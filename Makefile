@@ -1,0 +1,99 @@
+# $@ target
+# $< 1st dependency
+# $^ dependency list
+# $? recent dependency list
+# $* target without extension
+ 
+CC = gcc
+
+INC = -IdecNumberICU -Isrc/wp43s
+CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -g -DPC_BUILD -DTFM_NO_ASM
+LDFLAGS = -m64
+
+SRC_DECIMAL              = decNumberICU/decContext.c decNumberICU/decDouble.c decNumberICU/decimal128.c decNumberICU/decimal64.c decNumberICU/decNumber.c decNumberICU/decQuad.c
+OBJ_DECIMAL              = $(SRC_DECIMAL:.c=.o)
+
+SRC_WP43S                = $(wildcard src/wp43s/*.c)
+OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
+
+SRC_GENERATECONSTANTS    = $(wildcard src/generateConstants/*.c)
+OBJ_GENERATECONSTANTS    = $(SRC_GENERATECONSTANTS:.c=.o) $(OBJ_DECIMAL)
+
+
+
+.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
+
+all: generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
+
+clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts
+
+mrproper: clean_all
+	rm -f generateConstants
+	rm -f ttf2RasterFonts
+	rm -f testTtf2RasterFonts
+	rm -f wp43s
+
+
+clean_decNumberICU:
+	rm -f decNumberICU/*.o
+
+decNumberICU: $(OBJ_DECIMAL)
+	@echo -e "\n====> decNumberICU $@ <===="
+
+decNumberICU/%.o: decNumberICU/%.c
+	@echo -e "\n====> decNumberICU $@ <===="
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+
+
+clean_generateConstants: 
+	rm -f src/generateConstants/*.o
+
+generateConstants: decNumberICU $(OBJ_GENERATECONSTANTS)
+	@echo -e "\n====> generateConstants $@ <===="
+	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECONSTANTS) -o generateConstants
+	rm -f src/wp43s/constantPointers.h
+	rm -f src/wp43s/constantPointers.c
+	test -f generateConstants && ./generateConstants
+
+src/generateConstants/%.o: src/generateConstants/%.c
+	@echo -e "\n====> generateConstants $@ <===="
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+
+clean_ttf2RasterFonts:
+	rm -f src/ttf2RasterFonts/ttf2RasterFonts.o
+
+ttf2RasterFonts: src/ttf2RasterFonts/ttf2RasterFonts.o
+	@echo -e "\n====> ttf2RasterFonts $@ <===="
+	$(CC) $(CFLAGS) -m64 `pkg-config --libs freetype2` src/ttf2RasterFonts/ttf2RasterFonts.o -o ttf2RasterFonts
+	rm -f src/wp43s/rasterFontsData.c
+	test -f ttf2RasterFonts && ./ttf2RasterFonts > /dev/null
+
+src/ttf2RasterFonts/%.o: src/ttf2RasterFonts/%.c
+	@echo -e "\n====> ttf2RasterFonts $@ <===="
+	$(CC) $(CFLAGS) $(INC) `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0` -c -o $@ $<
+
+
+
+clean_testTtf2RasterFonts:
+	rm -f src/ttf2RasterFonts/testTtf2RasterFonts.o
+	rm -f src/wp43s/rasterFontsData.o
+
+testTtf2RasterFonts: src/ttf2RasterFonts/testTtf2RasterFonts.o src/wp43s/rasterFontsData.o
+	@echo -e "\n====> testTtf2RasterFonts $@ <===="
+	$(CC) $(CFLAGS) -m64 `pkg-config --libs freetype2` src/ttf2RasterFonts/testTtf2RasterFonts.o src/wp43s/rasterFontsData.o -o testTtf2RasterFonts
+
+
+
+clean_wp43s: 
+	rm -f src/wp43s/*.o
+
+wp43s: generateConstants ttf2RasterFonts $(OBJ_WP43S)
+	@echo -e "\n====> wp43s $@ <===="
+	$(CC) $(CFLAGS) -m64 `pkg-config --libs gtk+-3.0` $(OBJ_WP43S) -o wp43s
+
+src/wp43s/%.o: src/wp43s/%.c
+	@echo -e "\n====> wp43s $@ <===="
+	$(CC) $(CFLAGS) $(INC) `pkg-config --cflags gtk+-3.0` -c -o $@ $<

@@ -1,0 +1,57 @@
+2017-12-15 Added 4 glyphs in standard font:
+             - U+21C9 up triangle. Replacement for BST on the bezel
+             - U+21CB down triangle. Replacement for SST on the bezel
+             - U+21CC hamburger representing the code listing
+              -U+21CD undo arrow. Replacement for UNDO on the bezel
+
+2017-12-17 New WP43S_StandardFont.ttf generated.
+
+2017-12-17 Changed wide zero in numeric font.
+
+2017-12-20 New WP43S_NumericFont.ttf generated.
+
+2018-01-22 New WP43S_StandardFont.ttf generated: changed
+           underline characteristics used by the GUI.
+
+2018-02-24 Added 2 glyphs in standard font:
+             - U+2428 Double precision period
+             - U+2429 Double precision comma
+           New WP43S_StandardFont.ttf generated.
+           
+2018-02-27 In numeric font: moved printer glyph from
+           code point U+239A to U+2399.
+           New WP43S_NumericFont.ttf generated.
+
+2018-03-11 Added complex C in numeric font (U+2102) and modified 49
+           characters (made 18 lower case letters narrower, lifted 16
+           numeric indices, plus some small changes). Modified 14
+           characters in standard font (2, l, t, 1/2, 1/4, ...,
+           sigma, ...). Each modified character is marked by a blue
+           pixel top right outside of its bitmap.
+
+2018-03-14 New WP43S_NumericFont.ttf and WP43S_StandardFont.ttf
+           generated. Removed the blue pixel.
+           Added the glyph U+2491 in the standard font.
+
+2018-03-15 Updated copyright information in both ttf files:
+           2017 ==> 2018
+
+2018-03-19 Made the character U+2491 one pixel wider in standard font.
+
+2018-03-22 New WP43S_StandardFont.ttf generated.
+
+2018-07-07 Added 16 glyphs in standard font: from U+2460 to U+246F
+           representing subscript for bases. They can certainly be
+           improved. Generated the new WP43S_StandardFont.ttf
+
+2018-09-17 Duplicated character U+2064 on U+2027. I don't know why
+           U+2064 isn't visible! The name of that char is "INVISIBLE
+           PLUS" that may be an explanation. So use U+2027 insteed of
+           U+2064. Generated the new WP43S_StandardFont.ttf
+
+2018-09-18 Changed 16 glyphs in standard font from U+2460 to U+246F
+           according to the proposal of Walter. Generated the new
+           WP43S_StandardFont.ttf
+
+2018-11-04 Changed glyph U+220E (zero for narrow binary digit) in
+           standard font. Generated the new WP43S_StandardFont.ttf

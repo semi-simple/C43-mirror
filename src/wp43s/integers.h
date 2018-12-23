@@ -1,0 +1,65 @@
+/* This file is part of 43S.
+ *
+ * 43S is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * 43S is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/********************************************//**
+ * \file integers.h
+ ***********************************************/
+
+void     fnIntegerMode              (uint16_t mode);
+void     fnLeadingZeros             (uint16_t displayLeadingZeros);
+void     fnChangeBase               (uint16_t base);
+void     fnLogicalNot               (uint16_t unusedButMandatoryParameter);
+void     fnFp                       (uint16_t unusedButMandatoryParameter);
+void     fnIp                       (uint16_t unusedButMandatoryParameter);
+void     fnSign                     (uint16_t unusedButMandatoryParameter);
+void     fnMirror                   (uint16_t unusedButMandatoryParameter);
+void     fnM1Pow                    (uint16_t unusedButMandatoryParameter);
+void     fnIsPrime                  (uint16_t unusedButMandatoryParameter);
+uint32_t countBitsBigInteger        (bigInteger_t *value);
+uint32_t countBitsBigIntegerRegister(calcRegister_t regist);
+void     bigIntegerMultiply         (bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result);
+void     bigIntegerSquare           (bigInteger_t *op, bigInteger_t *result);
+void     bigIntegerAdd              (bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result);
+void     bigIntegerSubtract         (bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result);
+
+/*
+ * The functions below are borrowed
+ * from the WP34S project and sligtly
+ * modified and adapted
+ */
+uint64_t WP34S_intAdd               (uint64_t term1,      uint64_t term2);
+uint64_t WP34S_intSubtract          (uint64_t term1,      uint64_t term2);
+uint64_t WP34S_intMultiply          (uint64_t multiplier, uint64_t multiplicand);
+uint64_t WP34S_intDivide            (uint64_t dividend,   uint64_t divisor);
+uint64_t WP34S_intPower             (uint64_t base,       uint64_t exponent);
+uint64_t WP34S_intSqr               (uint64_t x);
+uint64_t WP34S_intCube              (uint64_t x);
+uint64_t WP34S_intLCM               (uint64_t y, uint64_t x);
+uint64_t WP34S_intGCD               (uint64_t y, uint64_t x);
+uint64_t WP34S_intChs               (uint64_t x);
+uint64_t WP34S_intSqrt              (uint64_t x);
+uint64_t WP34S_intAbs               (uint64_t x);
+//uint64_t WP34S_intNot               (uint64_t x);
+//uint64_t WP34S_intFP                (uint64_t x);
+//uint64_t WP34S_intIP                (uint64_t x);
+uint64_t WP34S_intSign              (uint64_t x);
+uint64_t WP34S_int2pow              (uint64_t x);
+uint64_t WP34S_int10pow             (uint64_t x);
+uint64_t WP34S_intLog2              (uint64_t x);
+uint64_t WP34S_intLog10             (uint64_t x);
+int32_t  WP34S_isPrime              (uint64_t p);
+uint64_t WP34S_int_1pow             (uint64_t exponent);
+uint64_t WP34S_intMirror            (uint64_t x);

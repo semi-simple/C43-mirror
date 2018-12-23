@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# x86 build
+cp -av makefile.x86 makefile
+make clean
+make
+cp -av libtfm.a /tmp/libtfmx86.a
+
+# arm build
+PATH=$PATH:/home/martin/Martin/developpement/DMCP/gcc-arm-none-eabi-7-2018-q2-update/bin
+cp -av makefile.arm makefile
+make clean
+make
+cp -av libtfm.a /tmp/libtfmarm.a
+
+make clean
+
+mv /tmp/libtfmx86.a .
+mv /tmp/libtfmarm.a .

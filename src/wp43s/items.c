@@ -822,7 +822,7 @@ const item_t indexOfItems[] = {
 /*  676 */  { toBeCoded,              NOPARAM,                     STD_x_BAR STD_SUB_w,                           STD_x_BAR STD_SUB_w,                                                          SLS_UNCHANGED},
 /*  677 */  { toBeCoded,              NOPARAM,                     STD_x_CIRC,                                    STD_x_CIRC,                                                                   SLS_UNCHANGED},
 /*  678 */  { toBeCoded,              NOPARAM,                     "X.FN",                                        "X.FN",                                                                       SLS_UNCHANGED},
-/*  679 */  { fnFactorial,            NOPARAM,                     "x!",                                          "x!",                                                                         SLS_UNCHANGED},
+/*  679 */  { fnFactorial,            NOPARAM,                     "x!",                                          "x!",                                                                         SLS_ENABLED},
 /*  680 */  { toBeCoded,              NOPARAM,                     "x:",                                          "x:",                                                                         SLS_UNCHANGED},
 /*  681 */  { toBeCoded,              NOPARAM,                     "x" STD_RIGHT_ARROW "DATE",                    "x" STD_RIGHT_ARROW "DATE",                                                   SLS_UNCHANGED},
 /*  682 */  { toBeCoded,              NOPARAM,                     "x" STD_RIGHT_ARROW STD_alpha,                 "x" STD_RIGHT_ARROW STD_alpha,                                                SLS_UNCHANGED},

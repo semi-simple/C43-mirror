@@ -84,7 +84,7 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
   #endif
 
   radixMark = RM_PERIOD;
-  groupingGap = 0;
+  groupingGap = 3;
   refreshStack();
   timeFormat = TF_H24;
   dateFormat = DF_DMY;

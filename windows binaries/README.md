@@ -6,4 +6,4 @@ Copy all this files in one directory.
 Copy dm42l.png, dm42lshort.png and wp43s_pre.css to the same directory  
 If there is a backup.bin file in your directory: delete it  
 
-run wp43s.exe and enjoy.
+Run wp43s.exe and enjoy.

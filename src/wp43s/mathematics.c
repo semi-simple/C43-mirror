@@ -1698,18 +1698,26 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
     enteringFunction("fnFactorial");
   #endif
 
-  bool_t real16 = false;
+  int8_t dataType = dtReal34;
+  bigInteger_t result;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    real16 = true;
+    convertBigIntegerRegisterToBigInteger(REGISTER_X, &result);
+    if(bigIntegerIsNegative(&result) || bigIntegerCompareUInt(&result, 294) == BIG_INTEGER_GREATER_THAN) {
+      convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      dataType = dtReal16;
+    }
+    else {
+      convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      dataType = dtBigInteger;
+    }
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     convertRegister16To34(REGISTER_X);
-    real16 = true;
+    dataType = dtReal16;
   }
 
   else if(getRegisterDataType(REGISTER_X) != dtReal34) {
@@ -1726,9 +1734,26 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  WP34S_real34Factorial(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+  if(dataType == dtBigInteger) {
+    uint16_t counter;
 
-  if(real16) {
+    counter = bigIntegerToUInt(&result);
+    if(counter == 0) {
+      uIntToBigInteger(1, &result);
+    }
+    else {
+      for(counter--; counter>0; counter--) {
+        bigIntegerMultiplyUInt(&result, counter, &result);
+      }
+    }
+
+    convertBigIntegerToBigIntegerRegister(&result, REGISTER_X);
+  }
+  else {
+    WP34S_real34Factorial(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+  }
+
+  if(dataType == dtReal16) {
     convertRegister34To16(REGISTER_X);
   }
 

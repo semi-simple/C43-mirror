@@ -28,6 +28,7 @@
 
 #define bigIntegerToString(source, destination, radix)          fp_toradix  (source, destination, radix)
 #define uIntToBigInteger(source, destination)                   fp_set      (destination, source)
+#define bigIntegerToUInt(op)                                    ((op)->dp[0])
 
 #define stringToBigInteger(source, radix, destination)          fp_read_radix(destination, source, radix)
 
@@ -36,6 +37,8 @@
 #define bigIntegerSetNegativeSign(op)                           {(op)->sign = 1; while((op)->used && (op)->dp[(op)->used-1] == 0) --((op)->used); (op)->sign = (op)->used ? (op)->sign : FP_ZPOS;}
 #define bigIntegerSetZero(op)                                   fp_init     (op)
 #define bigIntegerIsZero(op)                                    fp_iszero   (op)
+#define bigIntegerIsPositive(op)                                ((op)->sign == 0)
+#define bigIntegerIsNegative(op)                                ((op)->sign == 1)
 //#define bigIntegerIsEven(op)                                    fp_iseven   (op)
 #define bigIntegerIsOdd(op)                                     fp_isodd    (op)
 //#define bigIntegerCopy(source, destination)                     fp_copy     (source, destination)
@@ -53,7 +56,7 @@
 #define bigIntegerCompareUInt(op, uint)                         fp_cmp_d    (op, uint)
 #define bigIntegerAddUInt(op, uint, result)                     fp_add_d    (op, uint, result)
 #define bigIntegerSubtractUInt(op, uint, result)                fp_sub_d    (op, uint, result)
-//#define bigIntegerMultiplyUInt(op, uint, result)                fp_mul_d    (op, uint, result)
+#define bigIntegerMultiplyUInt(op, uint, result)                fp_mul_d    (op, uint, result)
 #define bigIntegerDivideUInt(op, uint, result, remainder)       fp_div_d    (op, uint, result, (fp_digit *)remainder) /* op/uint => result*uint + remainder == op */
 //#define bigIntegerModuloUInt(op, uint, result)                  fp_mod_d    (op, uint, result)                      /* result = op mod uint, 0 <= result < uint */
 

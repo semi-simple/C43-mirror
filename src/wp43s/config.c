@@ -654,6 +654,7 @@ void fnReset(uint16_t confirmation) {
     fnSetWordSize(64);
     fnDateFormat(DF_YMD);
     fnComplexMode(CM_RECTANGULAR);
+    showRealComplexResult();
 
     displayRealAsFraction = false;
     #if (STACK_LIFT_DEBUG == 1)

@@ -502,8 +502,6 @@ void addItemToNimBuffer(int16_t item) {
       #else
         stackLiftEnabled = true;
       #endif
-
-      refreshRegisterLine(REGISTER_X);
     }
   }
 
@@ -1539,6 +1537,8 @@ void closeNim(void) {
       }
     }
   }
+
+  refreshRegisterLine(NIM_REGISTER_LINE);
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("closeNim");

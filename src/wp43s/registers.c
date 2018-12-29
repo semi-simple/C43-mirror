@@ -1622,6 +1622,10 @@ void roundRegister(calcRegister_t regist) { // TODO: we can make better here! Do
   #endif
 
   if(getRegisterDataType(regist) == dtReal16) {
+    if(real16IsZero(POINTER_TO_REGISTER_DATA(regist))) {
+      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(regist));
+    }
+
     if(significantDigits == 0 || significantDigits >= 16) {
 
       #if (LOG_FUNCTIONS == 1)
@@ -1643,6 +1647,10 @@ void roundRegister(calcRegister_t regist) { // TODO: we can make better here! Do
   }
 
   else if(getRegisterDataType(regist) == dtReal34) {
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(regist))) {
+      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(regist));
+    }
+
     if(significantDigits == 0 || significantDigits >= 34) {
 
       #if (LOG_FUNCTIONS == 1)
@@ -1664,6 +1672,14 @@ void roundRegister(calcRegister_t regist) { // TODO: we can make better here! Do
   }
 
   else if(getRegisterDataType(regist) == dtComplex16) {
+    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+
+    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE)) {
+      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+    }
+
     if(significantDigits == 0 || significantDigits >= 16) {
 
       #if (LOG_FUNCTIONS == 1)
@@ -1689,6 +1705,14 @@ void roundRegister(calcRegister_t regist) { // TODO: we can make better here! Do
   }
 
   else if(getRegisterDataType(regist) == dtComplex34) {
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE)) {
+      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+    }
+
     if(significantDigits == 0 || significantDigits >= 34) {
 
       #if (LOG_FUNCTIONS == 1)

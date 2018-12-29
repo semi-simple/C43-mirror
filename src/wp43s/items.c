@@ -709,7 +709,7 @@ const item_t indexOfItems[] = {
 /*  563 */  { fnConstant,             50,                          "Se'" STD_SUP_2,                               "Se'" STD_SUP_2,                                                              SLS_ENABLED  },
 /*  564 */  { toBeCoded,              NOPARAM,                     "SF",                                          "SF",                                                                         SLS_UNCHANGED},
 /*  565 */  { fnConstant,             51,                          "Sf" STD_SUP_MINUS_1,                          "Sf" STD_SUP_MINUS_1,                                                         SLS_ENABLED  },
-/*  566 */  { fnSign,                 NOPARAM,                     "SIGN",                                        "sign",                                                                       SLS_UNCHANGED},
+/*  566 */  { fnSign,                 NOPARAM,                     "SIGN",                                        "sign",                                                                       SLS_ENABLED},
 /*  567 */  { fnIntegerMode,          SIM_SIGNMT,                   "SIGNMT",                                     "SIGNMT",                                                                     SLS_UNCHANGED},
 /*  568 */  { toBeCoded,              NOPARAM,                     "SIM_EQ",                                      "SIM EQ",                                                                     SLS_UNCHANGED},
 /*  569 */  { fnSin,                  NOPARAM,                     "sin",                                         "sin",                                                                        SLS_UNCHANGED},

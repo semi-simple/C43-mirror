@@ -213,11 +213,14 @@ void fnSign(uint16_t unusedButMandatoryParameter) {
   #endif
 
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intSign(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     bigInteger_t temp;
+
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     convertBigIntegerRegisterToBigInteger(REGISTER_X, &temp);
 
     if(bigIntegerIsZero(&temp)) {
@@ -234,11 +237,37 @@ void fnSign(uint16_t unusedButMandatoryParameter) {
     convertBigIntegerToBigIntegerRegister(&temp, REGISTER_X);
   }
 
+  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real16Zero(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(real16IsPositive(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      int32ToReal16(1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else {
+      int32ToReal16(-1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real34Zero(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(real34IsPositive(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      int32ToReal34(1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else {
+      int32ToReal34(-1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+  }
+
   else {
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "the input type %s is not allowed for IP!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      showInfoDialog("In function fnIp:", errorMessage, NULL, NULL);
+      sprintf(errorMessage, "the input type %s is not allowed for sign!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
+      showInfoDialog("In function fnSign:", errorMessage, NULL, NULL);
     #endif
   }
 

@@ -600,6 +600,34 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
     }
   }
 
+  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    op1 = allocateTemporaryRegister();
+    reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
+    real16Copy(const16_2, POINTER_TO_REGISTER_DATA(op1));
+
+    op2 = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, op2);
+
+    result = REGISTER_X;
+    powRe16Re16();
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    op1 = allocateTemporaryRegister();
+    reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
+    real34Copy(const34_2, POINTER_TO_REGISTER_DATA(op1));
+
+    op2 = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, op2);
+
+    result = REGISTER_X;
+    powRe34Re34();
+  }
+
   else {
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -656,6 +684,34 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
 
     copySourceRegisterToDestRegister(result, REGISTER_X);
     freeTemporaryRegister(result);
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    op1 = allocateTemporaryRegister();
+    reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
+    real16Copy(const16_10, POINTER_TO_REGISTER_DATA(op1));
+
+    op2 = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, op2);
+
+    result = REGISTER_X;
+    powRe16Re16();
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    op1 = allocateTemporaryRegister();
+    reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
+    real34Copy(const34_10, POINTER_TO_REGISTER_DATA(op1));
+
+    op2 = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, op2);
+
+    result = REGISTER_X;
+    powRe34Re34();
   }
 
   else {

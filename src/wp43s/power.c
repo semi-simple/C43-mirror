@@ -1028,7 +1028,7 @@ void powRe34Re34(void) {
     enteringFunction("powRe34Re34");
   #endif
 
-  reallocateRegister(result, dtReal34, REAL16_SIZE, 0);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Power(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
 
   roundRegister(result);

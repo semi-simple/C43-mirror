@@ -1655,6 +1655,11 @@ void fnLn(uint16_t unusedParamButMandatory) {
     real16 = true;
   }
 
+  else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+    convertSmallIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    real16 = true;
+  }
+
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     convertRegister16To34(REGISTER_X);
     real16 = true;

@@ -111,11 +111,19 @@ void fnDivide(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_Y, op1);
     copySourceRegisterToDestRegister(REGISTER_X, op2);
 
+    saveStack();
+
     division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
     freeTemporaryRegister(op1);
     freeTemporaryRegister(op2);
 
-    fnDropY(NOPARAM);
+    if(lastErrorCode == 0) {
+      fnDropY(NOPARAM);
+    }
+    else {
+      restoreStack();
+    }
+
     refreshStack();
   }
   else {
@@ -142,6 +150,7 @@ void fnInvert(uint16_t unusedParamButMandatory) {
     enteringFunction("fnInvert");
   #endif
 
+  saveStack();
   result = REGISTER_X;
   op1    = allocateTemporaryRegister();
   op2    = allocateTemporaryRegister();
@@ -155,6 +164,10 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
     divRe16Re16();
 
+    if(lastErrorCode != 0) {
+      restoreStack();
+    }
+
     refreshStack();
   }
 
@@ -163,12 +176,24 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
 
-    reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
-    int32ToReal34(1, POINTER_TO_REGISTER_DATA(op1));
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnInvert:", "cannot invert 0", NULL, NULL);
+      #endif
+    }
+    else {
+      reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
+      int32ToReal34(1, POINTER_TO_REGISTER_DATA(op1));
+      copySourceRegisterToDestRegister(REGISTER_X, op2);
 
-    divRe34Re34();
-    convertRegister34To16(REGISTER_X);
+      divRe34Re34();
+      convertRegister34To16(REGISTER_X);
+    }
+
+    if(lastErrorCode != 0) {
+      restoreStack();
+    }
 
     refreshStack();
   }
@@ -182,6 +207,10 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
     divRe16Co16();
 
+    if(lastErrorCode != 0) {
+      restoreStack();
+    }
+
     refreshStack();
   }
 
@@ -194,6 +223,10 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
     divRe34Re34();
 
+    if(lastErrorCode != 0) {
+      restoreStack();
+    }
+
     refreshStack();
   }
 
@@ -205,6 +238,10 @@ void fnInvert(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, op2);
 
     divRe34Co34();
+
+    if(lastErrorCode != 0) {
+      restoreStack();
+    }
 
     refreshStack();
   }
@@ -243,22 +280,30 @@ void divBigIBigI(void) {
   convertBigIntegerRegisterToBigInteger(op1, &iOp1);
   convertBigIntegerRegisterToBigInteger(op2, &iOp2);
 
-  bigIntegerDivideRemainder(&iOp1, &iOp2, &iOp1, &iOp2);
-
-  if(bigIntegerCompareUInt(&iOp2, 0) == BIG_INTEGER_EQUAL) {
-    convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  if(bigIntegerIsZero(&iOp2)) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function divBigIBigI:", "cannot divide an infinite integer by 0", NULL, NULL);
+    #endif
   }
   else {
-    convertBigIntegerRegisterToBigInteger(op1, &iOp1);
-    convertBigIntegerRegisterToBigInteger(op2, &iOp2);
+    bigIntegerDivideRemainder(&iOp1, &iOp2, &iOp1, &iOp2);
 
-    bigIntegerToString(&iOp1, tmpStr3000, 10);
-    reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
-    stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(op1));
-    bigIntegerToString(&iOp2, tmpStr3000, 10);
-    reallocateRegister(op2, dtReal16, REAL16_SIZE, 0);
-    stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(op2));
-    divRe16Re16();
+    if(bigIntegerCompareUInt(&iOp2, 0) == BIG_INTEGER_EQUAL) {
+      convertBigIntegerToBigIntegerRegister(&iOp1, result);
+    }
+    else {
+      convertBigIntegerRegisterToBigInteger(op1, &iOp1);
+      convertBigIntegerRegisterToBigInteger(op2, &iOp2);
+
+      bigIntegerToString(&iOp1, tmpStr3000, 10);
+      reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
+      stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(op1));
+      bigIntegerToString(&iOp2, tmpStr3000, 10);
+      reallocateRegister(op2, dtReal16, REAL16_SIZE, 0);
+      stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(op2));
+      divRe16Re16();
+    }
   }
 
   #if (LOG_FUNCTIONS == 1)
@@ -280,10 +325,37 @@ void divBigIRe16(void) {
   #endif
 
   convertBigIntegerRegisterToReal16Register(op1, op1);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
 
-  roundRegister(result);
+  if(real16IsZero(POINTER_TO_REGISTER_DATA(op1)) && real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const16_NaN, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divBigIRe16:", "cannot divide 0 by 0", NULL, NULL);
+      #endif
+    }
+  }
+
+  else if(real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const16_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divBigIRe16:", "cannot divide an infinite integer by 0", NULL, NULL);
+      #endif
+    }
+  }
+
+  else {
+    reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+    real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+
+    roundRegister(result);
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("divBigIRe16");
@@ -346,10 +418,37 @@ void divBigIRe34(void) {
   #endif
 
   convertBigIntegerRegisterToReal34Register(op1, op1);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
 
-  roundRegister(result);
+  if(real34IsZero(POINTER_TO_REGISTER_DATA(op1)) && real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real34Copy(const34_NaN, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divBigIRe34:", "cannot divide 0 by 0", NULL, NULL);
+      #endif
+    }
+  }
+
+  else if(real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real34Copy(const34_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divBigIRe34:", "cannot divide an infinite integer by 0", NULL, NULL);
+      #endif
+    }
+  }
+
+  else {
+    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+    real34Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+
+    roundRegister(result);
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("divBigIRe34");
@@ -391,10 +490,7 @@ void divRe16BigI(void) {
   #endif
 
   convertBigIntegerRegisterToReal16Register(op2, op2);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-
-  roundRegister(result);
+  divRe16Re16();
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("divRe16BigI");
@@ -414,10 +510,36 @@ void divRe16Re16(void) {
     enteringFunction("divRe16Re16");
   #endif
 
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  if(real16IsZero(POINTER_TO_REGISTER_DATA(op1)) && real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const16_NaN, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divRe16Re16:", "cannot divide 0 by 0", NULL, NULL);
+      #endif
+    }
+  }
 
-  roundRegister(result);
+  else if(real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const16_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divRe16Re16:", "cannot divide an real16 by 0", NULL, NULL);
+      #endif
+    }
+  }
+
+  else {
+    reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+    real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+
+    roundRegister(result);
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("divRe16Re16");
@@ -1209,10 +1331,36 @@ void divRe34Re34(void) {
     enteringFunction("divRe34Re34");
   #endif
 
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  if(real34IsZero(POINTER_TO_REGISTER_DATA(op1)) && real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real34Copy(const34_NaN, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divRe34Re34:", "cannot divide 0 by 0", NULL, NULL);
+      #endif
+    }
+  }
 
-  roundRegister(result);
+  else if(real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+    if(getFlag(FLAG_DANGER)) {
+      real34Copy(const34_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function divRe34Re34:", "cannot divide a real34 by 0", NULL, NULL);
+      #endif
+    }
+  }
+
+  else {
+    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+    real34Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+
+    roundRegister(result);
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("divRe34Re34");

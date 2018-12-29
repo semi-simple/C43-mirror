@@ -144,26 +144,48 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real16ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real34ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtComplex16) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real16ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+
     real16ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE)) {
+      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+    }
+
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real34ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
     real34ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+
+    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE)) {
+      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+    }
+
     refreshRegisterLine(REGISTER_X);
   }
 

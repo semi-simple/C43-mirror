@@ -326,13 +326,21 @@ uint32_t countBitsBigInteger(bigInteger_t *value) {
     enteringFunction("countBitsBigInteger");
   #endif
 
-  uint32_t bits = value->used * DIGIT_BIT;
-  uint64_t mostSignificantDigit = value->dp[value->used - 1];
-  uint64_t mask = ((uint64_t)1) << (DIGIT_BIT - 1);
+  uint32_t bits;
+  uint64_t mostSignificantDigit, mask;
 
-  while((mostSignificantDigit & mask) == 0) {
-    bits--;
-    mostSignificantDigit <<= 1;
+  if(bigIntegerIsZero(value)) {
+    bits = 1;
+  }
+  else {
+    bits = value->used * DIGIT_BIT;
+    mostSignificantDigit = value->dp[value->used - 1];
+    mask = ((uint64_t)1) << (DIGIT_BIT - 1);
+
+    while((mostSignificantDigit & mask) == 0) {
+      bits--;
+      mostSignificantDigit <<= 1;
+    }
   }
 
   #if (LOG_FUNCTIONS == 1)
@@ -350,13 +358,21 @@ uint32_t countBitsBigIntegerRegister(calcRegister_t regist) {
   #endif
 
   uint16_t *addr = (uint16_t *)(POINTER_TO_REGISTER_DATA(regist));
-  uint32_t bits = *addr * CHAR_BIT;
-  uint64_t mostSignificantDigit = *(uint64_t *)(addr + 1 + (*addr - (DIGIT_BIT / CHAR_BIT)) / 2);
-  uint64_t mask = ((uint64_t)1) << (DIGIT_BIT - 1);
+  uint32_t bits;
+  uint64_t mostSignificantDigit, mask;
 
-  while((mostSignificantDigit & mask) == 0) {
-    bits--;
-    mostSignificantDigit <<= 1;
+  if(bigIntegerIsZero((bigInteger_t *)addr)) {
+    bits = 1;
+  }
+  else {
+    bits = *addr * CHAR_BIT;
+    mostSignificantDigit = *(uint64_t *)(addr + 1 + (*addr - (DIGIT_BIT / CHAR_BIT)) / 2);
+    mask = ((uint64_t)1) << (DIGIT_BIT - 1);
+
+    while((mostSignificantDigit & mask) == 0) {
+      bits--;
+      mostSignificantDigit <<= 1;
+    }
   }
 
   #if (LOG_FUNCTIONS == 1)

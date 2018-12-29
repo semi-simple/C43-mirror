@@ -184,6 +184,7 @@ extern const real16_t * const const16_plusInfinity;
 extern const real16_t * const const16_0;
 extern const real16_t * const const16_1e_4;
 extern const real16_t * const const16_1;
+extern const real16_t * const const16_2;
 extern const real16_t * const const16_pi;
 extern const real16_t * const const16_2pi;
 extern const real16_t * const const16_10;

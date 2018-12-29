@@ -618,6 +618,11 @@ void btnClicked(void *notUsed, void *data) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
           reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
 
+          #if (STACK_LIFT_DEBUG == 1)
+            stackLiftEnable();
+          #else
+            stackLiftEnabled = true;
+          #endif
           if(complexMode == CM_RECTANGULAR) {
             real16Copy(COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), POINTER_TO_REGISTER_DATA(REGISTER_X));
             liftStack(dtReal16, REAL16_SIZE);
@@ -629,14 +634,18 @@ void btnClicked(void *notUsed, void *data) {
             temporaryInformation = TI_RADIUS_THETA;
           }
 
-          refreshRegisterLine(REGISTER_X);
-          refreshRegisterLine(REGISTER_Y);
+          refreshStack();
         }
 
         else if(dataTypeX == dtComplex34) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
           reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
 
+          #if (STACK_LIFT_DEBUG == 1)
+            stackLiftEnable();
+          #else
+            stackLiftEnabled = true;
+          #endif
           if(complexMode == CM_RECTANGULAR) {
             real34Copy(COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), POINTER_TO_REGISTER_DATA(REGISTER_X));
             liftStack(dtReal34, REAL34_SIZE);
@@ -648,8 +657,7 @@ void btnClicked(void *notUsed, void *data) {
             temporaryInformation = TI_RADIUS_THETA;
           }
 
-          refreshRegisterLine(REGISTER_X);
-          refreshRegisterLine(REGISTER_Y);
+          refreshStack();
         }
 
         else {

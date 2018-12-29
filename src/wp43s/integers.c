@@ -124,12 +124,15 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
   #endif
 
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = 0;
+    refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     real16_t integerPart;
 
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real16ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart);
     real16Subtract(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart ,POINTER_TO_REGISTER_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
@@ -138,15 +141,18 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34_t integerPart;
 
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real34ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart);
     real34Subtract(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart ,POINTER_TO_REGISTER_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     bigInteger_t temp;
     bigIntegerSetZero(&temp);
     convertBigIntegerToBigIntegerRegister(&temp, REGISTER_X);
+    refreshRegisterLine(REGISTER_X);
   }
 
   else {
@@ -170,15 +176,18 @@ void fnIp(uint16_t unusedButMandatoryParameter) {
   #endif
 
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger || getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    // Integer part of an integer: nothing to do!
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real16ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real34ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }

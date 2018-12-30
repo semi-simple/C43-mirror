@@ -82,6 +82,8 @@ void fnGcd(uint16_t unusedParamButMandatory) {
 
   bigInteger_t iOp1, iOp2;
 
+  saveStack();
+
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger && getRegisterDataType(REGISTER_Y) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intGCD(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_Y)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
@@ -127,6 +129,13 @@ void fnGcd(uint16_t unusedParamButMandatory) {
       sprintf(errorMessage, "cannot get the GDC from %s and %s!", getDataTypeName(getRegisterDataType(REGISTER_Y), true, false), getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnGdc:", errorMessage, NULL, NULL);
     #endif
+  }
+
+  if(lastErrorCode == 0) {
+    fnDropY(NOPARAM);
+  }
+  else {
+    restoreStack();
   }
 
   refreshStack();

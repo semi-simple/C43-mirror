@@ -360,7 +360,7 @@ const item_t indexOfItems[] = {
 /*  214 */  { fnConstant,             15,                          "G" STD_SUB_0,                                 "G" STD_SUB_0,                                                                SLS_ENABLED  },
 /*  215 */  { fnDisplayFormatGap,     TM_NORMAL_10000,             "GAP",                                         "GAP",                                                                        SLS_UNCHANGED},
 /*  216 */  { fnConstant,             16,                          "G" STD_SUB_C,                                 "G" STD_SUB_C,                                                                SLS_ENABLED  },
-/*  217 */  { fnGcd,                  NOPARAM,                     "GCD",                                         "GCD",                                                                        SLS_UNCHANGED},
+/*  217 */  { fnGcd,                  NOPARAM,                     "GCD",                                         "GCD",                                                                        SLS_ENABLED},
 /*  218 */  { toBeCoded,              NOPARAM,                     "g" STD_SUB_d,                                 "g" STD_SUB_d,                                                                SLS_UNCHANGED},
 /*  219 */  { toBeCoded,              NOPARAM,                     "g" STD_SUB_d STD_SUP_MINUS_1,                 "g" STD_SUB_d STD_SUP_MINUS_1,                                                SLS_UNCHANGED},
 /*  220 */  { fnConstant,             17,                          "g" STD_SUB_e,                                 "g" STD_SUB_e,                                                                SLS_ENABLED  },

@@ -7,7 +7,7 @@
 CC = gcc
 
 INC = -IdecNumberICU -Isrc/wp43s
-CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -g -DPC_BUILD -DTFM_NO_ASM
+CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -g -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
 LDFLAGS = -m64
 
 SRC_DECIMAL              = decNumberICU/decContext.c decNumberICU/decDouble.c decNumberICU/decimal128.c decNumberICU/decimal64.c decNumberICU/decNumber.c decNumberICU/decQuad.c

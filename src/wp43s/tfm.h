@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <limits.h>
+#include <stdint.h>
 
 #define TFM_VERSION     0x000D0100
 #define TFM_VERSION_S   "v0.13.1"
@@ -163,7 +164,7 @@
 #if defined(FP_64BIT)
   /* for GCC only on supported platforms */
   #ifndef CRYPT
-    typedef unsigned long long ulong64;
+    typedef uint64_t ulong64;
   #endif /* CRYPT */
 
   typedef ulong64            fp_digit;
@@ -176,13 +177,13 @@
       typedef unsigned __int64   ulong64;
       typedef signed __int64     long64;
     #else
-      typedef unsigned long long ulong64;
-      typedef signed long long   long64;
+      typedef uint64_t ulong64;
+      typedef int64_t   long64;
     #endif /* defined(_MSC_VER) ... */
   #endif /* CRYPT */
 
-  typedef unsigned int       fp_digit;
-  #define SIZEOF_FP_DIGIT 4
+  typedef uint64_t       fp_digit;
+  #define SIZEOF_FP_DIGIT 8
   typedef ulong64            fp_word;
 #endif /* FP_64BIT */
 

@@ -32,7 +32,6 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
     enteringFunction("registerBrowser");
   #endif
 
- uint8_t savedDisplayFormat, savedDisplayFormatDigits;
  int16_t registerNameWidth;
 
  if(currentRegisterBrowserScreen == 9999) { // Init
@@ -72,11 +71,6 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             setPixel(x, 218-22*row);
           }
         }
-
-        savedDisplayFormat       = displayFormat;
-        savedDisplayFormatDigits = displayFormatDigits;
-        displayFormat            = DF_SCI;
-        displayFormatDigits      = 6;
 
         if(getRegisterDataType(regist) == dtReal16) {
           if(showContent) {
@@ -150,9 +144,6 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
           sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, false));
         }
 
-        displayFormat            = savedDisplayFormat;
-        displayFormatDigits      = savedDisplayFormatDigits;
-
         showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true) - 1, 219-22*row, vmNormal, false, true);
       }
     }
@@ -176,11 +167,6 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
                 setPixel(x, 218-22*row);
               }
             }
-
-            savedDisplayFormat       = displayFormat;
-            savedDisplayFormatDigits = displayFormatDigits;
-            displayFormat            = DF_SCI;
-            displayFormatDigits      = 6;
 
             if(getRegisterDataType(regist) == dtReal16) {
               if(showContent) {
@@ -253,9 +239,6 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             else {
               sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, false));
             }
-
-            displayFormat            = savedDisplayFormat;
-            displayFormatDigits      = savedDisplayFormatDigits;
 
             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), 219-22*row, vmNormal, false, true);
           }

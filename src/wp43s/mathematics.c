@@ -856,7 +856,6 @@ void fnTan(uint16_t unusedParamButMandatory) {
     if(real34IsSpecial(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
       real34Copy(const34_NaN, POINTER_TO_REGISTER_DATA(REGISTER_X));
     }
-
     else {
       real34_t cos;
     	 WP34S_cvt_2rad_sincos(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), &cos, REGISTER_X);

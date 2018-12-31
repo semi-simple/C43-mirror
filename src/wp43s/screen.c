@@ -687,6 +687,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(getRegisterDataType(REGISTER_L) == dtString) {
               strcat(string, "string = ");
+              n = strlen(string);
               for(i=0, p=POINTER_TO_REGISTER_STRING(REGISTER_L); i<=stringByteLength(POINTER_TO_REGISTER_STRING(REGISTER_L)); i++, p++) {
                 string[n + i] = *p;
               }
@@ -709,6 +710,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
 
             else {
+              n = strlen(string);
               sprintf(string + n, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
             }
 

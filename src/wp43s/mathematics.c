@@ -751,6 +751,7 @@ void fnSin(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    real16 = true;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -801,6 +802,7 @@ void fnCos(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    real16 = true;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -846,9 +848,14 @@ void fnTan(uint16_t unusedParamButMandatory) {
 
   bool_t real16 = getRegisterDataType(REGISTER_X) == dtReal16;
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
+  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    real16 = true;
+  }
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
     if(real16) {
       convertRegister16To34(REGISTER_X);
     }

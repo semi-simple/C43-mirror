@@ -23,7 +23,7 @@
 #define BIG_INTEGER_EQUAL                                       FP_EQ
 
 #define bigInteger_t                                            fp_int
-#define BIG_INTEGER(a)                                          ((bigInteger_t *)(a))
+#define BIG_INTEGER_POINTER(a)                                  ((bigInteger_t *)(a))
 
 
 #define bigIntegerToString(source, destination, radix)          fp_toradix  (source, destination, radix)
@@ -32,15 +32,15 @@
 
 #define stringToBigInteger(source, radix, destination)          fp_read_radix(destination, source, radix)
 
-//#define bigIntegerChangeSign(op1, op2)                          fp_neg      (op2, op1)
-#define bigIntegerSetPositiveSign(op)                           (op)->sign = 0
-#define bigIntegerSetNegativeSign(op)                           {(op)->sign = 1; while((op)->used && (op)->dp[(op)->used-1] == 0) --((op)->used); (op)->sign = (op)->used ? (op)->sign : FP_ZPOS;}
+#define bigIntegerChangeSign(op)                                {(op)->sign ^= 1;}
+#define bigIntegerSetPositiveSign(op)                           {(op)->sign = 0;}
+#define bigIntegerSetNegativeSign(op)                           {(op)->sign = 1;}
 #define bigIntegerSetZero(op)                                   fp_init     (op)
 #define bigIntegerIsZero(op)                                    fp_iszero   (op)
 #define bigIntegerIsPositive(op)                                ((op)->sign == 0)
 #define bigIntegerIsNegative(op)                                ((op)->sign == 1)
-//#define bigIntegerIsEven(op)                                    fp_iseven   (op)
-#define bigIntegerIsOdd(op)                                     fp_isodd    (op)
+#define bigIntegerIsEven(op)                                    (((op)->dp[0] & 1) == 0)
+#define bigIntegerIsOdd(op)                                     (((op)->dp[0] & 1) == 1)
 //#define bigIntegerCopy(source, destination)                     fp_copy     (source, destination)
 
 #define bigIntegerCompare(op1, op2)                             fp_cmp      (op1, op2)

@@ -920,7 +920,7 @@ const item_t indexOfItems[] = {
 /*  774 */  { toBeCoded,              NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,                                    SLS_UNCHANGED},
 /*  775 */  { toBeCoded,              NOPARAM,                     STD_chi STD_SUP_2 ":",                         STD_chi STD_SUP_2 ":",                                                        SLS_UNCHANGED},
 /*  776 */  { fnConstant,             76,                          STD_omega,                                     STD_omega,                                                                    SLS_ENABLED  },
-/*  777 */  { fnM1Pow,                NOPARAM,                     "(-1)" STD_SUP_x,                              "(-1)" STD_SUP_x,                                                             SLS_UNCHANGED},
+/*  777 */  { fnM1Pow,                NOPARAM,                     "(-1)" STD_SUP_x,                              "(-1)" STD_SUP_x,                                                             SLS_ENABLED  },
 /*  778 */  { fnAdd,                  ITM_ADD,                     "+",                                           "+",                                                                          SLS_ENABLED  },
 /*  779 */  { fnChangeSign,           ITM_CHS,                     "+/-",                                         "+/-",                                                                        SLS_UNCHANGED},
 /*  780 */  { fnSubtract,             ITM_SUB,                     "-",                                           "-",                                                                          SLS_ENABLED  },

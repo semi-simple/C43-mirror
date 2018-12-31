@@ -79,6 +79,60 @@ void fnChangeBase(uint16_t base) {
       #endif
     }
   }
+
+  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+    if(2 <= base && base <= 16) {
+      convertBigIntegerRegisterToSmallIntegerRegister(REGISTER_X, REGISTER_X);
+      setRegisterBase(REGISTER_X, base);
+      refreshStack();
+    }
+    else {
+      displayCalcErrorMessage(8, REGISTER_Z, REGISTER_T);
+      #if(EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
+        showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
+      #endif
+    }
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    if(2 <= base && base <= 16) {
+      bigInteger_t tmp;
+
+      fnIp(NOPARAM);
+      real16ToString(POINTER_TO_REGISTER_DATA(REGISTER_X), tmpStr3000);
+      stringToBigInteger(tmpStr3000, 10, &tmp);
+      convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
+      fnChangeBase(base);
+    }
+    else {
+      displayCalcErrorMessage(8, REGISTER_Z, REGISTER_T);
+      #if(EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
+        showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
+      #endif
+    }
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    if(2 <= base && base <= 16) {
+      bigInteger_t tmp;
+
+      fnIp(NOPARAM);
+      real34ToString(POINTER_TO_REGISTER_DATA(REGISTER_X), tmpStr3000);
+      stringToBigInteger(tmpStr3000, 10, &tmp);
+      convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
+      fnChangeBase(base);
+    }
+    else {
+      displayCalcErrorMessage(8, REGISTER_Z, REGISTER_T);
+      #if(EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
+        showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
+      #endif
+    }
+  }
+
   else {
     displayCalcErrorMessage(24, REGISTER_T, NIM_REGISTER_LINE);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)

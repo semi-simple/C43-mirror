@@ -43,12 +43,12 @@ void calcModeAIM      (uint16_t unusedParamButMandatory);
 void calcModeNIM      (uint16_t unusedParamButMandatory);
 
 #ifdef PC_BUILD
-void setupUI          (void);
-void moveLabels       (void);
-void strReplace       (char *haystack, const char *needle, const char *newNeedle);
-void saveCalc         (void);
-void restoreCalc      (void);
-void calcModeNormalGui(void);
-void calcModeAimGui   (void);
-void calcModeTamGui   (void);
+  void setupUI          (void);
+  void moveLabels       (void);
+  void strReplace       (char *haystack, const char *needle, const char *newNeedle);
+  void saveCalc         (void);
+  void restoreCalc      (void);
+  void calcModeNormalGui(void);
+  void calcModeAimGui   (void);
+  void calcModeTamGui   (void);
 #endif

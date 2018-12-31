@@ -78,10 +78,14 @@ GtkWidget *lbl81Gr, *lbl82Gr, *lbl83Gr, *lbl84Gr, *lbl85Gr;
 GtkWidget                                         *lblOn;
 
 #if (DEBUG_PANEL == 1)
-GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
-GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedRegisters, *btnTmpAndSavedStackRegisters;
-GtkWidget *chkHexaString;
-int16_t debugWidgetDx, debugWidgetDy;
+  GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
+  GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedRegisters, *btnTmpAndSavedStackRegisters;
+  GtkWidget *chkHexaString;
+  int16_t debugWidgetDx, debugWidgetDy;
+#endif
+
+#if (DEBUG_REGISTER_L == 1)
+  GtkWidget *lblRegisterL;
 #endif
 
 char      *cssData;
@@ -1943,6 +1947,11 @@ void setupUI(void) {
   g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
 
 
+  #if (DEBUG_REGISTER_L == 1)
+    lblRegisterL = gtk_label_new("");
+    gtk_widget_set_name(lblRegisterL, "registerL");
+    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL, 30, 35);
+  #endif
 
   // 1st row: F1 to F6 buttons
   btn11 = gtk_button_new_with_label("^");

@@ -35,6 +35,7 @@
 
 #define EXTRA_INFO_ON_CALC_ERROR 1
 #define DEBUG_PANEL              1
+#define DEBUG_REGISTER_L         1
 #define STACK_LIFT_DEBUG         1
 #define LOG_FUNCTIONS            0
 #define IBM_DECIMAL              1
@@ -361,11 +362,14 @@ typedef int16_t calcRegister_t;
 
 // Variables for the simulator
 #ifdef PC_BUILD
-extern bool_t                 calcLandscape, calcAutoLandscapePortrait;
-extern GtkWidget              *screen, *frmCalc;
-extern int16_t                screenStride, debugWindow;
-extern uint32_t               *screenData;
-extern bool_t                 screenChange;
+  extern bool_t               calcLandscape, calcAutoLandscapePortrait;
+  extern GtkWidget            *screen, *frmCalc;
+  extern int16_t              screenStride, debugWindow;
+  extern uint32_t             *screenData;
+  extern bool_t               screenChange;
+  #if (DEBUG_REGISTER_L == 1)
+    extern                    GtkWidget *lblRegisterL;
+  #endif
 #endif
 
 #define RAM_SIZE              65536 //98304 // 96kb

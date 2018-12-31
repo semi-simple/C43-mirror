@@ -654,6 +654,75 @@ void refreshRegisterLine(calcRegister_t regist) {
           clearRegisterLine(132 - 37*(regist-100), 34);
         }
 
+        #ifdef PC_BUILD
+          #if (DEBUG_REGISTER_L == 1)
+            char     string[1000], *p;
+            uint16_t i, n;
+
+            strcpy(string, "L = ");
+
+            if(getRegisterDataType(REGISTER_L) == dtReal16) {
+              strcat(string, "real16 = ");
+              n = strlen(string);
+              formatReal16Debug(string + n, getRegisterDataPointer(REGISTER_L));
+            }
+
+            else if(getRegisterDataType(REGISTER_L) == dtReal34) {
+              strcat(string, "real34 = ");
+              n = strlen(string);
+              formatReal34Debug(string + n, getRegisterDataPointer(REGISTER_L));
+            }
+
+            else if(getRegisterDataType(REGISTER_L) == dtComplex16) {
+              strcat(string, "complex16 = ");
+              n = strlen(string);
+              formatComplex16Debug(string + n, getRegisterDataPointer(REGISTER_L));
+            }
+
+            else if(getRegisterDataType(REGISTER_L) == dtComplex34) {
+              strcat(string, "complex34 = ");
+              n = strlen(string);
+              formatComplex34Debug(string + n, getRegisterDataPointer(REGISTER_L));
+            }
+
+            else if(getRegisterDataType(REGISTER_L) == dtString) {
+              strcat(string, "string = ");
+              for(i=0, p=POINTER_TO_REGISTER_STRING(REGISTER_L); i<=stringByteLength(POINTER_TO_REGISTER_STRING(REGISTER_L)); i++, p++) {
+                string[n + i] = *p;
+              }
+            }
+
+            else if(getRegisterDataType(REGISTER_L) == dtSmallInteger) {
+              const font_t *font = &standardFont;
+
+              strcat(string, "small integer = ");
+              n = strlen(string);
+              smallIntegerToDisplayString(REGISTER_L, string + n, &font);
+              strcat(string + n, STD_SPACE_3_PER_EM);
+              strcat(string + n, getSmallIntegerModeName(smallIntegerMode));
+            }
+
+            else if(getRegisterDataType(REGISTER_L) == dtBigInteger) {
+              strcat(string, "big integer = ");
+              n = strlen(string);
+              bigIntegerToDisplayString(REGISTER_L, string + n);
+            }
+
+            else {
+              sprintf(string + n, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
+            }
+
+            while(stringWidth(string, &standardFont, true, true) > 961) {
+              string[stringLastGlyph(string)] = 0;
+            }
+
+            stringToUtf8(string, (uint8_t *)tmpStr3000);
+
+            gtk_label_set_label(GTK_LABEL(lblRegisterL), tmpStr3000);
+            gtk_widget_show(lblRegisterL);
+          #endif
+        #endif
+
         if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
           showString("Are you sure?", &standardFont, 1, 134 - 37*(regist-100), vmNormal, false, false);
         }

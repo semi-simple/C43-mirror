@@ -285,11 +285,78 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
     enteringFunction("fnM1Pow");
   #endif
 
+  saveStack();
+
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_int_1pow(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
   }
 
+  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+    bigInteger_t tmp;
+
+    uIntToBigInteger(1, &tmp);
+
+    if(bigIntegerIsOdd(BIG_INTEGER_POINTER(POINTER_TO_REGISTER_BIG_INTEGER(REGISTER_X)))) {
+      bigIntegerChangeSign(&tmp);
+    }
+
+    convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    convertRegister16To34(REGISTER_X);
+
+    if(angularMode == AM_DEGREE) {
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(angularMode == AM_DMS) {
+      convertRegisterFromDms(REGISTER_X);
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
+      convertRegisterToDms(REGISTER_X);
+    }
+    else if(angularMode == AM_GRAD) {
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_200, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(angularMode == AM_RADIAN) {
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_pi, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(angularMode != AM_MULTPI) {
+      sprintf(errorMessage, "In function fnM1Pow: %" FMT8U " is an unexpected value for angularMode!", angularMode);
+      displayBugScreen(errorMessage);
+    }
+
+    fnCos(NOPARAM);
+
+    convertRegister34To16(REGISTER_X);
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    if(angularMode == AM_DEGREE) {
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(angularMode == AM_DMS) {
+      convertRegisterFromDms(REGISTER_X);
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
+      convertRegisterToDms(REGISTER_X);
+    }
+    else if(angularMode == AM_GRAD) {
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_200, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(angularMode == AM_RADIAN) {
+      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_pi, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    }
+    else if(angularMode != AM_MULTPI) {
+      sprintf(errorMessage, "In function fnM1Pow: %" FMT8U " is an unexpected value for angularMode!", angularMode);
+      displayBugScreen(errorMessage);
+    }
+
+    fnCos(NOPARAM);
+  }
+
   else {
+    restoreStack();
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for (-1)" STD_SUP_x "!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
@@ -297,7 +364,7 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
     #endif
   }
 
-  refreshRegisterLine(NIM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("fnM1Pow");

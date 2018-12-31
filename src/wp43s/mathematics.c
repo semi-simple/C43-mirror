@@ -1069,24 +1069,36 @@ void fnArctan(uint16_t unusedParamButMandatory) {
     enteringFunction("fnArctan");
   #endif
 
+  dataType_t dataType = dtReal34;
+
+  saveStack();
+
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     convertRegister16To34(REGISTER_X);
+    dataType = dtReal16;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    dataType = dtReal16;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     WP34S_do_atan(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
     convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
+
+    if(dataType == dtReal16) {
+      convertRegister34To16(REGISTER_X);
+    }
+
     temporaryInformation = TI_ANGLE;
     refreshRegisterLine(REGISTER_X);
   }
 
   else {
+    restoreStack();
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "X register is %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -1343,24 +1355,36 @@ void fnArccos(uint16_t unusedParamButMandatory) {
     enteringFunction("fnArccos");
   #endif
 
+  dataType_t dataType = dtReal34;
+
+  saveStack();
+
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     convertRegister16To34(REGISTER_X);
+    dataType = dtReal16;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    dataType = dtReal16;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     WP34S_do_acos(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
     convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
+
+    if(dataType == dtReal16) {
+      convertRegister34To16(REGISTER_X);
+    }
+
     temporaryInformation = TI_ANGLE;
     refreshRegisterLine(REGISTER_X);
   }
 
   else {
+    restoreStack();
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "X register is %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -1380,24 +1404,36 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
     enteringFunction("fnArcsin");
   #endif
 
+  dataType_t dataType = dtReal34;
+
+  saveStack();
+
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     convertRegister16To34(REGISTER_X);
+    dataType = dtReal16;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    dataType = dtReal16;
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     WP34S_do_asin(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
     convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
+
+    if(dataType == dtReal16) {
+      convertRegister34To16(REGISTER_X);
+    }
+
     temporaryInformation = TI_ANGLE;
     refreshRegisterLine(REGISTER_X);
   }
 
   else {
+    restoreStack();
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "X register is %s", getRegisterDataTypeName(REGISTER_X, true, false));

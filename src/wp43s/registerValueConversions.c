@@ -174,6 +174,27 @@ void convertBigIntegerRegisterToReal16Register(calcRegister_t source, calcRegist
 
 
 
+void convertBigIntegerRegisterToSmallIntegerRegister(calcRegister_t source, calcRegister_t destination) {
+  bigInteger_t tmp;
+
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("convertBigIntegerRegisterToReal16Register");
+  #endif
+
+  convertBigIntegerRegisterToBigInteger(source, &tmp);
+  reallocateRegister(destination, dtSmallInteger, SMALL_INTEGER_SIZE, 0);
+  *(uint64_t *)(POINTER_TO_REGISTER_DATA(destination)) = tmp.dp[0] & smallIntegerMask;
+  if(bigIntegerIsNegative(&tmp)) {
+    *(uint64_t *)(POINTER_TO_REGISTER_DATA(destination)) = WP34S_intChs(*(uint64_t *)(POINTER_TO_REGISTER_DATA(destination)));
+  }
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("convertBigIntegerRegisterToReal16Register");
+  #endif
+}
+
+
+
 void convertBigIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
   bigInteger_t tmp;
 

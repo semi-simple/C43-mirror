@@ -1372,15 +1372,24 @@ void fnArccos(uint16_t unusedParamButMandatory) {
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    WP34S_do_acos(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
-    convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
-
-    if(dataType == dtReal16) {
-      convertRegister34To16(REGISTER_X);
+    if(real34CompareAbsGreaterThan(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), const34_1)) {
+      restoreStack();
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnArccos:", "|X| > 1", NULL, NULL);
+      #endif
     }
+    else {
+      WP34S_do_acos(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+      convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
 
-    temporaryInformation = TI_ANGLE;
-    refreshRegisterLine(REGISTER_X);
+      if(dataType == dtReal16) {
+        convertRegister34To16(REGISTER_X);
+      }
+
+      temporaryInformation = TI_ANGLE;
+      refreshRegisterLine(REGISTER_X);
+    }
   }
 
   else {
@@ -1421,15 +1430,24 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    WP34S_do_asin(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
-    convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
-
-    if(dataType == dtReal16) {
-      convertRegister34To16(REGISTER_X);
+    if(real34CompareAbsGreaterThan(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), const34_1)) {
+      restoreStack();
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnArcsin:", "|X| > 1", NULL, NULL);
+      #endif
     }
+    else {
+      WP34S_do_asin(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+      convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
 
-    temporaryInformation = TI_ANGLE;
-    refreshRegisterLine(REGISTER_X);
+      if(dataType == dtReal16) {
+        convertRegister34To16(REGISTER_X);
+      }
+
+      temporaryInformation = TI_ANGLE;
+      refreshRegisterLine(REGISTER_X);
+    }
   }
 
   else {

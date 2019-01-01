@@ -368,7 +368,8 @@ typedef int16_t calcRegister_t;
   extern uint32_t             *screenData;
   extern bool_t               screenChange;
   #if (DEBUG_REGISTER_L == 1)
-    extern                    GtkWidget *lblRegisterL;
+    extern                    GtkWidget *lblRegisterL1;
+    extern                    GtkWidget *lblRegisterL2;
   #endif
 #endif
 

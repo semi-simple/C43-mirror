@@ -656,72 +656,63 @@ void refreshRegisterLine(calcRegister_t regist) {
 
         #ifdef PC_BUILD
           #if (DEBUG_REGISTER_L == 1)
-            char     string[1000], *p;
-            uint16_t i, n;
+            char     string1[500], string2[500], *p;
+            uint16_t i, n=0;
 
-            strcpy(string, "L = ");
+            strcpy(string1, "L = ");
 
             if(getRegisterDataType(REGISTER_L) == dtReal16) {
-              strcat(string, "real16 = ");
-              n = strlen(string);
-              formatReal16Debug(string + n, getRegisterDataPointer(REGISTER_L));
+              strcat(string1, "real16 = ");
+              formatReal16Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtReal34) {
-              strcat(string, "real34 = ");
-              n = strlen(string);
-              formatReal34Debug(string + n, getRegisterDataPointer(REGISTER_L));
+              strcat(string1, "real34 = ");
+              formatReal34Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtComplex16) {
-              strcat(string, "complex16 = ");
-              n = strlen(string);
-              formatComplex16Debug(string + n, getRegisterDataPointer(REGISTER_L));
+              strcat(string1, "complex16 = ");
+              formatComplex16Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtComplex34) {
-              strcat(string, "complex34 = ");
-              n = strlen(string);
-              formatComplex34Debug(string + n, getRegisterDataPointer(REGISTER_L));
+              strcat(string1, "complex34 = ");
+              formatComplex34Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtString) {
-              strcat(string, "string = ");
-              n = strlen(string);
+              strcat(string1, "string = ");
               for(i=0, p=POINTER_TO_REGISTER_STRING(REGISTER_L); i<=stringByteLength(POINTER_TO_REGISTER_STRING(REGISTER_L)); i++, p++) {
-                string[n + i] = *p;
+                string2[n + i] = *p;
               }
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtSmallInteger) {
               const font_t *font = &standardFont;
 
-              strcat(string, "small integer = ");
-              n = strlen(string);
-              smallIntegerToDisplayString(REGISTER_L, string + n, &font);
-              strcat(string + n, STD_SPACE_3_PER_EM);
-              strcat(string + n, getSmallIntegerModeName(smallIntegerMode));
+              strcat(string1, "small integer = ");
+              smallIntegerToDisplayString(REGISTER_L, string2 + n, &font);
+              strcat(string2 + n, STD_SPACE_3_PER_EM);
+              strcat(string2 + n, getSmallIntegerModeName(smallIntegerMode));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtBigInteger) {
-              strcat(string, "big integer = ");
-              n = strlen(string);
-              bigIntegerToDisplayString(REGISTER_L, string + n);
+              strcat(string1, "big integer = ");
+              bigIntegerToDisplayString(REGISTER_L, string2 + n);
             }
 
             else {
-              n = strlen(string);
-              sprintf(string + n, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
+              sprintf(string2 + n, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
             }
 
-            while(stringWidth(string, &standardFont, true, true) > 961) {
-              string[stringLastGlyph(string)] = 0;
-            }
+            stringToUtf8(string1, (uint8_t *)tmpStr3000);
+            stringToUtf8(string2, (uint8_t *)tmpStr3000 + 1000);
 
-            stringToUtf8(string, (uint8_t *)tmpStr3000);
-
-            gtk_label_set_label(GTK_LABEL(lblRegisterL), tmpStr3000);
-            gtk_widget_show(lblRegisterL);
+            gtk_label_set_label(GTK_LABEL(lblRegisterL1), tmpStr3000);
+            gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr3000 + 1000);
+            gtk_widget_show(lblRegisterL1);
+            gtk_widget_show(lblRegisterL2);
           #endif
         #endif
 

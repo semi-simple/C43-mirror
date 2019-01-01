@@ -98,25 +98,25 @@ typedef enum {
 typedef int16_t calcRegister_t;
 
 #if (IBM_DECIMAL == 1)
- #define DECNUMDIGITS 51
- #include "decimal128.h"
- #include "decimal64.h"
- #include "decDouble.h"
- #include "decQuad.h"
- #include "decNumberWrappers.h"
+  #define DECNUMDIGITS 51
+  #include "decimal128.h"
+  #include "decimal64.h"
+  #include "decDouble.h"
+  #include "decQuad.h"
+  #include "decNumberWrappers.h"
 #endif
 
 #define MAX_BIG_INTEGER_SIZE_IN_BITS 4096
 
 #if (TOMS_FAST_MATH == 1)
- #define FP_MAX_SIZE (MAX_BIG_INTEGER_SIZE_IN_BITS+(8*DIGIT_BIT))
+  #define FP_MAX_SIZE (MAX_BIG_INTEGER_SIZE_IN_BITS+(8*DIGIT_BIT))
 
- #include "tfm.h"
- #include "tomsFastMathWrappers.h"
+  #include "tfm.h"
+  #include "tomsFastMathWrappers.h"
 #endif
 
 #if defined(__MINGW64__)
- #include <locale.h>
+  #include <locale.h>
 #endif
 
 
@@ -323,37 +323,37 @@ typedef int16_t calcRegister_t;
 #define DBG_TMP_SAVED_STACK_REGISTERS  6
 
 #if (__linux__ == 1)
- #define FMT64U "lu"
- #define FMT64S "ld"
- #define FMT32U "u"
- #define FMT32S "d"
- #define FMT16U "u"
- #define FMT16S "d"
- #define FMT8U  "u"
- #define FMT8S  "d"
- #define FMTPTR "lu"
+  #define FMT64U "lu"
+  #define FMT64S "ld"
+  #define FMT32U "u"
+  #define FMT32S "d"
+  #define FMT16U "u"
+  #define FMT16S "d"
+  #define FMT8U  "u"
+  #define FMT8S  "d"
+  #define FMTPTR "lu"
 #elif defined(__arm__)
- #define FMT64U "llu"
- #define FMT64S "lld"
- #define FMT32U "lu"
- #define FMT32S "ld"
- #define FMT16U "u"
- #define FMT16S "d"
- #define FMT8U  "u"
- #define FMT8S  "d"
- #define FMTPTR "d"
+  #define FMT64U "llu"
+  #define FMT64S "lld"
+  #define FMT32U "lu"
+  #define FMT32S "ld"
+  #define FMT16U "u"
+  #define FMT16S "d"
+  #define FMT8U  "u"
+  #define FMT8S  "d"
+  #define FMTPTR "d"
 #elif defined(__MINGW64__)
- #define FMT64U "I64u"
- #define FMT64S "I64d"
- #define FMT32U "u"
- #define FMT32S "d"
- #define FMT16U "u"
- #define FMT16S "d"
- #define FMT8U  "u"
- #define FMT8S  "d"
- #define FMTPTR "lu"
+  #define FMT64U "I64u"
+  #define FMT64S "I64d"
+  #define FMT32U "u"
+  #define FMT32S "d"
+  #define FMT16U "u"
+  #define FMT16S "d"
+  #define FMT8U  "u"
+  #define FMT8S  "d"
+  #define FMTPTR "lu"
 #else
- #error Only Linux, ARM and Windows MINGW64 are supported for now
+  #error Only Linux, ARM and Windows MINGW64 are supported for now
 #endif
 
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode

@@ -44,28 +44,32 @@ void leavingFunction                      (char *func);
 #endif
 
 #if (DEBUG_PANEL == 1)
-char * getDenModeName                     (uint16_t dm);
-char * getDisplayFormatName               (uint16_t df);
-char * getTimeFormatName                  (uint16_t tf);
-char * getDateFormatName                  (uint16_t df);
-char * getBooleanName                     (uint16_t b);
-char * getRbrModeName                     (uint16_t mode);
-char * getCurveFittingName                (uint16_t cf);
-char * getRoundingModeName                (uint16_t rm);
-char * getCalcModeName                    (uint16_t cm);
-char * getNextCharName                    (uint16_t nc);
-char * getComplexUnitName                 (uint16_t cu);
-char * getProductSignName                 (uint16_t ps);
-char * getFractionTypeName                (uint16_t ft);
-char * getRadixMarkName                   (uint16_t rm);
-char * getDisplayOvrName                  (uint16_t dio);
-char * getStackSizeName                   (uint16_t ss);
-char * getComplexModeName                 (uint16_t cm);
-char * getAlphaCaseName                   (uint16_t ac);
-char * getCursorFontName                  (uint16_t cf);
-void   formatReal16Debug                  (char *str, uint32_t addr);
-void   formatComplex16Debug               (char *str, uint32_t addr);
-void   formatReal34Debug                  (char *str, uint32_t addr);
-void   formatComplex34Debug               (char *str, uint32_t addr);
-void   memoryDump                         (bool_t bitFields, bool_t globalFlags, bool_t globalRegisters, bool_t localFlags, bool_t FIRSTLOCALREGISTERs, bool_t otherVars);
+  char * getDenModeName                     (uint16_t dm);
+  char * getDisplayFormatName               (uint16_t df);
+  char * getTimeFormatName                  (uint16_t tf);
+  char * getDateFormatName                  (uint16_t df);
+  char * getBooleanName                     (uint16_t b);
+  char * getRbrModeName                     (uint16_t mode);
+  char * getCurveFittingName                (uint16_t cf);
+  char * getRoundingModeName                (uint16_t rm);
+  char * getCalcModeName                    (uint16_t cm);
+  char * getNextCharName                    (uint16_t nc);
+  char * getComplexUnitName                 (uint16_t cu);
+  char * getProductSignName                 (uint16_t ps);
+  char * getFractionTypeName                (uint16_t ft);
+  char * getRadixMarkName                   (uint16_t rm);
+  char * getDisplayOvrName                  (uint16_t dio);
+  char * getStackSizeName                   (uint16_t ss);
+  char * getComplexModeName                 (uint16_t cm);
+  char * getAlphaCaseName                   (uint16_t ac);
+  char * getCursorFontName                  (uint16_t cf);
+  void   memoryDump                         (bool_t bitFields, bool_t globalFlags, bool_t globalRegisters, bool_t localFlags, bool_t FIRSTLOCALREGISTERs, bool_t otherVars);
+#endif
+
+
+#if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
+  void   formatReal16Debug                  (char *str, uint32_t addr);
+  void   formatComplex16Debug               (char *str, uint32_t addr);
+  void   formatReal34Debug                  (char *str, uint32_t addr);
+  void   formatComplex34Debug               (char *str, uint32_t addr);
 #endif

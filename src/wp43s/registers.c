@@ -107,13 +107,13 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
     #endif
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
 
       #if (LOG_FUNCTIONS == 1)
         leavingFunction("getRegisterDataType");
       #endif
 
-      return (savedStackRegister[regist-SAVED_REGISTER_X] >> OFFSET_REGISTER_DATA_TYPE) & ((1u << LENGTH_REGISTER_DATA_TYPE) - 1u);
+      return (savedStackRegister[regist - SAVED_REGISTER_X] >> OFFSET_REGISTER_DATA_TYPE) & ((1u << LENGTH_REGISTER_DATA_TYPE) - 1u);
     }
     #ifdef PC_BUILD
     else {
@@ -222,7 +222,7 @@ uint32_t getRegisterDataPointer(calcRegister_t regist) {
     #endif
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
 
       #if (LOG_FUNCTIONS == 1)
         leavingFunction("getRegisterDataPointer");
@@ -338,7 +338,7 @@ uint32_t getRegisterDataInfo(calcRegister_t regist) {
     #endif
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
 
       #if (LOG_FUNCTIONS == 1)
         leavingFunction("getRegisterDataInfo");
@@ -528,7 +528,7 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType) {
     #endif
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
       savedStackRegister[regist - SAVED_REGISTER_X] = (savedStackRegister[regist - SAVED_REGISTER_X] & ~(((1u << LENGTH_REGISTER_DATA_TYPE) - 1u) << OFFSET_REGISTER_DATA_TYPE)) | (dataType << OFFSET_REGISTER_DATA_TYPE);
     }
     #ifdef PC_BUILD
@@ -619,7 +619,7 @@ void setRegisterDataPointer(calcRegister_t regist, uint32_t dataPointer) {
     #endif
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
       savedStackRegister[regist - SAVED_REGISTER_X] = (savedStackRegister[regist - SAVED_REGISTER_X] & ~(((1u << LENGTH_REGISTER_POINTER) - 1u) << OFFSET_REGISTER_POINTER)) | (dataPointer << OFFSET_REGISTER_POINTER);
     }
     #ifdef PC_BUILD
@@ -709,7 +709,7 @@ void setRegisterDataInfo(calcRegister_t regist, uint16_t dataInfo) {
     #endif
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
       savedStackRegister[regist - SAVED_REGISTER_X] = (savedStackRegister[regist - SAVED_REGISTER_X] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (dataInfo << OFFSET_REGISTER_INFORMATION);
     }
     #ifdef PC_BUILD
@@ -919,7 +919,7 @@ void allocateMemoryInsert(uint32_t address, uint32_t numBytes) {
       }
 
       // Adjust the pointers to the moved area: temporary registers pointers
-      for(r=SAVED_REGISTER_X; r<=SAVED_REGISTER_D; r++) {
+      for(r=SAVED_REGISTER_X; r<=SAVED_REGISTER_L; r++) {
         addr = getRegisterDataPointer(r);
         if(address <= addr && addr < firstFreeByte) {
           setRegisterDataPointer(r, addr + numBytes);
@@ -1030,7 +1030,7 @@ void freeMemory(uint32_t address, uint32_t numBytes) {
       }
 
       // Adjust the pointers to the moved area: saved stack registers pointers
-      for(regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_D; regist++) {
+      for(regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_L; regist++) {
         addr = getRegisterDataPointer(regist);
         if(address+numBytes <= addr && addr < firstFreeByte) {
           setRegisterDataPointer(regist, addr - numBytes);
@@ -1302,7 +1302,7 @@ void setRegisterMaxStringLength(calcRegister_t regist, uint16_t maxStringLen) {
     }
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
       *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)) = maxStringLen;
     }
     else {
@@ -1399,7 +1399,7 @@ uint16_t getRegisterMaxStringLength(calcRegister_t regist) {
     }
   }
   else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_D) {
+    if(regist <= SAVED_REGISTER_L) {
 
       #if (LOG_FUNCTIONS == 1)
         leavingFunction("getRegisterMaxStringLength");

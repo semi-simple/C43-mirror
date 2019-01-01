@@ -496,7 +496,7 @@ void addItemToNimBuffer(int16_t item) {
     done = true;
 
     closeNim();
-    if(calcMode != CM_NIM) {
+    if(calcMode != CM_NIM && lastErrorCode == 0) {
       #if (STACK_LIFT_DEBUG == 1)
         stackLiftEnable();
       #else
@@ -509,7 +509,7 @@ void addItemToNimBuffer(int16_t item) {
     done = true;
 
     closeNim();
-    if(calcMode != CM_NIM) {
+    if(calcMode != CM_NIM && lastErrorCode == 0) {
       if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
         setFlag(FLAG_CPXRES);
       }
@@ -688,7 +688,7 @@ void addItemToNimBuffer(int16_t item) {
 
   else {
     closeNim();
-    if(calcMode != CM_NIM) {
+    if(calcMode != CM_NIM && lastErrorCode == 0) {
       runFunction(item);
       refreshStack();
     }
@@ -1259,6 +1259,8 @@ void closeNim(void) {
                 sprintf(errorMessage, "digit %c is not allowed in base %d!", nimBuffer[i], base);
                 showInfoDialog("In function closeNIM:", errorMessage, NULL, NULL);
               #endif
+
+              restoreStack();
 
               #if (LOG_FUNCTIONS == 1)
                 leavingFunction("closeNim");

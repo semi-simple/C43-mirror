@@ -2698,7 +2698,7 @@ void setupUI(void) {
 #define BACKUP_VERSION 1
 
 void saveCalc(void) {
-  #if (LOG_FUNCTIONS == 1)
+  #if (LOG_FUNCTIONS == 2) // 2 = one register more for table savedStackRegister[]
     enteringFunction("saveCalc");
   #endif
 

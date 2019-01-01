@@ -37,7 +37,7 @@ decContext             ctxtReal16, ctxtReal34, ctxtReal51;
 uint16_t               flags[7];
 char                   tmpStr3000[TMP_STR_LENGTH], errorMessage[ERROR_MESSAGE_LENGTH], aimBuffer[AIM_BUFFER_LENGTH], nimBuffer[NIM_BUFFER_LENGTH], nimBufferDisplay[NIM_BUFFER_LENGTH], tamBuffer[TAM_BUFFER_LENGTH], oldTime[8], dateTimeString[12];
 softmenuStack_t        softmenuStack[7];
-uint32_t               reg[112], savedStackRegister[8], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
+uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
 int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
 int16_t                currentRegisterBrowserScreen;
 calcRegister_t         result, op1, op2;
@@ -121,12 +121,12 @@ void setupDefaults(void) {
     firstFreeByte += REAL16_SIZE;                                            // 8 * 8 = 64 bytes
   }
 
-  // initialize the 8 saved stack registers
-  for(calcRegister_t regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_D; regist++) {
+  // initialize the 9 saved stack registers
+  for(calcRegister_t regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_L; regist++) {
     setRegisterDataType(regist, dtReal16);
     setRegisterDataPointer(regist, firstFreeByte);
     real16Zero(RAM(firstFreeByte));
-    firstFreeByte += REAL16_SIZE;                                            // 8 * 8 = 64 bytes
+    firstFreeByte += REAL16_SIZE;                                            // 9 * 8 = 64 bytes
   }
 
 

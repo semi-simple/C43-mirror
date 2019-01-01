@@ -1373,7 +1373,7 @@ void debugNIM(void) {
 
       row ++;
 
-      for(uint16_t i=SAVED_REGISTER_X; i<=SAVED_REGISTER_D; i++) {
+      for(uint16_t i=SAVED_REGISTER_X; i<=SAVED_REGISTER_L; i++) {
         sprintf(string, "%3d   %s %7d %7d", i-SAVED_REGISTER_X, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);

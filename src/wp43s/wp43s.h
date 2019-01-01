@@ -395,7 +395,7 @@ extern uint16_t               flags[7];
 #define ERROR_MESSAGE_LENGTH 512
 extern char                   tmpStr3000[TMP_STR_LENGTH], errorMessage[ERROR_MESSAGE_LENGTH], aimBuffer[AIM_BUFFER_LENGTH], nimBuffer[NIM_BUFFER_LENGTH], nimBufferDisplay[NIM_BUFFER_LENGTH], tamBuffer[TAM_BUFFER_LENGTH], oldTime[8], dateTimeString[12];
 extern softmenuStack_t        softmenuStack[7];
-extern uint32_t               reg[112], savedStackRegister[8], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
+extern uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
 extern int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
 extern int16_t                currentRegisterBrowserScreen;
 extern calcRegister_t         result, op1, op2;

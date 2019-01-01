@@ -108,7 +108,9 @@ void executeFunction(int16_t fn, int16_t shift) {
           closeNim();
         }
 
-        runFunction(func);
+        if(lastErrorCode == 0) {
+          runFunction(func);
+        }
       }
     }
   }
@@ -872,32 +874,34 @@ void btnClicked(void *notUsed, void *data) {
         closeNim();
       }
 
-      if(calcMode == CM_NORMAL && displayRealAsFraction) {
-        displayRealAsFraction = false;
-        refreshStack();
-      }
-
-      else if(calcMode == CM_NORMAL) {
-        if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-          convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-          refreshRegisterLine(REGISTER_X);
+      if(lastErrorCode == 0) {
+        if(calcMode == CM_NORMAL && displayRealAsFraction) {
+          displayRealAsFraction = false;
+          refreshStack();
         }
 
-        else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-          convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-          refreshRegisterLine(REGISTER_X);
-        }
+        else if(calcMode == CM_NORMAL) {
+          if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+            convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+            refreshRegisterLine(REGISTER_X);
+          }
 
-        else if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+          else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+            convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+            refreshRegisterLine(REGISTER_X);
+          }
+
+          else if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+          }
+
+          else {
+            displayBugScreen("In function btnClicked: CM_NORMAL unexpected case while processing .d function!");
+          }
         }
 
         else {
-          displayBugScreen("In function btnClicked: CM_NORMAL unexpected case while processing .d function!");
+          displayBugScreen("In function btnClicked: unexpected case while processing .d function!");
         }
-      }
-
-      else {
-        displayBugScreen("In function btnClicked: unexpected case while processing .d function!");
       }
     }
 

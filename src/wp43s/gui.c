@@ -85,7 +85,8 @@ GtkWidget                                         *lblOn;
 #endif
 
 #if (DEBUG_REGISTER_L == 1)
-  GtkWidget *lblRegisterL;
+  GtkWidget *lblRegisterL1;
+  GtkWidget *lblRegisterL2;
 #endif
 
 char      *cssData;
@@ -1948,9 +1949,12 @@ void setupUI(void) {
 
 
   #if (DEBUG_REGISTER_L == 1)
-    lblRegisterL = gtk_label_new("");
-    gtk_widget_set_name(lblRegisterL, "registerL");
-    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL, 30, 35);
+    lblRegisterL1 = gtk_label_new("");
+    lblRegisterL2 = gtk_label_new("");
+    gtk_widget_set_name(lblRegisterL1, "registerL");
+    gtk_widget_set_name(lblRegisterL2, "registerL");
+    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL1, 30, 28);
+    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 30, 46);
   #endif
 
   // 1st row: F1 to F6 buttons

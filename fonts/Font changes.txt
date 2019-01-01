@@ -55,3 +55,6 @@
 
 2018-11-04 Changed glyph U+220E (zero for narrow binary digit) in
            standard font. Generated the new WP43S_StandardFont.ttf
+
+2019-01-01 Updated copyright information in both ttf files:
+           2018 ==> 2019

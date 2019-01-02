@@ -5,9 +5,14 @@
 # $* target without extension
  
 CC = gcc
-
 INC = -IdecNumberICU -Isrc/wp43s
-CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -g -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
+
+ifdef DEBUG_WP43S
+CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -g     -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
+else
+CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -O2 -s -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
+endif
+
 LDFLAGS = -m64
 
 SRC_DECIMAL              = decNumberICU/decContext.c decNumberICU/decDouble.c decNumberICU/decimal128.c decNumberICU/decimal64.c decNumberICU/decNumber.c decNumberICU/decQuad.c
@@ -23,7 +28,7 @@ OBJ_GENERATECONSTANTS    = $(SRC_GENERATECONSTANTS:.c=.o) $(OBJ_DECIMAL)
 
 .PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
 
-all: generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
+all: mrproper wp43s
 
 clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts
 

@@ -1056,7 +1056,9 @@ void convertAngle34FromDms(real34_t *angle34) {
   if(!real34IsNegative(&temp2)) {                // regist >= 0.60
     displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      real34Multiply(angle34, const34_100, angle34);
       real34ToString(angle34, errorMessage + ERROR_MESSAGE_LENGTH/2);
+      real34Divide(angle34, const34_100, angle34);
       sprintf(errorMessage, "seconds = %s", errorMessage + ERROR_MESSAGE_LENGTH/2);
       showInfoDialog("In function convertAngle34FromDms: the input value has seconds " STD_GREATER_EQUAL " 60!", errorMessage, NULL, NULL);
     #endif

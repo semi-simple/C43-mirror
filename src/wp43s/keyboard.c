@@ -109,6 +109,7 @@ void executeFunction(int16_t fn, int16_t shift) {
         }
 
         if(lastErrorCode == 0) {
+          temporaryInformation = TI_NO_INFO;
           runFunction(func);
         }
       }

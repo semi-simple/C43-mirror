@@ -133,9 +133,9 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
 
     case 65473:
-     //printf("key pressed: F4\n");
-     btnFnClicked(w, "4");
-     break;
+      //printf("key pressed: F4\n");
+      btnFnClicked(w, "4");
+      break;
 
     case 65474:
       //printf("key pressed: F5\n");

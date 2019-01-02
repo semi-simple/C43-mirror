@@ -383,7 +383,7 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
     }
 
     fnCos(NOPARAM);
-
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_L);
     convertRegister34To16(REGISTER_X);
   }
 
@@ -410,6 +410,7 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
     }
 
     fnCos(NOPARAM);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_L);
   }
 
   else {

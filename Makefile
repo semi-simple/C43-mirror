@@ -7,11 +7,19 @@
 CC = gcc
 INC = -IdecNumberICU -Isrc/wp43s
 
-ifdef DEBUG_WP43S
-CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -g     -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
+ifeq ($(DEST), gitlab)
+  CFLAGS = -march=x86-64
 else
-CFLAGS = -march=nocona -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -O2 -s -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
+  CFLAGS = -march=native
 endif
+
+ifdef DEBUG_WP43S
+  CFLAGS += -g
+else
+  CFLAGS += -O2 -s
+endif
+
+CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
 
 LDFLAGS = -m64
 

@@ -388,7 +388,7 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    real34Remainder(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_2, POINTER_TO_REGISTER_DATA(REGISTER_X);
+    real34Remainder(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_2, POINTER_TO_REGISTER_DATA(REGISTER_X));
 
     if(angularMode == AM_DEGREE) {
       real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));

@@ -59,6 +59,8 @@
 #ifdef DMCP_BUILD
   #undef  DEBUG_PANEL
   #define DEBUG_PANEL 0
+  #undef  DEBUG_REGISTER_L
+  #define DEBUG_REGISTER_L 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
   #undef  LOG_FUNCTIONS

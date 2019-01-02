@@ -40,6 +40,8 @@ void   fnFactorial                (uint16_t unusedParamButMandatory);
 void   fnLnGamma                  (uint16_t unusedParamButMandatory);
 void   fnGamma                    (uint16_t unusedParamButMandatory);
 
+void   checkDms                   (real16_t *angleDms);
+
 void   WP34S_cvt_2rad_sincos      (real34_t *sin, real34_t *cos, calcRegister_t angle);
 void   WP34S_sincosTaylor         (const real34_t *a, real34_t *sinOut, real34_t *cosOut);
 void   WP34S_do_atan              (const real34_t *x, real34_t *angle);

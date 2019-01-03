@@ -503,6 +503,36 @@ void fnAngularMode(uint16_t am) {
   #endif
 
   angularMode = am;
+  if(am == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal16) {
+    real16_t angle, integerPart;
+
+    real16Copy(REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), &angle);
+    real16SetPositiveSign(&angle);
+    real16ToIntegral(&angle, &integerPart);
+    real16Subtract(&angle, &integerPart, &angle);
+    real16Multiply(&angle, const16_100, &angle);
+    if(real16CompareGreaterEqual(&angle, const16_60)) {
+      displayCalcErrorMessage(28, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnAngularMode:", "minutes in d.ms number >= 60", NULL, NULL);
+      #endif
+    }
+    else {
+      real16ToIntegral(&angle, &integerPart);
+      real16Subtract(&angle, &integerPart, &angle);
+      real16Multiply(&angle, const16_100, &angle);
+      if(real16CompareGreaterEqual(&angle, const16_60)) {
+        displayCalcErrorMessage(28, REGISTER_T, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function fnAngularMode:", "seconds in d.ms number >= 60", NULL, NULL);
+        #endif
+      }
+      else {
+        displayAngularMode = am;
+        temporaryInformation = TI_ANGLE;
+      }
+    }
+  }
   showAngularMode();
   refreshStack();
 

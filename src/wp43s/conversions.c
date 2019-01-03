@@ -1098,6 +1098,8 @@ void fnCvtFromAngularMode(uint16_t fromAngularMode) {
 
   convertRegisterAngleFromTo(REGISTER_X, fromAngularMode, angularMode);
   roundRegister(REGISTER_X);
+  temporaryInformation = TI_ANGLE;
+  displayAngularMode = angularMode;
   refreshRegisterLine(REGISTER_X);
 
   #if (LOG_FUNCTIONS == 1)
@@ -1125,6 +1127,8 @@ void fnCvtToAngularMode(uint16_t toAngularMode) {
 
   convertRegisterAngleFromTo(REGISTER_X, angularMode, toAngularMode);
   roundRegister(REGISTER_X);
+  temporaryInformation = TI_ANGLE;
+  displayAngularMode = toAngularMode;
   refreshRegisterLine(REGISTER_X);
 
   #if (LOG_FUNCTIONS == 1)
@@ -1152,6 +1156,8 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
 
   convertRegisterAngleFromTo(REGISTER_X, AM_DEGREE, AM_RADIAN);
   roundRegister(REGISTER_X);
+  temporaryInformation = TI_ANGLE;
+  displayAngularMode = AM_RADIAN;
   refreshRegisterLine(REGISTER_X);
 
   #if (LOG_FUNCTIONS == 1)
@@ -1179,6 +1185,8 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
 
   convertRegisterAngleFromTo(REGISTER_X, AM_DEGREE, AM_DMS);
   roundRegister(REGISTER_X);
+  temporaryInformation = TI_ANGLE;
+  displayAngularMode = AM_DMS;
   refreshRegisterLine(REGISTER_X);
 
   #if (LOG_FUNCTIONS == 1)
@@ -1206,6 +1214,8 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
 
   convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, AM_DEGREE);
   roundRegister(REGISTER_X);
+  temporaryInformation = TI_ANGLE;
+  displayAngularMode = AM_DEGREE;
   refreshRegisterLine(REGISTER_X);
 
   #if (LOG_FUNCTIONS == 1)

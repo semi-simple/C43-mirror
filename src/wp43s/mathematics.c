@@ -1104,6 +1104,7 @@ void fnArctan(uint16_t unusedParamButMandatory) {
     }
 
     temporaryInformation = TI_ANGLE;
+    displayAngularMode = angularMode;
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -1401,6 +1402,7 @@ void fnArccos(uint16_t unusedParamButMandatory) {
       }
 
       temporaryInformation = TI_ANGLE;
+      displayAngularMode = angularMode;
       refreshRegisterLine(REGISTER_X);
     }
   }
@@ -1462,6 +1464,7 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
       }
 
       temporaryInformation = TI_ANGLE;
+      displayAngularMode = angularMode;
       refreshRegisterLine(REGISTER_X);
     }
   }

@@ -1197,7 +1197,6 @@ void angle16ToDisplayString(const real16_t *angle, char *displayString) {
 
     real16_t temp0;
     real16_t temp1; // degrees
-    real16_t temp2; // 100
     real16_t temp3; // minutes
     real16_t temp4; // seconds
 
@@ -1211,21 +1210,20 @@ void angle16ToDisplayString(const real16_t *angle, char *displayString) {
 
     // Get the minutes
     real16Subtract(&temp0, &temp1, &temp0);
-    uInt32ToReal16(100, &temp2);
-    real16Multiply(&temp0, &temp2, &temp0);
+    real16Multiply(&temp0, const16_100, &temp0);
     real16ToIntegral(&temp0, &temp3);
 
     // Get the seconds
     real16Subtract(&temp0, &temp3, &temp0);
-    real16Multiply(&temp0, &temp2, &temp0);
+    real16Multiply(&temp0, const16_100, &temp0);
     real16ToIntegral(&temp0, &temp4);
 
     // Get the fractional seconds
     real16Subtract(&temp0, &temp4, &temp0);
-    real16Multiply(&temp0, &temp2, &temp0);
-    real34ToIntegralRound(&temp0, &temp2);
+    real16Multiply(&temp0, const16_100, &temp0);
+    real34ToIntegralRound(&temp0, &temp0);
 
-    fs = real16ToUInt32(&temp2);
+    fs = real16ToUInt32(&temp0);
     s  = real16ToUInt32(&temp4);
     m  = real16ToUInt32(&temp3);
 
@@ -1241,12 +1239,16 @@ void angle16ToDisplayString(const real16_t *angle, char *displayString) {
 
     if(m >= 60) {
       m -= 60;
-      uInt32ToReal16(1, &temp2);
-      real16Add(&temp1, &temp2, &temp1);
+      real16Add(&temp1, const16_1, &temp1);
     }
 
     real16ToString(&temp1, degStr);
-    sprintf(displayString, "%s%s" STD_DEGREE STD_SPACE_4_PER_EM "%" FMT32U STD_QUOTE STD_SPACE_4_PER_EM "%" FMT32U "%s%02" FMT32U STD_DOUBLE_QUOTE, sign==-1 ? "-" : "", degStr, m, s, RADIX16_MARK_STRING, fs);
+    sprintf(displayString, "%s%s" STD_DEGREE "%s%" FMT32U STD_QUOTE "%s%" FMT32U "%s%02" FMT32U STD_DOUBLE_QUOTE,
+                            sign==-1 ? "-" : "",
+                              degStr,         m < 10 ? STD_SPACE_FIGURE : "",
+                                               m,                    s < 10 ? STD_SPACE_FIGURE : "",
+                                                                       s,         RADIX16_MARK_STRING,
+                                                                                    fs);
   }
   else {
     real16ToDisplayString(angle, false, displayString);

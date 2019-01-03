@@ -2699,10 +2699,10 @@ void setupUI(void) {
 }
 
 
-#define BACKUP_VERSION 1
+#define BACKUP_VERSION 3  // 3 = displayAngularMode
 
 void saveCalc(void) {
-  #if (LOG_FUNCTIONS == 2) // 2 = one register more for table savedStackRegister[]
+  #if (LOG_FUNCTIONS == 1)
     enteringFunction("saveCalc");
   #endif
 
@@ -2779,6 +2779,7 @@ void saveCalc(void) {
   size += fwrite(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
   size += fwrite(&smallIntegerMode,                   1, sizeof(smallIntegerMode),                   backup); //printf("%8lu smallIntegerMode\n",                   (unsigned long)size);
   size += fwrite(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
+  size += fwrite(&displayAngularMode,                 1, sizeof(displayAngularMode),                 backup); //printf("%8lu displayAngularMode\n",                 (unsigned long)size);
   size += fwrite(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
   size += fwrite(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
   size += fwrite(&curveFitting,                       1, sizeof(curveFitting),                       backup); //printf("%8lu curveFitting\n",                       (unsigned long)size);
@@ -2937,6 +2938,7 @@ void restoreCalc(void) {
     size += fread(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
     size += fread(&smallIntegerMode,                   1, sizeof(smallIntegerMode),                   backup); //printf("%8lu smallIntegerMode\n",                   (unsigned long)size);
     size += fread(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
+    size += fread(&displayAngularMode,                 1, sizeof(displayAngularMode),                 backup); //printf("%8lu displayAngularMode\n",                 (unsigned long)size);
     size += fread(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
     size += fread(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
     size += fread(&curveFitting,                       1, sizeof(curveFitting),                       backup); //printf("%8lu curveFitting\n",                       (unsigned long)size);

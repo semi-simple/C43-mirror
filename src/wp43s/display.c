@@ -1190,7 +1190,7 @@ void angle16ToDisplayString(const real16_t *angle, char *displayString) {
     enteringFunction("angle16ToDisplayString");
   #endif
 
-  if(angularMode == AM_DMS) {
+  if(displayAngularMode == AM_DMS) {
     char degStr[27];
     uint32_t m, s, fs;
     int16_t sign;
@@ -1253,13 +1253,13 @@ void angle16ToDisplayString(const real16_t *angle, char *displayString) {
   else {
     real16ToDisplayString(angle, false, displayString);
 
-         if(angularMode == AM_DEGREE) strcat(displayString, STD_DEGREE);
-    else if(angularMode == AM_GRAD)   strcat(displayString, STD_SUP_g);
-    else if(angularMode == AM_MULTPI) strcat(displayString, STD_pi);
-    else if(angularMode == AM_RADIAN) strcat(displayString, STD_SUP_r);
+         if(displayAngularMode == AM_DEGREE) strcat(displayString, STD_DEGREE);
+    else if(displayAngularMode == AM_GRAD)   strcat(displayString, STD_SUP_g);
+    else if(displayAngularMode == AM_MULTPI) strcat(displayString, STD_pi);
+    else if(displayAngularMode == AM_RADIAN) strcat(displayString, STD_SUP_r);
     else {
       strcat(displayString, "?");
-      sprintf(errorMessage, "In function angle16ToDisplayString: %" FMT8U " is an unexpected value for angularMode!", angularMode);
+      sprintf(errorMessage, "In function angle16ToDisplayString: %" FMT8U " is an unexpected value for displayAngularMode!", displayAngularMode);
       displayBugScreen(errorMessage);
     }
   }

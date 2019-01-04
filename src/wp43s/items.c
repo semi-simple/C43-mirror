@@ -453,7 +453,7 @@ const item_t indexOfItems[] = {
 /*  307 */  { toBeCoded,              NOPARAM,                     "LgNrm:",                                      "LgNrm:",                                                                     SLS_UNCHANGED},
 /*  308 */  { fnCurveFitting,         CF_LINEAR_FITTING,           "LinF",                                        "LinF",                                                                       SLS_UNCHANGED},
 /*  309 */  { toBeCoded,              NOPARAM,                     "LJ",                                          "LJ",                                                                         SLS_UNCHANGED},
-/*  310 */  { fnLn,                   NOPARAM,                     "LN",                                          "ln",                                                                         SLS_UNCHANGED},
+/*  310 */  { fnLn,                   NOPARAM,                     "LN",                                          "ln",                                                                         SLS_ENABLED  },
 /*  311 */  { toBeCoded,              NOPARAM,                     "L" STD_SUB_n ,                                "L" STD_SUB_n ,                                                               SLS_UNCHANGED},
 /*  312 */  { toBeCoded,              NOPARAM,                     "LN1+x",                                       "ln 1+x",                                                                     SLS_ENABLED  },
 /*  313 */  { toBeCoded,              NOPARAM,                     "L" STD_SUB_n STD_SUB_alpha,                   "L" STD_SUB_n STD_SUB_alpha,                                                  SLS_UNCHANGED},

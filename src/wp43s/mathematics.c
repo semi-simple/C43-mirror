@@ -1889,62 +1889,6 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 
-void fnLn(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnLn");
-  #endif
-
-  bool_t real16 = false;
-
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    real16 = true;
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    convertSmallIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    real16 = true;
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
-    real16 = true;
-  }
-
-  else if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot calculate ln of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fnLn:", errorMessage, NULL, NULL);
-    #endif
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fnLn");
-    #endif
-
-    return;
-  }
-
-  real51_t real51;
-  real34ToReal51(POINTER_TO_REGISTER_DATA(REGISTER_X), &real51);
-  WP34S_real51Ln(&real51, &real51);
-  real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(REGISTER_X));
-
-  if(real16) {
-    convertRegister34To16(REGISTER_X);
-  }
-
-  refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnLn");
-  #endif
-}
-
-
-
 void fnFactorial(uint16_t unusedParamButMandatory) {
   #if (LOG_FUNCTIONS == 1)
     enteringFunction("fnFactorial");

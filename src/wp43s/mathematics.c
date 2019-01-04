@@ -438,9 +438,15 @@ void fnLog2(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intLog2(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+
+    refreshRegisterLine(REGISTER_X);
+
+    #if (LOG_FUNCTIONS == 1)
+      leavingFunction("fnLog2");
+    #endif
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     bigInteger_t value;
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -477,14 +483,37 @@ void fnLog2(uint16_t unusedParamButMandatory) {
 
     uIntToBigInteger(log2, &value);
     convertBigIntegerToBigIntegerRegister(&value, result);
+
+    refreshRegisterLine(REGISTER_X);
+
+    #if (LOG_FUNCTIONS == 1)
+      leavingFunction("fnLog2");
+    #endif
   }
 
-  else {
+  bool_t real16;
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    convertRegister16To34(REGISTER_X);
+    real16 = true;
+  }
+
+  if(getRegisterDataType(REGISTER_X) != dtReal34) {
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot calculate the log" STD_SUB_2 " of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnLog2:", errorMessage, NULL, NULL);
     #endif
+  }
+
+  real51_t real51;
+  real34ToReal51(POINTER_TO_REGISTER_DATA(REGISTER_X), &real51);
+  WP34S_real51Ln(&real51, &real51);
+  real51Divide(&real51, const51_ln2, &real51);
+  real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(REGISTER_X));
+
+  if(real16) {
+    convertRegister34To16(REGISTER_X);
   }
 
   refreshRegisterLine(REGISTER_X);
@@ -511,9 +540,15 @@ void fnLog10(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intLog10(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+
+    refreshRegisterLine(REGISTER_X);
+
+    #if (LOG_FUNCTIONS == 1)
+      leavingFunction("fnLog10");
+    #endif
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     bigInteger_t value;
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -528,8 +563,8 @@ void fnLog10(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnLog10: Cannot calculate the log" STD_SUB_10 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
       #endif
 
-  	  	bigIntegerSetZero(&value);
-	    	convertBigIntegerToBigIntegerRegister(&value, result);
+      bigIntegerSetZero(&value);
+      convertBigIntegerToBigIntegerRegister(&value, result);
 
       #if (LOG_FUNCTIONS == 1)
         leavingFunction("fnLog10");
@@ -551,14 +586,43 @@ void fnLog10(uint16_t unusedParamButMandatory) {
 
     uIntToBigInteger(log10, &value);
     convertBigIntegerToBigIntegerRegister(&value, REGISTER_X);
+
+    refreshRegisterLine(REGISTER_X);
+
+    #if (LOG_FUNCTIONS == 1)
+      leavingFunction("fnLog10");
+    #endif
   }
 
-  else {
+  bool_t real16;
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    convertRegister16To34(REGISTER_X);
+    real16 = true;
+  }
+
+  if(getRegisterDataType(REGISTER_X) != dtReal34) {
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot calculate the log" STD_SUB_10 " of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnLog10:", errorMessage, NULL, NULL);
     #endif
+
+    #if (LOG_FUNCTIONS == 1)
+      leavingFunction("fnLog10");
+    #endif
+
+    return;
+  }
+
+  real51_t real51;
+  real34ToReal51(POINTER_TO_REGISTER_DATA(REGISTER_X), &real51);
+  WP34S_real51Ln(&real51, &real51);
+  real51Divide(&real51, const51_ln10, &real51);
+  real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(REGISTER_X));
+
+  if(real16) {
+    convertRegister34To16(REGISTER_X);
   }
 
   refreshRegisterLine(REGISTER_X);
@@ -1867,7 +1931,6 @@ void fnLn(uint16_t unusedParamButMandatory) {
   real34ToReal51(POINTER_TO_REGISTER_DATA(REGISTER_X), &real51);
   WP34S_real51Ln(&real51, &real51);
   real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(REGISTER_X));
-  //real34Ln(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X));
 
   if(real16) {
     convertRegister34To16(REGISTER_X);

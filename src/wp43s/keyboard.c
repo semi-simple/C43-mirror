@@ -904,7 +904,6 @@ void btnClicked(void *notUsed, void *data) {
             sprintf(errorMessage, "data type %s cannot be converted to a real16!", getRegisterDataTypeName(REGISTER_X, false, false));
             showInfoDialog("In function btnClicked:", errorMessage, NULL, NULL);
           #endif
-          displayBugScreen(" CM_NORMAL unexpected case while processing .d function!");
         }
       }
 

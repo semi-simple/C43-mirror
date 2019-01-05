@@ -23,9 +23,9 @@
 
 
 void (* const ln[12])(void) = {
-//  regX ==> 1            2            3            4         5            6            7            8            9            10            11           12
-//           Big integer  real16       complex16              Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-             lnBigI,      lnRe16,      lnCo16,      errorLn,  errorLn,     errorLn,     errorLn,     lnRm16,      lnCm16,      lnSmaI,       lnRe34,      lnCo34
+//  regX ==> 1            2        3          4         5         6         7         8           9            10             11       12
+//           Big integer  real16   complex16            Time      Date      String    real16 mat  complex16 m  Small integer  real34   complex34
+             lnBigI,      lnRe16,  lnCo16,    errorLn,  errorLn,  errorLn,  errorLn,  lnRm16,     lnCm16,      lnSmaI,        lnRe34,  lnCo34
 };
 
 
@@ -43,7 +43,7 @@ void errorLn(void) {
 
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot Ln for %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "cannot calculate Ln for %s", getRegisterDataTypeName(op1, true, false));
     showInfoDialog("In function fnLn:", errorMessage, NULL, NULL);
   #endif
 

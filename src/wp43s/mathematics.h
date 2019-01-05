@@ -22,8 +22,11 @@ void   fnGcd                      (uint16_t unusedParamButMandatory);
 void   fnLcm                      (uint16_t unusedParamButMandatory);
 void   fnSquareRoot               (uint16_t unusedParamButMandatory);
 void   fnMagnitude                (uint16_t unusedParamButMandatory);
-void   fnLog2                     (uint16_t unusedParamButMandatory);
-void   fnLog10                    (uint16_t unusedParamButMandatory);
+
+#include "ln.h"
+#include "log2.h"
+#include "log10.h"
+
 void   fn2Pow                     (uint16_t unusedParamButMandatory);
 void   fn10Pow                    (uint16_t unusedParamButMandatory);
 void   fnSin                      (uint16_t unusedParamButMandatory);
@@ -35,17 +38,6 @@ void   fnArccos                   (uint16_t unusedParamButMandatory);
 void   fnToPolar                  (uint16_t unusedParamButMandatory);
 void   fnToRect                   (uint16_t unusedParamButMandatory);
 void   fnExp                      (uint16_t unusedParamButMandatory);
-
-void   fnLn                       (uint16_t unusedParamButMandatory);
-void   errorLn                    (void);
-void   lnBigI                     (void);
-void   lnRe16                     (void);
-void   lnCo16                     (void);
-void   lnRm16                     (void);
-void   lnCm16                     (void);
-void   lnSmaI                     (void);
-void   lnRe34                     (void);
-void   lnCo34                     (void);
 
 void   fnFactorial                (uint16_t unusedParamButMandatory);
 void   fnLnGamma                  (uint16_t unusedParamButMandatory);

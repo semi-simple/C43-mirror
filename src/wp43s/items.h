@@ -1562,7 +1562,7 @@
 #define KEY_BACKSPACE                 1526
 #define KEY_PRTX                      1527
 #define ITM_AIM                       1528
-#define ITM_DD                        1529
+#define KEY_dotD                      1529
 #define ITM_QTtoM3                    1530
 #define ITM_M3toQT                    1531
 #define ITM_toSP                      1532

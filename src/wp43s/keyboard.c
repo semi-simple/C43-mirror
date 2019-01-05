@@ -870,39 +870,46 @@ void btnClicked(void *notUsed, void *data) {
       }
     }
 
-    else if(item == ITM_DD) {
+    else if(item == KEY_dotD) {
       if(calcMode == CM_NIM) {
-        closeNim();
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function btnClicked:", "the data type date is to be coded!", NULL, NULL);
+        #endif
       }
 
-      if(lastErrorCode == 0) {
-        if(calcMode == CM_NORMAL && displayRealAsFraction) {
-          displayRealAsFraction = false;
-          refreshStack();
+      else if(displayRealAsFraction) {
+        displayRealAsFraction = false;
+        refreshStack();
+      }
+
+      else if(calcMode == CM_NORMAL) {
+        if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+          convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+          refreshRegisterLine(REGISTER_X);
         }
 
-        else if(calcMode == CM_NORMAL) {
-          if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-            convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-            refreshRegisterLine(REGISTER_X);
-          }
-
-          else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-            convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-            refreshRegisterLine(REGISTER_X);
-          }
-
-          else if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
-          }
-
-          else {
-            displayBugScreen("In function btnClicked: CM_NORMAL unexpected case while processing .d function!");
-          }
+        else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+          convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+          refreshRegisterLine(REGISTER_X);
         }
 
-        else {
-          displayBugScreen("In function btnClicked: unexpected case while processing .d function!");
+        else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+          convertRegister34To16(REGISTER_X);
+          refreshRegisterLine(REGISTER_X);
         }
+
+        else if(getRegisterDataType(REGISTER_X) != dtReal16) {
+          displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            sprintf(errorMessage, "data type %s cannot be converted to a real16!", getRegisterDataTypeName(REGISTER_X, false, false));
+            showInfoDialog("In function btnClicked:", errorMessage, NULL, NULL);
+          #endif
+          displayBugScreen(" CM_NORMAL unexpected case while processing .d function!");
+        }
+      }
+
+      else {
+        displayBugScreen("In function btnClicked: unexpected case while processing .d function!");
       }
     }
 

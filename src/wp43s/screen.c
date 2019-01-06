@@ -728,6 +728,18 @@ void refreshRegisterLine(calcRegister_t regist) {
           showString(VERSION, &standardFont, 1, 134 - 37*(regist-100), vmNormal, false, false);
         }
 
+        else if(temporaryInformation == TI_FALSE && regist == REGISTER_X) {
+          sprintf(tmpStr3000, "false");
+          w = stringWidth(tmpStr3000, &standardFont, false, false) + 1;
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, false);
+        }
+
+        else if(temporaryInformation == TI_TRUE && regist == REGISTER_X) {
+          sprintf(tmpStr3000, "true");
+          w = stringWidth(tmpStr3000, &standardFont, false, false) + 1;
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, false);
+        }
+
         else if(temporaryInformation == TI_RESET && regist == REGISTER_X) {
           sprintf(tmpStr3000, "Data, programs, and definitions cleared");
           w = stringWidth(tmpStr3000, &standardFont, false, false) + 1;

@@ -716,21 +716,21 @@ void fnReset(uint16_t confirmation) {
     kbd_usr[19].gShifted    = ITM_SXY;
     kbd_usr[20].gShifted    = ITM_LYtoM;
 
-    setFlag(  3);
-    setFlag( 11);
-    setFlag( 33);
-    setFlag( 34);
-    setFlag( 52);
-    setFlag( 62);
-    setFlag( 77);
-    setFlag( 85);
-    setFlag(FLAG_CARRY);
-    setFlag(FLAG_DANGER);
+    fnSetFlag(  3);
+    fnSetFlag( 11);
+    fnSetFlag( 33);
+    fnSetFlag( 34);
+    fnSetFlag( 52);
+    fnSetFlag( 62);
+    fnSetFlag( 77);
+    fnSetFlag( 85);
+    fnSetFlag(FLAG_CARRY);
+    fnSetFlag(FLAG_DANGER);
     showOverflowCarry();
 
     allocateLocalRegisters(2);
-    setFlag(FIRST_LOCAL_REGISTER+0);
-    setFlag(NUMBER_OF_LOCAL_FLAGS+2);
+    fnSetFlag(FIRST_LOCAL_REGISTER+0);
+    fnSetFlag(NUMBER_OF_LOCAL_FLAGS+2);
     reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, 0);
     stringToReal16("5.555", POINTER_TO_REGISTER_DATA(FIRST_LOCAL_REGISTER));
 

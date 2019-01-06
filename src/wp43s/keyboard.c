@@ -541,7 +541,7 @@ void btnClicked(void *notUsed, void *data) {
         if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtBigInteger)
            && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtBigInteger)) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-          setFlag(FLAG_CPXRES);
+          fnSetFlag(FLAG_CPXRES);
 
           if(dataTypeX == dtBigInteger) {
             if(dataTypeY == dtReal16 || dataTypeY == dtBigInteger) {

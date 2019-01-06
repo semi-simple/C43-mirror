@@ -511,7 +511,7 @@ void addItemToNimBuffer(int16_t item) {
     closeNim();
     if(calcMode != CM_NIM && lastErrorCode == 0) {
       if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
-        setFlag(FLAG_CPXRES);
+        fnSetFlag(FLAG_CPXRES);
       }
 
       #if (STACK_LIFT_DEBUG == 1)

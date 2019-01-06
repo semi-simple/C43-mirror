@@ -662,10 +662,10 @@ static void WP34S_set_carry(int32_t carry) {
   #endif
 
  	if(carry) {
-		  setFlag(FLAG_CARRY);
+		  fnSetFlag(FLAG_CARRY);
   }
  	else {
-	 	 clearFlag(FLAG_CARRY);
+	 	 fnClearFlag(FLAG_CARRY);
   }
 
   #if (LOG_FUNCTIONS == 1)
@@ -679,10 +679,10 @@ static void WP34S_set_overflow(int32_t overflow) {
   #endif
 
  	if(overflow) {
-		  setFlag(FLAG_OVERFLOW);
+		  fnSetFlag(FLAG_OVERFLOW);
   }
 	 else {
-		 clearFlag(FLAG_OVERFLOW);
+		 fnClearFlag(FLAG_OVERFLOW);
   }
 
   #if (LOG_FUNCTIONS == 1)

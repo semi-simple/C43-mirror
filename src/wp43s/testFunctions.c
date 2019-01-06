@@ -2872,9 +2872,9 @@ void testFunctions(void) {
 //roundRegister
 //fnStore
 //fnRecall
-//setFlag
-//clearFlag
-//flipFlag
+//fnSetFlag
+//fnClearFlag
+//fnFlipFlag
 
 
 

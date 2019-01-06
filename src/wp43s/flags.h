@@ -34,7 +34,16 @@
 #define FLAG_J        110
 #define FLAG_K        111
 
-bool_t getFlag  (uint16_t f);
-void   setFlag  (uint16_t f);
-void   clearFlag(uint16_t f);
-void   flipFlag (uint16_t f);
+bool_t getFlag           (uint16_t f);
+void   fnSetFlag         (uint16_t f);
+void   fnClearFlag       (uint16_t f);
+void   fnFlipFlag        (uint16_t f);
+void   fnClFAll          (uint16_t unusedParamButMandatory);
+void   fnIsFlagClear     (uint16_t f);
+void   fnIsFlagSet       (uint16_t f);
+void   fnIsFlagClearClear(uint16_t f);
+void   fnIsFlagSetClear  (uint16_t f);
+void   fnIsFlagClearSet  (uint16_t f);
+void   fnIsFlagSetSet    (uint16_t f);
+void   fnIsFlagClearFlip (uint16_t f);
+void   fnIsFlagSetFlip   (uint16_t f);

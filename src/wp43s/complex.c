@@ -50,7 +50,7 @@ void fnComplexResult(uint16_t complexResult) {
     enteringFunction("fnComplexResult");
   #endif
 
-  complexResult ? setFlag(FLAG_CPXRES) : clearFlag(FLAG_CPXRES);
+  complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("fnComplexResult");

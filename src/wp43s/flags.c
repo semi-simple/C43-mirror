@@ -77,9 +77,9 @@ bool_t getFlag(uint16_t f) {
  * \param[in] f uint16_t
  * \return void
  ***********************************************/
-void setFlag(uint16_t f) {
+void fnSetFlag(uint16_t f) {
   #if (LOG_FUNCTIONS == 1)
-    enteringFunction("setFlag");
+    enteringFunction("fnSetFlag");
   #endif
 
   if(f < NUMBER_OF_LOCAL_FLAGS) {
@@ -99,19 +99,21 @@ void setFlag(uint16_t f) {
         *POINTER_TO_LOCAL_FLAGS |=  (1u << f);
       }
       else {
-        sprintf(errorMessage, "In function setFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
+        sprintf(errorMessage, "In function fnSetFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
         displayBugScreen(errorMessage);
       }
     }
     #ifdef PC_BUILD
     else {
-      showInfoDialog("In function setFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      showInfoDialog("In function fnSetFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
     }
     #endif
   }
 
+  refreshRegisterLine(TAM_REGISTER_LINE);
+
   #if (LOG_FUNCTIONS == 1)
-    leavingFunction("setFlag");
+    leavingFunction("fnSetFlag");
   #endif
 }
 
@@ -123,9 +125,9 @@ void setFlag(uint16_t f) {
  * \param[in] f uint16_t
  * \return void
  ***********************************************/
-void clearFlag(uint16_t f) {
+void fnClearFlag(uint16_t f) {
   #if (LOG_FUNCTIONS == 1)
-    enteringFunction("clearFlag");
+    enteringFunction("fnClearFlag");
   #endif
 
   if(f < NUMBER_OF_LOCAL_FLAGS) {
@@ -145,19 +147,21 @@ void clearFlag(uint16_t f) {
         *POINTER_TO_LOCAL_FLAGS &= ~(1u << f);
       }
       else {
-        sprintf(errorMessage, "In function clearFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
+        sprintf(errorMessage, "In function fnClearFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
         displayBugScreen(errorMessage);
       }
     }
     #ifdef PC_BUILD
     else {
-     showInfoDialog("In function clearFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+     showInfoDialog("In function fnClearFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
     }
    #endif
   }
 
+  refreshRegisterLine(TAM_REGISTER_LINE);
+
   #if (LOG_FUNCTIONS == 1)
-    leavingFunction("clearFlag");
+    leavingFunction("fnClearFlag");
   #endif
 }
 
@@ -169,9 +173,9 @@ void clearFlag(uint16_t f) {
  * \param[in] f uint16_t
  * \return void
  ***********************************************/
-void flipFlag(uint16_t f) {
+void fnFlipFlag(uint16_t f) {
   #if (LOG_FUNCTIONS == 1)
-    enteringFunction("flipFlag");
+    enteringFunction("fnFlipFlag");
   #endif
 
   if(f < NUMBER_OF_LOCAL_FLAGS) {
@@ -191,18 +195,165 @@ void flipFlag(uint16_t f) {
         *POINTER_TO_LOCAL_FLAGS ^=  (1u << f);
       }
       else {
-        sprintf(errorMessage, "In function flipFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
+        sprintf(errorMessage, "In function fnFlipFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
         displayBugScreen(errorMessage);
       }
     }
     #ifdef PC_BUILD
     else {
-      showInfoDialog("In function flipFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      showInfoDialog("In function fnFlipFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
     }
     #endif
   }
 
+  refreshRegisterLine(TAM_REGISTER_LINE);
+
   #if (LOG_FUNCTIONS == 1)
-    leavingFunction("flipFlag");
+    leavingFunction("fnFlipFlag");
   #endif
+}
+
+
+
+/********************************************//**
+ * \brief Clear all global and local flags
+ *
+ * \param[in] f uint16_t
+ * \return void
+ ***********************************************/
+void fnClFAll(uint16_t unusedParamButMandatory) {
+  memset(flags, 0, sizeof(flags));
+  showRealComplexResult();
+  showOverflowCarry();
+
+  if(numberOfLocalRegisters != 0) {
+    *POINTER_TO_LOCAL_FLAGS = 0;
+  }
+}
+
+
+
+void fnIsFlagClear(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_FALSE;
+  }
+  else {
+    temporaryInformation = TI_TRUE;
+  }
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
+}
+
+
+
+void fnIsFlagClearClear(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_FALSE;
+  }
+  else {
+    temporaryInformation = TI_TRUE;
+  }
+
+  fnClearFlag(f);
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
+}
+
+
+
+void fnIsFlagClearSet(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_FALSE;
+  }
+  else {
+    temporaryInformation = TI_TRUE;
+  }
+
+  fnSetFlag(f);
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
+}
+
+
+
+void fnIsFlagClearFlip(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_FALSE;
+  }
+  else {
+    temporaryInformation = TI_TRUE;
+  }
+
+  fnFlipFlag(f);
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
+}
+
+
+
+void fnIsFlagSet(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_TRUE;
+  }
+  else {
+    temporaryInformation = TI_FALSE;
+  }
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
+}
+
+
+
+
+void fnIsFlagSetClear(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_TRUE;
+  }
+  else {
+    temporaryInformation = TI_FALSE;
+  }
+
+  fnClearFlag(f);
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
+}
+
+
+
+
+void fnIsFlagSetSet(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_TRUE;
+  }
+  else {
+    temporaryInformation = TI_FALSE;
+  }
+
+  fnSetFlag(f);
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
+}
+
+
+
+
+void fnIsFlagSetFlip(uint16_t f) {
+  if(getFlag(f)) {
+    temporaryInformation = TI_TRUE;
+  }
+  else {
+    temporaryInformation = TI_FALSE;
+  }
+
+  fnFlipFlag(f);
+
+  refreshRegisterLine(TAM_REGISTER_LINE);
+  refreshRegisterLine(REGISTER_X);
 }

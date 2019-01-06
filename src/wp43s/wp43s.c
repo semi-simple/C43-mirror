@@ -199,11 +199,11 @@ void setupDefaults(void) {
   aimBuffer[0] = 0;
 
 
-  clearFlag(FLAG_OVERFLOW);
-  clearFlag(FLAG_CARRY);
+  fnClearFlag(FLAG_OVERFLOW);
+  fnClearFlag(FLAG_CARRY);
   showOverflowCarry();
 
-  clearFlag(FLAG_CPXRES);
+  fnClearFlag(FLAG_CPXRES);
   showRealComplexResult();
 
   showAlphaMode();

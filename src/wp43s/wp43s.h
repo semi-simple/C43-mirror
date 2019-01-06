@@ -309,6 +309,8 @@ typedef int16_t calcRegister_t;
 #define TI_ARE_YOU_SURE         5
 #define TI_VERSION              6
 #define TI_WHO                  7
+#define TI_FALSE                8
+#define TI_TRUE                 9
 
 // Register browser mode
 #define RBR_GLOBAL              0

@@ -847,6 +847,17 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
+            else if(temporaryInformation == TI_X_Y) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "x" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "y" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
+              }
+            }
+
             else if(temporaryInformation == TI_ANGLE) {
               if(regist == REGISTER_X) {
                 registerAngleToDisplayString(regist, tmpStr3000);

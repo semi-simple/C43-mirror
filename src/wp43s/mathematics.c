@@ -1612,6 +1612,8 @@ void fnToRect(uint16_t unusedParamButMandatory) {
       convertRegister34To16(REGISTER_Y);
     }
 
+    temporaryInformation = TI_X_Y;
+
     refreshRegisterLine(REGISTER_X);
     refreshRegisterLine(REGISTER_Y);
   }

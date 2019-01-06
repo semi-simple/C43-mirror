@@ -168,10 +168,42 @@ void log10Re16(void) {
 
   real51_t real51;
 
-  real16ToReal51(POINTER_TO_REGISTER_DATA(op1), &real51);
-  WP34S_real51Ln(&real51, &real51);
-  real51Divide(&real51, const51_ln10, &real51);
-  real51ToReal16(&real51, POINTER_TO_REGISTER_DATA(result));
+  if(real16IsZero(POINTER_TO_REGISTER_DATA(op1))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const16_minusInfinity, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log10Re16:", "cannot calculate Ln(0)", NULL, NULL);
+      #endif
+    }
+  }
+  else if(real16IsPositive(POINTER_TO_REGISTER_DATA(op1))) { // Positive
+    real16ToReal51(POINTER_TO_REGISTER_DATA(op1), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln10, &real51);
+    real51ToReal16(&real51, POINTER_TO_REGISTER_DATA(result));
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    real16SetPositiveSign(POINTER_TO_REGISTER_DATA(op1));
+    real16ToReal51(POINTER_TO_REGISTER_DATA(op1), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln10, &real51);
+    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
+    real51ToReal16(&real51, POINTER_TO_REGISTER_DATA(result));
+    real16Copy(const16_pi, COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    real16Divide(COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)), const16_ln10, COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+  }
+  else if(getFlag(FLAG_DANGER)) {
+    real16Copy(const16_NaN, POINTER_TO_REGISTER_DATA(result));
+  }
+  else {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log10Re16:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+    #endif
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("log10Re16");
@@ -185,7 +217,34 @@ void log10Co16(void) {
     enteringFunction("log10Co16");
   #endif
 
-  log10ToBeCoded();
+  if(real16IsZero(POINTER_TO_REGISTER_DATA(op1)) && real16IsZero(COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const16_NaN, POINTER_TO_REGISTER_DATA(result));
+      real16Copy(const16_NaN, COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log10Co16:", "cannot calculate Ln(0)", NULL, NULL);
+      #endif
+    }
+  }
+  else {
+    real16_t magnitude, theta;
+    real51_t real51;
+    uint8_t savedAngularMode;
+
+    savedAngularMode = angularMode;
+    angularMode = AM_RADIAN;
+    real16RectangularToPolar(REAL16_POINTER(POINTER_TO_REGISTER_DATA(op1)), COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)), &magnitude, &theta);
+    real16ToReal51(&magnitude, &real51);
+    real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln10, &real51);
+    real51ToReal16(&real51, POINTER_TO_REGISTER_DATA(result));
+    real16Copy(&theta, COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    real16Divide(COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)), const16_ln10, COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    angularMode = savedAngularMode;
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("log10Co16");
@@ -243,10 +302,42 @@ void log10Re34(void) {
 
   real51_t real51;
 
-  real34ToReal51(POINTER_TO_REGISTER_DATA(op1), &real51);
-  WP34S_real51Ln(&real51, &real51);
-  real51Divide(&real51, const51_ln10, &real51);
-  real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(result));
+  if(real34IsZero(POINTER_TO_REGISTER_DATA(op1))) {
+    if(getFlag(FLAG_DANGER)) {
+      real34Copy(const34_minusInfinity, POINTER_TO_REGISTER_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log10Re34:", "cannot calculate Ln(0)", NULL, NULL);
+      #endif
+    }
+  }
+  else if(real34IsPositive(POINTER_TO_REGISTER_DATA(op1))) { // Positive
+    real34ToReal51(POINTER_TO_REGISTER_DATA(op1), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln10, &real51);
+    real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(result));
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    real34SetPositiveSign(POINTER_TO_REGISTER_DATA(op1));
+    real34ToReal51(POINTER_TO_REGISTER_DATA(op1), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln10, &real51);
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+    real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(result));
+    real34Copy(const34_pi, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    real34Divide(COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)), const34_ln10, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+  }
+  else if(getFlag(FLAG_DANGER)) {
+    real34Copy(const34_NaN, POINTER_TO_REGISTER_DATA(result));
+  }
+  else {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log10Re34:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+    #endif
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("log10Re34");
@@ -260,7 +351,34 @@ void log10Co34(void) {
     enteringFunction("log10Co34");
   #endif
 
-  log10ToBeCoded();
+  if(real34IsZero(POINTER_TO_REGISTER_DATA(op1)) && real34IsZero(COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const34_NaN, POINTER_TO_REGISTER_DATA(result));
+      real16Copy(const34_NaN, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    }
+    else {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log10Co34:", "cannot calculate Ln(0)", NULL, NULL);
+      #endif
+    }
+  }
+  else {
+    real34_t magnitude, theta;
+    real51_t real51;
+    uint8_t savedAngularMode;
+
+    savedAngularMode = angularMode;
+    angularMode = AM_RADIAN;
+    real34RectangularToPolar(REAL34_POINTER(POINTER_TO_REGISTER_DATA(op1)), COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)), &magnitude, &theta);
+    real34ToReal51(&magnitude, &real51);
+    real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln10, &real51);
+    real51ToReal34(&real51, POINTER_TO_REGISTER_DATA(result));
+    real34Copy(&theta, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    real34Divide(COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)), const34_ln10, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+    angularMode = savedAngularMode;
+  }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("log10Co34");

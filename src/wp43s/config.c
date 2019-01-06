@@ -514,7 +514,7 @@ void fnAngularMode(uint16_t am) {
     if(real16CompareGreaterEqual(&angle, const16_60)) {
       displayCalcErrorMessage(28, REGISTER_T, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnAngularMode:", "minutes in d.ms number >= 60", NULL, NULL);
+        showInfoDialog("In function fnAngularMode:", "minutes in d.ms number " STD_GREATER_EQUAL " 60", NULL, NULL);
       #endif
     }
     else {
@@ -524,7 +524,7 @@ void fnAngularMode(uint16_t am) {
       if(real16CompareGreaterEqual(&angle, const16_60)) {
         displayCalcErrorMessage(28, REGISTER_T, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnAngularMode:", "seconds in d.ms number >= 60", NULL, NULL);
+          showInfoDialog("In function fnAngularMode:", "seconds in d.ms number " STD_GREATER_EQUAL " 60", NULL, NULL);
         #endif
       }
       else {

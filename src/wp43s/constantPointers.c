@@ -105,8 +105,10 @@ const uint8_t constants[] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x78,  // const_plusInfinity
   0x00,0x00,0x00,0x00,0x00,0x00,0x60,0x21,  // const_0
   0x00,0x00,0x00,0x00,0x00,0x00,0xec,0x25,  // const_1e_4
+  0x53,0x7e,0xdb,0x60,0x9c,0xbd,0xf8,0x39,  // const_ln2
   0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x25,  // const_1
   0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x29,  // const_2
+  0x46,0x78,0xaa,0xc3,0xb2,0x82,0xfd,0x29,  // const_ln10
   0xbb,0x3f,0x3b,0xb5,0xae,0xc1,0xfc,0x2d,  // const_pi
   0xea,0xe6,0x73,0xd8,0x32,0x2b,0xfd,0x39,  // const_2pi
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x26,  // const_10
@@ -157,6 +159,7 @@ const uint8_t constants[] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xc0,0x80,0xa2,0x72,0xc2,0x0e,0xa6,0x03,0x6e,  // const_LyToM
   0x72,0xea,0xdf,0x7d,0xef,0x9d,0xe1,0x75,0xde,0x86,0x8b,0xde,0xbd,0xc4,0x03,0x2e,  // const_PcToM
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x7c,  // const_NaN
+  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,  // const_minusInfinity
   0x83,0xe6,0xb5,0xda,0xd0,0x62,0xe2,0xb4,0xfb,0xb3,0x53,0xeb,0x1a,0xcc,0xff,0xad,  // const_minusPi
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0xfa,0x21,  // const_0
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xc0,0xf9,0x25,  // const_1e_24
@@ -167,6 +170,7 @@ const uint8_t constants[] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0xff,0x35,  // const_0_5
   0x24,0xb0,0xc8,0x08,0x28,0x65,0x18,0x8c,0x5a,0x05,0x49,0x5b,0x23,0xbf,0xff,0x35,  // const_egamma
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0xff,0x39,  // const_0_6
+  0xe6,0x2f,0x4a,0x51,0x68,0xf2,0x68,0x31,0xe5,0xb7,0x0d,0xc6,0xd9,0x8b,0xff,0x39,  // const_ln2
   0x1a,0x22,0x11,0xf2,0x90,0x08,0x10,0x55,0x67,0x9b,0x1d,0x9c,0x11,0x87,0xff,0x3d,  // const_root2on2
   0xd7,0x7b,0x83,0x25,0xc2,0xd6,0xe8,0xb1,0x22,0xbf,0x33,0x3f,0xd2,0x95,0xff,0x3d,  // const_piOn4
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0xff,0x6d,  // const_0_9
@@ -174,6 +178,7 @@ const uint8_t constants[] = {
   0xd1,0xe7,0xbc,0x71,0x68,0x31,0x65,0xec,0xb1,0xf6,0xa6,0xe9,0x0f,0xef,0xff,0x25,  // const_piOn2
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xc0,0xc0,0xff,0x25,  // const_1_8
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xc0,0xff,0x29,  // const_2
+  0xe4,0x29,0x4d,0xe5,0x27,0x17,0x28,0x5d,0x84,0xa7,0x3a,0x2c,0x2b,0xd8,0xff,0x29,  // const_ln10
   0x27,0x67,0x79,0xab,0x63,0x4c,0xbb,0x46,0x9c,0x2e,0x1a,0x6a,0x63,0xdd,0xff,0x29,  // const_3piOn4
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xc0,0xff,0x2d,  // const_3
   0x83,0xe6,0xb5,0xda,0xd0,0x62,0xe2,0xb4,0xfb,0xb3,0x53,0xeb,0x1a,0xcc,0xff,0x2d,  // const_pi
@@ -289,107 +294,112 @@ const real16_t * const const16_minusInfinity = (real16_t *)(constants +  608);
 const real16_t * const const16_plusInfinity  = (real16_t *)(constants +  616);
 const real16_t * const const16_0             = (real16_t *)(constants +  624);
 const real16_t * const const16_1e_4          = (real16_t *)(constants +  632);
-const real16_t * const const16_1             = (real16_t *)(constants +  640);
-const real16_t * const const16_2             = (real16_t *)(constants +  648);
-const real16_t * const const16_pi            = (real16_t *)(constants +  656);
-const real16_t * const const16_2pi           = (real16_t *)(constants +  664);
-const real16_t * const const16_10            = (real16_t *)(constants +  672);
-const real16_t * const const16_20            = (real16_t *)(constants +  680);
-const real16_t * const const16_32            = (real16_t *)(constants +  688);
-const real16_t * const const16_60            = (real16_t *)(constants +  696);
-const real16_t * const const16_100           = (real16_t *)(constants +  704);
-const real16_t * const const16_1000          = (real16_t *)(constants +  712);
-const real16_t * const const16_9999          = (real16_t *)(constants +  720);
-const real16_t * const const16_10000         = (real16_t *)(constants +  728);
-const real16_t * const const16_1e6           = (real16_t *)(constants +  736);
+const real16_t * const const16_ln2           = (real16_t *)(constants +  640);
+const real16_t * const const16_1             = (real16_t *)(constants +  648);
+const real16_t * const const16_2             = (real16_t *)(constants +  656);
+const real16_t * const const16_ln10          = (real16_t *)(constants +  664);
+const real16_t * const const16_pi            = (real16_t *)(constants +  672);
+const real16_t * const const16_2pi           = (real16_t *)(constants +  680);
+const real16_t * const const16_10            = (real16_t *)(constants +  688);
+const real16_t * const const16_20            = (real16_t *)(constants +  696);
+const real16_t * const const16_32            = (real16_t *)(constants +  704);
+const real16_t * const const16_60            = (real16_t *)(constants +  712);
+const real16_t * const const16_100           = (real16_t *)(constants +  720);
+const real16_t * const const16_1000          = (real16_t *)(constants +  728);
+const real16_t * const const16_9999          = (real16_t *)(constants +  736);
+const real16_t * const const16_10000         = (real16_t *)(constants +  744);
+const real16_t * const const16_1e6           = (real16_t *)(constants +  752);
 
-const real34_t * const const34_FlozukToM3    = (real34_t *)(constants +  744);
-const real34_t * const const34_FlozusToM3    = (real34_t *)(constants +  760);
-const real34_t * const const34_PointsToM     = (real34_t *)(constants +  776);
-const real34_t * const const34_GalusToM3     = (real34_t *)(constants +  792);
-const real34_t * const const34_GalukToM3     = (real34_t *)(constants +  808);
-const real34_t * const const34_QuartToM3     = (real34_t *)(constants +  824);
-const real34_t * const const34_InchesToM     = (real34_t *)(constants +  840);
-const real34_t * const const34_OzToKg        = (real34_t *)(constants +  856);
-const real34_t * const const34_TrozToKg      = (real34_t *)(constants +  872);
-const real34_t * const const34_FtToM         = (real34_t *)(constants +  888);
-const real34_t * const const34_SfeetToM      = (real34_t *)(constants +  904);
-const real34_t * const const34_LbsToKg       = (real34_t *)(constants +  920);
-const real34_t * const const34_YardsToM      = (real34_t *)(constants +  936);
-const real34_t * const const34_CalToJ        = (real34_t *)(constants +  952);
-const real34_t * const const34_StonesToKg    = (real34_t *)(constants +  968);
-const real34_t * const const34_LbfToN        = (real34_t *)(constants +  984);
-const real34_t * const const34_ShortcwtToKg  = (real34_t *)(constants + 1000);
-const real34_t * const const34_CwtToKg       = (real34_t *)(constants + 1016);
-const real34_t * const const34_TorrToPa      = (real34_t *)(constants + 1032);
-const real34_t * const const34_HpmToW        = (real34_t *)(constants + 1048);
-const real34_t * const const34_HpukToW       = (real34_t *)(constants + 1064);
-const real34_t * const const34_ShorttonsToKg = (real34_t *)(constants + 1080);
-const real34_t * const const34_HpeToW        = (real34_t *)(constants + 1096);
-const real34_t * const const34_TonsToKg      = (real34_t *)(constants + 1112);
-const real34_t * const const34_BtuToJ        = (real34_t *)(constants + 1128);
-const real34_t * const const34_MiToM         = (real34_t *)(constants + 1144);
-const real34_t * const const34_NmiToM        = (real34_t *)(constants + 1160);
-const real34_t * const const34_InhgToPa      = (real34_t *)(constants + 1176);
-const real34_t * const const34_WhToJ         = (real34_t *)(constants + 1192);
-const real34_t * const const34_AccresToM2    = (real34_t *)(constants + 1208);
-const real34_t * const const34_AccresusToM2  = (real34_t *)(constants + 1224);
-const real34_t * const const34_PsiToPa       = (real34_t *)(constants + 1240);
-const real34_t * const const34_BarToPa       = (real34_t *)(constants + 1256);
-const real34_t * const const34_AtmToPa       = (real34_t *)(constants + 1272);
-const real34_t * const const34_YearToS       = (real34_t *)(constants + 1288);
-const real34_t * const const34_AuToM         = (real34_t *)(constants + 1304);
-const real34_t * const const34_LyToM         = (real34_t *)(constants + 1320);
-const real34_t * const const34_PcToM         = (real34_t *)(constants + 1336);
-const real34_t * const const34_NaN           = (real34_t *)(constants + 1352);
-const real34_t * const const34_minusPi       = (real34_t *)(constants + 1368);
-const real34_t * const const34_0             = (real34_t *)(constants + 1384);
-const real34_t * const const34_1e_24         = (real34_t *)(constants + 1400);
-const real34_t * const const34_1e_4          = (real34_t *)(constants + 1416);
-const real34_t * const const34_piOn200       = (real34_t *)(constants + 1432);
-const real34_t * const const34_piOn180       = (real34_t *)(constants + 1448);
-const real34_t * const const34_0_1           = (real34_t *)(constants + 1464);
-const real34_t * const const34_0_5           = (real34_t *)(constants + 1480);
-const real34_t * const const34_egamma        = (real34_t *)(constants + 1496);
-const real34_t * const const34_0_6           = (real34_t *)(constants + 1512);
-const real34_t * const const34_root2on2      = (real34_t *)(constants + 1528);
-const real34_t * const const34_piOn4         = (real34_t *)(constants + 1544);
-const real34_t * const const34_0_9           = (real34_t *)(constants + 1560);
-const real34_t * const const34_1             = (real34_t *)(constants + 1576);
-const real34_t * const const34_piOn2         = (real34_t *)(constants + 1592);
-const real34_t * const const34_1_8           = (real34_t *)(constants + 1608);
-const real34_t * const const34_2             = (real34_t *)(constants + 1624);
-const real34_t * const const34_3piOn4        = (real34_t *)(constants + 1640);
-const real34_t * const const34_3             = (real34_t *)(constants + 1656);
-const real34_t * const const34_pi            = (real34_t *)(constants + 1672);
-const real34_t * const const34_5             = (real34_t *)(constants + 1688);
-const real34_t * const const34_2pi           = (real34_t *)(constants + 1704);
-const real34_t * const const34_10            = (real34_t *)(constants + 1720);
-const real34_t * const const34_20            = (real34_t *)(constants + 1736);
-const real34_t * const const34_32            = (real34_t *)(constants + 1752);
-const real34_t * const const34_36            = (real34_t *)(constants + 1768);
-const real34_t * const const34_60            = (real34_t *)(constants + 1784);
-const real34_t * const const34_100           = (real34_t *)(constants + 1800);
-const real34_t * const const34_180           = (real34_t *)(constants + 1816);
-const real34_t * const const34_200           = (real34_t *)(constants + 1832);
-const real34_t * const const34_204           = (real34_t *)(constants + 1848);
-const real34_t * const const34_9000          = (real34_t *)(constants + 1864);
-const real34_t * const const34_10000         = (real34_t *)(constants + 1880);
-const real34_t * const const34_1e6           = (real34_t *)(constants + 1896);
-const real34_t * const const34_plusInfinity  = (real34_t *)(constants + 1912);
+const real34_t * const const34_FlozukToM3    = (real34_t *)(constants +  760);
+const real34_t * const const34_FlozusToM3    = (real34_t *)(constants +  776);
+const real34_t * const const34_PointsToM     = (real34_t *)(constants +  792);
+const real34_t * const const34_GalusToM3     = (real34_t *)(constants +  808);
+const real34_t * const const34_GalukToM3     = (real34_t *)(constants +  824);
+const real34_t * const const34_QuartToM3     = (real34_t *)(constants +  840);
+const real34_t * const const34_InchesToM     = (real34_t *)(constants +  856);
+const real34_t * const const34_OzToKg        = (real34_t *)(constants +  872);
+const real34_t * const const34_TrozToKg      = (real34_t *)(constants +  888);
+const real34_t * const const34_FtToM         = (real34_t *)(constants +  904);
+const real34_t * const const34_SfeetToM      = (real34_t *)(constants +  920);
+const real34_t * const const34_LbsToKg       = (real34_t *)(constants +  936);
+const real34_t * const const34_YardsToM      = (real34_t *)(constants +  952);
+const real34_t * const const34_CalToJ        = (real34_t *)(constants +  968);
+const real34_t * const const34_StonesToKg    = (real34_t *)(constants +  984);
+const real34_t * const const34_LbfToN        = (real34_t *)(constants + 1000);
+const real34_t * const const34_ShortcwtToKg  = (real34_t *)(constants + 1016);
+const real34_t * const const34_CwtToKg       = (real34_t *)(constants + 1032);
+const real34_t * const const34_TorrToPa      = (real34_t *)(constants + 1048);
+const real34_t * const const34_HpmToW        = (real34_t *)(constants + 1064);
+const real34_t * const const34_HpukToW       = (real34_t *)(constants + 1080);
+const real34_t * const const34_ShorttonsToKg = (real34_t *)(constants + 1096);
+const real34_t * const const34_HpeToW        = (real34_t *)(constants + 1112);
+const real34_t * const const34_TonsToKg      = (real34_t *)(constants + 1128);
+const real34_t * const const34_BtuToJ        = (real34_t *)(constants + 1144);
+const real34_t * const const34_MiToM         = (real34_t *)(constants + 1160);
+const real34_t * const const34_NmiToM        = (real34_t *)(constants + 1176);
+const real34_t * const const34_InhgToPa      = (real34_t *)(constants + 1192);
+const real34_t * const const34_WhToJ         = (real34_t *)(constants + 1208);
+const real34_t * const const34_AccresToM2    = (real34_t *)(constants + 1224);
+const real34_t * const const34_AccresusToM2  = (real34_t *)(constants + 1240);
+const real34_t * const const34_PsiToPa       = (real34_t *)(constants + 1256);
+const real34_t * const const34_BarToPa       = (real34_t *)(constants + 1272);
+const real34_t * const const34_AtmToPa       = (real34_t *)(constants + 1288);
+const real34_t * const const34_YearToS       = (real34_t *)(constants + 1304);
+const real34_t * const const34_AuToM         = (real34_t *)(constants + 1320);
+const real34_t * const const34_LyToM         = (real34_t *)(constants + 1336);
+const real34_t * const const34_PcToM         = (real34_t *)(constants + 1352);
+const real34_t * const const34_NaN           = (real34_t *)(constants + 1368);
+const real34_t * const const34_minusInfinity = (real34_t *)(constants + 1384);
+const real34_t * const const34_minusPi       = (real34_t *)(constants + 1400);
+const real34_t * const const34_0             = (real34_t *)(constants + 1416);
+const real34_t * const const34_1e_24         = (real34_t *)(constants + 1432);
+const real34_t * const const34_1e_4          = (real34_t *)(constants + 1448);
+const real34_t * const const34_piOn200       = (real34_t *)(constants + 1464);
+const real34_t * const const34_piOn180       = (real34_t *)(constants + 1480);
+const real34_t * const const34_0_1           = (real34_t *)(constants + 1496);
+const real34_t * const const34_0_5           = (real34_t *)(constants + 1512);
+const real34_t * const const34_egamma        = (real34_t *)(constants + 1528);
+const real34_t * const const34_0_6           = (real34_t *)(constants + 1544);
+const real34_t * const const34_ln2           = (real34_t *)(constants + 1560);
+const real34_t * const const34_root2on2      = (real34_t *)(constants + 1576);
+const real34_t * const const34_piOn4         = (real34_t *)(constants + 1592);
+const real34_t * const const34_0_9           = (real34_t *)(constants + 1608);
+const real34_t * const const34_1             = (real34_t *)(constants + 1624);
+const real34_t * const const34_piOn2         = (real34_t *)(constants + 1640);
+const real34_t * const const34_1_8           = (real34_t *)(constants + 1656);
+const real34_t * const const34_2             = (real34_t *)(constants + 1672);
+const real34_t * const const34_ln10          = (real34_t *)(constants + 1688);
+const real34_t * const const34_3piOn4        = (real34_t *)(constants + 1704);
+const real34_t * const const34_3             = (real34_t *)(constants + 1720);
+const real34_t * const const34_pi            = (real34_t *)(constants + 1736);
+const real34_t * const const34_5             = (real34_t *)(constants + 1752);
+const real34_t * const const34_2pi           = (real34_t *)(constants + 1768);
+const real34_t * const const34_10            = (real34_t *)(constants + 1784);
+const real34_t * const const34_20            = (real34_t *)(constants + 1800);
+const real34_t * const const34_32            = (real34_t *)(constants + 1816);
+const real34_t * const const34_36            = (real34_t *)(constants + 1832);
+const real34_t * const const34_60            = (real34_t *)(constants + 1848);
+const real34_t * const const34_100           = (real34_t *)(constants + 1864);
+const real34_t * const const34_180           = (real34_t *)(constants + 1880);
+const real34_t * const const34_200           = (real34_t *)(constants + 1896);
+const real34_t * const const34_204           = (real34_t *)(constants + 1912);
+const real34_t * const const34_9000          = (real34_t *)(constants + 1928);
+const real34_t * const const34_10000         = (real34_t *)(constants + 1944);
+const real34_t * const const34_1e6           = (real34_t *)(constants + 1960);
+const real34_t * const const34_plusInfinity  = (real34_t *)(constants + 1976);
 
-const real51_t * const const51_minusInfinity = (real51_t *)(constants + 1928);
-const real51_t * const const51_NaN           = (real51_t *)(constants + 1972);
-const real51_t * const const51_0             = (real51_t *)(constants + 2016);
-const real51_t * const const51_1e_37         = (real51_t *)(constants + 2060);
-const real51_t * const const51_0_5           = (real51_t *)(constants + 2104);
-const real51_t * const const51_ln2           = (real51_t *)(constants + 2148);
-const real51_t * const const51_root2on2      = (real51_t *)(constants + 2192);
-const real51_t * const const51_1             = (real51_t *)(constants + 2236);
-const real51_t * const const51_2             = (real51_t *)(constants + 2280);
-const real51_t * const const51_ln10          = (real51_t *)(constants + 2324);
-const real51_t * const const51_3             = (real51_t *)(constants + 2368);
-const real51_t * const const51_21            = (real51_t *)(constants + 2412);
-const real51_t * const const51_gammaR        = (real51_t *)(constants + 2456);
-const real51_t * const const51_plusInfinity  = (real51_t *)(constants + 2500);
-const real51_t * const const51_gammaC00      = (real51_t *)(constants + 2544);
+const real51_t * const const51_minusInfinity = (real51_t *)(constants + 1992);
+const real51_t * const const51_NaN           = (real51_t *)(constants + 2036);
+const real51_t * const const51_0             = (real51_t *)(constants + 2080);
+const real51_t * const const51_1e_37         = (real51_t *)(constants + 2124);
+const real51_t * const const51_0_5           = (real51_t *)(constants + 2168);
+const real51_t * const const51_ln2           = (real51_t *)(constants + 2212);
+const real51_t * const const51_root2on2      = (real51_t *)(constants + 2256);
+const real51_t * const const51_1             = (real51_t *)(constants + 2300);
+const real51_t * const const51_2             = (real51_t *)(constants + 2344);
+const real51_t * const const51_ln10          = (real51_t *)(constants + 2388);
+const real51_t * const const51_3             = (real51_t *)(constants + 2432);
+const real51_t * const const51_21            = (real51_t *)(constants + 2476);
+const real51_t * const const51_gammaR        = (real51_t *)(constants + 2520);
+const real51_t * const const51_plusInfinity  = (real51_t *)(constants + 2564);
+const real51_t * const const51_gammaC00      = (real51_t *)(constants + 2608);

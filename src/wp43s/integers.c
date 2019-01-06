@@ -1687,7 +1687,7 @@ int32_t WP34S_isPrime(uint64_t primeCandidate) {
  	if((primeCandidate & 0x8000000000000000ull) != 0) {
  	 	displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function WP34S_isPrime:", "We fail for numbers >= 2^63!", tmpStr3000, NULL);
+      showInfoDialog("In function WP34S_isPrime:", "We fail for numbers " STD_GREATER_EQUAL " 2^63!", tmpStr3000, NULL);
     #endif
 
     #if (LOG_FUNCTIONS == 1)

@@ -24,8 +24,8 @@ void   fnSquareRoot               (uint16_t unusedParamButMandatory);
 void   fnMagnitude                (uint16_t unusedParamButMandatory);
 
 #include "ln.h"
-#include "log2.h"
 #include "log10.h"
+#include "log2.h"
 
 void   fn2Pow                     (uint16_t unusedParamButMandatory);
 void   fn10Pow                    (uint16_t unusedParamButMandatory);

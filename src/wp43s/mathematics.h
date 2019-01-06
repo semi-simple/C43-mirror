@@ -26,6 +26,7 @@ void   fnMagnitude                (uint16_t unusedParamButMandatory);
 #include "ln.h"
 #include "log10.h"
 #include "log2.h"
+#include "exp.h"
 
 void   fn2Pow                     (uint16_t unusedParamButMandatory);
 void   fn10Pow                    (uint16_t unusedParamButMandatory);
@@ -37,7 +38,6 @@ void   fnArcsin                   (uint16_t unusedParamButMandatory);
 void   fnArccos                   (uint16_t unusedParamButMandatory);
 void   fnToPolar                  (uint16_t unusedParamButMandatory);
 void   fnToRect                   (uint16_t unusedParamButMandatory);
-void   fnExp                      (uint16_t unusedParamButMandatory);
 
 void   fnFactorial                (uint16_t unusedParamButMandatory);
 void   fnLnGamma                  (uint16_t unusedParamButMandatory);

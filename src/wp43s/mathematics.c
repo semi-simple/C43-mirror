@@ -1632,54 +1632,6 @@ void fnToRect(uint16_t unusedParamButMandatory) {
 
 
 
-void fnExp(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnExp");
-  #endif
-
-  bool_t real16 = false;
-
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    real16 = true;
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
-    real16 = true;
-  }
-
-  else if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot exponentiate %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fnExp:", errorMessage, NULL, NULL);
-    #endif
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fnExp");
-    #endif
-
-    return;
-  }
-
-  real34Exp(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X));
-
-  if(real16) {
-    convertRegister34To16(REGISTER_X);
-  }
-
-  refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnExp");
-  #endif
-}
-
-
-
 void fnFactorial(uint16_t unusedParamButMandatory) {
   #if (LOG_FUNCTIONS == 1)
     enteringFunction("fnFactorial");

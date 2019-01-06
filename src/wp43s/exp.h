@@ -15,16 +15,16 @@
  */
 
 /********************************************//**
- * \file ln.h
+ * \file exp.h
  ***********************************************/
 
-void fnLn   (uint16_t unusedParamButMandatory);
-void errorLn(void);
-void lnBigI (void);
-void lnRe16 (void);
-void lnCo16 (void);
-void lnRm16 (void);
-void lnCm16 (void);
-void lnSmaI (void);
-void lnRe34 (void);
-void lnCo34 (void);
+void fnExp   (uint16_t unusedParamButMandatory);
+void errorExp(void);
+void expBigI (void);
+void expRe16 (void);
+void expCo16 (void);
+void expRm16 (void);
+void expCm16 (void);
+void expSmaI (void);
+void expRe34 (void);
+void expCo34 (void);

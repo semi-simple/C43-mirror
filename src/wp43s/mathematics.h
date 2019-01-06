@@ -23,20 +23,20 @@ void   fnLcm                      (uint16_t unusedParamButMandatory);
 void   fnSquareRoot               (uint16_t unusedParamButMandatory);
 void   fnMagnitude                (uint16_t unusedParamButMandatory);
 
+#include "arccos.h"
+#include "arcsin.h"
+#include "arctan.h"
+#include "cos.h"
 #include "ln.h"
 #include "log10.h"
 #include "log2.h"
 #include "exp.h"
+#include "sin.h"
+#include "tan.h"
 #include "wp34s.h"
 
 void   fn2Pow                     (uint16_t unusedParamButMandatory);
 void   fn10Pow                    (uint16_t unusedParamButMandatory);
-void   fnSin                      (uint16_t unusedParamButMandatory);
-void   fnCos                      (uint16_t unusedParamButMandatory);
-void   fnTan                      (uint16_t unusedParamButMandatory);
-void   fnArctan                   (uint16_t unusedParamButMandatory);
-void   fnArcsin                   (uint16_t unusedParamButMandatory);
-void   fnArccos                   (uint16_t unusedParamButMandatory);
 void   fnToPolar                  (uint16_t unusedParamButMandatory);
 void   fnToRect                   (uint16_t unusedParamButMandatory);
 

@@ -36,10 +36,9 @@
 #include "sin.h"
 #include "sqrt.h"
 #include "tan.h"
+#include "toPolar.h"
+#include "toRect.h"
 #include "wp34s.h"
-
-void   fnToPolar                  (uint16_t unusedParamButMandatory);
-void   fnToRect                   (uint16_t unusedParamButMandatory);
 
 void   fnFactorial                (uint16_t unusedParamButMandatory);
 void   fnLnGamma                  (uint16_t unusedParamButMandatory);
@@ -63,7 +62,3 @@ bool_t real16CompareAbsGreaterThan(const real16_t *number1, const real16_t *numb
 bool_t real34CompareAbsGreaterThan(const real34_t *number1, const real34_t *number2);
 bool_t real16CompareAbsLessThan   (const real16_t *number1, const real16_t *number2);
 bool_t real34CompareAbsLessThan   (const real34_t *number1, const real34_t *number2);
-void   real16RectangularToPolar   (const real16_t *real16,      const real16_t *imag16,  real16_t *magnitude16, real16_t *theta16);
-void   real16PolarToRectangular   (const real16_t *magnitude16, const real16_t *theta16, real16_t *real16,      real16_t *imag16);
-void   real34RectangularToPolar   (const real34_t *real34,      const real34_t *imag34,  real34_t *magnitude34, real34_t *theta34);
-void   real34PolarToRectangular   (const real34_t *magnitude34, const real34_t *theta34, real34_t *real34,      real34_t *imag34);

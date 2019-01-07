@@ -415,6 +415,15 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/gcd.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/gcd.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/gui.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -448,6 +457,15 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/keyboard.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/lcm.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/lcm.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>

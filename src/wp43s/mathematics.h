@@ -27,6 +27,8 @@ void   fnMagnitude                (uint16_t unusedParamButMandatory);
 #include "arcsin.h"
 #include "arctan.h"
 #include "cos.h"
+#include "gcd.h"
+#include "lcm.h"
 #include "ln.h"
 #include "log10.h"
 #include "log2.h"

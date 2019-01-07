@@ -302,12 +302,21 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/conversions.c">
+		<Unit filename="src/wp43s/conversionAngles.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/conversions.h">
+		<Unit filename="src/wp43s/conversionAngles.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/conversionUnits.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/conversionUnits.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>

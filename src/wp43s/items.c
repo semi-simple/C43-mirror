@@ -96,6 +96,9 @@ void runFunction(int16_t fn) {
     else if(fn == ITM_WSIZE) {
       tamNumberMax = 64;
     }
+    else if(fn == ITM_CF || fn == ITM_SF || fn == ITM_FF || fn == ITM_FC || fn == ITM_FCC || fn == ITM_FCS || fn == ITM_FCF || fn == ITM_FS || fn == ITM_FSC || fn == ITM_FSS || fn == ITM_FSF) {
+      tamNumberMax = 99;
+    }
     else {
       tamNumberMax = 0;
     }

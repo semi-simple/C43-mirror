@@ -25,6 +25,7 @@
 #include "arccos.h"
 #include "arcsin.h"
 #include "arctan.h"
+#include "comparisonReals.h"
 #include "cos.h"
 #include "exp.h"
 #include "factorial.h"
@@ -41,22 +42,3 @@
 #include "toPolar.h"
 #include "toRect.h"
 #include "wp34s.h"
-
-bool_t real16CompareGreaterThan   (const real16_t *number1, const real16_t *number2);
-bool_t real34CompareGreaterThan   (const real34_t *number1, const real34_t *number2);
-bool_t real51CompareGreaterThan   (const real51_t *number1, const real51_t *number2);
-bool_t real16CompareGreaterEqual  (const real16_t *number1, const real16_t *number2);
-bool_t real34CompareGreaterEqual  (const real34_t *number1, const real34_t *number2);
-bool_t real16CompareEqual         (const real16_t *number1, const real16_t *number2);
-bool_t real34CompareEqual         (const real34_t *number1, const real34_t *number2);
-bool_t real51CompareEqual         (const real51_t *number1, const real51_t *number2);
-bool_t real16CompareLessEqual     (const real16_t *number1, const real16_t *number2);
-bool_t real34CompareLessEqual     (const real34_t *number1, const real34_t *number2);
-bool_t real51CompareLessEqual     (const real51_t *number1, const real51_t *number2);
-bool_t real16CompareLessThan      (const real16_t *number1, const real16_t *number2);
-bool_t real34CompareLessThan      (const real34_t *number1, const real34_t *number2);
-bool_t real51CompareLessThan      (const real51_t *number1, const real51_t *number2);
-bool_t real16CompareAbsGreaterThan(const real16_t *number1, const real16_t *number2);
-bool_t real34CompareAbsGreaterThan(const real34_t *number1, const real34_t *number2);
-bool_t real16CompareAbsLessThan   (const real16_t *number1, const real16_t *number2);
-bool_t real34CompareAbsLessThan   (const real34_t *number1, const real34_t *number2);

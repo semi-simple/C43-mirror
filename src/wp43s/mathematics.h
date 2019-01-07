@@ -28,6 +28,7 @@
 #include "cos.h"
 #include "exp.h"
 #include "factorial.h"
+#include "gamma.h"
 #include "gcd.h"
 #include "lcm.h"
 #include "ln.h"
@@ -40,9 +41,6 @@
 #include "toPolar.h"
 #include "toRect.h"
 #include "wp34s.h"
-
-void   fnLnGamma                  (uint16_t unusedParamButMandatory);
-void   fnGamma                    (uint16_t unusedParamButMandatory);
 
 bool_t real16CompareGreaterThan   (const real16_t *number1, const real16_t *number2);
 bool_t real34CompareGreaterThan   (const real34_t *number1, const real34_t *number2);

@@ -155,6 +155,7 @@ typedef int16_t calcRegister_t;
 #include "screen.h"
 #include "subtraction.h"
 #include "timer.h"
+#include "saveRestoreCalcState.h"
 #include "softmenus.h"
 #include "sort.h"
 #include "stack.h"

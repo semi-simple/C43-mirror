@@ -122,6 +122,7 @@ void lnBigI(void) {
   convertBigIntegerRegisterToReal34Register(op1, op1);
   if(real34IsZero(POINTER_TO_REGISTER_DATA(op1))) {
     if(getFlag(FLAG_DANGER)) {
+      reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
       real16Copy(const16_minusInfinity, POINTER_TO_REGISTER_DATA(result));
     }
     else {

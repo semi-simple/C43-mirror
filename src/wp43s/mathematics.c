@@ -22,52 +22,6 @@
 
 
 
-void checkDms(real16_t *angleDms) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("checkDms");
-  #endif
-
-  int16_t  sign;
-  real16_t degrees, minutes, seconds;
-
-  sign = real16IsNegative(angleDms) ? -1 : 1;
-  real16SetPositiveSign(angleDms);
-
-  real16ToIntegral(angleDms, &degrees);
-  real16Subtract(angleDms, &degrees, angleDms);
-
-  real16Multiply(angleDms, const16_100, angleDms);
-  real16ToIntegral(angleDms, &minutes);
-  real16Subtract(angleDms, &minutes, angleDms);
-
-  real16Multiply(angleDms, const16_100, &seconds);
-
-  if(real16CompareGreaterEqual(&seconds, const16_60)) {
-    real16Subtract(&seconds, const16_60, &seconds);
-    real16Add(&minutes, const16_1, &minutes);
-  }
-
-  if(real16CompareGreaterEqual(&minutes, const16_60)) {
-    real16Subtract(&minutes, const16_60, &minutes);
-    real16Add(&degrees, const16_1, &degrees);
-  }
-
-  real16Divide(&minutes, const16_100, &minutes);
-  real16Add(&degrees, &minutes, angleDms);
-  real16Divide(&seconds, const16_10000, &seconds);
-  real16Add(angleDms, &seconds, angleDms);
-
-  if(sign == -1) {
-    real34SetNegativeSign(angleDms);
-  }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("checkDms");
-  #endif
-}
-
-
-
 void fnToPolar(uint16_t unusedParamButMandatory) {
   #if (LOG_FUNCTIONS == 1)
     enteringFunction("fnToPolar");

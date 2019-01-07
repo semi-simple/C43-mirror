@@ -45,8 +45,6 @@ void   fnFactorial                (uint16_t unusedParamButMandatory);
 void   fnLnGamma                  (uint16_t unusedParamButMandatory);
 void   fnGamma                    (uint16_t unusedParamButMandatory);
 
-void   checkDms                   (real16_t *angleDms);
-
 bool_t real16CompareGreaterThan   (const real16_t *number1, const real16_t *number2);
 bool_t real34CompareGreaterThan   (const real34_t *number1, const real34_t *number2);
 bool_t real51CompareGreaterThan   (const real51_t *number1, const real51_t *number2);

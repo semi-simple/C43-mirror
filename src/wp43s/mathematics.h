@@ -18,18 +18,19 @@
  * \file mathematics.h
  ***********************************************/
 
-void   fnMagnitude                (uint16_t unusedParamButMandatory);
+
 
 #include "arccos.h"
 #include "arcsin.h"
 #include "arctan.h"
 #include "cos.h"
+#include "exp.h"
 #include "gcd.h"
 #include "lcm.h"
 #include "ln.h"
 #include "log10.h"
 #include "log2.h"
-#include "exp.h"
+#include "magnitude.h"
 #include "sin.h"
 #include "sqrt.h"
 #include "tan.h"

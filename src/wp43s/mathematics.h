@@ -20,6 +20,8 @@
 
 
 
+#include "2pow.h"
+#include "10pow.h"
 #include "arccos.h"
 #include "arcsin.h"
 #include "arctan.h"
@@ -36,8 +38,6 @@
 #include "tan.h"
 #include "wp34s.h"
 
-void   fn2Pow                     (uint16_t unusedParamButMandatory);
-void   fn10Pow                    (uint16_t unusedParamButMandatory);
 void   fnToPolar                  (uint16_t unusedParamButMandatory);
 void   fnToRect                   (uint16_t unusedParamButMandatory);
 

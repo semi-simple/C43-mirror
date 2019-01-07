@@ -185,6 +185,24 @@
 			<Option compilerVar="CC" />
 			<Option target="ttf2RasterFonts" />
 		</Unit>
+		<Unit filename="src/wp43s/10pow.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/10pow.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/2pow.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/2pow.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/addition.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

@@ -18,9 +18,6 @@
  * \file mathematics.h
  ***********************************************/
 
-void   fnGcd                      (uint16_t unusedParamButMandatory);
-void   fnLcm                      (uint16_t unusedParamButMandatory);
-void   fnSquareRoot               (uint16_t unusedParamButMandatory);
 void   fnMagnitude                (uint16_t unusedParamButMandatory);
 
 #include "arccos.h"
@@ -34,6 +31,7 @@ void   fnMagnitude                (uint16_t unusedParamButMandatory);
 #include "log2.h"
 #include "exp.h"
 #include "sin.h"
+#include "sqrt.h"
 #include "tan.h"
 #include "wp34s.h"
 

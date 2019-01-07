@@ -27,6 +27,7 @@
 #include "arctan.h"
 #include "cos.h"
 #include "exp.h"
+#include "factorial.h"
 #include "gcd.h"
 #include "lcm.h"
 #include "ln.h"
@@ -40,7 +41,6 @@
 #include "toRect.h"
 #include "wp34s.h"
 
-void   fnFactorial                (uint16_t unusedParamButMandatory);
 void   fnLnGamma                  (uint16_t unusedParamButMandatory);
 void   fnGamma                    (uint16_t unusedParamButMandatory);
 

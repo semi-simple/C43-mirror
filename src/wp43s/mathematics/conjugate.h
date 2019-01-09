@@ -15,41 +15,7 @@
  */
 
 /********************************************//**
- * \file mathematics.h
+ * \file conjugate.h
  ***********************************************/
 
-
-
-#include "2pow.h"
-#include "10pow.h"
-#include "addition.h"
-#include "arccos.h"
-#include "arcsin.h"
-#include "arctan.h"
-#include "comparisonReals.h"
-#include "conjugate.h"
-#include "cos.h"
-#include "division.h"
-#include "exp.h"
-#include "factorial.h"
-#include "gamma.h"
-#include "gcd.h"
-#include "imaginaryPart.h"
-#include "lcm.h"
-#include "ln.h"
-#include "log10.h"
-#include "log2.h"
-#include "magnitude.h"
-#include "multiplication.h"
-#include "power.h"
-#include "realPart.h"
-#include "sin.h"
-#include "sqrt.h"
-#include "subtraction.h"
-#include "swapRealImaginary.h"
-#include "tan.h"
-#include "toPolar.h"
-#include "toRect.h"
-#include "unitVector.h"
-#include "wp34s.h"
-
+void fnConjugate(uint16_t unusedParamButMandatory);

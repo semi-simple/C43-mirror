@@ -10,3 +10,5 @@ From free42: select [shift][SETUP][5][2][4][3] WP43S.pgm [ENTER][ENTER] wait [EX
 The keyboard layout is that of the WP43S as long as you stay in this program.  
 Outside WP43S the DM42 keyboard is valid.  
 To leave the WP43S program: in the menu [g][MODE][up] select [g][SYSTEM] ([g][F1]) to return to the DMCP system.
+
+![Alt text](https://gitlab.com/Over_score/wp43s/uploads/ac891c572162919dd8f60516c51edba2/image.png "DM42")

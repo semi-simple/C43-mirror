@@ -124,6 +124,7 @@ typedef int16_t calcRegister_t;
 
 #include "assign.h"
 #include "bufferize.h"
+#include "browsers/browsers.h"
 #include "config.h"
 #include "conversionAngles.h"
 #include "conversionUnits.h"
@@ -132,9 +133,7 @@ typedef int16_t calcRegister_t;
 #include "constants.h"
 #include "debug.h"
 #include "error.h"
-#include "flagBrowser.h"
 #include "flags.h"
-#include "fontBrowser.h"
 #include "fractions.h"
 #include "fonts.h"
 #include "charString.h" // must be after font.h
@@ -144,7 +143,6 @@ typedef int16_t calcRegister_t;
 #include "items.h"
 #include "keyboard.h"
 #include "mathematics/mathematics.h"
-#include "registerBrowser.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"

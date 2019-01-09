@@ -51,7 +51,7 @@ typedef struct {
 int16_t findGlyph            (const font_t *font, uint16_t charCode);
 void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
 
-//<-------- Numeric font glyphs ---------->         <---------- Standard fond glyphs ---------->
+//<-------- Numeric font glyphs ---------->         <---------- Standard font glyphs ---------->
 #define NUM_SPACE                     "\x20"
                                                      #define STD_SPACE                     "\x20"
 #define NUM_EXCLAMATION_MARK          "\x21"

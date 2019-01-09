@@ -26,7 +26,7 @@ LDFLAGS = -m64
 SRC_DECIMAL              = decNumberICU/decContext.c decNumberICU/decDouble.c decNumberICU/decimal128.c decNumberICU/decimal64.c decNumberICU/decNumber.c decNumberICU/decQuad.c
 OBJ_DECIMAL              = $(SRC_DECIMAL:.c=.o)
 
-SRC_WP43S                = $(wildcard src/wp43s/*.c)
+SRC_WP43S                = $(wildcard src/wp43s/*.c) $(wildcard src/wp43s/mathematics/*.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
 
 SRC_GENERATECONSTANTS    = $(wildcard src/generateConstants/*.c)

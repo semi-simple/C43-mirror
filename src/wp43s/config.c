@@ -561,6 +561,65 @@ void setConfirmationMode(void (*func)(uint16_t)) {
 
 
 
+/********************************************//**
+ * \brief Defines the complex unit i or j
+ *
+ * \param[in] complexUnit uint16_t
+ * \return void
+ ***********************************************/
+void fnComplexUnit(uint16_t cu) {
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("fnComplexUnit");
+  #endif
+
+  complexUnit = cu;
+  refreshStack();
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("fnComplexUnit");
+  #endif
+}
+
+/********************************************//**
+ * \brief Defines if an operation result can be complex or not
+ *
+ * \param[in] complexRes uint16_t
+ * \return void
+ ***********************************************/
+void fnComplexResult(uint16_t complexResult) {
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("fnComplexResult");
+  #endif
+
+  complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("fnComplexResult");
+  #endif
+}
+
+/********************************************//**
+ * \brief Defines the complex display mode: rectangular or polar
+ *
+ * \param[in] complexMode uint16_t
+ * \return void
+ ***********************************************/
+void fnComplexMode(uint16_t cm) {
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("fnComplexMode");
+  #endif
+
+  complexMode = cm;
+  showComplexMode();
+  refreshStack();
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("fnComplexMode");
+  #endif
+}
+
+
+
 void fnClAll(uint16_t confirmation) {
   #if (LOG_FUNCTIONS == 1)
     enteringFunction("fnClAll");

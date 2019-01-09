@@ -18,9 +18,6 @@
  * \file complex.h
  ***********************************************/
 
-void fnComplexUnit      (uint16_t complexUnit);
-void fnComplexResult    (uint16_t complexRes);
-void fnComplexMode      (uint16_t complexMode);
 void fnUnitVector       (uint16_t unusedParamButMandatory);
 void fnConjugate        (uint16_t unusedParamButMandatory);
 void fnSwapRealImaginary(uint16_t unusedParamButMandatory);

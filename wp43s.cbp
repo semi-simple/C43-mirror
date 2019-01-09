@@ -93,22 +93,6 @@
 		<Unit filename="COPYING">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="DMCP/dmcp.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="DMCP/ff_ifc.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="DMCP/lft_ifc.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="DMCP/main.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="README">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
@@ -195,6 +179,37 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/browsers/browsers.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/browsers/flagBrowser.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/browsers/flagBrowser.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/browsers/fontBrowser.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/browsers/fontBrowser.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/browsers/registerBrowser.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/browsers/registerBrowser.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/bufferize.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -210,15 +225,6 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/charString.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/complex.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/complex.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -317,30 +323,12 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/flagBrowser.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/flagBrowser.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/flags.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/flags.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/fontBrowser.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/fontBrowser.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -461,6 +449,15 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/conjugate.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/conjugate.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/cos.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -512,6 +509,15 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/gcd.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/imaginaryPart.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/imaginaryPart.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -582,6 +588,15 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/realPart.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/realPart.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/sin.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -606,6 +621,15 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/subtraction.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/swapRealImaginary.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/swapRealImaginary.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -636,6 +660,15 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/unitVector.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/unitVector.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/wp34s.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -652,15 +685,6 @@
 			<Option target="testTtf2RasterFonts" />
 		</Unit>
 		<Unit filename="src/wp43s/rasterFontsTypes.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/registerBrowser.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/registerBrowser.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>

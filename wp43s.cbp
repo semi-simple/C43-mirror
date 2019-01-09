@@ -85,6 +85,7 @@
 			<Add option="-DTFM_NO_ASM" />
 			<Add directory="decNumberICU" />
 			<Add directory="DMCP" />
+			<Add directory="src/wp43s" />
 		</Compiler>
 		<Linker>
 			<Add option="-m64" />
@@ -185,60 +186,6 @@
 			<Option compilerVar="CC" />
 			<Option target="ttf2RasterFonts" />
 		</Unit>
-		<Unit filename="src/wp43s/10pow.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/10pow.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/2pow.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/2pow.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/addition.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/addition.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/arccos.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/arccos.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/arcsin.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/arcsin.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/arctan.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/arctan.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/assign.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -263,15 +210,6 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/charString.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/comparisonReals.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/comparisonReals.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -329,15 +267,6 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/cos.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/cos.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/curveFitting.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -379,39 +308,12 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/division.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/division.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/error.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/error.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/exp.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/exp.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/factorial.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/factorial.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -460,24 +362,6 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/gamma.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/gamma.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/gcd.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/gcd.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/gui.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -514,70 +398,250 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/lcm.c">
+		<Unit filename="src/wp43s/mathematics/10pow.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/lcm.h">
+		<Unit filename="src/wp43s/mathematics/10pow.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/ln.c">
+		<Unit filename="src/wp43s/mathematics/2pow.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/ln.h">
+		<Unit filename="src/wp43s/mathematics/2pow.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/log10.c">
+		<Unit filename="src/wp43s/mathematics/addition.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/log10.h">
+		<Unit filename="src/wp43s/mathematics/addition.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/log2.c">
+		<Unit filename="src/wp43s/mathematics/arccos.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/log2.h">
+		<Unit filename="src/wp43s/mathematics/arccos.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/magnitude.c">
+		<Unit filename="src/wp43s/mathematics/arcsin.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/magnitude.h">
+		<Unit filename="src/wp43s/mathematics/arcsin.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/mathematics.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/multiplication.c">
+		<Unit filename="src/wp43s/mathematics/arctan.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/multiplication.h">
+		<Unit filename="src/wp43s/mathematics/arctan.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/power.c">
+		<Unit filename="src/wp43s/mathematics/comparisonReals.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/power.h">
+		<Unit filename="src/wp43s/mathematics/comparisonReals.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/cos.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/cos.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/division.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/division.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/exp.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/exp.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/factorial.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/factorial.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gamma.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gamma.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gcd.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gcd.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/lcm.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/lcm.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ln.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ln.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/log10.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/log10.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/log2.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/log2.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/magnitude.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/magnitude.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/mathematics.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/multiplication.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/multiplication.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/power.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/power.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sin.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sin.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sqrt.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sqrt.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/subtraction.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/subtraction.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/tan.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/tan.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/toPolar.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/toPolar.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/toRect.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/toRect.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/wp34s.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/wp34s.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -636,15 +700,6 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/sin.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/sin.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/softkeys.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
@@ -664,15 +719,6 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/sort.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/sqrt.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/sqrt.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
@@ -703,24 +749,6 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/subtraction.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/subtraction.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/tan.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/tan.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/testFunctions.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -747,39 +775,12 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
-		<Unit filename="src/wp43s/toPolar.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/toPolar.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/toRect.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/toRect.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
 		<Unit filename="src/wp43s/tomsFastMathWrappers.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/tomsfastmath.c">
 			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/wp34s.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-		</Unit>
-		<Unit filename="src/wp43s/wp34s.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>

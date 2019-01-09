@@ -122,7 +122,6 @@ typedef int16_t calcRegister_t;
 #endif
 
 
-#include "addition.h"
 #include "assign.h"
 #include "bufferize.h"
 #include "complex.h"
@@ -131,7 +130,6 @@ typedef int16_t calcRegister_t;
 #include "conversionUnits.h"
 #include "curveFitting.h"
 #include "dateTime.h"
-#include "division.h"
 #include "constants.h"
 #include "debug.h"
 #include "error.h"
@@ -146,14 +144,11 @@ typedef int16_t calcRegister_t;
 #include "integers.h"
 #include "items.h"
 #include "keyboard.h"
-#include "mathematics.h"
-#include "multiplication.h"
-#include "power.h"
+#include "mathematics/mathematics.h"
 #include "registerBrowser.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
-#include "subtraction.h"
 #include "timer.h"
 #include "saveRestoreCalcState.h"
 #include "softmenus.h"

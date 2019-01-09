@@ -15,11 +15,7 @@
  */
 
 /********************************************//**
- * \file complex.h
+ * \file imaginaryPart.h
  ***********************************************/
 
-void fnUnitVector       (uint16_t unusedParamButMandatory);
-void fnConjugate        (uint16_t unusedParamButMandatory);
-void fnSwapRealImaginary(uint16_t unusedParamButMandatory);
-void fnRealPart         (uint16_t unusedParamButMandatory);
-void fnImaginaryPart    (uint16_t unusedParamButMandatory);
+void fnImaginaryPart(uint16_t unusedParamButMandatory);

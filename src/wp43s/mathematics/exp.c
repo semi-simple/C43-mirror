@@ -138,7 +138,19 @@ void expCo16(void) {
     enteringFunction("expCo16");
   #endif
 
-  expToBeCoded();
+  real34_t c, real34, imag34;
+  uint8_t savedAngularMode;
+
+  convertRegister16To34(op1);
+  real34Exp(REAL34_POINTER(POINTER_TO_REGISTER_DATA(op1)), &c);
+  savedAngularMode = angularMode;
+  angularMode = AM_RADIAN;
+  real34PolarToRectangular(const34_1, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)), &real34, &imag34);
+  angularMode = savedAngularMode;
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+  real34Multiply(&c, &real34, REAL34_POINTER(POINTER_TO_REGISTER_DATA(result)));
+  real34Multiply(&c, &imag34, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+  convertRegister34To16(result);
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("expCo16");
@@ -197,7 +209,16 @@ void expCo34(void) {
     enteringFunction("expCo34");
   #endif
 
-  expToBeCoded();
+  real34_t c, real34, imag34;
+  uint8_t savedAngularMode;
+
+  real34Exp(REAL34_POINTER(POINTER_TO_REGISTER_DATA(op1)), &c);
+  savedAngularMode = angularMode;
+  angularMode = AM_RADIAN;
+  real34PolarToRectangular(const34_1, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)), &real34, &imag34);
+  angularMode = savedAngularMode;
+  real34Multiply(&c, &real34, REAL34_POINTER(POINTER_TO_REGISTER_DATA(result)));
+  real34Multiply(&c, &imag34, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("expCo34");

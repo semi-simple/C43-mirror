@@ -324,7 +324,7 @@ void btnPressed(void *w, void *data) {
 
   else {
     int16_t item = determineItem(key);
-    showFunctionName(item);
+    if(item >= 0) showFunctionName(item);
   }
 
   #if (LOG_FUNCTIONS == 1)

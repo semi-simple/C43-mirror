@@ -199,106 +199,30 @@ uint16_t determineItem(const calcKey_t *key) {
     enteringFunction("determineItem");
   #endif
 
+  uint16_t result;
   if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
-    if(shiftF) {
-      resetShiftState();
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->fShifted;
-    }
-    else if(shiftG) {
-      resetShiftState();
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->gShifted;
-    }
-    else {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->primary;
-    }
+    result = shiftF ? key->fShifted :
+             shiftG ? key->gShifted :
+                      key->primary;
   }
-
   else if(calcMode == CM_AIM) {
-    if(shiftF) {
-      resetShiftState();
+    result = shiftF ? key->fShiftedAim :
+             shiftG ? key->gShiftedAim :
+                      key->primaryAim;
 
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->fShiftedAim;
-     }
-    else if(shiftG) {
-      resetShiftState();
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->gShiftedAim;
-    }
-    else {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->primaryAim;
-    }
   }
-
   else if(calcMode == CM_TAM) {
-    if(shiftF) {
-      resetShiftState();
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->primaryTam; // No shifted function in TAM
-    }
-    else if(shiftG) {
-      resetShiftState();
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("determineItem");
-      #endif
-
-      return key->primaryTam; // No shifted function in TAM
-    }
-    else {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("determineItem");
-    #endif
-
-     return key->primaryTam;
-    }
+    result = key->primaryTam; // No shifted function in TAM
   }
-
   else {
     displayBugScreen("In function determineItem: item was not determined!");
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("determineItem");
-    #endif
-
-    return 0;
+    result=0;
   }
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("determineItem");
   #endif
+  return result;
 }
 
 
@@ -344,8 +268,6 @@ void btnPressed(void *w, void *data) {
   #if (LOG_FUNCTIONS == 1)
     enteringFunction("btnPressed");
   #endif
-
-  bool_t saveShiftF, saveShiftG;
 
   const calcKey_t *key;
   key = userModeEnabled ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
@@ -401,12 +323,7 @@ void btnPressed(void *w, void *data) {
   }
 
   else {
-    saveShiftF = shiftF;
-    saveShiftG = shiftG;
     int16_t item = determineItem(key);
-    shiftF = saveShiftF;
-    shiftG = saveShiftG;
-    // showShiftState();
     showFunctionName(item);
   }
 
@@ -447,6 +364,7 @@ void btnReleased(void *notUsed, void *data) {
 
   else {
     int16_t item = determineItem(key);
+    if(shiftF || shiftG) resetShiftState();
 
     if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
       lastErrorCode = 0;

@@ -49,6 +49,20 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define RAM(a)                                            ((uint8_t  *)(ram + (a)))
 
 
+#define REGISTER_REAL16_DATA(a)                           ((real16_t *)(ram + getRegisterDataPointer(a)))
+#define REGISTER_IMAG16_DATA(a)                           ((real16_t *)(ram + getRegisterDataPointer(a) + REAL16_SIZE))
+#define REGISTER_COMPLEX16_DATA(a)                        ((complex16_t *)(ram + getRegisterDataPointer(a)))
+#define REGISTER_REAL34_DATA(a)                           ((real34_t *)(ram + getRegisterDataPointer(a)))
+#define REGISTER_IMAG34_DATA(a)                           ((real34_t *)(ram + getRegisterDataPointer(a) + REAL34_SIZE))
+#define REGISTER_COMPLEX34_DATA(a)                        ((complex34_t *)(ram + getRegisterDataPointer(a)))
+#define VARIABLE_REAL16_DATA(a)                           ((real16_t *)(&a))
+#define VARIABLE_IMAG16_DATA(a)                           ((real16_t *)((char *)(&a) + REAL16_SIZE))
+#define VARIABLE_COMPLEX16_DATA(a)                        ((complex16_t *)(&a))
+#define VARIABLE_REAL34_DATA(a)                           ((real34_t *)(&a))
+#define VARIABLE_IMAG34_DATA(a)                           ((real34_t *)((char *)(&a) + REAL34_SIZE))
+#define VARIABLE_COMPLEX34_DATA(a)                        ((complex34_t *)(&a))
+
+
 #define real16ToString(source, destination)               decDoubleToString        (REAL16_POINTER(source),      destination)
 #define real34ToString(source, destination)               decQuadToString          (REAL34_POINTER(source),      destination)
 #define real51ToString(source, destination)               decNumberToString        (REAL51_POINTER(source),      destination)
@@ -148,12 +162,12 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real51SetNegativeSign(operand)                    (REAL51_POINTER(operand))->bits      |= 0x80
 
 
-#define complex16ChangeSign(operand)                      real16ChangeSign(operand);      real16ChangeSign((operand) + REAL16_SIZE)
-#define complex34ChangeSign(operand)                      real34ChangeSign(operand);      real34ChangeSign((operand) + REAL34_SIZE)
-#define complex16SetPositiveSign(operand)                 real16SetPositiveSign(operand); real16SetPositiveSign((operand) + REAL16_SIZE)
-#define complex34SetPositiveSign(operand)                 real34SetPositiveSign(operand); real34SetPositiveSign((operand) + REAL34_SIZE)
-#define complex16SetNegativeSign(operand)                 real16SetNegativeSign(operand); real16SetNegativeSign((operand) + REAL16_SIZE)
-#define complex34SetNegativeSign(operand)                 real34SetNegativeSign(operand); real34SetNegativeSign((operand) + REAL34_SIZE)
+#define complex16ChangeSign(operand)                      {real16ChangeSign(operand);      real16ChangeSign((real16_t *)((char *)(operand) + REAL16_SIZE));}
+#define complex34ChangeSign(operand)                      {real34ChangeSign(operand);      real34ChangeSign((real16_t *)((char *)(operand) + REAL34_SIZE));}
+#define complex16SetPositiveSign(operand)                 {real16SetPositiveSign(operand); real16SetPositiveSign((real16_t *)((char *)(operand) + REAL16_SIZE));}
+#define complex34SetPositiveSign(operand)                 {real34SetPositiveSign(operand); real34SetPositiveSign((real16_t *)((char *)(operand) + REAL34_SIZE));}
+#define complex16SetNegativeSign(operand)                 {real16SetNegativeSign(operand); real16SetNegativeSign((real16_t *)((char *)(operand) + REAL16_SIZE));}
+#define complex34SetNegativeSign(operand)                 {real34SetNegativeSign(operand); real34SetNegativeSign((real16_t *)((char *)(operand) + REAL34_SIZE));}
 
 
 #define real16Copy(source, destination)                   memcpy(destination, source, REAL16_SIZE)

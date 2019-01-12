@@ -2504,11 +2504,33 @@ void printReal16ToConsole(const real16_t *value) {
 
 
 
+void printComplex16ToConsole(const complex16_t *value) {
+  char str[100];
+
+  real16ToString((real16_t *)value, str);
+  printf("complex16 %s + ", str);
+  real16ToString((real16_t *)value + 1, str);
+  printf("%si", str);
+}
+
+
+
 void printReal34ToConsole(const real34_t *value) {
   char str[100];
 
   real34ToString(value, str);
   printf("real34 %s", str);
+}
+
+
+
+void printComplex34ToConsole(const complex34_t *value) {
+  char str[100];
+
+  real34ToString((real34_t *)value, str);
+  printf("complex34 %s + ", str);
+  real34ToString((real34_t *)value + 1, str);
+  printf("%si", str);
 }
 
 

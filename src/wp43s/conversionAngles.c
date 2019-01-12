@@ -488,9 +488,9 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
 
 
 
-void checkDms(real16_t *angleDms) {
+void checkDms16(real16_t *angleDms) {
   #if (LOG_FUNCTIONS == 1)
-    enteringFunction("checkDms");
+    enteringFunction("checkDms16");
   #endif
 
   int16_t  sign;
@@ -524,10 +524,56 @@ void checkDms(real16_t *angleDms) {
   real16Add(angleDms, &seconds, angleDms);
 
   if(sign == -1) {
+    real16SetNegativeSign(angleDms);
+  }
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("checkDms16");
+  #endif
+}
+
+
+
+void checkDms34(real34_t *angleDms) {
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("checkDms34");
+  #endif
+
+  int16_t  sign;
+  real34_t degrees, minutes, seconds;
+
+  sign = real34IsNegative(angleDms) ? -1 : 1;
+  real34SetPositiveSign(angleDms);
+
+  real34ToIntegral(angleDms, &degrees);
+  real34Subtract(angleDms, &degrees, angleDms);
+
+  real34Multiply(angleDms, const34_100, angleDms);
+  real34ToIntegral(angleDms, &minutes);
+  real34Subtract(angleDms, &minutes, angleDms);
+
+  real34Multiply(angleDms, const34_100, &seconds);
+
+  if(real34CompareGreaterEqual(&seconds, const34_60)) {
+    real34Subtract(&seconds, const34_60, &seconds);
+    real34Add(&minutes, const34_1, &minutes);
+  }
+
+  if(real34CompareGreaterEqual(&minutes, const34_60)) {
+    real34Subtract(&minutes, const34_60, &minutes);
+    real34Add(&degrees, const34_1, &degrees);
+  }
+
+  real34Divide(&minutes, const34_100, &minutes);
+  real34Add(&degrees, &minutes, angleDms);
+  real34Divide(&seconds, const34_10000, &seconds);
+  real34Add(angleDms, &seconds, angleDms);
+
+  if(sign == -1) {
     real34SetNegativeSign(angleDms);
   }
 
   #if (LOG_FUNCTIONS == 1)
-    leavingFunction("checkDms");
+    leavingFunction("checkDms34");
   #endif
 }

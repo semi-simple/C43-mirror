@@ -32,4 +32,5 @@ void fnCvtToAngularMode        (uint16_t toAngularMode);
 void fnCvtDegToRad             (uint16_t unusedParamButMandatory);
 void fnCvtDegToDms             (uint16_t unusedParamButMandatory);
 void fnCvtRadToDeg             (uint16_t unusedParamButMandatory);
-void checkDms                  (real16_t *angleDms);
+void checkDms16                (real16_t *angleDms);
+void checkDms34                (real34_t *angleDms);

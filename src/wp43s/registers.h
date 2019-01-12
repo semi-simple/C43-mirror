@@ -153,6 +153,7 @@ calcRegister_t    indirectAddressing              (calcRegister_t regist);
 void              printRegisterToConsole          (calcRegister_t regist, int16_t line);
 void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);
+void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
 void              printBigIntegerToConsole        (bigInteger_t *value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint16_t numBytes, uint32_t dataInfo);

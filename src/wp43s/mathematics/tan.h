@@ -19,3 +19,11 @@
  ***********************************************/
 
 void fnTan(uint16_t unusedParamButMandatory);
+void errorTan(void);
+void tanBigI (void);
+void tanRe16 (void);
+void tanCo16 (void);
+void tanRm16 (void);
+void tanCm16 (void);
+void tanRe34 (void);
+void tanCo34 (void);

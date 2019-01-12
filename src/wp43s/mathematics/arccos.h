@@ -18,4 +18,12 @@
  * \file arccos.h
  ***********************************************/
 
-void fnArccos(uint16_t unusedParamButMandatory);
+void fnArccos   (uint16_t unusedParamButMandatory);
+void errorArccos(void);
+void arccosBigI (void);
+void arccosRe16 (void);
+void arccosCo16 (void);
+void arccosRm16 (void);
+void arccosCm16 (void);
+void arccosRe34 (void);
+void arccosCo34 (void);

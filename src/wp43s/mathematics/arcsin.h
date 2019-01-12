@@ -18,4 +18,12 @@
  * \file arcsin.h
  ***********************************************/
 
-void fnArcsin(uint16_t unusedParamButMandatory);
+void fnArcsin   (uint16_t unusedParamButMandatory);
+void errorArcsin(void);
+void arcsinBigI (void);
+void arcsinRe16 (void);
+void arcsinCo16 (void);
+void arcsinRm16 (void);
+void arcsinCm16 (void);
+void arcsinRe34 (void);
+void arcsinCo34 (void);

@@ -50,7 +50,7 @@ void fnArctan(uint16_t unusedParamButMandatory) {
     if(dataType == dtReal16) {
       convertRegister34To16(REGISTER_X);
       if(angularMode == AM_DMS) {
-        checkDms(REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+        checkDms16(REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
       }
     }
 

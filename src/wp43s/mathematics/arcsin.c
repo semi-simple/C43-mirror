@@ -136,6 +136,7 @@ void arcsinRe16(void) {
     if(angularMode == AM_DMS) {
       checkDms16(REGISTER_REAL16_DATA(result));
     }
+    temporaryInformation = TI_ANGLE;
   }
 }
 
@@ -164,7 +165,6 @@ void arcsinCo16(void) {
   real34Zero(REGISTER_IMAG34_DATA(op1));
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
   subCo34Co34();
-  freeTemporaryRegister(op2);
 
   // calculate sqrt(1 - z*z)
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
@@ -174,6 +174,7 @@ void arcsinCo16(void) {
   complex34Copy(VARIABLE_COMPLEX34_DATA(iz), REGISTER_COMPLEX34_DATA(op1));
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
   addCo34Co34();
+  freeTemporaryRegister(op2);
 
   // calculate ln(iz + sqtr(1 - z*z))
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
@@ -216,6 +217,7 @@ void arcsinRe34(void) {
     if(angularMode == AM_DMS) {
       checkDms16(REGISTER_REAL16_DATA(result));
     }
+    temporaryInformation = TI_ANGLE;
   }
 }
 
@@ -241,7 +243,6 @@ void arcsinCo34(void) {
   real34Zero(REGISTER_IMAG34_DATA(op1));
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
   subCo34Co34();
-  freeTemporaryRegister(op2);
 
   // calculate sqrt(1 - z*z)
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
@@ -251,6 +252,7 @@ void arcsinCo34(void) {
   complex34Copy(VARIABLE_COMPLEX34_DATA(iz), REGISTER_COMPLEX34_DATA(op1));
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
   addCo34Co34();
+  freeTemporaryRegister(op2);
 
   // calculate ln(iz + sqtr(1 - z*z))
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));

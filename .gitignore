@@ -5,5 +5,6 @@
 *.depend
 bin/
 obj/
+src/qspi_crc.h
 
 !windows\ binaries/wp43.exe

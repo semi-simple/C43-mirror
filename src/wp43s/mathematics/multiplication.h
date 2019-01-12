@@ -20,8 +20,6 @@
 
 void mulToBeCoded(void);
 void fnMultiply  (uint16_t unusedParamButMandatory);
-void fnSquare    (uint16_t unusedParamButMandatory);
-void fnCube      (uint16_t unusedParamButMandatory);
 
 void errorMul    (void);
 

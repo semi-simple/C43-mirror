@@ -357,7 +357,7 @@ void btnReleased(void *notUsed, void *data) {
   allowScreenUpdate = true;
 
 
-  // Shift f released
+  // Shift f or g released
   if(key->primary == KEY_f || key->primary == KEY_g) {
     // nothing to do
   }

@@ -1218,7 +1218,7 @@ void debugNIM(void) {
       if(statisticalSumsPointer != 0) {
         gtk_label_set_label(GTK_LABEL(lbl1[row]), "n");
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*0);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*0);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1226,7 +1226,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*1);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*1);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1234,7 +1234,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*2);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*2);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1242,7 +1242,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*3);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*3);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1250,7 +1250,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*5);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*5);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1258,7 +1258,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*6);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*6);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1266,7 +1266,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*8);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*8);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1274,7 +1274,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*11);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*11);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1282,7 +1282,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*7);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*7);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1290,7 +1290,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*9);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*9);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1298,7 +1298,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*12);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*12);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1306,7 +1306,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*13);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*13);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1314,7 +1314,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*10);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*10);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1322,7 +1322,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal16Debug(string, statisticalSumsPointer + REAL16_SIZE*4);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*4);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
       }

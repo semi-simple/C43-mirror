@@ -23,7 +23,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-bool_t                 calcLandscape, calcAutoLandscapePortrait;
+bool_t                 calcLandscape, calcAutoLandscapePortrait, runTestsOnly;
 int16_t                screenStride, debugWindow;
 uint32_t               *screenData;
 bool_t                 screenChange;
@@ -252,6 +252,7 @@ void setupDefaults(void) {
 int main(int argc, char* argv[]) {
   calcLandscape             = false;
   calcAutoLandscapePortrait = true;
+  runTestsOnly              = false;
 
   for(int arg=1; arg<=argc-1; arg++) {
     if(strcmp(argv[arg], "--landscape") == 0) {
@@ -268,6 +269,10 @@ int main(int argc, char* argv[]) {
       calcLandscape             = false;
       calcAutoLandscapePortrait = true;
     }
+
+    if(strcmp(argv[arg], "--run-tests-only") == 0) {
+      runTestsOnly              = true;
+    }
   }
 
   if(strcmp(indexOfItems[LAST_ITEM].itemPrinted, "Last item") != 0) {
@@ -275,13 +280,16 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-test();
+//test();
 
   gtk_init(&argc, &argv);
   setupUI();
 
   setupDefaults();
-  testFunctions();
+  if(runTestsOnly) {
+    testFunctions();
+    exit(0);
+  }
 
   // Without the following 8 lines of code
   // the f- and g-shifted labels are

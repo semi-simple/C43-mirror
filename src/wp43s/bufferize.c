@@ -689,8 +689,8 @@ void addItemToNimBuffer(int16_t item) {
   else {
     closeNim();
     if(calcMode != CM_NIM && lastErrorCode == 0) {
-      runFunction(item);
-      refreshStack();
+      showFunctionName(item);
+      keyHoldFunction=item;
     }
   }
 

@@ -253,26 +253,28 @@ void btnClicked(void *w, void *data) {
 
 
 /********************************************//**
- * \brief One of the keys was pressed (but not yet released)
+ * \brief A calc button was pressed
  *
- * \param w GtkWidget* The pressed button
- * \param data gpointer String containing the key ID
+ * \param w GtkWidget*
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnPressed(GtkWidget *w, gpointer data) {
+void btnPressed(GtkWidget *notUsed, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnPressed(void *w, void *data) {
+void btnPressed(void *notUsed, void *data) {
 #endif
   #if (LOG_FUNCTIONS == 1)
     enteringFunction("btnPressed");
   #endif
 
   const calcKey_t *key;
+
   key = userModeEnabled ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
 
   allowScreenUpdate = true;
+
 
   // Shift f pressed
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
@@ -324,47 +326,7 @@ void btnPressed(void *w, void *data) {
 
   else {
     int16_t item = determineItem(key);
-    if(item >= 0) showFunctionName(item);
-  }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("btnPressed");
-  #endif
-}
-
-
-/********************************************//**
- * \brief A calc button was released
- *
- * \param w GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnReleased(GtkWidget *notUsed, gpointer data) {
-#endif
-#ifdef DMCP_BUILD
-void btnReleased(void *notUsed, void *data) {
-#endif
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("btnReleased");
-  #endif
-
-  const calcKey_t *key;
-
-  key = userModeEnabled ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
-
-  allowScreenUpdate = true;
-
-
-  // Shift f or g released
-  if(key->primary == KEY_f || key->primary == KEY_g) {
-    // nothing to do
-  }
-
-  else {
-    int16_t item = determineItem(key);
-    if(shiftF || shiftG) resetShiftState();
+    resetShiftState();
 
     if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
       lastErrorCode = 0;
@@ -456,7 +418,7 @@ void btnReleased(void *notUsed, void *data) {
       }
 
       else {
-        displayBugScreen("In function btnReleased: unexpected case while processing key ENTER!");
+        displayBugScreen("In function btnPressed: unexpected case while processing key ENTER!");
       }
     }
 
@@ -538,7 +500,7 @@ void btnReleased(void *notUsed, void *data) {
       }
 
       else {
-       displayBugScreen("In function btnReleased: unexpected case while processing key EXIT!");
+       displayBugScreen("In function btnPressed: unexpected case while processing key EXIT!");
       }
     }
 
@@ -676,7 +638,7 @@ void btnReleased(void *notUsed, void *data) {
           displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
-            showInfoDialog("In function btnReleased:", errorMessage, NULL, NULL);
+            showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
       }
@@ -686,7 +648,7 @@ void btnReleased(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnReleased: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
         displayBugScreen(errorMessage);
       }
     }
@@ -759,7 +721,7 @@ void btnReleased(void *notUsed, void *data) {
       }
 
       else {
-        displayBugScreen("In function btnReleased: unexpected case while processing key BACKSPACE!");
+        displayBugScreen("In function btnPressed: unexpected case while processing key BACKSPACE!");
       }
     }
 
@@ -799,7 +761,7 @@ void btnReleased(void *notUsed, void *data) {
           registerBrowser(NOPARAM);
         }
         else {
-          sprintf(errorMessage, "In function btnReleased: unexpected case while processing key UP! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
+          sprintf(errorMessage, "In function btnPressed: unexpected case while processing key UP! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
           displayBugScreen(errorMessage);
         }
       }
@@ -817,7 +779,7 @@ void btnReleased(void *notUsed, void *data) {
       }
 
       else {
-       displayBugScreen("In function btnReleased: unexpected case while processing key UP!");
+       displayBugScreen("In function btnPressed: unexpected case while processing key UP!");
       }
     }
 
@@ -857,7 +819,7 @@ void btnReleased(void *notUsed, void *data) {
           registerBrowser(NOPARAM);
         }
         else {
-          sprintf(errorMessage, "In function btnReleased: unexpected case while processing key DOWN! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
+          sprintf(errorMessage, "In function btnPressed: unexpected case while processing key DOWN! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
           displayBugScreen(errorMessage);
         }
       }
@@ -875,14 +837,14 @@ void btnReleased(void *notUsed, void *data) {
       }
 
       else {
-        displayBugScreen("In function btnReleased: unexpected case while processing key DOWN!");
+        displayBugScreen("In function btnPressed: unexpected case while processing key DOWN!");
       }
     }
 
     else if(item == KEY_dotD) {
       if(calcMode == CM_NIM) {
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function btnReleased:", "the data type date is to be coded!", NULL, NULL);
+          showInfoDialog("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
         #endif
       }
 
@@ -911,13 +873,13 @@ void btnReleased(void *notUsed, void *data) {
           displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             sprintf(errorMessage, "data type %s cannot be converted to a real16!", getRegisterDataTypeName(REGISTER_X, false, false));
-            showInfoDialog("In function btnReleased:", errorMessage, NULL, NULL);
+            showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
       }
 
       else {
-        displayBugScreen("In function btnReleased: unexpected case while processing .d function!");
+        displayBugScreen("In function btnPressed: unexpected case while processing .d function!");
       }
     }
 
@@ -929,7 +891,8 @@ void btnReleased(void *notUsed, void *data) {
         addItemToNimBuffer(item);
       }
       else {
-        runFunction(item);
+        showFunctionName(item);
+        keyHoldFunction=item;
       }
     }
 
@@ -955,7 +918,8 @@ void btnReleased(void *notUsed, void *data) {
       }
 
       else {
-        runFunction(item);
+        showFunctionName(item);
+        keyHoldFunction=item;
       }
     }
 
@@ -1058,9 +1022,38 @@ void btnReleased(void *notUsed, void *data) {
     }
 
     else {
-      sprintf(errorMessage, "In function btnReleased: %" FMT8U " is an unexpected value while processing calcMode!", calcMode);
+      sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value while processing calcMode!", calcMode);
       displayBugScreen(errorMessage);
     }
+  }
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("btnPressed");
+  #endif
+}
+
+
+/********************************************//**
+ * \brief A calc button was released
+ *
+ * \param w GtkWidget*
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return void
+ ***********************************************/
+#ifdef PC_BUILD
+void btnReleased(GtkWidget *notUsed, gpointer data) {
+#endif
+#ifdef DMCP_BUILD
+void btnReleased(void *notUsed, void *data) {
+#endif
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("btnReleased");
+  #endif
+
+  if(keyHoldFunction) {
+    refreshStack();
+    runFunction(keyHoldFunction);
+    keyHoldFunction=0;
   }
 
   #if (LOG_FUNCTIONS == 1)

@@ -19,3 +19,11 @@
  ***********************************************/
 
 void fnArctan(uint16_t unusedParamButMandatory);
+void errorArctan(void);
+void arctanBigI (void);
+void arctanRe16 (void);
+void arctanCo16 (void);
+void arctanRm16 (void);
+void arctanCm16 (void);
+void arctanRe34 (void);
+void arctanCo34 (void);

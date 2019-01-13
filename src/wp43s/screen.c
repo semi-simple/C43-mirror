@@ -801,7 +801,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
-                sprintf(prefix, "Data point %03" FMT32S, real16ToInt32(RAM(statisticalSumsPointer)));
+                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(RAM(statisticalSumsPointer)));
                 prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
                 for(w=0; w<SCREEN_WIDTH; w++) {
                   setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
@@ -866,7 +866,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
-                sprintf(prefix, "Data point %03" FMT32S, real16ToInt32(RAM(statisticalSumsPointer)));
+                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(RAM(statisticalSumsPointer)));
                 prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
                 for(w=0; w<SCREEN_WIDTH; w++) {
                   setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);

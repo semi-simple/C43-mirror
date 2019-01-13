@@ -271,6 +271,8 @@ void btnPressed(void *notUsed, void *data) {
 
   const calcKey_t *key;
 
+  keyHoldFunction = 0;
+
   key = userModeEnabled ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
 
   allowScreenUpdate = true;

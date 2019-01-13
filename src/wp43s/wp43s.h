@@ -361,7 +361,7 @@ typedef int16_t calcRegister_t;
 
 // Variables for the simulator
 #ifdef PC_BUILD
-  extern bool_t               calcLandscape, calcAutoLandscapePortrait;
+  extern bool_t               calcLandscape, calcAutoLandscapePortrait, runTestsOnly;
   extern GtkWidget            *screen, *frmCalc;
   extern int16_t              screenStride, debugWindow;
   extern uint32_t             *screenData;

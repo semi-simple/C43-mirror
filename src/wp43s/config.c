@@ -696,7 +696,7 @@ void fnClSigma(uint16_t unusedParamButMandatory) {
   #endif
 
   if(statisticalSumsPointer != 0) {
-    freeMemory(statisticalSumsPointer, 14*REAL16_SIZE);
+    freeMemory(statisticalSumsPointer, 14*REAL34_SIZE);
     statisticalSumsPointer = 0;
   }
 

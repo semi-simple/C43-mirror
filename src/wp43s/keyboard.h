@@ -20,13 +20,19 @@
 
 void resetShiftState(void);
 void showShiftState (void);
+void showFunctionName(int16_t item);
+int16_t keyHoldFunction;
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);
   void btnClicked     (GtkWidget *w, gpointer data);
+  void btnPressed     (GtkWidget *w, gpointer data);
+  void btnReleased    (GtkWidget *w, gpointer data);
 #endif
 
 #ifdef DMCP_BUILD
   void btnFnClicked   (void *w, void *data);
   void btnClicked     (void *w, void *data);
+  void btnPressed     (void *w, void *data);
+  void btnReleased    (void *w, void *data);
 #endif // DMCP_BUILD

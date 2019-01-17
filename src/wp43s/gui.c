@@ -2046,12 +2046,18 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn25, KEY_WIDTH_1, 0);
   gtk_widget_set_size_request(btn26, KEY_WIDTH_1, 0);
 
-  g_signal_connect(btn21, "clicked", G_CALLBACK(btnClicked), "00");
-  g_signal_connect(btn22, "clicked", G_CALLBACK(btnClicked), "01");
-  g_signal_connect(btn23, "clicked", G_CALLBACK(btnClicked), "02");
-  g_signal_connect(btn24, "clicked", G_CALLBACK(btnClicked), "03");
-  g_signal_connect(btn25, "clicked", G_CALLBACK(btnClicked), "04");
-  g_signal_connect(btn26, "clicked", G_CALLBACK(btnClicked), "05");
+  g_signal_connect(btn21, "pressed", G_CALLBACK(btnPressed), "00");
+  g_signal_connect(btn22, "pressed", G_CALLBACK(btnPressed), "01");
+  g_signal_connect(btn23, "pressed", G_CALLBACK(btnPressed), "02");
+  g_signal_connect(btn24, "pressed", G_CALLBACK(btnPressed), "03");
+  g_signal_connect(btn25, "pressed", G_CALLBACK(btnPressed), "04");
+  g_signal_connect(btn26, "pressed", G_CALLBACK(btnPressed), "05");
+  g_signal_connect(btn21, "released", G_CALLBACK(btnReleased), "00");
+  g_signal_connect(btn22, "released", G_CALLBACK(btnReleased), "01");
+  g_signal_connect(btn23, "released", G_CALLBACK(btnReleased), "02");
+  g_signal_connect(btn24, "released", G_CALLBACK(btnReleased), "03");
+  g_signal_connect(btn25, "released", G_CALLBACK(btnReleased), "04");
+  g_signal_connect(btn26, "released", G_CALLBACK(btnReleased), "05");
 
   gtk_fixed_put(GTK_FIXED(grid), lbl21F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl22F,  0, 0);
@@ -2148,12 +2154,18 @@ void setupUI(void) {
 
   gtk_widget_set_name(lbl33H,  "fShifted");
 
-  g_signal_connect(btn31, "clicked", G_CALLBACK(btnClicked), "06");
-  g_signal_connect(btn32, "clicked", G_CALLBACK(btnClicked), "07");
-  g_signal_connect(btn33, "clicked", G_CALLBACK(btnClicked), "08");
-  g_signal_connect(btn34, "clicked", G_CALLBACK(btnClicked), "09");
-  g_signal_connect(btn35, "clicked", G_CALLBACK(btnClicked), "10");
-  g_signal_connect(btn36, "clicked", G_CALLBACK(btnClicked), "11");
+  g_signal_connect(btn31, "pressed", G_CALLBACK(btnPressed), "06");
+  g_signal_connect(btn32, "pressed", G_CALLBACK(btnPressed), "07");
+  g_signal_connect(btn33, "pressed", G_CALLBACK(btnPressed), "08");
+  g_signal_connect(btn34, "pressed", G_CALLBACK(btnPressed), "09");
+  g_signal_connect(btn35, "pressed", G_CALLBACK(btnPressed), "10");
+  g_signal_connect(btn36, "pressed", G_CALLBACK(btnPressed), "11");
+  g_signal_connect(btn31, "released", G_CALLBACK(btnReleased), "06");
+  g_signal_connect(btn32, "released", G_CALLBACK(btnReleased), "07");
+  g_signal_connect(btn33, "released", G_CALLBACK(btnReleased), "08");
+  g_signal_connect(btn34, "released", G_CALLBACK(btnReleased), "09");
+  g_signal_connect(btn35, "released", G_CALLBACK(btnReleased), "10");
+  g_signal_connect(btn36, "released", G_CALLBACK(btnReleased), "11");
 
   gtk_fixed_put(GTK_FIXED(grid), lbl31F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl32F,  0, 0);
@@ -2243,11 +2255,16 @@ void setupUI(void) {
   gtk_widget_set_name(lbl42H,  "gShifted");
   gtk_widget_set_name(lbl44P,  "fShifted");
 
-  g_signal_connect(btn41, "clicked", G_CALLBACK(btnClicked), "12");
-  g_signal_connect(btn42, "clicked", G_CALLBACK(btnClicked), "13");
-  g_signal_connect(btn43, "clicked", G_CALLBACK(btnClicked), "14");
-  g_signal_connect(btn44, "clicked", G_CALLBACK(btnClicked), "15");
-  g_signal_connect(btn45, "clicked", G_CALLBACK(btnClicked), "16");
+  g_signal_connect(btn41, "pressed", G_CALLBACK(btnPressed), "12");
+  g_signal_connect(btn42, "pressed", G_CALLBACK(btnPressed), "13");
+  g_signal_connect(btn43, "pressed", G_CALLBACK(btnPressed), "14");
+  g_signal_connect(btn44, "pressed", G_CALLBACK(btnPressed), "15");
+  g_signal_connect(btn45, "pressed", G_CALLBACK(btnPressed), "16");
+  g_signal_connect(btn41, "released", G_CALLBACK(btnReleased), "12");
+  g_signal_connect(btn42, "released", G_CALLBACK(btnReleased), "13");
+  g_signal_connect(btn43, "released", G_CALLBACK(btnReleased), "14");
+  g_signal_connect(btn44, "released", G_CALLBACK(btnReleased), "15");
+  g_signal_connect(btn45, "released", G_CALLBACK(btnReleased), "16");
 
   gtk_fixed_put(GTK_FIXED(grid), lbl41F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl42F,  0, 0);
@@ -2325,11 +2342,16 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn54, KEY_WIDTH_2, 0);
   gtk_widget_set_size_request(btn55, KEY_WIDTH_2, 0);
 
-  g_signal_connect(btn51, "clicked", G_CALLBACK(btnClicked), "17");
-  g_signal_connect(btn52, "clicked", G_CALLBACK(btnClicked), "18");
-  g_signal_connect(btn53, "clicked", G_CALLBACK(btnClicked), "19");
-  g_signal_connect(btn54, "clicked", G_CALLBACK(btnClicked), "20");
-  g_signal_connect(btn55, "clicked", G_CALLBACK(btnClicked), "21");
+  g_signal_connect(btn51, "pressed", G_CALLBACK(btnPressed), "17");
+  g_signal_connect(btn52, "pressed", G_CALLBACK(btnPressed), "18");
+  g_signal_connect(btn53, "pressed", G_CALLBACK(btnPressed), "19");
+  g_signal_connect(btn54, "pressed", G_CALLBACK(btnPressed), "20");
+  g_signal_connect(btn55, "pressed", G_CALLBACK(btnPressed), "21");
+  g_signal_connect(btn51, "released", G_CALLBACK(btnReleased), "17");
+  g_signal_connect(btn52, "released", G_CALLBACK(btnReleased), "18");
+  g_signal_connect(btn53, "released", G_CALLBACK(btnReleased), "19");
+  g_signal_connect(btn54, "released", G_CALLBACK(btnReleased), "20");
+  g_signal_connect(btn55, "released", G_CALLBACK(btnReleased), "21");
 
   gtk_fixed_put(GTK_FIXED(grid), lbl51F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl52F,  0, 0);
@@ -2408,11 +2430,16 @@ void setupUI(void) {
 
   gtk_widget_set_name(lbl64H,  "gShifted");
 
-  g_signal_connect(btn61, "clicked", G_CALLBACK(btnClicked), "22");
-  g_signal_connect(btn62, "clicked", G_CALLBACK(btnClicked), "23");
-  g_signal_connect(btn63, "clicked", G_CALLBACK(btnClicked), "24");
-  g_signal_connect(btn64, "clicked", G_CALLBACK(btnClicked), "25");
-  g_signal_connect(btn65, "clicked", G_CALLBACK(btnClicked), "26");
+  g_signal_connect(btn61, "pressed", G_CALLBACK(btnPressed), "22");
+  g_signal_connect(btn62, "pressed", G_CALLBACK(btnPressed), "23");
+  g_signal_connect(btn63, "pressed", G_CALLBACK(btnPressed), "24");
+  g_signal_connect(btn64, "pressed", G_CALLBACK(btnPressed), "25");
+  g_signal_connect(btn65, "pressed", G_CALLBACK(btnPressed), "26");
+  g_signal_connect(btn61, "released", G_CALLBACK(btnReleased), "22");
+  g_signal_connect(btn62, "released", G_CALLBACK(btnReleased), "23");
+  g_signal_connect(btn63, "released", G_CALLBACK(btnReleased), "24");
+  g_signal_connect(btn64, "released", G_CALLBACK(btnReleased), "25");
+  g_signal_connect(btn65, "released", G_CALLBACK(btnReleased), "26");
 
   gtk_fixed_put(GTK_FIXED(grid), lbl61F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl62F,  0, 0);
@@ -2493,11 +2520,16 @@ void setupUI(void) {
   gtk_widget_set_name(lbl71H,  "gShiftedUnderline");
   gtk_widget_set_name(lbl72H,  "gShifted");
 
-  g_signal_connect(btn71, "clicked", G_CALLBACK(btnClicked), "27");
-  g_signal_connect(btn72, "clicked", G_CALLBACK(btnClicked), "28");
-  g_signal_connect(btn73, "clicked", G_CALLBACK(btnClicked), "29");
-  g_signal_connect(btn74, "clicked", G_CALLBACK(btnClicked), "30");
-  g_signal_connect(btn75, "clicked", G_CALLBACK(btnClicked), "31");
+  g_signal_connect(btn71, "pressed", G_CALLBACK(btnPressed), "27");
+  g_signal_connect(btn72, "pressed", G_CALLBACK(btnPressed), "28");
+  g_signal_connect(btn73, "pressed", G_CALLBACK(btnPressed), "29");
+  g_signal_connect(btn74, "pressed", G_CALLBACK(btnPressed), "30");
+  g_signal_connect(btn75, "pressed", G_CALLBACK(btnPressed), "31");
+  g_signal_connect(btn71, "released", G_CALLBACK(btnReleased), "27");
+  g_signal_connect(btn72, "released", G_CALLBACK(btnReleased), "28");
+  g_signal_connect(btn73, "released", G_CALLBACK(btnReleased), "29");
+  g_signal_connect(btn74, "released", G_CALLBACK(btnReleased), "30");
+  g_signal_connect(btn75, "released", G_CALLBACK(btnReleased), "31");
 
   gtk_fixed_put(GTK_FIXED(grid), lbl71F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl72F,  0, 0);
@@ -2583,11 +2615,16 @@ void setupUI(void) {
   gtk_widget_set_name(lbl84H, "fShifted");
   gtk_widget_set_name(lblOn,  "On");
 
-  g_signal_connect(btn81, "clicked", G_CALLBACK(btnClicked), "32");
-  g_signal_connect(btn82, "clicked", G_CALLBACK(btnClicked), "33");
-  g_signal_connect(btn83, "clicked", G_CALLBACK(btnClicked), "34");
-  g_signal_connect(btn84, "clicked", G_CALLBACK(btnClicked), "35");
-  g_signal_connect(btn85, "clicked", G_CALLBACK(btnClicked), "36");
+  g_signal_connect(btn81, "pressed", G_CALLBACK(btnPressed), "32");
+  g_signal_connect(btn82, "pressed", G_CALLBACK(btnPressed), "33");
+  g_signal_connect(btn83, "pressed", G_CALLBACK(btnPressed), "34");
+  g_signal_connect(btn84, "pressed", G_CALLBACK(btnPressed), "35");
+  g_signal_connect(btn85, "pressed", G_CALLBACK(btnPressed), "36");
+  g_signal_connect(btn81, "released", G_CALLBACK(btnReleased), "32");
+  g_signal_connect(btn82, "released", G_CALLBACK(btnReleased), "33");
+  g_signal_connect(btn83, "released", G_CALLBACK(btnReleased), "34");
+  g_signal_connect(btn84, "released", G_CALLBACK(btnReleased), "35");
+  g_signal_connect(btn85, "released", G_CALLBACK(btnReleased), "36");
 
   gtk_fixed_put(GTK_FIXED(grid), lbl81F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl82F,  0, 0);

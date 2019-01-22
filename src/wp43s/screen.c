@@ -137,6 +137,13 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
+  // Function name display
+  if(showFunctionNameCounter>0) {
+    if(--showFunctionNameCounter == 0) {
+      showFunctionName(424, 0); // 424==NOP;
+    }
+  }
+
   // Update date and time
   getTimeString(dateTimeString);
   if(strcmp(dateTimeString, oldTime)) {
@@ -596,6 +603,55 @@ void hideCursor(void) {
 
   #if (LOG_FUNCTIONS == 1)
     leavingFunction("hideCursor");
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Displays the function of the
+ * currently pressed button in the
+ * upper left corner of the T register line
+ *
+ * \param[in] item     int16_t  Item ID to show
+ * \param[in] counter  int8_t   number of 1/10 seconds until NOP
+ * \return void
+ ***********************************************/
+void showFunctionName(int16_t item, int8_t counter) {
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("showFunctionName");
+  #endif
+
+  showFunctionNameItem = item;
+  showFunctionNameCounter = counter;
+  showString(indexOfItems[item].itemName, &standardFont, 1, 134 - 37*(REGISTER_T-100), vmNormal, false, false);
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("showFunctionName");
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Hides the function name in the
+ * upper left corner of the T register line
+ * and clears the counter
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void hideFunctionName() {
+  #if (LOG_FUNCTIONS == 1)
+    enteringFunction("hideFunctionName");
+  #endif
+
+  showFunctionNameItem = 0;
+  showFunctionNameCounter = 0;
+  refreshStack();
+
+  #if (LOG_FUNCTIONS == 1)
+    leavingFunction("hideFunctionName");
   #endif
 }
 

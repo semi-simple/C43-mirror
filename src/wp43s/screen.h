@@ -43,6 +43,9 @@ typedef enum {
   vmReverse  ///< Reverse mode: white on black background
 } videoMode_t; // 1 bit
 
+int16_t  showFunctionNameItem;
+int8_t   showFunctionNameCounter;
+
 #ifdef PC_BUILD
 gboolean drawScreen           (GtkWidget *widget, cairo_t *cr, gpointer data);
 void     copyScreenToClipboard(void);
@@ -59,5 +62,7 @@ int16_t  showGlyphCode        (uint16_t charCode, const font_t *font, int16_t x,
 void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);
 void     showCursor           (void);
 void     hideCursor           (void);
+void     showFunctionName     (int16_t item, int8_t counter);
+void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
 void     refreshRegisterLine  (calcRegister_t regist);

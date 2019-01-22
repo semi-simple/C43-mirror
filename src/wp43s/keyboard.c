@@ -48,26 +48,6 @@ void showShiftState(void) {
 }
 
 
-/********************************************//**
- * \brief Displays the function of the
- * currently pressed button in the
- * upper left corner of the T register line
- *
- * \param void
- * \return void
- ***********************************************/
-void showFunctionName(int16_t item) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showFunctionName");
-  #endif
-
-  showString(indexOfItems[item].itemName, &standardFont, 1, 134 - 37*(REGISTER_T-100), vmNormal, false, false);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showFunctionName");
-  #endif
-}
-
 
 
 /********************************************//**
@@ -270,8 +250,6 @@ void btnPressed(void *notUsed, void *data) {
   #endif
 
   const calcKey_t *key;
-
-  keyHoldFunction = 0;
 
   key = userModeEnabled ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
 
@@ -893,8 +871,7 @@ void btnPressed(void *notUsed, void *data) {
         addItemToNimBuffer(item);
       }
       else {
-        showFunctionName(item);
-        keyHoldFunction=item;
+        showFunctionName(item, 10);
       }
     }
 
@@ -920,8 +897,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        showFunctionName(item);
-        keyHoldFunction=item;
+        showFunctionName(item,10);
       }
     }
 
@@ -1052,10 +1028,10 @@ void btnReleased(void *notUsed, void *data) {
     enteringFunction("btnReleased");
   #endif
 
-  if(keyHoldFunction) {
-    refreshStack();
-    runFunction(keyHoldFunction);
-    keyHoldFunction=0;
+  if(showFunctionNameItem != 0) {
+    int16_t item = showFunctionNameItem;
+    hideFunctionName();
+    runFunction(item);
   }
 
   #if (LOG_FUNCTIONS == 1)

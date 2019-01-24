@@ -20,8 +20,6 @@
 
 void resetShiftState(void);
 void showShiftState (void);
-void showFunctionName(int16_t item);
-int16_t keyHoldFunction;
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);

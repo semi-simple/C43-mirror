@@ -38,11 +38,6 @@ char *getSmallIntegerModeName             (uint16_t im);
 char *getAngularModeName                  (uint16_t am);
 void  debugNIM                            (void);
 
-#if (LOG_FUNCTIONS == 1)
-void enteringFunction                     (char *func);
-void leavingFunction                      (char *func);
-#endif
-
 #if (DEBUG_PANEL == 1)
   char * getDenModeName                     (uint16_t dm);
   char * getDisplayFormatName               (uint16_t df);
@@ -68,6 +63,13 @@ void leavingFunction                      (char *func);
 
 
 #if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
+  #if (ANGLE16 == 1)
+    #define formatAngleDebug(str, addr) formatReal16Debug(str, addr)
+  #endif
+  #if (ANGLE34 == 1)
+    #define formatAngleDebug(str, addr) formatReal34Debug(str, addr)
+  #endif
+
   void   formatReal16Debug                  (char *str, uint32_t addr);
   void   formatComplex16Debug               (char *str, uint32_t addr);
   void   formatReal34Debug                  (char *str, uint32_t addr);

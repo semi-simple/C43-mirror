@@ -27,27 +27,13 @@
  * \return bool_t
  ***********************************************/
 bool_t getFlag(uint16_t f) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("getFlag");
-  #endif
-
   if(f < NUMBER_OF_LOCAL_FLAGS) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("getFlag");
-    #endif
-
     return (flags[f/16] & (1u << (f%16))) != 0;
   }
   else {
     if(numberOfLocalRegisters > 0) {
       f -= NUMBER_OF_LOCAL_FLAGS;
       if(f < 16) {
-
-        #if (LOG_FUNCTIONS == 1)
-          leavingFunction("getFlag");
-        #endif
-
         return (*POINTER_TO_LOCAL_FLAGS & (1u << f)) != 0;
       }
       else {
@@ -61,11 +47,6 @@ bool_t getFlag(uint16_t f) {
     }
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("getFlag");
-  #endif
-
   return false;
  }
 
@@ -78,10 +59,6 @@ bool_t getFlag(uint16_t f) {
  * \return void
  ***********************************************/
 void fnSetFlag(uint16_t f) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnSetFlag");
-  #endif
-
   if(f < NUMBER_OF_LOCAL_FLAGS) {
     flags[f/16] |= 1u << (f%16);
 
@@ -111,10 +88,6 @@ void fnSetFlag(uint16_t f) {
   }
 
   refreshRegisterLine(TAM_REGISTER_LINE);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnSetFlag");
-  #endif
 }
 
 
@@ -126,10 +99,6 @@ void fnSetFlag(uint16_t f) {
  * \return void
  ***********************************************/
 void fnClearFlag(uint16_t f) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnClearFlag");
-  #endif
-
   if(f < NUMBER_OF_LOCAL_FLAGS) {
     flags[f/16] &= ~(1u << (f%16));
 
@@ -159,10 +128,6 @@ void fnClearFlag(uint16_t f) {
   }
 
   refreshRegisterLine(TAM_REGISTER_LINE);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnClearFlag");
-  #endif
 }
 
 
@@ -174,10 +139,6 @@ void fnClearFlag(uint16_t f) {
  * \return void
  ***********************************************/
 void fnFlipFlag(uint16_t f) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnFlipFlag");
-  #endif
-
   if(f < NUMBER_OF_LOCAL_FLAGS) {
     flags[f/16] ^=  1u << (f%16);
 
@@ -207,10 +168,6 @@ void fnFlipFlag(uint16_t f) {
   }
 
   refreshRegisterLine(TAM_REGISTER_LINE);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnFlipFlag");
-  #endif
 }
 
 

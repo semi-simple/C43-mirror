@@ -29,20 +29,16 @@
  * \return void
  ***********************************************/
 void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnSwapRealImaginary");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtComplex16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16Copy(POINTER_TO_REGISTER_DATA(REGISTER_L) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(REGISTER_X)               );
-    real16Copy(POINTER_TO_REGISTER_DATA(REGISTER_L)               , POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+    real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
+    real16Copy(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_X));
     refreshStack();
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_L) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(REGISTER_X)               );
-    real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_L)               , POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+    real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_X));
     refreshStack();
   }
   #ifdef PC_BUILD
@@ -57,8 +53,4 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnSwapRealImaginary:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnSwapRealImaginary");
-  #endif
 }

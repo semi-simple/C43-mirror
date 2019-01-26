@@ -30,15 +30,11 @@
  * \return void
  ***********************************************/
 void fnLcm(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnLcm");
-  #endif
-
   bigInteger_t iOp1, iOp2;
 
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger && getRegisterDataType(REGISTER_Y) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intLCM(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_Y)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intLCM(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_Y)), *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger && getRegisterDataType(REGISTER_Y) == dtBigInteger) {
@@ -84,8 +80,4 @@ void fnLcm(uint16_t unusedParamButMandatory) {
   }
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnLcm");
-  #endif
 }

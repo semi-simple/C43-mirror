@@ -23,10 +23,6 @@
 
 
 void fnLnGamma(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnLnGamma");
-  #endif
-
   bool_t real16 = false;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -47,34 +43,21 @@ void fnLnGamma(uint16_t unusedParamButMandatory) {
       sprintf(errorMessage, "cannot calculate ln" STD_GAMMA " of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnLnGamma:", errorMessage, NULL, NULL);
     #endif
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fnLnGamma");
-    #endif
-
     return;
   }
 
-  WP34S_real34LnGamma(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+  WP34S_real34LnGamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 
   if(real16) {
    convertRegister34To16(REGISTER_X);
   }
 
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnLnGamma");
-  #endif
 }
 
 
 
 void fnGamma(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnGamma");
-  #endif
-
   bool_t real16 = false;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -96,22 +79,14 @@ void fnGamma(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnGamma:", errorMessage, NULL, NULL);
     #endif
 
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fnGamma");
-    #endif
-
     return;
   }
 
-  WP34S_real34Gamma(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+  WP34S_real34Gamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 
   if(real16) {
     convertRegister34To16(REGISTER_X);
   }
 
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnGamma");
-  #endif
 }

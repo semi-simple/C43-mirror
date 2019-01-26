@@ -72,13 +72,5 @@ const calcKey_t kbd_std[37] = {
 
 
 void fnUserMode(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnUserMode");
-  #endif
-
   toggleUserMode();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnUserMode");
-  #endif
 }

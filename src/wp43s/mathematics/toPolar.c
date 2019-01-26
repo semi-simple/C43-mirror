@@ -23,10 +23,6 @@
 
 
 void fnToPolar(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnToPolar");
-  #endif
-
   if(   (getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtBigInteger)
      && (getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtBigInteger)) {
     bool_t real16 = false;
@@ -69,17 +65,22 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
 
     real34_t real34, imag34;
 
-    real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_X), &real34);
-    real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_Y), &imag34);
-    real34RectangularToPolar(&real34, &imag34, REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_Y)));
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &real34);
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), &imag34);
+    real34RectangularToPolar(&real34, &imag34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y));
 
     if(real16) {
       convertRegister34To16(REGISTER_X);
-      convertRegister34To16(REGISTER_Y);
     }
 
-    temporaryInformation = TI_RADIUS_THETA;
+    #if (ANGLE16 == 1)
+      convertRegister34To16(REGISTER_Y);
+    #endif
 
+    setRegisterDataType(REGISTER_Y, dtAngle);
+    setRegisterAngularMode(REGISTER_Y, angularMode);
+
+    temporaryInformation = TI_RADIUS_THETA;
     refreshRegisterLine(REGISTER_X);
     refreshRegisterLine(REGISTER_Y);
   }
@@ -90,53 +91,38 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnToPolar:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnToPolar");
-  #endif
 }
 
 
 
-void real16RectangularToPolar(const real16_t *real16, const real16_t *imag16, real16_t *magnitude16, real16_t *theta16) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("real16RectangularToPolar");
-  #endif
-
+void real16RectangularToPolar(const real16_t *real16, const real16_t *imag16, real16_t *magnitude16, real16_t *theta16) { // theta16 in internal units
   real34_t real34, imag34, magnitude34, theta34;
 
   real16ToReal34(real16, &real34);
   real16ToReal34(imag16, &imag34);
 
-  real34RectangularToPolar(&real34, &imag34, &magnitude34, &theta34);
+  real34RectangularToPolar(&real34, &imag34, &magnitude34, &theta34); // theta34 in internal units
 
   real34ToReal16(&magnitude34, magnitude16);
   real34ToReal16(&theta34, theta16);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("real16RectangularToPolar");
-  #endif
 }
 
 
 
-void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, real34_t *magnitude34, real34_t *theta34) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("real34RectangularToPolar");
-  #endif
-
-  if(real34IsZero(real34) && real34IsZero(imag34)) {
-    real34Zero(magnitude34);
-    real34Zero(theta34);
-  }
-  else if(real34IsZero(real34) && real34IsNegative(imag34)) {
-    real34AbsToReal34(imag34, magnitude34);
-    real34Copy(const34_piOn2, theta34);
-    real34SetNegativeSign(theta34);
-  }
-  else if(real34IsZero(real34) && real34IsPositive(imag34)) {
-    real34Copy(imag34, magnitude34);
-    real34Copy(const34_piOn2, theta34);
+void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, real34_t *magnitude34, real34_t *theta34) { // theta34 in internal units
+  if(real34IsZero(real34)) {
+    if(real34IsZero(imag34)) {
+      real34Zero(magnitude34);
+      real34Zero(theta34);
+    }
+    else if(real34IsNegative(imag34)) {
+      real34AbsToReal34(imag34, magnitude34);
+      real34Copy(const34_972, theta34); // 270°
+    }
+    else {
+      real34Copy(imag34, magnitude34);
+      real34Copy(const34_324, theta34); // 90°
+    }
   }
   else { // real34 != 0
     // Magnitude
@@ -146,27 +132,7 @@ void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, re
 
     // Angle
     real34Divide(imag34, real34, theta34);
-    WP34S_do_atan(theta34, theta34);
+    WP34S_do_atan2(imag34, real34, theta34);
+    convertAngle34ToInternal(theta34, AM_RADIAN);
   }
-
-  if(real34IsNegative(real34)) {
-    if(real34IsNegative(imag34)) {
-      real34Subtract(theta34, const34_pi, theta34);
-      if(real34CompareLessEqual(theta34, const34_minusPi)) {
-        real34Add(theta34, const34_2pi, theta34);
-      }
-    }
-    else {
-      real34Add(theta34, const34_pi, theta34);
-      if(real34CompareGreaterThan(theta34, const34_pi)) {
-        real34Subtract(theta34, const34_2pi, theta34);
-      }
-    }
-  }
-
-  convertAngle34FromTo(theta34, AM_RADIAN, angularMode);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("real34RectangularToPolar");
-  #endif
 }

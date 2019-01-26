@@ -21,15 +21,13 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 3  // 3 = displayAngularMode
+#define BACKUP_VERSION 5  // 5 = added size of angle data type
 
 void saveCalc(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("saveCalc");
-  #endif
-
   size_t size;
   uint32_t backupVersion = BACKUP_VERSION;
+  uint32_t ramSize       = RAM_SIZE;
+  uint32_t angleSize     = ANGLE_SIZE;
   FILE *backup;
 
   backup = fopen("backup.bin", "wb");
@@ -47,6 +45,8 @@ void saveCalc(void) {
 
 
   size  = fwrite(&backupVersion,                      1, sizeof(backupVersion),                      backup); //printf("%8lu backupVersion\n",                      (unsigned long)size);
+  size += fwrite(&ramSize,                            1, sizeof(ramSize),                            backup); //printf("%8lu ramSize\n",                            (unsigned long)size);
+  size += fwrite(&angleSize,                          1, sizeof(angleSize),                          backup); //printf("%8lu angleSize\n",                          (unsigned long)size);
   size += fwrite(ram,                                 1, RAM_SIZE,                                   backup); //printf("%8lu ram\n",                                (unsigned long)size);
   size += fwrite(flags,                               1, sizeof(flags),                              backup); //printf("%8lu flags\n",                              (unsigned long)size);
   size += fwrite(tmpStr3000,                          1, TMP_STR_LENGTH,                             backup); //printf("%8lu tmpStr3000\n",                         (unsigned long)size);
@@ -74,8 +74,8 @@ void saveCalc(void) {
   size += fwrite(&tamLetteredRegister,                1, sizeof(tamLetteredRegister),                backup); //printf("%8lu tamLetteredRegister\n",                (unsigned long)size);
   size += fwrite(&tamCurrentOperation,                1, sizeof(tamCurrentOperation),                backup); //printf("%8lu tamCurrentOperation\n",                (unsigned long)size);
   size += fwrite(&result,                             1, sizeof(result),                             backup); //printf("%8lu result\n",                             (unsigned long)size);
-  size += fwrite(&op1,                                1, sizeof(op1),                                backup); //printf("%8lu op1\n",                                (unsigned long)size);
-  size += fwrite(&op2,                                1, sizeof(op2),                                backup); //printf("%8lu op2\n",                                (unsigned long)size);
+  size += fwrite(&opY,                                1, sizeof(opY),                                backup); //printf("%8lu opY\n",                                (unsigned long)size);
+  size += fwrite(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
   size += fwrite(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
   size += fwrite(&numberOfNamedRegisters,             1, sizeof(numberOfNamedRegisters),             backup); //printf("%8lu numberOfNamedRegisters\n",             (unsigned long)size);
   size += fwrite(&allLocalRegisterPointer,            1, sizeof(allLocalRegisterPointer),            backup); //printf("%8lu allLocalRegisterPointer\n",            (unsigned long)size);
@@ -101,7 +101,6 @@ void saveCalc(void) {
   size += fwrite(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
   size += fwrite(&smallIntegerMode,                   1, sizeof(smallIntegerMode),                   backup); //printf("%8lu smallIntegerMode\n",                   (unsigned long)size);
   size += fwrite(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
-  size += fwrite(&displayAngularMode,                 1, sizeof(displayAngularMode),                 backup); //printf("%8lu displayAngularMode\n",                 (unsigned long)size);
   size += fwrite(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
   size += fwrite(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
   size += fwrite(&curveFitting,                       1, sizeof(curveFitting),                       backup); //printf("%8lu curveFitting\n",                       (unsigned long)size);
@@ -161,46 +160,35 @@ void saveCalc(void) {
 
   fclose(backup);
   printf("End of calc's backup\n");
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("saveCalc");
-  #endif
 }
 
 
 
 void restoreCalc(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("restoreCalc");
-  #endif
-
   size_t size;
-  uint32_t backupVersion;
+  uint32_t backupVersion, ramSize, angleSize;
   FILE *backup;
 
   backup = fopen("backup.bin", "rb");
   if (backup == NULL) {
     printf("Cannot restore calc's memory from file backup.bin! Performing RESET\n");
     fnReset(CONFIRMED);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("restoreCalc");
-    #endif
-
     return;
   }
 
   size  = fread(&backupVersion,                      1, sizeof(backupVersion),                      backup); //printf("%8lu backupVersion\n",                      (unsigned long)size);
-  if(backupVersion != BACKUP_VERSION) {
+  size += fread(&ramSize,                            1, sizeof(ramSize),                            backup); //printf("%8lu ramSize\n",                            (unsigned long)size);
+  size += fread(&angleSize,                          1, sizeof(angleSize),                          backup); //printf("%8lu angleSize\n",                          (unsigned long)size);
+  if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE || angleSize != ANGLE_SIZE) {
     fclose(backup);
 
     printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version. Performing RESET\n");
+    printf("               Backup file      Program\n");
+    printf("backupVersion  %6u           %6u\n", backupVersion, BACKUP_VERSION);
+    printf("ramSize        %6u           %6u\n", ramSize, RAM_SIZE);
+    printf("angleSize      %6u           %6u\n", angleSize, (uint32_t)ANGLE_SIZE);
+
     fnReset(CONFIRMED);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("restoreCalc");
-    #endif
-
     return;
   }
   else {
@@ -233,8 +221,8 @@ void restoreCalc(void) {
     size += fread(&tamLetteredRegister,                1, sizeof(tamLetteredRegister),                backup); //printf("%8lu tamLetteredRegister\n",                (unsigned long)size);
     size += fread(&tamCurrentOperation,                1, sizeof(tamCurrentOperation),                backup); //printf("%8lu tamCurrentOperation\n",                (unsigned long)size);
     size += fread(&result,                             1, sizeof(result),                             backup); //printf("%8lu result\n",                             (unsigned long)size);
-    size += fread(&op1,                                1, sizeof(op1),                                backup); //printf("%8lu op1\n",                                (unsigned long)size);
-    size += fread(&op2,                                1, sizeof(op2),                                backup); //printf("%8lu op2\n",                                (unsigned long)size);
+    size += fread(&opY,                                1, sizeof(opY),                                backup); //printf("%8lu opY\n",                                (unsigned long)size);
+    size += fread(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
     size += fread(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
     size += fread(&numberOfNamedRegisters,             1, sizeof(numberOfNamedRegisters),             backup); //printf("%8lu numberOfNamedRegisters\n",             (unsigned long)size);
     size += fread(&allLocalRegisterPointer,            1, sizeof(allLocalRegisterPointer),            backup); //printf("%8lu allLocalRegisterPointer\n",            (unsigned long)size);
@@ -260,7 +248,6 @@ void restoreCalc(void) {
     size += fread(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
     size += fread(&smallIntegerMode,                   1, sizeof(smallIntegerMode),                   backup); //printf("%8lu smallIntegerMode\n",                   (unsigned long)size);
     size += fread(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
-    size += fread(&displayAngularMode,                 1, sizeof(displayAngularMode),                 backup); //printf("%8lu displayAngularMode\n",                 (unsigned long)size);
     size += fread(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
     size += fread(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
     size += fread(&curveFitting,                       1, sizeof(curveFitting),                       backup); //printf("%8lu curveFitting\n",                       (unsigned long)size);
@@ -355,9 +342,5 @@ void restoreCalc(void) {
       #endif
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("restoreCalc");
-  #endif
 }
 #endif

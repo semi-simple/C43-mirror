@@ -51,10 +51,6 @@ const char *hexaFont = "\x69\x99\x99\x60"  // 0
  *                 * -2 when not found in the numeric font
  ***********************************************/
 int16_t findGlyph(const font_t *font, uint16_t charCode) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("findGlyph");
-  #endif
-
   int16_t first, middle, last;
 
   first = 0;
@@ -71,45 +67,20 @@ int16_t findGlyph(const font_t *font, uint16_t charCode) {
   }
 
   if(font->glyphs[first].charCode == charCode) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("findGlyph");
-    #endif
-
     return first;
   }
 
   if(font->glyphs[last].charCode == charCode) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("findGlyph");
-    #endif
-
     return last;
   }
 
   if(font->id == 1) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("findGlyph");
-    #endif
-
     return -1;
   }
 
   if(font->id == 0) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("findGlyph");
-    #endif
-
     return -2;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("findGlyph");
-  #endif
-
   return 0;
 }
 
@@ -123,10 +94,6 @@ int16_t findGlyph(const font_t *font, uint16_t charCode) {
  * \return void
  ***********************************************/
 void generateNotFoundGlyph(int16_t font, uint16_t charCode) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("generateNotFoundGlyph");
-  #endif
-
   int16_t i;
   int8_t  nibble1, nibble2;
 
@@ -180,8 +147,4 @@ void generateNotFoundGlyph(int16_t font, uint16_t charCode) {
     glyphNotFound.data[i]   |= nibble1<<2 | nibble2>>3;
     glyphNotFound.data[i+1] |= nibble2<<5;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("generateNotFoundGlyph");
-  #endif
 }

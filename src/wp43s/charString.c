@@ -32,10 +32,6 @@
  * \return int16_t                        Width in pixel of the string
  ***********************************************/
 int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stringWidth");
-  #endif
-
   int16_t ch, numPixels, charCode, glyphId;
   const glyph_t *glyph;
   bool_t  firstChar;
@@ -69,11 +65,6 @@ int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmpty
     if(glyph == NULL) {
       sprintf(errorMessage, "In function stringWidth: %d is an unexpected value returned by findGlyph!", glyphId);
       displayBugScreen(errorMessage);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("stringWidth");
-      #endif
-
       return 0;
     }
 
@@ -92,11 +83,6 @@ int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmpty
   if(glyph != NULL && withEndingEmptyRows == false) {
     numPixels -= glyph->colsAfterGlyph;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stringWidth");
-  #endif
-
   return numPixels;
 }
 
@@ -110,44 +96,21 @@ int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmpty
  * \return int16_t              Pointer to the glyph after pos
  ***********************************************/
 int16_t stringNextGlyph(const char *str, int16_t pos) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stringNextGlyph");
-  #endif
-
   int16_t lg;
 
   lg = stringByteLength(str);
   if(pos >= lg) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("stringNextGlyph");
-    #endif
-
     return lg;
   }
 
   pos += (str[pos] & 0x80) ? 2 : 1;
 
   if(pos >= lg) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("stringNextGlyph");
-    #endif
-
     return lg;
   }
   else {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("stringNextGlyph");
-    #endif
-
    return pos;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stringNextGlyph");
-  #endif
 }
 
 
@@ -159,10 +122,6 @@ int16_t stringNextGlyph(const char *str, int16_t pos) {
  * \return int16_t              Pointer to the last glyph
  ***********************************************/
 int16_t stringLastGlyph(const char *str) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stringLastGlyph");
-  #endif
-
   int16_t lastGlyph, next, lg;
 
   next = 0;
@@ -191,11 +150,6 @@ int16_t stringLastGlyph(const char *str) {
       lastGlyph = next;
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stringLastGlyph");
-  #endif
-
   return lastGlyph;
 }
 
@@ -208,10 +162,6 @@ int16_t stringLastGlyph(const char *str) {
  * \return int32_t
  ***********************************************/
 int32_t stringByteLength(const char *str) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stringByteLength");
-  #endif
-
   int32_t len = 0;
 
   while(*str != 0) {
@@ -224,11 +174,6 @@ int32_t stringByteLength(const char *str) {
       len++;
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stringByteLength");
-  #endif
-
   return len;
 }
 
@@ -241,10 +186,6 @@ int32_t stringByteLength(const char *str) {
  * \return int32_t
  ***********************************************/
 int32_t stringGlyphLength(const char *str) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stringGlyphLength");
-  #endif
-
   int32_t len = 0;
 
   while(*str != 0) {
@@ -257,11 +198,6 @@ int32_t stringGlyphLength(const char *str) {
       len++;
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stringGlyphLength");
-  #endif
-
   return len;
 }
 
@@ -275,10 +211,6 @@ int32_t stringGlyphLength(const char *str) {
  * \return void
  ***********************************************/
 void codePointToUtf8(uint32_t codePoint, uint8_t *utf8) { // code point must be from 0x0 to 0x10FFFF
-  #if (LOG_FUNCTIONS == 1)
-    //enteringFunction("codePointToUtf8");
-  #endif
-
   if(codePoint <= 0x00007F) {
     utf8[0] = codePoint;
     utf8[1] = 0;
@@ -305,18 +237,10 @@ void codePointToUtf8(uint32_t codePoint, uint8_t *utf8) { // code point must be 
   }
 
   utf8[4] = 0;
-
-  #if (LOG_FUNCTIONS == 1)
-    //leavingFunction("codePointToUtf8");
-  #endif
 }
 
 
 void stringToUtf8(const char *str, uint8_t *utf8) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stringToUtf8");
-  #endif
-
   int16_t  len;
 
   len = stringGlyphLength(str);
@@ -335,8 +259,4 @@ void stringToUtf8(const char *str, uint8_t *utf8) {
       *utf8 = 0;
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stringToUtf8");
-  #endif
 }

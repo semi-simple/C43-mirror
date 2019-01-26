@@ -94,16 +94,8 @@ char      *cssData;
 
 
 static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("destroyCalc");
-  #endif
-
   saveCalc();
   gtk_main_quit();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("destroyCalc");
-  #endif
 
   return 0;
 }
@@ -111,10 +103,6 @@ static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
 
 
 gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("nakeyPressedme");
-  #endif
-
   //printf("%d\n", event->keyval);
   switch (event->keyval) {
     case 65470:
@@ -370,21 +358,12 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     default:
       break;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("keyPressed");
-  #endif
-
   return FALSE;
 }
 
 
 
 void strReplace(char *haystack, const char *needle, const char *newNeedle) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("strReplace");
-  #endif
-
   ////////////////////////////////////////////////////////
   // There MUST be enough memory allocated to *haystack //
   // when strlen(newNeedle) > strlen(needle)            //
@@ -407,10 +386,6 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
     strcat(haystack, tmpString);
     free(tmpString);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("strReplace");
-  #endif
 }
 
 
@@ -422,10 +397,6 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
  * \return void
  ***********************************************/
 void prepareCssData(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("prepareCssData");
-  #endif
-
   FILE *cssFile;
   char *toReplace, *replaceWith, needle[100], newNeedle[100];
   int  i, fileLg;
@@ -489,10 +460,6 @@ void prepareCssData(void) {
     printf("%s\n", cssData);
     exit(1);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("prepareCssData");
-  #endif
 }
 
 
@@ -504,10 +471,6 @@ void prepareCssData(void) {
  * \return void
  ***********************************************/
 void hideAllWidgets(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideAllWidgets");
-  #endif
-
   gtk_widget_hide(btn11);
   gtk_widget_hide(btn12);
   gtk_widget_hide(btn13);
@@ -725,19 +688,11 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl85Gr);
 
   gtk_widget_hide(lblOn);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideAllWidgets");
-  #endif
 }
 
 
 
 void moveLabels(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("moveLabels");
-  #endif
-
   int            xPos, yPos;
   GtkRequisition lblF, lblG;
 
@@ -1043,19 +998,11 @@ void moveLabels(void) {
   gtk_widget_get_preferred_size(  lbl85G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos + 38);
   gtk_fixed_move(GTK_FIXED(grid), lbl85G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos + 38);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("moveLabels");
-  #endif
 }
 
 
 
 void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF, GtkWidget *lblG, GtkWidget *lblL) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("labelCaptionNormal");
-  #endif
-
   uint8_t lbl[22];
 
   if(key->primary == 0) {
@@ -1118,19 +1065,11 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
 
   gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
   gtk_widget_set_name(lblL, "letter");
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("labelCaptionNormal");
-  #endif
 }
 
 
 
 void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGreek, GtkWidget *lblL) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("labelCaptionAim");
-  #endif
-
   uint8_t lbl[22];
 
   if(key->keyLblAim == 0) {
@@ -1196,19 +1135,11 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
   gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
   gtk_widget_set_name(lblL, "letter");
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("labelCaptionAim");
-  #endif
 }
 
 
 
 void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("labelCaptionTam");
-  #endif
-
   uint8_t lbl[22];
 
   if(key->primaryTam == 0) {
@@ -1229,19 +1160,11 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
   else {
     gtk_widget_set_name(button, "calcKey");
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("labelCaptionTam");
-  #endif
 }
 
 
 
 void calcModeNormalGui(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("calcModeNormalGui");
-  #endif
-
   const calcKey_t *keys;
 
   keys = userModeEnabled ? kbd_usr : kbd_std;
@@ -1463,19 +1386,11 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lblOn);
 
   moveLabels();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("calcModeNormalGui");
-  #endif
 }
 
 
 
 void calcModeAimGui(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("calcModeAimGui");
-  #endif
-
   const calcKey_t *keys;
 
   keys = userModeEnabled ? kbd_usr : kbd_std;
@@ -1664,19 +1579,11 @@ void calcModeAimGui(void) {
   moveLabels();
   gtk_widget_hide(lbl31G);
   gtk_widget_hide(lbl41G);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("calcModeAimGui");
-  #endif
 }
 
 
 
 void calcModeTamGui(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("calcModeTamGui");
-  #endif
-
   const calcKey_t *keys;
 
   keys = userModeEnabled ? kbd_usr : kbd_std;
@@ -1781,25 +1688,13 @@ void calcModeTamGui(void) {
   gtk_widget_show(btn85);
 
   moveLabels();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("calcModeTamGui");
-  #endif
 }
 
 
 
 void configureCallback(GtkWindow *window, GdkEvent *event, gpointer data) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("configureCallback");
-  #endif
-
   allowScreenUpdate = false;
   //printf("x=%d y=%d\n", event->configure.x, event->configure.y);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("configureCallback");
-  #endif
  }
 
 
@@ -1811,10 +1706,6 @@ void configureCallback(GtkWindow *window, GdkEvent *event, gpointer data) {
  * \return void
  ***********************************************/
 void setupUI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("setupUI");
-  #endif
-
   int            numBytes, xPos, yPos;
   GError         *error;
   GtkCssProvider *cssProvider;
@@ -2729,28 +2620,16 @@ void setupUI(void) {
   #endif
 
   gtk_widget_show_all(frmCalc);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("setupUI");
-  #endif
 }
 #endif
 
 
 void fnOff(uint16_t unsuedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnOff");
-  #endif
-
   resetShiftState();
 
   #ifdef PC_BUILD
     saveCalc();
     gtk_main_quit();
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnOff");
   #endif
 }
 
@@ -2763,10 +2642,6 @@ void fnOff(uint16_t unsuedParamButMandatory) {
  * \return void
  ***********************************************/
 void calcModeNormal(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("calcModeNormal");
-  #endif
-
   if(calcMode == CM_TAM) {
     popSoftmenu();
     #if (STACK_LIFT_DEBUG == 1)
@@ -2783,10 +2658,6 @@ void calcModeNormal(void) {
   #ifdef PC_BUILD
     calcModeNormalGui();
   #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("calcModeNormal");
-  #endif
 }
 
 
@@ -2798,10 +2669,6 @@ void calcModeNormal(void) {
  * \return void
  ***********************************************/
 void calcModeAIM(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("calcModeAIM");
-  #endif
-
   showSoftmenu(NULL, -MNU_MyAlpha, true);
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;
@@ -2817,10 +2684,6 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   #ifdef PC_BUILD
     calcModeAimGui();
   #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("calcModeAIM");
-  #endif
 }
 
 
@@ -2832,17 +2695,13 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void calcModeNIM(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("calcModeNIM");
-  #endif
-
   saveStack();
 
   calcMode = CM_NIM;
   //nimTempRegister = allocateTemporaryRegister();
 
   liftStack(dtReal16, REAL16_SIZE);
-  real16Zero(POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 
   nimBuffer[0] = 0;
@@ -2853,10 +2712,6 @@ void calcModeNIM(uint16_t unusedParamButMandatory) {
   yCursor = Y_POSITION_OF_NIM_LINE;
   cursorFont = CF_NUMERIC;
   cursorEnabled = true;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("calcModeNIM");
-  #endif
 }
 
 
@@ -2874,10 +2729,6 @@ void calcModeNIM(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void calcModeTAM(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("calcModeTAM");
-  #endif
-
   if(calcMode == CM_NIM) {
     closeNim();
   }
@@ -2894,11 +2745,6 @@ void calcModeTAM(void) {
   else {
     sprintf(errorMessage, "In function calcModeTAM: %" FMT8U " is an unexpected value for tamMode!", tamMode);
     displayBugScreen(errorMessage);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("calcModeTAM");
-    #endif
-
     return;
   }
 
@@ -2913,9 +2759,5 @@ void calcModeTAM(void) {
 
   #ifdef PC_BUILD
     calcModeTamGui();
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("calcModeTAM");
   #endif
 }

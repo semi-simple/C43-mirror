@@ -37,18 +37,10 @@ void (* const Exp[12])(void) = {
  * \return void
  ***********************************************/
 void errorExp(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorExp");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnExp:", errorMessage, NULL, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorExp");
   #endif
 }
 
@@ -61,17 +53,9 @@ void errorExp(void) {
  * \return void
  ***********************************************/
 void expToBeCoded(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("expToBeCoded");
-  #endif
-
   #ifdef PC_BUILD
-    sprintf(errorMessage, "exp(%s)", getRegisterDataTypeName(op1, false, false));
+    sprintf(errorMessage, "exp(%s)", getRegisterDataTypeName(opX, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("expToBeCoded");
   #endif
 }
 
@@ -85,29 +69,21 @@ void expToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnExp(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnExp");
-  #endif
-
   if(Exp[getRegisterDataType(REGISTER_X)] != errorExp) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op1);
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     Exp[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(op1);
+    freeTemporaryRegister(opX);
 
     refreshStack();
   }
   else {
     errorExp();
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnExp");
-  #endif
 }
 
 
@@ -115,10 +91,10 @@ void fnExp(uint16_t unusedParamButMandatory) {
 void expBigI(void) {
   real34_t real34;
 
-  convertBigIntegerRegisterToReal34Register(op1, op1);
-  real34Exp(POINTER_TO_REGISTER_DATA(op1), &real34);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
+  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real34ToReal16(&real34, POINTER_TO_REGISTER_DATA(result));
+  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
 }
 
 
@@ -126,63 +102,40 @@ void expBigI(void) {
 void expRe16(void) {
   real34_t real34;
 
-  convertRegister16To34(op1);
-  real34Exp(POINTER_TO_REGISTER_DATA(op1), &real34);
-  real34ToReal16(&real34, POINTER_TO_REGISTER_DATA(result));
+  convertRegister16To34(opX);
+  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
+  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
 }
 
 
 
 void expCo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("expCo16");
-  #endif
-
-  real34_t c, real34, imag34;
+  real34_t factor, real34, imag34;
   uint8_t savedAngularMode;
 
-  convertRegister16To34(op1);
-  real34Exp(REAL34_POINTER(POINTER_TO_REGISTER_DATA(op1)), &c);
+  convertRegister16To34(opX);
+  real34Exp(REGISTER_REAL34_DATA(opX), &factor);
   savedAngularMode = angularMode;
   angularMode = AM_RADIAN;
-  real34PolarToRectangular(const34_1, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)), &real34, &imag34);
+  convertAngle34ToInternal(REGISTER_IMAG34_DATA(opX), AM_RADIAN);
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal units
   angularMode = savedAngularMode;
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Multiply(&c, &real34, REAL34_POINTER(POINTER_TO_REGISTER_DATA(result)));
-  real34Multiply(&c, &imag34, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
+  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
+  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
   convertRegister34To16(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("expCo16");
-  #endif
 }
 
 
 
 void expRm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("expRm16");
-  #endif
-
   expToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("expRm16");
-  #endif
 }
 
 
 
 void expCm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("expCm16");
-  #endif
-
   expToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("expCm16");
-  #endif
 }
 
 
@@ -190,37 +143,30 @@ void expCm16(void) {
 void expSmaI(void) {
   real34_t real34;
 
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
-  real34Exp(POINTER_TO_REGISTER_DATA(op1), &real34);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
+  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real34ToReal16(&real34, POINTER_TO_REGISTER_DATA(result));
+  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
 }
 
 
 
 void expRe34(void) {
-  real34Exp(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result));
+  real34Exp(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
 
 
 void expCo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("expCo34");
-  #endif
-
-  real34_t c, real34, imag34;
+  real34_t factor, real34, imag34;
   uint8_t savedAngularMode;
 
-  real34Exp(REAL34_POINTER(POINTER_TO_REGISTER_DATA(op1)), &c);
+  real34Exp(REGISTER_REAL34_DATA(opX), &factor);
   savedAngularMode = angularMode;
   angularMode = AM_RADIAN;
-  real34PolarToRectangular(const34_1, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(op1)), &real34, &imag34);
+  convertAngle34ToInternal(REGISTER_IMAG34_DATA(opX), AM_RADIAN);
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal units
   angularMode = savedAngularMode;
-  real34Multiply(&c, &real34, REAL34_POINTER(POINTER_TO_REGISTER_DATA(result)));
-  real34Multiply(&c, &imag34, COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(result)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("expCo34");
-  #endif
+  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
+  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
 }

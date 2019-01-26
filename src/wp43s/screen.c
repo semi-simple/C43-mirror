@@ -30,10 +30,6 @@
  * \return gboolean
  ***********************************************/
 gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("drawScreen");
-  #endif
-
   cairo_surface_t *imageSurface;
 
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride*4);
@@ -44,20 +40,12 @@ gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
 
   screenChange = false;
 
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("drawScreen");
-  #endif
-
   return FALSE;
 }
 
 
 
 void copyScreenToClipboard(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("copyScreenToClipboard");
-  #endif
-
   cairo_surface_t *imageSurface;
   GtkClipboard *clipboard;
 
@@ -68,10 +56,6 @@ void copyScreenToClipboard(void) {
 
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride*4);
   gtk_clipboard_set_image(clipboard, gdk_pixbuf_get_from_surface(imageSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("copyScreenToClipboard");
-  #endif
 }
 
 
@@ -84,10 +68,6 @@ void copyScreenToClipboard(void) {
  * \return void
  ***********************************************/
 void waitAndSee(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("waitAndSee");
-  #endif
-
   refreshStack();
   #if (DEBUG_PANEL == 1)
    refreshDebugPanel();
@@ -99,10 +79,6 @@ void waitAndSee(void) {
   }
 
   showInfoDialog("Click close to continue", NULL, NULL, NULL);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("waitAndSee");
-  #endif
 }
 
 
@@ -122,10 +98,6 @@ void waitAndSee(void) {
  *                          * false = timer stops calling this function
  ***********************************************/
 gboolean refreshScreen(gpointer data) {// This function is called every 100 ms by a GTK timer
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("refreshScreen");
-  #endif
-
   // Cursor blinking
   if(cursorEnabled) {
     cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
@@ -164,10 +136,6 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("refreshScreen");
-  #endif
-
   return TRUE;
 }
 #endif
@@ -181,18 +149,9 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
  * \return void
  ***********************************************/
 void setPixel(int16_t x, int16_t y) {
-  #if (LOG_FUNCTIONS == 1)
-    //enteringFunction("setPixel");
-  #endif
-
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
       printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
-
-      #if (LOG_FUNCTIONS == 1)
-        //leavingFunction("setPixel");
-      #endif
-
       return;
     }
 
@@ -202,10 +161,6 @@ void setPixel(int16_t x, int16_t y) {
 
   #ifdef DMCP_BUILD
     bitblt24(x, 1, y, 1, BLT_OR, BLT_NONE);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    //leavingFunction("setPixel");
   #endif
 }
 
@@ -219,18 +174,9 @@ void setPixel(int16_t x, int16_t y) {
  * \return void
  ***********************************************/
 void clearPixel(int16_t x, int16_t y) {
-  #if (LOG_FUNCTIONS == 1)
-    //enteringFunction("clearPixel");
-  #endif
-
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
       printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
-
-      #if (LOG_FUNCTIONS == 1)
-        //leavingFunction("clearPixel");
-      #endif
-
       return;
     }
 
@@ -240,10 +186,6 @@ void clearPixel(int16_t x, int16_t y) {
 
   #ifdef DMCP_BUILD
     bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    //leavingFunction("clearPixel");
   #endif
 }
 
@@ -262,10 +204,6 @@ void clearPixel(int16_t x, int16_t y) {
  * \return int16_t                   x coordinate for the next glyph
  ***********************************************/
 int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showGlyphCode");
-  #endif
-
   int16_t  col, row, xGlyph, xEndingCols, endingCols, bit, glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
@@ -289,11 +227,6 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   if(glyph == NULL) {
     sprintf(errorMessage, "In function showGlyphCode: %d is an unexpected value returned by fingGlyph!", glyphId);
     displayBugScreen(errorMessage);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("showGlyphCode");
-    #endif
-
     return 0;
   }
 
@@ -382,11 +315,6 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showGlyphCode");
-  #endif
-
   return x + xGlyph + glyph->colsGlyph + endingCols;
 }
 
@@ -405,21 +333,12 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
  * \return int16_t                   x coordinate for the next glyph
  ***********************************************/
 int16_t showGlyph(const char *ch, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showGlyph");
-  #endif
-
   uint16_t charCode;
 
   charCode = (uint8_t)*ch;
   if(charCode &0x0080) {
     charCode = (charCode << 8) | (uint8_t)*(ch+1);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showGlyph");
-  #endif
-
   return showGlyphCode(charCode, font, x, y, videoMode, showLeadingCols, showEndingCols);
 }
 
@@ -438,10 +357,6 @@ int16_t showGlyph(const char *ch, const font_t *font, int16_t x, int16_t y, vide
  * \return int16_t                   x coordinate for the next glyph
  ***********************************************/
 int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showString");
-  #endif
-
   uint16_t ch, charCode, lg;
   bool_t   slc, sec;
 
@@ -473,11 +388,6 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
     x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showString");
-  #endif
-
   return x;
 }
 
@@ -492,10 +402,6 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
  * \return void
  ***********************************************/
 void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("clearScreen");
-  #endif
-
   #ifdef PC_BUILD
     int16_t x, y;
 
@@ -537,10 +443,6 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearS
       lcd_fill_rect(0, 167, SCREEN_WIDTH, 73, 0);
     }
   #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("clearScreen");
-  #endif
 }
 
 
@@ -553,20 +455,12 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearS
  * \return void
  ***********************************************/
 void showCursor(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showCursor");
-  #endif
-
   if(cursorFont == CF_STANDARD) {
     showGlyph(STD_CURSOR, &standardFont, xCursor, yCursor, vmNormal, true, false);
   }
   else {
     showGlyph(NUM_CURSOR, &numericFont,  xCursor, yCursor, vmNormal, true, false);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showCursor");
-  #endif
 }
 
 
@@ -578,10 +472,6 @@ void showCursor(void) {
  * \return void
  ***********************************************/
 void hideCursor(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideCursor");
-  #endif
-
   uint16_t x, y;
 
   if(cursorEnabled) {
@@ -600,10 +490,6 @@ void hideCursor(void) {
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideCursor");
-  #endif
 }
 
 
@@ -664,10 +550,6 @@ void hideFunctionName() {
  * \return void
  ***********************************************/
 void clearRegisterLine(int16_t yStart, int16_t height) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("clearRegisterLine");
-  #endif
-
   int16_t x, y;
 
   for(x=0; x<SCREEN_WIDTH; x++) {
@@ -675,10 +557,6 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
       clearPixel(x, y);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("clearRegisterLine");
-  #endif
 }
 
 
@@ -690,10 +568,6 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
  * \return void
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("refreshRegisterLine");
-  #endif
-
   int16_t w, prefixWidth;
   char    prefix[15];
 
@@ -713,34 +587,50 @@ void refreshRegisterLine(calcRegister_t regist) {
         #ifdef PC_BUILD
           #if (DEBUG_REGISTER_L == 1)
             char     string1[500], string2[500], *p;
-            uint16_t i, n=0;
+            uint16_t i;
 
             strcpy(string1, "L = ");
 
             if(getRegisterDataType(REGISTER_L) == dtReal16) {
               strcat(string1, "real16 = ");
-              formatReal16Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
+              formatReal16Debug(string2, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtReal34) {
               strcat(string1, "real34 = ");
-              formatReal34Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
+              formatReal34Debug(string2, getRegisterDataPointer(REGISTER_L));
+            }
+
+            else if(getRegisterDataType(REGISTER_L) == dtAngle) {
+              calcRegister_t angle = allocateTemporaryRegister();
+
+              strcat(string1, "angle = ");
+              formatAngleDebug(string2, getRegisterDataPointer(REGISTER_L));
+              strcat(string1, string2);
+              reallocateRegister(angle, dtAngle, ANGLE_SIZE, 0);
+              angleCopy(REGISTER_ANGLE_DATA(REGISTER_L), REGISTER_ANGLE_DATA(angle));
+              convertAngleFromInternal(REGISTER_ANGLE_DATA(angle), getRegisterAngularMode(REGISTER_L));
+              formatAngleDebug(string2,  getRegisterDataPointer(angle));
+              freeTemporaryRegister(angle);
+              strcat(string2, " (");
+              strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
+              strcat(string2, ")");
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtComplex16) {
               strcat(string1, "complex16 = ");
-              formatComplex16Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
+              formatComplex16Debug(string2, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtComplex34) {
               strcat(string1, "complex34 = ");
-              formatComplex34Debug(string2 + n, getRegisterDataPointer(REGISTER_L));
+              formatComplex34Debug(string2, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtString) {
               strcat(string1, "string = ");
-              for(i=0, p=POINTER_TO_REGISTER_STRING(REGISTER_L); i<=stringByteLength(POINTER_TO_REGISTER_STRING(REGISTER_L)); i++, p++) {
-                string2[n + i] = *p;
+              for(i=0, p=REGISTER_STRING_DATA(REGISTER_L); i<=stringByteLength(REGISTER_STRING_DATA(REGISTER_L)); i++, p++) {
+                string2[i] = *p;
               }
             }
 
@@ -748,18 +638,18 @@ void refreshRegisterLine(calcRegister_t regist) {
               const font_t *font = &standardFont;
 
               strcat(string1, "small integer = ");
-              smallIntegerToDisplayString(REGISTER_L, string2 + n, &font);
-              strcat(string2 + n, STD_SPACE_3_PER_EM);
-              strcat(string2 + n, getSmallIntegerModeName(smallIntegerMode));
+              smallIntegerToDisplayString(REGISTER_L, string2, &font);
+              strcat(string2, STD_SPACE_3_PER_EM);
+              strcat(string2, getSmallIntegerModeName(smallIntegerMode));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtBigInteger) {
               strcat(string1, "big integer = ");
-              bigIntegerToDisplayString(REGISTER_L, string2 + n);
+              bigIntegerToDisplayString(REGISTER_L, string2);
             }
 
             else {
-              sprintf(string2 + n, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
+              sprintf(string2, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
             }
 
             stringToUtf8(string1, (uint8_t *)tmpStr3000);
@@ -837,18 +727,18 @@ void refreshRegisterLine(calcRegister_t regist) {
                   && (
                           (   getRegisterDataType(regist) == dtReal16
                            && (
-                                  (   real16CompareAbsGreaterThan(REAL16_POINTER(POINTER_TO_REGISTER_DATA(regist)), const16_1e_4)
-                                   && real16CompareAbsLessThan(REAL16_POINTER(POINTER_TO_REGISTER_DATA(regist)), const16_1e6)
+                                  (   real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(regist), const16_1e_4)
+                                   && real16CompareAbsLessThan(REGISTER_REAL16_DATA(regist), const16_1e6)
                                   )
-                               || real16IsZero(POINTER_TO_REGISTER_DATA(regist))
+                               || real16IsZero(REGISTER_REAL16_DATA(regist))
                               )
                           )
                        || (   getRegisterDataType(regist) == dtReal34
                            && (
-                                  (   real34CompareAbsGreaterThan(REAL34_POINTER(POINTER_TO_REGISTER_DATA(regist)), const34_1e_4)
-                                   && real34CompareAbsLessThan(REAL34_POINTER(POINTER_TO_REGISTER_DATA(regist)), const34_1e6)
+                                  (   real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(regist), const34_1e_4)
+                                   && real34CompareAbsLessThan(REGISTER_REAL34_DATA(regist), const34_1e6)
                                   )
-                               || real34IsZero(POINTER_TO_REGISTER_DATA(regist))
+                               || real34IsZero(REGISTER_REAL34_DATA(regist))
                               )
                           )
                      )
@@ -857,7 +747,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
-                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(RAM(statisticalSumsPointer)));
+                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(RAM_REAL34(statisticalSumsPointer)));
                 prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
                 for(w=0; w<SCREEN_WIDTH; w++) {
                   setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
@@ -889,17 +779,12 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtReal16) {
-            real16ToDisplayString(REAL16_POINTER(POINTER_TO_REGISTER_DATA(regist)), false, tmpStr3000);
+            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000);
 
             if(temporaryInformation == TI_RADIUS_THETA) {
               if(regist == REGISTER_X) {
                 strcpy(prefix, "r" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
-              }
-              else if(regist == REGISTER_Y) {
-                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
-                registerAngleToDisplayString(regist, tmpStr3000);
               }
             }
 
@@ -914,15 +799,9 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
-            else if(temporaryInformation == TI_ANGLE) {
-              if(regist == REGISTER_X) {
-                registerAngleToDisplayString(regist, tmpStr3000);
-              }
-            }
-
             else if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
-                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(RAM(statisticalSumsPointer)));
+                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(RAM_REAL34(statisticalSumsPointer)));
                 prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
                 for(w=0; w<SCREEN_WIDTH; w++) {
                   setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
@@ -954,7 +833,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtReal34) {
-            real34ToDisplayString(REAL34_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000);
 
             w = stringWidth(tmpStr3000, &numericFont, false, false) + 1;
             if(w + prefixWidth <= SCREEN_WIDTH) {
@@ -980,7 +859,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex16) {
-            complex16ToDisplayString(COMPLEX16_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000);
 
             w = stringWidth(tmpStr3000, &numericFont, false, false) + 1;
 
@@ -1001,7 +880,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex34) {
-            complex34ToDisplayString(COMPLEX34_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000);
 
             w = stringWidth(tmpStr3000, &numericFont, false, false) + 1;
 
@@ -1021,14 +900,57 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
           }
 
+          else if(getRegisterDataType(regist) == dtAngle) {
+            real34_t angle34;
+
+            #if (ANGLE16 == 1)
+              real16ToReal34(REGISTER_REAL16_DATA(regist), &angle34);
+            #endif
+            #if (ANGLE34 == 1)
+              real34Copy(REGISTER_REAL34_DATA(regist), &angle34);
+            #endif
+
+            angle34ToDisplayString(&angle34, getRegisterAngularMode(regist), tmpStr3000);
+
+            if(temporaryInformation == TI_RADIUS_THETA) {
+              if(regist == REGISTER_Y) {
+                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, false, false) + 2;
+              }
+            }
+
+            w = stringWidth(tmpStr3000, &numericFont, false, false) + 1;
+
+            if(w + prefixWidth <= SCREEN_WIDTH) {
+              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, false);
+              if(prefixWidth > 0) {
+                showString(prefix, &standardFont, 1, 146 - 37*(regist-100), vmNormal, false, false);
+              }
+            }
+            else {
+              w = stringWidth(tmpStr3000, &standardFont, false, false) + 1;
+              if(w + prefixWidth > SCREEN_WIDTH) {
+                #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                  showInfoDialog("In function refreshRegisterLine:", "angle representation too wide!", tmpStr3000, NULL);
+                #endif
+                strcpy(tmpStr3000, "angle representation too wide!");
+                w = stringWidth(tmpStr3000, &standardFont, false, false) + 1;
+              }
+              if(prefixWidth > 0) {
+                showString(prefix, &standardFont, 1, 146 - 37*(regist-100), vmNormal, false, false);
+              }
+              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, false);
+            }
+          }
+
           else if(getRegisterDataType(regist) == dtString) {
-            w = stringWidth(POINTER_TO_REGISTER_STRING(regist), &standardFont, false, true) + 1;
+            w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true) + 1;
 
             if(w > SCREEN_WIDTH) {
               strcpy(tmpStr3000, "String is too wide!");
             }
 
-            showString(POINTER_TO_REGISTER_STRING(regist), &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtSmallInteger) {
@@ -1071,8 +993,4 @@ void refreshRegisterLine(calcRegister_t regist) {
       displayBugScreen(errorMessage);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("refreshRegisterLine");
-  #endif
 }

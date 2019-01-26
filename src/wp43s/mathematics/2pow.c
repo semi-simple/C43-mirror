@@ -30,13 +30,9 @@
  * \return void
  ***********************************************/
 void fn2Pow(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fn2Pow");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_int2pow(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int2pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
@@ -64,12 +60,12 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    op1 = allocateTemporaryRegister();
-    reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
-    real16Copy(const16_2, POINTER_TO_REGISTER_DATA(op1));
+    opY = allocateTemporaryRegister();
+    reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+    real16Copy(const16_2, REGISTER_REAL16_DATA(opY));
 
-    op2 = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opX = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     result = REGISTER_X;
     powRe16Re16();
@@ -78,12 +74,12 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    op1 = allocateTemporaryRegister();
-    reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
-    real34Copy(const34_2, POINTER_TO_REGISTER_DATA(op1));
+    opY = allocateTemporaryRegister();
+    reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+    real34Copy(const34_2, REGISTER_REAL34_DATA(opY));
 
-    op2 = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opX = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     result = REGISTER_X;
     powRe34Re34();
@@ -98,8 +94,4 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
   }
 
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fn2Pow");
-  #endif
 }

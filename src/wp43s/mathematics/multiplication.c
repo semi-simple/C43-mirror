@@ -23,20 +23,20 @@
 
 
 void (* const multiplication[12][12])(void) = {
-// regX |    regY ==>    1            2            3            4         5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16    Angle     Time                      String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {mulBigIBigI, mulRe16BigI, mulCo16BigI, errorMul, mulTimeBigI, errorMul,    errorMul,    mulRm16BigI, mulCm16BigI, mulSmaIBigI,  mulRe34BigI, mulCo34BigI},
-/*  2 real16         */ {mulBigIRe16, mulRe16Re16, mulCo16Re16, errorMul, mulTimeRe16, errorMul,    errorMul,    mulRm16Re16, mulCm16Re16, mulSmaIRe16,  mulRe34Re16, mulCo34Re16},
-/*  3 complex16      */ {mulBigICo16, mulRe16Co16, mulCo16Co16, errorMul, errorMul,    errorMul,    errorMul,    mulRm16Co16, mulCm16Co16, mulSmaICo16,  mulRe34Co16, mulCo34Co16},
-/*  4                */ {errorMul,    errorMul,    errorMul,    errorMul, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,     errorMul,    errorMul   },
-/*  5 Time           */ {mulBigITime, mulRe16Time, errorMul,    errorMul, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    mulSmaITime,  mulRe34Time, errorMul   },
-/*  6 Date           */ {errorMul,    errorMul,    errorMul,    errorMul, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,     errorMul,    errorMul   },
-/*  7 String         */ {errorMul,    errorMul,    errorMul,    errorMul, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,     errorMul,    errorMul   },
-/*  8 real16 mat     */ {mulBigIRm16, mulRe16Rm16, mulCo16Rm16, errorMul, errorMul,    errorMul,    errorMul,    mulRm16Rm16, mulCm16Rm16, mulSmaIRm16,  mulRe34Rm16, mulCo34Rm16},
-/*  9 complex16 mat  */ {mulBigICm16, mulRe16Cm16, mulCo16Cm16, errorMul, errorMul,    errorMul,    errorMul,    mulRm16Cm16, mulCm16Cm16, mulSmaICm16,  mulRe34Cm16, mulCo34Cm16},
-/* 10 Small integer  */ {mulBigISmaI, mulRe16SmaI, mulCo16SmaI, errorMul, mulTimeSmaI, errorMul,    errorMul,    mulRm16SmaI, mulCm16SmaI, mulSmaISmaI,  mulRe34SmaI, mulCo34SmaI},
-/* 11 real34         */ {mulBigIRe34, mulRe16Re34, mulCo16Re34, errorMul, mulTimeRe34, errorMul,    errorMul,    mulRm16Re34, mulCm16Re34, mulSmaIRe34,  mulRe34Re34, mulCo34Re34},
-/* 12 complex34      */ {mulBigICo34, mulRe16Co34, mulCo16Co34, errorMul, errorMul,    errorMul,    errorMul,    mulRm16Co34, mulCm16Co34, mulSmaICo34,  mulRe34Co34, mulCo34Co34}
+// regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
+//      V                Big integer  real16       complex16    Angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
+/*  1 Big integer    */ {mulBigIBigI, mulRe16BigI, mulCo16BigI, mulAnglBigI, mulTimeBigI, errorMul,    errorMul,    mulRm16BigI, mulCm16BigI, mulSmaIBigI,  mulRe34BigI, mulCo34BigI},
+/*  2 real16         */ {mulBigIRe16, mulRe16Re16, mulCo16Re16, mulAnglRe16, mulTimeRe16, errorMul,    errorMul,    mulRm16Re16, mulCm16Re16, mulSmaIRe16,  mulRe34Re16, mulCo34Re16},
+/*  3 complex16      */ {mulBigICo16, mulRe16Co16, mulCo16Co16, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Co16, mulCm16Co16, mulSmaICo16,  mulRe34Co16, mulCo34Co16},
+/*  4 angle34        */ {mulBigIAngl, mulRe16Angl, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    mulSmaIAngl,  mulRe34Angl, errorMul   },
+/*  5 Time           */ {mulBigITime, mulRe16Time, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    mulSmaITime,  mulRe34Time, errorMul   },
+/*  6 Date           */ {errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,     errorMul,    errorMul   },
+/*  7 String         */ {errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,     errorMul,    errorMul   },
+/*  8 real16 mat     */ {mulBigIRm16, mulRe16Rm16, mulCo16Rm16, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Rm16, mulCm16Rm16, mulSmaIRm16,  mulRe34Rm16, mulCo34Rm16},
+/*  9 complex16 mat  */ {mulBigICm16, mulRe16Cm16, mulCo16Cm16, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Cm16, mulCm16Cm16, mulSmaICm16,  mulRe34Cm16, mulCo34Cm16},
+/* 10 Small integer  */ {mulBigISmaI, mulRe16SmaI, mulCo16SmaI, mulAnglSmaI, mulTimeSmaI, errorMul,    errorMul,    mulRm16SmaI, mulCm16SmaI, mulSmaISmaI,  mulRe34SmaI, mulCo34SmaI},
+/* 11 real34         */ {mulBigIRe34, mulRe16Re34, mulCo16Re34, mulAnglRe34, mulTimeRe34, errorMul,    errorMul,    mulRm16Re34, mulCm16Re34, mulSmaIRe34,  mulRe34Re34, mulCo34Re34},
+/* 12 complex34      */ {mulBigICo34, mulRe16Co34, mulCo16Co34, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Co34, mulCm16Co34, mulSmaICo34,  mulRe34Co34, mulCo34Co34}
 };
 
 
@@ -48,19 +48,11 @@ void (* const multiplication[12][12])(void) = {
  * \return void
  ***********************************************/
 void errorMul(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorMul");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot multiply %s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(op2, true, false));
+    sprintf(errorMessage, "cannot multiply %s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnMultiply:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorMul");
   #endif
 }
 
@@ -73,18 +65,10 @@ void errorMul(void) {
  * \return void
  ***********************************************/
 void mulToBeCoded(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulToBeCoded");
-  #endif
-
   #ifdef PC_BUILD
-    sprintf(errorMessage, "multiply %s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(op2, true, false));
+    sprintf(errorMessage, "multiply %s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulToBeCoded");
   #endif
 }
 
@@ -98,22 +82,18 @@ void mulToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnMultiply(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnMultiply");
-  #endif
-
   if(multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorMul) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    op2    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, op1);
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opY    = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_Y, opY);
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(op1);
-    freeTemporaryRegister(op2);
+    freeTemporaryRegister(opY);
+    freeTemporaryRegister(opX);
 
     fnDropY(NOPARAM);
     refreshStack();
@@ -121,16 +101,12 @@ void fnMultiply(uint16_t unusedParamButMandatory) {
   else {
     errorMul();
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnMultiply");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(big integer) ==> result(big integer)
+ * \brief opY(big integer) × opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
@@ -139,1542 +115,1110 @@ void mulBigIBigI(void) {
   bigInteger_t iOp1;
   bigInteger_t iOp2;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigIBigI");
-  #endif
-
-  convertBigIntegerRegisterToBigInteger(op1, &iOp1);
-  convertBigIntegerRegisterToBigInteger(op2, &iOp2);
+  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
 
   bigIntegerMultiply(&iOp1, &iOp2, &iOp1);
 
   convertBigIntegerToBigIntegerRegister(&iOp1, result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(real16) ==> result(real16)
+ * \brief opY(big integer) × opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigIRe16");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op1, op1);
+  convertBigIntegerRegisterToReal16Register(opY, opY);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(complex16) ==> result(complex16)
+ * \brief opY(big integer) × opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigICo16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal16Register(op1, op1);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE);
+  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal16Register(opY, opY);
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(time) ==> result(time)
+ * \brief opY(big integer) × opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulBigIAngl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertBigIntegerRegisterToAngleRegister(opY, opY);
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(big integer) × opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigITime(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigITime");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigITime");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(real16 matrix) ==> result(real16 matrix)
+ * \brief opY(big integer) × opX(real16 matrix) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigIRm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigIRm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigIRm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(big integer) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigICm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigICm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigICm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(64bits integer) ==> result(big integer)
+ * \brief opY(big integer) × opX(64bits integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigISmaI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op2, op2);
+  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
   mulBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigISmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(real34) ==> result(real34)
+ * \brief opY(big integer) × opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigIRe34");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op1, op1);
+  convertBigIntegerRegisterToReal34Register(opY, opY);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) × op2(complex34) ==> result(complex34)
+ * \brief opY(big integer) × opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulBigICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulBigICo34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal34Register(op1, op1);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE);
+  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal34Register(opY, opY);
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulBigICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(big integer) ==> result(real16)
+ * \brief opY(real16) × opX(big integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op2, op2);
+  convertBigIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(real16) ==> result(real16)
+ * \brief opY(real16) × opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16Re16");
-  #endif
-
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(complex16) ==> result(complex16)
+ * \brief opY(real16) × opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16Co16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(result)); // real part
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // imaginary part
+  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result)); // real part
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(result), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(time) ==> result(time)
+ * \brief opY(real16) × opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulRe16Angl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE34 == 1)
+    convertRegister16To34(opY)
+  #endif
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(real16) × opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16Time(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16Time");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16Time");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(real16 matrix) ==> result(real16 matrix)
+ * \brief opY(real16) × opX(real16 matrix) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16Rm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(real16) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16Cm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(64bits integer) ==> result(real16)
+ * \brief opY(real16) × opX(64bits integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   mulRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(real34) ==> result(real34)
+ * \brief opY(real16) × opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   mulRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) × op2(complex34) ==> result(complex34)
+ * \brief opY(real16) × opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   mulRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(big integer) ==> result(complex16)
+ * \brief opY(complex16) × opX(big integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16BigI");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal16Register(op2, op2);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE);
+  complex16Copy(REGISTER_COMPLEX16_DATA(opY), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal16Register(opX, opX);
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  real16Multiply(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(real16) ==> result(complex16)
+ * \brief opY(complex16) × opX(real16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16Re16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // imaginary part
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Multiply(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(complex16) ==> result(complex16)
+ * \brief opY(complex16) × opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16Co16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
 
   // imaginary part
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE);
-  real16FMA(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE);
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result));
+  real16FMA(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result), REGISTER_IMAG16_DATA(result));
 
   //real part
-  real16ChangeSign(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-  real16FMA(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(result));
+  real16ChangeSign(REGISTER_IMAG16_DATA(opY));
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  real16FMA(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(real16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16) × opX(real16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16Rm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16Cm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(64bits integer) ==> result(complex16)
+ * \brief opY(complex16) × opX(64bits integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   mulCo16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(real34) ==> result(complex34)
+ * \brief opY(complex16) × opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   mulCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) × op2(complex34) ==> result(complex34)
+ * \brief opY(complex16) × opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   mulCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) × op2(big integer) ==> result(time)
+ * \brief opY(angle) × opX(big integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulAnglBigI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertBigIntegerRegisterToAngleRegister(opX, opX);
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) × opX(real16) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulAnglRe16(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE34 == 1)
+    convertRegister16To34(opX)
+  #endif
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) × opX(small integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulAnglSmaI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertSmallIntegerRegisterToAngleRegister(opX, opX);
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) × opX(real34) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulAnglRe34(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(opX);
+  #endif
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(time) × opX(big integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulTimeBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulTimeBigI");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulTimeBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) × op2(real16) ==> result(time)
+ * \brief opY(time) × opX(real16) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulTimeRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulTimeRe16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulTimeRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) × op2(64bits integer) ==> result(time)
+ * \brief opY(time) × opX(64bits integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulTimeSmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulTimeSmaI");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulTimeSmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) × op2(real34) ==> result(time)
+ * \brief opY(time) × opX(real34) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulTimeRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulTimeRe34");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulTimeRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(big integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) × opX(big integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16BigI");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(real16) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) × opX(real16) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16Re16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(complex16) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) × opX(complex16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16Co16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(real16 matrix) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) × opX(real16 matrix) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16Rm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16Cm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(64bits integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) × opX(64bits integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16SmaI");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(real34) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) × opX(real34) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16Re34");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) × op2(complex34) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) × opX(complex34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRm16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRm16Co34");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRm16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(big integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(big integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16BigI");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(real16) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(real16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16Re16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(complex16) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(complex16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16Co16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(real16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(real16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16Rm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16Cm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(64bits integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(64bits integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16SmaI");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(real34) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(real34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16Re34");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) × op2(complex34) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) × opX(complex34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCm16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCm16Co34");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCm16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(big integer) ==> result(big integer)
+ * \brief opY(64bits integer) × opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaIBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaIBigI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op1, op1);
+  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
   mulBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(real16) ==> result(real16)
+ * \brief opY(64bits integer) × opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaIRe16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   mulRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(complex16) ==> result(complex16)
+ * \brief opY(64bits integer) × opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaICo16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   mulRe16Co16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(time) ==> result(time)
+ * \brief opY(small integer) × opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulSmaIAngl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertSmallIntegerRegisterToAngleRegister(opY, opY);
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(64bits integer) × opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaITime(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaITime");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaITime");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(real16 matrix) ==> result(real16 matrix)
+ * \brief opY(64bits integer) × opX(real16 matrix) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaIRm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaIRm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaIRm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(64bits integer) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaICm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaICm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaICm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(64bits integer) ==> result(64bits integer)
+ * \brief opY(64bits integer) × opX(64bits integer) ==> result(64bits integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaISmaI");
-  #endif
-
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(op1));
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(result)) = WP34S_intMultiply(*(uint64_t *)(POINTER_TO_REGISTER_DATA(op1)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(op2)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaISmaI");
-  #endif
+  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intMultiply(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(real34) ==> result(real34)
+ * \brief opY(64bits integer) × opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaIRe34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   mulRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) × op2(complex34) ==> result(complex34)
+ * \brief opY(64bits integer) × opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulSmaICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulSmaICo34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   mulRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulSmaICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(big integer) ==> result(real34)
+ * \brief opY(real34) × opX(big integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op2, op2);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(real16) ==> result(real34)
+ * \brief opY(real34) × opX(real16) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   mulRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(complex16) ==> result(complex34)
+ * \brief opY(real34) × opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   mulRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(time) ==> result(time)
+ * \brief opY(real34) × opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void mulRe34Angl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(opY);
+  #endif
+  angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(real34) × opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34Time(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34Time");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34Time");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(real16 matrix) ==> result(real16 matrix)
+ * \brief opY(real34) × opX(real16 matrix) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34Rm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(real34) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34Cm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(64bits integer) ==> result(real34)
+ * \brief opY(real34) × opX(64bits integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   mulRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(real34) ==> result(real34)
+ * \brief opY(real34) × opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34Re34");
-  #endif
-
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) × op2(complex34) ==> result(complex34)
+ * \brief opY(real34) × opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulRe34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulRe34Co34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulRe34Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(big integer) ==> result(complex34)
+ * \brief opY(complex34) × opX(big integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34BigI");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result)); // result = op1
-  convertBigIntegerRegisterToReal34Register(op2, op2);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE);
+  complex34Copy(REGISTER_COMPLEX34_DATA(opY), REGISTER_COMPLEX34_DATA(result)); // result = opY
+  convertBigIntegerRegisterToReal34Register(opX, opX);
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  real34Multiply(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(real16) ==> result(complex34)
+ * \brief opY(complex34) × opX(real16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   mulCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(complex16) ==> result(complex34)
+ * \brief opY(complex34) × opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   mulCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(real16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex34) × opX(real16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34Rm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex34) × opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34Cm16");
-  #endif
-
   mulToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(64bits integer) ==> result(complex34)
+ * \brief opY(complex34) × opX(64bits integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   mulCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(real34) ==> result(complex34)
+ * \brief opY(complex34) × opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34Re34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Multiply(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) × op2(complex34) ==> result(complex34)
+ * \brief opY(complex34) × opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void mulCo34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("mulCo34Co34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
 
   // imaginary part
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE);
-  real34FMA(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE);
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result));
+  real34FMA(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
 
   //real part
-  real34ChangeSign(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE);
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-  real34FMA(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(result));
+  real34ChangeSign(REGISTER_IMAG34_DATA(opY));
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  real34FMA(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("mulCo34Co34");
-  #endif
 }

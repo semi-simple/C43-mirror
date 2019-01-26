@@ -28,6 +28,7 @@ void errorSub    (void);
 void subBigIBigI (void);
 void subBigIRe16 (void);
 void subBigICo16 (void);
+void subBigIAngl (void);
 void subBigITime (void);
 void subBigIDate (void);
 void subBigISmaI (void);
@@ -38,6 +39,7 @@ void subBigICo34 (void);
 void subRe16BigI (void);
 void subRe16Re16 (void);
 void subRe16Co16 (void);
+void subRe16Angl (void);
 void subRe16Time (void);
 void subRe16Date (void);
 void subRe16SmaI (void);
@@ -51,6 +53,13 @@ void subCo16Co16 (void);
 void subCo16SmaI (void);
 void subCo16Re34 (void);
 void subCo16Co34 (void);
+
+//      RegYRegX
+void subAnglBigI (void);
+void subAnglRe16 (void);
+void subAnglAngl (void);
+void subAnglSmaI (void);
+void subAnglRe34 (void);
 
 //      RegYRegX
 void subTimeBigI (void);
@@ -76,6 +85,7 @@ void subCm16Cm16 (void);
 void subSmaIBigI (void);
 void subSmaIRe16 (void);
 void subSmaICo16 (void);
+void subSmaIAngl (void);
 void subSmaISmaI (void);
 void subSmaIRe34 (void);
 void subSmaICo34 (void);
@@ -84,6 +94,7 @@ void subSmaICo34 (void);
 void subRe34BigI (void);
 void subRe34Re16 (void);
 void subRe34Co16 (void);
+void subRe34Angl (void);
 void subRe34Time (void);
 void subRe34Date (void);
 void subRe34SmaI (void);

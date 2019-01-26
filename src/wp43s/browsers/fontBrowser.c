@@ -28,10 +28,6 @@
  * \return void
  ***********************************************/
 void fontBrowser(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fontBrowser");
-  #endif
-
   uint16_t x, y, g, first;
 
   if(currentFntScr == 0) { // Init
@@ -132,8 +128,4 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
     clearScreen(false, true, true);
     displayBugScreen("In function showFonts: This should never happen!");
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fontBrowser");
-  #endif
 }

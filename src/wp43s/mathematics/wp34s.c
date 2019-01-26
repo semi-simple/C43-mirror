@@ -21,31 +21,6 @@
 #include "wp43s.h"
 
 
-const real34_t * const thresholdsDegrees[]  = {
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x28\x00\x32", //  45
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x6e", //  90
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0\x40\x00\x26", // 180
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x70\x00\x2e"  // 360
-};
-const real34_t * const thresholdsGradians[] = {
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x36", //  50
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00\x26", // 100
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00\x2a", // 200
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00\x32"  // 400
-};
-const real34_t * const thresholdsRadians[]  = {
-  (real34_t *)"\xd7\x7b\x83\x25\xc2\xd6\xe8\xb1\x22\xbf\x33\x3f\xd2\x95\xff\x3d", // pi/4
-  (real34_t *)"\xd1\xe7\xbc\x71\x68\x31\x65\xec\xb1\xf6\xa6\xe9\x0f\xef\xff\x25", // pi/2
-  (real34_t *)"\x83\xe6\xb5\xda\xd0\x62\xe2\xb4\xfb\xb3\x53\xeb\x1a\xcc\xff\x2d", // pi
-  (real34_t *)"\x06\x64\x6b\xbe\x5a\xad\xda\xa9\x6e\x3e\x87\x2d\xb3\xd2\xff\x39"  // 2pi
-};
-const real34_t * const thresholdsMultPi[]   = {
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xa8\xff\x29", // 0.25
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\xff\x35", // 0.5
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0\xff\x25", // 1
-  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0\xff\x29"  // 2
-};
-
 const real51_t * const gamma_consts[] = {
   (real51_t *)"\x33\x00\x00\x00\xd8\xff\xff\xff\x00\x00\x8a\x02\x96\x02\xba\x03\x5c\x03\x74\x00\xe7\x01\xb0\x03\x94\x00\x82\x02\x97\x00\xd4\x00\xe9\x01\x51\x02\x5d\x00\x8e\x00\x7a\x03\xbd\x00", // const_gammaC01 = +1.898901420935934892121516421489444871168609546626500000e+10
   (real51_t *)"\x33\x00\x00\x00\xd9\xff\xff\xff\x80\x00\x90\x01\x4e\x03\x29\x03\x7f\x03\x7f\x03\xab\x03\xca\x01\xa1\x01\x92\x01\x12\x00\xec\x00\x4c\x02\x17\x02\x5a\x00\xc8\x00\x9c\x00\x90\x00", // const_gammaC02 = -1.441562000905355882360184024174589398958958098464000000e+11
@@ -78,59 +53,36 @@ const real51_t * const gamma_consts[] = {
 /* Have to be careful here to ensure that every function we call can handle
  * the increased size of the numbers we're using.
  */
-void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, calcRegister_t angle) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_cvt_2rad_sincos");
-  #endif
-
-	 const real34_t * const *thresholds=NULL;
+void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle) { // angle in internal units
 	 bool_t sinNeg = false, cosNeg = false, swap = false;
+  real34_t angle34;
 
-	 if(angularMode == AM_RADIAN) {
-	   thresholds = thresholdsRadians;
-	 }
-	 else if(angularMode == AM_GRAD) {
-    thresholds = thresholdsGradians;
-  }
-	 else if(angularMode == AM_DEGREE) {
-    thresholds = thresholdsDegrees;
-  }
-	 else if(angularMode == AM_DMS) {
-    convertRegisterAngleFromTo(angle, AM_DMS, AM_DEGREE);
-    thresholds = thresholdsDegrees;
-  }
-	 else if(angularMode == AM_MULTPI) {
-    thresholds = thresholdsMultPi;
-  }
-  else {
-    sprintf(errorMessage, "In function WP34S_cvt_2rad_sincos: %" FMT8U " is an unexpected value for angularMode!", angularMode);
-    displayBugScreen(errorMessage);
-  }
+  real34Copy(angle, &angle34);
 
 	 // sin(-x) = -sin(x), cos(-x) = cos(x)
-	 if(real34IsNegative(POINTER_TO_REGISTER_DATA(angle))) {
+	 if(real34IsNegative(&angle34)) {
 	  	sinNeg = true;
-	  	real34ChangeSign(POINTER_TO_REGISTER_DATA(angle));
+	  	real34SetPositiveSign(&angle34);
 	 }
 
-	 real34Remainder(POINTER_TO_REGISTER_DATA(angle), thresholds[3], POINTER_TO_REGISTER_DATA(angle)); // mod(angle, 360) --> angle
+	 real34Remainder(&angle34, const34_1296, &angle34); // mod(angle34, 360°) --> angle34
 
 	 // sin(180+x) = -sin(x), cos(180+x) = -cos(x)
- 	if(real34CompareGreaterEqual(REAL34_POINTER(POINTER_TO_REGISTER_DATA(angle)), thresholds[2])) {// angle >= 180
-	  	real34Subtract(POINTER_TO_REGISTER_DATA(angle), thresholds[2], POINTER_TO_REGISTER_DATA(angle)); // angle - 180 --> angle
+ 	if(real34CompareGreaterEqual(&angle34, const34_648)) { // angle34 >= 180°
+	  	real34Subtract(&angle34, const34_648, &angle34);     // angle34 - 180° --> angle34
 	  	sinNeg = !sinNeg;
 	  	cosNeg = !cosNeg;
   }
 
 	 // sin(90+x) = cos(x), cos(90+x) = -sin(x)
-	 if(real34CompareGreaterEqual(REAL34_POINTER(POINTER_TO_REGISTER_DATA(angle)), thresholds[1])) { // angle >= 90
-		  real34Subtract(POINTER_TO_REGISTER_DATA(angle), thresholds[1], POINTER_TO_REGISTER_DATA(angle)); // angle - 90 --> angle
+	 if(real34CompareGreaterEqual(&angle34, const34_324)) { // angle34 >= 90°
+		  real34Subtract(&angle34, const34_324, &angle34);     // angle34 - 90° --> angle34
 		  swap = true;
 		  cosNeg = !cosNeg;
   }
 
 	 // sin(90-x) = cos(x), cos(90-x) = sin(x)
-	 if(real34CompareEqual(REAL34_POINTER(POINTER_TO_REGISTER_DATA(angle)), thresholds[0])) {// angle == 45
+	 if(real34CompareEqual(&angle34, const34_162)) { // angle34 == 45°
 	   if(sin != NULL) {
 	 	  real34Copy(const34_root2on2, sin);
 	 	 }
@@ -138,36 +90,38 @@ void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, calcRegister_t angle) {
 	  	  real34Copy(const34_root2on2, cos);
 	  	}
   }
-	 else { // angle < 90
-		  if(real34CompareGreaterThan(REAL34_POINTER(POINTER_TO_REGISTER_DATA(angle)), thresholds[0])) { // angle > 45
-		   	real34Subtract(thresholds[1], POINTER_TO_REGISTER_DATA(angle), POINTER_TO_REGISTER_DATA(angle)); // 90 - angle  --> angle
+	 else { // angle34 < 90
+		  if(real34CompareGreaterThan(&angle34, const34_162)) { // angle34 > 45°
+		   	real34Subtract(const34_324, &angle34, &angle34);    // 90° - angle34  --> angle34
 			   swap = !swap;
    	}
-    convertRegisterAngleFromTo(angle, angularMode == AM_DMS ? AM_DEGREE : angularMode, AM_RADIAN);
-		  WP34S_sincosTaylor(REAL34_POINTER(POINTER_TO_REGISTER_DATA(angle)), swap?cos:sin, swap?sin:cos);
+    real34Divide(&angle34, const34_648onPi, &angle34);        // convertion from internal to radian
+		  WP34S_sincosTaylor(&angle34, swap?cos:sin, swap?sin:cos); // angle34 in radian
   }
 
-  if(sin != NULL && sinNeg) {
-    real34SetNegativeSign(sin);
+  if(sin != NULL) {
+    if(sinNeg) {
+      real34SetNegativeSign(sin);
+    }
+		  if(real34IsZero(sin)) {
+      real34SetPositiveSign(sin);
+		  }
   }
 
-  if(cos != NULL && cosNeg) {
-    real34SetNegativeSign(cos);
+  if(cos != NULL) {
+    if(cosNeg) {
+      real34SetNegativeSign(cos);
+    }
+		  if(real34IsZero(cos)) {
+      real34SetPositiveSign(cos);
+		  }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_cvt_2rad_sincos");
-  #endif
 }
 
 
 /* Calculate sin and cos by Taylor series
  */
-void WP34S_sincosTaylor(const real34_t *a, real34_t *sinOut, real34_t *cosOut) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_sincosTaylor");
-  #endif
-
+void WP34S_sincosTaylor(const real34_t *a, real34_t *sinOut, real34_t *cosOut) { // a in radian
  	real51_t angle, a2, t, j, z, one, sin, cos, compare;
  	int i, odd;
  	bool_t finSin = (sinOut == NULL), finCos = (cosOut == NULL);
@@ -227,19 +181,11 @@ void WP34S_sincosTaylor(const real34_t *a, real34_t *sinOut, real34_t *cosOut) {
  	if(cosOut != NULL) {
  		 real51ToReal34(&cos, cosOut);
 		}
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_sincosTaylor");
-  #endif
 }
 
 
 
 void WP34S_do_atan(const real34_t *x, real34_t *angle) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_do_atan");
-  #endif
-
  	real34_t a, b, a2, t, j, z, last;
  	int doubles = 0;
  	int invert;
@@ -315,30 +261,17 @@ void WP34S_do_atan(const real34_t *x, real34_t *angle) {
  	if(neg) {
  		 real34ChangeSign(angle);
  	}
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_do_atan");
-  #endif
 }
 
 
 
 void WP34S_do_atan2(const real34_t *y, const real34_t *x, real34_t *atan) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_do_atan2");
-  #endif
-
 	 real34_t r, t;
 	 const int xNeg = real34IsNegative(x);
 	 const int yNeg = real34IsNegative(y);
 
 	 if(real34IsNaN(x) || real34IsNaN(y)) {
 	   real34Copy(const34_NaN, atan);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_atan2");
-    #endif
-
 		  return;
 	 }
 
@@ -378,10 +311,6 @@ void WP34S_do_atan2(const real34_t *y, const real34_t *x, real34_t *atan) {
 			   }
 		  }
 
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_atan2");
-    #endif
-
 		  return;
 	 }
 
@@ -390,10 +319,6 @@ void WP34S_do_atan2(const real34_t *y, const real34_t *x, real34_t *atan) {
 	  	if(yNeg) {
       real34SetNegativeSign(atan);
     }
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_atan2");
-    #endif
 
 		  return;
 	 }
@@ -428,10 +353,6 @@ void WP34S_do_atan2(const real34_t *y, const real34_t *x, real34_t *atan) {
 			   }
 		  }
 
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_atan2");
-    #endif
-
 		  return;
 	 }
 
@@ -440,10 +361,6 @@ void WP34S_do_atan2(const real34_t *y, const real34_t *x, real34_t *atan) {
 	  	if(yNeg) {
       real34SetNegativeSign(atan);
     }
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_atan2");
-    #endif
 
 		  return;
 	 }
@@ -464,27 +381,15 @@ void WP34S_do_atan2(const real34_t *y, const real34_t *x, real34_t *atan) {
  	if(real34CompareEqual(atan, const34_0) && yNeg) {
     real34SetNegativeSign(atan);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_do_atan2");
-  #endif
 }
 
 
 
 void WP34S_do_asin(const real34_t *x, real34_t *angle) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_do_asin");
-  #endif
-
 	 real34_t abx, z;
 
 	 if(real34IsNaN(x)) {
 	  	real34Copy(const34_NaN, angle);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_asin");
-    #endif
 
 	  	return;
 	 }
@@ -493,10 +398,6 @@ void WP34S_do_asin(const real34_t *x, real34_t *angle) {
 	 real34SetPositiveSign(&abx);
 	 if(real34CompareGreaterThan(&abx, const34_1)) {
 	  	real34Copy(const34_NaN, angle);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_asin");
-    #endif
 
 	  	return;
 	 }
@@ -509,27 +410,15 @@ void WP34S_do_asin(const real34_t *x, real34_t *angle) {
 	 real34Divide(x, &z, &z);
 	 WP34S_do_atan(&z, &abx);
 	 real34Add(&abx, &abx, angle);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_do_asin");
-  #endif
 }
 
 
 
 void WP34S_do_acos(const real34_t *x, real34_t *angle) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_do_acos");
-  #endif
-
  	real34_t abx, z;
 
 	 if(real34IsNaN(x)) {
 	  	real34Copy(const34_NaN, angle);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_acos");
-    #endif
 
 	  	return;
 	 }
@@ -538,10 +427,6 @@ void WP34S_do_acos(const real34_t *x, real34_t *angle) {
 	 real34SetPositiveSign(&abx);
 	 if(real34CompareGreaterThan(&abx, const34_1)) {
 	  	real34Copy(const34_NaN, angle);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_do_acos");
-    #endif
 
 	  	return;
 	 }
@@ -559,10 +444,6 @@ void WP34S_do_acos(const real34_t *x, real34_t *angle) {
   	 WP34S_do_atan(&z, &abx);
   	 real34Add(&abx, &abx, angle);
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_do_acos");
-  #endif
 }
 
 
@@ -570,35 +451,17 @@ void WP34S_do_acos(const real34_t *x, real34_t *angle) {
 /* Check if a number is an integer.
  */
 bool_t WP34S_is_int(const real34_t *x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_is_int");
-  #endif
-
  	real34_t r, y;
 
  	if(real34IsNaN(x)) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_is_int");
-    #endif
-
  		 return false;
  	}
  	if(real34IsInfinite(x)) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_is_int");
-    #endif
-
  		 return true;
  	}
 
  	real34ToIntegral(x, &y);
  	real34Subtract(x, &y, &r);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_is_int");
-  #endif
 
  	return real34CompareEqual(&r, const34_0);
 }
@@ -606,10 +469,6 @@ bool_t WP34S_is_int(const real34_t *x) {
 
 
 static void WP34S_dn_LnGamma(const real34_t *x, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_dn_LnGamma");
-  #endif
-
 	 real51_t r, s, t, u, v, xin;
 	 int32_t k;
 
@@ -636,20 +495,12 @@ static void WP34S_dn_LnGamma(const real34_t *x, real34_t *res) {
 	 real51Subtract(&v, &r, &u);
 	 real51Add(&u, &s, &r);
 	 real51ToReal34(&r, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_dn_LnGamma");
-  #endif
 }
 
 
 
 // common code for the [GAMMA] and LN[GAMMA]
 static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_Gamma_LnGamma");
-  #endif
-
 	 real34_t x, t;
 	 int reflec = 0;
 
@@ -657,20 +508,10 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
 	 if(real34IsSpecial(xin)) {
 	  	if(real34IsInfinite(xin) && !real34IsNegative(xin)) {
 	  	  real34Copy(const34_plusInfinity, res);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_Gamma_LnGamma");
-      #endif
-
 		  	 return;
     }
 
  	  real34Copy(const34_NaN, res);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_Gamma_LnGamma");
-    #endif
-
 		  return;
 	 }
 
@@ -680,11 +521,6 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
 	 if(real34CompareLessThan(&t, const34_1e_24)) {
 	  	if(real34CompareEqual(xin, const34_0)) {
    	  real34Copy(const34_NaN, res);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_Gamma_LnGamma");
-      #endif
-
       return;
     }
 		  real34Divide(const34_1, xin, &x);
@@ -692,11 +528,6 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
 	  	if(calculateLn) {
 	  	 real34Ln(res, res);
 	  	}
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_Gamma_LnGamma");
-    #endif
-
 		  return;
 	 }
 
@@ -706,11 +537,6 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
 	  	real34Subtract(const34_1, xin, &t);
 	  	if(WP34S_is_int(&t)) {
    	  real34Copy(const34_NaN, res);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_Gamma_LnGamma");
-      #endif
-
 	  		 return;
     }
 	  	real34Subtract(&t, const34_1, &x);
@@ -728,18 +554,8 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
 	 	 	 }
 	 	 	 if(calculateLn) {
 	 	 	 	 real34Ln(res, res);
-
-        #if (LOG_FUNCTIONS == 1)
-          leavingFunction("WP34S_Gamma_LnGamma");
-        #endif
-
 	 	 	 	 return;
       }
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_Gamma_LnGamma");
-      #endif
-
 	 	  	return;
 	 	 }
 	 }
@@ -754,7 +570,7 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
  	 	// figure out xin * PI mod 2PI
  	 	real34Remainder(xin, const34_2, &t);
  	 	real34Multiply(&t, const34_pi, &t);
- 	 	WP34S_sincosTaylor(&t, &x, NULL);
+ 	 	WP34S_sincosTaylor(&t, &x, NULL); // t in radian
   		if(calculateLn) {
   		 	real34Divide(const34_pi, &x, &t);
   		 	real34Ln(&t, &t);
@@ -762,59 +578,31 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
   		}
   		else {
   	 		real34Multiply(&x, res, &t);
-  	 		real34Divide(&const34_pi, &t, res);
+  	 		real34Divide(const34_pi, &t, res);
   	 }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_Gamma_LnGamma");
-  #endif
 }
 
 
 
 void WP34S_real34Gamma(const real34_t *xin, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real34Gamma");
-  #endif
-
 	 WP34S_Gamma_LnGamma(xin, false, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real34Gamma");
-  #endif
 }
 
 
 
 void WP34S_real34Factorial(const real34_t *xin, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real34Factorial");
-  #endif
-
 	 real34_t x;
 
 	 real34Add(xin, const34_1, &x);
 	 WP34S_real34Gamma(&x, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real34Factorial");
-  #endif
 }
 
 
 
 // The log gamma function.
 void WP34S_real34LnGamma(const real34_t *xin, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real34LnGamma");
-  #endif
-
 	 WP34S_Gamma_LnGamma(xin, true, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real34LnGamma");
-  #endif
 }
 
 
@@ -834,50 +622,26 @@ void WP34S_real34LnGamma(const real34_t *xin, real34_t *res) {
  * which converges quickly for an argument near unity.
  */
 void WP34S_real51Ln(const real51_t *xin, real51_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real51Ln");
-  #endif
-
  	real51_t z, t, f, n, m, i, v, w, e;
  	int32_t expon;
 
  	if(real51IsSpecial(xin)) {
 	  	if(real51IsNaN(xin) || real51IsNegative(xin)) {
   	   real51Copy(const51_NaN, res);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_real51Ln");
-      #endif
-
 		  	 return;
     }
 
 	   real51Copy(const51_plusInfinity, res);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_real51Ln");
-    #endif
-
 	  	return;
   }
 
 	 if(real51CompareLessEqual(xin, const51_0)) {
 	  	if(real51IsNegative(xin)) {
   	   real51Copy(const51_NaN, res);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_real51Ln");
-      #endif
-
 		  	 return;
     }
 
 	   real51Copy(const51_minusInfinity, res);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_real51Ln");
-    #endif
-
 		  return;
 	 }
 
@@ -928,105 +692,58 @@ void WP34S_real51Ln(const real51_t *xin, real51_t *res) {
 
 	 real51Multiply(&f, &w, res);
 	 if(expon == 0) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_real51Ln");
-    #endif
-
   	 return;
   }
 
 	 int32ToReal51(expon, &e);
 	 real51Multiply(&e, const51_ln10, &w);
 	 real51Add(res, &w, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real51Ln");
-  #endif
 }
 
 
 
 void WP34S_real51Log(const real51_t *xin, const real51_t *base, real51_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real51Log");
-  #endif
-
  	real51_t y;
 
  	if(real51IsSpecial(xin)) {
 	  	if(real51IsNaN(xin) || real51IsNegative(xin)) {
   	   real51Copy(const34_NaN, res);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_real51Log");
-      #endif
-
 		  	 return;
     }
 
 	   real51Copy(const51_plusInfinity, res);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_real51Log");
-    #endif
-
 	  	return;
   }
 
 	 WP34S_real51Ln(xin, &y);
 
  	real51Divide(&y, base, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real51Log");
-  #endif
 }
 
 
 
 void WP34S_real34Log2(const real34_t *xin, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real34Log2");
-  #endif
-
   real51_t x, r;
 
   real34ToReal51(xin, &x);
  	WP34S_real51Log(&x, const51_ln2, &r);
   real51ToReal34(&r, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real34Log2");
-  #endif
 }
 
 
 
 void WP34S_real34Log10(const real34_t *xin, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real34Log10");
-  #endif
-
   real51_t x, r;
 
   real34ToReal51(xin, &x);
  	WP34S_real51Log(&x, const51_ln10, &r);
 
   real51ToReal34(&r, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real34Log10");
-  #endif
 }
 
 
 
 void WP34S_real34Logxy(const real34_t *yin, const real34_t *xin, real34_t *res) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_real34Logxy");
-  #endif
-
   real51_t x, r, lx;
 
   real34ToReal51(xin, &x);
@@ -1036,40 +753,22 @@ void WP34S_real34Logxy(const real34_t *yin, const real34_t *xin, real34_t *res) 
 	 WP34S_real51Log(&x, &lx, &r);
 
   real51ToReal34(&r, res);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_real34Logxy");
-  #endif
 }
 
 
 
 bool_t WP34S_relative_error(const real51_t *x, const real51_t *y, const real51_t *tol) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_relative_error");
-  #endif
-
  	real51_t a;
 
  	if(real51CompareEqual(x, const51_0)) {
  	  real51Copy(y, &a);
  	  real51SetPositiveSign(&a);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_relative_error");
-    #endif
-
  		 return real51CompareLessThan(&a, tol);
   }
 
  	real51Subtract(x, y, &a);
  	real51Divide(&a, x, &a);
  	real51SetPositiveSign(&a);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_relative_error");
-  #endif
-
  	return real51CompareLessThan(&a, tol);
 }
 

@@ -29,19 +29,15 @@
  * \return void
  ***********************************************/
 void fnUnitVector(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnUnitVector");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtComplex16) {
     real16_t temp;
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X), &temp);
-    real16FMA(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE, &temp, &temp);
+    real16Multiply(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X), &temp);
+    real16FMA(REGISTER_IMAG16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X), &temp, &temp);
     real16SquareRoot(&temp, &temp);
-    real16Divide(POINTER_TO_REGISTER_DATA(REGISTER_X), &temp, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    real16Divide(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE, &temp, POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+    real16Divide(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
+    real16Divide(REGISTER_IMAG16_DATA(REGISTER_X), &temp, REGISTER_IMAG16_DATA(REGISTER_X));
 
     refreshStack();
   }
@@ -49,11 +45,11 @@ void fnUnitVector(uint16_t unusedParamButMandatory) {
     real34_t temp;
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X), &temp);
-    real34FMA(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE, &temp, &temp);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &temp);
+    real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &temp, &temp);
     real34SquareRoot(&temp, &temp);
-    real34Divide(POINTER_TO_REGISTER_DATA(REGISTER_X), &temp, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    real34Divide(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE, &temp, POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+    real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &temp, REGISTER_IMAG34_DATA(REGISTER_X));
 
     refreshStack();
   }
@@ -69,8 +65,4 @@ void fnUnitVector(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnUnitVector:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnUnitVector");
-  #endif
 }

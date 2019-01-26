@@ -23,20 +23,20 @@
 
 
 void (* const division[12][12])(void) = {
-// regX |    regY ==>    1            2            3            4         5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16              Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {divBigIBigI, divRe16BigI, divCo16BigI, errorDiv, divTimeBigI, errorDiv,    errorDiv,    divRm16BigI, divCm16BigI, divSmaIBigI,  divRe34BigI, divCo34BigI},
-/*  2 real16         */ {divBigIRe16, divRe16Re16, divCo16Re16, errorDiv, divTimeRe16, errorDiv,    errorDiv,    divRm16Re16, divCm16Re16, divSmaIRe16,  divRe34Re16, divCo34Re16},
-/*  3 complex16      */ {divBigICo16, divRe16Co16, divCo16Co16, errorDiv, errorDiv,    errorDiv,    errorDiv,    divRm16Co16, divCm16Co16, divSmaICo16,  divRe34Co16, divCo34Co16},
-/*  4                */ {errorDiv,    errorDiv,    errorDiv,    errorDiv, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  5 Time           */ {errorDiv,    errorDiv,    errorDiv,    errorDiv, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  6 Date           */ {errorDiv,    errorDiv,    errorDiv,    errorDiv, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  7 String         */ {errorDiv,    errorDiv,    errorDiv,    errorDiv, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  8 real16 mat     */ {errorDiv,    errorDiv,    errorDiv,    errorDiv, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  9 complex16 mat  */ {errorDiv,    errorDiv,    errorDiv,    errorDiv, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/* 10 Small integer  */ {divBigISmaI, divRe16SmaI, divCo16SmaI, errorDiv, divTimeSmaI, errorDiv,    errorDiv,    divRm16SmaI, divCm16SmaI, divSmaISmaI,  divRe34SmaI, divCo34SmaI},
-/* 11 real34         */ {divBigIRe34, divRe16Re34, divCo16Re34, errorDiv, divTimeRe34, errorDiv,    errorDiv,    divRm16Re34, divCm16Re34, divSmaIRe34,  divRe34Re34, divCo34Re34},
-/* 12 complex34      */ {divBigICo34, divRe16Co34, divCo16Co34, errorDiv, errorDiv,    errorDiv,    errorDiv,    divRm16Co34, divCm16Co34, divSmaICo34,  divRe34Co34, divCo34Co34}
+// regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
+//      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
+/*  1 Big integer    */ {divBigIBigI, divRe16BigI, divCo16BigI, divAnglBigI, divTimeBigI, errorDiv,    errorDiv,    divRm16BigI, divCm16BigI, divSmaIBigI,  divRe34BigI, divCo34BigI},
+/*  2 real16         */ {divBigIRe16, divRe16Re16, divCo16Re16, divAnglRe16, divTimeRe16, errorDiv,    errorDiv,    divRm16Re16, divCm16Re16, divSmaIRe16,  divRe34Re16, divCo34Re16},
+/*  3 complex16      */ {divBigICo16, divRe16Co16, divCo16Co16, errorDiv,    errorDiv,    errorDiv,    errorDiv,    divRm16Co16, divCm16Co16, divSmaICo16,  divRe34Co16, divCo34Co16},
+/*  4 angle34        */ {errorDiv,    errorDiv,    errorDiv,    divAnglAngl, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
+/*  5 Time           */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
+/*  6 Date           */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
+/*  7 String         */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
+/*  8 real16 mat     */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
+/*  9 complex16 mat  */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
+/* 10 Small integer  */ {divBigISmaI, divRe16SmaI, divCo16SmaI, divAnglSmaI, divTimeSmaI, errorDiv,    errorDiv,    divRm16SmaI, divCm16SmaI, divSmaISmaI,  divRe34SmaI, divCo34SmaI},
+/* 11 real34         */ {divBigIRe34, divRe16Re34, divCo16Re34, divAnglRe34, divTimeRe34, errorDiv,    errorDiv,    divRm16Re34, divCm16Re34, divSmaIRe34,  divRe34Re34, divCo34Re34},
+/* 12 complex34      */ {divBigICo34, divRe16Co34, divCo16Co34, errorDiv,    errorDiv,    errorDiv,    errorDiv,    divRm16Co34, divCm16Co34, divSmaICo34,  divRe34Co34, divCo34Co34}
 };
 
 
@@ -48,19 +48,11 @@ void (* const division[12][12])(void) = {
  * \return void
  ***********************************************/
 void errorDiv(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorDiv");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot divide %s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(op2, true, false));
+    sprintf(errorMessage, "cannot divide %s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnDivide:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorDiv");
   #endif
 }
 
@@ -73,18 +65,10 @@ void errorDiv(void) {
  * \return void
  ***********************************************/
 void divToBeCoded(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divToBeCoded");
-  #endif
-
   #ifdef PC_BUILD
-    sprintf(errorMessage, "divide %s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(op2, true, false));
+    sprintf(errorMessage, "divide %s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divToBeCoded");
   #endif
 }
 
@@ -98,24 +82,20 @@ void divToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnDivide(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDivide");
-  #endif
-
   if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorDiv) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    op2    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, op1);
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opY    = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_Y, opY);
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     saveStack();
 
     division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(op1);
-    freeTemporaryRegister(op2);
+    freeTemporaryRegister(opY);
+    freeTemporaryRegister(opX);
 
     if(lastErrorCode == 0) {
       fnDropY(NOPARAM);
@@ -129,10 +109,6 @@ void fnDivide(uint16_t unusedParamButMandatory) {
   else {
     errorDiv();
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDivide");
-  #endif
 }
 
 
@@ -146,21 +122,17 @@ void fnDivide(uint16_t unusedParamButMandatory) {
  *
  ***********************************************/
 void fnInvert(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnInvert");
-  #endif
-
   saveStack();
   result = REGISTER_X;
-  op1    = allocateTemporaryRegister();
-  op2    = allocateTemporaryRegister();
+  opY    = allocateTemporaryRegister();
+  opX    = allocateTemporaryRegister();
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
-    int32ToReal16(1, POINTER_TO_REGISTER_DATA(op1));
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+    int32ToReal16(1, REGISTER_REAL16_DATA(opY));
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     divRe16Re16();
 
@@ -176,16 +148,16 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
 
-    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnInvert:", "cannot invert 0", NULL, NULL);
       #endif
     }
     else {
-      reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
-      int32ToReal34(1, POINTER_TO_REGISTER_DATA(op1));
-      copySourceRegisterToDestRegister(REGISTER_X, op2);
+      reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+      int32ToReal34(1, REGISTER_REAL34_DATA(opY));
+      copySourceRegisterToDestRegister(REGISTER_X, opX);
 
       divRe34Re34();
       convertRegister34To16(REGISTER_X);
@@ -201,9 +173,9 @@ void fnInvert(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtComplex16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
-    int32ToReal16(1, POINTER_TO_REGISTER_DATA(op1));
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+    int32ToReal16(1, REGISTER_REAL16_DATA(opY));
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     divRe16Co16();
 
@@ -217,9 +189,9 @@ void fnInvert(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
-    int32ToReal34(1, POINTER_TO_REGISTER_DATA(op1));
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+    int32ToReal34(1, REGISTER_REAL34_DATA(opY));
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     divRe34Re34();
 
@@ -233,9 +205,9 @@ void fnInvert(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
-    int32ToReal34(1, POINTER_TO_REGISTER_DATA(op1));
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+    int32ToReal34(1, REGISTER_REAL34_DATA(opY));
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     divRe34Co34();
 
@@ -253,32 +225,24 @@ void fnInvert(uint16_t unusedParamButMandatory) {
     #endif
   }
 
-  freeTemporaryRegister(op1);
-  freeTemporaryRegister(op2);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnInvert");
-  #endif
+  freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ÷ op2(big integer) ==> result(big integer or real16)
+ * \brief opY(big integer) ÷ opX(big integer) ==> result(big integer or real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divBigIBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divBigIBigI");
-  #endif
-
   bigInteger_t iOp1;
   bigInteger_t iOp2;
 
-  convertBigIntegerRegisterToBigInteger(op1, &iOp1);
-  convertBigIntegerRegisterToBigInteger(op2, &iOp2);
+  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
 
   if(bigIntegerIsZero(&iOp2)) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -293,42 +257,34 @@ void divBigIBigI(void) {
       convertBigIntegerToBigIntegerRegister(&iOp1, result);
     }
     else {
-      convertBigIntegerRegisterToBigInteger(op1, &iOp1);
-      convertBigIntegerRegisterToBigInteger(op2, &iOp2);
+      convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+      convertBigIntegerRegisterToBigInteger(opX, &iOp2);
 
       bigIntegerToString(&iOp1, tmpStr3000, 10);
-      reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
-      stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(op1));
+      reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+      stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(opY));
       bigIntegerToString(&iOp2, tmpStr3000, 10);
-      reallocateRegister(op2, dtReal16, REAL16_SIZE, 0);
-      stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(op2));
+      reallocateRegister(opX, dtReal16, REAL16_SIZE, 0);
+      stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(opX));
       divRe16Re16();
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divBigIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ÷ op2(real16) ==> result(real16)
+ * \brief opY(big integer) ÷ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divBigIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divBigIRe16");
-  #endif
+  convertBigIntegerRegisterToReal16Register(opY, opY);
 
-  convertBigIntegerRegisterToReal16Register(op1, op1);
-
-  if(real16IsZero(POINTER_TO_REGISTER_DATA(op1)) && real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(opY)) && real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, POINTER_TO_REGISTER_DATA(result));
+      real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -338,9 +294,9 @@ void divBigIRe16(void) {
     }
   }
 
-  else if(real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+      real16Copy(const16_plusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -352,76 +308,52 @@ void divBigIRe16(void) {
 
   else {
     reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-    real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+    real16Divide(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
     roundRegister(result);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divBigIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ÷ op2(complex16) ==> result(complex16)
+ * \brief opY(big integer) ÷ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divBigICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divBigICo16");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op1, op1);
+  convertBigIntegerRegisterToReal16Register(opY, opY);
   divRe16Co16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divBigICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ÷ op2(small integer) ==> result(big integer)
+ * \brief opY(big integer) ÷ opX(small integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void divBigISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divBigISmaI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op2, op2);
+  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
   divBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divBigISmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ÷ op2(real34) ==> result(real34)
+ * \brief opY(big integer) ÷ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divBigIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divBigIRe34");
-  #endif
+  convertBigIntegerRegisterToReal34Register(opY, opY);
 
-  convertBigIntegerRegisterToReal34Register(op1, op1);
-
-  if(real34IsZero(POINTER_TO_REGISTER_DATA(op1)) && real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, POINTER_TO_REGISTER_DATA(result));
+      real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -431,9 +363,9 @@ void divBigIRe34(void) {
     }
   }
 
-  else if(real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+      real34Copy(const34_plusInfinity, REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -445,74 +377,50 @@ void divBigIRe34(void) {
 
   else {
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    real34Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+    real34Divide(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
     roundRegister(result);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divBigIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ÷ op2(complex34) ==> result(complex34)
+ * \brief opY(big integer) ÷ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divBigICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divBigICo34");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op1, op1);
+  convertBigIntegerRegisterToReal34Register(opY, opY);
   divRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divBigICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ÷ op2(big integer) ==> result(real16)
+ * \brief opY(real16) ÷ opX(big integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe16BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op2, op2);
+  convertBigIntegerRegisterToReal16Register(opX, opX);
   divRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ÷ op2(real16) ==> result(real16)
+ * \brief opY(real16) ÷ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe16Re16");
-  #endif
-
-  if(real16IsZero(POINTER_TO_REGISTER_DATA(op1)) && real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(opY)) && real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, POINTER_TO_REGISTER_DATA(result));
+      real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -522,9 +430,9 @@ void divRe16Re16(void) {
     }
   }
 
-  else if(real16IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+      real16Copy(const16_plusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -536,804 +444,598 @@ void divRe16Re16(void) {
 
   else {
     reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-    real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+    real16Divide(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
     roundRegister(result);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ÷ op2(complex16) ==> result(complex16)
+ * \brief opY(real16) ÷ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe16Co16");
-  #endif
-
   real16_t temp;
 
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Multiply(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(op2), &temp); // c*c
-  real16FMA(POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, &temp, &temp); // c*c + d*d
+  real16Multiply(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(opX), &temp); // c*c
+  real16FMA(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(opX), &temp, &temp); // c*c + d*d
 
-  real16Divide(POINTER_TO_REGISTER_DATA(op2), &temp, POINTER_TO_REGISTER_DATA(result));
-  real16Multiply(POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result));
+  real16Divide(REGISTER_REAL16_DATA(opX), &temp, REGISTER_REAL16_DATA(result));
+  real16Multiply(REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(result));
   real16ChangeSign(&temp);
-  real16Divide(POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, &temp, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE);
-  real16Multiply(POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE);
+  real16Divide(REGISTER_IMAG16_DATA(opX), &temp, REGISTER_IMAG16_DATA(result));
+  real16Multiply(REGISTER_IMAG16_DATA(result), REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ÷ op2(64bits integer) ==> result(real16)
+ * \brief opY(real16) ÷ opX(64bits integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   divRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ÷ op2(real34) ==> result(real34)
+ * \brief opY(real16) ÷ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   divRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ÷ op2(complex34) ==> result(complex34)
+ * \brief opY(real16) ÷ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   divRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ÷ op2(big integer) ==> result(complex16)
+ * \brief opY(complex16) ÷ opX(big integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo16BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op2, op2);
+  convertBigIntegerRegisterToReal16Register(opX, opX);
   divCo16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ÷ op2(real16) ==> result(complex16)
+ * \brief opY(complex16) ÷ opX(real16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo16Re16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real16Divide(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // imaginary part
+  real16Divide(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Divide(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ÷ op2(complex16) ==> result(complex16)
+ * \brief opY(complex16) ÷ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo16Co16");
-  #endif
-
   real16_t temp;
 
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
 
   // Denominator
-  real16Multiply(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(op2), &temp); // c*c
-  real16FMA(POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, &temp, &temp); // c*c + d*d
+  real16Multiply(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(opX), &temp); // c*c
+  real16FMA(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(opX), &temp, &temp); // c*c + d*d
 
   // real part
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // a*c
-  real16FMA(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(result)); // a*c + b*d
-  real16Divide(POINTER_TO_REGISTER_DATA(result), &temp, POINTER_TO_REGISTER_DATA(result)); // (a*c + b*d) / (c*c + d*d)
+  real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // a*c
+  real16FMA(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result)); // a*c + b*d
+  real16Divide(REGISTER_REAL16_DATA(result), &temp, REGISTER_REAL16_DATA(result)); // (a*c + b*d) / (c*c + d*d)
 
   // imaginary part
-  real16Multiply(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // b*c
-  real16ChangeSign(POINTER_TO_REGISTER_DATA(op1)); // -a
-  real16FMA(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // b*c - a*d
-  real16Divide(POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE, &temp, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // (b*c - a*d) / (c*c + d*d)
+  real16Multiply(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result)); // b*c
+  real16ChangeSign(REGISTER_REAL16_DATA(opY)); // -a
+  real16FMA(REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result), REGISTER_IMAG16_DATA(result)); // b*c - a*d
+  real16Divide(REGISTER_IMAG16_DATA(result), &temp, REGISTER_IMAG16_DATA(result)); // (b*c - a*d) / (c*c + d*d)
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ÷ op2(64bits integer) ==> result(complex16)
+ * \brief opY(complex16) ÷ opX(64bits integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   divCo16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ÷ op2(real34) ==> result(complex34)
+ * \brief opY(complex16) ÷ opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   divCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ÷ op2(complex34) ==> result(complex34)
+ * \brief opY(complex16) ÷ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   divCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) ÷ op2(big integer) ==> result(time)
+ * \brief opY(angle) ÷ opX(big integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void divAnglBigI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertBigIntegerRegisterToAngleRegister(opX, opX);
+  angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) ÷ opX(real16) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void divAnglRe16(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE34 == 1)
+    convertRegister16To34(opX)
+  #endif
+  angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) ÷ opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void divAnglAngl(void) {
+  angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  #if (ANGLE34 == 1)
+    convertRegister34To16(result);
+  #endif
+  setRegisterDataType(result, dtReal16);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) ÷ opX(small integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void divAnglSmaI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertSmallIntegerRegisterToAngleRegister(opX, opX);
+  angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) ÷ opX(real34) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void divAnglRe34(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(opX);
+  #endif
+  angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(time) ÷ opX(big integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void divTimeBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divTimeBigI");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divTimeBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) ÷ op2(real16) ==> result(time)
+ * \brief opY(time) ÷ opX(real16) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void divTimeRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divTimeRe16");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divTimeRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) ÷ op2(64bits integer) ==> result(time)
+ * \brief opY(time) ÷ opX(64bits integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void divTimeSmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divTimeSmaI");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divTimeSmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) ÷ op2(real34) ==> result(time)
+ * \brief opY(time) ÷ opX(real34) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void divTimeRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divTimeRe34");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divTimeRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ÷ op2(big integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ÷ opX(big integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRm16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRm16BigI");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRm16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ÷ op2(real16) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ÷ opX(real16) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRm16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRm16Re16");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRm16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ÷ op2(complex16) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) ÷ opX(complex16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRm16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRm16Co16");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRm16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ÷ op2(64bits integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ÷ opX(64bits integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRm16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRm16SmaI");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRm16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ÷ op2(real34) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ÷ opX(real34) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRm16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRm16Re34");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRm16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ÷ op2(complex34) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) ÷ opX(complex34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRm16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRm16Co34");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRm16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ÷ op2(big integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ÷ opX(big integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCm16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCm16BigI");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCm16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ÷ op2(real16) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ÷ opX(real16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCm16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCm16Re16");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCm16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ÷ op2(complex16) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ÷ opX(complex16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCm16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCm16Co16");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCm16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ÷ op2(64bits integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ÷ opX(64bits integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCm16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCm16SmaI");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCm16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ÷ op2(real34) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ÷ opX(real34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCm16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCm16Re34");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCm16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ÷ op2(complex34) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ÷ opX(complex34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCm16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCm16Co34");
-  #endif
-
   divToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCm16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ÷ op2(big integer) ==> result(64bits integer)
+ * \brief opY(64bits integer) ÷ opX(big integer) ==> result(64bits integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void divSmaIBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divSmaIBigI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op1, op1);
+  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
   divBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divSmaIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ÷ op2(real16) ==> result(real16)
+ * \brief opY(64bits integer) ÷ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divSmaIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divSmaIRe16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   divRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divSmaIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ÷ op2(complex16) ==> result(complex16)
+ * \brief opY(64bits integer) ÷ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divSmaICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divSmaICo16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   divRe16Co16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divSmaICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ÷ op2(64bits integer) ==> result(64bits integer)
+ * \brief opY(64bits integer) ÷ opX(64bits integer) ==> result(64bits integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void divSmaISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divSmaISmaI");
-  #endif
-
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(op1));
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(result)) = WP34S_intDivide(*(uint64_t *)(POINTER_TO_REGISTER_DATA(op1)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(op2)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divSmaISmaI");
-  #endif
+  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intDivide(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ÷ op2(real34) ==> result(real34)
+ * \brief opY(64bits integer) ÷ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divSmaIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divSmaIRe34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   divRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divSmaIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ÷ op2(complex34) ==> result(complex34)
+ * \brief opY(64bits integer) ÷ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divSmaICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divSmaICo34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   divRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divSmaICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ÷ op2(big integer) ==> result(real34)
+ * \brief opY(real34) ÷ opX(big integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe34BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op2, op2);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
   divRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ÷ op2(real16) ==> result(real34)
+ * \brief opY(real34) ÷ opX(real16) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   divRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ÷ op2(complex16) ==> result(complex34)
+ * \brief opY(real34) ÷ opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   divRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ÷ op2(64bits integer) ==> result(real34)
+ * \brief opY(real34) ÷ opX(64bits integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   divRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ÷ op2(real34) ==> result(real34)
+ * \brief opY(real34) ÷ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe34Re34");
-  #endif
-
-  if(real34IsZero(POINTER_TO_REGISTER_DATA(op1)) && real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, POINTER_TO_REGISTER_DATA(result));
+      real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -1343,9 +1045,9 @@ void divRe34Re34(void) {
     }
   }
 
-  else if(real34IsZero(POINTER_TO_REGISTER_DATA(op2))) {
+  else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_plusInfinity, POINTER_TO_REGISTER_DATA(result));
+      real34Copy(const34_plusInfinity, REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // error 1 = domain error
@@ -1357,196 +1059,136 @@ void divRe34Re34(void) {
 
   else {
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    real34Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+    real34Divide(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
     roundRegister(result);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ÷ op2(complex34) ==> result(complex34)
+ * \brief opY(real34) ÷ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divRe34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divRe34Co34");
-  #endif
-
   real34_t temp;
 
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
 
   // Denominator
-  real34Multiply(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(op2), &temp); // c*c
-  real34FMA(POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, &temp, &temp); // c*c + d*d
+  real34Multiply(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX), &temp); // c*c
+  real34FMA(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(opX), &temp, &temp); // c*c + d*d
 
   // Real part
-  real34Divide(POINTER_TO_REGISTER_DATA(op1), &temp, POINTER_TO_REGISTER_DATA(result));
-  real34Multiply(POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Divide(REGISTER_REAL34_DATA(opY), &temp, REGISTER_REAL34_DATA(result));
+  real34Multiply(REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   // Imaginary part
   real34ChangeSign(&temp);
-  real34Divide(POINTER_TO_REGISTER_DATA(op1), &temp, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE);
-  real34Multiply(POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE);
+  real34Divide(REGISTER_REAL34_DATA(opY), &temp, REGISTER_IMAG34_DATA(result));
+  real34Multiply(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divRe34Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ÷ op2(big integer) ==> result(complex34)
+ * \brief opY(complex34) ÷ opX(big integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo34BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op2, op2);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
   divCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ÷ op2(real16) ==> result(complex34)
+ * \brief opY(complex34) ÷ opX(real16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   divCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ÷ op2(complex16) ==> result(complex34)
+ * \brief opY(complex34) ÷ opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   divCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ÷ op2(64bits integer) ==> result(complex34)
+ * \brief opY(complex34) ÷ opX(64bits integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   divCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ÷ op2(real34) ==> result(complex34)
+ * \brief opY(complex34) ÷ opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo34Re34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Divide(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Divide(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Divide(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Divide(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ÷ op2(complex34) ==> result(complex34)
+ * \brief opY(complex34) ÷ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void divCo34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("divCo34Co34");
-  #endif
-
   real34_t temp;
 
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
 
   // Denominator
-  real34Multiply(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(op2), &temp); // c*c
-  real34FMA(POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, &temp, &temp); // c*c + d*d
+  real34Multiply(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX), &temp); // c*c
+  real34FMA(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(opX), &temp, &temp); // c*c + d*d
 
   // real part
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // a*c
-  real34FMA(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(result)); // a*c + b*d
-  real34Divide(POINTER_TO_REGISTER_DATA(result), &temp, POINTER_TO_REGISTER_DATA(result)); // (a*c + b*d) / (c*c + d*d)
+  real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // a*c
+  real34FMA(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result)); // a*c + b*d
+  real34Divide(REGISTER_REAL34_DATA(result), &temp, REGISTER_REAL34_DATA(result)); // (a*c + b*d) / (c*c + d*d)
 
   // imaginary part
-  real34Multiply(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // b*c
-  real34ChangeSign(POINTER_TO_REGISTER_DATA(op1)); // -a
-  real34FMA(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // b*c - a*d
-  real34Divide(POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE, &temp, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // (b*c - a*d) / (c*c + d*d)
+  real34Multiply(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result)); // b*c
+  real34ChangeSign(REGISTER_REAL34_DATA(opY)); // -a
+  real34FMA(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result)); // b*c - a*d
+  real34Divide(REGISTER_IMAG34_DATA(result), &temp, REGISTER_IMAG34_DATA(result)); // (b*c - a*d) / (c*c + d*d)
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("divCo34Co34");
-  #endif
 }

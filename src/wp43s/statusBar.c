@@ -29,10 +29,6 @@
 void showDateTime(void) {
   int16_t x;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showDateTime");
-  #endif
-
   //if(displayDateTime) {
     showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-12, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
     showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-24, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
@@ -45,10 +41,6 @@ void showDateTime(void) {
     getTimeString(dateTimeString);
     showString(dateTimeString, &standardFont, x, 0, vmNormal, true, false);
   //}
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showDateTime");
-  #endif
 }
 
 
@@ -60,20 +52,12 @@ void showDateTime(void) {
  * \return void
  ***********************************************/
 void showRealComplexResult(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showRealComplexResult");
-  #endif
-
   if(getFlag(FLAG_CPXRES)) {
     showGlyph(STD_COMPLEX_C, &standardFont, X_REAL_COMPLEX, 0, vmNormal, true, false); // Complex C is 0+8+3 pixel wide
   }
   else {
     showGlyph(STD_REAL_R,    &standardFont, X_REAL_COMPLEX, 0, vmNormal, true, false); // Real R    is 0+8+3 pixel wide
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showRealComplexResult");
-  #endif
 }
 
 
@@ -85,20 +69,12 @@ void showRealComplexResult(void) {
  * \return void
  ***********************************************/
 void showComplexMode(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showComplexMode");
-  #endif
-
   if(complexMode == CM_POLAR) {
    showGlyph(STD_SUN,           &standardFont, X_COMPLEX_MODE, 0, vmNormal, true, true); // Sun         is 0+12+2 pixel wide
   }
   else {
    showGlyph(STD_RIGHT_ANGLE,   &standardFont, X_COMPLEX_MODE, 0, vmNormal, true, true); // Right angle is 0+12+2 pixel wide
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showComplexMode");
-  #endif
 }
 
 
@@ -112,10 +88,6 @@ void showComplexMode(void) {
  ***********************************************/
 void showAngularMode(void) {
   int16_t x;
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showAngularMode");
-  #endif
 
   x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9+3 pixel wide
 
@@ -142,10 +114,6 @@ void showAngularMode(void) {
     sprintf(errorMessage, "In function showAngularMode: %" FMT8U " is an unexpected value for angularMode!", angularMode);
     displayBugScreen(errorMessage);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showAngularMode");
-  #endif
 }
 
 
@@ -158,10 +126,6 @@ void showAngularMode(void) {
  ***********************************************/
 void showFracMode(void) {
   int16_t x = 0;
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showFracMode");
-  #endif
 
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
@@ -185,10 +149,6 @@ void showFracMode(void) {
       displayBugScreen(errorMessage);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showFracMode");
-  #endif
 }
 
 
@@ -200,10 +160,6 @@ void showFracMode(void) {
  * \return void
  ***********************************************/
 void showIntegerMode(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showIntegerMode");
-  #endif
-
   if(smallIntegerWordSize <= 9) {
     sprintf(tmpStr3000, STD_SPACE_FIGURE "%" FMT8U ":%c", smallIntegerWordSize, smallIntegerMode==SIM_1COMPL?'1':(smallIntegerMode==SIM_2COMPL?'2':(smallIntegerMode==SIM_UNSIGN?'u':(smallIntegerMode==SIM_SIGNMT?'s':'?'))));
   }
@@ -212,10 +168,6 @@ void showIntegerMode(void) {
   }
 
   showString(tmpStr3000, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showIntegerMode");
-  #endif
 }
 
 
@@ -228,10 +180,6 @@ void showIntegerMode(void) {
  ***********************************************/
 void showOverflowCarry(void) {
   int16_t x, y;
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showOverflowCarry");
-  #endif
 
   showGlyph(STD_OVERFLOW_CARRY, &standardFont, X_OVERFLOW_CARRY, 0, vmNormal, true, false); // STD_OVERFLOW_CARRY is 0+6+3 pixel wide
 
@@ -250,10 +198,6 @@ void showOverflowCarry(void) {
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showOverflowCarry");
-  #endif
 }
 
 
@@ -265,10 +209,6 @@ void showOverflowCarry(void) {
  * \return void
  ***********************************************/
 void showAlphaMode(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showAlphaMode");
-  #endif
-
   if(calcMode == CM_AIM) {
     if(alphaCase == AC_UPPER) {
       showString(STD_ALPHA, &standardFont, X_ALPHA_MODE, 0, vmNormal, true, false); // STD_ALPHA is 0+9+2 pixel wide
@@ -280,10 +220,6 @@ void showAlphaMode(void) {
   else {
     showGlyphCode(' ',  &standardFont, X_ALPHA_MODE, 0, vmNormal, true, true); // is 0+0+10 pixel wide
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showAlphaMode");
-  #endif
 }
 
 
@@ -295,16 +231,8 @@ void showAlphaMode(void) {
  * \return void
  ***********************************************/
 void showHourGlass(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showHourGlass");
-  #endif
-
   hourGlassIconEnabled = true;
   showGlyph(STD_HOURGLASS, &standardFont, X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showHourGlass");
-  #endif
 }
 
 
@@ -316,16 +244,8 @@ void showHourGlass(void) {
  * \return void
  ***********************************************/
 void hideHourGlass(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideHourGlass");
-  #endif
-
   hourGlassIconEnabled = false;
   showGlyph(STD_SPACE_EM, &standardFont, X_HOURGLASS, 0, vmNormal, true, true); // STD_SPACE_EM is 12 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideHourGlass");
-  #endif
 }
 
 
@@ -337,10 +257,6 @@ void hideHourGlass(void) {
  * \return void
  ***********************************************/
 void toggleHourGlass(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("toggleHourGlass");
-  #endif
-
   if(hourGlassIconEnabled) {
     showGlyph(STD_SPACE_EM,  &standardFont, X_HOURGLASS, 0, vmNormal, true, true);  // STD_SPACE_EM is 12 pixel wide
   }
@@ -348,10 +264,6 @@ void toggleHourGlass(void) {
     showGlyph(STD_HOURGLASS, &standardFont, X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide
   }
   hourGlassIconEnabled = !hourGlassIconEnabled;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("toggleHourGlass");
-  #endif
 }
 
 
@@ -363,20 +275,12 @@ void toggleHourGlass(void) {
  * \return void
  ***********************************************/
 void showPgmBegin(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showPgmBegin");
-  #endif
-
   if(programCounter == 0) {
     showGlyph(STD_PGM_BEGIN, &standardFont, X_PROGRAM_BEGIN, 0, vmNormal, true, false); // is 0+10+3 pixel wide
   }
   else {
     showString(STD_SPACE_EM, &standardFont, X_PROGRAM_BEGIN, 0, vmNormal, true, true); // STD_SPACE_EM is 12 pixel wide
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showPgmBegin");
-  #endif
 }
 
 
@@ -388,16 +292,8 @@ void showPgmBegin(void) {
  * \return void
  ***********************************************/
 void showWatch(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showWatch");
-  #endif
-
   watchIconEnabled = true;
   showGlyph(STD_WATCH, &standardFont, X_WATCH, 0, vmNormal, true, false); // is 0+13+1 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showWatch");
-  #endif
 }
 
 
@@ -409,16 +305,8 @@ void showWatch(void) {
  * \return void
  ***********************************************/
 void hideWatch(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideWatch");
-  #endif
-
   watchIconEnabled = false;
   showString(STD_SPACE_EM STD_SPACE_HAIR, &standardFont, X_WATCH, 0, vmNormal, true, true); // STD_SPACE_EM is 12 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideWatch");
-  #endif
 }
 
 
@@ -430,10 +318,6 @@ void hideWatch(void) {
  * \return void
  ***********************************************/
 void toggleWatch(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("toggleWatch");
-  #endif
-
   if(watchIconEnabled) {
     showString(STD_SPACE_EM STD_SPACE_HAIR, &standardFont, X_WATCH, 0, vmNormal, true, true);  // STD_SPACE_EM is 12 pixel wide
   }
@@ -441,10 +325,6 @@ void toggleWatch(void) {
     showGlyph(STD_WATCH,                    &standardFont, X_WATCH, 0, vmNormal, true, false); // is 0+13+1 pixel wide
   }
   watchIconEnabled = !watchIconEnabled;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("toggleWatch");
-  #endif
 }
 
 
@@ -456,16 +336,8 @@ void toggleWatch(void) {
  * \return void
  ***********************************************/
 void showSerialIO(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showSerialIO");
-  #endif
-
   serialIOIconEnabled = true;
   showGlyph(STD_SERIAL_IO, &standardFont, X_SERIAL_IO, 0, vmNormal, true, false); // is 0+8+3 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showSerialIO");
-  #endif
 }
 
 
@@ -477,16 +349,8 @@ void showSerialIO(void) {
  * \return void
  ***********************************************/
 void hideSerialIO(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideSerialIO");
-  #endif
-
   serialIOIconEnabled = false;
   showGlyphCode(' ', &standardFont, X_SERIAL_IO, 0, vmNormal, true, true); // is 10 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideSerialIO");
-  #endif
 }
 
 
@@ -498,10 +362,6 @@ void hideSerialIO(void) {
  * \return void
  ***********************************************/
 void toggleSerialIO(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("toggleSerialIO");
-  #endif
-
   if(serialIOIconEnabled) {
     showGlyphCode(' ',       &standardFont, X_SERIAL_IO, 0, vmNormal, true, true);  // is 10 pixel wide
   }
@@ -509,10 +369,6 @@ void toggleSerialIO(void) {
     showGlyph(STD_SERIAL_IO, &standardFont, X_SERIAL_IO, 0, vmNormal, true, false); // is 0+8+3 pixel wide
   }
   serialIOIconEnabled = !serialIOIconEnabled;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("toggleSerialIO");
-  #endif
 }
 
 
@@ -524,16 +380,8 @@ void toggleSerialIO(void) {
  * \return void
  ***********************************************/
 void showPrinter(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showPrinter");
-  #endif
-
   printerIconEnabled = true;
   showGlyph(STD_PRINTER, &standardFont, X_PRINTER, 0, vmNormal, true, false); // is 0+12+3 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showPrinter");
-  #endif
 }
 
 
@@ -545,16 +393,8 @@ void showPrinter(void) {
  * \return void
  ***********************************************/
 void hidePrinter(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hidePrinter");
-  #endif
-
   printerIconEnabled = false;
   showString(STD_SPACE_EM, &standardFont, X_PRINTER, 0, vmNormal, true, true); // STD_SPACE_EM is 12 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hidePrinter");
-  #endif
 }
 
 
@@ -566,10 +406,6 @@ void hidePrinter(void) {
  * \return void
  ***********************************************/
 void togglePrinter(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("togglePrinter");
-  #endif
-
   if(printerIconEnabled) {
     showString(STD_SPACE_EM, &standardFont, X_PRINTER, 0, vmNormal, true, true);  // STD_SPACE_EM is 12 pixel wide
   }
@@ -577,10 +413,6 @@ void togglePrinter(void) {
     showGlyph(STD_PRINTER,   &standardFont, X_PRINTER, 0, vmNormal, true, false); // is 0+12+3 pixel wide
   }
   printerIconEnabled = !printerIconEnabled;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("togglePrinter");
-  #endif
 }
 
 
@@ -592,16 +424,8 @@ void togglePrinter(void) {
  * \return void
  ***********************************************/
 void showBattery(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showBattery");
-  #endif
-
   batteryIconEnabled = true;
   showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showBattery");
-  #endif
 }
 
 
@@ -613,16 +437,8 @@ void showBattery(void) {
  * \return void
  ***********************************************/
 void hideBattery(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideBattery");
-  #endif
-
   batteryIconEnabled = false;
   showGlyphCode(' ', &standardFont, X_BATTERY, 0, vmNormal, true, true); // is 10 pixel wide
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideBattery");
-  #endif
 }
 
 
@@ -634,10 +450,6 @@ void hideBattery(void) {
  * \return void
  ***********************************************/
 void toggleBattery(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("toggleBattery");
-  #endif
-
   if(batteryIconEnabled) {
     showGlyphCode(' ',     &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
   }
@@ -645,10 +457,6 @@ void toggleBattery(void) {
     showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
   }
   batteryIconEnabled = !batteryIconEnabled;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("toggleBattery");
-  #endif
 }
 
 
@@ -660,10 +468,6 @@ void toggleBattery(void) {
  * \return void
  ***********************************************/
 void showUserMode(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showUserMode");
-  #endif
-
   userModeEnabled = true;
   showGlyph(STD_USER_MODE, &standardFont, X_USER_MODE, 0, vmNormal, false, false); // STD_USER_MODE is 0+12+2 pixel wide
 
@@ -671,10 +475,6 @@ void showUserMode(void) {
     if(calcMode == CM_NORMAL) calcModeNormalGui();
     else if(calcMode == CM_AIM) calcModeAimGui();
     else if(calcMode == CM_TAM) calcModeTamGui();
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showUserMode");
   #endif
 }
 
@@ -687,10 +487,6 @@ void showUserMode(void) {
  * \return void
  ***********************************************/
 void hideUserMode(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideUserMode");
-  #endif
-
   userModeEnabled = false;
   showString(STD_SPACE_EM, &standardFont, X_USER_MODE, 0, vmNormal, true, true);   // STD_SPACE_EM is 12 pixel wide
 
@@ -698,10 +494,6 @@ void hideUserMode(void) {
     if(calcMode == CM_NORMAL) calcModeNormalGui();
     else if(calcMode == CM_AIM) calcModeAimGui();
     else if(calcMode == CM_TAM) calcModeTamGui();
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideUserMode");
   #endif
 }
 
@@ -714,10 +506,6 @@ void hideUserMode(void) {
  * \return void
  ***********************************************/
 void toggleUserMode(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("toggleUserMode");
-  #endif
-
   if(userModeEnabled) {
     showString(STD_SPACE_EM, &standardFont, X_USER_MODE, 0, vmNormal, true, true);   // STD_SPACE_EM is 12 pixel wide
   }
@@ -730,9 +518,5 @@ void toggleUserMode(void) {
     if(calcMode == CM_NORMAL) calcModeNormalGui();
     else if(calcMode == CM_AIM) calcModeAimGui();
     else if(calcMode == CM_TAM) calcModeTamGui();
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("toggleUserMode");
   #endif
 }

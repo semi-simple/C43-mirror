@@ -23,20 +23,20 @@
 
 
 void (* const subtraction[12][12])(void) = {
-// regX |    regY ==>    1            2            3            4         5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16              Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {subBigIBigI, subRe16BigI, subCo16BigI, errorSub, subTimeBigI, subDateBigI, errorSub,    errorSub,    errorSub,    subSmaIBigI,  subRe34BigI, subCo34BigI},
-/*  2 real16         */ {subBigIRe16, subRe16Re16, subCo16Re16, errorSub, subTimeRe16, subDateRe16, errorSub,    errorSub,    errorSub,    subSmaIRe16,  subRe34Re16, subCo34Re16},
-/*  3 complex16      */ {subBigICo16, subRe16Co16, subCo16Co16, errorSub, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaICo16,  subRe34Co16, subCo34Co16},
-/*  4                */ {errorSub,    errorSub,    errorSub,    errorSub, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,     errorSub,    errorSub   },
-/*  5 Time           */ {subBigITime, subRe16Time, errorSub,    errorSub, subTimeTime, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,     subRe34Time, errorSub   },
-/*  6 Date           */ {subBigIDate, subRe16Date, errorSub,    errorSub, errorSub,    subDateDate, errorSub,    errorSub,    errorSub,    errorSub,     subRe34Date, errorSub   },
-/*  7 String         */ {errorSub,    errorSub,    errorSub,    errorSub, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,     errorSub,    errorSub   },
-/*  8 real16 mat     */ {errorSub,    errorSub,    errorSub,    errorSub, errorSub,    errorSub,    errorSub,    subRm16Rm16, subCm16Rm16, errorSub,     errorSub,    errorSub   },
-/*  9 complex16 mat  */ {errorSub,    errorSub,    errorSub,    errorSub, errorSub,    errorSub,    errorSub,    subRm16Cm16, subCm16Cm16, errorSub,     errorSub,    errorSub   },
-/* 10 Small integer  */ {subBigISmaI, subRe16SmaI, subCo16SmaI, errorSub, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaISmaI,  subRe34SmaI, subCo34SmaI},
-/* 11 real34         */ {subBigIRe34, subRe16Re34, subCo16Re34, errorSub, subTimeRe34, subDateRe34, errorSub,    errorSub,    errorSub,    subSmaIRe34,  subRe34Re34, subCo34Re34},
-/* 12 complex34      */ {subBigICo34, subRe16Co34, subCo16Co34, errorSub, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaICo34,  subRe34Co34, subCo34Co34}
+// regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
+//      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
+/*  1 Big integer    */ {subBigIBigI, subRe16BigI, subCo16BigI, subAnglBigI, subTimeBigI, subDateBigI, errorSub,    errorSub,    errorSub,    subSmaIBigI,  subRe34BigI, subCo34BigI},
+/*  2 real16         */ {subBigIRe16, subRe16Re16, subCo16Re16, subAnglRe16, subTimeRe16, subDateRe16, errorSub,    errorSub,    errorSub,    subSmaIRe16,  subRe34Re16, subCo34Re16},
+/*  3 complex16      */ {subBigICo16, subRe16Co16, subCo16Co16, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaICo16,  subRe34Co16, subCo34Co16},
+/*  4 angle34        */ {subBigIAngl, subRe16Angl, errorSub,    subAnglAngl, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaIAngl,  subRe34Angl, errorSub   },
+/*  5 Time           */ {subBigITime, subRe16Time, errorSub,    errorSub,    subTimeTime, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,     subRe34Time, errorSub   },
+/*  6 Date           */ {subBigIDate, subRe16Date, errorSub,    errorSub,    errorSub,    subDateDate, errorSub,    errorSub,    errorSub,    errorSub,     subRe34Date, errorSub   },
+/*  7 String         */ {errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,     errorSub,    errorSub   },
+/*  8 real16 mat     */ {errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subRm16Rm16, subCm16Rm16, errorSub,     errorSub,    errorSub   },
+/*  9 complex16 mat  */ {errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subRm16Cm16, subCm16Cm16, errorSub,     errorSub,    errorSub   },
+/* 10 Small integer  */ {subBigISmaI, subRe16SmaI, subCo16SmaI, subAnglSmaI, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaISmaI,  subRe34SmaI, subCo34SmaI},
+/* 11 real34         */ {subBigIRe34, subRe16Re34, subCo16Re34, subAnglRe34, subTimeRe34, subDateRe34, errorSub,    errorSub,    errorSub,    subSmaIRe34,  subRe34Re34, subCo34Re34},
+/* 12 complex34      */ {subBigICo34, subRe16Co34, subCo16Co34, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaICo34,  subRe34Co34, subCo34Co34}
 };
 
 
@@ -48,19 +48,11 @@ void (* const subtraction[12][12])(void) = {
  * \return void
  ***********************************************/
 void errorSub(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorSub");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot subtract %s", getRegisterDataTypeName(op2, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "from %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "cannot subtract %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "from %s", getRegisterDataTypeName(opY, true, false));
     showInfoDialog("In function fnSubtract:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorSub");
   #endif
 }
 
@@ -73,18 +65,10 @@ void errorSub(void) {
  * \return void
  ***********************************************/
 void subToBeCoded(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subToBeCoded");
-  #endif
-
   #ifdef PC_BUILD
-    sprintf(errorMessage, "subtract %s", getRegisterDataTypeName(op2, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "subtract %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(opY, true, false));
     showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subToBeCoded");
   #endif
 }
 
@@ -98,22 +82,18 @@ void subToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnSubtract(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnSubtract");
-  #endif
-
   if(subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorSub) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    op2    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, op1);
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opY    = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_Y, opY);
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(op1);
-    freeTemporaryRegister(op2);
+    freeTemporaryRegister(opY);
+    freeTemporaryRegister(opX);
 
     fnDropY(NOPARAM);
     refreshStack();
@@ -121,10 +101,6 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
   else {
     errorSub();
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnSubtract");
-  #endif
 }
 
 
@@ -137,38 +113,34 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnChangeSign(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnChangeSign");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
-    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
     }
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
-    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
     }
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtComplex16) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
-    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
     }
 
-    real16ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
-    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE)) {
-      real16SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+    real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
+    if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      real16SetPositiveSign(REGISTER_IMAG16_DATA(REGISTER_X));
     }
 
     refreshRegisterLine(REGISTER_X);
@@ -176,14 +148,14 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
 
   else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
-    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
     }
-    real34ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+    real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
 
-    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE)) {
-      real34SetPositiveSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+    if(real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      real34SetPositiveSign(REGISTER_IMAG34_DATA(REGISTER_X));
     }
 
     refreshRegisterLine(REGISTER_X);
@@ -197,7 +169,7 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
 
   else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intChs(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intChs(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -208,16 +180,12 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
      showInfoDialog("In function fnChangeSign:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnChangeSign");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(big integer) ==> result(big integer)
+ * \brief opY(big integer) - opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
@@ -226,1165 +194,901 @@ void subBigIBigI(void) {
   bigInteger_t iOp1;
   bigInteger_t iOp2;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigIBigI");
-  #endif
-
-  convertBigIntegerRegisterToBigInteger(op1, &iOp1);
-  convertBigIntegerRegisterToBigInteger(op2, &iOp2);
+  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
 
   bigIntegerSubtract(&iOp1, &iOp2, &iOp1);
 
   convertBigIntegerToBigIntegerRegister(&iOp1, result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(real16) ==> result(real16)
+ * \brief opY(big integer) - opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subBigIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigIRe16");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op1, op1);
+  convertBigIntegerRegisterToReal16Register(opY, opY);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(complex16) ==> result(complex16)
+ * \brief opY(big integer) - opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subBigICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigICo16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal16Register(op1, op1);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal16Register(opY, opY);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(time) ==> result(time)
+ * \brief opY(big integer) - opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subBigIAngl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertBigIntegerRegisterToAngleRegister(opY, opY);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(big integer) - opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void subBigITime(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigITime");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigITime");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(date) ==> result(date)
+ * \brief opY(big integer) - opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void subBigIDate(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigIDate");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigIDate");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(64bits integer) ==> result(big integer)
+ * \brief opY(big integer) - opX(64bits integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void subBigISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigISmaI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op2, op2);
+  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
   subBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigISmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(real34) ==> result(real34)
+ * \brief opY(big integer) - opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subBigIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigIRe34");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op1, op1);
+  convertBigIntegerRegisterToReal34Register(opY, opY);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) - op2(complex34) ==> result(complex34)
+ * \brief opY(big integer) - opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subBigICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subBigICo34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal34Register(op1, op1);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal34Register(opY, opY);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subBigICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(big integer) ==> result(real16)
+ * \brief opY(real16) - opX(big integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op2, op2);
+  convertBigIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(real16) ==> result(real16)
+ * \brief opY(real16) - opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16Re16");
-  #endif
-
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(complex16) ==> result(complex16)
+ * \brief opY(real16) - opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16Co16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  complex16ChangeSign(POINTER_TO_REGISTER_DATA(result)); // result = -result
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result), POINTER_TO_REGISTER_DATA(result)); // real part
+  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  complex16ChangeSign(REGISTER_REAL16_DATA(result)); // result = -result
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result)); // real part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(time) ==> result(time)
+ * \brief opY(real16) - opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe16Angl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE34 == 1)
+    convertRegister16To34(opY)
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(real16) - opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16Time(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16Time");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16Time");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(date) ==> result(date)
+ * \brief opY(real16) - opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16Date(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16Date");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16Date");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(64bits integer) ==> result(real16)
+ * \brief opY(real16) - opX(64bits integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   subRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(real34) ==> result(real34)
+ * \brief opY(real16) - opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   subRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) - op2(complex34) ==> result(complex34)
+ * \brief opY(real16) - opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   subRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) - op2(big integer) ==> result(complex16)
+ * \brief opY(complex16) - opX(big integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo16BigI");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal16Register(op2, op2);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex16Copy(REGISTER_COMPLEX16_DATA(opY), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal16Register(opX, opX);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) - op2(real16) ==> result(complex16)
+ * \brief opY(complex16) - opX(real16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo16Re16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real16Copy(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // imaginary part
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) - op2(complex16) ==> result(complex16)
+ * \brief opY(complex16) - opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo16Co16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // imaginary part
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Subtract(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) - op2(64bits integer) ==> result(complex16)
+ * \brief opY(complex16) - opX(64bits integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   subCo16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) - op2(real34) ==> result(complex34)
+ * \brief opY(complex16) - opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   subCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) - op2(complex34) ==> result(complex34)
+ * \brief opY(complex16) - opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   subCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) - op2(big integer) ==> result(time)
+ * \brief opY(angle) - opX(big integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAnglBigI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertBigIntegerRegisterToAngleRegister(opX, opX);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) - opX(real16) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAnglRe16(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE34 == 1)
+    convertRegister16To34(opX)
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) - opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAnglAngl(void) {
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) - opX(small integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAnglSmaI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertSmallIntegerRegisterToAngleRegister(opX, opX);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) - opX(real34) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAnglRe34(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(opX);
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(time) - opX(big integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void subTimeBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subTimeBigI");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subTimeBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) - op2(real16) ==> result(time)
+ * \brief opY(time) - opX(real16) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void subTimeRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subTimeRe16");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subTimeRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) - op2(time) ==> result(time)
+ * \brief opY(time) - opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void subTimeTime(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subTimeTime");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subTimeTime");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) - op2(real34) ==> result(time)
+ * \brief opY(time) - opX(real34) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void subTimeRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subTimeRe34");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subTimeRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(date) - op2(big integer) ==> result(date)
+ * \brief opY(date) - opX(big integer) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void subDateBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subDateBigI");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subDateBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(date) - op2(real16) ==> result(date)
+ * \brief opY(date) - opX(real16) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void subDateRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subDateRe16");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subDateRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(date) - op2(date) ==> result(big integer)
+ * \brief opY(date) - opX(date) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void subDateDate(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subDateDate");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subDateDate");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(date) - op2(real34) ==> result(date)
+ * \brief opY(date) - opX(real34) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void subDateRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subDateRe34");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subDateRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) - op2(real16 matrix) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) - opX(real16 matrix) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRm16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRm16Rm16");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRm16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) - op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) - opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRm16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRm16Cm16");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRm16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) - op2(real16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) - opX(real16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCm16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCm16Rm16");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCm16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) - op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) - opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCm16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCm16Cm16");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCm16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) - op2(big integer) ==> result(big integer)
+ * \brief opY(64bits integer) - opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void subSmaIBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subSmaIBigI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op1, op1);
+  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
   subBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subSmaIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) - op2(real16) ==> result(real16)
+ * \brief opY(64bits integer) - opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subSmaIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subSmaIRe16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   subRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subSmaIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) - op2(complex16) ==> result(complex16)
+ * \brief opY(64bits integer) - opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subSmaICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subSmaICo16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   subRe16Co16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subSmaICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(Small integer) - op2(Small integer) ==> result(Small integer)
+ * \brief opY(small integer) - opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subSmaIAngl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertSmallIntegerRegisterToAngleRegister(opY, opY);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(Small integer) - opX(Small integer) ==> result(Small integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void subSmaISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subSmaISmaI");
-  #endif
-
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(op1));
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(result)) = WP34S_intSubtract(*(uint64_t *)(POINTER_TO_REGISTER_DATA(op1)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(op2)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subSmaISmaI");
-  #endif
+  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intSubtract(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) - op2(real34) ==> result(real34)
+ * \brief opY(64bits integer) - opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subSmaIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subSmaIRe34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   subRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subSmaIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) - op2(complex34) ==> result(complex34)
+ * \brief opY(64bits integer) - opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subSmaICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subSmaICo34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   subRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subSmaICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(big integer) ==> result(real34)
+ * \brief opY(real34) - opX(big integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op2, op2);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(real16) ==> result(real34)
+ * \brief opY(real34) - opX(real16) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   subRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(complex16) ==> result(complex34)
+ * \brief opY(real34) - opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   subRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(time) ==> result(time)
+ * \brief opY(real34) - opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe34Angl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(opY);
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(real34) - opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34Time(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34Time");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34Time");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(date) ==> result(date)
+ * \brief opY(real34) - opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34Date(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34Date");
-  #endif
-
   subToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34Date");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(64bits integer) ==> result(real34)
+ * \brief opY(real34) - opX(64bits integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   subRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(real34) ==> result(real34)
+ * \brief opY(real34) - opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34Re34");
-  #endif
 
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) - op2(complex34) ==> result(complex34)
+ * \brief opY(real34) - opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subRe34Co34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Copy(POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
-  real34ChangeSign(POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subRe34Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) - op2(big integer) ==> result(complex34)
+ * \brief opY(complex34) - opX(big integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo34BigI");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result)); // result = op1
-  convertBigIntegerRegisterToReal34Register(op2, op2);
-  real16Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex34Copy(REGISTER_COMPLEX34_DATA(opY), REGISTER_COMPLEX34_DATA(result)); // result = opY
+  convertBigIntegerRegisterToReal34Register(opX, opX);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) - op2(real16) ==> result(complex34)
+ * \brief opY(complex34) - opX(real16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   subCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) - op2(complex16) ==> result(complex34)
+ * \brief opY(complex34) - opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   subCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) - op2(64bits integer) ==> result(complex34)
+ * \brief opY(complex34) - opX(64bits integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   subCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) - op2(real34) ==> result(complex34)
+ * \brief opY(complex34) - opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo34Re34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Copy(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) - op2(complex34) ==> result(complex34)
+ * \brief opY(complex34) - opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void subCo34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subCo34Co34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Subtract(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Subtract(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Subtract(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subCo34Co34");
-  #endif
 }

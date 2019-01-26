@@ -19,18 +19,24 @@
  ***********************************************/
 
 
-// Angle
-void convertRegisterAngleFromTo(calcRegister_t regist, uint32_t fromAngularMode, uint32_t toAngularMode);
-void convertRegisterToDms      (calcRegister_t regist);
-void convertRegisterFromDms    (calcRegister_t regist);
-void convertAngle16FromTo      (real16_t *angle16, uint32_t fromAngularMode, uint32_t toAngularMode);
-void convertAngle34FromTo      (real34_t *angle34, uint32_t fromAngularMode, uint32_t toAngularMode);
-void convertAngle34ToDms       (real34_t *angle34);
-void convertAngle34FromDms     (real34_t *angle34);
+
+#if (ANGLE16 == 1)
+  #define convertAngleToInternal(angle16, toAngularMode)     convertAngle16ToInternal(angle16, toAngularMode)
+  #define convertAngleFromInternal(angle16, fromAngularMode) convertAngle16FromInternal(angle16, fromAngularMode)
+#endif
+#if (ANGLE34 == 1)
+  #define convertAngleToInternal(angle34, toAngularMode)     convertAngle34ToInternal(angle34, toAngularMode)
+  #define convertAngleFromInternal(angle34, fromAngularMode) convertAngle34FromInternal(angle34, fromAngularMode)
+#endif
+
 void fnCvtFromAngularMode      (uint16_t fromAngularMode);
 void fnCvtToAngularMode        (uint16_t toAngularMode);
 void fnCvtDegToRad             (uint16_t unusedParamButMandatory);
 void fnCvtDegToDms             (uint16_t unusedParamButMandatory);
+void fnCvtDmsToDeg             (uint16_t unusedParamButMandatory);
 void fnCvtRadToDeg             (uint16_t unusedParamButMandatory);
-void checkDms16                (real16_t *angleDms);
 void checkDms34                (real34_t *angleDms);
+void convertAngle16ToInternal  (real16_t *angle16, uint32_t toAngularMode);
+void convertAngle34ToInternal  (real34_t *angle34, uint32_t toAngularMode);
+void convertAngle16FromInternal(real16_t *angle16, uint32_t fromAngularMode);
+void convertAngle34FromInternal(real34_t *angle34, uint32_t fromAngularMode);

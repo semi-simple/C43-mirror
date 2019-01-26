@@ -23,20 +23,20 @@
 
 
 void (* const addition[12][12])(void) = {
-// regX |    regY ==>    1            2            3            4         5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16              Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {addBigIBigI, addRe16BigI, addCo16BigI, errorAdd, addTimeBigI, addDateBigI, addStriBigI, errorAdd,    errorAdd,    addSmaIBigI,  addRe34BigI, addCo34BigI},
-/*  2 real16         */ {addBigIRe16, addRe16Re16, addCo16Re16, errorAdd, addTimeRe16, addDateRe16, addStriRe16, errorAdd,    errorAdd,    addSmaIRe16,  addRe34Re16, addCo34Re16},
-/*  3 complex16      */ {addBigICo16, addRe16Co16, addCo16Co16, errorAdd, errorAdd,    errorAdd,    addStriCo16, errorAdd,    errorAdd,    addSmaICo16,  addRe34Co16, addCo34Co16},
-/*  4                */ {errorAdd,    errorAdd,    errorAdd,    errorAdd, errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,     errorAdd,    errorAdd   },
-/*  5 Time           */ {addBigITime, addRe16Time, errorAdd,    errorAdd, addTimeTime, errorAdd,    addStriTime, errorAdd,    errorAdd,    errorAdd,     addRe34Time, errorAdd   },
-/*  6 Date           */ {addBigIDate, addRe16Date, errorAdd,    errorAdd, errorAdd,    errorAdd,    addStriDate, errorAdd,    errorAdd,    errorAdd,     addRe34Date, errorAdd   },
-/*  7 String         */ {errorAdd,    errorAdd,    errorAdd,    errorAdd, errorAdd,    errorAdd,    addStriStri, errorAdd,    errorAdd,    errorAdd,     errorAdd,    errorAdd   },
-/*  8 real16 mat     */ {errorAdd,    errorAdd,    errorAdd,    errorAdd, errorAdd,    errorAdd,    addStriRm16, addRm16Rm16, addCm16Rm16, errorAdd,     errorAdd,    errorAdd   },
-/*  9 complex16 mat  */ {errorAdd,    errorAdd,    errorAdd,    errorAdd, errorAdd,    errorAdd,    addStriCm16, addRm16Cm16, addCm16Cm16, errorAdd,     errorAdd,    errorAdd   },
-/* 10 Small integer  */ {addBigISmaI, addRe16SmaI, addCo16SmaI, errorAdd, errorAdd,    errorAdd,    addStriSmaI, errorAdd,    errorAdd,    addSmaISmaI,  addRe34SmaI, addCo34SmaI},
-/* 11 real34         */ {addBigIRe34, addRe16Re34, addCo16Re34, errorAdd, addTimeRe34, addDateRe34, addStriRe34, errorAdd,    errorAdd,    addSmaIRe34,  addRe34Re34, addCo34Re34},
-/* 12 complex34      */ {addBigICo34, addRe16Co34, addCo16Co34, errorAdd, errorAdd,    errorAdd,    addStriCo34, errorAdd,    errorAdd,    addSmaICo34,  addRe34Co34, addCo34Co34}
+// regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
+//      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
+/*  1 Big integer    */ {addBigIBigI, addRe16BigI, addCo16BigI, addAnglBigI, addTimeBigI, addDateBigI, addStriBigI, errorAdd,    errorAdd,    addSmaIBigI,  addRe34BigI, addCo34BigI},
+/*  2 real16         */ {addBigIRe16, addRe16Re16, addCo16Re16, addAnglRe16, addTimeRe16, addDateRe16, addStriRe16, errorAdd,    errorAdd,    addSmaIRe16,  addRe34Re16, addCo34Re16},
+/*  3 complex16      */ {addBigICo16, addRe16Co16, addCo16Co16, errorAdd,    errorAdd,    errorAdd,    addStriCo16, errorAdd,    errorAdd,    addSmaICo16,  addRe34Co16, addCo34Co16},
+/*  4 angle34        */ {addBigIAngl, addRe16Angl, errorAdd,    addAnglAngl, errorAdd,    errorAdd,    addStriAngl, errorAdd,    errorAdd,    addSmaIAngl,  addRe34Angl, errorAdd   },
+/*  5 Time           */ {addBigITime, addRe16Time, errorAdd,    errorAdd,    addTimeTime, errorAdd,    addStriTime, errorAdd,    errorAdd,    errorAdd,     addRe34Time, errorAdd   },
+/*  6 Date           */ {addBigIDate, addRe16Date, errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriDate, errorAdd,    errorAdd,    errorAdd,     addRe34Date, errorAdd   },
+/*  7 String         */ {errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriStri, errorAdd,    errorAdd,    errorAdd,     errorAdd,    errorAdd   },
+/*  8 real16 mat     */ {errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriRm16, addRm16Rm16, addCm16Rm16, errorAdd,     errorAdd,    errorAdd   },
+/*  9 complex16 mat  */ {errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriCm16, addRm16Cm16, addCm16Cm16, errorAdd,     errorAdd,    errorAdd   },
+/* 10 Small integer  */ {addBigISmaI, addRe16SmaI, addCo16SmaI, addAnglSmaI, errorAdd,    errorAdd,    addStriSmaI, errorAdd,    errorAdd,    addSmaISmaI,  addRe34SmaI, addCo34SmaI},
+/* 11 real34         */ {addBigIRe34, addRe16Re34, addCo16Re34, addAnglRe34, addTimeRe34, addDateRe34, addStriRe34, errorAdd,    errorAdd,    addSmaIRe34,  addRe34Re34, addCo34Re34},
+/* 12 complex34      */ {addBigICo34, addRe16Co34, addCo16Co34, errorAdd,    errorAdd,    errorAdd,    addStriCo34, errorAdd,    errorAdd,    addSmaICo34,  addRe34Co34, addCo34Co34}
 };
 
 
@@ -48,19 +48,11 @@ void (* const addition[12][12])(void) = {
  * \return void
  ***********************************************/
 void errorAdd(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorAdd");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot add %s", getRegisterDataTypeName(op2, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "cannot add %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(opY, true, false));
     showInfoDialog("In function fnAdd:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorAdd");
   #endif
 }
 
@@ -73,18 +65,10 @@ void errorAdd(void) {
  * \return void
  ***********************************************/
 void addToBeCoded(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addToBeCoded");
-  #endif
-
   #ifdef PC_BUILD
-    sprintf(errorMessage, "add %s", getRegisterDataTypeName(op2, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "add %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(opY, true, false));
     showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addToBeCoded");
   #endif
 }
 
@@ -98,22 +82,18 @@ void addToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnAdd(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnAdd");
-  #endif
-
   if(addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorAdd) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    op2    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, op1);
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opY    = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_Y, opY);
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(op1);
-    freeTemporaryRegister(op2);
+    freeTemporaryRegister(opY);
+    freeTemporaryRegister(opX);
 
     fnDropY(NOPARAM);
     refreshStack();
@@ -121,1463 +101,1135 @@ void fnAdd(uint16_t unusedParamButMandatory) {
   else {
     errorAdd();
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnAdd");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(big integer) ==> result(big integer)
+ * \brief opY(big integer) + opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigIBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigIBigI");
-  #endif
-
   bigInteger_t iOp1;
   bigInteger_t iOp2;
 
-  convertBigIntegerRegisterToBigInteger(op1, &iOp1);
-  convertBigIntegerRegisterToBigInteger(op2, &iOp2);
+  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
 
   bigIntegerAdd(&iOp1, &iOp2, &iOp1);
 
   convertBigIntegerToBigIntegerRegister(&iOp1, result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(real16) ==> result(real16)
+ * \brief opY(big integer) + opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigIRe16");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op1, op1);
+  convertBigIntegerRegisterToReal16Register(opY, opY);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(complex16) ==> result(complex16)
+ * \brief opY(big integer) + opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigICo16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal16Register(op1, op1);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal16Register(opY, opY);
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(time) ==> result(time)
+ * \brief opY(big integer) + opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addBigIAngl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertBigIntegerRegisterToAngleRegister(opY, opY);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(big integer) + opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigITime(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigITime");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigITime");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(date) ==> result(date)
+ * \brief opY(big integer) + opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigIDate(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigIDate");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigIDate");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(64bits integer) ==> result(big integer)
+ * \brief opY(big integer) + opX(64bits integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigISmaI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op2, op2);
+  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
   addBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigISmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(real34) ==> result(real34)
+ * \brief opY(big integer) + opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigIRe34");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op1, op1);
+  convertBigIntegerRegisterToReal34Register(opY, opY);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) + op2(complex34) ==> result(complex34)
+ * \brief opY(big integer) + opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addBigICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addBigICo34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal34Register(op1, op1);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal34Register(opY, opY);
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addBigICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(big integer) ==> result(real16)
+ * \brief opY(real16) + opX(big integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op2, op2);
+  convertBigIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(real16) ==> result(real16)
+ * \brief opY(real16) + opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16Re16");
-  #endif
-
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(complex16) ==> result(complex16)
+ * \brief opY(real16) + opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16Co16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
+  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(time) ==> result(time)
+ * \brief opY(real16) + opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addRe16Angl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE34 == 1)
+    convertRegister16To34(opY)
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(real16) + opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16Time(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16Time");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16Time");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(date) ==> result(date)
+ * \brief opY(real16) + opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16Date(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16Date");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16Date");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(64bits integer) ==> result(real16)
+ * \brief opY(real16) + opX(64bits integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   addRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(real34) ==> result(real34)
+ * \brief opY(real16) + opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   addRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) + op2(complex34) ==> result(complex34)
+ * \brief opY(real16) + opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   addRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) + op2(big integer) ==> result(complex16)
+ * \brief opY(complex16) + opX(big integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo16BigI");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result)); // result = op2
-  convertBigIntegerRegisterToReal16Register(op2, op2);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex16Copy(REGISTER_COMPLEX16_DATA(opY), REGISTER_COMPLEX16_DATA(result)); // result = opX
+  convertBigIntegerRegisterToReal16Register(opX, opX);
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) + op2(real16) ==> result(complex16)
+ * \brief opY(complex16) + opX(real16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo16Re16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real16Copy(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // imaginary part
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) + op2(complex16) ==> result(complex16)
+ * \brief opY(complex16) + opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo16Co16");
-  #endif
-
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Add(POINTER_TO_REGISTER_DATA(op1)               , POINTER_TO_REGISTER_DATA(op2),                POINTER_TO_REGISTER_DATA(result)); // real part
-  real16Add(POINTER_TO_REGISTER_DATA(op1) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL16_SIZE); // imaginary part
+  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Add(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) + op2(64bits integer) ==> result(complex16)
+ * \brief opY(complex16) + opX(64bits integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   addCo16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) + op2(real34) ==> result(complex34)
+ * \brief opY(complex16) + opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   addCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) + op2(complex34) ==> result(complex34)
+ * \brief opY(complex16) + opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo16Co34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   addCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) + op2(big integer) ==> result(time)
+ * \brief opY(angle) + opX(big integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addAnglBigI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertBigIntegerRegisterToAngleRegister(opX, opX);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) + opX(real16) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addAnglRe16(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE34 == 1)
+    convertRegister16To34(opX)
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) + opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addAnglAngl(void) {
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) + opX(small integer) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addAnglSmaI(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertSmallIntegerRegisterToAngleRegister(opX, opX);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle) + opX(real34) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addAnglRe34(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(opX);
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(time) + opX(big integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void addTimeBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addTimeBigI");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addTimeBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) + op2(real16) ==> result(time)
+ * \brief opY(time) + opX(real16) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void addTimeRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addTimeRe16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addTimeRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) + op2(time) ==> result(time)
+ * \brief opY(time) + opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void addTimeTime(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addTimeTime");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addTimeTime");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(time) + op2(real34) ==> result(time)
+ * \brief opY(time) + opX(real34) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void addTimeRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addTimeRe34");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addTimeRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(date) + op2(big integer) ==> result(date)
+ * \brief opY(date) + opX(big integer) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void addDateBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addDateBigI");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addDateBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(date) + op2(real16) ==> result(date)
+ * \brief opY(date) + opX(real16) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void addDateRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addDateRe16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addDateRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(date) + op2(real34) ==> result(date)
+ * \brief opY(date) + opX(real34) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void addDateRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addDateRe34");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addDateRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(big integer) ==> result(string)
+ * \brief opY(string) + opX(big integer) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriBigI");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  bigIntegerToDisplayString(op2, tmpStr3000);
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  bigIntegerToDisplayString(opX, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, tmpStr3000,                      len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriBigI");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result),        REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(real16) ==> result(string)
+ * \brief opY(string) + opX(real16) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriRe16");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  real16ToDisplayString(REAL16_POINTER(POINTER_TO_REGISTER_DATA(op2)), false, tmpStr3000);
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  real16ToDisplayString(REGISTER_REAL16_DATA(opX), false, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, tmpStr3000,                      len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriRe16");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result),        REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(complex16) ==> result(string)
+ * \brief opY(string) + opX(complex16) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriCo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriCo16");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  complex16ToDisplayString(COMPLEX16_POINTER(POINTER_TO_REGISTER_DATA(op2)), tmpStr3000);
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  complex16ToDisplayString(REGISTER_COMPLEX16_DATA(opX), tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, tmpStr3000,                      len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriCo16");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(time) ==> result(string)
+ * \brief opY(string) + opX(angle) ==> result(string)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addStriAngl(void) {
+  int16_t len1, len2;
+
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  registerAngleToDisplayString(opX, tmpStr3000);
+  len2 = stringByteLength(tmpStr3000);
+
+  reallocateRegister(result, dtString, len1 + len2, 0);
+
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
+}
+
+
+
+/********************************************//**
+ * \brief opY(string) + opX(time) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriTime(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriTime");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  timeToDisplayString(op2, tmpStr3000);
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  timeToDisplayString(opX, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2 , 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, tmpStr3000,                      len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriTime");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(date) ==> result(string)
+ * \brief opY(string) + opX(date) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriDate(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriDate");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  dateToDisplayString(op2, tmpStr3000);
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  dateToDisplayString(opX, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1   );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, tmpStr3000,                      len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriDate");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1   );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(string) ==> result(string)
+ * \brief opY(string) + opX(string) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriStri(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriStri");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  len2 = stringByteLength(POINTER_TO_REGISTER_STRING(op2));
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  len2 = stringByteLength(REGISTER_STRING_DATA(opX));
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, POINTER_TO_REGISTER_STRING(op2), len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriStri");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, REGISTER_STRING_DATA(opX), len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(real16 matrix) ==> result(string)
+ * \brief opY(string) + opX(real16 matrix) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriRm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriRm16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriRm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(complex16 matrix) ==> result(string)
+ * \brief opY(string) + opX(complex16 matrix) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriCm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriCm16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriCm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(64bits integer) ==> result(string)
+ * \brief opY(string) + opX(64bits integer) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriSmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriSmaI");
-  #endif
-
   int16_t len1, len2;
   const font_t *font;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
   font = &standardFont;
-  smallIntegerToDisplayString(op2, errorMessage, &font); // We use errorMeaage here because this string can become very long
+  smallIntegerToDisplayString(opX, errorMessage, &font); // We use errorMeaage here because this string can become very long
   len2 = stringByteLength(errorMessage) + 1; // +1 for the trailing 0
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, errorMessage,                    len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriSmaI");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, errorMessage,                    len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(real34) ==> result(string)
+ * \brief opY(string) + opX(real34) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriRe34");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  real34ToDisplayString(REAL34_POINTER(POINTER_TO_REGISTER_DATA(op2)), tmpStr3000);
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  real34ToDisplayString(REGISTER_REAL34_DATA(opX), tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, tmpStr3000,                      len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriRe34");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(string) + op2(complex34) ==> result(string)
+ * \brief opY(string) + opX(complex34) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
 void addStriCo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addStriCo34");
-  #endif
-
   int16_t len1, len2;
 
-  len1 = stringByteLength(POINTER_TO_REGISTER_STRING(op1));
-  complex34ToDisplayString(COMPLEX34_POINTER(POINTER_TO_REGISTER_DATA(op2)), tmpStr3000);
+  len1 = stringByteLength(REGISTER_STRING_DATA(opY));
+  complex34ToDisplayString(REGISTER_COMPLEX34_DATA(opX), tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(POINTER_TO_REGISTER_STRING(result)       , POINTER_TO_REGISTER_STRING(op1), len1    );
-  memcpy(POINTER_TO_REGISTER_STRING(result) + len1, tmpStr3000,                      len2 + 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addStriCo34");
-  #endif
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) + op2(real16 matrix) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) + opX(real16 matrix) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRm16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRm16Rm16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRm16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) + op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) + opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRm16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRm16Cm16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRm16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) + op2(real16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) + opX(real16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCm16Rm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCm16Rm16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCm16Rm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) + op2(complex16 matrix) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) + opX(complex16 matrix) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCm16Cm16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCm16Cm16");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCm16Cm16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) + op2(big integer) ==> result(big integer)
+ * \brief opY(64bits integer) + opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void addSmaIBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addSmaIBigI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op1, op1);
+  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
   addBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addSmaIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) + op2(real16) ==> result(real16)
+ * \brief opY(64bits integer) + opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addSmaIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addSmaIRe16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   addRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addSmaIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) + op2(complex16) ==> result(complex16)
+ * \brief opY(64bits integer) + opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void addSmaICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addSmaICo16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   addRe16Co16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addSmaICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) + op2(64bits integer) ==> result(64bits integer)
+ * \brief opY(small integer) + opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addSmaIAngl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  convertSmallIntegerRegisterToAngleRegister(opY, opY);
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(64bits integer) + opX(64bits integer) ==> result(64bits integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void addSmaISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addSmaISmaI");
-  #endif
-
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(op1));
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(result)) = WP34S_intAdd(*(uint64_t *)(POINTER_TO_REGISTER_DATA(op1)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(op2)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addSmaISmaI");
-  #endif
+  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intAdd(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) + op2(real34) ==> result(real34)
+ * \brief opY(64bits integer) + opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addSmaIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addSmaIRe34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   addRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addSmaIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) + op2(complex34) ==> result(complex34)
+ * \brief opY(64bits integer) + opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addSmaICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addSmaICo34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   addRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addSmaICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(big integer) ==> result(real34)
+ * \brief opY(real34) + opX(big integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op2, op2);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(real16) ==> result(real34)
+ * \brief opY(real34) + opX(real16) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   addRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(complex16) ==> result(complex34)
+ * \brief opY(real34) + opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   addRe34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(time) ==> result(time)
+ * \brief opY(real34) + opX(angle) ==> result(angle)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void addRe34Angl(void) {
+  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(opY);
+  #endif
+  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
+  angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
+  setRegisterAngularMode(result, angularMode);
+
+  roundRegister(result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(real34) + opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34Time(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34Time");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34Time");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(date) ==> result(date)
+ * \brief opY(real34) + opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34Date(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34Date");
-  #endif
-
   addToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34Date");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(64bits integer) ==> result(real34)
+ * \brief opY(real34) + opX(64bits integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   addRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(real34) ==> result(real34)
+ * \brief opY(real34) + opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34Re34");
-  #endif
-
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) + op2(complex34) ==> result(complex34)
+ * \brief opY(real34) + opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addRe34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addRe34Co34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Copy(POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addRe34Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) + op2(big integer) ==> result(complex34)
+ * \brief opY(complex34) + opX(big integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo34BigI");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(result)); // result = op1
-  convertBigIntegerRegisterToReal34Register(op2, op2);
-  real16Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  complex34Copy(REGISTER_COMPLEX34_DATA(opY), REGISTER_COMPLEX34_DATA(result)); // result = opY
+  convertBigIntegerRegisterToReal34Register(opX, opX);
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) + op2(real16) ==> result(complex34)
+ * \brief opY(complex34) + opX(real16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   addCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) + op2(complex16) ==> result(complex34)
+ * \brief opY(complex34) + opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo34Co16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   addCo34Co34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) + op2(64bits integer) ==> result(complex34)
+ * \brief opY(complex34) + opX(64bits integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   addCo34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) + op2(real34) ==> result(complex34)
+ * \brief opY(complex34) + opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo34Re34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Add(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result)); // real part
-  real34Copy(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) + op2(complex34) ==> result(complex34)
+ * \brief opY(complex34) + opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void addCo34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addCo34Co34");
-  #endif
-
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34Add(POINTER_TO_REGISTER_DATA(op1)               , POINTER_TO_REGISTER_DATA(op2)               , POINTER_TO_REGISTER_DATA(result)               ); // real part
-  real34Add(POINTER_TO_REGISTER_DATA(op1) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(op2) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(result) + REAL34_SIZE); // imaginary part
+  real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)               ); // real part
+  real34Add(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addCo34Co34");
-  #endif
 }

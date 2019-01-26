@@ -114,17 +114,9 @@ const constant_t physicalAndMathConstants[] = {
  * \return void
  ***********************************************/
 void fnConstant(const uint16_t cst) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConstant");
-  #endif
   liftStack(dtReal16, REAL16_SIZE);
-
-  real16Copy(constants + physicalAndMathConstants[cst].value, POINTER_TO_REGISTER_DATA(REGISTER_X));
-
+  real16Copy(constants + physicalAndMathConstants[cst].value, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConstant");
-  #endif
 }
 
 
@@ -138,15 +130,7 @@ void fnConstant(const uint16_t cst) {
  * \return void
  ***********************************************/
 void fnPi(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnPi");
-  #endif
   liftStack(dtReal16, REAL16_SIZE);
-
-  real16Copy(const16_pi, POINTER_TO_REGISTER_DATA(REGISTER_X));
-
+  real16Copy(const16_pi, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnPi");
-  #endif
 }

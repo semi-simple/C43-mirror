@@ -22,13 +22,13 @@
 
 
 
-void (*power[12][12])(void) = {
+void (* const power[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4         5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16              Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
+//      V                Big integer  real16       complex16    angle34   Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
 /*  1 Big integer    */ {powBigIBigI, powRe16BigI, powCo16BigI, errorPow, errorPow,    errorPow,    errorPow,    powRm16BigI, powCm16BigI, powSmaIBigI,  powRe34BigI, powCo34BigI},
 /*  2 real16         */ {powBigIRe16, powRe16Re16, powCo16Re16, errorPow, errorPow,    errorPow,    errorPow,    powRm16Re16, powCm16Re16, powSmaIRe16,  powRe34Re16, powCo34Re16},
 /*  3 complex16      */ {powBigICo16, powRe16Co16, powCo16Co16, errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    powSmaICo16,  powRe34Co16, powCo34Co16},
-/*  4                */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
+/*  4 angle34        */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
 /*  5 Time           */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
 /*  6 Date           */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
 /*  7 String         */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
@@ -48,19 +48,11 @@ void (*power[12][12])(void) = {
  * \return void
  ***********************************************/
 void errorPow(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorPow");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(op2, true, false));
+    sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnPower:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorPow");
   #endif
 }
 
@@ -73,18 +65,10 @@ void errorPow(void) {
  * \return void
  ***********************************************/
 void powToBeCoded(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powToBeCoded");
-  #endif
-
   #ifdef PC_BUILD
-    sprintf(errorMessage, "%s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "raised to %s", getRegisterDataTypeName(op2, true, false));
+    sprintf(errorMessage, "%s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "raised to %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powToBeCoded");
   #endif
 }
 
@@ -98,22 +82,18 @@ void powToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnPower(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnPower");
-  #endif
-
   if(power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorPow) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    op2    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, op1);
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opY    = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_Y, opY);
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(op1);
-    freeTemporaryRegister(op2);
+    freeTemporaryRegister(opY);
+    freeTemporaryRegister(opX);
 
     fnDropY(NOPARAM);
     refreshStack();
@@ -121,16 +101,12 @@ void fnPower(uint16_t unusedParamButMandatory) {
   else {
     errorPow();
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnPower");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ^ op2(big integer) ==> result(big integer)
+ * \brief opY(big integer) ^ opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
@@ -140,12 +116,8 @@ void powBigIBigI(void) {
   bigInteger_t base;
   bigInteger_t exponent;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powBigIBigI");
-  #endif
-
-  convertBigIntegerRegisterToBigInteger(op1, &base);
-  convertBigIntegerRegisterToBigInteger(op2, &exponent);
+  convertBigIntegerRegisterToBigInteger(opY, &base);
+  convertBigIntegerRegisterToBigInteger(opX, &exponent);
 
   baseSign = base.sign;
   bigIntegerSetPositiveSign(&base);
@@ -161,32 +133,17 @@ void powBigIBigI(void) {
 
 	  	bigIntegerSetZero(&base);
 	  	convertBigIntegerToBigIntegerRegister(&base, result);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("powBigIBigI");
-    #endif
-
 	  	return;
   }
 
  	if(bigIntegerIsZero(&exponent)) {
 	  	uIntToBigInteger(1, &base);
 	  	convertBigIntegerToBigIntegerRegister(&base, result);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("powBigIBigI");
-    #endif
-
 	  	return;
   }
 	 else if(bigIntegerIsZero(&base) || exponentSign) {
 	  	bigIntegerSetZero(&base);
 	  	convertBigIntegerToBigIntegerRegister(&base, result);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("powBigIBigI");
-    #endif
-
 	  	return;
 	 }
 
@@ -213,967 +170,587 @@ void powBigIBigI(void) {
   }
 
   convertBigIntegerToBigIntegerRegister(&power, result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powBigIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ^ op2(real16) ==> result(real16)
+ * \brief opY(big integer) ^ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powBigIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powBigIRe16");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op1, op1);
+  convertBigIntegerRegisterToReal16Register(opY, opY);
   powRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powBigIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ^ op2(complex16) ==> result(complex16)
+ * \brief opY(big integer) ^ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powBigICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powBigICo16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powBigICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ^ op2(64bits integer) ==> result(big integer)
+ * \brief opY(big integer) ^ opX(64bits integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void powBigISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powBigISmaI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op2, op2);
+  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
   powBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powBigISmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ^ op2(real34) ==> result(real34)
+ * \brief opY(big integer) ^ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powBigIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powBigIRe34");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op1, op1);
+  convertBigIntegerRegisterToReal34Register(opY, opY);
   powRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powBigIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(big integer) ^ op2(complex34) ==> result(complex34)
+ * \brief opY(big integer) ^ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powBigICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powBigICo34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powBigICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ^ op2(big integer) ==> result(real16)
+ * \brief opY(real16) ^ opX(big integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe16BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal16Register(op2, op2);
+  convertBigIntegerRegisterToReal16Register(opX, opX);
   powRe16Re16();
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ^ op2(real16) ==> result(real16)
+ * \brief opY(real16) ^ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe16Re16");
-  #endif
-
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Power(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe16Re16");
-  #endif
+  real16Power(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ^ op2(complex16) ==> result(complex16)
+ * \brief opY(real16) ^ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe16Co16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ^ op2(64bits integer) ==> result(real16)
+ * \brief opY(real16) ^ opX(64bits integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe16SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op2, op2);
+  convertSmallIntegerRegisterToReal16Register(opX, opX);
   powRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ^ op2(real34) ==> result(real34)
+ * \brief opY(real16) ^ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe16Re34");
-  #endif
-
-  convertRegister16To34(op1);
+  convertRegister16To34(opY);
   powRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16) ^ op2(complex34) ==> result(complex34)
+ * \brief opY(real16) ^ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe16Co34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ^ op2(big integer) ==> result(complex16)
+ * \brief opY(complex16) ^ opX(big integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo16BigI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ^ op2(real16) ==> result(complex16)
+ * \brief opY(complex16) ^ opX(real16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo16Re16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ^ op2(complex16) ==> result(complex16)
+ * \brief opY(complex16) ^ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo16Co16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ^ op2(64bits integer) ==> result(complex16)
+ * \brief opY(complex16) ^ opX(64bits integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo16SmaI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ^ op2(real34) ==> result(complex34)
+ * \brief opY(complex16) ^ opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo16Re34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16) ^ op2(complex34) ==> result(complex34)
+ * \brief opY(complex16) ^ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo16Co34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ^ op2(big integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ^ opX(big integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRm16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRm16BigI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRm16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ^ op2(real16) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ^ opX(real16) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRm16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRm16Re16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRm16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ^ op2(complex16) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) ^ opX(complex16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRm16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRm16Co16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRm16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ^ op2(64bits integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ^ opX(64bits integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRm16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRm16SmaI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRm16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ^ op2(real34) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ^ opX(real34) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRm16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRm16Re34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRm16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real16 matrix) ^ op2(complex34) ==> result(complex16 matrix)
+ * \brief opY(real16 matrix) ^ opX(complex34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRm16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRm16Co34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRm16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ^ op2(big integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ^ opX(big integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCm16BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCm16BigI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCm16BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ^ op2(real16) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ^ opX(real16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCm16Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCm16Re16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCm16Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ^ op2(complex16) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ^ opX(complex16) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCm16Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCm16Co16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCm16Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ^ op2(64bits integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ^ opX(64bits integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCm16SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCm16SmaI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCm16SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ^ op2(real34) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ^ opX(real34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCm16Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCm16Re34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCm16Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex16 matrix) ^ op2(complex34) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ^ opX(complex34) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCm16Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCm16Co34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCm16Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ^ op2(big integer) ==> result(big integer)
+ * \brief opY(64bits integer) ^ opX(big integer) ==> result(big integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void powSmaIBigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powSmaIBigI");
-  #endif
-
-  convertSmallIntegerRegisterBigIntegerRegister(op1, op1);
+  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
   powBigIBigI();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powSmaIBigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ^ op2(real16) ==> result(real16)
+ * \brief opY(64bits integer) ^ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powSmaIRe16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powSmaIRe16");
-  #endif
-
-  convertSmallIntegerRegisterToReal16Register(op1, op1);
+  convertSmallIntegerRegisterToReal16Register(opY, opY);
   powRe16Re16();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powSmaIRe16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ^ op2(complex16) ==> result(complex16)
+ * \brief opY(64bits integer) ^ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
 void powSmaICo16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powSmaICo16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powSmaICo16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ^ op2(64bits integer) ==> result(64bits integer)
+ * \brief opY(64bits integer) ^ opX(64bits integer) ==> result(64bits integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void powSmaISmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powSmaISmaI");
-  #endif
-
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(op1));
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(result)) = WP34S_intPower(*(uint64_t *)(POINTER_TO_REGISTER_DATA(op1)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(op2)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powSmaISmaI");
-  #endif
+  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intPower(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ^ op2(real34) ==> result(real34)
+ * \brief opY(64bits integer) ^ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powSmaIRe34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powSmaIRe34");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op1, op1);
+  convertSmallIntegerRegisterToReal34Register(opY, opY);
   powRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powSmaIRe34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(64bits integer) ^ op2(complex34) ==> result(complex34)
+ * \brief opY(64bits integer) ^ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powSmaICo34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powSmaICo34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powSmaICo34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ^ op2(big integer) ==> result(real34)
+ * \brief opY(real34) ^ opX(big integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe34BigI");
-  #endif
-
-  convertBigIntegerRegisterToReal34Register(op2, op2);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
   powRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ^ op2(real16) ==> result(real34)
+ * \brief opY(real34) ^ opX(real16) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe34Re16");
-  #endif
-
-  convertRegister16To34(op2);
+  convertRegister16To34(opX);
   powRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ^ op2(complex16) ==> result(complex34)
+ * \brief opY(real34) ^ opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe34Co16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ^ op2(64bits integer) ==> result(real34)
+ * \brief opY(real34) ^ opX(64bits integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe34SmaI");
-  #endif
-
-  convertSmallIntegerRegisterToReal34Register(op2, op2);
+  convertSmallIntegerRegisterToReal34Register(opX, opX);
   powRe34Re34();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ^ op2(real34) ==> result(real34)
+ * \brief opY(real34) ^ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe34Re34");
-  #endif
-
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  real34Power(POINTER_TO_REGISTER_DATA(op1), POINTER_TO_REGISTER_DATA(op2), POINTER_TO_REGISTER_DATA(result));
+  real34Power(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(real34) ^ op2(complex34) ==> result(complex34)
+ * \brief opY(real34) ^ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powRe34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powRe34Co34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powRe34Co34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ^ op2(big integer) ==> result(complex34)
+ * \brief opY(complex34) ^ opX(big integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo34BigI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo34BigI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo34BigI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ^ op2(real16) ==> result(complex34)
+ * \brief opY(complex34) ^ opX(real16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo34Re16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo34Re16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo34Re16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ^ op2(complex16) ==> result(complex34)
+ * \brief opY(complex34) ^ opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo34Co16(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo34Co16");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo34Co16");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ^ op2(64bits integer) ==> result(complex34)
+ * \brief opY(complex34) ^ opX(64bits integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo34SmaI(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo34SmaI");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo34SmaI");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ^ op2(real34) ==> result(complex34)
+ * \brief opY(complex34) ^ opX(real34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo34Re34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo34Re34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo34Re34");
-  #endif
 }
 
 
 
 /********************************************//**
- * \brief op1(complex34) ^ op2(complex34) ==> result(complex34)
+ * \brief opY(complex34) ^ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
 void powCo34Co34(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("powCo34Co34");
-  #endif
-
   powToBeCoded();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("powCo34Co34");
-  #endif
 }

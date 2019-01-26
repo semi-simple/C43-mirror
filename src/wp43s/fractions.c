@@ -29,26 +29,14 @@
  * \return void
  ***********************************************/
 void fnDenMode(uint16_t denMode) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDenMode");
-  #endif
-
   denominatorMode = denMode;
   showFracMode();
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDenMode");
-  #endif
 }
 
 
 
 void fnDenMax(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDenMax");
-  #endif
-
   calcRegister_t tmp = allocateTemporaryRegister();
 
   copySourceRegisterToDestRegister(REGISTER_X, tmp);
@@ -72,19 +60,14 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
       sprintf(errorMessage, "cannot use %s to set or recall DENMAX!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnDenMax:", errorMessage, NULL, NULL);
     #endif
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fnDenMax");
-    #endif
-
     return;
   }
 
-  if(real16IsSpecial(POINTER_TO_REGISTER_DATA(tmp)) || real16CompareLessThan(REAL16_POINTER(POINTER_TO_REGISTER_DATA(tmp)), const16_1) || real16CompareGreaterEqual(REAL16_POINTER(POINTER_TO_REGISTER_DATA(tmp)), const16_9999)) {
+  if(real16IsSpecial(REGISTER_REAL16_DATA(tmp)) || real16CompareLessThan(REGISTER_REAL16_DATA(tmp), const16_1) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(tmp), const16_9999)) {
     denMax = DM_DENMAX;
   }
   else {
-    int32_t den = real16ToInt32(POINTER_TO_REGISTER_DATA(tmp));
+    int32_t den = real16ToInt32(REGISTER_REAL16_DATA(tmp));
 
     if(den == 1) {
       bigInteger_t bigInteger;
@@ -102,10 +85,6 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
   freeTemporaryRegister(tmp);
   showFracMode();
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDenMax");
-  #endif
 }
 
 
@@ -117,24 +96,12 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnFractionType(uint16_t ft) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnFractionType");
-  #endif
-
   fractionType = ft;
   displayRealAsFraction = true;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnFractionType");
-  #endif
 }
 
 void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t *numer, uint64_t *denom, int16_t *lessEqualGreater) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fraction");
-  #endif
-
   // temp0 = fractional_part(absolute_value(real number))
   // temp1 = continued fraction calculation --> factional_part(1 / temp1)  initialized with temp0
   // delta = difference between the best faction and the real number
@@ -143,10 +110,10 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   real34_t temp0;
 
   if(getRegisterDataType(regist) == dtReal16) {
-    real16ToReal34(POINTER_TO_REGISTER_DATA(regist), &temp0);
+    real16ToReal34(REGISTER_REAL16_DATA(regist), &temp0);
   }
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34Copy(POINTER_TO_REGISTER_DATA(regist), &temp0);
+    real34Copy(REGISTER_REAL34_DATA(regist), &temp0);
   }
   else {
     #ifdef PC_BUILD
@@ -159,10 +126,6 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     *denom            = 0;
     *lessEqualGreater = 0;
 
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fraction");
-    #endif
-
     return;
   }
 
@@ -172,10 +135,6 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     *numer            = 0;
     *denom            = 1;
     *lessEqualGreater = 0;
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fraction");
-    #endif
 
     return;
   }
@@ -351,20 +310,16 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     *denom            = 0;
     *lessEqualGreater = 0;
 
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fraction");
-    #endif
-
     return;
   }
 
   // The register value
   real51_t r;
   if(getRegisterDataType(regist) == dtReal16) {
-    real16ToReal51(POINTER_TO_REGISTER_DATA(regist), &r);
+    real16ToReal51(REGISTER_REAL16_DATA(regist), &r);
   }
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34ToReal51(POINTER_TO_REGISTER_DATA(regist), &r);
+    real34ToReal51(REGISTER_REAL34_DATA(regist), &r);
   }
 
   // The fraction value
@@ -396,8 +351,4 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     *numer += *denom * *intPart;
     *intPart = 0;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fraction");
-  #endif
 }

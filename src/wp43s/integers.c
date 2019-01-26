@@ -27,17 +27,9 @@
  * \return void
  ***********************************************/
 void fnIntegerMode(uint16_t mode) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnIntegerMode");
-  #endif
-
   smallIntegerMode = mode;
   showIntegerMode();
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnIntegerMode");
-  #endif
 }
 
 /********************************************//**
@@ -47,25 +39,13 @@ void fnIntegerMode(uint16_t mode) {
  * \return void
  ***********************************************/
 void fnLeadingZeros(uint16_t dlz) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnLeadingZeros");
-  #endif
-
   displayLeadingZeros = dlz;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnLeadingZeros");
-  #endif
 }
 
 
 
 void fnChangeBase(uint16_t base) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnChangeBase");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     if(2 <= base && base <= 16) {
       setRegisterBase(REGISTER_X, base);
@@ -100,7 +80,7 @@ void fnChangeBase(uint16_t base) {
       bigInteger_t tmp;
 
       fnIp(NOPARAM);
-      real16ToString(POINTER_TO_REGISTER_DATA(REGISTER_X), tmpStr3000);
+      real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
       stringToBigInteger(tmpStr3000, 10, &tmp);
       convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
       fnChangeBase(base);
@@ -119,7 +99,7 @@ void fnChangeBase(uint16_t base) {
       bigInteger_t tmp;
 
       fnIp(NOPARAM);
-      real34ToString(POINTER_TO_REGISTER_DATA(REGISTER_X), tmpStr3000);
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
       stringToBigInteger(tmpStr3000, 10, &tmp);
       convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
       fnChangeBase(base);
@@ -140,21 +120,13 @@ void fnChangeBase(uint16_t base) {
       showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnChangeBase");
-  #endif
 }
 
 
 
 void fnLogicalNot(uint16_t unusedButMandatoryParameter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnLogicalNot");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = ~(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X))) & smallIntegerMask;
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = ~(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X))) & smallIntegerMask;
   }
 
   else {
@@ -164,22 +136,14 @@ void fnLogicalNot(uint16_t unusedButMandatoryParameter) {
       showInfoDialog("In function fnLogicalNot:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnLogicalNot");
-  #endif
 }
 
 
 
 void fnFp(uint16_t unusedButMandatoryParameter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnFp");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = 0;
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = 0;
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -187,8 +151,8 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
     real16_t integerPart;
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart);
-    real16Subtract(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart ,POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real16ToIntegral(REGISTER_REAL16_DATA(REGISTER_X), &integerPart);
+    real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &integerPart ,REGISTER_REAL16_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -196,8 +160,8 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
     real34_t integerPart;
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart);
-    real34Subtract(POINTER_TO_REGISTER_DATA(REGISTER_X), &integerPart ,POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real34ToIntegral(REGISTER_REAL34_DATA(REGISTER_X), &integerPart);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &integerPart ,REGISTER_REAL34_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -216,19 +180,11 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
       showInfoDialog("In function fnFp:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnFp");
-  #endif
 }
 
 
 
 void fnIp(uint16_t unusedButMandatoryParameter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnIp");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger || getRegisterDataType(REGISTER_X) == dtBigInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     refreshRegisterLine(REGISTER_X);
@@ -236,13 +192,13 @@ void fnIp(uint16_t unusedButMandatoryParameter) {
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real16ToIntegral(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34ToIntegral(POINTER_TO_REGISTER_DATA(REGISTER_X), POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real34ToIntegral(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -253,22 +209,14 @@ void fnIp(uint16_t unusedButMandatoryParameter) {
       showInfoDialog("In function fnIp:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnIp");
-  #endif
 }
 
 
 
 void fnSign(uint16_t unusedButMandatoryParameter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnSign");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intSign(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intSign(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
@@ -293,27 +241,27 @@ void fnSign(uint16_t unusedButMandatoryParameter) {
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    if(real16IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      real16Zero(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
     }
-    else if(real16IsPositive(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      int32ToReal16(1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    else if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
+      int32ToReal16(1, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      int32ToReal16(-1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+      int32ToReal16(-1, REGISTER_REAL16_DATA(REGISTER_X));
     }
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    if(real34IsZero(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      real34Zero(POINTER_TO_REGISTER_DATA(REGISTER_X));
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
     }
-    else if(real34IsPositive(POINTER_TO_REGISTER_DATA(REGISTER_X))) {
-      int32ToReal34(1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    else if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+      int32ToReal34(1, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      int32ToReal34(-1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+      int32ToReal34(-1, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 
@@ -326,25 +274,17 @@ void fnSign(uint16_t unusedButMandatoryParameter) {
   }
 
   refreshRegisterLine(NIM_REGISTER_LINE);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnSign");
-  #endif
 }
 
 
 
 void fnM1Pow(uint16_t unusedButMandatoryParameter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnM1Pow");
-  #endif
-
   saveStack();
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_int_1pow(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int_1pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
@@ -352,7 +292,7 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
 
     uIntToBigInteger(1, &tmp);
 
-    if(bigIntegerIsOdd(BIG_INTEGER_POINTER(POINTER_TO_REGISTER_BIG_INTEGER(REGISTER_X)))) {
+    if(bigIntegerIsOdd(BIG_INTEGER_POINTER(REGISTER_BIG_INTEGER_DATA(REGISTER_X)))) {
       bigIntegerChangeSign(&tmp);
     }
 
@@ -361,56 +301,14 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     convertRegister16To34(REGISTER_X);
-    real34Remainder(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_2, POINTER_TO_REGISTER_DATA(REGISTER_X));
-
-    if(angularMode == AM_DEGREE) {
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    }
-    else if(angularMode == AM_DMS) {
-      convertRegisterFromDms(REGISTER_X);
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
-      convertRegisterToDms(REGISTER_X);
-    }
-    else if(angularMode == AM_GRAD) {
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_200, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    }
-    else if(angularMode == AM_RADIAN) {
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_pi, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    }
-    else if(angularMode != AM_MULTPI) {
-      sprintf(errorMessage, "In function fnM1Pow: %" FMT8U " is an unexpected value for angularMode!", angularMode);
-      displayBugScreen(errorMessage);
-    }
-
-    fnCos(NOPARAM);
-    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_L);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_648, REGISTER_REAL34_DATA(REGISTER_X));
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // X in internal units
     convertRegister34To16(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    real34Remainder(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_2, POINTER_TO_REGISTER_DATA(REGISTER_X));
-
-    if(angularMode == AM_DEGREE) {
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    }
-    else if(angularMode == AM_DMS) {
-      convertRegisterFromDms(REGISTER_X);
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_180, POINTER_TO_REGISTER_DATA(REGISTER_X));
-      convertRegisterToDms(REGISTER_X);
-    }
-    else if(angularMode == AM_GRAD) {
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_200, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    }
-    else if(angularMode == AM_RADIAN) {
-      real34Multiply(POINTER_TO_REGISTER_DATA(REGISTER_X), const34_pi, POINTER_TO_REGISTER_DATA(REGISTER_X));
-    }
-    else if(angularMode != AM_MULTPI) {
-      sprintf(errorMessage, "In function fnM1Pow: %" FMT8U " is an unexpected value for angularMode!", angularMode);
-      displayBugScreen(errorMessage);
-    }
-
-    fnCos(NOPARAM);
-    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_L);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_648, REGISTER_REAL34_DATA(REGISTER_X));
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // X in internal units
   }
 
   else {
@@ -423,21 +321,13 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
   }
 
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnM1Pow");
-  #endif
 }
 
 
 
 void fnMirror(uint16_t unusedButMandatoryParameter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnMirror");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intMirror(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intMirror(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else {
@@ -449,21 +339,13 @@ void fnMirror(uint16_t unusedButMandatoryParameter) {
   }
 
   refreshRegisterLine(NIM_REGISTER_LINE);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnMirror");
-  #endif
 }
 
 
 
 void fnIsPrime(uint16_t unusedButMandatoryParameter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnIsPrime");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_isPrime(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_isPrime(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else {
@@ -475,20 +357,12 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   }
 
   refreshRegisterLine(NIM_REGISTER_LINE);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnIsPrime");
-  #endif
 }
 
 
 
 #if (TOMS_FAST_MATH == 1)
 uint32_t countBitsBigInteger(bigInteger_t *value) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("countBitsBigInteger");
-  #endif
-
   uint32_t bits;
   uint64_t mostSignificantDigit, mask;
 
@@ -506,20 +380,12 @@ uint32_t countBitsBigInteger(bigInteger_t *value) {
     }
   }
 
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("countBitsBigInteger");
-  #endif
-
   return bits;
 }
 
 
 
 uint32_t countBitsBigIntegerRegister(calcRegister_t regist) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("countBitsBigIntegerRegister");
-  #endif
-
   uint16_t *addr = (uint16_t *)(POINTER_TO_REGISTER_DATA(regist));
   uint32_t bits;
   uint64_t mostSignificantDigit, mask;
@@ -538,45 +404,29 @@ uint32_t countBitsBigIntegerRegister(calcRegister_t regist) {
     }
   }
 
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("countBitsBigIntegerRegister");
-  #endif
-
   return bits;
 }
 
 
 
-void bigIntegerMultiply(bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("bigIntegerMultiply");
-  #endif
-
-  if(countBitsBigInteger(op1) + countBitsBigInteger(op2) <= MAX_BIG_INTEGER_SIZE_IN_BITS) {
-    fp_mul(op1, op2, result);
+void bigIntegerMultiply(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result) {
+  if(countBitsBigInteger(opY) + countBitsBigInteger(opX) <= MAX_BIG_INTEGER_SIZE_IN_BITS) {
+    fp_mul(opY, opX, result);
   }
   else {
-    displayCalcErrorMessage(op1->sign == op2->sign ? 4 : 5, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(opY->sign == opX->sign ? 4 : 5, REGISTER_T, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Multiplying this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(op1), countBitsBigInteger(op2), MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(op1, tmpStr3000, 10);
-      bigIntegerToString(op2, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      sprintf(errorMessage, "Multiplying this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
+      bigIntegerToString(opY, tmpStr3000, 10);
+      bigIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
       showInfoDialog("In function bigIntegerMultiply:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("bigIntegerMultiply");
-  #endif
 }
 
 
 
 void bigIntegerSquare(bigInteger_t *op, bigInteger_t *result) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("bigIntegerSquare");
-  #endif
-
   if(countBitsBigInteger(op) * 2 <= MAX_BIG_INTEGER_SIZE_IN_BITS) {
     fp_sqr(op, result);
   }
@@ -588,60 +438,40 @@ void bigIntegerSquare(bigInteger_t *op, bigInteger_t *result) {
       showInfoDialog("In function bigIntegerSquare:", errorMessage, tmpStr3000, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("bigIntegerSquare");
-  #endif
 }
 
 
 
-void bigIntegerAdd(bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("bigIntegerAdd");
-  #endif
-
-  if(op1->sign != op2->sign || max(countBitsBigInteger(op1), countBitsBigInteger(op2)) <= MAX_BIG_INTEGER_SIZE_IN_BITS - 1) {
-    fp_add(op1, op2, result);
+void bigIntegerAdd(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result) {
+  if(opY->sign != opX->sign || max(countBitsBigInteger(opY), countBitsBigInteger(opX)) <= MAX_BIG_INTEGER_SIZE_IN_BITS - 1) {
+    fp_add(opY, opX, result);
   }
   else {
-    displayCalcErrorMessage(op1->sign == 0 ? 4 : 5, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, REGISTER_T, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Adding this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(op1), countBitsBigInteger(op2), MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(op1, tmpStr3000, 10);
-      bigIntegerToString(op2, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      sprintf(errorMessage, "Adding this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
+      bigIntegerToString(opY, tmpStr3000, 10);
+      bigIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
       showInfoDialog("In function bigIntegerAdd:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("bigIntegerAdd");
-  #endif
 }
 
 
 
-void bigIntegerSubtract(bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("bigIntegerSubtract");
-  #endif
-
-  if(op1->sign == op2->sign || max(countBitsBigInteger(op1), countBitsBigInteger(op2)) <= MAX_BIG_INTEGER_SIZE_IN_BITS - 1) {
-    fp_sub(op1, op2, result);
+void bigIntegerSubtract(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result) {
+  if(opY->sign == opX->sign || max(countBitsBigInteger(opY), countBitsBigInteger(opX)) <= MAX_BIG_INTEGER_SIZE_IN_BITS - 1) {
+    fp_sub(opY, opX, result);
   }
   else {
-    displayCalcErrorMessage(op1->sign == 0 ? 4 : 5, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, REGISTER_T, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Subtracting this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(op1), countBitsBigInteger(op2), MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(op1, tmpStr3000, 10);
-      bigIntegerToString(op2, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      sprintf(errorMessage, "Subtracting this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
+      bigIntegerToString(opY, tmpStr3000, 10);
+      bigIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
       showInfoDialog("In function bigIntegerSubtract:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("bigIntegerSubtract");
-  #endif
 }
 #endif
 
@@ -657,37 +487,21 @@ void bigIntegerSubtract(bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *resu
  */
 
 static void WP34S_set_carry(int32_t carry) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_set_carry");
-  #endif
-
  	if(carry) {
 		  fnSetFlag(FLAG_CARRY);
   }
  	else {
 	 	 fnClearFlag(FLAG_CARRY);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_set_carry");
-  #endif
 }
 
 static void WP34S_set_overflow(int32_t overflow) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_set_overflow");
-  #endif
-
  	if(overflow) {
 		  fnSetFlag(FLAG_OVERFLOW);
   }
 	 else {
 		 fnClearFlag(FLAG_OVERFLOW);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_set_overflow");
-  #endif
 }
 
 /* Helper routine for addition and subtraction that detemines the proper
@@ -698,10 +512,6 @@ static void WP34S_set_overflow(int32_t overflow) {
  * to positive unsigned quantities nominally in two's complement.
  */
 static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_calc_overflow");
-  #endif
-
  	uint64_t u;
  	int32_t i;
 
@@ -714,21 +524,11 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
  	    if(i > 1) {
 			     break;
       }
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_calc_overflow");
-      #endif
-
 		    return 0;
 
 	   case SIM_2COMPL:
 	    	u = xv + yv;
 		    if(neg && u == smallIntegerSignBit) {
-
-        #if (LOG_FUNCTIONS == 1)
-          leavingFunction("WP34S_calc_overflow");
-        #endif
-
 			     return 0;
       }
 
@@ -739,11 +539,6 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
 		    if((xv == smallIntegerSignBit && yv !=0) || (yv == smallIntegerSignBit && xv != 0)) {
 			     break;
       }
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_calc_overflow");
-      #endif
-
 		    return 0;
 
    	case SIM_SIGNMT:
@@ -751,29 +546,15 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
 	    	if(smallIntegerSignBit & (xv + yv)) {
 			     break;
       }
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_calc_overflow");
-      #endif
-
 		    return 0;
 
     default:
       sprintf(errorMessage, "In function calc_overflow: %" FMT8U " is an unexpected value for smallIntegerMode!", smallIntegerMode);
       displayBugScreen(errorMessage);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_calc_overflow");
-      #endif
-
       return 0;
 	 }
 
  	WP34S_set_overflow(1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_calc_overflow");
-  #endif
 
  	return 1;
 }
@@ -783,19 +564,10 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
  * value components.  The sign returned is 1 for negative and 0 for positive.
  */
 static uint64_t WP34S_extract_value(const uint64_t val, int32_t *const sign) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_extract_value");
-  #endif
-
  	uint64_t value = val & smallIntegerMask;
 
  	if(smallIntegerMode == SIM_UNSIGN) {
 	  	*sign = 0;
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_extract_value");
-    #endif
-
 		  return value;
 	 }
 
@@ -815,10 +587,6 @@ static uint64_t WP34S_extract_value(const uint64_t val, int32_t *const sign) {
 	 	 *sign = 0;
   }
 
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_extract_value");
-  #endif
-
   return value & smallIntegerMask;
 }
 
@@ -826,53 +594,25 @@ static uint64_t WP34S_extract_value(const uint64_t val, int32_t *const sign) {
 /* Helper routine to construct a value from the magnitude and sign
  */
 static int64_t WP34S_build_value(const uint64_t x, const int32_t sign) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_build_value");
-  #endif
-
  	int64_t value = x & smallIntegerMask;
 
  	if(sign == 0 || smallIntegerMode == SIM_UNSIGN) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_build_value");
-    #endif
-
  		 return value;
   }
 
  	if(smallIntegerMode == SIM_2COMPL) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_build_value");
-    #endif
-
  		 return (-(int64_t)value) & smallIntegerMask;
   }
 
  	if(smallIntegerMode == SIM_1COMPL) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_build_value");
-    #endif
-
  		 return (~value) & smallIntegerMask;
   }
-
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_build_value");
-  #endif
 
  	return value | smallIntegerSignBit;
 }
 
 
 static uint64_t WP34S_multiply_with_overflow(uint64_t multiplier, uint64_t multiplicand, int32_t *overflow) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_multiply_with_overflow");
-  #endif
-
  	const uint64_t product = (multiplier * multiplicand) & smallIntegerMask;
 
  	if(! *overflow && multiplicand != 0) {
@@ -882,19 +622,10 @@ static uint64_t WP34S_multiply_with_overflow(uint64_t multiplier, uint64_t multi
 	  		 *overflow = 1;
     }
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_multiply_with_overflow");
-  #endif
-
 	 return product;
 }
 
 uint64_t WP34S_intAdd(uint64_t y, uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intAdd");
-  #endif
-
  	int32_t termXSign, termYSign;
  	uint64_t termX = WP34S_extract_value(x, &termXSign);
  	uint64_t termY = WP34S_extract_value(y, &termYSign);
@@ -936,20 +667,11 @@ uint64_t WP34S_intAdd(uint64_t y, uint64_t x) {
 		   	WP34S_set_carry(0);
 	   }
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intAdd");
-  #endif
-
 	 return sum & smallIntegerMask;
 }
 
 
 uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intSubtract");
-  #endif
-
  	int32_t termXSign, termYSign;
  	uint64_t termX = WP34S_extract_value(x, &termXSign);
  	uint64_t termY = WP34S_extract_value(y, &termYSign);
@@ -989,20 +711,11 @@ uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
 		   	WP34S_set_carry(0);
 	   }
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intSubtract");
-  #endif
-
 	 return difference & smallIntegerMask;
 }
 
 
 uint64_t WP34S_intMultiply(uint64_t y, uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intMultiply");
-  #endif
-
  	uint64_t product;
  	int32_t multiplicandSign, multiplierSign;
  	uint64_t multiplicand = WP34S_extract_value(x, &multiplicandSign);
@@ -1013,26 +726,13 @@ uint64_t WP34S_intMultiply(uint64_t y, uint64_t x) {
  	WP34S_set_overflow(overflow);
 
  	if(smallIntegerMode == SIM_UNSIGN) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intMultiply");
-    #endif
  		 return product;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intMultiply");
-  #endif
-
  	return WP34S_build_value(product & ~smallIntegerSignBit, multiplicandSign ^ multiplierSign);
 }
 
 
 uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intDivide");
-  #endif
-
  	int32_t divisorSign, dividendSign;
  	uint64_t divisor = WP34S_extract_value(x, &divisorSign);
  	uint64_t dividend   = WP34S_extract_value(y, &dividendSign);
@@ -1057,11 +757,6 @@ uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
         showInfoDialog("In function WP34S_intDivide: cannot divide a positive finite integer by 0!", NULL, NULL, NULL);
       #endif
     }
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intDivide");
-    #endif
-
 	  	return 0;
 	 }
 
@@ -1078,32 +773,15 @@ uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
 	  		 WP34S_set_overflow(1);
     }
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intDivide");
-  #endif
-
  	return WP34S_build_value(quotient, divisorSign ^ dividendSign);
 }
 
 
 uint64_t WP34S_intSqr(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intSqr");
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intSqr");
-  #endif
-
  	return WP34S_intMultiply(x, x);
 }
 
 uint64_t WP34S_intCube(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intCube");
-  #endif
-
  	int64_t y = WP34S_intMultiply(x, x);
  	int32_t overflow = (getFlag(FLAG_OVERFLOW) == ON ? 1 : 0);
 
@@ -1111,20 +789,11 @@ uint64_t WP34S_intCube(uint64_t x) {
  	if(overflow) {
 	 	 WP34S_set_overflow(1);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intCube");
-  #endif
-
  	return y;
 }
 
 
 static uint64_t WP34S_int_gcd(uint64_t a, uint64_t b) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_int_gcd");
-  #endif
-
 		uint64_t t;
 
  	while(b != 0) {
@@ -1132,20 +801,11 @@ static uint64_t WP34S_int_gcd(uint64_t a, uint64_t b) {
   		b = a % b;
 	  	a = t;
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_int_gcd");
-  #endif
-
  	return a;
 }
 
 
 uint64_t WP34S_intGCD(uint64_t y, uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intGCD");
-  #endif
-
  	int32_t s;
  	uint64_t xv = WP34S_extract_value(x, &s);
  	uint64_t yv = WP34S_extract_value(y, &s);
@@ -1160,68 +820,35 @@ uint64_t WP34S_intGCD(uint64_t y, uint64_t x) {
  	else {
 	 	 gcd = WP34S_int_gcd(xv, yv);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intGCD");
-  #endif
-
  	return WP34S_build_value(gcd, 0);
 }
 
 
 uint64_t WP34S_intLCM(uint64_t y, uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intLCM");
-  #endif
-
  	int32_t s;
  	uint64_t xv = WP34S_extract_value(x, &s);
  	uint64_t yv = WP34S_extract_value(y, &s);
  	uint64_t gcd;
 
  	if(xv == 0 || yv == 0) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intLCM");
-    #endif
-
 	 	 return 0;
   }
 
  	gcd = WP34S_int_gcd(xv, yv);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intLCM");
-  #endif
-
  	return WP34S_intMultiply((xv / gcd) & smallIntegerMask, WP34S_build_value(yv, 0));
 }
 
 
 uint64_t WP34S_intChs(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intChs");
-  #endif
-
  	int32_t signValue;
  	uint64_t value = WP34S_extract_value(x, &signValue);
 
  	if(smallIntegerMode == SIM_UNSIGN || (smallIntegerMode == SIM_2COMPL && x == smallIntegerSignBit)) {
 	  	WP34S_set_overflow(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intChs");
-    #endif
-
 		  return (-(int64_t)value) & smallIntegerMask;
   }
 
  	WP34S_set_overflow(0);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intChs");
-  #endif
-
  	return WP34S_build_value(value, !signValue);
 }
 
@@ -1229,10 +856,6 @@ uint64_t WP34S_intChs(uint64_t x) {
 /* Integer floor(sqrt())
  */
 uint64_t WP34S_intSqrt(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intSqrt");
-  #endif
-
  	int32_t signValue;
  	uint64_t value = WP34S_extract_value(x, &signValue);
  	uint64_t n0, n1;
@@ -1242,11 +865,6 @@ uint64_t WP34S_intSqrt(uint64_t x) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intSqrt: Cannot extract the square root of a negative finite integer!", NULL, NULL, NULL);
     #endif
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intSqrt");
-    #endif
-
 	  	return 0;
   }
  	if(value == 0) {
@@ -1265,38 +883,19 @@ uint64_t WP34S_intSqrt(uint64_t x) {
     }
 		  WP34S_set_carry((n0 != value) ? 1 : 0);
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intSqrt");
-  #endif
-
  	return WP34S_build_value(n1, signValue);
 }
 
 
 uint64_t WP34S_intAbs(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intAbs");
-  #endif
-
  	int32_t signValue;
  	uint64_t value = WP34S_extract_value(x, &signValue);
 
  	WP34S_set_overflow(0);
  	if(smallIntegerMode == SIM_2COMPL && x == smallIntegerSignBit) {
 	  	WP34S_set_overflow(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intAbs");
-    #endif
-
 	  	return x;
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intAbs");
-  #endif
-
  	return WP34S_build_value(value, 0);
 }
 
@@ -1319,10 +918,6 @@ uint64_t WP34S_intAbs(uint64_t x) {
 
 
 uint64_t WP34S_intSign(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intSign");
-  #endif
-
  	int32_t signValue;
  	uint64_t value = WP34S_extract_value(x, &signValue);
 
@@ -1332,20 +927,11 @@ uint64_t WP34S_intSign(uint64_t x) {
  	else {
  		 value = 1;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intSign");
-  #endif
-
  	return WP34S_build_value(value, signValue);
 }
 
 
 static uint64_t WP34S_int_power_helper(uint64_t base, uint64_t exponent, int32_t overflow) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_int_power_helper");
-  #endif
-
  	uint64_t power = 1;
  	uint32_t i;
  	int32_t overflow_next = 0;
@@ -1365,11 +951,6 @@ static uint64_t WP34S_int_power_helper(uint64_t base, uint64_t exponent, int32_t
 	 }
 
 	 WP34S_set_overflow(overflow);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_int_power_helper");
-  #endif
-
  	return power;
 }
 
@@ -1377,10 +958,6 @@ static uint64_t WP34S_int_power_helper(uint64_t base, uint64_t exponent, int32_t
 /* Integer power y^x
  */
 uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intPower");
-  #endif
-
 	 int32_t exponentSign, baseSign, powerSign;
 	 uint64_t exponent = WP34S_extract_value(e, &exponentSign);
 	 uint64_t base     = WP34S_extract_value(b, &baseSign);
@@ -1391,49 +968,24 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
       showInfoDialog("In function WP34S_intPower: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
    	WP34S_set_overflow(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intPower");
-    #endif
-
 	  	return 0;
   }
  	WP34S_set_carry(0);
  	WP34S_set_overflow(0);
 
  	if(exponent == 0) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intPower");
-    #endif
-
   	 return 1;
   }
 	 else if(base == 0) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intPower");
-    #endif
-
 	 	 return 0;
   }
 
 	 if(exponentSign) {
 	  	WP34S_set_carry(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intPower");
-    #endif
-
 	  	return 0;
 	 }
 
 	 powerSign = (baseSign && (exponent & 1))?1:0;	// Determine the sign of the result
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intPower");
-  #endif
-
 	 return WP34S_build_value(WP34S_int_power_helper(base, exponent, 0), powerSign);
 }
 
@@ -1441,10 +993,6 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
 /* 2^x
  */
 uint64_t WP34S_int2pow(uint64_t exp) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_int2pow");
-  #endif
-
  	int32_t signExponent;
  	uint64_t exponent = WP34S_extract_value(exp, &signExponent);
  	uint32_t wordSize = smallIntegerWordSize;
@@ -1452,11 +1000,6 @@ uint64_t WP34S_int2pow(uint64_t exp) {
  	WP34S_set_overflow(0);
  	WP34S_set_carry(signExponent && exponent == 1);
  	if(signExponent && exponent != 0) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_int2pow");
-    #endif
-
  		 return 0;
   }
 
@@ -1466,18 +1009,8 @@ uint64_t WP34S_int2pow(uint64_t exp) {
  	if(exponent >= wordSize) {
  	 	WP34S_set_carry(exponent == wordSize);
  	 	WP34S_set_overflow(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_int2pow");
-    #endif
-
  	 	return 0;
  	}
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_int2pow");
-  #endif
-
 	 return 1LL << (uint32_t)(exponent & 0xff);
 }
 
@@ -1485,10 +1018,6 @@ uint64_t WP34S_int2pow(uint64_t exp) {
 /* 10^x
  */
 uint64_t WP34S_int10pow(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_int10pow");
-  #endif
-
  	int32_t sx;
  	uint64_t exponent = WP34S_extract_value(x, &sx);
  	int32_t overflow = 0;
@@ -1496,32 +1025,17 @@ uint64_t WP34S_int10pow(uint64_t x) {
  	WP34S_set_carry(0);
  	if(exponent == 0) {
 	  	WP34S_set_overflow(0);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_int10pow");
-    #endif
-
 	  	return 1;
   }
 
  	if(sx) {
 	  	WP34S_set_carry(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_int10pow");
-    #endif
-
 	  	return 0;
 	 }
 
 	 if(smallIntegerWordSize <= 3 || (smallIntegerMode != SIM_UNSIGN && smallIntegerWordSize == 4)) {
 	 	 overflow = 1;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_int10pow");
-  #endif
-
  	return WP34S_build_value(WP34S_int_power_helper(10, x, overflow), 0);
 }
 
@@ -1529,10 +1043,6 @@ uint64_t WP34S_int10pow(uint64_t x) {
 /* Integer floor(log2())
  */
 uint64_t WP34S_intLog2(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intLog2");
-  #endif
-
 	 int32_t signValue;
 	 uint64_t value = WP34S_extract_value(x, &signValue);
 	 uint32_t log2 = 0;
@@ -1543,11 +1053,6 @@ uint64_t WP34S_intLog2(uint64_t x) {
       showInfoDialog("In function WP34S_intLog2: Cannot calculate the log" STD_SUB_2 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
    	//WP34S_set_overflow(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intLog2");
-    #endif
-
 	  	return 0;
 	 }
 
@@ -1558,10 +1063,6 @@ uint64_t WP34S_intLog2(uint64_t x) {
     }
   }
 
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intLog2");
-  #endif
-
  	return WP34S_build_value(log2, signValue);
 }
 
@@ -1569,10 +1070,6 @@ uint64_t WP34S_intLog2(uint64_t x) {
 /* Integer floor(log10())
  */
 uint64_t WP34S_intLog10(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intLog10");
-  #endif
-
  	int32_t signValue;
  	uint64_t value = WP34S_extract_value(x, &signValue);
  	int32_t r = 0;
@@ -1584,11 +1081,6 @@ uint64_t WP34S_intLog10(uint64_t x) {
       showInfoDialog("In function WP34S_intLog10: Cannot calculate the log" STD_SUB_10 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
    	//WP34S_set_overflow(1);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intLog10");
-    #endif
-
 	  	return 0;
  	}
 
@@ -1601,11 +1093,6 @@ uint64_t WP34S_intLog10(uint64_t x) {
 	 }
 
  	WP34S_set_carry(c || value != 1);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intLog10");
-  #endif
-
  	return WP34S_build_value(r, signValue);
 }
 
@@ -1614,10 +1101,6 @@ uint64_t WP34S_intLog10(uint64_t x) {
 
 /* Calculate (a . b) mod c taking care to avoid overflow */
 static uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_mulmod");
-  #endif
-
  	uint64_t x = 0, y = a % c;
  	while(b > 0) {
  	 	if((b & 1)) {
@@ -1626,11 +1109,6 @@ static uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {
  	 	y = (y + y) % c;
  	 	b /= 2;
  	}
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_mulmod");
-  #endif
-
  	return x % c;
 }
 
@@ -1638,10 +1116,6 @@ static uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {
 
 /* Calculate (a ^ b) mod c */
 static uint64_t WP34S_expmod(const uint64_t a, uint64_t b, const uint64_t c) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_expmod");
-  #endif
-
  	uint64_t x = 1, y = a;
  	while(b > 0) {
  	 	if((b & 1)) {
@@ -1650,11 +1124,6 @@ static uint64_t WP34S_expmod(const uint64_t a, uint64_t b, const uint64_t c) {
  	 	y = WP34S_mulmod(y, y, c);
  	 	b /= 2;
  	}
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_expmod");
-  #endif
-
  	return (x % c);
 }
 
@@ -1666,20 +1135,11 @@ const uint8_t primes[] = {2, 3, 5, 7,	11, 13, 17, 19, 23, 29, 31, 37,	41, 43, 47
 #define QUICK_CHECK	(101*101-1)
 
 int32_t WP34S_isPrime(uint64_t primeCandidate) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_isPrime");
-  #endif
-
  	uint32_t i;
  	uint64_t s;
   #define PRIME_ITERATION	15
 
 	 if(primeCandidate < 2) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_isPrime");
-    #endif
-
 	 	 return 0;
   }
 
@@ -1689,40 +1149,20 @@ int32_t WP34S_isPrime(uint64_t primeCandidate) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_isPrime:", "We fail for numbers " STD_GREATER_EQUAL " 2^63!", tmpStr3000, NULL);
     #endif
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_isPrime");
-    #endif
-
 	  	return 1;
 	 }
 
 	 /* Quick check for divisibility by small primes */
 	 for(i=0; i<N_PRIMES; i++) {
 	 	 if(primeCandidate == primes[i]) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_isPrime");
-      #endif
-
 	 	 	 return 1;
     }
 	 	 else if((primeCandidate % primes[i]) == 0) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_isPrime");
-      #endif
-
 	 	 	 return 0;
     }
   }
 
  	if(primeCandidate < QUICK_CHECK) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_isPrime");
-    #endif
-
 	 	 return 1;
   }
 
@@ -1740,19 +1180,9 @@ int32_t WP34S_isPrime(uint64_t primeCandidate) {
 		  }
 
 		  if(mod != primeCandidate - 1 && temp % 2 == 0) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("WP34S_isPrime");
-      #endif
-
 		 	  return 0;
     }
 	 }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_isPrime");
-  #endif
-
 	 return 1;
 }
 
@@ -1761,20 +1191,11 @@ int32_t WP34S_isPrime(uint64_t primeCandidate) {
 /* -1^x
  */
 uint64_t WP34S_int_1pow(uint64_t exponent) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_int_1pow");
-  #endif
-
  	int32_t signExponent;
  	uint64_t valueExponent = WP34S_extract_value(exponent, &signExponent);
  	int32_t odd = valueExponent & 1;
 
  	WP34S_set_overflow((smallIntegerMode == SIM_UNSIGN && odd) ? 1 : 0);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_int_1pow");
-  #endif
-
  	return WP34S_build_value((uint64_t)1, odd);
 }
 
@@ -1783,19 +1204,10 @@ uint64_t WP34S_int_1pow(uint64_t exponent) {
 /* Mirror - reverse the bits in the word
  */
 uint64_t WP34S_intMirror(uint64_t x) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("WP34S_intMirror");
-  #endif
-
  	uint64_t r = 0;
  	uint32_t i;
 
 	 if(x == 0) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("WP34S_intMirror");
-    #endif
-
 	 	 return 0;
   }
 
@@ -1804,11 +1216,6 @@ uint64_t WP34S_intMirror(uint64_t x) {
 	 	 	 r |= 1LL << (smallIntegerWordSize-i-1);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("WP34S_intMirror");
-  #endif
-
  	return r;
 }
 

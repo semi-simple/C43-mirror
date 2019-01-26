@@ -27,16 +27,8 @@
  * \return void
  ***********************************************/
 void fnClX(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnClX");
-  #endif
-
   clearRegister(REGISTER_X);
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnClX");
-  #endif
 }
 
 
@@ -49,19 +41,11 @@ void fnClX(uint16_t unusedParamButMandatory) {
  *
  ***********************************************/
 void fnClearStack(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnClearStack");
-  #endif
-
   for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
     clearRegister(regist);
   }
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnClearStack");
-  #endif
 }
 
 
@@ -73,10 +57,6 @@ void fnClearStack(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnDrop(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDrop");
-  #endif
-
   freeRegisterData(REGISTER_X);
   for(calcRegister_t regist=REGISTER_X; regist<getStackTop(); regist++) {
     reg[regist] = reg[regist + 1];
@@ -85,10 +65,6 @@ void fnDrop(uint16_t unusedParamButMandatory) {
   setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterDataSize(getStackTop())));
   memcpy(POINTER_TO_REGISTER_DATA(getStackTop()-1), POINTER_TO_REGISTER_DATA(getStackTop()), getRegisterDataSize(getStackTop()));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDrop");
-  #endif
 }
 
 
@@ -102,10 +78,6 @@ void fnDrop(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void liftStack(uint32_t dataType, uint32_t numBytes) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("liftStack");
-  #endif
-
   if(stackLiftEnabled) {
     freeRegisterData(getStackTop());
     for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
@@ -118,10 +90,6 @@ void liftStack(uint32_t dataType, uint32_t numBytes) {
 
   setRegisterDataType(REGISTER_X, dataType);
   setRegisterDataPointer(REGISTER_X, allocateMemory(numBytes));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("liftStack");
-  #endif
 }
 
 
@@ -133,10 +101,6 @@ void liftStack(uint32_t dataType, uint32_t numBytes) {
  * \return void
  ***********************************************/
 void fnDropY(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDropY");
-  #endif
-
   freeRegisterData(REGISTER_Y);
   for(uint16_t i=REGISTER_Y; i<getStackTop(); i++) {
     reg[i] = reg[i+1];
@@ -145,10 +109,6 @@ void fnDropY(uint16_t unusedParamButMandatory) {
   setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterDataSize(getStackTop())));
   memcpy(POINTER_TO_REGISTER_DATA(getStackTop()-1), POINTER_TO_REGISTER_DATA(getStackTop()), getRegisterDataSize(getStackTop()));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDropY");
-  #endif
 }
 
 
@@ -162,19 +122,11 @@ void fnDropY(uint16_t unusedParamButMandatory) {
 void fnRollUp(uint16_t unusedParamButMandatory) {
   uint32_t savedRegister = reg[stackSize==SS_4 ? REGISTER_T : REGISTER_D];
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnRollUp");
-  #endif
-
   for(uint16_t i=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i>REGISTER_X; i--) {
     reg[i] = reg[i-1];
   }
   reg[REGISTER_X] = savedRegister;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnRollUp");
-  #endif
 }
 
 
@@ -188,19 +140,11 @@ void fnRollUp(uint16_t unusedParamButMandatory) {
 void fnRollDown(uint16_t unusedParamButMandatory) {
   uint32_t savedRegister = reg[REGISTER_X];
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnRollDown");
-  #endif
-
   for(uint16_t i=REGISTER_X; i<(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
     reg[i] = reg[i+1];
   }
   reg[stackSize==SS_4 ? REGISTER_T : REGISTER_D] = savedRegister;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnRollDown");
-  #endif
 }
 
 
@@ -212,15 +156,7 @@ void fnRollDown(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnStackSize(uint16_t ss) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnStackSize");
-  #endif
-
   stackSize = ss;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnStackSize");
-  #endif
 }
 
 
@@ -232,16 +168,8 @@ void fnStackSize(uint16_t ss) {
  * \return void
  ***********************************************/
 void fnDisplayStack(uint16_t numberOfStackLines) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayStack");
-  #endif
-
   displayStack = numberOfStackLines;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayStack");
-  #endif
 }
 
 
@@ -255,18 +183,10 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
 void fnSwapXY(uint16_t unusedParamButMandatory) {
   uint32_t savedRegister = reg[REGISTER_X];
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnSwapXY");
-  #endif
-
   reg[REGISTER_X] = reg[REGISTER_Y];
   reg[REGISTER_Y] = savedRegister;
   refreshRegisterLine(REGISTER_X);
   refreshRegisterLine(REGISTER_Y);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnSwapXY");
-  #endif
 }
 
 
@@ -283,10 +203,6 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
   uint16_t dataInfo  = getRegisterDataInfo(REGISTER_X);
   uint16_t newDataPointer;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnFillStack");
-  #endif
-
   for(uint16_t i=REGISTER_Y; i<=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX);
@@ -297,10 +213,6 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
   }
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnFillStack");
-  #endif
 }
 
 
@@ -312,19 +224,11 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetStackSize(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnGetStackSize");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
 
-  int32ToReal16(stackSize==SS_4 ? 4 : 8, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  int32ToReal16(stackSize==SS_4 ? 4 : 8, REGISTER_REAL16_DATA(REGISTER_X));
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnGetStackSize");
-  #endif
 }
 
 
@@ -336,18 +240,10 @@ void fnGetStackSize(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void refreshStack(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("refreshStack");
-  #endif
-
   refreshRegisterLine(REGISTER_X);
   refreshRegisterLine(REGISTER_Y);
   refreshRegisterLine(REGISTER_Z);
   refreshRegisterLine(REGISTER_T);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("refreshStack");
-  #endif
 }
 
 
@@ -382,10 +278,6 @@ void restoreStack(void) {
 
 #if (STACK_LIFT_DEBUG == 1)
 void stackLiftEnable(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stackLiftEnable");
-  #endif
-
   //printf("Stack lift enabled\n");
   stackLiftEnabled = true;
   hideBattery();
@@ -419,25 +311,13 @@ void stackLiftEnable(void) {
   setPixel(393, 16);
   setPixel(394, 16);
   setPixel(395, 16);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stackLiftEnable");
-  #endif
 }
 
 
 
 void stackLiftDisable(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("stackLiftDisable");
-  #endif
-
   //printf("Stack lift disabled\n");
   stackLiftEnabled = false;
   hideBattery();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("stackLiftDisable");
-  #endif
 }
 #endif

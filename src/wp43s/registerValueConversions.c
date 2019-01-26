@@ -32,42 +32,36 @@
  * \return void
  ***********************************************/
 void convertRegister16To34(calcRegister_t regist) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertRegister16To34");
+  // Register is already a real34 or complex34
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtComplex34) {
+      return;
+    }
+  #endif
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtComplex34 || getRegisterDataType(regist) == dtAngle) {
+      return;
+    }
   #endif
 
-  // Register is already a real34 or complex34
-  if(getRegisterDataType(regist) == dtReal34|| getRegisterDataType(regist) == dtComplex34) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("convertRegister16To34");
-    #endif
-
-    return;
-  }
-
-  if(getRegisterDataType(regist) == dtReal16) {
+  if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtAngle) {
     calcRegister_t temp = allocateTemporaryRegister();
     reallocateRegister(temp, dtReal34, REAL34_SIZE, getRegisterDataInfo(regist));
-    real16ToReal34(POINTER_TO_REGISTER_DATA(regist), POINTER_TO_REGISTER_DATA(temp));
+    real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
     copySourceRegisterToDestRegister(temp, regist);
     freeTemporaryRegister(temp);
   }
   else if(getRegisterDataType(regist) == dtComplex16) {
     calcRegister_t temp = allocateTemporaryRegister();
     reallocateRegister(temp, dtComplex34, COMPLEX34_SIZE, getRegisterDataInfo(regist));
-    real16ToReal34(POINTER_TO_REGISTER_DATA(regist), POINTER_TO_REGISTER_DATA(temp));
-    real16ToReal34(POINTER_TO_REGISTER_DATA(regist) + REAL16_SIZE, POINTER_TO_REGISTER_DATA(temp) + REAL34_SIZE);
+    real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
+    real16ToReal34(REGISTER_IMAG16_DATA(regist), REGISTER_IMAG34_DATA(temp));
     copySourceRegisterToDestRegister(temp, regist);
     freeTemporaryRegister(temp);
   }
   else {
     displayBugScreen("In function convertRegister16To34: the register to convert must be real16 or complex16!");
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertRegister16To34");
-  #endif
 }
 
 
@@ -82,75 +76,53 @@ void convertRegister16To34(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void convertRegister34To16(calcRegister_t regist) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertRegister34To16");
+  // Register is already a real16 or complex16
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtComplex16 || getRegisterDataType(regist) == dtAngle) {
+      return;
+    }
+  #endif
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtComplex16) {
+      return;
+    }
   #endif
 
-  // Register is already a real16 or complex16
-  if(getRegisterDataType(regist) == dtReal16|| getRegisterDataType(regist) == dtComplex16) {
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("convertRegister34To16");
-    #endif
-
-    return;
-  }
-
-  if(getRegisterDataType(regist) == dtReal34) {
+  if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtAngle) {
     calcRegister_t temp = allocateTemporaryRegister();
     reallocateRegister(temp, dtReal16, REAL16_SIZE, getRegisterDataInfo(regist));
-    real34ToReal16(POINTER_TO_REGISTER_DATA(regist), POINTER_TO_REGISTER_DATA(temp));
+    real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
     copySourceRegisterToDestRegister(temp, regist);
     freeTemporaryRegister(temp);
   }
   else if(getRegisterDataType(regist) == dtComplex34) {
     calcRegister_t temp = allocateTemporaryRegister();
     reallocateRegister(temp, dtComplex16, COMPLEX16_SIZE, getRegisterDataInfo(regist));
-    real34ToReal16(POINTER_TO_REGISTER_DATA(regist), POINTER_TO_REGISTER_DATA(temp));
-    real34ToReal16(POINTER_TO_REGISTER_DATA(regist) + REAL34_SIZE, POINTER_TO_REGISTER_DATA(temp) + REAL16_SIZE);
+    real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
+    real34ToReal16(REGISTER_IMAG34_DATA(regist), REGISTER_IMAG16_DATA(temp));
     copySourceRegisterToDestRegister(temp, regist);
     freeTemporaryRegister(temp);
   }
   else {
     displayBugScreen("In function convertRegister34To16: the register to convert must be real34 or complex34!");
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertRegister34To16");
-  #endif
 }
 
 
 
 void convertBigIntegerToBigIntegerRegister(const bigInteger_t *bigInteger, calcRegister_t regist) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertBigIntegerToBigIntegerRegister");
-  #endif
-
   reallocateRegister(regist, dtBigInteger, bigInteger->used * (DIGIT_BIT / CHAR_BIT), bigInteger->sign);
-  memcpy(POINTER_TO_REGISTER_BIG_INTEGER(regist), bigInteger, bigInteger->used * (DIGIT_BIT / CHAR_BIT));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertBigIntegerToBigIntegerRegister");
-  #endif
+  memcpy(REGISTER_BIG_INTEGER_DATA(regist), bigInteger, bigInteger->used * (DIGIT_BIT / CHAR_BIT));
 }
 
 
 
 void convertBigIntegerRegisterToBigInteger(calcRegister_t regist, bigInteger_t *bigInteger) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertBigIntegerRegisterToBigInteger");
-  #endif
-
   bigIntegerSetZero(bigInteger);
   bigInteger->sign = getRegisterDataInfo(regist);
   bigInteger->used = *(uint16_t *)POINTER_TO_REGISTER_DATA(regist);
-  memcpy(bigInteger, POINTER_TO_REGISTER_BIG_INTEGER(regist), bigInteger->used);
+  memcpy(bigInteger, REGISTER_BIG_INTEGER_DATA(regist), bigInteger->used);
   bigInteger->used = (bigInteger->used * CHAR_BIT) / DIGIT_BIT;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertBigIntegerRegisterToBigInteger");
-  #endif
 }
 
 
@@ -158,18 +130,10 @@ void convertBigIntegerRegisterToBigInteger(calcRegister_t regist, bigInteger_t *
 void convertBigIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
   bigInteger_t tmp;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertBigIntegerRegisterToReal16Register");
-  #endif
-
   convertBigIntegerRegisterToBigInteger(source, &tmp);
   bigIntegerToString(&tmp, tmpStr3000, 10);
   reallocateRegister(destination, dtReal16, REAL16_SIZE, 0);
-  stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(destination));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertBigIntegerRegisterToReal16Register");
-  #endif
+  stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
 
 
@@ -177,20 +141,12 @@ void convertBigIntegerRegisterToReal16Register(calcRegister_t source, calcRegist
 void convertBigIntegerRegisterToSmallIntegerRegister(calcRegister_t source, calcRegister_t destination) {
   bigInteger_t tmp;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertBigIntegerRegisterToReal16Register");
-  #endif
-
   convertBigIntegerRegisterToBigInteger(source, &tmp);
   reallocateRegister(destination, dtSmallInteger, SMALL_INTEGER_SIZE, 0);
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(destination)) = tmp.dp[0] & smallIntegerMask;
+  *(REGISTER_SMALL_INTEGER_DATA(destination)) = tmp.dp[0] & smallIntegerMask;
   if(bigIntegerIsNegative(&tmp)) {
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(destination)) = WP34S_intChs(*(uint64_t *)(POINTER_TO_REGISTER_DATA(destination)));
+    *(REGISTER_SMALL_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SMALL_INTEGER_DATA(destination)));
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertBigIntegerRegisterToReal16Register");
-  #endif
 }
 
 
@@ -198,29 +154,17 @@ void convertBigIntegerRegisterToSmallIntegerRegister(calcRegister_t source, calc
 void convertBigIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
   bigInteger_t tmp;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertBigIntegerRegisterToReal34Register");
-  #endif
-
   convertBigIntegerRegisterToBigInteger(source, &tmp);
   bigIntegerToString(&tmp, tmpStr3000, 10);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, 0);
-  stringToReal34(tmpStr3000, POINTER_TO_REGISTER_DATA(destination));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertBigIntegerRegisterToReal34Register");
-  #endif
+  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
 
 
 
 void convertSmallIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
   bigInteger_t tmp;
-  uint64_t value = *(uint64_t *)(POINTER_TO_REGISTER_DATA(source));
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertSmallIntegerRegisterToReal16Register");
-  #endif
+  uint64_t value = *(REGISTER_SMALL_INTEGER_DATA(source));
 
   if(smallIntegerMode == SIM_UNSIGN) {
     uIntToBigInteger(value, &tmp);
@@ -251,22 +195,14 @@ void convertSmallIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
 
   bigIntegerToString(&tmp, tmpStr3000, 10);
   reallocateRegister(destination, dtReal16, REAL16_SIZE, 0);
-  stringToReal16(tmpStr3000, POINTER_TO_REGISTER_DATA(destination));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertSmallIntegerRegisterToReal16Register");
-  #endif
+  stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
 
 
 
 void convertSmallIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
   bigInteger_t tmp;
-  uint64_t value = *(uint64_t *)(POINTER_TO_REGISTER_DATA(source));
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertSmallIntegerRegisterToReal34Register");
-  #endif
+  uint64_t value = *(REGISTER_SMALL_INTEGER_DATA(source));
 
   if(smallIntegerMode == SIM_UNSIGN) {
     uIntToBigInteger(value, &tmp);
@@ -297,21 +233,13 @@ void convertSmallIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
 
   bigIntegerToString(&tmp, tmpStr3000, 10);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, 0);
-  stringToReal34(tmpStr3000, POINTER_TO_REGISTER_DATA(destination));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertSmallIntegerRegisterToReal34Register");
-  #endif
+  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
 
 
 
 void convertSmallIntegerRegisterToUInt64(calcRegister_t regist, int16_t *sign, uint64_t *value) {
-  *value = *(uint64_t *)(POINTER_TO_REGISTER_DATA(regist));
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertSmallIntegerRegisterToUInt64");
-  #endif
+  *value = *(REGISTER_SMALL_INTEGER_DATA(regist));
 
   if(smallIntegerMode == SIM_UNSIGN) {
     *sign = 0;
@@ -340,21 +268,13 @@ void convertSmallIntegerRegisterToUInt64(calcRegister_t regist, int16_t *sign, u
       *sign = 0;
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertSmallIntegerRegisterToUInt64");
-  #endif
 }
 
 
 
 void convertSmallIntegerRegisterBigIntegerRegister(calcRegister_t source, calcRegister_t destination) {
   bigInteger_t tmp;
-  uint64_t value = *(uint64_t *)(POINTER_TO_REGISTER_DATA(source));
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertSmallIntegerRegisterBigIntegerRegister");
-  #endif
+  uint64_t value = *(REGISTER_SMALL_INTEGER_DATA(source));
 
   if(smallIntegerMode == SIM_UNSIGN) {
     uIntToBigInteger(value, &tmp);
@@ -384,19 +304,11 @@ void convertSmallIntegerRegisterBigIntegerRegister(calcRegister_t source, calcRe
   }
 
   convertBigIntegerToBigIntegerRegister(&tmp, destination);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertSmallIntegerRegisterBigIntegerRegister");
-  #endif
 }
 
 
 
 void convertUInt64ToSmallIntegerRegister(int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("convertUInt64ToSmallIntegerRegister");
-  #endif
-
   if(sign) { // Negative value
     if(smallIntegerMode == SIM_2COMPL) {
       value = (~value) + 1;
@@ -415,9 +327,5 @@ void convertUInt64ToSmallIntegerRegister(int16_t sign, uint64_t value, uint32_t 
   }
 
   reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, base);
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(regist)) = value & smallIntegerMask;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("convertUInt64ToSmallIntegerRegister");
-  #endif
+  *(REGISTER_SMALL_INTEGER_DATA(regist)) = value & smallIntegerMask;
 }

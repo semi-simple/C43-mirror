@@ -49,6 +49,13 @@ void divCo16Re34 (void);
 void divCo16Co34 (void);
 
 //      RegYRegX
+void divAnglBigI (void);
+void divAnglRe16 (void);
+void divAnglAngl (void);
+void divAnglSmaI (void);
+void divAnglRe34 (void);
+
+//      RegYRegX
 void divTimeBigI (void);
 void divTimeRe16 (void);
 void divTimeSmaI (void);

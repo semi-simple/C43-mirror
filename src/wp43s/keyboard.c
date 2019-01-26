@@ -143,10 +143,6 @@ void btnFnClicked(void *w, void *data) {
 
 
 uint16_t determineItem(const calcKey_t *key) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("determineItem");
-  #endif
-
   uint16_t result;
   if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
     result = shiftF ? key->fShifted :
@@ -166,10 +162,6 @@ uint16_t determineItem(const calcKey_t *key) {
     displayBugScreen("In function determineItem: item was not determined!");
     result=0;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("determineItem");
-  #endif
   return result;
 }
 
@@ -187,16 +179,8 @@ void btnClicked(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnClicked(void *w, void *data) {
 #endif
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("btnClicked");
-  #endif
-
   btnPressed(w, data);
   btnReleased(w, data);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("btnClicked");
-  #endif
 }
 
 
@@ -213,10 +197,6 @@ void btnPressed(GtkWidget *notUsed, gpointer data) {
 #ifdef DMCP_BUILD
 void btnPressed(void *notUsed, void *data) {
 #endif
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("btnPressed");
-  #endif
-
   const calcKey_t *key;
 
   key = userModeEnabled ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
@@ -984,10 +964,6 @@ void btnPressed(void *notUsed, void *data) {
       displayBugScreen(errorMessage);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("btnPressed");
-  #endif
 }
 
 
@@ -1004,17 +980,9 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 #ifdef DMCP_BUILD
 void btnReleased(void *notUsed, void *data) {
 #endif
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("btnReleased");
-  #endif
-
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();
     runFunction(item);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("btnReleased");
-  #endif
 }

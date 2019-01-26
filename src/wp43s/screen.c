@@ -504,17 +504,9 @@ void hideCursor(void) {
  * \return void
  ***********************************************/
 void showFunctionName(int16_t item, int8_t counter) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showFunctionName");
-  #endif
-
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
   showString(indexOfItems[item].itemName, &standardFont, 1, 134 - 37*(REGISTER_T-100), vmNormal, false, false);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showFunctionName");
-  #endif
 }
 
 
@@ -528,17 +520,9 @@ void showFunctionName(int16_t item, int8_t counter) {
  * \return void
  ***********************************************/
 void hideFunctionName() {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("hideFunctionName");
-  #endif
-
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("hideFunctionName");
-  #endif
 }
 
 

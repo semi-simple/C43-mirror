@@ -37,19 +37,10 @@ void (* const square[12])(void) = {
  * \return void
  ***********************************************/
 void errorSquare(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorSquare");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot square %s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(op2, true, false));
+    sprintf(errorMessage, "cannot square %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnSquare:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorSquare");
   #endif
 }
 
@@ -67,14 +58,14 @@ void fnSquare(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    op2    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op1);
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opY    = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opY);
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     square[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(op1);
-    freeTemporaryRegister(op2);
+    freeTemporaryRegister(opY);
+    freeTemporaryRegister(opX);
 
     refreshStack();
   }

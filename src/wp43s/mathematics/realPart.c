@@ -29,20 +29,16 @@
  * \return void
  ***********************************************/
 void fnRealPart(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnRealPart");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtComplex16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
-    real16Copy(POINTER_TO_REGISTER_DATA(REGISTER_L), POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real16Copy(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
     refreshStack();
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
-    real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_L), POINTER_TO_REGISTER_DATA(REGISTER_X));
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
     refreshStack();
   }
   #ifdef PC_BUILD
@@ -57,8 +53,4 @@ void fnRealPart(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnRealPart:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnRealPart");
-  #endif
 }

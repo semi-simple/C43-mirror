@@ -23,10 +23,6 @@
 
 
 void fnFactorial(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnFactorial");
-  #endif
-
   int8_t dataType = dtReal34;
   bigInteger_t result;
 
@@ -55,11 +51,6 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
       sprintf(errorMessage, "cannot calculate factorial of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnFactorial:", errorMessage, NULL, NULL);
     #endif
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("fnFactorial");
-    #endif
-
     return;
   }
 
@@ -79,7 +70,7 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
     convertBigIntegerToBigIntegerRegister(&result, REGISTER_X);
   }
   else {
-    WP34S_real34Factorial(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   if(dataType == dtReal16) {
@@ -87,8 +78,4 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
   }
 
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnFactorial");
-  #endif
 }

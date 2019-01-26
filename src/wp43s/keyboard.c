@@ -28,10 +28,6 @@
  * \return void
  ***********************************************/
 void showShiftState(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showShiftState");
-  #endif
-
   if(shiftF) {
     showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
   }
@@ -41,10 +37,6 @@ void showShiftState(void) {
   else {
     refreshRegisterLine(REGISTER_T);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showShiftState");
-  #endif
 }
 
 
@@ -59,17 +51,9 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("resetShiftState");
-  #endif
-
   shiftF = false;
   shiftG = false;
   showShiftState();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("resetShiftState");
-  #endif
 }
 
 
@@ -85,10 +69,6 @@ void resetShiftState(void) {
  * \return void
  ***********************************************/
 void executeFunction(int16_t fn, int16_t shift) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("executeFunction");
-  #endif
-
   int16_t    row, func;
   const softmenu_t *sm;
 
@@ -116,10 +96,6 @@ void executeFunction(int16_t fn, int16_t shift) {
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("executeFunction");
-  #endif
 }
 
 
@@ -136,10 +112,6 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnClicked(void *w, void *data) {
 #endif
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("btnFnClicked");
-  #endif
-
   int16_t fn = *((char *)data) - '0';
 
   if(calcMode != CM_CONFIRMATION) {
@@ -167,10 +139,6 @@ void btnFnClicked(void *w, void *data) {
       resetShiftState();
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("btnFnClicked");
-  #endif
 }
 
 
@@ -339,7 +307,7 @@ void btnPressed(void *notUsed, void *data) {
         liftStack(dtString, mem);
 
         *(uint16_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = mem - 2;
-        memcpy(POINTER_TO_REGISTER_STRING(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+        memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
 
         #if (STACK_LIFT_DEBUG == 1)
           stackLiftEnable();
@@ -350,7 +318,7 @@ void btnPressed(void *notUsed, void *data) {
         liftStack(dtString, mem);
 
         *(uint16_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = mem - 2;
-        memcpy(POINTER_TO_REGISTER_STRING(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+        memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
         aimBuffer[0] = 0;
 
         #if (STACK_LIFT_DEBUG == 1)
@@ -429,7 +397,7 @@ void btnPressed(void *notUsed, void *data) {
           liftStack(dtString, mem);
 
           *(uint16_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = mem - 2;
-          memcpy(POINTER_TO_REGISTER_STRING(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
 
           #if (STACK_LIFT_DEBUG == 1)
             stackLiftEnable();
@@ -519,48 +487,48 @@ void btnPressed(void *notUsed, void *data) {
           if(dataTypeX == dtReal16 && dataTypeY == dtReal34) {
             real34_t temp;
 
-            real16ToReal34(POINTER_TO_REGISTER_DATA(REGISTER_X), &temp);
+            real16ToReal34(REGISTER_REAL16_DATA(REGISTER_X), &temp);
             reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
-            real34Copy(&temp, POINTER_TO_REGISTER_DATA(REGISTER_X));
+            real34Copy(&temp, REGISTER_REAL34_DATA(REGISTER_X));
             dataTypeX = dtReal34;
           }
 
           if(dataTypeY == dtReal16 && dataTypeX == dtReal34) {
             real34_t temp;
 
-            real16ToReal34(POINTER_TO_REGISTER_DATA(REGISTER_Y), &temp);
+            real16ToReal34(REGISTER_REAL16_DATA(REGISTER_Y), &temp);
             reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, 0);
-            real34Copy(&temp, POINTER_TO_REGISTER_DATA(REGISTER_Y));
+            real34Copy(&temp, REGISTER_REAL34_DATA(REGISTER_Y));
           }
 
           if(dataTypeX == dtReal16) {
             complex16_t temp;
 
-            real16Copy(POINTER_TO_REGISTER_DATA(REGISTER_X), &temp);
-            real16Copy(POINTER_TO_REGISTER_DATA(REGISTER_Y), COMPLEX16_IMAGINARY_PART_POINTER(&temp));
+            real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &temp);
+            real16Copy(REGISTER_REAL16_DATA(REGISTER_Y), VARIABLE_IMAG16_DATA(&temp));
             reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, 0);
 
             if(complexMode == CM_POLAR) {
-              convertAngle16FromTo(COMPLEX16_IMAGINARY_PART_POINTER(&temp), angularMode, AM_RADIAN);
-              real16PolarToRectangular(REAL16_POINTER(&temp), COMPLEX16_IMAGINARY_PART_POINTER(&temp), REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+              convertAngle16ToInternal(VARIABLE_IMAG16_DATA(&temp), angularMode);
+              real16PolarToRectangular(VARIABLE_REAL16_DATA(&temp), VARIABLE_IMAG16_DATA(&temp), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // temp in internal units
             }
             else {
-              complex16Copy(&temp, POINTER_TO_REGISTER_DATA(REGISTER_X));
+              complex16Copy(&temp, REGISTER_COMPLEX16_DATA(REGISTER_X));
             }
           }
           else { //dataTypeX == dtReal34
             complex34_t temp;
 
-            real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_X), &temp);
-            real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_Y), COMPLEX34_IMAGINARY_PART_POINTER(&temp));
+            real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
+            real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), VARIABLE_IMAG34_DATA(&temp));
             reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, 0);
 
             if(complexMode == CM_POLAR) {
-              convertAngle34FromTo(COMPLEX34_IMAGINARY_PART_POINTER(&temp), angularMode, AM_RADIAN);
-              real34PolarToRectangular(REAL34_POINTER(&temp), COMPLEX34_IMAGINARY_PART_POINTER(&temp), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+              convertAngle34ToInternal(VARIABLE_IMAG34_DATA(&temp), angularMode);
+              real34PolarToRectangular(VARIABLE_REAL34_DATA(&temp), VARIABLE_IMAG34_DATA(&temp), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // temp in internal units
             }
             else {
-              complex34Copy(&temp, POINTER_TO_REGISTER_DATA(REGISTER_X));
+              complex34Copy(&temp, REGISTER_COMPLEX34_DATA(REGISTER_X));
             }
           }
 
@@ -578,13 +546,13 @@ void btnPressed(void *notUsed, void *data) {
             stackLiftEnabled = true;
           #endif
           if(complexMode == CM_RECTANGULAR) {
-            real16Copy(COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), POINTER_TO_REGISTER_DATA(REGISTER_X));
+            real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
             liftStack(dtReal16, REAL16_SIZE);
-            real16Copy(POINTER_TO_REGISTER_DATA(REGISTER_L), POINTER_TO_REGISTER_DATA(REGISTER_X));
+            real16Copy(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
           }
           else { // CM_POLAR mode
             liftStack(dtReal16, REAL16_SIZE);
-            real16RectangularToPolar(REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_Y)));
+            real16RectangularToPolar(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_Y)); // Y in internal units
             temporaryInformation = TI_RADIUS_THETA;
           }
 
@@ -601,13 +569,13 @@ void btnPressed(void *notUsed, void *data) {
             stackLiftEnabled = true;
           #endif
           if(complexMode == CM_RECTANGULAR) {
-            real34Copy(COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), POINTER_TO_REGISTER_DATA(REGISTER_X));
+            real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
             liftStack(dtReal34, REAL34_SIZE);
-            real34Copy(POINTER_TO_REGISTER_DATA(REGISTER_L), POINTER_TO_REGISTER_DATA(REGISTER_X));
+            real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
           }
           else { // CM_POLAR mode
             liftStack(dtReal34, REAL34_SIZE);
-            real34RectangularToPolar(REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), COMPLEX34_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_L)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), REAL34_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_Y)));
+            real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y));
             temporaryInformation = TI_RADIUS_THETA;
           }
 
@@ -846,6 +814,18 @@ void btnPressed(void *notUsed, void *data) {
 
         else if(getRegisterDataType(REGISTER_X) == dtReal34) {
           convertRegister34To16(REGISTER_X);
+          refreshRegisterLine(REGISTER_X);
+        }
+
+        else if(getRegisterDataType(REGISTER_X) == dtAngle) {
+          #if (ANGLE16 == 1)
+            convertAngle16FromInternal(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+          #endif
+          #if (ANGLE34 == 1)
+            convertAngle34FromInternal(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+            convertRegister34To16(REGISTER_X);
+          #endif
+          setRegisterDataType(REGISTER_X, dtReal16);
           refreshRegisterLine(REGISTER_X);
         }
 

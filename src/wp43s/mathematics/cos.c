@@ -23,9 +23,9 @@
 
 
 void (* const Cos[12])(void) = {
-//  regX ==> 1            2         3          4          5          6          7          8            9             10              11        12
-//           Big integer  real16    complex16             Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
-             cosBigI,     cosRe16,  cosCo16,   errorCos,  errorCos,  errorCos,  errorCos,  cosRm16,     cosCm16,      errorCos,       cosRe34,  cosCo34
+//  regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
+//           Big integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
+             cosBigI,     cosRe16,  cosCo16,   cosAngl,  errorCos,  errorCos,  errorCos,  cosRm16,     cosCm16,      errorCos,       cosRe34,  cosCo34
 };
 
 
@@ -39,7 +39,7 @@ void (* const Cos[12])(void) = {
 void errorCos(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnCos:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorCos(void) {
  ***********************************************/
 void cosToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "cos(%s)", getRegisterDataTypeName(op1, false, false));
+    sprintf(errorMessage, "cos(%s)", getRegisterDataTypeName(opX, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }
@@ -73,11 +73,11 @@ void fnCos(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op1);
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     Cos[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(op1);
+    freeTemporaryRegister(opX);
 
     refreshStack();
   }
@@ -89,22 +89,24 @@ void fnCos(uint16_t unusedParamButMandatory) {
 
 
 void cosBigI(void) {
-  convertBigIntegerRegisterToReal34Register(op1, op1);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  WP34S_cvt_2rad_sincos(NULL, REAL34_POINTER(POINTER_TO_REGISTER_DATA(result)), op1);
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
   convertRegister34To16(result);
 }
 
 
 
 void cosRe16(void) {
-  if(real16IsSpecial(POINTER_TO_REGISTER_DATA(op1))) {
-    real16Copy(const16_NaN, POINTER_TO_REGISTER_DATA(result));
+  if(real16IsSpecial(REGISTER_REAL16_DATA(opX))) {
+    real16Copy(const16_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    convertRegister16To34(op1);
+    convertRegister16To34(opX);
+    convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    WP34S_cvt_2rad_sincos(NULL, REAL34_POINTER(POINTER_TO_REGISTER_DATA(result)), op1);
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
     convertRegister34To16(result);
   }
 }
@@ -115,38 +117,50 @@ void cosCo16(void) {
   // cos(z) = (exp(iz) + exp(-iz)) / 2
   complex34_t iz, expIz;
 
-  convertRegister16To34(op1);
+  convertRegister16To34(opX);
   convertRegister16To34(result);
 
   // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(op1), VARIABLE_IMAG34_DATA(iz));
-  real34Copy(REGISTER_IMAG34_DATA(op1), VARIABLE_REAL34_DATA(iz));
-  real34ChangeSign(VARIABLE_REAL34_DATA(iz));
+  real34Copy(REGISTER_REAL34_DATA(opX), VARIABLE_IMAG34_DATA(&iz));
+  real34Copy(REGISTER_IMAG34_DATA(opX), VARIABLE_REAL34_DATA(&iz));
+  real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
 
   // calculate exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(iz), REGISTER_COMPLEX34_DATA(op1));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(expIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expIz));
 
   // calculate exp(-iz)
-  complex34ChangeSign(VARIABLE_COMPLEX34_DATA(iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(iz), REGISTER_COMPLEX34_DATA(op1));
+  complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
   expCo34();
 
   // calculate exp(iz) - exp(-iz)
-  op2 = allocateTemporaryRegister();
-  reallocateRegister(op2, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(VARIABLE_COMPLEX34_DATA(expIz),  REGISTER_COMPLEX34_DATA(op1));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz), REGISTER_COMPLEX34_DATA(opY));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   addCo34Co34();
 
   // calculate (exp(iz) + exp(-iz)) / 2
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
-  real34Copy(const34_2, REGISTER_REAL34_DATA(op2));
-  real34Zero(REGISTER_IMAG34_DATA(op2));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
+  real34Copy(const34_2, REGISTER_REAL34_DATA(opX));
+  real34Zero(REGISTER_IMAG34_DATA(opX));
   divCo34Co34();
 
-  freeTemporaryRegister(op2);
+  freeTemporaryRegister(opY);
+  convertRegister34To16(result);
+}
+
+
+
+void cosAngl(void) {
+  #if (ANGLE16 == 1)
+    convertRegister16To34(opX);
+  #endif
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
+  setRegisterDataType(result, dtReal34);
   convertRegister34To16(result);
 }
 
@@ -165,11 +179,12 @@ void cosCm16(void) {
 
 
 void cosRe34(void) {
-  if(real34IsSpecial(POINTER_TO_REGISTER_DATA(op1))) {
-    real34Copy(const34_NaN, POINTER_TO_REGISTER_DATA(result));
+  if(real34IsSpecial(REGISTER_REAL34_DATA(opX))) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    WP34S_cvt_2rad_sincos(NULL, REAL34_POINTER(POINTER_TO_REGISTER_DATA(result)), op1);
+    convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
   }
 }
 
@@ -180,32 +195,32 @@ void cosCo34(void) {
   complex34_t iz, expIz;
 
   // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(op1), VARIABLE_IMAG34_DATA(iz));
-  real34Copy(REGISTER_IMAG34_DATA(op1), VARIABLE_REAL34_DATA(iz));
-  real34ChangeSign(VARIABLE_REAL34_DATA(iz));
+  real34Copy(REGISTER_REAL34_DATA(opX), VARIABLE_IMAG34_DATA(&iz));
+  real34Copy(REGISTER_IMAG34_DATA(opX), VARIABLE_REAL34_DATA(&iz));
+  real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
 
   // calculate exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(iz), REGISTER_COMPLEX34_DATA(op1));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(expIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expIz));
 
   // calculate exp(-iz)
-  complex34ChangeSign(VARIABLE_COMPLEX34_DATA(iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(iz), REGISTER_COMPLEX34_DATA(op1));
+  complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
   expCo34();
 
   // calculate exp(iz) + exp(-iz)
-  op2 = allocateTemporaryRegister();
-  reallocateRegister(op2, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(VARIABLE_COMPLEX34_DATA(expIz),  REGISTER_COMPLEX34_DATA(op1));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz), REGISTER_COMPLEX34_DATA(opY));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   addCo34Co34();
 
   // calculate (exp(iz) - exp(-iz)) / 2i
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
-  real34Copy(const34_2, REGISTER_REAL34_DATA(op2));
-  real34Zero(REGISTER_IMAG34_DATA(op2));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
+  real34Copy(const34_2, REGISTER_REAL34_DATA(opX));
+  real34Zero(REGISTER_IMAG34_DATA(opX));
   divCo34Co34();
 
-  freeTemporaryRegister(op2);
+  freeTemporaryRegister(opY);
 }

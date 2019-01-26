@@ -28,10 +28,6 @@
  * \return void
  ***********************************************/
 void registerBrowser(uint16_t unusedParamButMandatory) {
-   #if (LOG_FUNCTIONS == 1)
-    enteringFunction("registerBrowser");
-  #endif
-
  int16_t registerNameWidth;
 
  if(currentRegisterBrowserScreen == 9999) { // Init
@@ -74,7 +70,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
         if(getRegisterDataType(regist) == dtReal16) {
           if(showContent) {
-            real16ToDisplayString(REAL16_POINTER(POINTER_TO_REGISTER_DATA(regist)), false, tmpStr3000);
+            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000);
           }
           else {
             strcpy(tmpStr3000, "8 bytes");
@@ -82,7 +78,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtReal34) {
           if(showContent) {
-            real34ToDisplayString(REAL34_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000);
           }
           else {
             strcpy(tmpStr3000, "16 bytes");
@@ -90,7 +86,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex16) {
           if(showContent) {
-            complex16ToDisplayString(COMPLEX16_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000);
           }
           else {
             strcpy(tmpStr3000, "16 bytes");
@@ -98,7 +94,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex34) {
           if(showContent) {
-            complex34ToDisplayString(COMPLEX34_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000);
           }
           else {
             strcpy(tmpStr3000, "32 bytes");
@@ -126,7 +122,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         else if(getRegisterDataType(regist) == dtString) {
           if(showContent) {
             strcpy(tmpStr3000, "'");
-            strncat(tmpStr3000, POINTER_TO_REGISTER_STRING(regist), stringByteLength(POINTER_TO_REGISTER_STRING(regist)) + 1);
+            strncat(tmpStr3000, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
             strcat(tmpStr3000, "'");
             if(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
               tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
@@ -137,7 +133,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
           }
           else {
-            sprintf(tmpStr3000, "%" FMT32S " character%s := 2+%" FMT16U " bytes", stringGlyphLength(POINTER_TO_REGISTER_STRING(regist)), stringGlyphLength(POINTER_TO_REGISTER_STRING(regist))==1 ? "" : "s", *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)));
+            sprintf(tmpStr3000, "%" FMT32S " character%s := 2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)));
           }
         }
         else {
@@ -170,7 +166,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
             if(getRegisterDataType(regist) == dtReal16) {
               if(showContent) {
-                real16ToDisplayString(REAL16_POINTER(POINTER_TO_REGISTER_DATA(regist)), false, tmpStr3000);
+                real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000);
               }
               else {
                 strcpy(tmpStr3000, "4+8 bytes");
@@ -178,7 +174,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtReal34) {
               if(showContent) {
-                real34ToDisplayString(REAL34_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+                real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000);
               }
               else {
                 strcpy(tmpStr3000, "4+16 bytes");
@@ -186,7 +182,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex16) {
               if(showContent) {
-                complex16ToDisplayString(COMPLEX16_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+                complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000);
               }
               else {
                 strcpy(tmpStr3000, "4+16 bytes");
@@ -194,7 +190,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex34) {
               if(showContent) {
-                complex34ToDisplayString(COMPLEX34_POINTER(POINTER_TO_REGISTER_DATA(regist)), tmpStr3000);
+                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000);
               }
               else {
                 strcpy(tmpStr3000, "4+32 bytes");
@@ -222,7 +218,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             else if(getRegisterDataType(regist) == dtString) {
               if(showContent) {
                 strcpy(tmpStr3000, "'");
-                strncat(tmpStr3000, POINTER_TO_REGISTER_STRING(regist), stringByteLength(POINTER_TO_REGISTER_STRING(regist)) + 1);
+                strncat(tmpStr3000, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
                 strcat(tmpStr3000, "'");
                 if(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
                   tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
@@ -233,7 +229,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
                 }
               }
               else {
-                sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT16U " bytes", stringGlyphLength(POINTER_TO_REGISTER_STRING(regist)), stringGlyphLength(POINTER_TO_REGISTER_STRING(regist))==1 ? "" : "s", *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)));
+                sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)));
               }
             }
             else {
@@ -249,8 +245,4 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("registerBrowser");
-  #endif
 }

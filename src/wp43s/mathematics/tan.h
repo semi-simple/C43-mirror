@@ -18,11 +18,12 @@
  * \file tan.h
  ***********************************************/
 
-void fnTan(uint16_t unusedParamButMandatory);
+void fnTan   (uint16_t unusedParamButMandatory);
 void errorTan(void);
 void tanBigI (void);
 void tanRe16 (void);
 void tanCo16 (void);
+void tanAngl (void);
 void tanRm16 (void);
 void tanCm16 (void);
 void tanRe34 (void);

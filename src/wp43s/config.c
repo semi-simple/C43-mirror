@@ -27,10 +27,6 @@
  * \return void
  ***********************************************/
 void fnConfigChina(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConfigChina");
-  #endif
-
   radixMark = RM_PERIOD;
   groupingGap = 4;
   refreshStack();
@@ -38,10 +34,6 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
   dateFormat = DF_YMD;
   oldTime[0] = 0;
   firstGregorianDay = 1949; // JDN of the first day in the Gregorian calendar
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConfigChina");
-  #endif
 }
 
 
@@ -53,10 +45,6 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigEurope(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConfigEurope");
-  #endif
-
   radixMark = RM_COMMA;
   groupingGap = 3;
   refreshStack();
@@ -64,10 +52,6 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
   dateFormat = DF_DMY;
   oldTime[0] = 0;
   firstGregorianDay = 1582; // JDN of the first day in the Gregorian calendar
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConfigEurope");
-  #endif
 }
 
 
@@ -79,10 +63,6 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigIndia(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConfigIndia");
-  #endif
-
   radixMark = RM_PERIOD;
   groupingGap = 3;
   refreshStack();
@@ -90,10 +70,6 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
   dateFormat = DF_DMY;
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConfigIndia");
-  #endif
 }
 
 
@@ -105,10 +81,6 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigJapan(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConfigJapan");
-  #endif
-
   radixMark = RM_PERIOD;
   groupingGap = 3;
   refreshStack();
@@ -116,10 +88,6 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
   dateFormat = DF_YMD;
   oldTime[0] = 0;
   firstGregorianDay = 1873; // JDN of the first day in the Gregorian calendar
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConfigJapan");
-  #endif
 }
 
 
@@ -131,10 +99,6 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUk(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConfigUk");
-  #endif
-
   radixMark = RM_PERIOD;
   groupingGap = 3;
   refreshStack();
@@ -142,10 +106,6 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
   dateFormat = DF_DMY;
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConfigUk");
-  #endif
 }
 
 
@@ -157,10 +117,6 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUsa(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConfigUsa");
-  #endif
-
   radixMark = RM_PERIOD;
   groupingGap = 3;
   refreshStack();
@@ -168,10 +124,6 @@ void fnConfigUsa(uint16_t unusedParamButMandatory) {
   dateFormat = DF_MDY;
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConfigUsa");
-  #endif
 }
 
 
@@ -184,16 +136,8 @@ void fnConfigUsa(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnWho(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnWho");
-  #endif
-
   temporaryInformation = TI_WHO;
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnWho");
-  #endif
  }
 
 
@@ -205,16 +149,8 @@ void fnWho(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnVersion(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnVersion");
-  #endif
-
   temporaryInformation = TI_VERSION;
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnVersion");
-  #endif
 }
 
 
@@ -226,17 +162,9 @@ void fnVersion(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnFreeMemory(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnFreeMemory");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
-  uInt32ToReal16(lastFreeByte - firstFreeByte + 1, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  uInt32ToReal16(lastFreeByte - firstFreeByte + 1, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnFreeMemory");
-  #endif
 }
 
 
@@ -248,17 +176,9 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnGetRoundingMode");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(roundingMode, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  int32ToReal16(roundingMode, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnGetRoundingMode");
-  #endif
 }
 
 
@@ -269,17 +189,9 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnGetIntegerSignMode");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16((smallIntegerMode==SIM_2COMPL ? 2 : (smallIntegerMode==SIM_1COMPL ? 1 : (smallIntegerMode==SIM_UNSIGN ? 0 : -1))), POINTER_TO_REGISTER_DATA(REGISTER_X));
+  int32ToReal16((smallIntegerMode==SIM_2COMPL ? 2 : (smallIntegerMode==SIM_1COMPL ? 1 : (smallIntegerMode==SIM_UNSIGN ? 0 : -1))), REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnGetIntegerSignMode");
-  #endif
 }
 
 
@@ -291,17 +203,9 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetWordSize(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnGetWordSize");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(smallIntegerWordSize, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  int32ToReal16(smallIntegerWordSize, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnGetWordSize");
-  #endif
 }
 
 
@@ -313,10 +217,6 @@ void fnGetWordSize(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnSetWordSize(uint16_t WS) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnSetWordSize");
-  #endif
-
   bool_t reduceWordSize;
   if(WS == 0) {
     WS = 64;
@@ -342,21 +242,17 @@ void fnSetWordSize(uint16_t WS) {
     // reduce the word size of integers on the stack
     for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
       if(getRegisterDataType(regist) == dtSmallInteger) {
-        *(uint64_t *)(POINTER_TO_REGISTER_DATA(regist)) &= smallIntegerMask;
+        *(REGISTER_SMALL_INTEGER_DATA(regist)) &= smallIntegerMask;
       }
     }
 
     // reduce the word size of integers in the L register
     if(getRegisterDataType(REGISTER_L) == dtSmallInteger) {
-      *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_L)) &= smallIntegerMask;
+      *(REGISTER_SMALL_INTEGER_DATA(REGISTER_L)) &= smallIntegerMask;
     }
   }
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnSetWordSize");
-  #endif
 }
 
 
@@ -368,17 +264,9 @@ void fnSetWordSize(uint16_t WS) {
  * \return void
  ***********************************************/
 void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnFreeFlashMemory");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(getFreeFlash(), POINTER_TO_REGISTER_DATA(REGISTER_X));
+  int32ToReal16(getFreeFlash(), REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnFreeFlashMemory");
-  #endif
 }
 
 
@@ -390,26 +278,18 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnBatteryVoltage");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
 
   #ifdef PC_BUILD
-    uInt32ToReal16(3100, POINTER_TO_REGISTER_DATA(REGISTER_X));
+    uInt32ToReal16(3100, REGISTER_REAL16_DATA(REGISTER_X));
   #endif
 
   #ifdef DMCP_BUILD
-    uInt32ToReal16(read_power_voltage(), POINTER_TO_REGISTER_DATA(REGISTER_X));
+    uInt32ToReal16(read_power_voltage(), REGISTER_REAL16_DATA(REGISTER_X));
   #endif
 
-  real16Divide(POINTER_TO_REGISTER_DATA(REGISTER_X), const16_1000, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real16Divide(REGISTER_REAL16_DATA(REGISTER_X), const16_1000, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnBatteryVoltage");
-  #endif
 }
 
 
@@ -421,14 +301,6 @@ void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
  * \return uint32_t Number of bytes free
  ***********************************************/
 uint32_t getFreeFlash(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("getFreeFlash");
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("getFreeFlash");
-  #endif
-
   return 1234567u;
 }
 
@@ -442,17 +314,9 @@ uint32_t getFreeFlash(void) {
  * \return void
  ***********************************************/
 void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnGetSignificantDigits");
-  #endif
-
   liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(significantDigits, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  int32ToReal16(significantDigits, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnGetSignificantDigits");
-  #endif
 }
 
 
@@ -464,10 +328,6 @@ void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnRoundingMode(uint16_t RM) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnRoundingMode");
-  #endif
-
   roundingMode = RM;
 
   if(RM == 0) ctxtReal16.round = DEC_ROUND_HALF_EVEN;
@@ -483,10 +343,6 @@ void fnRoundingMode(uint16_t RM) {
   }
 
   ctxtReal34.round = ctxtReal16.round;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnRoundingMode");
-  #endif
 }
 
 
@@ -498,65 +354,30 @@ void fnRoundingMode(uint16_t RM) {
  * \return void
  ***********************************************/
 void fnAngularMode(uint16_t am) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnAngularMode");
-  #endif
-
   angularMode = am;
-  if(am == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16_t angle, integerPart;
+  if(am == AM_DMS && (getRegisterDataType(REGISTER_X) == dtBigInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)) {
+    if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+      convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    }
+    else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      convertRegister16To34(REGISTER_X);
+    }
 
-    real16Copy(REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), &angle);
-    real16SetPositiveSign(&angle);
-    real16ToIntegral(&angle, &integerPart);
-    real16Subtract(&angle, &integerPart, &angle);
-    real16Multiply(&angle, const16_100, &angle);
-    if(real16CompareGreaterEqual(&angle, const16_60)) {
-      displayCalcErrorMessage(28, REGISTER_T, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnAngularMode:", "minutes in d.ms number " STD_GREATER_EQUAL " 60", NULL, NULL);
-      #endif
-    }
-    else {
-      real16ToIntegral(&angle, &integerPart);
-      real16Subtract(&angle, &integerPart, &angle);
-      real16Multiply(&angle, const16_100, &angle);
-      if(real16CompareGreaterEqual(&angle, const16_60)) {
-        displayCalcErrorMessage(28, REGISTER_T, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnAngularMode:", "seconds in d.ms number " STD_GREATER_EQUAL " 60", NULL, NULL);
-        #endif
-      }
-      else {
-        displayAngularMode = am;
-        temporaryInformation = TI_ANGLE;
-      }
-    }
+    convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS);
+    setRegisterAngularMode(REGISTER_X, AM_DMS);
   }
-  showAngularMode();
-  refreshStack();
 
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnAngularMode");
-  #endif
+  showAngularMode();
 }
 
 
 
 void setConfirmationMode(void (*func)(uint16_t)) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("setConfirmationMode");
-  #endif
-
   previousCalcMode = calcMode;
   calcMode = CM_CONFIRMATION;
   confirmedFunction = func;
   temporaryInformation = TI_ARE_YOU_SURE;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("setConfirmationMode");
-  #endif
 }
 
 
@@ -568,16 +389,8 @@ void setConfirmationMode(void (*func)(uint16_t)) {
  * \return void
  ***********************************************/
 void fnComplexUnit(uint16_t cu) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnComplexUnit");
-  #endif
-
   complexUnit = cu;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnComplexUnit");
-  #endif
 }
 
 /********************************************//**
@@ -587,15 +400,7 @@ void fnComplexUnit(uint16_t cu) {
  * \return void
  ***********************************************/
 void fnComplexResult(uint16_t complexResult) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnComplexResult");
-  #endif
-
   complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnComplexResult");
-  #endif
 }
 
 /********************************************//**
@@ -605,26 +410,14 @@ void fnComplexResult(uint16_t complexResult) {
  * \return void
  ***********************************************/
 void fnComplexMode(uint16_t cm) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnComplexMode");
-  #endif
-
   complexMode = cm;
   showComplexMode();
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnComplexMode");
-  #endif
 }
 
 
 
 void fnClAll(uint16_t confirmation) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnClAll");
-  #endif
-
   if(confirmation == NOT_CONFIRMED) {
     setConfirmationMode(fnClAll);
   }
@@ -659,19 +452,11 @@ void fnClAll(uint16_t confirmation) {
 
     temporaryInformation = TI_NO_INFO;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnClAll");
-  #endif
 }
 
 
 
 void fnClPAll(uint16_t confirmation) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnClPAll");
-  #endif
-
   if(confirmation == NOT_CONFIRMED) {
     setConfirmationMode(fnClPAll);
   }
@@ -682,36 +467,20 @@ void fnClPAll(uint16_t confirmation) {
     showPgmBegin();
     temporaryInformation = TI_NO_INFO;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnClPAll");
-  #endif
 }
 
 
 
 void fnClSigma(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnClSigma");
-  #endif
-
   if(statisticalSumsPointer != 0) {
     freeMemory(statisticalSumsPointer, 14*REAL34_SIZE);
     statisticalSumsPointer = 0;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnClSigma");
-  #endif
 }
 
 
 
 void fnReset(uint16_t confirmation) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnReset");
-  #endif
-
   if(confirmation == NOT_CONFIRMED) {
     setConfirmationMode(fnReset);
   }
@@ -791,11 +560,11 @@ void fnReset(uint16_t confirmation) {
     fnSetFlag(FIRST_LOCAL_REGISTER+0);
     fnSetFlag(NUMBER_OF_LOCAL_FLAGS+2);
     reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, 0);
-    stringToReal16("5.555", POINTER_TO_REGISTER_DATA(FIRST_LOCAL_REGISTER));
+    stringToReal16("5.555", REGISTER_REAL16_DATA(FIRST_LOCAL_REGISTER));
 
     strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
     reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), 0);
-    strcpy(POINTER_TO_REGISTER_STRING(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
+    strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
 
 
     allocateNamedRegister("Z" STD_a_DIARESIS "hler");
@@ -810,28 +579,16 @@ void fnReset(uint16_t confirmation) {
 
     refreshStack();
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnReset");
-  #endif
 }
 
 
 
 void backToSystem(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("backToSystem");
-  #endif
-
   #ifdef PC_BUILD
     fnOff(NOPARAM);
   #endif
 
   #ifdef DMCP_BUILD
     endOfProgram = true;
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("backToSystem");
   #endif
 }

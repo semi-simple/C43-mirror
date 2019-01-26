@@ -62,10 +62,12 @@
 #define OFFSET_REGISTER_NAME_LENGTH   27
 #define LENGTH_REGISTER_NAME_LENGTH    5 // variable name memory area length in byte, 0, 1, ..., 30. 2 to 16 used for now. 16 = 7 glyphs × 2 + terminating 0  + 1 to be even
 
-#define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
+#define getStackTop()                        (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
 #define getRegisterBase(regist)            getRegisterDataInfo(regist)       // Only for a small integer
+#define getRegisterAngularMode(regist)     getRegisterDataInfo(regist)       // Only for a real 34
 #define setRegisterBase(regist, base)      setRegisterDataInfo(regist, base) // Only for a small integer
+#define setRegisterAngularMode(regist, am) setRegisterDataInfo(regist, am)   // Only for a real34
 #define setRegisterSign(regist, sign)      setRegisterDataInfo(regist, sign) // Only for a big integer
 
 
@@ -91,6 +93,7 @@ typedef enum {
   dtBigInteger      =  0,  ///< Z arbitrary precision integer
   dtReal16          =  1,  ///< R single precision real (64 bits)
   dtComplex16       =  2,  ///< C single precision complex (2x 64 bits), RegDataInfo contains rectangular or polar mode
+  dtAngle           =  3,  ///< Angle stored in 1296 units per 360°
   dtTime            =  4,  ///< Time
   dtDate            =  5,  ///< Date in various formats
   dtString          =  6,  ///< Alphanumeric string

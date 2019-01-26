@@ -22,16 +22,8 @@
 
 
 void fnAim(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnAim");
-  #endif
-
   resetShiftState();
   calcModeAIM(NOPARAM); // Alpha Input Mode
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnAim");
-  #endif
 }
 
 
@@ -42,10 +34,6 @@ void fnAim(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void addItemToBuffer(uint16_t item) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addItemToBuffer");
-  #endif
-
   if(item == NOPARAM) {
     displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
   }
@@ -128,11 +116,6 @@ void addItemToBuffer(uint16_t item) {
       }
       else {
         funcOK = false;
-
-        #if (LOG_FUNCTIONS == 1)
-          leavingFunction("addItemToBuffer");
-        #endif
-
         return;
       }
     }
@@ -143,29 +126,16 @@ void addItemToBuffer(uint16_t item) {
 
     else {
       funcOK = false;
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("addItemToBuffer");
-      #endif
-
       return;
     }
 
     funcOK = true;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addItemToBuffer");
-  #endif
 }
 
 
 
 void addItemToNimBuffer(int16_t item) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("addItemToNimBuffer");
-  #endif
-
   int16_t index;
   bool_t done;
 
@@ -196,11 +166,6 @@ void addItemToNimBuffer(int16_t item) {
     else {
       sprintf(errorMessage, "In function addItemToNimBuffer: %d is an unexpected item value when initializing NIM!", item);
       displayBugScreen(errorMessage);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("addItemToNimBuffer");
-      #endif
-
       return;
     }
 
@@ -530,11 +495,6 @@ void addItemToNimBuffer(int16_t item) {
       #else
         stackLiftEnabled = false;
       #endif
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("addItemToNimBuffer");
-      #endif
-
       return;
     }
   }
@@ -692,10 +652,6 @@ void addItemToNimBuffer(int16_t item) {
       showFunctionName(item, 10);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("addItemToNimBuffer");
-  #endif
 }
 
 
@@ -741,10 +697,6 @@ int16_t getStoRclOperation(void) {
 
 
 void tamTransitionSystem(uint16_t tamTransition) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("tamTransitionSystem");
-  #endif
-
   uint16_t status = transitionSystemStatus;
 
   // Entry point
@@ -1168,19 +1120,11 @@ void tamTransitionSystem(uint16_t tamTransition) {
     sprintf(errorMessage, "In function tamTransitionSystem: unknown state %" FMT16U " of the TAM transition system! This should never happen!", status);
     displayBugScreen(errorMessage);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("tamTransitionSystem");
-  #endif
 }
 
 
 
 void closeNim(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("closeNim");
-  #endif
-
   int16_t lastChar = strlen(nimBuffer) - 1;
 
   if(nimNumberPart != NP_INT_16) { // We need a # and a base
@@ -1228,11 +1172,6 @@ void closeNim(void) {
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function closeNIM:", "there is a non numeric character in the base of the integer!", NULL, NULL);
               #endif
-
-              #if (LOG_FUNCTIONS == 1)
-                leavingFunction("closeNim");
-              #endif
-
               return;
             }
           }
@@ -1243,11 +1182,6 @@ void closeNim(void) {
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
              showInfoDialog("In function closeNIM:", "the base of the integer must be from 2 to 16!", NULL, NULL);
             #endif
-
-            #if (LOG_FUNCTIONS == 1)
-              leavingFunction("closeNim");
-            #endif
-
             return;
           }
 
@@ -1260,11 +1194,6 @@ void closeNim(void) {
               #endif
 
               restoreStack();
-
-              #if (LOG_FUNCTIONS == 1)
-                leavingFunction("closeNim");
-              #endif
-
               return;
             }
           }
@@ -1278,11 +1207,6 @@ void closeNim(void) {
           else {
             sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for smallIntegerWordSize!", smallIntegerWordSize);
             displayBugScreen(errorMessage);
-
-            #if (LOG_FUNCTIONS == 1)
-              leavingFunction("closeNim");
-            #endif
-
             return;
           }
 
@@ -1315,11 +1239,6 @@ void closeNim(void) {
               sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "the entered number must be from %s to %s!", strMin, strMax);
               showInfoDialog("In function closeNIM:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
             #endif
-
-            #if (LOG_FUNCTIONS == 1)
-              leavingFunction("closeNim");
-            #endif
-
             return;
           }
 
@@ -1337,39 +1256,39 @@ void closeNim(void) {
           }
 
           if(smallIntegerMode == SIM_UNSIGN) {
-            *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = val;
+            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
           }
           else if(smallIntegerMode == SIM_2COMPL) {
             if(value.sign) {
               val = (~val + 1) & smallIntegerMask;
             }
 
-            *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = val;
+            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
           }
           else if(smallIntegerMode == SIM_1COMPL) {
             if(value.sign) {
               val = ~val & smallIntegerMask;
             }
 
-            *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = val;
+            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
           }
           else if(smallIntegerMode == SIM_SIGNMT) {
             if(value.sign) {
               val += smallIntegerMask;
             }
 
-            *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = val;
+            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
           }
           else {
             sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for smallIntegerMode!", smallIntegerMode);
             displayBugScreen(errorMessage);
-            *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = 0;
+            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = 0;
           }
         }
         else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
-          stringToReal16(nimBuffer, POINTER_TO_REGISTER_DATA(REGISTER_X));
-          if(real16IsInfinite(POINTER_TO_REGISTER_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+          stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
+          if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
             displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function closeNIM:", "the absolute value of a real must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
@@ -1397,11 +1316,6 @@ void closeNim(void) {
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function parseNimString:", "there is a non numeric character in the integer part of the fraction!", NULL, NULL);
               #endif
-
-              #if (LOG_FUNCTIONS == 1)
-                leavingFunction("closeNim");
-              #endif
-
               return;
             }
           }
@@ -1420,11 +1334,6 @@ void closeNim(void) {
              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                showInfoDialog("In function parseNimString:", "there is a non numeric character in the numerator part of the fraction!", NULL, NULL);
              #endif
-
-             #if (LOG_FUNCTIONS == 1)
-               leavingFunction("closeNim");
-             #endif
-
              return;
             }
           }
@@ -1435,11 +1344,6 @@ void closeNim(void) {
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function parseNimString:", "there is a non numeric character in the denominator part of the fraction!", NULL, NULL);
               #endif
-
-              #if (LOG_FUNCTIONS == 1)
-                leavingFunction("closeNim");
-              #endif
-
               return;
             }
           }
@@ -1455,22 +1359,17 @@ void closeNim(void) {
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function parseNimString:", "the denominator of the fraction should not be 0!", "Unless D flag (Danger) is set.", NULL);
             #endif
-
-            #if (LOG_FUNCTIONS == 1)
-              leavingFunction("closeNim");
-            #endif
-
             return;
           }
 
           reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
-          int32ToReal16(numer, POINTER_TO_REGISTER_DATA(REGISTER_X));
+          int32ToReal16(numer, REGISTER_REAL16_DATA(REGISTER_X));
           int32ToReal16(denom, &temp);
-          real16Divide(POINTER_TO_REGISTER_DATA(REGISTER_X), &temp, POINTER_TO_REGISTER_DATA(REGISTER_X));
+          real16Divide(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
           int32ToReal16(integer, &temp);
-          real16Add(POINTER_TO_REGISTER_DATA(REGISTER_X), &temp, POINTER_TO_REGISTER_DATA(REGISTER_X));
+          real16Add(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
           if(nimBuffer[0] == '-')
-           real16SetNegativeSign(POINTER_TO_REGISTER_DATA(REGISTER_X));
+           real16SetNegativeSign(REGISTER_REAL16_DATA(REGISTER_X));
 
           displayRealAsFraction = true;
           if(integer != 0) {
@@ -1493,19 +1392,19 @@ void closeNim(void) {
           }
           nimBuffer[imaginaryMantissaSignLocation] = 0;
 
-          stringToReal16(nimBuffer, POINTER_TO_REGISTER_DATA(REGISTER_X));
-          if(real16IsInfinite(POINTER_TO_REGISTER_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+          stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
+          if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
             displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function closeNIM:", "the absolute value of the real part of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
             #endif
           }
 
-          stringToReal16(nimBuffer + imaginaryMantissaSignLocation + 2, POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+          stringToReal16(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG16_DATA(REGISTER_X));
           if(imaginarySign == -1) {
-            real16SetNegativeSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+            real16SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
           }
-          if(real16IsInfinite(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE) && !getFlag(FLAG_DANGER)) {
+          if(real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
             displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function closeNIM:", "the absolute value of the imaginary part of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
@@ -1513,21 +1412,21 @@ void closeNim(void) {
           }
 
           if(complexMode == CM_POLAR) {
-            if(real16CompareEqual(REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), const16_0)) {
-              real16Zero(COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+            if(real16CompareEqual(REGISTER_REAL16_DATA(REGISTER_X), const16_0)) {
+              real16Zero(REGISTER_IMAG16_DATA(REGISTER_X));
             }
             else {
               real16_t magnitude16, theta16;
 
-              real16Copy(POINTER_TO_REGISTER_DATA(REGISTER_X), &magnitude16);
-              real16Copy(COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), &theta16);
+              real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &magnitude16);
+              real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &theta16);
               if(real16CompareLessThan(&magnitude16, const16_0)) {
                 real16SetPositiveSign(&magnitude16);
                 real16Add(&theta16, const16_pi, &theta16);
                 real16Remainder(&theta16, const16_2pi, &theta16);
               }
-              convertAngle16FromTo(&theta16, angularMode, AM_RADIAN);
-              real16PolarToRectangular(&magnitude16, &theta16, REAL16_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)), COMPLEX16_IMAGINARY_PART_POINTER(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+              convertAngle16ToInternal(&theta16, AM_RADIAN);
+              real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in internal units
             }
           }
         }
@@ -1540,8 +1439,4 @@ void closeNim(void) {
   }
 
   refreshRegisterLine(NIM_REGISTER_LINE);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("closeNim");
-  #endif
 }

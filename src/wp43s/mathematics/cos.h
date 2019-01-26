@@ -18,11 +18,12 @@
  * \file cos.h
  ***********************************************/
 
-void fnCos(uint16_t unusedParamButMandatory);
+void fnCos   (uint16_t unusedParamButMandatory);
 void errorCos(void);
 void cosBigI (void);
 void cosRe16 (void);
 void cosCo16 (void);
+void cosAngl (void);
 void cosRm16 (void);
 void cosCm16 (void);
 void cosRe34 (void);

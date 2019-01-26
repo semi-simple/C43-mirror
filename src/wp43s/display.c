@@ -27,16 +27,8 @@
  * \return void
  ***********************************************/
 void fnDisplayOvr(uint16_t displayOvr) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayOvr");
-  #endif
-
   displayModeOverride = displayOvr;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayOvr");
-  #endif
 }
 
 
@@ -48,17 +40,9 @@ void fnDisplayOvr(uint16_t displayOvr) {
  * \return void
  ***********************************************/
 void fnProductSign(uint16_t ps) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnProductSign");
-  #endif
-
   productSign = ps;
   showFracMode();
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnProductSign");
-  #endif
 }
 
 
@@ -71,16 +55,8 @@ void fnProductSign(uint16_t ps) {
  *
  ***********************************************/
 void fnRadixMark(uint16_t rm) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnRadixMark");
-  #endif
-
   radixMark = rm;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnRadixMark");
-  #endif
 }
 
 
@@ -92,10 +68,6 @@ void fnRadixMark(uint16_t rm) {
  * \return void
  ***********************************************/
 void fnDisplayFormatFix(uint16_t displayFormatN) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayFormatFix");
-  #endif
-
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
@@ -110,10 +82,6 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   #endif
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayFormatFix");
-  #endif
 }
 
 
@@ -125,10 +93,6 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatSci(uint16_t displayFormatN) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayFormatSci");
-  #endif
-
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
@@ -137,16 +101,12 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
     convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
   #ifdef PC_BUILD
-  else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    showInfoDialog("In function fnDisplayFormatSci:", "converting an integer to a real16", "is to be coded", NULL);
+    else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+      showInfoDialog("In function fnDisplayFormatSci:", "converting an integer to a real16", "is to be coded", NULL);
   }
   #endif
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayFormatSci");
-  #endif
 }
 
 
@@ -158,10 +118,6 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatEng(uint16_t displayFormatN) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayFormatEng");
-  #endif
-
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
@@ -172,14 +128,10 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   #ifdef PC_BUILD
     else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
       showInfoDialog("In function fnDisplayFormatEng:", "converting an integer to a real16", "is to be coded", NULL);
-  }
+    }
   #endif
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayFormatEng");
-  #endif
 }
 
 
@@ -191,10 +143,6 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatAll(uint16_t displayFormatN) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayFormatAll");
-  #endif
-
   displayFormat = DF_ALL;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
@@ -205,14 +153,10 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   #ifdef PC_BUILD
     else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
       showInfoDialog("In function fnDisplayFormatAll:", "converting an integer to a real16", "is to be coded", NULL);
-  }
+    }
   #endif
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayFormatAll");
-  #endif
 }
 
 
@@ -224,10 +168,6 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatDsp(uint16_t displayFormatN) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayFormatDsp");
-  #endif
-
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
@@ -237,14 +177,10 @@ void fnDisplayFormatDsp(uint16_t displayFormatN) {
   #ifdef PC_BUILD
     else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
       showInfoDialog("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
-  }
+    }
   #endif
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayFormatDsp");
-  #endif
 }
 
 
@@ -256,16 +192,8 @@ void fnDisplayFormatDsp(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatGap(uint16_t gap) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDisplayFormatGap");
-  #endif
-
   groupingGap = gap;
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDisplayFormatGap");
-  #endif
 }
 
 
@@ -278,26 +206,14 @@ void fnDisplayFormatGap(uint16_t gap) {
  * \return void
  ***********************************************/
 void exponentToDisplayString(int32_t exponent, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("exponentToDisplayString");
-  #endif
-
   strcpy(displayString, PRODUCT_SIGN);
   strcpy(displayString+2, NUM_SUB_10);
   supNumberToDisplayString(exponent, displayString+4);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("exponentToDisplayString");
-  #endif
 }
 
 
 
 void supNumberToDisplayString(int32_t supNumber, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("supNumberToDisplayString");
-  #endif
-
   if(supNumber < 0) {
     supNumber = -supNumber;
     strcat(displayString, NUM_SUP_MINUS);
@@ -330,19 +246,11 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString) {
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("supNumberToDisplayString");
-  #endif
 }
 
 
 
 void subNumberToDisplayString(int32_t subNumber, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("subNumberToDisplayString");
-  #endif
-
   if(subNumber < 0) {
     subNumber = -subNumber;
     strcat(displayString, NUM_SUB_MINUS);
@@ -365,10 +273,6 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
       displayString[1] += digit;
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("subNumberToDisplayString");
-  #endif
 }
 
 
@@ -382,10 +286,6 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
  * \return void
  ***********************************************/
 void real16ToDisplayString(const real16_t *value, bool_t real34, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("real16ToDisplayString");
-  #endif
-
   #undef MAX_DIGITS
   #define MAX_DIGITS 19 // 16 + 1 before + 2 after
 
@@ -402,21 +302,11 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
     else {
       strcpy(displayString, "+" NUM_INFINITY);
     }
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("real16ToDisplayString");
-    #endif
-
     return;
   }
 
   if(real16IsNaN(value)) {
     real16ToString(value, displayString);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("real16ToDisplayString");
-    #endif
-
     return;
   }
 
@@ -424,9 +314,9 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
 
   sign = real16GetCoefficient(value, bcd+1);
   exponent = real16GetExponent(value);
-  bcd[0]           = 0; // used when rounding from 9.999 to 10.000
-  bcd[MAX_DIGITS-2] = 0; // used for rounding and ENG display mode
-  bcd[MAX_DIGITS-1] = 0; // used for ENG display mode
+  bcd[0]              = 0; // used when rounding from 9.999 to 10.000
+  bcd[MAX_DIGITS - 2] = 0; // used for rounding and ENG display mode
+  bcd[MAX_DIGITS - 1] = 0; // used for ENG display mode
 
   // Calculate the number of significant digits
   for(digitPointer=1; digitPointer<=MAX_DIGITS-3; digitPointer++) {
@@ -565,11 +455,6 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
       }
 
       displayString[charIndex] = 0;
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("real16ToDisplayString");
-      #endif
-
       return;
     }
   }
@@ -711,11 +596,6 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
       }
 
       displayString[charIndex] = 0;
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("real16ToDisplayString");
-      #endif
-
       return;
     }
   }
@@ -797,12 +677,6 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
     if(exponent != 0) {
       exponentToDisplayString(exponent, displayString+charIndex);
     }
-
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("real16ToDisplayString");
-    #endif
-
     return;
   }
 
@@ -895,10 +769,6 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
       exponentToDisplayString(exponent, displayString+charIndex);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("real16ToDisplayString");
-  #endif
 }
 
 
@@ -911,36 +781,24 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
  * \return void
  ***********************************************/
 void real34ToDisplayString(const real34_t *real34, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("real34ToDisplayString");
-  #endif
-
   real16_t tmp;
 
   real34ToReal16(real34, &tmp);
   real16ToDisplayString(&tmp, true, displayString);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("real34ToDisplayString");
-  #endif
 }
 
 
 
 void complex16ToDisplayString(const complex16_t *complex16, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("complex16ToDisplayString");
-  #endif
-
   int16_t i=64;
   real16_t real16, imag16;
 
   if(complexMode == CM_RECTANGULAR) {
-    real16Copy(REAL16_POINTER(complex16), &real16);
-    real16Copy(COMPLEX16_IMAGINARY_PART_POINTER(complex16), &imag16);
+    real16Copy(VARIABLE_REAL16_DATA(complex16), &real16);
+    real16Copy(VARIABLE_IMAG16_DATA(complex16), &imag16);
   }
   else if(complexMode == CM_POLAR) {
-    real16RectangularToPolar(REAL16_POINTER(complex16), COMPLEX16_IMAGINARY_PART_POINTER(complex16), &real16, &imag16);
+    real16RectangularToPolar(VARIABLE_REAL16_DATA(complex16), VARIABLE_IMAG16_DATA(complex16), &real16, &imag16); // imag16 in internal units
   }
   else {
     sprintf(errorMessage, "In function complex16ToDisplayString: %d is an unexpected value for complexMode!", complexMode);
@@ -965,30 +823,22 @@ void complex16ToDisplayString(const complex16_t *complex16, char *displayString)
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle16ToDisplayString(&imag16, displayString + stringByteLength(displayString));
+    //angle16ToDisplayString(&imag16, displayString + stringByteLength(displayString));
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("complex16ToDisplayString");
-  #endif
 }
 
 
 
 void complex34ToDisplayString(const complex34_t *complex34, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("complex34ToDisplayString");
-  #endif
-
   int16_t i=64;
   real34_t real34, imag34;
 
   if(complexMode == CM_RECTANGULAR) {
-    real34Copy(REAL34_POINTER(complex34), &real34);
-    real34Copy(COMPLEX34_IMAGINARY_PART_POINTER(complex34), &imag34);
+    real34Copy(VARIABLE_REAL34_DATA(complex34), &real34);
+    real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
   }
   else if(complexMode == CM_POLAR) {
-    real34RectangularToPolar(REAL34_POINTER(complex34), COMPLEX34_IMAGINARY_PART_POINTER(complex34), &real34, &imag34);
+    real34RectangularToPolar(VARIABLE_REAL34_DATA(complex34), VARIABLE_IMAG34_DATA(complex34), &real34, &imag34);
   }
   else {
     sprintf(errorMessage, "In function complex34ToDisplayString: %d is an unexpected value for complexMode!", complexMode);
@@ -1013,12 +863,8 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString)
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle34ToDisplayString(&imag34, displayString + stringByteLength(displayString));
+    //angle34ToDisplayString(&imag34, displayString + stringByteLength(displayString));
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("complex34ToDisplayString");
-  #endif
 }
 
 
@@ -1031,10 +877,6 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString)
  * \return void
  ***********************************************/
 void fractionToDisplayString(calcRegister_t regist, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fractionToDisplayString");
-  #endif
-
   int16_t  sign, lessEqualGreater;
   uint64_t intPart, numer, denom;
   int16_t  u, insertAt, endingZero, gap;
@@ -1154,78 +996,69 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     sprintf(errorMessage, "In function fractionToDisplayString: %d is an unexpected value for lessEqualGreater!", lessEqualGreater);
     displayBugScreen(errorMessage);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fractionToDisplayString");
-  #endif
 }
 
 
 
 void registerAngleToDisplayString(calcRegister_t regist, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("registerAngleToDisplayString");
-  #endif
+  if(getRegisterDataType(regist) == dtAngle) {
+    #if (ANGLE16 == 1)
+      real34_t angle34;
 
-  if(getRegisterDataType(regist) == dtReal16) {
-    angle16ToDisplayString(REAL16_POINTER(POINTER_TO_REGISTER_DATA(regist)), displayString);
-  }
-  else if(getRegisterDataType(regist) == dtReal34) {
-    angle34ToDisplayString(REAL34_POINTER(POINTER_TO_REGISTER_DATA(regist)), displayString);
+      real16ToReal34(REGISTER_REAL16_DATA(regist), &angle34);
+      angle34ToDisplayString(&angle34, getRegisterAngularMode(regist), displayString);
+    #endif
+
+    #if (ANGLE34 == 1)
+      angle34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), displayString);
+    #endif
   }
   else {
     sprintf(errorMessage, "In function registerAngleToDisplayString: register %d is %s which cannot be represented as an angle!", regist, getDataTypeName(getRegisterDataType(regist), true, false));
     displayBugScreen(errorMessage);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("registerAngleToDisplayString");
-  #endif
 }
 
 
 
-void angle16ToDisplayString(const real16_t *angle, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("angle16ToDisplayString");
-  #endif
-
-  if(displayAngularMode == AM_DMS) {
+void angle34ToDisplayString(const real34_t *angle34, uint8_t mode, char *displayString) {
+  if(mode == AM_DMS) {
     char degStr[27];
     uint32_t m, s, fs;
     int16_t sign;
 
-    real16_t temp0;
-    real16_t temp1; // degrees
-    real16_t temp3; // minutes
-    real16_t temp4; // seconds
+    real34_t temp;
+    real34_t degrees;
+    real34_t minutes;
+    real34_t seconds;
 
-    real16Copy(angle, &temp0);
+    real34Copy(angle34, &temp);
+    convertAngle34FromInternal(&temp, AM_DMS);
 
-    sign = real16IsNegative(&temp0) ? -1 : 1;
-    real16SetPositiveSign(&temp0);
+    sign = real34IsNegative(&temp) ? -1 : 1;
+    real34SetPositiveSign(&temp);
 
     // Get the degrees
-    real16ToIntegral(&temp0, &temp1);
+    real34ToIntegral(&temp, &degrees);
 
     // Get the minutes
-    real16Subtract(&temp0, &temp1, &temp0);
-    real16Multiply(&temp0, const16_100, &temp0);
-    real16ToIntegral(&temp0, &temp3);
+    real34Subtract(&temp, &degrees, &temp);
+    real34Multiply(&temp, const34_100, &temp);
+    real34ToIntegral(&temp, &minutes);
 
     // Get the seconds
-    real16Subtract(&temp0, &temp3, &temp0);
-    real16Multiply(&temp0, const16_100, &temp0);
-    real16ToIntegral(&temp0, &temp4);
+    real34Subtract(&temp, &minutes, &temp);
+    real34Multiply(&temp, const34_100, &temp);
+    real34ToIntegral(&temp, &seconds);
 
     // Get the fractional seconds
-    real16Subtract(&temp0, &temp4, &temp0);
-    real16Multiply(&temp0, const16_100, &temp0);
-    real34ToIntegralRound(&temp0, &temp0);
+    real34Subtract(&temp, &seconds, &temp);
+    real34Multiply(&temp, const34_100, &temp);
+    real34ToIntegralRound(&temp, &temp);
 
-    fs = real16ToUInt32(&temp0);
-    s  = real16ToUInt32(&temp4);
-    m  = real16ToUInt32(&temp3);
+    fs = real34ToUInt32(&temp);
+    s  = real34ToUInt32(&seconds);
+    m  = real34ToUInt32(&minutes);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1239,10 +1072,10 @@ void angle16ToDisplayString(const real16_t *angle, char *displayString) {
 
     if(m >= 60) {
       m -= 60;
-      real16Add(&temp1, const16_1, &temp1);
+      real34Add(&degrees, const34_1, &degrees);
     }
 
-    real16ToString(&temp1, degStr);
+    real34ToString(&degrees, degStr);
     sprintf(displayString, "%s%s" STD_DEGREE "%s%" FMT32U STD_QUOTE "%s%" FMT32U "%s%02" FMT32U STD_DOUBLE_QUOTE,
                             sign==-1 ? "-" : "",
                               degStr,         m < 10 ? STD_SPACE_FIGURE : "",
@@ -1251,54 +1084,35 @@ void angle16ToDisplayString(const real16_t *angle, char *displayString) {
                                                                                     fs);
   }
   else {
-    real16ToDisplayString(angle, false, displayString);
+    real16_t angle16;
+    real34_t angle;
 
-         if(displayAngularMode == AM_DEGREE) strcat(displayString, STD_DEGREE);
-    else if(displayAngularMode == AM_GRAD)   strcat(displayString, STD_SUP_g);
-    else if(displayAngularMode == AM_MULTPI) strcat(displayString, STD_pi);
-    else if(displayAngularMode == AM_RADIAN) strcat(displayString, STD_SUP_r);
+    real34Copy(angle34, &angle);
+    convertAngle34FromInternal(&angle, mode);
+    real34ToReal16(&angle, &angle16);
+    real16ToDisplayString(&angle16, false, displayString);
+
+         if(mode == AM_DEGREE) strcat(displayString, STD_DEGREE);
+    else if(mode == AM_GRAD)   strcat(displayString, STD_SUP_g);
+    else if(mode == AM_MULTPI) strcat(displayString, STD_pi);
+    else if(mode == AM_RADIAN) strcat(displayString, STD_SUP_r);
     else {
       strcat(displayString, "?");
-      sprintf(errorMessage, "In function angle16ToDisplayString: %" FMT8U " is an unexpected value for displayAngularMode!", displayAngularMode);
+      sprintf(errorMessage, "In function angle34ToDisplayString: %" FMT8U " is an unexpected value for mode!", mode);
       displayBugScreen(errorMessage);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("angle16ToDisplayString");
-  #endif
-}
-
-
-
-void angle34ToDisplayString(const real34_t *angle34, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("angle34ToDisplayString");
-  #endif
-
-  real16_t angle16;
-
-  real34ToReal16(angle34, &angle16);
-  angle16ToDisplayString(&angle16, displayString);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("angle34ToDisplayString");
-  #endif
 }
 
 
 
 void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, const font_t **font) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("smallIntegerToDisplayString");
-  #endif
-
   int16_t i, j, k, unit, gap, digit, bitsPerDigit, maxDigits, base;
   uint64_t number, sign;
   static const char digits[17] = "0123456789ABCDEF";
 
   base    = getRegisterBase(regist);
-  number  = *(uint64_t *)(POINTER_TO_REGISTER_DATA(regist));
+  number  = *(REGISTER_SMALL_INTEGER_DATA(regist));
 
   if(base <= 1 || base >= 17) {
     sprintf(errorMessage, "In function smallIntegerToDisplayString: %d is an unexpected value for base!", base);
@@ -1418,11 +1232,6 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("smallIntegerToDisplayString");
-      #endif
-
       return;
     }
 
@@ -1446,11 +1255,6 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("smallIntegerToDisplayString");
-      #endif
-
       return;
     }
 
@@ -1472,11 +1276,6 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("smallIntegerToDisplayString");
-      #endif
-
       return;
     }
 
@@ -1504,11 +1303,6 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, &standardFont, false, false) < SCREEN_WIDTH) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("smallIntegerToDisplayString");
-      #endif
-
       return;
     }
 
@@ -1538,11 +1332,6 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("smallIntegerToDisplayString");
-      #endif
-
       return;
     }
 
@@ -1570,11 +1359,6 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("smallIntegerToDisplayString");
-      #endif
-
       return;
     }
 
@@ -1584,19 +1368,11 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
     strcpy(displayString, "Integer data representation to wide!");
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("smallIntegerToDisplayString");
-  #endif
 }
 
 
 
 void bigIntegerToDisplayString(calcRegister_t regist, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("bigIntegerToDisplayString");
-  #endif
-
   int16_t len;
   bigInteger_t tempBigInteger;
 
@@ -1636,36 +1412,16 @@ void bigIntegerToDisplayString(calcRegister_t regist, char *displayString) {
 
     strcat(displayString, exponentString);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("bigIntegerToDisplayString");
-  #endif
 }
 
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("dateToDisplayString");
-  #endif
-
   sprintf(displayString, "%" FMT64S, *(int64_t *)(POINTER_TO_REGISTER_DATA(regist)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("dateToDisplayString");
-  #endif
 }
 
 
 
 void timeToDisplayString(calcRegister_t regist, char *displayString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("timeToDisplayString");
-  #endif
-
   sprintf(displayString, "%" FMT64S, *(int64_t *)(POINTER_TO_REGISTER_DATA(regist)));
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("timeToDisplayString");
-  #endif
 }

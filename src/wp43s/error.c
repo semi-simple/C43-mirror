@@ -65,10 +65,6 @@ const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
  * \return void
  ***********************************************/
 void showInfoDialog(const char *m1, const char *m2, const char *m3, const char *m4) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showInfoDialog");
-  #endif
-
   GtkWidget *dialog;
   uint8_t utf8m1[2000], utf8m2[2000], utf8m3[2000], utf8m4[2000];
 
@@ -103,19 +99,11 @@ void showInfoDialog(const char *m1, const char *m2, const char *m3, const char *
   gtk_window_set_title(GTK_WINDOW(dialog), "WP 43S error message");
   gtk_dialog_run(GTK_DIALOG(dialog));
   gtk_widget_destroy(dialog);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showInfoDialog");
-  #endif
 }
 #endif
 
 
 void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegisterLine, calcRegister_t errRegisterLine) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("displayCalcErrorMessage");
-  #endif
-
   if(errorCode >= NUMBER_OF_ERROR_CODES || errorCode <= 0) {
     sprintf(errorMessage, "In function displayCalcErrorMessage: %d is an unexpected value for errorCode!", errorCode);
     displayBugScreen(errorMessage);
@@ -137,19 +125,11 @@ void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegiste
     errorRegisterLine        = errRegisterLine;
     refreshRegisterLine(errMessageRegisterLine);
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("displayCalcErrorMessage");
-  #endif
 }
 
 
 
 void nextWord(const char *str, int16_t *pos, char *word) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("nextWord");
-  #endif
-
   int16_t i = 0;
 
   while(str[*pos] != 0 && str[*pos] != ' ') {
@@ -161,10 +141,6 @@ void nextWord(const char *str, int16_t *pos, char *word) {
   while(str[*pos] != 0 && str[*pos] == ' ') {
     (*pos)++;
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("nextWord");
-  #endif
 }
 
 
@@ -177,10 +153,6 @@ void nextWord(const char *str, int16_t *pos, char *word) {
  * \return void
  ***********************************************/
 void displayBugScreen(const char *msg) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("displayBugScreen");
-  #endif
-
   if(calcMode != CM_BUG_ON_SCREEN) {
     int16_t y, pos;
     char line[100], word[50], message[1000];
@@ -192,7 +164,7 @@ void displayBugScreen(const char *msg) {
     cursorEnabled = false;
     hideCursor();
 
-    clearScreen(true, true, true);
+    clearScreen(false, true, true);
 
     y = 20;
     showString("This is most likely a bug in the firmware!", &standardFont, 1, y, vmNormal, true, false);
@@ -230,8 +202,4 @@ void displayBugScreen(const char *msg) {
       showString(line, &standardFont, 1, y, vmNormal, true, false);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("displayBugScreen");
-  #endif
 }

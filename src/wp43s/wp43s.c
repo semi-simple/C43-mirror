@@ -40,7 +40,7 @@ softmenuStack_t        softmenuStack[7];
 uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
 int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
 int16_t                currentRegisterBrowserScreen;
-calcRegister_t         result, op1, op2;
+calcRegister_t         result, opX, opY;
 uint16_t               numberOfLocalRegisters, numberOfNamedRegisters;
 uint32_t               allLocalRegisterPointer, allNamedRegisterPointer, statisticalSumsPointer, firstFreeByte, lastFreeByte;
 uint16_t               programCounter, xCursor, yCursor;
@@ -55,7 +55,7 @@ uint8_t                displayModeOverride, stackSize, complexMode, alphaCase;
 uint8_t                numLinesNumericFont, numLinesStandardFont, cursorEnabled, cursorFont;
 uint8_t                nimNumberPart, hexDigits, lastErrorCode, serialIOIconEnabled;
 uint8_t                timeFormat, tamMode, temporaryInformation, rbrMode;
-uint8_t                numScreensNumericFont, angularMode, displayAngularMode;
+uint8_t                numScreensNumericFont, angularMode;
 bool_t                 hourGlassIconEnabled, watchIconEnabled, userModeEnabled;
 bool_t                 printerIconEnabled, batteryIconEnabled, shiftF, shiftG;
 bool_t                 showContent, stackLiftEnabled, displayLeadingZeros, displayRealAsFraction;
@@ -80,10 +80,6 @@ void                   (*confirmedFunction)(uint16_t);
  * \return void
  ***********************************************/
 void setupDefaults(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("setupDefaults");
-  #endif
-
   ram = malloc(RAM_SIZE);
 
   firstFreeByte = 0;
@@ -108,7 +104,7 @@ void setupDefaults(void) {
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     setRegisterDataType(regist, dtReal16);
     setRegisterDataPointer(regist, firstFreeByte);
-    real16Zero(RAM(firstFreeByte));
+    real16Zero(RAM_REAL16(firstFreeByte));
     firstFreeByte += REAL16_SIZE;                                            // 112 * 8 = 896 bytes
   }
 
@@ -117,7 +113,7 @@ void setupDefaults(void) {
     tempRegistersInUse[regist - FIRST_TEMPORARY_REGISTER] = false;
     setRegisterDataType(regist, dtReal16);
     setRegisterDataPointer(regist, firstFreeByte);
-    real16Zero(RAM(firstFreeByte));
+    real16Zero(RAM_REAL16(firstFreeByte));
     firstFreeByte += REAL16_SIZE;                                            // 8 * 8 = 64 bytes
   }
 
@@ -125,7 +121,7 @@ void setupDefaults(void) {
   for(calcRegister_t regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_L; regist++) {
     setRegisterDataType(regist, dtReal16);
     setRegisterDataPointer(regist, firstFreeByte);
-    real16Zero(RAM(firstFreeByte));
+    real16Zero(RAM_REAL16(firstFreeByte));
     firstFreeByte += REAL16_SIZE;                                            // 9 * 8 = 64 bytes
   }
 
@@ -151,9 +147,6 @@ void setupDefaults(void) {
     printf("Free RAM:               %5" FMT32U "\n", lastFreeByte - firstFreeByte + 1);
   #endif
 
-//cpystr(tmpStr3000, STD_SIGMA "(1/i" STD_SUP_2 ") pour i de 1 " STD_a_GRAVE " +" STD_INFINITY " = " STD_pi STD_SUP_2 "/6");
-//reallocateRegister(REGISTER_T, dtString, strlen(tmpStr3000), 0);
-//strcpy(POINTER_TO_REGISTER_DATA(REGISTER_T) + 2u, tmpStr3000);
   fnSetWordSize(64); // word size from 1 to 64
   fnIntegerMode(SIM_2COMPL);
 
@@ -240,10 +233,6 @@ void setupDefaults(void) {
 
   hideUserMode();
   calcModeNormal();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("setupDefaults");
-  #endif
 }
 
 

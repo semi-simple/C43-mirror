@@ -28,14 +28,6 @@
  *
  ***********************************************/
 void fnCurveFitting(uint16_t cf) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnCurveFitting");
-  #endif
-
   curveFitting = cf;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnCurveFitting");
-  #endif
 }
 

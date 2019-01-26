@@ -18,11 +18,12 @@
  * \file sin.h
  ***********************************************/
 
-void fnSin(uint16_t unusedParamButMandatory);
+void fnSin   (uint16_t unusedParamButMandatory);
 void errorSin(void);
 void sinBigI (void);
 void sinRe16 (void);
 void sinCo16 (void);
+void sinAngl (void);
 void sinRm16 (void);
 void sinCm16 (void);
 void sinRe34 (void);

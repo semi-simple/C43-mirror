@@ -431,14 +431,6 @@ const char sortingOrder[] =
  ;
 
 void test(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("test");
-  #endif
-
   for(int i=1; i<LAST_ITEM; i++) {
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("test");
-  #endif
 }

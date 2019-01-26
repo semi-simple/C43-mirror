@@ -27,16 +27,8 @@
  * \return void
  ***********************************************/
 void fnTimeFormat(uint16_t tf) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnTimeFormat");
-  #endif
-
   timeFormat = tf;
   oldTime[0] = 0;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnTimeFormat");
-  #endif
 }
 
 /********************************************//**
@@ -46,16 +38,8 @@ void fnTimeFormat(uint16_t tf) {
  * \return void
  ***********************************************/
 void fnDateFormat(uint16_t df) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnDateFormat");
-  #endif
-
   dateFormat = df;
   oldTime[0] = 0;
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnDateFormat");
-  #endif
 }
 
 /********************************************//**
@@ -65,10 +49,6 @@ void fnDateFormat(uint16_t df) {
  * \return void
  ***********************************************/
 void getDateString(char *dateString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("getDateString");
-  #endif
-
   #ifdef PC_BUILD
     time_t rawTime;
     struct tm *timeInfo;
@@ -141,10 +121,6 @@ void getDateString(char *dateString) {
       }
     }
   #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("getDateString");
-  #endif
 }
 
 
@@ -156,10 +132,6 @@ void getDateString(char *dateString) {
  * \return void
  ***********************************************/
 void getTimeString(char *timeString) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("getTimeString");
-  #endif
-
   #ifdef PC_BUILD
     time_t rawTime;
     struct tm *timeInfo;
@@ -199,9 +171,5 @@ void getTimeString(char *timeString) {
     else {
       sprintf(timeString, "%02d:%02d", timeInfo.hour, timeInfo.min);
     }
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("getTimeString");
   #endif
 }

@@ -33,6 +33,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtBigInteger      ) return "a big integer        ";
     if(dt == dtReal16          ) return "a real16             ";
     if(dt == dtComplex16       ) return "a complex16          ";
+    if(dt == dtAngle           ) return "an angle             ";
     if(dt == dtTime            ) return "a time               ";
     if(dt == dtDate            ) return "a date               ";
     if(dt == dtString          ) return "a string             ";
@@ -53,6 +54,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtBigInteger      ) return "a big integer";
     if(dt == dtReal16          ) return "a real16";
     if(dt == dtComplex16       ) return "a complex16";
+    if(dt == dtAngle           ) return "an angle";
     if(dt == dtTime            ) return "a time";
     if(dt == dtDate            ) return "a date";
     if(dt == dtString          ) return "a string";
@@ -73,6 +75,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtBigInteger      ) return "big integer          ";
     if(dt == dtReal16          ) return "real16               ";
     if(dt == dtComplex16       ) return "complex16            ";
+    if(dt == dtAngle           ) return "angle                ";
     if(dt == dtTime            ) return "time                 ";
     if(dt == dtDate            ) return "date                 ";
     if(dt == dtString          ) return "string               ";
@@ -93,6 +96,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtBigInteger      ) return "big integer";
     if(dt == dtReal16          ) return "real16";
     if(dt == dtComplex16       ) return "complex16";
+    if(dt == dtAngle           ) return "angle";
     if(dt == dtTime            ) return "time";
     if(dt == dtDate            ) return "date";
     if(dt == dtString          ) return "string";
@@ -123,106 +127,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
  * \return char* Name of the data type
  ***********************************************/
 char * getRegisterDataTypeName(calcRegister_t regist, bool_t article, bool_t padWithBlanks) {
-  uint16_t dt;
-  static char str[22];
-
-  dt = getRegisterDataType(regist);
-
-  if(article && padWithBlanks) {
-    if(dt == dtBigInteger      ) return "a big integer        ";
-    if(dt == dtReal16          ) return "a real16             ";
-    if(dt == dtComplex16       ) return "a complex16          ";
-    if(dt == dtTime            ) return "a time               ";
-    if(dt == dtDate            ) return "a date               ";
-    if(dt == dtString          ) return "a string             ";
-    if(dt == dtReal16Matrix    ) return "a real16 matrix      ";
-    if(dt == dtComplex16Matrix ) return "a complex16 matrix   ";
-    if(dt == dtSmallInteger    ) {
-      sprintf(str, "a small integer (%2" FMT32U ") ", getRegisterBase(regist));
-      return str;
-    }
-    if(dt == dtReal34          ) return "a real34             ";
-    if(dt == dtComplex34       ) return "a complex34          ";
-    //if(dt == dtLabel           ) return "a label              ";
-    //if(dt == dtSystemInteger   ) return "a system integer     ";
-    //if(dt == dtFlags           ) return "a flags              ";
-    //if(dt == dtConfig          ) return "a config             ";
-    //if(dt == dtPgmStep         ) return "a pgm step           ";
-    //if(dt == dtDirectory       ) return "a directory          ";
-    return                              "a ???                ";
-  }
-  else if(article && !padWithBlanks) {
-    if(dt == dtBigInteger      ) return "a big integer";
-    if(dt == dtReal16          ) return "a real16";
-    if(dt == dtComplex16       ) return "a complex16";
-    if(dt == dtTime            ) return "a time";
-    if(dt == dtDate            ) return "a date";
-    if(dt == dtString          ) return "a string";
-    if(dt == dtReal16Matrix    ) return "a real16 matrix";
-    if(dt == dtComplex16Matrix ) return "a complex16 matrix";
-    if(dt == dtSmallInteger    ) {
-      sprintf(str, "a small integer (%2" FMT32U ")", getRegisterBase(regist));
-      return str;
-    }
-    if(dt == dtReal34          ) return "a real34";
-    if(dt == dtComplex34       ) return "a complex34";
-    //if(dt == dtLabel           ) return "a label";
-    //if(dt == dtSystemInteger   ) return "a system integer";
-    //if(dt == dtFlags           ) return "a flags";
-    //if(dt == dtConfig          ) return "a config";
-    //if(dt == dtPgmStep         ) return "a pgm step";
-    //if(dt == dtDirectory       ) return "a directory";
-    return                              "a ???";
-  }
-  else if(!article && padWithBlanks) {
-    if(dt == dtBigInteger      ) return "big integer          ";
-    if(dt == dtReal16          ) return "real16               ";
-    if(dt == dtComplex16       ) return "complex16            ";
-    if(dt == dtTime            ) return "time                 ";
-    if(dt == dtDate            ) return "date                 ";
-    if(dt == dtString          ) return "string               ";
-    if(dt == dtReal16Matrix    ) return "real16 matrix        ";
-    if(dt == dtComplex16Matrix ) return "complex16 matrix     ";
-    if(dt == dtSmallInteger    ) {
-      sprintf(str, "small integer (%2" FMT32U ")   ", getRegisterBase(regist));
-      return str;
-    }
-    if(dt == dtReal34          ) return "real34               ";
-    if(dt == dtComplex34       ) return "complex34            ";
-    //if(dt == dtLabel           ) return "label                ";
-    //if(dt == dtSystemInteger   ) return "system integer       ";
-    //if(dt == dtFlags           ) return "flags                ";
-    //if(dt == dtConfig          ) return "config               ";
-    //if(dt == dtPgmStep         ) return "pgm step             ";
-    //if(dt == dtDirectory       ) return "directory            ";
-    return                              "???                  ";
-  }
-  else if(!article && !padWithBlanks) {
-    if(dt == dtBigInteger      ) return "big integer";
-    if(dt == dtReal16          ) return "real16";
-    if(dt == dtComplex16       ) return "complex16";
-    if(dt == dtTime            ) return "time";
-    if(dt == dtDate            ) return "date";
-    if(dt == dtString          ) return "string";
-    if(dt == dtReal16Matrix    ) return "real16 matrix";
-    if(dt == dtComplex16Matrix ) return "complex16 matrix";
-    if(dt == dtSmallInteger    ) {
-      sprintf(str, "small integer (%" FMT32U ")", getRegisterBase(regist));
-      return str;
-    }
-    if(dt == dtReal34          ) return "real34";
-    if(dt == dtComplex34       ) return "complex34";
-    //if(dt == dtLabel           ) return "label";
-    //if(dt == dtSystemInteger   ) return "system integer";
-    //if(dt == dtFlags           ) return "flags";
-    //if(dt == dtConfig          ) return "config";
-    //if(dt == dtPgmStep         ) return "pgm step";
-    //if(dt == dtDirectory       ) return "directory";
-    return                              "???";
-  }
-  else {
-    return                              "???";
-  }
+  return getDataTypeName(getRegisterDataType(regist), article, padWithBlanks);
 }
 
 
@@ -273,30 +178,6 @@ void debugNIM(void) {
   else if(nimNumberPart == NP_COMPLEX_EXPONENT    ) printf("nimNumberPart = NP_COMPLEX_EXPONENT    \n");
   else                                              printf("nimNumberPart = NP_???                 \n");
 }
-
-
-
-#if (LOG_FUNCTIONS == 1)
-  int16_t logIndent = 0;
-
-  void enteringFunction(char *func) {
-    for(int16_t i=0; i<logIndent; i++) {
-      putchar(' ');
-    }
-    printf("Entering %s\n", func);
-    logIndent += 1;
-  }
-
-
-
-  void leavingFunction(char *func) {
-    logIndent -= 1;
-    for(int16_t i=0; i<logIndent; i++) {
-      putchar(' ');
-    }
-    printf("Leaving  %s\n", func);
-  }
-#endif
 
 
 
@@ -619,10 +500,6 @@ void debugNIM(void) {
    *
    ***********************************************/
   void debugRegisterValue(calcRegister_t regist, int row) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("debugRegisterValue");
-    #endif
-
     char     string[1000], *p;
     uint16_t i, k, n=0;
 
@@ -644,6 +521,19 @@ void debugNIM(void) {
       formatReal34Debug(string + n, getRegisterDataPointer(regist));
     }
 
+    else if(getRegisterDataType(regist) == dtAngle) {
+      calcRegister_t angle = allocateTemporaryRegister();
+
+      reallocateRegister(angle, dtAngle, ANGLE_SIZE, 0);
+      angleCopy(REGISTER_ANGLE_DATA(regist), REGISTER_ANGLE_DATA(angle));
+      convertAngleFromInternal(REGISTER_ANGLE_DATA(angle), getRegisterAngularMode(regist));
+      formatAngleDebug(string + n,  getRegisterDataPointer(angle));
+      freeTemporaryRegister(angle);
+      strcat(string + n, " (");
+      strcat(string + n, getAngularModeName(getRegisterAngularMode(regist)));
+      strcat(string + n, ")");
+    }
+
     else if(getRegisterDataType(regist) == dtComplex16) {
       formatComplex16Debug(string + n, getRegisterDataPointer(regist));
     }
@@ -662,7 +552,7 @@ void debugNIM(void) {
         }
       }
       else {
-        for(i=0, p=POINTER_TO_REGISTER_STRING(regist); i<=stringByteLength(POINTER_TO_REGISTER_STRING(regist)); i++, p++) {
+        for(i=0, p=REGISTER_STRING_DATA(regist); i<=stringByteLength(REGISTER_STRING_DATA(regist)); i++, p++) {
           string[n + i] = *p;
         }
       }
@@ -692,10 +582,6 @@ void debugNIM(void) {
 
     gtk_label_set_label(GTK_LABEL(lbl2[row]), tmpStr3000);
     gtk_widget_show(lbl2[row]);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("debugRegisterValue");
-    #endif
   }
 
 
@@ -707,10 +593,6 @@ void debugNIM(void) {
    * \return void
    ***********************************************/
   void refreshDebugPanel(void) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("refreshDebugPanel");
-    #endif
-
     char string[100];
     int row;
 
@@ -1380,128 +1262,60 @@ void debugNIM(void) {
         debugRegisterValue(i, row++);
       }
     }
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("refreshDebugPanel");
-    #endif
   }
 
   void btnBitFieldsClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("btnBitFieldsClicked");
-    #endif
-
     allowScreenUpdate = true;
     debugWindow = DBG_BIT_FIELDS;
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("btnBitFieldsClicked");
-    #endif
   }
 
   void btnFlagsClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("btnFlagsClicked");
-    #endif
-
     allowScreenUpdate = true;
     debugWindow = DBG_FLAGS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Flags:");
     //gtk_widget_show(frmCalc);
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("btnFlagsClicked");
-    #endif
   }
 
   void btnRegistersClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("btnRegistersClicked");
-    #endif
-
     allowScreenUpdate = true;
     debugWindow = DBG_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("btnRegistersClicked");
-    #endif
   }
 
   void btnLocalRegistersClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("btnLocalRegistersClicked");
-    #endif
-
     allowScreenUpdate = true;
     debugWindow = DBG_LOCAL_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("btnLocalRegistersClicked");
-    #endif
   }
 
   void btnStatisticalSumsClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("btnStatisticalSumsClicked");
-    #endif
-
     allowScreenUpdate = true;
     debugWindow = DBG_STATISTICAL_SUMS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("btnStatisticalSumsClicked");
-    #endif
   }
 
   void btnNamedRegistersClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("btnNamedRegistersClicked");
-    #endif
-
     allowScreenUpdate = true;
     debugWindow = DBG_NAMED_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("btnNamedRegistersClicked");
-    #endif
   }
 
   void btnTmpAndSavedStackRegistersClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("btnTmpAndSavedStackRegistersClicked");
-    #endif
-
     allowScreenUpdate = true;
     debugWindow = DBG_TMP_SAVED_STACK_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("btnTmpAndSavedStackRegistersClicked");
-    #endif
   }
 
   void chkHexaStringClicked(GtkWidget* w, gpointer data) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("chkHexaStringClicked");
-    #endif
-
     allowScreenUpdate = true;
     refreshDebugPanel();
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("chkHexaStringClicked");
-    #endif
   }
 #endif
 
@@ -1516,36 +1330,22 @@ void debugNIM(void) {
    * \return void
    ***********************************************/
   void formatReal16Debug(char *str, uint32_t addr) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("formatReal16Debug");
-    #endif
-
     uint8_t ch, coef, digit;
     uint8_t bcd[DECDOUBLE_Pmax];
     int32_t sign, exponent;
 
-    if(real16IsInfinite(RAM(addr)) || real16IsNaN(RAM(addr))) {
-      real16ToString(RAM(addr), str);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("formatReal16Debug");
-      #endif
-
+    if(real16IsInfinite(RAM_REAL16(addr)) || real16IsNaN(RAM_REAL16(addr))) {
+      real16ToString(RAM_REAL16(addr), str);
       return;
     }
 
-    if(real16IsZero(RAM(addr))) {
+    if(real16IsZero(RAM_REAL16(addr))) {
       strcpy(str, "+0.000000000000000e+0");
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("formatReal16Debug");
-      #endif
-
       return;
     }
 
-    sign = real16GetCoefficient(RAM(addr), bcd);
-    exponent = real16GetExponent(RAM(addr));
+    sign = real16GetCoefficient(RAM_REAL16(addr), bcd);
+    exponent = real16GetExponent(RAM_REAL16(addr));
     if(sign) {
       str[0] = '-';
     }
@@ -1573,10 +1373,6 @@ void debugNIM(void) {
     }
 
     sprintf(str+ch, "e%+d", exponent);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("formatReal16Debug");
-    #endif
   }
 
 
@@ -1588,20 +1384,12 @@ void debugNIM(void) {
    * \return void
    ***********************************************/
   void formatComplex16Debug(char *str, uint32_t addr) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("formatComplex16Debug");
-    #endif
-
     formatReal16Debug(str     , addr               );
     formatReal16Debug(str + 64, addr + REAL16_SIZE);
 
     strcat(str, " ");
     strcat(str, str + 64);
     strcat(str, "i");
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("formatComplex16Debug");
-    #endif
   }
 
 
@@ -1613,36 +1401,22 @@ void debugNIM(void) {
    * \return void
    ***********************************************/
   void formatReal34Debug(char *str, uint32_t addr) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("formatReal34Debug");
-    #endif
-
     uint8_t ch, coef, digit;
     uint8_t bcd[DECQUAD_Pmax];
     int32_t sign, exponent;
 
-    if(real34IsInfinite(RAM(addr)) || real34IsNaN(RAM(addr))) {
-      real34ToString(RAM(addr), str);
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("formatReal34Debug");
-      #endif
-
+    if(real34IsInfinite(RAM_REAL34(addr)) || real34IsNaN(RAM_REAL34(addr))) {
+      real34ToString(RAM_REAL34(addr), str);
       return;
     }
 
-    if(real34IsZero(RAM(addr))) {
+    if(real34IsZero(RAM_REAL34(addr))) {
       strcpy(str, "+0.000000000000000000000000000000000e+0");
-
-      #if (LOG_FUNCTIONS == 1)
-        leavingFunction("formatReal34Debug");
-      #endif
-
       return;
     }
 
-    sign = real34GetCoefficient(RAM(addr), bcd);
-    exponent = real34GetExponent(RAM(addr));
+    sign = real34GetCoefficient(RAM_REAL34(addr), bcd);
+    exponent = real34GetExponent(RAM_REAL34(addr));
     if(sign) {
       str[0] = '-';
     }
@@ -1670,10 +1444,6 @@ void debugNIM(void) {
     }
 
     sprintf(str+ch, "e%+d", exponent);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("formatReal34Debug");
-    #endif
   }
 
 
@@ -1686,19 +1456,11 @@ void debugNIM(void) {
    * \return void
    ***********************************************/
   void formatComplex34Debug(char *str, uint32_t addr) {
-    #if (LOG_FUNCTIONS == 1)
-      enteringFunction("formatComplex34Debug");
-    #endif
-
     formatReal34Debug(str     , addr             );
     formatReal34Debug(str + 64, addr + REAL34_SIZE);
 
     strcat(str, " ");
     strcat(str, str + 64);
     strcat(str, "i");
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("formatComplex34Debug");
-    #endif
   }
 #endif

@@ -39,7 +39,7 @@ void (* const Sqrt[12])(void) = {
 void errorSqrt(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate sqrt for %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "cannot calculate sqrt for %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorSqrt(void) {
  ***********************************************/
 void sqrtToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "sqrt(%s)", getRegisterDataTypeName(op1, false, false));
+    sprintf(errorMessage, "sqrt(%s)", getRegisterDataTypeName(opX, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }
@@ -74,11 +74,11 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op1);
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     Sqrt[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(op1);
+    freeTemporaryRegister(opX);
 
     if(lastErrorCode != 0) {
       restoreStack();
@@ -94,17 +94,17 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
 
 
 void sqrtBigI(void) {
-  convertBigIntegerRegisterToReal34Register(op1, op1);
+  convertBigIntegerRegisterToReal34Register(opX, opX);
 
-  if(!real34IsNegative(REGISTER_REAL34_DATA(op1))) {
+  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    real34SquareRoot(REGISTER_REAL34_DATA(op1), REGISTER_REAL34_DATA(result));
+    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
     convertRegister34To16(result);
   }
   else if(getFlag(FLAG_CPXRES)) {
     real34_t real34;
 
-    real34Copy(REGISTER_REAL34_DATA(op1), &real34);
+    real34Copy(REGISTER_REAL34_DATA(opX), &real34);
     reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
     real34SetPositiveSign(&real34);
     real34SquareRoot(&real34, REGISTER_IMAG34_DATA(result));
@@ -125,16 +125,16 @@ void sqrtBigI(void) {
 
 
 void sqrtRe16(void) {
-  convertRegister16To34(op1);
+  convertRegister16To34(opX);
 
-  if(!real34IsNegative(REGISTER_REAL34_DATA(op1))) {
+  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    real34SquareRoot(REGISTER_REAL34_DATA(op1), REGISTER_REAL34_DATA(result));
+    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
     convertRegister34To16(result);
   }
   else if(getFlag(FLAG_CPXRES)) {
     reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-    real34Copy(REGISTER_REAL34_DATA(op1), REGISTER_IMAG34_DATA(result));
+    real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
     real34Zero(REGISTER_REAL34_DATA(result));
     real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
@@ -153,15 +153,17 @@ void sqrtRe16(void) {
 
 void sqrtCo16(void) {
   real34_t magnitude34, theta34;
+  uint8_t savedAngularMode = angularMode;
 
-  convertRegister16To34(op1);
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  real34RectangularToPolar(REGISTER_REAL34_DATA(op1), REGISTER_IMAG34_DATA(op1), &magnitude34, &theta34);
+  angularMode = AM_RADIAN;
+  convertRegister16To34(opX);
+  real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
-  convertAngle34FromTo(&theta34, angularMode, AM_RADIAN);
-  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result));
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
   convertRegister34To16(result);
+  angularMode = savedAngularMode;
 }
 
 
@@ -179,18 +181,18 @@ void sqrtCm16(void) {
 
 
 void sqrtSmaI(void) {
-  *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intSqrt(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+  *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intSqrt(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
 }
 
 
 
 void sqrtRe34(void) {
-  if(!real34IsNegative(REGISTER_REAL34_DATA(op1))) {
-    real34SquareRoot(REGISTER_REAL34_DATA(op1), REGISTER_REAL34_DATA(result));
+  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
+    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   }
   else if(getFlag(FLAG_CPXRES)) {
     reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-    real34Copy(REGISTER_REAL34_DATA(op1), REGISTER_IMAG34_DATA(result));
+    real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
     real34Zero(REGISTER_REAL34_DATA(result));
     real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
@@ -208,10 +210,12 @@ void sqrtRe34(void) {
 
 void sqrtCo34(void) {
   real34_t magnitude34, theta34;
+  uint8_t savedAngularMode = angularMode;
 
-  real34RectangularToPolar(REGISTER_REAL34_DATA(op1), REGISTER_IMAG34_DATA(op1), &magnitude34, &theta34);
+  angularMode = AM_RADIAN;
+  real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
-  convertAngle34FromTo(&theta34, angularMode, AM_RADIAN);
-  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result));
+  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
+  angularMode = savedAngularMode;
 }

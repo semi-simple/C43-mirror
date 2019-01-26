@@ -30,10 +30,10 @@ void     fnM1Pow                    (uint16_t unusedButMandatoryParameter);
 void     fnIsPrime                  (uint16_t unusedButMandatoryParameter);
 uint32_t countBitsBigInteger        (bigInteger_t *value);
 uint32_t countBitsBigIntegerRegister(calcRegister_t regist);
-void     bigIntegerMultiply         (bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result);
+void     bigIntegerMultiply         (bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result);
 void     bigIntegerSquare           (bigInteger_t *op, bigInteger_t *result);
-void     bigIntegerAdd              (bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result);
-void     bigIntegerSubtract         (bigInteger_t *op1, bigInteger_t *op2, bigInteger_t *result);
+void     bigIntegerAdd              (bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result);
+void     bigIntegerSubtract         (bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result);
 
 /*
  * The functions below are borrowed

@@ -28,10 +28,6 @@
  * \return void
  ***********************************************/
 void flagBrowser(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("flagBrowser");
-  #endif
-
   int16_t f, x, y;
 
   if(currentFlgScr == 0) { // Init
@@ -116,8 +112,4 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("flagBrowser");
-  #endif
 }

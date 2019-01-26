@@ -39,7 +39,7 @@ void (* const arccos[12])(void) = {
 void errorArccos(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate arccos for %s", getRegisterDataTypeName(op1, true, false));
+    sprintf(errorMessage, "cannot calculate arccos for %s", getRegisterDataTypeName(opX, true, false));
     showInfoDialog("In function fnArccos:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorArccos(void) {
  ***********************************************/
 void arccosToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "arccos(%s)", getRegisterDataTypeName(op1, false, false));
+    sprintf(errorMessage, "arccos(%s)", getRegisterDataTypeName(opX, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }
@@ -74,11 +74,11 @@ void fnArccos(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op1);
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     arccos[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(op1);
+    freeTemporaryRegister(opX);
 
     if(lastErrorCode != 0) {
       restoreStack();
@@ -94,8 +94,8 @@ void fnArccos(uint16_t unusedParamButMandatory) {
 
 
 void arccosBigI(void) {
- convertBigIntegerRegisterToReal16Register(op1, op1);
-  if(real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(op1), const16_1)) {
+ convertBigIntegerRegisterToReal34Register(opX, opX);
+  if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(opX), const34_1)) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnArccos:", "|X| > 1", NULL, NULL);
@@ -103,42 +103,45 @@ void arccosBigI(void) {
   }
   else {
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    if(real16IsZero(REGISTER_REAL16_DATA(op1))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
       real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
     }
     else {
-      if(real16IsNegative(REGISTER_REAL16_DATA(op1))) {
+      if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
         real34Copy(const34_1, REGISTER_REAL34_DATA(result));
       }
       else{
         real34Zero(REGISTER_REAL34_DATA(result));
       }
     }
-    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_MULTPI, angularMode);
-    temporaryInformation = TI_ANGLE;
-    convertRegister34To16(result);
+    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_MULTPI);
+    #if (ANGLE16 == 1)
+      convertRegister34To16(result);
+    #endif
+    setRegisterDataType(result, dtAngle);
+    setRegisterAngularMode(result, angularMode);
   }
 }
 
 
 
 void arccosRe16(void) {
-  if(real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(op1), const16_1)) {
+  if(real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(opX), const16_1)) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnArccos:", "|X| > 1", NULL, NULL);
     #endif
   }
   else {
-    convertRegister16To34(op1);
+    convertRegister16To34(opX);
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    WP34S_do_acos(REGISTER_REAL34_DATA(op1), REGISTER_REAL34_DATA(result));
-    convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
-    convertRegister34To16(result);
-    if(angularMode == AM_DMS) {
-      checkDms16(REGISTER_REAL16_DATA(result));
-    }
-    temporaryInformation = TI_ANGLE;
+    WP34S_do_acos(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
+    #if (ANGLE16 == 1)
+      convertRegister34To16(result);
+    #endif
+    setRegisterDataType(result, dtAngle);
+    setRegisterAngularMode(result, angularMode);
   }
 }
 
@@ -148,42 +151,42 @@ void arccosCo16(void) {
   // arccos(z) = -i.ln(z + sqtr(z*z - 1))
   complex34_t z;
 
-  convertRegister16To34(op1);
+  convertRegister16To34(opX);
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
 
   // store z
-  complex34Copy(REGISTER_COMPLEX34_DATA(op1), &z);
+  complex34Copy(REGISTER_COMPLEX34_DATA(opX), &z);
 
   // calculate z*z
-  op2 = allocateTemporaryRegister();
-  reallocateRegister(op2, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(REGISTER_COMPLEX34_DATA(op1), REGISTER_COMPLEX34_DATA(op2));
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
   mulCo34Co34();
 
   // calculate z*z - 1
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
-  real34Copy(const34_1, REGISTER_REAL34_DATA(op2));
-  real34Zero(REGISTER_IMAG34_DATA(op2));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
+  real34Copy(const34_1, REGISTER_REAL34_DATA(opX));
+  real34Zero(REGISTER_IMAG34_DATA(opX));
   subCo34Co34();
 
-  // calculate sqrt(1 - z*z)
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
+  // calculate sqrt(z*z - 1)
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   sqrtCo34();
 
   // calculate z + sqrt(z*z - 1)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(z), REGISTER_COMPLEX34_DATA(op1));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&z), REGISTER_COMPLEX34_DATA(opY));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   addCo34Co34();
-  freeTemporaryRegister(op2);
+  freeTemporaryRegister(opY);
 
-  // calculate ln(iz + sqtr(1 - z*z))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
+  // calculate ln(z + sqtr(1 - z*z))
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   lnCo34();
 
   // calculate = -i.ln(iz + sqtr(1 - z*z))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
-  real34Copy(REGISTER_REAL34_DATA(op1), REGISTER_IMAG34_DATA(result));
-  real34Copy(REGISTER_IMAG34_DATA(op1), REGISTER_REAL34_DATA(result));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
+  real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
   real34ChangeSign(REGISTER_IMAG34_DATA(result));
 
   convertRegister34To16(result);
@@ -204,20 +207,20 @@ void arccosCm16(void) {
 
 
 void arccosRe34(void) {
-  if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(op1), const34_1)) {
+  if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(opX), const34_1)) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnArccos:", "|X| > 1", NULL, NULL);
     #endif
   }
   else {
-    WP34S_do_acos(REGISTER_REAL34_DATA(op1), REGISTER_REAL34_DATA(result));
-    convertRegisterAngleFromTo(REGISTER_X, AM_RADIAN, angularMode);
-    convertRegister34To16(result);
-    if(angularMode == AM_DMS) {
-      checkDms16(REGISTER_REAL16_DATA(result));
-    }
-    temporaryInformation = TI_ANGLE;
+    WP34S_do_acos(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
+    #if (ANGLE16 == 1)
+      convertRegister34To16(result);
+    #endif
+    setRegisterDataType(result, dtAngle);
+    setRegisterAngularMode(result, angularMode);
   }
 }
 
@@ -228,37 +231,37 @@ void arccosCo34(void) {
   complex34_t z;
 
   // store z
-  complex34Copy(REGISTER_COMPLEX34_DATA(op1), &z);
+  complex34Copy(REGISTER_COMPLEX34_DATA(opX), &z);
 
   // calculate z*z
-  op2 = allocateTemporaryRegister();
-  reallocateRegister(op2, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(REGISTER_COMPLEX34_DATA(op1), REGISTER_COMPLEX34_DATA(op2));
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
   mulCo34Co34();
 
   // calculate z*z - 1
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
-  real34Copy(const34_1, REGISTER_REAL34_DATA(op2));
-  real34Zero(REGISTER_IMAG34_DATA(op2));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
+  real34Copy(const34_1, REGISTER_REAL34_DATA(opX));
+  real34Zero(REGISTER_IMAG34_DATA(opX));
   subCo34Co34();
 
   // calculate sqrt(1 - z*z)
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   sqrtCo34();
 
   // calculate z + sqrt(z*z - 1)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(z), REGISTER_COMPLEX34_DATA(op1));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op2));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&z), REGISTER_COMPLEX34_DATA(opY));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   addCo34Co34();
-  freeTemporaryRegister(op2);
+  freeTemporaryRegister(opY);
 
   // calculate ln(iz + sqtr(1 - z*z))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   lnCo34();
 
   // calculate = -i.ln(iz + sqtr(1 - z*z))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(op1));
-  real34Copy(REGISTER_REAL34_DATA(op1), REGISTER_IMAG34_DATA(result));
-  real34Copy(REGISTER_IMAG34_DATA(op1), REGISTER_REAL34_DATA(result));
+  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
+  real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
   real34ChangeSign(REGISTER_IMAG34_DATA(result));
 }

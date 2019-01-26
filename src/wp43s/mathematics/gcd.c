@@ -30,17 +30,13 @@
  * \return void
  ***********************************************/
 void fnGcd(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnGcd");
-  #endif
-
   bigInteger_t iOp1, iOp2;
 
   saveStack();
 
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger && getRegisterDataType(REGISTER_Y) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_intGCD(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_Y)), *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intGCD(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_Y)), *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger && getRegisterDataType(REGISTER_Y) == dtBigInteger) {
@@ -93,8 +89,4 @@ void fnGcd(uint16_t unusedParamButMandatory) {
   }
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnGcd");
-  #endif
 }

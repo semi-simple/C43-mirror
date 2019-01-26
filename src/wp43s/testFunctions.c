@@ -28,10 +28,6 @@
  * \return void
  ***********************************************/
 void testFunctions(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("testFunctions");
-  #endif
-
   #ifdef PC_BUILD
     printf("  indexOfItems\n");
     if(strcmp(indexOfItems[ITM_CtoF                     ].itemPrinted, STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F"                                )) {printf("item %" FMT16S " is not ITM_CtoF                     \n", ITM_CtoF                     ); exit(0);}
@@ -853,11 +849,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[ITM_M_TRANSP                 ].itemPrinted, "[M]" STD_SUP_T                                                              )) {printf("item %" FMT16S " is not ITM_M_TRANSP                 \n", ITM_M_TRANSP                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_M_INV                    ].itemPrinted, "[M]" STD_SUP_MINUS_1                                                        )) {printf("item %" FMT16S " is not ITM_M_INV                    \n", ITM_M_INV                    ); exit(0);}
     if(strcmp(indexOfItems[ITM_ANGLE                    ].itemPrinted, STD_MEASURED_ANGLE                                                           )) {printf("item %" FMT16S " is not ITM_ANGLE                    \n", ITM_ANGLE                    ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ANGLEDEGto               ].itemPrinted, STD_MEASURED_ANGLE STD_DEGREE STD_RIGHT_ARROW STD_MEASURED_ANGLE             )) {printf("item %" FMT16S " is not ITM_ANGLEDEGto               \n", ITM_ANGLEDEGto               ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ANGLEGRAGto              ].itemPrinted, STD_MEASURED_ANGLE STD_SUP_g STD_RIGHT_ARROW STD_MEASURED_ANGLE              )) {printf("item %" FMT16S " is not ITM_ANGLEGRAGto              \n", ITM_ANGLEGRAGto              ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ANGLERADto               ].itemPrinted, STD_MEASURED_ANGLE STD_SUP_r STD_RIGHT_ARROW STD_MEASURED_ANGLE              )) {printf("item %" FMT16S " is not ITM_ANGLERADto               \n", ITM_ANGLERADto               ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ANGLEPIto                ].itemPrinted, STD_MEASURED_ANGLE STD_pi STD_RIGHT_ARROW STD_MEASURED_ANGLE                 )) {printf("item %" FMT16S " is not ITM_ANGLEPIto                \n", ITM_ANGLEPIto                ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ANGLEDMSto               ].itemPrinted, STD_MEASURED_ANGLE STD_RIGHT_DOUBLE_QUOTE STD_RIGHT_ARROW STD_MEASURED_ANGLE )) {printf("item %" FMT16S " is not ITM_ANGLEDMSto               \n", ITM_ANGLEDMSto               ); exit(0);}
+    if(strcmp(indexOfItems[ITM_MULPIto                  ].itemPrinted, STD_MEASURED_ANGLE STD_pi STD_RIGHT_ARROW STD_MEASURED_ANGLE                 )) {printf("item %" FMT16S " is not ITM_MULPIto                  \n", ITM_MULPIto                  ); exit(0);}
     if(strcmp(indexOfItems[MNU_ANGLECONV                ].itemPrinted, STD_MEASURED_ANGLE STD_RIGHT_ARROW                                           )) {printf("item %" FMT16S " is not MNU_ANGLECONV                \n", MNU_ANGLECONV                ); exit(0);}
     if(strcmp(indexOfItems[ITM_PRINTERADV               ].itemPrinted, STD_PRINTER "ADV"                                                            )) {printf("item %" FMT16S " is not ITM_PRINTERADV               \n", ITM_PRINTERADV               ); exit(0);}
     if(strcmp(indexOfItems[ITM_PRINTERCHAR              ].itemPrinted, STD_PRINTER "CHAR"                                                           )) {printf("item %" FMT16S " is not ITM_PRINTERCHAR              \n", ITM_PRINTERCHAR              ); exit(0);}
@@ -992,19 +984,19 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_y                        ].itemPrinted, "y"                                                                          )) {printf("char %" FMT16S " is not CHR_y                        \n", CHR_y                        ); exit(0);}
     if(strcmp(indexOfItems[CHR_z                        ].itemPrinted, "z"                                                                          )) {printf("char %" FMT16S " is not CHR_z                        \n", CHR_z                        ); exit(0);}
     if(strcmp(indexOfItems[CHR_ALPHA                    ].itemPrinted, STD_ALPHA                                                                    )) {printf("char %" FMT16S " is not CHR_ALPHA                    \n", CHR_ALPHA                    ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0960                     ].itemPrinted, "0960"                                                                       )) {printf("char %" FMT16S " is not CHR_0960                     \n", CHR_0960                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0953                     ].itemPrinted, "0953"                                                                       )) {printf("char %" FMT16S " is not CHR_0953                     \n", CHR_0953                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_BETA                     ].itemPrinted, STD_BETA                                                                     )) {printf("char %" FMT16S " is not CHR_BETA                     \n", CHR_BETA                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_GAMMA                    ].itemPrinted, STD_GAMMA                                                                    )) {printf("char %" FMT16S " is not CHR_GAMMA                    \n", CHR_GAMMA                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_DELTA                    ].itemPrinted, STD_DELTA                                                                    )) {printf("char %" FMT16S " is not CHR_DELTA                    \n", CHR_DELTA                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_EPSILON                  ].itemPrinted, STD_EPSILON                                                                  )) {printf("char %" FMT16S " is not CHR_EPSILON                  \n", CHR_EPSILON                  ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0960                     ].itemPrinted, "0960"                                                                       )) {printf("char %" FMT16S " is not CHR_0960                     \n", CHR_0960                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0958                     ].itemPrinted, "0958"                                                                       )) {printf("char %" FMT16S " is not CHR_0958                     \n", CHR_0958                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_ZETA                     ].itemPrinted, STD_ZETA                                                                     )) {printf("char %" FMT16S " is not CHR_ZETA                     \n", CHR_ZETA                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_ETA                      ].itemPrinted, STD_ETA                                                                      )) {printf("char %" FMT16S " is not CHR_ETA                      \n", CHR_ETA                      ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0963                     ].itemPrinted, "0963"                                                                       )) {printf("char %" FMT16S " is not CHR_0963                     \n", CHR_0963                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0961                     ].itemPrinted, "0961"                                                                       )) {printf("char %" FMT16S " is not CHR_0961                     \n", CHR_0961                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_THETA                    ].itemPrinted, STD_THETA                                                                    )) {printf("char %" FMT16S " is not CHR_THETA                    \n", CHR_THETA                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_IOTA                     ].itemPrinted, STD_IOTA                                                                     )) {printf("char %" FMT16S " is not CHR_IOTA                     \n", CHR_IOTA                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0966                     ].itemPrinted, "0966"                                                                       )) {printf("char %" FMT16S " is not CHR_0966                     \n", CHR_0966                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0967                     ].itemPrinted, "0967"                                                                       )) {printf("char %" FMT16S " is not CHR_0967                     \n", CHR_0967                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0964                     ].itemPrinted, "0964"                                                                       )) {printf("char %" FMT16S " is not CHR_0964                     \n", CHR_0964                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0965                     ].itemPrinted, "0965"                                                                       )) {printf("char %" FMT16S " is not CHR_0965                     \n", CHR_0965                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_IOTA_DIALYTIKA           ].itemPrinted, STD_IOTA_DIALYTIKA                                                           )) {printf("char %" FMT16S " is not CHR_IOTA_DIALYTIKA           \n", CHR_IOTA_DIALYTIKA           ); exit(0);}
     if(strcmp(indexOfItems[CHR_KAPPA                    ].itemPrinted, STD_KAPPA                                                                    )) {printf("char %" FMT16S " is not CHR_KAPPA                    \n", CHR_KAPPA                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_LAMBDA                   ].itemPrinted, STD_LAMBDA                                                                   )) {printf("char %" FMT16S " is not CHR_LAMBDA                   \n", CHR_LAMBDA                   ); exit(0);}
@@ -1012,21 +1004,21 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_NU                       ].itemPrinted, STD_NU                                                                       )) {printf("char %" FMT16S " is not CHR_NU                       \n", CHR_NU                       ); exit(0);}
     if(strcmp(indexOfItems[CHR_XI                       ].itemPrinted, STD_XI                                                                       )) {printf("char %" FMT16S " is not CHR_XI                       \n", CHR_XI                       ); exit(0);}
     if(strcmp(indexOfItems[CHR_OMICRON                  ].itemPrinted, STD_OMICRON                                                                  )) {printf("char %" FMT16S " is not CHR_OMICRON                  \n", CHR_OMICRON                  ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0975                     ].itemPrinted, "0975"                                                                       )) {printf("char %" FMT16S " is not CHR_0975                     \n", CHR_0975                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0973                     ].itemPrinted, "0973"                                                                       )) {printf("char %" FMT16S " is not CHR_0973                     \n", CHR_0973                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_PI                       ].itemPrinted, STD_PI                                                                       )) {printf("char %" FMT16S " is not CHR_PI                       \n", CHR_PI                       ); exit(0);}
     if(strcmp(indexOfItems[CHR_RHO                      ].itemPrinted, STD_RHO                                                                      )) {printf("char %" FMT16S " is not CHR_RHO                      \n", CHR_RHO                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_SIGMA                    ].itemPrinted, STD_SIGMA                                                                    )) {printf("char %" FMT16S " is not CHR_SIGMA                    \n", CHR_SIGMA                    ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0979                     ].itemPrinted, "0979"                                                                       )) {printf("char %" FMT16S " is not CHR_0679                     \n", CHR_0979                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0977                     ].itemPrinted, "0977"                                                                       )) {printf("char %" FMT16S " is not CHR_0677                     \n", CHR_0977                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_TAU                      ].itemPrinted, STD_TAU                                                                      )) {printf("char %" FMT16S " is not CHR_TAU                      \n", CHR_TAU                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_UPSILON                  ].itemPrinted, STD_UPSILON                                                                  )) {printf("char %" FMT16S " is not CHR_UPSILON                  \n", CHR_UPSILON                  ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0982                     ].itemPrinted, "0982"                                                                       )) {printf("char %" FMT16S " is not CHR_0982                     \n", CHR_0982                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0980                     ].itemPrinted, "0980"                                                                       )) {printf("char %" FMT16S " is not CHR_0980                     \n", CHR_0980                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_UPSILON_DIALYTIKA        ].itemPrinted, STD_UPSILON_DIALYTIKA                                                        )) {printf("char %" FMT16S " is not CHR_UPSILON_DIALYTIKA        \n", CHR_UPSILON_DIALYTIKA        ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0984                     ].itemPrinted, "0984"                                                                       )) {printf("char %" FMT16S " is not CHR_0984                     \n", CHR_0984                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0982                     ].itemPrinted, "0982"                                                                       )) {printf("char %" FMT16S " is not CHR_0982                     \n", CHR_0982                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_PHI                      ].itemPrinted, STD_PHI                                                                      )) {printf("char %" FMT16S " is not CHR_PHI                      \n", CHR_PHI                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_CHI                      ].itemPrinted, STD_CHI                                                                      )) {printf("char %" FMT16S " is not CHR_CHI                      \n", CHR_CHI                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_PSI                      ].itemPrinted, STD_PSI                                                                      )) {printf("char %" FMT16S " is not CHR_PSI                      \n", CHR_PSI                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_OMEGA                    ].itemPrinted, STD_OMEGA                                                                    )) {printf("char %" FMT16S " is not CHR_OMEGA                    \n", CHR_OMEGA                    ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0989                     ].itemPrinted, "0989"                                                                       )) {printf("char %" FMT16S " is not CHR_0989                     \n", CHR_0989                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_0987                     ].itemPrinted, "0987"                                                                       )) {printf("char %" FMT16S " is not CHR_0987                     \n", CHR_0987                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_alpha                    ].itemPrinted, STD_alpha                                                                    )) {printf("char %" FMT16S " is not CHR_alpha                    \n", CHR_alpha                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_alpha_TONOS              ].itemPrinted, STD_alpha_TONOS                                                              )) {printf("char %" FMT16S " is not CHR_alpha_TONOS              \n", CHR_alpha_TONOS              ); exit(0);}
     if(strcmp(indexOfItems[CHR_beta                     ].itemPrinted, STD_beta                                                                     )) {printf("char %" FMT16S " is not CHR_beta                     \n", CHR_beta                     ); exit(0);}
@@ -1063,12 +1055,12 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_psi                      ].itemPrinted, STD_psi                                                                      )) {printf("char %" FMT16S " is not CHR_psi                      \n", CHR_psi                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_omega                    ].itemPrinted, STD_omega                                                                    )) {printf("char %" FMT16S " is not CHR_omega                    \n", CHR_omega                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_omega_TONOS              ].itemPrinted, STD_omega_TONOS                                                              )) {printf("char %" FMT16S " is not CHR_omega_TONOS              \n", CHR_omega_TONOS              ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1024                     ].itemPrinted, "1024"                                                                       )) {printf("char %" FMT16S " is not CHR_1024                     \n", CHR_1024                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1025                     ].itemPrinted, "1025"                                                                       )) {printf("char %" FMT16S " is not CHR_1025                     \n", CHR_1025                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1026                     ].itemPrinted, "1026"                                                                       )) {printf("char %" FMT16S " is not CHR_1026                     \n", CHR_1026                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1027                     ].itemPrinted, "1027"                                                                       )) {printf("char %" FMT16S " is not CHR_1027                     \n", CHR_1027                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1028                     ].itemPrinted, "1028"                                                                       )) {printf("char %" FMT16S " is not CHR_1028                     \n", CHR_1028                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1029                     ].itemPrinted, "1029"                                                                       )) {printf("char %" FMT16S " is not CHR_1029                     \n", CHR_1029                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1030                     ].itemPrinted, "1030"                                                                       )) {printf("char %" FMT16S " is not CHR_1030                     \n", CHR_1030                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1031                     ].itemPrinted, "1031"                                                                       )) {printf("char %" FMT16S " is not CHR_1031                     \n", CHR_1031                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_A_MACRON                 ].itemPrinted, STD_A_MACRON                                                                 )) {printf("char %" FMT16S " is not CHR_A_MACRON                 \n", CHR_A_MACRON                 ); exit(0);}
     if(strcmp(indexOfItems[CHR_A_ACUTE                  ].itemPrinted, STD_A_ACUTE                                                                  )) {printf("char %" FMT16S " is not CHR_A_ACUTE                  \n", CHR_A_ACUTE                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_A_BREVE                  ].itemPrinted, STD_A_BREVE                                                                  )) {printf("char %" FMT16S " is not CHR_A_BREVE                  \n", CHR_A_BREVE                  ); exit(0);}
@@ -1092,7 +1084,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_E_CIRC                   ].itemPrinted, STD_E_CIRC                                                                   )) {printf("char %" FMT16S " is not CHR_E_CIRC                   \n", CHR_E_CIRC                   ); exit(0);}
     if(strcmp(indexOfItems[CHR_E_OGONEK                 ].itemPrinted, STD_E_OGONEK                                                                 )) {printf("char %" FMT16S " is not CHR_E_OGONEK                 \n", CHR_E_OGONEK                 ); exit(0);}
     if(strcmp(indexOfItems[CHR_G_BREVE                  ].itemPrinted, STD_G_BREVE                                                                  )) {printf("char %" FMT16S " is not CHR_G_BREVE                  \n", CHR_G_BREVE                  ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1055                     ].itemPrinted, "1055"                                                                       )) {printf("char %" FMT16S " is not CHR_1055                     \n", CHR_1055                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1053                     ].itemPrinted, "1053"                                                                       )) {printf("char %" FMT16S " is not CHR_1053                     \n", CHR_1053                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_I_MACRON                 ].itemPrinted, STD_I_MACRON                                                                 )) {printf("char %" FMT16S " is not CHR_I_MACRON                 \n", CHR_I_MACRON                 ); exit(0);}
     if(strcmp(indexOfItems[CHR_I_ACUTE                  ].itemPrinted, STD_I_ACUTE                                                                  )) {printf("char %" FMT16S " is not CHR_I_ACUTE                  \n", CHR_I_ACUTE                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_I_BREVE                  ].itemPrinted, STD_I_BREVE                                                                  )) {printf("char %" FMT16S " is not CHR_I_BREVE                  \n", CHR_I_BREVE                  ); exit(0);}
@@ -1117,9 +1109,9 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_O_CIRC                   ].itemPrinted, STD_O_CIRC                                                                   )) {printf("char %" FMT16S " is not CHR_O_CIRC                   \n", CHR_O_CIRC                   ); exit(0);}
     if(strcmp(indexOfItems[CHR_O_STROKE                 ].itemPrinted, STD_O_STROKE                                                                 )) {printf("char %" FMT16S " is not CHR_O_STROKE                 \n", CHR_O_STROKE                 ); exit(0);}
     if(strcmp(indexOfItems[CHR_OE                       ].itemPrinted, STD_OE                                                                       )) {printf("char %" FMT16S " is not CHR_OE                       \n", CHR_OE                       ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1078                     ].itemPrinted, "1078"                                                                       )) {printf("char %" FMT16S " is not CHR_1078                     \n", CHR_1078                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1079                     ].itemPrinted, "1079"                                                                       )) {printf("char %" FMT16S " is not CHR_1079                     \n", CHR_1079                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1080                     ].itemPrinted, "1080"                                                                       )) {printf("char %" FMT16S " is not CHR_1080                     \n", CHR_1080                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1081                     ].itemPrinted, "1081"                                                                       )) {printf("char %" FMT16S " is not CHR_1081                     \n", CHR_1081                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1082                     ].itemPrinted, "1082"                                                                       )) {printf("char %" FMT16S " is not CHR_1082                     \n", CHR_1082                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_S_ACUTE                  ].itemPrinted, STD_S_ACUTE                                                                  )) {printf("char %" FMT16S " is not CHR_S_ACUTE                  \n", CHR_S_ACUTE                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_S_CARON                  ].itemPrinted, STD_S_CARON                                                                  )) {printf("char %" FMT16S " is not CHR_S_CARON                  \n", CHR_S_CARON                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_S_CEDILLA                ].itemPrinted, STD_S_CEDILLA                                                                )) {printf("char %" FMT16S " is not CHR_S_CEDILLA                \n", CHR_S_CEDILLA                ); exit(0);}
@@ -1134,21 +1126,21 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_U_CIRC                   ].itemPrinted, STD_U_CIRC                                                                   )) {printf("char %" FMT16S " is not CHR_U_CIRC                   \n", CHR_U_CIRC                   ); exit(0);}
     if(strcmp(indexOfItems[CHR_U_RING                   ].itemPrinted, STD_U_RING                                                                   )) {printf("char %" FMT16S " is not CHR_U_RING                   \n", CHR_U_RING                   ); exit(0);}
     if(strcmp(indexOfItems[CHR_W_CIRC                   ].itemPrinted, STD_W_CIRC                                                                   )) {printf("char %" FMT16S " is not CHR_W_CIRC                   \n", CHR_W_CIRC                   ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1095                     ].itemPrinted, "1095"                                                                       )) {printf("char %" FMT16S " is not CHR_1095                     \n", CHR_1095                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1096                     ].itemPrinted, "1096"                                                                       )) {printf("char %" FMT16S " is not CHR_1096                     \n", CHR_1096                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1097                     ].itemPrinted, "1097"                                                                       )) {printf("char %" FMT16S " is not CHR_1097                     \n", CHR_1097                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1098                     ].itemPrinted, "1098"                                                                       )) {printf("char %" FMT16S " is not CHR_1098                     \n", CHR_1098                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1099                     ].itemPrinted, "1099"                                                                       )) {printf("char %" FMT16S " is not CHR_1099                     \n", CHR_1099                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_Y_CIRC                   ].itemPrinted, STD_Y_CIRC                                                                   )) {printf("char %" FMT16S " is not CHR_Y_CIRC                   \n", CHR_Y_CIRC                   ); exit(0);}
     if(strcmp(indexOfItems[CHR_Y_ACUTE                  ].itemPrinted, STD_Y_ACUTE                                                                  )) {printf("char %" FMT16S " is not CHR_Y_ACUTE                  \n", CHR_Y_ACUTE                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_Y_DIARESIS               ].itemPrinted, STD_Y_DIARESIS                                                               )) {printf("char %" FMT16S " is not CHR_Y_DIARESIS               \n", CHR_Y_DIARESIS               ); exit(0);}
     if(strcmp(indexOfItems[CHR_Z_ACUTE                  ].itemPrinted, STD_Z_ACUTE                                                                  )) {printf("char %" FMT16S " is not CHR_Z_ACUTE                  \n", CHR_Z_ACUTE                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_Z_CARON                  ].itemPrinted, STD_Z_CARON                                                                  )) {printf("char %" FMT16S " is not CHR_Z_CARON                  \n", CHR_Z_CARON                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_Z_DOT                    ].itemPrinted, STD_Z_DOT                                                                    )) {printf("char %" FMT16S " is not CHR_Z_DOT                    \n", CHR_Z_DOT                    ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1104                     ].itemPrinted, "1104"                                                                       )) {printf("char %" FMT16S " is not CHR_1104                     \n", CHR_1104                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1105                     ].itemPrinted, "1105"                                                                       )) {printf("char %" FMT16S " is not CHR_1105                     \n", CHR_1105                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1106                     ].itemPrinted, "1106"                                                                       )) {printf("char %" FMT16S " is not CHR_1106                     \n", CHR_1106                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1107                     ].itemPrinted, "1107"                                                                       )) {printf("char %" FMT16S " is not CHR_1107                     \n", CHR_1107                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1108                     ].itemPrinted, "1108"                                                                       )) {printf("char %" FMT16S " is not CHR_1108                     \n", CHR_1108                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1109                     ].itemPrinted, "1109"                                                                       )) {printf("char %" FMT16S " is not CHR_1109                     \n", CHR_1109                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1110                     ].itemPrinted, "1110"                                                                       )) {printf("char %" FMT16S " is not CHR_1110                     \n", CHR_1110                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1111                     ].itemPrinted, "1111"                                                                       )) {printf("char %" FMT16S " is not CHR_1111                     \n", CHR_1111                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_a_MACRON                 ].itemPrinted, STD_a_MACRON                                                                 )) {printf("char %" FMT16S " is not CHR_a_MACRON                 \n", CHR_a_MACRON                 ); exit(0);}
     if(strcmp(indexOfItems[CHR_a_ACUTE                  ].itemPrinted, STD_a_ACUTE                                                                  )) {printf("char %" FMT16S " is not CHR_a_ACUTE                  \n", CHR_a_ACUTE                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_a_BREVE                  ].itemPrinted, STD_a_BREVE                                                                  )) {printf("char %" FMT16S " is not CHR_a_BREVE                  \n", CHR_a_BREVE                  ); exit(0);}
@@ -1223,12 +1215,12 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_z_ACUTE                  ].itemPrinted, STD_z_ACUTE                                                                  )) {printf("char %" FMT16S " is not CHR_z_ACUTE                  \n", CHR_z_ACUTE                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_z_CARON                  ].itemPrinted, STD_z_CARON                                                                  )) {printf("char %" FMT16S " is not CHR_z_CARON                  \n", CHR_z_CARON                  ); exit(0);}
     if(strcmp(indexOfItems[CHR_z_DOT                    ].itemPrinted, STD_z_DOT                                                                    )) {printf("char %" FMT16S " is not CHR_z_DOT                    \n", CHR_z_DOT                    ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1184                     ].itemPrinted, "1184"                                                                       )) {printf("char %" FMT16S " is not CHR_1184                     \n", CHR_1184                     ); exit(0);}
+    if(strcmp(indexOfItems[CHR_1185                     ].itemPrinted, "1185"                                                                       )) {printf("char %" FMT16S " is not CHR_1185                     \n", CHR_1185                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1186                     ].itemPrinted, "1186"                                                                       )) {printf("char %" FMT16S " is not CHR_1186                     \n", CHR_1186                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1187                     ].itemPrinted, "1187"                                                                       )) {printf("char %" FMT16S " is not CHR_1187                     \n", CHR_1187                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1188                     ].itemPrinted, "1188"                                                                       )) {printf("char %" FMT16S " is not CHR_1188                     \n", CHR_1188                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_1189                     ].itemPrinted, "1189"                                                                       )) {printf("char %" FMT16S " is not CHR_1189                     \n", CHR_1189                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1190                     ].itemPrinted, "1190"                                                                       )) {printf("char %" FMT16S " is not CHR_1190                     \n", CHR_1190                     ); exit(0);}
-    if(strcmp(indexOfItems[CHR_1191                     ].itemPrinted, "1191"                                                                       )) {printf("char %" FMT16S " is not CHR_1191                     \n", CHR_1191                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_SUB_alpha                ].itemPrinted, STD_SUB_alpha                                                                )) {printf("char %" FMT16S " is not CHR_SUB_alpha                \n", CHR_SUB_alpha                ); exit(0);}
     if(strcmp(indexOfItems[CHR_SUB_delta                ].itemPrinted, STD_SUB_delta                                                                )) {printf("char %" FMT16S " is not CHR_SUB_delta                \n", CHR_SUB_delta                ); exit(0);}
     if(strcmp(indexOfItems[CHR_SUB_mu                   ].itemPrinted, STD_SUB_mu                                                                   )) {printf("char %" FMT16S " is not CHR_SUB_mu                   \n", CHR_SUB_mu                   ); exit(0);}
@@ -1557,9 +1549,9 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[ITM_toSP                     ].itemPrinted, STD_RIGHT_ARROW "SP"                                                         )) {printf("item %" FMT16S " is not ITM_toSP                     \n", ITM_toSP                     ); exit(0);}
     if(strcmp(indexOfItems[ITM_SHOW                     ].itemPrinted, "SHOW"                                                                       )) {printf("item %" FMT16S " is not ITM_SHOW                     \n", ITM_SHOW                     ); exit(0);}
     if(strcmp(indexOfItems[ITM_SYSTEM                   ].itemPrinted, "SYSTEM"                                                                     )) {printf("item %" FMT16S " is not ITM_SYSTEM                   \n", ITM_SYSTEM                   ); exit(0);}
+    if(strcmp(indexOfItems[ITM_DMStoD                   ].itemPrinted, STD_MEASURED_ANGLE STD_RIGHT_DOUBLE_QUOTE STD_RIGHT_ARROW STD_MEASURED_ANGLE STD_DEGREE)) {printf("item %" FMT16S " is not ITM_DMStoD         \n", ITM_DMStoD                   ); exit(0);}
     if(strcmp(indexOfItems[LAST_ITEM                    ].itemPrinted, "Last item"                                                                  )) {printf("item %" FMT16S " is not LAST_ITEM                    \n", LAST_ITEM                    ); exit(0);}
   #endif
-
 
 
 
@@ -1576,17 +1568,17 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_X, dtComplex34, "addRe16Co34()", "-12", "-4", 0);
   registerShouldBe(REGISTER_L, dtComplex34, "addRe16Co34()", "-2",  "-4", 0);
 
-  op1    = allocateTemporaryRegister();
-  op2    = allocateTemporaryRegister();
+  opY    = allocateTemporaryRegister();
+  opX    = allocateTemporaryRegister();
   result = allocateTemporaryRegister();
 
-  initializeRegister(op1, dtBigInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
-  initializeRegister(op2, dtBigInteger, "-231053122121212121212121212121212121212121002102102102121331344321032103312220", "", 0);
+  initializeRegister(opY, dtBigInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
+  initializeRegister(opX, dtBigInteger, "-231053122121212121212121212121212121212121002102102102121331344321032103312220", "", 0);
   addBigIBigI();
   registerShouldBe(result, dtBigInteger, "addBigIBigI()", "315801132574230400244335633537244463442444453154353354424321220233524352113325", "", 0);
 
-  initializeRegister(op1, dtBigInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
-  initializeRegister(op2, dtReal16,      "5e61",                                                                           "", 0);
+  initializeRegister(opY, dtBigInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
+  initializeRegister(opX, dtReal16,      "5e61",                                                                           "", 0);
   addBigIRe16();
   registerShouldBe(result, dtReal16,     "addBigIRe16()", "5468542546954426e62", "", 0);
 
@@ -1653,8 +1645,8 @@ void testFunctions(void) {
   //addCo34Re34();
   //addCo34Co34();
 
-  freeTemporaryRegister(op1);
-  freeTemporaryRegister(op2);
+  freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
   freeTemporaryRegister(result);
 
   //////////////////////////////
@@ -1680,37 +1672,37 @@ void testFunctions(void) {
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
 
-  real16Copy(const16_minusInfinity, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal16, "const16_minusInfinity", "-9999e9999", "", 0);
 
-  real16Copy(const16_32, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real16Copy(const16_32, REGISTER_REAL16_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal16, "const16_32", "32", "", 0);
 
-  real16Copy(const16_plusInfinity, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real16Copy(const16_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal16, "const16_plusInfinity", "9999e9999", "", 0);
 
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
 
-  real34Copy(const34_10000, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real34Copy(const34_10000, REGISTER_REAL34_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal34, "const34_10000", "10000", "", 0);
 
-  real34Copy(const34_36, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real34Copy(const34_36, REGISTER_REAL34_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal34, "const34_36", "36", "", 0);
 
-  real34Copy(const34_60, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real34Copy(const34_60, REGISTER_REAL34_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal34, "const34_60", "60", "", 0);
 
-  real34Copy(const34_0_5, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real34Copy(const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal34, "const34_0_5", "0.5", "", 0);
 
-  real34Copy(const34_1_8, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real34Copy(const34_1_8, REGISTER_REAL34_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal34, "const34_1_8", "1.8", "", 0);
 
-  real34Copy(const34_pi, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real34Copy(const34_pi, REGISTER_REAL34_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal34, "const34_pi", "3.141592653589793238462643383279502884", "", 0);
 
-  real34Copy(const34_32, POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real34Copy(const34_32, REGISTER_REAL34_DATA(REGISTER_X));
   registerShouldBe(REGISTER_X, dtReal34, "const34_32", "32", "", 0);
 
 
@@ -1859,7 +1851,7 @@ void testFunctions(void) {
   #endif
 
   liftStack(dtReal16, REAL16_SIZE);
-  real16Zero(POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
 
   registerShouldBe(REGISTER_X, dtReal16,    "liftStack(4)", "0",     "",        0);
   registerShouldBe(REGISTER_Y, dtComplex16, "liftStack(4)", "-1",    "-2",      0);
@@ -1891,7 +1883,7 @@ void testFunctions(void) {
   #endif
 
   liftStack(dtReal16, REAL16_SIZE);
-  real16Zero(POINTER_TO_REGISTER_DATA(REGISTER_X));
+  real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
 
   registerShouldBe(REGISTER_X, dtReal16,    "liftStack(8)", "0",     "",        0);
   registerShouldBe(REGISTER_Y, dtComplex16, "liftStack(8)", "-1",    "-2",      0);
@@ -2466,12 +2458,12 @@ void testFunctions(void) {
   #ifdef PC_BUILD
     initializeRegister(REGISTER_X, dtString, "50", "Test string " STD_OMEGA STD_SUB_2 "\x81\x00\xa2\x00", 0); //20+1 bytes and 16 glyphs
 
-    if(stringByteLength( POINTER_TO_REGISTER_STRING(REGISTER_X))     != 20) {printf("stringByteLength( POINTER_TO_REGISTER_STRING(REGISTER_X))     should be 20 but it's %" FMT32S "\n", stringByteLength( POINTER_TO_REGISTER_STRING(REGISTER_X)));     exit(0);}
-    if(stringGlyphLength(POINTER_TO_REGISTER_STRING(REGISTER_X))     != 16) {printf("stringGlyphLength(POINTER_TO_REGISTER_STRING(REGISTER_X))     should be 20 but it's %" FMT32S "\n", stringGlyphLength(POINTER_TO_REGISTER_STRING(REGISTER_X)));     exit(0);}
-    if(stringNextGlyph(  POINTER_TO_REGISTER_STRING(REGISTER_X),  8) !=  9) {printf("stringNextGlypg(  POINTER_TO_REGISTER_STRING(REGISTER_X),  8) should be  9 but it's %" FMT16S "\n", stringNextGlyph(  POINTER_TO_REGISTER_STRING(REGISTER_X),  8)); exit(0);}
-    if(stringNextGlyph(  POINTER_TO_REGISTER_STRING(REGISTER_X), 12) != 14) {printf("stringNextGlypg(  POINTER_TO_REGISTER_STRING(REGISTER_X), 12) should be 14 but it's %" FMT16S "\n", stringNextGlyph(  POINTER_TO_REGISTER_STRING(REGISTER_X), 12)); exit(0);}
-    if(stringLastGlyph(  POINTER_TO_REGISTER_STRING(REGISTER_X))     != 18) {printf("stringLastGlypg(  POINTER_TO_REGISTER_STRING(REGISTER_X))     should be 18 but it's %" FMT16S "\n", stringLastGlyph(  POINTER_TO_REGISTER_STRING(REGISTER_X)));     exit(0);}
-    if(stringWidth(POINTER_TO_REGISTER_STRING(REGISTER_X), &standardFont, true, true) != 155) {printf("stringWidth(POINTER_TO_REGISTER_STRING(REGISTER_X), ...) should be 155 but it's %" FMT16S "\n", stringWidth(POINTER_TO_REGISTER_STRING(REGISTER_X), &standardFont, true, true)); exit(0);}
+    if(stringByteLength( REGISTER_STRING_DATA(REGISTER_X))     != 20) {printf("stringByteLength( REGISTER_STRING_DATA(REGISTER_X))     should be 20 but it's %" FMT32S "\n", stringByteLength( REGISTER_STRING_DATA(REGISTER_X)));     exit(0);}
+    if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_X))     != 16) {printf("stringGlyphLength(REGISTER_STRING_DATA(REGISTER_X))     should be 20 but it's %" FMT32S "\n", stringGlyphLength(REGISTER_STRING_DATA(REGISTER_X)));     exit(0);}
+    if(stringNextGlyph(  REGISTER_STRING_DATA(REGISTER_X),  8) !=  9) {printf("stringNextGlypg(  REGISTER_STRING_DATA(REGISTER_X),  8) should be  9 but it's %" FMT16S "\n", stringNextGlyph(  REGISTER_STRING_DATA(REGISTER_X),  8)); exit(0);}
+    if(stringNextGlyph(  REGISTER_STRING_DATA(REGISTER_X), 12) != 14) {printf("stringNextGlypg(  REGISTER_STRING_DATA(REGISTER_X), 12) should be 14 but it's %" FMT16S "\n", stringNextGlyph(  REGISTER_STRING_DATA(REGISTER_X), 12)); exit(0);}
+    if(stringLastGlyph(  REGISTER_STRING_DATA(REGISTER_X))     != 18) {printf("stringLastGlypg(  REGISTER_STRING_DATA(REGISTER_X))     should be 18 but it's %" FMT16S "\n", stringLastGlyph(  REGISTER_STRING_DATA(REGISTER_X)));     exit(0);}
+    if(stringWidth(REGISTER_STRING_DATA(REGISTER_X), &standardFont, true, true) != 155) {printf("stringWidth(REGISTER_STRING_DATA(REGISTER_X), ...) should be 155 but it's %" FMT16S "\n", stringWidth(REGISTER_STRING_DATA(REGISTER_X), &standardFont, true, true)); exit(0);}
   #endif
 
 
@@ -4526,239 +4518,56 @@ void testFunctions(void) {
 
 
   /////////////////////////////
-  // Convert Degrees to ...
+  // Convert ... to internal
   #ifdef PC_BUILD
     printf("  Angle conversions\n");
   #endif
 
-  angularMode = AM_DEGREE;
+  initializeRegister(REGISTER_X, dtReal34, "77.77", "", 0);
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34ToInternal(degree -> internal)", "279.972", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal16, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(degree -> degree)", "77.77", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(degree -> d.ms)", "77.4612", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(degree -> grad)", "86.41111111111111", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(degree -> multpi)", "0.4320555555555556", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(degree -> radian)", "1.357342559275990", "", 0);
-
+  initializeRegister(REGISTER_X, dtReal34, "55.555555", "", 0);
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34ToInternal(d.ms -> internal)", "201.35555", "", 0);
 
   initializeRegister(REGISTER_X, dtReal34, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(degree -> degree)", "77.77", "", 0);
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_GRAD);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34ToInternal(grad -> internal)", "251.9748", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal34, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(degree -> d.ms)", "77.4612", "", 0);
+  initializeRegister(REGISTER_X, dtReal34, "5.77", "", 0);
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34ToInternal(radian -> internal)", "1190.147932045745969252851271798593", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal34, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(degree -> grad)", "86.41111111111111111111111111111111", "", 0);
+  initializeRegister(REGISTER_X, dtReal34, "1.77", "", 0);
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34ToInternal(multpi -> internal)", "1146.96", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal34, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(degree -> multpi)", "0.4320555555555555555555555555555556", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "77.77", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(degree -> radian)", "1.357342559275990111973554310653594", "", 0);
 
 
   /////////////////////////////
-  // Convert Dms to ...
-  angularMode = AM_DMS;
+  // Convert internal to ...
+  initializeRegister(REGISTER_X, dtReal34, "279.972", "", 0);
+  convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34FromInternal(internal -> degree)", "77.77", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal16, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(d.ms -> degree)", "55.93209861111111", "", 0);
+  initializeRegister(REGISTER_X, dtReal34, "201.35555", "", 0);
+  convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34FromInternal(internal -> d.ms)", "55.555555", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal16, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(d.ms -> d.ms)", "55.5555555", "", 0);
+  initializeRegister(REGISTER_X, dtReal34, "251.9748", "", 0);
+  convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_GRAD);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34FromInternal(internal -> grad)", "77.77", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal16, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(d.ms -> grad)", "62.14677623456790", "", 0);
+  initializeRegister(REGISTER_X, dtReal34, "1190.147932045745969252851271798593", "", 0);
+  convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34FromInternal(internal -> radian)", "5.770000000000000000000000000000002", "", 0);
 
-  initializeRegister(REGISTER_X, dtReal16, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(d.ms -> multpi)", "0.3107338811728395", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(d.ms -> radian)", "0.9761992783140364", "", 0);
+  initializeRegister(REGISTER_X, dtReal34, "1146.96", "", 0);
+  convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI);
+  registerShouldBe(REGISTER_X, dtReal34, "convertAngle34FromInternal(internal -> multpi)", "1.77", "", 0);
 
 
-  initializeRegister(REGISTER_X, dtReal34, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(d.ms -> degree)", "55.93209861111111111111111111111111", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(d.ms -> d.ms)", "55.5555555", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(d.ms -> grad)", "62.1467762345679012345679012345679", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(d.ms -> multpi)", "0.3107338811728395061728395061728395", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "55.5555555", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(d.ms -> radian)", "0.9761992783140363578177359648261144", "", 0);
-
-
-  /////////////////////////////
-  // Convert Grad to ...
-  angularMode = AM_GRAD;
-
-  initializeRegister(REGISTER_X, dtReal16, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(grad -> degree)", "89.991", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(grad -> d.ms)", "89.59276", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(grad -> grad)", "99.99", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(grad -> multpi)", "0.49995", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(grad -> radian)", "1.570639247162217", "", 0);
-
-
-  initializeRegister(REGISTER_X, dtReal34, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(grad -> degree)", "89.991", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(grad -> d.ms)", "89.59276", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(grad -> grad)", "99.99", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(grad -> multpi)", "0.49995", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "99.99", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(grad -> radian)", "1.570639247162217129569398559470587", "", 0);
-
-
-  /////////////////////////////
-  // Convert MultPi to ...
-  angularMode = AM_MULTPI;
-
-  initializeRegister(REGISTER_X, dtReal16, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(multpi -> degree)", "222.21", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(multpi -> d.ms)", "222.1236", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(multpi -> grad)", "246.9", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(multpi -> multpi)", "1.2345", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(multpi -> radian)", "3.878296130856600", "", 0);
-
-
-  initializeRegister(REGISTER_X, dtReal34, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(multpi -> degree)", "222.21", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(multpi -> d.ms)", "222.1236", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(multpi -> grad)", "246.9", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(multpi -> multpi)", "1.2345", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "1.2345", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal34, "convertAngleFromTo(multpi -> radian)", "3.878296130856599752882133256658546", "", 0);
-
-
-  /////////////////////////////
-  // Convert Radian to ...
-  angularMode = AM_RADIAN;
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> degree)", "31.12364038930145", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> d.ms)", "31.07251054014852", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> grad)", "34.58182265477939", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> multpi)", "0.1729091132738969", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> radian)", "0.54321", "", 0);
-
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DEGREE);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> degree)", "31.12364038930144752348552567657006", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_DMS);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> d.ms)", "31.07251054014852110845478924356522", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_GRAD);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> grad)", "34.58182265477938613720613964063342", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_MULTPI);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> multpi)", "0.1729091132738969306860306982031670", "", 0);
-
-  initializeRegister(REGISTER_X, dtReal16, "0.54321", "", 0);
-  convertRegisterAngleFromTo(REGISTER_X, angularMode, AM_RADIAN);
-  registerShouldBe(REGISTER_X, dtReal16, "convertAngleFromTo(radian -> radian)", "0.54321", "", 0);
-
-  angularMode = AM_DEGREE;
 
   /////////////////////////////////////////
   // Convert big integer to real16
@@ -5750,32 +5559,6 @@ void testFunctions(void) {
   tmpStr1390ShouldBe(REGISTER_X, "1" NUM_SPACE_PUNCTUATION NUM_SUP_1 "/" NUM_SUB_6 NUM_SUB_0 NUM_SPACE_PUNCTUATION "<");
 
 
-  ////////////////////////////
-  //Convert from .d to d.ms
-  #ifdef PC_BUILD
-    printf("  DMS conversion\n");
-  #endif
-
-  initializeRegister(REGISTER_X, dtReal34, "11.99572",  "", 0);
-  convertRegisterToDms(REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertToDms()", "11.5944592",  "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "-46.68452156",  "", 0);
-  convertRegisterToDms(REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertToDms()", "-46.4104277616",  "", 0);
-
-
-  ////////////////////////////
-  //Convert from d.ms to .d
-  initializeRegister(REGISTER_X, dtReal34, "11.5944592",  "", 0);
-  convertRegisterFromDms(REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertFromDms()", "11.99572",  "", 0);
-
-  initializeRegister(REGISTER_X, dtReal34, "-46.4104277616",  "", 0);
-  convertRegisterFromDms(REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertFromDms()", "-46.68452156",  "", 0);
-
-
   ///////////////////////////////////
   // addBigIBigI
   #ifdef PC_BUILD
@@ -5909,18 +5692,10 @@ void testFunctions(void) {
   denMax = 9999;
 
   refreshStack();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("testFunctions");
-  #endif
 }
 
 
 void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *function, const char *real, const char *imag, uint32_t dataInfo) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("registerShouldBe");
-  #endif
-
   if(getRegisterDataType(regist) != dataType || getRegisterDataInfo(regist) != dataInfo) {
     #ifdef PC_BUILD
       printf("After %s register %" FMT16S " should be %s (%" FMT32U ") but it's %s\n", function, regist, getDataTypeName(dataType, true, false), dataInfo, getRegisterDataTypeName(regist, true, false));
@@ -5953,10 +5728,10 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
 
     stringToReal16(real, &temp);
 
-    if(real16IsNaN(&temp) && real16IsNaN(POINTER_TO_REGISTER_DATA(regist))) {
+    if(real16IsNaN(&temp) && real16IsNaN(REGISTER_REAL16_DATA(regist))) {
       return;
     }
-    else if(real16IsNaN(&temp) && !real16IsNaN(POINTER_TO_REGISTER_DATA(regist))) {
+    else if(real16IsNaN(&temp) && !real16IsNaN(REGISTER_REAL16_DATA(regist))) {
       #ifdef PC_BUILD
         printf("After %s register %" FMT16S " should be\nreal16 NaN\nbut it is\n", function, regist);
         printRegisterToConsole(regist, 0);
@@ -5981,10 +5756,10 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
       #endif
     }
 
-    if(real16IsInfinite(&temp) && real16IsPositive(&temp) && (real16IsInfinite(POINTER_TO_REGISTER_DATA(regist)) && real16IsPositive(POINTER_TO_REGISTER_DATA(regist)))) {
+    if(real16IsInfinite(&temp) && real16IsPositive(&temp) && (real16IsInfinite(REGISTER_REAL16_DATA(regist)) && real16IsPositive(REGISTER_REAL16_DATA(regist)))) {
       return;
     }
-    else if(real16IsInfinite(&temp) && real16IsPositive(&temp) && !(real16IsInfinite(POINTER_TO_REGISTER_DATA(regist)) && real16IsPositive(POINTER_TO_REGISTER_DATA(regist)))) {
+    else if(real16IsInfinite(&temp) && real16IsPositive(&temp) && !(real16IsInfinite(REGISTER_REAL16_DATA(regist)) && real16IsPositive(REGISTER_REAL16_DATA(regist)))) {
       #ifdef PC_BUILD
         printf("After %s register %" FMT16S " should be\nreal16 Infinity\nbut it is\n", function, regist);
         printRegisterToConsole(regist, 0);
@@ -6009,10 +5784,10 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
       #endif
     }
 
-    if(real16IsInfinite(&temp) && real16IsNegative(&temp) && (real16IsInfinite(POINTER_TO_REGISTER_DATA(regist)) && real16IsNegative(POINTER_TO_REGISTER_DATA(regist)))) {
+    if(real16IsInfinite(&temp) && real16IsNegative(&temp) && (real16IsInfinite(REGISTER_REAL16_DATA(regist)) && real16IsNegative(REGISTER_REAL16_DATA(regist)))) {
       return;
     }
-    else if(real16IsInfinite(&temp) && real16IsNegative(&temp) && !(real16IsInfinite(POINTER_TO_REGISTER_DATA(regist)) && real16IsNegative(POINTER_TO_REGISTER_DATA(regist)))) {
+    else if(real16IsInfinite(&temp) && real16IsNegative(&temp) && !(real16IsInfinite(REGISTER_REAL16_DATA(regist)) && real16IsNegative(REGISTER_REAL16_DATA(regist)))) {
       #ifdef PC_BUILD
         printf("After %s register %" FMT16S " should be\nreal16 -Infinity\nbut it is\n", function, regist);
         printRegisterToConsole(regist, 0);
@@ -6037,7 +5812,7 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
       #endif
     }
 
-    real16Subtract(&temp, POINTER_TO_REGISTER_DATA(regist), &temp);
+    real16Subtract(&temp, REGISTER_REAL16_DATA(regist), &temp);
     if(!real16IsZero(&temp)) {
       #ifdef PC_BUILD
         printf("After %s register %" FMT16S " should be\nreal16 %s\nbut it is\n", function, regist, real);
@@ -6069,8 +5844,8 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
 
     stringToReal16(real, &temp);
     stringToReal16(imag, &temp2);
-    real16Subtract(&temp, POINTER_TO_REGISTER_DATA(regist), &temp);
-    real16Subtract(&temp2, POINTER_TO_REGISTER_DATA(regist) + REAL16_SIZE, &temp2);
+    real16Subtract(&temp,  REGISTER_REAL16_DATA(regist), &temp);
+    real16Subtract(&temp2, REGISTER_IMAG16_DATA(regist), &temp2);
     if(!real16IsZero(&temp) || !real16IsZero(&temp2)) {
       #ifdef PC_BUILD
         printf("After %s register %" FMT16S " should be\nreal16 %s + %si\nbut it is\n", function, regist, real, imag);
@@ -6104,7 +5879,7 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
     real34_t temp;
 
     stringToReal34(real, &temp);
-    real34Subtract(&temp, POINTER_TO_REGISTER_DATA(regist), &temp);
+    real34Subtract(&temp, REGISTER_REAL34_DATA(regist), &temp);
     if(!real34IsZero(&temp)) {
       #ifdef PC_BUILD
         printf("After %s register %" FMT16S " should be\nreal34 %s\nbut it is\n", function, regist, real);
@@ -6136,8 +5911,8 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
 
     stringToReal34(real, &temp);
     stringToReal34(imag, &temp2);
-    real34Subtract(&temp, POINTER_TO_REGISTER_DATA(regist), &temp);
-    real34Subtract(&temp2, POINTER_TO_REGISTER_DATA(regist) + REAL34_SIZE, &temp2);
+    real34Subtract(&temp, REGISTER_REAL34_DATA(regist), &temp);
+    real34Subtract(&temp2, REGISTER_IMAG34_DATA(regist), &temp2);
     if(!real34IsZero(&temp) || !real34IsZero(&temp2)) {
       #ifdef PC_BUILD
         printf("After %s register %" FMT16S " should be\nreal34 %s + %si\nbut it is\n", function, regist, real, imag);
@@ -6200,9 +5975,9 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
   }
 
   else if(dataType == dtSmallInteger) {
-    if(*(uint64_t *)(POINTER_TO_REGISTER_DATA(regist)) != (uint64_t)atoll(real)) {
+    if(*(REGISTER_SMALL_INTEGER_DATA(regist)) != (uint64_t)atoll(real)) {
       #ifdef PC_BUILD
-        printf("After %s register %" FMT16S " should be\nSmall integer %s(%" FMT32U ")\nbut it is\n%" FMT64U "(%" FMT32U ")\n", function, regist, real, dataInfo, *(uint64_t *)(POINTER_TO_REGISTER_DATA(regist)), getRegisterBase(regist));
+        printf("After %s register %" FMT16S " should be\nSmall integer %s(%" FMT32U ")\nbut it is\n%" FMT64U "(%" FMT32U ")\n", function, regist, real, dataInfo, *(REGISTER_SMALL_INTEGER_DATA(regist)), getRegisterBase(regist));
         exit(0);
       #endif
 
@@ -6216,7 +5991,7 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
         sprintf(errorMessage, "register %" FMT16S " should be small integer %s(%" FMT32U ") but it's", regist, real, dataInfo);
         lcd_putsAt(t20, 3, errorMessage);
 
-        sprintf(errorMessage, "%" FMT64U "(%" FMT32U ")", *(uint64_t *)(POINTER_TO_REGISTER_DATA(regist)), getRegisterBase(regist));
+        sprintf(errorMessage, "%" FMT64U "(%" FMT32U ")", *(REGISTER_SMALL_INTEGER_DATA(regist)), getRegisterBase(regist));
         lcd_putsAt(t20, 4, errorMessage);
 
         lcd_refresh();
@@ -6242,19 +6017,11 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
       wait_for_key_press();
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("registerShouldBe");
-  #endif
 }
 
 
 
 void tmpStr1390ShouldBe(calcRegister_t regist, const char *shouldBe) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("tmpStr1390ShouldBe");
-  #endif
-
   if(strcmp(tmpStr3000, shouldBe)) {
     #ifdef PC_BUILD
       printf("for "); printRegisterToConsole(REGISTER_X, 0);
@@ -6277,39 +6044,31 @@ void tmpStr1390ShouldBe(calcRegister_t regist, const char *shouldBe) {
       wait_for_key_press();
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("tmpStr1390ShouldBe");
-  #endif
 }
 
 
 
 void initializeRegister(calcRegister_t regist, uint32_t dataType, const char *real, const char *imag, uint32_t dataInfo) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("initializeRegister");
-  #endif
-
   if(dataType == dtReal16) {
     reallocateRegister(regist, dataType, REAL16_SIZE, dataInfo);
-    stringToReal16(real, POINTER_TO_REGISTER_DATA(regist));
+    stringToReal16(real, REGISTER_REAL16_DATA(regist));
   }
 
   else if(dataType == dtComplex16) {
     reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, dataInfo);
-    stringToReal16(real, POINTER_TO_REGISTER_DATA(regist));
-    stringToReal16(imag, POINTER_TO_REGISTER_DATA(regist) + REAL16_SIZE);
+    stringToReal16(real, REGISTER_REAL16_DATA(regist));
+    stringToReal16(imag, REGISTER_IMAG16_DATA(regist));
   }
 
   else if(dataType == dtReal34) {
     reallocateRegister(regist, dtReal34, REAL34_SIZE, dataInfo);
-    stringToReal34(real, POINTER_TO_REGISTER_DATA(regist));
+    stringToReal34(real, REGISTER_REAL34_DATA(regist));
   }
 
   else if(dataType == dtComplex34) {
     reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, dataInfo);
-    stringToReal34(real, POINTER_TO_REGISTER_DATA(regist));
-    stringToReal34(imag, POINTER_TO_REGISTER_DATA(regist) + REAL34_SIZE);
+    stringToReal34(real, REGISTER_REAL34_DATA(regist));
+    stringToReal34(imag, REGISTER_IMAG34_DATA(regist));
   }
 
   else if(dataType == dtString) {
@@ -6325,7 +6084,7 @@ void initializeRegister(calcRegister_t regist, uint32_t dataType, const char *re
 
   else if(dataType == dtSmallInteger) {
     reallocateRegister(regist, dtSmallInteger, SMALL_INTEGER_SIZE, dataInfo);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(regist)) = atol(real);
+    *(REGISTER_SMALL_INTEGER_DATA(regist)) = atol(real);
     setRegisterBase(regist, dataInfo);
   }
 
@@ -6349,9 +6108,5 @@ void initializeRegister(calcRegister_t regist, uint32_t dataType, const char *re
       wait_for_key_press();
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("initializeRegister");
-  #endif
 }
 #endif

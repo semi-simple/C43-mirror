@@ -32,3 +32,12 @@ void convertBigIntegerRegisterToBigInteger           (calcRegister_t regist, big
 
 void convertSmallIntegerRegisterToUInt64             (calcRegister_t regist, int16_t *sign, uint64_t *value);
 void convertUInt64ToSmallIntegerRegister             (int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist);
+
+#if (ANGLE16 == 1)
+  #define convertBigIntegerRegisterToAngleRegister(source, destination)   convertBigIntegerRegisterToReal16Register(source, destination)
+  #define convertSmallIntegerRegisterToAngleRegister(source, destination) convertSmallIntegerRegisterToReal16Register(source, destination)
+#endif
+#if (ANGLE34 == 1)
+  #define convertBigIntegerRegisterToAngleRegister(source, destination)   convertBigIntegerRegisterToReal34Register(source, destination)
+  #define convertSmallIntegerRegisterToAngleRegister(source, destination) convertSmallIntegerRegisterToReal34Register(source, destination)
+#endif

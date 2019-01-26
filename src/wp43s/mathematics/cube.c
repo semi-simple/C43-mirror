@@ -37,19 +37,10 @@ void (* const cube[12])(void) = {
  * \return void
  ***********************************************/
 void errorCube(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("errorCube");
-  #endif
-
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot cube %s", getRegisterDataTypeName(op1, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(op2, true, false));
-    showInfoDialog("In function fnCube:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("errorCube");
+    sprintf(errorMessage, "cannot cube %s", getRegisterDataTypeName(opX, true, false));
+    showInfoDialog("In function fnCube:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -67,19 +58,19 @@ void fnCube(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    op1    = allocateTemporaryRegister();
-    op2    = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
+    opY    = allocateTemporaryRegister();
 
-    copySourceRegisterToDestRegister(REGISTER_X, op1);
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
-    cube[getRegisterDataType(op1)]();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
+    copySourceRegisterToDestRegister(REGISTER_X, opY);
+    cube[getRegisterDataType(opX)]();
 
-    copySourceRegisterToDestRegister(REGISTER_X, op1);
-    copySourceRegisterToDestRegister(REGISTER_L, op2);
-    cube[getRegisterDataType(op1)]();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
+    copySourceRegisterToDestRegister(REGISTER_L, opY);
+    cube[getRegisterDataType(opX)]();
 
-    freeTemporaryRegister(op1);
-    freeTemporaryRegister(op2);
+    freeTemporaryRegister(opX);
+    freeTemporaryRegister(opY);
 
     refreshStack();
   }

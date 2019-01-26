@@ -20,12 +20,12 @@
 
 
 
+#ifndef wp43s_H_INCLUDED
+#define wp43s_H_INCLUDED
+
 #define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.01"
 #define COPYRIGHT "The WP43S team"
 #define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2018.12" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
-
-#ifndef wp43s_H_INCLUDED
-#define wp43s_H_INCLUDED
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -37,7 +37,6 @@
 #define DEBUG_PANEL              1
 #define DEBUG_REGISTER_L         1
 #define STACK_LIFT_DEBUG         1
-#define LOG_FUNCTIONS            0
 #define IBM_DECIMAL              1
 #define TOMS_FAST_MATH           1
 
@@ -63,8 +62,6 @@
   #define DEBUG_REGISTER_L 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
-  #undef  LOG_FUNCTIONS
-  #define LOG_FUNCTIONS 0
 #endif
 
 
@@ -188,11 +185,12 @@ typedef int16_t calcRegister_t;
 #define DO_ENG                  1
 
 // Angular mode 3 bits
-#define AM_DEGREE               0
-#define AM_GRAD                 1
-#define AM_RADIAN               2
-#define AM_MULTPI               3
-#define AM_DMS                  4
+#define AM_INTERNAL             0
+#define AM_DEGREE               1
+#define AM_GRAD                 2
+#define AM_RADIAN               3
+#define AM_MULTPI               4
+#define AM_DMS                  5
 
 // Time format 1 bit
 #define TF_H24                  0
@@ -299,13 +297,12 @@ typedef int16_t calcRegister_t;
 #define TI_RESET                1
 #define TI_RADIUS_THETA         2
 #define TI_X_Y                  3
-#define TI_ANGLE                4
-#define TI_STATISTIC_SUMS       5
-#define TI_ARE_YOU_SURE         6
-#define TI_VERSION              7
-#define TI_WHO                  8
-#define TI_FALSE                9
-#define TI_TRUE                10
+#define TI_STATISTIC_SUMS       4
+#define TI_ARE_YOU_SURE         5
+#define TI_VERSION              6
+#define TI_WHO                  7
+#define TI_FALSE                8
+#define TI_TRUE                 9
 
 // Register browser mode
 #define RBR_GLOBAL              0
@@ -372,7 +369,7 @@ typedef int16_t calcRegister_t;
   #endif
 #endif
 
-#define RAM_SIZE              65536 //98304 // 96kb
+#define RAM_SIZE              32768 //98304 // 96kb
 extern char                   *ram;
 extern bool_t                 allowScreenUpdate, funcOK;
 
@@ -398,7 +395,7 @@ extern softmenuStack_t        softmenuStack[7];
 extern uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
 extern int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
 extern int16_t                currentRegisterBrowserScreen;
-extern calcRegister_t         result, op1, op2;
+extern calcRegister_t         result, opX, opY;
 extern uint16_t               numberOfLocalRegisters, numberOfNamedRegisters;
 extern uint32_t               allLocalRegisterPointer, allNamedRegisterPointer, statisticalSumsPointer, firstFreeByte, lastFreeByte;
 extern uint16_t               programCounter, xCursor, yCursor;
@@ -413,7 +410,7 @@ extern uint8_t                displayModeOverride, stackSize, complexMode, alpha
 extern uint8_t                numLinesNumericFont, numLinesStandardFont, cursorEnabled, cursorFont;
 extern uint8_t                nimNumberPart, hexDigits, lastErrorCode, serialIOIconEnabled;
 extern uint8_t                timeFormat, tamMode, temporaryInformation, rbrMode;
-extern uint8_t                numScreensNumericFont, angularMode, displayAngularMode;
+extern uint8_t                numScreensNumericFont, angularMode;
 extern bool_t                 hourGlassIconEnabled, watchIconEnabled, userModeEnabled;
 extern bool_t                 printerIconEnabled, batteryIconEnabled, shiftF, shiftG;
 extern bool_t                 showContent, stackLiftEnabled, displayLeadingZeros, displayRealAsFraction;

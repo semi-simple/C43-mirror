@@ -27,6 +27,7 @@ void errorMul    (void);
 void mulBigIBigI (void);
 void mulBigIRe16 (void);
 void mulBigICo16 (void);
+void mulBigIAngl (void);
 void mulBigITime (void);
 void mulBigIRm16 (void);
 void mulBigICm16 (void);
@@ -38,6 +39,7 @@ void mulBigICo34 (void);
 void mulRe16BigI (void);
 void mulRe16Re16 (void);
 void mulRe16Co16 (void);
+void mulRe16Angl (void);
 void mulRe16Time (void);
 void mulRe16Rm16 (void);
 void mulRe16Cm16 (void);
@@ -54,6 +56,12 @@ void mulCo16Cm16 (void);
 void mulCo16SmaI (void);
 void mulCo16Re34 (void);
 void mulCo16Co34 (void);
+
+//      RegYRegX
+void mulAnglBigI (void);
+void mulAnglRe16 (void);
+void mulAnglSmaI (void);
+void mulAnglRe34 (void);
 
 //      RegYRegX
 void mulTimeBigI (void);
@@ -85,6 +93,7 @@ void mulCm16Co34 (void);
 void mulSmaIBigI (void);
 void mulSmaIRe16 (void);
 void mulSmaICo16 (void);
+void mulSmaIAngl (void);
 void mulSmaITime (void);
 void mulSmaIRm16 (void);
 void mulSmaICm16 (void);
@@ -96,6 +105,7 @@ void mulSmaICo34 (void);
 void mulRe34BigI (void);
 void mulRe34Re16 (void);
 void mulRe34Co16 (void);
+void mulRe34Angl (void);
 void mulRe34Time (void);
 void mulRe34Rm16 (void);
 void mulRe34Cm16 (void);

@@ -272,9 +272,9 @@ const int16_t menu_alpha_omega[] = { CHR_alpha,                   CHR_alpha_TONO
                                      CHR_sigma,                   CHR_sigma_end,            CHR_tau,            CHR_upsilon,        CHR_upsilon_TONOS,   CHR_upsilon_DIALYTIKA,
                                      CHR_upsilon_DIALYTIKA_TONOS, CHR_phi,                  CHR_chi,            CHR_psi,            CHR_omega,           CHR_omega_TONOS        };
 
-const int16_t menu_AngleConv[]   = { ITM_toDEG,                   ITM_toRAD,                ITM_toGRAD,         ITM_toDMS,          ITM_toMULpi,         ITM_NULL,
-                                     ITM_DEGto,                   ITM_RADto,                ITM_GRADto,         ITM_ANGLEDMSto,     ITM_ANGLEPIto,       ITM_NULL,
-                                     ITM_DtoR,                    ITM_RtoD,                 ITM_NULL,           ITM_DtoDMS,         ITM_NULL,            ITM_NULL               };
+const int16_t menu_AngleConv[]   = { ITM_toDEG,                   ITM_toRAD,                ITM_toGRAD,         ITM_NULL,           ITM_toDMS,           ITM_toMULpi,
+                                     ITM_DEGto,                   ITM_RADto,                ITM_GRADto,         ITM_NULL,           ITM_DMSto,           ITM_MULPIto,
+                                     ITM_DtoR,                    ITM_RtoD,                 ITM_NULL,           ITM_DtoDMS,         ITM_DMStoD,          ITM_NULL,              };
 
 const int16_t menu_UnitConv[]    = { -MNU_CONVE,                  -MNU_CONVP,               ITM_YEARtoS,        -MNU_CONVFP,        -MNU_CONVM,          -MNU_CONVX,
                                      ITM_CtoF,                    ITM_FtoC,                 ITM_StoYEAR,        ITM_NULL,           -MNU_CONVV,          -MNU_CONVA,
@@ -469,10 +469,6 @@ const softmenu_t softmenu[] = {
  * \return void
  ***********************************************/
 void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoMode, bool_t topLineDotted, bool_t topLine, bool_t bottomLine) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showSoftkey");
-  #endif
-
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
 
@@ -483,11 +479,6 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
   else {
     sprintf(errorMessage, "In function showSoftkey: xsk=%" FMT16S " must be from 0 to 5" , xsk);
     displayBugScreen(errorMessage);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("showSoftkey");
-    #endif
-
     return;
   }
 
@@ -498,11 +489,6 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
   else {
     sprintf(errorMessage, "In function showSoftkey: ysk=%" FMT16S " but must be from 0 to 2!" , ysk);
     displayBugScreen(errorMessage);
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("showSoftkey");
-    #endif
-
     return;
   }
 
@@ -588,10 +574,6 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
 
   w = stringWidth(label, &standardFont, false, false);
   showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showSoftkey");
-  #endif
 }
 
 
@@ -606,10 +588,6 @@ void showSoftmenuCurrentPart(void) {
   int16_t m, x, y, menu, yDotted=0, currentRow, item;
   const int16_t *softkeyRow;
   bool_t  dottedTopLine;
-
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showSoftmenuCurrentPart");
-  #endif
 
   if(softmenuStackPointer > 0) {
     clearScreen(false, false, true);
@@ -693,10 +671,6 @@ void showSoftmenuCurrentPart(void) {
       }
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showSoftmenuCurrentPart");
-  #endif
 }
 
 
@@ -709,18 +683,10 @@ void showSoftmenuCurrentPart(void) {
  * \return void
  ***********************************************/
 void initSoftmenuStack(int16_t softmenu) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("initSoftmenuStack");
-  #endif
-
   softmenuStack[0].softmenu = softmenu;
   softmenuStack[0].row      = 0;
   softmenuStackPointer = 1;
   showSoftmenuCurrentPart();
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("initSoftmenuStack");
-  #endif
 }
 
 
@@ -733,10 +699,6 @@ void initSoftmenuStack(int16_t softmenu) {
  * \return void
  ***********************************************/
 void pushSoftmenu(int16_t softmenu) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("pushSoftmenu");
-  #endif
-
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
     softmenuStack[softmenuStackPointer].softmenu = softmenu;
     softmenuStack[softmenuStackPointer].row      = 0;
@@ -746,10 +708,6 @@ void pushSoftmenu(int16_t softmenu) {
   else {
     displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in wp43s.h");
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("pushSoftmenu");
-  #endif
 }
 
 
@@ -764,10 +722,6 @@ void pushSoftmenu(int16_t softmenu) {
  * \return void
  ***********************************************/
 void popSoftmenu(void) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("popSoftmenu");
-  #endif
-
   if(softmenuStackPointer > 0) {
     softmenuStackPointer--;
     if(softmenuStackPointer > 0) {
@@ -780,10 +734,6 @@ void popSoftmenu(void) {
   else {
     displayBugScreen("In function popSoftmenu: the softmenu stack is empty, there is no softmenu to pop!");
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("popSoftmenu");
-  #endif
 }
 
 
@@ -801,18 +751,9 @@ void popSoftmenu(void) {
 void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   int16_t m;
 
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("showSoftmenu");
-  #endif
-
   if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
     clearScreen(false, false, true);
     displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
-
-    #if (LOG_FUNCTIONS == 1)
-      leavingFunction("showSoftmenu");
-    #endif
-
     return;
   }
 
@@ -891,8 +832,4 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
       displayBugScreen(errorMessage);
     }
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("showSoftmenu");
-  #endif
 }

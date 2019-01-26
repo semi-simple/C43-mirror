@@ -30,13 +30,9 @@
  * \return void
  ***********************************************/
 void fn10Pow(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fn10Pow");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = WP34S_int10pow(*(uint64_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)));
+    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int10pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
@@ -49,12 +45,12 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
     exponent = (bigIntegerCompareUInt(&temp, 1234) == BIG_INTEGER_GREATER_THAN ? 1234 : temp.dp[0]);
 
     uIntToBigInteger(10, &temp);
-    op1 = allocateTemporaryRegister();
-    convertBigIntegerToBigIntegerRegister(&temp, op1);
+    opY = allocateTemporaryRegister();
+    convertBigIntegerToBigIntegerRegister(&temp, opY);
 
     uIntToBigInteger(exponent, &temp);
-    op2 = allocateTemporaryRegister();
-    convertBigIntegerToBigIntegerRegister(&temp, op2);
+    opX = allocateTemporaryRegister();
+    convertBigIntegerToBigIntegerRegister(&temp, opX);
 
     result = allocateTemporaryRegister();
     powBigIBigI();
@@ -66,12 +62,12 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    op1 = allocateTemporaryRegister();
-    reallocateRegister(op1, dtReal16, REAL16_SIZE, 0);
-    real16Copy(const16_10, POINTER_TO_REGISTER_DATA(op1));
+    opY = allocateTemporaryRegister();
+    reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+    real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
 
-    op2 = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opX = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     result = REGISTER_X;
     powRe16Re16();
@@ -80,12 +76,12 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    op1 = allocateTemporaryRegister();
-    reallocateRegister(op1, dtReal34, REAL34_SIZE, 0);
-    real34Copy(const34_10, POINTER_TO_REGISTER_DATA(op1));
+    opY = allocateTemporaryRegister();
+    reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+    real34Copy(const34_10, REGISTER_REAL34_DATA(opY));
 
-    op2 = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, op2);
+    opX = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     result = REGISTER_X;
     powRe34Re34();
@@ -100,8 +96,4 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
   }
 
   refreshRegisterLine(REGISTER_X);
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fn10Pow");
-  #endif
 }

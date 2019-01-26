@@ -29,18 +29,14 @@
  * \return void
  ***********************************************/
 void fnConjugate(uint16_t unusedParamButMandatory) {
-  #if (LOG_FUNCTIONS == 1)
-    enteringFunction("fnConjugate");
-  #endif
-
   if(getRegisterDataType(REGISTER_X) == dtComplex16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL16_SIZE);
+    real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
     refreshStack();
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34ChangeSign(POINTER_TO_REGISTER_DATA(REGISTER_X) + REAL34_SIZE);
+    real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
     refreshStack();
   }
   #ifdef PC_BUILD
@@ -55,8 +51,4 @@ void fnConjugate(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnConjugate:", errorMessage, NULL, NULL);
     #endif
   }
-
-  #if (LOG_FUNCTIONS == 1)
-    leavingFunction("fnConjugate");
-  #endif
 }

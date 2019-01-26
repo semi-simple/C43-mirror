@@ -84,6 +84,9 @@ void executeFunction(int16_t fn, int16_t shift) {
       else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=func && func<=CHR_F)) {
         addItemToNimBuffer(func);
       }
+      else if(calcMode == CM_TAM) {
+        addItemToBuffer(func);
+      }
       else if(func > 0) { // function
         if(calcMode == CM_NIM) {
           closeNim();

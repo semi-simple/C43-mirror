@@ -39,7 +39,7 @@ void (* const arcsin[12])(void) = {
 void errorArcsin(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate arcsin for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate arcsin for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnArcsin:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorArcsin(void) {
  ***********************************************/
 void arcsinToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "arcsin(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "arcsin(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

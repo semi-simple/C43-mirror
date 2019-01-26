@@ -39,7 +39,7 @@ void (* const cube[12])(void) = {
 void errorCube(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot cube %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot cube %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnCube:", errorMessage, NULL, NULL);
   #endif
 }

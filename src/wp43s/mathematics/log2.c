@@ -39,7 +39,7 @@ void (* const logBase2[12])(void) = {
 void errorLog2(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate log2 for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate log2 for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnLog2:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorLog2(void) {
  ***********************************************/
 void log2ToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "log2(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "log2(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

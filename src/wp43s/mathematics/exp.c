@@ -39,7 +39,7 @@ void (* const Exp[12])(void) = {
 void errorExp(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnExp:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorExp(void) {
  ***********************************************/
 void expToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "exp(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "exp(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

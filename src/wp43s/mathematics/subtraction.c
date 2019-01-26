@@ -50,8 +50,8 @@ void (* const subtraction[12][12])(void) = {
 void errorSub(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot subtract %s", getRegisterDataTypeName(opX, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "from %s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage, "cannot subtract %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "from %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     showInfoDialog("In function fnSubtract:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
@@ -66,8 +66,8 @@ void errorSub(void) {
  ***********************************************/
 void subToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "subtract %s", getRegisterDataTypeName(opX, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(opY, true, false));
+    sprintf(errorMessage, "subtract %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }

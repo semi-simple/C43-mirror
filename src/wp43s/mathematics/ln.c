@@ -39,7 +39,7 @@ void (* const ln[12])(void) = {
 void errorLn(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Ln for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate Ln for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnLn:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorLn(void) {
  ***********************************************/
 void lnToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "ln(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "ln(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

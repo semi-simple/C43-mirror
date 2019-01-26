@@ -39,7 +39,7 @@ void (* const Sqrt[12])(void) = {
 void errorSqrt(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate sqrt for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate sqrt for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorSqrt(void) {
  ***********************************************/
 void sqrtToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "sqrt(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "sqrt(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

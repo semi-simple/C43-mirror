@@ -39,7 +39,7 @@ void (* const arccos[12])(void) = {
 void errorArccos(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate arccos for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate arccos for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnArccos:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorArccos(void) {
  ***********************************************/
 void arccosToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "arccos(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "arccos(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

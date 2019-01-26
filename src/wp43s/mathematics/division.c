@@ -50,8 +50,8 @@ void (* const division[12][12])(void) = {
 void errorDiv(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot divide %s", getRegisterDataTypeName(opY, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot divide %s", getRegisterDataTypeName(REGISTER_Y, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnDivide:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
@@ -66,8 +66,8 @@ void errorDiv(void) {
  ***********************************************/
 void divToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "divide %s", getRegisterDataTypeName(opY, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "divide %s", getRegisterDataTypeName(REGISTER_Y, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }

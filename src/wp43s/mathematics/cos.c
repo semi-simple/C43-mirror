@@ -39,7 +39,7 @@ void (* const Cos[12])(void) = {
 void errorCos(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnCos:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorCos(void) {
  ***********************************************/
 void cosToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "cos(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "cos(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

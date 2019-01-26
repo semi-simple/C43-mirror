@@ -39,7 +39,7 @@ void (* const Tan[12])(void) = {
 void errorTan(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Tan for %s", getRegisterDataTypeName(opX, true, false));
+    sprintf(errorMessage, "cannot calculate Tan for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnTan:", errorMessage, NULL, NULL);
   #endif
 }
@@ -54,7 +54,7 @@ void errorTan(void) {
  ***********************************************/
 void tanToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "tan(%s)", getRegisterDataTypeName(opX, false, false));
+    sprintf(errorMessage, "tan(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }

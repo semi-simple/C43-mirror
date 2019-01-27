@@ -704,6 +704,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     if(tamTransition == TT_OPERATION) {
       strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : "S")))))));
       sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       tamCurrentOperation = tamOperation;
@@ -718,18 +721,27 @@ void tamTransitionSystem(uint16_t tamTransition) {
     else if(tamTransition == TT_DIGIT) {
       tamNumber = tamDigit;
       sprintf(tamBuffer, "%s %d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 2;
     }
     else if(tamTransition == TT_DOT) {
       sprintf(tamBuffer, "%s .__", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 3;
     }
     else if(tamTransition == TT_INDIRECT) {
       sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 5;
@@ -748,6 +760,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
     if((tamTransition==TT_OPERATION && tamOperation==tamCurrentOperation) || tamTransition==TT_BACKSPACE) {
       sprintf(tamBuffer, "%s __   ", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 0;
@@ -756,6 +771,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
       tamCurrentOperation = tamOperation;
       strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : "S")))))));
       sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
     }
     else if(tamTransition == TT_LETTER) {
@@ -767,18 +785,27 @@ void tamTransitionSystem(uint16_t tamTransition) {
     else if(tamTransition == TT_DIGIT) {
       tamNumber = tamDigit;
       sprintf(tamBuffer, "%s%s %d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 9;
     }
     else if(tamTransition == TT_DOT) {
       sprintf(tamBuffer, "%s%s .__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 10;
     }
     else if(tamTransition == TT_INDIRECT) {
       sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 12;
@@ -801,6 +828,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s __", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 0;
     }
@@ -812,6 +842,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
       if(tamDigit < numberOfLocalRegisters) {
         tamNumber = tamDigit;
         sprintf(tamBuffer, "%s .%d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+        if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+          clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+        }
         showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
         transitionSystemStatus = 4;
@@ -819,6 +852,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s __ ", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 0;
@@ -841,6 +877,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s .__", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 3;
     }
@@ -861,18 +900,27 @@ void tamTransitionSystem(uint16_t tamTransition) {
     else if(tamTransition == TT_DIGIT) {
       tamNumber = tamDigit;
       sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 6;
     }
     else if(tamTransition == TT_DOT) {
       sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 7;
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s __ ", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 0;
@@ -901,6 +949,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 5;
     }
@@ -912,6 +963,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
       if(tamDigit < numberOfLocalRegisters) {
         tamNumber = tamDigit;
         sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+        if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+          clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+        }
         showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
         transitionSystemStatus = 8;
@@ -919,6 +973,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__ ", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 5;
@@ -945,6 +1002,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 7;
     }
@@ -966,6 +1026,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 1;
     }
@@ -977,6 +1040,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
       if(tamDigit < numberOfLocalRegisters) {
         tamNumber = tamDigit;
         sprintf(tamBuffer, "%s%s .%d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+        if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+          clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+        }
         showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
         transitionSystemStatus = 11;
@@ -984,6 +1050,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s%s __ ", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 1;
@@ -1006,6 +1075,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s%s .__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 10;
     }
@@ -1026,18 +1098,27 @@ void tamTransitionSystem(uint16_t tamTransition) {
     else if(tamTransition == TT_DIGIT) {
       tamNumber = tamDigit;
       sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "%d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 13;
     }
     else if(tamTransition == TT_DOT) {
       sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 14;
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s%s __ ", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 1;
@@ -1066,6 +1147,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 12;
     }
@@ -1077,6 +1161,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
       if(tamDigit < numberOfLocalRegisters) {
         tamNumber = tamDigit;
         sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".%d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+        if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+          clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+        }
         showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
         transitionSystemStatus = 15;
@@ -1084,6 +1171,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__ ", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
 
       transitionSystemStatus = 12;
@@ -1110,6 +1200,9 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_BACKSPACE) {
       sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+      if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+      }
       showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
       transitionSystemStatus = 14;
     }

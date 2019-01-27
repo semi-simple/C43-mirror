@@ -158,7 +158,6 @@ void displayBugScreen(const char *msg) {
     char line[100], word[50], message[1000];
     bool_t firstWordOfLine;
 
-    //displayDateTime = false;
     previousCalcMode = calcMode;
     calcMode = CM_BUG_ON_SCREEN;
     cursorEnabled = false;

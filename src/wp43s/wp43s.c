@@ -37,7 +37,7 @@ char                   tmpStr3000[TMP_STR_LENGTH], errorMessage[ERROR_MESSAGE_LE
 softmenuStack_t        softmenuStack[7];
 uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
 int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
-int16_t                currentRegisterBrowserScreen;
+int16_t                currentRegisterBrowserScreen, lineTWidth;
 calcRegister_t         result, opX, opY;
 uint16_t               numberOfLocalRegisters, numberOfNamedRegisters;
 uint32_t               allLocalRegisterPointer, allNamedRegisterPointer, statisticalSumsPointer, firstFreeByte, lastFreeByte;
@@ -172,8 +172,6 @@ void setupDefaults(void) {
   significantDigits = 0;
   fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN
   fnDisplayStack(4);
-
-  //displayDateTime = true;
 
   showDateTime();
 

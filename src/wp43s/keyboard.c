@@ -163,7 +163,7 @@ uint16_t determineItem(const calcKey_t *key) {
   }
   else {
     displayBugScreen("In function determineItem: item was not determined!");
-    result=0;
+    result = 0;
   }
   return result;
 }
@@ -417,7 +417,6 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_BUG_ON_SCREEN) {
-        //displayDateTime = true;
         calcMode = previousCalcMode;
         clearScreen(false, true, true);
         refreshStack();
@@ -638,7 +637,6 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_BUG_ON_SCREEN) {
-        //displayDateTime = true;
         calcMode = previousCalcMode;
         clearScreen(false, true, true);
         refreshStack();

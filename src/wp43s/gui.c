@@ -2750,10 +2750,11 @@ void calcModeTAM(void) {
 
   calcMode = CM_TAM;
 
-  clearRegisterLine(Y_POSITION_OF_TAM_LINE, 32);
-
   strcat(tamBuffer, " __");
-  showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE+6, vmNormal, true, true);
+  if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+  }
+  showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 
   transitionSystemStatus = 0;
 

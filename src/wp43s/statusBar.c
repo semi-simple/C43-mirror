@@ -29,18 +29,16 @@
 void showDateTime(void) {
   int16_t x;
 
-  //if(displayDateTime) {
-    showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-12, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
-    showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-24, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
+  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-12, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
+  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-24, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
 
-    getDateString(dateTimeString);
-    x = showString(dateTimeString, &standardFont, X_DATE, 0, vmNormal, true, true);
+  getDateString(dateTimeString);
+  x = showString(dateTimeString, &standardFont, X_DATE, 0, vmNormal, true, true);
 
-    x = showGlyph(timeFormat==TF_H12 ? STD_SPACE_3_PER_EM : STD_SPACE_FIGURE, &standardFont, x, 0, vmNormal, true, true); // is 0+0+8 pixel wide
+  x = showGlyph(timeFormat==TF_H12 ? STD_SPACE_3_PER_EM : STD_SPACE_FIGURE, &standardFont, x, 0, vmNormal, true, true); // is 0+0+8 pixel wide
 
-    getTimeString(dateTimeString);
-    showString(dateTimeString, &standardFont, x, 0, vmNormal, true, false);
-  //}
+  getTimeString(dateTimeString);
+  showString(dateTimeString, &standardFont, x, 0, vmNormal, true, false);
 }
 
 

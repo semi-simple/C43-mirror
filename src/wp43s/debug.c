@@ -754,12 +754,6 @@ void debugNIM(void) {
         gtk_widget_show(lbl1[row++]);
       }
 
-      //if(row < DEBUG_LINES) {
-      //  sprintf(string, "displayDateTime              = %6u = %s",   displayDateTime,      getBooleanName(displayDateTime));
-      //  gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-      //  gtk_widget_show(lbl1[row++]);
-      //}
-
       if(row < DEBUG_LINES) {
         sprintf(string, "complexUnit                  = %6u = %s",   complexUnit,          getComplexUnitName(complexUnit));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);

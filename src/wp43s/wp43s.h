@@ -394,7 +394,7 @@ extern char                   tmpStr3000[TMP_STR_LENGTH], errorMessage[ERROR_MES
 extern softmenuStack_t        softmenuStack[7];
 extern uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
 extern int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
-extern int16_t                currentRegisterBrowserScreen;
+extern int16_t                currentRegisterBrowserScreen, lineTWidth;
 extern calcRegister_t         result, opX, opY;
 extern uint16_t               numberOfLocalRegisters, numberOfNamedRegisters;
 extern uint32_t               allLocalRegisterPointer, allNamedRegisterPointer, statisticalSumsPointer, firstFreeByte, lastFreeByte;

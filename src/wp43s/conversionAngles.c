@@ -20,361 +20,148 @@
 
 #include "wp43s.h"
 
-/*
-void convertRegisterAngleFromTo(calcRegister_t regist, uint32_t fromAngularMode, uint32_t toAngularMode) {
-  if(getRegisterDataType(regist) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(regist, regist);
-    convertAngle34FromTo(REGISTER_REAL34_DATA(regist), fromAngularMode, toAngularMode);
-  }
-  else if(getRegisterDataType(regist) == dtReal16) {
-    convertRegister16To34(regist);
-    convertAngle34FromTo(REGISTER_REAL34_DATA(regist), fromAngularMode, toAngularMode);
-  }
-  else if(getRegisterDataType(regist) == dtReal34) {
-    convertAngle34FromTo(REGISTER_REAL34_DATA(regist), fromAngularMode, toAngularMode);
-  }
-  else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Cannot use %s for converting an angle!", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function convertRegisterAngleFromTo:", errorMessage, NULL, NULL);
-    #endif
-
-    return;
-  }
-
-  setRegisterAngularMode(regist, toAngularMode);
-  refreshRegisterLine(regist);
-}
 
 
+void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-void convertAngle34FromTo(real34_t *angle34, uint32_t fromAngularMode, uint32_t toAngularMode) {
-  if(fromAngularMode == AM_DEGREE) {
-    if(toAngularMode == AM_DMS) {
-      convertAngle34ToDms(angle34);
-    }
-
-    else if(toAngularMode == AM_GRAD) {
-      real34Divide(angle34, const34_0_9, angle34); // 180/200
-    }
-
-    else if(toAngularMode == AM_MULTPI) {
-      real34Divide(angle34, const34_180, angle34);
-    }
-
-    else if(toAngularMode == AM_RADIAN) {
-      real34Multiply(angle34, const34_piOn180, angle34);
-    }
-
-    else if(toAngularMode != AM_DEGREE) {
-      sprintf(errorMessage, "In function convertAngle34FromTo from AM_DEGREE: %" FMT32U " is an unexpected value for toAngularMode!", toAngularMode);
-      displayBugScreen(errorMessage);
-    }
-  }
-
-  else if(fromAngularMode == AM_DMS) {
-    if(toAngularMode != AM_DMS) {
-      convertAngle34FromDms(angle34);
-    }
-
-    if(toAngularMode == AM_GRAD) {
-      real34Divide(angle34, const34_0_9, angle34); // 180/200
-    }
-
-    else if(toAngularMode == AM_MULTPI) {
-      real34Divide(angle34, const34_180, angle34);
-    }
-
-    else if(toAngularMode == AM_RADIAN) {
-      real34Multiply(angle34, const34_piOn180, angle34);
-    }
-
-    else if(toAngularMode != AM_DEGREE && toAngularMode != AM_DMS) {
-      sprintf(errorMessage, "In function convertAngle34FromTo from AM_DMS: %" FMT32U " is an unexpected value for toAngularMode!", toAngularMode);
-      displayBugScreen(errorMessage);
-    }
-  }
-
-  else if(fromAngularMode == AM_GRAD) {
-    if(toAngularMode == AM_DEGREE) {
-      real34Multiply(angle34, const34_0_9, angle34); // 180/200
-    }
-
-    else if(toAngularMode == AM_DMS) {
-      real34Multiply(angle34, const34_0_9, angle34); // 180/200
-      convertAngle34ToDms(angle34);
-    }
-
-    else if(toAngularMode == AM_MULTPI) {
-      real34Divide(angle34, const34_200, angle34);
-    }
-
-    else if(toAngularMode == AM_RADIAN) {
-      real34Multiply(angle34, const34_piOn200, angle34);
-    }
-
-    else if(toAngularMode != AM_GRAD) {
-      sprintf(errorMessage, "In function convertAngle34FromTo from AM_GRAD: %" FMT32U " is an unexpected value for toAngularMode!", toAngularMode);
-      displayBugScreen(errorMessage);
-    }
-  }
-
-  else if(fromAngularMode == AM_MULTPI) {
-    if(toAngularMode == AM_DEGREE) {
-      real34Multiply(angle34, const34_180, angle34);
-    }
-
-    else if(toAngularMode == AM_DMS) {
-      real34Multiply(angle34, const34_180, angle34);
-      convertAngle34ToDms(angle34);
-    }
-
-    else if(toAngularMode == AM_GRAD) {
-      real34Multiply(angle34, const34_200, angle34);
-    }
-
-    else if(toAngularMode == AM_RADIAN) {
-      real34Multiply(angle34, const34_pi, angle34);
-    }
-
-    else if(toAngularMode != AM_MULTPI) {
-      sprintf(errorMessage, "In function convertAngle34FromTo from AM_MULTPI: %" FMT32U " is an unexpected value for toAngularMode!", toAngularMode);
-      displayBugScreen(errorMessage);
-    }
-  }
-
-  else if(fromAngularMode == AM_RADIAN) {
-    if(toAngularMode == AM_DEGREE) {
-     real34Divide(angle34, const34_piOn180, angle34);
-    }
-
-    else if(toAngularMode == AM_DMS) {
-      real34Divide(angle34, const34_piOn180, angle34);
-      convertAngle34ToDms(angle34);
-    }
-
-    else if(toAngularMode == AM_GRAD) {
-      real34Divide(angle34, const34_piOn200, angle34);
-    }
-
-    else if(toAngularMode == AM_MULTPI) {
-     real34Divide(angle34, const34_pi, angle34);
-    }
-
-    else if(toAngularMode != AM_RADIAN) {
-      sprintf(errorMessage, "In function convertAngle34FromTo from AM_RADIAN: %" FMT32U " is an unexpected value for toAngularMode!", toAngularMode);
-      displayBugScreen(errorMessage);
-    }
-  }
-
-  else {
-    sprintf(errorMessage, "In function convertAngle34FromTo: %" FMT32U " is an unexpected value for fromAngularMode!", fromAngularMode);
-    displayBugScreen(errorMessage);
-  }
-}
-
-
-
-void convertRegisterToDms(calcRegister_t regist) {
-  convertAngle34ToDms(REGISTER_REAL34_DATA(regist));
-}
-
-
-
-void convertAngle34ToDms(real34_t *angle34) {
-  int16_t  sign;
-
-  real34_t temp0; // integer degrees
-  real34_t temp1;
-
-  sign = real34IsNegative(angle34) ? -1 : 1;     // sign = sign(regist)
-  real34SetPositiveSign(angle34);                // regist = abs(regist)
-
-  real34ToIntegral(angle34, &temp0);             // temp0 = intPart(regist)            : integral number of degrees
-  real34Subtract(angle34, &temp0, angle34);      // regist = regist - intPart(regist)  : fractional part of degrees
-
-  real34Multiply(angle34, const34_60, angle34);  // regist = regist * 60               : number of minutes
-  real34ToIntegral(angle34, &temp1);             // temp1 = int(regist)                : integral number of minutes
-  real34Subtract(angle34, &temp1, angle34);      // regist = regist - intPart(minutes) : fractional part of minutes
-  real34Multiply(angle34, const34_60, angle34);  // regist = regist * 60               : number of seconds
-  real34Divide(angle34, const34_10000, angle34); // regist = regist / 10000
-  real34Divide(&temp1, const34_100, &temp1);     // temp1 = temp1 / 100
-  real34Add(angle34, &temp1, angle34);           // regist = minutes/100 + seconds/10000
-  real34Add(angle34, &temp0, angle34);           // regist = degrees + minutes/100 + seconds/10000
-
-  if(sign == -1) {
-    real34SetNegativeSign(angle34);
-  }
-}
-
-
-
-void convertRegisterFromDms(calcRegister_t regist) {
-  convertAngle34FromDms(REGISTER_REAL34_DATA(regist));
-}
-
-
-
-void convertAngle34FromDms(real34_t *angle34) {
-  int16_t  sign;
-  real34_t temp0; // integer degrees
-  real34_t temp1;
-  real34_t temp2; // for comparisons
-
-  sign = real34IsNegative(angle34) ? -1 : 1;     // sign = sign(regist)
-  real34SetPositiveSign(angle34);                // regist = abs(regist)
-
-  real34ToIntegral(angle34, &temp0);             // temp0 = intPart(regist)    : integral number of degrees
-
-  real34Subtract(const34_9000, &temp0, &temp2);
-  if(real34IsNegative(&temp2)) {                 // temp0 > 9000 ?
-    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      real34ToString(&temp0, errorMessage + ERROR_MESSAGE_LENGTH/2);
-      sprintf(errorMessage, "degrees = %s", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      showInfoDialog("In function convertAngle34FromDms: the input value must be " STD_LESS_EQUAL " 9000!", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  real34Subtract(angle34, &temp0, angle34);      // regist = regist - intPart(regist) : fractional part of degrees
-
-  real34Multiply(angle34, const34_100, angle34); // regist = regist * 100             : number of minutes
-  real34ToIntegral(angle34, &temp1);             // temp1 = int(regist)                 : integral number of minutes
-
-  real34Subtract(&temp1, const34_60, &temp2);
-  if(!real34IsNegative(&temp2)) {                // temp1 >= 60 ?
-    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      real34ToString(&temp1, errorMessage + ERROR_MESSAGE_LENGTH/2);
-      sprintf(errorMessage, "minutes = %s", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      showInfoDialog("In function convertAngle34FromDms: the input value has minutes " STD_GREATER_EQUAL " 60!", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  real34Subtract(angle34, &temp1, angle34);      // regist = regist - intPart(minutes) : fractional part of minutes
-
-  real34Subtract(angle34, const34_0_6, &temp2);
-  if(!real34IsNegative(&temp2)) {                // regist >= 0.60
-    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      real34Multiply(angle34, const34_100, angle34);
-      real34ToString(angle34, errorMessage + ERROR_MESSAGE_LENGTH/2);
-      real34Divide(angle34, const34_100, angle34);
-      sprintf(errorMessage, "seconds = %s", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      showInfoDialog("In function convertAngle34FromDms: the input value has seconds " STD_GREATER_EQUAL " 60!", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  real34Divide(&temp1, const34_60, &temp1);      // temp1 = minutes/60
-  real34Divide(angle34, const34_36, angle34);    // regist = regist / (3600/100)     : number of seconds
-  real34Add(angle34, &temp0, angle34);           // regist = degrees + seconds/3600
-  real34Add(angle34, &temp1, angle34);           // regist = degrees + minutes/60 + seconds/3600
-
-  if(sign == -1) {
-    real34SetNegativeSign(angle34);
-  }
-}
-*/
-
-
-void fnCvtFromAngularMode(uint16_t fromAngularMode) {
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), fromAngularMode);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, fromAngularMode);
   }
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      convertRegister34To16(REGISTER_X);
+    }
+  #endif
+
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      convertRegister16To34(REGISTER_X);
+    }
+  #endif
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), fromAngularMode);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, fromAngularMode);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(getRegisterDataInfo(REGISTER_X) == fromAngularMode) {
       setRegisterAngularMode(REGISTER_X, angularMode);
+      refreshRegisterLine(REGISTER_X);
       return;
     }
     else {
       displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "the input angle is not tagged as %s!", getAngularModeName(fromAngularMode));
-        showInfoDialog("In function fnCvtFromAngularMode:", errorMessage, NULL, NULL);
+        showInfoDialog("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
       #endif
 
+      restoreStack();
+      refreshStack();
       return;
     }
   }
 
-  if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "an angle tagged %s!", getAngularModeName(fromAngularMode));
-      showInfoDialog("In function fnCvtFromAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
-    #endif
-
-    return;
-  }
-
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode);
-  setRegisterAngularMode(REGISTER_X, angularMode);
-  refreshRegisterLine(REGISTER_X);
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "an angle tagged %s!", getAngularModeName(fromAngularMode));
+    showInfoDialog("In function fnCvtToCurrentAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
+  #endif
 }
 
 
 
-void fnCvtToAngularMode(uint16_t toAngularMode) {
+void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), angularMode);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, angularMode);
   }
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      convertRegister34To16(REGISTER_X);
+    }
+  #endif
+
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      convertRegister16To34(REGISTER_X);
+    }
+  #endif
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), angularMode);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, angularMode);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
-    if(getRegisterDataInfo(REGISTER_X) == angularMode) {
-      setRegisterAngularMode(REGISTER_X, toAngularMode);
-      return;
-    }
-    else {
-      displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "the input angle is not tagged as %s!", getAngularModeName(angularMode));
-        showInfoDialog("In function fnCvtToAngularMode:", errorMessage, NULL, NULL);
-      #endif
-
-      return;
-    }
+    convertAngleFromInternal(REGISTER_ANGLE_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, toAngularMode);
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), angularMode);
+    setRegisterAngularMode(REGISTER_X, toAngularMode);
+    refreshRegisterLine(REGISTER_X);
   }
-
-  if(getRegisterDataType(REGISTER_X) != dtReal34) {
+  else {
     displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "an angle tagged %s!", getAngularModeName(angularMode));
-      showInfoDialog("In function fnCvtToAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
+      showInfoDialog("In function fnCvtFromCurrentAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
     #endif
 
-    return;
+    restoreStack();
+    refreshStack();
   }
-
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), angularMode);
-  setRegisterDataType(REGISTER_X, dtAngle);
-  setRegisterAngularMode(REGISTER_X, toAngularMode);
-  refreshRegisterLine(REGISTER_X);
 }
 
 
 
 void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DEGREE);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_DEGREE);
   }
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      convertRegister34To16(REGISTER_X);
+    }
+  #endif
+
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      convertRegister16To34(REGISTER_X);
+    }
+  #endif
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DEGREE);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_DEGREE);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(getRegisterDataInfo(REGISTER_X) == AM_DEGREE) {
       setRegisterAngularMode(REGISTER_X, AM_RADIAN);
+      refreshRegisterLine(REGISTER_X);
       return;
     }
     else {
@@ -383,38 +170,53 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtDegToRad:", "the input angle is not tagged as degree!", NULL, NULL);
       #endif
 
+      restoreStack();
+      refreshStack();
       return;
     }
   }
 
-  if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtDegToRad:", "the input value must be a real16, a real34, a big integer", "an angle tagged degree!", NULL);
-    #endif
-
-    return;
-  }
-
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE);
-  setRegisterAngularMode(REGISTER_X, AM_RADIAN);
-  refreshRegisterLine(REGISTER_X);
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    showInfoDialog("In function fnCvtDegToRad:", "the input value must be a real16, a real34, a big integer", "or an angle tagged degree!", NULL);
+  #endif
 }
 
 
 
 void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
     convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DEGREE);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_DEGREE);
   }
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      convertRegister34To16(REGISTER_X);
+    }
+  #endif
+
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      convertRegister16To34(REGISTER_X);
+    }
+  #endif
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DEGREE);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_DEGREE);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(getRegisterDataInfo(REGISTER_X) == AM_DEGREE) {
       setRegisterAngularMode(REGISTER_X, AM_DMS);
+      refreshRegisterLine(REGISTER_X);
       return;
     }
     else {
@@ -423,38 +225,53 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtDegToDms:", "the input angle is not tagged as degree!", NULL, NULL);
       #endif
 
+      restoreStack();
+      refreshStack();
       return;
     }
   }
 
-  if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtDegToDms:", "the input value must be a real16, a real34, a big integer", "an angle tagged degree!", NULL);
-    #endif
-
-    return;
-  }
-
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE);
-  setRegisterAngularMode(REGISTER_X, AM_DMS);
-  refreshRegisterLine(REGISTER_X);
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    showInfoDialog("In function fnCvtDegToDms:", "the input value must be a real16, a real34, a big integer", "or an angle tagged degree!", NULL);
+  #endif
 }
 
 
 
 void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_DMS);
   }
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      convertRegister34To16(REGISTER_X);
+    }
+  #endif
+
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      convertRegister16To34(REGISTER_X);
+    }
+  #endif
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_DMS);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(getRegisterDataInfo(REGISTER_X) == AM_DMS) {
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      refreshRegisterLine(REGISTER_X);
       return;
     }
     else {
@@ -463,38 +280,53 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtDmsToDeg:", "the input angle is not tagged as d.ms!", NULL, NULL);
       #endif
 
+      restoreStack();
+      refreshStack();
       return;
     }
   }
 
-  if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a big integer", "an angle tagged d.ms!", NULL);
-    #endif
-
-    return;
-  }
-
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS);
-  setRegisterAngularMode(REGISTER_X, AM_DEGREE);
-  refreshRegisterLine(REGISTER_X);
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    showInfoDialog("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a big integer", "or an angle tagged d.ms!", NULL);
+  #endif
 }
 
 
 
 void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_RADIAN);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_RADIAN);
   }
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
+  #if (ANGLE16 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      convertRegister34To16(REGISTER_X);
+    }
+  #endif
+
+  #if (ANGLE34 == 1)
+    if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      convertRegister16To34(REGISTER_X);
+    }
+  #endif
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_RADIAN);
+    setRegisterDataType(REGISTER_X, dtAngle);
+    setRegisterAngularMode(REGISTER_X, AM_RADIAN);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(getRegisterDataInfo(REGISTER_X) == AM_RADIAN) {
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      refreshRegisterLine(REGISTER_X);
       return;
     }
     else {
@@ -503,22 +335,16 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtRadToDeg:", "the input angle is not tagged as radian!", NULL, NULL);
       #endif
 
+      restoreStack();
+      refreshStack();
       return;
     }
   }
 
-  if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a big integer", "an angle tagged radian!", NULL);
-    #endif
-
-    return;
-  }
-
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
-  setRegisterAngularMode(REGISTER_X, AM_DEGREE);
-  refreshRegisterLine(REGISTER_X);
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a big integer", "or an angle tagged radian!", NULL);
+  #endif
 }
 
 

@@ -14,8 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Recalling constant tp (Planck time) leads to an error
-
 /********************************************//**
  * \file wp43s.c
  ***********************************************/

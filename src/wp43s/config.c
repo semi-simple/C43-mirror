@@ -357,14 +357,29 @@ void fnAngularMode(uint16_t am) {
   angularMode = am;
   if(am == AM_DMS && (getRegisterDataType(REGISTER_X) == dtBigInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)) {
     if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-      convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    }
-    else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-      convertRegister16To34(REGISTER_X);
+      convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+      convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
+      setRegisterDataType(REGISTER_X, dtAngle);
+      setRegisterAngularMode(REGISTER_X, AM_DMS);
     }
 
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS);
+    #if (ANGLE16 == 1)
+      if(getRegisterDataType(REGISTER_X) == dtReal34) {
+        convertRegister34To16(REGISTER_X);
+      }
+    #endif
+
+    #if (ANGLE34 == 1)
+      if(getRegisterDataType(REGISTER_X) == dtReal16) {
+        convertRegister16To34(REGISTER_X);
+      }
+    #endif
+
+    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
+    setRegisterDataType(REGISTER_X, dtAngle);
     setRegisterAngularMode(REGISTER_X, AM_DMS);
+
+    refreshRegisterLine(REGISTER_X);
   }
 
   showAngularMode();

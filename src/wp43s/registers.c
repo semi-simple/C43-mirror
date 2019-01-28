@@ -1216,9 +1216,12 @@ void fnClearRegisters(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetLocR(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
+  bigInteger_t locR;
 
-  int32ToReal16(numberOfLocalRegisters, REGISTER_REAL16_DATA(REGISTER_X));
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger(numberOfLocalRegisters, &locR);
+  convertBigIntegerToBigIntegerRegister(&locR, REGISTER_X);
 
   refreshStack();
 }

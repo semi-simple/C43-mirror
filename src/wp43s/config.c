@@ -162,8 +162,13 @@ void fnVersion(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnFreeMemory(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
-  uInt32ToReal16(lastFreeByte - firstFreeByte + 1, REGISTER_REAL16_DATA(REGISTER_X));
+  bigInteger_t mem;
+
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger(lastFreeByte - firstFreeByte + 1, &mem);
+  convertBigIntegerToBigIntegerRegister(&mem, REGISTER_X);
+
   refreshStack();
 }
 
@@ -176,8 +181,13 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(roundingMode, REGISTER_REAL16_DATA(REGISTER_X));
+  bigInteger_t rm;
+
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger(roundingMode, &rm);
+  convertBigIntegerToBigIntegerRegister(&rm, REGISTER_X);
+
   refreshStack();
 }
 
@@ -189,8 +199,13 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16((smallIntegerMode==SIM_2COMPL ? 2 : (smallIntegerMode==SIM_1COMPL ? 1 : (smallIntegerMode==SIM_UNSIGN ? 0 : -1))), REGISTER_REAL16_DATA(REGISTER_X));
+  bigInteger_t ism;
+
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger((smallIntegerMode==SIM_2COMPL ? 2 : (smallIntegerMode==SIM_1COMPL ? 1 : (smallIntegerMode==SIM_UNSIGN ? 0 : -1))), &ism);
+  convertBigIntegerToBigIntegerRegister(&ism, REGISTER_X);
+
   refreshStack();
 }
 
@@ -203,8 +218,13 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetWordSize(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(smallIntegerWordSize, REGISTER_REAL16_DATA(REGISTER_X));
+  bigInteger_t ws;
+
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger(smallIntegerWordSize, &ws);
+  convertBigIntegerToBigIntegerRegister(&ws, REGISTER_X);
+
   refreshStack();
 }
 
@@ -264,8 +284,13 @@ void fnSetWordSize(uint16_t WS) {
  * \return void
  ***********************************************/
 void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(getFreeFlash(), REGISTER_REAL16_DATA(REGISTER_X));
+  bigInteger_t flashMem;
+
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger(getFreeFlash(), &flashMem);
+  convertBigIntegerToBigIntegerRegister(&flashMem, REGISTER_X);
+
   refreshStack();
 }
 
@@ -314,8 +339,13 @@ uint32_t getFreeFlash(void) {
  * \return void
  ***********************************************/
 void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
-  int32ToReal16(significantDigits, REGISTER_REAL16_DATA(REGISTER_X));
+  bigInteger_t sigDigits;
+
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger(significantDigits, &sigDigits);
+  convertBigIntegerToBigIntegerRegister(&sigDigits, REGISTER_X);
+
   refreshStack();
 }
 

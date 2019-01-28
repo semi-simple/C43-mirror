@@ -224,9 +224,12 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetStackSize(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
+  bigInteger_t ss;
 
-  int32ToReal16(stackSize==SS_4 ? 4 : 8, REGISTER_REAL16_DATA(REGISTER_X));
+  liftStack(dtBigInteger, 6);
+
+  uIntToBigInteger(stackSize==SS_4 ? 4 : 8, &ss);
+  convertBigIntegerToBigIntegerRegister(&ss, REGISTER_X);
 
   refreshStack();
 }

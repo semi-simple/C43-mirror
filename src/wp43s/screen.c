@@ -112,6 +112,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   // Function name display
   if(showFunctionNameCounter>0) {
     if(--showFunctionNameCounter == 0) {
+      hideFunctionName();
       showFunctionName(ITM_NOP, 0);
     }
   }

@@ -20,6 +20,7 @@
 
 void resetShiftState(void);
 void showShiftState (void);
+void fnComplexCCCC  (uint16_t unusedParamButMandatory);
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);

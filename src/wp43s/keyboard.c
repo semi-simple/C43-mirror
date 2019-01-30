@@ -88,7 +88,7 @@ void executeFunction(int16_t fn, int16_t shift) {
         addItemToBuffer(func);
       }
       else if(func > 0) { // function
-        if(calcMode == CM_NIM) {
+        if(calcMode == CM_NIM && func != KEY_CC) {
           closeNim();
         }
 
@@ -185,6 +185,20 @@ void btnClicked(void *w, void *data) {
   btnPressed(w, data);
   btnReleased(w, data);
 }
+
+
+void fnComplexCCCC(uint16_t unusedParamButMandatory) {
+  shiftF = true;
+
+  #ifdef PC_BUILD
+    btnClicked(NULL, "02");
+  #endif
+
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "02")
+  #endif
+}
+
 
 
 /********************************************//**

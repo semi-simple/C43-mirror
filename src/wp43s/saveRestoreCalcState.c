@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 7  // 7 = bug in save and restore calc state
+#define BACKUP_VERSION 9  // 9 = numberOfLocalFlags added
 
 void saveCalc(void) {
   size_t size;
@@ -77,6 +77,7 @@ void saveCalc(void) {
   size += fwrite(&opY,                                1, sizeof(opY),                                backup); //printf("%8lu opY\n",                                (unsigned long)size);
   size += fwrite(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
   size += fwrite(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
+  size += fwrite(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
   size += fwrite(&numberOfNamedRegisters,             1, sizeof(numberOfNamedRegisters),             backup); //printf("%8lu numberOfNamedRegisters\n",             (unsigned long)size);
   size += fwrite(&allLocalRegisterPointer,            1, sizeof(allLocalRegisterPointer),            backup); //printf("%8lu allLocalRegisterPointer\n",            (unsigned long)size);
   size += fwrite(&allNamedRegisterPointer,            1, sizeof(allNamedRegisterPointer),            backup); //printf("%8lu allNamedRegisterPointer\n",            (unsigned long)size);
@@ -224,6 +225,7 @@ void restoreCalc(void) {
     size += fread(&opY,                                1, sizeof(opY),                                backup); //printf("%8lu opY\n",                                (unsigned long)size);
     size += fread(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
     size += fread(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
+    size += fread(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
     size += fread(&numberOfNamedRegisters,             1, sizeof(numberOfNamedRegisters),             backup); //printf("%8lu numberOfNamedRegisters\n",             (unsigned long)size);
     size += fread(&allLocalRegisterPointer,            1, sizeof(allLocalRegisterPointer),            backup); //printf("%8lu allLocalRegisterPointer\n",            (unsigned long)size);
     size += fread(&allNamedRegisterPointer,            1, sizeof(allNamedRegisterPointer),            backup); //printf("%8lu allNamedRegisterPointer\n",            (unsigned long)size);

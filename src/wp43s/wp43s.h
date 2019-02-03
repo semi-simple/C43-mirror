@@ -272,13 +272,12 @@ typedef int16_t calcRegister_t;
 #define CF_NUMERIC              0
 #define CF_STANDARD             1
 
-// TAM mode 2 bits
-#define TM_NORMAL               0
-#define TM_CMP                  1
-#define TM_STO_RCL              2
-#define TM_NORMAL_10000     10000
-#define TM_CMP_10000        10001
-#define TM_STO_RCL_10000    10002
+// TAM mode
+#define TM_VALUE            10001 // TM_VALUE must be the 1st in this list
+#define TM_REGISTER         10002
+#define TM_FLAG             10003
+#define TM_STORCL           10004
+#define TM_CMP              10005 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                0
@@ -396,9 +395,9 @@ extern uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMB
 extern int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
 extern int16_t                currentRegisterBrowserScreen, lineTWidth;
 extern calcRegister_t         result, opX, opY;
-extern uint16_t               numberOfLocalRegisters, numberOfNamedRegisters;
+extern uint16_t               numberOfLocalRegisters, numberOfLocalFlags, numberOfNamedRegisters;
 extern uint32_t               allLocalRegisterPointer, allNamedRegisterPointer, statisticalSumsPointer, firstFreeByte, lastFreeByte;
-extern uint16_t               programCounter, xCursor, yCursor;
+extern uint16_t               programCounter, xCursor, yCursor, tamMode;
 extern uint32_t               firstGregorianDay, denMax;
 extern uint8_t                softmenuStackPointer, transitionSystemStatus, cursorBlinkCounter, numScreensStandardFont;
 extern uint8_t                currentFntScr, currentFlgScr, displayFormat, displayFormatDigits;
@@ -409,7 +408,7 @@ extern uint8_t                displayStack, productSign, fractionType, radixMark
 extern uint8_t                displayModeOverride, stackSize, complexMode, alphaCase;
 extern uint8_t                numLinesNumericFont, numLinesStandardFont, cursorEnabled, cursorFont;
 extern uint8_t                nimNumberPart, hexDigits, lastErrorCode, serialIOIconEnabled;
-extern uint8_t                timeFormat, tamMode, temporaryInformation, rbrMode;
+extern uint8_t                timeFormat, temporaryInformation, rbrMode;
 extern uint8_t                numScreensNumericFont, angularMode;
 extern bool_t                 hourGlassIconEnabled, watchIconEnabled, userModeEnabled;
 extern bool_t                 printerIconEnabled, batteryIconEnabled, shiftF, shiftG;

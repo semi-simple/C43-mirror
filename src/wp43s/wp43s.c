@@ -39,9 +39,9 @@ uint32_t               reg[112], savedStackRegister[9], tempRegister[NUMBER_OF_T
 int16_t                tamFunction, tamNumber, tamNumberMin, tamNumberMax, tamDigit, tamOperation, tamLetteredRegister, tamCurrentOperation;
 int16_t                currentRegisterBrowserScreen, lineTWidth;
 calcRegister_t         result, opX, opY;
-uint16_t               numberOfLocalRegisters, numberOfNamedRegisters;
+uint16_t               numberOfLocalRegisters, numberOfLocalFlags, numberOfNamedRegisters;
 uint32_t               allLocalRegisterPointer, allNamedRegisterPointer, statisticalSumsPointer, firstFreeByte, lastFreeByte;
-uint16_t               programCounter, xCursor, yCursor;
+uint16_t               programCounter, xCursor, yCursor, tamMode;
 uint32_t               firstGregorianDay, denMax;
 uint8_t                softmenuStackPointer, transitionSystemStatus, cursorBlinkCounter, numScreensStandardFont;
 uint8_t                currentFntScr, currentFlgScr, displayFormat, displayFormatDigits;
@@ -52,7 +52,7 @@ uint8_t                displayStack, productSign, fractionType, radixMark;
 uint8_t                displayModeOverride, stackSize, complexMode, alphaCase;
 uint8_t                numLinesNumericFont, numLinesStandardFont, cursorEnabled, cursorFont;
 uint8_t                nimNumberPart, hexDigits, lastErrorCode, serialIOIconEnabled;
-uint8_t                timeFormat, tamMode, temporaryInformation, rbrMode;
+uint8_t                timeFormat, temporaryInformation, rbrMode;
 uint8_t                numScreensNumericFont, angularMode;
 bool_t                 hourGlassIconEnabled, watchIconEnabled, userModeEnabled;
 bool_t                 printerIconEnabled, batteryIconEnabled, shiftF, shiftG;
@@ -205,6 +205,7 @@ void setupDefaults(void) {
   oldTime[0] = 0;
 
   numberOfLocalRegisters = 0;
+  numberOfLocalFlags = 0;
   allLocalRegisterPointer = 0;
 
   numberOfNamedRegisters = 0;

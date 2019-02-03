@@ -1581,4 +1581,4 @@ typedef struct {
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
 } item_t;
 
-void runFunction(int16_t fn);
+void runFunction(int16_t func);

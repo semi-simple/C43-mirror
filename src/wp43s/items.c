@@ -39,8 +39,6 @@ void toBeCoded(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnNop(uint16_t unusedParamButMandatory) {
-
-
 }
 
 
@@ -51,54 +49,48 @@ void fnNop(uint16_t unusedParamButMandatory) {
  * \param[in] fn int16_t Index in the indexOfItems area of the function to run
  * \return void
  ***********************************************/
-void runFunction(int16_t fn) {
+void runFunction(int16_t func) {
   funcOK = true;
 
-  fn %= 10000;
+  if(func > LAST_ITEM) {
+  }
 
-  if(calcMode!=CM_TAM && indexOfItems[fn].param>=10000) {
-    tamFunction = fn;
-    tamMode = indexOfItems[fn].param % 10000;
-    strcpy(tamBuffer, indexOfItems[tamFunction].itemPrinted);
+  tamMode = indexOfItems[func].param;
+  if(calcMode != CM_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
+    tamFunction = func;
+    strcpy(tamBuffer, indexOfItems[func].itemPrinted);
     tamNumberMin = 0;
-    if(fn == ITM_FIX || fn == ITM_SCI || fn == ITM_ENG || fn == ITM_ALL || fn == ITM_DSP || fn == ITM_GAP) {
+    tamNumberMax = 99;
+
+    if(func == ITM_FIX || func == ITM_SCI || func == ITM_ENG || func == ITM_ALL || func == ITM_DSP || func == ITM_GAP) {
       tamNumberMax = 15;
     }
-    else if(fn == ITM_toINT) {
+    else if(func == ITM_toINT) {
       tamNumberMin = 2;
       tamNumberMax = 16;
     }
-    else if(fn == ITM_DSTACK) {
+    else if(func == ITM_DSTACK) {
       tamNumberMin = 1;
       tamNumberMax = 4;
     }
-    else if(fn == ITM_STO || fn == ITM_RCL) {
-      tamNumberMax = 99;
-    }
-    else if(fn == ITM_WSIZE) {
+    else if(func == ITM_WSIZE) {
       tamNumberMax = 64;
-    }
-    else if(fn == ITM_CF || fn == ITM_SF || fn == ITM_FF || fn == ITM_FC || fn == ITM_FCC || fn == ITM_FCS || fn == ITM_FCF || fn == ITM_FS || fn == ITM_FSC || fn == ITM_FSS || fn == ITM_FSF) {
-      tamNumberMax = 99;
-    }
-    else {
-      tamNumberMax = 0;
     }
 
     calcModeTAM();
     return;
   }
 
-  indexOfItems[fn].func(indexOfItems[fn].param);
+  indexOfItems[func].func(indexOfItems[func].param);
 
-  if(indexOfItems[fn].stackLiftStatus == SLS_DISABLED) {
+  if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
     #if (STACK_LIFT_DEBUG == 1)
       stackLiftDisable();
     #else
       stackLiftEnabled = false;
     #endif
   }
-  else if(indexOfItems[fn].stackLiftStatus == SLS_ENABLED) {
+  else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
     #if (STACK_LIFT_DEBUG == 1)
       stackLiftEnable();
     #else
@@ -108,7 +100,7 @@ void runFunction(int16_t fn) {
 
   #ifdef PC_BUILD
     if(!funcOK) {
-      sprintf(errorMessage, "%" FMT16S " = %s", fn, indexOfItems[fn].itemPrinted);
+      sprintf(errorMessage, "%" FMT16S " = %s", func, indexOfItems[func].itemPrinted);
       showInfoDialog("In function runFunction:", "Item not implemented", errorMessage, "to be coded");
     }
   #endif
@@ -139,7 +131,7 @@ const item_t indexOfItems[] = {
 /*   17 */  { toBeCoded,                   NOPARAM,                     "ADV",                                         "ADV",                                                                        SLS_UNCHANGED},
 /*   18 */  { toBeCoded,                   NOPARAM,                     "AGM",                                         "AGM",                                                                        SLS_UNCHANGED},
 /*   19 */  { toBeCoded,                   NOPARAM,                     "AGRAPH",                                      "AGRAPH",                                                                     SLS_UNCHANGED},
-/*   20 */  { fnDisplayFormatAll,          TM_NORMAL_10000,             "ALL" ,                                        "ALL",                                                                        SLS_ENABLED  },
+/*   20 */  { fnDisplayFormatAll,          TM_VALUE,                    "ALL" ,                                        "ALL",                                                                        SLS_ENABLED  },
 /*   21 */  { fnConstant,                  3,                           "a" STD_SUB_M,                                 "a" STD_SUB_M,                                                                SLS_ENABLED  },
 /*   22 */  { toBeCoded,                   NOPARAM,                     "AND",                                         "AND",                                                                        SLS_UNCHANGED},
 /*   23 */  { toBeCoded,                   NOPARAM,                     "ANGLES",                                      "ANGLES",                                                                     SLS_UNCHANGED},
@@ -188,7 +180,7 @@ const item_t indexOfItems[] = {
 /*   66 */  { toBeCoded,                   NOPARAM,                     "Cauch:",                                      "Cauch:",                                                                     SLS_UNCHANGED},
 /*   67 */  { toBeCoded,                   NOPARAM,                     "CB",                                          "CB",                                                                         SLS_UNCHANGED},
 /*   68 */  { toBeCoded,                   NOPARAM,                     "CEIL",                                        "CEIL",                                                                       SLS_ENABLED  },
-/*   69 */  { fnClearFlag,                 TM_NORMAL_10000,             "CF",                                          "CF",                                                                         SLS_UNCHANGED},
+/*   69 */  { fnClearFlag,                 TM_FLAG,                     "CF",                                          "CF",                                                                         SLS_UNCHANGED},
 /*   70 */  { toBeCoded,                   NOPARAM,                     "CHARS",                                       "CHARS",                                                                      SLS_UNCHANGED},
 /*   71 */  { fnClAll,                     NOT_CONFIRMED,               "CLALL",                                       "CLall",                                                                      SLS_UNCHANGED},
 /*   72 */  { toBeCoded,                   NOPARAM,                     "CLCVAR",                                      "CLCVAR",                                                                     SLS_UNCHANGED},
@@ -250,8 +242,8 @@ const item_t indexOfItems[] = {
 /*  128 */  { fnDropY,                     NOPARAM,                     "DROPy",                                       "DROPy",                                                                      SLS_UNCHANGED},
 /*  129 */  { toBeCoded,                   NOPARAM,                     "DSE",                                         "DSE",                                                                        SLS_UNCHANGED},
 /*  130 */  { toBeCoded,                   NOPARAM,                     "DSL",                                         "DSL",                                                                        SLS_UNCHANGED},
-/*  131 */  { fnDisplayFormatDsp,          TM_NORMAL_10000,             "DSP",                                         "DSP",                                                                        SLS_UNCHANGED},
-/*  132 */  { fnDisplayStack,              TM_NORMAL_10000,             "DSTACK",                                      "DSTACK",                                                                     SLS_UNCHANGED},
+/*  131 */  { fnDisplayFormatDsp,          TM_VALUE,                    "DSP",                                         "DSP",                                                                        SLS_UNCHANGED},
+/*  132 */  { fnDisplayStack,              TM_VALUE,                    "DSTACK",                                      "DSTACK",                                                                     SLS_UNCHANGED},
 /*  133 */  { toBeCoded,                   NOPARAM,                     "DSZ",                                         "DSZ",                                                                        SLS_UNCHANGED},
 /*  134 */  { fnAngularMode,               AM_DMS,                      "D.MS",                                        "d.ms",                                                                       SLS_UNCHANGED},
 /*  135 */  { fnCvtToCurrentAngularMode,   AM_DMS,                      "D.MS" STD_RIGHT_ARROW,                        STD_MEASURED_ANGLE STD_DOUBLE_HIGH_QUOTE STD_RIGHT_ARROW STD_MEASURED_ANGLE,  SLS_UNCHANGED},
@@ -264,7 +256,7 @@ const item_t indexOfItems[] = {
 /*  142 */  { toBeCoded,                   NOPARAM,                     "EIGVEC",                                      "EIGVEC",                                                                     SLS_UNCHANGED},
 /*  143 */  { toBeCoded,                   NOPARAM,                     "END",                                         "END",                                                                        SLS_UNCHANGED},
 /*  144 */  { toBeCoded,                   NOPARAM,                     "ENDP",                                        "End",                                                                        SLS_UNCHANGED},
-/*  145 */  { fnDisplayFormatEng,          TM_NORMAL_10000,             "ENG",                                         "ENG",                                                                        SLS_UNCHANGED},
+/*  145 */  { fnDisplayFormatEng,          TM_VALUE,                    "ENG",                                         "ENG",                                                                        SLS_UNCHANGED},
 /*  146 */  { fnDisplayOvr,                DO_ENG,                      "ENGOVR",                                      "ENGOVR",                                                                     SLS_UNCHANGED},
 /*  147 */  { toBeCoded,                   NOPARAM,                     "ENORM",                                       "ENORM",                                                                      SLS_UNCHANGED},
 /*  148 */  { addItemToBuffer,             NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                                                         SLS_DISABLED },
@@ -294,17 +286,17 @@ const item_t indexOfItems[] = {
 /*  172 */  { toBeCoded,                   NOPARAM,                     "FAST",                                        "FAST",                                                                       SLS_UNCHANGED},
 /*  173 */  { toBeCoded,                   NOPARAM,                     "FB",                                          "FB",                                                                         SLS_UNCHANGED},
 /*  174 */  { toBeCoded,                   NOPARAM,                     "FCNS",                                        "FCNS",                                                                       SLS_UNCHANGED},
-/*  175 */  { fnIsFlagClear,               TM_NORMAL_10000,             "FC?",                                         "FC?",                                                                        SLS_UNCHANGED},
-/*  176 */  { fnIsFlagClearClear,          TM_NORMAL_10000,             "FC?C",                                        "FC?C",                                                                       SLS_UNCHANGED},
-/*  177 */  { fnIsFlagClearFlip,           TM_NORMAL_10000,             "FC?F",                                        "FC?F",                                                                       SLS_UNCHANGED},
-/*  178 */  { fnIsFlagClearSet,            TM_NORMAL_10000,             "FC?S",                                        "FC?S",                                                                       SLS_UNCHANGED},
+/*  175 */  { fnIsFlagClear,               TM_FLAG,                     "FC?",                                         "FC?",                                                                        SLS_UNCHANGED},
+/*  176 */  { fnIsFlagClearClear,          TM_FLAG,                     "FC?C",                                        "FC?C",                                                                       SLS_UNCHANGED},
+/*  177 */  { fnIsFlagClearFlip,           TM_FLAG,                     "FC?F",                                        "FC?F",                                                                       SLS_UNCHANGED},
+/*  178 */  { fnIsFlagClearSet,            TM_FLAG,                     "FC?S",                                        "FC?S",                                                                       SLS_UNCHANGED},
 /*  179 */  { fnCvtFtM,                    multiply,                    "ft." STD_RIGHT_ARROW "m",                     "ft." STD_RIGHT_ARROW "m",                                                    SLS_ENABLED  },
-/*  180 */  { fnFlipFlag,                  TM_NORMAL_10000,             "FF",                                          "FF",                                                                         SLS_UNCHANGED},
+/*  180 */  { fnFlipFlag,                  TM_FLAG,                     "FF",                                          "FF",                                                                         SLS_UNCHANGED},
 /*  181 */  { toBeCoded,                   NOPARAM,                     "FIB",                                         "FIB",                                                                        SLS_UNCHANGED},
 /*  182 */  { fnFillStack,                 NOPARAM,                     "FILL",                                        "FILL",                                                                       SLS_UNCHANGED},
 /*  183 */  { toBeCoded,                   NOPARAM,                     "FIN",                                         "FIN",                                                                        SLS_UNCHANGED},
 /*  184 */  { toBeCoded,                   NOPARAM,                     "FINTS",                                       "FINTS",                                                                      SLS_UNCHANGED},
-/*  185 */  { fnDisplayFormatFix,          TM_NORMAL_10000,             "FIX",                                         "FIX",                                                                        SLS_UNCHANGED},
+/*  185 */  { fnDisplayFormatFix,          TM_VALUE,                    "FIX",                                         "FIX",                                                                        SLS_UNCHANGED},
 /*  186 */  { toBeCoded,                   NOPARAM,                     "FLAGS",                                       "FLAGS",                                                                      SLS_UNCHANGED},
 /*  187 */  { toBeCoded,                   NOPARAM,                     "FLASH",                                       "FLASH",                                                                      SLS_UNCHANGED},
 /*  188 */  { fnFreeFlashMemory,           NOPARAM,                     "FLASH?",                                      "FLASH?",                                                                     SLS_ENABLED  },
@@ -316,10 +308,10 @@ const item_t indexOfItems[] = {
 /*  194 */  { toBeCoded,                   NOPARAM,                     "F(x)",                                        "F(x)",                                                                       SLS_UNCHANGED},
 /*  195 */  { toBeCoded,                   NOPARAM,                     "F" STD_SUP_MINUS_1 "(p)",                     "F" STD_SUP_MINUS_1 "(p)",                                                    SLS_UNCHANGED},
 /*  196 */  { fnCvtRatioDb,                20,                          "fr" STD_RIGHT_ARROW "dB",                     "field",                                                                      SLS_ENABLED  },
-/*  197 */  { fnIsFlagSet,                 TM_NORMAL_10000,             "FS?",                                         "FS?",                                                                        SLS_UNCHANGED},
-/*  198 */  { fnIsFlagSetClear,            TM_NORMAL_10000,             "FS?C",                                        "FS?C",                                                                       SLS_UNCHANGED},
-/*  199 */  { fnIsFlagSetFlip,             TM_NORMAL_10000,             "FS?F",                                        "FS?F",                                                                       SLS_UNCHANGED},
-/*  200 */  { fnIsFlagSetSet,              TM_NORMAL_10000,             "FS?S",                                        "FS?S",                                                                       SLS_UNCHANGED},
+/*  197 */  { fnIsFlagSet,                 TM_FLAG,                     "FS?",                                         "FS?",                                                                        SLS_UNCHANGED},
+/*  198 */  { fnIsFlagSetClear,            TM_FLAG,                     "FS?C",                                        "FS?C",                                                                       SLS_UNCHANGED},
+/*  199 */  { fnIsFlagSetFlip,             TM_FLAG,                     "FS?F",                                        "FS?F",                                                                       SLS_UNCHANGED},
+/*  200 */  { fnIsFlagSetSet,              TM_FLAG,                     "FS?S",                                        "FS?S",                                                                       SLS_UNCHANGED},
 /*  201 */  { fnCvtSfeetM,                 multiply,                    "ft" STD_US STD_RIGHT_ARROW "m",               "s:feet" STD_US,                                                              SLS_ENABLED  },
 /*  202 */  { toBeCoded,                   NOPARAM,                     "FV",                                          "FV",                                                                         SLS_UNCHANGED},
 /*  203 */  { fnCvtFlozukM3,               multiply,                    "fz" STD_UK STD_RIGHT_ARROW "m" STD_SUP_3,     "floz" STD_UK,                                                                SLS_ENABLED  },
@@ -334,7 +326,7 @@ const item_t indexOfItems[] = {
 /*  212 */  { toBeCoded,                   NOPARAM,                     "F&p:",                                        "F&p:",                                                                       SLS_UNCHANGED},
 /*  213 */  { fnConstant,                  14,                          "G",                                           "G",                                                                          SLS_ENABLED  },
 /*  214 */  { fnConstant,                  15,                          "G" STD_SUB_0,                                 "G" STD_SUB_0,                                                                SLS_ENABLED  },
-/*  215 */  { fnDisplayFormatGap,          TM_NORMAL_10000,             "GAP",                                         "GAP",                                                                        SLS_UNCHANGED},
+/*  215 */  { fnDisplayFormatGap,          TM_VALUE,                    "GAP",                                         "GAP",                                                                        SLS_UNCHANGED},
 /*  216 */  { fnConstant,                  16,                          "G" STD_SUB_C,                                 "G" STD_SUB_C,                                                                SLS_ENABLED  },
 /*  217 */  { fnGcd,                       NOPARAM,                     "GCD",                                         "GCD",                                                                        SLS_ENABLED  },
 /*  218 */  { toBeCoded,                   NOPARAM,                     "g" STD_SUB_d,                                 "g" STD_SUB_d,                                                                SLS_UNCHANGED},
@@ -607,7 +599,7 @@ const item_t indexOfItems[] = {
 /*  485 */  { toBeCoded,                   NOPARAM,                     "RAM",                                         "RAM",                                                                        SLS_UNCHANGED},
 /*  486 */  { toBeCoded,                   NOPARAM,                     "RAN#",                                        "RAN#",                                                                       SLS_UNCHANGED},
 /*  487 */  { registerBrowser,             NOPARAM,                     "RBR",                                         "RBR",                                                                        SLS_UNCHANGED},
-/*  488 */  { fnRecall,                    TM_STO_RCL_10000,            "RCL",                                         "RCL",                                                                        SLS_ENABLED  },
+/*  488 */  { fnRecall,                    TM_STORCL,                   "RCL",                                         "RCL",                                                                        SLS_ENABLED  },
 /*  489 */  { toBeCoded,                   NOPARAM,                     "RCLCFG",                                      "Config",                                                                     SLS_UNCHANGED},
 /*  490 */  { toBeCoded,                   NOPARAM,                     "RCLEL",                                       "RCLEL",                                                                      SLS_UNCHANGED},
 /*  491 */  { toBeCoded,                   NOPARAM,                     "RCLIJ",                                       "RCLIJ",                                                                      SLS_UNCHANGED},
@@ -664,7 +656,7 @@ const item_t indexOfItems[] = {
 /*  542 */  { toBeCoded,                   NOPARAM,                     "SAVE",                                        "SAVE",                                                                       SLS_UNCHANGED},
 /*  543 */  { toBeCoded,                   NOPARAM,                     "SB",                                          "SB",                                                                         SLS_UNCHANGED},
 /*  544 */  { fnConstant,                  48,                          "Sb",                                          "Sb",                                                                         SLS_ENABLED  },
-/*  545 */  { fnDisplayFormatSci,          TM_NORMAL_10000,             "SCI",                                         "SCI",                                                                        SLS_UNCHANGED},
+/*  545 */  { fnDisplayFormatSci,          TM_VALUE,                    "SCI",                                         "SCI",                                                                        SLS_UNCHANGED},
 /*  546 */  { fnCvtShortcwtKg,             multiply,                    "scw" STD_RIGHT_ARROW "kg",                    "short",                                                                      SLS_ENABLED  },
 /*  547 */  { fnDisplayOvr,                DO_SCI,                      "SCIOVR",                                      "SCIOVR",                                                                     SLS_UNCHANGED},
 /*  548 */  { fnGetSignificantDigits,      NOPARAM,                     "SDIGS?",                                      "SDIGS?",                                                                     SLS_ENABLED  },
@@ -683,7 +675,7 @@ const item_t indexOfItems[] = {
 /*  561 */  { fnConfigUk,                  NOPARAM,                     "SETUK",                                       "UK",                                                                         SLS_UNCHANGED},
 /*  562 */  { fnConfigUsa,                 NOPARAM,                     "SETUSA",                                      "USA",                                                                        SLS_UNCHANGED},
 /*  563 */  { fnConstant,                  50,                          "Se'" STD_SUP_2,                               "Se'" STD_SUP_2,                                                              SLS_ENABLED  },
-/*  564 */  { fnSetFlag,                   TM_NORMAL_10000,             "SF",                                          "SF",                                                                         SLS_UNCHANGED},
+/*  564 */  { fnSetFlag,                   TM_FLAG,                     "SF",                                          "SF",                                                                         SLS_UNCHANGED},
 /*  565 */  { fnConstant,                  51,                          "Sf" STD_SUP_MINUS_1,                          "Sf" STD_SUP_MINUS_1,                                                         SLS_ENABLED  },
 /*  566 */  { fnSign,                      NOPARAM,                     "SIGN",                                        "sign",                                                                       SLS_ENABLED  },
 /*  567 */  { fnIntegerMode,               SIM_SIGNMT,                  "SIGNMT",                                      "SIGNMT",                                                                     SLS_UNCHANGED},
@@ -708,7 +700,7 @@ const item_t indexOfItems[] = {
 /*  586 */  { toBeCoded,                   NOPARAM,                     "STAT",                                        "STAT",                                                                       SLS_UNCHANGED},
 /*  587 */  { flagBrowser,                 NOPARAM,                     "STATUS",                                      "STATUS",                                                                     SLS_UNCHANGED},
 /*  588 */  { toBeCoded,                   NOPARAM,                     "STK",                                         "STK",                                                                        SLS_UNCHANGED},
-/*  589 */  { fnStore,                     TM_STO_RCL_10000,            "STO",                                         "STO",                                                                        SLS_UNCHANGED},
+/*  589 */  { fnStore,                     TM_STORCL,                   "STO",                                         "STO",                                                                        SLS_UNCHANGED},
 /*  590 */  { toBeCoded,                   NOPARAM,                     "STOCFG",                                      "Config",                                                                     SLS_UNCHANGED},
 /*  591 */  { toBeCoded,                   NOPARAM,                     "STOEL",                                       "STOEL",                                                                      SLS_UNCHANGED},
 /*  592 */  { toBeCoded,                   NOPARAM,                     "STOIJ",                                       "STOIJ",                                                                      SLS_UNCHANGED},
@@ -783,7 +775,7 @@ const item_t indexOfItems[] = {
 /*  661 */  { toBeCoded,                   NOPARAM,                     "W" STD_SUB_m,                                 "W" STD_SUB_m,                                                                SLS_UNCHANGED},
 /*  662 */  { toBeCoded,                   NOPARAM,                     "W" STD_SUB_p,                                 "W" STD_SUB_p,                                                                SLS_UNCHANGED},
 /*  663 */  { toBeCoded,                   NOPARAM,                     "W" STD_SUP_MINUS_1,                           "W" STD_SUP_MINUS_1,                                                          SLS_UNCHANGED},
-/*  664 */  { fnSetWordSize,               TM_NORMAL_10000,             "WSIZE",                                       "WSIZE",                                                                      SLS_UNCHANGED},
+/*  664 */  { fnSetWordSize,               TM_VALUE,                    "WSIZE",                                       "WSIZE",                                                                      SLS_UNCHANGED},
 /*  665 */  { fnGetWordSize,               NOPARAM,                     "WSIZE?",                                      "WSIZE?",                                                                     SLS_ENABLED  },
 /*  666 */  { fnCvtHpeW,                   divide,                      "W" STD_RIGHT_ARROW "hp" STD_SUB_E,            "W" STD_RIGHT_ARROW "hp" STD_SUB_E,                                           SLS_ENABLED  },
 /*  667 */  { fnCvtHpmW,                   divide,                      "W" STD_RIGHT_ARROW "hp" STD_SUB_M,            "W" STD_RIGHT_ARROW "hp" STD_SUB_M,                                           SLS_ENABLED  },
@@ -912,7 +904,7 @@ const item_t indexOfItems[] = {
 /*  790 */  { fnCvtFromCurrentAngularMode, AM_GRAD,                     STD_RIGHT_ARROW "GRAD",                        STD_MEASURED_ANGLE STD_RIGHT_ARROW STD_MEASURED_ANGLE STD_SUP_g,              SLS_ENABLED  },
 /*  791 */  { toBeCoded,                   NOPARAM,                     STD_RIGHT_ARROW "HR",                          ".d",                                                                         SLS_ENABLED  },
 /*  792 */  { toBeCoded,                   NOPARAM,                     STD_RIGHT_ARROW "H.MS",                        "h.ms",                                                                       SLS_UNCHANGED},
-/*  793 */  { fnChangeBase,                TM_NORMAL_10000,             STD_RIGHT_ARROW "INT",                         "#",                                                                          SLS_UNCHANGED},
+/*  793 */  { fnChangeBase,                TM_VALUE,                    STD_RIGHT_ARROW "INT",                         "#",                                                                          SLS_UNCHANGED},
 /*  794 */  { fnCvtFromCurrentAngularMode, AM_MULTPI,                   STD_RIGHT_ARROW "MUL" STD_pi,                  STD_MEASURED_ANGLE STD_RIGHT_ARROW STD_MEASURED_ANGLE STD_pi,                 SLS_ENABLED  },
 /*  795 */  { fnToPolar,                   NOPARAM,                     STD_RIGHT_ARROW "POL",                         STD_RIGHT_ARROW "P",                                                          SLS_UNCHANGED},
 /*  796 */  { fnCvtFromCurrentAngularMode, AM_RADIAN,                   STD_RIGHT_ARROW "RAD",                         STD_MEASURED_ANGLE STD_RIGHT_ARROW STD_MEASURED_ANGLE STD_SUP_r,              SLS_ENABLED  },

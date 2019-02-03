@@ -572,7 +572,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
         #ifdef PC_BUILD
           #if (DEBUG_REGISTER_L == 1)
-            char     string1[500], string2[500], *p;
+            char     string1[500], string2[1000], *p;
             uint16_t i;
 
             strcpy(string1, "L = ");

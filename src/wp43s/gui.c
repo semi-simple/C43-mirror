@@ -21,11 +21,10 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-GtkWidget *frmCalc;
 GtkWidget *grid;
 GtkWidget *backgroundImage;
 GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea; //, *lblSoftkeyArea1, *lblSoftkeyArea2;
-GtkWidget *lblBehindScreen, *screen;
+GtkWidget *lblBehindScreen;
 
 GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
 
@@ -82,11 +81,6 @@ GtkWidget                                         *lblOn;
   GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedRegisters, *btnTmpAndSavedStackRegisters;
   GtkWidget *chkHexaString;
   int16_t debugWidgetDx, debugWidgetDy;
-#endif
-
-#if (DEBUG_REGISTER_L == 1)
-  GtkWidget *lblRegisterL1;
-  GtkWidget *lblRegisterL2;
 #endif
 
 char *cssData;

@@ -665,6 +665,8 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
                                                      #define STD_SST                       "\xa1\xcb"
                                                      #define STD_HAMBURGER                 "\xa1\xcc"
                                                      #define STD_UNDO                      "\xa1\xcd"
+                                                     #define STD_HOLLOW_UP_ARROW           "\xa1\xe7"
+                                                     #define STD_HOLLOW_DOWN_ARROW         "\xa1\xe9"
                                                      #define STD_FOR_ALL                   "\xa2\x00"
                                                      #define STD_COMPLEMENT                "\xa2\x01"
                                                      #define STD_PARTIAL_DIFF              "\xa2\x02"

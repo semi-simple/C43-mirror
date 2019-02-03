@@ -89,7 +89,7 @@ GtkWidget                                         *lblOn;
   GtkWidget *lblRegisterL2;
 #endif
 
-char      *cssData;
+char *cssData;
 
 
 
@@ -753,6 +753,8 @@ void moveLabels(void) {
   gtk_widget_get_preferred_size(  lbl26G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl26F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl26G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+  gtk_widget_get_preferred_size(  lbl26Gr, NULL, &lblG);
+  gtk_fixed_move(GTK_FIXED(grid), lbl26Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
 
   xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
@@ -1072,7 +1074,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
 void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGreek, GtkWidget *lblL) {
   uint8_t lbl[22];
 
-  if(key->keyLblAim == 0) {
+  if(key->keyLblAim == ITM_NULL) {
     lbl[0] = 0;
   }
   else {
@@ -1119,7 +1121,12 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 
-  if(key->gShiftedAim < 0) gtk_widget_set_name(lblGreek, "greekUnderline"); else  gtk_widget_set_name(lblGreek, "greek");
+  if(key->gShiftedAim < 0) {
+    gtk_widget_set_name(lblGreek, "greekUnderline");
+  }
+  else {
+    gtk_widget_set_name(lblGreek, "greek");
+  }
 
 
   if(key->primaryAim == 0) {
@@ -1470,6 +1477,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl23Gr);
   gtk_widget_show(lbl24Gr);
   gtk_widget_show(lbl25Gr);
+  gtk_widget_show(lbl26Gr);
 
   gtk_widget_show(btn31);
   gtk_widget_show(btn32);
@@ -1567,6 +1575,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl82L);
   gtk_widget_show(lbl83L);
   gtk_widget_show(lbl84L);
+  gtk_widget_show(lbl84H);
   gtk_widget_show(lbl85G);
   gtk_widget_show(lbl81Gr);
   gtk_widget_show(lbl82Gr);
@@ -2022,7 +2031,7 @@ void setupUI(void) {
   lbl34G  = gtk_label_new("");
   lbl35G  = gtk_label_new("");
   lbl36G  = gtk_label_new("");
-  lbl33H  = gtk_label_new("\u2193"); // Low case
+  lbl33H  = gtk_label_new("\u21e9"); // Hollow down
   lbl31L  = gtk_label_new("");
   lbl32L  = gtk_label_new("");
   lbl33L  = gtk_label_new("");
@@ -2124,7 +2133,7 @@ void setupUI(void) {
   lbl45G  = gtk_label_new("");
   lbl42H  = gtk_label_new("\u03b7"); // eta
   lbl43P  = gtk_label_new("");
-  lbl44P  = gtk_label_new("\u2191"); // Up case
+  lbl44P  = gtk_label_new("\u21e7"); // Hollow up
   lbl41L  = gtk_label_new("");
   lbl42L  = gtk_label_new("");
   lbl43L  = gtk_label_new("");

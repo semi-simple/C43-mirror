@@ -58,3 +58,8 @@
 
 2019-01-01 Updated copyright information in both ttf files:
            2018 ==> 2019
+
+2019-02-03 Added 2 glyphs in standard font:
+             - U+21E7 Up hollow arrow
+             - U+21E9 Down hollow arrow
+           New WP43S_StandardFont.ttf generated.

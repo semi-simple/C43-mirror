@@ -558,6 +558,7 @@ void fnReset(uint16_t confirmation) {
     fnDateFormat(DF_YMD);
     fnComplexMode(CM_RECTANGULAR);
     showRealComplexResult();
+    allocateLocalRegisters(0);
 
     displayRealAsFraction = false;
     #if (STACK_LIFT_DEBUG == 1)
@@ -601,15 +602,15 @@ void fnReset(uint16_t confirmation) {
     fnSetFlag(FLAG_DANGER);
     showOverflowCarry();
 
-    allocateLocalRegisters(2);
-    fnSetFlag(FIRST_LOCAL_REGISTER+0);
-    fnSetFlag(NUMBER_OF_LOCAL_FLAGS+2);
-    reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, 0);
-    stringToReal16("5.555", REGISTER_REAL16_DATA(FIRST_LOCAL_REGISTER));
+    //allocateLocalRegisters(2);
+    //fnSetFlag(FIRST_LOCAL_REGISTER+0);
+    //fnSetFlag(NUMBER_OF_LOCAL_FLAGS+2);
+    //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, 0);
+    //stringToReal16("5.555", REGISTER_REAL16_DATA(FIRST_LOCAL_REGISTER));
 
-    strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
-    reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), 0);
-    strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
+    //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), 0);
+    //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
 
 
     allocateNamedRegister("Z" STD_a_DIARESIS "hler");

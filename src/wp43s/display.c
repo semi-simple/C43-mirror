@@ -143,20 +143,29 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatAll(uint16_t displayFormatN) {
-  displayFormat = DF_ALL;
-  displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  //if(0 <= displayFormatN && displayFormatN <= 15) {
+    displayFormat = DF_ALL;
+    displayFormatDigits = displayFormatN;
+    displayRealAsFraction = false;
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-  #ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-      showInfoDialog("In function fnDisplayFormatAll:", "converting an integer to a real16", "is to be coded", NULL);
+    if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+      convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
     }
-  #endif
+    #ifdef PC_BUILD
+      else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+        showInfoDialog("In function fnDisplayFormatAll:", "converting an integer to a real16", "is to be coded", NULL);
+      }
+    #endif
 
-  refreshStack();
+    refreshStack();
+  //}
+  //else {
+  //  displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+  //  #ifdef PC_BUILD
+  //    sprintf(errorMessage, "displayFormatN = %u is out of range for ALL!", displayFormatN);
+  //    showInfoDialog("In function fnDisplayFormatAll:", errorMessage, "The value should be from 0 to 15.", NULL);
+  //  #endif
+  //}
 }
 
 

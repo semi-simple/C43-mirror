@@ -2644,6 +2644,7 @@ void fnOff(uint16_t unsuedParamButMandatory) {
 void calcModeNormal(void) {
   if(calcMode == CM_TAM) {
     popSoftmenu();
+    refreshRegisterLine(TAM_REGISTER_LINE);
     #if (STACK_LIFT_DEBUG == 1)
       stackLiftEnable();
     #else
@@ -2733,13 +2734,13 @@ void calcModeTAM(void) {
     closeNim();
   }
 
-  if(tamMode == TM_NORMAL) {
+  if(tamMode == TM_VALUE || tamMode == TM_REGISTER || tamMode == TM_FLAG) {
     showSoftmenu(NULL, -MNU_TAM, true);
   }
   else if(tamMode == TM_CMP) {
     showSoftmenu(NULL, -MNU_TAMCMP, true);
   }
-  else if(tamMode == TM_STO_RCL) {
+  else if(tamMode == TM_STORCL) {
     showSoftmenu(NULL, -MNU_TAMSTORCL, true);
   }
   else {

@@ -152,7 +152,7 @@ void              fnRecallDiv                     (uint16_t r);
 void              fnRecallMin                     (uint16_t r);
 void              fnRecallMax                     (uint16_t r);
 void              fnXLessThan                     (uint16_t unusedParamButMandatory);
-calcRegister_t    indirectAddressing              (calcRegister_t regist);
+int16_t           indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
 void              printRegisterToConsole          (calcRegister_t regist, int16_t line);
 void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);

@@ -898,6 +898,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       }
 
       numberOfLocalRegisters = 0; // This must be done before the freeMemory call
+      numberOfLocalFlags = 0;
       freeMemory(allLocalRegisterPointer, 2 + 4*numRegs);
 
       allLocalRegisterPointer = 0;
@@ -906,6 +907,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
     else if(numberOfLocalRegisters == 0) { // Allocate memory
       allLocalRegisterPointer = allocateMemory(2u + 4u*numberOfRegistersToAllocate);
       numberOfLocalRegisters = numberOfRegistersToAllocate;
+      numberOfLocalFlags = 16;
 
       // clear all local flags
       *POINTER_TO_LOCAL_FLAGS = 0;
@@ -1853,41 +1855,92 @@ void fnRecallMax(uint16_t r) {
  * \return void
  ***********************************************/
 void fnXLessThan(uint16_t unusedParamButMandatory) {
-
-
 }
 
 
 
 /********************************************//**
- * \brief returns the integer part of the absolute value of a register
+ * \brief returns the integer part of the value of a register
  *
  * \param regist calcRegister_t Register
  * \return void
  ***********************************************/
-calcRegister_t indirectAddressing(calcRegister_t regist) {
-  calcRegister_t value;
+int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxValue) {
+  int16_t value;
 
-  if(regist >= FIRST_LOCAL_REGISTER + numberOfLocalRegisters)   {
+  if(regist >= FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "local indirection register .%02d", regist - FIRST_LOCAL_REGISTER);
       showInfoDialog("In function indirectAddressing:", errorMessage, "is not defined!", NULL);
     #endif
     return 9999;
   }
+
   else if(getRegisterDataType(regist) == dtReal16) {
-    real16_t temp;
-
-    real16AbsToReal16(REGISTER_REAL16_DATA(regist), &temp);
-    value = real16ToInt32(&temp);
+    if(real16CompareLessThan(REGISTER_REAL16_DATA(regist), const16_0) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(regist), const16_1000)) {
+      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      #ifdef PC_BUILD
+        real16ToString(REGISTER_REAL16_DATA(regist), errorMessage + 200);
+        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
+        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
+      #endif
+      return 9999;
+    }
+    value = real16ToInt32(REGISTER_REAL16_DATA(regist));
   }
+
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34_t temp;
-
-    real34AbsToReal34(REGISTER_REAL34_DATA(regist), &temp);
-    value = real34ToInt32(&temp);
+    if(real34CompareLessThan(REGISTER_REAL34_DATA(regist), const34_0) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(regist), const34_180)) {
+      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      #ifdef PC_BUILD
+        real34ToString(REGISTER_REAL34_DATA(regist), errorMessage + 200);
+        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
+        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
+      #endif
+      return 9999;
+    }
+    value = real34ToInt32(REGISTER_REAL34_DATA(regist));
   }
+
+  else if(getRegisterDataType(regist) == dtBigInteger) {
+    bigInteger_t bigInteger;
+
+    convertBigIntegerRegisterToBigInteger(regist, &bigInteger);
+    if(bigIntegerIsNegative(&bigInteger) || bigIntegerCompareUInt(&bigInteger, 180) == BIG_INTEGER_GREATER_THAN) {
+      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      #ifdef PC_BUILD
+        bigIntegerToString(&bigInteger, errorMessage + 200, 10);
+        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
+        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
+      #endif
+      return 9999;
+    }
+    value = bigIntegerToUInt(&bigInteger);
+  }
+
+  else if(getRegisterDataType(regist) == dtSmallInteger) {
+    uint64_t val;
+    int16_t sign;
+
+    convertSmallIntegerRegisterToUInt64(regist, &sign, &val);
+    if(sign == 1 || val > 180) {
+      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      #ifdef PC_BUILD
+        const font_t *font;
+
+        font = &standardFont;
+        smallIntegerToDisplayString(regist, errorMessage + 200, &font);
+        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
+        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
+      #endif
+      return 9999;
+    }
+    value = val;
+  }
+
   else {
+    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "register %" FMT16S " is %s:", regist, getRegisterDataTypeName(regist, true, false));
       showInfoDialog("In function indirectAddressing:", errorMessage, "not suited for indirect addressing!", NULL);
@@ -1895,14 +1948,17 @@ calcRegister_t indirectAddressing(calcRegister_t regist) {
     return 9999;
   }
 
-  if(value>=FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    #ifdef PC_BUILD
-      sprintf(errorMessage, "local register .%02d", value - FIRST_LOCAL_REGISTER);
-      showInfoDialog("In function indirectAddressing:", errorMessage, "is not defined!", NULL);
-    #endif
-    value = 9999;
+  if(minValue <= value && value <= maxValue) {
+    return value;
   }
-  return value;
+  else {
+    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "value = %d! Should be from %d to %d.", value, minValue, maxValue);
+      showInfoDialog("In function indirectAddressing:", errorMessage, NULL, NULL);
+    #endif
+    return 9999;
+  }
 }
 
 

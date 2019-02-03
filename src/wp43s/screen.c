@@ -507,7 +507,6 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-
   if(stringWidth(indexOfItems[item].itemName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
   }
@@ -936,7 +935,6 @@ void refreshRegisterLine(calcRegister_t regist) {
             else {
               w = stringWidth(tmpStr3000, &standardFont, false, true);
               lineWidth = w;
-
               if(w + prefixWidth > SCREEN_WIDTH) {
                 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                   showInfoDialog("In function refreshRegisterLine:", "angle representation too wide!", tmpStr3000, NULL);

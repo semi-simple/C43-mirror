@@ -255,6 +255,8 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString) {
       }
     }
   }
+
+  strcat(displayString, NUM_SPACE_HAIR);
 }
 
 
@@ -997,9 +999,9 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
   } while(denom != 0);
 
   // Comparison sign
-       if(lessEqualGreater == -1) strcat(displayString, NUM_SPACE_PUNCTUATION "<");
-  else if(lessEqualGreater ==  0) strcat(displayString, NUM_SPACE_PUNCTUATION "=");
-  else if(lessEqualGreater ==  1) strcat(displayString, NUM_SPACE_PUNCTUATION ">");
+       if(lessEqualGreater == -1) strcat(displayString, NUM_SPACE_PUNCTUATION "<" NUM_SPACE_HAIR);
+  else if(lessEqualGreater ==  0) strcat(displayString, NUM_SPACE_PUNCTUATION "=" NUM_SPACE_HAIR);
+  else if(lessEqualGreater ==  1) strcat(displayString, NUM_SPACE_PUNCTUATION ">" NUM_SPACE_HAIR);
   else {
     strcat(displayString, NUM_SPACE_PUNCTUATION "?");
     sprintf(errorMessage, "In function fractionToDisplayString: %d is an unexpected value for lessEqualGreater!", lessEqualGreater);

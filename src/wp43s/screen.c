@@ -507,6 +507,10 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
+
+  if(stringWidth(indexOfItems[item].itemName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+  }
   showString(indexOfItems[item].itemName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
 }
 
@@ -523,7 +527,7 @@ void showFunctionName(int16_t item, int8_t counter) {
 void hideFunctionName() {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
-  refreshStack();
+  refreshRegisterLine(REGISTER_T);
 }
 
 

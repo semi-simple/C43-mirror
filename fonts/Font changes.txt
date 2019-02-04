@@ -63,3 +63,8 @@
              - U+21E7 Up hollow arrow
              - U+21E9 Down hollow arrow
            New WP43S_StandardFont.ttf generated.
+
+2019-02-04 Changed 2 glyphs in standard font:
+             - U+21E7 Up hollow arrow
+             - U+21E9 Down hollow arrow
+           New WP43S_StandardFont.ttf generated.

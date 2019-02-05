@@ -106,7 +106,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   // temp1 = continued fraction calculation --> factional_part(1 / temp1)  initialized with temp0
   // delta = difference between the best faction and the real number
 
-  //printf("0 regist = "); printRegisterToConsole(regist); printf("\n");
+  printf("0 regist = "); printRegisterToConsole(regist, 0); printf("\n");
   real34_t temp0;
 
   if(getRegisterDataType(regist) == dtReal16) {
@@ -139,7 +139,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     return;
   }
 
-  //printf("1 temp0 = "); printReal34ToConsole(&temp0); printf("\n");
+  printf("1 temp0 = "); printReal34ToConsole(&temp0); printf("\n");
   if(real34IsNegative(&temp0)) {
     *sign = -1;
     real34ChangeSign(&temp0);
@@ -150,12 +150,12 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
 
   real34_t delta, temp3;
   uInt32ToReal34(9999, &delta);
-  //printf("2 delta = "); printReal34ToConsole(&delta); printf("\n");
+  printf("2 delta = "); printReal34ToConsole(&delta); printf("\n");
 
   *intPart = real34ToUInt32(&temp0);
   uInt32ToReal34(*intPart, &temp3);
   real34Subtract(&temp0, &temp3, &temp0);
-  //printf("3 partie_décimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
+  printf("3 partie_decimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
 
   //*******************
   //* Any denominator *
@@ -173,68 +173,68 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     iPart[0] = *intPart;
 
     real34Copy(&temp0, &temp1);
-    //printf("4 partie_décimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
+    printf("4 partie_decimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
 
     while(*denom < denMax && !real34IsZero(&temp1) && !invalidOperation) {
       real34Divide(const34_1, &temp1, &temp1);
-      //printf("  5 1/partie_décimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
+      printf("  5 1/partie_decimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
       iPart[++i] = real34ToUInt32(&temp1);
       uInt32ToReal34(iPart[i], &temp3);
       invalidOperation = decContextGetStatus(&ctxtReal34) & DEC_Invalid_operation;
       decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
       real34Subtract(&temp1, &temp3, &temp1);
-      //printf("  6 partie_décimale de 1/partie_décimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
+      printf("  6 partie_decimale de 1/partie_decimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
 
       *numer = 1;
       *denom = iPart[i];
-      //printf("  7 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      printf("  7 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
       for(j=i; j>1; j--) {
         *numer += *denom * iPart[j-1];
         ex = *numer; *numer = *denom; *denom = ex;
-        //printf("    8 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+        printf("    8 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
       }
-      //printf("  9 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      printf("  9 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
 
       if(*denom <= denMax) {
         uInt32ToReal34(*numer, &temp3);
-        //printf("A partie_decimale = temp3 = "); printReal34ToConsole(&temp3); printf("\n");
+        printf("A partie_decimale = temp3 = "); printReal34ToConsole(&temp3); printf("\n");
         uInt32ToReal34(*denom, &temp4);
-        //printf("B partie_decimale = temp4 = "); printReal34ToConsole(&temp4); printf("\n");
+        printf("B partie_decimale = temp4 = "); printReal34ToConsole(&temp4); printf("\n");
 
-        //printf("   C temp3 "); printReal34ToConsole(&temp3); printf(" / temp4 "); printReal34ToConsole(&temp4);
+        printf("   C temp3 "); printReal34ToConsole(&temp3); printf(" / temp4 "); printReal34ToConsole(&temp4);
         real34Divide(&temp3, &temp4, &temp3);
-        //printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
+        printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
 
 
-        //printf("   D temp3 "); printReal34ToConsole(&temp3); printf(" - temp0 "); printReal34ToConsole(&temp0);
+        printf("   D temp3 "); printReal34ToConsole(&temp3); printf(" - temp0 "); printReal34ToConsole(&temp0);
         real34Subtract(&temp3, &temp0, &temp3);
-        //printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
+        printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
 
         real34SetPositiveSign(&temp3);
-        //printf("   E temp3 = "); printReal34ToConsole(&temp3); printf("\n");
+        printf("   E temp3 = "); printReal34ToConsole(&temp3); printf("\n");
 
-        //printf("   F temp3 "); printReal34ToConsole(&temp3); printf(" - delta "); printReal34ToConsole(&delta);
+        printf("   F temp3 "); printReal34ToConsole(&temp3); printf(" - delta "); printReal34ToConsole(&delta);
         real34Subtract(&temp3, &delta, &temp3);
-        //printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
+        printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
 
         if(real34IsNegative(&temp3)) {
           real34Add(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
-          //printf("  G bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
-          //printf("  H delta = "); printReal34ToConsole(&delta); printf("\n");
+          printf("  G bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
+          printf("  H delta = "); printReal34ToConsole(&delta); printf("\n");
         }
       }
 
       *numer = 1;
       *denom = iPart[i] + 1;
-      //printf("  I numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      printf("  I numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
       for(j=i; j>1; j--) {
         *numer += *denom * iPart[j-1];
         ex = *numer; *numer = *denom; *denom = ex;
-        //printf("    J numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+        printf("    J numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
       }
-      //printf("  K numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      printf("  K numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
 
       if(*denom <= denMax) {
         uInt32ToReal34(*numer, &temp3);
@@ -247,8 +247,8 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
           real34Add(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
-          //printf("  L bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
-          //printf("  M delta = "); printReal34ToConsole(&delta); printf("\n");
+          printf("  L bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
+          printf("  M delta = "); printReal34ToConsole(&delta); printf("\n");
         }
       }
     }

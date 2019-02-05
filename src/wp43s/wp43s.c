@@ -362,6 +362,14 @@ int main(int argc, char* argv[]) {
     exit(0);
   }
 
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
+  stringToReal16("720.0000000000002", REGISTER_REAL16_DATA(REGISTER_X));
+  int16_t sign, lessEqualGreater;
+  uint64_t intPart, numer, denom;
+  fraction(REGISTER_X, &sign, &intPart, &numer, &denom, &lessEqualGreater);
+  printf("\n\nsign=%d  intPart=%lu  numer=%lu  denom=%lu  lessEqualGreater=%d\n", sign, intPart, numer, denom, lessEqualGreater);
+  exit(0);
+
   // Without the following 8 lines of code
   // the f- and g-shifted labels are
   // miss aligned! I dont know why!

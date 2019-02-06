@@ -106,7 +106,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   // temp1 = continued fraction calculation --> factional_part(1 / temp1)  initialized with temp0
   // delta = difference between the best faction and the real number
 
-  //printf("0 regist = "); printRegisterToConsole(regist); printf("\n");
+  //printf("0 regist = "); printRegisterToConsole(regist, 0); printf("\n");
   real34_t temp0;
 
   if(getRegisterDataType(regist) == dtReal16) {
@@ -155,7 +155,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   *intPart = real34ToUInt32(&temp0);
   uInt32ToReal34(*intPart, &temp3);
   real34Subtract(&temp0, &temp3, &temp0);
-  //printf("3 partie_décimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
+  //printf("3 partie_decimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
 
   //*******************
   //* Any denominator *
@@ -173,17 +173,24 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     iPart[0] = *intPart;
 
     real34Copy(&temp0, &temp1);
-    //printf("4 partie_décimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
+    //printf("4 partie_decimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
+
+    if(real34CompareAbsLessThan(&temp1, const34_1e_6)) {
+      real34Zero(&temp1);
+    }
 
     while(*denom < denMax && !real34IsZero(&temp1) && !invalidOperation) {
       real34Divide(const34_1, &temp1, &temp1);
-      //printf("  5 1/partie_décimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
+      //printf("  5 1/partie_decimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
       iPart[++i] = real34ToUInt32(&temp1);
       uInt32ToReal34(iPart[i], &temp3);
       invalidOperation = decContextGetStatus(&ctxtReal34) & DEC_Invalid_operation;
       decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
       real34Subtract(&temp1, &temp3, &temp1);
-      //printf("  6 partie_décimale de 1/partie_décimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
+      if(real34CompareAbsLessThan(&temp1, const34_1e_6)) {
+        real34Zero(&temp1);
+      }
+      //printf("  6 partie_decimale de 1/partie_decimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
 
       *numer = 1;
       *denom = iPart[i];
@@ -255,6 +262,11 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
 
     *numer = bestNumer;
     *denom = bestDenom;
+
+    if(*numer == 1 && *denom == 1) {
+      *numer = 0;
+      *intPart += 1;
+    }
   }
 
   //*******************

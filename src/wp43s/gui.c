@@ -2673,6 +2673,8 @@ void calcModeNormal(void) {
  * \return void
  ***********************************************/
 void calcModeAIM(uint16_t unusedParamButMandatory) {
+  liftStack(dtReal16, REAL16_SIZE);
+  refreshStack();
   showSoftmenu(NULL, -MNU_MyAlpha, true);
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;

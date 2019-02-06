@@ -714,6 +714,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       if(tamMode != TM_VALUE) {
         indexOfItems[tamFunction].func(tamLetteredRegister);
         calcModeNormal();
+        return;
       }
     }
     else if(tamTransition == TT_VARIABLE) {

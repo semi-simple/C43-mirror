@@ -301,9 +301,9 @@ void btnPressed(void *notUsed, void *data) {
           mem++;
         }
 
-        liftStack(dtString, mem);
+        reallocateRegister(REGISTER_X, dtString, mem, 0);
 
-        *(uint16_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = mem - 2;
+        *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
         memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
 
         #if (STACK_LIFT_DEBUG == 1)
@@ -314,7 +314,7 @@ void btnPressed(void *notUsed, void *data) {
 
         liftStack(dtString, mem);
 
-        *(uint16_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = mem - 2;
+        *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
         memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
         aimBuffer[0] = 0;
 
@@ -391,10 +391,11 @@ void btnPressed(void *notUsed, void *data) {
             mem++;
           }
 
-          liftStack(dtString, mem);
+          reallocateRegister(REGISTER_X, dtString, mem, 0);
 
-          *(uint16_t *)(POINTER_TO_REGISTER_DATA(REGISTER_X)) = mem - 2;
+          *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
           memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+          aimBuffer[0] = 0;
 
           #if (STACK_LIFT_DEBUG == 1)
             stackLiftEnable();

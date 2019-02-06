@@ -717,8 +717,8 @@ void btnPressed(void *notUsed, void *data) {
       else if(calcMode == CM_FONT_BROWSER) {
         if(currentFntScr >= 2) {
           currentFntScr--;
-          fontBrowser(NOPARAM);
         }
+        fontBrowser(NOPARAM);
       }
 
       else {
@@ -775,8 +775,8 @@ void btnPressed(void *notUsed, void *data) {
       else if(calcMode == CM_FONT_BROWSER) {
         if(currentFntScr < numScreensNumericFont+numScreensStandardFont) {
           currentFntScr++;
-          fontBrowser(NOPARAM);
         }
+        fontBrowser(NOPARAM);
       }
 
       else {

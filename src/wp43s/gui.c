@@ -2648,11 +2648,7 @@ void calcModeNormal(void) {
   if(calcMode == CM_TAM) {
     popSoftmenu();
     refreshRegisterLine(TAM_REGISTER_LINE);
-    #if (STACK_LIFT_DEBUG == 1)
-      stackLiftEnable();
-    #else
-      stackLiftEnabled = true;
-    #endif
+    STACK_LIFT_ENABLE;
   }
 
   calcMode = CM_NORMAL;

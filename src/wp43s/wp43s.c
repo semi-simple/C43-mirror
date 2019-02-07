@@ -296,11 +296,7 @@ void setupDefaults(void) {
   numberOfNamedRegisters = 0;
   allNamedRegisterPointer = 0;
 
-  #if (STACK_LIFT_DEBUG == 1)
-    stackLiftEnable();
-  #else
-    stackLiftEnabled = true;
-  #endif
+  STACK_LIFT_ENABLE;
 
   lastErrorCode = 0;
 

@@ -310,11 +310,7 @@ void btnPressed(void *notUsed, void *data) {
           *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
           memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
 
-          #if (STACK_LIFT_DEBUG == 1)
-            stackLiftEnable();
-          #else
-            stackLiftEnabled = true;
-          #endif
+          STACK_LIFT_ENABLE;
 
           liftStack(dtString, mem);
 
@@ -322,11 +318,7 @@ void btnPressed(void *notUsed, void *data) {
           memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
           aimBuffer[0] = 0;
 
-          #if (STACK_LIFT_DEBUG == 1)
-            stackLiftDisable();
-          #else
-            stackLiftEnabled = false;
-          #endif
+          STACK_LIFT_DISABLE;
         }
 
         refreshStack();
@@ -337,22 +329,14 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_NORMAL) {
-        #if (STACK_LIFT_DEBUG == 1)
-          stackLiftEnable();
-        #else
-          stackLiftEnabled = true;
-        #endif
+        STACK_LIFT_ENABLE;
 
         liftStack(getRegisterDataType(REGISTER_X), getRegisterDataSize(REGISTER_X));
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
 
         refreshStack();
 
-        #if (STACK_LIFT_DEBUG == 1)
-          stackLiftDisable();
-        #else
-          stackLiftEnabled = false;
-        #endif
+        STACK_LIFT_DISABLE;
       }
 
       else if(calcMode == CM_FONT_BROWSER) {
@@ -406,11 +390,7 @@ void btnPressed(void *notUsed, void *data) {
             memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
             aimBuffer[0] = 0;
 
-            #if (STACK_LIFT_DEBUG == 1)
-              stackLiftEnable();
-            #else
-              stackLiftEnabled = true;
-            #endif
+            STACK_LIFT_ENABLE;
           }
 
           refreshStack();
@@ -547,11 +527,7 @@ void btnPressed(void *notUsed, void *data) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
           reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
 
-          #if (STACK_LIFT_DEBUG == 1)
-            stackLiftEnable();
-          #else
-            stackLiftEnabled = true;
-          #endif
+          STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
             real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
             liftStack(dtReal16, REAL16_SIZE);
@@ -570,11 +546,7 @@ void btnPressed(void *notUsed, void *data) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
           reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
 
-          #if (STACK_LIFT_DEBUG == 1)
-            stackLiftEnable();
-          #else
-            stackLiftEnabled = true;
-          #endif
+          STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
             real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
             liftStack(dtReal34, REAL34_SIZE);
@@ -617,11 +589,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           fnClX(NOPARAM);
 
-          #if (STACK_LIFT_DEBUG == 1)
-            stackLiftDisable();
-          #else
-            stackLiftEnabled = false;
-          #endif
+          STACK_LIFT_DISABLE;
         }
       }
 
@@ -941,11 +909,7 @@ void btnPressed(void *notUsed, void *data) {
           showDateTime();
           clearScreen(false, true, true);
           fnRecall(currentRegisterBrowserScreen);
-          #if (STACK_LIFT_DEBUG == 1)
-            stackLiftEnable();
-          #else
-            stackLiftEnabled = true;
-          #endif
+          STACK_LIFT_ENABLE;
           refreshStack();
           currentRegisterBrowserScreen = 9999;
         }

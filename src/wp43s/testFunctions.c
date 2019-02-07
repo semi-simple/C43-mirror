@@ -1844,11 +1844,7 @@ void testFunctions(void) {
   initializeRegister(REGISTER_C, dtReal16,    "43",    "",        0);
   initializeRegister(REGISTER_D, dtReal34,    "44",    "",        0);
 
-  #if (STACK_LIFT_DEBUG == 1)
-    stackLiftEnable();
-  #else
-    stackLiftEnabled = true;
-  #endif
+  STACK_LIFT_ENABLE;
 
   liftStack(dtReal16, REAL16_SIZE);
   real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
@@ -1876,11 +1872,7 @@ void testFunctions(void) {
   initializeRegister(REGISTER_C, dtReal16,    "43",    "",        0);
   initializeRegister(REGISTER_D, dtReal34,    "44",    "",        0);
 
-  #if (STACK_LIFT_DEBUG == 1)
-    stackLiftEnable();
-  #else
-    stackLiftEnabled = true;
-  #endif
+  STACK_LIFT_ENABLE;
 
   liftStack(dtReal16, REAL16_SIZE);
   real16Zero(REGISTER_REAL16_DATA(REGISTER_X));

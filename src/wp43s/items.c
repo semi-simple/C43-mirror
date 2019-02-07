@@ -84,18 +84,10 @@ void runFunction(int16_t func) {
   indexOfItems[func].func(indexOfItems[func].param);
 
   if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
-    #if (STACK_LIFT_DEBUG == 1)
-      stackLiftDisable();
-    #else
-      stackLiftEnabled = false;
-    #endif
+    STACK_LIFT_DISABLE;
   }
   else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
-    #if (STACK_LIFT_DEBUG == 1)
-      stackLiftEnable();
-    #else
-      stackLiftEnabled = true;
-    #endif
+    STACK_LIFT_ENABLE;
   }
 
   #ifdef PC_BUILD

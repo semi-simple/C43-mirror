@@ -354,6 +354,13 @@ typedef int16_t calcRegister_t;
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode
 //#define setTamMode(x)              *bits5 = (*bits5 & ~(((1 << LENGTH_TAMMODE        ) - 1) << OFFSET_TAMMODE        )) | ((x) << OFFSET_TAMMODE        )
 
+#if (STACK_LIFT_DEBUG == 1)
+  #define STACK_LIFT_ENABLE  stackLiftEnable();
+  #define STACK_LIFT_DISABLE stackLiftDisable();
+#elif
+  #define STACK_LIFT_ENABLE  stackLiftEnabled = true;
+  #define STACK_LIFT_DISABLE stackLiftEnabled = false;
+#endif
 
 // Variables for the simulator
 #ifdef PC_BUILD

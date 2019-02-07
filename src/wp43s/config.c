@@ -561,11 +561,7 @@ void fnReset(uint16_t confirmation) {
     allocateLocalRegisters(0);
 
     displayRealAsFraction = false;
-    #if (STACK_LIFT_DEBUG == 1)
-      stackLiftDisable();
-    #else
-      stackLiftEnabled = false;
-    #endif
+    STACK_LIFT_DISABLE;
     showOverflowCarry();
 
     // Initialization of user key assignments

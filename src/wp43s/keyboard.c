@@ -296,33 +296,38 @@ void btnPressed(void *notUsed, void *data) {
         showAlphaMode();
         popSoftmenu();
 
-        mem = stringByteLength(aimBuffer) + 3u; // +3 = 2 bytes for the data length and 1 for the terminating \0
-        if(mem%2 == 1) {
-          mem++;
+        if(aimBuffer[0] == 0) {
+          restoreStack();
         }
+        else {
+          mem = stringByteLength(aimBuffer) + 3u; // +3 = 2 bytes for the data length and 1 for the terminating \0
+          if(mem%2 == 1) {
+            mem++;
+          }
 
-        reallocateRegister(REGISTER_X, dtString, mem, 0);
+          reallocateRegister(REGISTER_X, dtString, mem, 0);
 
-        *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
-        memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+          *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
+          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
 
-        #if (STACK_LIFT_DEBUG == 1)
-          stackLiftEnable();
-        #else
-          stackLiftEnabled = true;
-        #endif
+          #if (STACK_LIFT_DEBUG == 1)
+            stackLiftEnable();
+          #else
+            stackLiftEnabled = true;
+          #endif
 
-        liftStack(dtString, mem);
+          liftStack(dtString, mem);
 
-        *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
-        memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
-        aimBuffer[0] = 0;
+          *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
+          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+          aimBuffer[0] = 0;
 
-        #if (STACK_LIFT_DEBUG == 1)
-          stackLiftDisable();
-        #else
-          stackLiftEnabled = false;
-        #endif
+          #if (STACK_LIFT_DEBUG == 1)
+            stackLiftDisable();
+          #else
+            stackLiftEnabled = false;
+          #endif
+        }
 
         refreshStack();
       }
@@ -386,22 +391,27 @@ void btnPressed(void *notUsed, void *data) {
           showAlphaMode();
           popSoftmenu();
 
-          mem = stringByteLength(aimBuffer) + 3u; // +3 = 2 bytes for the data length and 1 for the terminating \0
-          if(mem%2 == 1) {
-            mem++;
+          if(aimBuffer[0] == 0) {
+            restoreStack();
           }
+          else {
+            mem = stringByteLength(aimBuffer) + 3u; // +3 = 2 bytes for the data length and 1 for the terminating \0
+            if(mem%2 == 1) {
+              mem++;
+            }
 
-          reallocateRegister(REGISTER_X, dtString, mem, 0);
+            reallocateRegister(REGISTER_X, dtString, mem, 0);
 
-          *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
-          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
-          aimBuffer[0] = 0;
+            *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
+            memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+            aimBuffer[0] = 0;
 
-          #if (STACK_LIFT_DEBUG == 1)
-            stackLiftEnable();
-          #else
-            stackLiftEnabled = true;
-          #endif
+            #if (STACK_LIFT_DEBUG == 1)
+              stackLiftEnable();
+            #else
+              stackLiftEnabled = true;
+            #endif
+          }
 
           refreshStack();
         }

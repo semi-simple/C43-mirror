@@ -463,11 +463,7 @@ void addItemToNimBuffer(int16_t item) {
 
     closeNim();
     if(calcMode != CM_NIM && lastErrorCode == 0) {
-      #if (STACK_LIFT_DEBUG == 1)
-        stackLiftEnable();
-      #else
-        stackLiftEnabled = true;
-      #endif
+     STACK_LIFT_ENABLE;
     }
   }
 
@@ -480,22 +476,14 @@ void addItemToNimBuffer(int16_t item) {
         fnSetFlag(FLAG_CPXRES);
       }
 
-      #if (STACK_LIFT_DEBUG == 1)
-        stackLiftEnable();
-      #else
-        stackLiftEnabled = true;
-      #endif
+      STACK_LIFT_ENABLE;
 
       liftStack(getRegisterDataType(REGISTER_X), getRegisterDataSize(REGISTER_X));
       copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
 
       refreshStack();
 
-      #if (STACK_LIFT_DEBUG == 1)
-        stackLiftDisable();
-      #else
-        stackLiftEnabled = false;
-      #endif
+      STACK_LIFT_DISABLE;
       return;
     }
   }

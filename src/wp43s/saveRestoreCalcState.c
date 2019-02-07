@@ -330,18 +330,10 @@ void restoreCalc(void) {
     oldTime[0] = 0;
 
     if(stackLiftEnabled) {
-      #if (STACK_LIFT_DEBUG == 1)
-        stackLiftEnable();
-      #else
-        stackLiftEnabled = true;
-      #endif
+      STACK_LIFT_ENABLE;
     }
     else {
-      #if (STACK_LIFT_DEBUG == 1)
-        stackLiftDisable();
-      #else
-        stackLiftEnabled = false;
-      #endif
+     STACK_LIFT_DISABLE;
     }
   }
 }

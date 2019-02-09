@@ -386,7 +386,7 @@ uint32_t countBitsBigInteger(bigInteger_t *value) {
 
 
 uint32_t countBitsBigIntegerRegister(calcRegister_t regist) {
-  uint16_t *addr = (uint16_t *)(POINTER_TO_REGISTER_DATA(regist));
+  uint16_t *addr = (uint16_t *)(REGISTER_DATA(regist));
   uint32_t bits;
   uint64_t mostSignificantDigit, mask;
 
@@ -395,7 +395,7 @@ uint32_t countBitsBigIntegerRegister(calcRegister_t regist) {
   }
   else {
     bits = *addr * CHAR_BIT;
-    mostSignificantDigit = *(uint64_t *)(addr + 1 + (*addr - (DIGIT_BIT / CHAR_BIT)) / 2);
+    mostSignificantDigit = *(uint64_t *)(addr + 1 + (*addr - SIZEOF_FP_DIGIT) / 2);
     mask = ((uint64_t)1) << (DIGIT_BIT - 1);
 
     while((mostSignificantDigit & mask) == 0) {

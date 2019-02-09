@@ -164,7 +164,7 @@ void fnVersion(uint16_t unusedParamButMandatory) {
 void fnFreeMemory(uint16_t unusedParamButMandatory) {
   bigInteger_t mem;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger(lastFreeByte - firstFreeByte + 1, &mem);
   convertBigIntegerToBigIntegerRegister(&mem, REGISTER_X);
@@ -183,7 +183,7 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
 void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
   bigInteger_t rm;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger(roundingMode, &rm);
   convertBigIntegerToBigIntegerRegister(&rm, REGISTER_X);
@@ -201,7 +201,7 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
 void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
   bigInteger_t ism;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger((smallIntegerMode==SIM_2COMPL ? 2 : (smallIntegerMode==SIM_1COMPL ? 1 : (smallIntegerMode==SIM_UNSIGN ? 0 : -1))), &ism);
   convertBigIntegerToBigIntegerRegister(&ism, REGISTER_X);
@@ -220,7 +220,7 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
 void fnGetWordSize(uint16_t unusedParamButMandatory) {
   bigInteger_t ws;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger(smallIntegerWordSize, &ws);
   convertBigIntegerToBigIntegerRegister(&ws, REGISTER_X);
@@ -286,7 +286,7 @@ void fnSetWordSize(uint16_t WS) {
 void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
   bigInteger_t flashMem;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger(getFreeFlash(), &flashMem);
   convertBigIntegerToBigIntegerRegister(&flashMem, REGISTER_X);
@@ -303,7 +303,7 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
-  liftStack(dtReal16, REAL16_SIZE);
+  liftStack();
 
   #ifdef PC_BUILD
     uInt32ToReal16(3100, REGISTER_REAL16_DATA(REGISTER_X));
@@ -341,7 +341,7 @@ uint32_t getFreeFlash(void) {
 void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
   bigInteger_t sigDigits;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger(significantDigits, &sigDigits);
   convertBigIntegerToBigIntegerRegister(&sigDigits, REGISTER_X);

@@ -16,7 +16,7 @@
 
 void fnClX           (uint16_t unusedParamButMandatory);
 void fnDrop          (uint16_t unusedParamButMandatory);
-void liftStack       (uint32_t dataType, uint32_t numBytes);
+void liftStack       (void);
 void fnDropY         (uint16_t unusedParamButMandatory);
 void fnRollUp        (uint16_t unusedParamButMandatory);
 void fnRollDown      (uint16_t unusedParamButMandatory);

@@ -62,13 +62,14 @@
 #define OFFSET_REGISTER_NAME_LENGTH   27
 #define LENGTH_REGISTER_NAME_LENGTH    5 // variable name memory area length in byte, 0, 1, ..., 30. 2 to 16 used for now. 16 = 7 glyphs × 2 + terminating 0  + 1 to be even
 
-#define getStackTop()                        (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
+#define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
 #define getRegisterBase(regist)            getRegisterDataInfo(regist)       // Only for a small integer
 #define getRegisterAngularMode(regist)     getRegisterDataInfo(regist)       // Only for a real 34
 #define setRegisterBase(regist, base)      setRegisterDataInfo(regist, base) // Only for a small integer
 #define setRegisterAngularMode(regist, am) setRegisterDataInfo(regist, am)   // Only for a real34
 #define setRegisterSign(regist, sign)      setRegisterDataInfo(regist, sign) // Only for a big integer
+#define freeRegisterData(regist)           freeMemory(getRegisterDataPointer(regist), getRegisterFullSize(regist))
 
 
 
@@ -116,20 +117,20 @@ uint32_t          getRegisterDataPointer          (calcRegister_t regist);
 uint32_t          getRegisterDataInfo             (calcRegister_t regist);
 uint32_t          getRegisterNameLength           (calcRegister_t regist);
 uint32_t          getRegisterNamePointer          (calcRegister_t regist);
-uint16_t          getRegisterMaxStringLength      (calcRegister_t regist);
+uint16_t          getRegisterMaxDataLength        (calcRegister_t regist);
 void              setRegisterDataType             (calcRegister_t regist, uint16_t dataType);
 void              setRegisterDataPointer          (calcRegister_t regist, uint32_t dataPointer);
 void              setRegisterDataInfo             (calcRegister_t regist, uint16_t dataInfo);
 void              setRegisterNameLength           (calcRegister_t regist, uint16_t length);
 void              setRegisterNamePointer          (calcRegister_t regist, uint32_t pointer);
-void              setRegisterMaxStringLength      (calcRegister_t regist, uint16_t maxStringLen);
+void              setRegisterMaxDataLength        (calcRegister_t regist, uint16_t maxDataLen);
 void              allocateLocalRegisters          (uint16_t n);
 void              allocateNamedRegister           (const char *registerName);
 uint32_t          allocateMemory                  (uint32_t numBytes);
 void              allocateMemoryInsert            (uint32_t address, uint32_t numBytes);
 void              freeMemory                      (uint32_t address, uint32_t numBytes);
-void              freeRegisterData                (calcRegister_t regist);
-uint32_t          getRegisterDataSize             (calcRegister_t regist);
+uint32_t          getRegisterFullSize             (calcRegister_t regist);
+uint32_t          getRegisterDataOnlySize         (calcRegister_t regist);
 void              clearRegister                   (calcRegister_t regist);
 void              fnClearRegisters                (uint16_t unusedParamButMandatory);
 void              fnGetLocR                       (uint16_t unusedParamButMandatory);
@@ -159,6 +160,6 @@ void              printReal34ToConsole            (const real34_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
 void              printBigIntegerToConsole        (bigInteger_t *value);
-void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint16_t numBytes, uint32_t dataInfo);
+void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t dataInfo);
 calcRegister_t    allocateTemporaryRegister       (void);
 void              freeTemporaryRegister           (calcRegister_t tmpReg);

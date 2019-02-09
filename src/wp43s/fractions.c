@@ -73,7 +73,6 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
       bigInteger_t bigInteger;
 
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-      reallocateRegister(REGISTER_X, dtBigInteger, 0, 0);
       uIntToBigInteger(denMax, &bigInteger);
       convertBigIntegerToBigIntegerRegister(&bigInteger, REGISTER_X);
     }

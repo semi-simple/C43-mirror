@@ -697,7 +697,7 @@ void addStriCo16(void) {
   reallocateRegister(result, dtString, len1 + len2, 0);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
-  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
 }
 
 
@@ -736,10 +736,10 @@ void addStriTime(void) {
   timeToDisplayString(opX, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2 , 0);
+  reallocateRegister(result, dtString, len1 + len2, 0);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
-  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
 }
 
 
@@ -759,8 +759,8 @@ void addStriDate(void) {
 
   reallocateRegister(result, dtString, len1 + len2, 0);
 
-  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1   );
-  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
+  memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
 }
 
 
@@ -827,7 +827,7 @@ void addStriSmaI(void) {
   reallocateRegister(result, dtString, len1 + len2, 0);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
-  memcpy(REGISTER_STRING_DATA(result) + len1, errorMessage,                    len2 + 1);
+  memcpy(REGISTER_STRING_DATA(result) + len1, errorMessage,              len2 + 1);
 }
 
 
@@ -848,7 +848,7 @@ void addStriRe34(void) {
   reallocateRegister(result, dtString, len1 + len2, 0);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
-  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
 }
 
 
@@ -869,7 +869,7 @@ void addStriCo34(void) {
   reallocateRegister(result, dtString, len1 + len2, 0);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
-  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                      len2 + 1);
+  memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
 }
 
 

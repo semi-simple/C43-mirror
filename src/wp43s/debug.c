@@ -545,10 +545,10 @@ void debugNIM(void) {
 
     else if(getRegisterDataType(regist) == dtString) {
       if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(chkHexaString))) {
-        sprintf(string + n, "%04x", *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)));
+        sprintf(string + n, "%04x", *(REGISTER_DATA_MAX_LEN(regist)));
         k = 4;
-        for(i=2; i<getRegisterDataSize(regist); i++) {
-          sprintf(string + n + k, STD_SPACE_3_PER_EM "%02x", (unsigned char)*(POINTER_TO_REGISTER_DATA(regist) + i));
+        for(i=2; i<getRegisterFullSize(regist); i++) {
+          sprintf(string + n + k, STD_SPACE_3_PER_EM "%02x", *(unsigned char *)(REGISTER_DATA(regist) + i));
           k += 4;
         }
       }
@@ -1013,32 +1013,32 @@ void debugNIM(void) {
       gtk_widget_show(lbl2[row++]);
 
       for(int i=REGISTER_K; i>=REGISTER_I; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_I+'I', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_I+'I', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
       for(int i=REGISTER_D; i>=REGISTER_A; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_A+'A', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_A+'A', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
-      sprintf(string, "103 T %s %7d %7d", getRegisterDataTypeName(REGISTER_T, false, true), getRegisterDataPointer(REGISTER_T), getRegisterDataSize(REGISTER_T));
+      sprintf(string, "103 T %s %7d %7d", getRegisterDataTypeName(REGISTER_T, false, true), getRegisterDataPointer(REGISTER_T), getRegisterFullSize(REGISTER_T));
       gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
       gtk_widget_show(lbl1[row]);
       debugRegisterValue(REGISTER_T, row++);
 
       for(int i=REGISTER_Z; i>=REGISTER_X; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_X+'X', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_X+'X', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
-      sprintf(string, "108 L %s %7d %7d", getRegisterDataTypeName(REGISTER_L, false, true), getRegisterDataPointer(REGISTER_L), getRegisterDataSize(REGISTER_L));
+      sprintf(string, "108 L %s %7d %7d", getRegisterDataTypeName(REGISTER_L, false, true), getRegisterDataPointer(REGISTER_L), getRegisterFullSize(REGISTER_L));
       gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
       gtk_widget_show(lbl1[row]);
       debugRegisterValue(REGISTER_L, row++);
@@ -1046,7 +1046,7 @@ void debugNIM(void) {
       row++;
       for(int i=0; i<100; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, "  %02d  %s %7d %7d", i, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+          sprintf(string, "  %02d  %s %7d %7d", i, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row);
@@ -1071,7 +1071,7 @@ void debugNIM(void) {
 
       for(uint16_t i=FIRST_LOCAL_REGISTER; i<FIRST_LOCAL_REGISTER+numberOfLocalRegisters; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, ".%02d   %s %7d %7d", i-FIRST_LOCAL_REGISTER, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+          sprintf(string, ".%02d   %s %7d %7d", i-FIRST_LOCAL_REGISTER, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row++);
@@ -1220,7 +1220,7 @@ void debugNIM(void) {
 
       for(uint16_t i=1000; i<1000+numberOfNamedRegisters; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, "%03d   %s %7d %7d", i-1000, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+          sprintf(string, "%03d   %s %7d %7d", i-1000, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row++);
@@ -1242,7 +1242,7 @@ void debugNIM(void) {
       gtk_widget_show(lbl2[row++]);
 
       for(uint16_t i=FIRST_TEMPORARY_REGISTER; i<FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS; i++) {
-        sprintf(string, "%3d   %s %7d %7d", i-FIRST_TEMPORARY_REGISTER, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+        sprintf(string, "%3d   %s %7d %7d", i-FIRST_TEMPORARY_REGISTER, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
@@ -1251,7 +1251,7 @@ void debugNIM(void) {
       row ++;
 
       for(uint16_t i=SAVED_REGISTER_X; i<=SAVED_REGISTER_L; i++) {
-        sprintf(string, "%3d   %s %7d %7d", i-SAVED_REGISTER_X, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterDataSize(i));
+        sprintf(string, "%3d   %s %7d %7d", i-SAVED_REGISTER_X, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);

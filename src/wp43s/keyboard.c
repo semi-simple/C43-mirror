@@ -195,7 +195,7 @@ void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   #endif
 
   #ifdef DMCP_BUILD
-    btnClicked(NULL, "02")
+    btnClicked(NULL, "02");
   #endif
 }
 
@@ -290,8 +290,6 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_AIM) {
-        uint16_t mem;
-
         calcModeNormal();
         showAlphaMode();
         popSoftmenu();
@@ -300,25 +298,17 @@ void btnPressed(void *notUsed, void *data) {
           restoreStack();
         }
         else {
-          mem = stringByteLength(aimBuffer) + 3u; // +3 = 2 bytes for the data length and 1 for the terminating \0
-          if(mem%2 == 1) {
-            mem++;
-          }
+          int16_t mem = stringByteLength(aimBuffer);
 
           reallocateRegister(REGISTER_X, dtString, mem, 0);
-
-          *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
-          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
 
           STACK_LIFT_ENABLE;
-
-          liftStack(dtString, mem);
-
-          *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
-          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
-          aimBuffer[0] = 0;
-
+          liftStack();
           STACK_LIFT_DISABLE;
+
+          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_Y);
+          aimBuffer[0] = 0;
         }
 
         refreshStack();
@@ -331,7 +321,7 @@ void btnPressed(void *notUsed, void *data) {
       else if(calcMode == CM_NORMAL) {
         STACK_LIFT_ENABLE;
 
-        liftStack(getRegisterDataType(REGISTER_X), getRegisterDataSize(REGISTER_X));
+        liftStack();
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
 
         refreshStack();
@@ -369,8 +359,6 @@ void btnPressed(void *notUsed, void *data) {
 
       else if(calcMode == CM_AIM) {
         if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU) {
-          uint16_t mem;
-
           calcModeNormal();
           showAlphaMode();
           popSoftmenu();
@@ -379,15 +367,11 @@ void btnPressed(void *notUsed, void *data) {
             restoreStack();
           }
           else {
-            mem = stringByteLength(aimBuffer) + 3u; // +3 = 2 bytes for the data length and 1 for the terminating \0
-            if(mem%2 == 1) {
-              mem++;
-            }
+            int16_t len = stringByteLength(aimBuffer);
 
-            reallocateRegister(REGISTER_X, dtString, mem, 0);
+            reallocateRegister(REGISTER_X, dtString, len, 0);
 
-            *(REGISTER_STRING_LEN(REGISTER_X)) = mem - 2;
-            memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, stringByteLength(aimBuffer) + 1u);
+            memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len + 1);
             aimBuffer[0] = 0;
 
             STACK_LIFT_ENABLE;
@@ -530,11 +514,11 @@ void btnPressed(void *notUsed, void *data) {
           STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
             real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
-            liftStack(dtReal16, REAL16_SIZE);
+            liftStack();
             real16Copy(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
           }
           else { // CM_POLAR mode
-            liftStack(dtReal16, REAL16_SIZE);
+            liftStack();
             real16RectangularToPolar(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_Y)); // Y in internal units
             temporaryInformation = TI_RADIUS_THETA;
           }
@@ -549,11 +533,13 @@ void btnPressed(void *notUsed, void *data) {
           STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
             real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
-            liftStack(dtReal34, REAL34_SIZE);
+            liftStack();
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
             real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
           }
           else { // CM_POLAR mode
-            liftStack(dtReal34, REAL34_SIZE);
+            liftStack();
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
             real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y));
             temporaryInformation = TI_RADIUS_THETA;
           }

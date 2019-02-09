@@ -2670,7 +2670,7 @@ void calcModeNormal(void) {
  ***********************************************/
 void calcModeAIM(uint16_t unusedParamButMandatory) {
   saveStack();
-  liftStack(dtReal16, REAL16_SIZE);
+  liftStack();
   refreshStack();
   showSoftmenu(NULL, -MNU_MyAlpha, true);
   calcMode = CM_AIM;
@@ -2703,7 +2703,7 @@ void calcModeNIM(uint16_t unusedParamButMandatory) {
   calcMode = CM_NIM;
   //nimTempRegister = allocateTemporaryRegister();
 
-  liftStack(dtReal16, REAL16_SIZE);
+  liftStack();
   real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 

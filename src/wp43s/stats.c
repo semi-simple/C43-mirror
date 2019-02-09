@@ -195,7 +195,8 @@ void fnSigma(uint16_t plusMinus) {
 
 
 void fnStatSum(uint16_t sum) {
-  liftStack(dtReal34, REAL34_SIZE);
+  liftStack();
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
 
   if(statisticalSumsPointer == 0) {
    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));

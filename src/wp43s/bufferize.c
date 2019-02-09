@@ -477,12 +477,9 @@ void addItemToNimBuffer(int16_t item) {
       }
 
       STACK_LIFT_ENABLE;
-
-      liftStack(getRegisterDataType(REGISTER_X), getRegisterDataSize(REGISTER_X));
+      liftStack();
       copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-
       refreshStack();
-
       STACK_LIFT_DISABLE;
       return;
     }

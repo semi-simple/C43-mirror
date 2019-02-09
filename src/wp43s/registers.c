@@ -867,18 +867,6 @@ void freeMemory(uint32_t address, uint32_t numBytes) {
 
 
 /********************************************//**
- * \brief Frees the memory hold by the data of a register
- *
- * \param[in] r calcRegister_t Register number
- * \return void
- ***********************************************/
-void freeRegisterData(calcRegister_t regist) {
-  freeMemory(getRegisterDataPointer(regist), getRegisterDataSize(regist));
-}
-
-
-
-/********************************************//**
  * \brief Allocates local registers. Works when increasing
  * and when decreasing the number of local registers.
  *
@@ -1013,65 +1001,65 @@ void allocateNamedRegister(const char *registerName) {
  * \param[in] maxStringLen uint16_t Max length of the string
  * \return void
  ***********************************************/
-void setRegisterMaxStringLength(calcRegister_t regist, uint16_t maxStringLen) {
+void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDatagLen) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
-    *(uint16_t *)(ram + ((reg[regist] >> OFFSET_REGISTER_POINTER) & ((1u << LENGTH_REGISTER_POINTER) - 1u))) = maxStringLen;
+    *(uint16_t *)(ram + ((reg[regist] >> OFFSET_REGISTER_POINTER) & ((1u << LENGTH_REGISTER_POINTER) - 1u))) = maxDatagLen;
   }
   else if(regist < 1000) { // Local register
     if(numberOfLocalRegisters > 0) {
       if(regist-FIRST_LOCAL_REGISTER < numberOfLocalRegisters) {
-        *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)) = maxStringLen;
+        *(uint16_t *)(REGISTER_DATA(regist)) = maxDatagLen;
       }
       #ifdef PC_BUILD
       else {
         sprintf(errorMessage, "local register %" FMT16S " is not defined!", regist - FIRST_LOCAL_REGISTER);
         sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16U, numberOfLocalRegisters - 1);
-        showInfoDialog("In function setRegisterMaxStringLength:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+        showInfoDialog("In function setRegisterMaxDataLength:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
       }
       #endif
     }
     #ifdef PC_BUILD
     else {
-     showInfoDialog("In function setRegisterMaxStringLength:", "no local registers defined!", NULL, NULL);
+     showInfoDialog("In function setRegisterMaxDataLength:", "no local registers defined!", NULL, NULL);
     }
     #endif
   }
   else if(regist < FIRST_TEMPORARY_REGISTER) { // Named register
     if(numberOfNamedRegisters > 0) {
       if(regist-1000 < numberOfNamedRegisters) {
-        *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)) = maxStringLen;
+        *(uint16_t *)(REGISTER_DATA(regist)) = maxDatagLen;
       }
       else {
-        sprintf(errorMessage, "In function setRegisterMaxStringLength: named register %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - 1000, numberOfNamedRegisters - 1);
+        sprintf(errorMessage, "In function setRegisterMaxDataLength: named register %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - 1000, numberOfNamedRegisters - 1);
         displayBugScreen(errorMessage);
       }
     }
     #ifdef PC_BUILD
     else {
-      showInfoDialog("In function setRegisterMaxStringLength:", "no named registers defined!", NULL, NULL);
+      showInfoDialog("In function setRegisterMaxDataLength:", "no named registers defined!", NULL, NULL);
     }
     #endif
   }
   else if(regist < SAVED_REGISTER_X) { // Temporary register
     if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)) = maxStringLen;
+      *(uint16_t *)(REGISTER_DATA(regist)) = maxDatagLen;
     }
     else {
-      sprintf(errorMessage, "In function setRegisterMaxStringLength: temporary register %" FMT16S " is not defined! Must be from 0 to %" FMT16S "!", regist - FIRST_TEMPORARY_REGISTER, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
+      sprintf(errorMessage, "In function setRegisterMaxDataLength: temporary register %" FMT16S " is not defined! Must be from 0 to %" FMT16S "!", regist - FIRST_TEMPORARY_REGISTER, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
       displayBugScreen(errorMessage);
     }
   }
   else if(regist < 4000) { // Saved stack register
     if(regist <= SAVED_REGISTER_L) {
-      *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)) = maxStringLen;
+      *(uint16_t *)(REGISTER_DATA(regist)) = maxDatagLen;
     }
     else {
-      sprintf(errorMessage, "In function setRegisterMaxStringLength: saved stack register %" FMT16S " is not defined! Must be from 0 to 7!", regist - SAVED_REGISTER_X);
+      sprintf(errorMessage, "In function setRegisterMaxDataLength: saved stack register %" FMT16S " is not defined! Must be from 0 to 7!", regist - SAVED_REGISTER_X);
       displayBugScreen(errorMessage);
     }
   }
   else {
-    sprintf(errorMessage, "In function setRegisterMaxStringLength: regist=%" FMT16S " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function setRegisterMaxDataLength: regist=%" FMT16S " must be less then 4000!", regist);
     displayBugScreen(errorMessage);
   }
 }
@@ -1085,17 +1073,17 @@ void setRegisterMaxStringLength(calcRegister_t regist, uint16_t maxStringLen) {
  * \return uint16_t      Number of bytes
  *
  ***********************************************/
-uint16_t getRegisterMaxStringLength(calcRegister_t regist) {
+uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
     return *(uint16_t *)(ram + ((reg[regist] >> OFFSET_REGISTER_POINTER) & ((1u << LENGTH_REGISTER_POINTER) - 1u)));
   }
   else if(regist < 1000) { // Local register
     if(numberOfLocalRegisters > 0) {
       if(regist-FIRST_LOCAL_REGISTER < numberOfLocalRegisters) {
-        return *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist));
+        return *(uint16_t *)(REGISTER_DATA(regist));
       }
       else {
-        sprintf(errorMessage, "In function setRegisterMaxStringLength: local register %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - FIRST_LOCAL_REGISTER, numberOfLocalRegisters - 1);
+        sprintf(errorMessage, "In function getRegisterMaxDataLength: local register %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - FIRST_LOCAL_REGISTER, numberOfLocalRegisters - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -1108,10 +1096,10 @@ uint16_t getRegisterMaxStringLength(calcRegister_t regist) {
   else if(regist < FIRST_TEMPORARY_REGISTER) { // Named register
     if(numberOfNamedRegisters > 0) {
       if(regist-1000 < numberOfNamedRegisters) {
-        return *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist));
+        return *(uint16_t *)(REGISTER_DATA(regist));
       }
       else {
-        sprintf(errorMessage, "In function setRegisterMaxStringLength: named register %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - 1000, numberOfNamedRegisters - 1);
+        sprintf(errorMessage, "In function getRegisterMaxDataLength: named register %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - 1000, numberOfNamedRegisters - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -1123,19 +1111,19 @@ uint16_t getRegisterMaxStringLength(calcRegister_t regist) {
   }
   else if(regist < SAVED_REGISTER_X) { // Temporary register
     if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      return *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist));
+      return *(uint16_t *)(REGISTER_DATA(regist));
     }
     else {
-      sprintf(errorMessage, "In function setRegisterMaxStringLength: temporary register %" FMT16S " is not defined! Must be from 0 to %" FMT16S "!", regist - FIRST_TEMPORARY_REGISTER, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
+      sprintf(errorMessage, "In function getRegisterMaxDataLength: temporary register %" FMT16S " is not defined! Must be from 0 to %" FMT16S "!", regist - FIRST_TEMPORARY_REGISTER, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
       displayBugScreen(errorMessage);
     }
   }
   else if(regist < 4000) { // Saved stack register
     if(regist <= SAVED_REGISTER_L) {
-      return *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist));
+      return *(uint16_t *)(REGISTER_DATA(regist));
     }
     else {
-      sprintf(errorMessage, "In function setRegisterMaxStringLength: saved stack register %" FMT16S " is not defined! Must be from 0 to 7!", regist - SAVED_REGISTER_X);
+      sprintf(errorMessage, "In function getRegisterMaxDataLength: saved stack register %" FMT16S " is not defined! Must be from 0 to 7!", regist - SAVED_REGISTER_X);
       displayBugScreen(errorMessage);
     }
   }
@@ -1145,7 +1133,7 @@ uint16_t getRegisterMaxStringLength(calcRegister_t regist) {
 
 
 /********************************************//**
- * \brief Returns the data size of a register
+ * \brief Returns the full data size of a register
  *
  * \param[in] r calcRegister_t Register number
  * \return uint32_t      Number of bytes. For a string this
@@ -1154,19 +1142,49 @@ uint16_t getRegisterMaxStringLength(calcRegister_t regist) {
  *                       plus 2 bytes holding the max size
  *                       of the string.
  ***********************************************/
-uint32_t getRegisterDataSize(calcRegister_t regist) {
+uint32_t getRegisterFullSize(calcRegister_t regist) {
   uint32_t dataType = getRegisterDataType(regist);
 
-  if     (dataType == dtReal16         ) return REAL16_SIZE;
-  else if(dataType == dtComplex16      ) return COMPLEX16_SIZE;
-  else if(dataType == dtReal34         ) return REAL34_SIZE;
-  else if(dataType == dtAngle          ) return ANGLE_SIZE;
-  else if(dataType == dtComplex34      ) return COMPLEX34_SIZE;
-  else if(dataType == dtSmallInteger   ) return SMALL_INTEGER_SIZE;
-  else if(dataType == dtString         ) return *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)) + 2; // +2 because the 2 first bytes hold the max size of the string
-  else if(dataType == dtBigInteger     ) return *(uint16_t *)(POINTER_TO_REGISTER_DATA(regist)) + 2; // +2 because the 2 first bytes hold the size of the integer
+  if     (dataType == dtReal16      ) return REAL16_SIZE;
+  else if(dataType == dtComplex16   ) return COMPLEX16_SIZE;
+  else if(dataType == dtReal34      ) return REAL34_SIZE;
+  else if(dataType == dtAngle       ) return ANGLE_SIZE;
+  else if(dataType == dtComplex34   ) return COMPLEX34_SIZE;
+  else if(dataType == dtSmallInteger) return SMALL_INTEGER_SIZE;
+  else if(dataType == dtString      ) return *(REGISTER_DATA_MAX_LEN(regist)) + 2; // +2 because of the 2 first bytes holding the size
+  else if(dataType == dtBigInteger  ) return *(REGISTER_DATA_MAX_LEN(regist)) + 2; // +2 because of the 2 first bytes holding the size
   else {
-    sprintf(errorMessage, "In function getRegisterDataSize: data type %s is unknown!", getDataTypeName(dataType, true, false));
+    sprintf(errorMessage, "In function getRegisterFullSize: data type %s is unknown!", getDataTypeName(dataType, true, false));
+    displayBugScreen(errorMessage);
+  }
+  return 0;
+}
+
+
+
+/********************************************//**
+ * \brief Returns the data only size of a register
+ *
+ * \param[in] r calcRegister_t Register number
+ * \return uint32_t      Number of bytes. For a string this
+ *                       is the number of bytes reserved for
+ *                       the string (including the ending 0)
+ *                       plus 2 bytes holding the max size
+ *                       of the string.
+ ***********************************************/
+uint32_t getRegisterDataOnlySize(calcRegister_t regist) {
+  uint32_t dataType = getRegisterDataType(regist);
+
+  if     (dataType == dtReal16      ) return REAL16_SIZE;
+  else if(dataType == dtComplex16   ) return COMPLEX16_SIZE;
+  else if(dataType == dtReal34      ) return REAL34_SIZE;
+  else if(dataType == dtAngle       ) return ANGLE_SIZE;
+  else if(dataType == dtComplex34   ) return COMPLEX34_SIZE;
+  else if(dataType == dtSmallInteger) return SMALL_INTEGER_SIZE;
+  else if(dataType == dtString      ) return *(REGISTER_DATA_MAX_LEN(regist));
+  else if(dataType == dtBigInteger  ) return *(REGISTER_DATA_MAX_LEN(regist));
+  else {
+    sprintf(errorMessage, "In function getRegisterDataOnlySize: data type %s is unknown!", getDataTypeName(dataType, true, false));
     displayBugScreen(errorMessage);
   }
   return 0;
@@ -1220,7 +1238,7 @@ void fnClearRegisters(uint16_t unusedParamButMandatory) {
 void fnGetLocR(uint16_t unusedParamButMandatory) {
   bigInteger_t locR;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger(numberOfLocalRegisters, &locR);
   convertBigIntegerToBigIntegerRegister(&locR, REGISTER_X);
@@ -1420,16 +1438,16 @@ void roundRegister(calcRegister_t regist) { // TODO: we can make better here! Do
 /********************************************//**
  * \brief Duplicates register source to register destination
  *
- * \param[in] rSource Source register
- * \param[in] rDest   Destination register
+ * \param[in] sourceRegister Source register
+ * \param[in] destRegister   Destination register
  * \return void
  ***********************************************/
-void copySourceRegisterToDestRegister(calcRegister_t rSource, calcRegister_t rDest) {
-  if(getRegisterDataType(rDest) != getRegisterDataType(rSource) || getRegisterDataSize(rDest) != getRegisterDataSize(rSource) || getRegisterDataInfo(rDest) != getRegisterDataInfo(rSource)) {
-    reallocateRegister(rDest, getRegisterDataType(rSource), getRegisterDataSize(rSource), getRegisterDataInfo(rSource));
+void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegister_t destRegister) {
+  if(getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister) || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister) || getRegisterDataInfo(destRegister) != getRegisterDataInfo(sourceRegister)) {
+    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), getRegisterDataOnlySize(sourceRegister), getRegisterDataInfo(sourceRegister));
   }
 
-  memcpy(POINTER_TO_REGISTER_DATA(rDest), POINTER_TO_REGISTER_DATA(rSource), getRegisterDataSize(rSource));
+  memcpy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), getRegisterFullSize(sourceRegister));
 }
 
 
@@ -1613,8 +1631,6 @@ void fnStoreDiv(uint16_t r) {
  * \return void
  ***********************************************/
 void fnStoreMin(uint16_t r) {
-
-
 }
 
 
@@ -1626,8 +1642,6 @@ void fnStoreMin(uint16_t r) {
  * \return void
  ***********************************************/
 void fnStoreMax(uint16_t r) {
-
-
 }
 
 
@@ -1646,12 +1660,12 @@ void fnRecall(uint16_t r) {
       calcRegister_t temp = allocateTemporaryRegister();
 
       copySourceRegisterToDestRegister(regist, temp);
-      liftStack(getRegisterDataType(regist), getRegisterDataSize(regist));
+      liftStack();
       copySourceRegisterToDestRegister(temp, REGISTER_X);
       freeTemporaryRegister(temp);
     }
     else {
-      liftStack(getRegisterDataType(regist), getRegisterDataSize(regist));
+      liftStack();
       copySourceRegisterToDestRegister(regist, REGISTER_X);
     }
     refreshStack();
@@ -2062,11 +2076,11 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
   else if(getRegisterDataType(regist) == dtString) {
     stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
     #ifdef PC_BUILD
-      printf("STR (%" FMT16S ") %s", *(int16_t *)(POINTER_TO_REGISTER_DATA(regist)), str);
+      printf("STR (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "STR (%" FMT16S ") %s", *(int16_t *)(POINTER_TO_REGISTER_DATA(regist)), str);
+      sprintf(errorMessage, "STR (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
       lcd_putsAt(t20, line, errorMessage);
     #endif
   }
@@ -2089,11 +2103,11 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     convertBigIntegerRegisterToBigInteger(regist, &tmp);
     bigIntegerToString(&tmp, str, 10);
     #ifdef PC_BUILD
-      printf("BI (%" FMT16S ") %s", *(int16_t *)(POINTER_TO_REGISTER_DATA(regist)), str);
+      printf("BI (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "BI (%" FMT16S ") %s", *(int16_t *)(POINTER_TO_REGISTER_DATA(regist)), str);
+      sprintf(errorMessage, "BI (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
       lcd_putsAt(t20, line, errorMessage);
     #endif
   }
@@ -2165,59 +2179,57 @@ void printBigIntegerToConsole(bigInteger_t *value) {
   char str[1000];
 
   bigIntegerToString(value, str, 10);
-  printf("BI (%d) %s", value->used * (DIGIT_BIT / CHAR_BIT), str);
+  printf("BI (%d) %s", value->used * SIZEOF_FP_DIGIT, str);
 }
 
 
 
-void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t numBytes, uint32_t dataInfo) {
-  if(dataType == dtReal16 && numBytes != REAL16_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for a real16! It should be REAL16_SIZE=%" FMT32U "!", numBytes, (uint32_t)REAL16_SIZE);
+void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t dataInfo) { // dataSize without trailing 0 and without data length
+  if(dataType == dtReal16 && dataSize != REAL16_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real16! It should be REAL16_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL16_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if(dataType == dtReal34 && numBytes != REAL34_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for a real34! It should be REAL34_SIZE=%" FMT32U "!", numBytes, (uint32_t)REAL34_SIZE);
+  else if(dataType == dtReal34 && dataSize != REAL34_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real34! It should be REAL34_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL34_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if(dataType == dtAngle && numBytes != ANGLE_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for an angle! It should be ANGLE_SIZE=%" FMT32U "!", numBytes, (uint32_t)REAL34_SIZE);
+  else if(dataType == dtAngle && dataSize != ANGLE_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for an angle! It should be ANGLE_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL34_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if(dataType == dtComplex16 && numBytes != COMPLEX16_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for a complex16! It should be COMPLEX16_SIZE=%" FMT32U "!", numBytes, (uint32_t)COMPLEX16_SIZE);
+  else if(dataType == dtComplex16 && dataSize != COMPLEX16_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a complex16! It should be COMPLEX16_SIZE=%" FMT32U "!", dataSize, (uint32_t)COMPLEX16_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if(dataType == dtComplex34 && numBytes != COMPLEX34_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for a complex34! It should be COMPLEX34_SIZE=%" FMT32U "!", numBytes, (uint32_t)COMPLEX34_SIZE);
+  else if(dataType == dtComplex34 && dataSize != COMPLEX34_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a complex34! It should be COMPLEX34_SIZE=%" FMT32U "!", dataSize, (uint32_t)COMPLEX34_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if(dataType == dtSmallInteger && numBytes != SMALL_INTEGER_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for an integer! It should be SMALL_INTEGER_SIZE=%" FMT32U "!", numBytes, (uint32_t)SMALL_INTEGER_SIZE);
+  else if(dataType == dtSmallInteger && dataSize != SMALL_INTEGER_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for an integer! It should be SMALL_INTEGER_SIZE=%" FMT32U "!", dataSize, (uint32_t)SMALL_INTEGER_SIZE);
     displayBugScreen(errorMessage);
   }
-
-  if(dataType == dtString) {
-    numBytes += 2 + 1; // +2 For the length of the string and +1 for the trailing 0
-    if(numBytes % 2 == 1) {
-      numBytes++;   // To be even
+  else if(dataType == dtString) {
+    dataSize += 3; // +2 For the length of the string and +1 for the trailing 0
+    if(dataSize % 2 != 0) {
+      dataSize++;   // To be even
     }
   }
-
   else if(dataType == dtBigInteger) {
-    if(numBytes % 2 == 1) {
-      sprintf(errorMessage, "In function reallocateRegister: the value of numBytes (%" FMT16U ") for a big integer is odd! This value must be even!", numBytes);
+    if(dataSize % SIZEOF_FP_DIGIT != 0) {
+      sprintf(errorMessage, "In function reallocateRegister: the value of dataSize (%" FMT32U ") for a big integer must be a multiple of %d!", dataSize, SIZEOF_FP_DIGIT);
       displayBugScreen(errorMessage);
-      numBytes++;
+      dataSize = ((dataSize / SIZEOF_FP_DIGIT) + 1) * SIZEOF_FP_DIGIT;
     }
-    numBytes += 2; // +2 For the length of the data
+    dataSize += 2; // +2 For the length of the data
   }
 
-  if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtBigInteger) && getRegisterMaxStringLength(regist)+2 != numBytes)) {
+  if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtBigInteger) && getRegisterMaxDataLength(regist)+2 != (uint16_t)dataSize)) {
     freeRegisterData(regist);
-    setRegisterDataPointer(regist, allocateMemory(numBytes));
+    setRegisterDataPointer(regist, allocateMemory(dataSize));
     setRegisterDataType(regist, dataType);
     if(dataType == dtString || dataType == dtBigInteger) {
-      setRegisterMaxStringLength(regist, numBytes - 2);
+      setRegisterMaxDataLength(regist, dataSize - 2);
     }
   }
 

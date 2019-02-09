@@ -1428,11 +1428,11 @@ void bigIntegerToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" FMT64S, *(int64_t *)(POINTER_TO_REGISTER_DATA(regist)));
+  sprintf(displayString, "%" FMT64S, *(int64_t *)(REGISTER_DATA(regist)));
 }
 
 
 
 void timeToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" FMT64S, *(int64_t *)(POINTER_TO_REGISTER_DATA(regist)));
+  sprintf(displayString, "%" FMT64S, *(int64_t *)(REGISTER_DATA(regist)));
 }

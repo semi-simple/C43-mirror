@@ -62,8 +62,8 @@ void fnDrop(uint16_t unusedParamButMandatory) {
     reg[regist] = reg[regist + 1];
   }
 
-  setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterDataSize(getStackTop())));
-  memcpy(POINTER_TO_REGISTER_DATA(getStackTop()-1), POINTER_TO_REGISTER_DATA(getStackTop()), getRegisterDataSize(getStackTop()));
+  setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterFullSize(getStackTop())));
+  memcpy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
   refreshStack();
 }
 
@@ -77,7 +77,7 @@ void fnDrop(uint16_t unusedParamButMandatory) {
  * \param[in] numBytes uint32_t Number of bytes allocated to the new X register
  * \return void
  ***********************************************/
-void liftStack(uint32_t dataType, uint32_t numBytes) {
+void liftStack(void) {
   if(stackLiftEnabled) {
     freeRegisterData(getStackTop());
     for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
@@ -88,8 +88,9 @@ void liftStack(uint32_t dataType, uint32_t numBytes) {
     freeRegisterData(REGISTER_X);
   }
 
-  setRegisterDataType(REGISTER_X, dataType);
-  setRegisterDataPointer(REGISTER_X, allocateMemory(numBytes));
+  setRegisterDataPointer(REGISTER_X, allocateMemory(REAL16_SIZE));
+  setRegisterDataType(REGISTER_X, dtReal16);
+  setRegisterDataInfo(REGISTER_X, 0);
 }
 
 
@@ -106,8 +107,8 @@ void fnDropY(uint16_t unusedParamButMandatory) {
     reg[i] = reg[i+1];
   }
 
-  setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterDataSize(getStackTop())));
-  memcpy(POINTER_TO_REGISTER_DATA(getStackTop()-1), POINTER_TO_REGISTER_DATA(getStackTop()), getRegisterDataSize(getStackTop()));
+  setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterFullSize(getStackTop())));
+  memcpy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
   refreshStack();
 }
 
@@ -208,7 +209,7 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnFillStack(uint16_t unusedParamButMandatory) {
   uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
-  uint16_t dataSizeX = getRegisterDataSize(REGISTER_X);
+  uint16_t dataSizeX = getRegisterFullSize(REGISTER_X);
   uint16_t dataInfo  = getRegisterDataInfo(REGISTER_X);
   uint16_t newDataPointer;
 
@@ -218,7 +219,7 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
     setRegisterDataInfo(i, dataInfo);
     newDataPointer = allocateMemory(dataSizeX);
     setRegisterDataPointer(i, newDataPointer);
-    memcpy(ram + newDataPointer, POINTER_TO_REGISTER_DATA(REGISTER_X), dataSizeX);
+    memcpy(ram + newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeX);
   }
 
   refreshStack();
@@ -235,7 +236,7 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
 void fnGetStackSize(uint16_t unusedParamButMandatory) {
   bigInteger_t ss;
 
-  liftStack(dtBigInteger, 6);
+  liftStack();
 
   uIntToBigInteger(stackSize==SS_4 ? 4 : 8, &ss);
   convertBigIntegerToBigIntegerRegister(&ss, REGISTER_X);

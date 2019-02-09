@@ -1846,7 +1846,7 @@ void testFunctions(void) {
 
   STACK_LIFT_ENABLE;
 
-  liftStack(dtReal16, REAL16_SIZE);
+  liftStack();
   real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
 
   registerShouldBe(REGISTER_X, dtReal16,    "liftStack(4)", "0",     "",        0);
@@ -1874,7 +1874,7 @@ void testFunctions(void) {
 
   STACK_LIFT_ENABLE;
 
-  liftStack(dtReal16, REAL16_SIZE);
+  liftStack();
   real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
 
   registerShouldBe(REGISTER_X, dtReal16,    "liftStack(8)", "0",     "",        0);
@@ -6065,7 +6065,7 @@ void initializeRegister(calcRegister_t regist, uint32_t dataType, const char *re
 
   else if(dataType == dtString) {
     reallocateRegister(regist, dtString, atoi(real), dataInfo);
-    memcpy(POINTER_TO_REGISTER_DATA(regist) + 2, imag, atoi(real)+1);
+    memcpy(REGISTER_DATA(regist) + 2, imag, atoi(real)+1);
   }
 
   else if(dataType == dtBigInteger) {

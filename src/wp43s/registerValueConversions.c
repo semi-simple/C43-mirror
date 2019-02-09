@@ -111,8 +111,8 @@ void convertRegister34To16(calcRegister_t regist) {
 
 
 void convertBigIntegerToBigIntegerRegister(const bigInteger_t *bigInteger, calcRegister_t regist) {
-  reallocateRegister(regist, dtBigInteger, bigInteger->used * (DIGIT_BIT / CHAR_BIT), bigInteger->sign);
-  memcpy(REGISTER_BIG_INTEGER_DATA(regist), bigInteger, bigInteger->used * (DIGIT_BIT / CHAR_BIT));
+  reallocateRegister(regist, dtBigInteger, bigInteger->used * SIZEOF_FP_DIGIT, bigInteger->sign);
+  memcpy(REGISTER_BIG_INTEGER_DATA(regist), bigInteger, bigInteger->used * SIZEOF_FP_DIGIT);
 }
 
 
@@ -120,7 +120,7 @@ void convertBigIntegerToBigIntegerRegister(const bigInteger_t *bigInteger, calcR
 void convertBigIntegerRegisterToBigInteger(calcRegister_t regist, bigInteger_t *bigInteger) {
   bigIntegerSetZero(bigInteger);
   bigInteger->sign = getRegisterDataInfo(regist);
-  bigInteger->used = *(uint16_t *)POINTER_TO_REGISTER_DATA(regist);
+  bigInteger->used = *REGISTER_DATA_MAX_LEN(regist);
   memcpy(bigInteger, REGISTER_BIG_INTEGER_DATA(regist), bigInteger->used);
   bigInteger->used = (bigInteger->used * CHAR_BIT) / DIGIT_BIT;
 }

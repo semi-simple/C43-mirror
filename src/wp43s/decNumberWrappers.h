@@ -49,7 +49,6 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define COMPLEX16_SIZE                                    (2*sizeof(real16_t))
 #define COMPLEX34_SIZE                                    (2*sizeof(real34_t))
 
-#define POINTER_TO_REGISTER_DATA(a)                       ((uint8_t  *)(ram + getRegisterDataPointer(a)))     // Memory pointer to the data of a global register
 #define POINTER_TO_REGISTER_NAME(a)                       ((char     *)(ram + getRegisterNamePointer(a)))
 #define POINTER_TO_LOCAL_FLAGS                            ((uint16_t *)(ram + allLocalRegisterPointer))
 #define POINTER_TO_LOCAL_REGISTER(a)                      ((uint32_t *)(ram + allLocalRegisterPointer + 2u + 4u*(a)))
@@ -60,6 +59,7 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define RAM_REAL34(a)                                     ((real34_t *)(ram + (a)))
 
 
+#define REGISTER_DATA(a)                                  ((void        *)(ram + getRegisterDataPointer(a)))
 #define REGISTER_REAL16_DATA(a)                           ((real16_t    *)(ram + getRegisterDataPointer(a)))
 #define REGISTER_IMAG16_DATA(a)                           ((real16_t    *)(ram + getRegisterDataPointer(a) + REAL16_SIZE))
 #define REGISTER_COMPLEX16_DATA(a)                        ((complex16_t *)(ram + getRegisterDataPointer(a)))
@@ -67,9 +67,9 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define REGISTER_IMAG34_DATA(a)                           ((real34_t    *)(ram + getRegisterDataPointer(a) + REAL34_SIZE))
 #define REGISTER_COMPLEX34_DATA(a)                        ((complex34_t *)(ram + getRegisterDataPointer(a)))
 #define REGISTER_ANGLE_DATA(a)                            ((angle_t     *)(ram + getRegisterDataPointer(a)))
-#define REGISTER_STRING_LEN(a)                            ((uint16_t    *)(ram + getRegisterDataPointer(a)))     // Memory pointer to the lenght of the string of a register
 #define REGISTER_STRING_DATA(a)                           ((char        *)(ram + getRegisterDataPointer(a) + 2)) // Memory pointer to the string of a register
 #define REGISTER_BIG_INTEGER_DATA(a)                      ((uint8_t     *)(ram + getRegisterDataPointer(a) + 2)) // Memory pointer to the big integer of a register
+#define REGISTER_DATA_MAX_LEN(a)                          ((uint16_t    *)(ram + getRegisterDataPointer(a)))     // Memory pointer to the lenght of string or big integer
 #define REGISTER_SMALL_INTEGER_DATA(a)                    ((uint64_t    *)(ram + getRegisterDataPointer(a)))
 #define VARIABLE_REAL16_DATA(a)                           ((real16_t    *)(a))
 #define VARIABLE_IMAG16_DATA(a)                           ((real16_t    *)((char *)(a) + REAL16_SIZE))

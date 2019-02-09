@@ -777,12 +777,12 @@ void btnPressed(void *notUsed, void *data) {
           refreshRegisterLine(REGISTER_X);
         }
 
-        else if(getRegisterDataType(REGISTER_X) == dtAngle) {
+        else if(getRegisterDataType(REGISTER_X) == dtAngle && getRegisterAngularMode(REGISTER_X) == AM_DMS) {
           #if (ANGLE16 == 1)
-            convertAngle16FromInternal(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+            convertAngle16FromInternal(REGISTER_REAL16_DATA(REGISTER_X), AM_DEGREE);
           #endif
           #if (ANGLE34 == 1)
-            convertAngle34FromInternal(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+            convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE);
             convertRegister34To16(REGISTER_X);
           #endif
           setRegisterDataType(REGISTER_X, dtReal16);

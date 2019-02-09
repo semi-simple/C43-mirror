@@ -463,7 +463,8 @@ void addItemToNimBuffer(int16_t item) {
 
     closeNim();
     if(calcMode != CM_NIM && lastErrorCode == 0) {
-     STACK_LIFT_ENABLE;
+      STACK_LIFT_ENABLE;
+      return;
     }
   }
 
@@ -495,6 +496,38 @@ void addItemToNimBuffer(int16_t item) {
     done = true;
 
     strcat(nimBuffer, "16");
+  }
+
+  else if(item == ITM_DMS && (nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART)) {
+    done = true;
+
+    closeNim();
+    if(calcMode != CM_NIM && lastErrorCode == 0) {
+      if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+        convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+      }
+      #if (ANGLE16 == 1)
+        convertAngle16ToInternal(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS);
+      #endif
+      #if (ANGLE34 == 1)
+        convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS);
+      #endif
+
+      if(lastErrorCode == 0) {
+        setRegisterDataType(REGISTER_X, dtAngle);
+        setRegisterAngularMode(REGISTER_X, AM_DMS);
+      }
+      else {
+        #if (ANGLE34 == 1)
+          convertRegister34To16(REGISTER_X, REGISTER_X);
+        #endif
+        setRegisterDataType(REGISTER_X, dtReal16);
+      }
+
+      refreshRegisterLine(REGISTER_X);
+      STACK_LIFT_ENABLE;
+      return;
+    }
   }
 
   if(done) {

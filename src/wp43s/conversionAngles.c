@@ -398,37 +398,46 @@ void convertAngle16ToInternal(real16_t *angle16, uint32_t fromAngularMode) {
 
 
 void convertAngle34ToInternal(real34_t *angle34, uint32_t fromAngularMode) {
-  if(fromAngularMode == AM_DEGREE || fromAngularMode == AM_DMS) {
-    if(fromAngularMode == AM_DEGREE) {
-      real34Multiply(angle34, const34_3_6, angle34); // 1296/360  1296=36*36
+  if(fromAngularMode == AM_DEGREE) {
+    real34Multiply(angle34, const34_3_6, angle34); // 1296/360  1296=36*36
+  }
+
+  else if(fromAngularMode == AM_DMS) {
+    real34_t angle, degrees, minutes;
+    bool_t negativeAngle = false;
+
+    real34Copy(angle34, &angle);
+
+    if(real34IsNegative(angle34)) {
+      if(!real34IsZero(angle34)) {
+        negativeAngle = true;
+      }
+      real34SetPositiveSign(angle34);
     }
-    else {
-      bool_t negativeAngle = false;
 
-      if(real34IsNegative(angle34)) {
-        if(!real34IsZero(angle34)) {
-          negativeAngle = true;
-        }
-        real34SetPositiveSign(angle34);
-      }
+    real34ToIntegral(angle34, &degrees);           // degrees = intPart(angle34)           : integral number of degrees
+    real34Subtract(angle34, &degrees, angle34);    // angle34 = angle34 - intPart(angle34) : fractional part of degrees
 
-      real34_t degrees, minutes;
+    real34Multiply(angle34, const34_100, angle34); // angle34 = angle34 * 100              : number of minutes
+    real34ToIntegral(angle34, &minutes);           // minutes = int(angle34)               : integral number of minutes
+    real34Subtract(angle34, &minutes, angle34);    // angle34 = angle34 - intPart(minutes) : fractional part of minutes
+    real34Multiply(angle34, const34_100, angle34); // angle34 = angle34 * 100              : number of seconds
 
-      real34ToIntegral(angle34, &degrees);           // degrees = intPart(angle34)           : integral number of degrees
-      real34Subtract(angle34, &degrees, angle34);    // angle34 = angle34 - intPart(angle34) : fractional part of degrees
+    if(real34CompareGreaterEqual(angle34, const34_60) || real34CompareGreaterEqual(&minutes, const34_60)) {
+      displayCalcErrorMessage(28, REGISTER_T, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+       showInfoDialog("In function convertAngle34ToInternal:", "Minutes and/or seconds are " STD_GREATER_EQUAL " 60!", NULL, NULL);
+      #endif
+      real34Copy(&angle, angle34);
+      return;
+    }
 
-      real34Multiply(angle34, const34_100, angle34); // angle34 = angle34 * 100              : number of minutes
-      real34ToIntegral(angle34, &minutes);           // minutes = int(angle34)               : integral number of minutes
-      real34Subtract(angle34, &minutes, angle34);    // angle34 = angle34 - intPart(minutes) : fractional part of minutes
-      real34Multiply(angle34, const34_100, angle34); // angle34 = angle34 * 100              : number of seconds
+    real34Multiply(angle34, const34_1e_3, angle34);      // seconds
+    real34FMA(&minutes, const34_0_06, angle34, angle34); // minutes
+    real34FMA(&degrees, const34_3_6, angle34, angle34);  // degrees
 
-      real34Multiply(angle34, const34_1e_3, angle34);      // seconds
-      real34FMA(&minutes, const34_0_06, angle34, angle34); // minutes
-      real34FMA(&degrees, const34_3_6, angle34, angle34);  // degrees
-
-      if(negativeAngle && !real34IsZero(angle34)) {
-        real34SetNegativeSign(angle34);
-      }
+    if(negativeAngle && !real34IsZero(angle34)) {
+      real34SetNegativeSign(angle34);
     }
   }
 

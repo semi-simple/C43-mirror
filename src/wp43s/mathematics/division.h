@@ -20,7 +20,6 @@
 
 void divToBeCoded(void);
 void fnDivide    (uint16_t unusedParamButMandatory);
-void fnInvert    (uint16_t unusedParamButMandatory);
 
 void errorDiv    (void);
 

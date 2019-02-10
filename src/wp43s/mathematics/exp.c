@@ -24,7 +24,7 @@
 
 void (* const Exp[12])(void) = {
 //  regX ==> 1            2         3          4          5          6          7          8            9             10              11        12
-//           Big integer  real16    complex16             Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
+//           Big integer  real16    complex16  Date       Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
              expBigI,     expRe16,  expCo16,   errorExp,  errorExp,  errorExp,  errorExp,  expRm16,     expCm16,      expSmaI,        expRe34,  expCo34
 };
 

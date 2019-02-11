@@ -94,22 +94,68 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
 
 
 void sqrtBigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  bigInteger_t value;
 
-  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertRegister34To16(result);
+  convertBigIntegerRegisterToBigInteger(opX, &value);
+
+  if(!bigIntegerIsNegative(&value)) { // Positive or zero value
+    bigInteger_t value, nn0, nn1;
+
+    if(bigIntegerIsZero(&value)) {
+      uIntToBigInteger(0, &nn1);
+    }
+    else {
+      //value = opX;
+      convertBigIntegerRegisterToBigInteger(opX, &value);
+
+      // n0 = value / 2 + 1;
+      bigIntegerDivide2(&value, &nn0);
+      bigIntegerAddUInt(&nn0, 1, &nn0);
+
+      // n1 = value / n0 + n0 / 2;
+      bigIntegerDivide(&value, &nn0, &nn1);
+      bigIntegerDivide2(&nn0, &nn0);
+      bigIntegerAdd(&nn1, &nn0, &nn1);
+      bigIntegerMultiply2(&nn0, &nn0);
+      while(bigIntegerCompare(&nn0, &nn1) == BIG_INTEGER_GREATER_THAN) {
+        //n0 = n1;
+        bigIntegerCopy(&nn1, &nn0);
+
+        //n1 = (n0 + value / n0) / 2;
+        bigIntegerDivide(&value, &nn0, &nn1);
+        bigIntegerAdd(&nn1, &nn0, &nn1);
+        bigIntegerDivide2(&nn1, &nn1);
+      }
+
+      // n0 = n1 * n1;
+      bigIntegerMultiply(&nn1, &nn1, &nn0);
+      if(bigIntegerCompare(&nn0, &value) == BIG_INTEGER_GREATER_THAN) {
+        bigIntegerSubtractUInt(&nn1, 1, &nn1);
+      }
+
+      if(bigIntegerCompare(&nn0, &value) == BIG_INTEGER_EQUAL) {
+        convertBigIntegerToBigIntegerRegister(&nn1, result);
+        return;
+      }
+      else {
+        convertBigIntegerRegisterToReal34Register(opX, opX);
+        reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+        real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+        convertRegister34To16(result);
+      }
+    }
   }
-  else if(getFlag(FLAG_CPXRES)) {
+  else if(getFlag(FLAG_CPXRES)) { // Negative value
     real34_t real34;
 
+    convertBigIntegerRegisterToReal34Register(opX, opX);
     real34Copy(REGISTER_REAL34_DATA(opX), &real34);
     reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
     real34SetPositiveSign(&real34);
     real34SquareRoot(&real34, REGISTER_IMAG34_DATA(result));
     real34Zero(REGISTER_REAL34_DATA(result));
     convertRegister34To16(result);
+    //convertRegister34To16(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X); // 1 = argument exceeds functions domain
@@ -118,8 +164,6 @@ void sqrtBigI(void) {
       showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
     #endif
   }
-
-  convertRegister34To16(REGISTER_X);
 }
 
 

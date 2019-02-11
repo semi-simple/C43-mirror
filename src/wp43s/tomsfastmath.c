@@ -1937,7 +1937,7 @@ int fp_montgomery_setup(fp_int *a, fp_digit *rho) {
 
   return FP_OKAY;
 }
-
+*/
 void fp_mul_2(fp_int * a, fp_int * b) {
   int     x, oldused;
 
@@ -1982,7 +1982,7 @@ void fp_mul_2(fp_int * a, fp_int * b) {
   }
   b->sign = a->sign;
 }
-*/
+
 // c = a * 2**d
 void fp_mul_2d(fp_int *a, int b, fp_int *c) {
    fp_digit carry, carrytmp, shift;

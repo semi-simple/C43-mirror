@@ -41,16 +41,16 @@
 #define bigIntegerIsNegative(op)                                ((op)->sign == 1)
 #define bigIntegerIsEven(op)                                    (((op)->dp[0] & 1) == 0)
 #define bigIntegerIsOdd(op)                                     (((op)->dp[0] & 1) == 1)
-//#define bigIntegerCopy(source, destination)                     fp_copy     (source, destination)
+#define bigIntegerCopy(source, destination)                     fp_copy     (source, destination)
 
 #define bigIntegerCompare(op1, op2)                             fp_cmp      (op1, op2)
-//#define bigIntegerDivide(op1, op2, result)                      fp_div      (op1, op2, result, NULL)      /* op1/op2 => result*op2 + remainder == op1 */
+#define bigIntegerDivide(op1, op2, result)                      fp_div      (op1, op2, result, NULL)      /* op1/op2 => result*op2 + remainder == op1 */
 #define bigIntegerDivideRemainder(op1, op2, result, remainder)  fp_div      (op1, op2, result, remainder)   /* op1/op2 => result*op2 + remainder == op1 */
 //#define bigIntegerModulo(op1, op2, result)                      fp_mod      (op1, op2, result)            /* result = op1 mod op2, 0 <= result < op2 */
 #define bigInteger2Exp(exp, result)                             fp_2expt    (result, exp)                   /* result = 2^exp */
 #define bigIntegerDivide2(op, result)                           fp_div_2    (op, result)                    /* result = op / 2 */
 //#define bigIntegerRightShift(op, number)                        fp_rshd     (op, number);
-//#define bigIntegerMultiply2(op, result)                         fp_mul_2    (op, result);                   /* result = op * 2 */
+#define bigIntegerMultiply2(op, result)                         fp_mul_2    (op, result);                   /* result = op * 2 */
 //#define bigIntegerLeftShift(op, number)                         fp_lshd     (op, number);
 
 #define bigIntegerCompareUInt(op, uint)                         fp_cmp_d    (op, uint)

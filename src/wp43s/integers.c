@@ -858,7 +858,7 @@ uint64_t WP34S_intChs(uint64_t x) {
 uint64_t WP34S_intSqrt(uint64_t x) {
  	int32_t signValue;
  	uint64_t value = WP34S_extract_value(x, &signValue);
- 	uint64_t n0, n1;
+ 	uint64_t nn0, nn1;
 
 	 if(signValue) {
 	   displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
@@ -868,22 +868,22 @@ uint64_t WP34S_intSqrt(uint64_t x) {
 	  	return 0;
   }
  	if(value == 0) {
- 		 n1 = 0;
+ 		 nn1 = 0;
   }
  	else {
-	  	n0 = value / 2 + 1;
-  		n1 = value / n0 + n0 / 2;
-	  	while(n1 < n0) {
-   			n0 = n1;
-	   		n1 = (n0 + value / n0) / 2;
+	  	nn0 = value / 2 + 1;
+  		nn1 = value / nn0 + nn0 / 2;
+	  	while(nn1 < nn0) {
+   			nn0 = nn1;
+	   		nn1 = (nn0 + value / nn0) / 2;
 		  }
-		  n0 = n1 * n1;
-		  if(n0 > value) {
-		  	 n1--;
+		  nn0 = nn1 * nn1;
+		  if(nn0 > value) {
+		  	 nn1--;
     }
-		  WP34S_set_carry((n0 != value) ? 1 : 0);
+		  WP34S_set_carry((nn0 != value) ? 1 : 0);
 	 }
- 	return WP34S_build_value(n1, signValue);
+ 	return WP34S_build_value(nn1, signValue);
 }
 
 

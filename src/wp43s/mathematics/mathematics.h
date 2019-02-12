@@ -45,6 +45,7 @@
 #include "multiplication.h"
 #include "power.h"
 #include "realPart.h"
+#include "sign.h"
 #include "sin.h"
 #include "square.h"
 #include "sqrt.h"

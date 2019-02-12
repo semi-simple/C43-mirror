@@ -747,7 +747,7 @@ const item_t indexOfItems[] = {
 /*  641 */  { toBeCoded,                   NOPARAM,                     "t" STD_LEFT_RIGHT_ARROWS,                     "t" STD_LEFT_RIGHT_ARROWS,                                                    SLS_UNCHANGED},
 /*  642 */  { toBeCoded,                   NOPARAM,                     "ULP?",                                        "ULP?",                                                                       SLS_UNCHANGED},
 /*  643 */  { toBeCoded,                   NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                                                SLS_UNCHANGED},
-/*  644 */  { fnUnitVector,                NOPARAM,                     "UNITV",                                       "UNITV",                                                                      SLS_UNCHANGED},
+/*  644 */  { fnUnitVector,                NOPARAM,                     "UNITV",                                       "UNITV",                                                                      SLS_ENABLED  },
 /*  645 */  { fnIntegerMode,               SIM_UNSIGN,                  "UNSIGN",                                      "UNSIGN",                                                                     SLS_UNCHANGED},
 /*  646 */  { toBeCoded,                   NOPARAM,                     "U" STD_RIGHT_ARROW,                           "U" STD_RIGHT_ARROW,                                                          SLS_UNCHANGED},
 /*  647 */  { toBeCoded,                   NOPARAM,                     "VARMNU",                                      "VARMNU",                                                                     SLS_UNCHANGED},

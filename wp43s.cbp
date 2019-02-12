@@ -93,9 +93,6 @@
 		<Unit filename="COPYING">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="README">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="decNumberICU/decContext.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -612,6 +609,15 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/realPart.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sign.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sign.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>

@@ -15,10 +15,14 @@
  */
 
 /********************************************//**
- * \file unitVector.h
+ * \file sign.h
  ***********************************************/
 
-void fnUnitVector(uint16_t unusedParamButMandatory);
-void errorUnitVector(void);
-void unitVectorCo16 (void);
-void unitVectorCo34 (void);
+void fnSign(uint16_t unusedButMandatoryParameter);
+void signToBeCoded(void);
+void errorSign    (void);
+void signBigI     (void);
+void signRe16     (void);
+void signRm16     (void);
+void signSmaI     (void);
+void signRe34     (void);

@@ -114,7 +114,6 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnChangeSign(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
       real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
@@ -123,7 +122,6 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
@@ -131,8 +129,25 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
     refreshRegisterLine(REGISTER_X);
   }
 
+  else if(getRegisterDataType(REGISTER_X) == dtAngle) {
+    #if (ANGLE16 == 1)
+      real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
+      if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+        real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
+      }
+    #endif
+
+    #if (ANGLE34 == 1)
+      real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
+      if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+        real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
+      }
+    #endif
+
+    refreshRegisterLine(REGISTER_X);
+  }
+
   else if(getRegisterDataType(REGISTER_X) == dtComplex16) {
-    //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
       real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
@@ -147,7 +162,6 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-    //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
@@ -162,13 +176,11 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     setRegisterDataInfo(REGISTER_X, getRegisterDataInfo(REGISTER_X) ^ 1);
     refreshRegisterLine(REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intChs(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
     refreshRegisterLine(REGISTER_X);
   }

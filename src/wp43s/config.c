@@ -576,27 +576,27 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     // The following lines are test data
-    kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
-    kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
-    kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
-    kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
-    kbd_usr[18].fShifted    = -MNU_VARS;
-    kbd_usr[18].gShifted    = CST_54;
-    kbd_usr[19].fShifted    = ITM_SW;
-    kbd_usr[19].gShifted    = ITM_SXY;
-    kbd_usr[20].gShifted    = ITM_LYtoM;
+    //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
+    //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
+    //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
+    //kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
+    //kbd_usr[18].fShifted    = -MNU_VARS;
+    //kbd_usr[18].gShifted    = CST_54;
+    //kbd_usr[19].fShifted    = ITM_SW;
+    //kbd_usr[19].gShifted    = ITM_SXY;
+    //kbd_usr[20].gShifted    = ITM_LYtoM;
 
-    fnSetFlag(  3);
-    fnSetFlag( 11);
-    fnSetFlag( 33);
-    fnSetFlag( 34);
-    fnSetFlag( 52);
-    fnSetFlag( 62);
-    fnSetFlag( 77);
-    fnSetFlag( 85);
-    fnSetFlag(FLAG_CARRY);
-    fnSetFlag(FLAG_DANGER);
-    showOverflowCarry();
+    //fnSetFlag(  3);
+    //fnSetFlag( 11);
+    //fnSetFlag( 33);
+    //fnSetFlag( 34);
+    //fnSetFlag( 52);
+    //fnSetFlag( 62);
+    //fnSetFlag( 77);
+    //fnSetFlag( 85);
+    //fnSetFlag(FLAG_CARRY);
+    //fnSetFlag(FLAG_DANGER);
+    //showOverflowCarry();
 
     //allocateLocalRegisters(2);
     //fnSetFlag(FIRST_LOCAL_REGISTER+0);
@@ -609,9 +609,9 @@ void fnReset(uint16_t confirmation) {
     //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
 
 
-    allocateNamedRegister("Z" STD_a_DIARESIS "hler");
-    allocateNamedRegister(STD_omega STD_SUB_1);
-    allocateNamedRegister(STD_omega STD_SUB_2);
+    //allocateNamedRegister("Z" STD_a_DIARESIS "hler");
+    //allocateNamedRegister(STD_omega STD_SUB_1);
+    //allocateNamedRegister(STD_omega STD_SUB_2);
 
     #if (DEBUG_PANEL == 1)
       debugWindow = DBG_REGISTERS;

@@ -311,7 +311,7 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
       strcpy(displayString, "-" NUM_INFINITY);
     }
     else {
-      strcpy(displayString, "+" NUM_INFINITY);
+      strcpy(displayString, NUM_INFINITY);
     }
     return;
   }

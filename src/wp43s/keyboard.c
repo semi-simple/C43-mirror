@@ -837,7 +837,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        showFunctionName(item,10);
+        showFunctionName(item, 10);
       }
     }
 

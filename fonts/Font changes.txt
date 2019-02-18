@@ -70,14 +70,15 @@
            New WP43S_StandardFont.ttf generated.
 
 2019-02-16 Changed 2 characters in standard font:
-             - U+211D Proportional
-             - U+211E Infinity
+             - U+221D Proportional
+             - U+221E Infinity
            Changed 6 characters in numeric font:
-             - U+211E Infinty
+             - U+221E Infinty
              - U+00D7 Multiplication cross
              - U+00B7 Multiplication dot
              - U+003A Colon
              - U+002A Star
              - U+002D Minus
 
-
+2019-02-18 New WP43S_NumericFont.ttf generated.
+           New WP43S_StandardFont.ttf generated.

@@ -307,7 +307,7 @@ void btnPressed(void *notUsed, void *data) {
           liftStack();
           STACK_LIFT_DISABLE;
 
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_Y);
+          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           aimBuffer[0] = 0;
         }
 

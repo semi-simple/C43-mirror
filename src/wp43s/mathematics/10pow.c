@@ -22,78 +22,141 @@
 
 
 
+void (* const tenPow[12])(void) = {
+// regX ==> 1            2            3            4             5             6             7             8              9               10             11           12
+//          Big integer  real16       complex16    Date          Time          Date          String        real16 mat     complex16 m     Small integer  real34       complex34
+            tenPowBigI,  tenPowRe16,  tenPowCo16,  tenPowError,  tenPowError,  tenPowError,  tenPowError,  tenPowRm16,    tenPowCm16,     tenPowSmaI,    tenPowRe34,  tenPowCo34
+};
+
+
+
+/********************************************//**
+ * \brief Data type error in exp
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void tenPowError(void) {
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fn10Pow:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Error message for a valid operation to be coded
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void tenPowToBeCoded(void) {
+  #ifdef PC_BUILD
+    sprintf(errorMessage, "10^(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
+    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
 /********************************************//**
  * \brief regX ==> regL and 10^regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fn10Pow(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+  if(tenPow[getRegisterDataType(REGISTER_X)] != tenPowError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int10pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    int16_t exponent;
-
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-    bigInteger_t temp;
-    convertBigIntegerRegisterToBigInteger(REGISTER_X, &temp);
-    exponent = (bigIntegerCompareUInt(&temp, 1234) == BIG_INTEGER_GREATER_THAN ? 1234 : temp.dp[0]);
-
-    uIntToBigInteger(10, &temp);
-    opY = allocateTemporaryRegister();
-    convertBigIntegerToBigIntegerRegister(&temp, opY);
-
-    uIntToBigInteger(exponent, &temp);
-    opX = allocateTemporaryRegister();
-    convertBigIntegerToBigIntegerRegister(&temp, opX);
-
-    result = allocateTemporaryRegister();
-    powBigIBigI();
-
-    copySourceRegisterToDestRegister(result, REGISTER_X);
-    freeTemporaryRegister(result);
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-    opY = allocateTemporaryRegister();
-    reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
-    real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
-
-    opX = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
     result = REGISTER_X;
-    powRe16Re16();
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-    opY = allocateTemporaryRegister();
-    reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
-    real34Copy(const34_10, REGISTER_REAL34_DATA(opY));
-
-    opX = allocateTemporaryRegister();
+    opX    = allocateTemporaryRegister();
     copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    result = REGISTER_X;
-    powRe34Re34();
-  }
+    tenPow[getRegisterDataType(REGISTER_X)]();
+    freeTemporaryRegister(opX);
 
+    refreshStack();
+  }
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot calculate the power of 2 of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fn2Pow:", errorMessage, NULL, NULL);
-    #endif
+    tenPowError();
   }
+}
 
-  refreshRegisterLine(REGISTER_X);
+
+
+void tenPowBigI(void) {
+  int16_t exponent;
+  bigInteger_t temp;
+
+  convertBigIntegerRegisterToBigInteger(opX, &temp);
+  exponent = (bigIntegerCompareUInt(&temp, 1234) == BIG_INTEGER_GREATER_THAN ? 1234 : temp.dp[0]);
+
+  uIntToBigInteger(10, &temp);
+  opY = allocateTemporaryRegister();
+  convertBigIntegerToBigIntegerRegister(&temp, opY);
+
+  uIntToBigInteger(exponent, &temp);
+  convertBigIntegerToBigIntegerRegister(&temp, opX);
+
+  powBigIBigI();
+
+  freeTemporaryRegister(opY);
+}
+
+
+
+void tenPowRe16(void) {
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+  real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
+
+  powRe16Re16();
+
+  freeTemporaryRegister(opY);
+}
+
+
+
+void tenPowCo16(void) {
+  tenPowToBeCoded();
+}
+
+
+
+void tenPowRm16(void) {
+  tenPowToBeCoded();
+}
+
+
+
+void tenPowCm16(void) {
+  tenPowToBeCoded();
+}
+
+
+
+void tenPowSmaI(void) {
+  *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int10pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
+}
+
+
+
+void tenPowRe34(void) {
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+  real16Copy(const34_10, REGISTER_REAL34_DATA(opY));
+
+  powRe34Re34();
+
+  freeTemporaryRegister(opY);
+}
+
+
+
+void tenPowCo34(void) {
+  tenPowToBeCoded();
 }

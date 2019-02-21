@@ -25,18 +25,18 @@
 void (* const power[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4         5            6            7            8            9            10            11           12
 //      V                Big integer  real16       complex16    angle34   Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {powBigIBigI, powRe16BigI, powCo16BigI, errorPow, errorPow,    errorPow,    errorPow,    powRm16BigI, powCm16BigI, powSmaIBigI,  powRe34BigI, powCo34BigI},
-/*  2 real16         */ {powBigIRe16, powRe16Re16, powCo16Re16, errorPow, errorPow,    errorPow,    errorPow,    powRm16Re16, powCm16Re16, powSmaIRe16,  powRe34Re16, powCo34Re16},
-/*  3 complex16      */ {powBigICo16, powRe16Co16, powCo16Co16, errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    powSmaICo16,  powRe34Co16, powCo34Co16},
-/*  4 angle34        */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
-/*  5 Time           */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
-/*  6 Date           */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
-/*  7 String         */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
-/*  8 real16 mat     */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
-/*  9 complex16 mat  */ {errorPow,    errorPow,    errorPow,    errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow,    errorPow,     errorPow,    errorPow   },
-/* 10 Small integer  */ {powBigISmaI, powRe16SmaI, powCo16SmaI, errorPow, errorPow,    errorPow,    errorPow,    powRm16SmaI, powCm16SmaI, powSmaISmaI,  powRe34SmaI, powCo34SmaI},
-/* 11 real34         */ {powBigIRe34, powRe16Re34, powCo16Re34, errorPow, errorPow,    errorPow,    errorPow,    powRm16Re34, powCm16Re34, powSmaIRe34,  powRe34Re34, powCo34Re34},
-/* 12 complex34      */ {powBigICo34, powRe16Co34, powCo16Co34, errorPow, errorPow,    errorPow,    errorPow,    errorPow,    errorPow   , powSmaICo34,  powRe34Co34, powCo34Co34}
+/*  1 Big integer    */ {powBigIBigI, powRe16BigI, powCo16BigI, powError, powError,    powError,    powError,    powRm16BigI, powCm16BigI, powSmaIBigI,  powRe34BigI, powCo34BigI},
+/*  2 real16         */ {powBigIRe16, powRe16Re16, powCo16Re16, powError, powError,    powError,    powError,    powRm16Re16, powCm16Re16, powSmaIRe16,  powRe34Re16, powCo34Re16},
+/*  3 complex16      */ {powBigICo16, powRe16Co16, powCo16Co16, powError, powError,    powError,    powError,    powError,    powError,    powSmaICo16,  powRe34Co16, powCo34Co16},
+/*  4 angle34        */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
+/*  5 Time           */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
+/*  6 Date           */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
+/*  7 String         */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
+/*  8 real16 mat     */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
+/*  9 complex16 mat  */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
+/* 10 Small integer  */ {powBigISmaI, powRe16SmaI, powCo16SmaI, powError, powError,    powError,    powError,    powRm16SmaI, powCm16SmaI, powSmaISmaI,  powRe34SmaI, powCo34SmaI},
+/* 11 real34         */ {powBigIRe34, powRe16Re34, powCo16Re34, powError, powError,    powError,    powError,    powRm16Re34, powCm16Re34, powSmaIRe34,  powRe34Re34, powCo34Re34},
+/* 12 complex34      */ {powBigICo34, powRe16Co34, powCo16Co34, powError, powError,    powError,    powError,    powError,    powError   , powSmaICo34,  powRe34Co34, powCo34Co34}
 };
 
 
@@ -47,7 +47,7 @@ void (* const power[12][12])(void) = {
  * \param[in] unusedParamButMandatory
  * \return void
  ***********************************************/
-void errorPow(void) {
+void powError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
@@ -82,7 +82,7 @@ void powToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnPower(uint16_t unusedParamButMandatory) {
-  if(power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorPow) {
+  if(power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != powError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -99,7 +99,7 @@ void fnPower(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorPow();
+    powError();
   }
 }
 

@@ -18,10 +18,9 @@
  * \file division.h
  ***********************************************/
 
-void divToBeCoded(void);
 void fnDivide    (uint16_t unusedParamButMandatory);
-
-void errorDiv    (void);
+void divError    (void);
+void divToBeCoded(void);
 
 //      RegYRegX
 void divBigIBigI (void);

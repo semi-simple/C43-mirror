@@ -18,10 +18,9 @@
  * \file power.h
  ***********************************************/
 
-void powToBeCoded(void);
 void fnPower     (uint16_t unusedParamButMandatory);
-
-void errorPow    (void);
+void powError    (void);
+void powToBeCoded(void);
 
 //      RegYRegX
 void powBigIBigI (void);

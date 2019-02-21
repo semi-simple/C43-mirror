@@ -18,6 +18,14 @@
  * \file 10pow.h
  ***********************************************/
 
-
-
-void fn10Pow(uint16_t unusedParamButMandatory);
+void fn10Pow        (uint16_t unusedParamButMandatory);
+void tenPowError    (void);
+void tenPowToBeCoded(void);
+void tenPowBigI     (void);
+void tenPowRe16     (void);
+void tenPowCo16     (void);
+void tenPowRm16     (void);
+void tenPowCm16     (void);
+void tenPowSmaI     (void);
+void tenPowRe34     (void);
+void tenPowCo34     (void);

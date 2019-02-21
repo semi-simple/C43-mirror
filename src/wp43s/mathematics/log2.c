@@ -25,7 +25,7 @@
 void (* const logBase2[12])(void) = {
 //  regX ==> 1            2          3          4           5           6           7           8           9            10             11         12
 //           Big integer  real16     complex16              Time        Date        String      real16 mat  complex16 m  Small integer  real34     complex34
-             log2BigI,    log2Re16,  log2Co16,  errorLog2,  errorLog2,  errorLog2,  errorLog2,  log2Rm16,   log2Cm16,    log2SmaI,      log2Re34,  log2Co34
+             log2BigI,    log2Re16,  log2Co16,  log2Error,  log2Error,  log2Error,  log2Error,  log2Rm16,   log2Cm16,    log2SmaI,      log2Re34,  log2Co34
 };
 
 
@@ -36,7 +36,7 @@ void (* const logBase2[12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorLog2(void) {
+void log2Error(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate log2 for %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -69,7 +69,7 @@ void log2ToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnLog2(uint16_t unusedParamButMandatory) {
-  if(logBase2[getRegisterDataType(REGISTER_X)] != errorLog2) {
+  if(logBase2[getRegisterDataType(REGISTER_X)] != log2Error) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -82,7 +82,7 @@ void fnLog2(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorLog2();
+    log2Error();
   }
 }
 

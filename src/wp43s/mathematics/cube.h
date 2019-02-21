@@ -19,4 +19,4 @@
  ***********************************************/
 
 void fnCube   (uint16_t unusedParamButMandatory);
-void errorCube(void);
+void cubeError(void);

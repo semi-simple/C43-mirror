@@ -19,7 +19,7 @@
  ***********************************************/
 
 void fnLn   (uint16_t unusedParamButMandatory);
-void errorLn(void);
+void lnError(void);
 void lnBigI (void);
 void lnRe16 (void);
 void lnCo16 (void);

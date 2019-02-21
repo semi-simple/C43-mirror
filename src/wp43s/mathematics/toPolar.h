@@ -18,8 +18,6 @@
  * \file toPolar.h
  ***********************************************/
 
-
-
 void fnToPolar               (uint16_t unusedParamButMandatory);
 void real16RectangularToPolar(const real16_t *real16, const real16_t *imag16,  real16_t *magnitude16, real16_t *theta16); // theta16 in internal units
 void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34,  real34_t *magnitude34, real34_t *theta34); // theta34 in internal units

@@ -24,8 +24,8 @@
 
 void (* const ln[12])(void) = {
 //  regX ==> 1            2        3          4         5         6         7         8           9            10             11       12
-//           Big integer  real16   complex16            Time      Date      String    real16 mat  complex16 m  Small integer  real34   complex34
-             lnBigI,      lnRe16,  lnCo16,    errorLn,  errorLn,  errorLn,  errorLn,  lnRm16,     lnCm16,      lnSmaI,        lnRe34,  lnCo34
+//           Big integer  real16   complex16  Angle     Time      Date      String    real16 mat  complex16 m  Small integer  real34   complex34
+             lnBigI,      lnRe16,  lnCo16,    lnError,  lnError,  lnError,  lnError,  lnRm16,     lnCm16,      lnSmaI,        lnRe34,  lnCo34
 };
 
 
@@ -36,7 +36,7 @@ void (* const ln[12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorLn(void) {
+void lnError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Ln for %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -69,7 +69,7 @@ void lnToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnLn(uint16_t unusedParamButMandatory) {
-  if(ln[getRegisterDataType(REGISTER_X)] != errorLn) {
+  if(ln[getRegisterDataType(REGISTER_X)] != lnError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -82,7 +82,7 @@ void fnLn(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorLn();
+    lnError();
   }
 }
 

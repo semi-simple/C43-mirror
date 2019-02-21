@@ -1486,7 +1486,7 @@ void fnStoreAdd(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != errorAdd) {
+    if(addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != addError) {
       result = regist;
       opY    = allocateTemporaryRegister();
       opX    = allocateTemporaryRegister();
@@ -1500,7 +1500,7 @@ void fnStoreAdd(uint16_t r) {
       refreshStack();
     }
     else {
-     errorAdd();
+     addError();
     }
   }
   #ifdef PC_BUILD
@@ -1523,7 +1523,7 @@ void fnStoreSub(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != errorSub) {
+    if(subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != subError) {
       result = regist;
       opY    = allocateTemporaryRegister();
       opX    = allocateTemporaryRegister();
@@ -1537,7 +1537,7 @@ void fnStoreSub(uint16_t r) {
       refreshStack();
     }
     else {
-      errorSub();
+      subError();
     }
   }
   #ifdef PC_BUILD
@@ -1560,7 +1560,7 @@ void fnStoreMult(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != errorMul) {
+    if(multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != mulError) {
       result = regist;
       opY    = allocateTemporaryRegister();
       opX    = allocateTemporaryRegister();
@@ -1574,7 +1574,7 @@ void fnStoreMult(uint16_t r) {
       refreshStack();
     }
     else {
-      errorMul();
+      mulError();
     }
   }
   #ifdef PC_BUILD
@@ -1597,7 +1597,7 @@ void fnStoreDiv(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)   {
-    if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != errorDiv)     {
+    if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != divError)     {
       result = regist;
       opY    = allocateTemporaryRegister();
       opX    = allocateTemporaryRegister();
@@ -1611,7 +1611,7 @@ void fnStoreDiv(uint16_t r) {
       refreshStack();
     }
     else {
-      errorDiv();
+      divError();
     }
   }
   #ifdef PC_BUILD
@@ -1690,7 +1690,7 @@ void fnRecallAdd(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(addition[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != errorAdd) {
+    if(addition[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != addError) {
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
       result = REGISTER_X;
@@ -1706,7 +1706,7 @@ void fnRecallAdd(uint16_t r) {
       refreshStack();
     }
     else {
-      errorAdd();
+      addError();
     }
   }
   #ifdef PC_BUILD
@@ -1729,7 +1729,7 @@ void fnRecallSub(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(subtraction[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != errorSub) {
+    if(subtraction[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != subError) {
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
       result = REGISTER_X;
@@ -1745,7 +1745,7 @@ void fnRecallSub(uint16_t r) {
       refreshStack();
     }
     else {
-      errorSub();
+      subError();
     }
   }
   #ifdef PC_BUILD
@@ -1768,7 +1768,7 @@ void fnRecallMult(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(multiplication[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != errorMul) {
+    if(multiplication[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != mulError) {
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
       result = REGISTER_X;
@@ -1784,7 +1784,7 @@ void fnRecallMult(uint16_t r) {
       refreshStack();
     }
     else {
-      errorMul();
+      mulError();
     }
   }
   #ifdef PC_BUILD
@@ -1807,7 +1807,7 @@ void fnRecallDiv(uint16_t r) {
   calcRegister_t regist = r;
 
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(division[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != errorDiv) {
+    if(division[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != divError) {
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
       result = REGISTER_X;
@@ -1823,7 +1823,7 @@ void fnRecallDiv(uint16_t r) {
       refreshStack();
     }
     else {
-      errorDiv();
+      divError();
     }
   }
   #ifdef PC_BUILD

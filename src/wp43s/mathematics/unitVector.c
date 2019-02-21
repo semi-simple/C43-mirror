@@ -25,7 +25,7 @@
 void (* const unitVector[12])(void) = {
 //  regX ==> 1                2                3               4                5                6                7                8                9                10               11               12
 //           Big integer      real16           complex16       Date             Time             Date             String           real16 mat       complex16 m      Small integer    real34           complex34
-             errorUnitVector, errorUnitVector, unitVectorCo16, errorUnitVector, errorUnitVector, errorUnitVector, errorUnitVector, errorUnitVector, errorUnitVector, errorUnitVector, errorUnitVector, unitVectorCo34
+             unitVectorError, unitVectorError, unitVectorCo16, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorCo34
 };
 
 
@@ -36,7 +36,7 @@ void (* const unitVector[12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorUnitVector(void) {
+void unitVectorError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate the unit vector of %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -54,7 +54,7 @@ void errorUnitVector(void) {
  * \return void
  ***********************************************/
 void fnUnitVector(uint16_t unusedParamButMandatory) {
-  if(unitVector[getRegisterDataType(REGISTER_X)] != errorSign) {
+  if(unitVector[getRegisterDataType(REGISTER_X)] != unitVectorError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -67,7 +67,7 @@ void fnUnitVector(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorSign();
+    unitVectorError();
   }
 }
 

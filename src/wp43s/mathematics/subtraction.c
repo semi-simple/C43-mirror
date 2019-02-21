@@ -25,18 +25,18 @@
 void (* const subtraction[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
 //      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {subBigIBigI, subRe16BigI, subCo16BigI, subAnglBigI, subTimeBigI, subDateBigI, errorSub,    errorSub,    errorSub,    subSmaIBigI,  subRe34BigI, subCo34BigI},
-/*  2 real16         */ {subBigIRe16, subRe16Re16, subCo16Re16, subAnglRe16, subTimeRe16, subDateRe16, errorSub,    errorSub,    errorSub,    subSmaIRe16,  subRe34Re16, subCo34Re16},
-/*  3 complex16      */ {subBigICo16, subRe16Co16, subCo16Co16, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaICo16,  subRe34Co16, subCo34Co16},
-/*  4 angle34        */ {subBigIAngl, subRe16Angl, errorSub,    subAnglAngl, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaIAngl,  subRe34Angl, errorSub   },
-/*  5 Time           */ {subBigITime, subRe16Time, errorSub,    errorSub,    subTimeTime, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,     subRe34Time, errorSub   },
-/*  6 Date           */ {subBigIDate, subRe16Date, errorSub,    errorSub,    errorSub,    subDateDate, errorSub,    errorSub,    errorSub,    errorSub,     subRe34Date, errorSub   },
-/*  7 String         */ {errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,     errorSub,    errorSub   },
-/*  8 real16 mat     */ {errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subRm16Rm16, subCm16Rm16, errorSub,     errorSub,    errorSub   },
-/*  9 complex16 mat  */ {errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subRm16Cm16, subCm16Cm16, errorSub,     errorSub,    errorSub   },
-/* 10 Small integer  */ {subBigISmaI, subRe16SmaI, subCo16SmaI, subAnglSmaI, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaISmaI,  subRe34SmaI, subCo34SmaI},
-/* 11 real34         */ {subBigIRe34, subRe16Re34, subCo16Re34, subAnglRe34, subTimeRe34, subDateRe34, errorSub,    errorSub,    errorSub,    subSmaIRe34,  subRe34Re34, subCo34Re34},
-/* 12 complex34      */ {subBigICo34, subRe16Co34, subCo16Co34, errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    errorSub,    subSmaICo34,  subRe34Co34, subCo34Co34}
+/*  1 Big integer    */ {subBigIBigI, subRe16BigI, subCo16BigI, subAnglBigI, subTimeBigI, subDateBigI, subError,    subError,    subError,    subSmaIBigI,  subRe34BigI, subCo34BigI},
+/*  2 real16         */ {subBigIRe16, subRe16Re16, subCo16Re16, subAnglRe16, subTimeRe16, subDateRe16, subError,    subError,    subError,    subSmaIRe16,  subRe34Re16, subCo34Re16},
+/*  3 complex16      */ {subBigICo16, subRe16Co16, subCo16Co16, subError,    subError,    subError,    subError,    subError,    subError,    subSmaICo16,  subRe34Co16, subCo34Co16},
+/*  4 angle34        */ {subBigIAngl, subRe16Angl, subError,    subAnglAngl, subError,    subError,    subError,    subError,    subError,    subSmaIAngl,  subRe34Angl, subError   },
+/*  5 Time           */ {subBigITime, subRe16Time, subError,    subError,    subTimeTime, subError,    subError,    subError,    subError,    subError,     subRe34Time, subError   },
+/*  6 Date           */ {subBigIDate, subRe16Date, subError,    subError,    subError,    subDateDate, subError,    subError,    subError,    subError,     subRe34Date, subError   },
+/*  7 String         */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,     subError,    subError   },
+/*  8 real16 mat     */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Rm16, subCm16Rm16, subError,     subError,    subError   },
+/*  9 complex16 mat  */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Cm16, subCm16Cm16, subError,     subError,    subError   },
+/* 10 Small integer  */ {subBigISmaI, subRe16SmaI, subCo16SmaI, subAnglSmaI, subError,    subError,    subError,    subError,    subError,    subSmaISmaI,  subRe34SmaI, subCo34SmaI},
+/* 11 real34         */ {subBigIRe34, subRe16Re34, subCo16Re34, subAnglRe34, subTimeRe34, subDateRe34, subError,    subError,    subError,    subSmaIRe34,  subRe34Re34, subCo34Re34},
+/* 12 complex34      */ {subBigICo34, subRe16Co34, subCo16Co34, subError,    subError,    subError,    subError,    subError,    subError,    subSmaICo34,  subRe34Co34, subCo34Co34}
 };
 
 
@@ -47,7 +47,7 @@ void (* const subtraction[12][12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorSub(void) {
+void subError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot subtract %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -82,7 +82,7 @@ void subToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnSubtract(uint16_t unusedParamButMandatory) {
-  if(subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorSub) {
+  if(subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != subError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -99,7 +99,7 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorSub();
+    subError();
   }
 }
 

@@ -22,71 +22,202 @@
 
 
 
-void fnLnGamma(uint16_t unusedParamButMandatory) {
-  bool_t real16 = false;
+void (* const gamma[12])(void) = {
+// regX ==> 1             2             3             4              5              6              7              8              9              10             11           12
+//          Big integer   real16        complex16     Date           Time           Date           String         real16 mat     complex16 m    Small integer  real34       complex34
+            gammaBigI,    gammaRe16,    gammaCo16,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaRe34,   gammaCo34
+};
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+void (* const lnGamma[12])(void) = {
+// regX ==> 1             2             3             4              5              6              7              8              9              10             11           12
+//          Big integer   real16        complex16     Date           Time           Date           String         real16 mat     complex16 m    Small integer  real34       complex34
+            lnGammaBigI,  lnGammaRe16,  lnGammaCo16,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaRe34, lnGammaCo34
+};
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    real16 = true;
-  }
 
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
-    real16 = true;
-  }
 
-  else if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot calculate ln" STD_GAMMA " of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fnLnGamma:", errorMessage, NULL, NULL);
-    #endif
-    return;
-  }
-
-  WP34S_real34LnGamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-
-  if(real16) {
-   convertRegister34To16(REGISTER_X);
-  }
-
-  refreshRegisterLine(REGISTER_X);
+/********************************************//**
+ * \brief Data type error in gamma
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void gammaError(void) {
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate gamma(%s)", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnGamma:", errorMessage, NULL, NULL);
+  #endif
 }
 
 
 
+/********************************************//**
+ * \brief Data type error in lnGamma
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void lnGammaError(void) {
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate lnGamma(%s)", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnLnGamma:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Error message for a valid operation to be coded
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void gammaToBeCoded(void) {
+  #ifdef PC_BUILD
+    sprintf(errorMessage, "gamma(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
+    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Error message for a valid operation to be coded
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void lnGammaToBeCoded(void) {
+  #ifdef PC_BUILD
+    sprintf(errorMessage, "lnGamma(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
+    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief regX ==> regL and gamma(regX) ==> regX
+ * enables stack lift and refreshes the stack
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
 void fnGamma(uint16_t unusedParamButMandatory) {
-  bool_t real16 = false;
+  if(gamma[getRegisterDataType(REGISTER_X)] != gammaError) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    result = REGISTER_X;
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    real16 = true;
+    gamma[getRegisterDataType(REGISTER_X)]();
+    freeTemporaryRegister(opX);
+
+    refreshStack();
   }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
-    real16 = true;
+  else {
+    gammaError();
   }
+}
 
-  else if(getRegisterDataType(REGISTER_X) != dtReal34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot calculate " STD_GAMMA " of %s!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fnGamma:", errorMessage, NULL, NULL);
-    #endif
 
-    return;
+
+/********************************************//**
+ * \brief regX ==> regL and lnGamma(regX) ==> regX
+ * enables stack lift and refreshes the stack
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnLnGamma(uint16_t unusedParamButMandatory) {
+  if(lnGamma[getRegisterDataType(REGISTER_X)] != lnGammaError) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    result = REGISTER_X;
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
+
+    lnGamma[getRegisterDataType(REGISTER_X)]();
+    freeTemporaryRegister(opX);
+
+    refreshStack();
   }
-
-  WP34S_real34Gamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-
-  if(real16) {
-    convertRegister34To16(REGISTER_X);
+  else {
+    lnGammaError();
   }
+}
 
-  refreshRegisterLine(REGISTER_X);
+
+
+void gammaBigI(void) {
+  convertBigIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  WP34S_real34Gamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  convertRegister34To16(result);
+}
+
+
+
+void lnGammaBigI(void) {
+  convertBigIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  WP34S_real34LnGamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  convertRegister34To16(result);
+}
+
+
+
+void gammaRe16(void) {
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  WP34S_real34Gamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  convertRegister34To16(result);
+}
+
+
+
+void lnGammaRe16(void) {
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  WP34S_real34LnGamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  convertRegister34To16(result);
+}
+
+
+
+void gammaCo16(void) {
+  gammaToBeCoded();
+}
+
+
+
+void lnGammaCo16(void) {
+  lnGammaToBeCoded();
+}
+
+
+
+void gammaRe34(void) {
+  WP34S_real34Gamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+}
+
+
+
+void lnGammaRe34(void) {
+  WP34S_real34LnGamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+}
+
+
+
+void gammaCo34(void) {
+  gammaToBeCoded();
+}
+
+
+
+void lnGammaCo34(void) {
+  lnGammaToBeCoded();
 }

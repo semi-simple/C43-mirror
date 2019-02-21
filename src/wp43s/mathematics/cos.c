@@ -23,9 +23,9 @@
 
 
 void (* const Cos[12])(void) = {
-//  regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//           Big integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
-             cosBigI,     cosRe16,  cosCo16,   cosAngl,  errorCos,  errorCos,  errorCos,  cosRm16,     cosCm16,      errorCos,       cosRe34,  cosCo34
+// regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
+//          Big integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
+            cosBigI,     cosRe16,  cosCo16,   cosAngl,  cosError,  cosError,  cosError,  cosRm16,     cosCm16,      cosError,       cosRe34,  cosCo34
 };
 
 
@@ -36,7 +36,7 @@ void (* const Cos[12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorCos(void) {
+void cosError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -69,7 +69,7 @@ void cosToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnCos(uint16_t unusedParamButMandatory) {
-  if(Cos[getRegisterDataType(REGISTER_X)] != errorCos) {
+  if(Cos[getRegisterDataType(REGISTER_X)] != cosError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -82,7 +82,7 @@ void fnCos(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorCos();
+    cosError();
   }
 }
 

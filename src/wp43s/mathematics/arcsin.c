@@ -25,7 +25,7 @@
 void (* const arcsin[12])(void) = {
 // regX ==> 1            2            3            4             5             6             7             8               9            10             11           12
 //          Big integer  real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Small integer  real34       complex34
-            arcsinBigI,  arcsinRe16,  arcsinCo16,  errorArcsin,  errorArcsin,  errorArcsin,  errorArcsin,  arcsinRm16,     arcsinCm16,  errorArcsin,   arcsinRe34,  arcsinCo34
+            arcsinBigI,  arcsinRe16,  arcsinCo16,  arcsinError,  arcsinError,  arcsinError,  arcsinError,  arcsinRm16,     arcsinCm16,  arcsinError,   arcsinRe34,  arcsinCo34
 };
 
 
@@ -36,7 +36,7 @@ void (* const arcsin[12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorArcsin(void) {
+void arcsinError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arcsin for %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -69,7 +69,7 @@ void arcsinToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnArcsin(uint16_t unusedParamButMandatory) {
-  if(arcsin[getRegisterDataType(REGISTER_X)] != errorArcsin) {
+  if(arcsin[getRegisterDataType(REGISTER_X)] != arcsinError) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
@@ -87,7 +87,7 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorArcsin();
+    arcsinError();
   }
 }
 

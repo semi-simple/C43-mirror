@@ -25,7 +25,7 @@
 void (* const cube[12])(void) = {
 // regX ==> 1             2             3             4           5           6           7           8             9             10             11            12
 //          Big integer   real16        complex16     Angle       Time        Angle       String      real16 mat    complex16 m   Small integer  real34        complex34
-            mulBigIBigI,  mulRe16Re16,  mulCo16Co16,  errorCube,  errorCube,  errorCube,  errorCube,  mulRm16Rm16,  mulCm16Cm16,  mulSmaISmaI,   mulRe34Re34,  mulCo34Co34
+            mulBigIBigI,  mulRe16Re16,  mulCo16Co16,  cubeError,  cubeError,  cubeError,  cubeError,  mulRm16Rm16,  mulCm16Cm16,  mulSmaISmaI,   mulRe34Re34,  mulCo34Co34
 };
 
 
@@ -36,7 +36,7 @@ void (* const cube[12])(void) = {
  * \param[in] unusedParamButMandatory
  * \return void
  ***********************************************/
-void errorCube(void) {
+void cubeError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot cube %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -54,7 +54,7 @@ void errorCube(void) {
  * \return void
  ***********************************************/
 void fnCube(uint16_t unusedParamButMandatory) {
-  if(cube[getRegisterDataType(REGISTER_X)] != errorCube) {
+  if(cube[getRegisterDataType(REGISTER_X)] != cubeError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -75,6 +75,6 @@ void fnCube(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorCube();
+    cubeError();
   }
 }

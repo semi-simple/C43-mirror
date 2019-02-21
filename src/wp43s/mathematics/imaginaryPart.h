@@ -18,4 +18,9 @@
  * \file imaginaryPart.h
  ***********************************************/
 
-void fnImaginaryPart(uint16_t unusedParamButMandatory);
+void fnImaginaryPart  (uint16_t unusedParamButMandatory);
+void imagPartError    (void);
+void imagPartToBeCoded(void);
+void imagPartCo16     (void);
+void imagPartCm16     (void);
+void imagPartCo34     (void);

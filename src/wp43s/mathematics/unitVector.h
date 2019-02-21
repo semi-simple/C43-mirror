@@ -18,7 +18,7 @@
  * \file unitVector.h
  ***********************************************/
 
-void fnUnitVector(uint16_t unusedParamButMandatory);
-void errorUnitVector(void);
+void fnUnitVector   (uint16_t unusedParamButMandatory);
+void unitVectorError(void);
 void unitVectorCo16 (void);
 void unitVectorCo34 (void);

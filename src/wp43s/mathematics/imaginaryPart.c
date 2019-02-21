@@ -22,35 +22,85 @@
 
 
 
+void (* const imagPart[12])(void) = {
+// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12
+//          Big integer    real16         complex16     Date           Time           Date           String         real16 mat     complex16 m   Small integer  real34         complex34
+            imagPartError, imagPartError, imagPartCo16, imagPartError, imagPartError, imagPartError, imagPartError, imagPartError, imagPartCm16, imagPartError, imagPartError, imagPartCo34
+};
+
+
+
 /********************************************//**
- * \brief Returns the imaginary part of a complex or a complex matrix
+ * \brief Data type error in Im
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void imagPartError(void) {
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate Im for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnImaginaryPart:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Error message for a valid operation to be coded
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void imagPartToBeCoded(void) {
+  #ifdef PC_BUILD
+    sprintf(errorMessage, "Im(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
+    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief regX ==> regL and Im(regX) ==> regX
+ * enables stack lift and refreshes the stack
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fnImaginaryPart(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtComplex16) {
+  if(imagPart[getRegisterDataType(REGISTER_X)] != imagPartError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
-    real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
+
+    result = REGISTER_X;
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
+
+    imagPart[getRegisterDataType(REGISTER_X)]();
+    freeTemporaryRegister(opX);
+
     refreshStack();
   }
-  else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
-    real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
-    refreshStack();
-  }
-  #ifdef PC_BUILD
-  else if(getRegisterDataType(REGISTER_X) == dtComplex16Matrix) {
-    showInfoDialog("In function fnImaginaryPart:", "Im for a complex matrix:", "to be coded", NULL);
-  }
-  #endif
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Im doesn't work on %s!", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnImaginaryPart:", errorMessage, NULL, NULL);
-    #endif
+    imagPartError();
   }
+}
+
+
+
+void imagPartCo16(void) {
+  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+  real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result));
+}
+
+
+
+void imagPartCm16(void) {
+  imagPartToBeCoded();
+}
+
+
+void imagPartCo34(void) {
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
 }

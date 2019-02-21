@@ -18,4 +18,11 @@
  * \file gcd.h
  ***********************************************/
 
-void fnGcd(uint16_t unusedParamButMandatory);
+void fnGcd       (uint16_t unusedParamButMandatory);
+void gcdError    (void);
+
+//      RegYRegX
+void gcdBigIBigI(void);
+void gcdBigISmaI(void);
+void gcdSmaIBigI(void);
+void gcdSmaISmaI(void);

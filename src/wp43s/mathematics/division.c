@@ -25,18 +25,18 @@
 void (* const division[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
 //      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {divBigIBigI, divRe16BigI, divCo16BigI, divAnglBigI, divTimeBigI, errorDiv,    errorDiv,    divRm16BigI, divCm16BigI, divSmaIBigI,  divRe34BigI, divCo34BigI},
-/*  2 real16         */ {divBigIRe16, divRe16Re16, divCo16Re16, divAnglRe16, divTimeRe16, errorDiv,    errorDiv,    divRm16Re16, divCm16Re16, divSmaIRe16,  divRe34Re16, divCo34Re16},
-/*  3 complex16      */ {divBigICo16, divRe16Co16, divCo16Co16, errorDiv,    errorDiv,    errorDiv,    errorDiv,    divRm16Co16, divCm16Co16, divSmaICo16,  divRe34Co16, divCo34Co16},
-/*  4 angle34        */ {errorDiv,    errorDiv,    errorDiv,    divAnglAngl, errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  5 Time           */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  6 Date           */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  7 String         */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  8 real16 mat     */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/*  9 complex16 mat  */ {errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,    errorDiv,     errorDiv,    errorDiv   },
-/* 10 Small integer  */ {divBigISmaI, divRe16SmaI, divCo16SmaI, divAnglSmaI, divTimeSmaI, errorDiv,    errorDiv,    divRm16SmaI, divCm16SmaI, divSmaISmaI,  divRe34SmaI, divCo34SmaI},
-/* 11 real34         */ {divBigIRe34, divRe16Re34, divCo16Re34, divAnglRe34, divTimeRe34, errorDiv,    errorDiv,    divRm16Re34, divCm16Re34, divSmaIRe34,  divRe34Re34, divCo34Re34},
-/* 12 complex34      */ {divBigICo34, divRe16Co34, divCo16Co34, errorDiv,    errorDiv,    errorDiv,    errorDiv,    divRm16Co34, divCm16Co34, divSmaICo34,  divRe34Co34, divCo34Co34}
+/*  1 Big integer    */ {divBigIBigI, divRe16BigI, divCo16BigI, divAnglBigI, divTimeBigI, divError,    divError,    divRm16BigI, divCm16BigI, divSmaIBigI,  divRe34BigI, divCo34BigI},
+/*  2 real16         */ {divBigIRe16, divRe16Re16, divCo16Re16, divAnglRe16, divTimeRe16, divError,    divError,    divRm16Re16, divCm16Re16, divSmaIRe16,  divRe34Re16, divCo34Re16},
+/*  3 complex16      */ {divBigICo16, divRe16Co16, divCo16Co16, divError,    divError,    divError,    divError,    divRm16Co16, divCm16Co16, divSmaICo16,  divRe34Co16, divCo34Co16},
+/*  4 angle34        */ {divError,    divError,    divError,    divAnglAngl, divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
+/*  5 Time           */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
+/*  6 Date           */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
+/*  7 String         */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
+/*  8 real16 mat     */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
+/*  9 complex16 mat  */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
+/* 10 Small integer  */ {divBigISmaI, divRe16SmaI, divCo16SmaI, divAnglSmaI, divTimeSmaI, divError,    divError,    divRm16SmaI, divCm16SmaI, divSmaISmaI,  divRe34SmaI, divCo34SmaI},
+/* 11 real34         */ {divBigIRe34, divRe16Re34, divCo16Re34, divAnglRe34, divTimeRe34, divError,    divError,    divRm16Re34, divCm16Re34, divSmaIRe34,  divRe34Re34, divCo34Re34},
+/* 12 complex34      */ {divBigICo34, divRe16Co34, divCo16Co34, divError,    divError,    divError,    divError,    divRm16Co34, divCm16Co34, divSmaICo34,  divRe34Co34, divCo34Co34}
 };
 
 
@@ -47,7 +47,7 @@ void (* const division[12][12])(void) = {
  * \param[in] unusedParamButMandatory
  * \return void
  ***********************************************/
-void errorDiv(void) {
+void divError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot divide %s", getRegisterDataTypeName(REGISTER_Y, true, false));
@@ -82,7 +82,8 @@ void divToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnDivide(uint16_t unusedParamButMandatory) {
-  if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorDiv) {
+  if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != divError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -90,8 +91,6 @@ void fnDivide(uint16_t unusedParamButMandatory) {
     opX    = allocateTemporaryRegister();
     copySourceRegisterToDestRegister(REGISTER_Y, opY);
     copySourceRegisterToDestRegister(REGISTER_X, opX);
-
-    saveStack();
 
     division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
     freeTemporaryRegister(opY);
@@ -107,7 +106,7 @@ void fnDivide(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorDiv();
+    divError();
   }
 }
 

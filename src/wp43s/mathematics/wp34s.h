@@ -22,14 +22,14 @@
  * This functions are borrowed from the WP34S project
  ******************************************************/
 
-void   WP34S_cvt_2rad_sincos      (real34_t *sin, real34_t *cos, const real34_t *angle); // angle in internal units
-void   WP34S_sincosTaylor         (const real34_t *angle, real34_t *sinOut, real34_t *cosOut); // angle in radian
-void   WP34S_do_atan              (const real34_t *x, real34_t *angle);
-void   WP34S_do_atan2             (const real34_t *y, const real34_t *x, real34_t *angle);
-void   WP34S_do_asin              (const real34_t *x, real34_t *angle);
-void   WP34S_do_acos              (const real34_t *x, real34_t *angle);
-void   WP34S_real34Factorial      (const real34_t *x, real34_t *res);
-void   WP34S_real34LnGamma        (const real34_t *x, real34_t *res);
-void   WP34S_real34Gamma          (const real34_t *x, real34_t *res);
-void   WP34S_real51Ln             (const real51_t *x, real51_t *res);
-bool_t WP34S_relative_error       (const real51_t *x, const real51_t *y, const real51_t *tol);
+void   WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle); // angle in internal units
+void   WP34S_sincosTaylor   (const real34_t *angle, real34_t *sinOut, real34_t *cosOut); // angle in radian
+void   WP34S_do_atan        (const real34_t *x, real34_t *angle);
+void   WP34S_do_atan2       (const real34_t *y, const real34_t *x, real34_t *angle);
+void   WP34S_do_asin        (const real34_t *x, real34_t *angle);
+void   WP34S_do_acos        (const real34_t *x, real34_t *angle);
+void   WP34S_real34Factorial(const real34_t *x, real34_t *res);
+void   WP34S_real34LnGamma  (const real34_t *x, real34_t *res);
+void   WP34S_real34Gamma    (const real34_t *x, real34_t *res);
+void   WP34S_real51Ln       (const real51_t *x, real51_t *res);
+bool_t WP34S_relative_error (const real51_t *x, const real51_t *y, const real51_t *tol);

@@ -22,35 +22,85 @@
 
 
 
+void (* const realPart[12])(void) = {
+// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12
+//          Big integer    real16         complex16     Date           Time           Date           String         real16 mat     complex16 m   Small integer  real34         complex34
+            realPartError, realPartError, realPartCo16, realPartError, realPartError, realPartError, realPartError, realPartError, realPartCm16, realPartError, realPartError, realPartCo34
+};
+
+
+
 /********************************************//**
- * \brief Returns the real part of a complex or a complex matrix
+ * \brief Data type error in Re
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void realPartError(void) {
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate Re for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnRealPart:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Error message for a valid operation to be coded
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void realPartToBeCoded(void) {
+  #ifdef PC_BUILD
+    sprintf(errorMessage, "Re(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
+    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief regX ==> regL and Re(regX) ==> regX
+ * enables stack lift and refreshes the stack
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fnRealPart(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtComplex16) {
+  if(realPart[getRegisterDataType(REGISTER_X)] != realPartError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
-    real16Copy(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
+
+    result = REGISTER_X;
+    opX    = allocateTemporaryRegister();
+    copySourceRegisterToDestRegister(REGISTER_X, opX);
+
+    realPart[getRegisterDataType(REGISTER_X)]();
+    freeTemporaryRegister(opX);
+
     refreshStack();
   }
-  else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
-    real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
-    refreshStack();
-  }
-  #ifdef PC_BUILD
-  else if(getRegisterDataType(REGISTER_X) == dtComplex16Matrix) {
-    showInfoDialog("In function fnRealPart:", "Re for a complex matrix:", "to be coded", NULL);
-  }
-  #endif
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Re doesn't work on %s!", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnRealPart:", errorMessage, NULL, NULL);
-    #endif
+    realPartError();
   }
+}
+
+
+
+void realPartCo16(void) {
+  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+  real16Copy(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+}
+
+
+
+void realPartCm16(void) {
+  realPartToBeCoded();
+}
+
+
+void realPartCo34(void) {
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }

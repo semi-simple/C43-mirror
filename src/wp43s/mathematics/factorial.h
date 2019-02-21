@@ -18,6 +18,12 @@
  * \file factorial.h
  ***********************************************/
 
-
-
-void fnFactorial(uint16_t unusedParamButMandatory);
+void fnFactorial  (uint16_t unusedParamButMandatory);
+void factError    (void);
+void factToBeCoded(void);
+void factBigI     (void);
+void factRe16     (void);
+void factCo16     (void);
+void factSmaI     (void);
+void factRe34     (void);
+void factCo34     (void);

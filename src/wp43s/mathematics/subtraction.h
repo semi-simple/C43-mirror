@@ -18,11 +18,10 @@
  * \file subtraction.h
  ***********************************************/
 
-void subToBeCoded(void);
 void fnSubtract  (uint16_t unusedParamButMandatory);
 void fnChangeSign(uint16_t unusedParamButMandatory);
-
-void errorSub    (void);
+void subError    (void);
+void subToBeCoded(void);
 
 //      RegYRegX
 void subBigIBigI (void);

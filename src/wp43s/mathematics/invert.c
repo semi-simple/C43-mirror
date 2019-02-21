@@ -25,7 +25,7 @@
 void (* const invert[12])(void) = {
 // regX ==> 1            2            3            4            5            6            7            8           9             10             11           12
 //          Big integer  real16       complex16    Date         Time         Date         String       real16 mat  complex16 m   Small integer  real34       complex34
-            invertBigI,  divRe16Re16, divRe16Co16, errorInvert, errorInvert, errorInvert, errorInvert, invertRm16, invertCm16,   errorInvert,   divRe16Re34, divRe16Co34
+            invertBigI,  divRe16Re16, divRe16Co16, invertError, invertError, invertError, invertError, invertRm16, invertCm16,   invertError,   divRe16Re34, divRe16Co34
 };
 
 
@@ -36,7 +36,7 @@ void (* const invert[12])(void) = {
  * \param[in] unusedParamButMandatory
  * \return void
  ***********************************************/
-void errorInvert(void) {
+void invertError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -69,7 +69,7 @@ void invertToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnInvert(uint16_t unusedParamButMandatory) {
-  if(invert[getRegisterDataType(REGISTER_X)] != errorInvert) {
+  if(invert[getRegisterDataType(REGISTER_X)] != invertError) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
@@ -91,7 +91,7 @@ void fnInvert(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorInvert();
+    invertError();
   }
 }
 

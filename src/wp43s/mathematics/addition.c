@@ -25,18 +25,18 @@
 void (* const addition[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
 //      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {addBigIBigI, addRe16BigI, addCo16BigI, addAnglBigI, addTimeBigI, addDateBigI, addStriBigI, errorAdd,    errorAdd,    addSmaIBigI,  addRe34BigI, addCo34BigI},
-/*  2 real16         */ {addBigIRe16, addRe16Re16, addCo16Re16, addAnglRe16, addTimeRe16, addDateRe16, addStriRe16, errorAdd,    errorAdd,    addSmaIRe16,  addRe34Re16, addCo34Re16},
-/*  3 complex16      */ {addBigICo16, addRe16Co16, addCo16Co16, errorAdd,    errorAdd,    errorAdd,    addStriCo16, errorAdd,    errorAdd,    addSmaICo16,  addRe34Co16, addCo34Co16},
-/*  4 angle34        */ {addBigIAngl, addRe16Angl, errorAdd,    addAnglAngl, errorAdd,    errorAdd,    addStriAngl, errorAdd,    errorAdd,    addSmaIAngl,  addRe34Angl, errorAdd   },
-/*  5 Time           */ {addBigITime, addRe16Time, errorAdd,    errorAdd,    addTimeTime, errorAdd,    addStriTime, errorAdd,    errorAdd,    errorAdd,     addRe34Time, errorAdd   },
-/*  6 Date           */ {addBigIDate, addRe16Date, errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriDate, errorAdd,    errorAdd,    errorAdd,     addRe34Date, errorAdd   },
-/*  7 String         */ {errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriStri, errorAdd,    errorAdd,    errorAdd,     errorAdd,    errorAdd   },
-/*  8 real16 mat     */ {errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriRm16, addRm16Rm16, addCm16Rm16, errorAdd,     errorAdd,    errorAdd   },
-/*  9 complex16 mat  */ {errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    errorAdd,    addStriCm16, addRm16Cm16, addCm16Cm16, errorAdd,     errorAdd,    errorAdd   },
-/* 10 Small integer  */ {addBigISmaI, addRe16SmaI, addCo16SmaI, addAnglSmaI, errorAdd,    errorAdd,    addStriSmaI, errorAdd,    errorAdd,    addSmaISmaI,  addRe34SmaI, addCo34SmaI},
-/* 11 real34         */ {addBigIRe34, addRe16Re34, addCo16Re34, addAnglRe34, addTimeRe34, addDateRe34, addStriRe34, errorAdd,    errorAdd,    addSmaIRe34,  addRe34Re34, addCo34Re34},
-/* 12 complex34      */ {addBigICo34, addRe16Co34, addCo16Co34, errorAdd,    errorAdd,    errorAdd,    addStriCo34, errorAdd,    errorAdd,    addSmaICo34,  addRe34Co34, addCo34Co34}
+/*  1 Big integer    */ {addBigIBigI, addRe16BigI, addCo16BigI, addAnglBigI, addTimeBigI, addDateBigI, addStriBigI, addError,    addError,    addSmaIBigI,  addRe34BigI, addCo34BigI},
+/*  2 real16         */ {addBigIRe16, addRe16Re16, addCo16Re16, addAnglRe16, addTimeRe16, addDateRe16, addStriRe16, addError,    addError,    addSmaIRe16,  addRe34Re16, addCo34Re16},
+/*  3 complex16      */ {addBigICo16, addRe16Co16, addCo16Co16, addError,    addError,    addError,    addStriCo16, addError,    addError,    addSmaICo16,  addRe34Co16, addCo34Co16},
+/*  4 angle34        */ {addBigIAngl, addRe16Angl, addError,    addAnglAngl, addError,    addError,    addStriAngl, addError,    addError,    addSmaIAngl,  addRe34Angl, addError   },
+/*  5 Time           */ {addBigITime, addRe16Time, addError,    addError,    addTimeTime, addError,    addStriTime, addError,    addError,    addError,     addRe34Time, addError   },
+/*  6 Date           */ {addBigIDate, addRe16Date, addError,    addError,    addError,    addError,    addStriDate, addError,    addError,    addError,     addRe34Date, addError   },
+/*  7 String         */ {addError,    addError,    addError,    addError,    addError,    addError,    addStriStri, addError,    addError,    addError,     addError,    addError   },
+/*  8 real16 mat     */ {addError,    addError,    addError,    addError,    addError,    addError,    addStriRm16, addRm16Rm16, addCm16Rm16, addError,     addError,    addError   },
+/*  9 complex16 mat  */ {addError,    addError,    addError,    addError,    addError,    addError,    addStriCm16, addRm16Cm16, addCm16Cm16, addError,     addError,    addError   },
+/* 10 Small integer  */ {addBigISmaI, addRe16SmaI, addCo16SmaI, addAnglSmaI, addError,    addError,    addStriSmaI, addError,    addError,    addSmaISmaI,  addRe34SmaI, addCo34SmaI},
+/* 11 real34         */ {addBigIRe34, addRe16Re34, addCo16Re34, addAnglRe34, addTimeRe34, addDateRe34, addStriRe34, addError,    addError,    addSmaIRe34,  addRe34Re34, addCo34Re34},
+/* 12 complex34      */ {addBigICo34, addRe16Co34, addCo16Co34, addError,    addError,    addError,    addStriCo34, addError,    addError,    addSmaICo34,  addRe34Co34, addCo34Co34}
 };
 
 
@@ -47,7 +47,7 @@ void (* const addition[12][12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorAdd(void) {
+void addError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot add %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -82,7 +82,7 @@ void addToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnAdd(uint16_t unusedParamButMandatory) {
-  if(addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorAdd) {
+  if(addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != addError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -99,7 +99,7 @@ void fnAdd(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorAdd();
+    addError();
   }
 }
 

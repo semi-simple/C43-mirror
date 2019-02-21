@@ -19,3 +19,8 @@
  ***********************************************/
 
 void fnSwapRealImaginary(uint16_t unusedParamButMandatory);
+void swapReImError      (void);
+void swapReImToBeCoded  (void);
+void swapReImCo16       (void);
+void swapReImCm16       (void);
+void swapReImCo34       (void);

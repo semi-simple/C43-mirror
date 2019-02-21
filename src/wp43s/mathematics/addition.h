@@ -18,10 +18,9 @@
  * \file addition.h
  ***********************************************/
 
-void addToBeCoded(void);
 void fnAdd       (uint16_t unusedParamButMandatory);
-
-void errorAdd    (void);
+void addError    (void);
+void addToBeCoded(void);
 
 //      RegYRegX
 void addBigIBigI (void);

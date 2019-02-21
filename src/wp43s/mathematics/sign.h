@@ -18,9 +18,9 @@
  * \file sign.h
  ***********************************************/
 
-void fnSign(uint16_t unusedButMandatoryParameter);
+void fnSign       (uint16_t unusedButMandatoryParameter);
 void signToBeCoded(void);
-void errorSign    (void);
+void signError    (void);
 void signBigI     (void);
 void signRe16     (void);
 void signRm16     (void);

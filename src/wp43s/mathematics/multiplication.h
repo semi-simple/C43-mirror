@@ -18,10 +18,9 @@
  * \file multiplication.h
  ***********************************************/
 
-void mulToBeCoded(void);
 void fnMultiply  (uint16_t unusedParamButMandatory);
-
-void errorMul    (void);
+void mulError    (void);
+void mulToBeCoded(void);
 
 //      RegYRegX
 void mulBigIBigI (void);

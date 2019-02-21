@@ -18,7 +18,19 @@
  * \file gamma.h
  ***********************************************/
 
-
-
-void fnLnGamma(uint16_t unusedParamButMandatory);
-void fnGamma  (uint16_t unusedParamButMandatory);
+void fnGamma         (uint16_t unusedParamButMandatory);
+void fnLnGamma       (uint16_t unusedParamButMandatory);
+void gammaError      (void);
+void lnGammaError    (void);
+void gammaToBeCoded  (void);
+void lnGammaToBeCoded(void);
+void gammaBigI       (void);
+void lnGammaBigI     (void);
+void gammaRe16       (void);
+void lnGammaRe16     (void);
+void gammaCo16       (void);
+void lnGammaCo16     (void);
+void gammaRe34       (void);
+void lnGammaRe34     (void);
+void gammaCo34       (void);
+void lnGammaCo34     (void);

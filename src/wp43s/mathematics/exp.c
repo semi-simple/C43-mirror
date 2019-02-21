@@ -23,9 +23,9 @@
 
 
 void (* const Exp[12])(void) = {
-//  regX ==> 1            2         3          4          5          6          7          8           9            10             11        12
-//           Big integer  real16    complex16  Date       Time       Date       String     real16 mat  complex16 m  Small integer  real34    complex34
-             expBigI,     expRe16,  expCo16,   errorExp,  errorExp,  errorExp,  errorExp,  expRm16,    expCm16,     expSmaI,       expRe34,  expCo34
+// regX ==> 1            2         3          4          5          6          7          8           9            10             11        12
+//          Big integer  real16    complex16  Date       Time       Date       String     real16 mat  complex16 m  Small integer  real34    complex34
+            expBigI,     expRe16,  expCo16,   expError,  expError,  expError,  expError,  expRm16,    expCm16,     expSmaI,       expRe34,  expCo34
 };
 
 
@@ -36,7 +36,7 @@ void (* const Exp[12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorExp(void) {
+void expError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -69,7 +69,7 @@ void expToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnExp(uint16_t unusedParamButMandatory) {
-  if(Exp[getRegisterDataType(REGISTER_X)] != errorExp) {
+  if(Exp[getRegisterDataType(REGISTER_X)] != expError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -82,7 +82,7 @@ void fnExp(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorExp();
+    expError();
   }
 }
 

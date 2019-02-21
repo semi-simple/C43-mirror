@@ -18,6 +18,14 @@
  * \file 2pow.h
  ***********************************************/
 
-
-
-void fn2Pow(uint16_t unusedParamButMandatory);
+void fn2Pow         (uint16_t unusedParamButMandatory);
+void twoPowError    (void);
+void twoPowToBeCoded(void);
+void twoPowBigI     (void);
+void twoPowRe16     (void);
+void twoPowCo16     (void);
+void twoPowRm16     (void);
+void twoPowCm16     (void);
+void twoPowSmaI     (void);
+void twoPowRe34     (void);
+void twoPowCo34     (void);

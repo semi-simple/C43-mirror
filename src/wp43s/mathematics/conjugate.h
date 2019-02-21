@@ -18,4 +18,9 @@
  * \file conjugate.h
  ***********************************************/
 
-void fnConjugate(uint16_t unusedParamButMandatory);
+void fnConjugate  (uint16_t unusedParamButMandatory);
+void conjError    (void);
+void conjToBeCoded(void);
+void conjCo16     (void);
+void conjCm16     (void);
+void conjCo34     (void);

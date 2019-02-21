@@ -22,6 +22,45 @@
 
 
 
+void (* const magnitude[12])(void) = {
+// regX ==> 1               2              3              4               5               6               7               8              9              10             11             12
+//          Big integer     real16         complex16      Date            Time            Date            String          real16 mat     complex16 m    Small integer  real34         complex34
+            magnitudeBigI,  magnitudeRe16, magnitudeCo16, magnitudeError, magnitudeError, magnitudeError, magnitudeError, magnitudeRm16, magnitudeCm16, magnitudeSmaI, magnitudeRe34, magnitudeCo34
+};
+
+
+
+/********************************************//**
+ * \brief Data type error in |x|
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void magnitudeError(void) {
+  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate |x| for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnMagnitude:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Error message for a valid operation to be coded
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void magnitudeToBeCoded(void) {
+  #ifdef PC_BUILD
+    sprintf(errorMessage, "|%s|", getRegisterDataTypeName(REGISTER_X, false, false));
+    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
 /********************************************//**
  * \brief Returns the absolute value of an integer or a real and the magnitude of a complex
  *
@@ -29,49 +68,68 @@
  * \return void
  ***********************************************/
 void fnMagnitude(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtComplex16) {
+  if(magnitude[getRegisterDataType(REGISTER_X)] != magnitudeError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
-    real16Multiply(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
-    real16FMA(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-    real16SquareRoot(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-  }
 
-  else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
-    real34Multiply(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
-    real34FMA(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    result = REGISTER_X;
+    magnitude[getRegisterDataType(REGISTER_X)]();
+    refreshStack();
   }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intAbs(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    setRegisterSign(REGISTER_X, 0);
-  }
-
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "|x| doesn't work on %s!", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnMagnitude:", errorMessage, NULL, NULL);
-    #endif
+    magnitudeError();
   }
+}
 
-  refreshRegisterLine(REGISTER_X);
+
+
+void magnitudeBigI(void) {
+  setRegisterSign(result, 0);
+}
+
+
+
+void magnitudeRe16(void) {
+  real16SetPositiveSign(REGISTER_REAL16_DATA(result));
+}
+
+
+
+void magnitudeCo16(void) {
+  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+  real16Multiply(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(result));
+  real16FMA(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
+  real16SquareRoot(REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
+}
+
+
+
+void magnitudeRm16(void) {
+  magnitudeToBeCoded();
+}
+
+
+
+void magnitudeCm16(void) {
+  magnitudeToBeCoded();
+}
+
+
+
+void magnitudeSmaI(void) {
+  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intAbs(*(REGISTER_SMALL_INTEGER_DATA(result)));
+}
+
+
+
+void magnitudeRe34(void) {
+  real34SetPositiveSign(REGISTER_REAL34_DATA(result));
+}
+
+
+
+void magnitudeCo34(void) {
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(result));
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
+  real34SquareRoot(REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
 }

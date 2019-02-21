@@ -25,18 +25,18 @@
 void (* const multiplication[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
 //      V                Big integer  real16       complex16    Angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {mulBigIBigI, mulRe16BigI, mulCo16BigI, mulAnglBigI, mulTimeBigI, errorMul,    errorMul,    mulRm16BigI, mulCm16BigI, mulSmaIBigI,  mulRe34BigI, mulCo34BigI},
-/*  2 real16         */ {mulBigIRe16, mulRe16Re16, mulCo16Re16, mulAnglRe16, mulTimeRe16, errorMul,    errorMul,    mulRm16Re16, mulCm16Re16, mulSmaIRe16,  mulRe34Re16, mulCo34Re16},
-/*  3 complex16      */ {mulBigICo16, mulRe16Co16, mulCo16Co16, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Co16, mulCm16Co16, mulSmaICo16,  mulRe34Co16, mulCo34Co16},
-/*  4 angle34        */ {mulBigIAngl, mulRe16Angl, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    mulSmaIAngl,  mulRe34Angl, errorMul   },
-/*  5 Time           */ {mulBigITime, mulRe16Time, errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    mulSmaITime,  mulRe34Time, errorMul   },
-/*  6 Date           */ {errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,     errorMul,    errorMul   },
-/*  7 String         */ {errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,    errorMul,     errorMul,    errorMul   },
-/*  8 real16 mat     */ {mulBigIRm16, mulRe16Rm16, mulCo16Rm16, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Rm16, mulCm16Rm16, mulSmaIRm16,  mulRe34Rm16, mulCo34Rm16},
-/*  9 complex16 mat  */ {mulBigICm16, mulRe16Cm16, mulCo16Cm16, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Cm16, mulCm16Cm16, mulSmaICm16,  mulRe34Cm16, mulCo34Cm16},
-/* 10 Small integer  */ {mulBigISmaI, mulRe16SmaI, mulCo16SmaI, mulAnglSmaI, mulTimeSmaI, errorMul,    errorMul,    mulRm16SmaI, mulCm16SmaI, mulSmaISmaI,  mulRe34SmaI, mulCo34SmaI},
-/* 11 real34         */ {mulBigIRe34, mulRe16Re34, mulCo16Re34, mulAnglRe34, mulTimeRe34, errorMul,    errorMul,    mulRm16Re34, mulCm16Re34, mulSmaIRe34,  mulRe34Re34, mulCo34Re34},
-/* 12 complex34      */ {mulBigICo34, mulRe16Co34, mulCo16Co34, errorMul,    errorMul,    errorMul,    errorMul,    mulRm16Co34, mulCm16Co34, mulSmaICo34,  mulRe34Co34, mulCo34Co34}
+/*  1 Big integer    */ {mulBigIBigI, mulRe16BigI, mulCo16BigI, mulAnglBigI, mulTimeBigI, mulError,    mulError,    mulRm16BigI, mulCm16BigI, mulSmaIBigI,  mulRe34BigI, mulCo34BigI},
+/*  2 real16         */ {mulBigIRe16, mulRe16Re16, mulCo16Re16, mulAnglRe16, mulTimeRe16, mulError,    mulError,    mulRm16Re16, mulCm16Re16, mulSmaIRe16,  mulRe34Re16, mulCo34Re16},
+/*  3 complex16      */ {mulBigICo16, mulRe16Co16, mulCo16Co16, mulError,    mulError,    mulError,    mulError,    mulRm16Co16, mulCm16Co16, mulSmaICo16,  mulRe34Co16, mulCo34Co16},
+/*  4 angle34        */ {mulBigIAngl, mulRe16Angl, mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulSmaIAngl,  mulRe34Angl, mulError   },
+/*  5 Time           */ {mulBigITime, mulRe16Time, mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulSmaITime,  mulRe34Time, mulError   },
+/*  6 Date           */ {mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,     mulError,    mulError   },
+/*  7 String         */ {mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,     mulError,    mulError   },
+/*  8 real16 mat     */ {mulBigIRm16, mulRe16Rm16, mulCo16Rm16, mulError,    mulError,    mulError,    mulError,    mulRm16Rm16, mulCm16Rm16, mulSmaIRm16,  mulRe34Rm16, mulCo34Rm16},
+/*  9 complex16 mat  */ {mulBigICm16, mulRe16Cm16, mulCo16Cm16, mulError,    mulError,    mulError,    mulError,    mulRm16Cm16, mulCm16Cm16, mulSmaICm16,  mulRe34Cm16, mulCo34Cm16},
+/* 10 Small integer  */ {mulBigISmaI, mulRe16SmaI, mulCo16SmaI, mulAnglSmaI, mulTimeSmaI, mulError,    mulError,    mulRm16SmaI, mulCm16SmaI, mulSmaISmaI,  mulRe34SmaI, mulCo34SmaI},
+/* 11 real34         */ {mulBigIRe34, mulRe16Re34, mulCo16Re34, mulAnglRe34, mulTimeRe34, mulError,    mulError,    mulRm16Re34, mulCm16Re34, mulSmaIRe34,  mulRe34Re34, mulCo34Re34},
+/* 12 complex34      */ {mulBigICo34, mulRe16Co34, mulCo16Co34, mulError,    mulError,    mulError,    mulError,    mulRm16Co34, mulCm16Co34, mulSmaICo34,  mulRe34Co34, mulCo34Co34}
 };
 
 
@@ -47,7 +47,7 @@ void (* const multiplication[12][12])(void) = {
  * \param[in] unusedParamButMandatory
  * \return void
  ***********************************************/
-void errorMul(void) {
+void mulError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot multiply %s", getRegisterDataTypeName(REGISTER_Y, true, false));
@@ -82,7 +82,7 @@ void mulToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnMultiply(uint16_t unusedParamButMandatory) {
-  if(multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != errorMul) {
+  if(multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != mulError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -99,7 +99,7 @@ void fnMultiply(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    errorMul();
+    mulError();
   }
 }
 

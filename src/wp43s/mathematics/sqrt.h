@@ -19,7 +19,7 @@
  ***********************************************/
 
 void fnSquareRoot (uint16_t unusedParamButMandatory);
-void errorSqrt    (void);
+void sqrtError    (void);
 void sqrtToBeCoded(void);
 void sqrtBigI     (void);
 void sqrtRe16     (void);

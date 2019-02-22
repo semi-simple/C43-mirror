@@ -218,10 +218,12 @@ typedef struct {real34_t x[2];}                           complex34_t;
   #define angleSubtract(operand1, operand2, res)          real16Subtract(operand1, operand2, res)
   #define angleDivide(operand1, operand2, res)            real16Divide(operand1, operand2, res)
   #define angleMultiply(operand1, operand2, res)          real16Multiply(operand1, operand2, res)
+  #define angleIsNaN(operand)                             real16IsNaN(operand)
 #endif
 #if (ANGLE34 == 1)
   #define angleAdd(operand1, operand2, res)               real34Add(operand1, operand2, res)
   #define angleSubtract(operand1, operand2, res)          real34Subtract(operand1, operand2, res)
   #define angleDivide(operand1, operand2, res)            real34Divide(operand1, operand2, res)
   #define angleMultiply(operand1, operand2, res)          real34Multiply(operand1, operand2, res)
+  #define angleIsNaN(operand)                             real34IsNaN(operand)
 #endif

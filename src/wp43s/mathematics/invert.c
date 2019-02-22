@@ -62,7 +62,7 @@ void invertToBeCoded(void) {
 
 
 /********************************************//**
- * \brief regX ==> regL and 1 Ã· regX ==> regX
+ * \brief regX ==> regL and 1 ÷ regX ==> regX
  * enables stack lift and refreshes the stack
  *
  * \param[in] unusedParamButMandatory
@@ -86,9 +86,11 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
     if(lastErrorCode != 0) {
       restoreStack();
+      refreshStack();
     }
-
-    refreshStack();
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     invertError();

@@ -82,9 +82,11 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
 
     if(lastErrorCode != 0) {
       restoreStack();
+      refreshStack();
     }
-
-    refreshStack();
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     arcsinError();
@@ -100,52 +102,68 @@ void arcsinBigI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnArcsin:", "|X| > 1", NULL, NULL);
     #endif
+    return;
+  }
+
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+    real34Zero(REGISTER_REAL34_DATA(result));
   }
   else {
-    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
-      real34Zero(REGISTER_REAL34_DATA(result));
+    real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
+    if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
+      real34ChangeSign(REGISTER_REAL34_DATA(result));
     }
-    else {
-      real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
-      if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-        real34ChangeSign(REGISTER_REAL34_DATA(result));
-      }
-    }
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_MULTPI);
-    #if (ANGLE16 == 1)
-      convertRegister34To16(result);
-    #endif
-    setRegisterDataType(result, dtAngle);
-    setRegisterAngularMode(result, angularMode);
   }
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_MULTPI);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(result);
+  #endif
+  setRegisterDataType(result, dtAngle);
+  setRegisterAngularMode(result, angularMode);
 }
 
 
 
 void arcsinRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arcsinRe16:", "cannot use NaN as an input of arcsin", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(opX), const16_1)) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnArcsin:", "|X| > 1", NULL, NULL);
     #endif
+    return;
   }
-  else {
-    convertRegister16To34(opX);
-    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    WP34S_do_asin(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
-    #if (ANGLE16 == 1)
-      convertRegister34To16(result);
-    #endif
-    setRegisterDataType(result, dtAngle);
-    setRegisterAngularMode(result, angularMode);
-  }
+
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  WP34S_do_asin(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(result);
+  #endif
+  setRegisterDataType(result, dtAngle);
+  setRegisterAngularMode(result, angularMode);
 }
 
 
 
 void arcsinCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arcsinCo16:", "cannot use NaN as an input of arcsin", NULL, NULL);
+    #endif
+    return;
+  }
+
   // arcsin(z) = -i.ln(iz + sqtr(1 - z*z))
   complex34_t iz;
 
@@ -207,26 +225,42 @@ void arcsinCm16(void) {
 
 
 void arcsinRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arcsinRe34:", "cannot use NaN as an input of arcsin", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(opX), const34_1)) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnArcsin:", "|X| > 1", NULL, NULL);
     #endif
+    return;
   }
-  else {
-    WP34S_do_asin(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
-    #if (ANGLE16 == 1)
-      convertRegister34To16(result);
-    #endif
-    setRegisterDataType(result, dtAngle);
-    setRegisterAngularMode(result, angularMode);
-  }
+
+  WP34S_do_asin(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
+  #if (ANGLE16 == 1)
+    convertRegister34To16(result);
+  #endif
+  setRegisterDataType(result, dtAngle);
+  setRegisterAngularMode(result, angularMode);
 }
 
 
 
 void arcsinCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arcsinCo34:", "cannot use NaN as an input of arcsin", NULL, NULL);
+    #endif
+    return;
+  }
+
   // arcsin(z) = -i.ln(iz + sqtr(1 - z*z))
   complex34_t iz;
 

@@ -55,6 +55,7 @@ void errorSquare(void) {
  ***********************************************/
 void fnSquare(uint16_t unusedParamButMandatory) {
   if(square[getRegisterDataType(REGISTER_X)] != errorSquare) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -67,7 +68,13 @@ void fnSquare(uint16_t unusedParamButMandatory) {
     freeTemporaryRegister(opY);
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     errorSquare();

@@ -107,6 +107,7 @@ void lnGammaToBeCoded(void) {
  ***********************************************/
 void fnGamma(uint16_t unusedParamButMandatory) {
   if(gamma[getRegisterDataType(REGISTER_X)] != gammaError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -116,7 +117,13 @@ void fnGamma(uint16_t unusedParamButMandatory) {
     gamma[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     gammaError();
@@ -134,6 +141,7 @@ void fnGamma(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnLnGamma(uint16_t unusedParamButMandatory) {
   if(lnGamma[getRegisterDataType(REGISTER_X)] != lnGammaError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -143,7 +151,13 @@ void fnLnGamma(uint16_t unusedParamButMandatory) {
     lnGamma[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     lnGammaError();
@@ -171,6 +185,14 @@ void lnGammaBigI(void) {
 
 
 void gammaRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function gammaRe16:", "cannot use NaN as an input of gamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_real34Gamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
@@ -180,6 +202,14 @@ void gammaRe16(void) {
 
 
 void lnGammaRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnGammaRe16:", "cannot use NaN as an input of lnGamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_real34LnGamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
@@ -189,35 +219,83 @@ void lnGammaRe16(void) {
 
 
 void gammaCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function gammaCo16:", "cannot use NaN as an input of gamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   gammaToBeCoded();
 }
 
 
 
 void lnGammaCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnGammaCo16:", "cannot use NaN as an input of lnGamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   lnGammaToBeCoded();
 }
 
 
 
 void gammaRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function gammaRe34:", "cannot use NaN as an input of gamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   WP34S_real34Gamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
 
 
 void lnGammaRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnGammaRe34:", "cannot use NaN as an input of lnGamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   WP34S_real34LnGamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
 
 
 void gammaCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function gammaCo34:", "cannot use NaN as an input of gamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   gammaToBeCoded();
 }
 
 
 
 void lnGammaCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnGammaCo34:", "cannot use NaN as an input of lnGamma", NULL, NULL);
+    #endif
+    return;
+  }
+
   lnGammaToBeCoded();
 }

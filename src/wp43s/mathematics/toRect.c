@@ -27,6 +27,8 @@ void fnToRect(uint16_t unusedParamButMandatory) {
      && (getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtBigInteger || getRegisterDataType(REGISTER_Y) == dtAngle)) {
     bool_t real16 = (getRegisterDataType(REGISTER_X) != dtReal34 && getRegisterDataType(REGISTER_Y) != dtReal34);
 
+    saveStack();
+
     if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
       convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     }
@@ -46,6 +48,16 @@ void fnToRect(uint16_t unusedParamButMandatory) {
         convertRegister16To34(REGISTER_X);
       #endif
       convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), angularMode);
+    }
+
+    if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnToPolar:", "cannot use NaN as an input of " STD_RIGHT_ARROW "Pol", NULL, NULL);
+      #endif
+      restoreStack();
+      refreshStack();
+      return;
     }
 
     real34_t magnitude34, theta34;

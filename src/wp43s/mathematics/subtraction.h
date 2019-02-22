@@ -19,7 +19,6 @@
  ***********************************************/
 
 void fnSubtract  (uint16_t unusedParamButMandatory);
-void fnChangeSign(uint16_t unusedParamButMandatory);
 void subError    (void);
 void subToBeCoded(void);
 

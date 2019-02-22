@@ -21,10 +21,12 @@
 #include "wp43s.h"
 
 
+
 static void unitConversion(const real34_t * const coefficient, uint16_t multiplyDivide) {
   real34_t *pointerToRegisterXData;
   bool_t real16;
 
+  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
@@ -43,6 +45,16 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function unitConversion:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
+    return;
+  }
+
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function unitConversion:", "cannot use NaN as an input of unitConversion", NULL, NULL);
+    #endif
+    restoreStack();
+    refreshStack();
     return;
   }
 
@@ -75,15 +87,17 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
 void fnCvtCToF(uint16_t unusedParamButMandatory) {
   unitConversion(const34_1_8, multiply);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16Add(REGISTER_REAL16_DATA(REGISTER_X), const16_32, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    real34Add(REGISTER_REAL34_DATA(REGISTER_X), const34_32, REGISTER_REAL34_DATA(REGISTER_X));
-  }
+  if(lastErrorCode == 0) {
+    if(getRegisterDataType(REGISTER_X) == dtReal16) {
+      real16Add(REGISTER_REAL16_DATA(REGISTER_X), const16_32, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      real34Add(REGISTER_REAL34_DATA(REGISTER_X), const34_32, REGISTER_REAL34_DATA(REGISTER_X));
+    }
 
-  roundRegister(REGISTER_X);
-  refreshRegisterLine(REGISTER_X);
+    roundRegister(REGISTER_X);
+    refreshRegisterLine(REGISTER_X);
+  }
 }
 
 
@@ -116,11 +130,13 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
 
   unitConversion(const34_1_8, divide);
 
-  copySourceRegisterToDestRegister(tempReg, REGISTER_L);
-  freeTemporaryRegister(tempReg);
+  if(lastErrorCode == 0) {
+    copySourceRegisterToDestRegister(tempReg, REGISTER_L);
+    freeTemporaryRegister(tempReg);
 
-  roundRegister(REGISTER_X);
-  refreshRegisterLine(REGISTER_X);
+    roundRegister(REGISTER_X);
+    refreshRegisterLine(REGISTER_X);
+  }
 }
 
 
@@ -323,6 +339,7 @@ void fnCvtAcresusM2(uint16_t multiplyDivide) {
  * \return void
  ***********************************************/
 void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
+  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
@@ -330,6 +347,16 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as an input of fnCvtRatioDb", NULL, NULL);
+      #endif
+      restoreStack();
+      refreshStack();
+      return;
+    }
+
     real16Log10(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
     if(tenOrTwenty == 10) {
       real16Multiply(REGISTER_REAL16_DATA(REGISTER_X), const16_10, REGISTER_REAL16_DATA(REGISTER_X));
@@ -339,6 +366,16 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     }
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as an input of fnCvtRatioDb", NULL, NULL);
+      #endif
+      restoreStack();
+      refreshStack();
+      return;
+    }
+
     real34Log10(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
     if(tenOrTwenty == 10) {
       real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_10, REGISTER_REAL34_DATA(REGISTER_X));
@@ -375,6 +412,16 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as an input of fnCvtDbRatio", NULL, NULL);
+      #endif
+      restoreStack();
+      refreshStack();
+      return;
+    }
+
     if(tenOrTwenty == 10) {
       real16Divide(REGISTER_REAL16_DATA(REGISTER_X), const16_10, REGISTER_REAL16_DATA(REGISTER_X));
     }
@@ -385,6 +432,16 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     real16Power(const16_10, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as an input of fnCvtDbRatio", NULL, NULL);
+      #endif
+      restoreStack();
+      refreshStack();
+      return;
+    }
+
     if(tenOrTwenty == 10) {
       real34Divide(REGISTER_REAL34_DATA(REGISTER_X), const34_10, REGISTER_REAL34_DATA(REGISTER_X));
     }

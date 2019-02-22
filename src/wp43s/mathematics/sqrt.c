@@ -82,9 +82,11 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
 
     if(lastErrorCode != 0) {
       restoreStack();
+      refreshStack();
     }
-
-    refreshStack();
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     sqrtError();
@@ -169,6 +171,14 @@ void sqrtBigI(void) {
 
 
 void sqrtRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sqrtRe16:", "cannot use NaN as an input of sqrt", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opX);
 
   if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
@@ -196,6 +206,14 @@ void sqrtRe16(void) {
 
 
 void sqrtCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sqrtCo16:", "cannot use NaN as an input of sqrt", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34_t magnitude34, theta34;
   uint8_t savedAngularMode = angularMode;
 
@@ -231,6 +249,14 @@ void sqrtSmaI(void) {
 
 
 void sqrtRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sqrtRe34:", "cannot use NaN as an input of sqrt", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
     real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   }
@@ -253,6 +279,14 @@ void sqrtRe34(void) {
 
 
 void sqrtCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sqrtCo34:", "cannot use NaN as an input of sqrt", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34_t magnitude34, theta34;
   uint8_t savedAngularMode = angularMode;
 

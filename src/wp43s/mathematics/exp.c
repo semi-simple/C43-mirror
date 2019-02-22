@@ -70,6 +70,7 @@ void expToBeCoded(void) {
  ***********************************************/
 void fnExp(uint16_t unusedParamButMandatory) {
   if(Exp[getRegisterDataType(REGISTER_X)] != expError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnExp(uint16_t unusedParamButMandatory) {
     Exp[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     expError();
@@ -100,6 +107,14 @@ void expBigI(void) {
 
 
 void expRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expRe16:", "cannot use NaN as an input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34_t real34;
 
   convertRegister16To34(opX);
@@ -110,6 +125,14 @@ void expRe16(void) {
 
 
 void expCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expCo16:", "cannot use NaN as an input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34_t factor, real34, imag34;
   uint8_t savedAngularMode;
 
@@ -152,12 +175,28 @@ void expSmaI(void) {
 
 
 void expRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expRe34:", "cannot use NaN as an input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34Exp(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
 
 
 void expCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expCo34:", "cannot use NaN as an input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34_t factor, real34, imag34;
   uint8_t savedAngularMode;
 

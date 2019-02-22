@@ -82,9 +82,11 @@ void fnArctan(uint16_t unusedParamButMandatory) {
 
     if(lastErrorCode != 0) {
       restoreStack();
+      refreshStack();
     }
-
-    refreshStack();
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     arctanError();
@@ -108,6 +110,14 @@ void arctanBigI(void) {
 
 
 void arctanRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arctanRe16:", "cannot use NaN as an input of arctan", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
@@ -144,6 +154,14 @@ void arctanRe16(void) {
 
 
 void arctanCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arctanCo16:", "cannot use NaN as an input of arctan", NULL, NULL);
+    #endif
+    return;
+  }
+
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
   complex34_t one_iz;
   calcRegister_t opY;
@@ -204,6 +222,14 @@ void arctanCm16(void) {
 
 
 void arctanRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arctanRe34:", "cannot use NaN as an input of arctan", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
@@ -238,6 +264,14 @@ void arctanRe34(void) {
 
 
 void arctanCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function arctanCo34:", "cannot use NaN as an input of arctan", NULL, NULL);
+    #endif
+    return;
+  }
+
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
   complex34_t one_iz;
   calcRegister_t opY;

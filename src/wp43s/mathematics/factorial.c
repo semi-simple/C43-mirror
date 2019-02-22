@@ -70,6 +70,7 @@ void factToBeCoded(void) {
  ***********************************************/
 void fnFactorial(uint16_t unusedParamButMandatory) {
   if(fact[getRegisterDataType(REGISTER_X)] != factError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
     fact[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     factError();
@@ -100,31 +107,41 @@ void factBigI(void) {
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factBigI:", errorMessage, NULL, NULL);
     #endif
+    return;
   }
-  else if(bigIntegerCompareUInt(&temp, 294) == BIG_INTEGER_GREATER_THAN) {
+
+  if(bigIntegerCompareUInt(&temp, 294) == BIG_INTEGER_GREATER_THAN) {
     displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       bigIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factBigI:", errorMessage, NULL, NULL);
     #endif
+    return;
   }
-  else {
-    bigInteger_t fact;
-    uint32_t counter;
 
-    bigIntegerCopy(&temp, &fact);
-    counter = bigIntegerToUInt(&temp) - 1;
-    while(counter > 1) {
-      bigIntegerMultiplyUInt(&fact, counter--, &fact);
-    }
-    convertBigIntegerToBigIntegerRegister(&fact, result);
+  bigInteger_t fact;
+  uint32_t counter;
+
+  bigIntegerCopy(&temp, &fact);
+  counter = bigIntegerToUInt(&temp) - 1;
+  while(counter > 1) {
+    bigIntegerMultiplyUInt(&fact, counter--, &fact);
   }
+  convertBigIntegerToBigIntegerRegister(&fact, result);
 }
 
 
 
 void factRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function factRe16:", "cannot use NaN as an input of x!", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
@@ -134,6 +151,14 @@ void factRe16(void) {
 
 
 void factCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function factCo16:", "cannot use NaN as an input of x!", NULL, NULL);
+    #endif
+    return;
+  }
+
   factToBeCoded();
 }
 
@@ -152,41 +177,59 @@ void factSmaI(void) {
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factSmaI:", errorMessage, NULL, NULL);
     #endif
+    return;
   }
-  else if(value > 20) {
+
+  if(value > 20) {
     displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       bigIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factSmaI:", errorMessage, NULL, NULL);
     #endif
+    return;
   }
-  else {
-    uint64_t fact;
-    uint32_t counter;
 
-    fact = value;
-    counter = value - 1;
-    while(counter > 1) {
-      fact *= counter--;
-    }
+  uint64_t fact;
+  uint32_t counter;
 
-    if(fact > smallIntegerMask) {
-      fnSetFlag(FLAG_OVERFLOW);
-    }
-
-    convertUInt64ToSmallIntegerRegister(0, fact, getRegisterBase(opX), result);
+  fact = value;
+  counter = value - 1;
+  while(counter > 1) {
+    fact *= counter--;
   }
+
+  if(fact > smallIntegerMask) {
+    fnSetFlag(FLAG_OVERFLOW);
+  }
+
+  convertUInt64ToSmallIntegerRegister(0, fact, getRegisterBase(opX), result);
 }
 
 
 
 void factRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function factRe34:", "cannot use NaN as an input of x!", NULL, NULL);
+    #endif
+    return;
+  }
+
   WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
 
 
 void factCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function factCo34:", "cannot use NaN as an input of x!", NULL, NULL);
+    #endif
+    return;
+  }
+
   factToBeCoded();
 }

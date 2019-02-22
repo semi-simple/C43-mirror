@@ -70,6 +70,7 @@ void imagPartToBeCoded(void) {
  ***********************************************/
 void fnImaginaryPart(uint16_t unusedParamButMandatory) {
   if(imagPart[getRegisterDataType(REGISTER_X)] != imagPartError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnImaginaryPart(uint16_t unusedParamButMandatory) {
     imagPart[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     imagPartError();
@@ -89,6 +96,14 @@ void fnImaginaryPart(uint16_t unusedParamButMandatory) {
 
 
 void imagPartCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function imagPartCo16:", "cannot use NaN as an input of Im", NULL, NULL);
+    #endif
+    return;
+  }
+
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
@@ -101,6 +116,14 @@ void imagPartCm16(void) {
 
 
 void imagPartCo34(void) {
+  if(real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function imagPartCo34:", "cannot use NaN as an input of Im", NULL, NULL);
+    #endif
+    return;
+  }
+
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
 }

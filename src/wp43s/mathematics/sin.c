@@ -70,6 +70,7 @@ void sinToBeCoded(void) {
  ***********************************************/
 void fnSin(uint16_t unusedParamButMandatory) {
   if(Sin[getRegisterDataType(REGISTER_X)] != errorSin) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnSin(uint16_t unusedParamButMandatory) {
     Sin[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     errorSin();
@@ -99,6 +106,14 @@ void sinBigI(void) {
 
 
 void sinRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sinRe16:", "cannot use NaN as an input of sin", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real16IsSpecial(REGISTER_REAL16_DATA(opX))) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
@@ -114,6 +129,14 @@ void sinRe16(void) {
 
 
 void sinCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sinCo16:", "cannot use NaN as an input of sin", NULL, NULL);
+    #endif
+    return;
+  }
+
   // sin(z) = (exp(iz) - exp(-iz)) / 2i
   complex34_t iz, expIz;
 
@@ -155,6 +178,14 @@ void sinCo16(void) {
 
 
 void sinAngl(void) {
+  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sinAngl:", "cannot use NaN as an input of sin", NULL, NULL);
+    #endif
+    return;
+  }
+
   #if (ANGLE16 == 1)
     convertRegister16To34(opX);
   #endif
@@ -179,6 +210,14 @@ void sinCm16(void) {
 
 
 void sinRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sinRe34:", "cannot use NaN as an input of sin", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real34IsSpecial(REGISTER_REAL34_DATA(opX))) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
@@ -191,6 +230,14 @@ void sinRe34(void) {
 
 
 void sinCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sinCo34:", "cannot use NaN as an input of sin", NULL, NULL);
+    #endif
+    return;
+  }
+
   // sin(z) = (exp(iz) - exp(-iz)) / 2i
   complex34_t iz, expIz;
 

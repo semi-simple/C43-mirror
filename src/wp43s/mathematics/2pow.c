@@ -39,7 +39,7 @@ void (* const twoPow[12])(void) = {
 void twoPowError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage, "cannot calculate 2" STD_SUP_x " for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fn10Pow:", errorMessage, NULL, NULL);
   #endif
 }
@@ -70,6 +70,7 @@ void twoPowToBeCoded(void) {
  ***********************************************/
 void fn2Pow(uint16_t unusedParamButMandatory) {
   if(twoPow[getRegisterDataType(REGISTER_X)] != twoPowError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
     twoPow[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     twoPowError();
@@ -112,6 +119,14 @@ void twoPowBigI(void) {
 
 
 void twoPowRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function twoPowRe16:", "cannot use NaN as an input of 2^", NULL, NULL);
+    #endif
+    return;
+  }
+
   opY = allocateTemporaryRegister();
   reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
   real16Copy(const16_2, REGISTER_REAL16_DATA(opY));
@@ -124,7 +139,21 @@ void twoPowRe16(void) {
 
 
 void twoPowCo16(void) {
-  twoPowToBeCoded();
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function twoPowCo16:", "cannot use NaN as an input of 2^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+  real16Copy(const16_2, REGISTER_REAL16_DATA(opY));
+
+  powRe16Co16();
+
+  freeTemporaryRegister(opY);
 }
 
 
@@ -148,9 +177,17 @@ void twoPowSmaI(void) {
 
 
 void twoPowRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function twoPowRe34:", "cannot use NaN as an input of 2^", NULL, NULL);
+    #endif
+    return;
+  }
+
   opY = allocateTemporaryRegister();
   reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
-  real16Copy(const34_2, REGISTER_REAL34_DATA(opY));
+  real34Copy(const34_2, REGISTER_REAL34_DATA(opY));
 
   powRe34Re34();
 
@@ -160,5 +197,19 @@ void twoPowRe34(void) {
 
 
 void twoPowCo34(void) {
-  twoPowToBeCoded();
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function twoPowCo34:", "cannot use NaN as an input of 2^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+  real34Copy(const34_2, REGISTER_REAL34_DATA(opY));
+
+  powRe34Co34();
+
+  freeTemporaryRegister(opY);
 }

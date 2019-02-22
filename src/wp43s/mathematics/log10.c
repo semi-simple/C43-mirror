@@ -70,6 +70,7 @@ void log10ToBeCoded(void) {
  ***********************************************/
 void fnLog10(uint16_t unusedParamButMandatory) {
   if(logBase10[getRegisterDataType(REGISTER_X)] != log10Error) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnLog10(uint16_t unusedParamButMandatory) {
     logBase10[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     log10Error();
@@ -125,6 +132,14 @@ void log10BigI(void) {
 
 
 void log10Re16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log10Re16:", "cannot use NaN as an input of log" STD_SUB_10, NULL, NULL);
+    #endif
+    return;
+  }
+
   real51_t real51;
 
   if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
@@ -134,7 +149,7 @@ void log10Re16(void) {
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Re16:", "cannot calculate Ln(0)", NULL, NULL);
+        showInfoDialog("In function log10Re16:", "cannot calculate log" STD_SUB_10, NULL, NULL);
       #endif
     }
   }
@@ -160,7 +175,7 @@ void log10Re16(void) {
   else {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log10Re16:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+      showInfoDialog("In function log10Re16:", "cannot calculate log" STD_SUB_10 " of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
   }
 }
@@ -168,6 +183,14 @@ void log10Re16(void) {
 
 
 void log10Co16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log10Co16:", "cannot use NaN as an input of log" STD_SUB_10, NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real16IsZero(REGISTER_REAL16_DATA(opX)) && real16IsZero(REGISTER_IMAG16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
@@ -176,7 +199,7 @@ void log10Co16(void) {
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Co16:", "cannot calculate Ln(0)", NULL, NULL);
+        showInfoDialog("In function log10Co16:", "cannot calculate log" STD_SUB_10, NULL, NULL);
       #endif
     }
   }
@@ -221,6 +244,14 @@ void log10SmaI(void) {
 
 
 void log10Re34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log10Re34:", "cannot use NaN as an input of log" STD_SUB_10, NULL, NULL);
+    #endif
+    return;
+  }
+
   real51_t real51;
 
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
@@ -230,7 +261,7 @@ void log10Re34(void) {
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Re34:", "cannot calculate Ln(0)", NULL, NULL);
+        showInfoDialog("In function log10Re34:", "cannot calculate log" STD_SUB_10, NULL, NULL);
       #endif
     }
   }
@@ -256,7 +287,7 @@ void log10Re34(void) {
   else {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log10Re34:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+      showInfoDialog("In function log10Re34:", "cannot calculate log" STD_SUB_10 " of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
   }
 }
@@ -264,6 +295,14 @@ void log10Re34(void) {
 
 
 void log10Co34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log10Co34:", "cannot use NaN as an input of log" STD_SUB_10, NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real34IsZero(REGISTER_REAL34_DATA(opX)) && real34IsZero(REGISTER_IMAG34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
@@ -272,7 +311,7 @@ void log10Co34(void) {
     else {
       displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Co34:", "cannot calculate Ln(0)", NULL, NULL);
+        showInfoDialog("In function log10Co34:", "cannot calculate log" STD_SUB_10, NULL, NULL);
       #endif
     }
   }

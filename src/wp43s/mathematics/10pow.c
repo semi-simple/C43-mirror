@@ -39,7 +39,7 @@ void (* const tenPow[12])(void) = {
 void tenPowError(void) {
   displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage, "cannot calculate 10" STD_SUP_x " for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fn10Pow:", errorMessage, NULL, NULL);
   #endif
 }
@@ -70,6 +70,7 @@ void tenPowToBeCoded(void) {
  ***********************************************/
 void fn10Pow(uint16_t unusedParamButMandatory) {
   if(tenPow[getRegisterDataType(REGISTER_X)] != tenPowError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
     tenPow[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     tenPowError();
@@ -110,6 +117,14 @@ void tenPowBigI(void) {
 
 
 void tenPowRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tenPowRe16:", "cannot use NaN as an input of 10^", NULL, NULL);
+    #endif
+    return;
+  }
+
   opY = allocateTemporaryRegister();
   reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
   real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
@@ -122,7 +137,21 @@ void tenPowRe16(void) {
 
 
 void tenPowCo16(void) {
-  tenPowToBeCoded();
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tenPowCo16:", "cannot use NaN as an input of 10^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+  real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
+
+  powRe16Co16();
+
+  freeTemporaryRegister(opY);
 }
 
 
@@ -146,9 +175,17 @@ void tenPowSmaI(void) {
 
 
 void tenPowRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tenPowRe34:", "cannot use NaN as an input of 10^", NULL, NULL);
+    #endif
+    return;
+  }
+
   opY = allocateTemporaryRegister();
   reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
-  real16Copy(const34_10, REGISTER_REAL34_DATA(opY));
+  real34Copy(const34_10, REGISTER_REAL34_DATA(opY));
 
   powRe34Re34();
 
@@ -158,5 +195,19 @@ void tenPowRe34(void) {
 
 
 void tenPowCo34(void) {
-  tenPowToBeCoded();
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tenPowCo34:", "cannot use NaN as an input of 10^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  opY = allocateTemporaryRegister();
+  reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+  real34Copy(const34_10, REGISTER_REAL34_DATA(opY));
+
+  powRe34Co34();
+
+  freeTemporaryRegister(opY);
 }

@@ -70,6 +70,7 @@ void signToBeCoded(void) {
  ***********************************************/
 void fnSign(uint16_t unusedParamButMandatory) {
   if(sign[getRegisterDataType(REGISTER_X)] != signError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnSign(uint16_t unusedParamButMandatory) {
     sign[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     signError();
@@ -110,6 +117,14 @@ void signBigI(void) {
 
 
 void signRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function signRe16:", "cannot use NaN as an input of sign", NULL, NULL);
+    #endif
+    return;
+  }
+
   bigInteger_t temp;
 
   if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
@@ -155,6 +170,14 @@ void signSmaI(void) {
 
 
 void signRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function signRe34:", "cannot use NaN as an input of sign", NULL, NULL);
+    #endif
+    return;
+  }
+
   bigInteger_t temp;
 
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {

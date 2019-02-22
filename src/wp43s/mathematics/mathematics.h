@@ -26,6 +26,7 @@
 #include "arccos.h"
 #include "arcsin.h"
 #include "arctan.h"
+#include "changeSign.h"
 #include "comparisonReals.h"
 #include "conjugate.h"
 #include "cos.h"

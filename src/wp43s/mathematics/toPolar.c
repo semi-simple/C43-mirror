@@ -27,6 +27,8 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
      && (getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtBigInteger)) {
     bool_t real16 = false;
 
+    saveStack();
+
     if(getRegisterDataType(REGISTER_X) == dtBigInteger && getRegisterDataType(REGISTER_Y) == dtBigInteger) {
       convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       convertBigIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
@@ -61,6 +63,16 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
       real16 = true;
       convertRegister16To34(REGISTER_X);
       convertRegister16To34(REGISTER_Y);
+    }
+
+    if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
+      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnToPolar:", "cannot use NaN as an input of " STD_RIGHT_ARROW "Pol", NULL, NULL);
+      #endif
+      restoreStack();
+      refreshStack();
+      return;
     }
 
     real34_t real34, imag34;

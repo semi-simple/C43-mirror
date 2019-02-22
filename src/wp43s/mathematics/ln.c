@@ -70,6 +70,7 @@ void lnToBeCoded(void) {
  ***********************************************/
 void fnLn(uint16_t unusedParamButMandatory) {
   if(ln[getRegisterDataType(REGISTER_X)] != lnError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnLn(uint16_t unusedParamButMandatory) {
     ln[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     lnError();
@@ -132,6 +139,14 @@ void lnBigI(void) {
 
 
 void lnRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnRe16:", "cannot use NaN as an input of ln", NULL, NULL);
+    #endif
+    return;
+  }
+
   real51_t real51;
 
   if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
@@ -172,6 +187,14 @@ void lnRe16(void) {
 
 
 void lnCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnCo16:", "cannot use NaN as an input of ln", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real16IsZero(REGISTER_REAL16_DATA(opX)) && real16IsZero(REGISTER_IMAG16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
@@ -259,6 +282,14 @@ void lnSmaI(void) {
 
 
 void lnRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnRe34:", "cannot use NaN as an input of ln", NULL, NULL);
+    #endif
+    return;
+  }
+
   real51_t real51;
 
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
@@ -299,6 +330,14 @@ void lnRe34(void) {
 
 
 void lnCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function lnCo34:", "cannot use NaN as an input of ln", NULL, NULL);
+    #endif
+    return;
+  }
+
   if(real34IsZero(REGISTER_REAL34_DATA(opX)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));

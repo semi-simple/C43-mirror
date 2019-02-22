@@ -79,7 +79,7 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
     swapReIm[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    refreshRegisterLine(REGISTER_X);
   }
   else {
     swapReImError();

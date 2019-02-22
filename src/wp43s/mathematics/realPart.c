@@ -70,6 +70,7 @@ void realPartToBeCoded(void) {
  ***********************************************/
 void fnRealPart(uint16_t unusedParamButMandatory) {
   if(realPart[getRegisterDataType(REGISTER_X)] != realPartError) {
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
@@ -79,7 +80,13 @@ void fnRealPart(uint16_t unusedParamButMandatory) {
     realPart[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
-    refreshStack();
+    if(lastErrorCode != 0) {
+      restoreStack();
+      refreshStack();
+    }
+    else {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     realPartError();
@@ -89,6 +96,14 @@ void fnRealPart(uint16_t unusedParamButMandatory) {
 
 
 void realPartCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function realPartCo16:", "cannot use NaN as an input of Re", NULL, NULL);
+    #endif
+    return;
+  }
+
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Copy(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
@@ -101,6 +116,14 @@ void realPartCm16(void) {
 
 
 void realPartCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function realPartCo34:", "cannot use NaN as an input of Re", NULL, NULL);
+    #endif
+    return;
+  }
+
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }

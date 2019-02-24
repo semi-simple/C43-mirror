@@ -1176,7 +1176,7 @@ void closeNim(void) {
         nimBuffer[lastChar--] = 0;
       }
 
-      if(nimNumberPart == NP_COMPLEX_INT_PART && nimBuffer[lastChar] == 'i') {
+      if(nimNumberPart == NP_COMPLEX_INT_PART && (nimBuffer[lastChar] == 'i' || nimBuffer[lastChar-1]*256 + nimBuffer[lastChar]*256 == 0xa221)) { // complex i or measured angle
         nimBuffer[++lastChar] = '1';
         nimBuffer[lastChar + 1] = 0;
       }
@@ -1435,7 +1435,7 @@ void closeNim(void) {
           if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
             displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of the real part of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
+              showInfoDialog("In function closeNIM:", "the absolute value of the real part (or magnitude) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
             #endif
           }
 
@@ -1446,7 +1446,7 @@ void closeNim(void) {
           if(real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
             displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of the imaginary part of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
+              showInfoDialog("In function closeNIM:", "the absolute value of the imaginary part (or angle) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
             #endif
           }
 
@@ -1464,7 +1464,7 @@ void closeNim(void) {
                 real16Add(&theta16, const16_pi, &theta16);
                 real16Remainder(&theta16, const16_2pi, &theta16);
               }
-              convertAngle16ToInternal(&theta16, AM_RADIAN);
+              convertAngle16ToInternal(&theta16, angularMode);
               real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in internal units
             }
           }

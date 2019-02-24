@@ -833,8 +833,11 @@ void complex16ToDisplayString(const complex16_t *complex16, char *displayString)
     strcat(displayString, displayString + i);
   }
   else { // POLAR
+    real34_t angle34;
+
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    //angle16ToDisplayString(&imag16, displayString + stringByteLength(displayString));
+    real16ToReal34(&imag16, &angle34);
+    angle34ToDisplayString(&angle34, angularMode, displayString + stringByteLength(displayString));
   }
 }
 

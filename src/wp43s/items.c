@@ -918,7 +918,7 @@ const item_t indexOfItems[] = {
 /*  812 */  { fnConstant,                  78,                          STD_INFINITY,                                  STD_INFINITY,                                                                 SLS_ENABLED  },
 /*  813 */  { toBeCoded,                   NOPARAM,                     "^MOD",                                        "^MOD",                                                                       SLS_UNCHANGED},
 /*  814 */  { toBeCoded,                   NOPARAM,                     "|M|",                                         "|M|",                                                                        SLS_UNCHANGED},
-/*  815 */  { fnMagnitude,                 NOPARAM,                     "|x|",                                         "|x|",                                                                        SLS_UNCHANGED},
+/*  815 */  { fnMagnitude,                 NOPARAM,                     "|x|",                                         "|x|",                                                                        SLS_ENABLED  },
 /*  816 */  { toBeCoded,                   NOPARAM,                     "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                                                   SLS_UNCHANGED},
 /*  817 */  { toBeCoded,                   NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                                                              SLS_UNCHANGED},
 /*  818 */  { toBeCoded,                   NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                                                        SLS_UNCHANGED},

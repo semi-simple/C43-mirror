@@ -413,6 +413,7 @@ void fnAngularMode(uint16_t am) {
   //}
 
   showAngularMode();
+  refreshStack();
 }
 
 

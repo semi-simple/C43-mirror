@@ -127,6 +127,7 @@ void fnChangeBase(uint16_t base) {
 void fnLogicalNot(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = ~(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X))) & smallIntegerMask;
+    refreshRegisterLine(REGISTER_X);
   }
 
   else {

@@ -372,36 +372,37 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
       ovrENG = (displayModeOverride == DO_ENG);
     }
     else { // display all digits without ten exponent factor
+      // Number of digits to truncate
+      digitsToTruncate = max(numDigits - exponent, 16) - 16;
+      numDigits -= digitsToTruncate;
+      lastDigit -= digitsToTruncate;
+
+      // Round the displayed number
+      if(bcd[lastDigit+1] >= 5) {
+        bcd[lastDigit]++;
+      }
+
+      // Transfert the carry
+      while(bcd[lastDigit] == 10) {
+        bcd[lastDigit--] = 0;
+        numDigits--;
+        bcd[lastDigit]++;
+      }
+
+      // Case when 9.9999 rounds to 10.0000
+      if(lastDigit < firstDigit) {
+        firstDigit--;
+        lastDigit = firstDigit;
+        numDigits = 1;
+        exponent++;
+      }
+
+      // The sign
+      if(sign) {
+        displayString[charIndex++] = '-';
+      }
+
       if(exponent < 0) { // negative exponent
-        // Number of digits to truncate
-        digitsToTruncate = max(numDigits - exponent, 16) - 16;
-        numDigits -= digitsToTruncate;
-        lastDigit -= digitsToTruncate;
-
-        // Round the displayed number
-        if(bcd[lastDigit+1] >= 5) {
-          bcd[lastDigit]++;
-        }
-
-        // Transfert the carry
-        while(bcd[lastDigit] == 10) {
-          bcd[lastDigit--] = 0;
-          bcd[lastDigit]++;
-        }
-
-        // Case when 9.9999 rounds to 10.0000
-        if(lastDigit < firstDigit) {
-          firstDigit--;
-          lastDigit = firstDigit;
-          numDigits = 1;
-          exponent++;
-        }
-
-        // The sign
-        if(sign) {
-          displayString[charIndex++] = '-';
-        }
-
         // first 0 and radix mark
         displayString[charIndex++] = '0';
         if(real34) {
@@ -432,11 +433,6 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
         }
       }
       else { // zero or positive exponent
-        // The sign
-        if(sign) {
-         displayString[charIndex++] = '-';
-        }
-
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=lastDigit + max(exponent - numDigits + 1, 0); digitPointer++, digitCount--) {
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
             memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
@@ -480,37 +476,38 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
       ovrSCI = (displayModeOverride == DO_SCI);
       ovrENG = (displayModeOverride == DO_ENG);
     }
-    else { // display fix nunber of digits without ten exponent factor
+    else { // display fix number of digits without ten exponent factor
+      // Number of digits to truncate
+      digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits - exponent - 1, 0);
+      numDigits -= digitsToTruncate;
+      lastDigit -= digitsToTruncate;
+
+      // Round the displayed number
+      if(bcd[lastDigit+1] >= 5) {
+        bcd[lastDigit]++;
+      }
+
+      // Transfert the carry
+      while(bcd[lastDigit] == 10) {
+        bcd[lastDigit--] = 0;
+        numDigits--;
+        bcd[lastDigit]++;
+      }
+
+      // Case when 9.9999 rounds to 10.0000
+      if(lastDigit < firstDigit) {
+        firstDigit--;
+        lastDigit = firstDigit;
+        numDigits = 1;
+        exponent++;
+      }
+
+      // The sign
+      if(sign) {
+        displayString[charIndex++] = '-';
+      }
+
       if(exponent < 0) { // negative exponent
-        // Number of digits to truncate
-        digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits - exponent - 1, 0);
-        numDigits -= digitsToTruncate;
-        lastDigit -= digitsToTruncate;
-
-        // Round the displayed number
-        if(bcd[lastDigit+1] >= 5) {
-          bcd[lastDigit]++;
-        }
-
-        // Transfert the carry
-        while(bcd[lastDigit] == 10) {
-          bcd[lastDigit--] = 0;
-          bcd[lastDigit]++;
-        }
-
-        // Case when 9.9999 rounds to 10.0000
-        if(lastDigit < firstDigit) {
-          firstDigit--;
-          lastDigit = firstDigit;
-          numDigits = 1;
-          exponent++;
-        }
-
-        // The sign
-        if(sign) {
-          displayString[charIndex++] = '-';
-        }
-
         // first 0 and radix mark
         displayString[charIndex++] = '0';
         if(real34) {
@@ -550,34 +547,6 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
         }
       }
       else { // zero or positive exponent
-        // Number of digits to truncate
-        digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits - exponent - 1, 0);
-        numDigits -= digitsToTruncate;
-        lastDigit -= digitsToTruncate;
-
-        // Round the displayed number
-        if(bcd[lastDigit+1] >= 5) {
-          bcd[lastDigit]++;
-        }
-
-        // Transfert the carry
-        while(bcd[lastDigit] == 10) {
-          bcd[lastDigit--] = 0;
-          bcd[lastDigit]++;
-        }
-
-        // Case when 9.9999 rounds to 10.0000
-        if(lastDigit < firstDigit) {
-          firstDigit--;
-          lastDigit = firstDigit;
-          numDigits = 1;
-          exponent++;
-        }
-        // The sign
-        if(sign) {
-         displayString[charIndex++] = '-';
-        }
-
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) {
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
             memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
@@ -628,6 +597,7 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
     // Transfert the carry
     while(bcd[digitToRound] == 10) {
       bcd[digitToRound--] = 0;
+      numDigits--;
       bcd[digitToRound]++;
     }
 
@@ -711,6 +681,7 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
     // Transfert the carry
     while(bcd[digitToRound] == 10) {
       bcd[digitToRound--] = 0;
+      numDigits--;
       bcd[digitToRound]++;
     }
 

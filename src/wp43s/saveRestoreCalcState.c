@@ -212,6 +212,13 @@ void restoreCalc(void) {
     size += fread(kbd_usr,                             1, sizeof(kbd_usr),                            backup); //printf("%8lu kbd_usr\n",                            (unsigned long)size);
     size += fread(row,                                 1, sizeof(row),                                backup); //printf("%8lu row\n",                                (unsigned long)size);
     size += fread(transitionSystemOperation,           1, 4,                                          backup); //printf("%8lu transitionSystemOperation\n",          (unsigned long)size);
+
+    #if (DEBUG_REGISTER_L == 1)
+      //if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+        refreshRegisterLine(REGISTER_X); // to show L register
+      //}
+    #endif
+
     size += fread(screenData,                          1, 4 * screenStride * SCREEN_HEIGHT,           backup); //printf("%8lu screenData\n",                         (unsigned long)size);
     size += fread(&tamFunction,                        1, sizeof(tamFunction),                        backup); //printf("%8lu tamFunction\n",                        (unsigned long)size);
     size += fread(&tamNumber    ,                      1, sizeof(tamNumber),                          backup); //printf("%8lu tamNumber\n",                          (unsigned long)size);

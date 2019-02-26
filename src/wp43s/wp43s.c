@@ -375,10 +375,6 @@ int main(int argc, char* argv[]) {
 
   gdk_threads_add_timeout(100, refreshScreen, NULL); // refreshScreen is called every 100 ms
 
-  #if (DEBUG_REGISTER_L == 1)
-    refreshRegisterLine(REGISTER_X); // to show L register
-  #endif
-
   gtk_main();
 
   return 0;

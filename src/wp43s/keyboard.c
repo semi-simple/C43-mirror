@@ -870,7 +870,11 @@ void btnPressed(void *notUsed, void *data) {
         }
         registerBrowser(NOPARAM);
       }
-      if(item == ITM_RS) {
+      else if(item == ITM_RS) {
+        showContent = !showContent;
+        registerBrowser(NOPARAM);
+      }
+      else if(item == ITM_RS) {
         if(rbrMode == RBR_GLOBAL) {
           rbrMode = RBR_NAMED;
           currentRegisterBrowserScreen = 1000;
@@ -885,7 +889,6 @@ void btnPressed(void *notUsed, void *data) {
         }
         registerBrowser(NOPARAM);
       }
-
       else if(item == ITM_RCL) {
         if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
           calcMode = previousCalcMode;
@@ -901,10 +904,6 @@ void btnPressed(void *notUsed, void *data) {
         }
         else if(rbrMode == RBR_NAMED) {
         }
-      }
-      else if(item == ITM_STO) {
-        showContent = !showContent;
-        registerBrowser(NOPARAM);
       }
     }
 

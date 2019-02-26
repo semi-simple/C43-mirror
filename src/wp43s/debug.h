@@ -75,3 +75,7 @@ void  debugNIM                            (void);
   void   formatReal34Debug                  (char *str, uint32_t addr);
   void   formatComplex34Debug               (char *str, uint32_t addr);
 #endif
+
+#ifdef PC_BUILD
+  void dumpScreenToConsole(void);
+#endif

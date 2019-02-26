@@ -28,14 +28,16 @@
  * \return void
  ***********************************************/
 void showShiftState(void) {
-  if(shiftF) {
-    showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
-  }
-  else if(shiftG) {
-    showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
-  }
-  else {
-    refreshRegisterLine(REGISTER_T);
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+    if(shiftF) {
+      showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
+    }
+    else if(shiftG) {
+      showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
+    }
+    else {
+      refreshRegisterLine(REGISTER_T);
+    }
   }
 }
 

@@ -1459,3 +1459,21 @@ void debugNIM(void) {
     strcat(str, "i");
   }
 #endif
+
+#ifdef PC_BUILD
+void dumpScreenToConsole(void) {
+  int x, y;
+
+  for(y = 0; y < SCREEN_HEIGHT; y++) {
+    for(x = 0; x < SCREEN_WIDTH; x++) {
+      if(*(screenData + y*screenStride + x) == ON_PIXEL) {
+        printf("#");
+      }
+      else {
+        printf(" ");
+      }
+    }
+    printf("\n");
+  }
+}
+#endif

@@ -74,11 +74,7 @@ void fnConjugate(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
-
     conjugate[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
 
     if(lastErrorCode != 0) {
       restoreStack();
@@ -96,7 +92,7 @@ void fnConjugate(uint16_t unusedParamButMandatory) {
 
 
 void conjCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(result)) || real16IsNaN(REGISTER_IMAG16_DATA(result))) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function conjCo16:", "cannot use NaN as an input of conjugate", NULL, NULL);
@@ -104,7 +100,7 @@ void conjCo16(void) {
     return;
   }
 
-  real16ChangeSign(REGISTER_IMAG16_DATA(opX));
+  real16ChangeSign(REGISTER_IMAG16_DATA(result));
 }
 
 
@@ -116,7 +112,7 @@ void conjCm16(void) {
 
 
 void conjCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(result)) || real34IsNaN(REGISTER_IMAG34_DATA(result))) {
     displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function conjCo34:", "cannot use NaN as an input of conjugate", NULL, NULL);
@@ -124,5 +120,5 @@ void conjCo34(void) {
     return;
   }
 
-  real34ChangeSign(REGISTER_IMAG34_DATA(opX));
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 }

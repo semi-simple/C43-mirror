@@ -698,8 +698,8 @@ int16_t getStoRclOperation(void) {
     else if(tamCurrentOperation == ITM_DIV   ) return ITM_RCLDIV;
     else if(tamCurrentOperation == ITM_Max   ) return ITM_RCLMAX;
     else if(tamCurrentOperation == ITM_Min   ) return ITM_RCLMIN;
-    else if(tamCurrentOperation == ITM_Config) return ITM_STOCFG;
-    else if(tamCurrentOperation == ITM_Stack ) return ITM_STOS;
+    else if(tamCurrentOperation == ITM_Config) return ITM_RCLCFG;
+    else if(tamCurrentOperation == ITM_Stack ) return ITM_RCLS;
     else {
       sprintf(errorMessage, "In function getStoRclOperation: status=0 tamTransition=TT_OPERATION tamCurrentOperation=ITM_RCL. %d is an unexpected value for tamCurrentOperation!", tamCurrentOperation);
       displayBugScreen(errorMessage);

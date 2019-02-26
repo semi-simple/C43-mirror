@@ -1615,10 +1615,10 @@ void fnStoreDiv(uint16_t r) {
     }
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnStoreDiv:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+      showInfoDialog("In function fnStoreDiv:", errorMessage, "is not defined!", NULL);
+    }
   #endif
 }
 
@@ -1631,6 +1631,9 @@ void fnStoreDiv(uint16_t r) {
  * \return void
  ***********************************************/
 void fnStoreMin(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnStoreMin:", "To be coded", NULL, NULL);
+  #endif
 }
 
 
@@ -1642,6 +1645,37 @@ void fnStoreMin(uint16_t r) {
  * \return void
  ***********************************************/
 void fnStoreMax(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnStoreMax:", "To be coded", NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Stores the configuration
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnStoreConfig(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnStoreConfig:", "To be coded", NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Stores the stack
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnStoreStack(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnStoreStack:", "To be coded", NULL, NULL);
+  #endif
 }
 
 
@@ -1843,8 +1877,9 @@ void fnRecallDiv(uint16_t r) {
  * \return void
  ***********************************************/
 void fnRecallMin(uint16_t r) {
-
-
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnRecallMin:", "To be coded", NULL, NULL);
+  #endif
 }
 
 
@@ -1856,8 +1891,37 @@ void fnRecallMin(uint16_t r) {
  * \return void
  ***********************************************/
 void fnRecallMax(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnRecallMax:", "To be coded", NULL, NULL);
+  #endif
+}
 
 
+
+/********************************************//**
+ * \brief Recalls a configuration
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnRecallConfig(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnRecallConfig:", "To be coded", NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Recalls a stack
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnRecallStack(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnRecallStack:", "To be coded", NULL, NULL);
+  #endif
 }
 
 
@@ -1869,6 +1933,9 @@ void fnRecallMax(uint16_t r) {
  * \return void
  ***********************************************/
 void fnXLessThan(uint16_t unusedParamButMandatory) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnXLessThan:", "To be coded", NULL, NULL);
+  #endif
 }
 
 

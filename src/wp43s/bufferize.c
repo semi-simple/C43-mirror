@@ -1269,7 +1269,7 @@ void closeNim(void) {
           }
 
           if(bigIntegerCompare(&value, &minVal) == BIG_INTEGER_LESS_THAN || bigIntegerCompare(&value, &maxVal) == BIG_INTEGER_GREATER_THAN) {
-            displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(14, REGISTER_T, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               char strMin[22], strMax[22];
               bigIntegerToString(&minVal, strMin, 10);

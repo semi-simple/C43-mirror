@@ -174,7 +174,7 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
     refreshStack();
   //}
   //else {
-  //  displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+  //  displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
   //  #ifdef PC_BUILD
   //    sprintf(errorMessage, "numberOfStackLines = %u is out of range for DSTACK!", numberOfStackLines);
   //    showInfoDialog("In function fnDisplayStack:", errorMessage, "The value should be from 1 to 4.", NULL);

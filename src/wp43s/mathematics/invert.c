@@ -37,7 +37,7 @@ void (* const invert[12])(void) = {
  * \return void
  ***********************************************/
 void invertError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnInvert:", errorMessage, NULL, NULL);

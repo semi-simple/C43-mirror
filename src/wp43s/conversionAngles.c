@@ -47,7 +47,7 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as an input of fnCvtToCurrentAngularMode", NULL, NULL);
       #endif
@@ -63,7 +63,7 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as an input of fnCvtToCurrentAngularMode", NULL, NULL);
       #endif
@@ -78,7 +78,7 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       return;
     }
     else {
-      displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "the input angle is not tagged as %s!", getAngularModeName(fromAngularMode));
         showInfoDialog("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
@@ -90,7 +90,7 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
     }
   }
 
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "an angle tagged %s!", getAngularModeName(fromAngularMode));
     showInfoDialog("In function fnCvtToCurrentAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
@@ -126,7 +126,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as an input of fnCvtFromCurrentAngularMode", NULL, NULL);
       #endif
@@ -142,7 +142,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as an input of fnCvtFromCurrentAngularMode", NULL, NULL);
       #endif
@@ -158,7 +158,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
     refreshRegisterLine(REGISTER_X);
   }
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "an angle tagged %s!", getAngularModeName(angularMode));
       showInfoDialog("In function fnCvtFromCurrentAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
@@ -195,7 +195,7 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as an input of fnCvtDegToRad", NULL, NULL);
       #endif
@@ -211,7 +211,7 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as an input of fnCvtDegToRad", NULL, NULL);
       #endif
@@ -226,7 +226,7 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
       return;
     }
     else {
-      displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDegToRad:", "the input angle is not tagged as degree!", NULL, NULL);
       #endif
@@ -236,7 +236,7 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
     }
   }
 
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     showInfoDialog("In function fnCvtDegToRad:", "the input value must be a real16, a real34, a big integer", "or an angle tagged degree!", NULL);
   #endif
@@ -271,7 +271,7 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as an input of fnCvtDegToDms", NULL, NULL);
       #endif
@@ -287,7 +287,7 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as an input of fnCvtDegToDms", NULL, NULL);
       #endif
@@ -302,7 +302,7 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
       return;
     }
     else {
-      displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDegToDms:", "the input angle is not tagged as degree!", NULL, NULL);
       #endif
@@ -313,7 +313,7 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
     }
   }
 
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     showInfoDialog("In function fnCvtDegToDms:", "the input value must be a real16, a real34, a big integer", "or an angle tagged degree!", NULL);
   #endif
@@ -348,7 +348,7 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDmsToDeg:", "cannot use NaN as an input of fnCvtDmsToDeg", NULL, NULL);
       #endif
@@ -364,7 +364,7 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDmsToDeg:", "cannot use NaN as an input of fnCvtDmsToDeg", NULL, NULL);
       #endif
@@ -379,7 +379,7 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       return;
     }
     else {
-      displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDmsToDeg:", "the input angle is not tagged as d.ms!", NULL, NULL);
       #endif
@@ -389,7 +389,7 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
     }
   }
 
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     showInfoDialog("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a big integer", "or an angle tagged d.ms!", NULL);
   #endif
@@ -424,7 +424,7 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
       #endif
@@ -440,7 +440,7 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtAngle) {
     if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
       #endif
@@ -455,7 +455,7 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
       return;
     }
     else {
-      displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtRadToDeg:", "the input angle is not tagged as radian!", NULL, NULL);
       #endif
@@ -465,7 +465,7 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
     }
   }
 
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a big integer", "or an angle tagged radian!", NULL);
   #endif
@@ -550,7 +550,7 @@ void convertAngle34ToInternal(real34_t *angle34, uint32_t fromAngularMode) {
     real34Multiply(angle34, const34_100, angle34); // angle34 = angle34 * 100              : number of seconds
 
     if(real34CompareGreaterEqual(angle34, const34_60) || real34CompareGreaterEqual(&minutes, const34_60)) {
-      displayCalcErrorMessage(28, REGISTER_T, NIM_REGISTER_LINE);
+      displayCalcErrorMessage(28, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
        showInfoDialog("In function convertAngle34ToInternal:", "Minutes and/or seconds are " STD_GREATER_EQUAL " 60!", NULL, NULL);
       #endif

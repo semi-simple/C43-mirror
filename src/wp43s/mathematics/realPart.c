@@ -37,7 +37,7 @@ void (* const realPart[12])(void) = {
  * \return void
  ***********************************************/
 void realPartError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Re for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnRealPart:", errorMessage, NULL, NULL);
@@ -97,7 +97,7 @@ void fnRealPart(uint16_t unusedParamButMandatory) {
 
 void realPartCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function realPartCo16:", "cannot use NaN as an input of Re", NULL, NULL);
     #endif
@@ -117,7 +117,7 @@ void realPartCm16(void) {
 
 void realPartCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function realPartCo34:", "cannot use NaN as an input of Re", NULL, NULL);
     #endif

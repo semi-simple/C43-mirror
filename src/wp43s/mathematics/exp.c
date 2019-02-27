@@ -37,7 +37,7 @@ void (* const Exp[12])(void) = {
  * \return void
  ***********************************************/
 void expError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnExp:", errorMessage, NULL, NULL);
@@ -108,7 +108,7 @@ void expBigI(void) {
 
 void expRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function expRe16:", "cannot use NaN as an input of exp", NULL, NULL);
     #endif
@@ -126,7 +126,7 @@ void expRe16(void) {
 
 void expCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function expCo16:", "cannot use NaN as an input of exp", NULL, NULL);
     #endif
@@ -176,7 +176,7 @@ void expSmaI(void) {
 
 void expRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function expRe34:", "cannot use NaN as an input of exp", NULL, NULL);
     #endif
@@ -190,7 +190,7 @@ void expRe34(void) {
 
 void expCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function expCo34:", "cannot use NaN as an input of exp", NULL, NULL);
     #endif

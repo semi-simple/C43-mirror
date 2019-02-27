@@ -1207,7 +1207,7 @@ void closeNim(void) {
           for(i=posHash+1; i<lg; i++) {
             if(nimBuffer[i]<'0' || nimBuffer[i]>'9') {
               // This should never happen
-              displayCalcErrorMessage(9, REGISTER_T, NIM_REGISTER_LINE);
+              displayCalcErrorMessage(9, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function closeNIM:", "there is a non numeric character in the base of the integer!", NULL, NULL);
               #endif
@@ -1217,7 +1217,7 @@ void closeNim(void) {
 
           base = atoi(nimBuffer + posHash + 1);
           if(base < 2 || base > 16) {
-            displayCalcErrorMessage(9, REGISTER_T, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(9, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
              showInfoDialog("In function closeNIM:", "the base of the integer must be from 2 to 16!", NULL, NULL);
             #endif
@@ -1226,7 +1226,7 @@ void closeNim(void) {
 
           for(i=nimBuffer[0] == '-' ? 1 : 0; i<posHash; i++) {
             if((nimBuffer[i] > '9' ? nimBuffer[i] - 'A' + 10 : nimBuffer[i] - '0') >= base) {
-              displayCalcErrorMessage(9, REGISTER_T, NIM_REGISTER_LINE);
+              displayCalcErrorMessage(9, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 sprintf(errorMessage, "digit %c is not allowed in base %d!", nimBuffer[i], base);
                 showInfoDialog("In function closeNIM:", errorMessage, NULL, NULL);
@@ -1269,7 +1269,7 @@ void closeNim(void) {
           }
 
           if(bigIntegerCompare(&value, &minVal) == BIG_INTEGER_LESS_THAN || bigIntegerCompare(&value, &maxVal) == BIG_INTEGER_GREATER_THAN) {
-            displayCalcErrorMessage(14, REGISTER_T, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(14, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               char strMin[22], strMax[22];
               bigIntegerToString(&minVal, strMin, 10);
@@ -1328,7 +1328,7 @@ void closeNim(void) {
           reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
           stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
           if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(1, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function closeNIM:", "the absolute value of a real must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
             #endif
@@ -1351,7 +1351,7 @@ void closeNim(void) {
 
           for(i=1; i<posSpace; i++) {
             if(nimBuffer[i]<'0' || nimBuffer[i]>'9') { // This should never happen
-              displayCalcErrorMessage(28, REGISTER_T, NIM_REGISTER_LINE);
+              displayCalcErrorMessage(28, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function parseNimString:", "there is a non numeric character in the integer part of the fraction!", NULL, NULL);
               #endif
@@ -1369,7 +1369,7 @@ void closeNim(void) {
 
           for(i=posSpace+1; i<posSlash; i++) {
             if(nimBuffer[i]<'0' || nimBuffer[i]>'9') { // This should never happen
-             displayCalcErrorMessage(28, REGISTER_T, NIM_REGISTER_LINE);
+             displayCalcErrorMessage(28, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                showInfoDialog("In function parseNimString:", "there is a non numeric character in the numerator part of the fraction!", NULL, NULL);
              #endif
@@ -1379,7 +1379,7 @@ void closeNim(void) {
 
           for(i=posSlash+1; i<lg; i++) {
             if(nimBuffer[i]<'0' || nimBuffer[i]>'9') {
-              displayCalcErrorMessage(28, REGISTER_T, NIM_REGISTER_LINE);
+              displayCalcErrorMessage(28, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function parseNimString:", "there is a non numeric character in the denominator part of the fraction!", NULL, NULL);
               #endif
@@ -1394,7 +1394,7 @@ void closeNim(void) {
           denom   = atoi(nimBuffer + posSlash + 1);
 
           if(denom == 0 && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(1, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function parseNimString:", "the denominator of the fraction should not be 0!", "Unless D flag (Danger) is set.", NULL);
             #endif
@@ -1433,7 +1433,7 @@ void closeNim(void) {
 
           stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
           if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(1, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function closeNIM:", "the absolute value of the real part (or magnitude) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
             #endif
@@ -1444,7 +1444,7 @@ void closeNim(void) {
             real16SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
           }
           if(real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(1, REGISTER_T, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(1, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               showInfoDialog("In function closeNIM:", "the absolute value of the imaginary part (or angle) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
             #endif

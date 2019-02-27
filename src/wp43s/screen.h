@@ -29,10 +29,11 @@
 #define Y_POSITION_OF_REGISTER_Y_LINE  97
 #define Y_POSITION_OF_REGISTER_X_LINE 134
 
-// If one of the 3 next defines is changed: change also xxxREG in registers.h
+// If one of the 4 next defines is changed: change also xxxREG in registers.h
 #define Y_POSITION_OF_AIM_LINE        Y_POSITION_OF_REGISTER_X_LINE
 #define Y_POSITION_OF_TAM_LINE        Y_POSITION_OF_REGISTER_T_LINE
 #define Y_POSITION_OF_NIM_LINE        Y_POSITION_OF_REGISTER_X_LINE
+#define Y_POSITION_OF_ERR_LINE        Y_POSITION_OF_REGISTER_Z_LINE
 
 /********************************************//**
  * \typedef videoMode_t

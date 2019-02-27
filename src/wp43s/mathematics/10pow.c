@@ -37,7 +37,7 @@ void (* const tenPow[12])(void) = {
  * \return void
  ***********************************************/
 void tenPowError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate 10" STD_SUP_x " for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fn10Pow:", errorMessage, NULL, NULL);
@@ -118,7 +118,7 @@ void tenPowBigI(void) {
 
 void tenPowRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tenPowRe16:", "cannot use NaN as an input of 10^", NULL, NULL);
     #endif
@@ -138,7 +138,7 @@ void tenPowRe16(void) {
 
 void tenPowCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tenPowCo16:", "cannot use NaN as an input of 10^", NULL, NULL);
     #endif
@@ -176,7 +176,7 @@ void tenPowSmaI(void) {
 
 void tenPowRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tenPowRe34:", "cannot use NaN as an input of 10^", NULL, NULL);
     #endif
@@ -196,7 +196,7 @@ void tenPowRe34(void) {
 
 void tenPowCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tenPowCo34:", "cannot use NaN as an input of 10^", NULL, NULL);
     #endif

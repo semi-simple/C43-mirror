@@ -160,7 +160,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     refreshStack();
   //}
   //else {
-  //  displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+  //  displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
   //  #ifdef PC_BUILD
   //    sprintf(errorMessage, "displayFormatN = %u is out of range for ALL!", displayFormatN);
   //    showInfoDialog("In function fnDisplayFormatAll:", errorMessage, "The value should be from 0 to 15.", NULL);

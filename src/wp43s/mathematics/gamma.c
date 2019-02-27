@@ -43,7 +43,7 @@ void (* const lnGamma[12])(void) = {
  * \return void
  ***********************************************/
 void gammaError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate gamma(%s)", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnGamma:", errorMessage, NULL, NULL);
@@ -59,7 +59,7 @@ void gammaError(void) {
  * \return void
  ***********************************************/
 void lnGammaError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate lnGamma(%s)", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnLnGamma:", errorMessage, NULL, NULL);
@@ -186,7 +186,7 @@ void lnGammaBigI(void) {
 
 void gammaRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function gammaRe16:", "cannot use NaN as an input of gamma", NULL, NULL);
     #endif
@@ -203,7 +203,7 @@ void gammaRe16(void) {
 
 void lnGammaRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaRe16:", "cannot use NaN as an input of lnGamma", NULL, NULL);
     #endif
@@ -220,7 +220,7 @@ void lnGammaRe16(void) {
 
 void gammaCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function gammaCo16:", "cannot use NaN as an input of gamma", NULL, NULL);
     #endif
@@ -234,7 +234,7 @@ void gammaCo16(void) {
 
 void lnGammaCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaCo16:", "cannot use NaN as an input of lnGamma", NULL, NULL);
     #endif
@@ -248,7 +248,7 @@ void lnGammaCo16(void) {
 
 void gammaRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function gammaRe34:", "cannot use NaN as an input of gamma", NULL, NULL);
     #endif
@@ -262,7 +262,7 @@ void gammaRe34(void) {
 
 void lnGammaRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaRe34:", "cannot use NaN as an input of lnGamma", NULL, NULL);
     #endif
@@ -276,7 +276,7 @@ void lnGammaRe34(void) {
 
 void gammaCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function gammaCo34:", "cannot use NaN as an input of gamma", NULL, NULL);
     #endif
@@ -290,7 +290,7 @@ void gammaCo34(void) {
 
 void lnGammaCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaCo34:", "cannot use NaN as an input of lnGamma", NULL, NULL);
     #endif

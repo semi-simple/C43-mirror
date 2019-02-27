@@ -37,7 +37,7 @@ void (* const swapReIm[12])(void) = {
  * \return void
  ***********************************************/
 void swapReImError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Re" STD_LEFT_RIGHT_ARROWS "Im for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnSwapRealImaginary:", errorMessage, NULL, NULL);

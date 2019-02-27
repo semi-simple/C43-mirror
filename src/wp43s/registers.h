@@ -29,10 +29,11 @@
 #define REGISTER_J  110
 #define REGISTER_K  111
 
-// If one of the 3 next defines is changed: change also xxxLINE in screen.h
+// If one of the 4 next defines is changed: change also xxxLINE in screen.h
 #define AIM_REGISTER_LINE REGISTER_X
 #define TAM_REGISTER_LINE REGISTER_T
 #define NIM_REGISTER_LINE REGISTER_X
+#define ERR_REGISTER_LINE REGISTER_Z
 
 #define FIRST_TEMPORARY_REGISTER         2000
 #define NUMBER_OF_TEMPORARY_REGISTERS       8 // 7 are used here: [3] [1/x] [f] [a b/c] [1/x]

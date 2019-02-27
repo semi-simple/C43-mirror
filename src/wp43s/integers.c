@@ -52,7 +52,7 @@ void fnChangeBase(uint16_t base) {
       refreshStack();
     }
     else {
-      displayCalcErrorMessage(8, REGISTER_Z, REGISTER_T);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_T);
       #if(EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
         showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
@@ -67,7 +67,7 @@ void fnChangeBase(uint16_t base) {
       refreshStack();
     }
     else {
-      displayCalcErrorMessage(8, REGISTER_Z, REGISTER_T);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_T);
       #if(EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
         showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
@@ -86,7 +86,7 @@ void fnChangeBase(uint16_t base) {
       fnChangeBase(base);
     }
     else {
-      displayCalcErrorMessage(8, REGISTER_Z, REGISTER_T);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_T);
       #if(EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
         showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
@@ -105,7 +105,7 @@ void fnChangeBase(uint16_t base) {
       fnChangeBase(base);
     }
     else {
-      displayCalcErrorMessage(8, REGISTER_Z, REGISTER_T);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_T);
       #if(EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
         showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
@@ -114,7 +114,7 @@ void fnChangeBase(uint16_t base) {
   }
 
   else {
-    displayCalcErrorMessage(24, REGISTER_T, NIM_REGISTER_LINE);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for " STD_RIGHT_ARROW "INT!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
@@ -131,7 +131,7 @@ void fnLogicalNot(uint16_t unusedButMandatoryParameter) {
   }
 
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for NOT!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnLogicalNot:", errorMessage, NULL, NULL);
@@ -175,7 +175,7 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
   }
 
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for FP!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnFp:", errorMessage, NULL, NULL);
@@ -204,7 +204,7 @@ void fnIp(uint16_t unusedButMandatoryParameter) {
   }
 
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for IP!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnIp:", errorMessage, NULL, NULL);
@@ -249,7 +249,7 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
 
   else {
     restoreStack();
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for (-1)" STD_SUP_x "!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnM1Pow:", errorMessage, NULL, NULL);
@@ -267,7 +267,7 @@ void fnMirror(uint16_t unusedButMandatoryParameter) {
   }
 
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for MIRROR!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnMirror:", errorMessage, NULL, NULL);
@@ -285,7 +285,7 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   }
 
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for PRIME?!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnIsPrime:", errorMessage, NULL, NULL);
@@ -350,7 +350,7 @@ void bigIntegerMultiply(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *resu
     fp_mul(opY, opX, result);
   }
   else {
-    displayCalcErrorMessage(opY->sign == opX->sign ? 4 : 5, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(opY->sign == opX->sign ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Multiplying this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
       bigIntegerToString(opY, tmpStr3000, 10);
@@ -367,7 +367,7 @@ void bigIntegerSquare(bigInteger_t *op, bigInteger_t *result) {
     fp_sqr(op, result);
   }
   else {
-    displayCalcErrorMessage(4, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(4, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Squaring this value (%" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(op), MAX_BIG_INTEGER_SIZE_IN_BITS);
       bigIntegerToString(op, tmpStr3000, 10);
@@ -383,7 +383,7 @@ void bigIntegerAdd(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result) {
     fp_add(opY, opX, result);
   }
   else {
-    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Adding this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
       bigIntegerToString(opY, tmpStr3000, 10);
@@ -400,7 +400,7 @@ void bigIntegerSubtract(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *resu
     fp_sub(opY, opX, result);
   }
   else {
-    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Subtracting this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
       bigIntegerToString(opY, tmpStr3000, 10);
@@ -676,19 +676,19 @@ uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
 
  	if(divisor == 0) {
     if(dividend == 0) {
-      displayCalcErrorMessage(2, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(2, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function WP34S_intDivide: cannot divide 0 by 0!", NULL, NULL, NULL);
       #endif
     }
     else if(dividendSign) {
-      displayCalcErrorMessage(2, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(2, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function WP34S_intDivide: cannot divide a negative finite integer by 0!", NULL, NULL, NULL);
       #endif
     }
     else {
-      displayCalcErrorMessage(2, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(2, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function WP34S_intDivide: cannot divide a positive finite integer by 0!", NULL, NULL, NULL);
       #endif
@@ -797,7 +797,7 @@ uint64_t WP34S_intSqrt(uint64_t x) {
  	uint64_t nn0, nn1;
 
 	 if(signValue) {
-	   displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+	   displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intSqrt: Cannot extract the square root of a negative finite integer!", NULL, NULL, NULL);
     #endif
@@ -899,7 +899,7 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
 	 uint64_t base     = WP34S_extract_value(b, &baseSign);
 
  	if(exponent == 0 && base == 0) {
-	   displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+	   displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intPower: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
@@ -984,7 +984,7 @@ uint64_t WP34S_intLog2(uint64_t x) {
 	 uint32_t log2 = 0;
 
 	 if(value == 0 || signValue) {
-	   displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+	   displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intLog2: Cannot calculate the log" STD_SUB_2 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
@@ -1012,7 +1012,7 @@ uint64_t WP34S_intLog10(uint64_t x) {
  	int32_t c = 0;
 
  	if(value == 0 || signValue) {
-	   displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+	   displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intLog10: Cannot calculate the log" STD_SUB_10 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
@@ -1081,7 +1081,7 @@ int32_t WP34S_isPrime(uint64_t primeCandidate) {
 
 	 /* We fail for numbers >= 2^63 */
  	if((primeCandidate & 0x8000000000000000ull) != 0) {
- 	 	displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+ 	 	displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_isPrime:", "We fail for numbers " STD_GREATER_EQUAL " 2^63!", tmpStr3000, NULL);
     #endif

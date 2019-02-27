@@ -48,7 +48,7 @@ void (* const power[12][12])(void) = {
  * \return void
  ***********************************************/
 void powError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -133,7 +133,7 @@ void powBigIBigI(void) {
   bigIntegerSetPositiveSign(&exponent);
 
  	if(bigIntegerIsZero(&exponent) && bigIntegerIsZero(&base)) {
-	   displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+	   displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powBigIBigI: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
@@ -267,7 +267,7 @@ void powRe16BigI(void) {
  ***********************************************/
 void powRe16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe16Re16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -288,7 +288,7 @@ void powRe16Re16(void) {
  ***********************************************/
 void powRe16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe16Co16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -347,7 +347,7 @@ void powRe16Co34(void) {
  ***********************************************/
 void powCo16BigI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo16BigI:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -367,7 +367,7 @@ void powCo16BigI(void) {
  ***********************************************/
 void powCo16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo16Re16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -387,7 +387,7 @@ void powCo16Re16(void) {
  ***********************************************/
 void powCo16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo16Co16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -458,7 +458,7 @@ void powRm16BigI(void) {
  ***********************************************/
 void powRm16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRm16Re16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -478,7 +478,7 @@ void powRm16Re16(void) {
  ***********************************************/
 void powRm16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRm16Co16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -510,7 +510,7 @@ void powRm16SmaI(void) {
  ***********************************************/
 void powRm16Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRm16Re34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -530,7 +530,7 @@ void powRm16Re34(void) {
  ***********************************************/
 void powRm16Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRm16Co34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -562,7 +562,7 @@ void powCm16BigI(void) {
  ***********************************************/
 void powCm16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCm16Re16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -582,7 +582,7 @@ void powCm16Re16(void) {
  ***********************************************/
 void powCm16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCm16Co16:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -614,7 +614,7 @@ void powCm16SmaI(void) {
  ***********************************************/
 void powCm16Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCm16Re34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -634,7 +634,7 @@ void powCm16Re34(void) {
  ***********************************************/
 void powCm16Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCm16Co34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -783,7 +783,7 @@ void powRe34SmaI(void) {
  ***********************************************/
 void powRe34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe34Re34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -806,7 +806,7 @@ void powRe34Re34(void) {
  ***********************************************/
 void powRe34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe34Co34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -826,7 +826,7 @@ void powRe34Co34(void) {
  ***********************************************/
 void powCo34BigI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34BigI:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -885,7 +885,7 @@ void powCo34SmaI(void) {
  ***********************************************/
 void powCo34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34Re34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
@@ -905,7 +905,7 @@ void powCo34Re34(void) {
  ***********************************************/
 void powCo34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34Co34:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif

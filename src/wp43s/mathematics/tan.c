@@ -37,7 +37,7 @@ void (* const Tan[12])(void) = {
  * \return void
  ***********************************************/
 void errorTan(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Tan for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnTan:", errorMessage, NULL, NULL);
@@ -107,7 +107,7 @@ void tanBigI(void) {
       real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function tanRe34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
       #endif
@@ -124,7 +124,7 @@ void tanBigI(void) {
 
 void tanRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanRe16:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif
@@ -146,7 +146,7 @@ void tanRe16(void) {
       	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
       }
       else {
-        displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+        displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           showInfoDialog("In function tanRe16:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
         #endif
@@ -164,7 +164,7 @@ void tanRe16(void) {
 
 void tanCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanCo16:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif
@@ -223,7 +223,7 @@ void tanCo16(void) {
 
 void tanAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanAngl:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif
@@ -242,7 +242,7 @@ void tanAngl(void) {
       real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function tanRe34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
       #endif
@@ -270,7 +270,7 @@ void tanCm16(void) {
 
 void tanRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanRe34:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif
@@ -290,7 +290,7 @@ void tanRe34(void) {
       	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
       }
       else {
-        displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+        displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           showInfoDialog("In function tanRe34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
         #endif
@@ -306,7 +306,7 @@ void tanRe34(void) {
 
 void tanCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanCo34:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif

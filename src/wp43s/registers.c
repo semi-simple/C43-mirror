@@ -659,7 +659,7 @@ uint32_t allocateMemory(uint32_t numBytes) {
     return firstFreeByte - numBytes;
   }
   else {
-    displayCalcErrorMessage(11, REGISTER_Z, REGISTER_T);
+    displayCalcErrorMessage(11, ERR_REGISTER_LINE, REGISTER_T);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Trying to allocate %" FMT32U " bytes", numBytes);
       sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "but only %" FMT32U " left!", lastFreeByte - firstFreeByte + 1u);
@@ -760,7 +760,7 @@ void allocateMemoryInsert(uint32_t address, uint32_t numBytes) {
     }
   }
   else {
-    displayCalcErrorMessage(11, REGISTER_Z, REGISTER_T);
+    displayCalcErrorMessage(11, ERR_REGISTER_LINE, REGISTER_T);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage,      "Trying to allocate %" FMT32U " bytes", numBytes);
       sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "while only %" FMT32U " left!", lastFreeByte - firstFreeByte + 1u);
@@ -1267,7 +1267,7 @@ void fnConvertXToReal16(uint16_t unusedParamButMandatory) {
   }
 
   else if(getRegisterDataType(REGISTER_X) != dtReal16 && getRegisterDataType(REGISTER_X) != dtComplex16) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert %s to a SP!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnConvertXToReal16:", errorMessage, NULL, NULL);
@@ -1298,7 +1298,7 @@ void fnConvertXToReal34(uint16_t unusedParamButMandatory) {
   }
 
   else if(getRegisterDataType(REGISTER_X) != dtReal34 && getRegisterDataType(REGISTER_X) != dtComplex34) {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert %s to a DP!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnConvertXToReal34:", errorMessage, NULL, NULL);
@@ -1950,7 +1950,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
   int16_t value;
 
   if(regist >= FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "local indirection register .%02d", regist - FIRST_LOCAL_REGISTER);
       showInfoDialog("In function indirectAddressing:", errorMessage, "is not defined!", NULL);
@@ -1960,7 +1960,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
   else if(getRegisterDataType(regist) == dtReal16) {
     if(real16CompareLessThan(REGISTER_REAL16_DATA(regist), const16_0) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(regist), const16_1000)) {
-      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         real16ToString(REGISTER_REAL16_DATA(regist), errorMessage + 200);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
@@ -1973,7 +1973,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
   else if(getRegisterDataType(regist) == dtReal34) {
     if(real34CompareLessThan(REGISTER_REAL34_DATA(regist), const34_0) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(regist), const34_180)) {
-      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         real34ToString(REGISTER_REAL34_DATA(regist), errorMessage + 200);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
@@ -1989,7 +1989,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
     convertBigIntegerRegisterToBigInteger(regist, &bigInteger);
     if(bigIntegerIsNegative(&bigInteger) || bigIntegerCompareUInt(&bigInteger, 180) == BIG_INTEGER_GREATER_THAN) {
-      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         bigIntegerToString(&bigInteger, errorMessage + 200, 10);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
@@ -2006,7 +2006,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
     convertSmallIntegerRegisterToUInt64(regist, &sign, &val);
     if(sign == 1 || val > 180) {
-      displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         const font_t *font;
 
@@ -2021,7 +2021,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
   }
 
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "register %" FMT16S " is %s:", regist, getRegisterDataTypeName(regist, true, false));
       showInfoDialog("In function indirectAddressing:", errorMessage, "not suited for indirect addressing!", NULL);
@@ -2033,7 +2033,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     return value;
   }
   else {
-    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "value = %d! Should be from %d to %d.", value, minValue, maxValue);
       showInfoDialog("In function indirectAddressing:", errorMessage, NULL, NULL);

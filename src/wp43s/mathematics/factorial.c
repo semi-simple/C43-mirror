@@ -37,7 +37,7 @@ void (* const fact[12])(void) = {
  * \return void
  ***********************************************/
 void factError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate x! for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnFactorial:", errorMessage, NULL, NULL);
@@ -101,7 +101,7 @@ void factBigI(void) {
   convertBigIntegerRegisterToBigInteger(opX, &temp);
 
   if(bigIntegerIsNegative(&temp)) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       bigIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
@@ -111,7 +111,7 @@ void factBigI(void) {
   }
 
   if(bigIntegerCompareUInt(&temp, 294) == BIG_INTEGER_GREATER_THAN) {
-    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       bigIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
@@ -135,7 +135,7 @@ void factBigI(void) {
 
 void factRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function factRe16:", "cannot use NaN as an input of x!", NULL, NULL);
     #endif
@@ -152,7 +152,7 @@ void factRe16(void) {
 
 void factCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function factCo16:", "cannot use NaN as an input of x!", NULL, NULL);
     #endif
@@ -171,7 +171,7 @@ void factSmaI(void) {
   convertSmallIntegerRegisterToUInt64(opX, &sign, &value);
 
   if(sign == 1) { // Negative value
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       bigIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
@@ -181,7 +181,7 @@ void factSmaI(void) {
   }
 
   if(value > 20) {
-    displayCalcErrorMessage(8, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       bigIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
@@ -210,7 +210,7 @@ void factSmaI(void) {
 
 void factRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function factRe34:", "cannot use NaN as an input of x!", NULL, NULL);
     #endif
@@ -224,7 +224,7 @@ void factRe34(void) {
 
 void factCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function factCo34:", "cannot use NaN as an input of x!", NULL, NULL);
     #endif

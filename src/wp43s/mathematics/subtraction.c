@@ -48,7 +48,7 @@ void (* const subtraction[12][12])(void) = {
  * \return void
  ***********************************************/
 void subError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot subtract %s", getRegisterDataTypeName(REGISTER_X, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "from %s", getRegisterDataTypeName(REGISTER_Y, true, false));
@@ -140,7 +140,7 @@ void subBigIBigI(void) {
  ***********************************************/
 void subBigIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subBigIRe16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -164,7 +164,7 @@ void subBigIRe16(void) {
  ***********************************************/
 void subBigICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subBigICo16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -189,7 +189,7 @@ void subBigICo16(void) {
  ***********************************************/
 void subBigIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subBigIAngl:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -252,7 +252,7 @@ void subBigISmaI(void) {
  ***********************************************/
 void subBigIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subBigIRe34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -276,7 +276,7 @@ void subBigIRe34(void) {
  ***********************************************/
 void subBigICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subBigICo34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -301,7 +301,7 @@ void subBigICo34(void) {
  ***********************************************/
 void subRe16BigI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe16BigI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -325,7 +325,7 @@ void subRe16BigI(void) {
  ***********************************************/
 void subRe16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe16Re16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -348,7 +348,7 @@ void subRe16Re16(void) {
  ***********************************************/
 void subRe16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe16Co16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -373,7 +373,7 @@ void subRe16Co16(void) {
  ***********************************************/
 void subRe16Angl(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe16Angl:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -401,7 +401,7 @@ void subRe16Angl(void) {
  ***********************************************/
 void subRe16Time(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe16Time:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -421,7 +421,7 @@ void subRe16Time(void) {
  ***********************************************/
 void subRe16Date(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe16Date:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -480,7 +480,7 @@ void subRe16Co34(void) {
  ***********************************************/
 void subCo16BigI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subCo16BigI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -505,7 +505,7 @@ void subCo16BigI(void) {
  ***********************************************/
 void subCo16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subCo16Re16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -529,7 +529,7 @@ void subCo16Re16(void) {
  ***********************************************/
 void subCo16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subCo16Co16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -592,7 +592,7 @@ void subCo16Co34(void) {
  ***********************************************/
 void subAnglBigI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subAnglBigI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -618,7 +618,7 @@ void subAnglBigI(void) {
  ***********************************************/
 void subAnglRe16(void) {
   if(real16IsNaN(REGISTER_ANGLE_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subAnglRe16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -646,7 +646,7 @@ void subAnglRe16(void) {
  ***********************************************/
 void subAnglAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subAnglAngl:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -669,7 +669,7 @@ void subAnglAngl(void) {
  ***********************************************/
 void subAnglSmaI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subAnglSmaI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -695,7 +695,7 @@ void subAnglSmaI(void) {
  ***********************************************/
 void subAnglRe34(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subAnglRe34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -735,7 +735,7 @@ void subTimeBigI(void) {
  ***********************************************/
 void subTimeRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subTimeRe16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -767,7 +767,7 @@ void subTimeTime(void) {
  ***********************************************/
 void subTimeRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subTimeRe34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -799,7 +799,7 @@ void subDateBigI(void) {
  ***********************************************/
 void subDateRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subDateRe16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -831,7 +831,7 @@ void subDateDate(void) {
  ***********************************************/
 void subDateRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subDateRe34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -938,7 +938,7 @@ void subSmaICo16(void) {
  ***********************************************/
 void subSmaIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subSmaIAngl:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1003,7 +1003,7 @@ void subSmaICo34(void) {
  ***********************************************/
 void subRe34BigI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe34BigI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1053,7 +1053,7 @@ void subRe34Co16(void) {
  ***********************************************/
 void subRe34Angl(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe34Angl:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1081,7 +1081,7 @@ void subRe34Angl(void) {
  ***********************************************/
 void subRe34Time(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe34Time:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1101,7 +1101,7 @@ void subRe34Time(void) {
  ***********************************************/
 void subRe34Date(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe34Date:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1134,7 +1134,7 @@ void subRe34SmaI(void) {
  ***********************************************/
 void subRe34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe34Re34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1157,7 +1157,7 @@ void subRe34Re34(void) {
  ***********************************************/
 void subRe34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe34Co34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1182,7 +1182,7 @@ void subRe34Co34(void) {
  ***********************************************/
 void subCo34BigI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subCo34BigI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1246,7 +1246,7 @@ void subCo34SmaI(void) {
  ***********************************************/
 void subCo34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subCo34Re34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
@@ -1270,7 +1270,7 @@ void subCo34Re34(void) {
  ***********************************************/
 void subCo34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subCo34Co34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif

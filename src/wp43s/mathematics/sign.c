@@ -37,7 +37,7 @@ void (* const sign[12])(void) = {
  * \return void
  ***********************************************/
 void signError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate the sign of %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnSign:", errorMessage, NULL, NULL);
@@ -118,7 +118,7 @@ void signBigI(void) {
 
 void signRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function signRe16:", "cannot use NaN as an input of sign", NULL, NULL);
     #endif
@@ -171,7 +171,7 @@ void signSmaI(void) {
 
 void signRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function signRe34:", "cannot use NaN as an input of sign", NULL, NULL);
     #endif

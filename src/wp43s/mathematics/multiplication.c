@@ -48,7 +48,7 @@ void (* const multiplication[12][12])(void) = {
  * \return void
  ***********************************************/
 void mulError(void) {
-  displayCalcErrorMessage(24, REGISTER_T, REGISTER_X);
+  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot multiply %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -140,7 +140,7 @@ void mulBigIBigI(void) {
  ***********************************************/
 void mulBigIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulBigIRe16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -164,7 +164,7 @@ void mulBigIRe16(void) {
  ***********************************************/
 void mulBigICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulBigICo16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -190,7 +190,7 @@ void mulBigICo16(void) {
  ***********************************************/
 void mulBigIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulBigIAngl:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -264,7 +264,7 @@ void mulBigISmaI(void) {
  ***********************************************/
 void mulBigIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulBigIRe34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -288,7 +288,7 @@ void mulBigIRe34(void) {
  ***********************************************/
 void mulBigICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulBigICo34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -314,7 +314,7 @@ void mulBigICo34(void) {
  ***********************************************/
 void mulRe16BigI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe16BigI:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -338,7 +338,7 @@ void mulRe16BigI(void) {
  ***********************************************/
 void mulRe16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe16Re16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -361,7 +361,7 @@ void mulRe16Re16(void) {
  ***********************************************/
 void mulRe16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe16Co16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -386,7 +386,7 @@ void mulRe16Co16(void) {
  ***********************************************/
 void mulRe16Angl(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe16Angl:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -413,7 +413,7 @@ void mulRe16Angl(void) {
  ***********************************************/
 void mulRe16Time(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe16Time:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -433,7 +433,7 @@ void mulRe16Time(void) {
  ***********************************************/
 void mulRe16Rm16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe16Rm16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -453,7 +453,7 @@ void mulRe16Rm16(void) {
  ***********************************************/
 void mulRe16Cm16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe16Cm16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -512,7 +512,7 @@ void mulRe16Co34(void) {
  ***********************************************/
 void mulCo16BigI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo16BigI:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -538,7 +538,7 @@ void mulCo16BigI(void) {
  ***********************************************/
 void mulCo16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo16Re16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -562,7 +562,7 @@ void mulCo16Re16(void) {
  ***********************************************/
 void mulCo16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo16Co16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -593,7 +593,7 @@ void mulCo16Co16(void) {
  ***********************************************/
 void mulCo16Rm16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo16Rm16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -613,7 +613,7 @@ void mulCo16Rm16(void) {
  ***********************************************/
 void mulCo16Cm16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo16Cm16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -672,7 +672,7 @@ void mulCo16Co34(void) {
  ***********************************************/
 void mulAnglBigI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulAnglBigI:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -697,7 +697,7 @@ void mulAnglBigI(void) {
  ***********************************************/
 void mulAnglRe16(void) {
   if(real16IsNaN(REGISTER_ANGLE_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulAnglRe16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -724,7 +724,7 @@ void mulAnglRe16(void) {
  ***********************************************/
 void mulAnglSmaI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulAnglSmaI:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -749,7 +749,7 @@ void mulAnglSmaI(void) {
  ***********************************************/
 void mulAnglRe34(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulAnglRe34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -788,7 +788,7 @@ void mulTimeBigI(void) {
  ***********************************************/
 void mulTimeRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulTimeRe16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -820,7 +820,7 @@ void mulTimeSmaI(void) {
  ***********************************************/
 void mulTimeRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulTimeRe34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -852,7 +852,7 @@ void mulRm16BigI(void) {
  ***********************************************/
 void mulRm16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRm16Re16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -872,7 +872,7 @@ void mulRm16Re16(void) {
  ***********************************************/
 void mulRm16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRm16Co16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -928,7 +928,7 @@ void mulRm16SmaI(void) {
  ***********************************************/
 void mulRm16Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRm16Re34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -948,7 +948,7 @@ void mulRm16Re34(void) {
  ***********************************************/
 void mulRm16Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRm16Co34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -980,7 +980,7 @@ void mulCm16BigI(void) {
  ***********************************************/
 void mulCm16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCm16Re16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1000,7 +1000,7 @@ void mulCm16Re16(void) {
  ***********************************************/
 void mulCm16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCm16Co16:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1056,7 +1056,7 @@ void mulCm16SmaI(void) {
  ***********************************************/
 void mulCm16Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCm16Re34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1076,7 +1076,7 @@ void mulCm16Re34(void) {
  ***********************************************/
 void mulCm16Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCm16Co34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1135,7 +1135,7 @@ void mulSmaICo16(void) {
  ***********************************************/
 void mulSmaIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulSmaIAngl:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1235,7 +1235,7 @@ void mulSmaICo34(void) {
  ***********************************************/
 void mulRe34BigI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe34BigI:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1285,7 +1285,7 @@ void mulRe34Co16(void) {
  ***********************************************/
 void mulRe34Angl(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe34Angl:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1361,7 +1361,7 @@ void mulRe34SmaI(void) {
  ***********************************************/
 void mulRe34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe34Re34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1384,7 +1384,7 @@ void mulRe34Re34(void) {
  ***********************************************/
 void mulRe34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe34Co34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1408,7 +1408,7 @@ void mulRe34Co34(void) {
  ***********************************************/
 void mulCo34BigI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo34BigI:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1497,7 +1497,7 @@ void mulCo34SmaI(void) {
  ***********************************************/
 void mulCo34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo34Re34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif
@@ -1521,7 +1521,7 @@ void mulCo34Re34(void) {
  ***********************************************/
 void mulCo34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulCo34Co34:", "cannot use NaN as an input of x", NULL, NULL);
     #endif

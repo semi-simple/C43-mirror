@@ -51,7 +51,7 @@ void fnToRect(uint16_t unusedParamButMandatory) {
     }
 
     if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-      displayCalcErrorMessage(1, REGISTER_T, REGISTER_X);
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnToPolar:", "cannot use NaN as an input of " STD_RIGHT_ARROW "Pol", NULL, NULL);
       #endif
@@ -77,7 +77,7 @@ void fnToRect(uint16_t unusedParamButMandatory) {
     refreshRegisterLine(REGISTER_Y);
   }
   else {
-    displayCalcErrorMessage(24, REGISTER_T, REGISTER_X); // Invalid input data type for this operation
+    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert (%s, %s) to rectangular coordinates!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false), getDataTypeName(getRegisterDataType(REGISTER_Y), false, false));
       showInfoDialog("In function fnToRect:", errorMessage, NULL, NULL);

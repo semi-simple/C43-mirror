@@ -424,7 +424,7 @@ const item_t indexOfItems[] = {
 /*  318 */  { toBeCoded,                   NOPARAM,                     "LOADR",                                       "LOADR",                                                                      SLS_UNCHANGED},
 /*  319 */  { toBeCoded,                   NOPARAM,                     "LOADSS",                                      "LOADSS",                                                                     SLS_UNCHANGED},
 /*  320 */  { toBeCoded,                   NOPARAM,                     "LOAD" STD_SIGMA,                              "LOAD" STD_SIGMA,                                                             SLS_UNCHANGED},
-/*  321 */  { toBeCoded,                   NOPARAM,                     "LocR",                                        "LocR",                                                                       SLS_UNCHANGED},
+/*  321 */  { allocateLocalRegisters,      TM_VALUE,                    "LocR",                                        "LocR",                                                                       SLS_UNCHANGED},
 /*  322 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                                                      SLS_ENABLED  },
 /*  323 */  { fnLog10,                     NOPARAM,                     "LOG" STD_SUB_10,                              "lg",                                                                         SLS_ENABLED  },
 /*  324 */  { fnLog2,                      NOPARAM,                     "LOG" STD_SUB_2,                               "lb x",                                                                       SLS_ENABLED  },

@@ -396,6 +396,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_REGISTER_BROWSER) {
+        rbr1stDigit = true;
         calcMode = previousCalcMode;
         clearScreen(false, true, true);
         refreshStack();
@@ -658,6 +659,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_REGISTER_BROWSER) {
+        rbr1stDigit = true;
         if(rbrMode == RBR_GLOBAL) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen + 1, FIRST_LOCAL_REGISTER);
           registerBrowser(NOPARAM);
@@ -716,6 +718,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_REGISTER_BROWSER) {
+        rbr1stDigit = true;
         if(rbrMode == RBR_GLOBAL) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1, FIRST_LOCAL_REGISTER);
           registerBrowser(NOPARAM);
@@ -858,6 +861,7 @@ void btnPressed(void *notUsed, void *data) {
 
     else if(calcMode == CM_REGISTER_BROWSER) {
       if(item == CHR_PERIOD) {
+        rbr1stDigit = true;
         if(rbrMode == RBR_GLOBAL) {
           rbrMode = RBR_LOCAL;
           currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
@@ -873,10 +877,12 @@ void btnPressed(void *notUsed, void *data) {
         registerBrowser(NOPARAM);
       }
       else if(item == ITM_RS) {
+        rbr1stDigit = true;
         showContent = !showContent;
         registerBrowser(NOPARAM);
       }
       else if(item == ITM_RS) {
+        rbr1stDigit = true;
         if(rbrMode == RBR_GLOBAL) {
           rbrMode = RBR_NAMED;
           currentRegisterBrowserScreen = 1000;
@@ -892,6 +898,7 @@ void btnPressed(void *notUsed, void *data) {
         registerBrowser(NOPARAM);
       }
       else if(item == ITM_RCL) {
+        rbr1stDigit = true;
         if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
           calcMode = previousCalcMode;
           currentFlgScr = 0;
@@ -905,6 +912,26 @@ void btnPressed(void *notUsed, void *data) {
           currentRegisterBrowserScreen = 9999;
         }
         else if(rbrMode == RBR_NAMED) {
+        }
+      }
+      else if(CHR_0 <= item && item <= CHR_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+        if(rbr1stDigit) {
+          rbr1stDigit = false;
+          rbrRegister = item - CHR_0;
+        }
+        else {
+          rbr1stDigit = true;
+          rbrRegister = rbrRegister*10 + item - CHR_0;
+
+          if(rbrMode == RBR_GLOBAL) {
+            currentRegisterBrowserScreen = rbrRegister;
+            registerBrowser(NOPARAM);
+          }
+          else {
+            rbrRegister = (rbrRegister >= numberOfLocalRegisters ? 0 : rbrRegister);
+            currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
+            registerBrowser(NOPARAM);
+          }
         }
       }
     }

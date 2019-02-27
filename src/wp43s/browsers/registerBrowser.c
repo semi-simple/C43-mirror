@@ -34,6 +34,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
     currentRegisterBrowserScreen = REGISTER_X;
     rbrMode = RBR_GLOBAL;
     showContent = true;
+    rbr1stDigit = true;
     calcMode = CM_REGISTER_BROWSER;
   }
 

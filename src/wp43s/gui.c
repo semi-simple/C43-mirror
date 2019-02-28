@@ -2485,7 +2485,7 @@ void setupUI(void) {
   lbl85G  = gtk_label_new("");
   lbl81H  = gtk_label_new("I");      // Menu alphaINTL for AIM
   lbl83H  = gtk_label_new("\u2218"); // Menu alphaDOT for AIM
-  lbl84H  = gtk_label_new("\u2399"); // Printer
+  lbl84H  = gtk_label_new("");
   lbl81L  = gtk_label_new("");
   lbl82L  = gtk_label_new("");
   lbl83L  = gtk_label_new("");

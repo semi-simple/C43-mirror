@@ -64,7 +64,7 @@ const calcKey_t kbd_std[37] = {
  {81,   ITM_ADD,          KEY_PRTX,       -MNU_IO,       CHR_PLUS,       CHR_QUESTION_MARK, CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      },
  {82,   CHR_0,           -MNU_LOOP,       -MNU_TEST,     CHR_0,          CHR_Z,             CHR_0,           CHR_ZETA,      CHR_0        },
  {83,   CHR_PERIOD,      -MNU_PARTS,      -MNU_INFO,     CHR_PERIOD,     CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   },
- {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_SPACE,         CHR_PRINTER,     ITM_NULL,      ITM_NULL     },
+ {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_SPACE,         ITM_NULL,        ITM_NULL,      ITM_NULL     },
  {85,   KEY_EXIT,         ITM_RTN,         ITM_OFF,      KEY_EXIT,       KEY_EXIT,          ITM_NULL,        ITM_OFF,       KEY_EXIT     }
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
 };

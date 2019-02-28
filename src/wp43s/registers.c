@@ -1681,6 +1681,34 @@ void fnStoreStack(uint16_t r) {
 
 
 /********************************************//**
+ * \brief Stores X in the element I,J of a matrix
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnStoreElement(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnStoreElement:", "To be coded", NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Stores X and Y in the indexes I and J
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnStoreIJ(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnStoreIJ:", "To be coded", NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
  * \brief Recalls a register in X
  *
  * \param[in] regist uint16_t
@@ -1921,6 +1949,34 @@ void fnRecallConfig(uint16_t r) {
 void fnRecallStack(uint16_t r) {
   #ifdef PC_BUILD
     showInfoDialog("In function fnRecallStack:", "To be coded", NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Recalls the matrix element I,J in X
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnRecallElement(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnRecallElement:", "To be coded", NULL, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Recalls the indexes I and J in X and Y
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnRecallIJ(uint16_t r) {
+  #ifdef PC_BUILD
+    showInfoDialog("In function fnRecallIJ:", "To be coded", NULL, NULL);
   #endif
 }
 

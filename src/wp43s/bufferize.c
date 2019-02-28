@@ -88,7 +88,7 @@ void addItemToBuffer(uint16_t item) {
     }
 
     else if(calcMode == CM_TAM) {
-      if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack) { // Operation
+      if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
         tamOperation = item;
         tamTransitionSystem(TT_OPERATION);
       }
@@ -685,6 +685,8 @@ int16_t getStoRclOperation(void) {
     else if(tamCurrentOperation == ITM_Min   ) return ITM_STOMIN;
     else if(tamCurrentOperation == ITM_Config) return ITM_STOCFG;
     else if(tamCurrentOperation == ITM_Stack ) return ITM_STOS;
+    else if(tamCurrentOperation == ITM_dddEL ) return ITM_STOEL;
+    else if(tamCurrentOperation == ITM_dddIJ ) return ITM_STOIJ;
     else {
       sprintf(errorMessage, "In function getStoRclOperation: status=0 tamTransition=TT_OPERATION tamCurrentOperation=ITM_STO. %d is an unexpected value for tamCurrentOperation!", tamCurrentOperation);
       displayBugScreen(errorMessage);
@@ -700,6 +702,8 @@ int16_t getStoRclOperation(void) {
     else if(tamCurrentOperation == ITM_Min   ) return ITM_RCLMIN;
     else if(tamCurrentOperation == ITM_Config) return ITM_RCLCFG;
     else if(tamCurrentOperation == ITM_Stack ) return ITM_RCLS;
+    else if(tamCurrentOperation == ITM_dddEL ) return ITM_RCLEL;
+    else if(tamCurrentOperation == ITM_dddIJ ) return ITM_RCLIJ;
     else {
       sprintf(errorMessage, "In function getStoRclOperation: status=0 tamTransition=TT_OPERATION tamCurrentOperation=ITM_RCL. %d is an unexpected value for tamCurrentOperation!", tamCurrentOperation);
       displayBugScreen(errorMessage);
@@ -722,7 +726,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
   if(status == 0) { // OP __
     if(tamTransition == TT_OPERATION) {
       if(tamMode == TM_STORCL) {
-        strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : "S")))))));
+        strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : (tamOperation==ITM_Stack ? "S" : (tamOperation==ITM_dddEL ? "EL" : "IJ")))))))));
         sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
         tamCurrentOperation = tamOperation;
         transitionSystemStatus = 1;
@@ -777,7 +781,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
   // RCL+, RCL-, RCL×, RCL/, RCL^, RCLv, STO+, STO-, STO×, STO/, STO^ or RCLv
   else if(status == 1) {// OPo __
-    strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : "S")))))));
+    strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : (tamOperation==ITM_Stack ? "S" : (tamOperation==ITM_dddEL ? "EL" : "IJ")))))))));
 
     if((tamTransition==TT_OPERATION && tamOperation==tamCurrentOperation) || tamTransition==TT_BACKSPACE) {
       sprintf(tamBuffer, "%s __   ", indexOfItems[tamFunction].itemPrinted);
@@ -785,7 +789,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     }
     else if(tamTransition == TT_OPERATION) {
       tamCurrentOperation = tamOperation;
-      strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : "S")))))));
+      strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : (tamOperation==ITM_Stack ? "S" : (tamOperation==ITM_dddEL ? "EL" : "IJ")))))))));
       sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
     }
     else if(tamTransition == TT_LETTER) {

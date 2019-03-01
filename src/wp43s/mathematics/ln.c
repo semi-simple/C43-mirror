@@ -24,8 +24,8 @@
 
 void (* const ln[12])(void) = {
 //  regX ==> 1            2        3          4         5         6         7         8           9            10             11       12
-//           Big integer  real16   complex16  Angle     Time      Date      String    real16 mat  complex16 m  Small integer  real34   complex34
-             lnBigI,      lnRe16,  lnCo16,    lnError,  lnError,  lnError,  lnError,  lnRm16,     lnCm16,      lnSmaI,        lnRe34,  lnCo34
+//           Long integer real16   complex16  Angle     Time      Date      String    real16 mat  complex16 m  Short integer  real34   complex34
+             lnLonI,      lnRe16,  lnCo16,    lnError,  lnError,  lnError,  lnError,  lnRm16,     lnCm16,      lnShoI,        lnRe34,  lnCo34
 };
 
 
@@ -95,10 +95,10 @@ void fnLn(uint16_t unusedParamButMandatory) {
 
 
 
-void lnBigI(void) {
+void lnLonI(void) {
   real51_t real51;
 
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
@@ -107,7 +107,7 @@ void lnBigI(void) {
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnBigI:", "cannot calculate Ln(0)", NULL, NULL);
+        showInfoDialog("In function lnLonI:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
     }
   }
@@ -131,7 +131,7 @@ void lnBigI(void) {
   else {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnBigI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+      showInfoDialog("In function lnLonI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
   }
 }
@@ -239,10 +239,10 @@ void lnCm16(void) {
 
 
 
-void lnSmaI(void) {
+void lnShoI(void) {
   real51_t real51;
 
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
@@ -250,7 +250,7 @@ void lnSmaI(void) {
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnSmaI:", "cannot calculate Ln(0)", NULL, NULL);
+        showInfoDialog("In function lnShoI:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
     }
   }
@@ -274,7 +274,7 @@ void lnSmaI(void) {
   else {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnSmaI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+      showInfoDialog("In function lnShoI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
   }
 }

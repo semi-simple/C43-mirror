@@ -24,8 +24,8 @@
 
 void (* const logBase2[12])(void) = {
 //  regX ==> 1            2          3          4           5           6           7           8           9            10             11         12
-//           Big integer  real16     complex16              Time        Date        String      real16 mat  complex16 m  Small integer  real34     complex34
-             log2BigI,    log2Re16,  log2Co16,  log2Error,  log2Error,  log2Error,  log2Error,  log2Rm16,   log2Cm16,    log2SmaI,      log2Re34,  log2Co34
+//           Long integer real16     complex16              Time        Date        String      real16 mat  complex16 m  Short integer  real34     complex34
+             log2LonI,    log2Re16,  log2Co16,  log2Error,  log2Error,  log2Error,  log2Error,  log2Rm16,   log2Cm16,    log2ShoI,      log2Re34,  log2Co34
 };
 
 
@@ -95,37 +95,37 @@ void fnLog2(uint16_t unusedParamButMandatory) {
 
 
 
-void log2BigI(void) {
-  bigInteger_t value;
+void log2LonI(void) {
+  longInteger_t value;
 
-  convertBigIntegerRegisterToBigInteger(opX, &value);
+  convertLongIntegerRegisterToLongInteger(opX, &value);
 
   int32_t signX = value.sign;
-  bigIntegerSetPositiveSign(&value);
+  longIntegerSetPositiveSign(&value);
 
-  if(bigIntegerIsZero(&value) || signX) {
+  if(longIntegerIsZero(&value) || signX) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log2BigI: Cannot calculate the log" STD_SUB_2 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
+      showInfoDialog("In function log2LonI: Cannot calculate the log" STD_SUB_2 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
 
-    bigIntegerSetZero(&value);
-    convertBigIntegerToBigIntegerRegister(&value, result);
+    longIntegerSetZero(&value);
+    convertLongIntegerToLongIntegerRegister(&value, result);
     return;
   }
 
   uint32_t log2 = 0;
 
-  if(!bigIntegerIsZero(&value)) {
-    bigIntegerDivide2(&value, &value);
-    while(!bigIntegerIsZero(&value)) {
+  if(!longIntegerIsZero(&value)) {
+    longIntegerDivide2(&value, &value);
+    while(!longIntegerIsZero(&value)) {
       log2++;
-      bigIntegerDivide2(&value, &value);
+      longIntegerDivide2(&value, &value);
     }
   }
 
-  uIntToBigInteger(log2, &value);
-  convertBigIntegerToBigIntegerRegister(&value, result);
+  uIntToLongInteger(log2, &value);
+  convertLongIntegerToLongIntegerRegister(&value, result);
 }
 
 
@@ -236,8 +236,8 @@ void log2Cm16(void) {
 
 
 
-void log2SmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intLog2(*(REGISTER_SMALL_INTEGER_DATA(opX)));
+void log2ShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intLog2(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 

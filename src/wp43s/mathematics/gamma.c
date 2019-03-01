@@ -24,14 +24,14 @@
 
 void (* const gamma[12])(void) = {
 // regX ==> 1             2             3             4              5              6              7              8              9              10             11           12
-//          Big integer   real16        complex16     Date           Time           Date           String         real16 mat     complex16 m    Small integer  real34       complex34
-            gammaBigI,    gammaRe16,    gammaCo16,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaRe34,   gammaCo34
+//          Long integer  real16        complex16     Date           Time           Date           String         real16 mat     complex16 m    Short integer  real34       complex34
+            gammaLonI,    gammaRe16,    gammaCo16,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaRe34,   gammaCo34
 };
 
 void (* const lnGamma[12])(void) = {
 // regX ==> 1             2             3             4              5              6              7              8              9              10             11           12
-//          Big integer   real16        complex16     Date           Time           Date           String         real16 mat     complex16 m    Small integer  real34       complex34
-            lnGammaBigI,  lnGammaRe16,  lnGammaCo16,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaRe34, lnGammaCo34
+//          Long integer  real16        complex16     Date           Time           Date           String         real16 mat     complex16 m    Short integer  real34       complex34
+            lnGammaLonI,  lnGammaRe16,  lnGammaCo16,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaError,  lnGammaRe34, lnGammaCo34
 };
 
 
@@ -166,8 +166,8 @@ void fnLnGamma(uint16_t unusedParamButMandatory) {
 
 
 
-void gammaBigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void gammaLonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_real34Gamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   convertRegister34To16(result);
@@ -175,8 +175,8 @@ void gammaBigI(void) {
 
 
 
-void lnGammaBigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void lnGammaLonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_real34LnGamma(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   convertRegister34To16(result);

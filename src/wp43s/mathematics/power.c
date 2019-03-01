@@ -24,19 +24,19 @@
 
 void (* const power[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4         5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16    angle34   Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {powBigIBigI, powRe16BigI, powCo16BigI, powError, powError,    powError,    powError,    powRm16BigI, powCm16BigI, powSmaIBigI,  powRe34BigI, powCo34BigI},
-/*  2 real16         */ {powBigIRe16, powRe16Re16, powCo16Re16, powError, powError,    powError,    powError,    powRm16Re16, powCm16Re16, powSmaIRe16,  powRe34Re16, powCo34Re16},
-/*  3 complex16      */ {powBigICo16, powRe16Co16, powCo16Co16, powError, powError,    powError,    powError,    powError,    powError,    powSmaICo16,  powRe34Co16, powCo34Co16},
+//      V                Long integer real16       complex16    angle34   Time         Date         String       real16 mat   complex16 m  Short integer real34       complex34
+/*  1 Long integer   */ {powLonILonI, powRe16LonI, powCo16LonI, powError, powError,    powError,    powError,    powRm16LonI, powCm16LonI, powShoILonI,  powRe34LonI, powCo34LonI},
+/*  2 real16         */ {powLonIRe16, powRe16Re16, powCo16Re16, powError, powError,    powError,    powError,    powRm16Re16, powCm16Re16, powShoIRe16,  powRe34Re16, powCo34Re16},
+/*  3 complex16      */ {powLonICo16, powRe16Co16, powCo16Co16, powError, powError,    powError,    powError,    powError,    powError,    powShoICo16,  powRe34Co16, powCo34Co16},
 /*  4 angle34        */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
 /*  5 Time           */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
 /*  6 Date           */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
 /*  7 String         */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
 /*  8 real16 mat     */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
 /*  9 complex16 mat  */ {powError,    powError,    powError,    powError, powError,    powError,    powError,    powError,    powError,    powError,     powError,    powError   },
-/* 10 Small integer  */ {powBigISmaI, powRe16SmaI, powCo16SmaI, powError, powError,    powError,    powError,    powRm16SmaI, powCm16SmaI, powSmaISmaI,  powRe34SmaI, powCo34SmaI},
-/* 11 real34         */ {powBigIRe34, powRe16Re34, powCo16Re34, powError, powError,    powError,    powError,    powRm16Re34, powCm16Re34, powSmaIRe34,  powRe34Re34, powCo34Re34},
-/* 12 complex34      */ {powBigICo34, powRe16Co34, powCo16Co34, powError, powError,    powError,    powError,    powError,    powError   , powSmaICo34,  powRe34Co34, powCo34Co34}
+/* 10 Short integer  */ {powLonIShoI, powRe16ShoI, powCo16ShoI, powError, powError,    powError,    powError,    powRm16ShoI, powCm16ShoI, powShoIShoI,  powRe34ShoI, powCo34ShoI},
+/* 11 real34         */ {powLonIRe34, powRe16Re34, powCo16Re34, powError, powError,    powError,    powError,    powRm16Re34, powCm16Re34, powShoIRe34,  powRe34Re34, powCo34Re34},
+/* 12 complex34      */ {powLonICo34, powRe16Co34, powCo16Co34, powError, powError,    powError,    powError,    powError,    powError   , powShoICo34,  powRe34Co34, powCo34Co34}
 };
 
 
@@ -113,147 +113,147 @@ void fnPower(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
- * \brief opY(big integer) ^ opX(big integer) ==> result(big integer)
+ * \brief opY(long integer) ^ opX(long integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void powBigIBigI(void) {
+void powLonILonI(void) {
 	 int32_t exponentSign, baseSign, powerSign;
-  bigInteger_t base;
-  bigInteger_t exponent;
+  longInteger_t base;
+  longInteger_t exponent;
 
-  convertBigIntegerRegisterToBigInteger(opY, &base);
-  convertBigIntegerRegisterToBigInteger(opX, &exponent);
+  convertLongIntegerRegisterToLongInteger(opY, &base);
+  convertLongIntegerRegisterToLongInteger(opX, &exponent);
 
   baseSign = base.sign;
-  bigIntegerSetPositiveSign(&base);
+  longIntegerSetPositiveSign(&base);
 
   exponentSign = exponent.sign;
-  bigIntegerSetPositiveSign(&exponent);
+  longIntegerSetPositiveSign(&exponent);
 
- 	if(bigIntegerIsZero(&exponent) && bigIntegerIsZero(&base)) {
+ 	if(longIntegerIsZero(&exponent) && longIntegerIsZero(&base)) {
 	   displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powBigIBigI: Cannot calculate 0^0!", NULL, NULL, NULL);
+      showInfoDialog("In function powLonILonI: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
 
-	  	bigIntegerSetZero(&base);
-	  	convertBigIntegerToBigIntegerRegister(&base, result);
+	  	longIntegerSetZero(&base);
+	  	convertLongIntegerToLongIntegerRegister(&base, result);
 	  	return;
   }
 
- 	if(bigIntegerIsZero(&exponent)) {
-	  	uIntToBigInteger(1, &base);
-	  	convertBigIntegerToBigIntegerRegister(&base, result);
+ 	if(longIntegerIsZero(&exponent)) {
+	  	uIntToLongInteger(1, &base);
+	  	convertLongIntegerToLongIntegerRegister(&base, result);
 	  	return;
   }
-	 else if(bigIntegerIsZero(&base) || exponentSign) {
-	  	bigIntegerSetZero(&base);
-	  	convertBigIntegerToBigIntegerRegister(&base, result);
+	 else if(longIntegerIsZero(&base) || exponentSign) {
+	  	longIntegerSetZero(&base);
+	  	convertLongIntegerToLongIntegerRegister(&base, result);
 	  	return;
 	 }
 
-	 powerSign = (baseSign && bigIntegerIsOdd(&exponent));	// Determine the sign of the result
+	 powerSign = (baseSign && longIntegerIsOdd(&exponent));	// Determine the sign of the result
 
   // The int_power_helper function
-  bigInteger_t power;
- 	uIntToBigInteger(1, &power);
+  longInteger_t power;
+ 	uIntToLongInteger(1, &power);
 
-  for(uint32_t i=0; !bigIntegerIsZero(&exponent); i++) {
-    if(bigIntegerIsOdd(&exponent)) {
-     bigIntegerMultiply(&power, &base, &power);
+  for(uint32_t i=0; !longIntegerIsZero(&exponent); i++) {
+    if(longIntegerIsOdd(&exponent)) {
+     longIntegerMultiply(&power, &base, &power);
     }
 
-    bigIntegerDivide2(&exponent, &exponent);
+    longIntegerDivide2(&exponent, &exponent);
 
-    if(!bigIntegerIsZero(&exponent)) {
-      bigIntegerSquare(&base, &base);
+    if(!longIntegerIsZero(&exponent)) {
+      longIntegerSquare(&base, &base);
     }
   }
 
   if(powerSign) {
-    bigIntegerSetNegativeSign(&power);
+    longIntegerSetNegativeSign(&power);
   }
 
-  convertBigIntegerToBigIntegerRegister(&power, result);
+  convertLongIntegerToLongIntegerRegister(&power, result);
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ^ opX(real16) ==> result(real16)
+ * \brief opY(long integer) ^ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void powBigIRe16(void) {
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+void powLonIRe16(void) {
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   powRe16Re16();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ^ opX(complex16) ==> result(complex16)
+ * \brief opY(long integer) ^ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void powBigICo16(void) {
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+void powLonICo16(void) {
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   powRe16Co16();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ^ opX(64bits integer) ==> result(big integer)
+ * \brief opY(long integer) ^ opX(64bits integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void powBigISmaI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
-  powBigIBigI();
+void powLonIShoI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opX, opX);
+  powLonILonI();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ^ opX(real34) ==> result(real34)
+ * \brief opY(long integer) ^ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void powBigIRe34(void) {
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+void powLonIRe34(void) {
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   powRe34Re34();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ^ opX(complex34) ==> result(complex34)
+ * \brief opY(long integer) ^ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void powBigICo34(void) {
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+void powLonICo34(void) {
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   powRe34Co34();
 }
 
 
 
 /********************************************//**
- * \brief opY(real16) ^ opX(big integer) ==> result(real16)
+ * \brief opY(real16) ^ opX(long integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void powRe16BigI(void) {
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+void powRe16LonI(void) {
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   powRe16Re16();
 }
 
@@ -306,8 +306,8 @@ void powRe16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powRe16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void powRe16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   powRe16Re16();
 }
 
@@ -340,16 +340,16 @@ void powRe16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex16) ^ opX(big integer) ==> result(complex16)
+ * \brief opY(complex16) ^ opX(long integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void powCo16BigI(void) {
+void powCo16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo16BigI:", "cannot use NaN as an input of ^", NULL, NULL);
+      showInfoDialog("In function powCo16LonI:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
     return;
   }
@@ -405,8 +405,8 @@ void powCo16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powCo16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void powCo16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   powCo16Re16();
 }
 
@@ -439,12 +439,12 @@ void powCo16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(real16 matrix) ^ opX(big integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ^ opX(long integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void powRm16BigI(void) {
+void powRm16LonI(void) {
   powToBeCoded();
 }
 
@@ -496,7 +496,7 @@ void powRm16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powRm16SmaI(void) {
+void powRm16ShoI(void) {
   powToBeCoded();
 }
 
@@ -543,12 +543,12 @@ void powRm16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex16 matrix) ^ opX(big integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ^ opX(long integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void powCm16BigI(void) {
+void powCm16LonI(void) {
   powToBeCoded();
 }
 
@@ -600,7 +600,7 @@ void powCm16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powCm16SmaI(void) {
+void powCm16ShoI(void) {
   powToBeCoded();
 }
 
@@ -647,14 +647,14 @@ void powCm16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(64bits integer) ^ opX(big integer) ==> result(big integer)
+ * \brief opY(64bits integer) ^ opX(long integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void powSmaIBigI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
-  powBigIBigI();
+void powShoILonI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
+  powLonILonI();
 }
 
 
@@ -665,8 +665,8 @@ void powSmaIBigI(void) {
  * \param void
  * \return void
  ***********************************************/
-void powSmaIRe16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void powShoIRe16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   powRe16Re16();
 }
 
@@ -678,8 +678,8 @@ void powSmaIRe16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powSmaICo16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void powShoICo16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   powRe16Co16();
 }
 
@@ -691,9 +691,9 @@ void powSmaICo16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powSmaISmaI(void) {
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intPower(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
+void powShoIShoI(void) {
+  reallocateRegister(result, dtShortInteger, SHORT_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intPower(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 
@@ -704,8 +704,8 @@ void powSmaISmaI(void) {
  * \param void
  * \return void
  ***********************************************/
-void powSmaIRe34(void) {
-  convertSmallIntegerRegisterToReal34Register(opY, opY);
+void powShoIRe34(void) {
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   powRe34Re34();
 }
 
@@ -717,20 +717,20 @@ void powSmaIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void powSmaICo34(void) {
+void powShoICo34(void) {
   powToBeCoded();
 }
 
 
 
 /********************************************//**
- * \brief opY(real34) ^ opX(big integer) ==> result(real34)
+ * \brief opY(real34) ^ opX(long integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void powRe34BigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void powRe34LonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   powRe34Re34();
 }
 
@@ -768,8 +768,8 @@ void powRe34Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powRe34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void powRe34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   powRe34Re34();
 }
 
@@ -819,16 +819,16 @@ void powRe34Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex34) ^ opX(big integer) ==> result(complex34)
+ * \brief opY(complex34) ^ opX(long integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void powCo34BigI(void) {
+void powCo34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo34BigI:", "cannot use NaN as an input of ^", NULL, NULL);
+      showInfoDialog("In function powCo34LonI:", "cannot use NaN as an input of ^", NULL, NULL);
     #endif
     return;
   }
@@ -870,8 +870,8 @@ void powCo34Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void powCo34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void powCo34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   powCo34Re34();
 }
 

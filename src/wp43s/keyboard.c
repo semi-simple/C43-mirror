@@ -431,29 +431,29 @@ void btnPressed(void *notUsed, void *data) {
         uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
         uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
 
-        if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtBigInteger)
-           && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtBigInteger)) {
+        if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+           && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
           fnSetFlag(FLAG_CPXRES);
 
-          if(dataTypeX == dtBigInteger) {
-            if(dataTypeY == dtReal16 || dataTypeY == dtBigInteger) {
-              convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+          if(dataTypeX == dtLongInteger) {
+            if(dataTypeY == dtReal16 || dataTypeY == dtLongInteger) {
+              convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
               dataTypeX = dtReal16;
             }
             else { // dataTypeY == dtReal34
-              convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+              convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
               dataTypeX = dtReal34;
             }
           }
 
-          if(dataTypeY == dtBigInteger) {
+          if(dataTypeY == dtLongInteger) {
             if(dataTypeX == dtReal16) {
-              convertBigIntegerRegisterToReal16Register(REGISTER_Y, REGISTER_Y);
+              convertLongIntegerRegisterToReal16Register(REGISTER_Y, REGISTER_Y);
               dataTypeY = dtReal16;
             }
             else { // dataTypeX == dtReal34
-              convertBigIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+              convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
               dataTypeY = dtReal34;
             }
           }
@@ -767,13 +767,13 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_NORMAL) {
-        if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-          convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+        if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+          convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
           refreshRegisterLine(REGISTER_X);
         }
 
-        else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-          convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+        else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+          convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
           refreshRegisterLine(REGISTER_X);
         }
 

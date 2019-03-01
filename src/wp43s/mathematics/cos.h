@@ -20,7 +20,7 @@
 
 void fnCos   (uint16_t unusedParamButMandatory);
 void cosError(void);
-void cosBigI (void);
+void cosLonI (void);
 void cosRe16 (void);
 void cosCo16 (void);
 void cosAngl (void);

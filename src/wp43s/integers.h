@@ -27,12 +27,12 @@ void     fnSign                     (uint16_t unusedButMandatoryParameter);
 void     fnMirror                   (uint16_t unusedButMandatoryParameter);
 void     fnM1Pow                    (uint16_t unusedButMandatoryParameter);
 void     fnIsPrime                  (uint16_t unusedButMandatoryParameter);
-uint32_t countBitsBigInteger        (bigInteger_t *value);
-uint32_t countBitsBigIntegerRegister(calcRegister_t regist);
-void     bigIntegerMultiply         (bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result);
-void     bigIntegerSquare           (bigInteger_t *op, bigInteger_t *result);
-void     bigIntegerAdd              (bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result);
-void     bigIntegerSubtract         (bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result);
+uint32_t countBitsLongInteger        (longInteger_t *value);
+uint32_t countBitsLongIntegerRegister(calcRegister_t regist);
+void     longIntegerMultiply         (longInteger_t *opY, longInteger_t *opX, longInteger_t *result);
+void     longIntegerSquare           (longInteger_t *op, longInteger_t *result);
+void     longIntegerAdd              (longInteger_t *opY, longInteger_t *opX, longInteger_t *result);
+void     longIntegerSubtract         (longInteger_t *opY, longInteger_t *opX, longInteger_t *result);
 
 /*
  * The functions below are borrowed

@@ -24,8 +24,8 @@
 
 void (* const Cos[12])(void) = {
 // regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//          Big integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
-            cosBigI,     cosRe16,  cosCo16,   cosAngl,  cosError,  cosError,  cosError,  cosRm16,     cosCm16,      cosError,       cosRe34,  cosCo34
+//          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
+            cosLonI,     cosRe16,  cosCo16,   cosAngl,  cosError,  cosError,  cosError,  cosRm16,     cosCm16,      cosError,       cosRe34,  cosCo34
 };
 
 
@@ -95,8 +95,8 @@ void fnCos(uint16_t unusedParamButMandatory) {
 
 
 
-void cosBigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void cosLonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units

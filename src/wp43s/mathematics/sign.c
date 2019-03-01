@@ -23,9 +23,9 @@
 
 
 void (* const sign[12])(void) = {
-//  regX ==> 1            2         3                4          5          6          7          8           9            10             11        12
-//           Big integer  real16    complex16        Date       Time       Date       String     real16 mat  complex16 m  Small integer  real34    complex34
-             signBigI,    signRe16, unitVectorCo16,  signError, signError, signError, signError, signRm16,   signError,   signSmaI,      signRe34, unitVectorCo34
+//  regX ==> 1             2         3                4          5          6          7          8           9            10             11        12
+//           Long integer  real16    complex16        Date       Time       Date       String     real16 mat  complex16 m  Short integer  real34    complex34
+             signLonI,     signRe16, unitVectorCo16,  signError, signError, signError, signError, signRm16,   signError,   signShoI,      signRe34, unitVectorCo34
 };
 
 
@@ -95,23 +95,23 @@ void fnSign(uint16_t unusedParamButMandatory) {
 
 
 
-void signBigI(void) {
-  bigInteger_t temp;
+void signLonI(void) {
+  longInteger_t temp;
 
-  convertBigIntegerRegisterToBigInteger(opX, &temp);
+  convertLongIntegerRegisterToLongInteger(opX, &temp);
 
-  if(bigIntegerIsZero(&temp)) {
-    uIntToBigInteger(0, &temp);
+  if(longIntegerIsZero(&temp)) {
+    uIntToLongInteger(0, &temp);
   }
-  else if(bigIntegerCompareUInt(&temp, 0) < 0) {
-    uIntToBigInteger(1, &temp);
-    bigIntegerSetNegativeSign(&temp);
+  else if(longIntegerCompareUInt(&temp, 0) < 0) {
+    uIntToLongInteger(1, &temp);
+    longIntegerSetNegativeSign(&temp);
   }
   else {
-    uIntToBigInteger(1, &temp);
+    uIntToLongInteger(1, &temp);
   }
 
-  convertBigIntegerToBigIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(&temp, result);
 }
 
 
@@ -125,20 +125,20 @@ void signRe16(void) {
     return;
   }
 
-  bigInteger_t temp;
+  longInteger_t temp;
 
   if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
-    uIntToBigInteger(0, &temp);
+    uIntToLongInteger(0, &temp);
   }
   else if(real16IsNegative(REGISTER_REAL16_DATA(opX))) {
-    uIntToBigInteger(1, &temp);
-    bigIntegerSetNegativeSign(&temp);
+    uIntToLongInteger(1, &temp);
+    longIntegerSetNegativeSign(&temp);
   }
   else {
-    uIntToBigInteger(1, &temp);
+    uIntToLongInteger(1, &temp);
   }
 
-  convertBigIntegerToBigIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(&temp, result);
 }
 
 
@@ -149,22 +149,22 @@ void signRm16(void) {
 
 
 
-void signSmaI(void) {
-  bigInteger_t temp;
-  int64_t sign = WP34S_intSign(*(REGISTER_SMALL_INTEGER_DATA(opX)));
+void signShoI(void) {
+  longInteger_t temp;
+  int64_t sign = WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 
   if(sign == 0) {
-    uIntToBigInteger(0, &temp);
+    uIntToLongInteger(0, &temp);
   }
   else if(sign == -1) {
-    uIntToBigInteger(1, &temp);
-    bigIntegerSetNegativeSign(&temp);
+    uIntToLongInteger(1, &temp);
+    longIntegerSetNegativeSign(&temp);
   }
   else {
-    uIntToBigInteger(1, &temp);
+    uIntToLongInteger(1, &temp);
   }
 
-  convertBigIntegerToBigIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(&temp, result);
 }
 
 
@@ -178,18 +178,18 @@ void signRe34(void) {
     return;
   }
 
-  bigInteger_t temp;
+  longInteger_t temp;
 
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
-    uIntToBigInteger(0, &temp);
+    uIntToLongInteger(0, &temp);
   }
   else if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-    uIntToBigInteger(1, &temp);
-    bigIntegerSetNegativeSign(&temp);
+    uIntToLongInteger(1, &temp);
+    longIntegerSetNegativeSign(&temp);
   }
   else {
-    uIntToBigInteger(1, &temp);
+    uIntToLongInteger(1, &temp);
   }
 
-  convertBigIntegerToBigIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(&temp, result);
 }

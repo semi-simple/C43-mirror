@@ -24,8 +24,8 @@
 
 void (* const magnitude[12])(void) = {
 // regX ==> 1               2              3              4               5               6               7               8              9              10             11             12
-//          Big integer     real16         complex16      Date            Time            Date            String          real16 mat     complex16 m    Small integer  real34         complex34
-            magnitudeBigI,  magnitudeRe16, magnitudeCo16, magnitudeError, magnitudeError, magnitudeError, magnitudeError, magnitudeRm16, magnitudeCm16, magnitudeSmaI, magnitudeRe34, magnitudeCo34
+//          Long integer    real16         complex16      Date            Time            Date            String          real16 mat     complex16 m    Short integer  real34         complex34
+            magnitudeLonI,  magnitudeRe16, magnitudeCo16, magnitudeError, magnitudeError, magnitudeError, magnitudeError, magnitudeRm16, magnitudeCm16, magnitudeShoI, magnitudeRe34, magnitudeCo34
 };
 
 
@@ -90,7 +90,7 @@ void fnMagnitude(uint16_t unusedParamButMandatory) {
 
 
 
-void magnitudeBigI(void) {
+void magnitudeLonI(void) {
   setRegisterSign(result, 0);
 }
 
@@ -139,8 +139,8 @@ void magnitudeCm16(void) {
 
 
 
-void magnitudeSmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intAbs(*(REGISTER_SMALL_INTEGER_DATA(result)));
+void magnitudeShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intAbs(*(REGISTER_SHORT_INTEGER_DATA(result)));
 }
 
 

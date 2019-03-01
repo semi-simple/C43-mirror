@@ -23,28 +23,28 @@
 
 
 void fnToPolar(uint16_t unusedParamButMandatory) {
-  if(   (getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtBigInteger)
-     && (getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtBigInteger)) {
+  if(   (getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtLongInteger)
+     && (getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtLongInteger)) {
     bool_t real16 = false;
 
     saveStack();
 
-    if(getRegisterDataType(REGISTER_X) == dtBigInteger && getRegisterDataType(REGISTER_Y) == dtBigInteger) {
-      convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertBigIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger && getRegisterDataType(REGISTER_Y) == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
       real16 = true;
     }
 
-    else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-      convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       if(getRegisterDataType(REGISTER_Y) == dtReal16) {
         convertRegister16To34(REGISTER_Y);
         real16 = true;
       }
     }
 
-    else if(getRegisterDataType(REGISTER_Y) == dtBigInteger) {
-      convertBigIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+    else if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
       if(getRegisterDataType(REGISTER_X) == dtReal16) {
         convertRegister16To34(REGISTER_X);
         real16 = true;

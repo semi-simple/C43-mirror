@@ -1575,44 +1575,44 @@ void testFunctions(void) {
   opX    = allocateTemporaryRegister();
   result = allocateTemporaryRegister();
 
-  initializeRegister(opY, dtBigInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
-  initializeRegister(opX, dtBigInteger, "-231053122121212121212121212121212121212121002102102102121331344321032103312220", "", 0);
-  addBigIBigI();
-  registerShouldBe(result, dtBigInteger, "addBigIBigI()", "315801132574230400244335633537244463442444453154353354424321220233524352113325", "", 0);
+  initializeRegister(opY, dtLongInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
+  initializeRegister(opX, dtLongInteger, "-231053122121212121212121212121212121212121002102102102121331344321032103312220", "", 0);
+  addLonILonI();
+  registerShouldBe(result, dtLongInteger, "addLonILonI()", "315801132574230400244335633537244463442444453154353354424321220233524352113325", "", 0);
 
-  initializeRegister(opY, dtBigInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
+  initializeRegister(opY, dtLongInteger,  "546854254695442521456456845658456584654565455256455456545652564554556455425545", "", 0);
   initializeRegister(opX, dtReal16,      "5e61",                                                                           "", 0);
-  addBigIRe16();
-  registerShouldBe(result, dtReal16,     "addBigIRe16()", "5468542546954426e62", "", 0);
+  addLonIRe16();
+  registerShouldBe(result, dtReal16,     "addLonIRe16()", "5468542546954426e62", "", 0);
 
-  //addBigICo16();
-  //addBigITime();
-  //addBigIDate();
-  //addBigISmaI();
-  //addBigIRe34();
-  //addBigICo34();
-  //addRe16BigI();
+  //addLonICo16();
+  //addLonITime();
+  //addLonIDate();
+  //addLonIShoI();
+  //addLonIRe34();
+  //addLonICo34();
+  //addRe16LonI();
   //addRe16Re16();
   //addRe16Co16();
   //addRe16Time();
   //addRe16Date();
-  //addRe16SmaI();
+  //addRe16ShoI();
   //addRe16Re34();
   //addRe16Co34();
-  //addCo16BigI();
+  //addCo16LonI();
   //addCo16Re16();
   //addCo16Co16();
-  //addCo16SmaI();
+  //addCo16ShoI();
   //addCo16Re34();
   //addCo16Co34();
-  //addTimeBigI();
+  //addTimeLonI();
   //addTimeRe16();
   //addTimeTime();
   //addTimeRe34();
-  //addDateBigI();
+  //addDateLonI();
   //addDateRe16();
   //addDateRe34();
-  //addStriBigI();
+  //addStriLonI();
   //addStriRe16();
   //addStriCo16();
   //addStriTime();
@@ -1620,31 +1620,31 @@ void testFunctions(void) {
   //addStriStri();
   //addStriRm16();
   //addStriCm16();
-  //addStriSmaI();
+  //addStriShoI();
   //addStriRe34();
   //addStriCo34();
   //addRm16Rm16();
   //addRm16Cm16();
   //addCm16Rm16();
   //addCm16Cm16();
-  //addSmaIBigI();
-  //addSmaIRe16();
-  //addSmaICo16();
-  //addSmaISmaI();
-  //addSmaIRe34();
-  //addSmaICo34();
-  //addRe34BigI();
+  //addShoILonI();
+  //addShoIRe16();
+  //addShoICo16();
+  //addShoIShoI();
+  //addShoIRe34();
+  //addShoICo34();
+  //addRe34LonI();
   //addRe34Re16();
   //addRe34Co16();
   //addRe34Time();
   //addRe34Date();
-  //addRe34SmaI();
+  //addRe34ShoI();
   //addRe34Re34();
   //addRe34Co34();
-  //addCo34BigI();
+  //addCo34LonI();
   //addCo34Re16();
   //addCo34Co16();
-  //addCo34SmaI();
+  //addCo34ShoI();
   //addCo34Re34();
   //addCo34Co34();
 
@@ -2376,8 +2376,8 @@ void testFunctions(void) {
 
 
   //////////////////////////////
-  // Square big integer
-  initializeRegister(REGISTER_X, dtBigInteger, "12345678901234567890", "", 0);
+  // Square long integer
+  initializeRegister(REGISTER_X, dtLongInteger, "12345678901234567890", "", 0);
 
   fnSquare(NOPARAM);
   //fnSquare(NOPARAM);
@@ -2385,8 +2385,8 @@ void testFunctions(void) {
   //fnSquare(NOPARAM);
   //fnSquare(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtBigInteger, "fnSquare(big integer)", "152415787532388367501905199875019052100", "", 0);
-  registerShouldBe(REGISTER_L, dtBigInteger, "fnSquare(big integer)", "12345678901234567890",                    "", 0);
+  registerShouldBe(REGISTER_X, dtLongInteger, "fnSquare(long integer)", "152415787532388367501905199875019052100", "", 0);
+  registerShouldBe(REGISTER_L, dtLongInteger, "fnSquare(long integer)", "12345678901234567890",                    "", 0);
 
 
   //////////////////////////////
@@ -2434,13 +2434,13 @@ void testFunctions(void) {
 
 
   //////////////////////////////
-  // Cube big integer
-  initializeRegister(REGISTER_X, dtBigInteger, "1234567890", "", 0);
+  // Cube long integer
+  initializeRegister(REGISTER_X, dtLongInteger, "1234567890", "", 0);
 
   fnCube(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtBigInteger, "fnCube(big integer)", "1881676371789154860897069000", "", 0);
-  registerShouldBe(REGISTER_L, dtBigInteger, "fnCube(big integer)", "1234567890",   "",    0);
+  registerShouldBe(REGISTER_X, dtLongInteger, "fnCube(long integer)", "1881676371789154860897069000", "", 0);
+  registerShouldBe(REGISTER_L, dtLongInteger, "fnCube(long integer)", "1234567890",   "",    0);
 
 
 
@@ -4565,21 +4565,21 @@ void testFunctions(void) {
 
 
   /////////////////////////////////////////
-  // Convert big integer to real16
+  // Convert long integer to real16
   #ifdef PC_BUILD
-    printf("  Convert big integer to real16 and real34\n");
+    printf("  Convert long integer to real16 and real34\n");
   #endif
 
-  initializeRegister(REGISTER_X, dtBigInteger, "-1254789565424599", "", 0);
-  convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal16, "convertBigIntegerRegisterToReal16Register", "-1254789565424599.0", "", 0);
+  initializeRegister(REGISTER_X, dtLongInteger, "-1254789565424599", "", 0);
+  convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal16, "convertLongIntegerRegisterToReal16Register", "-1254789565424599.0", "", 0);
 
 
   /////////////////////////////////////////
-  // Convert big integer to real34
-  initializeRegister(REGISTER_X, dtBigInteger, "-12547895548542665424599", "", 0);
-  convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertBigIntegerRegisterToReal34Register", "-12547895548542665424599.0", "", 0);
+  // Convert long integer to real34
+  initializeRegister(REGISTER_X, dtLongInteger, "-12547895548542665424599", "", 0);
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal34, "convertLongIntegerRegisterToReal34Register", "-12547895548542665424599.0", "", 0);
 
 
   /////////////////////////////////////////
@@ -4590,59 +4590,59 @@ void testFunctions(void) {
 
   fnIntegerMode(SIM_UNSIGN);
   fnSetWordSize(12);
-  initializeRegister(REGISTER_X, dtSmallInteger, "147", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToRea16lRegister (SIM_UNSIGN)", "147", "", 10);
-  convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal16, "convertSmallIntegerRegisterToRea16lRegister (SIM_UNSIGN)", "147", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "147", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToRea16lRegister (SIM_UNSIGN)", "147", "", 10);
+  convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal16, "convertShortIntegerRegisterToRea16lRegister (SIM_UNSIGN)", "147", "", 0);
 
   fnIntegerMode(SIM_2COMPL);
   fnSetWordSize(12);
-  initializeRegister(REGISTER_X, dtSmallInteger, "3949", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToRea16lRegister (SIM_2COMPL)", "3949", "", 10);
-  convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal16, "convertSmallIntegerRegisterToRea16lRegister (SIM_2COMPL)", "-147", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "3949", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToRea16lRegister (SIM_2COMPL)", "3949", "", 10);
+  convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal16, "convertShortIntegerRegisterToRea16lRegister (SIM_2COMPL)", "-147", "", 0);
 
   fnIntegerMode(SIM_1COMPL);
   fnSetWordSize(12);
-  initializeRegister(REGISTER_X, dtSmallInteger, "3948", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToRea16lRegister (SIM_1COMPL)", "3948", "", 10);
-  convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal16, "convertSmallIntegerRegisterToRea16lRegister (SIM_1COMPL)", "-147", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "3948", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToRea16lRegister (SIM_1COMPL)", "3948", "", 10);
+  convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal16, "convertShortIntegerRegisterToRea16lRegister (SIM_1COMPL)", "-147", "", 0);
 
   fnIntegerMode(SIM_SIGNMT);
   fnSetWordSize(12);
-  initializeRegister(REGISTER_X, dtSmallInteger, "2195", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToRea16lRegister (SIM_SIGNMT)", "2195", "", 10);
-  convertSmallIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal16, "convertSmallIntegerRegisterToRea16lRegister (SIM_SIGNMT)", "-147", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "2195", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToRea16lRegister (SIM_SIGNMT)", "2195", "", 10);
+  convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal16, "convertShortIntegerRegisterToRea16lRegister (SIM_SIGNMT)", "-147", "", 0);
 
   fnIntegerMode(SIM_UNSIGN);
   fnSetWordSize(24);
-  initializeRegister(REGISTER_X, dtSmallInteger, "3316774", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToReal34Register (SIM_UNSIGN)", "3316774", "", 10);
-  convertSmallIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertSmallIntegerRegisterToReal34Register (SIM_UNSIGN)", "3316774", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "3316774", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToReal34Register (SIM_UNSIGN)", "3316774", "", 10);
+  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal34, "convertShortIntegerRegisterToReal34Register (SIM_UNSIGN)", "3316774", "", 0);
 
   fnIntegerMode(SIM_2COMPL);
   fnSetWordSize(24);
-  initializeRegister(REGISTER_X, dtSmallInteger, "13460442", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToReal34Register (SIM_2COMPL)", "13460442", "", 10);
-  convertSmallIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertSmallIntegerRegisterToReal34Register (SIM_2COMPL)", "-3316774", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "13460442", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToReal34Register (SIM_2COMPL)", "13460442", "", 10);
+  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal34, "convertShortIntegerRegisterToReal34Register (SIM_2COMPL)", "-3316774", "", 0);
 
   fnIntegerMode(SIM_1COMPL);
   fnSetWordSize(24);
-  initializeRegister(REGISTER_X, dtSmallInteger, "13460441", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToReal34Register (SIM_1COMPL)", "13460441", "", 10);
-  convertSmallIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertSmallIntegerRegisterToReal34Register (SIM_1COMPL)", "-3316774", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "13460441", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToReal34Register (SIM_1COMPL)", "13460441", "", 10);
+  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal34, "convertShortIntegerRegisterToReal34Register (SIM_1COMPL)", "-3316774", "", 0);
 
   fnIntegerMode(SIM_SIGNMT);
   fnSetWordSize(24);
-  initializeRegister(REGISTER_X, dtSmallInteger, "11705382", "", 10);
-  registerShouldBe(REGISTER_X, dtSmallInteger, "convertSmallIntegerRegisterToReal34Register (SIM_SIGNMT)", "11705382", "", 10);
-  convertSmallIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  registerShouldBe(REGISTER_X, dtReal34, "convertSmallIntegerRegisterToReal34Register (SIM_SIGNMT)", "-3316774", "", 0);
+  initializeRegister(REGISTER_X, dtShortInteger, "11705382", "", 10);
+  registerShouldBe(REGISTER_X, dtShortInteger, "convertShortIntegerRegisterToReal34Register (SIM_SIGNMT)", "11705382", "", 10);
+  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  registerShouldBe(REGISTER_X, dtReal34, "convertShortIntegerRegisterToReal34Register (SIM_SIGNMT)", "-3316774", "", 0);
 
 
 
@@ -5555,112 +5555,112 @@ void testFunctions(void) {
 
 
   ///////////////////////////////////
-  // addBigIBigI
+  // addLonILonI
   #ifdef PC_BUILD
-    printf("  4 operations Big integer Big integer\n");
+    printf("  4 operations Long integer Long integer\n");
   #endif
 
-  initializeRegister(REGISTER_Y, dtBigInteger, "1111111111111111111111111111111111111111", "", 0);
-  initializeRegister(REGISTER_X, dtBigInteger, "2222222222222222222222222222222222222222", "", 0);
+  initializeRegister(REGISTER_Y, dtLongInteger, "1111111111111111111111111111111111111111", "", 0);
+  initializeRegister(REGISTER_X, dtLongInteger, "2222222222222222222222222222222222222222", "", 0);
 
   fnAdd(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtBigInteger, "addBigIBigI()", "3333333333333333333333333333333333333333", "", 0);
-  registerShouldBe(REGISTER_L, dtBigInteger, "addBigIBigI()", "2222222222222222222222222222222222222222", "", 0);
+  registerShouldBe(REGISTER_X, dtLongInteger, "addLonILonI()", "3333333333333333333333333333333333333333", "", 0);
+  registerShouldBe(REGISTER_L, dtLongInteger, "addLonILonI()", "2222222222222222222222222222222222222222", "", 0);
 
 
   ///////////////////////////////////
-  // subBigIBigI
-  initializeRegister(REGISTER_Y, dtBigInteger, "7777777777777777777777777777777777777777", "", 0);
-  initializeRegister(REGISTER_X, dtBigInteger, "3333333333333333333333333333333333333333", "", 0);
+  // subLonILonI
+  initializeRegister(REGISTER_Y, dtLongInteger, "7777777777777777777777777777777777777777", "", 0);
+  initializeRegister(REGISTER_X, dtLongInteger, "3333333333333333333333333333333333333333", "", 0);
 
   fnSubtract(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtBigInteger, "subBigIBigI()", "4444444444444444444444444444444444444444", "", 0);
-  registerShouldBe(REGISTER_L, dtBigInteger, "subBigIBigI()", "3333333333333333333333333333333333333333", "", 0);
+  registerShouldBe(REGISTER_X, dtLongInteger, "subLonILonI()", "4444444444444444444444444444444444444444", "", 0);
+  registerShouldBe(REGISTER_L, dtLongInteger, "subLonILonI()", "3333333333333333333333333333333333333333", "", 0);
 
 
   ///////////////////////////////////
-  // mulBigIBigI
-  initializeRegister(REGISTER_Y, dtBigInteger, "111111111111111111111", "", 0);
-  initializeRegister(REGISTER_X, dtBigInteger, "999999999999999999999", "", 0);
+  // mulLonILonI
+  initializeRegister(REGISTER_Y, dtLongInteger, "111111111111111111111", "", 0);
+  initializeRegister(REGISTER_X, dtLongInteger, "999999999999999999999", "", 0);
 
   fnMultiply(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtBigInteger, "mulBigIBigI()", "111111111111111111110888888888888888888889", "", 0);
-  registerShouldBe(REGISTER_L, dtBigInteger, "mulBigIBigI()", "999999999999999999999", "", 0);
+  registerShouldBe(REGISTER_X, dtLongInteger, "mulLonILonI()", "111111111111111111110888888888888888888889", "", 0);
+  registerShouldBe(REGISTER_L, dtLongInteger, "mulLonILonI()", "999999999999999999999", "", 0);
 
 
   ///////////////////////////////////
-  // divBigIBigI
-  initializeRegister(REGISTER_Y, dtBigInteger, "111111111111111111110888888888888888888889", "", 0);
-  initializeRegister(REGISTER_X, dtBigInteger, "999999999999999999999", "", 0);
+  // divLonILonI
+  initializeRegister(REGISTER_Y, dtLongInteger, "111111111111111111110888888888888888888889", "", 0);
+  initializeRegister(REGISTER_X, dtLongInteger, "999999999999999999999", "", 0);
 
   fnDivide(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtBigInteger, "divBigIBigI()", "111111111111111111111", "", 0);
-  registerShouldBe(REGISTER_L, dtBigInteger, "divBigIBigI()", "999999999999999999999", "", 0);
+  registerShouldBe(REGISTER_X, dtLongInteger, "divLonILonI()", "111111111111111111111", "", 0);
+  registerShouldBe(REGISTER_L, dtLongInteger, "divLonILonI()", "999999999999999999999", "", 0);
 
 
   ///////////////////////////////////
-  // divBigIBigI
-  initializeRegister(REGISTER_Y, dtBigInteger, "2546845215987456314564901325026140025545", "", 0);
-  initializeRegister(REGISTER_X, dtBigInteger, "20278546482302162448505693725283484", "", 0);
+  // divLonILonI
+  initializeRegister(REGISTER_Y, dtLongInteger, "2546845215987456314564901325026140025545", "", 0);
+  initializeRegister(REGISTER_X, dtLongInteger, "20278546482302162448505693725283484", "", 0);
 
   fnDivide(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtReal16, "divBigIBigI()", "125593.0851952423", "", 0);
-  registerShouldBe(REGISTER_L, dtBigInteger, "divBigIBigI()", "20278546482302162448505693725283484", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "divLonILonI()", "125593.0851952423", "", 0);
+  registerShouldBe(REGISTER_L, dtLongInteger, "divLonILonI()", "20278546482302162448505693725283484", "", 0);
 
 
   ///////////////////////////////////
-  // addSmaISmaI
+  // addShoIShoI
   #ifdef PC_BUILD
-    printf("  4 operations Small integer Small integer\n");
+    printf("  4 operations Short integer Short integer\n");
   #endif
 
   fnSetWordSize(24);
   fnIntegerMode(SIM_UNSIGN);
-  initializeRegister(REGISTER_Y, dtSmallInteger, "16000000", "", 10);
-  initializeRegister(REGISTER_X, dtSmallInteger,  "3000000", "",  8);
+  initializeRegister(REGISTER_Y, dtShortInteger, "16000000", "", 10);
+  initializeRegister(REGISTER_X, dtShortInteger,  "3000000", "",  8);
 
   fnAdd(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtSmallInteger, "addSmaISmaI(SIM_UNSIGN)", "2222784", "", 10); // 19000000 - 2^24
-  registerShouldBe(REGISTER_L, dtSmallInteger, "addSmaISmaI(SIM_UNSIGN)", "3000000", "", 8);
+  registerShouldBe(REGISTER_X, dtShortInteger, "addShoIShoI(SIM_UNSIGN)", "2222784", "", 10); // 19000000 - 2^24
+  registerShouldBe(REGISTER_L, dtShortInteger, "addShoIShoI(SIM_UNSIGN)", "3000000", "", 8);
 
 
   fnSetWordSize(24);
   fnIntegerMode(SIM_2COMPL);
-  initializeRegister(REGISTER_Y, dtSmallInteger, "8000000", "",  7);
-  initializeRegister(REGISTER_X, dtSmallInteger, "3000000", "", 16);
+  initializeRegister(REGISTER_Y, dtShortInteger, "8000000", "",  7);
+  initializeRegister(REGISTER_X, dtShortInteger, "3000000", "", 16);
 
   fnAdd(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtSmallInteger, "addSmaISmaI(SIM_2COMPL)", "11000000", "",  7); // 8000000+3000000 = 11000000 --> -5777216
-  registerShouldBe(REGISTER_L, dtSmallInteger, "addSmaISmaI(SIM_2COMPL)",  "3000000", "", 16);
+  registerShouldBe(REGISTER_X, dtShortInteger, "addShoIShoI(SIM_2COMPL)", "11000000", "",  7); // 8000000+3000000 = 11000000 --> -5777216
+  registerShouldBe(REGISTER_L, dtShortInteger, "addShoIShoI(SIM_2COMPL)",  "3000000", "", 16);
 
 
   fnSetWordSize(24);
   fnIntegerMode(SIM_1COMPL);
-  initializeRegister(REGISTER_Y, dtSmallInteger, "7000000", "",  2);
-  initializeRegister(REGISTER_X, dtSmallInteger, "2000000", "", 12);
+  initializeRegister(REGISTER_Y, dtShortInteger, "7000000", "",  2);
+  initializeRegister(REGISTER_X, dtShortInteger, "2000000", "", 12);
 
   fnAdd(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtSmallInteger, "addSmaISmaI(SIM_1COMPL)", "9000000", "",  2); // 7000000+2000000 = 9000000 --> -7777215
-  registerShouldBe(REGISTER_L, dtSmallInteger, "addSmaISmaI(SIM_1COMPL)", "2000000", "", 12);
+  registerShouldBe(REGISTER_X, dtShortInteger, "addShoIShoI(SIM_1COMPL)", "9000000", "",  2); // 7000000+2000000 = 9000000 --> -7777215
+  registerShouldBe(REGISTER_L, dtShortInteger, "addShoIShoI(SIM_1COMPL)", "2000000", "", 12);
 
 
   fnSetWordSize(24);
   fnIntegerMode(SIM_SIGNMT);
-  initializeRegister(REGISTER_Y, dtSmallInteger,  "5000000", "", 3);
-  initializeRegister(REGISTER_X, dtSmallInteger, "10000000", "", 5); // -1611392
+  initializeRegister(REGISTER_Y, dtShortInteger,  "5000000", "", 3);
+  initializeRegister(REGISTER_X, dtShortInteger, "10000000", "", 5); // -1611392
 
   fnAdd(NOPARAM);
 
-  registerShouldBe(REGISTER_X, dtSmallInteger, "addSmaISmaI(SIM_SIGNMT)",  "3388608", "", 3); // 5000000+-1611392 = 3388608
-  registerShouldBe(REGISTER_L, dtSmallInteger, "addSmaISmaI(SIM_SIGNMT)", "10000000", "", 5);
+  registerShouldBe(REGISTER_X, dtShortInteger, "addShoIShoI(SIM_SIGNMT)",  "3388608", "", 3); // 5000000+-1611392 = 3388608
+  registerShouldBe(REGISTER_L, dtShortInteger, "addShoIShoI(SIM_SIGNMT)", "10000000", "", 5);
 
 
 
@@ -5937,15 +5937,15 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
     }
   }
 
-  else if(dataType == dtBigInteger) {
-    bigInteger_t is;
-    bigInteger_t shouldBe;
+  else if(dataType == dtLongInteger) {
+    longInteger_t is;
+    longInteger_t shouldBe;
 
-    convertBigIntegerRegisterToBigInteger(regist, &is);
-    stringToBigInteger(real, 10, &shouldBe);
-    if(bigIntegerCompare(&is, &shouldBe) != BIG_INTEGER_EQUAL) {
+    convertLongIntegerRegisterToLongInteger(regist, &is);
+    stringToLongInteger(real, 10, &shouldBe);
+    if(longIntegerCompare(&is, &shouldBe) != LONG_INTEGER_EQUAL) {
       #ifdef PC_BUILD
-        printf("After %s register %" FMT16S " should be\nBig integer %s\nbut it is\n", function, regist, real);
+        printf("After %s register %" FMT16S " should be\nLong integer %s\nbut it is\n", function, regist, real);
         printRegisterToConsole(regist, 0);
         printf("\n");
         exit(0);
@@ -5958,7 +5958,7 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
         sprintf(errorMessage, "after %s", function);
         lcd_putsAt(t20, 2, errorMessage);
 
-        sprintf(errorMessage, "register %" FMT16S " should be big integer %s but it's", regist, real);
+        sprintf(errorMessage, "register %" FMT16S " should be long integer %s but it's", regist, real);
         lcd_putsAt(t20, 3, errorMessage);
 
         printRegisterToConsole(regist, 4);
@@ -5969,10 +5969,10 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
     }
   }
 
-  else if(dataType == dtSmallInteger) {
-    if(*(REGISTER_SMALL_INTEGER_DATA(regist)) != (uint64_t)atoll(real)) {
+  else if(dataType == dtShortInteger) {
+    if(*(REGISTER_SHORT_INTEGER_DATA(regist)) != (uint64_t)atoll(real)) {
       #ifdef PC_BUILD
-        printf("After %s register %" FMT16S " should be\nSmall integer %s(%" FMT32U ")\nbut it is\n%" FMT64U "(%" FMT32U ")\n", function, regist, real, dataInfo, *(REGISTER_SMALL_INTEGER_DATA(regist)), getRegisterBase(regist));
+        printf("After %s register %" FMT16S " should be\nShort integer %s(%" FMT32U ")\nbut it is\n%" FMT64U "(%" FMT32U ")\n", function, regist, real, dataInfo, *(REGISTER_SHORT_INTEGER_DATA(regist)), getRegisterBase(regist));
         exit(0);
       #endif
 
@@ -5983,10 +5983,10 @@ void registerShouldBe(calcRegister_t regist, uint32_t dataType, const char *func
         sprintf(errorMessage, "after %s", function);
         lcd_putsAt(t20, 2, errorMessage);
 
-        sprintf(errorMessage, "register %" FMT16S " should be small integer %s(%" FMT32U ") but it's", regist, real, dataInfo);
+        sprintf(errorMessage, "register %" FMT16S " should be short integer %s(%" FMT32U ") but it's", regist, real, dataInfo);
         lcd_putsAt(t20, 3, errorMessage);
 
-        sprintf(errorMessage, "%" FMT64U "(%" FMT32U ")", *(REGISTER_SMALL_INTEGER_DATA(regist)), getRegisterBase(regist));
+        sprintf(errorMessage, "%" FMT64U "(%" FMT32U ")", *(REGISTER_SHORT_INTEGER_DATA(regist)), getRegisterBase(regist));
         lcd_putsAt(t20, 4, errorMessage);
 
         lcd_refresh();
@@ -6071,15 +6071,15 @@ void initializeRegister(calcRegister_t regist, uint32_t dataType, const char *re
     memcpy(REGISTER_DATA(regist) + 2, imag, atoi(real)+1);
   }
 
-  else if(dataType == dtBigInteger) {
-    bigInteger_t tmp;
-    stringToBigInteger(real, 10, &tmp);
-    convertBigIntegerToBigIntegerRegister(&tmp, regist);
+  else if(dataType == dtLongInteger) {
+    longInteger_t tmp;
+    stringToLongInteger(real, 10, &tmp);
+    convertLongIntegerToLongIntegerRegister(&tmp, regist);
   }
 
-  else if(dataType == dtSmallInteger) {
-    reallocateRegister(regist, dtSmallInteger, SMALL_INTEGER_SIZE, dataInfo);
-    *(REGISTER_SMALL_INTEGER_DATA(regist)) = atol(real);
+  else if(dataType == dtShortInteger) {
+    reallocateRegister(regist, dtShortInteger, SHORT_INTEGER_SIZE, dataInfo);
+    *(REGISTER_SHORT_INTEGER_DATA(regist)) = atol(real);
     setRegisterBase(regist, dataInfo);
   }
 

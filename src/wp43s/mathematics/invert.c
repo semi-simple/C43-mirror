@@ -24,8 +24,8 @@
 
 void (* const invert[12])(void) = {
 // regX ==> 1            2            3            4            5            6            7            8           9             10             11           12
-//          Big integer  real16       complex16    Date         Time         Date         String       real16 mat  complex16 m   Small integer  real34       complex34
-            invertBigI,  divRe16Re16, divRe16Co16, invertError, invertError, invertError, invertError, invertRm16, invertCm16,   invertError,   divRe16Re34, divRe16Co34
+//          Long integer real16       complex16    Date         Time         Date         String       real16 mat  complex16 m   Short integer  real34       complex34
+            invertLonI,  divRe16Re16, divRe16Co16, invertError, invertError, invertError, invertError, invertRm16, invertCm16,   invertError,   divRe16Re34, divRe16Co34
 };
 
 
@@ -99,8 +99,8 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
 
 
-void invertBigI(void) {
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+void invertLonI(void) {
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   divRe16Re16();
 }

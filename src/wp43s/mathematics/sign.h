@@ -21,8 +21,8 @@
 void fnSign       (uint16_t unusedButMandatoryParameter);
 void signToBeCoded(void);
 void signError    (void);
-void signBigI     (void);
+void signLonI     (void);
 void signRe16     (void);
 void signRm16     (void);
-void signSmaI     (void);
+void signShoI     (void);
 void signRe34     (void);

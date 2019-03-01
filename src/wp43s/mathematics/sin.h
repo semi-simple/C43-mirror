@@ -20,7 +20,7 @@
 
 void fnSin   (uint16_t unusedParamButMandatory);
 void errorSin(void);
-void sinBigI (void);
+void sinLonI (void);
 void sinRe16 (void);
 void sinCo16 (void);
 void sinAngl (void);

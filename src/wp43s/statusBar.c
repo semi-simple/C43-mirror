@@ -158,11 +158,11 @@ void showFracMode(void) {
  * \return void
  ***********************************************/
 void showIntegerMode(void) {
-  if(smallIntegerWordSize <= 9) {
-    sprintf(tmpStr3000, STD_SPACE_FIGURE "%" FMT8U ":%c", smallIntegerWordSize, smallIntegerMode==SIM_1COMPL?'1':(smallIntegerMode==SIM_2COMPL?'2':(smallIntegerMode==SIM_UNSIGN?'u':(smallIntegerMode==SIM_SIGNMT?'s':'?'))));
+  if(shortIntegerWordSize <= 9) {
+    sprintf(tmpStr3000, STD_SPACE_FIGURE "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
   }
   else {
-    sprintf(tmpStr3000, "%" FMT8U ":%c", smallIntegerWordSize, smallIntegerMode==SIM_1COMPL?'1':(smallIntegerMode==SIM_2COMPL?'2':(smallIntegerMode==SIM_UNSIGN?'u':(smallIntegerMode==SIM_SIGNMT?'s':'?'))));
+    sprintf(tmpStr3000, "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
   }
 
   showString(tmpStr3000, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);

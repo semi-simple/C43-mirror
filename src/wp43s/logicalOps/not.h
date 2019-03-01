@@ -20,7 +20,7 @@
 
 void fnLogicalNot(uint16_t unusedParamButMandatory);
 void notError    (void);
-void notBigI     (void);
+void notLonI     (void);
 void notRe16     (void);
-void notSmaI     (void);
+void notShoI     (void);
 void notRe34     (void);

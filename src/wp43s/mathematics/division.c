@@ -24,19 +24,19 @@
 
 void (* const division[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {divBigIBigI, divRe16BigI, divCo16BigI, divAnglBigI, divTimeBigI, divError,    divError,    divRm16BigI, divCm16BigI, divSmaIBigI,  divRe34BigI, divCo34BigI},
-/*  2 real16         */ {divBigIRe16, divRe16Re16, divCo16Re16, divAnglRe16, divTimeRe16, divError,    divError,    divRm16Re16, divCm16Re16, divSmaIRe16,  divRe34Re16, divCo34Re16},
-/*  3 complex16      */ {divBigICo16, divRe16Co16, divCo16Co16, divError,    divError,    divError,    divError,    divRm16Co16, divCm16Co16, divSmaICo16,  divRe34Co16, divCo34Co16},
+//      V                Long integer real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Short integer real34       complex34
+/*  1 Long integer   */ {divLonILonI, divRe16LonI, divCo16LonI, divAnglLonI, divTimeLonI, divError,    divError,    divRm16LonI, divCm16LonI, divShoILonI,  divRe34LonI, divCo34LonI},
+/*  2 real16         */ {divLonIRe16, divRe16Re16, divCo16Re16, divAnglRe16, divTimeRe16, divError,    divError,    divRm16Re16, divCm16Re16, divShoIRe16,  divRe34Re16, divCo34Re16},
+/*  3 complex16      */ {divLonICo16, divRe16Co16, divCo16Co16, divError,    divError,    divError,    divError,    divRm16Co16, divCm16Co16, divShoICo16,  divRe34Co16, divCo34Co16},
 /*  4 angle34        */ {divError,    divError,    divError,    divAnglAngl, divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
 /*  5 Time           */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
 /*  6 Date           */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
 /*  7 String         */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
 /*  8 real16 mat     */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
 /*  9 complex16 mat  */ {divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,    divError,     divError,    divError   },
-/* 10 Small integer  */ {divBigISmaI, divRe16SmaI, divCo16SmaI, divAnglSmaI, divTimeSmaI, divError,    divError,    divRm16SmaI, divCm16SmaI, divSmaISmaI,  divRe34SmaI, divCo34SmaI},
-/* 11 real34         */ {divBigIRe34, divRe16Re34, divCo16Re34, divAnglRe34, divTimeRe34, divError,    divError,    divRm16Re34, divCm16Re34, divSmaIRe34,  divRe34Re34, divCo34Re34},
-/* 12 complex34      */ {divBigICo34, divRe16Co34, divCo16Co34, divError,    divError,    divError,    divError,    divRm16Co34, divCm16Co34, divSmaICo34,  divRe34Co34, divCo34Co34}
+/* 10 Short integer  */ {divLonIShoI, divRe16ShoI, divCo16ShoI, divAnglShoI, divTimeShoI, divError,    divError,    divRm16ShoI, divCm16ShoI, divShoIShoI,  divRe34ShoI, divCo34ShoI},
+/* 11 real34         */ {divLonIRe34, divRe16Re34, divCo16Re34, divAnglRe34, divTimeRe34, divError,    divError,    divRm16Re34, divCm16Re34, divShoIRe34,  divRe34Re34, divCo34Re34},
+/* 12 complex34      */ {divLonICo34, divRe16Co34, divCo16Co34, divError,    divError,    divError,    divError,    divRm16Co34, divCm16Co34, divShoICo34,  divRe34Co34, divCo34Co34}
 };
 
 
@@ -113,38 +113,38 @@ void fnDivide(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
- * \brief opY(big integer) ÷ opX(big integer) ==> result(big integer or real16)
+ * \brief opY(long integer) ÷ opX(long integer) ==> result(long integer or real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void divBigIBigI(void) {
-  bigInteger_t iOp1;
-  bigInteger_t iOp2;
+void divLonILonI(void) {
+  longInteger_t iOp1;
+  longInteger_t iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
-  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
 
-  if(bigIntegerIsZero(&iOp2)) {
+  if(longIntegerIsZero(&iOp2)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divBigIBigI:", "cannot divide an infinite integer by 0", NULL, NULL);
+      showInfoDialog("In function divLonILonI:", "cannot divide an infinite integer by 0", NULL, NULL);
     #endif
   }
   else {
-    bigIntegerDivideRemainder(&iOp1, &iOp2, &iOp1, &iOp2);
+    longIntegerDivideRemainder(&iOp1, &iOp2, &iOp1, &iOp2);
 
-    if(bigIntegerCompareUInt(&iOp2, 0) == BIG_INTEGER_EQUAL) {
-      convertBigIntegerToBigIntegerRegister(&iOp1, result);
+    if(longIntegerCompareUInt(&iOp2, 0) == LONG_INTEGER_EQUAL) {
+      convertLongIntegerToLongIntegerRegister(&iOp1, result);
     }
     else {
-      convertBigIntegerRegisterToBigInteger(opY, &iOp1);
-      convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+      convertLongIntegerRegisterToLongInteger(opY, &iOp1);
+      convertLongIntegerRegisterToLongInteger(opX, &iOp2);
 
-      bigIntegerToString(&iOp1, tmpStr3000, 10);
+      longIntegerToString(&iOp1, tmpStr3000, 10);
       reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
       stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(opY));
-      bigIntegerToString(&iOp2, tmpStr3000, 10);
+      longIntegerToString(&iOp2, tmpStr3000, 10);
       reallocateRegister(opX, dtReal16, REAL16_SIZE, 0);
       stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(opX));
       divRe16Re16();
@@ -155,78 +155,78 @@ void divBigIBigI(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) ÷ opX(real16) ==> result(real16)
+ * \brief opY(long integer) ÷ opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void divBigIRe16(void) {
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+void divLonIRe16(void) {
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   divRe16Re16();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ÷ opX(complex16) ==> result(complex16)
+ * \brief opY(long integer) ÷ opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void divBigICo16(void) {
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+void divLonICo16(void) {
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   divRe16Co16();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ÷ opX(small integer) ==> result(big integer)
+ * \brief opY(long integer) ÷ opX(short integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void divBigISmaI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
-  divBigIBigI();
+void divLonIShoI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opX, opX);
+  divLonILonI();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ÷ opX(real34) ==> result(real34)
+ * \brief opY(long integer) ÷ opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void divBigIRe34(void) {
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+void divLonIRe34(void) {
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   divRe34Re34();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) ÷ opX(complex34) ==> result(complex34)
+ * \brief opY(long integer) ÷ opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void divBigICo34(void) {
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+void divLonICo34(void) {
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   divRe34Co34();
 }
 
 
 
 /********************************************//**
- * \brief opY(real16) ÷ opX(big integer) ==> result(real16)
+ * \brief opY(real16) ÷ opX(long integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void divRe16BigI(void) {
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+void divRe16LonI(void) {
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   divRe16Re16();
 }
 
@@ -324,8 +324,8 @@ void divRe16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRe16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void divRe16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   divRe16Re16();
 }
 
@@ -358,13 +358,13 @@ void divRe16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex16) ÷ opX(big integer) ==> result(complex16)
+ * \brief opY(complex16) ÷ opX(long integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void divCo16BigI(void) {
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+void divCo16LonI(void) {
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   divCo16Re16();
 }
 
@@ -439,8 +439,8 @@ void divCo16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCo16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void divCo16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   divCo16Re16();
 }
 
@@ -473,22 +473,22 @@ void divCo16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(angle) ÷ opX(big integer) ==> result(angle)
+ * \brief opY(angle) ÷ opX(long integer) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void divAnglBigI(void) {
+void divAnglLonI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divAnglBigI:", "cannot use NaN as an input of /", NULL, NULL);
+      showInfoDialog("In function divAnglLonI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertBigIntegerRegisterToAngleRegister(opX, opX);
+  convertLongIntegerRegisterToAngleRegister(opX, opX);
   angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
 
@@ -551,22 +551,22 @@ void divAnglAngl(void) {
 
 
 /********************************************//**
- * \brief opY(angle) ÷ opX(small integer) ==> result(angle)
+ * \brief opY(angle) ÷ opX(short integer) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void divAnglSmaI(void) {
+void divAnglShoI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divAnglSmaI:", "cannot use NaN as an input of /", NULL, NULL);
+      showInfoDialog("In function divAnglShoI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertSmallIntegerRegisterToAngleRegister(opX, opX);
+  convertShortIntegerRegisterToAngleRegister(opX, opX);
   angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
 
@@ -603,12 +603,12 @@ void divAnglRe34(void) {
 
 
 /********************************************//**
- * \brief opY(time) ÷ opX(big integer) ==> result(time)
+ * \brief opY(time) ÷ opX(long integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void divTimeBigI(void) {
+void divTimeLonI(void) {
   divToBeCoded();
 }
 
@@ -640,7 +640,7 @@ void divTimeRe16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divTimeSmaI(void) {
+void divTimeShoI(void) {
   divToBeCoded();
 }
 
@@ -667,12 +667,12 @@ void divTimeRe34(void) {
 
 
 /********************************************//**
- * \brief opY(real16 matrix) ÷ opX(big integer) ==> result(real16 matrix)
+ * \brief opY(real16 matrix) ÷ opX(long integer) ==> result(real16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void divRm16BigI(void) {
+void divRm16LonI(void) {
   divToBeCoded();
 }
 
@@ -724,7 +724,7 @@ void divRm16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRm16SmaI(void) {
+void divRm16ShoI(void) {
   divToBeCoded();
 }
 
@@ -771,12 +771,12 @@ void divRm16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex16 matrix) ÷ opX(big integer) ==> result(complex16 matrix)
+ * \brief opY(complex16 matrix) ÷ opX(long integer) ==> result(complex16 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void divCm16BigI(void) {
+void divCm16LonI(void) {
   divToBeCoded();
 }
 
@@ -828,7 +828,7 @@ void divCm16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCm16SmaI(void) {
+void divCm16ShoI(void) {
   divToBeCoded();
 }
 
@@ -875,14 +875,14 @@ void divCm16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(64bits integer) ÷ opX(big integer) ==> result(64bits integer)
+ * \brief opY(64bits integer) ÷ opX(long integer) ==> result(64bits integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void divSmaIBigI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
-  divBigIBigI();
+void divShoILonI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
+  divLonILonI();
 }
 
 
@@ -893,8 +893,8 @@ void divSmaIBigI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divSmaIRe16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void divShoIRe16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   divRe16Re16();
 }
 
@@ -906,8 +906,8 @@ void divSmaIRe16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divSmaICo16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void divShoICo16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   divRe16Co16();
 }
 
@@ -919,9 +919,9 @@ void divSmaICo16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divSmaISmaI(void) {
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intDivide(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
+void divShoIShoI(void) {
+  reallocateRegister(result, dtShortInteger, SHORT_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intDivide(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 
@@ -932,8 +932,8 @@ void divSmaISmaI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divSmaIRe34(void) {
-  convertSmallIntegerRegisterToReal34Register(opY, opY);
+void divShoIRe34(void) {
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   divRe34Re34();
 }
 
@@ -945,21 +945,21 @@ void divSmaIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divSmaICo34(void) {
-  convertSmallIntegerRegisterToReal34Register(opY, opY);
+void divShoICo34(void) {
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   divRe34Co34();
 }
 
 
 
 /********************************************//**
- * \brief opY(real34) ÷ opX(big integer) ==> result(real34)
+ * \brief opY(real34) ÷ opX(long integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void divRe34BigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void divRe34LonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   divRe34Re34();
 }
 
@@ -997,8 +997,8 @@ void divRe34Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRe34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void divRe34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   divRe34Re34();
 }
 
@@ -1096,13 +1096,13 @@ void divRe34Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex34) ÷ opX(big integer) ==> result(complex34)
+ * \brief opY(complex34) ÷ opX(long integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void divCo34BigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void divCo34LonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   divCo34Re34();
 }
 
@@ -1140,8 +1140,8 @@ void divCo34Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCo34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void divCo34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   divCo34Re34();
 }
 

@@ -26,8 +26,8 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
     convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), fromAngularMode);
     setRegisterDataType(REGISTER_X, dtAngle);
     setRegisterAngularMode(REGISTER_X, fromAngularMode);
@@ -93,7 +93,7 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "an angle tagged %s!", getAngularModeName(fromAngularMode));
-    showInfoDialog("In function fnCvtToCurrentAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
+    showInfoDialog("In function fnCvtToCurrentAngularMode:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
   #endif
   restoreStack();
   refreshStack();
@@ -105,8 +105,8 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
     convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), angularMode);
     setRegisterDataType(REGISTER_X, dtAngle);
     setRegisterAngularMode(REGISTER_X, angularMode);
@@ -158,7 +158,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
     displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "an angle tagged %s!", getAngularModeName(angularMode));
-      showInfoDialog("In function fnCvtFromCurrentAngularMode:", "the input value must be a real16, a real34, a big integer", errorMessage, NULL);
+      showInfoDialog("In function fnCvtFromCurrentAngularMode:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
     #endif
     restoreStack();
     refreshStack();
@@ -171,8 +171,8 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
     convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DEGREE);
     setRegisterDataType(REGISTER_X, dtAngle);
     setRegisterAngularMode(REGISTER_X, AM_DEGREE);
@@ -235,7 +235,7 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
 
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    showInfoDialog("In function fnCvtDegToRad:", "the input value must be a real16, a real34, a big integer", "or an angle tagged degree!", NULL);
+    showInfoDialog("In function fnCvtDegToRad:", "the input value must be a real16, a real34, a long integer", "or an angle tagged degree!", NULL);
   #endif
   restoreStack();
   refreshStack();
@@ -247,8 +247,8 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DEGREE);
     setRegisterDataType(REGISTER_X, dtAngle);
     setRegisterAngularMode(REGISTER_X, AM_DEGREE);
@@ -312,7 +312,7 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
 
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    showInfoDialog("In function fnCvtDegToDms:", "the input value must be a real16, a real34, a big integer", "or an angle tagged degree!", NULL);
+    showInfoDialog("In function fnCvtDegToDms:", "the input value must be a real16, a real34, a long integer", "or an angle tagged degree!", NULL);
   #endif
   restoreStack();
   refreshStack();
@@ -324,8 +324,8 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
     convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
     setRegisterDataType(REGISTER_X, dtAngle);
     setRegisterAngularMode(REGISTER_X, AM_DMS);
@@ -388,7 +388,7 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
 
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    showInfoDialog("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a big integer", "or an angle tagged d.ms!", NULL);
+    showInfoDialog("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a long integer", "or an angle tagged d.ms!", NULL);
   #endif
   restoreStack();
   refreshStack();
@@ -400,8 +400,8 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
     convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_RADIAN);
     setRegisterDataType(REGISTER_X, dtAngle);
     setRegisterAngularMode(REGISTER_X, AM_RADIAN);
@@ -464,7 +464,7 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
 
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a big integer", "or an angle tagged radian!", NULL);
+    showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a long integer", "or an angle tagged radian!", NULL);
   #endif
   restoreStack();
   refreshStack();

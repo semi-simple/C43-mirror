@@ -20,7 +20,7 @@
 
 void fnArcsin   (uint16_t unusedParamButMandatory);
 void arcsinError(void);
-void arcsinBigI (void);
+void arcsinLonI (void);
 void arcsinRe16 (void);
 void arcsinCo16 (void);
 void arcsinRm16 (void);

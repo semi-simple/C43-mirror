@@ -24,8 +24,8 @@
 
 void (* const not[12])(void) = {
 // regX ==> 1            2         3          4          5          6          7          8           9            10             11        12
-//          Big integer  real16    complex16  angle      Time       Date       String     real16 mat  complex16 m  Small integer  real34    complex34
-            notBigI,     notRe16,  notError,  notError,  notError,  notError,  notError,  notError,   notError,    notSmaI,       notRe34,  notError
+//          Long integer  real16    complex16  angle      Time       Date       String     real16 mat  complex16 m  Short integer  real34    complex34
+            notLonI,     notRe16,  notError,  notError,  notError,  notError,  notError,  notError,   notError,    notShoI,       notRe34,  notError
 };
 
 
@@ -80,53 +80,53 @@ void fnLogicalNot(uint16_t unusedParamButMandatory) {
 
 
 
-void notBigI(void) {
-  bigInteger_t res;
+void notLonI(void) {
+  longInteger_t res;
 
-  convertBigIntegerRegisterToBigInteger(opX, &res);
+  convertLongIntegerRegisterToLongInteger(opX, &res);
 
-  if(bigIntegerIsZero(&res)) {
-    uIntToBigInteger(1, &res);
+  if(longIntegerIsZero(&res)) {
+    uIntToLongInteger(1, &res);
   }
   else {
-    uIntToBigInteger(0, &res);
+    uIntToLongInteger(0, &res);
   }
 
-  convertBigIntegerToBigIntegerRegister(&res, result);
+  convertLongIntegerToLongIntegerRegister(&res, result);
 }
 
 
 
 void notRe16(void) {
-  bigInteger_t res;
+  longInteger_t res;
 
   if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
-    uIntToBigInteger(1, &res);
+    uIntToLongInteger(1, &res);
   }
   else {
-    uIntToBigInteger(0, &res);
+    uIntToLongInteger(0, &res);
   }
 
-  convertBigIntegerToBigIntegerRegister(&res, result);
+  convertLongIntegerToLongIntegerRegister(&res, result);
 }
 
 
 
-void notSmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = ~(*(REGISTER_SMALL_INTEGER_DATA(opX))) & smallIntegerMask;
+void notShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = ~(*(REGISTER_SHORT_INTEGER_DATA(opX))) & shortIntegerMask;
 }
 
 
 
 void notRe34(void) {
-  bigInteger_t res;
+  longInteger_t res;
 
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
-    uIntToBigInteger(1, &res);
+    uIntToLongInteger(1, &res);
   }
   else {
-    uIntToBigInteger(0, &res);
+    uIntToLongInteger(0, &res);
   }
 
-  convertBigIntegerToBigIntegerRegister(&res, result);
+  convertLongIntegerToLongIntegerRegister(&res, result);
 }

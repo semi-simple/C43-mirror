@@ -24,8 +24,8 @@
 
 void (* const arccos[12])(void) = {
 // regX ==> 1            2            3            4             5             6             7             8               9            10             11           12
-//          Big integer  real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Small integer  real34       complex34
-            arccosBigI,  arccosRe16,  arccosCo16,  arccosError,  arccosError,  arccosError,  arccosError,  arccosRm16,     arccosCm16,  arccosError,   arccosRe34,  arccosCo34
+//          Long integer real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Short integer  real34       complex34
+            arccosLonI,  arccosRe16,  arccosCo16,  arccosError,  arccosError,  arccosError,  arccosError,  arccosRm16,     arccosCm16,  arccosError,   arccosRe34,  arccosCo34
 };
 
 
@@ -95,8 +95,8 @@ void fnArccos(uint16_t unusedParamButMandatory) {
 
 
 
-void arccosBigI(void) {
- convertBigIntegerRegisterToReal34Register(opX, opX);
+void arccosLonI(void) {
+ convertLongIntegerRegisterToReal34Register(opX, opX);
   if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(opX), const34_1)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

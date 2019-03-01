@@ -24,8 +24,8 @@
 
 void (* const gcd[12][12])(void) = {
 // regX |    regY ==>    1            2         3          4         5         6         7         8           9            10            11        12
-//      V                Big integer  real16    complex16  angle34   Time      Date      String    real16 mat  complex16 m  Small integer real34    complex34
-/*  1 Big integer    */ {gcdBigIBigI, gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdSmaIBigI,  gcdError, gcdError},
+//      V                Long integer real16    complex16  angle34   Time      Date      String    real16 mat  complex16 m  Short integer real34    complex34
+/*  1 Long integer   */ {gcdLonILonI, gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdShoILonI,  gcdError, gcdError},
 /*  2 real16         */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError},
 /*  3 complex16      */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError},
 /*  4 angle34        */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError},
@@ -34,7 +34,7 @@ void (* const gcd[12][12])(void) = {
 /*  7 String         */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError},
 /*  8 real16 mat     */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError},
 /*  9 complex16 mat  */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError},
-/* 10 Small integer  */ {gcdBigISmaI, gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdSmaISmaI,  gcdError, gcdError},
+/* 10 Short integer  */ {gcdLonIShoI, gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdShoIShoI,  gcdError, gcdError},
 /* 11 real34         */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError},
 /* 12 complex34      */ {gcdError,    gcdError, gcdError,  gcdError, gcdError, gcdError, gcdError, gcdError,   gcdError,    gcdError,     gcdError, gcdError}
 };
@@ -95,53 +95,53 @@ void fnGcd(uint16_t unusedParamButMandatory) {
 
 
 
-void gcdBigIBigI(void) {
-  bigInteger_t iOp1, iOp2;
+void gcdLonILonI(void) {
+  longInteger_t iOp1, iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
   iOp1.sign = 0;
-  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
   iOp2.sign = 0;
 
-  bigIntegerGcd(&iOp1, &iOp2, &iOp1);
+  longIntegerGcd(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
-void gcdBigISmaI(void) {
-  bigInteger_t iOp1, iOp2;
+void gcdLonIShoI(void) {
+  longInteger_t iOp1, iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
   iOp1.sign = 0;
-  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
-  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+  convertShortIntegerRegisterLongIntegerRegister(opX, opX);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
   iOp2.sign = 0;
 
-  bigIntegerGcd(&iOp1, &iOp2, &iOp1);
+  longIntegerGcd(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
-void gcdSmaIBigI(void) {
-  bigInteger_t iOp1, iOp2;
+void gcdShoILonI(void) {
+  longInteger_t iOp1, iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opX, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp1);
   iOp1.sign = 0;
-  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
-  convertBigIntegerRegisterToBigInteger(opY, &iOp2);
+  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp2);
   iOp2.sign = 0;
 
-  bigIntegerGcd(&iOp1, &iOp2, &iOp1);
+  longIntegerGcd(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
-void gcdSmaISmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intGCD(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
+void gcdShoIShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intGCD(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
 }

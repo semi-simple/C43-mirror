@@ -105,10 +105,10 @@ typedef int16_t calcRegister_t;
   #include "decNumberWrappers.h"
 #endif
 
-#define MAX_BIG_INTEGER_SIZE_IN_BITS 4096
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 4096
 
 #if (TOMS_FAST_MATH == 1)
-  #define FP_MAX_SIZE (MAX_BIG_INTEGER_SIZE_IN_BITS+(8*DIGIT_BIT))
+  #define FP_MAX_SIZE (MAX_LONG_INTEGER_SIZE_IN_BITS+(8*DIGIT_BIT))
 
   #include "tfm.h"
   #include "tomsFastMathWrappers.h"
@@ -167,13 +167,13 @@ typedef int16_t calcRegister_t;
 #define DM_ANY                  2
 #define DM_DENMAX            9999
 
-// Small integer mode 2 bits
+// Short integer mode 2 bits
 #define SIM_UNSIGN              0
 #define SIM_1COMPL              1
 #define SIM_2COMPL              2
 #define SIM_SIGNMT              3
 
-#define SMALL_INTEGER_SIZE      8 // 8 bytes = 64 bits
+#define SHORT_INTEGER_SIZE      8 // 8 bytes = 64 bits
 
 // Display format 2 bits
 #define DF_ALL                  0
@@ -452,10 +452,10 @@ extern uint8_t          currentFntScr;
 extern uint8_t          currentFlgScr;
 extern uint8_t          displayFormat;
 extern uint8_t          displayFormatDigits;
-extern uint8_t          smallIntegerWordSize;
+extern uint8_t          shortIntegerWordSize;
 extern uint8_t          denominatorMode;
 extern uint8_t          significantDigits;
-extern uint8_t          smallIntegerMode;
+extern uint8_t          shortIntegerMode;
 extern uint8_t          previousCalcMode;
 extern uint8_t          groupingGap;
 extern uint8_t          dateFormat;
@@ -503,8 +503,8 @@ extern calcKey_t        kbd_usr[37];
 extern calcRegister_t   errorMessageRegisterLine;
 extern calcRegister_t   errorRegisterLine;
 extern uint16_t         row[100];
-extern uint64_t         smallIntegerMask;
-extern uint64_t         smallIntegerSignBit;
+extern uint64_t         shortIntegerMask;
+extern uint64_t         shortIntegerSignBit;
 extern glyph_t          glyphNotFound;
 extern char             transitionSystemOperation[4];
 extern int16_t          exponentSignLocation;

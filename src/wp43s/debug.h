@@ -34,7 +34,7 @@ void   refreshDebugPanel                  (void);
 
 char *getDataTypeName                     (uint16_t dt, bool_t article, bool_t padWithBlanks);
 char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article, bool_t padWithBlanks);
-char *getSmallIntegerModeName             (uint16_t im);
+char *getShortIntegerModeName             (uint16_t im);
 char *getAngularModeName                  (uint16_t am);
 void  debugNIM                            (void);
 

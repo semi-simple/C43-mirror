@@ -24,8 +24,8 @@
 
 void (* const lcm[12][12])(void) = {
 // regX |    regY ==>    1            2         3          4         5         6         7         8           9            10            11        12
-//      V                Big integer  real16    complex16  angle34   Time      Date      String    real16 mat  complex16 m  Small integer real34    complex34
-/*  1 Big integer    */ {lcmBigIBigI, lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmSmaIBigI,  lcmError, lcmError},
+//      V                Long integer real16    complex16  angle34   Time      Date      String    real16 mat  complex16 m  Short integer real34    complex34
+/*  1 Long integer   */ {lcmLonILonI, lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmShoILonI,  lcmError, lcmError},
 /*  2 real16         */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError},
 /*  3 complex16      */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError},
 /*  4 angle34        */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError},
@@ -34,7 +34,7 @@ void (* const lcm[12][12])(void) = {
 /*  7 String         */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError},
 /*  8 real16 mat     */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError},
 /*  9 complex16 mat  */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError},
-/* 10 Small integer  */ {lcmBigISmaI, lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmSmaISmaI,  lcmError, lcmError},
+/* 10 Short integer  */ {lcmLonIShoI, lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmShoIShoI,  lcmError, lcmError},
 /* 11 real34         */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError},
 /* 12 complex34      */ {lcmError,    lcmError, lcmError,  lcmError, lcmError, lcmError, lcmError, lcmError,   lcmError,    lcmError,     lcmError, lcmError}
 };
@@ -95,53 +95,53 @@ void fnLcm(uint16_t unusedParamButMandatory) {
 
 
 
-void lcmBigIBigI(void) {
-  bigInteger_t iOp1, iOp2;
+void lcmLonILonI(void) {
+  longInteger_t iOp1, iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
   iOp1.sign = 0;
-  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
   iOp2.sign = 0;
 
-  bigIntegerLcm(&iOp1, &iOp2, &iOp1);
+  longIntegerLcm(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
-void lcmBigISmaI(void) {
-  bigInteger_t iOp1, iOp2;
+void lcmLonIShoI(void) {
+  longInteger_t iOp1, iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
   iOp1.sign = 0;
-  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
-  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+  convertShortIntegerRegisterLongIntegerRegister(opX, opX);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
   iOp2.sign = 0;
 
-  bigIntegerLcm(&iOp1, &iOp2, &iOp1);
+  longIntegerLcm(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
-void lcmSmaIBigI(void) {
-  bigInteger_t iOp1, iOp2;
+void lcmShoILonI(void) {
+  longInteger_t iOp1, iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opX, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp1);
   iOp1.sign = 0;
-  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
-  convertBigIntegerRegisterToBigInteger(opY, &iOp2);
+  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp2);
   iOp2.sign = 0;
 
-  bigIntegerLcm(&iOp1, &iOp2, &iOp1);
+  longIntegerLcm(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
-void lcmSmaISmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intLCM(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
+void lcmShoIShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intLCM(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
 }

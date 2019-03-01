@@ -20,7 +20,7 @@
 
 void fnArccos   (uint16_t unusedParamButMandatory);
 void arccosError(void);
-void arccosBigI (void);
+void arccosLonI (void);
 void arccosRe16 (void);
 void arccosCo16 (void);
 void arccosRm16 (void);

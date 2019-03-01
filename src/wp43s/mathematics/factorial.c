@@ -24,8 +24,8 @@
 
 void (* const fact[12])(void) = {
 // regX ==> 1            2          3          4           5           6           7           8           9            10             11         12
-//          Big integer  real16     complex16  Date        Time        Date        String      real16 mat  complex16 m  Small integer  real34     complex34
-            factBigI,    factRe16,  factCo16,  factError,  factError,  factError,  factError,  factError,  factError,   factSmaI,      factRe34,  factCo34
+//          Long integer real16     complex16  Date        Time        Date        String      real16 mat  complex16 m  Short integer  real34     complex34
+            factLonI,    factRe16,  factCo16,  factError,  factError,  factError,  factError,  factError,  factError,   factShoI,      factRe34,  factCo34
 };
 
 
@@ -95,40 +95,40 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
 
 
 
-void factBigI(void) {
-  bigInteger_t temp;
+void factLonI(void) {
+  longInteger_t temp;
 
-  convertBigIntegerRegisterToBigInteger(opX, &temp);
+  convertLongIntegerRegisterToLongInteger(opX, &temp);
 
-  if(bigIntegerIsNegative(&temp)) {
+  if(longIntegerIsNegative(&temp)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      bigIntegerToDisplayString(opX, errorMessage + 100);
+      longIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
-      showInfoDialog("In function factBigI:", errorMessage, NULL, NULL);
+      showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
     return;
   }
 
-  if(bigIntegerCompareUInt(&temp, 294) == BIG_INTEGER_GREATER_THAN) {
+  if(longIntegerCompareUInt(&temp, 294) == LONG_INTEGER_GREATER_THAN) {
     displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      bigIntegerToDisplayString(opX, errorMessage + 100);
+      longIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
-      showInfoDialog("In function factBigI:", errorMessage, NULL, NULL);
+      showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
     return;
   }
 
-  bigInteger_t fact;
+  longInteger_t fact;
   uint32_t counter;
 
-  bigIntegerCopy(&temp, &fact);
-  counter = bigIntegerToUInt(&temp) - 1;
+  longIntegerCopy(&temp, &fact);
+  counter = longIntegerToUInt(&temp) - 1;
   while(counter > 1) {
-    bigIntegerMultiplyUInt(&fact, counter--, &fact);
+    longIntegerMultiplyUInt(&fact, counter--, &fact);
   }
-  convertBigIntegerToBigIntegerRegister(&fact, result);
+  convertLongIntegerToLongIntegerRegister(&fact, result);
 }
 
 
@@ -164,18 +164,18 @@ void factCo16(void) {
 
 
 
-void factSmaI(void) {
+void factShoI(void) {
   int16_t sign;
   uint64_t value;
 
-  convertSmallIntegerRegisterToUInt64(opX, &sign, &value);
+  convertShortIntegerRegisterToUInt64(opX, &sign, &value);
 
   if(sign == 1) { // Negative value
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      bigIntegerToDisplayString(opX, errorMessage + 100);
+      longIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
-      showInfoDialog("In function factSmaI:", errorMessage, NULL, NULL);
+      showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -183,9 +183,9 @@ void factSmaI(void) {
   if(value > 20) {
     displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      bigIntegerToDisplayString(opX, errorMessage + 100);
+      longIntegerToDisplayString(opX, errorMessage + 100);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
-      showInfoDialog("In function factSmaI:", errorMessage, NULL, NULL);
+      showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -199,11 +199,11 @@ void factSmaI(void) {
     fact *= counter--;
   }
 
-  if(fact > smallIntegerMask) {
+  if(fact > shortIntegerMask) {
     fnSetFlag(FLAG_OVERFLOW);
   }
 
-  convertUInt64ToSmallIntegerRegister(0, fact, getRegisterBase(opX), result);
+  convertUInt64ToShortIntegerRegister(0, fact, getRegisterBase(opX), result);
 }
 
 

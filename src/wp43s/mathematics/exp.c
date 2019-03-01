@@ -24,8 +24,8 @@
 
 void (* const Exp[12])(void) = {
 // regX ==> 1            2         3          4          5          6          7          8           9            10             11        12
-//          Big integer  real16    complex16  Date       Time       Date       String     real16 mat  complex16 m  Small integer  real34    complex34
-            expBigI,     expRe16,  expCo16,   expError,  expError,  expError,  expError,  expRm16,    expCm16,     expSmaI,       expRe34,  expCo34
+//          Long integer real16    complex16  Date       Time       Date       String     real16 mat  complex16 m  Short integer  real34    complex34
+            expLonI,     expRe16,  expCo16,   expError,  expError,  expError,  expError,  expRm16,    expCm16,     expShoI,       expRe34,  expCo34
 };
 
 
@@ -95,10 +95,10 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 
-void expBigI(void) {
+void expLonI(void) {
   real34_t real34;
 
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   real34Exp(REGISTER_REAL34_DATA(opX), &real34);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
@@ -163,10 +163,10 @@ void expCm16(void) {
 
 
 
-void expSmaI(void) {
+void expShoI(void) {
   real34_t real34;
 
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   real34Exp(REGISTER_REAL34_DATA(opX), &real34);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real34ToReal16(&real34, REGISTER_REAL16_DATA(result));

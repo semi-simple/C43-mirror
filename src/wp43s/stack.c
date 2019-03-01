@@ -234,12 +234,12 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetStackSize(uint16_t unusedParamButMandatory) {
-  bigInteger_t ss;
+  longInteger_t ss;
 
   liftStack();
 
-  uIntToBigInteger(stackSize==SS_4 ? 4 : 8, &ss);
-  convertBigIntegerToBigIntegerRegister(&ss, REGISTER_X);
+  uIntToLongInteger(stackSize==SS_4 ? 4 : 8, &ss);
+  convertLongIntegerToLongIntegerRegister(&ss, REGISTER_X);
 
   refreshStack();
 }

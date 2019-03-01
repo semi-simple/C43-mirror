@@ -45,12 +45,12 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     convertRegister34To16(tmp);
   }
 
-  else if(getRegisterDataType(tmp) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(tmp, tmp);
+  else if(getRegisterDataType(tmp) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(tmp, tmp);
   }
 
-  else if(getRegisterDataType(tmp) == dtSmallInteger) {
-    convertSmallIntegerRegisterToReal16Register(tmp, tmp);
+  else if(getRegisterDataType(tmp) == dtShortInteger) {
+    convertShortIntegerRegisterToReal16Register(tmp, tmp);
   }
 
   else if(getRegisterDataType(tmp) != dtReal16) {
@@ -70,11 +70,11 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     int32_t den = real16ToInt32(REGISTER_REAL16_DATA(tmp));
 
     if(den == 1) {
-      bigInteger_t bigInteger;
+      longInteger_t longInteger;
 
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-      uIntToBigInteger(denMax, &bigInteger);
-      convertBigIntegerToBigIntegerRegister(&bigInteger, REGISTER_X);
+      uIntToLongInteger(denMax, &longInteger);
+      convertLongIntegerToLongIntegerRegister(&longInteger, REGISTER_X);
     }
     else {
       denMax = den;

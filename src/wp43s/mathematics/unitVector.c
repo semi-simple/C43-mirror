@@ -24,7 +24,7 @@
 
 void (* const unitVector[12])(void) = {
 //  regX ==> 1                2                3               4                5                6                7                8                9                10               11               12
-//           Big integer      real16           complex16       Date             Time             Date             String           real16 mat       complex16 m      Small integer    real34           complex34
+//           Long integer     real16           complex16       Date             Time             Date             String           real16 mat       complex16 m      Short integer    real34           complex34
              unitVectorError, unitVectorError, unitVectorCo16, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorCo34
 };
 

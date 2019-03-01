@@ -20,11 +20,11 @@
 
 void fnExp   (uint16_t unusedParamButMandatory);
 void expError(void);
-void expBigI (void);
+void expLonI (void);
 void expRe16 (void);
 void expCo16 (void);
 void expRm16 (void);
 void expCm16 (void);
-void expSmaI (void);
+void expShoI (void);
 void expRe34 (void);
 void expCo34 (void);

@@ -503,8 +503,8 @@ void addItemToNimBuffer(int16_t item) {
 
     closeNim();
     if(calcMode != CM_NIM && lastErrorCode == 0) {
-      if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-        convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+      if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+        convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
       }
       #if (ANGLE16 == 1)
         convertAngle16ToInternal(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS);
@@ -1189,13 +1189,13 @@ void closeNim(void) {
         calcModeNormal();
 
         if(nimNumberPart == NP_INT_10) {
-          bigInteger_t tmp;
+          longInteger_t tmp;
 
-          stringToBigInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), 10, &tmp);
-          convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
+          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), 10, &tmp);
+          convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
         }
         else if(nimNumberPart == NP_INT_BASE) {
-          bigInteger_t minVal, value, maxVal;
+          longInteger_t minVal, value, maxVal;
           int16_t posHash, i, lg;
           int32_t base;
 
@@ -1241,54 +1241,54 @@ void closeNim(void) {
             }
           }
 
-          stringToBigInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), base, &value);
+          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), base, &value);
 
-          // maxVal = 2^smallIntegerWordSize
-          if(smallIntegerWordSize >= 1 && smallIntegerWordSize <= 64) {
-            bigInteger2Exp(smallIntegerWordSize, &maxVal);
+          // maxVal = 2^shortIntegerWordSize
+          if(shortIntegerWordSize >= 1 && shortIntegerWordSize <= 64) {
+            longInteger2Exp(shortIntegerWordSize, &maxVal);
           }
           else {
-            sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for smallIntegerWordSize!", smallIntegerWordSize);
+            sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for shortIntegerWordSize!", shortIntegerWordSize);
             displayBugScreen(errorMessage);
             return;
           }
 
           // minVal = -maxVal/2
-          bigIntegerSetZero(&minVal); // Mandatory! Else segmentation fault at next instruction
-          bigIntegerDivide2(&maxVal, &minVal); // minVal = maxVal / 2
-          bigIntegerSetNegativeSign(&minVal); // minVal = -minVal
+          longIntegerSetZero(&minVal); // Mandatory! Else segmentation fault at next instruction
+          longIntegerDivide2(&maxVal, &minVal); // minVal = maxVal / 2
+          longIntegerSetNegativeSign(&minVal); // minVal = -minVal
 
-          if(smallIntegerMode != SIM_UNSIGN) {
-            bigIntegerDivide2(&maxVal, &maxVal); // maxVal /= 2
+          if(shortIntegerMode != SIM_UNSIGN) {
+            longIntegerDivide2(&maxVal, &maxVal); // maxVal /= 2
           }
 
-          bigIntegerSubtractUInt(&maxVal, 1, &maxVal); // maxVal--
+          longIntegerSubtractUInt(&maxVal, 1, &maxVal); // maxVal--
 
-          if(smallIntegerMode == SIM_UNSIGN) {
-            bigIntegerSetZero(&minVal); // minVal = 0
+          if(shortIntegerMode == SIM_UNSIGN) {
+            longIntegerSetZero(&minVal); // minVal = 0
           }
 
-          if(smallIntegerMode == SIM_1COMPL || smallIntegerMode == SIM_SIGNMT) {
-            bigIntegerAddUInt(&minVal, 1, &minVal); // minVal++
+          if(shortIntegerMode == SIM_1COMPL || shortIntegerMode == SIM_SIGNMT) {
+            longIntegerAddUInt(&minVal, 1, &minVal); // minVal++
           }
 
-          if(bigIntegerCompare(&value, &minVal) == BIG_INTEGER_LESS_THAN || bigIntegerCompare(&value, &maxVal) == BIG_INTEGER_GREATER_THAN) {
+          if(longIntegerCompare(&value, &minVal) == LONG_INTEGER_LESS_THAN || longIntegerCompare(&value, &maxVal) == LONG_INTEGER_GREATER_THAN) {
             displayCalcErrorMessage(14, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               char strMin[22], strMax[22];
-              bigIntegerToString(&minVal, strMin, 10);
-              bigIntegerToString(&maxVal, strMax, 10);
-              sprintf(errorMessage, "For word size of %d bit%s and integer mode %s,", smallIntegerWordSize, smallIntegerWordSize>1 ? "s" : "", getSmallIntegerModeName(smallIntegerMode));
+              longIntegerToString(&minVal, strMin, 10);
+              longIntegerToString(&maxVal, strMax, 10);
+              sprintf(errorMessage, "For word size of %d bit%s and integer mode %s,", shortIntegerWordSize, shortIntegerWordSize>1 ? "s" : "", getShortIntegerModeName(shortIntegerMode));
               sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "the entered number must be from %s to %s!", strMin, strMax);
               showInfoDialog("In function closeNIM:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
             #endif
             return;
           }
 
-          reallocateRegister(REGISTER_X, dtSmallInteger, SMALL_INTEGER_SIZE, base);
+          reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
 
           char strValue[22];
-          bigIntegerToString(&value, strValue, 10);
+          longIntegerToString(&value, strValue, 10);
 
           uint64_t val;
           if(value.sign) {
@@ -1298,34 +1298,34 @@ void closeNim(void) {
             val = atoll(strValue); // value is positive
           }
 
-          if(smallIntegerMode == SIM_UNSIGN) {
-            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
+          if(shortIntegerMode == SIM_UNSIGN) {
+            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
-          else if(smallIntegerMode == SIM_2COMPL) {
+          else if(shortIntegerMode == SIM_2COMPL) {
             if(value.sign) {
-              val = (~val + 1) & smallIntegerMask;
+              val = (~val + 1) & shortIntegerMask;
             }
 
-            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
+            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
-          else if(smallIntegerMode == SIM_1COMPL) {
+          else if(shortIntegerMode == SIM_1COMPL) {
             if(value.sign) {
-              val = ~val & smallIntegerMask;
+              val = ~val & shortIntegerMask;
             }
 
-            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
+            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
-          else if(smallIntegerMode == SIM_SIGNMT) {
+          else if(shortIntegerMode == SIM_SIGNMT) {
             if(value.sign) {
-              val += smallIntegerMask;
+              val += shortIntegerMask;
             }
 
-            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = val;
+            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
           else {
-            sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for smallIntegerMode!", smallIntegerMode);
+            sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for shortIntegerMode!", shortIntegerMode);
             displayBugScreen(errorMessage);
-            *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = 0;
+            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = 0;
           }
         }
         else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {

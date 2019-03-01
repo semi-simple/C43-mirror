@@ -22,7 +22,7 @@ void fnGcd       (uint16_t unusedParamButMandatory);
 void gcdError    (void);
 
 //      RegYRegX
-void gcdBigIBigI(void);
-void gcdBigISmaI(void);
-void gcdSmaIBigI(void);
-void gcdSmaISmaI(void);
+void gcdLonILonI(void);
+void gcdLonIShoI(void);
+void gcdShoILonI(void);
+void gcdShoIShoI(void);

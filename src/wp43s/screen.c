@@ -623,18 +623,18 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
-            else if(getRegisterDataType(REGISTER_L) == dtSmallInteger) {
+            else if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
               const font_t *font = &standardFont;
 
-              strcat(string1, "small integer = ");
-              smallIntegerToDisplayString(REGISTER_L, string2, &font);
+              strcat(string1, "short integer = ");
+              shortIntegerToDisplayString(REGISTER_L, string2, &font);
               strcat(string2, STD_SPACE_3_PER_EM);
-              strcat(string2, getSmallIntegerModeName(smallIntegerMode));
+              strcat(string2, getShortIntegerModeName(shortIntegerMode));
             }
 
-            else if(getRegisterDataType(REGISTER_L) == dtBigInteger) {
-              strcat(string1, "big integer = ");
-              bigIntegerToDisplayString(REGISTER_L, string2);
+            else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
+              strcat(string1, "long integer = ");
+              longIntegerToDisplayString(REGISTER_L, string2);
             }
 
             else {
@@ -962,16 +962,16 @@ void refreshRegisterLine(calcRegister_t regist) {
             showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
           }
 
-          else if(getRegisterDataType(regist) == dtSmallInteger) {
+          else if(getRegisterDataType(regist) == dtShortInteger) {
             const font_t *font;
 
             font = NULL;
-            smallIntegerToDisplayString(regist, tmpStr3000, &font);
+            shortIntegerToDisplayString(regist, tmpStr3000, &font);
             showString(tmpStr3000, font, SCREEN_WIDTH - stringWidth(tmpStr3000, font, false, true), 134 - 37*(regist-100), vmNormal, false, true);
           }
 
-          else if(getRegisterDataType(regist) == dtBigInteger) {
-            bigIntegerToDisplayString(regist, tmpStr3000);
+          else if(getRegisterDataType(regist) == dtLongInteger) {
+            longIntegerToDisplayString(regist, tmpStr3000);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
@@ -983,9 +983,9 @@ void refreshRegisterLine(calcRegister_t regist) {
               w = stringWidth(tmpStr3000, &standardFont, false, true);
               if(w > SCREEN_WIDTH) {
                 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                  showInfoDialog("In function refreshRegisterLine:", "Big integer representation too wide!", tmpStr3000, NULL);
+                  showInfoDialog("In function refreshRegisterLine:", "Long integer representation too wide!", tmpStr3000, NULL);
                 #endif
-                strcpy(tmpStr3000, "Big integer representation too wide!");
+                strcpy(tmpStr3000, "Long integer representation too wide!");
               }
               w = stringWidth(tmpStr3000, &standardFont, false, true);
               lineWidth = w;

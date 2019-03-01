@@ -23,78 +23,78 @@ void divError    (void);
 void divToBeCoded(void);
 
 //      RegYRegX
-void divBigIBigI (void);
-void divBigIRe16 (void);
-void divBigICo16 (void);
-void divBigISmaI (void);
-void divBigIRe34 (void);
-void divBigICo34 (void);
+void divLonILonI (void);
+void divLonIRe16 (void);
+void divLonICo16 (void);
+void divLonIShoI (void);
+void divLonIRe34 (void);
+void divLonICo34 (void);
 
 //      RegYRegX
-void divRe16BigI (void);
+void divRe16LonI (void);
 void divRe16Re16 (void);
 void divRe16Co16 (void);
-void divRe16SmaI (void);
+void divRe16ShoI (void);
 void divRe16Re34 (void);
 void divRe16Co34 (void);
 
 //      RegYRegX
-void divCo16BigI (void);
+void divCo16LonI (void);
 void divCo16Re16 (void);
 void divCo16Co16 (void);
-void divCo16SmaI (void);
+void divCo16ShoI (void);
 void divCo16Re34 (void);
 void divCo16Co34 (void);
 
 //      RegYRegX
-void divAnglBigI (void);
+void divAnglLonI (void);
 void divAnglRe16 (void);
 void divAnglAngl (void);
-void divAnglSmaI (void);
+void divAnglShoI (void);
 void divAnglRe34 (void);
 
 //      RegYRegX
-void divTimeBigI (void);
+void divTimeLonI (void);
 void divTimeRe16 (void);
-void divTimeSmaI (void);
+void divTimeShoI (void);
 void divTimeRe34 (void);
 
 //      RegYRegX
-void divRm16BigI (void);
+void divRm16LonI (void);
 void divRm16Re16 (void);
 void divRm16Co16 (void);
-void divRm16SmaI (void);
+void divRm16ShoI (void);
 void divRm16Re34 (void);
 void divRm16Co34 (void);
 
 //      RegYRegX
-void divCm16BigI (void);
+void divCm16LonI (void);
 void divCm16Re16 (void);
 void divCm16Co16 (void);
-void divCm16SmaI (void);
+void divCm16ShoI (void);
 void divCm16Re34 (void);
 void divCm16Co34 (void);
 
 //      RegYRegX
-void divSmaIBigI (void);
-void divSmaIRe16 (void);
-void divSmaICo16 (void);
-void divSmaISmaI (void);
-void divSmaIRe34 (void);
-void divSmaICo34 (void);
+void divShoILonI (void);
+void divShoIRe16 (void);
+void divShoICo16 (void);
+void divShoIShoI (void);
+void divShoIRe34 (void);
+void divShoICo34 (void);
 
 //      RegYRegX
-void divRe34BigI (void);
+void divRe34LonI (void);
 void divRe34Re16 (void);
 void divRe34Co16 (void);
-void divRe34SmaI (void);
+void divRe34ShoI (void);
 void divRe34Re34 (void);
 void divRe34Co34 (void);
 
 //      RegYRegX
-void divCo34BigI (void);
+void divCo34LonI (void);
 void divCo34Re16 (void);
 void divCo34Co16 (void);
-void divCo34SmaI (void);
+void divCo34ShoI (void);
 void divCo34Re34 (void);
 void divCo34Co34 (void);

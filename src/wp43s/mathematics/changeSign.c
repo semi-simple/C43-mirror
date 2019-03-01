@@ -24,8 +24,8 @@
 
 void (* const chs[12])(void) = {
 // regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//          Big integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
-            chsBigI,     chsRe16,  chsCo16,   chsAngl,  chsError,  chsError,  chsError,  chsRm16,     chsCm16,      chsError,       chsRe34,  chsCo34
+//          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
+            chsLonI,     chsRe16,  chsCo16,   chsAngl,  chsError,  chsError,  chsError,  chsRm16,     chsCm16,      chsError,       chsRe34,  chsCo34
 };
 
 
@@ -93,7 +93,7 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
 
 
 
-void chsBigI(void) {
+void chsLonI(void) {
   setRegisterSign(result, getRegisterDataInfo(result) ^ 1);
 }
 
@@ -176,8 +176,8 @@ void chsCm16(void) {
 
 
 
-void chsSmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intChs(*(REGISTER_SMALL_INTEGER_DATA(result)));
+void chsShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(result)));
 }
 
 

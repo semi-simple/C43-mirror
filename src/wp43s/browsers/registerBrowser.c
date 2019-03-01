@@ -101,20 +101,20 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             strcpy(tmpStr3000, "32 bytes");
           }
         }
-        else if(getRegisterDataType(regist) == dtBigInteger) {
+        else if(getRegisterDataType(regist) == dtLongInteger) {
           if(showContent) {
-            bigIntegerToDisplayString(regist, tmpStr3000);
+            longIntegerToDisplayString(regist, tmpStr3000);
           }
           else {
             sprintf(tmpStr3000, "%" FMT16U " bits := 2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
           }
         }
-        else if(getRegisterDataType(regist) == dtSmallInteger) {
+        else if(getRegisterDataType(regist) == dtShortInteger) {
           if(showContent) {
             const font_t *font;
 
             font = &standardFont;
-            smallIntegerToDisplayString(regist, tmpStr3000, &font);
+            shortIntegerToDisplayString(regist, tmpStr3000, &font);
           }
           else {
             strcpy(tmpStr3000, "64 bits := 8 bytes");
@@ -197,20 +197,20 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
                 strcpy(tmpStr3000, "4+32 bytes");
               }
             }
-            else if(getRegisterDataType(regist) == dtBigInteger) {
+            else if(getRegisterDataType(regist) == dtLongInteger) {
               if(showContent) {
-                bigIntegerToDisplayString(regist, tmpStr3000);
+                longIntegerToDisplayString(regist, tmpStr3000);
               }
               else {
                 sprintf(tmpStr3000, "%" FMT16U " bits := 4+2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
               }
             }
-            else if(getRegisterDataType(regist) == dtSmallInteger) {
+            else if(getRegisterDataType(regist) == dtShortInteger) {
               if(showContent) {
                 const font_t *font;
 
                 font = &standardFont;
-                smallIntegerToDisplayString(regist, tmpStr3000, &font);
+                shortIntegerToDisplayString(regist, tmpStr3000, &font);
               }
               else {
                 strcpy(tmpStr3000, "64 bits := 4+8 bytes");

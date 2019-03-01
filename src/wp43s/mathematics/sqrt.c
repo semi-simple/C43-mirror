@@ -23,9 +23,9 @@
 
 
 void (* const Sqrt[12])(void) = {
-// regX ==> 1            2          3          4           5           6           7           8           9            10             11         12
-//          Big integer  real16     complex16  angle       Time        Date        String      real16 mat  complex16 m  Small integer  real34     complex34
-            sqrtBigI,    sqrtRe16,  sqrtCo16,  sqrtError,  sqrtError,  sqrtError,  sqrtError,  sqrtRm16,   sqrtCm16,    sqrtSmaI,      sqrtRe34,  sqrtCo34
+// regX ==> 1             2          3          4           5           6           7           8           9            10             11         12
+//          Long integer  real16     complex16  angle       Time        Date        String      real16 mat  complex16 m  Short integer  real34     complex34
+            sqrtLonI,     sqrtRe16,  sqrtCo16,  sqrtError,  sqrtError,  sqrtError,  sqrtError,  sqrtRm16,   sqrtCm16,    sqrtShoI,      sqrtRe34,  sqrtCo34
 };
 
 
@@ -95,52 +95,52 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
 
 
 
-void sqrtBigI(void) {
-  bigInteger_t value;
+void sqrtLonI(void) {
+  longInteger_t value;
 
-  convertBigIntegerRegisterToBigInteger(opX, &value);
+  convertLongIntegerRegisterToLongInteger(opX, &value);
 
-  if(!bigIntegerIsNegative(&value)) { // Positive or zero value
-    bigInteger_t value, nn0, nn1;
+  if(!longIntegerIsNegative(&value)) { // Positive or zero value
+    longInteger_t value, nn0, nn1;
 
-    if(bigIntegerIsZero(&value)) {
-      uIntToBigInteger(0, &nn1);
+    if(longIntegerIsZero(&value)) {
+      uIntToLongInteger(0, &nn1);
     }
     else {
       //value = opX;
-      convertBigIntegerRegisterToBigInteger(opX, &value);
+      convertLongIntegerRegisterToLongInteger(opX, &value);
 
       // n0 = value / 2 + 1;
-      bigIntegerDivide2(&value, &nn0);
-      bigIntegerAddUInt(&nn0, 1, &nn0);
+      longIntegerDivide2(&value, &nn0);
+      longIntegerAddUInt(&nn0, 1, &nn0);
 
       // n1 = value / n0 + n0 / 2;
-      bigIntegerDivide(&value, &nn0, &nn1);
-      bigIntegerDivide2(&nn0, &nn0);
-      bigIntegerAdd(&nn1, &nn0, &nn1);
-      bigIntegerMultiply2(&nn0, &nn0);
-      while(bigIntegerCompare(&nn0, &nn1) == BIG_INTEGER_GREATER_THAN) {
+      longIntegerDivide(&value, &nn0, &nn1);
+      longIntegerDivide2(&nn0, &nn0);
+      longIntegerAdd(&nn1, &nn0, &nn1);
+      longIntegerMultiply2(&nn0, &nn0);
+      while(longIntegerCompare(&nn0, &nn1) == LONG_INTEGER_GREATER_THAN) {
         //n0 = n1;
-        bigIntegerCopy(&nn1, &nn0);
+        longIntegerCopy(&nn1, &nn0);
 
         //n1 = (n0 + value / n0) / 2;
-        bigIntegerDivide(&value, &nn0, &nn1);
-        bigIntegerAdd(&nn1, &nn0, &nn1);
-        bigIntegerDivide2(&nn1, &nn1);
+        longIntegerDivide(&value, &nn0, &nn1);
+        longIntegerAdd(&nn1, &nn0, &nn1);
+        longIntegerDivide2(&nn1, &nn1);
       }
 
       // n0 = n1 * n1;
-      bigIntegerMultiply(&nn1, &nn1, &nn0);
-      if(bigIntegerCompare(&nn0, &value) == BIG_INTEGER_GREATER_THAN) {
-        bigIntegerSubtractUInt(&nn1, 1, &nn1);
+      longIntegerMultiply(&nn1, &nn1, &nn0);
+      if(longIntegerCompare(&nn0, &value) == LONG_INTEGER_GREATER_THAN) {
+        longIntegerSubtractUInt(&nn1, 1, &nn1);
       }
 
-      if(bigIntegerCompare(&nn0, &value) == BIG_INTEGER_EQUAL) {
-        convertBigIntegerToBigIntegerRegister(&nn1, result);
+      if(longIntegerCompare(&nn0, &value) == LONG_INTEGER_EQUAL) {
+        convertLongIntegerToLongIntegerRegister(&nn1, result);
         return;
       }
       else {
-        convertBigIntegerRegisterToReal34Register(opX, opX);
+        convertLongIntegerRegisterToReal34Register(opX, opX);
         reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
         real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
         convertRegister34To16(result);
@@ -150,7 +150,7 @@ void sqrtBigI(void) {
   else if(getFlag(FLAG_CPXRES)) { // Negative value
     real34_t real34;
 
-    convertBigIntegerRegisterToReal34Register(opX, opX);
+    convertLongIntegerRegisterToReal34Register(opX, opX);
     real34Copy(REGISTER_REAL34_DATA(opX), &real34);
     reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
     real34SetPositiveSign(&real34);
@@ -162,7 +162,7 @@ void sqrtBigI(void) {
   else {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // 1 = argument exceeds functions domain
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative big integer when flag I is not set!");
+      sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative long integer when flag I is not set!");
       showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
     #endif
   }
@@ -242,8 +242,8 @@ void sqrtCm16(void) {
 
 
 
-void sqrtSmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intSqrt(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
+void sqrtShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intSqrt(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }
 
 

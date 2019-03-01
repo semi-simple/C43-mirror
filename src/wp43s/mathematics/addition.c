@@ -24,19 +24,19 @@
 
 void (* const addition[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {addBigIBigI, addRe16BigI, addCo16BigI, addAnglBigI, addTimeBigI, addDateBigI, addStriBigI, addError,    addError,    addSmaIBigI,  addRe34BigI, addCo34BigI},
-/*  2 real16         */ {addBigIRe16, addRe16Re16, addCo16Re16, addAnglRe16, addTimeRe16, addDateRe16, addStriRe16, addError,    addError,    addSmaIRe16,  addRe34Re16, addCo34Re16},
-/*  3 complex16      */ {addBigICo16, addRe16Co16, addCo16Co16, addError,    addError,    addError,    addStriCo16, addError,    addError,    addSmaICo16,  addRe34Co16, addCo34Co16},
-/*  4 angle34        */ {addBigIAngl, addRe16Angl, addError,    addAnglAngl, addError,    addError,    addStriAngl, addError,    addError,    addSmaIAngl,  addRe34Angl, addError   },
-/*  5 Time           */ {addBigITime, addRe16Time, addError,    addError,    addTimeTime, addError,    addStriTime, addError,    addError,    addError,     addRe34Time, addError   },
-/*  6 Date           */ {addBigIDate, addRe16Date, addError,    addError,    addError,    addError,    addStriDate, addError,    addError,    addError,     addRe34Date, addError   },
+//      V                Long integer real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Short integer real34       complex34
+/*  1 Long integer   */ {addLonILonI, addRe16LonI, addCo16LonI, addAnglLonI, addTimeLonI, addDateLonI, addStriLonI, addError,    addError,    addShoILonI,  addRe34LonI, addCo34LonI},
+/*  2 real16         */ {addLonIRe16, addRe16Re16, addCo16Re16, addAnglRe16, addTimeRe16, addDateRe16, addStriRe16, addError,    addError,    addShoIRe16,  addRe34Re16, addCo34Re16},
+/*  3 complex16      */ {addLonICo16, addRe16Co16, addCo16Co16, addError,    addError,    addError,    addStriCo16, addError,    addError,    addShoICo16,  addRe34Co16, addCo34Co16},
+/*  4 angle34        */ {addLonIAngl, addRe16Angl, addError,    addAnglAngl, addError,    addError,    addStriAngl, addError,    addError,    addShoIAngl,  addRe34Angl, addError   },
+/*  5 Time           */ {addLonITime, addRe16Time, addError,    addError,    addTimeTime, addError,    addStriTime, addError,    addError,    addError,     addRe34Time, addError   },
+/*  6 Date           */ {addLonIDate, addRe16Date, addError,    addError,    addError,    addError,    addStriDate, addError,    addError,    addError,     addRe34Date, addError   },
 /*  7 String         */ {addError,    addError,    addError,    addError,    addError,    addError,    addStriStri, addError,    addError,    addError,     addError,    addError   },
 /*  8 real16 mat     */ {addError,    addError,    addError,    addError,    addError,    addError,    addStriRm16, addRm16Rm16, addCm16Rm16, addError,     addError,    addError   },
 /*  9 complex16 mat  */ {addError,    addError,    addError,    addError,    addError,    addError,    addStriCm16, addRm16Cm16, addCm16Cm16, addError,     addError,    addError   },
-/* 10 Small integer  */ {addBigISmaI, addRe16SmaI, addCo16SmaI, addAnglSmaI, addError,    addError,    addStriSmaI, addError,    addError,    addSmaISmaI,  addRe34SmaI, addCo34SmaI},
-/* 11 real34         */ {addBigIRe34, addRe16Re34, addCo16Re34, addAnglRe34, addTimeRe34, addDateRe34, addStriRe34, addError,    addError,    addSmaIRe34,  addRe34Re34, addCo34Re34},
-/* 12 complex34      */ {addBigICo34, addRe16Co34, addCo16Co34, addError,    addError,    addError,    addStriCo34, addError,    addError,    addSmaICo34,  addRe34Co34, addCo34Co34}
+/* 10 Short integer  */ {addLonIShoI, addRe16ShoI, addCo16ShoI, addAnglShoI, addError,    addError,    addStriShoI, addError,    addError,    addShoIShoI,  addRe34ShoI, addCo34ShoI},
+/* 11 real34         */ {addLonIRe34, addRe16Re34, addCo16Re34, addAnglRe34, addTimeRe34, addDateRe34, addStriRe34, addError,    addError,    addShoIRe34,  addRe34Re34, addCo34Re34},
+/* 12 complex34      */ {addLonICo34, addRe16Co34, addCo16Co34, addError,    addError,    addError,    addStriCo34, addError,    addError,    addShoICo34,  addRe34Co34, addCo34Co34}
 };
 
 
@@ -113,41 +113,41 @@ void fnAdd(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(big integer) ==> result(big integer)
+ * \brief opY(long integer) + opX(long integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigIBigI(void) {
-  bigInteger_t iOp1;
-  bigInteger_t iOp2;
+void addLonILonI(void) {
+  longInteger_t iOp1;
+  longInteger_t iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
-  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
 
-  bigIntegerAdd(&iOp1, &iOp2, &iOp1);
+  longIntegerAdd(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(real16) ==> result(real16)
+ * \brief opY(long integer) + opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigIRe16(void) {
+void addLonIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addBigIRe16:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addLonIRe16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
@@ -157,23 +157,23 @@ void addBigIRe16(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(complex16) ==> result(complex16)
+ * \brief opY(long integer) + opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigICo16(void) {
+void addLonICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addBigICo16:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addLonICo16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
@@ -182,22 +182,22 @@ void addBigICo16(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(angle) ==> result(angle)
+ * \brief opY(long integer) + opX(angle) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigIAngl(void) {
+void addLonIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addBigIAngl:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addLonIAngl:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertBigIntegerRegisterToAngleRegister(opY, opY);
+  convertLongIntegerRegisterToAngleRegister(opY, opY);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -208,58 +208,58 @@ void addBigIAngl(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(time) ==> result(time)
+ * \brief opY(long integer) + opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigITime(void) {
+void addLonITime(void) {
   addToBeCoded();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(date) ==> result(date)
+ * \brief opY(long integer) + opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigIDate(void) {
+void addLonIDate(void) {
   addToBeCoded();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(64bits integer) ==> result(big integer)
+ * \brief opY(long integer) + opX(64bits integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigISmaI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
-  addBigIBigI();
+void addLonIShoI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opX, opX);
+  addLonILonI();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(real34) ==> result(real34)
+ * \brief opY(long integer) + opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigIRe34(void) {
+void addLonIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addBigIRe34:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addLonIRe34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
@@ -269,23 +269,23 @@ void addBigIRe34(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) + opX(complex34) ==> result(complex34)
+ * \brief opY(long integer) + opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void addBigICo34(void) {
+void addLonICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addBigICo34:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addLonICo34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(result)); // result = opX
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
@@ -294,21 +294,21 @@ void addBigICo34(void) {
 
 
 /********************************************//**
- * \brief opY(real16) + opX(big integer) ==> result(real16)
+ * \brief opY(real16) + opX(long integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void addRe16BigI(void) {
+void addRe16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addRe16BigI:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addRe16LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
@@ -438,8 +438,8 @@ void addRe16Date(void) {
  * \param void
  * \return void
  ***********************************************/
-void addRe16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void addRe16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   addRe16Re16();
 }
 
@@ -472,23 +472,23 @@ void addRe16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex16) + opX(big integer) ==> result(complex16)
+ * \brief opY(complex16) + opX(long integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void addCo16BigI(void) {
+void addCo16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addCo16BigI:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addCo16LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   complex16Copy(REGISTER_COMPLEX16_DATA(opY), REGISTER_COMPLEX16_DATA(result)); // result = opX
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
@@ -550,8 +550,8 @@ void addCo16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void addCo16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void addCo16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   addCo16Re16();
 }
 
@@ -584,22 +584,22 @@ void addCo16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(angle) + opX(big integer) ==> result(angle)
+ * \brief opY(angle) + opX(long integer) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void addAnglBigI(void) {
+void addAnglLonI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addAnglBigI:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addAnglLonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertBigIntegerRegisterToAngleRegister(opX, opX);
+  convertLongIntegerRegisterToAngleRegister(opX, opX);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -661,22 +661,22 @@ void addAnglAngl(void) {
 
 
 /********************************************//**
- * \brief opY(angle) + opX(small integer) ==> result(angle)
+ * \brief opY(angle) + opX(short integer) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void addAnglSmaI(void) {
+void addAnglShoI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addAnglSmaI:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addAnglShoI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertSmallIntegerRegisterToAngleRegister(opX, opX);
+  convertShortIntegerRegisterToAngleRegister(opX, opX);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -715,12 +715,12 @@ void addAnglRe34(void) {
 
 
 /********************************************//**
- * \brief opY(time) + opX(big integer) ==> result(time)
+ * \brief opY(time) + opX(long integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void addTimeBigI(void) {
+void addTimeLonI(void) {
   addToBeCoded();
 }
 
@@ -779,12 +779,12 @@ void addTimeRe34(void) {
 
 
 /********************************************//**
- * \brief opY(date) + opX(big integer) ==> result(date)
+ * \brief opY(date) + opX(long integer) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
-void addDateBigI(void) {
+void addDateLonI(void) {
   addToBeCoded();
 }
 
@@ -831,16 +831,16 @@ void addDateRe34(void) {
 
 
 /********************************************//**
- * \brief opY(string) + opX(big integer) ==> result(string)
+ * \brief opY(string) + opX(long integer) ==> result(string)
  *
  * \param void
  * \return void
  ***********************************************/
-void addStriBigI(void) {
+void addStriLonI(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
-  bigIntegerToDisplayString(opX, tmpStr3000);
+  longIntegerToDisplayString(opX, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
@@ -1006,13 +1006,13 @@ void addStriCm16(void) {
  * \param void
  * \return void
  ***********************************************/
-void addStriSmaI(void) {
+void addStriShoI(void) {
   int16_t len1, len2;
   const font_t *font;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
   font = &standardFont;
-  smallIntegerToDisplayString(opX, errorMessage, &font); // We use errorMeaage here because this string can become very long
+  shortIntegerToDisplayString(opX, errorMessage, &font); // We use errorMeaage here because this string can become very long
   len2 = stringByteLength(errorMessage) + 1; // +1 for the trailing 0
 
   reallocateRegister(result, dtString, len1 + len2, 0);
@@ -1114,14 +1114,14 @@ void addCm16Cm16(void) {
 
 
 /********************************************//**
- * \brief opY(64bits integer) + opX(big integer) ==> result(big integer)
+ * \brief opY(64bits integer) + opX(long integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void addSmaIBigI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
-  addBigIBigI();
+void addShoILonI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
+  addLonILonI();
 }
 
 
@@ -1132,8 +1132,8 @@ void addSmaIBigI(void) {
  * \param void
  * \return void
  ***********************************************/
-void addSmaIRe16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void addShoIRe16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   addRe16Re16();
 }
 
@@ -1145,30 +1145,30 @@ void addSmaIRe16(void) {
  * \param void
  * \return void
  ***********************************************/
-void addSmaICo16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void addShoICo16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   addRe16Co16();
 }
 
 
 
 /********************************************//**
- * \brief opY(small integer) + opX(angle) ==> result(angle)
+ * \brief opY(short integer) + opX(angle) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void addSmaIAngl(void) {
+void addShoIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addSmaIAngl:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addShoIAngl:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertSmallIntegerRegisterToAngleRegister(opY, opY);
+  convertShortIntegerRegisterToAngleRegister(opY, opY);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleAdd(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -1184,9 +1184,9 @@ void addSmaIAngl(void) {
  * \param void
  * \return void
  ***********************************************/
-void addSmaISmaI(void) {
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intAdd(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
+void addShoIShoI(void) {
+  reallocateRegister(result, dtShortInteger, SHORT_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intAdd(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 
@@ -1197,8 +1197,8 @@ void addSmaISmaI(void) {
  * \param void
  * \return void
  ***********************************************/
-void addSmaIRe34(void) {
-  convertSmallIntegerRegisterToReal34Register(opY, opY);
+void addShoIRe34(void) {
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   addRe34Re34();
 }
 
@@ -1210,29 +1210,29 @@ void addSmaIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void addSmaICo34(void) {
-  convertSmallIntegerRegisterToReal34Register(opY, opY);
+void addShoICo34(void) {
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   addRe34Co34();
 }
 
 
 
 /********************************************//**
- * \brief opY(real34) + opX(big integer) ==> result(real34)
+ * \brief opY(real34) + opX(long integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void addRe34BigI(void) {
+void addRe34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addRe34BigI:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addRe34LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
@@ -1341,8 +1341,8 @@ void addRe34Date(void) {
  * \param void
  * \return void
  ***********************************************/
-void addRe34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void addRe34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   addRe34Re34();
 }
 
@@ -1396,23 +1396,23 @@ void addRe34Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex34) + opX(big integer) ==> result(complex34)
+ * \brief opY(complex34) + opX(long integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void addCo34BigI(void) {
+void addCo34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function addCo34BigI:", "cannot use NaN as an input of +", NULL, NULL);
+      showInfoDialog("In function addCo34LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   complex34Copy(REGISTER_COMPLEX34_DATA(opY), REGISTER_COMPLEX34_DATA(result)); // result = opY
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
@@ -1452,8 +1452,8 @@ void addCo34Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void addCo34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void addCo34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   addCo34Re34();
 }
 

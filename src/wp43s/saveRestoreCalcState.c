@@ -98,10 +98,10 @@ void saveCalc(void) {
   size += fwrite(&currentFlgScr,                      1, sizeof(currentFlgScr),                      backup); //printf("%8lu currentFlgScr\n",                      (unsigned long)size);
   size += fwrite(&displayFormat,                      1, sizeof(displayFormat),                      backup); //printf("%8lu displayFormat\n",                      (unsigned long)size);
   size += fwrite(&displayFormatDigits,                1, sizeof(displayFormatDigits),                backup); //printf("%8lu displayFormatDigits\n",                (unsigned long)size);
-  size += fwrite(&smallIntegerWordSize,               1, sizeof(smallIntegerWordSize),               backup); //printf("%8lu smallIntegerWordSize\n",               (unsigned long)size);
+  size += fwrite(&shortIntegerWordSize,               1, sizeof(shortIntegerWordSize),               backup); //printf("%8lu shortIntegerWordSize\n",               (unsigned long)size);
   size += fwrite(&denominatorMode,                    1, sizeof(denominatorMode),                    backup); //printf("%8lu denominatorMode\n",                    (unsigned long)size);
   size += fwrite(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
-  size += fwrite(&smallIntegerMode,                   1, sizeof(smallIntegerMode),                   backup); //printf("%8lu smallIntegerMode\n",                   (unsigned long)size);
+  size += fwrite(&shortIntegerMode,                   1, sizeof(shortIntegerMode),                   backup); //printf("%8lu shortIntegerMode\n",                   (unsigned long)size);
   size += fwrite(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
   size += fwrite(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
   size += fwrite(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
@@ -147,8 +147,8 @@ void saveCalc(void) {
   size += fwrite(&hexDigits,                          1, sizeof(hexDigits),                          backup); //printf("%8lu hexDigits\n",                          (unsigned long)size);
   size += fwrite(&errorMessageRegisterLine,           1, sizeof(errorMessageRegisterLine),           backup); //printf("%8lu errorMessageRegisterLine\n",           (unsigned long)size);
   size += fwrite(&errorRegisterLine,                  1, sizeof(errorRegisterLine),                  backup); //printf("%8lu errorRegisterLine\n",                  (unsigned long)size);
-  size += fwrite(&smallIntegerMask,                   1, sizeof(smallIntegerMask),                   backup); //printf("%8lu smallIntegerMask\n",                   (unsigned long)size);
-  size += fwrite(&smallIntegerSignBit,                1, sizeof(smallIntegerSignBit),                backup); //printf("%8lu smallIntegerSignBit\n",                (unsigned long)size);
+  size += fwrite(&shortIntegerMask,                   1, sizeof(shortIntegerMask),                   backup); //printf("%8lu shortIntegerMask\n",                   (unsigned long)size);
+  size += fwrite(&shortIntegerSignBit,                1, sizeof(shortIntegerSignBit),                backup); //printf("%8lu shortIntegerSignBit\n",                (unsigned long)size);
   size += fwrite(&temporaryInformation,               1, sizeof(temporaryInformation),               backup); //printf("%8lu temporaryInformation\n",               (unsigned long)size);
   size += fwrite(&glyphNotFound,                      1, sizeof(glyphNotFound),                      backup); //printf("%8lu glyphNotFound\n",                      (unsigned long)size);
   size += fwrite(&allowScreenUpdate,                  1, sizeof(allowScreenUpdate),                  backup); //printf("%8lu allowScreenUpdate\n",                  (unsigned long)size);
@@ -255,10 +255,10 @@ void restoreCalc(void) {
     size += fread(&currentFlgScr,                      1, sizeof(currentFlgScr),                      backup); //printf("%8lu currentFlgScr\n",                      (unsigned long)size);
     size += fread(&displayFormat,                      1, sizeof(displayFormat),                      backup); //printf("%8lu displayFormat\n",                      (unsigned long)size);
     size += fread(&displayFormatDigits,                1, sizeof(displayFormatDigits),                backup); //printf("%8lu displayFormatDigits\n",                (unsigned long)size);
-    size += fread(&smallIntegerWordSize,               1, sizeof(smallIntegerWordSize),               backup); //printf("%8lu smallIntegerWordSize\n",               (unsigned long)size);
+    size += fread(&shortIntegerWordSize,               1, sizeof(shortIntegerWordSize),               backup); //printf("%8lu shortIntegerWordSize\n",               (unsigned long)size);
     size += fread(&denominatorMode,                    1, sizeof(denominatorMode),                    backup); //printf("%8lu denominatorMode\n",                    (unsigned long)size);
     size += fread(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
-    size += fread(&smallIntegerMode,                   1, sizeof(smallIntegerMode),                   backup); //printf("%8lu smallIntegerMode\n",                   (unsigned long)size);
+    size += fread(&shortIntegerMode,                   1, sizeof(shortIntegerMode),                   backup); //printf("%8lu shortIntegerMode\n",                   (unsigned long)size);
     size += fread(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
     size += fread(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
     size += fread(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
@@ -304,8 +304,8 @@ void restoreCalc(void) {
     size += fread(&hexDigits,                          1, sizeof(hexDigits),                          backup); //printf("%8lu hexDigits\n",                          (unsigned long)size);
     size += fread(&errorMessageRegisterLine,           1, sizeof(errorMessageRegisterLine),           backup); //printf("%8lu errorMessageRegisterLine\n",           (unsigned long)size);
     size += fread(&errorRegisterLine,                  1, sizeof(errorRegisterLine),                  backup); //printf("%8lu errorRegisterLine\n",                  (unsigned long)size);
-    size += fread(&smallIntegerMask,                   1, sizeof(smallIntegerMask),                   backup); //printf("%8lu smallIntegerMask\n",                   (unsigned long)size);
-    size += fread(&smallIntegerSignBit,                1, sizeof(smallIntegerSignBit),                backup); //printf("%8lu smallIntegerSignBit\n",                (unsigned long)size);
+    size += fread(&shortIntegerMask,                   1, sizeof(shortIntegerMask),                   backup); //printf("%8lu shortIntegerMask\n",                   (unsigned long)size);
+    size += fread(&shortIntegerSignBit,                1, sizeof(shortIntegerSignBit),                backup); //printf("%8lu shortIntegerSignBit\n",                (unsigned long)size);
     size += fread(&temporaryInformation,               1, sizeof(temporaryInformation),               backup); //printf("%8lu temporaryInformation\n",               (unsigned long)size);
 
     size += fread(&glyphNotFound,                      1, sizeof(glyphNotFound),                      backup); //printf("%8lu glyphNotFound\n",                      (unsigned long)size);

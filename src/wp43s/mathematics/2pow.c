@@ -24,8 +24,8 @@
 
 void (* const twoPow[12])(void) = {
 // regX ==> 1            2            3            4             5             6             7             8              9               10             11           12
-//          Big integer  real16       complex16    Date          Time          Date          String        real16 mat     complex16 m     Small integer  real34       complex34
-            twoPowBigI,  twoPowRe16,  twoPowCo16,  twoPowError,  twoPowError,  twoPowError,  twoPowError,  twoPowRm16,    twoPowCm16,     twoPowSmaI,    twoPowRe34,  twoPowCo34
+//          Long integer real16       complex16    Date          Time          Date          String        real16 mat     complex16 m     Short integer  real34       complex34
+            twoPowLonI,  twoPowRe16,  twoPowCo16,  twoPowError,  twoPowError,  twoPowError,  twoPowError,  twoPowRm16,    twoPowCm16,     twoPowShoI,    twoPowRe34,  twoPowCo34
 };
 
 
@@ -95,23 +95,23 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
 
 
 
-void twoPowBigI(void) {
+void twoPowLonI(void) {
   int16_t exponent;
-  bigInteger_t power;
+  longInteger_t power;
 
-  convertBigIntegerRegisterToBigInteger(opX, &power);
-  if(bigIntegerCompareUInt(&power, MAX_BIG_INTEGER_SIZE_IN_BITS) != BIG_INTEGER_GREATER_THAN) {
+  convertLongIntegerRegisterToLongInteger(opX, &power);
+  if(longIntegerCompareUInt(&power, MAX_LONG_INTEGER_SIZE_IN_BITS) != LONG_INTEGER_GREATER_THAN) {
     exponent = power.dp[0];
 
-    bigInteger2Exp(exponent, &power);
-    convertBigIntegerToBigIntegerRegister(&power, result);
+    longInteger2Exp(exponent, &power);
+    convertLongIntegerToLongIntegerRegister(&power, result);
   }
   else {
     displayCalcErrorMessage(4, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "2^ this value would result in a value exceeding %" FMT16S " bits!", MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(&power, tmpStr3000, 10);
-      showInfoDialog("In function twoPowBigI:", errorMessage, tmpStr3000, NULL);
+      sprintf(errorMessage, "2^ this value would result in a value exceeding %" FMT16S " bits!", MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToString(&power, tmpStr3000, 10);
+      showInfoDialog("In function twoPowLonI:", errorMessage, tmpStr3000, NULL);
     #endif
   }
 }
@@ -170,8 +170,8 @@ void twoPowCm16(void) {
 
 
 
-void twoPowSmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int2pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
+void twoPowShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int2pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }
 
 

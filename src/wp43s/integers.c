@@ -124,23 +124,6 @@ void fnChangeBase(uint16_t base) {
 
 
 
-void fnLogicalNot(uint16_t unusedButMandatoryParameter) {
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = ~(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X))) & smallIntegerMask;
-    refreshRegisterLine(REGISTER_X);
-  }
-
-  else {
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
-    #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "the input type %s is not allowed for NOT!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      showInfoDialog("In function fnLogicalNot:", errorMessage, NULL, NULL);
-    #endif
-  }
-}
-
-
-
 void fnFp(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);

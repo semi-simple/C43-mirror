@@ -383,6 +383,19 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/logicalOps/logicalOps.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/logicalOps/not.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/logicalOps/not.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/10pow.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

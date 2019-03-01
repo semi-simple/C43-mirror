@@ -26,7 +26,7 @@ LDFLAGS = -m64
 SRC_DECIMAL              = decNumberICU/decContext.c decNumberICU/decDouble.c decNumberICU/decimal128.c decNumberICU/decimal64.c decNumberICU/decNumber.c decNumberICU/decQuad.c
 OBJ_DECIMAL              = $(SRC_DECIMAL:.c=.o)
 
-SRC_WP43S                = $(wildcard src/wp43s/*.c) $(wildcard src/wp43s/mathematics/*.c) $(wildcard src/wp43s/browsers/*.c)
+SRC_WP43S                = $(wildcard src/wp43s/*.c) $(wildcard src/wp43s/mathematics/*.c) $(wildcard src/wp43s/logicalOps/*.c) $(wildcard src/wp43s/browsers/*.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
 
 SRC_GENERATECONSTANTS    = $(wildcard src/generateConstants/*.c)
@@ -103,6 +103,7 @@ testTtf2RasterFonts: src/ttf2RasterFonts/testTtf2RasterFonts.o src/wp43s/rasterF
 clean_wp43s: 
 	rm -f src/wp43s/*.o
 	rm -f src/wp43s/mathematics/*.o
+	rm -f src/wp43s/logicalops/*.o
 	rm -f src/wp43s/browsers/*.o
 
 wp43s: generateConstants ttf2RasterFonts $(OBJ_WP43S)

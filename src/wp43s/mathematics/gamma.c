@@ -45,7 +45,7 @@ void (* const lnGamma[12])(void) = {
 void gammaError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate gamma(%s)", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage, "cannot calculate gamma(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("In function fnGamma:", errorMessage, NULL, NULL);
   #endif
 }
@@ -61,7 +61,7 @@ void gammaError(void) {
 void lnGammaError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate lnGamma(%s)", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage, "cannot calculate lnGamma(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("In function fnLnGamma:", errorMessage, NULL, NULL);
   #endif
 }

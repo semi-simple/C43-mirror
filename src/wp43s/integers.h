@@ -21,7 +21,6 @@
 void     fnIntegerMode              (uint16_t mode);
 void     fnLeadingZeros             (uint16_t displayLeadingZeros);
 void     fnChangeBase               (uint16_t base);
-void     fnLogicalNot               (uint16_t unusedButMandatoryParameter);
 void     fnFp                       (uint16_t unusedButMandatoryParameter);
 void     fnIp                       (uint16_t unusedButMandatoryParameter);
 void     fnSign                     (uint16_t unusedButMandatoryParameter);

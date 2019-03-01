@@ -534,7 +534,7 @@ const item_t indexOfItems[] = {
 /*  428 */  { toBeCoded,                   NOPARAM,                     "Norml" STD_SUB_u,                             "Norml" STD_SUB_u,                                                            SLS_UNCHANGED},
 /*  429 */  { toBeCoded,                   NOPARAM,                     "Norml" STD_SUP_MINUS_1,                       "Norml" STD_SUP_MINUS_1,                                                      SLS_UNCHANGED},
 /*  430 */  { toBeCoded,                   NOPARAM,                     "Norml:",                                      "Norml:",                                                                     SLS_UNCHANGED},
-/*  431 */  { fnLogicalNot,                NOPARAM,                     "NOT",                                         "NOT",                                                                        SLS_UNCHANGED},
+/*  431 */  { fnLogicalNot,                NOPARAM,                     "NOT",                                         "NOT",                                                                        SLS_ENABLED  },
 /*  432 */  { toBeCoded,                   NOPARAM,                     "NPER",                                        "n" STD_SUB_P STD_SUB_E STD_SUB_R,                                            SLS_UNCHANGED},
 /*  433 */  { fnStatSum,                   0,                           "n" STD_SIGMA,                                 "n",                                                                          SLS_ENABLED  },
 /*  434 */  { fnCvtLbfN,                   divide,                      "N" STD_RIGHT_ARROW "lbf",                     "N" STD_RIGHT_ARROW "lbf",                                                    SLS_ENABLED  },

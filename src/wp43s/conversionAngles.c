@@ -151,9 +151,6 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       return;
     }
 
-    convertAngleFromInternal(REGISTER_ANGLE_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, toAngularMode);
-    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), angularMode);
     setRegisterAngularMode(REGISTER_X, toAngularMode);
     refreshRegisterLine(REGISTER_X);
   }

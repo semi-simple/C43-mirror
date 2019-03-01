@@ -20,11 +20,11 @@
 
 void   fnLog10   (uint16_t unusedParamButMandatory);
 void   log10Error(void);
-void   log10BigI (void);
+void   log10LonI (void);
 void   log10Re16 (void);
 void   log10Co16 (void);
 void   log10Rm16 (void);
 void   log10Cm16 (void);
-void   log10SmaI (void);
+void   log10ShoI (void);
 void   log10Re34 (void);
 void   log10Co34 (void);

@@ -20,11 +20,11 @@
 
 void fnLn   (uint16_t unusedParamButMandatory);
 void lnError(void);
-void lnBigI (void);
+void lnLonI (void);
 void lnRe16 (void);
 void lnCo16 (void);
 void lnRm16 (void);
 void lnCm16 (void);
-void lnSmaI (void);
+void lnShoI (void);
 void lnRe34 (void);
 void lnCo34 (void);

@@ -20,24 +20,24 @@
 
 void convertRegister16To34                           (calcRegister_t regist);
 void convertRegister34To16                           (calcRegister_t regist);
-void convertBigIntegerRegisterToReal16Register       (calcRegister_t source, calcRegister_t destination);
-void convertBigIntegerRegisterToReal34Register       (calcRegister_t source, calcRegister_t destination);
-void convertBigIntegerRegisterToSmallIntegerRegister (calcRegister_t source, calcRegister_t destination);
-void convertSmallIntegerRegisterToReal16Register     (calcRegister_t source, calcRegister_t destination);
-void convertSmallIntegerRegisterToReal34Register     (calcRegister_t source, calcRegister_t destination);
-void convertSmallIntegerRegisterBigIntegerRegister   (calcRegister_t source, calcRegister_t destination);
+void convertLongIntegerRegisterToReal16Register       (calcRegister_t source, calcRegister_t destination);
+void convertLongIntegerRegisterToReal34Register       (calcRegister_t source, calcRegister_t destination);
+void convertLongIntegerRegisterToShortIntegerRegister (calcRegister_t source, calcRegister_t destination);
+void convertShortIntegerRegisterToReal16Register     (calcRegister_t source, calcRegister_t destination);
+void convertShortIntegerRegisterToReal34Register     (calcRegister_t source, calcRegister_t destination);
+void convertShortIntegerRegisterLongIntegerRegister   (calcRegister_t source, calcRegister_t destination);
 
-void convertBigIntegerToBigIntegerRegister           (const bigInteger_t *bigInteger, calcRegister_t regist);
-void convertBigIntegerRegisterToBigInteger           (calcRegister_t regist, bigInteger_t *bigInteger);
+void convertLongIntegerToLongIntegerRegister           (const longInteger_t *longInteger, calcRegister_t regist);
+void convertLongIntegerRegisterToLongInteger           (calcRegister_t regist, longInteger_t *longInteger);
 
-void convertSmallIntegerRegisterToUInt64             (calcRegister_t regist, int16_t *sign, uint64_t *value);
-void convertUInt64ToSmallIntegerRegister             (int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist);
+void convertShortIntegerRegisterToUInt64             (calcRegister_t regist, int16_t *sign, uint64_t *value);
+void convertUInt64ToShortIntegerRegister             (int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist);
 
 #if (ANGLE16 == 1)
-  #define convertBigIntegerRegisterToAngleRegister(source, destination)   convertBigIntegerRegisterToReal16Register(source, destination)
-  #define convertSmallIntegerRegisterToAngleRegister(source, destination) convertSmallIntegerRegisterToReal16Register(source, destination)
+  #define convertLongIntegerRegisterToAngleRegister(source, destination)   convertLongIntegerRegisterToReal16Register(source, destination)
+  #define convertShortIntegerRegisterToAngleRegister(source, destination) convertShortIntegerRegisterToReal16Register(source, destination)
 #endif
 #if (ANGLE34 == 1)
-  #define convertBigIntegerRegisterToAngleRegister(source, destination)   convertBigIntegerRegisterToReal34Register(source, destination)
-  #define convertSmallIntegerRegisterToAngleRegister(source, destination) convertSmallIntegerRegisterToReal34Register(source, destination)
+  #define convertLongIntegerRegisterToAngleRegister(source, destination)   convertLongIntegerRegisterToReal34Register(source, destination)
+  #define convertShortIntegerRegisterToAngleRegister(source, destination) convertShortIntegerRegisterToReal34Register(source, destination)
 #endif

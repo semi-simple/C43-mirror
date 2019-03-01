@@ -20,7 +20,7 @@
 
 void fnTan   (uint16_t unusedParamButMandatory);
 void errorTan(void);
-void tanBigI (void);
+void tanLonI (void);
 void tanRe16 (void);
 void tanCo16 (void);
 void tanAngl (void);

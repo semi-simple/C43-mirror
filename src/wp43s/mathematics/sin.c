@@ -23,9 +23,9 @@
 
 
 void (* const Sin[12])(void) = {
-//  regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//           Big integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
-             sinBigI,     sinRe16,  sinCo16,   sinAngl,  errorSin,  errorSin,  errorSin,  sinRm16,     sinCm16,      errorSin,       sinRe34,  sinCo34
+//  regX ==> 1             2         3          4         5          6          7          8            9             10              11        12
+//           Long integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
+             sinLonI,      sinRe16,  sinCo16,   sinAngl,  errorSin,  errorSin,  errorSin,  sinRm16,     sinCm16,      errorSin,       sinRe34,  sinCo34
 };
 
 
@@ -95,8 +95,8 @@ void fnSin(uint16_t unusedParamButMandatory) {
 
 
 
-void sinBigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void sinLonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), NULL, REGISTER_REAL34_DATA(opX)); // opX in internal units

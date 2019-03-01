@@ -65,11 +65,11 @@
 
 #define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
-#define getRegisterBase(regist)            getRegisterDataInfo(regist)       // Only for a small integer
+#define getRegisterBase(regist)            getRegisterDataInfo(regist)       // Only for a short integer
 #define getRegisterAngularMode(regist)     getRegisterDataInfo(regist)       // Only for a real 34
-#define setRegisterBase(regist, base)      setRegisterDataInfo(regist, base) // Only for a small integer
+#define setRegisterBase(regist, base)      setRegisterDataInfo(regist, base) // Only for a short integer
 #define setRegisterAngularMode(regist, am) setRegisterDataInfo(regist, am)   // Only for a real34
-#define setRegisterSign(regist, sign)      setRegisterDataInfo(regist, sign) // Only for a big integer
+#define setRegisterSign(regist, sign)      setRegisterDataInfo(regist, sign) // Only for a long integer
 #define freeRegisterData(regist)           freeMemory(getRegisterDataPointer(regist), getRegisterFullSize(regist))
 
 
@@ -92,7 +92,7 @@
  * \brief Different data types
  ***********************************************/
 typedef enum {
-  dtBigInteger      =  0,  ///< Z arbitrary precision integer
+  dtLongInteger      =  0,  ///< Z arbitrary precision integer
   dtReal16          =  1,  ///< R single precision real (64 bits)
   dtComplex16       =  2,  ///< C single precision complex (2x 64 bits), RegDataInfo contains rectangular or polar mode
   dtAngle           =  3,  ///< Angle stored in 1296 units per 360°
@@ -101,7 +101,7 @@ typedef enum {
   dtString          =  6,  ///< Alphanumeric string
   dtReal16Matrix    =  7,  ///< Single precision vector or matrix
   dtComplex16Matrix =  8,  ///< Double precision vector or matrix
-  dtSmallInteger    =  9,  ///< Finite precision integer
+  dtShortInteger    =  9,  ///< Finite precision integer
   dtReal34          = 10,  ///< R double precision real (128 bits)
   dtComplex34       = 11   ///< C double precision complex (2x 128 bits)
   //dtLabel           = 12,  ///< Label
@@ -168,7 +168,7 @@ void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
-void              printBigIntegerToConsole        (bigInteger_t *value);
+void              printLongIntegerToConsole        (longInteger_t *value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t dataInfo);
 calcRegister_t    allocateTemporaryRegister       (void);
 void              freeTemporaryRegister           (calcRegister_t tmpReg);

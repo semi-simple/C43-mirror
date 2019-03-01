@@ -21,11 +21,11 @@
 void fnSquareRoot (uint16_t unusedParamButMandatory);
 void sqrtError    (void);
 void sqrtToBeCoded(void);
-void sqrtBigI     (void);
+void sqrtLonI     (void);
 void sqrtRe16     (void);
 void sqrtCo16     (void);
 void sqrtRm16     (void);
 void sqrtCm16     (void);
-void sqrtSmaI     (void);
+void sqrtShoI     (void);
 void sqrtRe34     (void);
 void sqrtCo34     (void);

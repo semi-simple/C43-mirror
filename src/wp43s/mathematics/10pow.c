@@ -24,8 +24,8 @@
 
 void (* const tenPow[12])(void) = {
 // regX ==> 1            2            3            4             5             6             7             8              9               10             11           12
-//          Big integer  real16       complex16    Date          Time          Date          String        real16 mat     complex16 m     Small integer  real34       complex34
-            tenPowBigI,  tenPowRe16,  tenPowCo16,  tenPowError,  tenPowError,  tenPowError,  tenPowError,  tenPowRm16,    tenPowCm16,     tenPowSmaI,    tenPowRe34,  tenPowCo34
+//          Long integer real16       complex16    Date          Time          Date          String        real16 mat     complex16 m     Short integer  real34       complex34
+            tenPowLonI,  tenPowRe16,  tenPowCo16,  tenPowError,  tenPowError,  tenPowError,  tenPowError,  tenPowRm16,    tenPowCm16,     tenPowShoI,    tenPowRe34,  tenPowCo34
 };
 
 
@@ -95,21 +95,21 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
 
 
 
-void tenPowBigI(void) {
+void tenPowLonI(void) {
   int16_t exponent;
-  bigInteger_t temp;
+  longInteger_t temp;
 
-  convertBigIntegerRegisterToBigInteger(opX, &temp);
-  exponent = (bigIntegerCompareUInt(&temp, 1234) == BIG_INTEGER_GREATER_THAN ? 1234 : temp.dp[0]);
+  convertLongIntegerRegisterToLongInteger(opX, &temp);
+  exponent = (longIntegerCompareUInt(&temp, 1234) == LONG_INTEGER_GREATER_THAN ? 1234 : temp.dp[0]);
 
-  uIntToBigInteger(10, &temp);
+  uIntToLongInteger(10, &temp);
   opY = allocateTemporaryRegister();
-  convertBigIntegerToBigIntegerRegister(&temp, opY);
+  convertLongIntegerToLongIntegerRegister(&temp, opY);
 
-  uIntToBigInteger(exponent, &temp);
-  convertBigIntegerToBigIntegerRegister(&temp, opX);
+  uIntToLongInteger(exponent, &temp);
+  convertLongIntegerToLongIntegerRegister(&temp, opX);
 
-  powBigIBigI();
+  powLonILonI();
 
   freeTemporaryRegister(opY);
 }
@@ -168,8 +168,8 @@ void tenPowCm16(void) {
 
 
 
-void tenPowSmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int10pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
+void tenPowShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int10pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }
 
 

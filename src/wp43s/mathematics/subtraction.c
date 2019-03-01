@@ -24,19 +24,19 @@
 
 void (* const subtraction[12][12])(void) = {
 // regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
-//      V                Big integer  real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Small integer real34       complex34
-/*  1 Big integer    */ {subBigIBigI, subRe16BigI, subCo16BigI, subAnglBigI, subTimeBigI, subDateBigI, subError,    subError,    subError,    subSmaIBigI,  subRe34BigI, subCo34BigI},
-/*  2 real16         */ {subBigIRe16, subRe16Re16, subCo16Re16, subAnglRe16, subTimeRe16, subDateRe16, subError,    subError,    subError,    subSmaIRe16,  subRe34Re16, subCo34Re16},
-/*  3 complex16      */ {subBigICo16, subRe16Co16, subCo16Co16, subError,    subError,    subError,    subError,    subError,    subError,    subSmaICo16,  subRe34Co16, subCo34Co16},
-/*  4 angle34        */ {subBigIAngl, subRe16Angl, subError,    subAnglAngl, subError,    subError,    subError,    subError,    subError,    subSmaIAngl,  subRe34Angl, subError   },
-/*  5 Time           */ {subBigITime, subRe16Time, subError,    subError,    subTimeTime, subError,    subError,    subError,    subError,    subError,     subRe34Time, subError   },
-/*  6 Date           */ {subBigIDate, subRe16Date, subError,    subError,    subError,    subDateDate, subError,    subError,    subError,    subError,     subRe34Date, subError   },
+//      V                Long integer real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Short integer real34       complex34
+/*  1 Long integer   */ {subLonILonI, subRe16LonI, subCo16LonI, subAnglLonI, subTimeLonI, subDateLonI, subError,    subError,    subError,    subShoILonI,  subRe34LonI, subCo34LonI},
+/*  2 real16         */ {subLonIRe16, subRe16Re16, subCo16Re16, subAnglRe16, subTimeRe16, subDateRe16, subError,    subError,    subError,    subShoIRe16,  subRe34Re16, subCo34Re16},
+/*  3 complex16      */ {subLonICo16, subRe16Co16, subCo16Co16, subError,    subError,    subError,    subError,    subError,    subError,    subShoICo16,  subRe34Co16, subCo34Co16},
+/*  4 angle34        */ {subLonIAngl, subRe16Angl, subError,    subAnglAngl, subError,    subError,    subError,    subError,    subError,    subShoIAngl,  subRe34Angl, subError   },
+/*  5 Time           */ {subLonITime, subRe16Time, subError,    subError,    subTimeTime, subError,    subError,    subError,    subError,    subError,     subRe34Time, subError   },
+/*  6 Date           */ {subLonIDate, subRe16Date, subError,    subError,    subError,    subDateDate, subError,    subError,    subError,    subError,     subRe34Date, subError   },
 /*  7 String         */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,     subError,    subError   },
 /*  8 real16 mat     */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Rm16, subCm16Rm16, subError,     subError,    subError   },
 /*  9 complex16 mat  */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Cm16, subCm16Cm16, subError,     subError,    subError   },
-/* 10 Small integer  */ {subBigISmaI, subRe16SmaI, subCo16SmaI, subAnglSmaI, subError,    subError,    subError,    subError,    subError,    subSmaISmaI,  subRe34SmaI, subCo34SmaI},
-/* 11 real34         */ {subBigIRe34, subRe16Re34, subCo16Re34, subAnglRe34, subTimeRe34, subDateRe34, subError,    subError,    subError,    subSmaIRe34,  subRe34Re34, subCo34Re34},
-/* 12 complex34      */ {subBigICo34, subRe16Co34, subCo16Co34, subError,    subError,    subError,    subError,    subError,    subError,    subSmaICo34,  subRe34Co34, subCo34Co34}
+/* 10 Short integer  */ {subLonIShoI, subRe16ShoI, subCo16ShoI, subAnglShoI, subError,    subError,    subError,    subError,    subError,    subShoIShoI,  subRe34ShoI, subCo34ShoI},
+/* 11 real34         */ {subLonIRe34, subRe16Re34, subCo16Re34, subAnglRe34, subTimeRe34, subDateRe34, subError,    subError,    subError,    subShoIRe34,  subRe34Re34, subCo34Re34},
+/* 12 complex34      */ {subLonICo34, subRe16Co34, subCo16Co34, subError,    subError,    subError,    subError,    subError,    subError,    subShoICo34,  subRe34Co34, subCo34Co34}
 };
 
 
@@ -113,41 +113,41 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(big integer) ==> result(big integer)
+ * \brief opY(long integer) - opX(long integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigIBigI(void) {
-  bigInteger_t iOp1;
-  bigInteger_t iOp2;
+void subLonILonI(void) {
+  longInteger_t iOp1;
+  longInteger_t iOp2;
 
-  convertBigIntegerRegisterToBigInteger(opY, &iOp1);
-  convertBigIntegerRegisterToBigInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
 
-  bigIntegerSubtract(&iOp1, &iOp2, &iOp1);
+  longIntegerSubtract(&iOp1, &iOp2, &iOp1);
 
-  convertBigIntegerToBigIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(real16) ==> result(real16)
+ * \brief opY(long integer) - opX(real16) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigIRe16(void) {
+void subLonIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subBigIRe16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonIRe16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
@@ -157,23 +157,23 @@ void subBigIRe16(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(complex16) ==> result(complex16)
+ * \brief opY(long integer) - opX(complex16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigICo16(void) {
+void subLonICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subBigICo16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonICo16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
-  convertBigIntegerRegisterToReal16Register(opY, opY);
+  convertLongIntegerRegisterToReal16Register(opY, opY);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
@@ -182,22 +182,22 @@ void subBigICo16(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(angle) ==> result(angle)
+ * \brief opY(long integer) - opX(angle) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigIAngl(void) {
+void subLonIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subBigIAngl:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonIAngl:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertBigIntegerRegisterToAngleRegister(opY, opY);
+  convertLongIntegerRegisterToAngleRegister(opY, opY);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -208,58 +208,58 @@ void subBigIAngl(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(time) ==> result(time)
+ * \brief opY(long integer) - opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigITime(void) {
+void subLonITime(void) {
   subToBeCoded();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(date) ==> result(date)
+ * \brief opY(long integer) - opX(date) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigIDate(void) {
+void subLonIDate(void) {
   subToBeCoded();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(64bits integer) ==> result(big integer)
+ * \brief opY(long integer) - opX(64bits integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigISmaI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opX, opX);
-  subBigIBigI();
+void subLonIShoI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opX, opX);
+  subLonILonI();
 }
 
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(real34) ==> result(real34)
+ * \brief opY(long integer) - opX(real34) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigIRe34(void) {
+void subLonIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subBigIRe34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonIRe34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
@@ -269,23 +269,23 @@ void subBigIRe34(void) {
 
 
 /********************************************//**
- * \brief opY(big integer) - opX(complex34) ==> result(complex34)
+ * \brief opY(long integer) - opX(complex34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subBigICo34(void) {
+void subLonICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subBigICo34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonICo34:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(result)); // result = opX
-  convertBigIntegerRegisterToReal34Register(opY, opY);
+  convertLongIntegerRegisterToReal34Register(opY, opY);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
@@ -294,21 +294,21 @@ void subBigICo34(void) {
 
 
 /********************************************//**
- * \brief opY(real16) - opX(big integer) ==> result(real16)
+ * \brief opY(real16) - opX(long integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
-void subRe16BigI(void) {
+void subRe16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe16BigI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe16LonI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
@@ -439,8 +439,8 @@ void subRe16Date(void) {
  * \param void
  * \return void
  ***********************************************/
-void subRe16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void subRe16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   subRe16Re16();
 }
 
@@ -473,23 +473,23 @@ void subRe16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex16) - opX(big integer) ==> result(complex16)
+ * \brief opY(complex16) - opX(long integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void subCo16BigI(void) {
+void subCo16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subCo16BigI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo16LonI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   complex16Copy(REGISTER_COMPLEX16_DATA(opY), REGISTER_COMPLEX16_DATA(result)); // result = opX
-  convertBigIntegerRegisterToReal16Register(opX, opX);
+  convertLongIntegerRegisterToReal16Register(opX, opX);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
@@ -551,8 +551,8 @@ void subCo16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void subCo16SmaI(void) {
-  convertSmallIntegerRegisterToReal16Register(opX, opX);
+void subCo16ShoI(void) {
+  convertShortIntegerRegisterToReal16Register(opX, opX);
   subCo16Re16();
 }
 
@@ -585,22 +585,22 @@ void subCo16Co34(void) {
 
 
 /********************************************//**
- * \brief opY(angle) - opX(big integer) ==> result(angle)
+ * \brief opY(angle) - opX(long integer) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void subAnglBigI(void) {
+void subAnglLonI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subAnglBigI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subAnglLonI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertBigIntegerRegisterToAngleRegister(opX, opX);
+  convertLongIntegerRegisterToAngleRegister(opX, opX);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -662,22 +662,22 @@ void subAnglAngl(void) {
 
 
 /********************************************//**
- * \brief opY(angle) - opX(small integer) ==> result(angle)
+ * \brief opY(angle) - opX(short integer) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void subAnglSmaI(void) {
+void subAnglShoI(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subAnglSmaI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subAnglShoI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertSmallIntegerRegisterToAngleRegister(opX, opX);
+  convertShortIntegerRegisterToAngleRegister(opX, opX);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -716,12 +716,12 @@ void subAnglRe34(void) {
 
 
 /********************************************//**
- * \brief opY(time) - opX(big integer) ==> result(time)
+ * \brief opY(time) - opX(long integer) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void subTimeBigI(void) {
+void subTimeLonI(void) {
   subToBeCoded();
 }
 
@@ -780,12 +780,12 @@ void subTimeRe34(void) {
 
 
 /********************************************//**
- * \brief opY(date) - opX(big integer) ==> result(date)
+ * \brief opY(date) - opX(long integer) ==> result(date)
  *
  * \param void
  * \return void
  ***********************************************/
-void subDateBigI(void) {
+void subDateLonI(void) {
   subToBeCoded();
 }
 
@@ -812,7 +812,7 @@ void subDateRe16(void) {
 
 
 /********************************************//**
- * \brief opY(date) - opX(date) ==> result(big integer)
+ * \brief opY(date) - opX(date) ==> result(long integer)
  *
  * \param void
  * \return void
@@ -892,14 +892,14 @@ void subCm16Cm16(void) {
 
 
 /********************************************//**
- * \brief opY(64bits integer) - opX(big integer) ==> result(big integer)
+ * \brief opY(64bits integer) - opX(long integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void subSmaIBigI(void) {
-  convertSmallIntegerRegisterBigIntegerRegister(opY, opY);
-  subBigIBigI();
+void subShoILonI(void) {
+  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
+  subLonILonI();
 }
 
 
@@ -910,8 +910,8 @@ void subSmaIBigI(void) {
  * \param void
  * \return void
  ***********************************************/
-void subSmaIRe16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void subShoIRe16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   subRe16Re16();
 }
 
@@ -923,30 +923,30 @@ void subSmaIRe16(void) {
  * \param void
  * \return void
  ***********************************************/
-void subSmaICo16(void) {
-  convertSmallIntegerRegisterToReal16Register(opY, opY);
+void subShoICo16(void) {
+  convertShortIntegerRegisterToReal16Register(opY, opY);
   subRe16Co16();
 }
 
 
 
 /********************************************//**
- * \brief opY(small integer) - opX(angle) ==> result(angle)
+ * \brief opY(short integer) - opX(angle) ==> result(angle)
  *
  * \param void
  * \return void
  ***********************************************/
-void subSmaIAngl(void) {
+void subShoIAngl(void) {
   if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subSmaIAngl:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subShoIAngl:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertSmallIntegerRegisterToAngleRegister(opY, opY);
+  convertShortIntegerRegisterToAngleRegister(opY, opY);
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
@@ -957,14 +957,14 @@ void subSmaIAngl(void) {
 
 
 /********************************************//**
- * \brief opY(Small integer) - opX(Small integer) ==> result(Small integer)
+ * \brief opY(Short integer) - opX(Short integer) ==> result(Short integer)
  *
  * \param void
  * \return void
  ***********************************************/
-void subSmaISmaI(void) {
-  reallocateRegister(result, dtSmallInteger, SMALL_INTEGER_SIZE, getRegisterBase(opY));
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intSubtract(*(REGISTER_SMALL_INTEGER_DATA(opY)), *(REGISTER_SMALL_INTEGER_DATA(opX)));
+void subShoIShoI(void) {
+  reallocateRegister(result, dtShortInteger, SHORT_INTEGER_SIZE, getRegisterBase(opY));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intSubtract(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 
@@ -975,8 +975,8 @@ void subSmaISmaI(void) {
  * \param void
  * \return void
  ***********************************************/
-void subSmaIRe34(void) {
-  convertSmallIntegerRegisterToReal34Register(opY, opY);
+void subShoIRe34(void) {
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   subRe34Re34();
 }
 
@@ -988,29 +988,29 @@ void subSmaIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void subSmaICo34(void) {
-  convertSmallIntegerRegisterToReal34Register(opY, opY);
+void subShoICo34(void) {
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   subRe34Co34();
 }
 
 
 
 /********************************************//**
- * \brief opY(real34) - opX(big integer) ==> result(real34)
+ * \brief opY(real34) - opX(long integer) ==> result(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subRe34BigI(void) {
+void subRe34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe34BigI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe34LonI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
@@ -1119,8 +1119,8 @@ void subRe34Date(void) {
  * \param void
  * \return void
  ***********************************************/
-void subRe34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void subRe34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   subRe34Re34();
 }
 
@@ -1175,23 +1175,23 @@ void subRe34Co34(void) {
 
 
 /********************************************//**
- * \brief opY(complex34) - opX(big integer) ==> result(complex34)
+ * \brief opY(complex34) - opX(long integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subCo34BigI(void) {
+void subCo34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subCo34BigI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo34LonI:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
 
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   complex34Copy(REGISTER_COMPLEX34_DATA(opY), REGISTER_COMPLEX34_DATA(result)); // result = opY
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
@@ -1231,8 +1231,8 @@ void subCo34Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void subCo34SmaI(void) {
-  convertSmallIntegerRegisterToReal34Register(opX, opX);
+void subCo34ShoI(void) {
+  convertShortIntegerRegisterToReal34Register(opX, opX);
   subCo34Re34();
 }
 

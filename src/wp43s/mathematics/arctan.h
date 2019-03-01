@@ -20,7 +20,7 @@
 
 void fnArctan(uint16_t unusedParamButMandatory);
 void arctanError(void);
-void arctanBigI (void);
+void arctanLonI (void);
 void arctanRe16 (void);
 void arctanCo16 (void);
 void arctanRm16 (void);

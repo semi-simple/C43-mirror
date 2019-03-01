@@ -162,12 +162,12 @@ void fnVersion(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnFreeMemory(uint16_t unusedParamButMandatory) {
-  bigInteger_t mem;
+  longInteger_t mem;
 
   liftStack();
 
-  uIntToBigInteger(lastFreeByte - firstFreeByte + 1, &mem);
-  convertBigIntegerToBigIntegerRegister(&mem, REGISTER_X);
+  uIntToLongInteger(lastFreeByte - firstFreeByte + 1, &mem);
+  convertLongIntegerToLongIntegerRegister(&mem, REGISTER_X);
 
   refreshStack();
 }
@@ -181,12 +181,12 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
-  bigInteger_t rm;
+  longInteger_t rm;
 
   liftStack();
 
-  uIntToBigInteger(roundingMode, &rm);
-  convertBigIntegerToBigIntegerRegister(&rm, REGISTER_X);
+  uIntToLongInteger(roundingMode, &rm);
+  convertLongIntegerToLongIntegerRegister(&rm, REGISTER_X);
 
   refreshStack();
 }
@@ -199,12 +199,12 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
-  bigInteger_t ism;
+  longInteger_t ism;
 
   liftStack();
 
-  uIntToBigInteger((smallIntegerMode==SIM_2COMPL ? 2 : (smallIntegerMode==SIM_1COMPL ? 1 : (smallIntegerMode==SIM_UNSIGN ? 0 : -1))), &ism);
-  convertBigIntegerToBigIntegerRegister(&ism, REGISTER_X);
+  uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), &ism);
+  convertLongIntegerToLongIntegerRegister(&ism, REGISTER_X);
 
   refreshStack();
 }
@@ -218,12 +218,12 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetWordSize(uint16_t unusedParamButMandatory) {
-  bigInteger_t ws;
+  longInteger_t ws;
 
   liftStack();
 
-  uIntToBigInteger(smallIntegerWordSize, &ws);
-  convertBigIntegerToBigIntegerRegister(&ws, REGISTER_X);
+  uIntToLongInteger(shortIntegerWordSize, &ws);
+  convertLongIntegerToLongIntegerRegister(&ws, REGISTER_X);
 
   refreshStack();
 }
@@ -242,33 +242,33 @@ void fnSetWordSize(uint16_t WS) {
     WS = 64;
   }
 
-  reduceWordSize = (WS < smallIntegerWordSize);
+  reduceWordSize = (WS < shortIntegerWordSize);
 
-  smallIntegerWordSize = WS;
+  shortIntegerWordSize = WS;
   showIntegerMode();
 
-  if(smallIntegerWordSize == 64) {
-    smallIntegerMask    = -1;
-    smallIntegerSignBit = (uint64_t)1 << 63;
+  if(shortIntegerWordSize == 64) {
+    shortIntegerMask    = -1;
+    shortIntegerSignBit = (uint64_t)1 << 63;
   }
   else {
-    smallIntegerMask    = ((uint64_t)1 << smallIntegerWordSize) - 1;
-    smallIntegerSignBit = (uint64_t)1 << (smallIntegerWordSize - 1);
+    shortIntegerMask    = ((uint64_t)1 << shortIntegerWordSize) - 1;
+    shortIntegerSignBit = (uint64_t)1 << (shortIntegerWordSize - 1);
   }
-  //printf("smallIntegerMask  =   %08x-%08x\n", (unsigned int)(smallIntegerMask>>32), (unsigned int)(smallIntegerMask&0xffffffff));
-  //printf("smallIntegerSignBit = %08x-%08x\n", (unsigned int)(smallIntegerSignBit>>32), (unsigned int)(smallIntegerSignBit&0xffffffff));
+  //printf("shortIntegerMask  =   %08x-%08x\n", (unsigned int)(shortIntegerMask>>32), (unsigned int)(shortIntegerMask&0xffffffff));
+  //printf("shortIntegerSignBit = %08x-%08x\n", (unsigned int)(shortIntegerSignBit>>32), (unsigned int)(shortIntegerSignBit&0xffffffff));
 
   if(reduceWordSize) {
     // reduce the word size of integers on the stack
     for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
-      if(getRegisterDataType(regist) == dtSmallInteger) {
-        *(REGISTER_SMALL_INTEGER_DATA(regist)) &= smallIntegerMask;
+      if(getRegisterDataType(regist) == dtShortInteger) {
+        *(REGISTER_SHORT_INTEGER_DATA(regist)) &= shortIntegerMask;
       }
     }
 
     // reduce the word size of integers in the L register
-    if(getRegisterDataType(REGISTER_L) == dtSmallInteger) {
-      *(REGISTER_SMALL_INTEGER_DATA(REGISTER_L)) &= smallIntegerMask;
+    if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_L)) &= shortIntegerMask;
     }
   }
 
@@ -284,12 +284,12 @@ void fnSetWordSize(uint16_t WS) {
  * \return void
  ***********************************************/
 void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
-  bigInteger_t flashMem;
+  longInteger_t flashMem;
 
   liftStack();
 
-  uIntToBigInteger(getFreeFlash(), &flashMem);
-  convertBigIntegerToBigIntegerRegister(&flashMem, REGISTER_X);
+  uIntToLongInteger(getFreeFlash(), &flashMem);
+  convertLongIntegerToLongIntegerRegister(&flashMem, REGISTER_X);
 
   refreshStack();
 }
@@ -339,12 +339,12 @@ uint32_t getFreeFlash(void) {
  * \return void
  ***********************************************/
 void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
-  bigInteger_t sigDigits;
+  longInteger_t sigDigits;
 
   liftStack();
 
-  uIntToBigInteger(significantDigits, &sigDigits);
-  convertBigIntegerToBigIntegerRegister(&sigDigits, REGISTER_X);
+  uIntToLongInteger(significantDigits, &sigDigits);
+  convertLongIntegerToLongIntegerRegister(&sigDigits, REGISTER_X);
 
   refreshStack();
 }
@@ -385,9 +385,9 @@ void fnRoundingMode(uint16_t RM) {
  ***********************************************/
 void fnAngularMode(uint16_t am) {
   angularMode = am;
-  //if(am == AM_DMS && (getRegisterDataType(REGISTER_X) == dtBigInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)) {
-  //  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-  //    convertBigIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+  //if(am == AM_DMS && (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)) {
+  //  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  //    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
   //    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
   //    setRegisterDataType(REGISTER_X, dtAngle);
   //    setRegisterAngularMode(REGISTER_X, AM_DMS);

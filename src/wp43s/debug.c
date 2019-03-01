@@ -30,7 +30,7 @@
  ***********************************************/
 char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
   if(article && padWithBlanks) {
-    if(dt == dtBigInteger      ) return "a big integer        ";
+    if(dt == dtLongInteger     ) return "a long integer       ";
     if(dt == dtReal16          ) return "a real16             ";
     if(dt == dtComplex16       ) return "a complex16          ";
     if(dt == dtAngle           ) return "an angle             ";
@@ -39,7 +39,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtString          ) return "a string             ";
     if(dt == dtReal16Matrix    ) return "a real16 matrix      ";
     if(dt == dtComplex16Matrix ) return "a complex16 matrix   ";
-    if(dt == dtSmallInteger    ) return "a small integer      ";
+    if(dt == dtShortInteger    ) return "a short integer      ";
     if(dt == dtReal34          ) return "a real34             ";
     if(dt == dtComplex34       ) return "a complex34          ";
     //if(dt == dtLabel           ) return "a label              ";
@@ -51,7 +51,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     return                              "a ???                ";
   }
   else if(article && !padWithBlanks) {
-    if(dt == dtBigInteger      ) return "a big integer";
+    if(dt == dtLongInteger     ) return "a long integer";
     if(dt == dtReal16          ) return "a real16";
     if(dt == dtComplex16       ) return "a complex16";
     if(dt == dtAngle           ) return "an angle";
@@ -60,7 +60,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtString          ) return "a string";
     if(dt == dtReal16Matrix    ) return "a real16 matrix";
     if(dt == dtComplex16Matrix ) return "a complex16 matrix";
-    if(dt == dtSmallInteger    ) return "a small integer";
+    if(dt == dtShortInteger    ) return "a short integer";
     if(dt == dtReal34          ) return "a real34";
     if(dt == dtComplex34       ) return "a complex34";
     //if(dt == dtLabel           ) return "a label";
@@ -72,7 +72,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     return                              "a ???";
   }
   else if(!article && padWithBlanks) {
-    if(dt == dtBigInteger      ) return "big integer          ";
+    if(dt == dtLongInteger     ) return "long integer         ";
     if(dt == dtReal16          ) return "real16               ";
     if(dt == dtComplex16       ) return "complex16            ";
     if(dt == dtAngle           ) return "angle                ";
@@ -81,7 +81,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtString          ) return "string               ";
     if(dt == dtReal16Matrix    ) return "real16 matrix        ";
     if(dt == dtComplex16Matrix ) return "complex16 matrix     ";
-    if(dt == dtSmallInteger    ) return "small integer        ";
+    if(dt == dtShortInteger    ) return "short integer        ";
     if(dt == dtReal34          ) return "real34               ";
     if(dt == dtComplex34       ) return "complex34            ";
     //if(dt == dtLabel           ) return "label                ";
@@ -93,7 +93,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     return                              "???                  ";
   }
   else if(!article && !padWithBlanks) {
-    if(dt == dtBigInteger      ) return "big integer";
+    if(dt == dtLongInteger     ) return "long integer";
     if(dt == dtReal16          ) return "real16";
     if(dt == dtComplex16       ) return "complex16";
     if(dt == dtAngle           ) return "angle";
@@ -102,7 +102,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtString          ) return "string";
     if(dt == dtReal16Matrix    ) return "real16 matrix";
     if(dt == dtComplex16Matrix ) return "complex16 matrix";
-    if(dt == dtSmallInteger    ) return "small integer";
+    if(dt == dtShortInteger    ) return "short integer";
     if(dt == dtReal34          ) return "real34";
     if(dt == dtComplex34       ) return "complex34";
     //if(dt == dtLabel           ) return "label";
@@ -154,7 +154,7 @@ char * getAngularModeName(uint16_t am) {
  * \param[in] im uint16_t Integer mode
  * \return char*          Name of the integer mode
  ***********************************************/
-char * getSmallIntegerModeName(uint16_t im) {
+char * getShortIntegerModeName(uint16_t im) {
   if(im == SIM_1COMPL) return "1compl";
   if(im == SIM_2COMPL) return "2compl";
   if(im == SIM_SIGNMT) return "signmt";
@@ -559,16 +559,16 @@ void debugNIM(void) {
       }
     }
 
-    else if(getRegisterDataType(regist) == dtSmallInteger) {
+    else if(getRegisterDataType(regist) == dtShortInteger) {
       const font_t *font = &standardFont;
 
-      smallIntegerToDisplayString(regist, string + n, &font);
+      shortIntegerToDisplayString(regist, string + n, &font);
       strcat(string + n, STD_SPACE_3_PER_EM);
-      strcat(string + n, getSmallIntegerModeName(smallIntegerMode));
+      strcat(string + n, getShortIntegerModeName(shortIntegerMode));
     }
 
-    else if(getRegisterDataType(regist) == dtBigInteger) {
-      bigIntegerToDisplayString(regist, string + n);
+    else if(getRegisterDataType(regist) == dtLongInteger) {
+      longIntegerToDisplayString(regist, string + n);
     }
 
     else {
@@ -684,13 +684,13 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "smallIntegerMode             = %6u = %s",   smallIntegerMode,     getSmallIntegerModeName(smallIntegerMode));
+        sprintf(string, "shortIntegerMode             = %6u = %s",   shortIntegerMode,     getShortIntegerModeName(shortIntegerMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "smallIntegerWordSize         = %6u",        smallIntegerWordSize);
+        sprintf(string, "shortIntegerWordSize         = %6u",        shortIntegerWordSize);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

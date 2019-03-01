@@ -42,18 +42,18 @@ static void initStatisticalSums(void) {
 void fnSigma(uint16_t plusMinus) {
   real34_t tmpReal34, square;
 
-  if(   (getRegisterDataType(REGISTER_X) == dtBigInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)
-     && (getRegisterDataType(REGISTER_Y) == dtBigInteger || getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34)) {
-    if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-      convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)
+     && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34)) {
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     }
 
     if(getRegisterDataType(REGISTER_X) == dtReal16) {
       convertRegister16To34(REGISTER_X);
     }
 
-    if(getRegisterDataType(REGISTER_Y) == dtBigInteger) {
-     convertBigIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+    if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
+     convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
     }
 
     if(getRegisterDataType(REGISTER_Y) == dtReal16) {

@@ -36,8 +36,8 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real16 = false;
   }
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     real16 = true;
   }
   else {
@@ -121,11 +121,11 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), const34_32, REGISTER_REAL34_DATA(REGISTER_X));
   }
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    bigInteger_t bigInteger;
-    convertBigIntegerRegisterToBigInteger(REGISTER_X, &bigInteger);
-    bigIntegerSubtractUInt(&bigInteger, 32, &bigInteger);
-    convertBigIntegerToBigIntegerRegister(&bigInteger, REGISTER_X);
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    longInteger_t longInteger;
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, &longInteger);
+    longIntegerSubtractUInt(&longInteger, 32, &longInteger);
+    convertLongIntegerToLongIntegerRegister(&longInteger, REGISTER_X);
   }
 
   unitConversion(const34_1_8, divide);
@@ -342,8 +342,8 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
@@ -407,8 +407,8 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
 void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {

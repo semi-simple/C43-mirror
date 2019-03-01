@@ -1150,9 +1150,9 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
   else if(dataType == dtReal34      ) return REAL34_SIZE;
   else if(dataType == dtAngle       ) return ANGLE_SIZE;
   else if(dataType == dtComplex34   ) return COMPLEX34_SIZE;
-  else if(dataType == dtSmallInteger) return SMALL_INTEGER_SIZE;
+  else if(dataType == dtShortInteger) return SHORT_INTEGER_SIZE;
   else if(dataType == dtString      ) return *(REGISTER_DATA_MAX_LEN(regist)) + 2; // +2 because of the 2 first bytes holding the size
-  else if(dataType == dtBigInteger  ) return *(REGISTER_DATA_MAX_LEN(regist)) + 2; // +2 because of the 2 first bytes holding the size
+  else if(dataType == dtLongInteger ) return *(REGISTER_DATA_MAX_LEN(regist)) + 2; // +2 because of the 2 first bytes holding the size
   else {
     sprintf(errorMessage, "In function getRegisterFullSize: data type %s is unknown!", getDataTypeName(dataType, true, false));
     displayBugScreen(errorMessage);
@@ -1180,9 +1180,9 @@ uint32_t getRegisterDataOnlySize(calcRegister_t regist) {
   else if(dataType == dtReal34      ) return REAL34_SIZE;
   else if(dataType == dtAngle       ) return ANGLE_SIZE;
   else if(dataType == dtComplex34   ) return COMPLEX34_SIZE;
-  else if(dataType == dtSmallInteger) return SMALL_INTEGER_SIZE;
+  else if(dataType == dtShortInteger) return SHORT_INTEGER_SIZE;
   else if(dataType == dtString      ) return *(REGISTER_DATA_MAX_LEN(regist));
-  else if(dataType == dtBigInteger  ) return *(REGISTER_DATA_MAX_LEN(regist));
+  else if(dataType == dtLongInteger ) return *(REGISTER_DATA_MAX_LEN(regist));
   else {
     sprintf(errorMessage, "In function getRegisterDataOnlySize: data type %s is unknown!", getDataTypeName(dataType, true, false));
     displayBugScreen(errorMessage);
@@ -1236,12 +1236,12 @@ void fnClearRegisters(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetLocR(uint16_t unusedParamButMandatory) {
-  bigInteger_t locR;
+  longInteger_t locR;
 
   liftStack();
 
-  uIntToBigInteger(numberOfLocalRegisters, &locR);
-  convertBigIntegerToBigIntegerRegister(&locR, REGISTER_X);
+  uIntToLongInteger(numberOfLocalRegisters, &locR);
+  convertLongIntegerToLongIntegerRegister(&locR, REGISTER_X);
 
   refreshStack();
 }
@@ -1262,8 +1262,8 @@ void fnConvertXToReal16(uint16_t unusedParamButMandatory) {
     convertRegister34To16(REGISTER_X);
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) != dtReal16 && getRegisterDataType(REGISTER_X) != dtComplex16) {
@@ -1293,8 +1293,8 @@ void fnConvertXToReal34(uint16_t unusedParamButMandatory) {
     convertRegister16To34(REGISTER_X);
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) != dtReal34 && getRegisterDataType(REGISTER_X) != dtComplex34) {
@@ -2040,34 +2040,34 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     value = real34ToInt32(REGISTER_REAL34_DATA(regist));
   }
 
-  else if(getRegisterDataType(regist) == dtBigInteger) {
-    bigInteger_t bigInteger;
+  else if(getRegisterDataType(regist) == dtLongInteger) {
+    longInteger_t longInteger;
 
-    convertBigIntegerRegisterToBigInteger(regist, &bigInteger);
-    if(bigIntegerIsNegative(&bigInteger) || bigIntegerCompareUInt(&bigInteger, 180) == BIG_INTEGER_GREATER_THAN) {
+    convertLongIntegerRegisterToLongInteger(regist, &longInteger);
+    if(longIntegerIsNegative(&longInteger) || longIntegerCompareUInt(&longInteger, 180) == LONG_INTEGER_GREATER_THAN) {
       displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        bigIntegerToString(&bigInteger, errorMessage + 200, 10);
+        longIntegerToString(&longInteger, errorMessage + 200, 10);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
         showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
       #endif
       return 9999;
     }
-    value = bigIntegerToUInt(&bigInteger);
+    value = longIntegerToUInt(&longInteger);
   }
 
-  else if(getRegisterDataType(regist) == dtSmallInteger) {
+  else if(getRegisterDataType(regist) == dtShortInteger) {
     uint64_t val;
     int16_t sign;
 
-    convertSmallIntegerRegisterToUInt64(regist, &sign, &val);
+    convertShortIntegerRegisterToUInt64(regist, &sign, &val);
     if(sign == 1 || val > 180) {
       displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         const font_t *font;
 
         font = &standardFont;
-        smallIntegerToDisplayString(regist, errorMessage + 200, &font);
+        shortIntegerToDisplayString(regist, errorMessage + 200, &font);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
         showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
       #endif
@@ -2208,8 +2208,8 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     #endif
   }
 
-  else if(getRegisterDataType(regist) == dtSmallInteger) {
-    uint64_t value = *(REGISTER_SMALL_INTEGER_DATA(regist));
+  else if(getRegisterDataType(regist) == dtShortInteger) {
+    uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(regist));
     #ifdef PC_BUILD
       printf("SI %08x-%08x", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff));
     #endif
@@ -2220,11 +2220,11 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     #endif
   }
 
-  else if(getRegisterDataType(regist) == dtBigInteger) {
-    bigInteger_t tmp;
+  else if(getRegisterDataType(regist) == dtLongInteger) {
+    longInteger_t tmp;
 
-    convertBigIntegerRegisterToBigInteger(regist, &tmp);
-    bigIntegerToString(&tmp, str, 10);
+    convertLongIntegerRegisterToLongInteger(regist, &tmp);
+    longIntegerToString(&tmp, str, 10);
     #ifdef PC_BUILD
       printf("BI (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
     #endif
@@ -2293,15 +2293,15 @@ void printReal51ToConsole(const real51_t *value) {
 
 
 /********************************************//**
- * \brief Prints the content of a big integer to the console
+ * \brief Prints the content of a long integer to the console
  *
  * \param r int16_t Register number
  * \return void
  ***********************************************/
-void printBigIntegerToConsole(bigInteger_t *value) {
+void printLongIntegerToConsole(longInteger_t *value) {
   char str[1000];
 
-  bigIntegerToString(value, str, 10);
+  longIntegerToString(value, str, 10);
   printf("BI (%d) %s", value->used * SIZEOF_FP_DIGIT, str);
 }
 
@@ -2328,8 +2328,8 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataS
     sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a complex34! It should be COMPLEX34_SIZE=%" FMT32U "!", dataSize, (uint32_t)COMPLEX34_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if(dataType == dtSmallInteger && dataSize != SMALL_INTEGER_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for an integer! It should be SMALL_INTEGER_SIZE=%" FMT32U "!", dataSize, (uint32_t)SMALL_INTEGER_SIZE);
+  else if(dataType == dtShortInteger && dataSize != SHORT_INTEGER_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for an integer! It should be SHORT_INTEGER_SIZE=%" FMT32U "!", dataSize, (uint32_t)SHORT_INTEGER_SIZE);
     displayBugScreen(errorMessage);
   }
   else if(dataType == dtString) {
@@ -2338,20 +2338,20 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataS
       dataSize++;   // To be even
     }
   }
-  else if(dataType == dtBigInteger) {
+  else if(dataType == dtLongInteger) {
     if(dataSize % SIZEOF_FP_DIGIT != 0) {
-      sprintf(errorMessage, "In function reallocateRegister: the value of dataSize (%" FMT32U ") for a big integer must be a multiple of %d!", dataSize, SIZEOF_FP_DIGIT);
+      sprintf(errorMessage, "In function reallocateRegister: the value of dataSize (%" FMT32U ") for a long integer must be a multiple of %d!", dataSize, SIZEOF_FP_DIGIT);
       displayBugScreen(errorMessage);
       dataSize = ((dataSize / SIZEOF_FP_DIGIT) + 1) * SIZEOF_FP_DIGIT;
     }
     dataSize += 2; // +2 For the length of the data
   }
 
-  if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtBigInteger) && getRegisterMaxDataLength(regist)+2 != (uint16_t)dataSize)) {
+  if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtLongInteger) && getRegisterMaxDataLength(regist)+2 != (uint16_t)dataSize)) {
     freeRegisterData(regist);
     setRegisterDataPointer(regist, allocateMemory(dataSize));
     setRegisterDataType(regist, dataType);
-    if(dataType == dtString || dataType == dtBigInteger) {
+    if(dataType == dtString || dataType == dtLongInteger) {
       setRegisterMaxDataLength(regist, dataSize - 2);
     }
   }

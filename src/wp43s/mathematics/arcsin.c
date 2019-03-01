@@ -24,8 +24,8 @@
 
 void (* const arcsin[12])(void) = {
 // regX ==> 1            2            3            4             5             6             7             8               9            10             11           12
-//          Big integer  real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Small integer  real34       complex34
-            arcsinBigI,  arcsinRe16,  arcsinCo16,  arcsinError,  arcsinError,  arcsinError,  arcsinError,  arcsinRm16,     arcsinCm16,  arcsinError,   arcsinRe34,  arcsinCo34
+//          Long integer real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Short integer  real34       complex34
+            arcsinLonI,  arcsinRe16,  arcsinCo16,  arcsinError,  arcsinError,  arcsinError,  arcsinError,  arcsinRm16,     arcsinCm16,  arcsinError,   arcsinRe34,  arcsinCo34
 };
 
 
@@ -95,8 +95,8 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
 
 
 
-void arcsinBigI(void) {
- convertBigIntegerRegisterToReal34Register(opX, opX);
+void arcsinLonI(void) {
+ convertLongIntegerRegisterToReal34Register(opX, opX);
   if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(opX), const34_1)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

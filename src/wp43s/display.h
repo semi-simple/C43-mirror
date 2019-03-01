@@ -30,8 +30,8 @@ void complex34ToDisplayString    (const complex34_t *complex34, char *displayStr
 void fractionToDisplayString     (calcRegister_t regist, char *displayString);
 void angle34ToDisplayString      (const real34_t *angle34, uint8_t mode, char *displayString);
 void registerAngleToDisplayString(calcRegister_t regist, char *displayString);
-void smallIntegerToDisplayString (calcRegister_t regist, char *displayString, const font_t **font);
-void bigIntegerToDisplayString   (calcRegister_t regist, char *displayString);
+void shortIntegerToDisplayString (calcRegister_t regist, char *displayString, const font_t **font);
+void longIntegerToDisplayString   (calcRegister_t regist, char *displayString);
 void dateToDisplayString         (calcRegister_t regist, char *displayString);
 void timeToDisplayString         (calcRegister_t regist, char *displayString);
 void exponentToDisplayString     (int32_t exponent, char *displayString);

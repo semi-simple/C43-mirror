@@ -23,61 +23,61 @@ void powError    (void);
 void powToBeCoded(void);
 
 //      RegYRegX
-void powBigIBigI (void);
-void powBigIRe16 (void);
-void powBigICo16 (void);
-void powBigISmaI (void);
-void powBigIRe34 (void);
-void powBigICo34 (void);
+void powLonILonI (void);
+void powLonIRe16 (void);
+void powLonICo16 (void);
+void powLonIShoI (void);
+void powLonIRe34 (void);
+void powLonICo34 (void);
 
 //      RegYRegX
-void powRe16BigI (void);
+void powRe16LonI (void);
 void powRe16Re16 (void);
 void powRe16Co16 (void);
-void powRe16SmaI (void);
+void powRe16ShoI (void);
 void powRe16Re34 (void);
 void powRe16Co34 (void);
 
 //      RegYRegX
-void powCo16BigI (void);
+void powCo16LonI (void);
 void powCo16Re16 (void);
 void powCo16Co16 (void);
-void powCo16SmaI (void);
+void powCo16ShoI (void);
 void powCo16Re34 (void);
 void powCo16Co34 (void);
 
 //      RegYRegX
-void powRm16BigI (void);
+void powRm16LonI (void);
 void powRm16Re16 (void);
-void powRm16SmaI (void);
+void powRm16ShoI (void);
 void powRm16Re34 (void);
 
 //      RegYRegX
-void powCm16BigI (void);
+void powCm16LonI (void);
 void powCm16Re16 (void);
-void powCm16SmaI (void);
+void powCm16ShoI (void);
 void powCm16Re34 (void);
 
 //      RegYRegX
-void powSmaIBigI (void);
-void powSmaIRe16 (void);
-void powSmaICo16 (void);
-void powSmaISmaI (void);
-void powSmaIRe34 (void);
-void powSmaICo34 (void);
+void powShoILonI (void);
+void powShoIRe16 (void);
+void powShoICo16 (void);
+void powShoIShoI (void);
+void powShoIRe34 (void);
+void powShoICo34 (void);
 
 //      RegYRegX
-void powRe34BigI (void);
+void powRe34LonI (void);
 void powRe34Re16 (void);
 void powRe34Co16 (void);
-void powRe34SmaI (void);
+void powRe34ShoI (void);
 void powRe34Re34 (void);
 void powRe34Co34 (void);
 
 //      RegYRegX
-void powCo34BigI (void);
+void powCo34LonI (void);
 void powCo34Re16 (void);
 void powCo34Co16 (void);
-void powCo34SmaI (void);
+void powCo34ShoI (void);
 void powCo34Re34 (void);
 void powCo34Co34 (void);

@@ -24,8 +24,8 @@
 
 void (* const arctan[12])(void) = {
 // regX ==> 1            2            3            4             5             6             7             8               9            10             11           12
-//          Big integer  real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Small integer  real34       complex34
-            arctanBigI,  arctanRe16,  arctanCo16,  arctanError,  arctanError,  arctanError,  arctanError,  arctanRm16,     arctanCm16,  arctanError,   arctanRe34,  arctanCo34
+//          Long integer real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Short integer  real34       complex34
+            arctanLonI,  arctanRe16,  arctanCo16,  arctanError,  arctanError,  arctanError,  arctanError,  arctanRm16,     arctanCm16,  arctanError,   arctanRe34,  arctanCo34
 };
 
 
@@ -95,8 +95,8 @@ void fnArctan(uint16_t unusedParamButMandatory) {
 
 
 
-void arctanBigI(void) {
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+void arctanLonI(void) {
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_do_atan(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);

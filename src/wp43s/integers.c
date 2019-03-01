@@ -27,7 +27,7 @@
  * \return void
  ***********************************************/
 void fnIntegerMode(uint16_t mode) {
-  smallIntegerMode = mode;
+  shortIntegerMode = mode;
   showIntegerMode();
   refreshStack();
 }
@@ -46,7 +46,7 @@ void fnLeadingZeros(uint16_t dlz) {
 
 
 void fnChangeBase(uint16_t base) {
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     if(2 <= base && base <= 16) {
       setRegisterBase(REGISTER_X, base);
       refreshStack();
@@ -60,9 +60,9 @@ void fnChangeBase(uint16_t base) {
     }
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     if(2 <= base && base <= 16) {
-      convertBigIntegerRegisterToSmallIntegerRegister(REGISTER_X, REGISTER_X);
+      convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
       setRegisterBase(REGISTER_X, base);
       refreshStack();
     }
@@ -77,12 +77,12 @@ void fnChangeBase(uint16_t base) {
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     if(2 <= base && base <= 16) {
-      bigInteger_t tmp;
+      longInteger_t tmp;
 
       fnIp(NOPARAM);
       real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
-      stringToBigInteger(tmpStr3000, 10, &tmp);
-      convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
+      stringToLongInteger(tmpStr3000, 10, &tmp);
+      convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
       fnChangeBase(base);
     }
     else {
@@ -96,12 +96,12 @@ void fnChangeBase(uint16_t base) {
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(2 <= base && base <= 16) {
-      bigInteger_t tmp;
+      longInteger_t tmp;
 
       fnIp(NOPARAM);
       real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
-      stringToBigInteger(tmpStr3000, 10, &tmp);
-      convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
+      stringToLongInteger(tmpStr3000, 10, &tmp);
+      convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
       fnChangeBase(base);
     }
     else {
@@ -125,9 +125,9 @@ void fnChangeBase(uint16_t base) {
 
 
 void fnFp(uint16_t unusedButMandatoryParameter) {
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = 0;
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = 0;
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -149,11 +149,11 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
     refreshRegisterLine(REGISTER_X);
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    bigInteger_t temp;
-    bigIntegerSetZero(&temp);
-    convertBigIntegerToBigIntegerRegister(&temp, REGISTER_X);
+    longInteger_t temp;
+    longIntegerSetZero(&temp);
+    convertLongIntegerToLongIntegerRegister(&temp, REGISTER_X);
     refreshRegisterLine(REGISTER_X);
   }
 
@@ -169,7 +169,7 @@ void fnFp(uint16_t unusedButMandatoryParameter) {
 
 
 void fnIp(uint16_t unusedButMandatoryParameter) {
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger || getRegisterDataType(REGISTER_X) == dtBigInteger) {
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger || getRegisterDataType(REGISTER_X) == dtLongInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     refreshRegisterLine(REGISTER_X);
   }
@@ -202,20 +202,20 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_int_1pow(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int_1pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    bigInteger_t tmp;
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    longInteger_t tmp;
 
-    uIntToBigInteger(1, &tmp);
+    uIntToLongInteger(1, &tmp);
 
-    if(bigIntegerIsOdd(BIG_INTEGER_POINTER(REGISTER_BIG_INTEGER_DATA(REGISTER_X)))) {
-      bigIntegerChangeSign(&tmp);
+    if(longIntegerIsOdd(LONG_INTEGER_POINTER(REGISTER_LONG_INTEGER_DATA(REGISTER_X)))) {
+      longIntegerChangeSign(&tmp);
     }
 
-    convertBigIntegerToBigIntegerRegister(&tmp, REGISTER_X);
+    convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
@@ -245,8 +245,8 @@ void fnM1Pow(uint16_t unusedButMandatoryParameter) {
 
 
 void fnMirror(uint16_t unusedButMandatoryParameter) {
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_intMirror(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intMirror(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
   }
 
   else {
@@ -263,8 +263,8 @@ void fnMirror(uint16_t unusedButMandatoryParameter) {
 
 
 void fnIsPrime(uint16_t unusedButMandatoryParameter) {
-  if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
-    *(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)) = WP34S_isPrime(*(REGISTER_SMALL_INTEGER_DATA(REGISTER_X)));
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_isPrime(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
   }
 
   else {
@@ -281,11 +281,11 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
 
 
 #if (TOMS_FAST_MATH == 1)
-uint32_t countBitsBigInteger(bigInteger_t *value) {
+uint32_t countBitsLongInteger(longInteger_t *value) {
   uint32_t bits;
   uint64_t mostSignificantDigit, mask;
 
-  if(bigIntegerIsZero(value)) {
+  if(longIntegerIsZero(value)) {
     bits = 1;
   }
   else {
@@ -304,12 +304,12 @@ uint32_t countBitsBigInteger(bigInteger_t *value) {
 
 
 
-uint32_t countBitsBigIntegerRegister(calcRegister_t regist) {
+uint32_t countBitsLongIntegerRegister(calcRegister_t regist) {
   uint16_t *addr = (uint16_t *)(REGISTER_DATA(regist));
   uint32_t bits;
   uint64_t mostSignificantDigit, mask;
 
-  if(bigIntegerIsZero((bigInteger_t *)addr)) {
+  if(longIntegerIsZero((longInteger_t *)addr)) {
     bits = 1;
   }
   else {
@@ -328,67 +328,67 @@ uint32_t countBitsBigIntegerRegister(calcRegister_t regist) {
 
 
 
-void bigIntegerMultiply(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result) {
-  if(countBitsBigInteger(opY) + countBitsBigInteger(opX) <= MAX_BIG_INTEGER_SIZE_IN_BITS) {
+void longIntegerMultiply(longInteger_t *opY, longInteger_t *opX, longInteger_t *result) {
+  if(countBitsLongInteger(opY) + countBitsLongInteger(opX) <= MAX_LONG_INTEGER_SIZE_IN_BITS) {
     fp_mul(opY, opX, result);
   }
   else {
     displayCalcErrorMessage(opY->sign == opX->sign ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Multiplying this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(opY, tmpStr3000, 10);
-      bigIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
-      showInfoDialog("In function bigIntegerMultiply:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
+      sprintf(errorMessage, "Multiplying this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(opY), countBitsLongInteger(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToString(opY, tmpStr3000, 10);
+      longIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      showInfoDialog("In function longIntegerMultiply:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
 }
 
 
 
-void bigIntegerSquare(bigInteger_t *op, bigInteger_t *result) {
-  if(countBitsBigInteger(op) * 2 <= MAX_BIG_INTEGER_SIZE_IN_BITS) {
+void longIntegerSquare(longInteger_t *op, longInteger_t *result) {
+  if(countBitsLongInteger(op) * 2 <= MAX_LONG_INTEGER_SIZE_IN_BITS) {
     fp_sqr(op, result);
   }
   else {
     displayCalcErrorMessage(4, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Squaring this value (%" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(op), MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(op, tmpStr3000, 10);
-      showInfoDialog("In function bigIntegerSquare:", errorMessage, tmpStr3000, NULL);
+      sprintf(errorMessage, "Squaring this value (%" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(op), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToString(op, tmpStr3000, 10);
+      showInfoDialog("In function longIntegerSquare:", errorMessage, tmpStr3000, NULL);
     #endif
   }
 }
 
 
 
-void bigIntegerAdd(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result) {
-  if(opY->sign != opX->sign || max(countBitsBigInteger(opY), countBitsBigInteger(opX)) <= MAX_BIG_INTEGER_SIZE_IN_BITS - 1) {
+void longIntegerAdd(longInteger_t *opY, longInteger_t *opX, longInteger_t *result) {
+  if(opY->sign != opX->sign || max(countBitsLongInteger(opY), countBitsLongInteger(opX)) <= MAX_LONG_INTEGER_SIZE_IN_BITS - 1) {
     fp_add(opY, opX, result);
   }
   else {
     displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Adding this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(opY, tmpStr3000, 10);
-      bigIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
-      showInfoDialog("In function bigIntegerAdd:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
+      sprintf(errorMessage, "Adding this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(opY), countBitsLongInteger(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToString(opY, tmpStr3000, 10);
+      longIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      showInfoDialog("In function longIntegerAdd:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
 }
 
 
 
-void bigIntegerSubtract(bigInteger_t *opY, bigInteger_t *opX, bigInteger_t *result) {
-  if(opY->sign == opX->sign || max(countBitsBigInteger(opY), countBitsBigInteger(opX)) <= MAX_BIG_INTEGER_SIZE_IN_BITS - 1) {
+void longIntegerSubtract(longInteger_t *opY, longInteger_t *opX, longInteger_t *result) {
+  if(opY->sign == opX->sign || max(countBitsLongInteger(opY), countBitsLongInteger(opX)) <= MAX_LONG_INTEGER_SIZE_IN_BITS - 1) {
     fp_sub(opY, opX, result);
   }
   else {
     displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Subtracting this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsBigInteger(opY), countBitsBigInteger(opX), MAX_BIG_INTEGER_SIZE_IN_BITS);
-      bigIntegerToString(opY, tmpStr3000, 10);
-      bigIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
-      showInfoDialog("In function bigIntegerSubtract:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
+      sprintf(errorMessage, "Subtracting this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(opY), countBitsLongInteger(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToString(opY, tmpStr3000, 10);
+      longIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      showInfoDialog("In function longIntegerSubtract:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
 }
@@ -434,12 +434,12 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
  	uint64_t u;
  	int32_t i;
 
-	 switch(smallIntegerMode) {
+	 switch(shortIntegerMode) {
 	   case SIM_UNSIGN:
  	    // C doesn't expose the processor's status bits to us so we
  	    // break the addition down so we don't lose the overflow.
- 	    u = (yv & (smallIntegerSignBit-1)) + (xv & (smallIntegerSignBit-1));
- 	    i = ((u & smallIntegerSignBit)?1:0) + ((xv & smallIntegerSignBit)?1:0) + ((yv & smallIntegerSignBit)?1:0);
+ 	    u = (yv & (shortIntegerSignBit-1)) + (xv & (shortIntegerSignBit-1));
+ 	    i = ((u & shortIntegerSignBit)?1:0) + ((xv & shortIntegerSignBit)?1:0) + ((yv & shortIntegerSignBit)?1:0);
  	    if(i > 1) {
 			     break;
       }
@@ -447,28 +447,28 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
 
 	   case SIM_2COMPL:
 	    	u = xv + yv;
-		    if(neg && u == smallIntegerSignBit) {
+		    if(neg && u == shortIntegerSignBit) {
 			     return 0;
       }
 
-		    if(smallIntegerSignBit & u) {
+		    if(shortIntegerSignBit & u) {
 			     break;
       }
 
-		    if((xv == smallIntegerSignBit && yv !=0) || (yv == smallIntegerSignBit && xv != 0)) {
+		    if((xv == shortIntegerSignBit && yv !=0) || (yv == shortIntegerSignBit && xv != 0)) {
 			     break;
       }
 		    return 0;
 
    	case SIM_SIGNMT:
 	   case SIM_1COMPL:
-	    	if(smallIntegerSignBit & (xv + yv)) {
+	    	if(shortIntegerSignBit & (xv + yv)) {
 			     break;
       }
 		    return 0;
 
     default:
-      sprintf(errorMessage, "In function calc_overflow: %" FMT8U " is an unexpected value for smallIntegerMode!", smallIntegerMode);
+      sprintf(errorMessage, "In function calc_overflow: %" FMT8U " is an unexpected value for shortIntegerMode!", shortIntegerMode);
       displayBugScreen(errorMessage);
       return 0;
 	 }
@@ -483,59 +483,59 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
  * value components.  The sign returned is 1 for negative and 0 for positive.
  */
 static uint64_t WP34S_extract_value(const uint64_t val, int32_t *const sign) {
- 	uint64_t value = val & smallIntegerMask;
+ 	uint64_t value = val & shortIntegerMask;
 
- 	if(smallIntegerMode == SIM_UNSIGN) {
+ 	if(shortIntegerMode == SIM_UNSIGN) {
 	  	*sign = 0;
 		  return value;
 	 }
 
- 	if(value & smallIntegerSignBit) {
+ 	if(value & shortIntegerSignBit) {
 	  	*sign = 1;
-		  if(smallIntegerMode == SIM_2COMPL) {
+		  if(shortIntegerMode == SIM_2COMPL) {
 	  		 value = -value;
     }
-	  	else if(smallIntegerMode == SIM_1COMPL) {
+	  	else if(shortIntegerMode == SIM_1COMPL) {
 			   value = ~value;
     }
-		  else { // if(smallIntegerMode == SIM_SIGNMT)
-		  	 value ^= smallIntegerSignBit;
+		  else { // if(shortIntegerMode == SIM_SIGNMT)
+		  	 value ^= shortIntegerSignBit;
     }
 	 }
 	 else {
 	 	 *sign = 0;
   }
 
-  return value & smallIntegerMask;
+  return value & shortIntegerMask;
 }
 
 
 /* Helper routine to construct a value from the magnitude and sign
  */
 static int64_t WP34S_build_value(const uint64_t x, const int32_t sign) {
- 	int64_t value = x & smallIntegerMask;
+ 	int64_t value = x & shortIntegerMask;
 
- 	if(sign == 0 || smallIntegerMode == SIM_UNSIGN) {
+ 	if(sign == 0 || shortIntegerMode == SIM_UNSIGN) {
  		 return value;
   }
 
- 	if(smallIntegerMode == SIM_2COMPL) {
- 		 return (-(int64_t)value) & smallIntegerMask;
+ 	if(shortIntegerMode == SIM_2COMPL) {
+ 		 return (-(int64_t)value) & shortIntegerMask;
   }
 
- 	if(smallIntegerMode == SIM_1COMPL) {
- 		 return (~value) & smallIntegerMask;
+ 	if(shortIntegerMode == SIM_1COMPL) {
+ 		 return (~value) & shortIntegerMask;
   }
 
- 	return value | smallIntegerSignBit;
+ 	return value | shortIntegerSignBit;
 }
 
 
 static uint64_t WP34S_multiply_with_overflow(uint64_t multiplier, uint64_t multiplicand, int32_t *overflow) {
- 	const uint64_t product = (multiplier * multiplicand) & smallIntegerMask;
+ 	const uint64_t product = (multiplier * multiplicand) & shortIntegerMask;
 
  	if(! *overflow && multiplicand != 0) {
-  		const uint64_t tbm = (smallIntegerMode == SIM_UNSIGN) ? 0 : smallIntegerSignBit;
+  		const uint64_t tbm = (shortIntegerMode == SIM_UNSIGN) ? 0 : shortIntegerSignBit;
 
 	  	if((product & tbm) != 0 || product / multiplicand != multiplier) {
 	  		 *overflow = 1;
@@ -559,26 +559,26 @@ uint64_t WP34S_intAdd(uint64_t y, uint64_t x) {
  		 overflow = 0;
   }
 
- 	if(smallIntegerMode == SIM_SIGNMT) {
-	  	const uint64_t x2 = (x & smallIntegerSignBit)?-(x ^ smallIntegerSignBit):x;
-		  const uint64_t y2 = (y & smallIntegerSignBit)?-(y ^ smallIntegerSignBit):y;
+ 	if(shortIntegerMode == SIM_SIGNMT) {
+	  	const uint64_t x2 = (x & shortIntegerSignBit)?-(x ^ shortIntegerSignBit):x;
+		  const uint64_t y2 = (y & shortIntegerSignBit)?-(y ^ shortIntegerSignBit):y;
 
 		  WP34S_set_carry(overflow);
 
   		sum = y2 + x2;
-	  	if(sum & smallIntegerSignBit) {
-		  	 sum = -sum | smallIntegerSignBit;
+	  	if(sum & shortIntegerSignBit) {
+		  	 sum = -sum | shortIntegerSignBit;
     }
 	 }
 	 else {
-		  const uint64_t maskedSum = (y + x) & smallIntegerMask;
+		  const uint64_t maskedSum = (y + x) & shortIntegerMask;
 
 		  sum = y + x;
 
-		  if(maskedSum < (y & smallIntegerMask)) {
+		  if(maskedSum < (y & shortIntegerMask)) {
 		   	WP34S_set_carry(1);
 
-  	  	if(smallIntegerMode == SIM_1COMPL) {
+  	  	if(shortIntegerMode == SIM_1COMPL) {
 		    	 sum++;
       }
 		  }
@@ -586,7 +586,7 @@ uint64_t WP34S_intAdd(uint64_t y, uint64_t x) {
 		   	WP34S_set_carry(0);
 	   }
 	 }
-	 return sum & smallIntegerMask;
+	 return sum & shortIntegerMask;
 }
 
 
@@ -601,16 +601,16 @@ uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
  		 WP34S_calc_overflow(termX, termY, termYSign);
   }
 
- 	if(smallIntegerMode == SIM_SIGNMT) {
+ 	if(shortIntegerMode == SIM_SIGNMT) {
 	  	int64_t x2, y2;
 		  WP34S_set_carry((termXSign == 0 && termYSign == 0 && termX > termY) ||	(termXSign != 0 && termYSign != 0 && termX < termY));
 
-		  x2 = (x & smallIntegerSignBit)?-(x ^ smallIntegerSignBit):x;
-	  	y2 = (y & smallIntegerSignBit)?-(y ^ smallIntegerSignBit):y;
+		  x2 = (x & shortIntegerSignBit)?-(x ^ shortIntegerSignBit):x;
+	  	y2 = (y & shortIntegerSignBit)?-(y ^ shortIntegerSignBit):y;
 
 		  difference = y2 - x2;
-	  	if(difference & smallIntegerSignBit) {
-		  	 difference = -difference | smallIntegerSignBit;
+	  	if(difference & shortIntegerSignBit) {
+		  	 difference = -difference | shortIntegerSignBit;
     }
 	 }
 	 else {
@@ -618,11 +618,11 @@ uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
 
 	  	if((uint64_t)y < (uint64_t)x) {
 		   	WP34S_set_carry(1);
-		   	if(smallIntegerMode == SIM_UNSIGN) {
+		   	if(shortIntegerMode == SIM_UNSIGN) {
 			   	 WP34S_set_overflow(1);
       }
 
-  	  	if(smallIntegerMode == SIM_1COMPL) {
+  	  	if(shortIntegerMode == SIM_1COMPL) {
 		    	 difference--;
       }
 		  }
@@ -630,7 +630,7 @@ uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
 		   	WP34S_set_carry(0);
 	   }
 	 }
-	 return difference & smallIntegerMask;
+	 return difference & shortIntegerMask;
 }
 
 
@@ -644,10 +644,10 @@ uint64_t WP34S_intMultiply(uint64_t y, uint64_t x) {
  	product = WP34S_multiply_with_overflow(multiplier, multiplicand, &overflow);
  	WP34S_set_overflow(overflow);
 
- 	if(smallIntegerMode == SIM_UNSIGN) {
+ 	if(shortIntegerMode == SIM_UNSIGN) {
  		 return product;
   }
- 	return WP34S_build_value(product & ~smallIntegerSignBit, multiplicandSign ^ multiplierSign);
+ 	return WP34S_build_value(product & ~shortIntegerSignBit, multiplicandSign ^ multiplierSign);
 }
 
 
@@ -680,15 +680,15 @@ uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
 	 }
 
 	 WP34S_set_overflow(0);
-	 quotient = (dividend / divisor) & smallIntegerMask;
+	 quotient = (dividend / divisor) & shortIntegerMask;
 	 // Set carry if there is a remainder
 	 WP34S_set_carry(quotient * divisor != dividend);
 
-	 if(smallIntegerMode != SIM_UNSIGN) {
-	  	if(quotient & smallIntegerSignBit)
+	 if(shortIntegerMode != SIM_UNSIGN) {
+	  	if(quotient & shortIntegerSignBit)
 		 	WP34S_set_carry(1);
 		  // Special case for 0x8000...00 / -1 in 2's complement
-	  	if(smallIntegerMode == SIM_2COMPL && divisorSign && divisor == 1 && y == smallIntegerSignBit) {
+	  	if(shortIntegerMode == SIM_2COMPL && divisorSign && divisor == 1 && y == shortIntegerSignBit) {
 	  		 WP34S_set_overflow(1);
     }
 	 }
@@ -754,7 +754,7 @@ uint64_t WP34S_intLCM(uint64_t y, uint64_t x) {
   }
 
  	gcd = WP34S_int_gcd(xv, yv);
- 	return WP34S_intMultiply((xv / gcd) & smallIntegerMask, WP34S_build_value(yv, 0));
+ 	return WP34S_intMultiply((xv / gcd) & shortIntegerMask, WP34S_build_value(yv, 0));
 }
 
 
@@ -762,9 +762,9 @@ uint64_t WP34S_intChs(uint64_t x) {
  	int32_t signValue;
  	uint64_t value = WP34S_extract_value(x, &signValue);
 
- 	if(smallIntegerMode == SIM_UNSIGN || (smallIntegerMode == SIM_2COMPL && x == smallIntegerSignBit)) {
+ 	if(shortIntegerMode == SIM_UNSIGN || (shortIntegerMode == SIM_2COMPL && x == shortIntegerSignBit)) {
 	  	WP34S_set_overflow(1);
-		  return (-(int64_t)value) & smallIntegerMask;
+		  return (-(int64_t)value) & shortIntegerMask;
   }
 
  	WP34S_set_overflow(0);
@@ -811,7 +811,7 @@ uint64_t WP34S_intAbs(uint64_t x) {
  	uint64_t value = WP34S_extract_value(x, &signValue);
 
  	WP34S_set_overflow(0);
- 	if(smallIntegerMode == SIM_2COMPL && x == smallIntegerSignBit) {
+ 	if(shortIntegerMode == SIM_2COMPL && x == shortIntegerSignBit) {
 	  	WP34S_set_overflow(1);
 	  	return x;
 	 }
@@ -820,7 +820,7 @@ uint64_t WP34S_intAbs(uint64_t x) {
 
 
 //uint64_t WP34S_intNot(uint64_t x) {
-// 	return (~x) & smallIntegerMask;
+// 	return (~x) & shortIntegerMask;
 //}
 
 
@@ -855,7 +855,7 @@ static uint64_t WP34S_int_power_helper(uint64_t base, uint64_t exponent, int32_t
  	uint32_t i;
  	int32_t overflow_next = 0;
 
- 	for(i=0; i<smallIntegerWordSize && exponent != 0; i++) {
+ 	for(i=0; i<shortIntegerWordSize && exponent != 0; i++) {
 	  	if(exponent & 1) {
 		   	if(overflow_next) {
 		   		 overflow = 1;
@@ -914,7 +914,7 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
 uint64_t WP34S_int2pow(uint64_t exp) {
  	int32_t signExponent;
  	uint64_t exponent = WP34S_extract_value(exp, &signExponent);
- 	uint32_t wordSize = smallIntegerWordSize;
+ 	uint32_t wordSize = shortIntegerWordSize;
 
  	WP34S_set_overflow(0);
  	WP34S_set_carry(signExponent && exponent == 1);
@@ -922,7 +922,7 @@ uint64_t WP34S_int2pow(uint64_t exp) {
  		 return 0;
   }
 
- 	if(smallIntegerMode != SIM_UNSIGN) {
+ 	if(shortIntegerMode != SIM_UNSIGN) {
  		 wordSize--;
   }
  	if(exponent >= wordSize) {
@@ -952,7 +952,7 @@ uint64_t WP34S_int10pow(uint64_t x) {
 	  	return 0;
 	 }
 
-	 if(smallIntegerWordSize <= 3 || (smallIntegerMode != SIM_UNSIGN && smallIntegerWordSize == 4)) {
+	 if(shortIntegerWordSize <= 3 || (shortIntegerMode != SIM_UNSIGN && shortIntegerWordSize == 4)) {
 	 	 overflow = 1;
   }
  	return WP34S_build_value(WP34S_int_power_helper(10, x, overflow), 0);
@@ -1114,7 +1114,7 @@ uint64_t WP34S_int_1pow(uint64_t exponent) {
  	uint64_t valueExponent = WP34S_extract_value(exponent, &signExponent);
  	int32_t odd = valueExponent & 1;
 
- 	WP34S_set_overflow((smallIntegerMode == SIM_UNSIGN && odd) ? 1 : 0);
+ 	WP34S_set_overflow((shortIntegerMode == SIM_UNSIGN && odd) ? 1 : 0);
  	return WP34S_build_value((uint64_t)1, odd);
 }
 
@@ -1130,9 +1130,9 @@ uint64_t WP34S_intMirror(uint64_t x) {
 	 	 return 0;
   }
 
-	 for(i=0; i<smallIntegerWordSize; i++) {
+	 for(i=0; i<shortIntegerWordSize; i++) {
 	 	 if(x & (1LL << i)) {
-	 	 	 r |= 1LL << (smallIntegerWordSize-i-1);
+	 	 	 r |= 1LL << (shortIntegerWordSize-i-1);
     }
   }
  	return r;
@@ -1168,7 +1168,7 @@ void justify(int64_t (*shift)(int64_t), const int64_t mask)
 
 void int_justify(enum nilop op)
  {
- 	const uint64_t mask = (op == OP_LJ) ? smallIntegerSignBit : 1LL;
+ 	const uint64_t mask = (op == OP_LJ) ? shortIntegerSignBit : 1LL;
  	justify((op == OP_LJ) ? &intLSL : &intLSR, mask);
  }
 
@@ -1189,7 +1189,7 @@ void intmsks(uint32_t arg, enum rarg op)
 
  	if(op == RARG_MASKL)
  	 {
-  		mask = smallIntegerSignBit;
+  		mask = shortIntegerSignBit;
   		f = &intLSR;
 	  }
 	 else
@@ -1198,9 +1198,9 @@ void intmsks(uint32_t arg, enum rarg op)
 	  	f = &intLSL;
 	  }
 
- 	if(arg >= smallIntegerWordSize)
+ 	if(arg >= shortIntegerWordSize)
  	 {
-	  	x = (-1) & smallIntegerMask;
+	  	x = (-1) & shortIntegerMask;
 	  }
 	 else
 	  {
@@ -1222,7 +1222,7 @@ void intbits(uint32_t arg, enum rarg op)
  {
  	int64_t m, x;
 
- 	m =  (arg >= smallIntegerWordSize)?0:(1LL << arg);
+ 	m =  (arg >= shortIntegerWordSize)?0:(1LL << arg);
  	x = getX_int();
 
  	switch(op)
@@ -1269,8 +1269,8 @@ int64_t intFib(int64_t x)
 	 s = (sx && (n & 1) == 0)?1:0;
 
 	 /* Mask to check for overflow */
-	 tbm = smallIntegerSignBit;
-	 if(smallIntegerMode == SIM_UNSIGN)
+	 tbm = shortIntegerSignBit;
+	 if(shortIntegerMode == SIM_UNSIGN)
 	 	tbm <<= 1;
 
 	 /* Down to the computation.
@@ -1478,7 +1478,7 @@ void restore_flags(int32_t co)
 /* Utility routine to check if a value has overflowed or not */
 int32_t check_overflow(int64_t x)
  {
- 	return ((x) & smallIntegerMask) != x || (smallIntegerMode != SIM_UNSIGN && (x & smallIntegerSignBit) != 0);
+ 	return ((x) & shortIntegerMask) != x || (shortIntegerMode != SIM_UNSIGN && (x & shortIntegerSignBit) != 0);
  }
 
 
@@ -1637,7 +1637,7 @@ void intDblMul(void)
 	 yv = packup(r);
 	 xv = packup(r+4);
 
-	 i = smallIntegerWordSize;
+	 i = shortIntegerWordSize;
 	 if(i != 64)
 	 	xv = (xv << (64-i)) | (yv >> i);
 
@@ -1645,24 +1645,24 @@ void intDblMul(void)
 
 	 if(s != 0)
 	  {
-	  	if(smallIntegerMode == SIM_2COMPL)
+	  	if(shortIntegerMode == SIM_2COMPL)
 	  	 {
-		   	yv = (1 + ~yv) & smallIntegerMask;
+		   	yv = (1 + ~yv) & shortIntegerMask;
 		   	xv = ~xv;
 			   if(yv == 0)
 				   xv++;
 		   }
-		  else if(smallIntegerMode == SIM_1COMPL)
+		  else if(shortIntegerMode == SIM_1COMPL)
 		   {
 			   yv = ~yv;
 		   	xv = ~xv;
 		   }
 		  else
-		  	xv |= smallIntegerSignBit;
+		  	xv |= shortIntegerSignBit;
 	  }
 
-	 set_reg_n_int(regY_idx, yv & smallIntegerMask);
-	 setX_int(xv & smallIntegerMask);
+	 set_reg_n_int(regY_idx, yv & shortIntegerMask);
+	 setX_int(xv & shortIntegerMask);
 	 set_overflow(0);
  }
 
@@ -1797,24 +1797,24 @@ uint64_t divmod(const int64_t z, const int64_t y,	const int64_t x, int32_t *sx, 
 
 	 l = (uint64_t)z;		// Numerator low
 	 h = (uint64_t)y;		// Numerator high
- 	if(smallIntegerMode != SIM_UNSIGN && (h & smallIntegerSignBit) != 0)
+ 	if(shortIntegerMode != SIM_UNSIGN && (h & shortIntegerSignBit) != 0)
  	 {
-	  	if(smallIntegerMode == SIM_2COMPL)
+	  	if(shortIntegerMode == SIM_2COMPL)
 	  	 {
-	   		l = (1 + ~l) & smallIntegerMask;
+	   		l = (1 + ~l) & shortIntegerMask;
 	   		h = ~h;
 		   	if(l == 0)
 			   	h++;
-			   h = h & smallIntegerMask;
+			   h = h & shortIntegerMask;
 		   }
-		  else if(smallIntegerMode == SIM_1COMPL)
+		  else if(shortIntegerMode == SIM_1COMPL)
 		   {
-	   		l = (~l) & smallIntegerMask;
-		   	h = (~h) & smallIntegerMask;
+	   		l = (~l) & shortIntegerMask;
+		   	h = (~h) & shortIntegerMask;
 		   }
 		  else
 		   {
-		   	h ^= smallIntegerSignBit;
+		   	h ^= shortIntegerSignBit;
 		   }
 		  *sy = 1;
 	  }
@@ -1828,10 +1828,10 @@ uint64_t divmod(const int64_t z, const int64_t y,	const int64_t x, int32_t *sx, 
 	   return 0;
    }
 
-	 if(smallIntegerWordSize != 64)
+	 if(shortIntegerWordSize != 64)
 	  {
-	  	l |= h << smallIntegerWordSize;
-	  	h >>= (64 - smallIntegerWordSize);
+	  	l |= h << shortIntegerWordSize;
+	  	h >>= (64 - shortIntegerWordSize);
 	  }
 
 	 if(h == 0 && l == 0)
@@ -1893,7 +1893,7 @@ int64_t intBooleanOp(int64_t y, int64_t x)
 	 if(not)
  		result = ~result;
 
- 	return result & smallIntegerMask;
+ 	return result & shortIntegerMask;
  }
 
 /* Single bit shifts are special internal version.
@@ -1902,14 +1902,14 @@ int64_t intBooleanOp(int64_t y, int64_t x)
 
 int64_t intLSL(int64_t x)
  {
- 	set_carry(0 != (smallIntegerSignBit & x));
- 	return ((x << 1) & ~1) & smallIntegerMask;
+ 	set_carry(0 != (shortIntegerSignBit & x));
+ 	return ((x << 1) & ~1) & shortIntegerMask;
  }
 
 int64_t intLSR(int64_t x)
  {
  	set_carry(0 != (x & 1));
- 	return ((x >> 1) & ~smallIntegerSignBit) & smallIntegerMask;
+ 	return ((x >> 1) & ~shortIntegerSignBit) & shortIntegerMask;
  }
 
 int64_t intASR(int64_t x)
@@ -1917,22 +1917,22 @@ int64_t intASR(int64_t x)
  	int64_t y;
 
  	set_carry(x & 1);
- 	if(smallIntegerMode == SIM_SIGNMT)
- 		return ((x & ~smallIntegerSignBit) >> 1) | (x & smallIntegerSignBit);
+ 	if(shortIntegerMode == SIM_SIGNMT)
+ 		return ((x & ~shortIntegerSignBit) >> 1) | (x & shortIntegerSignBit);
 
 	 y = x >> 1;
-	 if(smallIntegerMode != SIM_UNSIGN && (x & smallIntegerSignBit) != 0)
-	 	y |= smallIntegerSignBit;
+	 if(shortIntegerMode != SIM_UNSIGN && (x & shortIntegerSignBit) != 0)
+	 	y |= shortIntegerSignBit;
 
 	 return y;
  }
 
 int64_t intRL(int64_t x)
  {
- 	const int32_t cry = (smallIntegerSignBit & x)?1:0;
+ 	const int32_t cry = (shortIntegerSignBit & x)?1:0;
 
  	set_carry(cry);
- 	return (intLSL(x) | cry) & smallIntegerMask;
+ 	return (intLSL(x) | cry) & shortIntegerMask;
  }
 
 int64_t intRR(int64_t x)
@@ -1942,17 +1942,17 @@ int64_t intRR(int64_t x)
  	set_carry(cry);
  	x = intLSR(x);
  	if(cry)
- 		x |= smallIntegerSignBit;
+ 		x |= shortIntegerSignBit;
 
- 	return x & smallIntegerMask;
+ 	return x & shortIntegerMask;
  }
 
 int64_t intRLC(int64_t x)
  {
  	const int32_t cin = (getFlag(FLAG_CARRY) == ON ? 1 : 0);
- 	set_carry((smallIntegerSignBit & x)?1:0);
+ 	set_carry((shortIntegerSignBit & x)?1:0);
 
- 	return (intLSL(x) | cin) & smallIntegerMask;
+ 	return (intLSL(x) | cin) & shortIntegerMask;
 }
 
 int64_t intRRC(int64_t x)
@@ -1962,9 +1962,9 @@ int64_t intRRC(int64_t x)
  	set_carry(x&1);
  	x = intLSR(x);
  	if(cin)
- 		x |= smallIntegerSignBit;
+ 		x |= shortIntegerSignBit;
 
- 	return x & smallIntegerMask;
+ 	return x & shortIntegerMask;
  }
 
 /* Like the above but taking the count argument from the opcode.
@@ -1983,10 +1983,10 @@ void introt(uint32_t arg, enum rarg op)
  	 {
 		  switch(op)
 		   {
-	    	case RARG_RL:	 f = &intRL; 	mod = smallIntegerWordSize;	    break;
-		    case RARG_RR:	 f = &intRR; 	mod = smallIntegerWordSize;	    break;
-		    case RARG_RLC:	f = &intRLC;	mod = smallIntegerWordSize + 1;	break;
-		    case RARG_RRC:	f = &intRRC;	mod = smallIntegerWordSize + 1;	break;
+	    	case RARG_RL:	 f = &intRL; 	mod = shortIntegerWordSize;	    break;
+		    case RARG_RR:	 f = &intRR; 	mod = shortIntegerWordSize;	    break;
+		    case RARG_RLC:	f = &intRLC;	mod = shortIntegerWordSize + 1;	break;
+		    case RARG_RRC:	f = &intRRC;	mod = shortIntegerWordSize + 1;	break;
 		    case RARG_SL: 	f = &intLSL;	mod = 0;           	break;
 		    case RARG_SR:	 f = &intLSR;	mod = 0;           	break;
 		    case RARG_ASR:	f = &intASR;	mod = 0;           	break;
@@ -1994,12 +1994,12 @@ void introt(uint32_t arg, enum rarg op)
 			    return;
 		   }
 
- 		 if(arg > smallIntegerWordSize)
+ 		 if(arg > shortIntegerWordSize)
  		  {
 		   	if(mod)
 		   		arg = arg % mod;
 		   	else
-			   	arg = smallIntegerWordSize;
+			   	arg = shortIntegerWordSize;
 		   }
 
 		  for(i=0; i<arg; i++)
@@ -2007,7 +2007,7 @@ void introt(uint32_t arg, enum rarg op)
 	  }
 
  	setlastX();
- 	setX_int(x & smallIntegerMask);
+ 	setX_int(x & shortIntegerMask);
  }
 
 
@@ -2025,7 +2025,7 @@ uint32_t count64bits(int64_t x) {
 }
 
 int64_t intNumBits(int64_t x) {
-	return count64bits(x) & smallIntegerMask;
+	return count64bits(x) & shortIntegerMask;
 }
 
 #endif

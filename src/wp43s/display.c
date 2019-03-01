@@ -72,11 +72,11 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
   #ifdef PC_BUILD
-  else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+  else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     showInfoDialog("In function fnDisplayFormatFix:", "converting an integer to a real16", "is to be coded", NULL);
   }
   #endif
@@ -97,11 +97,11 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
   #ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
       showInfoDialog("In function fnDisplayFormatSci:", "converting an integer to a real16", "is to be coded", NULL);
   }
   #endif
@@ -122,11 +122,11 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
   #ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
       showInfoDialog("In function fnDisplayFormatEng:", "converting an integer to a real16", "is to be coded", NULL);
     }
   #endif
@@ -148,11 +148,11 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     displayFormatDigits = displayFormatN;
     displayRealAsFraction = false;
 
-    if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-      convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
     }
     #ifdef PC_BUILD
-      else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+      else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
         showInfoDialog("In function fnDisplayFormatAll:", "converting an integer to a real16", "is to be coded", NULL);
       }
     #endif
@@ -180,11 +180,11 @@ void fnDisplayFormatDsp(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
-  if(getRegisterDataType(REGISTER_X) == dtBigInteger) {
-    convertBigIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
   }
   #ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtSmallInteger) {
+    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
       showInfoDialog("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
     }
   #endif
@@ -1091,46 +1091,46 @@ void angle34ToDisplayString(const real34_t *angle34, uint8_t mode, char *display
 
 
 
-void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, const font_t **font) {
+void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, const font_t **font) {
   int16_t i, j, k, unit, gap, digit, bitsPerDigit, maxDigits, base;
   uint64_t number, sign;
   static const char digits[17] = "0123456789ABCDEF";
 
   base    = getRegisterBase(regist);
-  number  = *(REGISTER_SMALL_INTEGER_DATA(regist));
+  number  = *(REGISTER_SHORT_INTEGER_DATA(regist));
 
   if(base <= 1 || base >= 17) {
-    sprintf(errorMessage, "In function smallIntegerToDisplayString: %d is an unexpected value for base!", base);
+    sprintf(errorMessage, "In function shortIntegerToDisplayString: %d is an unexpected value for base!", base);
     displayBugScreen(errorMessage);
     base = 10;
   }
 
-  number &= smallIntegerMask;
+  number &= shortIntegerMask;
 
-  if(smallIntegerMode == SIM_UNSIGN || base == 2 || base == 4 || base == 8 || base == 16) {
+  if(shortIntegerMode == SIM_UNSIGN || base == 2 || base == 4 || base == 8 || base == 16) {
     sign = 0;
   }
   else {
-    sign = number & smallIntegerSignBit;
+    sign = number & shortIntegerSignBit;
   }
 
   if(sign) {
-    if(smallIntegerMode == SIM_2COMPL) {
-      number |= ~smallIntegerMask;
+    if(shortIntegerMode == SIM_2COMPL) {
+      number |= ~shortIntegerMask;
       number = ~number + 1;
     }
-    else if(smallIntegerMode == SIM_1COMPL) {
+    else if(shortIntegerMode == SIM_1COMPL) {
       number = ~number;
     }
-    else if(smallIntegerMode == SIM_SIGNMT) {
-      number &= ~smallIntegerSignBit;
+    else if(shortIntegerMode == SIM_SIGNMT) {
+      number &= ~shortIntegerSignBit;
     }
     else {
-      sprintf(errorMessage, "In function smallIntegerToDisplayString: %d is an unexpected value for smallIntegerMode!", smallIntegerMode);
+      sprintf(errorMessage, "In function shortIntegerToDisplayString: %d is an unexpected value for shortIntegerMode!", shortIntegerMode);
       displayBugScreen(errorMessage);
     }
 
-    number &= smallIntegerMask;
+    number &= shortIntegerMask;
   }
 
   i = ERROR_MESSAGE_LENGTH / 2;
@@ -1178,8 +1178,8 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     else                bitsPerDigit = 0;
 
     if(bitsPerDigit != 0) {
-      maxDigits = smallIntegerWordSize / bitsPerDigit;
-      if(smallIntegerWordSize%bitsPerDigit) {
+      maxDigits = shortIntegerWordSize / bitsPerDigit;
+      if(shortIntegerWordSize%bitsPerDigit) {
         maxDigits++;
       }
 
@@ -1292,7 +1292,7 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function smallIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
+      showInfoDialog("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
     #endif
 
     strcpy(displayString, "Integer data representation to wide!");
@@ -1348,7 +1348,7 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function smallIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
+      showInfoDialog("In function shortIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
     #endif
 
     strcpy(displayString, "Integer data representation to wide!");
@@ -1357,12 +1357,12 @@ void smallIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void bigIntegerToDisplayString(calcRegister_t regist, char *displayString) {
+void longIntegerToDisplayString(calcRegister_t regist, char *displayString) {
   int16_t len;
-  bigInteger_t tempBigInteger;
+  longInteger_t tempLongInteger;
 
-  convertBigIntegerRegisterToBigInteger(regist, &tempBigInteger);
-  bigIntegerToString(&tempBigInteger, displayString, 10);
+  convertLongIntegerRegisterToLongInteger(regist, &tempLongInteger);
+  longIntegerToString(&tempLongInteger, displayString, 10);
 
   if(groupingGap > 0) {
     len = strlen(displayString);

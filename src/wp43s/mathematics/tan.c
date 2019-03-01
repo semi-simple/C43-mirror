@@ -23,9 +23,9 @@
 
 
 void (* const Tan[12])(void) = {
-//  regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//           Big integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Small integer   real34    complex34
-             tanBigI,     tanRe16,  tanCo16,   tanAngl,  errorTan,  errorTan,  errorTan,  tanRm16,     tanCm16,      errorTan,       tanRe34,  tanCo34
+//  regX ==> 1             2         3          4         5          6          7          8            9             10              11        12
+//           Long integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
+             tanLonI,      tanRe16,  tanCo16,   tanAngl,  errorTan,  errorTan,  errorTan,  tanRm16,     tanCm16,      errorTan,       tanRe34,  tanCo34
 };
 
 
@@ -95,10 +95,10 @@ void fnTan(uint16_t unusedParamButMandatory) {
 
 
 
-void tanBigI(void) {
+void tanLonI(void) {
   real34_t cos;
 
-  convertBigIntegerRegisterToReal34Register(opX, opX);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
   convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX)); // opX in internal units

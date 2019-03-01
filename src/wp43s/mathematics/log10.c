@@ -24,8 +24,8 @@
 
 void (* const logBase10[12])(void) = {
 //  regX ==> 1            2           3           4            5            6            7            8           9            10             11          12
-//           Big integer  real16      complex16                Time         Date         String       real16 mat  complex16 m  Small integer  real34      complex34
-             log10BigI,   log10Re16,  log10Co16,  log10Error,  log10Error,  log10Error,  log10Error,  log10Rm16,  log10Cm16,   log10SmaI,     log10Re34,  log10Co34
+//           Long integer real16      complex16                Time         Date         String       real16 mat  complex16 m  Short integer  real34      complex34
+             log10LonI,   log10Re16,  log10Co16,  log10Error,  log10Error,  log10Error,  log10Error,  log10Rm16,  log10Cm16,   log10ShoI,     log10Re34,  log10Co34
 };
 
 
@@ -95,38 +95,38 @@ void fnLog10(uint16_t unusedParamButMandatory) {
 
 
 
-void log10BigI(void) {
-  bigInteger_t value;
+void log10LonI(void) {
+  longInteger_t value;
 
-  convertBigIntegerRegisterToBigInteger(opX, &value);
+  convertLongIntegerRegisterToLongInteger(opX, &value);
 
   int32_t signX = value.sign;
-  bigIntegerSetPositiveSign(&value);
+  longIntegerSetPositiveSign(&value);
 
-  if(bigIntegerIsZero(&value) || signX) {
+  if(longIntegerIsZero(&value) || signX) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log10BigI: Cannot calculate the log" STD_SUB_10 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
+      showInfoDialog("In function log10LonI: Cannot calculate the log" STD_SUB_10 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
 
-    bigIntegerSetZero(&value);
-    convertBigIntegerToBigIntegerRegister(&value, result);
+    longIntegerSetZero(&value);
+    convertLongIntegerToLongIntegerRegister(&value, result);
     return;
   }
 
   uint32_t log10 = 0;
   uint64_t remainder;
 
-  if(!bigIntegerIsZero(&value)) {
-    bigIntegerDivideUInt(&value, 10, &value, &remainder);
-    while(!bigIntegerIsZero(&value)) {
+  if(!longIntegerIsZero(&value)) {
+    longIntegerDivideUInt(&value, 10, &value, &remainder);
+    while(!longIntegerIsZero(&value)) {
       log10++;
-      bigIntegerDivideUInt(&value, 10, &value, &remainder);
+      longIntegerDivideUInt(&value, 10, &value, &remainder);
     }
   }
 
-  uIntToBigInteger(log10, &value);
-  convertBigIntegerToBigIntegerRegister(&value, REGISTER_X);
+  uIntToLongInteger(log10, &value);
+  convertLongIntegerToLongIntegerRegister(&value, REGISTER_X);
 }
 
 
@@ -237,8 +237,8 @@ void log10Cm16(void) {
 
 
 
-void log10SmaI(void) {
-  *(REGISTER_SMALL_INTEGER_DATA(result)) = WP34S_intLog10(*(REGISTER_SMALL_INTEGER_DATA(opX)));
+void log10ShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intLog10(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 

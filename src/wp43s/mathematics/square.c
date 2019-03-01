@@ -24,8 +24,8 @@
 
 void (* const square[12])(void) = {
 // regX ==> 1             2             3             4             5             6             7             8             9             10             11            12
-//          Big integer   real16        complex16     Angle         Time          Angle         String        real16 mat    complex16 m   Small integer  real34        complex34
-            mulBigIBigI,  mulRe16Re16,  mulCo16Co16,  errorSquare,  errorSquare,  errorSquare,  errorSquare,  mulRm16Rm16,  mulCm16Cm16,  mulSmaISmaI,   mulRe34Re34,  mulCo34Co34
+//          Long integer  real16        complex16     Angle         Time          Angle         String        real16 mat    complex16 m   Short integer  real34        complex34
+            mulLonILonI,  mulRe16Re16,  mulCo16Co16,  errorSquare,  errorSquare,  errorSquare,  errorSquare,  mulRm16Rm16,  mulCm16Cm16,  mulShoIShoI,   mulRe34Re34,  mulCo34Co34
 };
 
 

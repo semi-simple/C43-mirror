@@ -835,7 +835,7 @@ static void dump1(const decNumber *a, const char *msg) {
 #endif
 
 
-#define MOD_DIGITS	450		/* Big enough for 1e384 mod small integer */
+#define MOD_DIGITS	450		/* Big enough for 1e384 mod short integer */
 #define BIGMOD_DIGITS	820		/* Big enough for maxreal mod minreal */
 
 
@@ -925,7 +925,7 @@ decNumber *dn_average(decNumber *r, const decNumber *a, const decNumber *b) {
 
 
 #if 0
-/* Define a table of small integers.
+/* Define a table of short integers.
  * This should be equal or larger than any of the summation integers required in the
  * various series approximations to avoid needless computation.
  */

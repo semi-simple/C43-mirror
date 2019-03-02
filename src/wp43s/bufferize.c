@@ -177,10 +177,81 @@ void addItemToNimBuffer(int16_t item) {
   if(CHR_0 <= item && item <= CHR_9) {
     done = true;
 
-    strcat(nimBuffer, indexOfItems[item].itemPrinted);
-    if(nimNumberPart == NP_EMPTY) {
-      nimNumberPart = NP_INT_10;
-      //debugNIM();
+    if(item == CHR_0 && nimNumberPart == NP_INT_10) {
+      if(nimBuffer[1] == '0') {
+        nimBuffer[1] = 0;
+      }
+
+      strcat(nimBuffer, "0");
+    }
+
+    else if(item == CHR_0 && nimNumberPart == NP_REAL_EXPONENT) {
+      if(nimBuffer[exponentSignLocation + 1] == '0') {
+        nimBuffer[strlen(nimBuffer) - 1] = 0;
+      }
+
+      if(nimBuffer[exponentSignLocation + 1] != 0 || nimBuffer[exponentSignLocation] == '+') {
+        strcat(nimBuffer, "0");
+      }
+    }
+
+    else if(item == CHR_0 && nimNumberPart == NP_COMPLEX_INT_PART) {
+      if(nimBuffer[imaginaryMantissaSignLocation + 2] == '0') {
+        nimBuffer[strlen(nimBuffer) - 1] = 0;
+      }
+
+      strcat(nimBuffer, "0");
+    }
+
+    else if(item == CHR_0 && nimNumberPart == NP_COMPLEX_EXPONENT) {
+      if(nimBuffer[imaginaryExponentSignLocation + 1] == '0') {
+        nimBuffer[strlen(nimBuffer) - 1] = 0;
+      }
+
+      if(nimBuffer[imaginaryExponentSignLocation + 1] != 0 || nimBuffer[imaginaryExponentSignLocation] != '-') {
+        strcat(nimBuffer, "0");
+      }
+    }
+
+    else if(item != CHR_0 && nimNumberPart == NP_INT_10) {
+      if(nimBuffer[1] == '0') {
+        nimBuffer[1] = 0;
+      }
+
+      strcat(nimBuffer, indexOfItems[item].itemPrinted);
+    }
+
+    else if(item != CHR_0 && nimNumberPart == NP_REAL_EXPONENT) {
+      if(nimBuffer[imaginaryMantissaSignLocation + 2] == '0') {
+        nimBuffer[strlen(nimBuffer) - 1] = 0;
+      }
+
+      strcat(nimBuffer, indexOfItems[item].itemPrinted);
+    }
+
+    else if(item != CHR_0 && nimNumberPart == NP_COMPLEX_INT_PART) {
+      if(nimBuffer[imaginaryMantissaSignLocation + 2] == '0') {
+        nimBuffer[imaginaryMantissaSignLocation + 2] = 0;
+      }
+
+      strcat(nimBuffer, indexOfItems[item].itemPrinted);
+    }
+
+    else if(item != CHR_0 && nimNumberPart == NP_COMPLEX_EXPONENT) {
+      if(nimBuffer[imaginaryExponentSignLocation + 1] == '0') {
+        nimBuffer[strlen(nimBuffer) - 1] = 0;
+      }
+
+      strcat(nimBuffer, indexOfItems[item].itemPrinted);
+    }
+
+    else {
+      if(nimNumberPart == NP_EMPTY) {
+        nimNumberPart = NP_INT_10;
+        //debugNIM();
+      }
+
+      strcat(nimBuffer, indexOfItems[item].itemPrinted);
     }
   }
 
@@ -287,6 +358,9 @@ void addItemToNimBuffer(int16_t item) {
     else if(nimNumberPart == NP_REAL_EXPONENT) {
       if(nimBuffer[exponentSignLocation] == '+') {
         nimBuffer[exponentSignLocation] = '-';
+        if(nimBuffer[exponentSignLocation + 1] == '0') {
+          nimBuffer[strlen(nimBuffer) - 1] = 0;
+        }
       }
       else {
         nimBuffer[exponentSignLocation] = '+';
@@ -305,6 +379,9 @@ void addItemToNimBuffer(int16_t item) {
     else if(nimNumberPart == NP_COMPLEX_EXPONENT) {
       if(nimBuffer[imaginaryExponentSignLocation] == '+') {
         nimBuffer[imaginaryExponentSignLocation] = '-';
+        if(nimBuffer[imaginaryExponentSignLocation + 1] == '0') {
+          nimBuffer[strlen(nimBuffer) - 1] = 0;
+        }
       }
       else {
         nimBuffer[imaginaryExponentSignLocation] = '+';
@@ -380,7 +457,7 @@ void addItemToNimBuffer(int16_t item) {
     }
 
     else if(nimNumberPart == NP_REAL_EXPONENT) {
-      if(nimBuffer[lastChar] == '+') {
+      if(nimBuffer[lastChar] == '+' || nimBuffer[lastChar] == '-') {
         nimBuffer[lastChar--] = 0;
       }
 
@@ -434,7 +511,7 @@ void addItemToNimBuffer(int16_t item) {
     }
 
     else if(nimNumberPart == NP_COMPLEX_EXPONENT) {
-      if(nimBuffer[lastChar] == '+') {
+      if(nimBuffer[lastChar] == '+' || nimBuffer[lastChar] == '-') {
         nimBuffer[lastChar--] = 0;
       }
 
@@ -531,7 +608,7 @@ void addItemToNimBuffer(int16_t item) {
   }
 
   if(done) {
-    //printf("nimBuffer = <%s>\n", nimBuffer);
+    printf("nimBuffer = <%s>   imaginaryMantissaSignLocation = %d\n", nimBuffer, imaginaryMantissaSignLocation);
     //Convert nimBuffer to display string
     if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16 || nimNumberPart == NP_INT_BASE || nimNumberPart == NP_REAL_FLOAT_PART) {
       if(nimBuffer[0] == '-') {
@@ -552,12 +629,12 @@ void addItemToNimBuffer(int16_t item) {
         nimBufferDisplay[exponentSignLocation - 2] = 0;
       }
 
-      exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay));
-      if(nimBuffer[exponentSignLocation + 1] == 0) {
-        nimBufferDisplay[stringByteLength(nimBufferDisplay) - 2] = 0;
-        if(nimBuffer[exponentSignLocation] == '-') {
-          strcat(nimBufferDisplay, NUM_SUP_MINUS);
-        }
+      exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
+      if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
+        strcat(nimBufferDisplay, NUM_SUP_MINUS);
+      }
+      else if(nimBuffer[exponentSignLocation + 1] == '0' && nimBuffer[exponentSignLocation] == '+') {
+        strcat(nimBufferDisplay, NUM_SUP_0);
       }
     }
 
@@ -595,7 +672,7 @@ void addItemToNimBuffer(int16_t item) {
           nimBufferDisplay[exponentSignLocation - 2] = 0;
         }
 
-        exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay));
+        exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), false);
       }
       else { // No exponent
         if(nimBuffer[0] == '-') {
@@ -635,13 +712,12 @@ void addItemToNimBuffer(int16_t item) {
         strcat(nimBufferDisplay, nimBuffer + imaginaryMantissaSignLocation + 2);
         nimBuffer[index] = 'e';
 
-        exponentToDisplayString(atoi(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay));
-
-        if(nimBuffer[imaginaryExponentSignLocation + 1] == 0) {
-          nimBufferDisplay[stringByteLength(nimBufferDisplay) - 2] = 0;
-          if(nimBuffer[imaginaryExponentSignLocation] == '-') {
-            strcat(nimBufferDisplay, NUM_SUP_MINUS);
-          }
+        exponentToDisplayString(atoi(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
+        if(nimBuffer[imaginaryExponentSignLocation + 1] == 0 && nimBuffer[imaginaryExponentSignLocation] == '-') {
+          strcat(nimBufferDisplay, NUM_SUP_MINUS);
+        }
+        else if(nimBuffer[imaginaryExponentSignLocation + 1] == '0' && nimBuffer[imaginaryExponentSignLocation] == '+') {
+          strcat(nimBufferDisplay, NUM_SUP_0);
         }
       }
       else {

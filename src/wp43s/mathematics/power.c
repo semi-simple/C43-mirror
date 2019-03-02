@@ -96,7 +96,7 @@ void fnPower(uint16_t unusedParamButMandatory) {
     freeTemporaryRegister(opY);
     freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
+    if(lastErrorCode == 0) {
       fnDropY(NOPARAM);
     }
     else {

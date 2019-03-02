@@ -214,10 +214,20 @@ void fnDisplayFormatGap(uint16_t gap) {
  * \param[in]  exponent int32_t Power of 10 to format
  * \return void
  ***********************************************/
-void exponentToDisplayString(int32_t exponent, char *displayString) {
+void exponentToDisplayString(int32_t exponent, char *displayString, bool_t nimMode) {
   strcpy(displayString, PRODUCT_SIGN);
-  strcpy(displayString+2, NUM_SUB_10);
-  supNumberToDisplayString(exponent, displayString+4);
+  displayString += 2;
+  strcpy(displayString, NUM_SUB_10);
+  displayString += 2;
+  displayString[0] = 0;
+  if(nimMode) {
+    if(exponent != 0) {
+      supNumberToDisplayString(exponent, displayString);
+    }
+  }
+  else {
+    supNumberToDisplayString(exponent, displayString);
+  }
 }
 
 
@@ -656,7 +666,7 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
     displayString[charIndex] = 0;
 
     if(exponent != 0) {
-      exponentToDisplayString(exponent, displayString+charIndex);
+      exponentToDisplayString(exponent, displayString+charIndex, false);
     }
     return;
   }
@@ -748,7 +758,7 @@ void real16ToDisplayString(const real16_t *value, bool_t real34, char *displaySt
     displayString[charIndex] = 0;
 
     if(exponent != 0) {
-      exponentToDisplayString(exponent, displayString+charIndex);
+      exponentToDisplayString(exponent, displayString+charIndex, false);
     }
   }
 }
@@ -1386,13 +1396,13 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString) {
     lastChar = strlen(displayString) - stringStep;
     displayString[lastChar] = 0;
     exponentString[0] = 0;
-    exponentToDisplayString(tenExponent, exponentString);
+    exponentToDisplayString(tenExponent, exponentString, false);
     while(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > SCREEN_WIDTH - 2) {
       lastChar -= stringStep;
       tenExponent += exponentStep;
       displayString[lastChar] = 0;
       exponentString[0] = 0;
-      exponentToDisplayString(tenExponent, exponentString);
+      exponentToDisplayString(tenExponent, exponentString, false);
     }
 
     strcat(displayString, exponentString);

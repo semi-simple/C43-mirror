@@ -861,7 +861,7 @@ void addStriRe16(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
-  real16ToDisplayString(REGISTER_REAL16_DATA(opX), false, tmpStr3000);
+  real16ToDisplayString(REGISTER_REAL16_DATA(opX), false, tmpStr3000, &numericFont, 400);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
@@ -882,7 +882,7 @@ void addStriCo16(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
-  complex16ToDisplayString(REGISTER_COMPLEX16_DATA(opX), tmpStr3000);
+  complex16ToDisplayString(REGISTER_COMPLEX16_DATA(opX), tmpStr3000, &numericFont, 400);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
@@ -903,7 +903,7 @@ void addStriAngl(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
-  registerAngleToDisplayString(opX, tmpStr3000);
+  registerAngleToDisplayString(opX, tmpStr3000, &numericFont, 400);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
@@ -1033,7 +1033,7 @@ void addStriRe34(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
-  real34ToDisplayString(REGISTER_REAL34_DATA(opX), tmpStr3000);
+  real34ToDisplayString(REGISTER_REAL34_DATA(opX), tmpStr3000, &numericFont, 400);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);
@@ -1054,7 +1054,7 @@ void addStriCo34(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
-  complex34ToDisplayString(REGISTER_COMPLEX34_DATA(opX), tmpStr3000);
+  complex34ToDisplayString(REGISTER_COMPLEX34_DATA(opX), tmpStr3000, &numericFont, 400);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);

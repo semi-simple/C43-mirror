@@ -608,7 +608,7 @@ void addItemToNimBuffer(int16_t item) {
   }
 
   if(done) {
-    printf("nimBuffer = <%s>   imaginaryMantissaSignLocation = %d\n", nimBuffer, imaginaryMantissaSignLocation);
+    //printf("nimBuffer = <%s>   imaginaryMantissaSignLocation = %d\n", nimBuffer, imaginaryMantissaSignLocation);
     //Convert nimBuffer to display string
     if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16 || nimNumberPart == NP_INT_BASE || nimNumberPart == NP_REAL_FLOAT_PART) {
       if(nimBuffer[0] == '-') {

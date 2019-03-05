@@ -33,7 +33,7 @@ const calcKey_t kbd_std[37] = {
  {31,   ITM_STO,          ITM_ASSIGN,      ITM_SAVE,     ITM_NULL,       CHR_G,             ITM_NULL,        CHR_GAMMA,     ITM_NULL     },
  {32,   ITM_RCL,          ITM_VIEW,       -MNU_CNST,     ITM_NULL,       CHR_H,             ITM_NULL,        CHR_CHI,       ITM_NULL     },
  {33,   ITM_Rdown,        ITM_Rup,         ITM_RBR,      ITM_NULL,       CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
- {34,   KEY_UM,           ITM_AIM,        -MNU_ALPHAFN,  KEY_UM,         ITM_NULL,          ITM_NULL,        ITM_NULL,      ITM_NULL     },
+ {34,   KEY_UM,           ITM_AIM,        -MNU_ALPHAFN,  KEY_UM,         ITM_NULL,          ITM_NULL,        ITM_NULL,      CHR_alpha    },
  {35,   KEY_f,            ITM_NULL,        ITM_NULL,     KEY_f,          KEY_f,             ITM_NULL,        ITM_NULL,      KEY_f        },
  {36,   KEY_g,            ITM_NULL,        ITM_NULL,     KEY_g,          KEY_g,             ITM_NULL,        ITM_NULL,      KEY_g        },
 

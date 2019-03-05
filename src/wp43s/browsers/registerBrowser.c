@@ -71,7 +71,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
         if(getRegisterDataType(regist) == dtReal16) {
           if(showContent) {
-            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000);
+            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &standardFont, 399 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "8 bytes");
@@ -79,7 +79,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtReal34) {
           if(showContent) {
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000, &standardFont, 399 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "16 bytes");
@@ -87,7 +87,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex16) {
           if(showContent) {
-            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000);
+            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &standardFont, 399 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "16 bytes");
@@ -95,7 +95,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex34) {
           if(showContent) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, 399 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "32 bytes");
@@ -138,7 +138,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
           }
         }
         else {
-          sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, false));
+          sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, true));
         }
 
         showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true) - 1, 219-22*row, vmNormal, false, true);
@@ -156,7 +156,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             sprintf(tmpStr3000, "R.%02d:", regist);
 
             // register number
-            registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, false, false);
+            registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, true, true);
 
             if(   (regist <  REGISTER_X && regist % 5 == 4)
                || (regist >= REGISTER_X && regist % 4 == 3)) {
@@ -167,7 +167,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
             if(getRegisterDataType(regist) == dtReal16) {
               if(showContent) {
-                real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000);
+                real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &standardFont, 399- registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+8 bytes");
@@ -175,7 +175,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtReal34) {
               if(showContent) {
-                real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000);
+                real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000, &standardFont, 399 - registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+16 bytes");
@@ -183,7 +183,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex16) {
               if(showContent) {
-                complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000);
+                complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &standardFont, 399 - registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+16 bytes");
@@ -191,7 +191,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex34) {
               if(showContent) {
-                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000);
+                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, 399 - registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+32 bytes");
@@ -234,7 +234,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
               }
             }
             else {
-              sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, false));
+              sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, true));
             }
 
             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), 219-22*row, vmNormal, false, true);

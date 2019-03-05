@@ -882,7 +882,7 @@ const item_t indexOfItems[] = {
 /*  776 */  { fnConstant,                  76,                          STD_omega,                                     STD_omega,                                                                    SLS_ENABLED  },
 /*  777 */  { fnM1Pow,                     NOPARAM,                     "(-1)" STD_SUP_x,                              "(-1)" STD_SUP_x,                                                             SLS_ENABLED  },
 /*  778 */  { fnAdd,                       ITM_ADD,                     "+",                                           "+",                                                                          SLS_ENABLED  },
-/*  779 */  { fnChangeSign,                ITM_CHS,                     "+/-",                                         "+/-",                                                                        SLS_UNCHANGED},
+/*  779 */  { fnChangeSign,                ITM_CHS,                     "+/-",                                         "+/-",                                                                        SLS_ENABLED  },
 /*  780 */  { fnSubtract,                  ITM_SUB,                     "-",                                           "-",                                                                          SLS_ENABLED  },
 /*  781 */  { fnConstant,                  77,                          "-" STD_INFINITY,                              "-" STD_INFINITY,                                                             SLS_ENABLED  },
 /*  782 */  { fnMultiply,                  ITM_MULT,                    STD_CROSS,                                     STD_CROSS,                                                                    SLS_ENABLED  },

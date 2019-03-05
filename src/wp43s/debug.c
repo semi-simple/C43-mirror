@@ -204,10 +204,10 @@ void debugNIM(void) {
    * \return char*          Name of the display format
    ***********************************************/
   char * getDisplayFormatName(uint16_t df) {
-    if(df == DF_ALL) return "all";
-    if(df == DF_FIX) return "fix";
-    if(df == DF_SCI) return "sci";
-    if(df == DF_ENG) return "eng";
+    if(df == DF_ALL) return "ALL";
+    if(df == DF_FIX) return "FIX";
+    if(df == DF_SCI) return "SCI";
+    if(df == DF_ENG) return "ENG";
 
     return "???";
   }

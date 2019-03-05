@@ -100,7 +100,7 @@ void chsLonI(void) {
 
 
 void chsRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsRe16:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -117,7 +117,7 @@ void chsRe16(void) {
 
 
 void chsCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(result)) || real16IsNaN(REGISTER_IMAG16_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsCo16:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -139,7 +139,7 @@ void chsCo16(void) {
 
 
 void chsAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
+  if(angleIsNaN(REGISTER_ANGLE_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsAngl:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -183,7 +183,7 @@ void chsShoI(void) {
 
 
 void chsRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsRe34:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -200,7 +200,7 @@ void chsRe34(void) {
 
 
 void chsCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(result)) || real34IsNaN(REGISTER_IMAG34_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsCo34:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -212,8 +212,8 @@ void chsCo34(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(result))) {
     real34SetPositiveSign(REGISTER_REAL34_DATA(result));
   }
-  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
   if(real34IsZero(REGISTER_IMAG34_DATA(result))) {
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
   }

@@ -924,7 +924,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
 
   real34ToReal16(&real34, &tmp);
   real16ToDisplayString2(&tmp, true, displayString);
-  real34ToReal16(&real34, &tmp);
+  real34ToReal16(&imag34, &tmp);
   real16ToDisplayString2(&tmp, true, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {

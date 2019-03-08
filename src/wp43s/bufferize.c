@@ -115,9 +115,14 @@ void addItemToBuffer(uint16_t item) {
       else if(item == KEY_BACKSPACE) {
         tamTransitionSystem(TT_BACKSPACE);
       }
+      else if(item == CHR_alpha) {
+        #ifdef PC_BUILD
+          showInfoDialog("In function addItemToBuffer:", STD_alpha " to be coded!", NULL, NULL);
+        #endif
+        tamTransitionSystem(TT_NOTHING);
+      }
       else {
-        funcOK = false;
-        return;
+        tamTransitionSystem(TT_NOTHING);
       }
     }
 

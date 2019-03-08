@@ -30,6 +30,7 @@
 #define TT_DOT             5
 #define TT_INDIRECT        6
 #define TT_BACKSPACE       7
+#define TT_NOTHING         8
 
 void fnAim              (uint16_t unusedParamButMandatory);
 void addItemToBuffer    (uint16_t item);

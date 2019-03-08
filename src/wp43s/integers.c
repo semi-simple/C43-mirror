@@ -667,13 +667,13 @@ uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
     else if(dividendSign) {
       displayCalcErrorMessage(2, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function WP34S_intDivide: cannot divide a negative finite integer by 0!", NULL, NULL, NULL);
+        showInfoDialog("In function WP34S_intDivide: cannot divide a negative short integer by 0!", NULL, NULL, NULL);
       #endif
     }
     else {
       displayCalcErrorMessage(2, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function WP34S_intDivide: cannot divide a positive finite integer by 0!", NULL, NULL, NULL);
+        showInfoDialog("In function WP34S_intDivide: cannot divide a positive short integer by 0!", NULL, NULL, NULL);
       #endif
     }
 	  	return 0;
@@ -782,7 +782,7 @@ uint64_t WP34S_intSqrt(uint64_t x) {
 	 if(signValue) {
 	   displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function WP34S_intSqrt: Cannot extract the square root of a negative finite integer!", NULL, NULL, NULL);
+      showInfoDialog("In function WP34S_intSqrt: Cannot extract the square root of a negative short integer!", NULL, NULL, NULL);
     #endif
 	  	return 0;
   }

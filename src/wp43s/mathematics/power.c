@@ -165,7 +165,7 @@ void powLonILonI(void) {
      longIntegerMultiply(&power, &base, &power);
     }
 
-    longIntegerDivide2(&exponent, &exponent);
+    longIntegerDivideUInt(&exponent, 2, &exponent);
 
     if(!longIntegerIsZero(&exponent)) {
       longIntegerSquare(&base, &base);

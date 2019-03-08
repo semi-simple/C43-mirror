@@ -128,7 +128,7 @@ void divLonILonI(void) {
   if(longIntegerIsZero(&iOp2)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divLonILonI:", "cannot divide an infinite integer by 0", NULL, NULL);
+      showInfoDialog("In function divLonILonI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
   }
   else {

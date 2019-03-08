@@ -152,7 +152,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
 void setPixel(int16_t x, int16_t y) {
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
+      //printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 
@@ -177,7 +177,7 @@ void setPixel(int16_t x, int16_t y) {
 void clearPixel(int16_t x, int16_t y) {
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+      //printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 
@@ -799,7 +799,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
-            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &numericFont, 400 - prefixWidth);
+            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
             if(prefixWidth > 0) {
@@ -809,18 +809,15 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtReal34) {
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000, &numericFont, 400);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
-            if(prefixWidth > 0) {
-              showString(prefix, &standardFont, 1, 146 - 37*(regist-100), vmNormal, true, true);
-            }
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtComplex16) {
-            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &numericFont, 400);
+            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
@@ -828,7 +825,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex34) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, 400);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
@@ -845,7 +842,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               real34Copy(REGISTER_REAL34_DATA(regist), &angle34);
             #endif
 
-            angle34ToDisplayString(&angle34, getRegisterAngularMode(regist), tmpStr3000, &numericFont, 400);
+            angle34ToDisplayString(&angle34, getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             if(temporaryInformation == TI_RADIUS_THETA) {
               if(regist == REGISTER_Y) {

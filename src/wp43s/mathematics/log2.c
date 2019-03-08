@@ -117,10 +117,10 @@ void log2LonI(void) {
   uint32_t log2 = 0;
 
   if(!longIntegerIsZero(&value)) {
-    longIntegerDivide2(&value, &value);
+    longIntegerDivideUInt(&value, 2, &value);
     while(!longIntegerIsZero(&value)) {
       log2++;
-      longIntegerDivide2(&value, &value);
+      longIntegerDivideUInt(&value, 2, &value);
     }
   }
 

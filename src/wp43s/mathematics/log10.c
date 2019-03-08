@@ -115,13 +115,12 @@ void log10LonI(void) {
   }
 
   uint32_t log10 = 0;
-  uint64_t remainder;
 
   if(!longIntegerIsZero(&value)) {
-    longIntegerDivideUInt(&value, 10, &value, &remainder);
+    longIntegerDivideUInt(&value, 10, &value);
     while(!longIntegerIsZero(&value)) {
       log10++;
-      longIntegerDivideUInt(&value, 10, &value, &remainder);
+      longIntegerDivideUInt(&value, 10, &value);
     }
   }
 

@@ -68,7 +68,7 @@ int16_t         tamCurrentOperation;
 int16_t         currentRegisterBrowserScreen;
 int16_t         lineTWidth;
 int16_t         rbrRegister;
-int16_t         allFormatDigits;
+int16_t         displayHasNDigits;
 calcRegister_t  result;
 calcRegister_t  opX;
 calcRegister_t  opY;

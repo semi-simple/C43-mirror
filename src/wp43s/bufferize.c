@@ -1331,11 +1331,11 @@ void closeNim(void) {
 
           // minVal = -maxVal/2
           longIntegerSetZero(&minVal); // Mandatory! Else segmentation fault at next instruction
-          longIntegerDivide2(&maxVal, &minVal); // minVal = maxVal / 2
+          longIntegerDivideUInt(&maxVal, 2, &minVal); // minVal = maxVal / 2
           longIntegerSetNegativeSign(&minVal); // minVal = -minVal
 
           if(shortIntegerMode != SIM_UNSIGN) {
-            longIntegerDivide2(&maxVal, &maxVal); // maxVal /= 2
+            longIntegerDivideUInt(&maxVal, 2, &maxVal); // maxVal /= 2
           }
 
           longIntegerSubtractUInt(&maxVal, 1, &maxVal); // maxVal--

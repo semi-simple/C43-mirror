@@ -101,7 +101,7 @@ typedef enum {
   dtString          =  6,  ///< Alphanumeric string
   dtReal16Matrix    =  7,  ///< Single precision vector or matrix
   dtComplex16Matrix =  8,  ///< Double precision vector or matrix
-  dtShortInteger    =  9,  ///< Finite precision integer
+  dtShortInteger    =  9,  ///< Short integer (64 bit)
   dtReal34          = 10,  ///< R double precision real (128 bits)
   dtComplex34       = 11   ///< C double precision complex (2x 128 bits)
   //dtLabel           = 12,  ///< Label
@@ -166,6 +166,7 @@ int16_t           indirectAddressing              (calcRegister_t regist, int16_
 void              printRegisterToConsole          (calcRegister_t regist, int16_t line);
 void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);
+void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
 void              printLongIntegerToConsole        (longInteger_t *value);

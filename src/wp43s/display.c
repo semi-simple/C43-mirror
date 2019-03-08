@@ -299,18 +299,17 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
 
 
 void real16ToDisplayString(const real16_t *value, bool_t real34, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits;
+  uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
-  allFormatDigits = 16;
-  savedDisplayFormatDigits = displayFormatDigits;
+  displayHasNDigits = 16;
 
   real16ToDisplayString2(value, real34, displayString);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
     if(displayFormat == DF_ALL) {
-      if(allFormatDigits == 0) {
+      if(displayHasNDigits == 2) {
         break;
       }
-      allFormatDigits--;
+      displayHasNDigits--;
     }
     else {
       if(displayFormatDigits == 0) {
@@ -396,13 +395,19 @@ void real16ToDisplayString2(const real16_t *value, bool_t real34, char *displayS
     exponent += numDigits++;
   }
 
+  // Limit the displayed digits to the max the device can display
+  if(numDigits > displayHasNDigits) {
+    lastDigit = firstDigit + displayHasNDigits - 1;
+    numDigits = displayHasNDigits;
+  }
+
   charIndex = 0;
 
   //////////////
   // ALL mode //
   //////////////
   if(displayFormat == DF_ALL) {
-    if(exponent >= 16 || (displayFormatDigits != 0 && exponent < -(int32_t)displayFormatDigits) || (displayFormatDigits == 0 && exponent < numDigits - 16)) { // Display in SCI or ENG format
+    if(exponent >= displayHasNDigits || (displayFormatDigits != 0 && exponent < -(int32_t)displayFormatDigits) || (displayFormatDigits == 0 && exponent < numDigits - displayHasNDigits)) { // Display in SCI or ENG format
       digitsToDisplay = numDigits - 1;
       digitToRound    = firstDigit + digitsToDisplay;
       ovrSCI = (displayModeOverride == DO_SCI);
@@ -410,7 +415,7 @@ void real16ToDisplayString2(const real16_t *value, bool_t real34, char *displayS
     }
     else { // display all digits without ten exponent factor
       // Number of digits to truncate
-      digitsToTruncate = max(numDigits - exponent, allFormatDigits) - allFormatDigits;
+      digitsToTruncate = max(numDigits - exponent, displayHasNDigits) - displayHasNDigits;
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
 
@@ -461,7 +466,7 @@ void real16ToDisplayString2(const real16_t *value, bool_t real34, char *displayS
         }
 
         // Significant digits
-        for(digitPointer=firstDigit; digitPointer<firstDigit+min(allFormatDigits - 1 - exponent, numDigits); digitPointer++, digitCount--) {
+        for(digitPointer=firstDigit; digitPointer<firstDigit+min(displayHasNDigits - 1 - exponent, numDigits); digitPointer++, digitCount--) {
           if(digitCount != 0 && groupingGap != 0 && digitCount%(uint16_t)groupingGap == 0) {
             memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
             charIndex += 2;
@@ -507,7 +512,7 @@ void real16ToDisplayString2(const real16_t *value, bool_t real34, char *displayS
   // FIX mode //
   //////////////
   if(displayFormat == DF_FIX) {
-    if(exponent >= 16 || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
+    if(exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
       ovrSCI = (displayModeOverride == DO_SCI);
@@ -809,18 +814,17 @@ void real34ToDisplayString(const real34_t *real34, char *displayString, const fo
 
 
 void complex16ToDisplayString(const complex16_t *value, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits;
+  uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
-  allFormatDigits = 16;
-  savedDisplayFormatDigits = displayFormatDigits;
+  displayHasNDigits = 16;
 
   complex16ToDisplayString2(value, displayString);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
     if(displayFormat == DF_ALL) {
-      if(allFormatDigits == 0) {
+      if(displayHasNDigits == 2) {
         break;
       }
-      allFormatDigits--;
+      displayHasNDigits--;
     }
     else {
       if(displayFormatDigits == 0) {
@@ -836,7 +840,7 @@ void complex16ToDisplayString(const complex16_t *value, char *displayString, con
 
 
 void complex16ToDisplayString2(const complex16_t *complex16, char *displayString) {
-  int16_t i=64;
+  int16_t i=100;
   real16_t real16, imag16;
 
   if(complexMode == CM_RECTANGULAR) {
@@ -879,18 +883,17 @@ void complex16ToDisplayString2(const complex16_t *complex16, char *displayString
 
 
 void complex34ToDisplayString(const complex34_t *value, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits;
+  uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
-  allFormatDigits = 16;
-  savedDisplayFormatDigits = displayFormatDigits;
+  displayHasNDigits = 16;
 
   complex34ToDisplayString2(value, displayString);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
     if(displayFormat == DF_ALL) {
-      if(allFormatDigits == 0) {
+      if(displayHasNDigits == 2) {
         break;
       }
-      allFormatDigits--;
+      displayHasNDigits--;
     }
     else {
       if(displayFormatDigits == 0) {
@@ -906,7 +909,7 @@ void complex34ToDisplayString(const complex34_t *value, char *displayString, con
 
 
 void complex34ToDisplayString2(const complex34_t *complex34, char *displayString) {
-  int16_t i=64;
+  int16_t i=100;
   real34_t real34, imag34;
   real16_t tmp;
 
@@ -942,7 +945,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    //angle34ToDisplayString(&imag34, displayString + stringByteLength(displayString));
+    angle34ToDisplayString2(&imag34, angularMode, displayString + stringByteLength(displayString));
   }
 }
 
@@ -1101,18 +1104,17 @@ void registerAngleToDisplayString(calcRegister_t regist, char *displayString, co
 
 
 void angle34ToDisplayString(const real34_t *angle34, uint8_t mode, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits;
+  uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
-  allFormatDigits = 16;
-  savedDisplayFormatDigits = displayFormatDigits;
+  displayHasNDigits = 16;
 
   angle34ToDisplayString2(angle34, mode, displayString);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
     if(displayFormat == DF_ALL) {
-      if(allFormatDigits == 0) {
+      if(displayHasNDigits == 2) {
         break;
       }
-      allFormatDigits--;
+      displayHasNDigits--;
     }
     else {
       if(displayFormatDigits == 0) {

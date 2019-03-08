@@ -101,7 +101,7 @@ void sqrtLonI(void) {
   convertLongIntegerRegisterToLongInteger(opX, &value);
 
   if(!longIntegerIsNegative(&value)) { // Positive or zero value
-    longInteger_t value, nn0, nn1;
+    longInteger_t value, nn0, nn1, nn2;
 
     if(longIntegerIsZero(&value)) {
       uIntToLongInteger(0, &nn1);
@@ -111,14 +111,13 @@ void sqrtLonI(void) {
       convertLongIntegerRegisterToLongInteger(opX, &value);
 
       // n0 = value / 2 + 1;
-      longIntegerDivide2(&value, &nn0);
+      longIntegerDivideUInt(&value, 2, &nn0);
       longIntegerAddUInt(&nn0, 1, &nn0);
 
       // n1 = value / n0 + n0 / 2;
       longIntegerDivide(&value, &nn0, &nn1);
-      longIntegerDivide2(&nn0, &nn0);
-      longIntegerAdd(&nn1, &nn0, &nn1);
-      longIntegerMultiply2(&nn0, &nn0);
+      longIntegerDivideUInt(&nn0, 2, &nn2);
+      longIntegerAdd(&nn1, &nn2, &nn1);
       while(longIntegerCompare(&nn0, &nn1) == LONG_INTEGER_GREATER_THAN) {
         //n0 = n1;
         longIntegerCopy(&nn1, &nn0);
@@ -126,7 +125,7 @@ void sqrtLonI(void) {
         //n1 = (n0 + value / n0) / 2;
         longIntegerDivide(&value, &nn0, &nn1);
         longIntegerAdd(&nn1, &nn0, &nn1);
-        longIntegerDivide2(&nn1, &nn1);
+        longIntegerDivideUInt(&nn1, 2, &nn1);
       }
 
       // n0 = n1 * n1;
@@ -157,7 +156,6 @@ void sqrtLonI(void) {
     real34SquareRoot(&real34, REGISTER_IMAG34_DATA(result));
     real34Zero(REGISTER_REAL34_DATA(result));
     convertRegister34To16(result);
-    //convertRegister34To16(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // 1 = argument exceeds functions domain

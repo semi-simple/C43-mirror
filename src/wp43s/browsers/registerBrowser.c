@@ -71,7 +71,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
         if(getRegisterDataType(regist) == dtReal16) {
           if(showContent) {
-            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            realToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "8 bytes");
@@ -79,7 +79,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtReal34) {
           if(showContent) {
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            realToDisplayString(REGISTER_REAL34_DATA(regist), true, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "16 bytes");
@@ -87,7 +87,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex16) {
           if(showContent) {
-            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            complexToDisplayString(REGISTER_COMPLEX16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "16 bytes");
@@ -95,7 +95,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex34) {
           if(showContent) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            complexToDisplayString(REGISTER_COMPLEX34_DATA(regist), true, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             strcpy(tmpStr3000, "32 bytes");
@@ -167,7 +167,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
             if(getRegisterDataType(regist) == dtReal16) {
               if(showContent) {
-                real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                realToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+8 bytes");
@@ -175,7 +175,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtReal34) {
               if(showContent) {
-                real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                realToDisplayString(REGISTER_REAL34_DATA(regist), true, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+16 bytes");
@@ -183,7 +183,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex16) {
               if(showContent) {
-                complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                complexToDisplayString(REGISTER_COMPLEX16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+16 bytes");
@@ -191,7 +191,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex34) {
               if(showContent) {
-                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                complexToDisplayString(REGISTER_COMPLEX34_DATA(regist), true, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 strcpy(tmpStr3000, "4+32 bytes");

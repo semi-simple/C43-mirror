@@ -799,7 +799,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
-            real16ToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+            realToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
             if(prefixWidth > 0) {
@@ -809,7 +809,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtReal34) {
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            realToDisplayString(REGISTER_REAL34_DATA(regist), true, tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
@@ -817,7 +817,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex16) {
-            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            complexToDisplayString(REGISTER_COMPLEX16_DATA(regist), false, tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
@@ -825,7 +825,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex34) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            complexToDisplayString(REGISTER_COMPLEX34_DATA(regist), true, tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

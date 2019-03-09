@@ -38,7 +38,7 @@ GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
 GtkWidget *lbl31F,  *lbl32F,  *lbl33F,  *lbl34F,  *lbl35F,  *lbl36F;
 GtkWidget *lbl31G,  *lbl32G,  *lbl33G,  *lbl34G,  *lbl35G,  *lbl36G;
 GtkWidget *lbl31L,  *lbl32L,  *lbl33L,  *lbl34L,  *lbl35L,  *lbl36L;
-GtkWidget                     *lbl33H;
+GtkWidget                     *lbl33H,  *lbl34H;
 GtkWidget *lbl31Gr, *lbl32Gr, *lbl33Gr, *lbl34Gr, *lbl35Gr, *lbl36Gr;
 
 GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
@@ -522,6 +522,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl33L);
   gtk_widget_hide(lbl34F);
   gtk_widget_hide(lbl34G);
+  gtk_widget_hide(lbl34H);
   gtk_widget_hide(lbl34L);
   gtk_widget_hide(lbl35F);
   gtk_widget_hide(lbl35G);
@@ -1267,6 +1268,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl33L);
   gtk_widget_show(lbl34F);
   gtk_widget_show(lbl34G);
+  gtk_widget_show(lbl34H);
   gtk_widget_show(lbl34L);
 
   gtk_widget_show(btn41);
@@ -1485,6 +1487,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl33H);
   gtk_widget_show(lbl33L);
   gtk_widget_show(lbl34L);
+  //gtk_widget_show(lbl34H);
   gtk_widget_show(lbl31Gr);
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);
@@ -2025,6 +2028,7 @@ void setupUI(void) {
   lbl35G  = gtk_label_new("");
   lbl36G  = gtk_label_new("");
   lbl33H  = gtk_label_new("\u21e9"); // Hollow down
+  lbl34H  = gtk_label_new("\u03b7"); // eta
   lbl31L  = gtk_label_new("");
   lbl32L  = gtk_label_new("");
   lbl33L  = gtk_label_new("");
@@ -2046,6 +2050,7 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn36, KEY_WIDTH_1, 0);
 
   gtk_widget_set_name(lbl33H,  "fShifted");
+  gtk_widget_set_name(lbl34H,  "gShifted");
 
   g_signal_connect(btn31, "pressed", G_CALLBACK(btnPressed), "06");
   g_signal_connect(btn32, "pressed", G_CALLBACK(btnPressed), "07");
@@ -2097,6 +2102,7 @@ void setupUI(void) {
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn34,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl34L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
+  gtk_fixed_put(GTK_FIXED(grid), lbl34H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);
 
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn35,  xPos,                         yPos);
@@ -2124,7 +2130,7 @@ void setupUI(void) {
   lbl43G  = gtk_label_new("");
   lbl44G  = gtk_label_new("");
   lbl45G  = gtk_label_new("");
-  lbl42H  = gtk_label_new("\u03b7"); // eta
+  lbl42H  = gtk_label_new("");
   lbl43P  = gtk_label_new("");
   lbl44P  = gtk_label_new("\u21e7"); // Hollow up
   lbl41L  = gtk_label_new("");
@@ -2145,7 +2151,6 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn45, KEY_WIDTH_1,              0);
 
   gtk_widget_set_name(lbl43P,  "fShifted");
-  gtk_widget_set_name(lbl42H,  "gShifted");
   gtk_widget_set_name(lbl44P,  "fShifted");
 
   g_signal_connect(btn41, "pressed", G_CALLBACK(btnPressed), "12");

@@ -57,8 +57,8 @@ const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,    
 /*      Menu name                  <------------------------------------------------------------------- 6 functions ------------------------------------------------------------------>  */
 /*                                 <------------------------------------------------------------ 6 f shifted functions --------------------------------------------------------------->  */
 /*                                 <------------------------------------------------------------ 6 g shifted functions --------------------------------------------------------------->  */
-const int16_t menu_CPX[]         = { KEY_CC,                        ITM_CROSS,                  ITM_DOT,                  ITM_UNITV,          ITM_MAGNITUDE,       ITM_CONJ,
-                                     ITM_RE,                        ITM_IM,                     ITM_REexIM,               ITM_SIGN,           ITM_ANGLE,           ITM_NULL,
+const int16_t menu_CPX[]         = { ITM_DOT,                       ITM_CROSS,                  ITM_UNITV,                ITM_MAGNITUDE,      ITM_CONJ,            ITM_REexIM,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_SIGN,                 ITM_ANGLE,          ITM_RE,              ITM_IM,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,                 ITM_NULL,           ITM_POLAR,           ITM_RECT               };
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,            ITM_DSP,             ITM_GAP,

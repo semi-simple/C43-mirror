@@ -1548,7 +1548,7 @@
 #define MNU_TAM                       1512
 #define MNU_TAMCMP                    1513
 #define MNU_TAMSTORCL                 1514
-#define KEY_UM                        1515
+#define KEY_USERMODE                  1515
 #define KEY_CC                        1516
 #define KEY_f                         1517
 #define KEY_g                         1518

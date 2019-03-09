@@ -97,255 +97,254 @@ static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
 
 
 gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
-  //printf("%d\n", event->keyval);
+  printf("%d\n", event->keyval);
   switch (event->keyval) {
-    case 65470:
+    case 65470: // F1
       //printf("key pressed: F1\n");
       btnFnClicked(w, "1");
       break;
 
-    case 65471:
+    case 65471: // F2
       //printf("key pressed: F2\n");
       btnFnClicked(w, "2");
       break;
 
-    case 65472:
+    case 65472: // F3
       //printf("key pressed: F3\n");
       btnFnClicked(w, "3");
       break;
 
-    case 65473:
+    case 65473: // F4
       //printf("key pressed: F4\n");
       btnFnClicked(w, "4");
       break;
 
-    case 65474:
+    case 65474: // F5
       //printf("key pressed: F5\n");
       btnFnClicked(w, "5");
       break;
 
-    case 65475:
+    case 65475: // F6
       //printf("key pressed: F6\n");
       btnFnClicked(w, "6");
       break;
 
-    case 73:
-    case 105:
+    case 73:  // I
+    case 105: // i
       //printf("key pressed: i 1/x\n");
       btnClicked(w, "00");
       break;
 
-    case 89:
-    case 121:
+    case 89:  // Y
+    case 121: // y
       //printf("key pressed: y y^x\n");
       btnClicked(w, "01");
       break;
 
-    case 84:
-    case 116:
+    case 84:  // T
+    case 116: // t
       //printf("key pressed: T TRI\n");
       btnClicked(w, "02");
       break;
 
-    case 76:
-    case 108:
+    case 76:  // L
+    case 108: // l
       //printf("key pressed: l ln\n");
       btnClicked(w, "03");
       break;
 
-    case 101:
+    case 101: // e
       //printf("key pressed: e e^x\n");
       btnClicked(w, "04");
       break;
 
-    case 81:
-    case 113:
+    case 81:  // Q
+    case 113: // q
       //printf("key pressed: Q Quadradwurzel\n");
       btnClicked(w, "05");
       break;
 
-    case 83:
-    case 115:
-      //printf("key pressed: STO\n");
+    case 83:  // S
+    case 115: // s
+      //printf("key pressed: s STO\n");
       btnClicked(w, "06");
       break;
 
-    case 82:
-    case 114:
-      //printf("key pressed: RCL\n");
+    case 82:  // R
+    case 114: // r
+      //printf("key pressed: r RCL\n");
       btnClicked(w, "07");
       break;
 
-    case 65366:
+    case 65366: // PgDn
       //printf("key pressed: PgDn Roll down\n");
       btnClicked(w, "08");
       break;
 
-    case 85:
-    case 117:
-      //printf("key pressed: UM\n");
+    case 67: // C
+      //printf("key pressed: C CC\n");
       btnClicked(w, "09");
       break;
 
-    case 70:
-    case 102:
+    case 70:  // F
+    case 102: // f
       //printf("key pressed: f\n");
       btnClicked(w, "10");
       break;
 
-    case 71:
-    case 103:
+    case 71:  // G
+    case 103: // g
       //printf("key pressed: g\n");
       btnClicked(w, "11");
       break;
 
-    case 65421:
-    case 65293:
+    case 65421: // Enter
+    case 65293: // Enter
       //printf("key pressed: ENTER\n");
       btnClicked(w, "12");
       break;
 
-    case 65289:
-      //printf("key pressed: TAB x<>y\n");
+    case 65289: // Tab
+      //printf("key pressed: Tab x<>y\n");
       btnClicked(w, "13");
       break;
 
-    case 99:
-    case 67:
-      //printf("key pressed: C CHS +/-\n");
+    case 99: // c
+      //printf("key pressed: c CHS +/-\n");
       btnClicked(w, "14");
       break;
 
-    case 69:
+    case 69: // E
       //printf("key pressed: E\n");
       btnClicked(w, "15");
       break;
 
-    case 65288:
+    case 65288: // Backspace
       //printf("key pressed: Backspace\n");
       btnClicked(w, "16");
       break;
 
-    case 47:
-    case 65455:
+    case 47:    // /
+    case 65455: // /
       //printf("key pressed: /\n");
       btnClicked(w, "17");
       break;
 
-    case 55:
-    case 65463:
+    case 55:    // 7
+    case 65463: // 7
       //printf("key pressed: 7\n");
       btnClicked(w, "18");
       break;
 
-    case 56:
-    case 65464:
+    case 56:    // 8
+    case 65464: // 8
       //printf("key pressed: 8\n");
       btnClicked(w, "19");
       break;
 
-    case 57:
-    case 65465:
+    case 57:    // 9
+    case 65465: // 9
       //printf("key pressed: 9\n");
       btnClicked(w, "20");
       break;
 
-    case 88:
-    case 120:
+    case 88:  // X
+    case 120: // x
       //printf("key pressed: XEQ\n");
       btnClicked(w, "21");
       break;
 
-    case 42:
-    case 65450:
+    case 42:    // *
+    case 65450: // *
       //printf("key pressed: *\n");
       btnClicked(w, "22");
       break;
 
-    case 52:
-    case 65460:
+    case 52:    // 4
+    case 65460: // 4
       //printf("key pressed: 4\n");
       btnClicked(w, "23");
       break;
 
-    case 53:
-    case 65461:
+    case 53:    // 5
+    case 65461: // 5
       //printf("key pressed: 5\n");
       btnClicked(w, "24");
       break;
 
-    case 54:
-    case 65462:
+    case 54:    // 6
+    case 65462: // 6
       //printf("key pressed: 6\n");
       btnClicked(w, "25");
       break;
 
-    case 65362:
+    case 65362: // up arrow
       //printf("key pressed: up\n");
       btnClicked(w, "26");
       break;
 
-    case 45:
-    case 65453:
+    case 45:    // -
+    case 65453: // -
       //printf("key pressed: -\n");
       btnClicked(w, "27");
       break;
 
-    case 49:
-    case 65457:
+    case 49:    // 1
+    case 65457: // 1
       //printf("key pressed: 1\n");
       btnClicked(w, "28");
       break;
 
-    case 50:
-    case 65458:
+    case 50:    // 2
+    case 65458: // 2
       //printf("key pressed: 2\n");
       btnClicked(w, "29");
       break;
 
-    case 51:
-    case 65459:
+    case 51:    // 3
+    case 65459: // 3
       //printf("key pressed: 3\n");
       btnClicked(w, "30");
       break;
 
-    case 65364:
+    case 65364: // down arrow
       //printf("key pressed: down\n");
       btnClicked(w, "31");
       break;
 
-    case 43:
-    case 65451:
+    case 43:    // +
+    case 65451: // +
       //printf("key pressed: +\n");
       btnClicked(w, "32");
       break;
 
-    case 48:
-    case 65456:
+    case 48:    // 0
+    case 65456: // 0
       //printf("key pressed: 0\n");
       btnClicked(w, "33");
       break;
 
-    case 44:
-    case 46:
-    case 65454:
+    case 44:    // ,
+    case 46:    // .
+    case 65454: // .
       //printf("key pressed: .\n");
       btnClicked(w, "34");
       break;
 
-    case 65508:
-    case 65507:
+    case 65507: // left Ctrl
+    case 65508: // right Ctrl
       //printf("key pressed: Ctrl R/S\n");
       btnClicked(w, "35");
       break;
 
-    case 65307: // ESC
+    case 65307: // Esc
       //printf("key pressed: EXIT\n");
       btnClicked(w, "36");
       break;
 
-    case 104: // H
-      //printf("key pressed: \n");
+    case 72:  // H
+    case 104: // h
+      //printf("key pressed: h Hardcopy\n");
       copyScreenToClipboard();
       break;
 
@@ -1075,9 +1074,9 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     stringToUtf8(indexOfItems[max(key->keyLblAim, -key->keyLblAim)].itemPrinted, lbl);
   }
 
-  if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
-    lbl[3] = 0;
-  }
+  //if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
+  //  lbl[3] = 0;
+  //}
 
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
   if(key->keyLblAim == KEY_f) {
@@ -1109,9 +1108,9 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   if(key->gShiftedAim == 0) {
     lbl[0] = 0;
   }
-  else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
-    lbl[3] = 0;
-  }
+  //else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
+  //  lbl[3] = 0;
+  //}
 
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 
@@ -1498,13 +1497,14 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn45);
 
   gtk_widget_show(lbl41F);
+  gtk_widget_show(lbl41G);
   gtk_widget_show(lbl42L);
   gtk_widget_show(lbl43L);
   gtk_widget_show(lbl43P);
   gtk_widget_show(lbl44L);
   gtk_widget_show(lbl44P);
-  //gtk_widget_show(lbl45F);
-  //gtk_widget_show(lbl45G);
+  gtk_widget_show(lbl45F);
+  gtk_widget_show(lbl45G);
   gtk_widget_show(lbl42Gr);
   gtk_widget_show(lbl43Gr);
   gtk_widget_show(lbl44Gr);
@@ -1516,6 +1516,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn55);
 
   gtk_widget_show(lbl51L);
+  gtk_widget_show(lbl51F);
   gtk_widget_show(lbl52L);
   gtk_widget_show(lbl53L);
   gtk_widget_show(lbl54L);
@@ -1535,8 +1536,8 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl62L);
   gtk_widget_show(lbl63L);
   gtk_widget_show(lbl64L);
-  //gtk_widget_show(lbl65F);
-  //gtk_widget_show(lbl65G);
+  gtk_widget_show(lbl65F);
+  gtk_widget_show(lbl65G);
   gtk_widget_show(lbl61Gr);
   gtk_widget_show(lbl62Gr);
   gtk_widget_show(lbl63Gr);
@@ -1552,8 +1553,8 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl72L);
   gtk_widget_show(lbl73L);
   gtk_widget_show(lbl74L);
-  //gtk_widget_show(lbl75F);
-  //gtk_widget_show(lbl75G);
+  gtk_widget_show(lbl75F);
+  gtk_widget_show(lbl75G);
   gtk_widget_show(lbl71Gr);
   gtk_widget_show(lbl72Gr);
   gtk_widget_show(lbl73Gr);
@@ -1578,10 +1579,8 @@ void calcModeAimGui(void) {
   gtk_widget_show(lblOn);
 
   gtk_widget_show(lbl31G);
-  gtk_widget_show(lbl41G);
   moveLabels();
   gtk_widget_hide(lbl31G);
-  gtk_widget_hide(lbl41G);
 }
 
 

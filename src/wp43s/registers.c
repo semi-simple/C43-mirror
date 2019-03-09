@@ -1225,6 +1225,16 @@ void fnClearRegisters(uint16_t unusedParamButMandatory) {
   for(regist=0; regist<numberOfLocalRegisters; regist++) {
     clearRegister(FIRST_LOCAL_REGISTER + regist);
   }
+
+  if(stackSize == SS_4) {
+    for(regist=REGISTER_A; regist<=REGISTER_D; regist++) {
+      clearRegister(FIRST_LOCAL_REGISTER + regist);
+    }
+  }
+
+  for(regist=REGISTER_I; regist<=REGISTER_K; regist++) {
+    clearRegister(FIRST_LOCAL_REGISTER + regist);
+  }
 }
 
 

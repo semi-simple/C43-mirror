@@ -880,6 +880,8 @@ void complexToDisplayString2(const void *complex, bool_t complex34, char *displa
   realToDisplayString2(&imag, complex34, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
+    strcat(displayString, NUM_SPACE_HAIR);
+
     if(displayString[i] == '-') {
       strcat(displayString, "-");
       i++;

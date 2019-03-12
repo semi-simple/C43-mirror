@@ -22,7 +22,7 @@
 
 
 
-void (* const gamma[12])(void) = {
+void (* const Gamma[12])(void) = {
 // regX ==> 1             2             3             4              5              6              7              8              9              10             11           12
 //          Long integer  real16        complex16     Date           Time           Date           String         real16 mat     complex16 m    Short integer  real34       complex34
             gammaLonI,    gammaRe16,    gammaCo16,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaError,    gammaRe34,   gammaCo34
@@ -106,7 +106,7 @@ void lnGammaToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnGamma(uint16_t unusedParamButMandatory) {
-  if(gamma[getRegisterDataType(REGISTER_X)] != gammaError) {
+  if(Gamma[getRegisterDataType(REGISTER_X)] != gammaError) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
@@ -114,7 +114,7 @@ void fnGamma(uint16_t unusedParamButMandatory) {
     opX    = allocateTemporaryRegister();
     copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    gamma[getRegisterDataType(REGISTER_X)]();
+    Gamma[getRegisterDataType(REGISTER_X)]();
     freeTemporaryRegister(opX);
 
     if(lastErrorCode != 0) {

@@ -64,9 +64,9 @@ const int16_t menu_CPX[]         = { ITM_DOT,                       ITM_CROSS,  
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,            ITM_DSP,             ITM_GAP,
                                      ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,            ITM_SDL,             ITM_SDR,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL,
-                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,         ITM_SETUK,           ITM_SETUSA,
                                      ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,        ITM_RDXPER,          ITM_RDXCOM,
-                                     ITM_DSTACK,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_LZON               };
+                                     ITM_DSTACK,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_LZON,
+                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,         ITM_SETUK,           ITM_SETUSA             };
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,      -MNU_Sf,             -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL               };

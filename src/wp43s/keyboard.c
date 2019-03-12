@@ -696,7 +696,7 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     else if(item == KEY_DOWN) {
-      if(calcMode == CM_NORMAL || calcMode == CM_AIM) {
+      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
         if(softmenuStackPointer > 0 && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           if((softmenuStack[softmenuStackPointer - 1].row - 3) >= 0) {
             softmenuStack[softmenuStackPointer - 1].row -= 3;

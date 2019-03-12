@@ -124,7 +124,10 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,         ITM_SSIZE4,          ITM_SSIZE8,
                                      ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,         ITM_WSIZE,           ITM_SETSIG,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL,
-                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL               };
+#if DMCP_BUILD
+                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL
+#endif
+                                                                                                                                                                                          };
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MAGNITUDE,            ITM_DECOMP,         ITM_RSD,             ITM_ROUND,
                                      ITM_MANT,                      ITM_EXPT,                   ITM_SIGN,                 ITM_NULL,           ITM_RDP,             ITM_ROUNDI             };

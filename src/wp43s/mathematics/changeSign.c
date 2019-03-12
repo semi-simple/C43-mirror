@@ -25,7 +25,7 @@
 void (* const chs[12])(void) = {
 // regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
 //          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
-            chsLonI,     chsRe16,  chsCo16,   chsAngl,  chsError,  chsError,  chsError,  chsRm16,     chsCm16,      chsError,       chsRe34,  chsCo34
+            chsLonI,     chsRe16,  chsCo16,   chsAngl,  chsError,  chsError,  chsError,  chsRm16,     chsCm16,      chsShoI,       chsRe34,  chsCo34
 };
 
 
@@ -39,9 +39,8 @@ void (* const chs[12])(void) = {
 void chsError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot change sign %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "from %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-    showInfoDialog("In function fnChangeSign:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    sprintf(errorMessage, "cannot change the sign of %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnChangeSign:", errorMessage, NULL, NULL);
   #endif
 }
 

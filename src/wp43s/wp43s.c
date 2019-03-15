@@ -150,6 +150,7 @@ uint64_t        shortIntegerSignBit;
 glyph_t         glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
 char            transitionSystemOperation[4];
 int16_t         exponentSignLocation;
+int16_t         denominatorLocation;
 int16_t         imaginaryExponentSignLocation;
 int16_t         imaginaryMantissaSignLocation;
 void            (*confirmedFunction)(uint16_t);

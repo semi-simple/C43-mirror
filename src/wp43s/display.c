@@ -222,17 +222,17 @@ void exponentToDisplayString(int32_t exponent, char *displayString, bool_t nimMo
   displayString[0] = 0;
   if(nimMode) {
     if(exponent != 0) {
-      supNumberToDisplayString(exponent, displayString);
+      supNumberToDisplayString(exponent, displayString, false);
     }
   }
   else {
-    supNumberToDisplayString(exponent, displayString);
+    supNumberToDisplayString(exponent, displayString, false);
   }
 }
 
 
 
-void supNumberToDisplayString(int32_t supNumber, char *displayString) {
+void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t insertGap) {
   if(supNumber < 0) {
     supNumber = -supNumber;
     strcat(displayString, NUM_SUP_MINUS);
@@ -243,8 +243,10 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString) {
     strcat(displayString, NUM_SUP_0);
   }
   else {
-    int16_t digit;
+    int16_t digit, digitCount=0;
+    bool_t greaterThan9999;
 
+    greaterThan9999 = (supNumber > 9999);
     while(supNumber > 0) {
       digit = supNumber % 10;
       supNumber /= 10;
@@ -262,6 +264,11 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString) {
       else {
         strncpy(displayString, NUM_SUP_4, 2);
         displayString[1] += digit-4;
+      }
+
+      if(greaterThan9999 && supNumber > 0 && groupingGap != 0 && ((++digitCount) % groupingGap) == 0) {
+        memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
+        strncpy(displayString, NUM_SPACE_PUNCTUATION, 2);
       }
     }
   }
@@ -880,7 +887,9 @@ void complexToDisplayString2(const void *complex, bool_t complex34, char *displa
   realToDisplayString2(&imag, complex34, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
-    strcat(displayString, NUM_SPACE_HAIR);
+    if(strncmp(displayString + stringByteLength(displayString) - 2, NUM_SPACE_HAIR, 2) != 0) {
+      strcat(displayString, NUM_SPACE_HAIR);
+    }
 
     if(displayString[i] == '-') {
       strcat(displayString, "-");

@@ -652,42 +652,42 @@ void refreshRegisterLine(calcRegister_t regist) {
         #endif
 
         if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
-          showString("Are you sure?", &standardFont, 1, 134 - 37*(regist-100), vmNormal, false, false);
+          showString("Are you sure?", &standardFont, 1, 134 - 37*(regist-100), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
-          showString(WHO, &standardFont, 1, 134 - 37*(regist-100), vmNormal, false, false);
+          showString(WHO, &standardFont, 1, 134 - 37*(regist-100), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_VERSION && regist == REGISTER_X) {
-          showString(VERSION, &standardFont, 1, 134 - 37*(regist-100), vmNormal, false, false);
+          showString(VERSION, &standardFont, 1, 134 - 37*(regist-100), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_FALSE && regist == REGISTER_X) {
           sprintf(tmpStr3000, "false");
-          w = stringWidth(tmpStr3000, &standardFont, false, true);
-          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+          w = stringWidth(tmpStr3000, &standardFont, true, true);
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_TRUE && regist == REGISTER_X) {
           sprintf(tmpStr3000, "true");
-          w = stringWidth(tmpStr3000, &standardFont, false, true);
-          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+          w = stringWidth(tmpStr3000, &standardFont, true, true);
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_RESET && regist == REGISTER_X) {
           sprintf(tmpStr3000, "Data, programs, and definitions cleared");
-          w = stringWidth(tmpStr3000, &standardFont, false, true);
-          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+          w = stringWidth(tmpStr3000, &standardFont, true, true);
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
         }
 
         else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
           prefixWidth = 0;
 
           if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
-            w = stringWidth(errorMessages[lastErrorCode], &standardFont, false, true);
+            w = stringWidth(errorMessages[lastErrorCode], &standardFont, true, true);
             if(w <= SCREEN_WIDTH) {
-              showString(errorMessages[lastErrorCode], &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+              showString(errorMessages[lastErrorCode], &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
             }
             else {
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -695,19 +695,19 @@ void refreshRegisterLine(calcRegister_t regist) {
                 showInfoDialog("In function refreshRegisterLine:", errorMessage, errorMessages[lastErrorCode], NULL);
               #endif
               sprintf(tmpStr3000, "Error message %" FMT8U " is too wide!", lastErrorCode);
-              w = stringWidth(tmpStr3000, &standardFont, false, true);
-              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+              w = stringWidth(tmpStr3000, &standardFont, true, true);
+              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
             }
           }
 
           else if(regist == NIM_REGISTER_LINE && calcMode == CM_NIM) {
-            w = stringWidth(nimBufferDisplay, &numericFont, false, true) + 13;
+            w = stringWidth(nimBufferDisplay, &numericFont, true, true) + 13;
             if(w <= SCREEN_WIDTH) {
-              xCursor = showString(nimBufferDisplay, &numericFont, 0, 134 - 37*(regist-100), vmNormal, false, true);
+              xCursor = showString(nimBufferDisplay, &numericFont, 0, 134 - 37*(regist-100), vmNormal, true, true);
               cursorFont = CF_NUMERIC;
             }
             else {
-              xCursor = showString(nimBufferDisplay, &standardFont, 0, 134 - 37*(regist-100), vmNormal, false, true);
+              xCursor = showString(nimBufferDisplay, &standardFont, 0, 134 - 37*(regist-100), vmNormal, true, true);
               cursorFont = CF_STANDARD;
             }
           }

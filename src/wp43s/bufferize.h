@@ -20,7 +20,7 @@
 
 #define AIM_BUFFER_LENGTH 50
 #define TAM_BUFFER_LENGTH 30
-#define NIM_BUFFER_LENGTH 50
+#define NIM_BUFFER_LENGTH 70
 
 #define TT_OPERATION       0
 #define TT_LETTER          1
@@ -32,8 +32,9 @@
 #define TT_BACKSPACE       7
 #define TT_NOTHING         8
 
-void fnAim              (uint16_t unusedParamButMandatory);
-void addItemToBuffer    (uint16_t item);
-void addItemToNimBuffer (int16_t item);
-void tamTransitionSystem(uint16_t tamEvent);
-void closeNim           (void);
+void    fnAim                   (uint16_t unusedParamButMandatory);
+void    addItemToBuffer         (uint16_t item);
+void    addItemToNimBuffer      (int16_t item);
+void    tamTransitionSystem     (uint16_t tamEvent);
+void    closeNim                (void);
+void    nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer);

@@ -564,6 +564,7 @@ void fnReset(uint16_t confirmation) {
     displayRealAsFraction = false;
     STACK_LIFT_DISABLE;
     showOverflowCarry();
+    hideUserMode();
 
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));

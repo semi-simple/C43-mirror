@@ -767,39 +767,55 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_NORMAL) {
-        if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-          convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-          refreshRegisterLine(REGISTER_X);
-        }
+        switch(getRegisterDataType(REGISTER_X)) {
+          case dtLongInteger :
+            convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+            refreshRegisterLine(REGISTER_X);
+            break;
 
-        else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-          convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-          refreshRegisterLine(REGISTER_X);
-        }
+          case dtReal16 :
+            break;
 
-        else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-          convertRegister34To16(REGISTER_X);
-          refreshRegisterLine(REGISTER_X);
-        }
+          case dtAngle :
+            if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+              #if (ANGLE16 == 1)
+                convertAngle16FromInternal(REGISTER_REAL16_DATA(REGISTER_X), AM_DEGREE);
+              #endif
+              #if (ANGLE34 == 1)
+                convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE);
+                convertRegister34To16(REGISTER_X);
+              #endif
+            }
+            else {
+              #if (ANGLE16 == 1)
+                convertAngle16FromInternal(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+              #endif
+              #if (ANGLE34 == 1)
+                convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+                convertRegister34To16(REGISTER_X);
+              #endif
+            }
 
-        else if(getRegisterDataType(REGISTER_X) == dtAngle && getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-          #if (ANGLE16 == 1)
-            convertAngle16FromInternal(REGISTER_REAL16_DATA(REGISTER_X), AM_DEGREE);
-          #endif
-          #if (ANGLE34 == 1)
-            convertAngle34FromInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE);
+            setRegisterDataType(REGISTER_X, dtReal16);
+            refreshRegisterLine(REGISTER_X);
+            break;
+
+          case dtShortInteger :
+            convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+            refreshRegisterLine(REGISTER_X);
+            break;
+
+          case dtReal34 :
             convertRegister34To16(REGISTER_X);
-          #endif
-          setRegisterDataType(REGISTER_X, dtReal16);
-          refreshRegisterLine(REGISTER_X);
-        }
+            refreshRegisterLine(REGISTER_X);
+            break;
 
-        else if(getRegisterDataType(REGISTER_X) != dtReal16) {
-          displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
-          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "data type %s cannot be converted to a real16!", getRegisterDataTypeName(REGISTER_X, false, false));
-            showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
-          #endif
+          default :
+            displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              sprintf(errorMessage, "data type %s cannot be converted to a real16!", getRegisterDataTypeName(REGISTER_X, false, false));
+              showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
+            #endif
         }
       }
 

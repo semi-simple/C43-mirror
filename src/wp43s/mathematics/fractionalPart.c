@@ -15,32 +15,32 @@
  */
 
 /********************************************//**
- * \file invert.c
+ * \file fractionalPart.c
  ***********************************************/
 
 #include "wp43s.h"
 
 
 
-void (* const invert[12])(void) = {
-// regX ==> 1            2            3            4            5            6            7            8           9             10             11           12
-//          Long integer real16       complex16    Date         Time         Date         String       real16 mat  complex16 m   Short integer  real34       complex34
-            invertLonI,  divRe16Re16, divRe16Co16, invertError, invertError, invertError, invertError, invertRm16, invertCm16,   invertError,   divRe16Re34, divRe16Co34
+void (* const fp[12])(void) = {
+// regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
+//          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
+            fpLonI,      fpRe16,   fpError,   fpError,  fpError,   fpError,   fpError,   fpRm16,      fpError,      fpShoI,         fpRe34,   fpError
 };
 
 
 
 /********************************************//**
- * \brief Data type error in invert
+ * \brief Data type error in FP
  *
- * \param[in] unusedParamButMandatory
+ * \param void
  * \return void
  ***********************************************/
-void invertError(void) {
+void fpError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnInvert:", errorMessage, NULL, NULL);
+    sprintf(errorMessage, "cannot calculate FP for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnFp:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -52,9 +52,9 @@ void invertError(void) {
  * \param void
  * \return void
  ***********************************************/
-void invertToBeCoded(void) {
+void fpToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage, "FP(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }
@@ -62,25 +62,21 @@ void invertToBeCoded(void) {
 
 
 /********************************************//**
- * \brief regX ==> regL and 1 ÷ regX ==> regX
+ * \brief regX ==> regL and FP(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnInvert(uint16_t unusedParamButMandatory) {
+void fnFp(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   result = REGISTER_X;
-  opY    = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
-  real16Copy(const16_1, REGISTER_REAL16_DATA(opY));
   opX    = allocateTemporaryRegister();
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-  invert[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opY);
+  fp[getRegisterDataType(REGISTER_X)]();
   freeTemporaryRegister(opX);
 
   if(lastErrorCode == 0) {
@@ -94,20 +90,39 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
 
 
-void invertLonI(void) {
-  convertLongIntegerRegisterToReal16Register(opX, opX);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  divRe16Re16();
+void fpLonI(void) {
+  longInteger_t temp;
+
+  longIntegerSetZero(&temp);
+  convertLongIntegerToLongIntegerRegister(&temp, result);
 }
 
 
 
-void invertRm16(void) {
-  invertToBeCoded();
+void fpRe16(void) {
+  real16_t integerPart;
+
+  real16ToIntegral(REGISTER_REAL16_DATA(opX), &integerPart);
+  real16Subtract(REGISTER_REAL16_DATA(opX), &integerPart ,REGISTER_REAL16_DATA(result));
 }
 
 
 
-void invertCm16(void) {
-  invertToBeCoded();
+void fpRm16(void) {
+  ipToBeCoded();
+}
+
+
+
+void fpRe34(void) {
+  real34_t integerPart;
+
+  real34ToIntegral(REGISTER_REAL34_DATA(opX), &integerPart);
+  real34Subtract(REGISTER_REAL34_DATA(opX), &integerPart ,REGISTER_REAL34_DATA(result));
+}
+
+
+
+void fpShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = 0;
 }

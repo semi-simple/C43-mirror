@@ -69,27 +69,22 @@ void sqrtToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnSquareRoot(uint16_t unusedParamButMandatory) {
-  if(Sqrt[getRegisterDataType(REGISTER_X)] != sqrtError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    Sqrt[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  Sqrt[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    sqrtError();
+    restoreStack();
+    refreshStack();
   }
 }
 
@@ -241,7 +236,7 @@ void sqrtCm16(void) {
 
 
 void sqrtShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intSqrt(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intSqrt(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 

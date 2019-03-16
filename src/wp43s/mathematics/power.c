@@ -82,32 +82,27 @@ void powToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnPower(uint16_t unusedParamButMandatory) {
-  if(power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != powError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opY    = allocateTemporaryRegister();
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, opY);
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opY    = allocateTemporaryRegister();
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_Y, opY);
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(opY);
-    freeTemporaryRegister(opX);
+  power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode == 0) {
-      fnDropY(NOPARAM);
-    }
-    else {
-      restoreStack();
-    }
-
-    refreshStack();
+  if(lastErrorCode == 0) {
+    fnDropY(NOPARAM);
   }
   else {
-    powError();
+    restoreStack();
   }
+
+  refreshStack();
 }
 
 

@@ -69,27 +69,22 @@ void log2ToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnLog2(uint16_t unusedParamButMandatory) {
-  if(logBase2[getRegisterDataType(REGISTER_X)] != log2Error) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    logBase2[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  logBase2[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    log2Error();
+    restoreStack();
+    refreshStack();
   }
 }
 

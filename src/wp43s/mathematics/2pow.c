@@ -40,7 +40,7 @@ void twoPowError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate 2" STD_SUP_x " for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fn10Pow:", errorMessage, NULL, NULL);
+    showInfoDialog("In function fn2Pow:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -62,34 +62,29 @@ void twoPowToBeCoded(void) {
 
 
 /********************************************//**
- * \brief regX ==> regL and 10^regX ==> regX
+ * \brief regX ==> regL and 2^regX ==> regX
  * enables stack lift and refreshes the stack
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fn2Pow(uint16_t unusedParamButMandatory) {
-  if(twoPow[getRegisterDataType(REGISTER_X)] != twoPowError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    twoPow[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  twoPow[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    twoPowError();
+    restoreStack();
+    refreshStack();
   }
 }
 
@@ -171,7 +166,7 @@ void twoPowCm16(void) {
 
 
 void twoPowShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int2pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_int2pow(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 

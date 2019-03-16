@@ -106,27 +106,22 @@ void lnGammaToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnGamma(uint16_t unusedParamButMandatory) {
-  if(Gamma[getRegisterDataType(REGISTER_X)] != gammaError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    Gamma[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  Gamma[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    gammaError();
+    restoreStack();
+    refreshStack();
   }
 }
 
@@ -140,27 +135,22 @@ void fnGamma(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnLnGamma(uint16_t unusedParamButMandatory) {
-  if(lnGamma[getRegisterDataType(REGISTER_X)] != lnGammaError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    lnGamma[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  lnGamma[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    lnGammaError();
+    restoreStack();
+    refreshStack();
   }
 }
 

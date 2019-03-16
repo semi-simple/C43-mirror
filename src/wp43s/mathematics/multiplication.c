@@ -82,32 +82,27 @@ void mulToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnMultiply(uint16_t unusedParamButMandatory) {
-  if(multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != mulError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opY    = allocateTemporaryRegister();
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, opY);
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opY    = allocateTemporaryRegister();
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_Y, opY);
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(opY);
-    freeTemporaryRegister(opX);
+  multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode == 0) {
-      fnDropY(NOPARAM);
-    }
-    else {
-      restoreStack();
-    }
-
-    refreshStack();
+  if(lastErrorCode == 0) {
+    fnDropY(NOPARAM);
   }
   else {
-    mulError();
+    restoreStack();
   }
+
+  refreshStack();
 }
 
 

@@ -654,7 +654,6 @@ void addItemToNimBuffer(int16_t item) {
     }
   }
 
-printf("%s\n", nimBuffer);
   if(done) {
     //printf("nimBuffer = <%s>   imaginaryMantissaSignLocation = %d\n", nimBuffer, imaginaryMantissaSignLocation);
     //Convert nimBuffer to display string

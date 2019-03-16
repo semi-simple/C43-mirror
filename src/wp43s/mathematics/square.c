@@ -54,29 +54,24 @@ void errorSquare(void) {
  * \return void
  ***********************************************/
 void fnSquare(uint16_t unusedParamButMandatory) {
-  if(square[getRegisterDataType(REGISTER_X)] != errorSquare) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opY    = allocateTemporaryRegister();
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opY);
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opY    = allocateTemporaryRegister();
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opY);
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    square[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opY);
-    freeTemporaryRegister(opX);
+  square[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    errorSquare();
+    restoreStack();
+    refreshStack();
   }
 }

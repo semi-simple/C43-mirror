@@ -69,27 +69,22 @@ void expToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnExp(uint16_t unusedParamButMandatory) {
-  if(Exp[getRegisterDataType(REGISTER_X)] != expError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    Exp[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  Exp[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    expError();
+    restoreStack();
+    refreshStack();
   }
 }
 

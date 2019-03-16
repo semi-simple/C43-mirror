@@ -69,27 +69,22 @@ void sinToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnSin(uint16_t unusedParamButMandatory) {
-  if(Sin[getRegisterDataType(REGISTER_X)] != errorSin) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    Sin[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  Sin[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    errorSin();
+    restoreStack();
+    refreshStack();
   }
 }
 

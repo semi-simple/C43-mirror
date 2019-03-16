@@ -70,36 +70,35 @@ void chsToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnChangeSign(uint16_t unusedParamButMandatory) {
-  if(chs[getRegisterDataType(REGISTER_X)] != chsError) {
-    saveStack();
-    //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    chs[getRegisterDataType(REGISTER_X)]();
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  chs[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
+
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    chsError();
+    restoreStack();
+    refreshStack();
   }
 }
 
 
 
 void chsLonI(void) {
-  setRegisterSign(result, getRegisterDataInfo(result) ^ 1);
+  setRegisterSign(result, getRegisterDataInfo(opX) ^ 1);
 }
 
 
 
 void chsRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(result))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsRe16:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -116,7 +115,7 @@ void chsRe16(void) {
 
 
 void chsCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(result)) || real16IsNaN(REGISTER_IMAG16_DATA(result))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsCo16:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -138,7 +137,7 @@ void chsCo16(void) {
 
 
 void chsAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(result))) {
+  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsAngl:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -176,13 +175,13 @@ void chsCm16(void) {
 
 
 void chsShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(result)));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 
 
 void chsRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(result))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsRe34:", "cannot use NaN as an input of +/-", NULL, NULL);
@@ -199,7 +198,7 @@ void chsRe34(void) {
 
 
 void chsCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(result)) || real34IsNaN(REGISTER_IMAG34_DATA(result))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function chsCo34:", "cannot use NaN as an input of +/-", NULL, NULL);

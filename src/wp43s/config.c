@@ -129,6 +129,31 @@ void fnConfigUsa(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
+ * \brief Sets the integer mode
+ *
+ * \param[in] mode uint16_t Integer mode
+ * \return void
+ ***********************************************/
+void fnIntegerMode(uint16_t mode) {
+  shortIntegerMode = mode;
+  showIntegerMode();
+  refreshStack();
+}
+
+/********************************************//**
+ * \brief Sets the the leading zeros mode in integer mode
+ *
+ * \param[in] dlz uint16_t
+ * \return void
+ ***********************************************/
+void fnLeadingZeros(uint16_t dlz) {
+  displayLeadingZeros = dlz;
+  refreshStack();
+}
+
+
+
+/********************************************//**
  * \brief Displays credits to the brave men who
  * made this project work.
  *

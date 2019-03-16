@@ -82,32 +82,27 @@ void addToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnAdd(uint16_t unusedParamButMandatory) {
-  if(addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != addError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opY    = allocateTemporaryRegister();
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, opY);
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opY    = allocateTemporaryRegister();
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_Y, opY);
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(opY);
-    freeTemporaryRegister(opX);
+  addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode == 0) {
-      fnDropY(NOPARAM);
-    }
-    else {
-      restoreStack();
-    }
-
-    refreshStack();
+  if(lastErrorCode == 0) {
+    fnDropY(NOPARAM);
   }
   else {
-    addError();
+    restoreStack();
   }
+
+  refreshStack();
 }
 
 

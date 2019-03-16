@@ -69,27 +69,22 @@ void signToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnSign(uint16_t unusedParamButMandatory) {
-  if(sign[getRegisterDataType(REGISTER_X)] != signError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    sign[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  sign[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    signError();
+    restoreStack();
+    refreshStack();
   }
 }
 

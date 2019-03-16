@@ -69,27 +69,22 @@ void arctanToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnArctan(uint16_t unusedParamButMandatory) {
-  if(arctan[getRegisterDataType(REGISTER_X)] != arctanError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    arctan[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  arctan[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    arctanError();
+    restoreStack();
+    refreshStack();
   }
 }
 

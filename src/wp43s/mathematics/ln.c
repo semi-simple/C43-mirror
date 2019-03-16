@@ -69,27 +69,22 @@ void lnToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnLn(uint16_t unusedParamButMandatory) {
-  if(ln[getRegisterDataType(REGISTER_X)] != lnError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    ln[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  ln[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    lnError();
+    restoreStack();
+    refreshStack();
   }
 }
 

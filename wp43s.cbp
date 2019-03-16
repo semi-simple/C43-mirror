@@ -522,6 +522,15 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/fractionalPart.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/fractionalPart.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/gamma.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -546,6 +555,15 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/imaginaryPart.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/integerPart.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/integerPart.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>

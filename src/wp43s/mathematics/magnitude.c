@@ -68,23 +68,22 @@ void magnitudeToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnMagnitude(uint16_t unusedParamButMandatory) {
-  if(magnitude[getRegisterDataType(REGISTER_X)] != magnitudeError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    magnitude[getRegisterDataType(REGISTER_X)]();
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  magnitude[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
+
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    magnitudeError();
+    restoreStack();
+    refreshStack();
   }
 }
 
@@ -97,7 +96,7 @@ void magnitudeLonI(void) {
 
 
 void magnitudeRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeRe16:", "cannot use NaN as an input of |x|", NULL, NULL);
@@ -111,7 +110,7 @@ void magnitudeRe16(void) {
 
 
 void magnitudeCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(result)) || real16IsNaN(REGISTER_IMAG16_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeCo16:", "cannot use NaN as an input of |x|", NULL, NULL);
@@ -120,8 +119,8 @@ void magnitudeCo16(void) {
   }
 
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(result));
-  real16FMA(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
+  real16Multiply(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  real16FMA(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
   real16SquareRoot(REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
 }
 
@@ -146,7 +145,7 @@ void magnitudeShoI(void) {
 
 
 void magnitudeRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeRe34:", "cannot use NaN as an input of |x|", NULL, NULL);
@@ -160,7 +159,7 @@ void magnitudeRe34(void) {
 
 
 void magnitudeCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(result)) || real34IsNaN(REGISTER_IMAG34_DATA(result))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeCo34:", "cannot use NaN as an input of |x|", NULL, NULL);

@@ -15,32 +15,32 @@
  */
 
 /********************************************//**
- * \file invert.c
+ * \file integerPart.c
  ***********************************************/
 
 #include "wp43s.h"
 
 
 
-void (* const invert[12])(void) = {
-// regX ==> 1            2            3            4            5            6            7            8           9             10             11           12
-//          Long integer real16       complex16    Date         Time         Date         String       real16 mat  complex16 m   Short integer  real34       complex34
-            invertLonI,  divRe16Re16, divRe16Co16, invertError, invertError, invertError, invertError, invertRm16, invertCm16,   invertError,   divRe16Re34, divRe16Co34
+void (* const ip[12])(void) = {
+// regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
+//          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
+            ipLonI,      ipRe16,   ipError,   ipError,  ipError,   ipError,   ipError,   ipRm16,      ipError,      ipShoI,         ipRe34,   ipError
 };
 
 
 
 /********************************************//**
- * \brief Data type error in invert
+ * \brief Data type error in IP
  *
- * \param[in] unusedParamButMandatory
+ * \param void
  * \return void
  ***********************************************/
-void invertError(void) {
+void ipError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnInvert:", errorMessage, NULL, NULL);
+    sprintf(errorMessage, "cannot calculate IP for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnIp:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -52,9 +52,9 @@ void invertError(void) {
  * \param void
  * \return void
  ***********************************************/
-void invertToBeCoded(void) {
+void ipToBeCoded(void) {
   #ifdef PC_BUILD
-    sprintf(errorMessage, "invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    sprintf(errorMessage, "IP(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
   #endif
 }
@@ -62,25 +62,21 @@ void invertToBeCoded(void) {
 
 
 /********************************************//**
- * \brief regX ==> regL and 1 ÷ regX ==> regX
+ * \brief regX ==> regL and IP(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnInvert(uint16_t unusedParamButMandatory) {
+void fnIp(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   result = REGISTER_X;
-  opY    = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
-  real16Copy(const16_1, REGISTER_REAL16_DATA(opY));
   opX    = allocateTemporaryRegister();
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-  invert[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opY);
+  ip[getRegisterDataType(REGISTER_X)]();
   freeTemporaryRegister(opX);
 
   if(lastErrorCode == 0) {
@@ -94,20 +90,28 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
 
 
-void invertLonI(void) {
-  convertLongIntegerRegisterToReal16Register(opX, opX);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  divRe16Re16();
+void ipLonI(void) {
 }
 
 
 
-void invertRm16(void) {
-  invertToBeCoded();
+void ipRe16(void) {
+  real16ToIntegral(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
 
 
-void invertCm16(void) {
-  invertToBeCoded();
+void ipRm16(void) {
+  ipToBeCoded();
+}
+
+
+
+void ipRe34(void) {
+  real34ToIntegral(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+}
+
+
+
+void ipShoI(void) {
 }

@@ -18,14 +18,8 @@
  * \file integers.h
  ***********************************************/
 
-void     fnIntegerMode              (uint16_t mode);
-void     fnLeadingZeros             (uint16_t displayLeadingZeros);
 void     fnChangeBase               (uint16_t base);
-void     fnFp                       (uint16_t unusedButMandatoryParameter);
-void     fnIp                       (uint16_t unusedButMandatoryParameter);
-void     fnSign                     (uint16_t unusedButMandatoryParameter);
 void     fnMirror                   (uint16_t unusedButMandatoryParameter);
-void     fnM1Pow                    (uint16_t unusedButMandatoryParameter);
 void     fnIsPrime                  (uint16_t unusedButMandatoryParameter);
 uint32_t countBitsLongInteger        (longInteger_t *value);
 uint32_t countBitsLongIntegerRegister(calcRegister_t regist);

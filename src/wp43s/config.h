@@ -24,6 +24,8 @@ void     fnConfigIndia         (uint16_t unusedParamButMandatory);
 void     fnConfigJapan         (uint16_t unusedParamButMandatory);
 void     fnConfigUk            (uint16_t unusedParamButMandatory);
 void     fnConfigUsa           (uint16_t unusedParamButMandatory);
+void     fnIntegerMode         (uint16_t mode);
+void     fnLeadingZeros        (uint16_t displayLeadingZeros);
 void     fnWho                 (uint16_t unusedParamButMandatory);
 void     fnVersion             (uint16_t unusedParamButMandatory);
 void     fnFreeMemory          (uint16_t unusedParamButMandatory);

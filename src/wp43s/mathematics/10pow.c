@@ -69,27 +69,22 @@ void tenPowToBeCoded(void) {
  * \return void
  ***********************************************/
 void fn10Pow(uint16_t unusedParamButMandatory) {
-  if(tenPow[getRegisterDataType(REGISTER_X)] != tenPowError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    tenPow[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  tenPow[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    tenPowError();
+    restoreStack();
+    refreshStack();
   }
 }
 
@@ -169,7 +164,7 @@ void tenPowCm16(void) {
 
 
 void tenPowShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int10pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_int10pow(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
 

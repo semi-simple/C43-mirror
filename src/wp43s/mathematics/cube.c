@@ -54,34 +54,29 @@ void cubeError(void) {
  * \return void
  ***********************************************/
 void fnCube(uint16_t unusedParamButMandatory) {
-  if(cube[getRegisterDataType(REGISTER_X)] != cubeError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    opY    = allocateTemporaryRegister();
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  opY    = allocateTemporaryRegister();
 
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
-    copySourceRegisterToDestRegister(REGISTER_X, opY);
-    cube[getRegisterDataType(opX)]();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
+  copySourceRegisterToDestRegister(REGISTER_X, opY);
+  cube[getRegisterDataType(opX)]();
 
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
-    copySourceRegisterToDestRegister(REGISTER_L, opY);
-    cube[getRegisterDataType(opX)]();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
+  copySourceRegisterToDestRegister(REGISTER_L, opY);
+  cube[getRegisterDataType(opX)]();
 
-    freeTemporaryRegister(opX);
-    freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
+  freeTemporaryRegister(opY);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    cubeError();
+    restoreStack();
+    refreshStack();
   }
 }

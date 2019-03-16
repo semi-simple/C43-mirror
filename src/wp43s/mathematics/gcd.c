@@ -65,32 +65,27 @@ void gcdError(void) {
  * \return void
  ***********************************************/
 void fnGcd(uint16_t unusedParamButMandatory) {
-  if(gcd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)] != gcdError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opY    = allocateTemporaryRegister();
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_Y, opY);
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opY    = allocateTemporaryRegister();
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_Y, opY);
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    gcd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-    freeTemporaryRegister(opY);
-    freeTemporaryRegister(opX);
+  gcd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  freeTemporaryRegister(opY);
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode == 0) {
-      fnDropY(NOPARAM);
-    }
-    else {
-      restoreStack();
-    }
-
-    refreshStack();
+  if(lastErrorCode == 0) {
+    fnDropY(NOPARAM);
   }
   else {
-    gcdError();
+    restoreStack();
   }
+
+  refreshStack();
 }
 
 

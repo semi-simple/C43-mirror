@@ -69,27 +69,22 @@ void arccosToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnArccos(uint16_t unusedParamButMandatory) {
-  if(arccos[getRegisterDataType(REGISTER_X)] != arccosError) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    arccos[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  arccos[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    arccosError();
+    restoreStack();
+    refreshStack();
   }
 }
 

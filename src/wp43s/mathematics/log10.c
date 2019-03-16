@@ -69,27 +69,22 @@ void log10ToBeCoded(void) {
  * \return void
  ***********************************************/
 void fnLog10(uint16_t unusedParamButMandatory) {
-  if(logBase10[getRegisterDataType(REGISTER_X)] != log10Error) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
+  result = REGISTER_X;
+  opX    = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, opX);
 
-    logBase10[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
+  logBase10[getRegisterDataType(REGISTER_X)]();
+  freeTemporaryRegister(opX);
 
-    if(lastErrorCode != 0) {
-      restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
-    }
+  if(lastErrorCode == 0) {
+    refreshRegisterLine(REGISTER_X);
   }
   else {
-    log10Error();
+    restoreStack();
+    refreshStack();
   }
 }
 
@@ -125,7 +120,7 @@ void log10LonI(void) {
   }
 
   uIntToLongInteger(log10, &value);
-  convertLongIntegerToLongIntegerRegister(&value, REGISTER_X);
+  convertLongIntegerToLongIntegerRegister(&value, opX);
 }
 
 

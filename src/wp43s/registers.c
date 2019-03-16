@@ -654,7 +654,6 @@ uint32_t allocateMemory(uint32_t numBytes) {
     numBytes++;
   }
 
-printf("Trying to allocate %" FMT32U " bytes\n", numBytes);
   if(numBytes <= lastFreeByte - firstFreeByte + 1u) {
     firstFreeByte += numBytes;
     return firstFreeByte - numBytes;
@@ -684,7 +683,6 @@ void allocateMemoryInsert(uint32_t address, uint32_t numBytes) {
   if(numBytes % 2u) {
     numBytes++;
   }
-printf("Trying to allocate %" FMT32U " bytes (insertion)\n", numBytes);
 
   if(numBytes <= lastFreeByte - firstFreeByte + 1u) {
     if(address <= firstFreeByte) {

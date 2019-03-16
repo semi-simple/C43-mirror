@@ -625,6 +625,15 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/minusOnePow.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/minusOnePow.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/multiplication.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

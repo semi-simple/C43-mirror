@@ -139,6 +139,35 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
 
   return TRUE;
 }
+#elif defined DMCP_BUILD
+void refreshScreen() {// This function is called roughly every 100 ms from the main loop
+  // Cursor blinking
+  if(cursorEnabled) {
+    cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
+    if(cursorBlinkCounter <  5) {
+      showCursor();
+    }
+    else {
+      hideCursor();
+    }
+  }
+
+  // Function name display
+  if(showFunctionNameCounter>0) {
+    if(--showFunctionNameCounter == 0) {
+      hideFunctionName();
+      showFunctionName(ITM_NOP, 0);
+    }
+  }
+
+  // Update date and time
+  getTimeString(dateTimeString);
+  if(strcmp(dateTimeString, oldTime)) {
+    allowScreenUpdate = true;
+    strcpy(oldTime, dateTimeString);
+    showDateTime();
+  }
+}
 #endif
 
 

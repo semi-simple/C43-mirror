@@ -157,6 +157,8 @@ void            (*confirmedFunction)(uint16_t);
 
 #ifdef DMCP_BUILD
   bool_t               endOfProgram;
+  uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
+  #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
 
@@ -399,6 +401,7 @@ void program_main(void) {
   endOfProgram = false;
 
   lcd_refresh();
+  nextScreenRefresh = sys_current_ms()+100;
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -406,12 +409,15 @@ void program_main(void) {
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
   for(;!endOfProgram;) {
-    if(( ST(STAT_PGM_END) && ST(STAT_SUSPENDED))  || // Already in off mode and suspended
-       (!ST(STAT_PGM_END) && key_empty())) {         // Go to sleep if no keys available
+    if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
+    } else if ((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
+      CLR_ST(STAT_RUNNING);
+      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));  // wake up for screen refresh
+      sys_sleep();
+      sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
-
 
     // Wakeup in off state or going to sleep
     if(ST(STAT_PGM_END) || ST(STAT_SUSPENDED)) {
@@ -460,14 +466,24 @@ void program_main(void) {
     if(38 <= key && key <=43) {
       sprintf(charKey, "%c", key+11);
       btnFnClicked(NULL, charKey);
+      lcd_refresh();
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
-      btnClicked(NULL, charKey);
+      btnPressed(NULL, charKey);
+      lcd_refresh();
+    } else if(key==0) {
+      btnReleased(NULL,NULL);
+      lcd_refresh();
     }
 
-    showDateTime();
-    lcd_refresh();
+    uint32_t now = sys_current_ms();
+    if(nextScreenRefresh<=now) {
+        nextScreenRefresh+=100;
+        if(nextScreenRefresh<now) nextScreenRefresh=now+100;    // we were out longer than expected; just skip ahead.
+        refreshScreen();
+        lcd_refresh();
+    }
   }
 }
 #endif

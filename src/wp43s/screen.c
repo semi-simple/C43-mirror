@@ -508,7 +508,7 @@ void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
   if(stringWidth(indexOfItems[item].itemName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
   showString(indexOfItems[item].itemName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
 }
@@ -566,12 +566,7 @@ void refreshRegisterLine(calcRegister_t regist) {
   if(calcMode != CM_BUG_ON_SCREEN) {
     if(REGISTER_X <= regist && regist <= REGISTER_T) {
       if(lastErrorCode == 0 || regist != errorRegisterLine) {
-        if(regist == REGISTER_T) {
-          clearRegisterLine(134 - 37*(regist-100), 32);
-        }
-        else {
-          clearRegisterLine(132 - 37*(regist-100), 34);
-        }
+        clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), REGISTER_LINE_HEIGHT);
 
         #ifdef PC_BUILD
           #if (DEBUG_REGISTER_L == 1)
@@ -652,33 +647,33 @@ void refreshRegisterLine(calcRegister_t regist) {
         #endif
 
         if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
-          showString("Are you sure?", &standardFont, 1, 134 - 37*(regist-100), vmNormal, true, true);
+          showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
-          showString(WHO, &standardFont, 1, 134 - 37*(regist-100), vmNormal, true, true);
+          showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_VERSION && regist == REGISTER_X) {
-          showString(VERSION, &standardFont, 1, 134 - 37*(regist-100), vmNormal, true, true);
+          showString(VERSION, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_FALSE && regist == REGISTER_X) {
           sprintf(tmpStr3000, "false");
           w = stringWidth(tmpStr3000, &standardFont, true, true);
-          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_TRUE && regist == REGISTER_X) {
           sprintf(tmpStr3000, "true");
           w = stringWidth(tmpStr3000, &standardFont, true, true);
-          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_RESET && regist == REGISTER_X) {
           sprintf(tmpStr3000, "Data, programs, and definitions cleared");
           w = stringWidth(tmpStr3000, &standardFont, true, true);
-          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
         }
 
         else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
@@ -687,7 +682,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
             w = stringWidth(errorMessages[lastErrorCode], &standardFont, true, true);
             if(w <= SCREEN_WIDTH) {
-              showString(errorMessages[lastErrorCode], &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
+              showString(errorMessages[lastErrorCode], &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
             }
             else {
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -696,18 +691,18 @@ void refreshRegisterLine(calcRegister_t regist) {
               #endif
               sprintf(tmpStr3000, "Error message %" FMT8U " is too wide!", lastErrorCode);
               w = stringWidth(tmpStr3000, &standardFont, true, true);
-              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, true, true);
+              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
             }
           }
 
           else if(regist == NIM_REGISTER_LINE && calcMode == CM_NIM) {
             w = stringWidth(nimBufferDisplay, &numericFont, true, true) + 13;
             if(w <= SCREEN_WIDTH) {
-              xCursor = showString(nimBufferDisplay, &numericFont, 0, 134 - 37*(regist-100), vmNormal, true, true);
+              xCursor = showString(nimBufferDisplay, &numericFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
               cursorFont = CF_NUMERIC;
             }
             else {
-              xCursor = showString(nimBufferDisplay, &standardFont, 0, 134 - 37*(regist-100), vmNormal, true, true);
+              xCursor = showString(nimBufferDisplay, &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
               cursorFont = CF_STANDARD;
             }
           }
@@ -748,9 +743,9 @@ void refreshRegisterLine(calcRegister_t regist) {
             lineWidth = w;
             if(w + prefixWidth <= SCREEN_WIDTH) {
               if(prefixWidth > 0) {
-                showString(prefix, &standardFont, 1, 146 - 37*(regist-100), vmNormal, true, true);
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
               }
-              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
             }
             else {
               w = stringWidth(tmpStr3000, &standardFont, false, true);
@@ -764,9 +759,9 @@ void refreshRegisterLine(calcRegister_t regist) {
                 lineWidth = w;
               }
               if(prefixWidth > 0) {
-                showString(prefix, &standardFont, 1, 146 - 37*(regist-100), vmNormal, true, true);
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
               }
-              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
             }
           }
 
@@ -803,9 +798,9 @@ void refreshRegisterLine(calcRegister_t regist) {
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
             if(prefixWidth > 0) {
-              showString(prefix, &standardFont, 1, 146 - 37*(regist-100), vmNormal, true, true);
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
             }
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtReal34) {
@@ -813,7 +808,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtComplex16) {
@@ -821,7 +816,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtComplex34) {
@@ -829,7 +824,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtAngle) {
@@ -854,9 +849,9 @@ void refreshRegisterLine(calcRegister_t regist) {
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
 
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
             if(prefixWidth > 0) {
-              showString(prefix, &standardFont, 1, 146 - 37*(regist-100), vmNormal, true, true);
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
             }
           }
 
@@ -870,7 +865,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               lineWidth = w;
             }
 
-            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtShortInteger) {
@@ -878,7 +873,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             font = NULL;
             shortIntegerToDisplayString(regist, tmpStr3000, &font);
-            showString(tmpStr3000, font, SCREEN_WIDTH - stringWidth(tmpStr3000, font, false, true), 134 - 37*(regist-100), vmNormal, false, true);
+            showString(tmpStr3000, font, SCREEN_WIDTH - stringWidth(tmpStr3000, font, false, true), Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtLongInteger) {
@@ -888,7 +883,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             lineWidth = w;
 
             if(w <= SCREEN_WIDTH) {
-              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
             }
             else {
               w = stringWidth(tmpStr3000, &standardFont, false, true);
@@ -900,13 +895,13 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
               w = stringWidth(tmpStr3000, &standardFont, false, true);
               lineWidth = w;
-              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, 134 - 37*(regist-100), vmNormal, false, true);
+              showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
             }
           }
 
           else {
             sprintf(tmpStr3000, "Showing %s: to be coded!", getRegisterDataTypeName(regist, true, false));
-            showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), 134 - 37*(regist-100), vmNormal, false, true);
+            showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
         }
       }

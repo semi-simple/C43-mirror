@@ -43,7 +43,7 @@ void  debugNIM                            (void);
   char * getDisplayFormatName               (uint16_t df);
   char * getTimeFormatName                  (uint16_t tf);
   char * getDateFormatName                  (uint16_t df);
-  char * getBooleanName                     (uint16_t b);
+  char * getBooleanName                     (bool_t b);
   char * getRbrModeName                     (uint16_t mode);
   char * getCurveFittingName                (uint16_t cf);
   char * getRoundingModeName                (uint16_t rm);

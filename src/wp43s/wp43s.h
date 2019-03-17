@@ -401,6 +401,7 @@ extern const int16_t    softkeyRow[];
 extern decContext       ctxtReal16;
 extern decContext       ctxtReal34;
 extern decContext       ctxtReal51;
+extern decContext       ctxtReal450;
 extern uint16_t         flags[7];
 #define TMP_STR_LENGTH  3000
 #define ERROR_MESSAGE_LENGTH 512

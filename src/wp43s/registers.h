@@ -169,6 +169,7 @@ void              printReal34ToConsole            (const real34_t *value);
 void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
+void              printReal450ToConsole           (const real450_t *value);
 void              printLongIntegerToConsole        (longInteger_t *value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t dataInfo);
 calcRegister_t    allocateTemporaryRegister       (void);

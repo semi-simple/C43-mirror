@@ -2302,6 +2302,15 @@ void printReal51ToConsole(const real51_t *value) {
 
 
 
+void printReal450ToConsole(const real450_t *value) {
+  char str[1000];
+
+  real450ToString((decNumber *)value, str);
+  printf("real450 %s", str);
+}
+
+
+
 /********************************************//**
  * \brief Prints the content of a long integer to the console
  *

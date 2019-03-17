@@ -56,6 +56,8 @@ const real51_t * const gamma_consts[] = {
 void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle) { // angle in internal units
 	 bool_t sinNeg = false, cosNeg = false, swap = false;
   real34_t angle34;
+  real450_t real450;
+  real51_t real51;
 
   real34Copy(angle, &angle34);
 
@@ -65,7 +67,20 @@ void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle) 
 	  	real34SetPositiveSign(&angle34);
 	 }
 
-	 real34Remainder(&angle34, const34_1296, &angle34); // mod(angle34, 360°) --> angle34
+ 	real34ToReal450(&angle34, (decNumber *)&real450);
+ 	real34ToReal51(const34_1296, &real51);
+	 real450Remainder((decNumber *)&real450, (decNumber *)&real51, (decNumber *)&real450); // mod(angle34, 360°) --> angle34
+	 if(real450IsNaN(&real450)) {
+	   if(sin != NULL) {
+	 	  real34Copy(const34_NaN, sin);
+	 	 }
+	   if(cos != NULL) {
+	  	  real34Copy(const34_NaN, cos);
+	  	}
+   return;
+	 }
+
+	 real450ToReal34((decNumber *)&real450, &angle34);
 
 	 // sin(180+x) = -sin(x), cos(180+x) = -cos(x)
  	if(real34CompareGreaterEqual(&angle34, const34_648)) { // angle34 >= 180°

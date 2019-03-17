@@ -18,16 +18,18 @@
  * \file screen.h
  ***********************************************/
 
-#define SCREEN_WIDTH         400
-#define SCREEN_HEIGHT        240
-#define ON_PIXEL             0x303030 // blue red green
-#define OFF_PIXEL            0xe0e0e0 // blue red green
-#define SOFTMENU_STACK_SIZE  7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#define SCREEN_WIDTH          400
+#define SCREEN_HEIGHT         240
+#define ON_PIXEL              0x303030 // blue red green
+#define OFF_PIXEL             0xe0e0e0 // blue red green
+#define SOFTMENU_STACK_SIZE   7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#define TEMPORARY_INFO_OFFSET 16
+#define REGISTER_LINE_HEIGHT  37
 
-#define Y_POSITION_OF_REGISTER_T_LINE  23 // 134 - 37*(registerNumber-100)
-#define Y_POSITION_OF_REGISTER_Z_LINE  60
-#define Y_POSITION_OF_REGISTER_Y_LINE  97
-#define Y_POSITION_OF_REGISTER_X_LINE 134
+#define Y_POSITION_OF_REGISTER_T_LINE  24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber-100)
+#define Y_POSITION_OF_REGISTER_Z_LINE  61
+#define Y_POSITION_OF_REGISTER_Y_LINE  98
+#define Y_POSITION_OF_REGISTER_X_LINE 135
 
 // If one of the 4 next defines is changed: change also xxxREG in registers.h
 #define Y_POSITION_OF_AIM_LINE        Y_POSITION_OF_REGISTER_X_LINE

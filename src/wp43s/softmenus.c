@@ -508,8 +508,8 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
   }
 
   if(0 <= ysk && ysk <= 2) {
-    y1 = 217 - 25*ysk;
-    y2 = y1 + 25;
+    y1 = 217 - SOFTMENU_HEIGHT*ysk;
+    y2 = y1 + SOFTMENU_HEIGHT;
   }
   else {
     sprintf(errorMessage, "In function showSoftkey: ysk=%" FMT16S " but must be from 0 to 2!" , ysk);
@@ -519,7 +519,7 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
 
   // Draw the frame
   //   Top line
-  for(x=max(0,x1)+1; x<min(x2,SCREEN_WIDTH); x++) {
+  for(x=max(0,x1); x<min(x2,SCREEN_WIDTH); x++) {
     if(topLineDotted) {
       if(x%8 < 4) {
         setPixel(x, y1);
@@ -544,9 +544,9 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
   }
 
   //   Bottom line
-  if(y1 + 25 <= min(y2, 239)) {
-    y = y1 + 25;
-    for(x=max(0,x1)+1; x<min(x2,SCREEN_WIDTH); x++) {
+  if(y1 + SOFTMENU_HEIGHT <= min(y2, 239)) {
+    y = y1 + SOFTMENU_HEIGHT;
+    for(x=max(0,x1); x<min(x2,SCREEN_WIDTH); x++) {
       if(videoMode == vmNormal) {
         if(bottomLine) {
           setPixel(x, y);
@@ -682,7 +682,7 @@ void showSoftmenuCurrentPart(void) {
 
     // TODO may be we can omit the 5th parameter of function showSoftkey if the dotted line remains going thru the full widh of the display
     if(0 <= yDotted && yDotted <= 2) {
-      yDotted = 217 - 25*yDotted;
+      yDotted = 217 - SOFTMENU_HEIGHT*yDotted;
 
       if(dottedTopLine) {
         for(x=0; x<SCREEN_WIDTH; x++) {

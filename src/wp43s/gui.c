@@ -1793,16 +1793,16 @@ void setupUI(void) {
   // Areas for the g shifted softkeys
   lblGSoftkeyArea = gtk_label_new("");
   gtk_widget_set_name(lblGSoftkeyArea, "gSoftkeyArea");
-  gtk_widget_set_size_request(lblGSoftkeyArea, 438, 25);
-  gtk_fixed_put(GTK_FIXED(grid), lblGSoftkeyArea, 44, 72+168);
+  gtk_widget_set_size_request(lblGSoftkeyArea, 438, 24);
+  gtk_fixed_put(GTK_FIXED(grid), lblGSoftkeyArea, 44, 72+170);
 
 
 
   // Area for the f shifted softkeys
   lblFSoftkeyArea = gtk_label_new("");
   gtk_widget_set_name(lblFSoftkeyArea, "fSoftkeyArea");
-  gtk_widget_set_size_request(lblFSoftkeyArea, 438, 25);
-  gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+168+25);
+  gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
+  gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
 
 
 
@@ -2682,7 +2682,7 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   showAlphaMode();
   nextChar = NC_NORMAL;
 
-  clearRegisterLine(Y_POSITION_OF_AIM_LINE, 32);
+  clearRegisterLine(Y_POSITION_OF_AIM_LINE - 4, REGISTER_LINE_HEIGHT);
   xCursor = 1;
   yCursor = Y_POSITION_OF_AIM_LINE + 6;
   cursorFont = CF_STANDARD;
@@ -2714,7 +2714,7 @@ void calcModeNIM(uint16_t unusedParamButMandatory) {
   nimBuffer[0] = 0;
   hexDigits = 0;
 
-  clearRegisterLine(Y_POSITION_OF_NIM_LINE, 32);
+  clearRegisterLine(Y_POSITION_OF_NIM_LINE - 4, REGISTER_LINE_HEIGHT);
   xCursor = 1;
   yCursor = Y_POSITION_OF_NIM_LINE;
   cursorFont = CF_NUMERIC;
@@ -2759,11 +2759,11 @@ void calcModeTAM(void) {
 
   strcat(tamBuffer, " __");
   if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE, 32);
+    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
   showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 
-  transitionSystemStatus = 0;
+  transitionSystemState = 0;
 
   #ifdef PC_BUILD
     calcModeTamGui();

@@ -249,7 +249,7 @@ void debugNIM(void) {
    * \param[in] b uint16_t Boolean
    * \return char*         Name of the boolean
    ***********************************************/
-  char * getBooleanName(uint16_t b) {
+  char * getBooleanName(bool_t b) {
     if(b) {
       return "true";
     }
@@ -858,7 +858,7 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "transSystStatus              = %6u",        transitionSystemStatus);
+        sprintf(string, "transitionSystemState        = %6u",        transitionSystemState);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

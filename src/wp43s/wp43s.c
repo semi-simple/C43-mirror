@@ -44,6 +44,7 @@ bool_t          funcOK;
 decContext      ctxtReal16;
 decContext      ctxtReal34;
 decContext      ctxtReal51;
+decContext      ctxtReal450;
 uint16_t        flags[7];
 char            tmpStr3000[TMP_STR_LENGTH];
 char            errorMessage[ERROR_MESSAGE_LENGTH];
@@ -228,6 +229,9 @@ void setupDefaults(void) {
   decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
   ctxtReal51.digits = 51;
   ctxtReal51.traps = 0;
+  decContextDefault(&ctxtReal450, DEC_INIT_DECQUAD);
+  ctxtReal450.digits = 450;
+  ctxtReal450.traps = 0;
 
   statisticalSumsPointer = 0;
 

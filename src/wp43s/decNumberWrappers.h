@@ -21,6 +21,14 @@
 #define real16_t                                          decDouble
 #define real34_t                                          decQuad
 #define real51_t                                          decNumber
+typedef struct {
+  int32_t digits;      /* Count of digits in the coefficient; >0    */
+  int32_t exponent;    /* Unadjusted exponent, unbiased, in         */
+                       /* range: -1999999997 through 999999999      */
+  uint8_t bits;        /* Indicator bits (see above)                */
+                       /* Coefficient, from least significant unit  */
+  decNumberUnit lsu[(450+DECDPUN-1)/DECDPUN];
+} real450_t;
 
 #define angle_t                                           real16_t
 #define ANGLE16                                           1
@@ -83,6 +91,7 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real16ToString(source, destination)               decDoubleToString        (source,      destination)
 #define real34ToString(source, destination)               decQuadToString          (source,      destination)
 #define real51ToString(source, destination)               decNumberToString        (source,      destination)
+#define real450ToString(source, destination)              decNumberToString        (source,      destination)
 #define stringToReal16(source, destination)               decDoubleFromString      (destination, source, &ctxtReal16)
 #define stringToReal34(source, destination)               decQuadFromString        (destination, source, &ctxtReal34)
 #define stringToReal51(source, destination)               decNumberFromString      (destination, source, &ctxtReal51)
@@ -99,8 +108,10 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real34ToReal16(source, destination)               decDoubleFromWider       (destination, source, &ctxtReal16)
 #define real16ToReal51(source, destination)               decDoubleToNumber        (source,      destination)
 #define real34ToReal51(source, destination)               decQuadToNumber          (source,      destination)
+#define real34ToReal450(source, destination)              decQuadToNumber          (source,      destination)
 #define real51ToReal16(source, destination)               decDoubleFromNumber      (destination, source, &ctxtReal16)
 #define real51ToReal34(source, destination)               decQuadFromNumber        (destination, source, &ctxtReal34)
+#define real450ToReal34(source, destination)              decQuadFromNumber        (destination, source, &ctxtReal34)
 #define real16AbsToReal16(source, destination)            decDoubleCopyAbs         (destination, source)
 #define real34AbsToReal34(source, destination)            decQuadCopyAbs           (destination, source)
 #define real16ToUInt32(source)                            decDoubleToUInt32        (source,      &ctxtReal16, DEC_ROUND_DOWN)
@@ -120,6 +131,7 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real16IsNaN(source)                               decDoubleIsNaN           (source)
 #define real34IsNaN(source)                               decQuadIsNaN             (source)
 #define real51IsNaN(source)                               decNumberIsNaN           (source)
+#define real450IsNaN(source)                              decNumberIsNaN           (source)
 #define real16IsZero(source)                              decDoubleIsZero          (source)
 #define real34IsZero(source)                              decQuadIsZero            (source)
 #define real51IsZero(source)                              decNumberIsZero          (source)
@@ -160,6 +172,7 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real51Compare(operand1, operand2, res)            decNumberCompare         (res, operand1, operand2, &ctxtReal51)
 #define real16Remainder(operand1, operand2, res)          decDoubleRemainder       (res, operand1, operand2, &ctxtReal16)
 #define real34Remainder(operand1, operand2, res)          decQuadRemainder         (res, operand1, operand2, &ctxtReal34)
+#define real450Remainder(operand1, operand2, res)         decNumberRemainder       (res, operand1, operand2, &ctxtReal450)
 #define real16FMA(factor1, factor2, term, res)            decDoubleFMA             (res, factor1,  factor2,  term, &ctxtReal16)
 #define real34FMA(factor1, factor2, term, res)            decQuadFMA               (res, factor1,  factor2,  term, &ctxtReal34)
 

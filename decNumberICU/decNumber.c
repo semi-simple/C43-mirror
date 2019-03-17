@@ -2374,7 +2374,7 @@ decNumber * decNumberPower(decNumber *res, const decNumber *lhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-/*decNumber * decNumberRemainder(decNumber *res, const decNumber *lhs,
+decNumber * decNumberRemainder(decNumber *res, const decNumber *lhs,
                                const decNumber *rhs, decContext *set) {
   uInt status=0;                        // accumulator
   decDivideOp(res, lhs, rhs, set, REMAINDER, &status);
@@ -2384,7 +2384,7 @@ decNumber * decNumberPower(decNumber *res, const decNumber *lhs,
   #endif
   return res;
   } // decNumberRemainder
-*/
+
 /* ------------------------------------------------------------------ */
 /* decNumberRemainderNear -- divide and return remainder from nearest */
 /*                                                                    */

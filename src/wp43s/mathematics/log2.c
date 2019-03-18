@@ -91,36 +91,47 @@ void fnLog2(uint16_t unusedParamButMandatory) {
 
 
 void log2LonI(void) {
-  longInteger_t value;
+  real51_t real51;
 
-  convertLongIntegerRegisterToLongInteger(opX, &value);
-
-  int32_t signX = value.sign;
-  longIntegerSetPositiveSign(&value);
-
-  if(longIntegerIsZero(&value) || signX) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log2LonI: Cannot calculate the log" STD_SUB_2 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
-    #endif
-
-    longIntegerSetZero(&value);
-    convertLongIntegerToLongIntegerRegister(&value, result);
-    return;
-  }
-
-  uint32_t log2 = 0;
-
-  if(!longIntegerIsZero(&value)) {
-    longIntegerDivideUInt(&value, 2, &value);
-    while(!longIntegerIsZero(&value)) {
-      log2++;
-      longIntegerDivideUInt(&value, 2, &value);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
+  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+    if(getFlag(FLAG_DANGER)) {
+      reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log2LonI:", "cannot calculate log2(0)", NULL, NULL);
+      #endif
     }
   }
-
-  uIntToLongInteger(log2, &value);
-  convertLongIntegerToLongIntegerRegister(&value, result);
+  else if(real34IsPositive(REGISTER_REAL34_DATA(opX))) { // Positive
+    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln2, &real51);
+    reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+   }
+  else if(getFlag(FLAG_CPXRES)) {
+    real34SetPositiveSign(REGISTER_REAL34_DATA(opX));
+    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln2, &real51);
+    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+    real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
+    real16Divide(REGISTER_IMAG16_DATA(result), const16_ln2, REGISTER_IMAG16_DATA(result));
+  }
+  else if(getFlag(FLAG_DANGER)) {
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
+  }
+  else {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log2LonI:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
+    #endif
+  }
 }
 
 

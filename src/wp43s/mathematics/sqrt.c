@@ -96,15 +96,12 @@ void sqrtLonI(void) {
   convertLongIntegerRegisterToLongInteger(opX, &value);
 
   if(!longIntegerIsNegative(&value)) { // Positive or zero value
-    longInteger_t value, nn0, nn1, nn2;
+    longInteger_t nn0, nn1, nn2;
 
     if(longIntegerIsZero(&value)) {
       uIntToLongInteger(0, &nn1);
     }
     else {
-      //value = opX;
-      convertLongIntegerRegisterToLongInteger(opX, &value);
-
       // n0 = value / 2 + 1;
       longIntegerDivideUInt(&value, 2, &nn0);
       longIntegerAddUInt(&nn0, 1, &nn0);

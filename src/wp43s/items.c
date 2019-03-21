@@ -230,7 +230,7 @@ const item_t indexOfItems[] = {
 /*  124 */  { toBeCoded,                   NOPARAM,                     "DISP",                                        "DISP",                                                                       SLS_UNCHANGED},
 /*  125 */  { toBeCoded,                   NOPARAM,                     "DOT",                                         "dot",                                                                        SLS_UNCHANGED},
 /*  126 */  { fnConvertXToReal34,          NOPARAM,                     STD_RIGHT_ARROW "DP",                          STD_RIGHT_ARROW "DP",                                                         SLS_UNCHANGED},
-/*  127 */  { fnDrop,                      NOPARAM,                     "DROP",                                        "DROP",                                                                       SLS_UNCHANGED},
+/*  127 */  { fnDrop,                      NOPARAM,                     "DROP" STD_DOWN_ARROW,                         "DROP" STD_DOWN_ARROW,                                                        SLS_UNCHANGED},
 /*  128 */  { fnDropY,                     NOPARAM,                     "DROPy",                                       "DROPy",                                                                      SLS_UNCHANGED},
 /*  129 */  { toBeCoded,                   NOPARAM,                     "DSE",                                         "DSE",                                                                        SLS_UNCHANGED},
 /*  130 */  { toBeCoded,                   NOPARAM,                     "DSL",                                         "DSL",                                                                        SLS_UNCHANGED},

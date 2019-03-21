@@ -42,7 +42,10 @@ const int16_t menu_BITS[]        = { ITM_AND,                       ITM_OR,     
                                      ITM_NAND,                      ITM_NOR,                    ITM_XNOR,                 ITM_NULL,           ITM_MIRROR,          ITM_ASR,
                                      ITM_SB,                        ITM_BS,                     ITM_NUMB,                 ITM_FB,             ITM_BC,              ITM_CB,
                                      ITM_SL,                        ITM_RL,                     ITM_RLC,                  ITM_RRC,            ITM_RR,              ITM_SR,
-                                     ITM_LJ,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_RJ                 };
+                                     ITM_LJ,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_RJ,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL,
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,         ITM_LZON,            ITM_WSIZE,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_NULL               };
 
 const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE,                 ITM_DATEto,               ITM_WDAY,           ITM_TIME,            ITM_XtoDATE,
                                      ITM_JtoD,                      ITM_DtoJ,                   ITM_NULL,                 ITM_DAY,            ITM_MONTH,           ITM_YEAR,
@@ -65,14 +68,14 @@ const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,    
                                      ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,            ITM_SDL,             ITM_SDR,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL,
                                      ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,        ITM_RDXPER,          ITM_RDXCOM,
-                                     ITM_DSTACK,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_LZON,
+                                     ITM_DSTACK,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL,
                                      ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,         ITM_SETUK,           ITM_SETUSA             };
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,      -MNU_Sf,             -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL               };
 
-const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_CUBEROOT,               ITM_XTHROOT,              ITM_LOGXY,          ITM_2X,              ITM_LOG2,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_LN1X,           ITM_EX1,             ITM_NULL,
+const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_XTHROOT,                ITM_LOGXY,                ITM_LOG2,           ITM_2X,              ITM_SQUARE,
+                                     ITM_CUBEROOT,                  ITM_NULL,                   ITM_NULL,                 ITM_LN1X,           ITM_EX1,             ITM_NULL,
                                      ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,         ITM_tanh,            ITM_artanh             };
 
 const int16_t menu_TRI[]         = { ITM_sin,                       ITM_arcsin,                 ITM_cos,                  ITM_arccos,         ITM_tan,             ITM_arctan             };
@@ -96,7 +99,8 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,              CHR_E,               CHR_F,
                                      ITM_IDIV,                      ITM_RMDR,                   ITM_MOD,                  ITM_XMOD,           ITM_FLOOR,           ITM_LCM,
                                      ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,           ITM_CEIL,            ITM_GCD,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,         ITM_NULL,            ITM_WSIZE              };
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,         ITM_LZON,            ITM_WSIZE,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_NULL               };
 
 const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,            ITM_ISZ,             ITM_ISG,
                                      ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_INC                };
@@ -122,8 +126,8 @@ const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW
 const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,          ITM_RECT,            ITM_POLAR,
                                      ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,          ITM_REALRES,         ITM_CPXRES,
                                      ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,         ITM_SSIZE4,          ITM_SSIZE8,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,         ITM_WSIZE,           ITM_SETSIG,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL,
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,         ITM_LZON,            ITM_WSIZE,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_NULL,
 #if DMCP_BUILD
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL
 #endif
@@ -167,12 +171,12 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,            ITM_VARMNU,          ITM_MVAR,
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,         ITM_PIXEL,           ITM_POINT              };
 
-const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,          ITM_SUM,             ITM_SM,
-                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,         ITM_NULL,            ITM_SMW,
-                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,       ITM_PLOT,            ITM_epsilonM,
-                                     ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,            ITM_YCIRC,           ITM_XCIRC,
+const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,          ITM_SM,              ITM_SQUARE,
+                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,         ITM_SMW,             ITM_SUM,
+                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,       ITM_epsilonM,        ITM_PLOT,
+                                     ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_XCIRC,          ITM_YCIRC,           ITM_SQUARE,
+                                     ITM_ORTHOF,                    ITM_NULL,                   ITM_COV,                  ITM_NULL,           ITM_NULL,            ITM_NULL,
                                      ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,         ITM_NULL,            ITM_BESTF,
-                                     ITM_ORTHOF,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL,
                                      ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,        ITM_SIGMAy2,         ITM_SIGMAy,
                                      ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,      ITM_SIGMAln2y,       ITM_SIGMAlny,
                                      ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_SIGMAylnx          };

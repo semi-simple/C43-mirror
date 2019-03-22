@@ -1593,7 +1593,7 @@ const item_t indexOfItems[] = {
 /* 1484 */  { addItemToBuffer,             ITM_dddIJ,                   "",                                            STD_ELLIPSIS "IJ",                                                            SLS_UNCHANGED},
 /* 1485 */  { toBeCoded,                   NOPARAM,                     "",                                            "0.",                                                                         SLS_UNCHANGED},
 /* 1486 */  { toBeCoded,                   NOPARAM,                     "",                                            "1.",                                                                         SLS_UNCHANGED},
-/* 1487 */  { addItemToBuffer,             ITM_EXPONENT,                "",                                            STD_SUB_E_OUTLINE,                                                            SLS_UNCHANGED},
+/* 1487 */  { addItemToBuffer,             ITM_EXPONENT,                "",                                            "E",                                                                          SLS_UNCHANGED},
 /* 1488 */  { addItemToBuffer,             ITM_MA11,                    "",                                            STD_a_DIARESIS,                                                               SLS_UNCHANGED},
 /* 1489 */  { addItemToBuffer,             ITM_MA12,                    "",                                            STD_o_DIARESIS,                                                               SLS_UNCHANGED},
 /* 1490 */  { addItemToBuffer,             ITM_MA13,                    "",                                            STD_u_DIARESIS,                                                               SLS_UNCHANGED},

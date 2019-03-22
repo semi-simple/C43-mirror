@@ -127,7 +127,7 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,          ITM_REALRES,         ITM_CPXRES,
                                      ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,         ITM_SSIZE4,          ITM_SSIZE8,
                                      ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,         ITM_LZON,            ITM_WSIZE,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_NULL,
+                                     ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_LZOFF,           ITM_NULL,
 #if DMCP_BUILD
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,           ITM_NULL,            ITM_NULL
 #endif

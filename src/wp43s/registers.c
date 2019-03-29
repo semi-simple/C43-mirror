@@ -2147,17 +2147,26 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
   else if(getRegisterDataType(regist) == dtAngle) {
     #if (ANGLE16 == 1)
       real16ToString(REGISTER_REAL16_DATA(regist), str);
+      real16_t value;
+      real16Copy(REGISTER_REAL16_DATA(regist), &value);
+      convertAngle16FromInternal(&value, getRegisterAngularMode(regist));
+      real16ToString(&value, str + 200);
     #endif
     #if (ANGLE34 == 1)
       real34ToString(REGISTER_REAL34_DATA(regist), str);
+      real34_t value;
+      real34Copy(REGISTER_REAL34_DATA(regist), &value);
+      convertAngle34FromInternal(&value, getRegisterAngularMode(regist));
+      real34ToString(&value, str + 200);
     #endif
 
+
     #ifdef PC_BUILD
-      printf("angle %s %s", getAngularModeName(getRegisterAngularMode(regist)), str);
+      printf("angle %s (%s %s)", str, str + 200, getAngularModeName(getRegisterAngularMode(regist)));
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "angle %s  %s", getAngularModeName(getRegisterAngularMode(regist)), str);
+      sprintf(errorMessage, "angle %s (%s %s)", str, str + 200, getAngularModeName(getRegisterAngularMode(regist)));
       lcd_putsAt(t20, line, errorMessage);
     #endif
   }

@@ -1665,8 +1665,8 @@ const item_t indexOfItems[] = {
 /* 1554 */  { fnCvtAtmPa,                  divide,                      "Pa" STD_RIGHT_ARROW "atm",                    STD_SPACE_HAIR,                                                               SLS_ENABLED  },
 /* 1555 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
 /* 1556 */  { fnCvtFathomM,                divide,                      "m" STD_RIGHT_ARROW "fm.",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
-/* 1557 */  { fnCvtPointsM,                multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
-/* 1558 */  { fnCvtPointsM,                divide,                      "m" STD_RIGHT_ARROW "pt.",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1557 */  { fnCvtPointM,                 multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1558 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
 
 /* 1559 */  { toBeCoded,                   NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
 };

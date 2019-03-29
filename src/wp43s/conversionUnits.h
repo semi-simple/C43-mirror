@@ -25,65 +25,68 @@ typedef enum {
 } multiplyDivide_t;
 
 // Temperature
-void fnCvtCToF       (uint16_t unusedParamButMandatory);
-void fnCvtFToC       (uint16_t unusedParamButMandatory);
+void fnCvtCToF      (uint16_t unusedParamButMandatory);
+void fnCvtFToC      (uint16_t unusedParamButMandatory);
 
 // Duration
-void fnCvtYearS      (uint16_t multiplyDivide);
+void fnCvtYearS     (uint16_t multiplyDivide);
 
 // Energy
-void fnCvtCalJ       (uint16_t multiplyDivide);
-void fnCvtBtuJ       (uint16_t multiplyDivide);
-void fnCvtWhJ        (uint16_t multiplyDivide);
+void fnCvtCalJ      (uint16_t multiplyDivide);
+void fnCvtBtuJ      (uint16_t multiplyDivide);
+void fnCvtWhJ       (uint16_t multiplyDivide);
 
 // Power
-void fnCvtHpeW       (uint16_t multiplyDivide);
-void fnCvtHpukW      (uint16_t multiplyDivide);
-void fnCvtHpmW       (uint16_t multiplyDivide);
+void fnCvtHpeW      (uint16_t multiplyDivide);
+void fnCvtHpukW     (uint16_t multiplyDivide);
+void fnCvtHpmW      (uint16_t multiplyDivide);
 
 // Force
-void fnCvtLbfN       (uint16_t multiplyDivide);
+void fnCvtLbfN      (uint16_t multiplyDivide);
 
 // Pressure
-void fnCvtBarPa      (uint16_t multiplyDivide);
-void fnCvtPsiPa      (uint16_t multiplyDivide);
-void fnCvtInhgPa     (uint16_t multiplyDivide);
-void fnCvtTorrPa     (uint16_t multiplyDivide);
-void fnCvtAtmPa      (uint16_t multiplyDivide);
+void fnCvtBarPa     (uint16_t multiplyDivide);
+void fnCvtPsiPa     (uint16_t multiplyDivide);
+void fnCvtInhgPa    (uint16_t multiplyDivide);
+void fnCvtTorrPa    (uint16_t multiplyDivide);
+void fnCvtAtmPa     (uint16_t multiplyDivide);
 
 // Mass
-void fnCvtLbsKg      (uint16_t multiplyDivide);
-void fnCvtCwtKg      (uint16_t multiplyDivide);
-void fnCvtOzKg       (uint16_t multiplyDivide);
-void fnCvtStonesKg   (uint16_t multiplyDivide);
-void fnCvtShortcwtKg (uint16_t multiplyDivide);
-void fnCvtTrozKg     (uint16_t multiplyDivide);
-void fnCvtTonsKg     (uint16_t multiplyDivide);
-void fnCvtShorttonsKg(uint16_t multiplyDivide);
+void fnCvtLbsKg     (uint16_t multiplyDivide);
+void fnCvtCwtKg     (uint16_t multiplyDivide);
+void fnCvtOzKg      (uint16_t multiplyDivide);
+void fnCvtStoneKg   (uint16_t multiplyDivide);
+void fnCvtShortcwtKg(uint16_t multiplyDivide);
+void fnCvtTrozKg    (uint16_t multiplyDivide);
+void fnCvtTonKg     (uint16_t multiplyDivide);
+void fnCvtShorttonKg(uint16_t multiplyDivide);
+void fnCvtCaratKg   (uint16_t multiplyDivide);
 
 // Length
-void fnCvtAuM        (uint16_t multiplyDivide);
-void fnCvtMiM        (uint16_t multiplyDivide);
-void fnCvtLyM        (uint16_t multiplyDivide);
-void fnCvtNmiM       (uint16_t multiplyDivide);
-void fnCvtFtM        (uint16_t multiplyDivide);
-void fnCvtPcM        (uint16_t multiplyDivide);
-void fnCvtInchesM    (uint16_t multiplyDivide);
-void fnCvtSfeetM     (uint16_t multiplyDivide);
-void fnCvtYardsM     (uint16_t multiplyDivide);
-void fnCvtPointsM    (uint16_t multiplyDivide);
+void fnCvtAuM       (uint16_t multiplyDivide);
+void fnCvtMiM       (uint16_t multiplyDivide);
+void fnCvtLyM       (uint16_t multiplyDivide);
+void fnCvtNmiM      (uint16_t multiplyDivide);
+void fnCvtFtM       (uint16_t multiplyDivide);
+void fnCvtPcM       (uint16_t multiplyDivide);
+void fnCvtInchesM   (uint16_t multiplyDivide);
+void fnCvtSfeetM    (uint16_t multiplyDivide);
+void fnCvtYardsM    (uint16_t multiplyDivide);
+void fnCvtPointsM   (uint16_t multiplyDivide);
+void fnCvtFathomM   (uint16_t multiplyDivide);
 
 // Volume
-void fnCvtGalukM3    (uint16_t multiplyDivide);
-void fnCvtGalusM3    (uint16_t multiplyDivide);
-void fnCvtFlozukM3   (uint16_t multiplyDivide);
-void fnCvtFlozusM3   (uint16_t multiplyDivide);
-void fnCvtQuartM3    (uint16_t multiplyDivide);
+void fnCvtGalukM3   (uint16_t multiplyDivide);
+void fnCvtGalusM3   (uint16_t multiplyDivide);
+void fnCvtFlozukM3  (uint16_t multiplyDivide);
+void fnCvtFlozusM3  (uint16_t multiplyDivide);
+void fnCvtQuartM3   (uint16_t multiplyDivide);
+void fnCvtBarrelM3  (uint16_t multiplyDivide);
 
 // Area
-void fnCvtAcresM2    (uint16_t multiplyDivide);
-void fnCvtAcresusM2  (uint16_t multiplyDivide);
+void fnCvtAcresM2   (uint16_t multiplyDivide);
+void fnCvtAcresusM2 (uint16_t multiplyDivide);
 
 // ...
-void fnCvtRatioDb    (uint16_t multiplyDivide);
-void fnCvtDbRatio    (uint16_t multiplyDivide);
+void fnCvtRatioDb   (uint16_t multiplyDivide);
+void fnCvtDbRatio   (uint16_t multiplyDivide);

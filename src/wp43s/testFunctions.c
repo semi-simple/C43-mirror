@@ -44,8 +44,8 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CST_02                       ].itemPrinted, "a" STD_SUB_0                                                                )) {printf("item %" FMT16S " is not CST_02                       \n", CST_02                       ); exit(0);}
     if(strcmp(indexOfItems[ITM_ABS                      ].itemPrinted, "ABS"                                                                        )) {printf("item %" FMT16S " is not ITM_ABS                      \n", ITM_ABS                      ); exit(0);}
     if(strcmp(indexOfItems[ITM_ACC                      ].itemPrinted, "ACC"                                                                        )) {printf("item %" FMT16S " is not ITM_ACC                      \n", ITM_ACC                      ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ACtoM2                   ].itemPrinted, "acres"                                                                      )) {printf("item %" FMT16S " is not ITM_ACtoM2                   \n", ITM_ACtoM2                   ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ACUStoM2                 ].itemPrinted, "acres" STD_US                                                               )) {printf("item %" FMT16S " is not ITM_ACUStoM2                 \n", ITM_ACUStoM2                 ); exit(0);}
+    if(strcmp(indexOfItems[ITM_ACtoM2                   ].itemPrinted, "acre"                                                                       )) {printf("item %" FMT16S " is not ITM_ACtoM2                   \n", ITM_ACtoM2                   ); exit(0);}
+    if(strcmp(indexOfItems[ITM_ACUStoM2                 ].itemPrinted, "acre" STD_US                                                                )) {printf("item %" FMT16S " is not ITM_ACUStoM2                 \n", ITM_ACUStoM2                 ); exit(0);}
     if(strcmp(indexOfItems[MNU_ADV                      ].itemPrinted, "ADV"                                                                        )) {printf("item %" FMT16S " is not MNU_ADV                      \n", MNU_ADV                      ); exit(0);}
     if(strcmp(indexOfItems[ITM_AGM                      ].itemPrinted, "AGM"                                                                        )) {printf("item %" FMT16S " is not ITM_AGM                      \n", ITM_AGM                      ); exit(0);}
     if(strcmp(indexOfItems[ITM_AGRAPH                   ].itemPrinted, "AGRAPH"                                                                     )) {printf("item %" FMT16S " is not ITM_AGRAPH                   \n", ITM_AGRAPH                   ); exit(0);}
@@ -437,7 +437,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[ITM_MtoMI                    ].itemPrinted, "m" STD_RIGHT_ARROW "mi."                                                    )) {printf("item %" FMT16S " is not ITM_MtoMI                    \n", ITM_MtoMI                    ); exit(0);}
     if(strcmp(indexOfItems[ITM_MtoNMI                   ].itemPrinted, "m" STD_RIGHT_ARROW "nmi."                                                   )) {printf("item %" FMT16S " is not ITM_MtoNMI                   \n", ITM_MtoNMI                   ); exit(0);}
     if(strcmp(indexOfItems[ITM_MtoPC                    ].itemPrinted, "m" STD_RIGHT_ARROW "pc"                                                     )) {printf("item %" FMT16S " is not ITM_MtoPC                    \n", ITM_MtoPC                    ); exit(0);}
-    if(strcmp(indexOfItems[ITM_MtoPT                    ].itemPrinted, "m" STD_RIGHT_ARROW "pt."                                                    )) {printf("item %" FMT16S " is not ITM_MtoPT                    \n", ITM_MtoPT                    ); exit(0);}
+    if(strcmp(indexOfItems[ITM_MtoPOINT                 ].itemPrinted, "m" STD_RIGHT_ARROW "pt."                                                    )) {printf("item %" FMT16S " is not ITM_MtoPOINT                 \n", ITM_MtoPOINT                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_MtoYD                    ].itemPrinted, "m" STD_RIGHT_ARROW "yd."                                                    )) {printf("item %" FMT16S " is not ITM_MtoYD                    \n", ITM_MtoYD                    ); exit(0);}
     if(strcmp(indexOfItems[CST_35                       ].itemPrinted, "m" STD_SUB_SUN                                                              )) {printf("item %" FMT16S " is not CST_35                       \n", CST_35                       ); exit(0);}
     if(strcmp(indexOfItems[CST_36                       ].itemPrinted, "m" STD_SUB_EARTH                                                            )) {printf("item %" FMT16S " is not CST_36                       \n", CST_36                       ); exit(0);}
@@ -504,7 +504,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[MNU_PROGS                    ].itemPrinted, "PROGS"                                                                      )) {printf("item %" FMT16S " is not MNU_PROGS                    \n", MNU_PROGS                    ); exit(0);}
     if(strcmp(indexOfItems[ITM_PSItoPA                  ].itemPrinted, "psi" STD_RIGHT_ARROW "Pa"                                                   )) {printf("item %" FMT16S " is not ITM_PSItoPA                  \n", ITM_PSItoPA                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_PSTO                     ].itemPrinted, "PSTO"                                                                       )) {printf("item %" FMT16S " is not ITM_PSTO                     \n", ITM_PSTO                     ); exit(0);}
-    if(strcmp(indexOfItems[ITM_PTtoM                    ].itemPrinted, "pt." STD_RIGHT_ARROW "m"                                                    )) {printf("item %" FMT16S " is not ITM_PTtoM                    \n", ITM_PTtoM                    ); exit(0);}
+    if(strcmp(indexOfItems[ITM_POINTtoM                 ].itemPrinted, "pt." STD_RIGHT_ARROW "m"                                                    )) {printf("item %" FMT16S " is not ITM_POINTtoM                 \n", ITM_POINTtoM                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_PUTK                     ].itemPrinted, "PUTK"                                                                       )) {printf("item %" FMT16S " is not ITM_PUTK                     \n", ITM_PUTK                     ); exit(0);}
     if(strcmp(indexOfItems[ITM_PV                       ].itemPrinted, "PV"                                                                         )) {printf("item %" FMT16S " is not ITM_PV                       \n", ITM_PV                       ); exit(0);}
     if(strcmp(indexOfItems[MNU_PFN                      ].itemPrinted, "P.FN"                                                                       )) {printf("item %" FMT16S " is not MNU_PFN                      \n", MNU_PFN                      ); exit(0);}
@@ -630,7 +630,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[ITM_STODIV                   ].itemPrinted, "STO/"                                                                       )) {printf("item %" FMT16S " is not ITM_STODIV                   \n", ITM_STODIV                   ); exit(0);}
     if(strcmp(indexOfItems[ITM_STOMAX                   ].itemPrinted, "Max"                                                                        )) {printf("item %" FMT16S " is not ITM_STOMAx                   \n", ITM_STOMAX                   ); exit(0);}
     if(strcmp(indexOfItems[ITM_STOMIN                   ].itemPrinted, "Min"                                                                        )) {printf("item %" FMT16S " is not ITM_STOMIN                   \n", ITM_STOMIN                   ); exit(0);}
-    if(strcmp(indexOfItems[ITM_STOtoKG                  ].itemPrinted, "stones"                                                                     )) {printf("item %" FMT16S " is not ITM_STOtoKG                  \n", ITM_STOtoKG                  ); exit(0);}
+    if(strcmp(indexOfItems[ITM_STOtoKG                  ].itemPrinted, "stone"                                                                      )) {printf("item %" FMT16S " is not ITM_STOtoKG                  \n", ITM_STOtoKG                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_STRI                     ].itemPrinted, "STRI?"                                                                      )) {printf("item %" FMT16S " is not ITM_STRI                     \n", ITM_STRI                     ); exit(0);}
     if(strcmp(indexOfItems[MNU_STRING                   ].itemPrinted, "STRING"                                                                     )) {printf("item %" FMT16S " is not MNU_STRING                   \n", MNU_STRING                   ); exit(0);}
     if(strcmp(indexOfItems[ITM_ST_A                     ].itemPrinted, "ST.A"                                                                       )) {printf("item %" FMT16S " is not ITM_ST_A                     \n", ITM_ST_A                     ); exit(0);}
@@ -657,7 +657,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[MNU_TIMES                    ].itemPrinted, "TIMES"                                                                      )) {printf("item %" FMT16S " is not MNU_TIMES                    \n", MNU_TIMES                    ); exit(0);}
     if(strcmp(indexOfItems[ITM_TN                       ].itemPrinted, "T" STD_SUB_n                                                                )) {printf("item %" FMT16S " is not ITM_TN                       \n", ITM_TN                       ); exit(0);}
     if(strcmp(indexOfItems[ITM_TONE                     ].itemPrinted, "TONE"                                                                       )) {printf("item %" FMT16S " is not ITM_TONE                     \n", ITM_TONE                     ); exit(0);}
-    if(strcmp(indexOfItems[ITM_TONtoKG                  ].itemPrinted, "tons"                                                                       )) {printf("item %" FMT16S " is not ITM_TONtoKG                  \n", ITM_TONtoKG                  ); exit(0);}
+    if(strcmp(indexOfItems[ITM_TONtoKG                  ].itemPrinted, "ton"                                                                        )) {printf("item %" FMT16S " is not ITM_TONtoKG                  \n", ITM_TONtoKG                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_TOP                      ].itemPrinted, "TOP?"                                                                       )) {printf("item %" FMT16S " is not ITM_TOP                      \n", ITM_TOP                      ); exit(0);}
     if(strcmp(indexOfItems[ITM_TORtoPA                  ].itemPrinted, "torr"                                                                       )) {printf("item %" FMT16S " is not ITM_TORtoPA                  \n", ITM_TORtoPA                  ); exit(0);}
     if(strcmp(indexOfItems[CST_53                       ].itemPrinted, "T" STD_SUB_P                                                                )) {printf("item %" FMT16S " is not CST_53                       \n", CST_53                       ); exit(0);}
@@ -869,7 +869,7 @@ void testFunctions(void) {
 
     if(strcmp(indexOfItems[ITM_ACtoM2b                  ].itemPrinted, STD_RIGHT_ARROW " m" STD_SUP_2                                               )) {printf("item %" FMT16S " is not ITM_ACtoM2b                  \n", ITM_ACtoM2b                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_ACUStoM2b                ].itemPrinted, STD_RIGHT_ARROW " m" STD_SUP_2                                               )) {printf("item %" FMT16S " is not ITM_ACUStoM2b                \n", ITM_ACUStoM2b                ); exit(0);}
-    if(strcmp(indexOfItems[ITM_ATMtoPAb                 ].itemPrinted, STD_RIGHT_ARROW " Pa"                                                        )) {printf("item %" FMT16S " is not ITM_ATMtoPAb                 \n", ITM_ATMtoPAb                 ); exit(0);}
+    if(strcmp(indexOfItems[ITM_CARATtoKG                ].itemPrinted, "carat"                                                                      )) {printf("item %" FMT16S " is not ITM_CARATtoKG                \n", ITM_CARATtoKG                ); exit(0);}
     if(strcmp(indexOfItems[ITM_DBtoFRb                  ].itemPrinted, "field"                                                                      )) {printf("item %" FMT16S " is not ITM_DBtoFRb                  \n", ITM_DBtoFRb                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_DBtoFRc                  ].itemPrinted, "ratio"                                                                      )) {printf("item %" FMT16S " is not ITM_DBtoFRc                  \n", ITM_DBtoFRc                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_DBtoPRb                  ].itemPrinted, "power"                                                                      )) {printf("item %" FMT16S " is not ITM_DBtoPRb                  \n", ITM_DBtoPRb                  ); exit(0);}
@@ -881,26 +881,26 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[ITM_FZUStoM3b                ].itemPrinted, STD_RIGHT_ARROW " m" STD_SUP_3                                               )) {printf("item %" FMT16S " is not ITM_FZUStoM3b                \n", ITM_FZUStoM3b                ); exit(0);}
     if(strcmp(indexOfItems[ITM_IHGtoPAb                 ].itemPrinted, STD_RIGHT_ARROW " Pa"                                                        )) {printf("item %" FMT16S " is not ITM_IHGtoPAb                 \n", ITM_IHGtoPAb                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_KGtoSCWb                 ].itemPrinted, "sh.cwt"                                                                     )) {printf("item %" FMT16S " is not ITM_KGtoSCWb                 \n", ITM_KGtoSCWb                 ); exit(0);}
-    if(strcmp(indexOfItems[ITM_KGtoSTOb                 ].itemPrinted, "stones"                                                                     )) {printf("item %" FMT16S " is not ITM_KGtoSTOb                 \n", ITM_KGtoSTOb                 ); exit(0);}
+    if(strcmp(indexOfItems[ITM_KGtoSTOb                 ].itemPrinted, "stone"                                                                      )) {printf("item %" FMT16S " is not ITM_KGtoSTOb                 \n", ITM_KGtoSTOb                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_KGtoSTb                  ].itemPrinted, "short"                                                                      )) {printf("item %" FMT16S " is not ITM_KGtoSTb                  \n", ITM_KGtoSTb                  ); exit(0);}
-    if(strcmp(indexOfItems[ITM_KGtoSTc                  ].itemPrinted, "tons"                                                                       )) {printf("item %" FMT16S " is not ITM_KGtoSTc                  \n", ITM_KGtoSTc                  ); exit(0);}
-    if(strcmp(indexOfItems[ITM_KGtoTONb                 ].itemPrinted, "tons"                                                                       )) {printf("item %" FMT16S " is not ITM_KGtoTONb                 \n", ITM_KGtoTONb                 ); exit(0);}
+    if(strcmp(indexOfItems[ITM_KGtoSTc                  ].itemPrinted, "ton"                                                                        )) {printf("item %" FMT16S " is not ITM_KGtoSTc                  \n", ITM_KGtoSTc                  ); exit(0);}
+    if(strcmp(indexOfItems[ITM_KGtoCARAT                ].itemPrinted, "kg " STD_RIGHT_ARROW                                                        )) {printf("item %" FMT16S " is not ITM_KGtoCARAT                \n", ITM_KGtoCARAT                ); exit(0);}
     if(strcmp(indexOfItems[ITM_KGtoTRZb                 ].itemPrinted, "tr.oz"                                                                      )) {printf("item %" FMT16S " is not ITM_KGtoTRZb                 \n", ITM_KGtoTRZb                 ); exit(0);}
-    if(strcmp(indexOfItems[ITM_M2toACb                  ].itemPrinted, "acres"                                                                      )) {printf("item %" FMT16S " is not ITM_M2toACb                  \n", ITM_M2toACb                  ); exit(0);}
-    if(strcmp(indexOfItems[ITM_M2toACUSb                ].itemPrinted, "acres" STD_US                                                               )) {printf("item %" FMT16S " is not ITM_M2toACUSb                \n", ITM_M2toACUSb                ); exit(0);}
+    if(strcmp(indexOfItems[ITM_M2toACb                  ].itemPrinted, "acre"                                                                       )) {printf("item %" FMT16S " is not ITM_M2toACb                  \n", ITM_M2toACb                  ); exit(0);}
+    if(strcmp(indexOfItems[ITM_M2toACUSb                ].itemPrinted, "acre" STD_US                                                                )) {printf("item %" FMT16S " is not ITM_M2toACUSb                \n", ITM_M2toACUSb                ); exit(0);}
     if(strcmp(indexOfItems[ITM_M3toFZUKb                ].itemPrinted, "floz" STD_UK                                                                )) {printf("item %" FMT16S " is not ITM_M3toFZUKb                \n", ITM_M3toFZUKb                ); exit(0);}
     if(strcmp(indexOfItems[ITM_M3toFZUSb                ].itemPrinted, "floz" STD_US                                                                )) {printf("item %" FMT16S " is not ITM_M3toFZUSb                \n", ITM_M3toFZUSb                ); exit(0);}
     if(strcmp(indexOfItems[ITM_MtoFTUSb                 ].itemPrinted, "s:feet" STD_US                                                              )) {printf("item %" FMT16S " is not ITM_MtoFTUSb                 \n", ITM_MtoFTUSb                 ); exit(0);}
-    if(strcmp(indexOfItems[ITM_PAtoATMb                 ].itemPrinted, "atm"                                                                        )) {printf("item %" FMT16S " is not ITM_PAtoATMb                 \n", ITM_PAtoATMb                 ); exit(0);}
+    if(strcmp(indexOfItems[ITM_CARATtoKGb               ].itemPrinted, STD_RIGHT_ARROW " kg"                                                        )) {printf("item %" FMT16S " is not ITM_CARATtoKGb               \n", ITM_CARATtoKGb               ); exit(0);}
     if(strcmp(indexOfItems[ITM_PAtoIHGb                 ].itemPrinted, "in.Hg"                                                                      )) {printf("item %" FMT16S " is not ITM_PAtoIHGb                 \n", ITM_PAtoIHGb                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_PAtoTORb                 ].itemPrinted, "torr"                                                                       )) {printf("item %" FMT16S " is not ITM_PAtoTORb                 \n", ITM_PAtoTORb                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_PRtoDBb                  ].itemPrinted, "ratio"                                                                      )) {printf("item %" FMT16S " is not ITM_PRtoDBb                  \n", ITM_PRtoDBb                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_PRtoDBc                  ].itemPrinted, STD_RIGHT_ARROW " dB"                                                        )) {printf("item %" FMT16S " is not ITM_PRtoDBc                  \n", ITM_PRtoDBc                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_SCWtoKGb                 ].itemPrinted, "cwt" STD_RIGHT_ARROW "kg"                                                   )) {printf("item %" FMT16S " is not ITM_SCWtoKGb                 \n", ITM_SCWtoKGb                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_STOtoKGb                 ].itemPrinted, STD_RIGHT_ARROW " kg"                                                        )) {printf("item %" FMT16S " is not ITM_STOtoKGb                 \n", ITM_STOtoKGb                 ); exit(0);}
-    if(strcmp(indexOfItems[ITM_STtoKGb                  ].itemPrinted, "tons"                                                                       )) {printf("item %" FMT16S " is not ITM_STtoKGb                  \n", ITM_STtoKGb                  ); exit(0);}
+    if(strcmp(indexOfItems[ITM_STtoKGb                  ].itemPrinted, "ton"                                                                        )) {printf("item %" FMT16S " is not ITM_STtoKGb                  \n", ITM_STtoKGb                  ); exit(0);}
     if(strcmp(indexOfItems[ITM_STtoKGc                  ].itemPrinted, STD_RIGHT_ARROW " kg"                                                        )) {printf("item %" FMT16S " is not ITM_STtoKGc                  \n", ITM_STtoKGc                  ); exit(0);}
-    if(strcmp(indexOfItems[ITM_TONtoKGb                 ].itemPrinted, STD_RIGHT_ARROW " kg"                                                        )) {printf("item %" FMT16S " is not ITM_TONtoKGb                 \n", ITM_TONtoKGb                 ); exit(0);}
+    if(strcmp(indexOfItems[ITM_KGtoCARATb               ].itemPrinted, "carat"                                                                      )) {printf("item %" FMT16S " is not ITM_KGtoCARATb               \n", ITM_KGtoCARATb               ); exit(0);}
     if(strcmp(indexOfItems[ITM_TORtoPAb                 ].itemPrinted, STD_RIGHT_ARROW " Pa"                                                        )) {printf("item %" FMT16S " is not ITM_TORtoPAb                 \n", ITM_TORtoPAb                 ); exit(0);}
     if(strcmp(indexOfItems[ITM_TRZtoKGb                 ].itemPrinted, STD_RIGHT_ARROW " kg"                                                        )) {printf("item %" FMT16S " is not ITM_TRZtoKGb                 \n", ITM_TRZtoKGb                 ); exit(0);}
 
@@ -984,12 +984,12 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_y                        ].itemPrinted, "y"                                                                          )) {printf("char %" FMT16S " is not CHR_y                        \n", CHR_y                        ); exit(0);}
     if(strcmp(indexOfItems[CHR_z                        ].itemPrinted, "z"                                                                          )) {printf("char %" FMT16S " is not CHR_z                        \n", CHR_z                        ); exit(0);}
     if(strcmp(indexOfItems[CHR_ALPHA                    ].itemPrinted, STD_ALPHA                                                                    )) {printf("char %" FMT16S " is not CHR_ALPHA                    \n", CHR_ALPHA                    ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0953                     ].itemPrinted, "0953"                                                                       )) {printf("char %" FMT16S " is not CHR_0953                     \n", CHR_0953                     ); exit(0);}
+    if(strcmp(indexOfItems[ITM_MtoPOINTb                ].itemPrinted, "point"                                                                      )) {printf("char %" FMT16S " is not ITM_MtoPOINTb                \n", ITM_MtoPOINTb                ); exit(0);}
     if(strcmp(indexOfItems[CHR_BETA                     ].itemPrinted, STD_BETA                                                                     )) {printf("char %" FMT16S " is not CHR_BETA                     \n", CHR_BETA                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_GAMMA                    ].itemPrinted, STD_GAMMA                                                                    )) {printf("char %" FMT16S " is not CHR_GAMMA                    \n", CHR_GAMMA                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_DELTA                    ].itemPrinted, STD_DELTA                                                                    )) {printf("char %" FMT16S " is not CHR_DELTA                    \n", CHR_DELTA                    ); exit(0);}
     if(strcmp(indexOfItems[CHR_EPSILON                  ].itemPrinted, STD_EPSILON                                                                  )) {printf("char %" FMT16S " is not CHR_EPSILON                  \n", CHR_EPSILON                  ); exit(0);}
-    if(strcmp(indexOfItems[CHR_0958                     ].itemPrinted, "0958"                                                                       )) {printf("char %" FMT16S " is not CHR_0958                     \n", CHR_0958                     ); exit(0);}
+    if(strcmp(indexOfItems[ITM_POINTtoMb                ].itemPrinted, "0958"                                                                       )) {printf("char %" FMT16S " is not ITM_POINTtoMb                \n", ITM_POINTtoMb                ); exit(0);}
     if(strcmp(indexOfItems[CHR_ZETA                     ].itemPrinted, STD_ZETA                                                                     )) {printf("char %" FMT16S " is not CHR_ZETA                     \n", CHR_ZETA                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_ETA                      ].itemPrinted, STD_ETA                                                                      )) {printf("char %" FMT16S " is not CHR_ETA                      \n", CHR_ETA                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_0961                     ].itemPrinted, "0961"                                                                       )) {printf("char %" FMT16S " is not CHR_0961                     \n", CHR_0961                     ); exit(0);}
@@ -3556,40 +3556,40 @@ void testFunctions(void) {
   // Convert real16 stone to kg
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtStonesKg(multiply);
+  fnCvtStoneKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtStonesKg()", "6.35029318", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtStonesKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtStoneKg()", "6.35029318", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtStoneKg()", "1", "", 0);
 
 
   //////////////////////////////
   // Convert real34 stone to kg
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtStonesKg(multiply);
+  fnCvtStoneKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtStonesKg()", "6.35029318", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtStonesKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtStoneKg()", "6.35029318", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtStoneKg()", "1", "", 0);
 
 
   //////////////////////////////
   // Convert real16 kg to stone
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtStonesKg(divide);
+  fnCvtStoneKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtStonesKg()", "0.1574730444177697", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtStonesKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtStoneKg()", "0.1574730444177697", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtStoneKg()", "1", "", 0);
 
 
   //////////////////////////////
   // Convert real34 kg to stone
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtStonesKg(divide);
+  fnCvtStoneKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtStonesKg()", "0.1574730444177697005164098581035907", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtStonesKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtStoneKg()", "0.1574730444177697005164098581035907", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtStoneKg()", "1", "", 0);
 
 
   //////////////////////////////
@@ -3672,84 +3672,84 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtTrozKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 tons to kg
+  /////////////////////////////
+  // Convert real16 ton to kg
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtTonsKg(multiply);
+  fnCvtTonKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtTonsKg()", "1016.0469088", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtTonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtTonKg()", "1016.0469088", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtTonKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 tons to kg
+  /////////////////////////////
+  // Convert real34 ton to kg
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtTonsKg(multiply);
+  fnCvtTonKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtTonsKg()", "1016.0469088", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtTonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtTonKg()", "1016.0469088", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtTonKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 kg to tons
+  /////////////////////////////
+  // Convert real16 kg to ton
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtTonsKg(divide);
+  fnCvtTonKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtTonsKg()", "9.842065276110606e-4", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtTonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtTonKg()", "9.842065276110606e-4", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtTonKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 kg to tons
+  /////////////////////////////
+  // Convert real34 kg to ton
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtTonsKg(divide);
+  fnCvtTonKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtTonsKg()", "9.842065276110606282275616131474421e-4", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtTonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtTonKg()", "9.842065276110606282275616131474421e-4", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtTonKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 short tons to kg
+  ///////////////////////////////////
+  // Convert real16 short ton to kg
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtShorttonsKg(multiply);
+  fnCvtShorttonKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtShorttonsKg()", "907.18474", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtShorttonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtShorttonKg()", "907.18474", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtShorttonKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 short tons to kg
+  ///////////////////////////////////
+  // Convert real34 short ton to kg
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtShorttonsKg(multiply);
+  fnCvtShorttonKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtShorttonsKg()", "907.18474", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtShorttonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtShorttonKg()", "907.18474", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtShorttonKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 kg to short tons
+  ///////////////////////////////////
+  // Convert real16 kg to short ton
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtShorttonsKg(divide);
+  fnCvtShorttonKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtShorttonsKg()", "1.102311310924388e-3", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtShorttonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtShorttonKg()", "1.102311310924388e-3", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtShorttonKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 kg to short tons
+  ///////////////////////////////////
+  // Convert real34 kg to short ton
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtShorttonsKg(divide);
+  fnCvtShorttonKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtShorttonsKg()", "1.102311310924387903614869006725135e-3", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtShorttonsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtShorttonKg()", "1.102311310924387903614869006725135e-3", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtShorttonKg()", "1", "", 0);
 
 
   //////////////////////////////
@@ -4352,8 +4352,8 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtQuartM3()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 acres to m2
+  /////////////////////////////
+  // Convert real16 acre to m2
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
   fnCvtAcresM2(multiply);
@@ -4362,8 +4362,8 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcresM2()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 acres to m2
+  /////////////////////////////
+  // Convert real34 acre to m2
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
   fnCvtAcresM2(multiply);
@@ -4372,8 +4372,8 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcresM2()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 m2 to acres
+  /////////////////////////////
+  // Convert real16 m2 to acre
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
   fnCvtAcresM2(divide);
@@ -4382,8 +4382,8 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcresM2()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 m2 to acres
+  /////////////////////////////
+  // Convert real34 m2 to acre
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
   fnCvtAcresM2(divide);

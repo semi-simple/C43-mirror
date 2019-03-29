@@ -1580,8 +1580,20 @@
 #define ITM_BARRELtoM3b               1544
 #define ITM_M3toBARREL                1545
 #define ITM_M3toBARRELb               1546
+#define ITM_TONtoKGb                  1547
+#define ITM_TONtoKGc                  1548
+#define ITM_KGtoTONb                  1549
+#define ITM_KGtoTONc                  1550
+#define ITM_CARATtoKGc                1551
+#define ITM_KGtoCARATc                1552
+#define ITM_ATMtoPAb                  1553
+#define ITM_PAtoATMb                  1554
+#define ITM_FATHOMtoMc                1555
+#define ITM_MtoFATHOMc                1556
+#define ITM_POINTtoMc                 1557
+#define ITM_MtoPOINTc                 1558
 
-#define LAST_ITEM                     1547
+#define LAST_ITEM                     1559
 
 
 /********************************************//**

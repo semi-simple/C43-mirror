@@ -300,22 +300,22 @@ const int16_t menu_ConvE[]       = { ITM_CALtoJ,                    ITM_JtoCAL, 
 const int16_t menu_ConvP[]       = { ITM_HPEtoW,                    ITM_WtoHPE,                 ITM_HPUKtoW,              ITM_WtoHPUK,           ITM_HPMtoW,           ITM_WtoHPM             };
 
 const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_BARtoPA,              ITM_PAtoBAR,           ITM_PSItoPA,          ITM_PAtoPSI,
-                                     10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    ITM_ATMtoPA,          ITM_PAtoATM,
-                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     ITM_NULL,             ITM_NULL               };
+                                     10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    10000+ITM_ATMtoPA,    10000+ITM_PAtoATM,
+                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,   20000+ITM_PAtoATMb     };
 
 const int16_t menu_ConvM[]       = { ITM_LBStoKG,                   ITM_KGtoLBS,                ITM_CWTtoKG,              ITM_KGtoCWT,           ITM_OZtoKG,           ITM_KGtoOZ,
                                      10000+ITM_STOtoKGb,            10000+ITM_KGtoSTOb,         10000+ITM_SCWtoKGb,       10000+ITM_KGtoSCWb,    10000+ITM_TRZtoKGb,   10000+ITM_KGtoTRZb,
                                      20000+ITM_STOtoKG,             20000+ITM_KGtoSTO,          20000+ITM_SCWtoKG,        20000+ITM_KGtoSCW,     20000+ITM_TRZtoKG,    20000+ITM_KGtoTRZ,
-                                     ITM_TONtoKG,                   ITM_KGtoTON,                10000+ITM_STtoKGc,        10000+ITM_KGtoSTc,     10000+ITM_CARATtoKGb, 10000+ITM_KGtoCARATb,
-                                     ITM_NULL,                      ITM_NULL,                   30000+ITM_STtoKGb,        30000+ITM_KGtoSTb,     20000+ITM_CARATtoKG,  20000+ITM_KGtoCARAT,
-                                     ITM_NULL,                      ITM_NULL,                   20000+ITM_STtoKG,         20000+ITM_KGtoST,      ITM_NULL,             ITM_NULL               };
+                                     10000+ITM_TONtoKG,             10000+ITM_KGtoTON,          10000+ITM_STtoKGc,        10000+ITM_KGtoSTc,     10000+ITM_CARATtoKGb, 10000+ITM_KGtoCARATb,
+                                     30000+ITM_TONtoKGb,            30000+ITM_KGtoTONb,         30000+ITM_STtoKGb,        30000+ITM_KGtoSTb,     30000+ITM_CARATtoKG,  30000+ITM_KGtoCARAT,
+                                     20000+ITM_TONtoKGc,            20000+ITM_KGtoTONc,         20000+ITM_STtoKG,         20000+ITM_KGtoST,      20000+ITM_CARATtoKGc, 20000+ITM_KGtoCARATc   };
 
 const int16_t menu_ConvX[]       = { ITM_AUtoM,                     ITM_MtoAU,                  ITM_LYtoM,                ITM_MtoLY,             ITM_PCtoM,            ITM_MtoPC,
                                      ITM_MItoM,                     ITM_MtoMI,                  ITM_NMItoM,               ITM_MtoNMI,            ITM_FTtoM,            ITM_MtoFT,
                                      ITM_INtoM,                     ITM_MtoINCH,                ITM_NULL,                 ITM_NULL,              ITM_YDtoM,            ITM_MtoYD,
                                      10000+ITM_FATHOMtoMb,          10000+ITM_MtoFATHOMb,       10000+ITM_POINTtoMb,      10000+ITM_MtoPOINT,    10000+ITM_FTUStoMc,   10000+ITM_MtoFTUSc,
-                                     20000+ITM_FATHOMtoM,           20000+ITM_MtoFATHOM,        20000+ITM_POINTtoM,       20000+ITM_MtoPOINTb,   30000+ITM_FTUStoMb,   30000+ITM_MtoFTUSb,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              20000+ITM_FTUStoM,    20000+ITM_MtoFTUS      };
+                                     30000+ITM_FATHOMtoM,           30000+ITM_MtoFATHOM,        30000+ITM_POINTtoM,       30000+ITM_MtoPOINTb,   30000+ITM_FTUStoMb,   30000+ITM_MtoFTUSb,
+                                     20000+ITM_FATHOMtoMc,          20000+ITM_MtoFATHOMc,       20000+ITM_POINTtoMc,      20000+ITM_MtoPOINTc,   20000+ITM_FTUStoM,    20000+ITM_MtoFTUS      };
 
 const int16_t menu_ConvA[]       = { 10000+ITM_ACtoM2b,             10000+ITM_M2toACb,          ITM_NULL,                 ITM_NULL,              10000+ITM_ACUStoM2b,  10000+ITM_M2toACUSb,
                                      20000+ITM_ACtoM2,              20000+ITM_M2toAC,           ITM_NULL,                 ITM_NULL,              20000+ITM_ACUStoM2,   20000+ITM_M2toACUS     };

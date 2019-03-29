@@ -1653,6 +1653,18 @@ const item_t indexOfItems[] = {
 /* 1544 */  { fnCvtBarrelM3,               multiply,                    "bbl" STD_RIGHT_ARROW "m" STD_SUP_3,           STD_RIGHT_ARROW " m" STD_SUP_3,                                               SLS_ENABLED  },
 /* 1545 */  { fnCvtBarrelM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "bbl",           STD_RIGHT_ARROW " m" STD_SUP_3,                                               SLS_ENABLED  },
 /* 1546 */  { fnCvtBarrelM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "bbl",           "barrel",                                                                     SLS_ENABLED  },
+/* 1547 */  { fnCvtTonKg,                  multiply,                    "ton" STD_RIGHT_ARROW "kg",                    STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1548 */  { fnCvtTonKg,                  multiply,                    "ton" STD_RIGHT_ARROW "kg",                    STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1549 */  { fnCvtTonKg,                  divide,                      "kg" STD_RIGHT_ARROW "ton",                    STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1550 */  { fnCvtTonKg,                  divide,                      "kg" STD_RIGHT_ARROW "ton",                    STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1551 */  { fnCvtCaratKg,                multiply,                    "ct" STD_RIGHT_ARROW "kg",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1552 */  { fnCvtCaratKg,                divide,                      "kg" STD_RIGHT_ARROW "ct",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1553 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1554 */  { fnCvtAtmPa,                  divide,                      "Pa" STD_RIGHT_ARROW "atm",                    STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1555 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1556 */  { fnCvtFathomM,                divide,                      "m" STD_RIGHT_ARROW "fm.",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1557 */  { fnCvtPointsM,                multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
+/* 1558 */  { fnCvtPointsM,                divide,                      "m" STD_RIGHT_ARROW "pt.",                     STD_SPACE_HAIR,                                                               SLS_ENABLED  },
 
-/* 1547 */  { toBeCoded,                   NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
+/* 1559 */  { toBeCoded,                   NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
 };

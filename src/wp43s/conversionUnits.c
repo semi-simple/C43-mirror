@@ -220,8 +220,8 @@ void fnCvtOzKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtStonesKg(uint16_t multiplyDivide) {
-  unitConversion(const34_StonesToKg, multiplyDivide);
+void fnCvtStoneKg(uint16_t multiplyDivide) {
+  unitConversion(const34_StoneToKg, multiplyDivide);
 }
 
 
@@ -235,13 +235,18 @@ void fnCvtTrozKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtTonsKg(uint16_t multiplyDivide) {
-  unitConversion(const34_TonsToKg, multiplyDivide);
+void fnCvtTonKg(uint16_t multiplyDivide) {
+  unitConversion(const34_TonToKg, multiplyDivide);
 }
 
 
-void fnCvtShorttonsKg(uint16_t multiplyDivide) {
-  unitConversion(const34_ShorttonsToKg, multiplyDivide);
+void fnCvtShorttonKg(uint16_t multiplyDivide) {
+  unitConversion(const34_ShorttonToKg, multiplyDivide);
+}
+
+
+void fnCvtCaratKg(uint16_t multiplyDivide) {
+  unitConversion(const34_CaratToKg, multiplyDivide);
 }
 
 
@@ -295,6 +300,11 @@ void fnCvtPointsM(uint16_t multiplyDivide) {
 }
 
 
+void fnCvtFathomM(uint16_t multiplyDivide) {
+  unitConversion(const34_FathomToM, multiplyDivide);
+}
+
+
 void fnCvtGalukM3(uint16_t multiplyDivide) {
   unitConversion(const34_GalukToM3, multiplyDivide);
 }
@@ -312,6 +322,11 @@ void fnCvtFlozukM3(uint16_t multiplyDivide) {
 
 void fnCvtFlozusM3(uint16_t multiplyDivide) {
   unitConversion(const34_FlozusToM3, multiplyDivide);
+}
+
+
+void fnCvtBarrelM3(uint16_t multiplyDivide) {
+  unitConversion(const34_BarrelToM3, multiplyDivide);
 }
 
 

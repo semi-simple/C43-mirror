@@ -434,7 +434,7 @@
 #define ITM_MtoMI                      405
 #define ITM_MtoNMI                     406
 #define ITM_MtoPC                      407
-#define ITM_MtoPT                      408
+#define ITM_MtoPOINT                   408
 #define ITM_MtoYD                      409
 #define CST_35                         410
 #define CST_36                         411
@@ -501,7 +501,7 @@
 #define MNU_PROGS                      472
 #define ITM_PSItoPA                    473
 #define ITM_PSTO                       474
-#define ITM_PTtoM                      475
+#define ITM_POINTtoM                   475
 #define ITM_PUTK                       476
 #define ITM_PV                         477
 #define MNU_PFN                        478
@@ -867,7 +867,7 @@
 
 #define ITM_ACtoM2b                    838
 #define ITM_ACUStoM2b                  839
-#define ITM_ATMtoPAb                   840
+#define ITM_CARATtoKG                  840
 #define ITM_DBtoFRb                    841
 #define ITM_DBtoFRc                    842
 #define ITM_DBtoPRb                    843
@@ -882,14 +882,14 @@
 #define ITM_KGtoSTOb                   852
 #define ITM_KGtoSTb                    853
 #define ITM_KGtoSTc                    854
-#define ITM_KGtoTONb                   855
+#define ITM_KGtoCARAT                  855
 #define ITM_KGtoTRZb                   856
 #define ITM_M2toACb                    857
 #define ITM_M2toACUSb                  858
 #define ITM_M3toFZUKb                  859
 #define ITM_M3toFZUSb                  860
 #define ITM_MtoFTUSb                   861
-#define ITM_PAtoATMb                   862
+#define ITM_CARATtoKGb                 862
 #define ITM_PAtoIHGb                   863
 #define ITM_PAtoTORb                   864
 #define ITM_PRtoDBb                    865
@@ -898,7 +898,7 @@
 #define ITM_STOtoKGb                   868
 #define ITM_STtoKGb                    869
 #define ITM_STtoKGc                    870
-#define ITM_TONtoKGb                   871
+#define ITM_KGtoCARATb                 871
 #define ITM_TORtoPAb                   872
 #define ITM_TRZtoKGb                   873
 
@@ -982,12 +982,12 @@
 #define CHR_y                          950
 #define CHR_z                          951
 #define CHR_ALPHA                      952
-#define CHR_0953                       953
+#define ITM_0953                       953
 #define CHR_BETA                       954
 #define CHR_GAMMA                      955
 #define CHR_DELTA                      956
 #define CHR_EPSILON                    957
-#define CHR_0958                       958
+#define ITM_0958                       958
 #define CHR_ZETA                       959
 #define CHR_ETA                        960
 #define CHR_0961                       961
@@ -1568,8 +1568,20 @@
 #define ITM_SYSTEM                    1532
 #define ITM_DMStoD                    1533
 #define ITM_VANGLE                    1534
+#define ITM_FATHOMtoM                 1535
+#define ITM_FATHOMtoMb                1536
+#define ITM_MtoFATHOM                 1537
+#define ITM_MtoFATHOMb                1538
+#define ITM_FTUStoMc                  1539
+#define ITM_MtoFTUSc                  1540
+#define ITM_MtoPOINTb                 1541
+#define ITM_POINTtoMb                 1542
+#define ITM_BARRELtoM3                1543
+#define ITM_BARRELtoM3b               1544
+#define ITM_M3toBARREL                1545
+#define ITM_M3toBARRELb               1546
 
-#define LAST_ITEM                     1535
+#define LAST_ITEM                     1547
 
 
 /********************************************//**

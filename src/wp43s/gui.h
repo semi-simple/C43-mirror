@@ -34,13 +34,15 @@
 #define Y_TOP_PORTRAIT        376
 #define Y_TOP_LANDSCAPE        30
 
-void fnOff            (uint16_t unsuedParamButMandatory);
-void calcModeNormal   (void);
-void calcModeAim      (void);
-void calcModeTam      (void);
-void calcModeTAM      (void);
-void calcModeAIM      (uint16_t unusedParamButMandatory);
-void calcModeNIM      (uint16_t unusedParamButMandatory);
+#ifndef TESTSUITE_BUILD
+  void fnOff            (uint16_t unsuedParamButMandatory);
+  void calcModeNormal   (void);
+  void calcModeAim      (void);
+  void calcModeTam      (void);
+  void calcModeTAM      (void);
+  void calcModeAIM      (uint16_t unusedParamButMandatory);
+  void calcModeNIM      (uint16_t unusedParamButMandatory);
+#endif // TESTSUITE_BUILD
 
 #ifdef PC_BUILD
   void setupUI          (void);

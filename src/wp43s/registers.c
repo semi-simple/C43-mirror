@@ -2121,7 +2121,7 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
 
   if(getRegisterDataType(regist) == dtReal16) {
     real16ToString(REGISTER_REAL16_DATA(regist), str);
-    #ifdef PC_BUILD
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("real16 %s", str);
     #endif
 
@@ -2133,7 +2133,7 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
 
   else if(getRegisterDataType(regist) == dtReal34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
-    #ifdef PC_BUILD
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("real34 %s", str);
     #endif
 
@@ -2160,9 +2160,12 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
       real34ToString(&value, str + 200);
     #endif
 
-
-    #ifdef PC_BUILD
-      printf("angle %s (%s %s)", str, str + 200, getAngularModeName(getRegisterAngularMode(regist)));
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      real34_t real34;
+      stringToReal34(str, &real34);
+      convertAngle34FromInternal(&real34, getRegisterDataInfo(regist));
+      real34ToString(&real34, errorMessage);
+      printf("angle %s (%s %s)", str, errorMessage, getAngularModeName(getRegisterAngularMode(regist)));
     #endif
 
     #ifdef DMCP_BUILD
@@ -2173,8 +2176,8 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
 
   else if(getRegisterDataType(regist) == dtComplex16) {
     real16ToString(REGISTER_REAL16_DATA(regist), str);
-    #ifdef PC_BUILD
-      printf("complex16 %s + ", str);
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      printf("complex16 %s ", str);
     #endif
 
     #ifdef DMCP_BUILD
@@ -2183,20 +2186,30 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     #endif
 
     real16ToString(REGISTER_IMAG16_DATA(regist), str);
-    #ifdef PC_BUILD
-      printf("%si", str);
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
+        printf("- i×%s", str + 1);
+      }
+      else {
+        printf("+ i×%s", str);
+      }
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "%si", str);
+      if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
+        sprintf(errorMessage, "-i×%s", str + 1);
+      }
+      else {
+        sprintf(errorMessage, "+i×%s", str);
+      }
       lcd_putsAt(t20, line, errorMessage);
     #endif
   }
 
   else if(getRegisterDataType(regist) == dtComplex34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
-    #ifdef PC_BUILD
-      printf("complex34 %s + ", str);
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      printf("complex34 %s ", str);
     #endif
 
     #ifdef DMCP_BUILD
@@ -2205,20 +2218,30 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     #endif
 
     real34ToString(REGISTER_IMAG34_DATA(regist), str);
-    #ifdef PC_BUILD
-      printf("%si", str);
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
+        printf("- i×%s", str + 1);
+      }
+      else {
+        printf("+ i×%s", str);
+      }
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "%si", str);
+      if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
+        sprintf(errorMessage, "-i×%s", str + 1);
+      }
+      else {
+        sprintf(errorMessage, "+i×%s", str);
+      }
       lcd_putsAt(t20, line, errorMessage);
     #endif
   }
 
   else if(getRegisterDataType(regist) == dtString) {
     stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
-    #ifdef PC_BUILD
-      printf("STR (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      printf("string (%" FMT16U " bytes) |%s|", *(REGISTER_DATA_MAX_LEN(regist)), str);
     #endif
 
     #ifdef DMCP_BUILD
@@ -2229,8 +2252,9 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
 
   else if(getRegisterDataType(regist) == dtShortInteger) {
     uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(regist));
-    #ifdef PC_BUILD
-      printf("SI %08x-%08x", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff));
+
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      printf("short integer %08x-%08x", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff));
     #endif
 
     #ifdef DMCP_BUILD
@@ -2244,8 +2268,8 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
 
     convertLongIntegerRegisterToLongInteger(regist, &tmp);
     longIntegerToString(&tmp, str, 10);
-    #ifdef PC_BUILD
-      printf("BI (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      printf("long integer (%" FMT16U " bytes) %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
     #endif
 
     #ifdef DMCP_BUILD

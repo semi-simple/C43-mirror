@@ -205,8 +205,8 @@ void fnCvtAtmPa(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtLbsKg(uint16_t multiplyDivide) {
-  unitConversion(const34_LbsToKg, multiplyDivide);
+void fnCvtLbKg(uint16_t multiplyDivide) {
+  unitConversion(const34_LbToKg, multiplyDivide);
 }
 
 
@@ -280,8 +280,8 @@ void fnCvtPcM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtInchesM(uint16_t multiplyDivide) {
-  unitConversion(const34_InchesToM, multiplyDivide);
+void fnCvtInchM(uint16_t multiplyDivide) {
+  unitConversion(const34_InchToM, multiplyDivide);
 }
 
 
@@ -290,13 +290,13 @@ void fnCvtSfeetM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtYardsM(uint16_t multiplyDivide) {
-  unitConversion(const34_YardsToM, multiplyDivide);
+void fnCvtYardM(uint16_t multiplyDivide) {
+  unitConversion(const34_YardToM, multiplyDivide);
 }
 
 
-void fnCvtPointsM(uint16_t multiplyDivide) {
-  unitConversion(const34_PointsToM, multiplyDivide);
+void fnCvtPointM(uint16_t multiplyDivide) {
+  unitConversion(const34_PointToM, multiplyDivide);
 }
 
 
@@ -335,13 +335,13 @@ void fnCvtQuartM3(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtAcresM2(uint16_t multiplyDivide) {
-  unitConversion(const34_AccresToM2, multiplyDivide);
+void fnCvtAcreM2(uint16_t multiplyDivide) {
+  unitConversion(const34_AccreToM2, multiplyDivide);
 }
 
 
-void fnCvtAcresusM2(uint16_t multiplyDivide) {
-  unitConversion(const34_AccresusToM2, multiplyDivide);
+void fnCvtAcreusM2(uint16_t multiplyDivide) {
+  unitConversion(const34_AccreusToM2, multiplyDivide);
 }
 
 

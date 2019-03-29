@@ -20,6 +20,7 @@
 
 #include "wp43s.h"
 
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Displays the f or g shift state in the
  * upper left corner of the T register line
@@ -80,6 +81,11 @@ void executeFunction(int16_t fn, int16_t shift) {
 
     if(shift <= row) {
       func = (sm->softkeyRow)[6*(softmenuStack[softmenuStackPointer - 1].row + shift) + (fn-1)];
+
+      if(func == CHR_PROD_SIGN) {
+        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+      }
+
       if(func < 0) { // softmenu
         showSoftmenu(NULL, func, true);
       }
@@ -102,6 +108,7 @@ void executeFunction(int16_t fn, int16_t shift) {
     }
   }
 }
+
 
 
 /********************************************//**
@@ -147,6 +154,26 @@ void btnFnClicked(void *w, void *data) {
 }
 
 
+
+/********************************************//**
+ * \brief Simulate a button click.
+ *
+ * \param w GtkWidget* The button to pass to btnPressed and btnReleased
+ * \param data gpointer String containing the key ID
+ * \return void
+ ***********************************************/
+#ifdef PC_BUILD
+void btnClicked(GtkWidget *w, gpointer data) {
+#endif
+#ifdef DMCP_BUILD
+void btnClicked(void *w, void *data) {
+#endif
+  btnPressed(w, data);
+  btnReleased(w, data);
+}
+
+
+
 uint16_t determineItem(const calcKey_t *key) {
   uint16_t result;
   if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
@@ -168,37 +195,6 @@ uint16_t determineItem(const calcKey_t *key) {
     result = 0;
   }
   return result;
-}
-
-
-/********************************************//**
- * \brief Simulate a button click.
- *
- * \param w GtkWidget* The button to pass to btnPressed and btnReleased
- * \param data gpointer String containing the key ID
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnClicked(GtkWidget *w, gpointer data) {
-#endif
-#ifdef DMCP_BUILD
-void btnClicked(void *w, void *data) {
-#endif
-  btnPressed(w, data);
-  btnReleased(w, data);
-}
-
-
-void fnComplexCCCC(uint16_t unusedParamButMandatory) {
-  shiftF = true;
-
-  #ifdef PC_BUILD
-    btnClicked(NULL, "02");
-  #endif
-
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "02");
-  #endif
 }
 
 
@@ -273,6 +269,11 @@ void btnPressed(void *notUsed, void *data) {
 
   else {
     int16_t item = determineItem(key);
+
+    if(item == CHR_PROD_SIGN) {
+      item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);
+    }
+
     resetShiftState();
 
     if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
@@ -987,6 +988,7 @@ void btnPressed(void *notUsed, void *data) {
 }
 
 
+
 /********************************************//**
  * \brief A calc button was released
  *
@@ -1006,3 +1008,18 @@ void btnReleased(void *notUsed, void *data) {
     runFunction(item);
   }
 }
+
+
+
+void fnComplexCCCC(uint16_t unusedParamButMandatory) {
+  shiftF = true;
+
+  #ifdef PC_BUILD
+    btnClicked(NULL, "02");
+  #endif
+
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "02");
+  #endif
+}
+#endif // TESTSUITE_BUILD

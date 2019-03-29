@@ -64,7 +64,39 @@
   #define EXTRA_INFO_ON_CALC_ERROR 0
 #endif
 
-
+#ifdef TESTSUITE_BUILD
+  #undef  PC_BUILD
+  #undef  DMCP_BUILD
+  #undef  DEBUG_PANEL
+  #define DEBUG_PANEL 0
+  #undef  DEBUG_REGISTER_L
+  #define DEBUG_REGISTER_L 0
+  #undef  STACK_LIFT_DEBUG
+  #define STACK_LIFT_DEBUG 0
+  #undef  EXTRA_INFO_ON_CALC_ERROR
+  #define EXTRA_INFO_ON_CALC_ERROR 0
+  #define addItemToBuffer toBeCoded
+  #define fnOff           toBeCoded
+  #define fnAim           toBeCoded
+  #define fnComplexCCCC   toBeCoded
+  #define registerBrowser toBeCoded
+  #define flagBrowser     toBeCoded
+  #define fontBrowser     toBeCoded
+  #define refreshRegisterLine(a)  {}
+  #define clearScreen(a, b, c)    {}
+  #define toggleUserMode()        {}
+  #define showIntegerMode()       {}
+  #define showAngularMode()       {}
+  #define showComplexMode()       {}
+  #define showPgmBegin()          {}
+  #define showFracMode()          {}
+  #define displayBugScreen(a)     {}
+  #define showRealComplexResult() {}
+  #define showOverflowCarry()     {}
+  #define hideUserMode()          {}
+  #define showDateTime()          {}
+  #define showAlphaMode()         {}
+#endif // TESTSUITE_BUILD
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -358,7 +390,7 @@ typedef int16_t calcRegister_t;
 #if (STACK_LIFT_DEBUG == 1)
   #define STACK_LIFT_ENABLE  stackLiftEnable();
   #define STACK_LIFT_DISABLE stackLiftDisable();
-#elif
+#else
   #define STACK_LIFT_ENABLE  stackLiftEnabled = true;
   #define STACK_LIFT_DISABLE stackLiftEnabled = false;
 #endif

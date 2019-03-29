@@ -20,7 +20,10 @@
 
 #define NUMBER_OF_ERROR_CODES 29
 
+#ifndef TESTSUITE_BUILD
 void displayBugScreen       (const char *message);
+#endif
+
 void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegisterLine, calcRegister_t errRegisterLine);
 
 #ifdef PC_BUILD

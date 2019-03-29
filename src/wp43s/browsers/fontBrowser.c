@@ -21,6 +21,8 @@
 #include "wp43s.h"
 
 
+
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief The font browser application
  *
@@ -129,3 +131,4 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
     displayBugScreen("In function showFonts: This should never happen!");
   }
 }
+#endif

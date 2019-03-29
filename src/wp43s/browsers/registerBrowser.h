@@ -18,4 +18,6 @@
  * \file registerBrowser.h
  ***********************************************/
 
+#ifndef TESTSUITE_BUILD
 void registerBrowser(uint16_t unusedParamButMandatory);
+#endif

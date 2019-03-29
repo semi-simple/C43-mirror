@@ -1484,7 +1484,7 @@
 #define CHR_MUCH_GREATER              1449
 #define CHR_SUN                       1450
 #define CHR_DOWN_TACK                 1451
-#define CHR_UP_TACK                   1452
+#define CHR_PERPENDICULAR             1452
 #define CHR_XOR                       1453
 #define CHR_NAND                      1454
 #define CHR_NOR                       1455
@@ -1595,6 +1595,7 @@
 
 #define LAST_ITEM                     1559
 
+#define CHR_PROD_SIGN                 9999
 
 /********************************************//**
  * \typedef item_t

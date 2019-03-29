@@ -43,6 +43,7 @@ void fnNop(uint16_t unusedParamButMandatory) {
 
 
 
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Runs a function
  *
@@ -97,6 +98,7 @@ void runFunction(int16_t func) {
     }
   #endif
 }
+#endif
 
 
 
@@ -118,8 +120,8 @@ const item_t indexOfItems[] = {
 /*   12 */  { fnConstant,                  2,                           "a" STD_SUB_0,                                 "a" STD_SUB_0,                                                                SLS_ENABLED  },
 /*   13 */  { toBeCoded,                   NOPARAM,                     "ABS",                                         "ABS",                                                                        SLS_UNCHANGED},
 /*   14 */  { toBeCoded,                   NOPARAM,                     "ACC",                                         "ACC",                                                                        SLS_UNCHANGED},
-/*   15 */  { fnCvtAcresM2,                multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            "acre",                                                                       SLS_ENABLED  },
-/*   16 */  { fnCvtAcresusM2,              multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     "acre" STD_US,                                                                SLS_ENABLED  },
+/*   15 */  { fnCvtAcreM2,                 multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            "acre",                                                                       SLS_ENABLED  },
+/*   16 */  { fnCvtAcreusM2,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     "acre" STD_US,                                                                SLS_ENABLED  },
 /*   17 */  { toBeCoded,                   NOPARAM,                     "ADV",                                         "ADV",                                                                        SLS_UNCHANGED},
 /*   18 */  { toBeCoded,                   NOPARAM,                     "AGM",                                         "AGM",                                                                        SLS_UNCHANGED},
 /*   19 */  { toBeCoded,                   NOPARAM,                     "AGRAPH",                                      "AGRAPH",                                                                     SLS_UNCHANGED},
@@ -361,7 +363,7 @@ const item_t indexOfItems[] = {
 /*  255 */  { toBeCoded,                   NOPARAM,                     "INPUT",                                       "INPUT",                                                                      SLS_UNCHANGED},
 /*  256 */  { toBeCoded,                   NOPARAM,                     "INTS",                                        "INTS",                                                                       SLS_UNCHANGED},
 /*  257 */  { toBeCoded,                   NOPARAM,                     "INT?",                                        "INT?",                                                                       SLS_UNCHANGED},
-/*  258 */  { fnCvtInchesM,                multiply,                    "in." STD_RIGHT_ARROW "m",                     "in." STD_RIGHT_ARROW "m",                                                    SLS_ENABLED  },
+/*  258 */  { fnCvtInchM,                  multiply,                    "in." STD_RIGHT_ARROW "m",                     "in." STD_RIGHT_ARROW "m",                                                    SLS_ENABLED  },
 /*  259 */  { fnIp,                        NOPARAM,                     "IP",                                          "IP",                                                                         SLS_ENABLED  },
 /*  260 */  { toBeCoded,                   NOPARAM,                     "ISE",                                         "ISE",                                                                        SLS_UNCHANGED},
 /*  261 */  { toBeCoded,                   NOPARAM,                     "ISG",                                         "ISG",                                                                        SLS_UNCHANGED},
@@ -389,7 +391,7 @@ const item_t indexOfItems[] = {
 /*  283 */  { toBeCoded,                   NOPARAM,                     "KEYX",                                        "KEYX",                                                                       SLS_UNCHANGED},
 /*  284 */  { toBeCoded,                   NOPARAM,                     "KEY?",                                        "KEY?",                                                                       SLS_UNCHANGED},
 /*  285 */  { fnCvtCwtKg,                  divide,                      "kg" STD_RIGHT_ARROW "cwt",                    "kg" STD_RIGHT_ARROW "cwt",                                                   SLS_ENABLED  },
-/*  286 */  { fnCvtLbsKg,                  divide,                      "kg" STD_RIGHT_ARROW "lb.",                    "kg" STD_RIGHT_ARROW "lb.",                                                   SLS_ENABLED  },
+/*  286 */  { fnCvtLbKg,                   divide,                      "kg" STD_RIGHT_ARROW "lb.",                    "kg" STD_RIGHT_ARROW "lb.",                                                   SLS_ENABLED  },
 /*  287 */  { fnCvtOzKg,                   divide,                      "kg" STD_RIGHT_ARROW "oz",                     "kg" STD_RIGHT_ARROW "oz",                                                    SLS_ENABLED  },
 /*  288 */  { fnCvtShortcwtKg,             divide,                      "kg" STD_RIGHT_ARROW "scw",                    "kg " STD_RIGHT_ARROW,                                                        SLS_ENABLED  },
 /*  289 */  { fnCvtStoneKg,                divide,                      "kg" STD_RIGHT_ARROW "sto",                    "kg " STD_RIGHT_ARROW,                                                        SLS_ENABLED  },
@@ -403,7 +405,7 @@ const item_t indexOfItems[] = {
 /*  297 */  { fnCvtLbfN,                   multiply,                    "lbf" STD_RIGHT_ARROW "N",                     "lbf" STD_RIGHT_ARROW "N",                                                    SLS_ENABLED  },
 /*  298 */  { toBeCoded,                   NOPARAM,                     "LBL",                                         "LBL",                                                                        SLS_UNCHANGED},
 /*  299 */  { toBeCoded,                   NOPARAM,                     "LBL?",                                        "LBL?",                                                                       SLS_UNCHANGED},
-/*  300 */  { fnCvtLbsKg,                  multiply,                    "lb." STD_RIGHT_ARROW "kg",                    "lb." STD_RIGHT_ARROW "kg",                                                   SLS_ENABLED  },
+/*  300 */  { fnCvtLbKg,                   multiply,                    "lb." STD_RIGHT_ARROW "kg",                    "lb." STD_RIGHT_ARROW "kg",                                                   SLS_ENABLED  },
 /*  301 */  { fnLcm,                       NOPARAM,                     "LCM",                                         "LCM",                                                                        SLS_UNCHANGED},
 /*  302 */  { toBeCoded,                   NOPARAM,                     "LEAP?",                                       "LEAP?",                                                                      SLS_UNCHANGED},
 /*  303 */  { toBeCoded,                   NOPARAM,                     "LgNrm",                                       "LgNrm",                                                                      SLS_UNCHANGED},
@@ -441,8 +443,8 @@ const item_t indexOfItems[] = {
 /*  335 */  { fnLeadingZeros,              false,                       "LZOFF",                                       "LZOFF",                                                                      SLS_UNCHANGED},
 /*  336 */  { fnLeadingZeros,              true,                        "LZON",                                        "LZON",                                                                       SLS_UNCHANGED},
 /*  337 */  { toBeCoded,                   NOPARAM,                     "L.R.",                                        "L.R.",                                                                       SLS_UNCHANGED},
-/*  338 */  { fnCvtAcresM2,                divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "m" STD_SUP_2 " " STD_RIGHT_ARROW,                                            SLS_ENABLED  },
-/*  339 */  { fnCvtAcresusM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "m" STD_SUP_2 " " STD_RIGHT_ARROW,                                            SLS_ENABLED  },
+/*  338 */  { fnCvtAcreM2,                 divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "m" STD_SUP_2 " " STD_RIGHT_ARROW,                                            SLS_ENABLED  },
+/*  339 */  { fnCvtAcreusM2,               divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "m" STD_SUP_2 " " STD_RIGHT_ARROW,                                            SLS_ENABLED  },
 /*  340 */  { fnCvtFlozukM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_UK,     "m" STD_SUP_3 " " STD_RIGHT_ARROW,                                            SLS_ENABLED  },
 /*  341 */  { fnCvtFlozusM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_US,     "m" STD_SUP_3 " " STD_RIGHT_ARROW,                                            SLS_ENABLED  },
 /*  342 */  { fnCvtGalukM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_UK,     "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_UK,                                    SLS_ENABLED  },
@@ -506,13 +508,13 @@ const item_t indexOfItems[] = {
 /*  400 */  { fnCvtAuM,                    divide,                      "m" STD_RIGHT_ARROW "au",                      "m" STD_RIGHT_ARROW "au",                                                     SLS_ENABLED  },
 /*  401 */  { fnCvtFtM,                    divide,                      "m" STD_RIGHT_ARROW "ft.",                     "m" STD_RIGHT_ARROW "ft.",                                                    SLS_ENABLED  },
 /*  402 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "m " STD_RIGHT_ARROW,                                                         SLS_ENABLED  },
-/*  403 */  { fnCvtInchesM,                divide,                      "m" STD_RIGHT_ARROW "in.",                     "m" STD_RIGHT_ARROW "in.",                                                    SLS_ENABLED  },
+/*  403 */  { fnCvtInchM,                  divide,                      "m" STD_RIGHT_ARROW "in.",                     "m" STD_RIGHT_ARROW "in.",                                                    SLS_ENABLED  },
 /*  404 */  { fnCvtLyM,                    divide,                      "m" STD_RIGHT_ARROW "ly",                      "m" STD_RIGHT_ARROW "ly",                                                     SLS_ENABLED  },
 /*  405 */  { fnCvtMiM,                    divide,                      "m" STD_RIGHT_ARROW "mi.",                     "m" STD_RIGHT_ARROW "mi.",                                                    SLS_ENABLED  },
 /*  406 */  { fnCvtNmiM,                   divide,                      "m" STD_RIGHT_ARROW "nmi.",                    "m" STD_RIGHT_ARROW "nmi.",                                                   SLS_ENABLED  },
 /*  407 */  { fnCvtPcM,                    divide,                      "m" STD_RIGHT_ARROW "pc",                      "m" STD_RIGHT_ARROW "pc",                                                     SLS_ENABLED  },
-/*  408 */  { fnCvtPointsM,                divide,                      "m" STD_RIGHT_ARROW "pt.",                     "point",                                                                      SLS_ENABLED  },
-/*  409 */  { fnCvtYardsM,                 divide,                      "m" STD_RIGHT_ARROW "yd.",                     "m" STD_RIGHT_ARROW "yd.",                                                    SLS_ENABLED  },
+/*  408 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     "point",                                                                      SLS_ENABLED  },
+/*  409 */  { fnCvtYardM,                  divide,                      "m" STD_RIGHT_ARROW "yd.",                     "m" STD_RIGHT_ARROW "yd.",                                                    SLS_ENABLED  },
 /*  410 */  { fnConstant,                  35,                          "M" STD_SUB_SUN,                               "M" STD_SUB_SUN,                                                              SLS_ENABLED  },
 /*  411 */  { fnConstant,                  36,                          "M" STD_SUB_EARTH,                             "M" STD_SUB_EARTH,                                                            SLS_ENABLED  },
 /*  412 */  { fnConstant,                  37,                          "N" STD_SUB_A,                                 "N" STD_SUB_A,                                                                SLS_ENABLED  },
@@ -578,7 +580,7 @@ const item_t indexOfItems[] = {
 /*  472 */  { toBeCoded,                   NOPARAM,                     "PROGS",                                       "PROGS",                                                                      SLS_UNCHANGED},
 /*  473 */  { fnCvtPsiPa,                  multiply,                    "psi" STD_RIGHT_ARROW "Pa",                    "psi" STD_RIGHT_ARROW "Pa",                                                   SLS_ENABLED  },
 /*  474 */  { toBeCoded,                   NOPARAM,                     "PSTO",                                        "PSTO",                                                                       SLS_UNCHANGED},
-/*  475 */  { fnCvtPointsM,                multiply,                    "pt." STD_RIGHT_ARROW "m",                     "point",                                                                      SLS_ENABLED  },
+/*  475 */  { fnCvtPointM,                 multiply,                    "pt." STD_RIGHT_ARROW "m",                     "point",                                                                      SLS_ENABLED  },
 /*  476 */  { toBeCoded,                   NOPARAM,                     "PUTK",                                        "PUTK",                                                                       SLS_UNCHANGED},
 /*  477 */  { toBeCoded,                   NOPARAM,                     "PV",                                          "PV",                                                                         SLS_UNCHANGED},
 /*  478 */  { toBeCoded,                   NOPARAM,                     "P.FN",                                        "P.FN",                                                                       SLS_UNCHANGED},
@@ -798,7 +800,7 @@ const item_t indexOfItems[] = {
 /*  692 */  { toBeCoded,                   NOPARAM,                     "x" STD_GREATER_EQUAL " ?",                    "x" STD_GREATER_EQUAL " ?",                                                   SLS_UNCHANGED},
 /*  693 */  { toBeCoded,                   NOPARAM,                     "x> ?",                                        "x> ?",                                                                       SLS_UNCHANGED},
 /*  694 */  { toBeCoded,                   NOPARAM,                     STD_xTH_ROOT STD_y_UNDER_ROOT,                 STD_xTH_ROOT STD_y_UNDER_ROOT,                                                SLS_ENABLED  },
-/*  695 */  { fnCvtYardsM,                 multiply,                    "yd." STD_RIGHT_ARROW "m",                     "yd." STD_RIGHT_ARROW "m",                                                    SLS_ENABLED  },
+/*  695 */  { fnCvtYardM,                  multiply,                    "yd." STD_RIGHT_ARROW "m",                     "yd." STD_RIGHT_ARROW "m",                                                    SLS_ENABLED  },
 /*  696 */  { toBeCoded,                   NOPARAM,                     "YEAR",                                        "YEAR",                                                                       SLS_UNCHANGED},
 /*  697 */  { fnCvtYearS,                  multiply,                    "year" STD_RIGHT_ARROW "s",                    "year" STD_RIGHT_ARROW "s",                                                   SLS_ENABLED  },
 /*  698 */  { fnPower,                     NOPARAM,                     "y" STD_SUP_x,                                 "y" STD_SUP_x,                                                                SLS_ENABLED  },
@@ -942,8 +944,8 @@ const item_t indexOfItems[] = {
 /*  836 */  { toBeCoded,                   79,                          "#",                                           "#",                                                                          SLS_UNCHANGED},
 /*  837 */  { toBeCoded,                   NOPARAM,                     "#B",                                          "#B",                                                                         SLS_UNCHANGED},
 
-/*  838 */  { fnCvtAcresM2,                multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            STD_RIGHT_ARROW " m" STD_SUP_2,                                               SLS_ENABLED  },
-/*  839 */  { fnCvtAcresusM2,              multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     STD_RIGHT_ARROW " m" STD_SUP_2,                                               SLS_ENABLED  },
+/*  838 */  { fnCvtAcreM2,                 multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            STD_RIGHT_ARROW " m" STD_SUP_2,                                               SLS_ENABLED  },
+/*  839 */  { fnCvtAcreusM2,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     STD_RIGHT_ARROW " m" STD_SUP_2,                                               SLS_ENABLED  },
 /*  840 */  { fnCvtCaratKg,                multiply,                    "ct" STD_RIGHT_ARROW "kg",                     "carat",                                                                      SLS_ENABLED  },
 /*  841 */  { fnCvtDbRatio,                20,                          "dB" STD_RIGHT_ARROW "fr",                     "field",                                                                      SLS_ENABLED  },
 /*  842 */  { fnCvtDbRatio,                20,                          "dB" STD_RIGHT_ARROW "fr",                     "ratio",                                                                      SLS_ENABLED  },
@@ -961,8 +963,8 @@ const item_t indexOfItems[] = {
 /*  854 */  { fnCvtShorttonKg,             divide,                      "kg" STD_RIGHT_ARROW "s.t",                    "ton",                                                                        SLS_ENABLED  },
 /*  855 */  { fnCvtCaratKg,                divide,                      "kg" STD_RIGHT_ARROW "ct",                     "kg " STD_RIGHT_ARROW,                                                        SLS_ENABLED  },
 /*  856 */  { fnCvtTrozKg,                 divide,                      "kg" STD_RIGHT_ARROW "trz",                    "tr.oz",                                                                      SLS_ENABLED  },
-/*  857 */  { fnCvtAcresM2,                divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "acre",                                                                       SLS_ENABLED  },
-/*  858 */  { fnCvtAcresusM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "acre" STD_US,                                                                SLS_ENABLED  },
+/*  857 */  { fnCvtAcreM2,                 divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "acre",                                                                       SLS_ENABLED  },
+/*  858 */  { fnCvtAcreusM2,               divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "acre" STD_US,                                                                SLS_ENABLED  },
 /*  859 */  { fnCvtFlozukM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_UK,     "floz" STD_UK,                                                                SLS_ENABLED  },
 /*  860 */  { fnCvtFlozusM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_US,     "floz" STD_US,                                                                SLS_ENABLED  },
 /*  861 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "survey",                                                                     SLS_ENABLED  },
@@ -1445,7 +1447,7 @@ const item_t indexOfItems[] = {
 /* 1336 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_DEGREE,                                                                   SLS_UNCHANGED},
 /* 1337 */  { addItemToBuffer,             CHR_PLUS_MINUS,              "",                                            STD_PLUS_MINUS,                                                               SLS_UNCHANGED},
 /* 1338 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_mu_b,                                                                     SLS_UNCHANGED},
-/* 1339 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_DOT,                                                                      SLS_UNCHANGED},
+/* 1339 */  { addItemToBuffer,             CHR_DOT,                     "",                                            STD_DOT,                                                                      SLS_UNCHANGED},
 /* 1340 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_ORDINAL,                                                                  SLS_UNCHANGED},
 /* 1341 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_RIGHT_DOUBLE_ANGLE,                                                       SLS_UNCHANGED},
 /* 1342 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_ONE_HALF,                                                                 SLS_UNCHANGED},
@@ -1558,7 +1560,7 @@ const item_t indexOfItems[] = {
 /* 1449 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_MUCH_GREATER,                                                             SLS_UNCHANGED},
 /* 1450 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_SUN,                                                                      SLS_UNCHANGED},
 /* 1451 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_DOWN_TACK,                                                                SLS_UNCHANGED},
-/* 1452 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_UP_TACK,                                                                  SLS_UNCHANGED},
+/* 1452 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_PERPENDICULAR,                                                            SLS_UNCHANGED},
 /* 1453 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_XOR,                                                                      SLS_UNCHANGED},
 /* 1454 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_NAND,                                                                     SLS_UNCHANGED},
 /* 1455 */  { toBeCoded,                   NOPARAM,                     "",                                            STD_NOR,                                                                      SLS_UNCHANGED},
@@ -1647,8 +1649,8 @@ const item_t indexOfItems[] = {
 /* 1538 */  { fnCvtFathomM,                divide,                      "m" STD_RIGHT_ARROW "fm.",                     "fathom",                                                                     SLS_ENABLED  },
 /* 1539 */  { fnCvtSfeetM,                 multiply,                    "ft" STD_US STD_RIGHT_ARROW "m",               STD_RIGHT_ARROW " m",                                                         SLS_ENABLED  },
 /* 1540 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "foot" STD_US,                                                                SLS_ENABLED  },
-/* 1541 */  { fnCvtPointsM,                divide,                      "m" STD_RIGHT_ARROW "pt.",                     "m " STD_RIGHT_ARROW,                                                         SLS_ENABLED  },
-/* 1542 */  { fnCvtPointsM,                multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_RIGHT_ARROW " m",                                                         SLS_ENABLED  },
+/* 1541 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     "m " STD_RIGHT_ARROW,                                                         SLS_ENABLED  },
+/* 1542 */  { fnCvtPointM,                 multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_RIGHT_ARROW " m",                                                         SLS_ENABLED  },
 /* 1543 */  { fnCvtBarrelM3,               multiply,                    "bbl" STD_RIGHT_ARROW "m" STD_SUP_3,           "barrel",                                                                     SLS_ENABLED  },
 /* 1544 */  { fnCvtBarrelM3,               multiply,                    "bbl" STD_RIGHT_ARROW "m" STD_SUP_3,           STD_RIGHT_ARROW " m" STD_SUP_3,                                               SLS_ENABLED  },
 /* 1545 */  { fnCvtBarrelM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "bbl",           STD_RIGHT_ARROW " m" STD_SUP_3,                                               SLS_ENABLED  },

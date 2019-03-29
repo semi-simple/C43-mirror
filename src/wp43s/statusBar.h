@@ -30,6 +30,7 @@
 #define X_USER_MODE      375
 #define X_BATTERY        389
 
+#ifndef TESTSUITE_BUILD
 void showDateTime         (void);
 void showRealComplexResult(void);
 void showComplexMode      (void);
@@ -57,3 +58,4 @@ void toggleUserMode       (void);
 void showBattery          (void);
 void hideBattery          (void);
 void toggleBattery        (void);
+#endif

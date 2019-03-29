@@ -52,7 +52,7 @@ void fnCvtTorrPa    (uint16_t multiplyDivide);
 void fnCvtAtmPa     (uint16_t multiplyDivide);
 
 // Mass
-void fnCvtLbsKg     (uint16_t multiplyDivide);
+void fnCvtLbKg      (uint16_t multiplyDivide);
 void fnCvtCwtKg     (uint16_t multiplyDivide);
 void fnCvtOzKg      (uint16_t multiplyDivide);
 void fnCvtStoneKg   (uint16_t multiplyDivide);
@@ -69,10 +69,10 @@ void fnCvtLyM       (uint16_t multiplyDivide);
 void fnCvtNmiM      (uint16_t multiplyDivide);
 void fnCvtFtM       (uint16_t multiplyDivide);
 void fnCvtPcM       (uint16_t multiplyDivide);
-void fnCvtInchesM   (uint16_t multiplyDivide);
+void fnCvtInchM     (uint16_t multiplyDivide);
 void fnCvtSfeetM    (uint16_t multiplyDivide);
-void fnCvtYardsM    (uint16_t multiplyDivide);
-void fnCvtPointsM   (uint16_t multiplyDivide);
+void fnCvtYardM     (uint16_t multiplyDivide);
+void fnCvtPointM    (uint16_t multiplyDivide);
 void fnCvtFathomM   (uint16_t multiplyDivide);
 
 // Volume
@@ -84,8 +84,8 @@ void fnCvtQuartM3   (uint16_t multiplyDivide);
 void fnCvtBarrelM3  (uint16_t multiplyDivide);
 
 // Area
-void fnCvtAcresM2   (uint16_t multiplyDivide);
-void fnCvtAcresusM2 (uint16_t multiplyDivide);
+void fnCvtAcreM2    (uint16_t multiplyDivide);
+void fnCvtAcreusM2  (uint16_t multiplyDivide);
 
 // ...
 void fnCvtRatioDb   (uint16_t multiplyDivide);

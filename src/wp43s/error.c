@@ -128,6 +128,8 @@ void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegiste
 }
 
 
+
+#ifndef TESTSUITE_BUILD
 void nextWord(const char *str, int16_t *pos, char *word) {
   int16_t i = 0;
 
@@ -201,3 +203,4 @@ void displayBugScreen(const char *msg) {
     }
   }
 }
+#endif

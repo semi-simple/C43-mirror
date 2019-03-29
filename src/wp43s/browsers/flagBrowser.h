@@ -14,4 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef TESTSUITE_BUILD
 void flagBrowser(uint16_t unusedParamButMandatory);
+#endif

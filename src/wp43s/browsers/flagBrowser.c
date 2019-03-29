@@ -21,6 +21,8 @@
 #include "wp43s.h"
 
 
+
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief The flag browser application
  *
@@ -113,3 +115,4 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     }
   }
 }
+#endif

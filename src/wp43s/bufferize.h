@@ -32,9 +32,11 @@
 #define TT_BACKSPACE       7
 #define TT_NOTHING         8
 
-void    fnAim                   (uint16_t unusedParamButMandatory);
-void    addItemToBuffer         (uint16_t item);
-void    addItemToNimBuffer      (int16_t item);
-void    tamTransitionSystem     (uint16_t tamEvent);
-void    closeNim                (void);
-void    nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer);
+#ifndef TESTSUITE_BUILD
+  void    fnAim                   (uint16_t unusedParamButMandatory);
+  void    addItemToBuffer         (uint16_t item);
+  void    addItemToNimBuffer      (int16_t item);
+  void    tamTransitionSystem     (uint16_t tamEvent);
+  void    closeNim                (void);
+  void    nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer);
+#endif

@@ -55,6 +55,8 @@ void     copyScreenToClipboard(void);
 void     waitAndSee           (void);
 gboolean refreshScreen        (gpointer data);
 #endif
+
+#ifndef TESTSUITE_BUILD
 void     setPixel             (int16_t x, int16_t y);
 void     clearPixel           (int16_t x, int16_t y);
 void     invertPixel          (int16_t x, int16_t y);
@@ -69,3 +71,4 @@ void     showFunctionName     (int16_t item, int8_t counter);
 void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
 void     refreshRegisterLine  (calcRegister_t regist);
+#endif

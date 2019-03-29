@@ -156,7 +156,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[MNU_DISP                     ].itemPrinted, "DISP"                                                                       )) {printf("item %" FMT16S " is not MNU_DISP                     \n", MNU_DISP                     ); exit(0);}
     if(strcmp(indexOfItems[ITM_DOT                      ].itemPrinted, "dot"                                                                        )) {printf("item %" FMT16S " is not ITM_DOT                      \n", ITM_DOT                      ); exit(0);}
     if(strcmp(indexOfItems[ITM_toDP                     ].itemPrinted, STD_RIGHT_ARROW "DP"                                                         )) {printf("item %" FMT16S " is not ITM_toDP                     \n", ITM_toDP                     ); exit(0);}
-    if(strcmp(indexOfItems[ITM_DROP                     ].itemPrinted, "DROP"                                                                       )) {printf("item %" FMT16S " is not ITM_DROP                     \n", ITM_DROP                     ); exit(0);}
+    if(strcmp(indexOfItems[ITM_DROP                     ].itemPrinted, "DROP" STD_DOWN_ARROW                                                        )) {printf("item %" FMT16S " is not ITM_DROP                     \n", ITM_DROP                     ); exit(0);}
     if(strcmp(indexOfItems[ITM_DROPY                    ].itemPrinted, "DROPy"                                                                      )) {printf("item %" FMT16S " is not ITM_DROPY                    \n", ITM_DROPY                    ); exit(0);}
     if(strcmp(indexOfItems[ITM_DSE                      ].itemPrinted, "DSE"                                                                        )) {printf("item %" FMT16S " is not ITM_DSE                      \n", ITM_DSE                      ); exit(0);}
     if(strcmp(indexOfItems[ITM_DSL                      ].itemPrinted, "DSL"                                                                        )) {printf("item %" FMT16S " is not ITM_DSL                      \n", ITM_DSL                      ); exit(0);}
@@ -1484,7 +1484,7 @@ void testFunctions(void) {
     if(strcmp(indexOfItems[CHR_MUCH_GREATER             ].itemPrinted, STD_MUCH_GREATER                                                             )) {printf("char %" FMT16S " is not CHR_MUCH_GREATER             \n", CHR_MUCH_GREATER             ); exit(0);}
     if(strcmp(indexOfItems[CHR_SUN                      ].itemPrinted, STD_SUN                                                                      )) {printf("char %" FMT16S " is not CHR_SUN                      \n", CHR_SUN                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_DOWN_TACK                ].itemPrinted, STD_DOWN_TACK                                                                )) {printf("char %" FMT16S " is not CHR_DOWN_TACK                \n", CHR_DOWN_TACK                ); exit(0);}
-    if(strcmp(indexOfItems[CHR_UP_TACK                  ].itemPrinted, STD_UP_TACK                                                                  )) {printf("char %" FMT16S " is not CHR_UP_TACK                  \n", CHR_UP_TACK                  ); exit(0);}
+    if(strcmp(indexOfItems[CHR_PERPENDICULAR            ].itemPrinted, STD_PERPENDICULAR                                                            )) {printf("char %" FMT16S " is not CHR_PERPENDICULAR            \n", CHR_PERPENDICULAR            ); exit(0);}
     if(strcmp(indexOfItems[CHR_XOR                      ].itemPrinted, STD_XOR                                                                      )) {printf("char %" FMT16S " is not CHR_XOR                      \n", CHR_XOR                      ); exit(0);}
     if(strcmp(indexOfItems[CHR_NAND                     ].itemPrinted, STD_NAND                                                                     )) {printf("char %" FMT16S " is not CHR_NAND                     \n", CHR_NAND                     ); exit(0);}
     if(strcmp(indexOfItems[CHR_NOR                      ].itemPrinted, STD_NOR                                                                      )) {printf("char %" FMT16S " is not CHR_NOR                      \n", CHR_NOR                      ); exit(0);}
@@ -3436,40 +3436,40 @@ void testFunctions(void) {
   // Convert real16 lbs to kg
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtLbsKg(multiply);
+  fnCvtLbKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtLbsKg()", "0.45359237", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtLbsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtLbKg()", "0.45359237", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtLbKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 lbs to kg
+  ////////////////////////////
+  // Convert real34 lb to kg
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtLbsKg(multiply);
+  fnCvtLbKg(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtLbsKg()", "0.45359237", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtLbsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtLbKg()", "0.45359237", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtLbKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 kg to lbs
+  ////////////////////////////
+  // Convert real16 kg to lb
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtLbsKg(divide);
+  fnCvtLbKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtLbsKg()", "2.204622621848776", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtLbsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtLbKg()", "2.204622621848776", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtLbKg()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 kg to lbs
+  ////////////////////////////
+  // Convert real34 kg to lb
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtLbsKg(divide);
+  fnCvtLbKg(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtLbsKg()", "2.20462262184877580722973801345027", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtLbsKg()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtLbKg()", "2.20462262184877580722973801345027", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtLbKg()", "1", "", 0);
 
 
   //////////////////////////////
@@ -3992,47 +3992,47 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtPcM()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 inches to m
+  /////////////////////////////
+  // Convert real16 inch to m
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtInchesM(multiply);
+  fnCvtInchM(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtInchesM()", "0.0254", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtInchesM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtInchM()", "0.0254", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtInchM()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 inches to m
+  /////////////////////////////
+  // Convert real34 inch to m
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtInchesM(multiply);
+  fnCvtInchM(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtInchesM()", "0.0254", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtInchesM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtInchM()", "0.0254", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtInchM()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 m to inches
+  /////////////////////////////
+  // Convert real16 m to inch
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtInchesM(divide);
+  fnCvtInchM(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtInchesM()", "39.37007874015748", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtInchesM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtInchM()", "39.37007874015748", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtInchM()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 m to inches
+  /////////////////////////////
+  // Convert real34 m to inch
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtInchesM(divide);
+  fnCvtInchM(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtInchesM()", "39.37007874015748031496062992125984", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtInchesM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtInchM()", "39.37007874015748031496062992125984", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtInchM()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real16 sfeetus to m
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4042,7 +4042,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtSfeetM()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real34 sfeetus to m
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4052,7 +4052,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtSfeetM()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real16 m to sfeetus
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4062,7 +4062,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtSfeetM()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real34 m to sfeetus
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4072,84 +4072,84 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtSfeetM()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 yards to m
+  /////////////////////////////
+  // Convert real16 yard to m
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtYardsM(multiply);
+  fnCvtYardM(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtYardsM()", "0.9144", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtYardsM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtYardM()", "0.9144", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtYardM()", "1", "", 0);
+
+
+  /////////////////////////////
+  // Convert real34 yard to m
+  initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
+
+  fnCvtYardM(multiply);
+
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtYardM()", "0.9144", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtYardM()", "1", "", 0);
+
+
+  /////////////////////////////
+  // Convert real16 m to yard
+  initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
+
+  fnCvtYardM(divide);
+
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtYardM()", "1.093613298337708", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtYardM()", "1", "", 0);
+
+
+  /////////////////////////////
+  // Convert real34 m to yard
+  initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
+
+  fnCvtYardM(divide);
+
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtYardM()", "1.09361329833770778652668416447944", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtYardM()", "1", "", 0);
 
 
   //////////////////////////////
-  // Convert real34 yards to m
-  initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
+  // Convert real16 point to m
+  initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtYardsM(multiply);
+  fnCvtPointM(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtYardsM()", "0.9144", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtYardsM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtPointM()", "352.7777777777778e-6", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtPointM()", "1", "", 0);
 
 
   //////////////////////////////
-  // Convert real16 m to yards
-  initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
+  // Convert real34 point to m
+  initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtYardsM(divide);
+  fnCvtPointM(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtYardsM()", "1.093613298337708", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtYardsM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtPointM()", "352.7777777777777777777777777777778e-6", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtPointM()", "1", "", 0);
 
 
   //////////////////////////////
-  // Convert real34 m to yards
-  initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
-
-  fnCvtYardsM(divide);
-
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtYardsM()", "1.09361329833770778652668416447944", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtYardsM()", "1", "", 0);
-
-
-  ////////////////////////////////
-  // Convert real16 points to m
+  // Convert real16 m to point
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtPointsM(multiply);
+  fnCvtPointM(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtPointsM()", "352.7777777777778e-6", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtPointsM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtPointM()", "2834.645669291339", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtPointM()", "1", "", 0);
 
 
-  ////////////////////////////////
-  // Convert real34 points to m
+  //////////////////////////////
+  // Convert real34 m to point
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtPointsM(multiply);
+  fnCvtPointM(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtPointsM()", "352.7777777777777777777777777777778e-6", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtPointsM()", "1", "", 0);
-
-
-  ////////////////////////////////
-  // Convert real16 m to points
-  initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
-
-  fnCvtPointsM(divide);
-
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtPointsM()", "2834.645669291339", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtPointsM()", "1", "", 0);
-
-
-  ////////////////////////////////
-  // Convert real34 m to points
-  initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
-
-  fnCvtPointsM(divide);
-
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtPointsM()", "2834.645669291338582677165354330708", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtPointsM()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtPointM()", "2834.645669291338582677165354330708", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtPointM()", "1", "", 0);
 
 
   //////////////////////////////
@@ -4232,7 +4232,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtGalusM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real16 flozuk to m3
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4242,7 +4242,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtFlozukM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real34 flozuk to m3
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4252,7 +4252,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtFlozukM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real16 m3 to flozuk
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4262,7 +4262,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtFlozukM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real34 m3 to flozuk
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4272,7 +4272,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtFlozukM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real16 flozus to m3
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4282,7 +4282,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtFlozusM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real34 flozus to m3
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4292,7 +4292,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtFlozusM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real16 m3 to flozus
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4302,7 +4302,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtFlozusM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ////////////////////////////////
   // Convert real34 m3 to flozus
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4312,7 +4312,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtFlozusM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ///////////////////////////////
   // Convert real16 quart to m3
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4322,7 +4322,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtQuartM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ///////////////////////////////
   // Convert real34 quart to m3
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4332,7 +4332,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtQuartM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ///////////////////////////////
   // Convert real16 m3 to quart
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
@@ -4342,7 +4342,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtQuartM3()", "1", "", 0);
 
 
-  //////////////////////////////
+  ///////////////////////////////
   // Convert real34 m3 to quart
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
@@ -4352,87 +4352,87 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtQuartM3()", "1", "", 0);
 
 
-  /////////////////////////////
+  //////////////////////////////
   // Convert real16 acre to m2
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtAcresM2(multiply);
+  fnCvtAcreM2(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcresM2()", "4046.8564224", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcresM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcreM2()", "4046.8564224", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcreM2()", "1", "", 0);
 
 
-  /////////////////////////////
+  //////////////////////////////
   // Convert real34 acre to m2
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtAcresM2(multiply);
+  fnCvtAcreM2(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcresM2()", "4046.8564224", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcresM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcreM2()", "4046.8564224", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcreM2()", "1", "", 0);
 
 
-  /////////////////////////////
+  //////////////////////////////
   // Convert real16 m2 to acre
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtAcresM2(divide);
+  fnCvtAcreM2(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcresM2()", "2.471053814671653e-4", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcresM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcreM2()", "2.471053814671653e-4", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcreM2()", "1", "", 0);
 
 
-  /////////////////////////////
+  //////////////////////////////
   // Convert real34 m2 to acre
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtAcresM2(divide);
+  fnCvtAcreM2(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcresM2()", "2.471053814671653422482439291988063e-4", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcresM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcreM2()", "2.471053814671653422482439291988063e-4", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcreM2()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 acresus to m2
+  ////////////////////////////////
+  // Convert real16 acreus to m2
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtAcresusM2(multiply);
+  fnCvtAcreusM2(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcresusM2()", "4046.872609874252", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcresusM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcreusM2()", "4046.872609874252", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcreusM2()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 acresus to m2
+  ////////////////////////////////
+  // Convert real34 acreus to m2
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtAcresusM2(multiply);
+  fnCvtAcreusM2(multiply);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcresusM2()", "4046.87260987425200656852926609079", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcresusM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcreusM2()", "4046.87260987425200656852926609079", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcreusM2()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real16 m2 to acresus
+  ////////////////////////////////
+  // Convert real16 m2 to acreus
   initializeRegister(REGISTER_X, dtReal16, "1", "", 0);
 
-  fnCvtAcresusM2(divide);
+  fnCvtAcreusM2(divide);
 
-  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcresusM2()", "2.471043930466279e-4", "", 0);
-  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcresusM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal16, "fnCvtAcreusM2()", "2.471043930466279e-4", "", 0);
+  registerShouldBe(REGISTER_L, dtReal16, "fnCvtAcreusM2()", "1", "", 0);
 
 
-  //////////////////////////////
-  // Convert real34 m2 to acresus
+  ////////////////////////////////
+  // Convert real34 m2 to acreus
   initializeRegister(REGISTER_X, dtReal34, "1", "", 0);
 
-  fnCvtAcresusM2(divide);
+  fnCvtAcreusM2(divide);
 
-  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcresusM2()", "2.471043930466278951127435975920825e-4", "", 0);
-  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcresusM2()", "1", "", 0);
+  registerShouldBe(REGISTER_X, dtReal34, "fnCvtAcreusM2()", "2.471043930466278951127435975920825e-4", "", 0);
+  registerShouldBe(REGISTER_L, dtReal34, "fnCvtAcreusM2()", "1", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real16 power ratio to dB
   initializeRegister(REGISTER_X, dtReal16, "2", "", 0);
 
@@ -4442,7 +4442,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtRatioDb(10)", "2", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real34 power ratio to dB
   initializeRegister(REGISTER_X, dtReal34, "2", "", 0);
 
@@ -4452,7 +4452,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtRatioDb(10)", "2", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real16 field ratio to dB
   initializeRegister(REGISTER_X, dtReal16, "2", "", 0);
 
@@ -4462,7 +4462,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtRatioDb(20)", "2", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real34 field ratio to dB
   initializeRegister(REGISTER_X, dtReal34, "2", "", 0);
 
@@ -4472,7 +4472,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtRatioDb(20)", "2", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real16 dB to power ratio
   initializeRegister(REGISTER_X, dtReal16, "2", "", 0);
 
@@ -4482,7 +4482,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtDbRatio(10)", "2", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real34 dB to power ratio
   initializeRegister(REGISTER_X, dtReal34, "2", "", 0);
 
@@ -4492,7 +4492,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal34, "fnCvtDbRatio(10)", "2", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real16 dB to field ratio
   initializeRegister(REGISTER_X, dtReal16, "2", "", 0);
 
@@ -4502,7 +4502,7 @@ void testFunctions(void) {
   registerShouldBe(REGISTER_L, dtReal16, "fnCvtDbRatio(20)", "2", "", 0);
 
 
-  //////////////////////////////
+  /////////////////////////////////////
   // Convert real34 dB to field ratio
   initializeRegister(REGISTER_X, dtReal34, "2", "", 0);
 

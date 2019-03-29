@@ -19,4 +19,6 @@
 #define NUMBER_OF_NUMERIC_FONT_LINES_PER_SCREEN   5
 #define NUMBER_OF_STANDARD_FONT_LINES_PER_SCREEN  8
 
+#ifndef TESTSUITE_BUILD
 void fontBrowser(uint16_t unusedParamButMandatory);
+#endif

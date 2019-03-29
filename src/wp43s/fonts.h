@@ -736,7 +736,7 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
                                                      #define STD_SUN                       "\xa2\x99"
                                                      #define STD_SUB_SUN_b                 "\xa2\x9a"
                                                      #define STD_DOWN_TACK                 "\xa2\xa4"
-                                                     #define STD_UP_TACK                   "\xa2\xa5"
+                                                     #define STD_PERPENDICULAR             "\xa2\xa5"
                                                      #define STD_XOR                       "\xa2\xbb"
                                                      #define STD_NAND                      "\xa2\xbc"
                                                      #define STD_NOR                       "\xa2\xbd"

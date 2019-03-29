@@ -20,6 +20,8 @@
 
 #include "wp43s.h"
 
+
+
 /********************************************//**
  * \brief Sets the calc to meet Chinese standards
  *
@@ -594,9 +596,11 @@ void fnReset(uint16_t confirmation) {
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
-    while(softmenuStackPointer > 0) {
-      popSoftmenu();
-    }
+    #ifndef TESTSUITE_BUILD
+      while(softmenuStackPointer > 0) {
+        popSoftmenu();
+      }
+    #endif // TESTSUITE_BUILD
 
     oldTime[0] = 0;
 

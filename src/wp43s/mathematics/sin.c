@@ -186,7 +186,6 @@ void sinAngl(void) {
   #endif
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), NULL, REGISTER_REAL34_DATA(opX)); // opX in internal units
-  setRegisterDataType(result, dtReal34);
   convertRegister34To16(result);
 }
 

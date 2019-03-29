@@ -21,6 +21,8 @@
 #include "wp43s.h"
 
 
+
+#ifndef TESTSUITE_BUILD
 void fnAim(uint16_t unusedParamButMandatory) {
   resetShiftState();
   calcModeAIM(NOPARAM); // Alpha Input Mode
@@ -132,8 +134,8 @@ void addItemToBuffer(uint16_t item) {
             case CHR_f        : item = CHR_SUP_f;        break;
             case CHR_g        : item = CHR_SUP_g;        break;
             case CHR_h        : item = CHR_SUP_h;        break;
-            case CHR_r        : item  = CHR_SUP_r;       break;
-            case CHR_T        : item  = CHR_SUP_T;       break;
+            case CHR_r        : item = CHR_SUP_r;        break;
+            case CHR_T        : item = CHR_SUP_T;        break;
             default : {}
           }
         break;
@@ -1772,6 +1774,9 @@ void closeNim(void) {
           convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
         }
         else if(nimNumberPart == NP_INT_BASE) {
+          //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          // Any change in this part is to be reported in the function strToShortInteger from file testSuite.c after the line: else if(nimNumberPart == NP_INT_BASE) {
+          //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           longInteger_t minVal, value, maxVal;
           int16_t posHash, i, lg;
           int32_t base;
@@ -2066,3 +2071,4 @@ void closeNim(void) {
 
   refreshRegisterLine(NIM_REGISTER_LINE);
 }
+#endif

@@ -273,7 +273,9 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
-  showShiftState();
+  #ifndef TESTSUITE_BUILD
+    showShiftState();
+  #endif // TESTSUITE_BUILD
 
   currentFntScr = 0;
   currentFlgScr = 0;
@@ -311,17 +313,17 @@ void setupDefaults(void) {
 
   lastErrorCode = 0;
 
-
-
-
-
-
   refreshStack();
 
   allowScreenUpdate = true;
 
   hideUserMode();
-  calcModeNormal();
+
+  #ifdef TESTSUITE_BUILD
+    calcMode = CM_NORMAL;
+  #else
+    calcModeNormal();
+  #endif // TESTSUITE_BUILD
 }
 
 
@@ -490,5 +492,34 @@ void program_main(void) {
         lcd_refresh();
     }
   }
+}
+#endif
+
+#ifdef TESTSUITE_BUILD
+#include "testSuite.h"
+
+FILE *testSuite;
+char line[10000];
+int32_t lineNumber;
+
+int main(void) {
+  setupDefaults();
+  fnReset(CONFIRMED);
+
+  testSuite = fopen("src/testSuite/testSuite.txt", "rb");
+  if(testSuite == NULL) {
+    printf("Cannot open file testSuite.txt!\n");
+    return -1;
+  }
+
+  fgets(line, 999, testSuite);
+  lineNumber = 1;
+  while(!feof(testSuite)) {
+    processLine(line);
+    fgets(line, 999, testSuite);
+    lineNumber++;
+  }
+
+  return 0;
 }
 #endif

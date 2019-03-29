@@ -1087,7 +1087,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     gtk_widget_set_name(button, "calcKeyG");
   }
   else {
-    if(key->keyLblAim == key->fShiftedAim && key->keyLblAim != ITM_NULL) {
+    if((key->fShiftedAim == key->keyLblAim || key->fShiftedAim == CHR_PROD_SIGN) && key->keyLblAim != ITM_NULL) {
       gtk_widget_set_name(button, "calcKeyGoldenBorder");
     }
     else {
@@ -2293,7 +2293,6 @@ void setupUI(void) {
 
   // 6th row
   btn61   = gtk_button_new();
-  btn61   = gtk_button_new();
   btn62   = gtk_button_new();
   btn63   = gtk_button_new();
   btn64   = gtk_button_new();
@@ -2631,6 +2630,8 @@ void setupUI(void) {
 #endif
 
 
+
+#ifndef TESTSUITE_BUILD
 void fnOff(uint16_t unsuedParamButMandatory) {
   resetShiftState();
 
@@ -2769,3 +2770,4 @@ void calcModeTAM(void) {
     calcModeTamGui();
   #endif
 }
+#endif

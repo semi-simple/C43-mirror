@@ -171,6 +171,8 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
 #endif
 
 
+
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Sets a pixel on the screen (black).
  *
@@ -945,3 +947,4 @@ void refreshRegisterLine(calcRegister_t regist) {
     }
   }
 }
+#endif

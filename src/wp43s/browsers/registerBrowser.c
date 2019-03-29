@@ -21,6 +21,8 @@
 #include "wp43s.h"
 
 
+
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief The register browser
  *
@@ -28,9 +30,9 @@
  * \return void
  ***********************************************/
 void registerBrowser(uint16_t unusedParamButMandatory) {
- int16_t registerNameWidth;
+  int16_t registerNameWidth;
 
- if(currentRegisterBrowserScreen == 9999) { // Init
+  if(currentRegisterBrowserScreen == 9999) { // Init
     currentRegisterBrowserScreen = REGISTER_X;
     rbrMode = RBR_GLOBAL;
     showContent = true;
@@ -247,3 +249,4 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
     }
   }
 }
+#endif

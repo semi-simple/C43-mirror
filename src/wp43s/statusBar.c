@@ -20,6 +20,9 @@
 
 #include "wp43s.h"
 
+
+
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Displays date and time in the status bar
  *
@@ -518,3 +521,4 @@ void toggleUserMode(void) {
     else if(calcMode == CM_TAM) calcModeTamGui();
   #endif
 }
+#endif

@@ -46,19 +46,19 @@ const constant_t physicalAndMathConstants[] = {
 /*  21 */  {.label = STD_PLANCK_2PI,                        .value = CONST_21}, // h/2pi
 /*  22 */  {.label = "k",                                   .value = CONST_22}, // Bolzmann constant
 /*  23 */  {.label = "K" STD_SUB_J,                         .value = CONST_23}, // Josephson constant
-/*  24 */  {.label = "l" STD_SUB_p,                         .value = CONST_24}, // Planck length
+/*  24 */  {.label = "l" STD_SUB_P STD_SUB_L,               .value = CONST_24}, // Planck length
 /*  25 */  {.label = "m" STD_SUB_e,                         .value = CONST_25}, // Electron mass
 /*  26 */  {.label = "M" STD_SUB_M,                         .value = CONST_26}, // Mass of the Moon
 /*  27 */  {.label = "m" STD_SUB_n,                         .value = CONST_27}, // Neutron mass
 /*  28 */  {.label = "m" STD_SUB_n "/m" STD_SUB_p,          .value = CONST_28}, // Neutron to proton mass ratio
-/*  29 */  {.label = "M" STD_SUB_p,                         .value = CONST_29}, // Planck mass,
-/*  30 */  {.label = "m" STD_SUB_p,                         .value = CONST_30}, // Proton mass
+/*  29 */  {.label = "m" STD_SUB_p,                         .value = CONST_29}, // Proton mass
+/*  30 */  {.label = "M" STD_SUB_P STD_SUB_L,               .value = CONST_30}, // Planck mass,
 /*  31 */  {.label = "m" STD_SUB_p "/m" STD_SUB_e,          .value = CONST_31}, // Proton to electron mass ratio
 /*  32 */  {.label = "m" STD_SUB_u,                         .value = CONST_32}, // Atomic mass unit
 /*  33 */  {.label = "m" STD_SUB_u "c" STD_SUP_2,           .value = CONST_33}, // Energy equivalent of atomic mass unit
 /*  34 */  {.label = "m" STD_SUB_mu,                        .value = CONST_34}, // Muon mass
-/*  35 */  {.label = "m" STD_SUB_SUN,                       .value = CONST_35}, // Mass of the Sun
-/*  36 */  {.label = "m" STD_SUB_EARTH,                     .value = CONST_36}, // Mass of the Earth
+/*  35 */  {.label = "M" STD_SUB_SUN,                       .value = CONST_35}, // Mass of the Sun
+/*  36 */  {.label = "M" STD_SUB_EARTH,                     .value = CONST_36}, // Mass of the Earth
 /*  37 */  {.label = "N" STD_SUB_A,                         .value = CONST_37}, // Avogadro's number
 /*  38 */  {.label = "NaN",                                 .value = CONST_38}, // Not a Number
 /*  39 */  {.label = "p" STD_SUB_0,                         .value = CONST_39}, // Standard atmospheric pressure (per definition)
@@ -76,7 +76,7 @@ const constant_t physicalAndMathConstants[] = {
 /*  51 */  {.label = "Sf" STD_SUP_MINUS_1,                  .value = CONST_51}, // Flattening parameter of WGS84 (per definition)
 /*  52 */  {.label = "T" STD_SUB_0,                         .value = CONST_52}, // 0°C standard temperature (per definition)
 /*  53 */  {.label = "T" STD_SUB_P,                         .value = CONST_53}, // Planck temperature
-/*  54 */  {.label = "t" STD_SUB_p,                         .value = CONST_54}, // Planck time
+/*  54 */  {.label = "t" STD_SUB_P STD_SUB_L,               .value = CONST_54}, // Planck time
 /*  55 */  {.label = "V" STD_SUB_m,                         .value = CONST_55}, // Molar volume of an ideal gas at standard conditions
 /*  56 */  {.label = "Z" STD_SUB_0,                         .value = CONST_56}, // Characteristic impedance of vaccum
 /*  57 */  {.label = STD_alpha,                             .value = CONST_57}, // Fine-structure constant

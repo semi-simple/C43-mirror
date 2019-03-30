@@ -47,19 +47,21 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
       calcRegister_t regist;
       for(int16_t row=0; row<10; row++) {
         regist = (currentRegisterBrowserScreen + row) % FIRST_LOCAL_REGISTER;
-        if     (regist == REGISTER_X) strcpy(tmpStr3000, "X:");
-        else if(regist == REGISTER_Y) strcpy(tmpStr3000, "Y:");
-        else if(regist == REGISTER_Z) strcpy(tmpStr3000, "Z:");
-        else if(regist == REGISTER_T) strcpy(tmpStr3000, "T:");
-        else if(regist == REGISTER_A) strcpy(tmpStr3000, "A:");
-        else if(regist == REGISTER_B) strcpy(tmpStr3000, "B:");
-        else if(regist == REGISTER_C) strcpy(tmpStr3000, "C:");
-        else if(regist == REGISTER_D) strcpy(tmpStr3000, "D:");
-        else if(regist == REGISTER_L) strcpy(tmpStr3000, "L:");
-        else if(regist == REGISTER_I) strcpy(tmpStr3000, "I:");
-        else if(regist == REGISTER_J) strcpy(tmpStr3000, "J:");
-        else if(regist == REGISTER_K) strcpy(tmpStr3000, "K:");
-        else                          sprintf(tmpStr3000, "R%02d:", regist);
+        switch(regist) {
+          case REGISTER_X: strcpy(tmpStr3000, "X:"); break;
+          case REGISTER_Y: strcpy(tmpStr3000, "Y:"); break;
+          case REGISTER_Z: strcpy(tmpStr3000, "Z:"); break;
+          case REGISTER_T: strcpy(tmpStr3000, "T:"); break;
+          case REGISTER_A: strcpy(tmpStr3000, "A:"); break;
+          case REGISTER_B: strcpy(tmpStr3000, "B:"); break;
+          case REGISTER_C: strcpy(tmpStr3000, "C:"); break;
+          case REGISTER_D: strcpy(tmpStr3000, "D:"); break;
+          case REGISTER_L: strcpy(tmpStr3000, "L:"); break;
+          case REGISTER_I: strcpy(tmpStr3000, "I:"); break;
+          case REGISTER_J: strcpy(tmpStr3000, "J:"); break;
+          case REGISTER_K: strcpy(tmpStr3000, "K:"); break;
+          default: sprintf(tmpStr3000, "R%02d:", regist);
+        }
 
         // register name or number
         registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, false, true);
@@ -137,6 +139,14 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
           }
           else {
             sprintf(tmpStr3000, "%" FMT32S " character%s := 2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
+          }
+        }
+        else if(getRegisterDataType(regist) == dtAngle) {
+          if(showContent) {
+            registerAngleToDisplayString(regist, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+          }
+          else {
+            sprintf(tmpStr3000, "%d bytes", ANGLE_SIZE);
           }
         }
         else {

@@ -266,7 +266,7 @@ void divRe16Re16(void) {
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe16Re16:", "cannot divide an real16 by 0", NULL, NULL);
+        showInfoDialog("In function divRe16Re16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
     }
   }

@@ -216,6 +216,7 @@ void sqrtCo16(void) {
   real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
   convertRegister34To16(result);
   angularMode = savedAngularMode;
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -286,4 +287,5 @@ void sqrtCo34(void) {
   real34Multiply(&theta34, const34_0_5, &theta34);
   real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
   angularMode = savedAngularMode;
+  fnSetFlag(FLAG_CPXRES);
 }

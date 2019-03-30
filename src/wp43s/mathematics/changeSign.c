@@ -132,6 +132,7 @@ void chsCo16(void) {
   if(real16IsZero(REGISTER_IMAG16_DATA(result))) {
     real16SetPositiveSign(REGISTER_IMAG16_DATA(result));
   }
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -215,4 +216,5 @@ void chsCo34(void) {
   if(real34IsZero(REGISTER_IMAG34_DATA(result))) {
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
   }
+  fnSetFlag(FLAG_CPXRES);
 }

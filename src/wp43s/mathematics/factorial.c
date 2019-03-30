@@ -155,6 +155,7 @@ void factCo16(void) {
   }
 
   factToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -227,4 +228,5 @@ void factCo34(void) {
   }
 
   factToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }

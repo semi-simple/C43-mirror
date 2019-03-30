@@ -91,6 +91,7 @@ void unitVectorCo16(void) {
   real16SquareRoot(&temp, &temp);
   real16Divide(REGISTER_REAL16_DATA(opX), &temp, REGISTER_REAL16_DATA(result));
   real16Divide(REGISTER_IMAG16_DATA(opX), &temp, REGISTER_IMAG16_DATA(result));
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -111,4 +112,5 @@ void unitVectorCo34(void) {
   real34SquareRoot(&temp, &temp);
   real34Divide(REGISTER_REAL34_DATA(opX), &temp, REGISTER_REAL34_DATA(result));
   real34Divide(REGISTER_IMAG34_DATA(opX), &temp, REGISTER_IMAG34_DATA(result));
+  fnSetFlag(FLAG_CPXRES);
 }

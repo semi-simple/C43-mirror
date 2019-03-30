@@ -648,6 +648,7 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
                                                      #define STD_NATURAL_N                 "\xa1\x15"
                                                      #define STD_RATIONAL_Q                "\xa1\x1a"
                                                      #define STD_REAL_R                    "\xa1\x1d"
+                                                     #define STD_INTEGER_Z                 "\xa1\x24"
                                                      #define STD_LEFT_ARROW                "\xa1\x90"
 #define NUM_UP_ARROW                  "\xa1\x91"
                                                      #define STD_UP_ARROW                  "\xa1\x91"

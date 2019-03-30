@@ -82,3 +82,6 @@
 
 2019-02-18 New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
+
+2019-03-30 Added glyph U+2124 Double struck Z
+           New WP43S_StandardFont.ttf generated.

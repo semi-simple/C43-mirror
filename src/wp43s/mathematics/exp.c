@@ -142,6 +142,7 @@ void expCo16(void) {
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
   convertRegister34To16(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -203,4 +204,5 @@ void expCo34(void) {
   angularMode = savedAngularMode;
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
+  fnSetFlag(FLAG_CPXRES);
 }

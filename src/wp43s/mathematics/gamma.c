@@ -218,6 +218,7 @@ void gammaCo16(void) {
   }
 
   gammaToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -232,6 +233,7 @@ void lnGammaCo16(void) {
   }
 
   lnGammaToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -274,6 +276,7 @@ void gammaCo34(void) {
   }
 
   gammaToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -288,4 +291,5 @@ void lnGammaCo34(void) {
   }
 
   lnGammaToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }

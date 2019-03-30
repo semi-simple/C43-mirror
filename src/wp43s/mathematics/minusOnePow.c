@@ -131,6 +131,7 @@ void m1PowCo16(void) {
   }
 
   m1PowToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -178,4 +179,5 @@ void m1PowCo34(void) {
   }
 
   m1PowToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }

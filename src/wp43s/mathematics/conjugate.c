@@ -100,6 +100,7 @@ void conjCo16(void) {
   }
 
   real16ChangeSign(REGISTER_IMAG16_DATA(result));
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -120,4 +121,5 @@ void conjCo34(void) {
   }
 
   real34ChangeSign(REGISTER_IMAG34_DATA(result));
+  fnSetFlag(FLAG_CPXRES);
 }

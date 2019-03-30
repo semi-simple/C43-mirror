@@ -172,6 +172,7 @@ void addLonICo16(void) {
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -284,6 +285,7 @@ void addLonICo34(void) {
   real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -355,6 +357,7 @@ void addRe16Co16(void) {
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -487,6 +490,7 @@ void addCo16LonI(void) {
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -511,6 +515,7 @@ void addCo16Re16(void) {
   real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -535,6 +540,7 @@ void addCo16Co16(void) {
   real16Add(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1386,6 +1392,7 @@ void addRe34Co34(void) {
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1411,6 +1418,7 @@ void addCo34LonI(void) {
   real34Add(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1474,6 +1482,7 @@ void addCo34Re34(void) {
   real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1498,4 +1507,5 @@ void addCo34Co34(void) {
   real34Add(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 
   roundRegister(result);
+  fnSetFlag(FLAG_CPXRES);
 }

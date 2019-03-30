@@ -146,7 +146,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             registerAngleToDisplayString(regist, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
-            sprintf(tmpStr3000, "%d bytes", ANGLE_SIZE);
+            sprintf(tmpStr3000, "%d bytes", (int16_t)ANGLE_SIZE);
           }
         }
         else {

@@ -291,6 +291,7 @@ void powRe16Co16(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -350,6 +351,7 @@ void powCo16LonI(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -370,6 +372,7 @@ void powCo16Re16(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -390,6 +393,7 @@ void powCo16Co16(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -481,6 +485,7 @@ void powRm16Co16(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -533,6 +538,7 @@ void powRm16Co34(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -585,6 +591,7 @@ void powCm16Co16(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -637,6 +644,7 @@ void powCm16Co34(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -714,6 +722,7 @@ void powShoIRe34(void) {
  ***********************************************/
 void powShoICo34(void) {
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -809,6 +818,7 @@ void powRe34Co34(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -829,6 +839,7 @@ void powCo34LonI(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -888,6 +899,7 @@ void powCo34Re34(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -908,4 +920,5 @@ void powCo34Co34(void) {
   }
 
   powToBeCoded();
+  fnSetFlag(FLAG_CPXRES);
 }

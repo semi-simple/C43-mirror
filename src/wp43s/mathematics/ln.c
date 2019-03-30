@@ -218,6 +218,7 @@ void lnCo16(void) {
     real34ToReal16(&theta34, REGISTER_IMAG16_DATA(result));
     angularMode = savedAngularMode;
   }
+  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -360,4 +361,5 @@ void lnCo34(void) {
     real34Copy(&theta34, REGISTER_IMAG34_DATA(result));
     angularMode = savedAngularMode;
   }
+  fnSetFlag(FLAG_CPXRES);
 }

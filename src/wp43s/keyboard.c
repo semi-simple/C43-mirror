@@ -227,17 +227,12 @@ void btnPressed(void *notUsed, void *data) {
       refreshRegisterLine(REGISTER_Y);
     }
 
-    if(shiftF) {
-      shiftF = false;
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-        refreshStack();
-      }
-    }
-    else {
-      shiftF = true;
+    if(lastErrorCode != 0) {
+      lastErrorCode = 0;
+      refreshStack();
     }
 
+    shiftF = !shiftF;
     shiftG = false;
 
     showShiftState();
@@ -251,17 +246,12 @@ void btnPressed(void *notUsed, void *data) {
       refreshRegisterLine(REGISTER_Y);
     }
 
-    if(shiftG) {
-      shiftG = false;
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-        refreshStack();
-      }
-    }
-    else {
-      shiftG = true;
+    if(lastErrorCode != 0) {
+      lastErrorCode = 0;
+      refreshStack();
     }
 
+    shiftG = !shiftG;
     shiftF = false;
 
     showShiftState();

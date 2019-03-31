@@ -47,21 +47,6 @@ void signError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void signToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "sign(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and sign(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -139,7 +124,7 @@ void signRe16(void) {
 
 
 void signRm16(void) {
-  signToBeCoded();
+  fnToBeCoded();
 }
 
 

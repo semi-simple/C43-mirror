@@ -59,22 +59,6 @@ void powError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void powToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "%s", getRegisterDataTypeName(REGISTER_Y, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "raised to %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and regY ^ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
@@ -92,17 +76,8 @@ void fnPower(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-  freeTemporaryRegister(opY);
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    fnDropY(NOPARAM);
-  }
-  else {
-    restoreStack();
-  }
-
-  refreshStack();
+  adjustResult(result, true, true, opX, opY, -1);
 }
 
 
@@ -290,8 +265,7 @@ void powRe16Co16(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -350,8 +324,7 @@ void powCo16LonI(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -371,8 +344,7 @@ void powCo16Re16(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -392,8 +364,7 @@ void powCo16Co16(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -444,7 +415,7 @@ void powCo16Co34(void) {
  * \return void
  ***********************************************/
 void powRm16LonI(void) {
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -464,7 +435,7 @@ void powRm16Re16(void) {
     return;
   }
 
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -484,8 +455,7 @@ void powRm16Co16(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -497,7 +467,7 @@ void powRm16Co16(void) {
  * \return void
  ***********************************************/
 void powRm16ShoI(void) {
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -517,7 +487,7 @@ void powRm16Re34(void) {
     return;
   }
 
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -537,8 +507,7 @@ void powRm16Co34(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -550,7 +519,7 @@ void powRm16Co34(void) {
  * \return void
  ***********************************************/
 void powCm16LonI(void) {
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -570,7 +539,7 @@ void powCm16Re16(void) {
     return;
   }
 
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -590,8 +559,7 @@ void powCm16Co16(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -603,7 +571,7 @@ void powCm16Co16(void) {
  * \return void
  ***********************************************/
 void powCm16ShoI(void) {
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -623,7 +591,7 @@ void powCm16Re34(void) {
     return;
   }
 
-  powToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -643,8 +611,7 @@ void powCm16Co34(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -721,8 +688,7 @@ void powShoIRe34(void) {
  * \return void
  ***********************************************/
 void powShoICo34(void) {
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -796,8 +762,6 @@ void powRe34Re34(void) {
 
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Power(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -817,8 +781,7 @@ void powRe34Co34(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -838,8 +801,7 @@ void powCo34LonI(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -898,8 +860,7 @@ void powCo34Re34(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -919,6 +880,5 @@ void powCo34Co34(void) {
     return;
   }
 
-  powToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }

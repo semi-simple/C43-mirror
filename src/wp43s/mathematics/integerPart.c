@@ -47,21 +47,6 @@ void ipError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void ipToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "IP(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and IP(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -102,7 +87,7 @@ void ipRe16(void) {
 
 
 void ipRm16(void) {
-  ipToBeCoded();
+  fnToBeCoded();
 }
 
 

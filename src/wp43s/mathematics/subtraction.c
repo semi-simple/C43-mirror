@@ -59,22 +59,6 @@ void subError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void subToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "subtract %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-    showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief rexX ==> regL and regY - regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
@@ -92,17 +76,8 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-  freeTemporaryRegister(opY);
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-   fnDropY(NOPARAM);
-  }
-  else {
-    restoreStack();
-  }
-
-  refreshStack();
+  adjustResult(result, true, true, opX, opY, -1);
 }
 
 
@@ -145,8 +120,6 @@ void subLonIRe16(void) {
   convertLongIntegerRegisterToReal16Register(opY, opY);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -170,9 +143,6 @@ void subLonICo16(void) {
   complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
   convertLongIntegerRegisterToReal16Register(opY, opY);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -197,8 +167,6 @@ void subLonIAngl(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -210,7 +178,7 @@ void subLonIAngl(void) {
  * \return void
  ***********************************************/
 void subLonITime(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -222,7 +190,7 @@ void subLonITime(void) {
  * \return void
  ***********************************************/
 void subLonIDate(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -258,8 +226,6 @@ void subLonIRe34(void) {
   convertLongIntegerRegisterToReal34Register(opY, opY);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -283,9 +249,6 @@ void subLonICo34(void) {
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(result)); // result = opX
   convertLongIntegerRegisterToReal34Register(opY, opY);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -308,8 +271,6 @@ void subRe16LonI(void) {
   convertLongIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -331,8 +292,6 @@ void subRe16Re16(void) {
 
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -356,9 +315,6 @@ void subRe16Co16(void) {
   complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
   complex16ChangeSign(REGISTER_REAL16_DATA(result)); // result = -result
   real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result)); // real part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -385,8 +341,6 @@ void subRe16Angl(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -406,7 +360,7 @@ void subRe16Time(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -426,7 +380,7 @@ void subRe16Date(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -489,9 +443,6 @@ void subCo16LonI(void) {
   complex16Copy(REGISTER_COMPLEX16_DATA(opY), REGISTER_COMPLEX16_DATA(result)); // result = opX
   convertLongIntegerRegisterToReal16Register(opX, opX);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -514,9 +465,6 @@ void subCo16Re16(void) {
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
   real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -539,9 +487,6 @@ void subCo16Co16(void) {
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
   real16Subtract(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -605,8 +550,6 @@ void subAnglLonI(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -633,8 +576,6 @@ void subAnglRe16(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -656,8 +597,6 @@ void subAnglAngl(void) {
 
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -682,8 +621,6 @@ void subAnglShoI(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -710,8 +647,6 @@ void subAnglRe34(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -723,7 +658,7 @@ void subAnglRe34(void) {
  * \return void
  ***********************************************/
 void subTimeLonI(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -743,7 +678,7 @@ void subTimeRe16(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -755,7 +690,7 @@ void subTimeRe16(void) {
  * \return void
  ***********************************************/
 void subTimeTime(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -775,7 +710,7 @@ void subTimeRe34(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -787,7 +722,7 @@ void subTimeRe34(void) {
  * \return void
  ***********************************************/
 void subDateLonI(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -807,7 +742,7 @@ void subDateRe16(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -819,7 +754,7 @@ void subDateRe16(void) {
  * \return void
  ***********************************************/
 void subDateDate(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -839,7 +774,7 @@ void subDateRe34(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -851,7 +786,7 @@ void subDateRe34(void) {
  * \return void
  ***********************************************/
 void subRm16Rm16(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -863,7 +798,7 @@ void subRm16Rm16(void) {
  * \return void
  ***********************************************/
 void subRm16Cm16(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -875,7 +810,7 @@ void subRm16Cm16(void) {
  * \return void
  ***********************************************/
 void subCm16Rm16(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -887,7 +822,7 @@ void subCm16Rm16(void) {
  * \return void
  ***********************************************/
 void subCm16Cm16(void) {
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -951,8 +886,6 @@ void subShoIAngl(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -1014,8 +947,6 @@ void subRe34LonI(void) {
   convertLongIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -1068,8 +999,6 @@ void subRe34Angl(void) {
   convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
   angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -1089,7 +1018,7 @@ void subRe34Time(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1109,7 +1038,7 @@ void subRe34Date(void) {
     return;
   }
 
-  subToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1144,8 +1073,6 @@ void subRe34Re34(void) {
 
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -1169,9 +1096,6 @@ void subRe34Co34(void) {
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
   real34ChangeSign(REGISTER_IMAG34_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1195,9 +1119,6 @@ void subCo34LonI(void) {
   complex34Copy(REGISTER_COMPLEX34_DATA(opY), REGISTER_COMPLEX34_DATA(result)); // result = opY
   convertLongIntegerRegisterToReal34Register(opX, opX);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1259,9 +1180,6 @@ void subCo34Re34(void) {
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1284,7 +1202,4 @@ void subCo34Co34(void) {
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Subtract(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }

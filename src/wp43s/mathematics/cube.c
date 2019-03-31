@@ -69,14 +69,5 @@ void fnCube(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_L, opY);
   cube[getRegisterDataType(opX)]();
 
-  freeTemporaryRegister(opX);
-  freeTemporaryRegister(opY);
-
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, opY, -1);
 }

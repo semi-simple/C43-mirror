@@ -18,9 +18,8 @@
  * \file realPart.h
  ***********************************************/
 
-void fnRealPart       (uint16_t unusedParamButMandatory);
-void realPartError    (void);
-void realPartToBeCoded(void);
-void realPartCo16     (void);
-void realPartCm16     (void);
-void realPartCo34     (void);
+void fnRealPart   (uint16_t unusedParamButMandatory);
+void realPartError(void);
+void realPartCo16 (void);
+void realPartCm16 (void);
+void realPartCo34 (void);

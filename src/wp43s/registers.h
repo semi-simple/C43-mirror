@@ -137,7 +137,7 @@ void              fnClearRegisters                (uint16_t unusedParamButMandat
 void              fnGetLocR                       (uint16_t unusedParamButMandatory);
 void              fnConvertXToReal34              (uint16_t unusedParamButMandatory);
 void              fnConvertXToReal16              (uint16_t unusedParamButMandatory);
-void              roundRegister                   (calcRegister_t regist);
+void              adjustResult                    (calcRegister_t result, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3);
 void              copySourceRegisterToDestRegister(calcRegister_t rSource, calcRegister_t rDest);
 void              fnStore                         (uint16_t r);
 void              fnStoreAdd                      (uint16_t r);

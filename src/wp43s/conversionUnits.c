@@ -71,8 +71,7 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
     convertRegister34To16(REGISTER_X);
   }
 
-  roundRegister(REGISTER_X);
-  refreshRegisterLine(REGISTER_X);
+  adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
 
 
@@ -95,8 +94,7 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
       real34Add(REGISTER_REAL34_DATA(REGISTER_X), const34_32, REGISTER_REAL34_DATA(REGISTER_X));
     }
 
-    roundRegister(REGISTER_X);
-    refreshRegisterLine(REGISTER_X);
+    adjustResult(REGISTER_X, false, false, -1, -1, -1);
   }
 }
 
@@ -134,8 +132,7 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(tempReg, REGISTER_L);
     freeTemporaryRegister(tempReg);
 
-    roundRegister(REGISTER_X);
-    refreshRegisterLine(REGISTER_X);
+    adjustResult(REGISTER_X, false, false, -1, -1, -1);
   }
 }
 
@@ -406,8 +403,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     #endif
   }
 
-  roundRegister(REGISTER_X);
-  refreshRegisterLine(REGISTER_X);
+  adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
 
 
@@ -473,6 +469,5 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     #endif
   }
 
-  roundRegister(REGISTER_X);
-  refreshRegisterLine(REGISTER_X);
+  adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }

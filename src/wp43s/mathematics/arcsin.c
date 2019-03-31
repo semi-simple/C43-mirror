@@ -47,21 +47,6 @@ void arcsinError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void arcsinToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "arcsin(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and arcsin(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   arcsin[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -208,13 +186,13 @@ void arcsinCo16(void) {
 
 
 void arcsinRm16(void) {
-  arcsinToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void arcsinCm16(void) {
-  arcsinToBeCoded();
+  fnToBeCoded();
 }
 
 

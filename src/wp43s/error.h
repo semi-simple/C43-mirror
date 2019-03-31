@@ -18,7 +18,7 @@
  * \file error.h
  ***********************************************/
 
-#define NUMBER_OF_ERROR_CODES 29
+#define NUMBER_OF_ERROR_CODES 31
 
 #ifndef TESTSUITE_BUILD
 void displayBugScreen       (const char *message);

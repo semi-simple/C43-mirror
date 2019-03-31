@@ -20,15 +20,14 @@
 
 void fnChangeSign(uint16_t unusedParamButMandatory);
 void chsError    (void);
-void chsToBeCoded(void);
 
 //      RegX
-void chsLonI (void);
-void chsRe16 (void);
-void chsCo16 (void);
-void chsAngl (void);
-void chsRm16 (void);
-void chsCm16 (void);
-void chsShoI (void);
-void chsRe34 (void);
-void chsCo34 (void);
+void chsLonI     (void);
+void chsRe16     (void);
+void chsCo16     (void);
+void chsAngl     (void);
+void chsRm16     (void);
+void chsCm16     (void);
+void chsShoI     (void);
+void chsRe34     (void);
+void chsCo34     (void);

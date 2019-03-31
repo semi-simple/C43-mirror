@@ -47,21 +47,6 @@ void swapReImError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void swapReImToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "Re" STD_LEFT_RIGHT_ARROWS "Im(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and Re<>IM(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -93,18 +78,16 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
 void swapReImCo16(void) {
   real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result));
   real16Copy(REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
 
 void swapReImCm16(void) {
-  swapReImToBeCoded();
+  fnToBeCoded();
 }
 
 
 void swapReImCo34(void) {
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
   real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }

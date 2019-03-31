@@ -18,11 +18,10 @@
  * \file fractionalPart.h
  ***********************************************/
 
-void fnFp       (uint16_t unusedButMandatoryParameter);
-void fpToBeCoded(void);
-void fpError    (void);
-void fpLonI     (void);
-void fpRe16     (void);
-void fpRm16     (void);
-void fpRe34     (void);
-void fpShoI     (void);
+void fnFp   (uint16_t unusedButMandatoryParameter);
+void fpError(void);
+void fpLonI (void);
+void fpRe16 (void);
+void fpRm16 (void);
+void fpRe34 (void);
+void fpShoI (void);

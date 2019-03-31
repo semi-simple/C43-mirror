@@ -18,83 +18,82 @@
  * \file division.h
  ***********************************************/
 
-void fnDivide    (uint16_t unusedParamButMandatory);
-void divError    (void);
-void divToBeCoded(void);
+void fnDivide   (uint16_t unusedParamButMandatory);
+void divError   (void);
 
 //      RegYRegX
-void divLonILonI (void);
-void divLonIRe16 (void);
-void divLonICo16 (void);
-void divLonIShoI (void);
-void divLonIRe34 (void);
-void divLonICo34 (void);
+void divLonILonI(void);
+void divLonIRe16(void);
+void divLonICo16(void);
+void divLonIShoI(void);
+void divLonIRe34(void);
+void divLonICo34(void);
 
 //      RegYRegX
-void divRe16LonI (void);
-void divRe16Re16 (void);
-void divRe16Co16 (void);
-void divRe16ShoI (void);
-void divRe16Re34 (void);
-void divRe16Co34 (void);
+void divRe16LonI(void);
+void divRe16Re16(void);
+void divRe16Co16(void);
+void divRe16ShoI(void);
+void divRe16Re34(void);
+void divRe16Co34(void);
 
 //      RegYRegX
-void divCo16LonI (void);
-void divCo16Re16 (void);
-void divCo16Co16 (void);
-void divCo16ShoI (void);
-void divCo16Re34 (void);
-void divCo16Co34 (void);
+void divCo16LonI(void);
+void divCo16Re16(void);
+void divCo16Co16(void);
+void divCo16ShoI(void);
+void divCo16Re34(void);
+void divCo16Co34(void);
 
 //      RegYRegX
-void divAnglLonI (void);
-void divAnglRe16 (void);
-void divAnglAngl (void);
-void divAnglShoI (void);
-void divAnglRe34 (void);
+void divAnglLonI(void);
+void divAnglRe16(void);
+void divAnglAngl(void);
+void divAnglShoI(void);
+void divAnglRe34(void);
 
 //      RegYRegX
-void divTimeLonI (void);
-void divTimeRe16 (void);
-void divTimeShoI (void);
-void divTimeRe34 (void);
+void divTimeLonI(void);
+void divTimeRe16(void);
+void divTimeShoI(void);
+void divTimeRe34(void);
 
 //      RegYRegX
-void divRm16LonI (void);
-void divRm16Re16 (void);
-void divRm16Co16 (void);
-void divRm16ShoI (void);
-void divRm16Re34 (void);
-void divRm16Co34 (void);
+void divRm16LonI(void);
+void divRm16Re16(void);
+void divRm16Co16(void);
+void divRm16ShoI(void);
+void divRm16Re34(void);
+void divRm16Co34(void);
 
 //      RegYRegX
-void divCm16LonI (void);
-void divCm16Re16 (void);
-void divCm16Co16 (void);
-void divCm16ShoI (void);
-void divCm16Re34 (void);
-void divCm16Co34 (void);
+void divCm16LonI(void);
+void divCm16Re16(void);
+void divCm16Co16(void);
+void divCm16ShoI(void);
+void divCm16Re34(void);
+void divCm16Co34(void);
 
 //      RegYRegX
-void divShoILonI (void);
-void divShoIRe16 (void);
-void divShoICo16 (void);
-void divShoIShoI (void);
-void divShoIRe34 (void);
-void divShoICo34 (void);
+void divShoILonI(void);
+void divShoIRe16(void);
+void divShoICo16(void);
+void divShoIShoI(void);
+void divShoIRe34(void);
+void divShoICo34(void);
 
 //      RegYRegX
-void divRe34LonI (void);
-void divRe34Re16 (void);
-void divRe34Co16 (void);
-void divRe34ShoI (void);
-void divRe34Re34 (void);
-void divRe34Co34 (void);
+void divRe34LonI(void);
+void divRe34Re16(void);
+void divRe34Co16(void);
+void divRe34ShoI(void);
+void divRe34Re34(void);
+void divRe34Co34(void);
 
 //      RegYRegX
-void divCo34LonI (void);
-void divCo34Re16 (void);
-void divCo34Co16 (void);
-void divCo34ShoI (void);
-void divCo34Re34 (void);
-void divCo34Co34 (void);
+void divCo34LonI(void);
+void divCo34Re16(void);
+void divCo34Co16(void);
+void divCo34ShoI(void);
+void divCo34Re34(void);
+void divCo34Co34(void);

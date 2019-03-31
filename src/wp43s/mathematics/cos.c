@@ -47,21 +47,6 @@ void cosError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void cosToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "cos(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and cos(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnCos(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   Cos[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -192,13 +170,13 @@ void cosAngl(void) {
 
 
 void cosRm16(void) {
-  cosToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void cosCm16(void) {
-  cosToBeCoded();
+  fnToBeCoded();
 }
 
 

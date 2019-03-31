@@ -47,21 +47,6 @@ void twoPowError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void twoPowToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "2^(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and 2^regX ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   twoPow[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -154,13 +132,13 @@ void twoPowCo16(void) {
 
 
 void twoPowRm16(void) {
-  twoPowToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void twoPowCm16(void) {
-  twoPowToBeCoded();
+  fnToBeCoded();
 }
 
 

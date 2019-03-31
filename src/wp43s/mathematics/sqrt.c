@@ -47,21 +47,6 @@ void sqrtError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void sqrtToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "sqrt(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and sqrt(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   Sqrt[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -216,19 +194,18 @@ void sqrtCo16(void) {
   real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
   convertRegister34To16(result);
   angularMode = savedAngularMode;
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
 
 void sqrtRm16(void) {
-  sqrtToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void sqrtCm16(void) {
-  sqrtToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -287,5 +264,4 @@ void sqrtCo34(void) {
   real34Multiply(&theta34, const34_0_5, &theta34);
   real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
   angularMode = savedAngularMode;
-  fnSetFlag(FLAG_CPXRES);
 }

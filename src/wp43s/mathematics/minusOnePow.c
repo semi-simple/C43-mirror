@@ -47,21 +47,6 @@ void m1PowError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void m1PowToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "(-1)^(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and 10^regX ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnM1Pow(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   m1Pow[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -130,20 +108,19 @@ void m1PowCo16(void) {
     return;
   }
 
-  m1PowToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
 
 void m1PowRm16(void) {
-  m1PowToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void m1PowCm16(void) {
-  m1PowToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -178,6 +155,5 @@ void m1PowCo34(void) {
     return;
   }
 
-  m1PowToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }

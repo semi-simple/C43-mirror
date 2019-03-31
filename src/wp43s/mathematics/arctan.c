@@ -47,21 +47,6 @@ void arctanError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void arctanToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "arctan(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and arctan(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnArctan(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   arctan[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -205,13 +183,13 @@ void arctanCo16(void) {
 
 
 void arctanRm16(void) {
-  arctanToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void arctanCm16(void) {
-  arctanToBeCoded();
+  fnToBeCoded();
 }
 
 

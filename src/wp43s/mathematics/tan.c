@@ -47,21 +47,6 @@ void errorTan(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void tanToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "tan(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and tan(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnTan(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   Tan[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -252,13 +230,13 @@ void tanAngl(void) {
 
 
 void tanRm16(void) {
-  tanToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void tanCm16(void) {
-  tanToBeCoded();
+  fnToBeCoded();
 }
 
 

@@ -47,21 +47,6 @@ void realPartError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void realPartToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "Re(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and Re(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -101,13 +86,12 @@ void realPartCo16(void) {
 
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Copy(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
 
 void realPartCm16(void) {
-  realPartToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -122,5 +106,4 @@ void realPartCo34(void) {
 
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }

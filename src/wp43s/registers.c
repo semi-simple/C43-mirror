@@ -1320,126 +1320,194 @@ void fnConvertXToReal34(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Rounding the register r to the number
- *        of significant digits returned by
- *        getSignificantDigits() following the
- *        rounding rule stored in the context
- *        structure.
- *
- * \param[in] r calcRegister_t Register number
- * \return void
- ***********************************************/
-void roundRegister(calcRegister_t regist) { // TODO: we can make better here! Do not use an intermediate string
-  #if (ANGLE16 == 1)
-  if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtAngle) {
-  #endif
-  #if (ANGLE34 == 1)
-  if(getRegisterDataType(regist) == dtReal16) {
-  #endif
-    if(real16IsZero(REGISTER_REAL16_DATA(regist))) {
-      real16SetPositiveSign(REGISTER_REAL16_DATA(regist));
-    }
+void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3) {
+  uint32_t resultDataType;
+  bool_t oneArgumentIsComplex = false;
 
-    if(significantDigits == 0 || significantDigits >= 16) {
-      return;
-    }
-
-    real51_t tmp;
-
-    real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000);
-
-    ctxtReal51.digits = significantDigits;
-    stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-    ctxtReal51.digits = 51;
-
-    real51ToReal16(&tmp, REGISTER_REAL16_DATA(regist));
+  if(op1 >= 0) {
+    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op1) == dtComplex16 || getRegisterDataType(op1) == dtComplex34;
+    freeTemporaryRegister(op1);
   }
 
-  #if (ANGLE16 == 1)
-  else if(getRegisterDataType(regist) == dtReal34) {
-  #endif
-  #if (ANGLE34 == 1)
-  else if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtAngle) {
-  #endif
-    if(real34IsZero(REGISTER_REAL34_DATA(regist))) {
-      real34SetPositiveSign(REGISTER_REAL34_DATA(regist));
-    }
-
-    if(significantDigits == 0 || significantDigits >= 34) {
-      return;
-    }
-
-    real51_t tmp;
-
-    real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000);
-
-    ctxtReal51.digits = significantDigits;
-    stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-    ctxtReal51.digits = 51;
-
-    real51ToReal34(&tmp, REGISTER_REAL34_DATA(regist));
+  if(op2 >= 0) {
+    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op2) == dtComplex16 || getRegisterDataType(op2) == dtComplex34;
+    freeTemporaryRegister(op2);
   }
 
-  else if(getRegisterDataType(regist) == dtComplex16) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
-    }
-
-    if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      real16SetPositiveSign(REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-
-    if(significantDigits == 0 || significantDigits >= 16) {
-      return;
-    }
-
-    real51_t tmp;
-
-    ctxtReal51.digits = significantDigits;
-
-    real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000);
-    stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-    real51ToReal16(&tmp, REGISTER_REAL16_DATA(regist));
-
-    real16ToString(REGISTER_IMAG16_DATA(regist), tmpStr3000);
-    stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-    real51ToReal16(&tmp, REGISTER_IMAG16_DATA(regist));
-
-    ctxtReal51.digits = 51;
+  if(op3 >= 0) {
+    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op3) == dtComplex16 || getRegisterDataType(op3) == dtComplex34;
+    freeTemporaryRegister(op3);
   }
 
-  else if(getRegisterDataType(regist) == dtComplex34) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-
-    if(real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      real34SetPositiveSign(REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-
-    if(significantDigits == 0 || significantDigits >= 34) {
-      return;
-    }
-
-    real51_t tmp;
-
-    ctxtReal51.digits = significantDigits;
-
-    real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000);
-    stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-    real51ToReal34(&tmp, REGISTER_REAL34_DATA(regist));
-
-    real34ToString(REGISTER_IMAG34_DATA(regist), tmpStr3000);
-    stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-    real51ToReal34(&tmp, REGISTER_IMAG34_DATA(regist));
-
-    ctxtReal51.digits = 51;
+  if(lastErrorCode != 0) {
+    restoreStack();
+    refreshStack();
+    return;
   }
 
+  resultDataType = getRegisterDataType(res);
+  if(getFlag(FLAG_DANGER) == false) {
+    // D is clear: test infinite values
+    switch(resultDataType) {
+      case dtReal16:
+        if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
+          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+        }
+        break;
+
+      case dtReal34:
+        if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
+          displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+        }
+        break;
+
+      case dtComplex16:
+        if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
+          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+        }
+        else if(real16IsInfinite(REGISTER_IMAG16_DATA(res))) {
+          displayCalcErrorMessage(real16IsPositive(REGISTER_IMAG16_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+        }
+        break;
+
+      case dtComplex34:
+        if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
+          displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+        }
+        else if(real34IsInfinite(REGISTER_IMAG34_DATA(res))) {
+          displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  if(lastErrorCode != 0) {
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  if(setCpxRes && oneArgumentIsComplex) {
+    fnSetFlag(FLAG_CPXRES);
+  }
+
+  // Round the register value
+  switch(resultDataType) {
+    real51_t tmp;
+
+    #if (ANGLE16 == 1)
+    case dtReal16:
+    case dtAngle:
+    #endif
+    #if (ANGLE34 == 1)
+    case dtReal16:
+    #endif
+      if(real16IsZero(REGISTER_REAL16_DATA(res))) {
+        real16SetPositiveSign(REGISTER_REAL16_DATA(res));
+      }
+
+      if(significantDigits == 0 || significantDigits >= 16) {
+        break;
+      }
+
+      real16ToString(REGISTER_REAL16_DATA(res), tmpStr3000);
+
+      ctxtReal51.digits = significantDigits;
+      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
+      ctxtReal51.digits = 51;
+
+      real51ToReal16(&tmp, REGISTER_REAL16_DATA(res));
+      break;
+
+    #if (ANGLE16 == 1)
+    case dtReal34:
+    #endif
+    #if (ANGLE34 == 1)
+    case dtReal34:
+    case dtAngle:
+    #endif
+      if(real34IsZero(REGISTER_REAL34_DATA(res))) {
+        real34SetPositiveSign(REGISTER_REAL34_DATA(res));
+      }
+
+      if(significantDigits == 0 || significantDigits >= 34) {
+        break;
+      }
+
+      real34ToString(REGISTER_REAL34_DATA(res), tmpStr3000);
+
+      ctxtReal51.digits = significantDigits;
+      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
+      ctxtReal51.digits = 51;
+
+      real51ToReal34(&tmp, REGISTER_REAL34_DATA(res));
+      break;
+
+    case dtComplex16:
+      if(real16IsZero(REGISTER_REAL16_DATA(res))) {
+        real16SetPositiveSign(REGISTER_REAL16_DATA(res));
+      }
+
+      if(real16IsZero(REGISTER_IMAG16_DATA(res))) {
+        real16SetPositiveSign(REGISTER_IMAG16_DATA(res));
+      }
+
+      if(significantDigits == 0 || significantDigits >= 16) {
+        break;
+      }
+
+      ctxtReal51.digits = significantDigits;
+
+      real16ToString(REGISTER_REAL16_DATA(res), tmpStr3000);
+      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
+      real51ToReal16(&tmp, REGISTER_REAL16_DATA(res));
+
+      real16ToString(REGISTER_IMAG16_DATA(res), tmpStr3000);
+      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
+      real51ToReal16(&tmp, REGISTER_IMAG16_DATA(res));
+
+      ctxtReal51.digits = 51;
+      break;
+
+    case dtComplex34:
+      if(real34IsZero(REGISTER_REAL34_DATA(res))) {
+        real34SetPositiveSign(REGISTER_REAL34_DATA(res));
+      }
+
+      if(real34IsZero(REGISTER_IMAG34_DATA(res))) {
+        real34SetPositiveSign(REGISTER_IMAG34_DATA(res));
+      }
+
+      if(significantDigits == 0 || significantDigits >= 34) {
+        break;
+      }
+
+      ctxtReal51.digits = significantDigits;
+
+      real34ToString(REGISTER_REAL34_DATA(res), tmpStr3000);
+      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
+      real51ToReal34(&tmp, REGISTER_REAL34_DATA(res));
+
+      real34ToString(REGISTER_IMAG34_DATA(res), tmpStr3000);
+      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
+      real51ToReal34(&tmp, REGISTER_IMAG34_DATA(res));
+
+      ctxtReal51.digits = 51;
+      break;
+
+    default:
+      break;
+  }
+
+  if(dropY) {
+    fnDropY(NOPARAM);
+    refreshStack();
+  }
   else {
-    sprintf(errorMessage, "In function roundRegister: %s cannot be rounded!", getRegisterDataTypeName(regist, true, false));
-    displayBugScreen(errorMessage);
+    refreshRegisterLine(res);
   }
 }
 

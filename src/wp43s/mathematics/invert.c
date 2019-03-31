@@ -47,21 +47,6 @@ void invertError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void invertToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and 1 ÷ regX ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -80,16 +65,8 @@ void fnInvert(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   invert[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opY);
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, opY, -1);
 }
 
 
@@ -103,11 +80,11 @@ void invertLonI(void) {
 
 
 void invertRm16(void) {
-  invertToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void invertCm16(void) {
-  invertToBeCoded();
+  fnToBeCoded();
 }

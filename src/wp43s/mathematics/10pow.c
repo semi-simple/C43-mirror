@@ -47,21 +47,6 @@ void tenPowError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void tenPowToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "10^(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and 10^regX ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   tenPow[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -152,13 +130,13 @@ void tenPowCo16(void) {
 
 
 void tenPowRm16(void) {
-  tenPowToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void tenPowCm16(void) {
-  tenPowToBeCoded();
+  fnToBeCoded();
 }
 
 

@@ -47,22 +47,6 @@ void chsError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void chsToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "change sign %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-    showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief rexX ==> regL and -regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
@@ -132,7 +116,6 @@ void chsCo16(void) {
   if(real16IsZero(REGISTER_IMAG16_DATA(result))) {
     real16SetPositiveSign(REGISTER_IMAG16_DATA(result));
   }
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -164,13 +147,13 @@ void chsAngl(void) {
 
 
 void chsRm16(void) {
-  chsToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void chsCm16(void) {
-  chsToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -216,5 +199,4 @@ void chsCo34(void) {
   if(real34IsZero(REGISTER_IMAG34_DATA(result))) {
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
   }
-  fnSetFlag(FLAG_CPXRES);
 }

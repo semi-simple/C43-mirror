@@ -47,21 +47,6 @@ void log10Error(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void log10ToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "log10(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and log10(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnLog10(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   logBase10[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -226,19 +204,18 @@ void log10Co16(void) {
     real34ToReal16(&theta34, REGISTER_IMAG16_DATA(result));
     angularMode = savedAngularMode;
   }
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
 
 void log10Rm16(void) {
-  log10ToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void log10Cm16(void) {
-  log10ToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -338,5 +315,4 @@ void log10Co34(void) {
     real34Copy(&theta34, REGISTER_IMAG34_DATA(result));
     angularMode = savedAngularMode;
   }
-  fnSetFlag(FLAG_CPXRES);
 }

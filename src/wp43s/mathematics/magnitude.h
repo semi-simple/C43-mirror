@@ -18,14 +18,13 @@
  * \file magnitude.h
  ***********************************************/
 
-void fnMagnitude       (uint16_t unusedParamButMandatory);
-void magnitudeError    (void);
-void magnitudeToBeCoded(void);
-void magnitudeLonI     (void);
-void magnitudeRe16     (void);
-void magnitudeCo16     (void);
-void magnitudeRm16     (void);
-void magnitudeCm16     (void);
-void magnitudeShoI     (void);
-void magnitudeRe34     (void);
-void magnitudeCo34     (void);
+void fnMagnitude   (uint16_t unusedParamButMandatory);
+void magnitudeError(void);
+void magnitudeLonI (void);
+void magnitudeRe16 (void);
+void magnitudeCo16 (void);
+void magnitudeRm16 (void);
+void magnitudeCm16 (void);
+void magnitudeShoI (void);
+void magnitudeRe34 (void);
+void magnitudeCo34 (void);

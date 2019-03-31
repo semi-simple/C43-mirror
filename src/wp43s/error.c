@@ -49,7 +49,9 @@ const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /* 25 */  "",
 /* 26 */  "Please enter a NEW name",
 /* 27 */  "Cannot delete a predefined item",
-/* 28 */  "Bad input"
+/* 28 */  "Bad input",
+/* 29 */  "Item to be coded",
+/* 30 */  "Function to be coded for that data type(s)"
 };
 
 

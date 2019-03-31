@@ -47,21 +47,6 @@ void arccosError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void arccosToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "arccos(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and arccos(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnArccos(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   arccos[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -208,13 +186,13 @@ void arccosCo16(void) {
 
 
 void arccosRm16(void) {
-  arccosToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void arccosCm16(void) {
-  arccosToBeCoded();
+  fnToBeCoded();
 }
 
 

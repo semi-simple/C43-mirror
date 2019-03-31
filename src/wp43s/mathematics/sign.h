@@ -18,11 +18,10 @@
  * \file sign.h
  ***********************************************/
 
-void fnSign       (uint16_t unusedButMandatoryParameter);
-void signToBeCoded(void);
-void signError    (void);
-void signLonI     (void);
-void signRe16     (void);
-void signRm16     (void);
-void signShoI     (void);
-void signRe34     (void);
+void fnSign   (uint16_t unusedButMandatoryParameter);
+void signError(void);
+void signLonI (void);
+void signRe16 (void);
+void signRm16 (void);
+void signShoI (void);
+void signRe34 (void);

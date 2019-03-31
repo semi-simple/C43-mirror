@@ -47,21 +47,6 @@ void imagPartError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void imagPartToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "Im(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and Im(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -101,13 +86,12 @@ void imagPartCo16(void) {
 
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
 
 void imagPartCm16(void) {
-  imagPartToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -122,5 +106,4 @@ void imagPartCo34(void) {
 
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }

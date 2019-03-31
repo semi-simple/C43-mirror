@@ -59,22 +59,6 @@ void mulError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void mulToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "multiply %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and regY × regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
@@ -92,17 +76,8 @@ void fnMultiply(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-  freeTemporaryRegister(opY);
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    fnDropY(NOPARAM);
-  }
-  else {
-    restoreStack();
-  }
-
-  refreshStack();
+  adjustResult(result, true, true, opX, opY, -1);
 }
 
 
@@ -145,8 +120,6 @@ void mulLonIRe16(void) {
   convertLongIntegerRegisterToReal16Register(opY, opY);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -171,9 +144,6 @@ void mulLonICo16(void) {
   convertLongIntegerRegisterToReal16Register(opY, opY);
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -197,8 +167,6 @@ void mulLonIAngl(void) {
   convertLongIntegerRegisterToAngleRegister(opY, opY);
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -210,7 +178,7 @@ void mulLonIAngl(void) {
  * \return void
  ***********************************************/
 void mulLonITime(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -222,7 +190,7 @@ void mulLonITime(void) {
  * \return void
  ***********************************************/
 void mulLonIRm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -234,7 +202,7 @@ void mulLonIRm16(void) {
  * \return void
  ***********************************************/
 void mulLonICm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -270,8 +238,6 @@ void mulLonIRe34(void) {
   convertLongIntegerRegisterToReal34Register(opY, opY);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -296,9 +262,6 @@ void mulLonICo34(void) {
   convertLongIntegerRegisterToReal34Register(opY, opY);
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -321,8 +284,6 @@ void mulRe16LonI(void) {
   convertLongIntegerRegisterToReal16Register(opX, opX);
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -344,8 +305,6 @@ void mulRe16Re16(void) {
 
   reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -369,9 +328,6 @@ void mulRe16Co16(void) {
   complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result)); // real part
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(result), REGISTER_IMAG16_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -397,8 +353,6 @@ void mulRe16Angl(void) {
   #endif
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -418,7 +372,7 @@ void mulRe16Time(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -438,7 +392,7 @@ void mulRe16Rm16(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -458,7 +412,7 @@ void mulRe16Cm16(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -522,9 +476,6 @@ void mulCo16LonI(void) {
   convertLongIntegerRegisterToReal16Register(opX, opX);
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
   real16Multiply(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -547,9 +498,6 @@ void mulCo16Re16(void) {
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
   real16Multiply(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -579,9 +527,6 @@ void mulCo16Co16(void) {
   real16ChangeSign(REGISTER_IMAG16_DATA(opY));
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
   real16FMA(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -601,8 +546,7 @@ void mulCo16Rm16(void) {
     return;
   }
 
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -622,8 +566,7 @@ void mulCo16Cm16(void) {
     return;
   }
 
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -686,8 +629,6 @@ void mulAnglLonI(void) {
   convertLongIntegerRegisterToAngleRegister(opX, opX);
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -713,8 +654,6 @@ void mulAnglRe16(void) {
   #endif
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -738,8 +677,6 @@ void mulAnglShoI(void) {
   convertShortIntegerRegisterToAngleRegister(opX, opX);
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -765,8 +702,6 @@ void mulAnglRe34(void) {
   #endif
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -778,7 +713,7 @@ void mulAnglRe34(void) {
  * \return void
  ***********************************************/
 void mulTimeLonI(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -798,7 +733,7 @@ void mulTimeRe16(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -810,7 +745,7 @@ void mulTimeRe16(void) {
  * \return void
  ***********************************************/
 void mulTimeShoI(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -830,7 +765,7 @@ void mulTimeRe34(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -842,7 +777,7 @@ void mulTimeRe34(void) {
  * \return void
  ***********************************************/
 void mulRm16LonI(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -862,7 +797,7 @@ void mulRm16Re16(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -882,8 +817,7 @@ void mulRm16Co16(void) {
     return;
   }
 
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -895,7 +829,7 @@ void mulRm16Co16(void) {
  * \return void
  ***********************************************/
 void mulRm16Rm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -907,7 +841,7 @@ void mulRm16Rm16(void) {
  * \return void
  ***********************************************/
 void mulRm16Cm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -919,7 +853,7 @@ void mulRm16Cm16(void) {
  * \return void
  ***********************************************/
 void mulRm16ShoI(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -939,7 +873,7 @@ void mulRm16Re34(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -959,8 +893,7 @@ void mulRm16Co34(void) {
     return;
   }
 
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -972,7 +905,7 @@ void mulRm16Co34(void) {
  * \return void
  ***********************************************/
 void mulCm16LonI(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -992,7 +925,7 @@ void mulCm16Re16(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1012,8 +945,7 @@ void mulCm16Co16(void) {
     return;
   }
 
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -1025,7 +957,7 @@ void mulCm16Co16(void) {
  * \return void
  ***********************************************/
 void mulCm16Rm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1037,7 +969,7 @@ void mulCm16Rm16(void) {
  * \return void
  ***********************************************/
 void mulCm16Cm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1049,7 +981,7 @@ void mulCm16Cm16(void) {
  * \return void
  ***********************************************/
 void mulCm16ShoI(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1069,7 +1001,7 @@ void mulCm16Re34(void) {
     return;
   }
 
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1089,8 +1021,7 @@ void mulCm16Co34(void) {
     return;
   }
 
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -1153,8 +1084,6 @@ void mulShoIAngl(void) {
   convertShortIntegerRegisterToAngleRegister(opY, opY);
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -1166,7 +1095,7 @@ void mulShoIAngl(void) {
  * \return void
  ***********************************************/
 void mulShoITime(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1178,7 +1107,7 @@ void mulShoITime(void) {
  * \return void
  ***********************************************/
 void mulShoIRm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1190,7 +1119,7 @@ void mulShoIRm16(void) {
  * \return void
  ***********************************************/
 void mulShoICm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1252,8 +1181,6 @@ void mulRe34LonI(void) {
   convertLongIntegerRegisterToReal34Register(opX, opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -1305,8 +1232,6 @@ void mulRe34Angl(void) {
   #endif
   angleMultiply(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -1318,7 +1243,7 @@ void mulRe34Angl(void) {
  * \return void
  ***********************************************/
 void mulRe34Time(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1330,7 +1255,7 @@ void mulRe34Time(void) {
  * \return void
  ***********************************************/
 void mulRe34Rm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1342,7 +1267,7 @@ void mulRe34Rm16(void) {
  * \return void
  ***********************************************/
 void mulRe34Cm16(void) {
-  mulToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -1377,8 +1302,6 @@ void mulRe34Re34(void) {
 
   reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
 }
 
 
@@ -1401,9 +1324,6 @@ void mulRe34Co34(void) {
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1428,9 +1348,6 @@ void mulCo34LonI(void) {
   convertLongIntegerRegisterToReal34Register(opX, opX);
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   real34Multiply(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1468,8 +1385,7 @@ void mulCo34Co16(void) {
  * \return void
  ***********************************************/
 void mulCo34Rm16(void) {
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -1481,8 +1397,7 @@ void mulCo34Rm16(void) {
  * \return void
  ***********************************************/
 void mulCo34Cm16(void) {
-  mulToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -1518,9 +1433,6 @@ void mulCo34Re34(void) {
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Multiply(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1550,7 +1462,4 @@ void mulCo34Co34(void) {
   real34ChangeSign(REGISTER_IMAG34_DATA(opY));
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   real34FMA(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }

@@ -47,21 +47,6 @@ void magnitudeError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void magnitudeToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "|%s|", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief Returns the absolute value of an integer or a real and the magnitude of a complex
  *
  * \param[in] unusedParamButMandatory uint16_t
@@ -76,15 +61,8 @@ void fnMagnitude(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   magnitude[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, false, opX, -1, -1);
 }
 
 
@@ -122,19 +100,18 @@ void magnitudeCo16(void) {
   real16Multiply(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
   real16FMA(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
   real16SquareRoot(REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
 
 void magnitudeRm16(void) {
-  magnitudeToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void magnitudeCm16(void) {
-  magnitudeToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -172,5 +149,4 @@ void magnitudeCo34(void) {
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(result));
   real34FMA(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
   real34SquareRoot(REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }

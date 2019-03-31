@@ -47,21 +47,6 @@ void fpError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void fpToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "FP(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and FP(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -109,7 +94,7 @@ void fpRe16(void) {
 
 
 void fpRm16(void) {
-  ipToBeCoded();
+  fnToBeCoded();
 }
 
 

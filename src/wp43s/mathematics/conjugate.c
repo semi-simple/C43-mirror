@@ -47,21 +47,6 @@ void conjError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void conjToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "conjugate(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and conj(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -100,13 +85,15 @@ void conjCo16(void) {
   }
 
   real16ChangeSign(REGISTER_IMAG16_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
+  if(real16IsZero(REGISTER_IMAG16_DATA(result))) {
+    real16SetPositiveSign(REGISTER_IMAG16_DATA(result));
+  }
 }
 
 
 
 void conjCm16(void) {
-  conjToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -121,5 +108,7 @@ void conjCo34(void) {
   }
 
   real34ChangeSign(REGISTER_IMAG34_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
+  if(real34IsZero(REGISTER_IMAG34_DATA(result))) {
+    real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
+  }
 }

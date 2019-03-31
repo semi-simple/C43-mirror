@@ -59,22 +59,6 @@ void divError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void divToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "divide %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("Operation to be coded:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and regY ÷ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
@@ -92,17 +76,8 @@ void fnDivide(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-  freeTemporaryRegister(opY);
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    fnDropY(NOPARAM);
-  }
-  else {
-    restoreStack();
-  }
-
-  refreshStack();
+  adjustResult(result, true, true, opX, opY, -1);
 }
 
 
@@ -274,8 +249,6 @@ void divRe16Re16(void) {
   else {
     reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
     real16Divide(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-
-    roundRegister(result);
   }
 }
 
@@ -307,9 +280,6 @@ void divRe16Co16(void) {
   real16ChangeSign(&temp);
   real16Divide(REGISTER_IMAG16_DATA(opX), &temp, REGISTER_IMAG16_DATA(result));
   real16Multiply(REGISTER_IMAG16_DATA(result), REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -384,9 +354,6 @@ void divCo16Re16(void) {
   reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   real16Divide(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
   real16Divide(REGISTER_IMAG16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -424,9 +391,6 @@ void divCo16Co16(void) {
   real16ChangeSign(REGISTER_REAL16_DATA(opY)); // -a
   real16FMA(REGISTER_REAL16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result), REGISTER_IMAG16_DATA(result)); // b*c - a*d
   real16Divide(REGISTER_IMAG16_DATA(result), &temp, REGISTER_IMAG16_DATA(result)); // (b*c - a*d) / (c*c + d*d)
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -489,8 +453,6 @@ void divAnglLonI(void) {
   convertLongIntegerRegisterToAngleRegister(opX, opX);
   angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -516,8 +478,6 @@ void divAnglRe16(void) {
   #endif
   angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -542,8 +502,6 @@ void divAnglAngl(void) {
     convertRegister34To16(result);
   #endif
   setRegisterDataType(result, dtReal16);
-
-  roundRegister(result);
 }
 
 
@@ -567,8 +525,6 @@ void divAnglShoI(void) {
   convertShortIntegerRegisterToAngleRegister(opX, opX);
   angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -594,8 +550,6 @@ void divAnglRe34(void) {
   #endif
   angleDivide(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
   setRegisterAngularMode(result, angularMode);
-
-  roundRegister(result);
 }
 
 
@@ -607,7 +561,7 @@ void divAnglRe34(void) {
  * \return void
  ***********************************************/
 void divTimeLonI(void) {
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -627,7 +581,7 @@ void divTimeRe16(void) {
     return;
   }
 
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -639,7 +593,7 @@ void divTimeRe16(void) {
  * \return void
  ***********************************************/
 void divTimeShoI(void) {
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -659,7 +613,7 @@ void divTimeRe34(void) {
     return;
   }
 
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -671,7 +625,7 @@ void divTimeRe34(void) {
  * \return void
  ***********************************************/
 void divRm16LonI(void) {
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -691,7 +645,7 @@ void divRm16Re16(void) {
     return;
   }
 
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -711,8 +665,7 @@ void divRm16Co16(void) {
     return;
   }
 
-  divToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -724,7 +677,7 @@ void divRm16Co16(void) {
  * \return void
  ***********************************************/
 void divRm16ShoI(void) {
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -744,7 +697,7 @@ void divRm16Re34(void) {
     return;
   }
 
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -764,8 +717,7 @@ void divRm16Co34(void) {
     return;
   }
 
-  divToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -777,7 +729,7 @@ void divRm16Co34(void) {
  * \return void
  ***********************************************/
 void divCm16LonI(void) {
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -797,7 +749,7 @@ void divCm16Re16(void) {
     return;
   }
 
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -817,8 +769,7 @@ void divCm16Co16(void) {
     return;
   }
 
-  divToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -830,7 +781,7 @@ void divCm16Co16(void) {
  * \return void
  ***********************************************/
 void divCm16ShoI(void) {
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -850,7 +801,7 @@ void divCm16Re34(void) {
     return;
   }
 
-  divToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -870,8 +821,7 @@ void divCm16Co34(void) {
     return;
   }
 
-  divToBeCoded();
-  fnSetFlag(FLAG_CPXRES);
+  fnToBeCoded();
 }
 
 
@@ -1053,8 +1003,6 @@ void divRe34Re34(void) {
   else {
     reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
     real34Divide(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-
-    roundRegister(result);
   }
 }
 
@@ -1091,9 +1039,6 @@ void divRe34Co34(void) {
   real34ChangeSign(&temp);
   real34Divide(REGISTER_REAL34_DATA(opY), &temp, REGISTER_IMAG34_DATA(result));
   real34Multiply(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result));
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1168,9 +1113,6 @@ void divCo34Re34(void) {
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   real34Divide(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Divide(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
@@ -1208,7 +1150,4 @@ void divCo34Co34(void) {
   real34ChangeSign(REGISTER_REAL34_DATA(opY)); // -a
   real34FMA(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result)); // b*c - a*d
   real34Divide(REGISTER_IMAG34_DATA(result), &temp, REGISTER_IMAG34_DATA(result)); // (b*c - a*d) / (c*c + d*d)
-
-  roundRegister(result);
-  fnSetFlag(FLAG_CPXRES);
 }

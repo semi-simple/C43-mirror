@@ -18,11 +18,10 @@
  * \file integerPart.h
  ***********************************************/
 
-void fnIp       (uint16_t unusedButMandatoryParameter);
-void ipToBeCoded(void);
-void ipError    (void);
-void ipLonI     (void);
-void ipRe16     (void);
-void ipRm16     (void);
-void ipRe34     (void);
-void ipShoI     (void);
+void fnIp   (uint16_t unusedButMandatoryParameter);
+void ipError(void);
+void ipLonI (void);
+void ipRe16 (void);
+void ipRm16 (void);
+void ipRe34 (void);
+void ipShoI (void);

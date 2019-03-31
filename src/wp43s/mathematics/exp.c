@@ -47,21 +47,6 @@ void expError(void) {
 
 
 /********************************************//**
- * \brief Error message for a valid operation to be coded
- *
- * \param void
- * \return void
- ***********************************************/
-void expToBeCoded(void) {
-  #ifdef PC_BUILD
-    sprintf(errorMessage, "exp(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("Operation to be coded:", errorMessage, NULL, NULL);
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief regX ==> regL and exp(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
@@ -77,15 +62,8 @@ void fnExp(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   Exp[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -142,19 +120,18 @@ void expCo16(void) {
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
   convertRegister34To16(result);
-  fnSetFlag(FLAG_CPXRES);
 }
 
 
 
 void expRm16(void) {
-  expToBeCoded();
+  fnToBeCoded();
 }
 
 
 
 void expCm16(void) {
-  expToBeCoded();
+  fnToBeCoded();
 }
 
 
@@ -204,5 +181,4 @@ void expCo34(void) {
   angularMode = savedAngularMode;
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
-  fnSetFlag(FLAG_CPXRES);
 }

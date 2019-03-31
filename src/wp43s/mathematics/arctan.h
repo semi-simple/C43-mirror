@@ -18,7 +18,7 @@
  * \file arctan.h
  ***********************************************/
 
-void fnArctan(uint16_t unusedParamButMandatory);
+void fnArctan   (uint16_t unusedParamButMandatory);
 void arctanError(void);
 void arctanLonI (void);
 void arctanRe16 (void);

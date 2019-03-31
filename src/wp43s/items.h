@@ -1610,3 +1610,4 @@ typedef struct {
 } item_t;
 
 void runFunction(int16_t func);
+void fnToBeCoded(void);

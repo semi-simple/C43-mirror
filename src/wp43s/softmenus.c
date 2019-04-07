@@ -174,11 +174,16 @@ const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,   
                                      ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                  ITM_SUM,
                                      ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,             ITM_PLOT,
                                      ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_XCIRC,             ITM_YCIRC,                ITM_SQUARE,
-                                     ITM_ORTHOF,                    ITM_NULL,                   ITM_COV,                  ITM_NULL,              ITM_NULL,                 ITM_NULL,
+                                     ITM_NULL,                      ITM_XH,                     ITM_COV,                  ITM_NULL,              ITM_NULL,                 ITM_NULL,
+                                     ITM_NULL,                      ITM_XRMS,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL,
                                      ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                 ITM_BESTF,
-                                     ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,              ITM_SIGMAy,
+                                     ITM_ORTHOF,                    ITM_GAUSSF,                 ITM_CAUCHF,               ITM_PARABF,            ITM_HYPF,                 ITM_ROOTF                     };
+
+const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,              ITM_SIGMAy,
                                      ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,         ITM_SIGMAln2y,            ITM_SIGMAlny,
-                                     ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_SIGMAylnx                 };
+                                     ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_NULL,                 ITM_SIGMAlnyonx,       ITM_NULL,                 ITM_SIGMAylnx,
+                                     ITM_SIGMAx2ony,                ITM_SIGMA1onx,              ITM_SIGMA1onx2,           ITM_SIGMAxony,         ITM_SIGMA1ony2,           ITM_SIGMA1ony,
+                                     ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
 
 const int16_t menu_STK[]         = { ITM_Xex,                       ITM_Yex,                    ITM_Zex,                  ITM_Tex,               ITM_ex,                   ITM_DROP,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_DROPY,
@@ -446,6 +451,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_PFN,         .numRows = sizeof(menu_PFN        )/sizeof(int16_t)/6, .softkeyRow = menu_PFN         },
   {.menuId = -MNU_PFN2,        .numRows = sizeof(menu_PFN2       )/sizeof(int16_t)/6, .softkeyRow = menu_PFN2        },
   {.menuId = -MNU_STAT,        .numRows = sizeof(menu_STAT       )/sizeof(int16_t)/6, .softkeyRow = menu_STAT        },
+  {.menuId = -MNU_SUMS,        .numRows = sizeof(menu_SUMS       )/sizeof(int16_t)/6, .softkeyRow = menu_SUMS        },
   {.menuId = -MNU_STK,         .numRows = sizeof(menu_STK        )/sizeof(int16_t)/6, .softkeyRow = menu_STK         },
   {.menuId = -MNU_TEST,        .numRows = sizeof(menu_TEST       )/sizeof(int16_t)/6, .softkeyRow = menu_TEST        },
   {.menuId = -MNU_XFN,         .numRows = sizeof(menu_XFN        )/sizeof(int16_t)/6, .softkeyRow = menu_XFN         },

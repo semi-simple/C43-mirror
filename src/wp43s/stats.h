@@ -14,5 +14,11 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/********************************************//**
+ * \file stats.h Statistical functions
+ ***********************************************/
+
+
+
 void fnSigma  (uint16_t plusMinus);
 void fnStatSum(uint16_t sum);

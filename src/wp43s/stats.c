@@ -22,10 +22,12 @@
 
 
 
+#define STATISTICAL_SUMS 23
+
 static void initStatisticalSums(void) {
   if(statisticalSumsPointer == 0) {
-    statisticalSumsPointer = allocateMemory(14 * REAL34_SIZE);
-    for(int32_t sum=0; sum<14; sum++) {
+    statisticalSumsPointer = allocateMemory(STATISTICAL_SUMS * REAL34_SIZE);
+    for(int32_t sum=0; sum<STATISTICAL_SUMS; sum++) {
       real34Zero((real34_t *)(ram + statisticalSumsPointer + REAL34_SIZE*sum));
     }
   }
@@ -40,7 +42,7 @@ static void initStatisticalSums(void) {
  * \return void
  ***********************************************/
 void fnSigma(uint16_t plusMinus) {
-  real34_t tmpReal34, square;
+  real34_t tmpReal1, tmpReal2;
 
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)
      && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34)) {
@@ -75,52 +77,87 @@ void fnSigma(uint16_t plusMinus) {
       real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*2),  REGISTER_REAL34_DATA(REGISTER_Y),      RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*2));
 
       // sigma x²
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3),  &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3));
+      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3),  &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3));
+
+      // sigma x³
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*21),  &tmpReal2,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*21));
+
+      // sigma x⁴
+      real34Multiply(&tmpReal2, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*22),  &tmpReal2,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*22));
 
       // sigma x²y
-      real34Multiply(&tmpReal34, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4),  &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4));
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4),  &tmpReal2,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4));
+
+      // sigma x²/y
+      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*15),  &tmpReal2,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*15));
+
+      // sigma 1/x²
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*17),  &tmpReal2,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*17));
 
       // sigma y²
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5),  &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5));
+      real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5),  &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5));
+
+      // sigma 1/y²
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*20),  &tmpReal2,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*20));
 
       // sigma xy
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6),  &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6));
+      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6),  &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6));
 
-      // sigma ln(x)ln(y)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &square);
-      real34Multiply(&tmpReal34, &square, &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7),  &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7));
+      // sigma ln(x+y)
+      real34Add(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Ln(&tmpReal1, &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7),  &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7));
 
       // sigma ln(x)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8),  &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8));
+      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8),  &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8));
 
       // sigma ln²(x)
-      real34Multiply(&tmpReal34, &tmpReal34, &square);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9),  &square,                               RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9));
+      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9),  &tmpReal2,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9));
 
       // sigma yln(x)
-      real34Multiply(&tmpReal34, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10), &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10));
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10), &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10));
 
       // sigma ln(y)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11), &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11));
+      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11), &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11));
+
+      // sigma ln(y)/x
+      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*14), &tmpReal2,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*14));
 
       // sigma ln²(y)
-      real34Multiply(&tmpReal34, &tmpReal34, &square);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12), &square,                               RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12));
+      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12), &tmpReal2,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12));
 
       // sigma xln(y)
-      real34Multiply(&tmpReal34, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13), &tmpReal34,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13));
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13), &tmpReal1,                             RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13));
+
+      // sigma 1/x
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*16),  &tmpReal1,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*16));
+
+      // sigma x/y
+      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*18),  &tmpReal1,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*18));
+
+      // sigma 1/y
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Add(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*19),  &tmpReal1,                            RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*19));
     }
-    else {
+    else { // SIGMA-
       // n
       real34Subtract(RAM_REAL34(statisticalSumsPointer),  const34_1,                                        RAM_REAL34(statisticalSumsPointer));
 
@@ -128,53 +165,88 @@ void fnSigma(uint16_t plusMinus) {
       real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*1),  REGISTER_REAL34_DATA(REGISTER_X), RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*1));
 
       // sigma y
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*2),  REGISTER_REAL34_DATA(REGISTER_X), RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*2));
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*2),  REGISTER_REAL34_DATA(REGISTER_Y), RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*2));
 
-      // sigma x^2
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3),  &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3));
+      // sigma x²
+      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3),  &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*3));
+
+      // sigma x³
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*21),  &tmpReal2,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*21));
+
+      // sigma x⁴
+      real34Multiply(&tmpReal2, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*22),  &tmpReal2,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*22));
 
       // sigma x²y
-      real34Multiply(&tmpReal34, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4),  &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4));
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4),  &tmpReal2,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*4));
 
-      // sigma y^2
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5),  &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5));
+      // sigma x²/y
+      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*15),  &tmpReal2,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*15));
+
+      // sigma 1/x²
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*17),  &tmpReal2,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*17));
+
+      // sigma y²
+      real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5),  &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*5));
+
+      // sigma 1/y²
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*20),  &tmpReal2,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*20));
 
       // sigma xy
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6),  &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6));
+      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6),  &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*6));
 
-      // sigma ln(x)ln(y)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &square);
-      real34Multiply(&tmpReal34, &square, &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7),  &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7));
+      // sigma ln(x+y)
+      real34Add(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Ln(&tmpReal1, &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7),  &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*7));
 
       // sigma ln(x)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8),  &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8));
+      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8),  &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*8));
 
       // sigma ln²(x)
-      real34Multiply(&tmpReal34, &tmpReal34, &square);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9),  &square,                          RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9));
+      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9),  &tmpReal2,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*9));
 
       // sigma yln(x)
-      real34Multiply(&tmpReal34, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10), &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10));
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10), &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*10));
 
       // sigma ln(y)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11), &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11));
+      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11), &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*11));
+
+      // sigma ln(y)/x
+      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*14), &tmpReal2,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*14));
 
       // sigma ln²(y)
-      real34Multiply(&tmpReal34, &tmpReal34, &square);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12), &square,                          RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12));
+      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12), &tmpReal2,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*12));
 
       // sigma xln(y)
-      real34Multiply(&tmpReal34, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal34);
-      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13), &tmpReal34,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13));
+      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13), &tmpReal1,                        RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*13));
+
+      // sigma 1/x
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*16),  &tmpReal1,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*16));
+
+      // sigma x/y
+      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*18),  &tmpReal1,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*18));
+
+      // sigma 1/y
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Subtract(RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*19),  &tmpReal1,                       RAM_REAL34(statisticalSumsPointer + REAL34_SIZE*19));
     }
 
     temporaryInformation = TI_STATISTIC_SUMS;

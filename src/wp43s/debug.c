@@ -1202,6 +1202,78 @@ void debugNIM(void) {
         formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*4);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(ln(y)/x)");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*14);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(x" STD_SUP_2 "/y)");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*15);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(1/x)");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*16);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(1/x" STD_SUP_2 ")");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*17);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(x/y)");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*18);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(1/y)");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*19);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(1/y" STD_SUP_2 ")");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*20);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(x" STD_SUP_3 ")");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*21);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(x" STD_SUP_4 ")");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*22);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
       }
     }
 

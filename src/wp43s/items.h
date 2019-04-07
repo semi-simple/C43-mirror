@@ -1592,8 +1592,25 @@
 #define ITM_MtoFATHOMc                1556
 #define ITM_POINTtoMc                 1557
 #define ITM_MtoPOINTc                 1558
+#define ITM_XH                        1559
+#define ITM_XRMS                      1560
+#define MNU_SUMS                      1561
+#define ITM_GAUSSF                    1562
+#define ITM_CAUCHF                    1563
+#define ITM_PARABF                    1564
+#define ITM_HYPF                      1565
+#define ITM_ROOTF                     1566
+#define ITM_SIGMAlnyonx               1567
+#define ITM_SIGMAx2ony                1568
+#define ITM_SIGMA1onx                 1569
+#define ITM_SIGMA1onx2                1570
+#define ITM_SIGMAxony                 1571
+#define ITM_SIGMA1ony                 1572
+#define ITM_SIGMA1ony2                1573
+#define ITM_SIGMAx3                   1574
+#define ITM_SIGMAx4                   1575
 
-#define LAST_ITEM                     1559
+#define LAST_ITEM                     1576
 
 #define CHR_PROD_SIGN                 9999
 

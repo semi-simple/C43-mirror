@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 12  // 12 = nimInputIsReal34
+#define BACKUP_VERSION 13  // 13 = lastIntegerBase
 
 void saveCalc(void) {
   size_t size;
@@ -160,6 +160,7 @@ void saveCalc(void) {
   size += fwrite(&imaginaryExponentSignLocation,      1, sizeof(imaginaryExponentSignLocation),      backup); //printf("%8lu imaginaryExponentSignLocation\n",      (unsigned long)size);
   size += fwrite(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
   size += fwrite(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
+  size += fwrite(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
 
@@ -323,6 +324,7 @@ void restoreCalc(void) {
     size += fread(&imaginaryExponentSignLocation,      1, sizeof(imaginaryExponentSignLocation),      backup); //printf("%8lu imaginaryExponentSignLocation\n",      (unsigned long)size);
     size += fread(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
     size += fread(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
+    size += fread(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);
 

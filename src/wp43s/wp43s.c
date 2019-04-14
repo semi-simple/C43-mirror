@@ -87,6 +87,7 @@ uint16_t        yCursor;
 uint16_t        tamMode;
 uint32_t        firstGregorianDay;
 uint32_t        denMax;
+uint32_t        lastIntegerBase;
 uint8_t         softmenuStackPointer;
 uint8_t         transitionSystemState;
 uint8_t         cursorBlinkCounter;

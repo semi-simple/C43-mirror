@@ -478,6 +478,7 @@ extern uint16_t         yCursor;
 extern uint16_t         tamMode;
 extern uint32_t         firstGregorianDay;
 extern uint32_t         denMax;
+extern uint32_t         lastIntegerBase;
 extern uint8_t          softmenuStackPointer;
 extern uint8_t          transitionSystemState;
 extern uint8_t          cursorBlinkCounter;

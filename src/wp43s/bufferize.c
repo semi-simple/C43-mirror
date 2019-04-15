@@ -268,7 +268,7 @@ void addItemToNimBuffer(int16_t item) {
     return false;
   }
 
-  int16_t lastChar, index, basePos;
+  int16_t lastChar, index;
   uint8_t savedNimNumberPart;
   bool_t done;
 
@@ -788,26 +788,6 @@ void addItemToNimBuffer(int16_t item) {
 
     case KEY_EXIT :
       done = true;
-
-      if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
-        strcat(nimBuffer, "#0");
-        basePos = strlen(nimBuffer) - 1;
-        if(lastIntegerBase <= 9) {
-          nimBuffer[basePos] += lastIntegerBase;
-        }
-        else {
-          nimBuffer[basePos++] = '1';
-          nimBuffer[basePos] = '0';
-          nimBuffer[basePos + 1] = 0;
-          nimBuffer[basePos] += lastIntegerBase - 10;
-        }
-
-        nimNumberPart = NP_INT_BASE;
-      }
-      else {
-        lastIntegerBase = 0;
-      }
-
       closeNim();
       if(calcMode != CM_NIM && lastErrorCode == 0) {
         STACK_LIFT_ENABLE;
@@ -817,26 +797,6 @@ void addItemToNimBuffer(int16_t item) {
 
     case ITM_ENTER :
       done = true;
-
-      if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
-        strcat(nimBuffer, "#0");
-        basePos = strlen(nimBuffer) - 1;
-        if(lastIntegerBase <= 9) {
-          nimBuffer[basePos] += lastIntegerBase;
-        }
-        else {
-          nimBuffer[basePos++] = '1';
-          nimBuffer[basePos] = '0';
-          nimBuffer[basePos + 1] = 0;
-          nimBuffer[basePos] += lastIntegerBase - 10;
-        }
-
-        nimNumberPart = NP_INT_BASE;
-      }
-      else {
-        lastIntegerBase = 0;
-      }
-
       closeNim();
       if(calcMode != CM_NIM && lastErrorCode == 0) {
         if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
@@ -1785,6 +1745,25 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
 
 void closeNim(void) {
+  if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
+    strcat(nimBuffer, "#0");
+    int16_t basePos = strlen(nimBuffer) - 1;
+    if(lastIntegerBase <= 9) {
+      nimBuffer[basePos] += lastIntegerBase;
+    }
+    else {
+      nimBuffer[basePos++] = '1';
+      nimBuffer[basePos] = '0';
+      nimBuffer[basePos + 1] = 0;
+      nimBuffer[basePos] += lastIntegerBase - 10;
+    }
+
+    nimNumberPart = NP_INT_BASE;
+  }
+  else {
+    lastIntegerBase = 0;
+  }
+
   int16_t lastChar = strlen(nimBuffer) - 1;
 
   if(nimNumberPart != NP_INT_16) { // We need a # and a base

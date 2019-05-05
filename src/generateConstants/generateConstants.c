@@ -42,7 +42,7 @@ char       defines[1000000], externalDeclarations[1000000]; // .h file
 char       realArray[1000000], real16PointerDeclarations[1000000], real34PointerDeclarations[1000000], real51PointerDeclarations[1000000]; // .c file
 FILE       *constantsc;
 FILE       *constantsh;
-int        index, c;
+int        idx, c;
 
 void generateConstant16Array(char *name, char *value) {
   stringToReal16(value, &real16);
@@ -55,7 +55,7 @@ void generateConstant16Array(char *name, char *value) {
   strcat(externalDeclarations, ";\n");
 
   if(c <= 79) {
-    sprintf(temp, "#define CONST_%02d %4d\n", c, index);
+    sprintf(temp, "#define CONST_%02d %4d\n", c, idx);
     strcat(defines, temp);
   }
 
@@ -63,8 +63,8 @@ void generateConstant16Array(char *name, char *value) {
   strcat(real16PointerDeclarations, name);
   strcat(real16PointerDeclarations, whiteSpace);
   strcat(real16PointerDeclarations, " = (real16_t *)(constants + ");
-  sprintf(temp, "%4d)", index);
-  index += sizeof(real16_t);
+  sprintf(temp, "%4d)", idx);
+  idx += sizeof(real16_t);
   strcat(real16PointerDeclarations, temp);
   strcat(real16PointerDeclarations, ";\n");
 
@@ -94,8 +94,8 @@ void generateConstant34Array(char *name, char *value) {
   strcat(real34PointerDeclarations, name);
   strcat(real34PointerDeclarations, whiteSpace);
   strcat(real34PointerDeclarations, " = (real34_t *)(constants + ");
-  sprintf(temp, "%4d)", index);
-  index += sizeof(real34_t);
+  sprintf(temp, "%4d)", idx);
+  idx += sizeof(real34_t);
   strcat(real34PointerDeclarations, temp);
   strcat(real34PointerDeclarations, ";\n");
 
@@ -125,8 +125,8 @@ void generateConstant51Array(char *name, char *value) {
   strcat(real51PointerDeclarations, name);
   strcat(real51PointerDeclarations, whiteSpace);
   strcat(real51PointerDeclarations, " = (real51_t *)(constants + ");
-  sprintf(temp, "%4d)", index);
-  index += sizeof(real51_t);
+  sprintf(temp, "%4d)", idx);
+  idx += sizeof(real51_t);
   strcat(real51PointerDeclarations, temp);
   strcat(real51PointerDeclarations, ";\n");
 
@@ -144,7 +144,7 @@ void generateConstant51Array(char *name, char *value) {
 
 void generateAllConstants(void) {
   // constants used by the program
-  index = 0;
+  idx = 0;
 
   strcat(realArray, "const uint8_t constants[] = {\n");
 

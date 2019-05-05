@@ -380,8 +380,18 @@ typedef int16_t calcRegister_t;
   #define FMT8U  "u"
   #define FMT8S  "d"
   #define FMTPTR "lu"
+#elif defined(__APPLE__)
+  #define FMT64U "llu"
+  #define FMT64S "lld"
+  #define FMT32U "u"
+  #define FMT32S "d"
+  #define FMT16U "u"
+  #define FMT16S "d"
+  #define FMT8U  "u"
+  #define FMT8S  "d"
+  #define FMTPTR "lu"
 #else
-  #error Only Linux, ARM and Windows MINGW64 are supported for now
+  #error Only Linux, MacOS, ARM and Windows MINGW64 are supported for now
 #endif
 
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode

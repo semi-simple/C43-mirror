@@ -245,8 +245,10 @@ int main(void) {
    cFile = fopen("src/wp43s/rasterFontsData.c", "wb");
   #elif defined(__MINGW64__)
    cFile = fopen("src\\wp43s\\rasterFontsData.c", "wb");
+  #elif defined(__APPLE__) 
+   cFile = fopen("src/wp43s/rasterFontsData.c", "wb");
   #else
-   #error Only Linux and Windows MINGW64 are supported for now
+   #error Only Linux, MacOS and Windows MINGW64 are supported for now
   #endif
   fprintf(cFile, "/* This file is part of 43S.\n");
   fprintf(cFile, " *\n");

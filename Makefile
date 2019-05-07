@@ -142,7 +142,7 @@ clean_wp43s:
 
 wp43s: generateConstants ttf2RasterFonts $(OBJ_WP43S)
 	@echo -e "\n====> wp43s $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) `PKG-CONFIG --libs GTK+-3.0`
+	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) `pkg-config --libs GTK+-3.0`
 
 src/wp43s/%.o: src/wp43s/%.c
 	@echo -e "\n====> wp43s $@ <===="

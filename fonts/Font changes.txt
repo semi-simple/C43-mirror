@@ -83,5 +83,17 @@
 2019-02-18 New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
 
-2019-03-30 Added glyph U+2124 Double struck Z
-           New WP43S_StandardFont.ttf generated.
+2019-05-07 Changed 14 characters in standard font:
+		  - U+0061 Lower case a
+		  - U+00AA Primera
+		  - U+00E0...6: Respective accented a's, Danish ae
+		  - U+0101, ..3, and ..5: More accented a's
+		  - U+2090 Subscript a
+		  - U+2427 Cursor
+		  - U+249C Subscript a
+           Changed 4 characters in numeric font:
+		  - U+0061 Lower case a
+		  - U+0065 Lower case e
+		  - U+2427 Cursor
+		  - U+249C Subscript a
+

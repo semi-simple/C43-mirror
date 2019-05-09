@@ -1008,7 +1008,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemPrinted, lbl);
   }
 
-  if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
+  if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
     lbl[3] = 0;
   }
 
@@ -1032,7 +1032,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   if(key->fShifted == 0) {
     lbl[0] = 0;
   }
-  else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
+  else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
     lbl[3] = 0;
   }
 
@@ -1043,7 +1043,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   if(key->gShifted == 0) {
     lbl[0] = 0;
   }
-  else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
+  else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
     lbl[3] = 0;
   }
 
@@ -1075,7 +1075,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     stringToUtf8(indexOfItems[max(key->keyLblAim, -key->keyLblAim)].itemPrinted, lbl);
   }
 
-  //if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
+  //if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
   //  lbl[3] = 0;
   //}
 
@@ -1109,7 +1109,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   if(key->gShiftedAim == 0) {
     lbl[0] = 0;
   }
-  //else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 41) {
+  //else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
   //  lbl[3] = 0;
   //}
 

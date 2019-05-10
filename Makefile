@@ -100,6 +100,14 @@ SRC_TESTTTF2RASTERFONTS  = \
 		testTtf2RasterFonts.c)
 OBJ_TESTTTF2RASTERFONTS  = $(SRC_TESTTTF2RASTERFONTS:.c=.o) src/wp43s/rasterFontsData.o
 
+GEN_SRC_CONSTANTPOINTERS = \
+	$(addprefix src/wp43s/, constantPointers.c constantPointers.h)
+
+GEN_SRC_RASTERFONTSDATA   = \
+	$(addprefix src/wp43s/, rasterFontsData.c)
+
+GENERATED_SOURCES        = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA)
+
 .PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
 
 all: mrproper wp43s
@@ -108,6 +116,7 @@ all: mrproper wp43s
 clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts
 
 mrproper: clean_all
+	rm -f $(GENERATED_SOURCES)
 	rm -f $(GENERATECONSTANTS_APP)
 	rm -f $(TTF2RASTERFONTS_APP)
 	rm -f $(TESTTTF2RASTERFONTS_APP)
@@ -132,8 +141,7 @@ clean_generateConstants:
 generateConstants: decNumberICU $(OBJ_GENERATECONSTANTS)
 	@echo -e "\n====> generateConstants $@ <===="
 	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECONSTANTS) -o $(GENERATECONSTANTS_APP)
-	rm -f src/wp43s/constantPointers.h
-	rm -f src/wp43s/constantPointers.c
+	rm -f $(GEN_SRC_CONSTANTPOINTERS)
 	test -f $(GENERATECONSTANTS_APP) && ./$(GENERATECONSTANTS_APP)
 
 src/generateConstants/%.o: src/generateConstants/%.c
@@ -148,7 +156,7 @@ clean_ttf2RasterFonts:
 ttf2RasterFonts: $(OBJ_TTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> ttf2RasterFonts $@ <===="
 	$(CC) $(CFLAGS) -m64 $(OBJ_TTF2RASTERFONTS) -o $(TTF2RASTERFONTS_APP) `pkg-config --libs freetype2`
-	rm -f src/wp43s/rasterFontsData.c
+	rm -f $(GEN_SRC_RASTERFONTSDATA)
 	test -f $(TTF2RASTERFONTS_APP) && ./$(TTF2RASTERFONTS_APP) > /dev/null
 
 src/ttf2RasterFonts/%.o: src/ttf2RasterFonts/%.c

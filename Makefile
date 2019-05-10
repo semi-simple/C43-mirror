@@ -112,11 +112,13 @@ GENERATED_SOURCES        = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA
 
 STAMP_FILES              = .stamp-constantPointers .stamp-rasterFontsData
 
-all:
-	$(MAKE) mrproper
-	$(MAKE) wp43s
+all: wp43s
 
-.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU sources
+rebuild:
+	$(MAKE) mrproper
+	$(MAKE) all
+
+.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU sources rebuild
 
 ifneq ($(EXE),)
 generateConstants: $(GENERATECONSTANTS_APP)

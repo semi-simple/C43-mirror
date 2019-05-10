@@ -4,11 +4,11 @@
 # $? recent dependency list
 # $* target without extension
 
-
-GENERATECONSTANTS_APP = generateConstants
-TTF2RASTERFONTS_APP = ttf2RasterFonts
-TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts
-WP43S_APP = wp43s
+GENERATECONSTANTS_APP = generateConstants$(EXE)
+TTF2RASTERFONTS_APP = ttf2RasterFonts$(EXE)
+TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
+WP43S_APP = wp43s$(EXE)
+EXE =
 
 
 ifeq '$(findstring ;,$(PATH))' ';'
@@ -21,11 +21,8 @@ else
 endif
 
 ifeq ($(detected_OS),Windows)
+    EXE = .exe
     CFLAGS += -D WIN32
-    GENERATECONSTANTS_APP = $(GENERATECONSTANTS_APP).exe
-    TTF2RASTERFONTS_APP = $(TTF2RASTERFONTS_APP).exe
-    TESTTTF2RASTERFONTS_APP = $(TESTTTF2RASTERFONTS_APP).exe
-    WP43S_APP = $(WP43S_APP).exe
 else ifeq ($(detected_OS),Darwin)        # Mac OS X
     CFLAGS += -D OSX
     LDFLAGS += -L/opt/local/libs

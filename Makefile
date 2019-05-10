@@ -111,7 +111,7 @@ all:
 	$(MAKE) mrproper
 	$(MAKE) wp43s
 
-.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU
+.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU sources
 
 ifneq ($(EXE),)
 generateConstants: $(GENERATECONSTANTS_APP)
@@ -121,6 +121,8 @@ wp43s: $(WP43S_APP)
 
 .PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
 endif
+
+sources: $(STAMP_FILES)
 
 clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts
 

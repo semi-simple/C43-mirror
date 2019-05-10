@@ -54,17 +54,40 @@ CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -DPC_BU
 
 LDFLAGS += -m64
 
-SRC_DECIMAL              = decNumberICU/decContext.c decNumberICU/decDouble.c decNumberICU/decimal128.c decNumberICU/decimal64.c decNumberICU/decNumber.c decNumberICU/decQuad.c
+SRC_DECIMAL              = \
+	$(addprefix decNumberICU/, \
+		decContext.c decDouble.c decimal128.c decimal64.c decNumber.c \
+		decQuad.c)
 OBJ_DECIMAL              = $(SRC_DECIMAL:.c=.o)
 
 SRC_WP43S                = \
-	$(wildcard src/wp43s/*.c) \
-	$(wildcard src/wp43s/mathematics/*.c) \
-	$(wildcard src/wp43s/logicalOps/*.c) \
-	$(wildcard src/wp43s/browsers/*.c)	
+	$(addprefix src/wp43s/, \
+		assign.c bufferize.c charString.c config.c constantPointers.c \
+		constants.c conversionAngles.c conversionUnits.c \
+		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
+		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
+		rasterFontsData.c registerValueConversions.c registers.c \
+		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
+		stats.c statusBar.c testFunctions.c timer.c tomsfastmath.c \
+		wp43s.c) \
+	$(addprefix src/wp43s/mathematics/, \
+		10pow.c 2pow.c addition.c arccos.c arcsin.c arctan.c \
+		changeSign.c comparisonReals.c conjugate.c cos.c cube.c \
+		division.c exp.c factorial.c fractionalPart.c gamma.c gcd.c \
+		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \
+		log2.c magnitude.c minusOnePow.c multiplication.c power.c \
+		realPart.c sign.c sin.c sqrt.c square.c subtraction.c \
+		swapRealImaginary.c tan.c toPolar.c toRect.c unitVector.c \
+		wp34s.c) \
+	$(addprefix src/wp43s/logicalOps/, \
+		not.c) \
+	$(addprefix src/wp43s/browsers/, \
+		flagBrowser.c fontBrowser.c registerBrowser.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
 
-SRC_GENERATECONSTANTS    = $(wildcard src/generateConstants/*.c)
+SRC_GENERATECONSTANTS    = \
+	$(addprefix src/generateConstants/, \
+		generateConstants.c)
 OBJ_GENERATECONSTANTS    = $(SRC_GENERATECONSTANTS:.c=.o) $(OBJ_DECIMAL)
 
 .PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s

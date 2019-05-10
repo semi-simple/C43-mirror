@@ -105,10 +105,18 @@ GEN_SRC_RASTERFONTSDATA   = \
 
 GENERATED_SOURCES        = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA)
 
-.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
-
 all: mrproper wp43s
 
+.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU
+
+ifneq ($(EXE),)
+generateConstants: $(GENERATECONSTANTS_APP)
+ttf2RasterFonts: $(TTF2RASTERFONTS_APP)
+testTtf2RasterFonts: $(TESTTTF2RASTERFONTS_APP)
+wp43s: $(WP43S_APP)
+
+.PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
+endif
 
 clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts
 
@@ -135,9 +143,9 @@ decNumberICU/%.o: decNumberICU/%.c
 clean_generateConstants: 
 	rm -f $(OBJ_GENERATECONSTANTS)
 
-generateConstants: decNumberICU $(OBJ_GENERATECONSTANTS)
+$(GENERATECONSTANTS_APP): decNumberICU $(OBJ_GENERATECONSTANTS)
 	@echo -e "\n====> generateConstants $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECONSTANTS) -o $(GENERATECONSTANTS_APP)
+	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECONSTANTS) -o $@
 	rm -f $(GEN_SRC_CONSTANTPOINTERS)
 	test -f $(GENERATECONSTANTS_APP) && ./$(GENERATECONSTANTS_APP)
 
@@ -150,9 +158,9 @@ src/generateConstants/%.o: src/generateConstants/%.c
 clean_ttf2RasterFonts:
 	rm -f $(OBJ_TTF2RASTERFONTS)
 
-ttf2RasterFonts: $(OBJ_TTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
+$(TTF2RASTERFONTS_APP): $(OBJ_TTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> ttf2RasterFonts $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_TTF2RASTERFONTS) -o $(TTF2RASTERFONTS_APP) `pkg-config --libs freetype2`
+	$(CC) $(CFLAGS) -m64 $(OBJ_TTF2RASTERFONTS) -o $@ `pkg-config --libs freetype2`
 	rm -f $(GEN_SRC_RASTERFONTSDATA)
 	test -f $(TTF2RASTERFONTS_APP) && ./$(TTF2RASTERFONTS_APP) > /dev/null
 
@@ -165,18 +173,18 @@ src/ttf2RasterFonts/%.o: src/ttf2RasterFonts/%.c
 clean_testTtf2RasterFonts:
 	rm -f $(OBJ_TESTTTF2RASTERFONTS)
 
-testTtf2RasterFonts: $(OBJ_TESTTTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
+$(TESTTTF2RASTERFONTS_APP): $(OBJ_TESTTTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> testTtf2RasterFonts $@ <===="
-	$(CC) $(CFLAGS) -m64 `pkg-config --libs freetype2` $(OBJ_TESTTTF2RASTERFONTS) -o $(TESTTTF2RASTERFONTS_APP)
+	$(CC) $(CFLAGS) -m64 `pkg-config --libs freetype2` $(OBJ_TESTTTF2RASTERFONTS) -o $@
 
 
 
 clean_wp43s: 
 	rm -f $(OBJ_WP43S)
 
-wp43s: generateConstants ttf2RasterFonts $(OBJ_WP43S)
+$(WP43S_APP): generateConstants ttf2RasterFonts $(OBJ_WP43S)
 	@echo -e "\n====> wp43s $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) `pkg-config --libs gtk+-3.0`
+	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $@ `pkg-config --libs gtk+-3.0`
 
 src/wp43s/%.o: src/wp43s/%.c
 	@echo -e "\n====> wp43s $@ <===="

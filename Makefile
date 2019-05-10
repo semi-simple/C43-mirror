@@ -47,7 +47,7 @@ else
   CFLAGS += -O2 -s
 endif
 
-CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64
+CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64 -MMD
 
 LDFLAGS += -m64
 
@@ -56,6 +56,7 @@ SRC_DECIMAL              = \
 		decContext.c decDouble.c decimal128.c decimal64.c decNumber.c \
 		decQuad.c)
 OBJ_DECIMAL              = $(SRC_DECIMAL:.c=.o)
+DEPS_DECIMAL             = $(SRC_DECIMAL:.c=.d)
 
 SRC_WP43S                = \
 	$(addprefix src/wp43s/, \
@@ -81,21 +82,25 @@ SRC_WP43S                = \
 	$(addprefix src/wp43s/browsers/, \
 		flagBrowser.c fontBrowser.c registerBrowser.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
+DEPS_WP43S               = $(SRC_WP43S:.c=.d)
 
 SRC_GENERATECONSTANTS    = \
 	$(addprefix src/generateConstants/, \
 		generateConstants.c)
 OBJ_GENERATECONSTANTS    = $(SRC_GENERATECONSTANTS:.c=.o) $(OBJ_DECIMAL)
+DEPS_GENERATECONSTANTS   = $(SRC_GENERATECONSTANTS:.c=.d)
 
 SRC_TTF2RASTERFONTS      = \
 	$(addprefix src/ttf2RasterFonts/, \
 		ttf2RasterFonts.c)
 OBJ_TTF2RASTERFONTS      = $(SRC_TTF2RASTERFONTS:.c=.o)
+DEPS_TTF2RASTERFONTS     = $(SRC_TTF2RASTERFONTS:.c=.d)
 
 SRC_TESTTTF2RASTERFONTS  = \
 	$(addprefix src/ttf2RasterFonts/, \
 		testTtf2RasterFonts.c)
 OBJ_TESTTTF2RASTERFONTS  = $(SRC_TESTTTF2RASTERFONTS:.c=.o) src/wp43s/rasterFontsData.o
+DEPS_TESTTTF2RASTERFONTS = $(SRC_TESTTTF2RASTERFONTS:.c=.d)
 
 GEN_SRC_CONSTANTPOINTERS = \
 	$(addprefix src/wp43s/, constantPointers.c constantPointers.h)
@@ -137,6 +142,9 @@ mrproper: clean_all
 
 clean_decNumberICU:
 	rm -f $(OBJ_DECIMAL)
+	rm -f $(DEPS_DECIMAL)
+
+-include $(DEPS_DECIMAL)
 
 decNumberICU: $(OBJ_DECIMAL)
 	@echo -e "\n====> decNumberICU $@ <===="
@@ -149,6 +157,9 @@ decNumberICU/%.o: decNumberICU/%.c
 
 clean_generateConstants: 
 	rm -f $(OBJ_GENERATECONSTANTS)
+	rm -f $(DEPS_GENERATECONSTANTS)
+
+-include $(DEPS_GENERATECONSTANTS)
 
 $(GENERATECONSTANTS_APP): $(OBJ_GENERATECONSTANTS)
 	@echo -e "\n====> generateConstants $@ <===="
@@ -168,6 +179,9 @@ $(GEN_SRC_CONSTANTPOINTERS): .stamp-constantPointers
 
 clean_ttf2RasterFonts:
 	rm -f $(OBJ_TTF2RASTERFONTS)
+	rm -f $(DEPS_TTF2RASTERFONTS)
+
+-include $(DEPS_TTF2RASTERFONTS)
 
 $(TTF2RASTERFONTS_APP): $(OBJ_TTF2RASTERFONTS)
 	@echo -e "\n====> ttf2RasterFonts $@ <===="
@@ -186,6 +200,9 @@ $(GEN_SRC_RASTERFONTSDATA): .stamp-rasterFontsData
 
 clean_testTtf2RasterFonts:
 	rm -f $(OBJ_TESTTTF2RASTERFONTS)
+	rm -f $(DEPS_TESTTTF2RASTERFONTS)
+
+-include $(DEPS_TESTTTF2RASTERFONTS)
 
 $(TESTTTF2RASTERFONTS_APP): $(OBJ_TESTTTF2RASTERFONTS)
 	@echo -e "\n====> testTtf2RasterFonts $@ <===="
@@ -195,6 +212,9 @@ src/ttf2RasterFonts/testTtf2RasterFonts.o: .stamp-constantPointers
 
 clean_wp43s: 
 	rm -f $(OBJ_WP43S)
+	rm -f $(DEPS_WP43S)
+
+-include $(DEPS_WP43S)
 
 $(WP43S_APP): $(OBJ_WP43S)
 	@echo -e "\n====> wp43s $@ <===="

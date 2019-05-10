@@ -213,16 +213,16 @@ const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,     
 const int16_t menu_alpha_INTL[]  = { CHR_A_MACRON,                  CHR_A_ACUTE,                CHR_A_BREVE,              CHR_A_GRAVE,           CHR_A_DIARESIS,           CHR_A_TILDE,
                                      CHR_A_CIRC,                    CHR_A_RING,                 CHR_AE,                   CHR_A_OGONEK,          CHR_C_ACUTE,              CHR_C_CARON,
                                      CHR_C_CEDILLA,                 CHR_D_STROKE,               CHR_D_CARON,              CHR_E_MACRON,          CHR_E_ACUTE,              CHR_E_BREVE,
-                                     CHR_E_GRAVE,                   CHR_E_DIARESIS,             CHR_E_CIRC,               CHR_E_OGONEK,          CHR_G_BREVE,              ITM_NULL,
-                                     CHR_I_MACRON,                  CHR_I_ACUTE,                CHR_I_BREVE,              CHR_I_GRAVE,           CHR_I_DIARESIS,           CHR_I_CIRC,
-                                     CHR_I_OGONEK,                  CHR_I_DOT,                  CHR_I_DOTLESS,            CHR_L_STROKE,          CHR_L_ACUTE,              CHR_L_APOSTROPHE,
-                                     CHR_N_ACUTE,                   CHR_N_CARON,                CHR_N_TILDE,              CHR_O_MACRON,          CHR_O_ACUTE,              CHR_O_BREVE,
-                                     CHR_O_GRAVE,                   CHR_O_DIARESIS,             CHR_O_TILDE,              CHR_O_CIRC,            CHR_O_STROKE,             CHR_OE,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 CHR_S_ACUTE,           CHR_S_CARON,              CHR_S_CEDILLA,
-                                     CHR_T_CARON,                   CHR_T_CEDILLA,              CHR_U_MACRON,             CHR_U_ACUTE,           CHR_U_BREVE,              CHR_U_GRAVE,
-                                     CHR_U_DIARESIS,                CHR_U_TILDE,                CHR_U_CIRC,               CHR_U_RING,            CHR_W_CIRC,               ITM_NULL,
-                                     ITM_NULL,                      ITM_NULL,                   CHR_Y_CIRC,               CHR_Y_ACUTE,           CHR_Y_DIARESIS,           CHR_Z_ACUTE,
-                                     CHR_Z_CARON,                   CHR_Z_DOT,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+                                     CHR_E_GRAVE,                   CHR_E_DIARESIS,             CHR_E_CIRC,               CHR_E_DOT,             CHR_E_BREVE,              CHR_E_OGONEK,
+                                     CHR_G_BREVE,                   CHR_I_MACRON,               CHR_I_ACUTE,              CHR_I_BREVE,           CHR_I_GRAVE,              CHR_I_DIARESIS,
+                                     CHR_I_CIRC,                    CHR_I_OGONEK,               CHR_I_DOT,                CHR_I_DOTLESS,         CHR_L_STROKE,             CHR_L_ACUTE,
+                                     CHR_L_APOSTROPHE,              CHR_N_ACUTE,                CHR_N_CARON,              CHR_N_TILDE,           CHR_O_MACRON,             CHR_O_ACUTE,
+                                     CHR_O_BREVE,                   CHR_O_GRAVE,                CHR_O_DIARESIS,           CHR_O_TILDE,           CHR_O_CIRC,               CHR_O_STROKE,
+                                     CHR_OE,                        CHR_R_CARON,                CHR_R_ACUTE,              ITM_NULL,              CHR_S_ACUTE,              CHR_S_CARON,
+                                     CHR_S_CEDILLA,                 CHR_T_CARON,                CHR_T_CEDILLA,            CHR_U_MACRON,          CHR_U_ACUTE,              CHR_U_BREVE,
+                                     CHR_U_GRAVE,                   CHR_U_DIARESIS,             CHR_U_TILDE,              CHR_U_CIRC,            CHR_U_RING,               CHR_U_OGONEK,
+                                     CHR_W_CIRC,                    CHR_Y_CIRC,                 CHR_Y_ACUTE,              CHR_Y_DIARESIS,        CHR_Z_ACUTE,              CHR_Z_CARON,
+                                     CHR_Z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
 
 /*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
 /*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
@@ -230,16 +230,16 @@ const int16_t menu_alpha_INTL[]  = { CHR_A_MACRON,                  CHR_A_ACUTE,
 const int16_t menu_alpha_intl[]  = { CHR_a_MACRON,                  CHR_a_ACUTE,                CHR_a_BREVE,              CHR_a_GRAVE,           CHR_a_DIARESIS,           CHR_a_TILDE,
                                      CHR_a_CIRC,                    CHR_a_RING,                 CHR_ae,                   CHR_a_OGONEK,          CHR_c_ACUTE,              CHR_c_CARON,
                                      CHR_c_CEDILLA,                 CHR_d_STROKE,               CHR_d_APOSTROPHE,         CHR_e_MACRON,          CHR_e_ACUTE,              CHR_e_BREVE,
-                                     CHR_e_GRAVE,                   CHR_e_DIARESIS,             CHR_e_CIRC,               CHR_e_OGONEK,          CHR_g_BREVE,              CHR_h_STROKE,
-                                     CHR_i_MACRON,                  CHR_i_ACUTE,                CHR_i_BREVE,              CHR_i_GRAVE,           CHR_i_DIARESIS,           CHR_i_CIRC,
-                                     CHR_i_OGONEK,                  CHR_i_DOT,                  CHR_i_DOTLESS,            CHR_l_STROKE,          CHR_l_ACUTE,              CHR_l_APOSTROPHE,
-                                     CHR_n_ACUTE,                   CHR_n_CARON,                CHR_n_TILDE,              CHR_o_MACRON,          CHR_o_ACUTE,              CHR_o_BREVE,
-                                     CHR_o_GRAVE,                   CHR_o_DIARESIS,             CHR_o_TILDE,              CHR_o_CIRC,            CHR_o_STROKE,             CHR_oe,
-                                     CHR_r_CARON,                   CHR_r_ACUTE,                CHR_s_SHARP,              CHR_s_ACUTE,           CHR_s_CARON,              CHR_s_CEDILLA,
-                                     CHR_t_APOSTROPHE,              CHR_t_CEDILLA,              CHR_u_MACRON,             CHR_u_ACUTE,           CHR_u_BREVE,              CHR_u_GRAVE,
-                                     CHR_u_DIARESIS,                CHR_u_TILDE,                CHR_u_CIRC,               CHR_u_RING,            CHR_w_CIRC,               CHR_x_BAR,
-                                     CHR_x_CIRC,                    CHR_y_BAR,                  CHR_y_CIRC,               CHR_y_ACUTE,           CHR_y_DIARESIS,           CHR_z_ACUTE,
-                                     CHR_z_CARON,                   CHR_z_DOT,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+                                     CHR_e_GRAVE,                   CHR_e_DIARESIS,             CHR_e_CIRC,               CHR_e_DOT,             CHR_e_BREVE,              CHR_e_OGONEK,
+                                     CHR_g_BREVE,                   CHR_i_MACRON,               CHR_i_ACUTE,              CHR_i_BREVE,           CHR_i_GRAVE,              CHR_i_DIARESIS,
+                                     CHR_i_CIRC,                    CHR_i_OGONEK,               CHR_i_DOT,                CHR_i_DOTLESS,         CHR_l_STROKE,             CHR_l_ACUTE,
+                                     CHR_l_APOSTROPHE,              CHR_n_ACUTE,                CHR_n_CARON,              CHR_n_TILDE,           CHR_o_MACRON,             CHR_o_ACUTE,
+                                     CHR_o_BREVE,                   CHR_o_GRAVE,                CHR_o_DIARESIS,           CHR_o_TILDE,           CHR_o_CIRC,               CHR_o_STROKE,
+                                     CHR_oe,                        CHR_r_CARON,                CHR_r_ACUTE,              CHR_s_SHARP,           CHR_s_ACUTE,              CHR_s_CARON,
+                                     CHR_s_CEDILLA,                 CHR_t_APOSTROPHE,           CHR_t_CEDILLA,            CHR_u_MACRON,          CHR_u_ACUTE,              CHR_u_BREVE,
+                                     CHR_u_GRAVE,                   CHR_u_DIARESIS,             CHR_u_TILDE,              CHR_u_CIRC,            CHR_u_RING,               CHR_u_OGONEK,
+                                     CHR_w_CIRC,                    CHR_y_CIRC,                 CHR_y_ACUTE,              CHR_y_DIARESIS,        CHR_z_ACUTE,              CHR_z_CARON,
+                                     CHR_z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
 
 const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_DIGITS,                -MNU_CHARS,               -MNU_PROGS,            -MNU_VARS,                -MNU_MENUS                    };
 

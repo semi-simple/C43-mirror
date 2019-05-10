@@ -115,7 +115,7 @@ mrproper: clean_all
 
 
 clean_decNumberICU:
-	rm -f decNumberICU/*.o
+	rm -f $(OBJ_DECIMAL)
 
 decNumberICU: $(OBJ_DECIMAL)
 	@echo -e "\n====> decNumberICU $@ <===="
@@ -127,7 +127,7 @@ decNumberICU/%.o: decNumberICU/%.c
 
 
 clean_generateConstants: 
-	rm -f src/generateConstants/*.o
+	rm -f $(OBJ_GENERATECONSTANTS)
 
 generateConstants: decNumberICU $(OBJ_GENERATECONSTANTS)
 	@echo -e "\n====> generateConstants $@ <===="
@@ -143,7 +143,7 @@ src/generateConstants/%.o: src/generateConstants/%.c
 
 
 clean_ttf2RasterFonts:
-	rm -f src/ttf2RasterFonts/ttf2RasterFonts.o
+	rm -f $(OBJ_TTF2RASTERFONTS)
 
 ttf2RasterFonts: $(OBJ_TTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> ttf2RasterFonts $@ <===="
@@ -158,8 +158,7 @@ src/ttf2RasterFonts/%.o: src/ttf2RasterFonts/%.c
 
 
 clean_testTtf2RasterFonts:
-	rm -f src/ttf2RasterFonts/testTtf2RasterFonts.o
-	rm -f src/wp43s/rasterFontsData.o
+	rm -f $(OBJ_TESTTTF2RASTERFONTS)
 
 testTtf2RasterFonts: $(OBJ_TESTTTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> testTtf2RasterFonts $@ <===="
@@ -168,10 +167,7 @@ testTtf2RasterFonts: $(OBJ_TESTTTF2RASTERFONTS) fonts/WP43S_NumericFont.ttf font
 
 
 clean_wp43s: 
-	rm -f src/wp43s/*.o
-	rm -f src/wp43s/mathematics/*.o
-	rm -f src/wp43s/logicalops/*.o
-	rm -f src/wp43s/browsers/*.o
+	rm -f $(OBJ_WP43S)
 
 wp43s: generateConstants ttf2RasterFonts $(OBJ_WP43S)
 	@echo -e "\n====> wp43s $@ <===="

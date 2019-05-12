@@ -99,3 +99,6 @@
 
 2019-05-07 New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
+
+2019-05-12 Corrected glyph U+0061 (lower case a) in numeric font
+           New WP43S_NumericFont.ttf generated.

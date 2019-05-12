@@ -1,8 +1,11 @@
+*.d
 *.o
 *.bin
 *.exe
 *.layout
 *.depend
+.stamp-constantPointers
+.stamp-rasterFontsData
 bin/
 obj/
 src/qspi_crc.h

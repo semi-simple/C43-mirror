@@ -26,383 +26,383 @@
 
 #include "wp43s.h"
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,              ITM_MA15,                 ITM_MA16,
-                                     ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                 ITM_MA26,
-                                     ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                 ITM_MA36                      };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,              ITM_MA15,                    ITM_MA16,
+                                     ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                    ITM_MA26,
+                                     ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                    ITM_MA36                      };
 
-const int16_t menu_ADV[]         = { ITM_SOLVE,                     ITM_SLVQ,                   ITM_FQX,                  ITM_PI,                ITM_SIGMA,                -MNU_Sfdx,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_FDQX,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_ADV[]         = { ITM_SOLVE,                     ITM_SLVQ,                   ITM_FQX,                  ITM_PI,                ITM_SIGMA,                   -MNU_Sfdx,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_FDQX,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_Sfdx[]        = { ITM_NULL,                      ITM_NULL,                   ITM_ACC,                  ITM_DLIM,              ITM_ULIM,                 ITM_INTEGRAL                  };
+const int16_t menu_Sfdx[]        = { ITM_NULL,                      ITM_NULL,                   ITM_ACC,                  ITM_DLIM,              ITM_ULIM,                    ITM_INTEGRAL                  };
 
-const int16_t menu_BITS[]        = { ITM_AND,                       ITM_OR,                     ITM_XOR,                  ITM_NOT,               ITM_MASKL,                ITM_MASKR,
-                                     ITM_NAND,                      ITM_NOR,                    ITM_XNOR,                 ITM_NULL,              ITM_MIRROR,               ITM_ASR,
-                                     ITM_SB,                        ITM_BS,                     ITM_NUMB,                 ITM_FB,                ITM_BC,                   ITM_CB,
-                                     ITM_SL,                        ITM_RL,                     ITM_RLC,                  ITM_RRC,               ITM_RR,                   ITM_SR,
-                                     ITM_LJ,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_RJ,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_LZON,                 ITM_WSIZE,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                ITM_NULL                      };
+const int16_t menu_BITS[]        = { ITM_AND,                       ITM_OR,                     ITM_XOR,                  ITM_NOT,               ITM_MASKL,                   ITM_MASKR,
+                                     ITM_NAND,                      ITM_NOR,                    ITM_XNOR,                 ITM_NULL,              ITM_MIRROR,                  ITM_ASR,
+                                     ITM_SB,                        ITM_BS,                     ITM_NUMB,                 ITM_FB,                ITM_BC,                      ITM_CB,
+                                     ITM_SL,                        ITM_RL,                     ITM_RLC,                  ITM_RRC,               ITM_RR,                      ITM_SR,
+                                     ITM_LJ,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_RJ,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_LZON,                    ITM_WSIZE,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                   ITM_NULL                      };
 
-const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE,                 ITM_DATEto,               ITM_WDAY,              ITM_TIME,                 ITM_XtoDATE,
-                                     ITM_JtoD,                      ITM_DtoJ,                   ITM_NULL,                 ITM_DAY,               ITM_MONTH,                ITM_YEAR,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL,
-                                     ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                  ITM_MDY,
-                                     ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_JonG                      };
+const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE,                 ITM_DATEto,               ITM_WDAY,              ITM_TIME,                    ITM_XtoDATE,
+                                     ITM_JtoD,                      ITM_DtoJ,                   ITM_NULL,                 ITM_DAY,               ITM_MONTH,                   ITM_YEAR,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
+                                     ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JonG                      };
 
-const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,                    ITM_CF,                   ITM_CLMENU,            ITM_CLSTK,                ITM_CLX,
-                                     ITM_CLREGS,                    ITM_CLPALL,                 ITM_CLFALL,               ITM_CLCVAR,            ITM_CLLCD,                ITM_CLALL,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_RESET                     };
+const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,                    ITM_CF,                   ITM_CLMENU,            ITM_CLSTK,                   ITM_CLX,
+                                     ITM_CLREGS,                    ITM_CLPALL,                 ITM_CLFALL,               ITM_CLCVAR,            ITM_CLLCD,                   ITM_CLALL,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_RESET                     };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_CPX[]         = { ITM_DOT,                       ITM_CROSS,                  ITM_UNITV,                ITM_MAGNITUDE,         ITM_CONJ,                 ITM_REexIM,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_SIGN,                 ITM_ANGLE,             ITM_RE,                   ITM_IM,
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,                 ITM_NULL,              ITM_POLAR,                ITM_RECT                      };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_CPX[]         = { ITM_DOT,                       ITM_CROSS,                  ITM_UNITV,                ITM_MAGNITUDE,         ITM_CONJ,                    ITM_REexIM,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_SIGN,                 ITM_ANGLE,             ITM_RE,                      ITM_IM,
+                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,                 ITM_NULL,              ITM_POLAR,                   ITM_RECT                      };
 
-const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_ROUNDI,               ITM_ROUND,
-                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_RDP,                  ITM_RSD,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL,
-                                     ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,           ITM_RDXPER,               ITM_RDXCOM,
-                                     ITM_GAP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_DSTACK,
-                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                ITM_SETUSA                    };
+const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_ROUNDI,                  ITM_ROUND,
+                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_RDP,                     ITM_RSD,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,           ITM_RDXPER,                  ITM_RDXCOM,
+                                     ITM_GAP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DSTACK,
+                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA                    };
 
-const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                  -MNU_Solver,
-                                     ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
+                                     ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_XTHROOT,                ITM_LOGXY,                ITM_LOG2,              ITM_2X,                   ITM_SQUARE,
-                                     ITM_CUBEROOT,                  ITM_NULL,                   ITM_NULL,                 ITM_LN1X,              ITM_EX1,                  ITM_NULL,
-                                     ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                 ITM_artanh                    };
+const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_XTHROOT,                ITM_LOGXY,                ITM_LOG2,              ITM_2X,                      ITM_SQUARE,
+                                     ITM_CUBEROOT,                  ITM_NULL,                   ITM_NULL,                 ITM_LN1X,              ITM_EX1,                     ITM_NULL,
+                                     ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
 
-const int16_t menu_TRI[]         = { ITM_sin,                       ITM_arcsin,                 ITM_cos,                  ITM_arccos,            ITM_tan,                  ITM_arctan                    };
+const int16_t menu_TRI[]         = { ITM_sin,                       ITM_arcsin,                 ITM_cos,                  ITM_arccos,            ITM_tan,                     ITM_arctan                    };
 
-const int16_t menu_FIN[]         = { ITM_PC,                        ITM_PCMRR,                  ITM_PCT,                  ITM_PCSIGMA,           ITM_PCPMG,                -MNU_TVM                      };
+const int16_t menu_FIN[]         = { ITM_PC,                        ITM_PCMRR,                  ITM_PCT,                  ITM_PCSIGMA,           ITM_PCPMG,                   -MNU_TVM                      };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_TVM[]         = { ITM_NPER,                      ITM_IPCA,                   ITM_PERonA,               ITM_PV,                ITM_PMT,                  ITM_FV,
-                                     ITM_BEGINP,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_ENDP                      };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_TVM[]         = { ITM_NPER,                      ITM_IPCA,                   ITM_PERonA,               ITM_PV,                ITM_PMT,                     ITM_FV,
+                                     ITM_BEGINP,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_ENDP                      };
 
-const int16_t menu_FLAGS[]       = { ITM_SF,                        ITM_FS,                     ITM_FF,                   ITM_STATUS,            ITM_FC,                   ITM_CF,
-                                     ITM_FSS,                       ITM_FSC,                    ITM_FSF,                  ITM_FCF,               ITM_FCS,                  ITM_FCC,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_CLFALL                    };
+const int16_t menu_FLAGS[]       = { ITM_SF,                        ITM_FS,                     ITM_FF,                   ITM_STATUS,            ITM_FC,                      ITM_CF,
+                                     ITM_FSS,                       ITM_FSC,                    ITM_FSF,                  ITM_FCF,               ITM_FCS,                     ITM_FCC,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLFALL                    };
 
-const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,                    ITM_RMQ,                  ITM_SMODE,             ITM_WSIZEQ,               ITM_KTYP,
-                                     ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                ITM_BATT,
-                                     ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,             ITM_ALPHALENG                 };
+const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,                    ITM_RMQ,                  ITM_SMODE,             ITM_WSIZEQ,                  ITM_KTYP,
+                                     ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
+                                     ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG                 };
 
-const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                    CHR_F,
-                                     ITM_IDIV,                      ITM_RMDR,                   ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                ITM_LCM,
-                                     ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,              ITM_CEIL,                 ITM_GCD                       };
+const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
+                                     ITM_IDIV,                      ITM_RMDR,                   ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
+                                     ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,              ITM_CEIL,                    ITM_GCD                       };
 
-const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                  ITM_ISG,
-                                     ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_INC                       };
+const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                     ITM_ISG,
+                                     ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_INC                       };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_MATX[]        = { ITM_M_NEW,                     ITM_M_INV,                  ITM_M_DET,                ITM_M_TRANSP,          -MNU_SIM_EQ,              -MNU_M_EDIT,
-                                     ITM_DOT,                       ITM_CROSS,                  ITM_UNITV,                ITM_M_DIM,             ITM_INDEX,                -MNU_M_EDITN,
-                                     ITM_ENORM,                     ITM_VANGLE,                 ITM_STOEL,                ITM_RCLEL,             ITM_M_PUT,                ITM_M_GET,
-                                     ITM_IPLUS,                     ITM_IMINUS,                 ITM_STOIJ,                ITM_RCLIJ,             ITM_JMINUS,               ITM_JPLUS,
-                                     ITM_RSUM,                      ITM_RNORM,                  ITM_M_LU,                 ITM_M_DIMQ,            ITM_NULL,                 ITM_M_R,
-                                     ITM_EIGVAL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_EIGVEC                    };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_MATX[]        = { ITM_M_NEW,                     ITM_M_INV,                  ITM_M_DET,                ITM_M_TRANSP,          -MNU_SIM_EQ,                 -MNU_M_EDIT,
+                                     ITM_DOT,                       ITM_CROSS,                  ITM_UNITV,                ITM_M_DIM,             ITM_INDEX,                   -MNU_M_EDITN,
+                                     ITM_ENORM,                     ITM_VANGLE,                 ITM_STOEL,                ITM_RCLEL,             ITM_M_PUT,                   ITM_M_GET,
+                                     ITM_IPLUS,                     ITM_IMINUS,                 ITM_STOIJ,                ITM_RCLIJ,             ITM_JMINUS,                  ITM_JPLUS,
+                                     ITM_RSUM,                      ITM_RNORM,                  ITM_M_LU,                 ITM_M_DIMQ,            ITM_NULL,                    ITM_M_R,
+                                     ITM_EIGVAL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_EIGVEC                    };
 
-const int16_t menu_M_SIM_Q[]     = { ITM_MATA,                      ITM_MATB,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_MATX                      };
+const int16_t menu_M_SIM_Q[]     = { ITM_MATA,                      ITM_MATB,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_MATX                      };
 
-const int16_t menu_M_EDIT[]      = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,           CHR_RIGHT_ARROW,
-                                     ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,               ITM_M_GROW                    };
+const int16_t menu_M_EDIT[]      = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,              CHR_RIGHT_ARROW,
+                                     ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,           CHR_RIGHT_ARROW,
-                                     ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,               ITM_M_GROW                    };
+const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,              CHR_RIGHT_ARROW,
+                                     ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                 ITM_POLAR,
-                                     ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,             ITM_REALRES,              ITM_CPXRES,
-                                     ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,            ITM_SSIZE4,               ITM_SSIZE8,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_LZON,                 ITM_WSIZE,
-                                     ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                ITM_NULL,
+const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,
+                                     ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,             ITM_REALRES,                 ITM_CPXRES,
+                                     ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,            ITM_SSIZE4,                  ITM_SSIZE8,
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_LZON,                    ITM_WSIZE,
+                                     ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                   ITM_NULL,
 #if DMCP_BUILD
-                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL
+                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL
 #endif
                                                                                                                                                                                                          };
 
-const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                 ITM_MAGNITUDE,
-                                     ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_DECOMP,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_RE,                ITM_IM,                   ITM_ANGLE                     };
+const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
+                                     ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_RE,                ITM_IM,                      ITM_ANGLE                     };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_PROB[]        = { -MNU_T,                        ITM_XFACT,                  ITM_COMB,                 ITM_PERM,              -MNU_F,                   -MNU_CHI2,
-                                     -MNU_NORML,                    -MNU_LGNRM,                 -MNU_CAUCH,               -MNU_EXPON,            -MNU_LOGIS,               -MNU_WEIBL,
-                                     -MNU_PHI,                      -MNU_NBIN,                  -MNU_GEOM,                -MNU_HYPER,            -MNU_BINOM,               -MNU_POISS,
-                                     ITM_RAN,                       ITM_SEED,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_GAMMAX                    };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_PROB[]        = { -MNU_T,                        ITM_XFACT,                  ITM_COMB,                 ITM_PERM,              -MNU_F,                      -MNU_CHI2,
+                                     -MNU_NORML,                    -MNU_LGNRM,                 -MNU_CAUCH,               -MNU_EXPON,            -MNU_LOGIS,                  -MNU_WEIBL,
+                                     -MNU_PHI,                      -MNU_NBIN,                  -MNU_GEOM,                -MNU_HYPER,            -MNU_BINOM,                  -MNU_POISS,
+                                     ITM_RAN,                       ITM_SEED,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GAMMAX                    };
 
-const int16_t menu_t[]           = { ITM_TPX,                       ITM_TX,                     ITM_NULL,                 ITM_NULL,              ITM_TUX,                  ITM_TM1P                      };
-const int16_t menu_PHI[]         = { ITM_phix,                      ITM_PHIx,                   ITM_NULL,                 ITM_NULL,              ITM_PHIux,                ITM_PHIM1p                    };
-const int16_t menu_F[]           = { ITM_FPX,                       ITM_FX,                     ITM_NULL,                 ITM_NULL,              ITM_FUX,                  ITM_FM1P                      };
-const int16_t menu_chi2[]        = { ITM_chi2Px,                    ITM_chi2x,                  ITM_NULL,                 ITM_NULL,              ITM_chi2ux,               ITM_chi2M1                    };
-const int16_t menu_Norml[]       = { ITM_NORMLP,                    ITM_NORML,                  ITM_NULL,                 ITM_NULL,              ITM_NORMLU,               ITM_NORMLM1                   };
-const int16_t menu_LgNrm[]       = { ITM_LGNRMP,                    ITM_LGNRM,                  ITM_NULL,                 ITM_NULL,              ITM_LGNRMU,               ITM_LGNRMM1                   };
-const int16_t menu_Cauch[]       = { ITM_CAUCHP,                    ITM_CAUCH,                  ITM_NULL,                 ITM_NULL,              ITM_CAUCHU,               ITM_CAUCHM1                   };
-const int16_t menu_Expon[]       = { ITM_EXPONP,                    ITM_EXPON,                  ITM_NULL,                 ITM_NULL,              ITM_EXPONU,               ITM_EXPONM1                   };
-const int16_t menu_Logis[]       = { ITM_LOGISP,                    ITM_LOGIS,                  ITM_NULL,                 ITM_NULL,              ITM_LOGISU,               ITM_LOGISM1                   };
-const int16_t menu_Weibl[]       = { ITM_WEIBLP,                    ITM_WEIBL,                  ITM_NULL,                 ITM_NULL,              ITM_WEIBLU,               ITM_WEIBLM1                   };
-const int16_t menu_Binom[]       = { ITM_BINOMP,                    ITM_BINOM,                  ITM_NULL,                 ITM_NULL,              ITM_BINOMU,               ITM_BINOMM1                   };
-const int16_t menu_Geom[]        = { ITM_GEOMP,                     ITM_GEOM,                   ITM_NULL,                 ITM_NULL,              ITM_GEOMU,                ITM_GEOMM1                    };
-const int16_t menu_Hyper[]       = { ITM_HYPERP,                    ITM_HYPER,                  ITM_NULL,                 ITM_NULL,              ITM_HYPERU,               ITM_HYPERM1                   };
-const int16_t menu_Nbin[]        = { ITM_NBINP,                     ITM_NBIN,                   ITM_NULL,                 ITM_NULL,              ITM_NBINU,                ITM_NBINM1                    };
-const int16_t menu_Poiss[]       = { ITM_POISSP,                    ITM_POISS,                  ITM_NULL,                 ITM_NULL,              ITM_POISSU,               ITM_POISSM1                   };
+const int16_t menu_t[]           = { ITM_TPX,                       ITM_TX,                     ITM_NULL,                 ITM_NULL,              ITM_TUX,                     ITM_TM1P                      };
+const int16_t menu_PHI[]         = { ITM_phix,                      ITM_PHIx,                   ITM_NULL,                 ITM_NULL,              ITM_PHIux,                   ITM_PHIM1p                    };
+const int16_t menu_F[]           = { ITM_FPX,                       ITM_FX,                     ITM_NULL,                 ITM_NULL,              ITM_FUX,                     ITM_FM1P                      };
+const int16_t menu_chi2[]        = { ITM_chi2Px,                    ITM_chi2x,                  ITM_NULL,                 ITM_NULL,              ITM_chi2ux,                  ITM_chi2M1                    };
+const int16_t menu_Norml[]       = { ITM_NORMLP,                    ITM_NORML,                  ITM_NULL,                 ITM_NULL,              ITM_NORMLU,                  ITM_NORMLM1                   };
+const int16_t menu_LgNrm[]       = { ITM_LGNRMP,                    ITM_LGNRM,                  ITM_NULL,                 ITM_NULL,              ITM_LGNRMU,                  ITM_LGNRMM1                   };
+const int16_t menu_Cauch[]       = { ITM_CAUCHP,                    ITM_CAUCH,                  ITM_NULL,                 ITM_NULL,              ITM_CAUCHU,                  ITM_CAUCHM1                   };
+const int16_t menu_Expon[]       = { ITM_EXPONP,                    ITM_EXPON,                  ITM_NULL,                 ITM_NULL,              ITM_EXPONU,                  ITM_EXPONM1                   };
+const int16_t menu_Logis[]       = { ITM_LOGISP,                    ITM_LOGIS,                  ITM_NULL,                 ITM_NULL,              ITM_LOGISU,                  ITM_LOGISM1                   };
+const int16_t menu_Weibl[]       = { ITM_WEIBLP,                    ITM_WEIBL,                  ITM_NULL,                 ITM_NULL,              ITM_WEIBLU,                  ITM_WEIBLM1                   };
+const int16_t menu_Binom[]       = { ITM_BINOMP,                    ITM_BINOM,                  ITM_NULL,                 ITM_NULL,              ITM_BINOMU,                  ITM_BINOMM1                   };
+const int16_t menu_Geom[]        = { ITM_GEOMP,                     ITM_GEOM,                   ITM_NULL,                 ITM_NULL,              ITM_GEOMU,                   ITM_GEOMM1                    };
+const int16_t menu_Hyper[]       = { ITM_HYPERP,                    ITM_HYPER,                  ITM_NULL,                 ITM_NULL,              ITM_HYPERU,                  ITM_HYPERM1                   };
+const int16_t menu_Nbin[]        = { ITM_NBINP,                     ITM_NBIN,                   ITM_NULL,                 ITM_NULL,              ITM_NBINU,                   ITM_NBINM1                    };
+const int16_t menu_Poiss[]       = { ITM_POISSP,                    ITM_POISS,                  ITM_NULL,                 ITM_NULL,              ITM_POISSU,                  ITM_POISSM1                   };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_PFN[]         = { ITM_INPUT,                     ITM_END,                    ITM_ERR,                  ITM_TICKS,             ITM_PAUSE,                -MNU_PFN2,
-                                     ITM_PSTO,                      ITM_PRCL,                   ITM_ALPHAOFF,             ITM_ALPHAON,           ITM_CONST,                ITM_PUTK,
-                                     ITM_R_CLR,                     ITM_R_COPY,                 ITM_R_SORT,               ITM_R_SWAP,            ITM_LocR,                 ITM_POPLR                     };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_PFN[]         = { ITM_INPUT,                     ITM_END,                    ITM_ERR,                  ITM_TICKS,             ITM_PAUSE,                   -MNU_PFN2,
+                                     ITM_PSTO,                      ITM_PRCL,                   ITM_ALPHAOFF,             ITM_ALPHAON,           ITM_CONST,                   ITM_PUTK,
+                                     ITM_R_CLR,                     ITM_R_COPY,                 ITM_R_SORT,               ITM_R_SWAP,            ITM_LocR,                    ITM_POPLR                     };
 
-const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,                   ITM_KEYX,                 ITM_CLMENU,            ITM_EXITALL,              ITM_RTNP1,
-                                     ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,               ITM_MVAR,
-                                     ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                ITM_POINT                     };
+const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,                   ITM_KEYX,                 ITM_CLMENU,            ITM_EXITALL,                 ITM_RTNP1,
+                                     ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
+                                     ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
-const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                   ITM_SQUARE,
-                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                  ITM_SUM,
-                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,             ITM_PLOT,
-                                     ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_XCIRC,             ITM_YCIRC,                ITM_SQUARE,
-                                     ITM_NULL,                      ITM_XH,                     ITM_COV,                  ITM_NULL,              ITM_NULL,                 ITM_NULL,
-                                     ITM_NULL,                      ITM_XRMS,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL,
-                                     ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                 ITM_BESTF,
-                                     ITM_ORTHOF,                    ITM_GAUSSF,                 ITM_CAUCHF,               ITM_PARABF,            ITM_HYPF,                 ITM_ROOTF                     };
+const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SQUARE,
+                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     ITM_SUM,
+                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
+                                     ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_XCIRC,             ITM_YCIRC,                   ITM_SQUARE,
+                                     ITM_NULL,                      ITM_XH,                     ITM_COV,                  ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_NULL,                      ITM_XRMS,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_BESTF,
+                                     ITM_ORTHOF,                    ITM_GAUSSF,                 ITM_CAUCHF,               ITM_PARABF,            ITM_HYPF,                    ITM_ROOTF                     };
 
-const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,              ITM_SIGMAy,
-                                     ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,         ITM_SIGMAln2y,            ITM_SIGMAlny,
-                                     ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_NULL,                 ITM_SIGMAlnyonx,       ITM_NULL,                 ITM_SIGMAylnx,
-                                     ITM_SIGMAx2ony,                ITM_SIGMA1onx,              ITM_SIGMA1onx2,           ITM_SIGMAxony,         ITM_SIGMA1ony2,           ITM_SIGMA1ony,
-                                     ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,                 ITM_SIGMAy,
+                                     ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,         ITM_SIGMAln2y,               ITM_SIGMAlny,
+                                     ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_NULL,                 ITM_SIGMAlnyonx,       ITM_NULL,                    ITM_SIGMAylnx,
+                                     ITM_SIGMAx2ony,                ITM_SIGMA1onx,              ITM_SIGMA1onx2,           ITM_SIGMAxony,         ITM_SIGMA1ony2,              ITM_SIGMA1ony,
+                                     ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_STK[]         = { ITM_Xex,                       ITM_Yex,                    ITM_Zex,                  ITM_Tex,               ITM_ex,                   ITM_DROP,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_DROPY,
-                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_STK[]         = { ITM_Xex,                       ITM_Yex,                    ITM_Zex,                  ITM_Tex,               ITM_ex,                      ITM_DROP,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DROPY,
+                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,                    ITM_XEQU,                 ITM_XNE,               ITM_XGE,                  ITM_XGT,
-                                     ITM_INT,                       ITM_EVEN,                   ITM_ODD,                  ITM_PRIME,             ITM_LEAP,                 ITM_FPQ,
-                                     ITM_ENTRY,                     ITM_KEYQ,                   ITM_LBLQ,                 ITM_STRI,              ITM_CONVG,                ITM_TOP,
-                                     ITM_XEQUP0,                    ITM_XEQUM0,                 ITM_XAEQU,                ITM_MATR,              ITM_CPX,                  ITM_REAL,
-                                     ITM_SPEC,                      ITM_NAN,                    ITM_NULL,                 ITM_M_SQR,             ITM_NULL,                 ITM_DBL                       };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,                    ITM_XEQU,                 ITM_XNE,               ITM_XGE,                     ITM_XGT,
+                                     ITM_INT,                       ITM_EVEN,                   ITM_ODD,                  ITM_PRIME,             ITM_LEAP,                    ITM_FPQ,
+                                     ITM_ENTRY,                     ITM_KEYQ,                   ITM_LBLQ,                 ITM_STRI,              ITM_CONVG,                   ITM_TOP,
+                                     ITM_XEQUP0,                    ITM_XEQUM0,                 ITM_XAEQU,                ITM_MATR,              ITM_CPX,                     ITM_REAL,
+                                     ITM_SPEC,                      ITM_NAN,                    ITM_NULL,                 ITM_M_SQR,             ITM_NULL,                    ITM_DBL                       };
 
-const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                -MNU_ORTHOG,
-                                     ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,              ITM_IGAMMAQ,
-                                     ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                  ITM_NEXTP,
-                                     ITM_SHOW,                      ITM_sinc,                   ITM_WM,                   ITM_WP,                ITM_WM1,                  ITM_BETAXY,
-                                     ITM_gammaXY,                   ITM_GAMMAXY,                ITM_zetaX,                ITM_M1X,               ITM_toDP,                 ITM_toSP,
-                                     ITM_PARALLEL,                  ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                   -MNU_ORTHOG,
+                                     ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
+                                     ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
+                                     ITM_SHOW,                      ITM_sinc,                   ITM_WM,                   ITM_WP,                ITM_WM1,                     ITM_BETAXY,
+                                     ITM_gammaXY,                   ITM_GAMMAXY,                ITM_zetaX,                ITM_M1X,               ITM_toDP,                    ITM_toSP,
+                                     ITM_PARALLEL,                  ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                   ITM_UN,
-                                     ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
+                                     ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 // Following menu is UPPER CASE for lower case: +80
 
-const int16_t menu_alpha_INTL[]  = { CHR_A_MACRON,                  CHR_A_ACUTE,                CHR_A_BREVE,              CHR_A_GRAVE,           CHR_A_DIARESIS,           CHR_A_TILDE,
-                                     CHR_A_CIRC,                    CHR_A_RING,                 CHR_AE,                   CHR_A_OGONEK,          CHR_C_ACUTE,              CHR_C_CARON,
-                                     CHR_C_CEDILLA,                 CHR_D_STROKE,               CHR_D_CARON,              CHR_E_MACRON,          CHR_E_ACUTE,              CHR_E_BREVE,
-                                     CHR_E_GRAVE,                   CHR_E_DIARESIS,             CHR_E_CIRC,               CHR_E_DOT,             CHR_E_BREVE,              CHR_E_OGONEK,
-                                     CHR_G_BREVE,                   CHR_I_MACRON,               CHR_I_ACUTE,              CHR_I_BREVE,           CHR_I_GRAVE,              CHR_I_DIARESIS,
-                                     CHR_I_CIRC,                    CHR_I_OGONEK,               CHR_I_DOT,                CHR_I_DOTLESS,         CHR_L_STROKE,             CHR_L_ACUTE,
-                                     CHR_L_APOSTROPHE,              CHR_N_ACUTE,                CHR_N_CARON,              CHR_N_TILDE,           CHR_O_MACRON,             CHR_O_ACUTE,
-                                     CHR_O_BREVE,                   CHR_O_GRAVE,                CHR_O_DIARESIS,           CHR_O_TILDE,           CHR_O_CIRC,               CHR_O_STROKE,
-                                     CHR_OE,                        CHR_R_CARON,                CHR_R_ACUTE,              ITM_NULL,              CHR_S_ACUTE,              CHR_S_CARON,
-                                     CHR_S_CEDILLA,                 CHR_T_CARON,                CHR_T_CEDILLA,            CHR_U_MACRON,          CHR_U_ACUTE,              CHR_U_BREVE,
-                                     CHR_U_GRAVE,                   CHR_U_DIARESIS,             CHR_U_TILDE,              CHR_U_CIRC,            CHR_U_RING,               CHR_U_OGONEK,
-                                     CHR_W_CIRC,                    CHR_Y_CIRC,                 CHR_Y_ACUTE,              CHR_Y_DIARESIS,        CHR_Z_ACUTE,              CHR_Z_CARON,
-                                     CHR_Z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_alpha_INTL[]  = { CHR_A_MACRON,                  CHR_A_ACUTE,                CHR_A_BREVE,              CHR_A_GRAVE,           CHR_A_DIARESIS,              CHR_A_TILDE,
+                                     CHR_A_CIRC,                    CHR_A_RING,                 CHR_AE,                   CHR_A_OGONEK,          CHR_C_ACUTE,                 CHR_C_CARON,
+                                     CHR_C_CEDILLA,                 CHR_D_STROKE,               CHR_D_CARON,              CHR_E_MACRON,          CHR_E_ACUTE,                 CHR_E_BREVE,
+                                     CHR_E_GRAVE,                   CHR_E_DIARESIS,             CHR_E_CIRC,               CHR_E_DOT,             CHR_E_BREVE,                 CHR_E_OGONEK,
+                                     CHR_G_BREVE,                   CHR_I_MACRON,               CHR_I_ACUTE,              CHR_I_BREVE,           CHR_I_GRAVE,                 CHR_I_DIARESIS,
+                                     CHR_I_CIRC,                    CHR_I_OGONEK,               CHR_I_DOT,                CHR_I_DOTLESS,         CHR_L_STROKE,                CHR_L_ACUTE,
+                                     CHR_L_APOSTROPHE,              CHR_N_ACUTE,                CHR_N_CARON,              CHR_N_TILDE,           CHR_O_MACRON,                CHR_O_ACUTE,
+                                     CHR_O_BREVE,                   CHR_O_GRAVE,                CHR_O_DIARESIS,           CHR_O_TILDE,           CHR_O_CIRC,                  CHR_O_STROKE,
+                                     CHR_OE,                        CHR_R_CARON,                CHR_R_ACUTE,              ITM_NULL,              CHR_S_ACUTE,                 CHR_S_CARON,
+                                     CHR_S_CEDILLA,                 CHR_T_CARON,                CHR_T_CEDILLA,            CHR_U_MACRON,          CHR_U_ACUTE,                 CHR_U_BREVE,
+                                     CHR_U_GRAVE,                   CHR_U_DIARESIS,             CHR_U_TILDE,              CHR_U_CIRC,            CHR_U_RING,                  CHR_U_OGONEK,
+                                     CHR_W_CIRC,                    CHR_Y_CIRC,                 CHR_Y_ACUTE,              CHR_Y_DIARESIS,        CHR_Z_ACUTE,                 CHR_Z_CARON,
+                                     CHR_Z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_alpha_intl[]  = { CHR_a_MACRON,                  CHR_a_ACUTE,                CHR_a_BREVE,              CHR_a_GRAVE,           CHR_a_DIARESIS,           CHR_a_TILDE,
-                                     CHR_a_CIRC,                    CHR_a_RING,                 CHR_ae,                   CHR_a_OGONEK,          CHR_c_ACUTE,              CHR_c_CARON,
-                                     CHR_c_CEDILLA,                 CHR_d_STROKE,               CHR_d_APOSTROPHE,         CHR_e_MACRON,          CHR_e_ACUTE,              CHR_e_BREVE,
-                                     CHR_e_GRAVE,                   CHR_e_DIARESIS,             CHR_e_CIRC,               CHR_e_DOT,             CHR_e_BREVE,              CHR_e_OGONEK,
-                                     CHR_g_BREVE,                   CHR_i_MACRON,               CHR_i_ACUTE,              CHR_i_BREVE,           CHR_i_GRAVE,              CHR_i_DIARESIS,
-                                     CHR_i_CIRC,                    CHR_i_OGONEK,               CHR_i_DOT,                CHR_i_DOTLESS,         CHR_l_STROKE,             CHR_l_ACUTE,
-                                     CHR_l_APOSTROPHE,              CHR_n_ACUTE,                CHR_n_CARON,              CHR_n_TILDE,           CHR_o_MACRON,             CHR_o_ACUTE,
-                                     CHR_o_BREVE,                   CHR_o_GRAVE,                CHR_o_DIARESIS,           CHR_o_TILDE,           CHR_o_CIRC,               CHR_o_STROKE,
-                                     CHR_oe,                        CHR_r_CARON,                CHR_r_ACUTE,              CHR_s_SHARP,           CHR_s_ACUTE,              CHR_s_CARON,
-                                     CHR_s_CEDILLA,                 CHR_t_APOSTROPHE,           CHR_t_CEDILLA,            CHR_u_MACRON,          CHR_u_ACUTE,              CHR_u_BREVE,
-                                     CHR_u_GRAVE,                   CHR_u_DIARESIS,             CHR_u_TILDE,              CHR_u_CIRC,            CHR_u_RING,               CHR_u_OGONEK,
-                                     CHR_w_CIRC,                    CHR_y_CIRC,                 CHR_y_ACUTE,              CHR_y_DIARESIS,        CHR_z_ACUTE,              CHR_z_CARON,
-                                     CHR_z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_alpha_intl[]  = { CHR_a_MACRON,                  CHR_a_ACUTE,                CHR_a_BREVE,              CHR_a_GRAVE,           CHR_a_DIARESIS,              CHR_a_TILDE,
+                                     CHR_a_CIRC,                    CHR_a_RING,                 CHR_ae,                   CHR_a_OGONEK,          CHR_c_ACUTE,                 CHR_c_CARON,
+                                     CHR_c_CEDILLA,                 CHR_d_STROKE,               CHR_d_APOSTROPHE,         CHR_e_MACRON,          CHR_e_ACUTE,                 CHR_e_BREVE,
+                                     CHR_e_GRAVE,                   CHR_e_DIARESIS,             CHR_e_CIRC,               CHR_e_DOT,             CHR_e_BREVE,                 CHR_e_OGONEK,
+                                     CHR_g_BREVE,                   CHR_i_MACRON,               CHR_i_ACUTE,              CHR_i_BREVE,           CHR_i_GRAVE,                 CHR_i_DIARESIS,
+                                     CHR_i_CIRC,                    CHR_i_OGONEK,               CHR_i_DOT,                CHR_i_DOTLESS,         CHR_l_STROKE,                CHR_l_ACUTE,
+                                     CHR_l_APOSTROPHE,              CHR_n_ACUTE,                CHR_n_CARON,              CHR_n_TILDE,           CHR_o_MACRON,                CHR_o_ACUTE,
+                                     CHR_o_BREVE,                   CHR_o_GRAVE,                CHR_o_DIARESIS,           CHR_o_TILDE,           CHR_o_CIRC,                  CHR_o_STROKE,
+                                     CHR_oe,                        CHR_r_CARON,                CHR_r_ACUTE,              CHR_s_SHARP,           CHR_s_ACUTE,                 CHR_s_CARON,
+                                     CHR_s_CEDILLA,                 CHR_t_APOSTROPHE,           CHR_t_CEDILLA,            CHR_u_MACRON,          CHR_u_ACUTE,                 CHR_u_BREVE,
+                                     CHR_u_GRAVE,                   CHR_u_DIARESIS,             CHR_u_TILDE,              CHR_u_CIRC,            CHR_u_RING,                  CHR_u_OGONEK,
+                                     CHR_w_CIRC,                    CHR_y_CIRC,                 CHR_y_ACUTE,              CHR_y_DIARESIS,        CHR_z_ACUTE,                 CHR_z_CARON,
+                                     CHR_z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_DIGITS,                -MNU_CHARS,               -MNU_PROGS,            -MNU_VARS,                -MNU_MENUS                    };
+const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_DIGITS,                -MNU_CHARS,               -MNU_PROGS,            -MNU_VARS,                   -MNU_MENUS                    };
 
-const int16_t menu_DIGITS[]      = { CHR_0,                         CHR_1,                      CHR_2,                    CHR_3,                 CHR_4,                    CHR_5,
-                                     CHR_6,                         CHR_7,                      CHR_8,                    CHR_9,                 CHR_A,                    CHR_B,
-                                     CHR_C,                         CHR_D,                      CHR_E,                    CHR_F,                 CHR_i,                    ITM_NULL                      };
+const int16_t menu_DIGITS[]      = { CHR_0,                         CHR_1,                      CHR_2,                    CHR_3,                 CHR_4,                       CHR_5,
+                                     CHR_6,                         CHR_7,                      CHR_8,                    CHR_9,                 CHR_A,                       CHR_B,
+                                     CHR_C,                         CHR_D,                      CHR_E,                    CHR_F,                 CHR_i,                       ITM_NULL                      };
 
-const int16_t menu_CHARS[]       = { -MNU_A_Z,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,             -MNU_ALPHADOT                 };
+const int16_t menu_CHARS[]       = { -MNU_A_Z,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,                -MNU_ALPHADOT                 };
 
-const int16_t menu_PROGS[]       = { -MNU_RAM,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 -MNU_FLASH                    };
+const int16_t menu_PROGS[]       = { -MNU_RAM,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_FLASH                    };
 
-const int16_t menu_VARS[]        = { -MNU_IINTS,                    -MNU_FINTS,                 -MNU_REALS,               -MNU_CPXS,             -MNU_STRING,              -MNU_MATRS,
-                                     -MNU_DATES,                    -MNU_TIMES,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_VARS[]        = { -MNU_IINTS,                    -MNU_FINTS,                 -MNU_REALS,               -MNU_CPXS,             -MNU_STRING,                 -MNU_MATRS,
+                                     -MNU_DATES,                    -MNU_TIMES,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
 // Following menu is UPPER CASE for lower case: +26
-const int16_t menu_A_Z[]         = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                    CHR_F,
-                                     CHR_G,                         CHR_H,                      CHR_I,                    CHR_J,                 CHR_K,                    CHR_L,
-                                     CHR_M,                         CHR_N,                      CHR_O,                    CHR_P,                 CHR_Q,                    CHR_R,
-                                     CHR_S,                         CHR_T,                      CHR_U,                    CHR_V,                 CHR_W,                    CHR_X,
-                                     CHR_Y,                         CHR_Z,                      ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_A_Z[]         = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
+                                     CHR_G,                         CHR_H,                      CHR_I,                    CHR_J,                 CHR_K,                       CHR_L,
+                                     CHR_M,                         CHR_N,                      CHR_O,                    CHR_P,                 CHR_Q,                       CHR_R,
+                                     CHR_S,                         CHR_T,                      CHR_U,                    CHR_V,                 CHR_W,                       CHR_X,
+                                     CHR_Y,                         CHR_Z,                      ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_a_z[]         = { CHR_a,                         CHR_b,                      CHR_c,                    CHR_d,                 CHR_e,                    CHR_f,
-                                     CHR_g,                         CHR_h,                      CHR_i,                    CHR_j,                 CHR_k,                    CHR_l,
-                                     CHR_m,                         CHR_n,                      CHR_o,                    CHR_p,                 CHR_q,                    CHR_r,
-                                     CHR_s,                         CHR_t,                      CHR_u,                    CHR_v,                 CHR_w,                    CHR_x,
-                                     CHR_y,                         CHR_z,                      ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_a_z[]         = { CHR_a,                         CHR_b,                      CHR_c,                    CHR_d,                 CHR_e,                       CHR_f,
+                                     CHR_g,                         CHR_h,                      CHR_i,                    CHR_j,                 CHR_k,                       CHR_l,
+                                     CHR_m,                         CHR_n,                      CHR_o,                    CHR_p,                 CHR_q,                       CHR_r,
+                                     CHR_s,                         CHR_t,                      CHR_u,                    CHR_v,                 CHR_w,                       CHR_x,
+                                     CHR_y,                         CHR_z,                      ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 // Following menu is UPPER CASE for lower case: +36
-const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     ITM_NULL,                   CHR_BETA,                 CHR_GAMMA,             CHR_DELTA,                CHR_EPSILON,
-                                     ITM_NULL,                      CHR_ZETA,                   CHR_ETA,                  ITM_NULL,              CHR_THETA,                CHR_IOTA,
-                                     ITM_NULL,                      ITM_NULL,                   CHR_IOTA_DIALYTIKA,       CHR_KAPPA,             CHR_LAMBDA,               CHR_MU,
-                                     CHR_NU,                        CHR_XI,                     CHR_OMICRON,              ITM_NULL,              CHR_PI,                   CHR_RHO,
-                                     CHR_SIGMA,                     ITM_NULL,                   CHR_TAU,                  CHR_UPSILON,           ITM_NULL,                 CHR_UPSILON_DIALYTIKA,
-                                     ITM_NULL,                      CHR_PHI,                    CHR_CHI,                  CHR_PSI,               CHR_OMEGA,                ITM_NULL                      };
+const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     CHR_BETA,                   CHR_GAMMA,                CHR_DELTA,             CHR_EPSILON,                 CHR_ZETA,
+                                     CHR_ETA,                       CHR_THETA,                  CHR_IOTA,                 CHR_KAPPA,             CHR_LAMBDA,                  CHR_MU,
+                                     CHR_NU,                        CHR_XI,                     CHR_OMICRON,              CHR_PI,                CHR_RHO,                     CHR_SIGMA,
+                                     ITM_NULL,                      CHR_TAU,                    CHR_UPSILON,              CHR_PHI,               CHR_CHI,                     CHR_PSI,
+                                     CHR_OMEGA,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     CHR_IOTA_DIALYTIKA,            ITM_NULL,                   ITM_NULL,                 CHR_UPSILON_DIALYTIKA, ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_alpha_TONOS,            CHR_beta,                 CHR_gamma,             CHR_delta,                CHR_epsilon,
-                                     CHR_epsilon_TONOS,             CHR_zeta,                   CHR_eta,                  CHR_eta_TONOS,         CHR_theta,                CHR_iota,
-                                     CHR_iotaTON,                   CHR_iota_DIALYTIKA_TONOS,   CHR_iota_DIALYTIKA,       CHR_kappa,             CHR_lambda,               CHR_mu,
-                                     CHR_nu,                        CHR_xi,                     CHR_omicron,              CHR_omicron_TONOS,     CHR_pi,                   CHR_rho,
-                                     CHR_sigma,                     CHR_sigma_end,              CHR_tau,                  CHR_upsilon,           CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA,
-                                     CHR_upsilon_DIALYTIKA_TONOS,   CHR_phi,                    CHR_chi,                  CHR_psi,               CHR_omega,                CHR_omega_TONOS               };
+const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,                   CHR_gamma,                CHR_delta,             CHR_epsilon,                 CHR_zeta,
+                                     CHR_eta,                       CHR_theta,                  CHR_iota,                 CHR_kappa,             CHR_lambda,                  CHR_mu,
+                                     CHR_nu,                        CHR_xi,                     CHR_omicron,              CHR_pi,                CHR_rho,                     CHR_sigma,
+                                     CHR_sigma_end,                 CHR_tau,                    CHR_upsilon,              CHR_phi,               CHR_chi,                     CHR_psi,
+                                     CHR_omega,                     CHR_alpha_TONOS,            CHR_epsilon_TONOS,        CHR_eta_TONOS,         CHR_iotaTON,                 CHR_iota_DIALYTIKA_TONOS,
+                                     CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS               };
 
-const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_NULL,              ITM_toDMS,                ITM_toMULpi,
-                                     ITM_DEGto,                     ITM_RADto,                  ITM_GRADto,               ITM_NULL,              ITM_DMSto,                ITM_MULPIto,
-                                     ITM_DtoR,                      ITM_RtoD,                   ITM_NULL,                 ITM_DtoDMS,            ITM_DMStoD,               ITM_NULL,                     };
+const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_NULL,              ITM_toDMS,                   ITM_toMULpi,
+                                     ITM_DEGto,                     ITM_RADto,                  ITM_GRADto,               ITM_NULL,              ITM_DMSto,                   ITM_MULPIto,
+                                     ITM_DtoR,                      ITM_RtoD,                   ITM_NULL,                 ITM_DtoDMS,            ITM_DMStoD,                  ITM_NULL                      };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_UnitConv[]    = { -MNU_CONVE,                    -MNU_CONVP,                 ITM_YEARtoS,              -MNU_CONVFP,           -MNU_CONVM,               -MNU_CONVX,
-                                     ITM_CtoF,                      ITM_FtoC,                   ITM_StoYEAR,              ITM_NULL,              -MNU_CONVV,               -MNU_CONVA,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL,
-                                     10000+ITM_PRtoDBc,             10000+ITM_DBtoPRc,          ITM_NULL,                 ITM_NULL,              10000+ITM_FRtoDBc,        10000+ITM_DBtoFRc,
-                                     30000+ITM_PRtoDBb,             30000+ITM_DBtoPRb,          ITM_NULL,                 ITM_NULL,              30000+ITM_FRtoDBb,        30000+ITM_DBtoFRb,
-                                     20000+ITM_PRtoDB,              20000+ITM_DBtoPR,           ITM_NULL,                 ITM_NULL,              20000+ITM_FRtoDB,         20000+ITM_DBtoFR              };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_UnitConv[]    = { -MNU_CONVE,                    -MNU_CONVP,                 ITM_YEARtoS,              -MNU_CONVFP,           -MNU_CONVM,                  -MNU_CONVX,
+                                     ITM_CtoF,                      ITM_FtoC,                   ITM_StoYEAR,              ITM_NULL,              -MNU_CONVV,                  -MNU_CONVA,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     10000+ITM_PRtoDBc,             10000+ITM_DBtoPRc,          ITM_NULL,                 ITM_NULL,              10000+ITM_FRtoDBc,           10000+ITM_DBtoFRc,
+                                     30000+ITM_PRtoDBb,             30000+ITM_DBtoPRb,          ITM_NULL,                 ITM_NULL,              30000+ITM_FRtoDBb,           30000+ITM_DBtoFRb,
+                                     20000+ITM_PRtoDB,              20000+ITM_DBtoPR,           ITM_NULL,                 ITM_NULL,              20000+ITM_FRtoDB,            20000+ITM_DBtoFR              };
 
-const int16_t menu_ConvE[]       = { ITM_CALtoJ,                    ITM_JtoCAL,                 ITM_BTUtoJ,               ITM_JtoBTU,            ITM_WHtoJ,                ITM_JtoWH                     };
+const int16_t menu_ConvE[]       = { ITM_CALtoJ,                    ITM_JtoCAL,                 ITM_BTUtoJ,               ITM_JtoBTU,            ITM_WHtoJ,                   ITM_JtoWH                     };
 
-const int16_t menu_ConvP[]       = { ITM_HPEtoW,                    ITM_WtoHPE,                 ITM_HPUKtoW,              ITM_WtoHPUK,           ITM_HPMtoW,               ITM_WtoHPM                    };
+const int16_t menu_ConvP[]       = { ITM_HPEtoW,                    ITM_WtoHPE,                 ITM_HPUKtoW,              ITM_WtoHPUK,           ITM_HPMtoW,                  ITM_WtoHPM                    };
 
-const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_BARtoPA,              ITM_PAtoBAR,           ITM_PSItoPA,              ITM_PAtoPSI,
-                                     10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    10000+ITM_ATMtoPA,        10000+ITM_PAtoATM,
-                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,       20000+ITM_PAtoATMb            };
+const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_BARtoPA,              ITM_PAtoBAR,           ITM_PSItoPA,                 ITM_PAtoPSI,
+                                     10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    10000+ITM_ATMtoPA,           10000+ITM_PAtoATM,
+                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,          20000+ITM_PAtoATMb            };
 
-const int16_t menu_ConvM[]       = { ITM_LBStoKG,                   ITM_KGtoLBS,                ITM_CWTtoKG,              ITM_KGtoCWT,           ITM_OZtoKG,               ITM_KGtoOZ,
-                                     10000+ITM_STOtoKGb,            10000+ITM_KGtoSTOb,         10000+ITM_SCWtoKGb,       10000+ITM_KGtoSCWb,    10000+ITM_TRZtoKGb,       10000+ITM_KGtoTRZb,
-                                     20000+ITM_STOtoKG,             20000+ITM_KGtoSTO,          20000+ITM_SCWtoKG,        20000+ITM_KGtoSCW,     20000+ITM_TRZtoKG,        20000+ITM_KGtoTRZ,
-                                     10000+ITM_TONtoKG,             10000+ITM_KGtoTON,          10000+ITM_STtoKGc,        10000+ITM_KGtoSTc,     10000+ITM_CARATtoKGb,     10000+ITM_KGtoCARATb,
-                                     30000+ITM_TONtoKGb,            30000+ITM_KGtoTONb,         30000+ITM_STtoKGb,        30000+ITM_KGtoSTb,     30000+ITM_CARATtoKG,      30000+ITM_KGtoCARAT,
-                                     20000+ITM_TONtoKGc,            20000+ITM_KGtoTONc,         20000+ITM_STtoKG,         20000+ITM_KGtoST,      20000+ITM_CARATtoKGc,     20000+ITM_KGtoCARATc          };
+const int16_t menu_ConvM[]       = { ITM_LBStoKG,                   ITM_KGtoLBS,                ITM_CWTtoKG,              ITM_KGtoCWT,           ITM_OZtoKG,                  ITM_KGtoOZ,
+                                     10000+ITM_STOtoKGb,            10000+ITM_KGtoSTOb,         10000+ITM_SCWtoKGb,       10000+ITM_KGtoSCWb,    10000+ITM_TRZtoKGb,          10000+ITM_KGtoTRZb,
+                                     20000+ITM_STOtoKG,             20000+ITM_KGtoSTO,          20000+ITM_SCWtoKG,        20000+ITM_KGtoSCW,     20000+ITM_TRZtoKG,           20000+ITM_KGtoTRZ,
+                                     10000+ITM_TONtoKG,             10000+ITM_KGtoTON,          10000+ITM_STtoKGc,        10000+ITM_KGtoSTc,     10000+ITM_CARATtoKGb,        10000+ITM_KGtoCARATb,
+                                     30000+ITM_TONtoKGb,            30000+ITM_KGtoTONb,         30000+ITM_STtoKGb,        30000+ITM_KGtoSTb,     30000+ITM_CARATtoKG,         30000+ITM_KGtoCARAT,
+                                     20000+ITM_TONtoKGc,            20000+ITM_KGtoTONc,         20000+ITM_STtoKG,         20000+ITM_KGtoST,      20000+ITM_CARATtoKGc,        20000+ITM_KGtoCARATc          };
 
-const int16_t menu_ConvX[]       = { ITM_AUtoM,                     ITM_MtoAU,                  ITM_LYtoM,                ITM_MtoLY,             ITM_PCtoM,                ITM_MtoPC,
-                                     ITM_MItoM,                     ITM_MtoMI,                  ITM_NMItoM,               ITM_MtoNMI,            ITM_FTtoM,                ITM_MtoFT,
-                                     ITM_INtoM,                     ITM_MtoINCH,                ITM_NULL,                 ITM_NULL,              ITM_YDtoM,                ITM_MtoYD,
-                                     10000+ITM_FATHOMtoMb,          10000+ITM_MtoFATHOMb,       10000+ITM_POINTtoMb,      10000+ITM_MtoPOINT,    10000+ITM_FTUStoMc,       10000+ITM_MtoFTUSc,
-                                     30000+ITM_FATHOMtoM,           30000+ITM_MtoFATHOM,        30000+ITM_POINTtoM,       30000+ITM_MtoPOINTb,   30000+ITM_FTUStoMb,       30000+ITM_MtoFTUSb,
-                                     20000+ITM_FATHOMtoMc,          20000+ITM_MtoFATHOMc,       20000+ITM_POINTtoMc,      20000+ITM_MtoPOINTc,   20000+ITM_FTUStoM,        20000+ITM_MtoFTUS             };
+const int16_t menu_ConvX[]       = { ITM_AUtoM,                     ITM_MtoAU,                  ITM_LYtoM,                ITM_MtoLY,             ITM_PCtoM,                   ITM_MtoPC,
+                                     ITM_MItoM,                     ITM_MtoMI,                  ITM_NMItoM,               ITM_MtoNMI,            ITM_FTtoM,                   ITM_MtoFT,
+                                     ITM_INtoM,                     ITM_MtoINCH,                ITM_NULL,                 ITM_NULL,              ITM_YDtoM,                   ITM_MtoYD,
+                                     10000+ITM_FATHOMtoMb,          10000+ITM_MtoFATHOMb,       10000+ITM_POINTtoMb,      10000+ITM_MtoPOINT,    10000+ITM_FTUStoMc,          10000+ITM_MtoFTUSc,
+                                     30000+ITM_FATHOMtoM,           30000+ITM_MtoFATHOM,        30000+ITM_POINTtoM,       30000+ITM_MtoPOINTb,   30000+ITM_FTUStoMb,          30000+ITM_MtoFTUSb,
+                                     20000+ITM_FATHOMtoMc,          20000+ITM_MtoFATHOMc,       20000+ITM_POINTtoMc,      20000+ITM_MtoPOINTc,   20000+ITM_FTUStoM,           20000+ITM_MtoFTUS             };
 
-const int16_t menu_ConvA[]       = { 10000+ITM_ACtoM2b,             10000+ITM_M2toACb,          ITM_NULL,                 ITM_NULL,              10000+ITM_ACUStoM2b,      10000+ITM_M2toACUSb,
-                                     20000+ITM_ACtoM2,              20000+ITM_M2toAC,           ITM_NULL,                 ITM_NULL,              20000+ITM_ACUStoM2,       20000+ITM_M2toACUS            };
+const int16_t menu_ConvA[]       = { 10000+ITM_ACtoM2b,             10000+ITM_M2toACb,          ITM_NULL,                 ITM_NULL,              10000+ITM_ACUStoM2b,         10000+ITM_M2toACUSb,
+                                     20000+ITM_ACtoM2,              20000+ITM_M2toAC,           ITM_NULL,                 ITM_NULL,              20000+ITM_ACUStoM2,          20000+ITM_M2toACUS            };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_ConvV[]       = { ITM_GLUKtoM3,                  ITM_M3toGLUK,               ITM_QTtoM3,               ITM_M3toQT,            ITM_GLUStoM3,             ITM_M3toGLUS,
-                                     10000+ITM_FZUKtoM3b,           10000+ITM_M3toFZUKb,        10000+ITM_BARRELtoM3b,    10000+ITM_M3toBARRELb, 10000+ITM_FZUStoM3b,      10000+ITM_M3toFZUSb,
-                                     20000+ITM_FZUKtoM3,            20000+ITM_M3toFZUK,         20000+ITM_BARRELtoM3,     20000+ITM_M3toBARREL,  20000+ITM_FZUStoM3,       20000+ITM_M3toFZUS            };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_ConvV[]       = { ITM_GLUKtoM3,                  ITM_M3toGLUK,               ITM_QTtoM3,               ITM_M3toQT,            ITM_GLUStoM3,                ITM_M3toGLUS,
+                                     10000+ITM_FZUKtoM3b,           10000+ITM_M3toFZUKb,        10000+ITM_BARRELtoM3b,    10000+ITM_M3toBARRELb, 10000+ITM_FZUStoM3b,         10000+ITM_M3toFZUSb,
+                                     20000+ITM_FZUKtoM3,            20000+ITM_M3toFZUK,         20000+ITM_BARRELtoM3,     20000+ITM_M3toBARREL,  20000+ITM_FZUStoM3,          20000+ITM_M3toFZUS            };
 
-const int16_t menu_CNST[]        = { CST_00,                        CST_01,                     CST_02,                   CST_03,                CST_04,                   CST_05,
-                                     CST_06,                        CST_07,                     CST_08,                   CST_09,                CST_10,                   CST_11,
-                                     CST_12,                        CST_13,                     CST_14,                   CST_15,                CST_16,                   CST_17,
-                                     CST_18,                        CST_19,                     CST_20,                   CST_21,                CST_22,                   CST_23,
-                                     CST_24,                        CST_25,                     CST_26,                   CST_27,                CST_28,                   CST_29,
-                                     CST_30,                        CST_31,                     CST_32,                   CST_33,                CST_34,                   CST_35,
-                                     CST_36,                        CST_37,                     CST_38,                   CST_39,                CST_40,                   CST_41,
-                                     CST_42,                        CST_43,                     CST_44,                   CST_45,                CST_46,                   CST_47,
-                                     CST_48,                        CST_49,                     CST_50,                   CST_51,                CST_52,                   CST_53,
-                                     CST_54,                        CST_55,                     CST_56,                   CST_57,                CST_58,                   CST_59,
-                                     CST_60,                        CST_61,                     CST_62,                   CST_63,                CST_64,                   CST_65,
-                                     CST_66,                        CST_67,                     CST_68,                   CST_69,                CST_70,                   CST_71,
-                                     CST_72,                        CST_73,                     CST_74,                   CST_75,                CST_76,                   CST_77,
-                                     CST_78,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_CNST[]        = { CST_00,                        CST_01,                     CST_02,                   CST_03,                CST_04,                      CST_05,
+                                     CST_06,                        CST_07,                     CST_08,                   CST_09,                CST_10,                      CST_11,
+                                     CST_12,                        CST_13,                     CST_14,                   CST_15,                CST_16,                      CST_17,
+                                     CST_18,                        CST_19,                     CST_20,                   CST_21,                CST_22,                      CST_23,
+                                     CST_24,                        CST_25,                     CST_26,                   CST_27,                CST_28,                      CST_29,
+                                     CST_30,                        CST_31,                     CST_32,                   CST_33,                CST_34,                      CST_35,
+                                     CST_36,                        CST_37,                     CST_38,                   CST_39,                CST_40,                      CST_41,
+                                     CST_42,                        CST_43,                     CST_44,                   CST_45,                CST_46,                      CST_47,
+                                     CST_48,                        CST_49,                     CST_50,                   CST_51,                CST_52,                      CST_53,
+                                     CST_54,                        CST_55,                     CST_56,                   CST_57,                CST_58,                      CST_59,
+                                     CST_60,                        CST_61,                     CST_62,                   CST_63,                CST_64,                      CST_65,
+                                     CST_66,                        CST_67,                     CST_68,                   CST_69,                CST_70,                      CST_71,
+                                     CST_72,                        CST_73,                     CST_74,                   CST_75,                CST_76,                      CST_77,
+                                     CST_78,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,                ITM_ALPHARR,              ITM_ALPHASL,           ITM_ALPHAPOS,             ITM_ALPHAtoX,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_ALPHALENG,            ITM_NULL,
-                                     ITM_FBR,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,                ITM_ALPHARR,              ITM_ALPHASL,           ITM_ALPHAPOS,                ITM_ALPHAtoX,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_ALPHALENG,               ITM_NULL,
+                                     ITM_FBR,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_FCNS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_MENUS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_MATRS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_STRING[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_CPXS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_RAM[]         = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_FLASH[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_DATES[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_TIMES[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_ANGLES[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_FINTS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_IINTS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_FCNS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_MENUS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_MATRS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_STRING[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_CPXS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_RAM[]         = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_FLASH[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_DATES[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_TIMES[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_ANGLES[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_FINTS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_IINTS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_alphaMATH[]   = { CHR_LESS_THAN,                 CHR_LESS_EQUAL,             CHR_EQUAL,                CHR_ALMOST_EQUAL,      CHR_GREATER_EQUAL,        CHR_GREATER_THAN,
-                                     CHR_LEFT_CURLY_BRACKET,        CHR_LEFT_SQUARE_BRACKET,    CHR_LEFT_PARENTHESIS,     CHR_RIGHT_PARENTHESIS, CHR_RIGHT_SQUARE_BRACKET, CHR_RIGHT_CURLY_BRACKET,
-                                     CHR_PROD_SIGN,                 CHR_DIVIDE,                 CHR_INTEGRAL,             CHR_SUB_INFINITY,      CHR_SUP_INFINITY,         CHR_INFINITY,
-                                     CHR_NOT,                       CHR_AND,                    CHR_OR,                   CHR_NOT_EQUAL,         CHR_PIPE,                 CHR_AMPERSAND,
-                                     CHR_MEASURED_ANGLE,            CHR_RIGHT_ANGLE,            CHR_PERPENDICULAR,        CHR_CUBIC_ROOT,        CHR_SQUARE_ROOT,          CHR_xTH_ROOT,
-                                     CHR_x_BAR,                     CHR_y_BAR,                  CHR_x_CIRC,               CHR_y_CIRC,            CHR_x_UNDER_ROOT,         CHR_y_UNDER_ROOT,
-                                     CHR_COLON_EQUALS,              CHR_ESTIMATES,              CHR_CORRESPONDS_TO,       CHR_SUB_E_OUTLINE,     CHR_COMPLEX_C,            CHR_REAL_R,
-                                     CHR_SUN,                       CHR_SUB_SUN,                CHR_SUB_EARTH,            ITM_NULL,              ITM_NULL,                 CHR_NEG_EXCLAMATION_MARK,
-                                     CHR_PLUS_MINUS,                CHR_CIRCUMFLEX,             CHR_SUP_T,                CHR_SUP_MINUS_1,       CHR_PLANCK_2PI,           ITM_NULL                      };
+const int16_t menu_alphaMATH[]   = { CHR_LESS_THAN,                 CHR_LESS_EQUAL,             CHR_EQUAL,                CHR_ALMOST_EQUAL,      CHR_GREATER_EQUAL,           CHR_GREATER_THAN,
+                                     CHR_LEFT_CURLY_BRACKET,        CHR_LEFT_SQUARE_BRACKET,    CHR_LEFT_PARENTHESIS,     CHR_RIGHT_PARENTHESIS, CHR_RIGHT_SQUARE_BRACKET,    CHR_RIGHT_CURLY_BRACKET,
+                                     CHR_PROD_SIGN,                 CHR_DIVIDE,                 CHR_INTEGRAL,             CHR_SUB_INFINITY,      CHR_SUP_INFINITY,            CHR_INFINITY,
+                                     CHR_NOT,                       CHR_AND,                    CHR_OR,                   CHR_NOT_EQUAL,         CHR_PIPE,                    CHR_AMPERSAND,
+                                     CHR_MEASURED_ANGLE,            CHR_RIGHT_ANGLE,            CHR_PERPENDICULAR,        CHR_CUBIC_ROOT,        CHR_SQUARE_ROOT,             CHR_xTH_ROOT,
+                                     CHR_x_BAR,                     CHR_y_BAR,                  CHR_x_CIRC,               CHR_y_CIRC,            CHR_x_UNDER_ROOT,            CHR_y_UNDER_ROOT,
+                                     CHR_COLON_EQUALS,              CHR_ESTIMATES,              CHR_CORRESPONDS_TO,       CHR_SUB_E_OUTLINE,     CHR_COMPLEX_C,               CHR_REAL_R,
+                                     CHR_SUN,                       CHR_SUB_SUN,                CHR_SUB_EARTH,            ITM_NULL,              ITM_NULL,                    CHR_NEG_EXCLAMATION_MARK,
+                                     CHR_PLUS_MINUS,                CHR_CIRCUMFLEX,             CHR_SUP_T,                CHR_SUP_MINUS_1,       CHR_PLANCK_2PI,              ITM_NULL                      };
 
-/*      Menu name                  <--------------------------------------------------------------------------- 6 functions -------------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 f shifted functions ----------------------------------------------------------------------->  */
-/*                                 <-------------------------------------------------------------------- 6 g shifted functions ----------------------------------------------------------------------->  */
-const int16_t menu_alphaDot[]    = { CHR_EXCLAMATION_MARK,          CHR_COLON,                  CHR_SEMICOLON,            CHR_QUOTE,             CHR_DOUBLE_QUOTE,         CHR_AT,
-                                     CHR_INVERTED_EXCLAMATION_MARK, CHR_INVERTED_QUESTION_MARK, CHR_NUMBER_SIGN,          CHR_UNDERSCORE,        CHR_TILDE,                CHR_BACK_SLASH,
-                                     CHR_DOLLAR,                    CHR_EURO,                   CHR_PERCENT,              CHR_AMPERSAND,         CHR_POUND,                CHR_YEN,
-                                     CHR_LEFT_ARROW,                CHR_UP_ARROW,               CHR_SERIAL_IO,            CHR_DOWN_ARROW,        CHR_LEFT_ARROW,           CHR_PGM_BEGIN,
-                                     CHR_LEFT_DOUBLE_ANGLE,         CHR_RIGHT_DOUBLE_ANGLE,     CHR_EMPTY_SET,            CHR_WATCH,             CHR_BULLET,               CHR_ASTERISK,
-                                     CHR_PRINTER,                   CHR_HOURGLASS,              CHR_NEG_EXCLAMATION_MARK, CHR_USER_MODE,         CHR_BATTERY,              CHR_SUP_ASTERISK              };
+/*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_alphaDot[]    = { CHR_EXCLAMATION_MARK,          CHR_COLON,                  CHR_SEMICOLON,            CHR_QUOTE,             CHR_DOUBLE_QUOTE,            CHR_AT,
+                                     CHR_INVERTED_EXCLAMATION_MARK, CHR_INVERTED_QUESTION_MARK, CHR_NUMBER_SIGN,          CHR_UNDERSCORE,        CHR_TILDE,                   CHR_BACK_SLASH,
+                                     CHR_DOLLAR,                    CHR_EURO,                   CHR_PERCENT,              CHR_AMPERSAND,         CHR_POUND,                   CHR_YEN,
+                                     CHR_LEFT_ARROW,                CHR_UP_ARROW,               CHR_SERIAL_IO,            CHR_DOWN_ARROW,        CHR_LEFT_ARROW,              CHR_PGM_BEGIN,
+                                     CHR_LEFT_DOUBLE_ANGLE,         CHR_RIGHT_DOUBLE_ANGLE,     CHR_EMPTY_SET,            CHR_WATCH,             CHR_BULLET,                  CHR_ASTERISK,
+                                     CHR_PRINTER,                   CHR_HOURGLASS,              CHR_NEG_EXCLAMATION_MARK, CHR_USER_MODE,         CHR_BATTERY,                 CHR_SUP_ASTERISK              };
 
-const int16_t menu_REALS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_1stDeriv[]    = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_2ndDeriv[]    = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_Sf[]          = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_Solver[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_IO[]          = { ITM_BEEP,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,               ITM_LOADSIGMA,
-                                     ITM_QUIET,                     ITM_TONE,                   ITM_NULL,                 ITM_NULL,              ITM_RECV,                 ITM_SEND,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL,
-                                     ITM_PRINTERADV,                ITM_PRINTERCHAR,            ITM_PRINTERDLAY,          ITM_PRINTERLCD,        ITM_PRINTERMODE,          ITM_PRINTERPROG,
-                                     ITM_PRINTERR,                  ITM_PRINTERREGS,            ITM_PRINTERSTK,           ITM_PRINTERTAB,        ITM_PRINTERUSER,          ITM_PRINTERWIDTH,
-                                     ITM_PRINTERSIGMA,              ITM_PRINTERHASH,            ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_Tam[]         = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                 ITM_ST_T                      };
-const int16_t menu_TamCmp[]      = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                 ITM_ST_T,
-                                     ITM_0P,                        ITM_1P,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
-const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                 ITM_ST_T,
-                                     ITM_Config,                    ITM_Stack,                  ITM_NULL,                 ITM_NULL,              ITM_Max,                  ITM_Min,
-                                     ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                 ITM_NULL                      };
+const int16_t menu_REALS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_1stDeriv[]    = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_2ndDeriv[]    = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_Sf[]          = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_Solver[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_IO[]          = { ITM_BEEP,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,                  ITM_LOADSIGMA,
+                                     ITM_QUIET,                     ITM_TONE,                   ITM_NULL,                 ITM_NULL,              ITM_RECV,                    ITM_SEND,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_PRINTERADV,                ITM_PRINTERCHAR,            ITM_PRINTERDLAY,          ITM_PRINTERLCD,        ITM_PRINTERMODE,             ITM_PRINTERPROG,
+                                     ITM_PRINTERR,                  ITM_PRINTERREGS,            ITM_PRINTERSTK,           ITM_PRINTERTAB,        ITM_PRINTERUSER,             ITM_PRINTERWIDTH,
+                                     ITM_PRINTERSIGMA,              ITM_PRINTERHASH,            ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_Tam[]         = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T                      };
+const int16_t menu_TamCmp[]      = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T,
+                                     ITM_0P,                        ITM_1P,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T,
+                                     ITM_Config,                    ITM_Stack,                  ITM_NULL,                 ITM_NULL,              ITM_Max,                     ITM_Min,
+                                     ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numRows = sizeof(menu_MyAlpha    )/sizeof(int16_t)/6, .softkeyRow = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0

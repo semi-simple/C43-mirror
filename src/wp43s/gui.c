@@ -23,7 +23,7 @@
 #ifdef PC_BUILD
 GtkWidget *grid;
 GtkWidget *backgroundImage;
-GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea; //, *lblSoftkeyArea1, *lblSoftkeyArea2;
+GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
 GtkWidget *lblBehindScreen;
 
 GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
@@ -841,8 +841,8 @@ void moveLabels(void) {
   gtk_widget_get_preferred_size(  lbl51G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl51F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl51G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-  gtk_widget_get_preferred_size(  lbl51Gr, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl51Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
+  //gtk_widget_get_preferred_size(  lbl51Gr, NULL, &lblG);
+  //gtk_fixed_move(GTK_FIXED(grid), lbl51Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
 
   xPos += DELTA_KEYS_X + 18;
   gtk_widget_get_preferred_size(  lbl52F, NULL, &lblF);
@@ -1075,9 +1075,9 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     stringToUtf8(indexOfItems[max(key->keyLblAim, -key->keyLblAim)].itemPrinted, lbl);
   }
 
-  //if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
-  //  lbl[3] = 0;
-  //}
+  if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
+    lbl[3] = 0;
+  }
 
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
   if(key->keyLblAim == KEY_f) {
@@ -1109,9 +1109,9 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   if(key->gShiftedAim == 0) {
     lbl[0] = 0;
   }
-  //else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
-  //  lbl[3] = 0;
-  //}
+  else if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
+    lbl[3] = 0;
+  }
 
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 
@@ -1499,7 +1499,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn44);
   gtk_widget_show(btn45);
 
-  gtk_widget_show(lbl41F);
+  //gtk_widget_show(lbl41F);
   //gtk_widget_show(lbl41G);
   gtk_widget_show(lbl42L);
   gtk_widget_show(lbl43L);
@@ -1520,11 +1520,12 @@ void calcModeAimGui(void) {
 
   gtk_widget_show(lbl51L);
   gtk_widget_show(lbl51F);
+  gtk_widget_show(lbl51G);
   gtk_widget_show(lbl52L);
   gtk_widget_show(lbl53L);
   gtk_widget_show(lbl54L);
   gtk_widget_show(lbl55L);
-  gtk_widget_show(lbl51Gr);
+  //gtk_widget_show(lbl51Gr);
   gtk_widget_show(lbl52Gr);
   gtk_widget_show(lbl53Gr);
   gtk_widget_show(lbl54Gr);
@@ -1540,7 +1541,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl63L);
   gtk_widget_show(lbl64L);
   gtk_widget_show(lbl65F);
-  gtk_widget_show(lbl65G);
+  //gtk_widget_show(lbl65G);
   gtk_widget_show(lbl61Gr);
   gtk_widget_show(lbl62Gr);
   gtk_widget_show(lbl63Gr);
@@ -1574,6 +1575,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl83L);
   gtk_widget_show(lbl84L);
   gtk_widget_show(lbl84H);
+  gtk_widget_show(lbl85F);
   gtk_widget_show(lbl85G);
   gtk_widget_show(lbl81Gr);
   gtk_widget_show(lbl82Gr);

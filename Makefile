@@ -7,6 +7,7 @@
 GENERATECONSTANTS_APP = generateConstants$(EXE)
 TTF2RASTERFONTS_APP = ttf2RasterFonts$(EXE)
 TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
+TESTSUITE_APP = testSuite$(EXE)
 WP43S_APP = wp43s$(EXE)
 EXE =
 
@@ -33,7 +34,7 @@ endif
 
  
 CC = gcc
-INC = -IdecNumberICU -Isrc/wp43s
+INC = -IdecNumberICU -Isrc/wp43s -Isrc/testSuite
 
 ifeq ($(DEST), gitlab)
   CFLAGS += -march=x86-64
@@ -42,9 +43,9 @@ else
 endif
 
 ifdef DEBUG_WP43S
-  CFLAGS += -g
+	CFLAGS += -g
 else
-  CFLAGS += -O2 -s
+	CFLAGS += -O2 -s
 endif
 
 CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64 -MMD
@@ -84,6 +85,12 @@ SRC_WP43S                = \
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
 DEPS_WP43S               = $(SRC_WP43S:.c=.d)
 
+SRC_TESTSUITE            = \
+	$(addprefix src/testSuite/, \
+		testSuite.c)
+OBJ_TESTSUITE            = $(SRC_TESTSUITE:.c=.o) $(OBJ_WP43S)
+DEPS_TESTSUITE           = $(SRC_TESTSUITE:.c=.d)
+
 SRC_GENERATECONSTANTS    = \
 	$(addprefix src/generateConstants/, \
 		generateConstants.c)
@@ -118,20 +125,21 @@ rebuild:
 	$(MAKE) mrproper
 	$(MAKE) all
 
-.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts all clean_all mrproper decNumberICU sources rebuild
+.PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild
 
 ifneq ($(EXE),)
 generateConstants: $(GENERATECONSTANTS_APP)
 ttf2RasterFonts: $(TTF2RASTERFONTS_APP)
 testTtf2RasterFonts: $(TESTTTF2RASTERFONTS_APP)
+testSuite: $(TESTSUITE_APP)
 wp43s: $(WP43S_APP)
 
-.PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts wp43s
+.PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts testSuite wp43s
 endif
 
 sources: $(STAMP_FILES)
 
-clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts
+clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
 
 mrproper: clean_all
 	rm -f $(GENERATED_SOURCES)
@@ -140,6 +148,7 @@ mrproper: clean_all
 	rm -f $(TTF2RASTERFONTS_APP)
 	rm -f $(TESTTTF2RASTERFONTS_APP)
 	rm -f $(WP43S_APP)
+	rm -f $(TESTSUITE_APP)
 
 
 clean_decNumberICU:
@@ -212,19 +221,38 @@ $(TESTTTF2RASTERFONTS_APP): $(OBJ_TESTTTF2RASTERFONTS)
 
 src/ttf2RasterFonts/testTtf2RasterFonts.o: .stamp-constantPointers
 
+clean_testSuite:
+	rm -f $(OBJ_TESTSUITE)
+	rm -f $(DEPS_TESTSUITE) $(DEPS_WP43S)
+
+-include $(DEPS_TESTSUITE)
+
+$(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
+$(TESTSUITE_APP): $(OBJ_TESTSUITE)
+	@echo -e "\n====> testSuite $@ <===="
+	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP)
+
+src/testSuite/%.o: src/testSuite/%.c .stamp-constantPointers
+	@echo -e "\n====> testSuite $@ <===="
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+
 clean_wp43s: 
 	rm -f $(OBJ_WP43S)
 	rm -f $(DEPS_WP43S)
 
 -include $(DEPS_WP43S)
 
+$(WP43S_APP): GTK_LIBS   = `pkg-config --libs   gtk+-3.0`
+$(WP43S_APP): GTK_CFLAGS = `pkg-config --cflags gtk+-3.0`
 $(WP43S_APP): $(OBJ_WP43S)
 	@echo -e "\n====> wp43s $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $@ `pkg-config --libs gtk+-3.0`
+	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) $(GTK_LIBS)
 
 src/wp43s/%.o: src/wp43s/%.c .stamp-constantPointers
 	@echo -e "\n====> wp43s $@ <===="
-	$(CC) $(CFLAGS) $(INC) `pkg-config --cflags gtk+-3.0` -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) $(GTK_CFLAGS) -c -o $@ $<
 
 src/wp43s/rasterFontsData.o: .stamp-rasterFontsData
 

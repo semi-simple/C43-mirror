@@ -1448,7 +1448,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString) {
+void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int16_t maxWidth) {
   int16_t len;
   longInteger_t tempLongInteger;
 
@@ -1467,7 +1467,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString) {
     }
   }
 
-  if(stringWidth(displayString, &standardFont, false, false) > SCREEN_WIDTH - 2) {
+  if(stringWidth(displayString, &standardFont, false, false) > maxWidth) {
     char exponentString[14];
     int16_t lastChar, stringStep, exponentStep, tenExponent;
 
@@ -1478,7 +1478,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString) {
     displayString[lastChar] = 0;
     exponentString[0] = 0;
     exponentToDisplayString(tenExponent, exponentString, false);
-    while(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > SCREEN_WIDTH - 2) {
+    while(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > maxWidth) {
       lastChar -= stringStep;
       tenExponent += exponentStep;
       displayString[lastChar] = 0;

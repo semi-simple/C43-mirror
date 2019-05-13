@@ -107,7 +107,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtLongInteger) {
           if(showContent) {
-            longIntegerToDisplayString(regist, tmpStr3000);
+            longIntegerToDisplayString(regist, tmpStr3000, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             sprintf(tmpStr3000, "%" FMT16U " bits := 2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
@@ -211,7 +211,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtLongInteger) {
               if(showContent) {
-                longIntegerToDisplayString(regist, tmpStr3000);
+                longIntegerToDisplayString(regist, tmpStr3000, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 sprintf(tmpStr3000, "%" FMT16U " bits := 4+2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));

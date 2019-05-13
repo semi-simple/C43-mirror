@@ -776,7 +776,7 @@ void addStriLonI(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
-  longIntegerToDisplayString(opX, tmpStr3000);
+  longIntegerToDisplayString(opX, tmpStr3000, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(result, dtString, len1 + len2, 0);

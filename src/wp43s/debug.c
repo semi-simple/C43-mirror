@@ -568,7 +568,7 @@ void debugNIM(void) {
     }
 
     else if(getRegisterDataType(regist) == dtLongInteger) {
-      longIntegerToDisplayString(regist, string + n);
+      longIntegerToDisplayString(regist, string + n, SCREEN_WIDTH);
     }
 
     else {

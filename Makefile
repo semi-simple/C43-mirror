@@ -88,8 +88,8 @@ DEPS_WP43S               = $(SRC_WP43S:.c=.d)
 SRC_TESTSUITE            = \
 	$(addprefix src/testSuite/, \
 		testSuite.c)
-OBJ_TESTSUITE            = $(SRC_TESTSUITE:.c=.o) $(OBJ_WP43S)
-DEPS_TESTSUITE           = $(SRC_TESTSUITE:.c=.d)
+OBJ_TESTSUITE            = $(SRC_TESTSUITE:.c=.o) $(OBJ_WP43S:.o=.ts.o)
+DEPS_TESTSUITE           = $(OBJ_TESTSUITE:.o=.d)
 
 SRC_GENERATECONSTANTS    = \
 	$(addprefix src/generateConstants/, \
@@ -235,6 +235,14 @@ $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 src/testSuite/%.o: src/testSuite/%.c .stamp-constantPointers
 	@echo -e "\n====> testSuite $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+src/wp43s/%.ts.o: src/wp43s/%.c .stamp-constantPointers
+	@echo -e "\n====> wp43s (testSuite) $@ <===="
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+decNumberICU/%.ts.o: decNumberICU/%.c
+	@echo -e "\n====> decNumberICU (testSuite) $@ <===="
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 
 

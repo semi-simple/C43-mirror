@@ -22,10 +22,10 @@
 
 
 
-void (* const m1Pow[12])(void) = {
-// regX ==> 1            2           3           4            5            6            7            8            9             10             11          12
-//          Long integer real16      complex16   Date         Time         Date         String       real16 mat   complex16 m   Short integer  real34      complex34
-            m1PowLonI,   m1PowRe16,  m1PowCo16,  m1PowError,  m1PowError,  m1PowError,  m1PowError,  m1PowRm16,   m1PowCm16,    m1PowShoI,     m1PowRe34,  m1PowCo34
+void (* const m1Pow[13])(void) = {
+// regX ==> 1            2          3          4          5           6           7           8          9            10            11         12         13
+//          Long integer Real16     Complex16  Angle16    Time        Date        String      Real16 mat Complex16 m  Short integer Real34     Complex34  Angle34
+            m1PowLonI,   m1PowRe16, m1PowCo16, m1PowRe16, m1PowError, m1PowError, m1PowError, m1PowRm16, m1PowCm16,   m1PowShoI,    m1PowRe34, m1PowCo34, m1PowAn34
 };
 
 
@@ -92,8 +92,8 @@ void m1PowRe16(void) {
   }
 
   convertRegister16To34(opX);
-  real34Multiply(REGISTER_REAL34_DATA(opX), const34_648, REGISTER_REAL34_DATA(result));
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result)); // X in internal units
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
   convertRegister34To16(result);
 }
 
@@ -140,8 +140,7 @@ void m1PowRe34(void) {
     return;
   }
 
-  real34Multiply(REGISTER_REAL34_DATA(opX), const34_648, REGISTER_REAL34_DATA(result));
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result)); // X in internal units
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
 }
 
 
@@ -156,4 +155,19 @@ void m1PowCo34(void) {
   }
 
   fnToBeCoded();
+}
+
+
+
+void m1PowAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function m1PowAn34:", "cannot use NaN as an input of 2^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  setRegisterDataType(result, dtReal34, TAG_NONE);
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
 }

@@ -22,10 +22,10 @@
 
 
 
-void (* const invert[12])(void) = {
-// regX ==> 1            2            3            4            5            6            7            8           9             10             11           12
-//          Long integer real16       complex16    Date         Time         Date         String       real16 mat  complex16 m   Short integer  real34       complex34
-            invertLonI,  divRe16Re16, divRe16Co16, invertError, invertError, invertError, invertError, invertRm16, invertCm16,   invertError,   divRe16Re34, divRe16Co34
+void (* const invert[13])(void) = {
+// regX ==> 1            2            3            4            5            6            7            8           9           10            11           12           13
+//          Long integer Real16       Complex16    Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34       Complex34    Angle34
+            divRe16LonI, divRe16Re16, divRe16Co16, divRe16An16, invertError, invertError, invertError, invertRm16, invertCm16, invertError,  divRe16Re34, divRe16Co34, divRe16An34
 };
 
 
@@ -59,7 +59,7 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 
   result = REGISTER_X;
   opY    = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+  reallocateRegister(opY, dtReal16, REAL16_SIZE, TAG_NONE);
   real16Copy(const16_1, REGISTER_REAL16_DATA(opY));
   opX    = allocateTemporaryRegister();
   copySourceRegisterToDestRegister(REGISTER_X, opX);
@@ -67,14 +67,6 @@ void fnInvert(uint16_t unusedParamButMandatory) {
   invert[getRegisterDataType(REGISTER_X)]();
 
   adjustResult(result, false, true, opX, opY, -1);
-}
-
-
-
-void invertLonI(void) {
-  convertLongIntegerRegisterToReal16Register(opX, opX);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  divRe16Re16();
 }
 
 

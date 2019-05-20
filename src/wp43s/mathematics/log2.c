@@ -22,10 +22,10 @@
 
 
 
-void (* const logBase2[12])(void) = {
-//  regX ==> 1            2          3          4           5           6           7           8           9            10             11         12
-//           Long integer real16     complex16              Time        Date        String      real16 mat  complex16 m  Short integer  real34     complex34
-             log2LonI,    log2Re16,  log2Co16,  log2Error,  log2Error,  log2Error,  log2Error,  log2Rm16,   log2Cm16,    log2ShoI,      log2Re34,  log2Co34
+void (* const logBase2[13])(void) = {
+// regX ==> 1            2         3         4         5          6          7          8          9           10            11        12        13
+//          Long integer Real16    Complex16 Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34 Angle34
+            log2LonI,    log2Re16, log2Co16, log2An16, log2Error, log2Error, log2Error, log2Rm16,  log2Cm16,   log2ShoI,     log2Re34, log2Co34, log2An34
 };
 
 
@@ -74,7 +74,7 @@ void log2LonI(void) {
   convertLongIntegerRegisterToReal34Register(opX, opX);
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+      reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
@@ -88,7 +88,7 @@ void log2LonI(void) {
     real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
     WP34S_real51Ln(&real51, &real51);
     real51Divide(&real51, const51_ln2, &real51);
-    reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+    reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
     real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
    }
   else if(getFlag(FLAG_CPXRES)) {
@@ -96,7 +96,7 @@ void log2LonI(void) {
     real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
     WP34S_real51Ln(&real51, &real51);
     real51Divide(&real51, const51_ln2, &real51);
-    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
+    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
     real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
     real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
     real16Divide(REGISTER_IMAG16_DATA(result), const16_ln2, REGISTER_IMAG16_DATA(result));
@@ -147,7 +147,7 @@ void log2Re16(void) {
     real16ToReal51(REGISTER_REAL16_DATA(opX), &real51);
     WP34S_real51Ln(&real51, &real51);
     real51Divide(&real51, const51_ln2, &real51);
-    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
+    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
     real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
     real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
     real16Divide(REGISTER_IMAG16_DATA(result), const16_2, REGISTER_IMAG16_DATA(result));
@@ -191,18 +191,70 @@ void log2Co16(void) {
     real51_t real51;
     uint8_t savedAngularMode;
 
-    savedAngularMode = angularMode;
-    angularMode = AM_RADIAN;
+    savedAngularMode = currentAngularMode;
+    currentAngularMode = AM_RADIAN;
     convertRegister16To34(opX);
     real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
     real34ToReal51(&magnitude34, &real51);
     real51Ln(&real51, &real51);
     real51Divide(&real51, const51_ln2, &real51);
     real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
-    convertAngle34FromInternal(&theta34, AM_RADIAN);
     real34Divide(&theta34, const34_ln2, &theta34);
     real34ToReal16(&theta34, REGISTER_IMAG16_DATA(result));
-    angularMode = savedAngularMode;
+    currentAngularMode = savedAngularMode;
+  }
+}
+
+
+
+void log2An16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log2An16:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
+    #endif
+    return;
+  }
+
+  real51_t real51;
+
+  setRegisterDataType(result, dtReal16, TAG_NONE);
+
+  if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
+    if(getFlag(FLAG_DANGER)) {
+      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log2An16:", "cannot calculate log" STD_SUB_2, NULL, NULL);
+      #endif
+    }
+  }
+  else if(real16IsPositive(REGISTER_REAL16_DATA(opX))) { // Positive
+    real16ToReal51(REGISTER_REAL16_DATA(opX), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln2, &real51);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    real16SetPositiveSign(REGISTER_REAL16_DATA(opX));
+    real16ToReal51(REGISTER_REAL16_DATA(opX), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln2, &real51);
+    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+    real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
+    real16Divide(REGISTER_IMAG16_DATA(result), const16_2, REGISTER_IMAG16_DATA(result));
+  }
+  else if(getFlag(FLAG_DANGER)) {
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
+  }
+  else {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log2An16:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+    #endif
   }
 }
 
@@ -259,7 +311,7 @@ void log2Re34(void) {
     real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
     WP34S_real51Ln(&real51, &real51);
     real51Divide(&real51, const51_ln2, &real51);
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
     real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
     real34Copy(const34_pi, REGISTER_IMAG34_DATA(result));
     real34Divide(REGISTER_IMAG34_DATA(result), const34_ln2, REGISTER_IMAG34_DATA(result));
@@ -303,16 +355,68 @@ void log2Co34(void) {
     real51_t real51;
     uint8_t savedAngularMode;
 
-    savedAngularMode = angularMode;
-    angularMode = AM_RADIAN;
+    savedAngularMode = currentAngularMode;
+    currentAngularMode = AM_RADIAN;
     real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
     real34ToReal51(&magnitude34, &real51);
     real51Ln(&real51, &real51);
     real51Divide(&real51, const51_ln2, &real51);
     real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
-    convertAngle34FromInternal(&theta34, AM_RADIAN);
     real34Divide(&theta34, const34_ln2, &theta34);
     real34Copy(&theta34, REGISTER_IMAG34_DATA(result));
-    angularMode = savedAngularMode;
+    currentAngularMode = savedAngularMode;
+  }
+}
+
+
+
+void log2An34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log2An34:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
+    #endif
+    return;
+  }
+
+  real51_t real51;
+
+  setRegisterDataType(result, dtReal34, TAG_NONE);
+
+  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+    if(getFlag(FLAG_DANGER)) {
+      real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(result));
+    }
+    else {
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log2An34:", "cannot calculate log" STD_SUB_2, NULL, NULL);
+      #endif
+    }
+  }
+  else if(real34IsPositive(REGISTER_REAL34_DATA(opX))) { // Positive
+    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln2, &real51);
+    real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    real34SetPositiveSign(REGISTER_REAL34_DATA(opX));
+    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    WP34S_real51Ln(&real51, &real51);
+    real51Divide(&real51, const51_ln2, &real51);
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
+    real34Copy(const34_pi, REGISTER_IMAG34_DATA(result));
+    real34Divide(REGISTER_IMAG34_DATA(result), const34_ln2, REGISTER_IMAG34_DATA(result));
+  }
+  else if(getFlag(FLAG_DANGER)) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+  }
+  else {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function log2An34:", "cannot calculate log" STD_SUB_2 " of a negative number when CPXRES is not set!", NULL, NULL);
+    #endif
   }
 }

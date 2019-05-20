@@ -22,10 +22,10 @@
 
 
 
-void (* const arcsin[12])(void) = {
-// regX ==> 1            2            3            4             5             6             7             8               9            10             11           12
-//          Long integer real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Short integer  real34       complex34
-            arcsinLonI,  arcsinRe16,  arcsinCo16,  arcsinError,  arcsinError,  arcsinError,  arcsinError,  arcsinRm16,     arcsinCm16,  arcsinError,   arcsinRe34,  arcsinCo34
+void (* const arcsin[13])(void) = {
+// regX ==> 1            2           3           4           5            6            7            8           9           10            11          12          13
+//          Long integer Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
+            arcsinLonI,  arcsinRe16, arcsinCo16, arcsinRe16, arcsinError, arcsinError, arcsinError, arcsinRm16, arcsinCm16, arcsinError,  arcsinRe34, arcsinCo34, arcsinRe34
 };
 
 
@@ -69,8 +69,8 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
 
 
 void arcsinLonI(void) {
- convertLongIntegerRegisterToReal34Register(opX, opX);
-  if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(opX), const34_1)) {
+ convertLongIntegerRegisterToReal16Register(opX, opX);
+  if(real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(opX), const16_1)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnArcsin:", "|X| > 1", NULL, NULL);
@@ -78,22 +78,20 @@ void arcsinLonI(void) {
     return;
   }
 
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
-    real34Zero(REGISTER_REAL34_DATA(result));
+  reallocateRegister(result, dtReal16, REAL16_SIZE, currentAngularMode);
+
+  if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
+    real16Zero(REGISTER_REAL16_DATA(result));
   }
   else {
-    real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
-    if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-      real34ChangeSign(REGISTER_REAL34_DATA(result));
+    real16Copy(const16_0_5, REGISTER_REAL16_DATA(result));
+    if(real16IsNegative(REGISTER_REAL16_DATA(opX))) {
+      real16ChangeSign(REGISTER_REAL16_DATA(result));
     }
+    convertAngle16FromTo(REGISTER_REAL16_DATA(result), AM_MULTPI, currentAngularMode);
   }
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_MULTPI);
-  #if (ANGLE16 == 1)
-    convertRegister34To16(result);
-  #endif
-  setRegisterDataType(result, dtAngle);
-  setRegisterAngularMode(result, angularMode);
+
+  setRegisterDataType(result, dtAngle16, currentAngularMode);
 }
 
 
@@ -116,14 +114,16 @@ void arcsinRe16(void) {
   }
 
   convertRegister16To34(opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, currentAngularMode);
   WP34S_do_asin(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
-  #if (ANGLE16 == 1)
-    convertRegister34To16(result);
-  #endif
-  setRegisterDataType(result, dtAngle);
-  setRegisterAngularMode(result, angularMode);
+  convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
+  convertRegister34To16(result);
+
+  setRegisterDataType(result, dtAngle16, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
 }
 
 
@@ -141,7 +141,7 @@ void arcsinCo16(void) {
   complex34_t iz;
 
   convertRegister16To34(opX);
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // calculate iz
   real34Copy(REGISTER_REAL34_DATA(opX), VARIABLE_IMAG34_DATA(&iz));
@@ -150,7 +150,7 @@ void arcsinCo16(void) {
 
   // calculate z*z
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
   mulCo34Co34();
 
@@ -215,12 +215,14 @@ void arcsinRe34(void) {
   }
 
   WP34S_do_asin(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
-  #if (ANGLE16 == 1)
-    convertRegister34To16(result);
-  #endif
-  setRegisterDataType(result, dtAngle);
-  setRegisterAngularMode(result, angularMode);
+  convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
+  setRegisterTag(result, currentAngularMode);
+
+  setRegisterDataType(result, dtAngle34, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
 }
 
 
@@ -244,7 +246,7 @@ void arcsinCo34(void) {
 
   // calculate z*z
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
   mulCo34Co34();
 

@@ -1675,7 +1675,7 @@ decNumber * decNumberLog10(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* This is a generalization of 754 NextUp.                            */
 /* ------------------------------------------------------------------ */
-/*decNumber * decNumberNextPlus(decNumber *res, const decNumber *rhs,
+decNumber * decNumberNextPlus(decNumber *res, const decNumber *rhs,
                               decContext *set) {
   decNumber dtiny;                           // constant
   decContext workset=*set;                   // work
@@ -1700,7 +1700,7 @@ decNumber * decNumberLog10(decNumber *res, const decNumber *rhs,
   if (status!=0) decStatus(res, status, set);
   return res;
   } // decNumberNextPlus
-*/
+
 /* ------------------------------------------------------------------ */
 /* decNumberNextToward -- next towards rhs                            */
 /*                                                                    */

@@ -27,7 +27,6 @@ void saveCalc(void) {
   size_t size;
   uint32_t backupVersion = BACKUP_VERSION;
   uint32_t ramSize       = RAM_SIZE;
-  uint32_t angleSize     = ANGLE_SIZE;
   FILE *backup;
 
   backup = fopen("backup.bin", "wb");
@@ -46,7 +45,6 @@ void saveCalc(void) {
 
   size  = fwrite(&backupVersion,                      1, sizeof(backupVersion),                      backup); //printf("%8lu backupVersion\n",                      (unsigned long)size);
   size += fwrite(&ramSize,                            1, sizeof(ramSize),                            backup); //printf("%8lu ramSize\n",                            (unsigned long)size);
-  size += fwrite(&angleSize,                          1, sizeof(angleSize),                          backup); //printf("%8lu angleSize\n",                          (unsigned long)size);
   size += fwrite(ram,                                 1, RAM_SIZE,                                   backup); //printf("%8lu ram\n",                                (unsigned long)size);
   size += fwrite(flags,                               1, sizeof(flags),                              backup); //printf("%8lu flags\n",                              (unsigned long)size);
   size += fwrite(tmpStr3000,                          1, TMP_STR_LENGTH,                             backup); //printf("%8lu tmpStr3000\n",                         (unsigned long)size);
@@ -102,7 +100,7 @@ void saveCalc(void) {
   size += fwrite(&denominatorMode,                    1, sizeof(denominatorMode),                    backup); //printf("%8lu denominatorMode\n",                    (unsigned long)size);
   size += fwrite(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
   size += fwrite(&shortIntegerMode,                   1, sizeof(shortIntegerMode),                   backup); //printf("%8lu shortIntegerMode\n",                   (unsigned long)size);
-  size += fwrite(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
+  size += fwrite(&currentAngularMode,                 1, sizeof(currentAngularMode),                 backup); //printf("%8lu currentAngularMode\n",                 (unsigned long)size);
   size += fwrite(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
   size += fwrite(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
   size += fwrite(&curveFitting,                       1, sizeof(curveFitting),                       backup); //printf("%8lu curveFitting\n",                       (unsigned long)size);
@@ -172,7 +170,7 @@ void saveCalc(void) {
 
 void restoreCalc(void) {
   size_t size;
-  uint32_t backupVersion, ramSize, angleSize;
+  uint32_t backupVersion, ramSize;
   FILE *backup;
 
   backup = fopen("backup.bin", "rb");
@@ -184,15 +182,13 @@ void restoreCalc(void) {
 
   size  = fread(&backupVersion,                      1, sizeof(backupVersion),                      backup); //printf("%8lu backupVersion\n",                      (unsigned long)size);
   size += fread(&ramSize,                            1, sizeof(ramSize),                            backup); //printf("%8lu ramSize\n",                            (unsigned long)size);
-  size += fread(&angleSize,                          1, sizeof(angleSize),                          backup); //printf("%8lu angleSize\n",                          (unsigned long)size);
-  if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE || angleSize != ANGLE_SIZE) {
+  if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE) {
     fclose(backup);
 
     printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version. Performing RESET\n");
     printf("               Backup file      Program\n");
     printf("backupVersion  %6u           %6u\n", backupVersion, BACKUP_VERSION);
     printf("ramSize        %6u           %6u\n", ramSize, RAM_SIZE);
-    printf("angleSize      %6u           %6u\n", angleSize, (uint32_t)ANGLE_SIZE);
 
     fnReset(CONFIRMED);
     return;
@@ -262,7 +258,7 @@ void restoreCalc(void) {
     size += fread(&denominatorMode,                    1, sizeof(denominatorMode),                    backup); //printf("%8lu denominatorMode\n",                    (unsigned long)size);
     size += fread(&significantDigits,                  1, sizeof(significantDigits),                  backup); //printf("%8lu significantDigits\n",                  (unsigned long)size);
     size += fread(&shortIntegerMode,                   1, sizeof(shortIntegerMode),                   backup); //printf("%8lu shortIntegerMode\n",                   (unsigned long)size);
-    size += fread(&angularMode,                        1, sizeof(angularMode),                        backup); //printf("%8lu angularMode\n",                        (unsigned long)size);
+    size += fread(&currentAngularMode,                 1, sizeof(currentAngularMode),                 backup); //printf("%8lu currentAngularMode\n",                 (unsigned long)size);
     size += fread(&groupingGap,                        1, sizeof(groupingGap),                        backup); //printf("%8lu groupingGap\n",                        (unsigned long)size);
     size += fread(&dateFormat,                         1, sizeof(dateFormat),                         backup); //printf("%8lu dateFormat\n",                         (unsigned long)size);
     size += fread(&curveFitting,                       1, sizeof(curveFitting),                       backup); //printf("%8lu curveFitting\n",                       (unsigned long)size);

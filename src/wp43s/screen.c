@@ -611,25 +611,23 @@ void refreshRegisterLine(calcRegister_t regist) {
               formatReal16Debug(string2, getRegisterDataPointer(REGISTER_L));
             }
 
+            else if(getRegisterDataType(REGISTER_L) == dtAngle16) {
+              strcat(string1, "angle16 = ");
+              formatReal16Debug(string2, getRegisterDataPointer(REGISTER_L));
+              strcat(string2, " ");
+              strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
+            }
+
             else if(getRegisterDataType(REGISTER_L) == dtReal34) {
               strcat(string1, "real34 = ");
               formatReal34Debug(string2, getRegisterDataPointer(REGISTER_L));
             }
 
-            else if(getRegisterDataType(REGISTER_L) == dtAngle) {
-              calcRegister_t angle = allocateTemporaryRegister();
-
-              strcat(string1, "angle = ");
-              formatAngleDebug(string2, getRegisterDataPointer(REGISTER_L));
-              strcat(string1, string2);
-              reallocateRegister(angle, dtAngle, ANGLE_SIZE, 0);
-              angleCopy(REGISTER_ANGLE_DATA(REGISTER_L), REGISTER_ANGLE_DATA(angle));
-              convertAngleFromInternal(REGISTER_ANGLE_DATA(angle), getRegisterAngularMode(REGISTER_L));
-              formatAngleDebug(string2,  getRegisterDataPointer(angle));
-              freeTemporaryRegister(angle);
-              strcat(string2, " (");
+            else if(getRegisterDataType(REGISTER_L) == dtAngle34) {
+              strcat(string1, "angle34 = ");
+              formatReal34Debug(string2, getRegisterDataPointer(REGISTER_L));
+              strcat(string2, " ");
               strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
-              strcat(string2, ")");
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtComplex16) {
@@ -825,7 +823,26 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
-            realToDisplayString(REGISTER_REAL16_DATA(regist), false, tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+            realToDisplayString(REGISTER_REAL16_DATA(regist), false, getRegisterTag(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+
+            w = stringWidth(tmpStr3000, &numericFont, false, true);
+            lineWidth = w;
+            if(prefixWidth > 0) {
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+            }
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          }
+
+          else if(getRegisterDataType(regist) == dtAngle16) {
+            if(temporaryInformation == TI_RADIUS_THETA) {
+              if(regist == REGISTER_Y) {
+                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            angle16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterTag(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
             if(prefixWidth > 0) {
@@ -835,10 +852,49 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtReal34) {
-            realToDisplayString(REGISTER_REAL34_DATA(regist), true, tmpStr3000, &numericFont, SCREEN_WIDTH);
+            if(temporaryInformation == TI_RADIUS_THETA) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "r" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            else if(temporaryInformation == TI_X_Y) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "x" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "y" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            realToDisplayString(REGISTER_REAL34_DATA(regist), true, getRegisterTag(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
+            if(prefixWidth > 0) {
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+            }
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          }
+
+          else if(getRegisterDataType(regist) == dtAngle34) {
+            if(temporaryInformation == TI_RADIUS_THETA) {
+              if(regist == REGISTER_Y) {
+                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            angle34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterTag(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+
+            w = stringWidth(tmpStr3000, &numericFont, false, true);
+            lineWidth = w;
+            if(prefixWidth > 0) {
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+            }
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
@@ -856,34 +912,6 @@ void refreshRegisterLine(calcRegister_t regist) {
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-          }
-
-          else if(getRegisterDataType(regist) == dtAngle) {
-            real34_t angle34;
-
-            #if (ANGLE16 == 1)
-              real16ToReal34(REGISTER_REAL16_DATA(regist), &angle34);
-            #endif
-            #if (ANGLE34 == 1)
-              real34Copy(REGISTER_REAL34_DATA(regist), &angle34);
-            #endif
-
-            angle34ToDisplayString(&angle34, getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
-
-            if(temporaryInformation == TI_RADIUS_THETA) {
-              if(regist == REGISTER_Y) {
-                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-            }
-
-            w = stringWidth(tmpStr3000, &numericFont, false, true);
-            lineWidth = w;
-
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-            if(prefixWidth > 0) {
-              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
-            }
           }
 
           else if(getRegisterDataType(regist) == dtString) {

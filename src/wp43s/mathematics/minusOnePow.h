@@ -28,3 +28,4 @@ void m1PowCm16 (void);
 void m1PowShoI (void);
 void m1PowRe34 (void);
 void m1PowCo34 (void);
+void m1PowAn34 (void);

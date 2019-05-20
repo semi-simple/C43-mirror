@@ -19,12 +19,14 @@
  ***********************************************/
 
 void fnSin   (uint16_t unusedParamButMandatory);
-void errorSin(void);
+void sinError(void);
 void sinLonI (void);
 void sinRe16 (void);
 void sinCo16 (void);
+void sinAn16 (void);
 void sinAngl (void);
 void sinRm16 (void);
 void sinCm16 (void);
 void sinRe34 (void);
 void sinCo34 (void);
+void sinAn34 (void);

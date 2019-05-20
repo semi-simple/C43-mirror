@@ -191,7 +191,7 @@ uint32_t getRegisterDataPointer(calcRegister_t regist) {
  * \param[in] r calcRegister_t Register number
  * \return uint32_t      Angular mode
  ***********************************************/
-uint32_t getRegisterDataInfo(calcRegister_t regist) {
+uint32_t getRegisterTag(calcRegister_t regist) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
     return ((reg[regist] >> OFFSET_REGISTER_INFORMATION) & ((1u << LENGTH_REGISTER_INFORMATION) - 1u));
   }
@@ -205,13 +205,13 @@ uint32_t getRegisterDataInfo(calcRegister_t regist) {
       else {
         sprintf(errorMessage, "local register %" FMT16S, regist);
         sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16U, numberOfLocalRegisters - 1);
-        showInfoDialog("In function getRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        showInfoDialog("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
       }
       #endif
     }
     #ifdef PC_BUILD
     else {
-     showInfoDialog("In function getRegisterDataInfo:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+     showInfoDialog("In function getRegisterTag:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
     }
     #endif
   }
@@ -225,12 +225,12 @@ uint32_t getRegisterDataInfo(calcRegister_t regist) {
       else {
         sprintf(errorMessage, "named register %" FMT16S, regist);
         sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16U, numberOfNamedRegisters - 1);
-        showInfoDialog("In function getRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        showInfoDialog("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
       }
       #endif
     }
     else {
-      displayBugScreen("In function getRegisterDataInfo: no named registers defined!");
+      displayBugScreen("In function getRegisterTag: no named registers defined!");
     }
   }
   else if(regist < SAVED_REGISTER_X) { // Temporary register register
@@ -241,7 +241,7 @@ uint32_t getRegisterDataInfo(calcRegister_t regist) {
     else {
       sprintf(errorMessage, "temporary register %" FMT16S, regist - FIRST_TEMPORARY_REGISTER);
       sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16S, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      showInfoDialog("In function getRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      showInfoDialog("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
     }
     #endif
   }
@@ -253,12 +253,12 @@ uint32_t getRegisterDataInfo(calcRegister_t regist) {
     else {
       sprintf(errorMessage, "saved stack register %" FMT16S, regist - SAVED_REGISTER_X);
       sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-      showInfoDialog("In function getRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      showInfoDialog("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
     }
     #endif
   }
   else {
-    sprintf(errorMessage, "In function getRegisterDataInfo: r=%" FMT16S " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function getRegisterTag: r=%" FMT16S " must be less then 4000!", regist);
     displayBugScreen(errorMessage);
   }
   return 0;
@@ -337,17 +337,20 @@ uint32_t getRegisterNamePointer(calcRegister_t regist) {
  *
  * \param[in] r calcRegister_t        Register number
  * \param[in] dataType uint16_t Data type
+ * \param[in] tag      uint16_t Tag
  * \return void
  ***********************************************/
-void setRegisterDataType(calcRegister_t regist, uint16_t dataType) {
+void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint16_t tag) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
     reg[regist] = (reg[regist] & ~(((1u << LENGTH_REGISTER_DATA_TYPE) - 1u) << OFFSET_REGISTER_DATA_TYPE)) | (dataType << OFFSET_REGISTER_DATA_TYPE);
+    reg[regist] = (reg[regist] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
   }
   else if(regist < 1000) { // Local register
     if(numberOfLocalRegisters > 0) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < numberOfLocalRegisters) {
         *POINTER_TO_LOCAL_REGISTER(regist) = (*POINTER_TO_LOCAL_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_DATA_TYPE) - 1u) << OFFSET_REGISTER_DATA_TYPE)) | (dataType << OFFSET_REGISTER_DATA_TYPE);
+        *POINTER_TO_LOCAL_REGISTER(regist) = (*POINTER_TO_LOCAL_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
       }
       #ifdef PC_BUILD
       else {
@@ -368,6 +371,7 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType) {
       regist -= 1000;
       if(regist < numberOfNamedRegisters) {
         *POINTER_TO_NAMED_REGISTER(regist) = (*POINTER_TO_NAMED_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_DATA_TYPE) - 1u) << OFFSET_REGISTER_DATA_TYPE)) | (dataType << OFFSET_REGISTER_DATA_TYPE);
+        *POINTER_TO_NAMED_REGISTER(regist) = (*POINTER_TO_NAMED_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
       }
       #ifdef PC_BUILD
       else {
@@ -384,6 +388,7 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType) {
   else if(regist < SAVED_REGISTER_X) { // Temporary register
     if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
       tempRegister[regist - FIRST_TEMPORARY_REGISTER] = (tempRegister[regist - FIRST_TEMPORARY_REGISTER] & ~(((1u << LENGTH_REGISTER_DATA_TYPE) - 1u) << OFFSET_REGISTER_DATA_TYPE)) | (dataType << OFFSET_REGISTER_DATA_TYPE);
+      tempRegister[regist - FIRST_TEMPORARY_REGISTER] = (tempRegister[regist - FIRST_TEMPORARY_REGISTER] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
     }
     #ifdef PC_BUILD
     else {
@@ -396,6 +401,7 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType) {
   else if(regist < 4000) { // Saved stack register
     if(regist <= SAVED_REGISTER_L) {
       savedStackRegister[regist - SAVED_REGISTER_X] = (savedStackRegister[regist - SAVED_REGISTER_X] & ~(((1u << LENGTH_REGISTER_DATA_TYPE) - 1u) << OFFSET_REGISTER_DATA_TYPE)) | (dataType << OFFSET_REGISTER_DATA_TYPE);
+      savedStackRegister[regist - SAVED_REGISTER_X] = (savedStackRegister[regist - SAVED_REGISTER_X] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
     }
     #ifdef PC_BUILD
     else {
@@ -504,15 +510,15 @@ void setRegisterDataPointer(calcRegister_t regist, uint32_t dataPointer) {
  * \param[in] dataType uint16_t Angular mode
  * \return void
  ***********************************************/
-void setRegisterDataInfo(calcRegister_t regist, uint16_t dataInfo) {
+void setRegisterTag(calcRegister_t regist, uint16_t tag) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
-    reg[regist] = (reg[regist] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (dataInfo << OFFSET_REGISTER_INFORMATION);
+    reg[regist] = (reg[regist] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
   }
   else if(regist < 1000) { // Local register
     if(numberOfLocalRegisters > 0) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < numberOfLocalRegisters) {
-        *POINTER_TO_LOCAL_REGISTER(regist) = (*POINTER_TO_LOCAL_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (dataInfo << OFFSET_REGISTER_INFORMATION);
+        *POINTER_TO_LOCAL_REGISTER(regist) = (*POINTER_TO_LOCAL_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
       }
       #ifdef PC_BUILD
       else {
@@ -532,7 +538,7 @@ void setRegisterDataInfo(calcRegister_t regist, uint16_t dataInfo) {
     if(numberOfNamedRegisters > 0) {
       regist -= 1000u;
       if(regist < numberOfNamedRegisters) {
-        *POINTER_TO_NAMED_REGISTER(regist) = (*POINTER_TO_NAMED_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (dataInfo << OFFSET_REGISTER_INFORMATION);
+        *POINTER_TO_NAMED_REGISTER(regist) = (*POINTER_TO_NAMED_REGISTER(regist) & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
       }
       #ifdef PC_BUILD
       else {
@@ -548,7 +554,7 @@ void setRegisterDataInfo(calcRegister_t regist, uint16_t dataInfo) {
    }
   else if(regist < SAVED_REGISTER_X) { // Temporary register
     if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      tempRegister[regist - FIRST_TEMPORARY_REGISTER] = (tempRegister[regist - FIRST_TEMPORARY_REGISTER] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (dataInfo << OFFSET_REGISTER_INFORMATION);
+      tempRegister[regist - FIRST_TEMPORARY_REGISTER] = (tempRegister[regist - FIRST_TEMPORARY_REGISTER] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
     }
     #ifdef PC_BUILD
     else {
@@ -560,7 +566,7 @@ void setRegisterDataInfo(calcRegister_t regist, uint16_t dataInfo) {
   }
   else if(regist < 4000) { // Saved stack register
     if(regist <= SAVED_REGISTER_L) {
-      savedStackRegister[regist - SAVED_REGISTER_X] = (savedStackRegister[regist - SAVED_REGISTER_X] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (dataInfo << OFFSET_REGISTER_INFORMATION);
+      savedStackRegister[regist - SAVED_REGISTER_X] = (savedStackRegister[regist - SAVED_REGISTER_X] & ~(((1u << LENGTH_REGISTER_INFORMATION) - 1u) << OFFSET_REGISTER_INFORMATION)) | (tag << OFFSET_REGISTER_INFORMATION);
     }
     #ifdef PC_BUILD
     else {
@@ -902,7 +908,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        setRegisterDataType(r, dtReal16);
+        setRegisterDataType(r, dtReal16, TAG_NONE);
         setRegisterDataPointer(r, allocateMemory(REAL16_SIZE));
         real16Zero(REGISTER_REAL16_DATA(r));
       }
@@ -916,7 +922,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumRegs; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        setRegisterDataType(r, dtReal16);
+        setRegisterDataType(r, dtReal16, TAG_NONE);
         setRegisterDataPointer(r, allocateMemory(REAL16_SIZE));
         real16Zero(REGISTER_REAL16_DATA(r));
       }
@@ -977,7 +983,7 @@ void allocateNamedRegister(const char *registerName) {
   }
 
   // The new named register is a real16 initialized to 0.0
-  setRegisterDataType(regist, dtReal16);
+  setRegisterDataType(regist, dtReal16, TAG_NONE);
 
   len = stringByteLength(registerName) + 1;
   if(len % 2) {
@@ -1146,9 +1152,10 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
   uint32_t dataType = getRegisterDataType(regist);
 
   if     (dataType == dtReal16      ) return REAL16_SIZE;
-  else if(dataType == dtComplex16   ) return COMPLEX16_SIZE;
+  else if(dataType == dtAngle16     ) return REAL16_SIZE;
   else if(dataType == dtReal34      ) return REAL34_SIZE;
-  else if(dataType == dtAngle       ) return ANGLE_SIZE;
+  else if(dataType == dtAngle34     ) return REAL34_SIZE;
+  else if(dataType == dtComplex16   ) return COMPLEX16_SIZE;
   else if(dataType == dtComplex34   ) return COMPLEX34_SIZE;
   else if(dataType == dtShortInteger) return SHORT_INTEGER_SIZE;
   else if(dataType == dtString      ) return *(REGISTER_DATA_MAX_LEN(regist)) + 2; // +2 because of the 2 first bytes holding the size
@@ -1176,9 +1183,10 @@ uint32_t getRegisterDataOnlySize(calcRegister_t regist) {
   uint32_t dataType = getRegisterDataType(regist);
 
   if     (dataType == dtReal16      ) return REAL16_SIZE;
-  else if(dataType == dtComplex16   ) return COMPLEX16_SIZE;
+  else if(dataType == dtAngle16     ) return REAL16_SIZE;
   else if(dataType == dtReal34      ) return REAL34_SIZE;
-  else if(dataType == dtAngle       ) return ANGLE_SIZE;
+  else if(dataType == dtAngle34     ) return REAL34_SIZE;
+  else if(dataType == dtComplex16   ) return COMPLEX16_SIZE;
   else if(dataType == dtComplex34   ) return COMPLEX34_SIZE;
   else if(dataType == dtShortInteger) return SHORT_INTEGER_SIZE;
   else if(dataType == dtString      ) return *(REGISTER_DATA_MAX_LEN(regist));
@@ -1200,10 +1208,13 @@ uint32_t getRegisterDataOnlySize(calcRegister_t regist) {
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
   if(getRegisterDataType(regist) != dtReal16) {
-    reallocateRegister(regist, dtReal16, REAL16_SIZE, 0);
+    reallocateRegister(regist, dtReal16, REAL16_SIZE, TAG_NONE);
+    real16Zero(REGISTER_REAL16_DATA(regist));
   }
-
-  real16Zero(REGISTER_REAL16_DATA(regist));
+  else{
+    real16Zero(REGISTER_REAL16_DATA(regist));
+    setRegisterTag(regist, TAG_NONE);
+  }
 }
 
 
@@ -1350,12 +1361,14 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
     // D is clear: test infinite values
     switch(resultDataType) {
       case dtReal16:
+      case dtAngle16:
         if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
           displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
         }
         break;
 
       case dtReal34:
+      case dtAngle34:
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
         }
@@ -1390,7 +1403,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
     return;
   }
 
-  if(setCpxRes && oneArgumentIsComplex) {
+  if(setCpxRes && oneArgumentIsComplex && resultDataType != dtString) {
     fnSetFlag(FLAG_CPXRES);
   }
 
@@ -1398,13 +1411,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   switch(resultDataType) {
     real51_t tmp;
 
-    #if (ANGLE16 == 1)
     case dtReal16:
-    case dtAngle:
-    #endif
-    #if (ANGLE34 == 1)
-    case dtReal16:
-    #endif
+    case dtAngle16:
       if(real16IsZero(REGISTER_REAL16_DATA(res))) {
         real16SetPositiveSign(REGISTER_REAL16_DATA(res));
       }
@@ -1422,13 +1430,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       real51ToReal16(&tmp, REGISTER_REAL16_DATA(res));
       break;
 
-    #if (ANGLE16 == 1)
     case dtReal34:
-    #endif
-    #if (ANGLE34 == 1)
-    case dtReal34:
-    case dtAngle:
-    #endif
+    case dtAngle34:
       if(real34IsZero(REGISTER_REAL34_DATA(res))) {
         real34SetPositiveSign(REGISTER_REAL34_DATA(res));
       }
@@ -1521,8 +1524,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
  * \return void
  ***********************************************/
 void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegister_t destRegister) {
-  if(getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister) || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister) || getRegisterDataInfo(destRegister) != getRegisterDataInfo(sourceRegister)) {
-    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), getRegisterDataOnlySize(sourceRegister), getRegisterDataInfo(sourceRegister));
+  if(getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister) || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister) || getRegisterTag(destRegister) != getRegisterTag(sourceRegister)) {
+    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), getRegisterDataOnlySize(sourceRegister), getRegisterTag(sourceRegister));
   }
 
   memcpy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), getRegisterFullSize(sourceRegister));
@@ -1674,8 +1677,8 @@ void fnStoreMult(uint16_t r) {
 void fnStoreDiv(uint16_t r) {
   calcRegister_t regist = r;
 
-  if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)   {
-    if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != divError)     {
+  if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+    if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != divError) {
       result = regist;
       opY    = allocateTemporaryRegister();
       opX    = allocateTemporaryRegister();
@@ -2199,6 +2202,18 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     #endif
   }
 
+  else if(getRegisterDataType(regist) == dtAngle16) {
+    real16ToString(REGISTER_REAL16_DATA(regist), str);
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      printf("angle16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
+    #endif
+
+    #ifdef DMCP_BUILD
+      sprintf(errorMessage, "angle16 %s $s", str, getAngularModeName(getRegisterAngularMode(regist)));
+      lcd_putsAt(t20, line, errorMessage);
+    #endif
+  }
+
   else if(getRegisterDataType(regist) == dtReal34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
@@ -2211,33 +2226,14 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     #endif
   }
 
-
-  else if(getRegisterDataType(regist) == dtAngle) {
-    #if (ANGLE16 == 1)
-      real16ToString(REGISTER_REAL16_DATA(regist), str);
-      real16_t value;
-      real16Copy(REGISTER_REAL16_DATA(regist), &value);
-      convertAngle16FromInternal(&value, getRegisterAngularMode(regist));
-      real16ToString(&value, str + 200);
-    #endif
-    #if (ANGLE34 == 1)
-      real34ToString(REGISTER_REAL34_DATA(regist), str);
-      real34_t value;
-      real34Copy(REGISTER_REAL34_DATA(regist), &value);
-      convertAngle34FromInternal(&value, getRegisterAngularMode(regist));
-      real34ToString(&value, str + 200);
-    #endif
-
+  else if(getRegisterDataType(regist) == dtAngle34) {
+    real34ToString(REGISTER_REAL34_DATA(regist), str);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      real34_t real34;
-      stringToReal34(str, &real34);
-      convertAngle34FromInternal(&real34, getRegisterDataInfo(regist));
-      real34ToString(&real34, errorMessage);
-      printf("angle %s (%s %s)", str, errorMessage, getAngularModeName(getRegisterAngularMode(regist)));
+      printf("real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "angle %s (%s %s)", str, str + 200, getAngularModeName(getRegisterAngularMode(regist)));
+      sprintf(errorMessage, "real34 %s $s", str, getAngularModeName(getRegisterAngularMode(regist)));
       lcd_putsAt(t20, line, errorMessage);
     #endif
   }
@@ -2256,19 +2252,19 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     real16ToString(REGISTER_IMAG16_DATA(regist), str);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-        printf("- i×%s", str + 1);
+        printf("- ix%s", str + 1);
       }
       else {
-        printf("+ i×%s", str);
+        printf("+ ix%s", str);
       }
     #endif
 
     #ifdef DMCP_BUILD
       if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-        sprintf(errorMessage, "-i×%s", str + 1);
+        sprintf(errorMessage, "-ix%s", str + 1);
       }
       else {
-        sprintf(errorMessage, "+i×%s", str);
+        sprintf(errorMessage, "+ix%s", str);
       }
       lcd_putsAt(t20, line, errorMessage);
     #endif
@@ -2288,19 +2284,19 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     real34ToString(REGISTER_IMAG34_DATA(regist), str);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-        printf("- i×%s", str + 1);
+        printf("- ix%s", str + 1);
       }
       else {
-        printf("+ i×%s", str);
+        printf("+ ix%s", str);
       }
     #endif
 
     #ifdef DMCP_BUILD
       if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-        sprintf(errorMessage, "-i×%s", str + 1);
+        sprintf(errorMessage, "-ix%s", str + 1);
       }
       else {
-        sprintf(errorMessage, "+i×%s", str);
+        sprintf(errorMessage, "+ix%s", str);
       }
       lcd_putsAt(t20, line, errorMessage);
     #endif
@@ -2322,11 +2318,11 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(regist));
 
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("short integer %08x-%08x", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff));
+      printf("short integer %08x-%08x (base %u)", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "SI %08x-%08x", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff));
+      sprintf(errorMessage, "SI %08x-%08x (base %u)", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
       lcd_putsAt(t20, line, errorMessage);
     #endif
   }
@@ -2351,6 +2347,93 @@ void printRegisterToConsole(calcRegister_t regist, int16_t line) {
     displayBugScreen(errorMessage);
   }
 }
+
+
+
+#ifdef TESTSUITE_BUILD
+/********************************************//**
+ * \brief Prints the content of a register to a string
+ *
+ * \param r calcRegister_t Register number
+ * \return void
+ ***********************************************/
+void printRegisterToString(calcRegister_t regist, char *registerContent) {
+  char str[1000];
+
+  if(getRegisterDataType(regist) == dtReal16) {
+    real16ToString(REGISTER_REAL16_DATA(regist), str);
+    sprintf(registerContent, "real16 %s", str);
+  }
+
+  else if(getRegisterDataType(regist) == dtAngle16) {
+    real16ToString(REGISTER_REAL16_DATA(regist), str);
+    sprintf(registerContent, "real16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
+  }
+
+  else if(getRegisterDataType(regist) == dtReal34) {
+    real34ToString(REGISTER_REAL34_DATA(regist), str);
+    sprintf(registerContent, "real34 %s", str);
+  }
+
+  else if(getRegisterDataType(regist) == dtAngle34) {
+    real34ToString(REGISTER_REAL34_DATA(regist), str);
+    sprintf(registerContent, "real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
+  }
+
+  else if(getRegisterDataType(regist) == dtComplex16) {
+    real16ToString(REGISTER_REAL16_DATA(regist), str);
+    sprintf(registerContent, "complex16 %s ", str);
+
+    real16ToString(REGISTER_IMAG16_DATA(regist), str);
+    if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
+      strcat(registerContent, "- ix");
+      strcat(registerContent, str + 1);
+    }
+    else {
+      strcat(registerContent, "+ ix");
+      strcat(registerContent, str);
+    }
+  }
+
+  else if(getRegisterDataType(regist) == dtComplex34) {
+    real34ToString(REGISTER_REAL34_DATA(regist), str);
+    sprintf(registerContent, "complex34 %s ", str);
+
+    real34ToString(REGISTER_IMAG34_DATA(regist), str);
+    if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
+      strcat(registerContent, "- ix");
+      strcat(registerContent, str + 1);
+    }
+    else {
+      strcat(registerContent, "+ ix");
+      strcat(registerContent, str);
+    }
+  }
+
+  else if(getRegisterDataType(regist) == dtString) {
+    stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
+    sprintf(registerContent, "string (%" FMT16U " bytes) |%s|", *(REGISTER_DATA_MAX_LEN(regist)), str);
+  }
+
+  else if(getRegisterDataType(regist) == dtShortInteger) {
+    uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(regist));
+
+    sprintf(registerContent, "short integer %08x-%08x (base %u)", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
+  }
+
+  else if(getRegisterDataType(regist) == dtLongInteger) {
+    longInteger_t tmp;
+
+    convertLongIntegerRegisterToLongInteger(regist, &tmp);
+    longIntegerToString(&tmp, str, 10);
+    sprintf(registerContent, "long integer (%" FMT16U " bytes) %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
+  }
+
+  else {
+    sprintf(registerContent, "In printRegisterToString: data type %s not supported", getRegisterDataTypeName(regist ,false, false));
+  }
+}
+#endif // TESTSUITE_BUILD
 
 
 
@@ -2403,11 +2486,11 @@ void printReal51ToConsole(const real51_t *value) {
 
 
 
-void printReal450ToConsole(const real450_t *value) {
+void printReal451ToConsole(const real451_t *value) {
   char str[1000];
 
-  real450ToString((decNumber *)value, str);
-  printf("real450 %s", str);
+  real451ToString((decNumber *)value, str);
+  printf("real451 %s", str);
 }
 
 
@@ -2427,17 +2510,13 @@ void printLongIntegerToConsole(longInteger_t *value) {
 
 
 
-void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t dataInfo) { // dataSize without trailing 0 and without data length
-  if(dataType == dtReal16 && dataSize != REAL16_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real16! It should be REAL16_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL16_SIZE);
+void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t tag) { // dataSize without trailing 0 and without data length
+  if((dataType == dtReal16 || dataType == dtAngle16) && dataSize != REAL16_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real16 or an angle16! It should be REAL16_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL16_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if(dataType == dtReal34 && dataSize != REAL34_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real34! It should be REAL34_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL34_SIZE);
-    displayBugScreen(errorMessage);
-  }
-  else if(dataType == dtAngle && dataSize != ANGLE_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for an angle! It should be ANGLE_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL34_SIZE);
+  else if((dataType == dtReal34 || dataType == dtAngle34) && dataSize != REAL34_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real34 or an angle34! It should be REAL34_SIZE=%" FMT32U "!", dataSize, (uint32_t)REAL34_SIZE);
     displayBugScreen(errorMessage);
   }
   else if(dataType == dtComplex16 && dataSize != COMPLEX16_SIZE) {
@@ -2470,13 +2549,14 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataS
   if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtLongInteger) && getRegisterMaxDataLength(regist)+2 != (uint16_t)dataSize)) {
     freeRegisterData(regist);
     setRegisterDataPointer(regist, allocateMemory(dataSize));
-    setRegisterDataType(regist, dataType);
+    setRegisterDataType(regist, dataType, tag);
     if(dataType == dtString || dataType == dtLongInteger) {
       setRegisterMaxDataLength(regist, dataSize - 2);
     }
   }
-
-  setRegisterDataInfo(regist, dataInfo);
+  else {
+    setRegisterTag(regist, tag);
+  }
 }
 
 

@@ -20,8 +20,11 @@
 
 
 
-extern char line[10000];
-extern int32_t lineNumber;
+#define FUNC_NOPARAM  0
+#define FUNC_CVT      1
+
+#define RE_ACCURATE   0
+#define RE_INACCURATE 1
 
 typedef struct {
   char     name[25];
@@ -30,10 +33,19 @@ typedef struct {
 
 void strToShortInteger        (char *nimBuffer, calcRegister_t regist);
 char *endOfString             (char *string);
+char hexToChar                (const char *string);
 void setParameter             (char *p);
 void inParameters             (char *token);
-void checkRegisterType        (calcRegister_t regist, char letter, uint32_t expectedDataType);
+void checkRegisterType        (calcRegister_t regist, char letter, uint32_t expectedDataType, uint32_t tag);
 void checkExpectedOutParameter(char *p);
 void outParameters            (char *token);
 void functionToCall           (char *functionName);
-void processLine              (char *line);
+void abortTest                (void);
+void standardizeLine          (void);
+void processLine              (void);
+void processOneFile           (void);
+void processTests             (void);
+int  relativeErrorReal16      (real16_t *expectedValue, real16_t *value, char *numberPart);
+int  relativeErrorReal34      (real34_t *expectedValue, real34_t *value, char *numberPart);
+void wrongRegisterValue       (calcRegister_t regist, char letter, char *expectedValue);
+void expectedAndShouldBeValue (calcRegister_t regist, char letter, char *expectedValue, char *expectedAndValue);

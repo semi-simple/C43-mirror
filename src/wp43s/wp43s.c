@@ -44,7 +44,7 @@ bool_t          funcOK;
 decContext      ctxtReal16;
 decContext      ctxtReal34;
 decContext      ctxtReal51;
-decContext      ctxtReal450;
+decContext      ctxtReal451;
 uint16_t        flags[7];
 char            tmpStr3000[TMP_STR_LENGTH];
 char            errorMessage[ERROR_MESSAGE_LENGTH];
@@ -128,7 +128,7 @@ uint8_t         timeFormat;
 uint8_t         temporaryInformation;
 uint8_t         rbrMode;
 uint8_t         numScreensNumericFont;
-uint8_t         angularMode;
+uint8_t         currentAngularMode;
 bool_t          hourGlassIconEnabled;
 bool_t          watchIconEnabled;
 bool_t          userModeEnabled;
@@ -194,7 +194,7 @@ void setupDefaults(void) {
 
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal16);
+    setRegisterDataType(regist, dtReal16, TAG_NONE);
     setRegisterDataPointer(regist, firstFreeByte);
     real16Zero(RAM_REAL16(firstFreeByte));
     firstFreeByte += REAL16_SIZE;                                            // 112 * 8 = 896 bytes
@@ -203,7 +203,7 @@ void setupDefaults(void) {
   // initialize the temporary registers
   for(calcRegister_t regist=FIRST_TEMPORARY_REGISTER; regist<FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS; regist++) {
     tempRegistersInUse[regist - FIRST_TEMPORARY_REGISTER] = false;
-    setRegisterDataType(regist, dtReal16);
+    setRegisterDataType(regist, dtReal16, TAG_NONE);
     setRegisterDataPointer(regist, firstFreeByte);
     real16Zero(RAM_REAL16(firstFreeByte));
     firstFreeByte += REAL16_SIZE;                                            // 8 * 8 = 64 bytes
@@ -211,7 +211,7 @@ void setupDefaults(void) {
 
   // initialize the 9 saved stack registers
   for(calcRegister_t regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_L; regist++) {
-    setRegisterDataType(regist, dtReal16);
+    setRegisterDataType(regist, dtReal16, TAG_NONE);
     setRegisterDataPointer(regist, firstFreeByte);
     real16Zero(RAM_REAL16(firstFreeByte));
     firstFreeByte += REAL16_SIZE;                                            // 9 * 8 = 64 bytes
@@ -230,9 +230,9 @@ void setupDefaults(void) {
   decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
   ctxtReal51.digits = 51;
   ctxtReal51.traps = 0;
-  decContextDefault(&ctxtReal450, DEC_INIT_DECQUAD);
-  ctxtReal450.digits = 450;
-  ctxtReal450.traps = 0;
+  decContextDefault(&ctxtReal451, DEC_INIT_DECQUAD);
+  ctxtReal451.digits = 451;
+  ctxtReal451.traps = 0;
 
   statisticalSumsPointer = 0;
 
@@ -499,27 +499,12 @@ void program_main(void) {
 #ifdef TESTSUITE_BUILD
 #include "testSuite.h"
 
-FILE *testSuite;
-char line[10000];
-int32_t lineNumber;
 
 int main(void) {
   setupDefaults();
   fnReset(CONFIRMED);
 
-  testSuite = fopen("src/testSuite/testSuite.txt", "rb");
-  if(testSuite == NULL) {
-    printf("Cannot open file testSuite.txt!\n");
-    return -1;
-  }
-
-  fgets(line, 999, testSuite);
-  lineNumber = 1;
-  while(!feof(testSuite)) {
-    processLine(line);
-    fgets(line, 999, testSuite);
-    lineNumber++;
-  }
+  processTests();
 
   return 0;
 }

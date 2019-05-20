@@ -22,10 +22,10 @@
 
 
 
-void (* const Cos[12])(void) = {
-// regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
-            cosLonI,     cosRe16,  cosCo16,   cosAngl,  cosError,  cosError,  cosError,  cosRm16,     cosCm16,      cosError,       cosRe34,  cosCo34
+void (* const Cos[13])(void) = {
+// regX ==> 1            2        3         4        5         6         7         8          9           10            11       12        13
+//          Long integer Real16   Complex16 Angle16  Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34 Angle34
+            cosLonI,     cosRe16, cosCo16,  cosAn16, cosError, cosError, cosError, cosRm16,   cosCm16,    cosError,     cosRe34, cosCo34,  cosAn34
 };
 
 
@@ -70,10 +70,13 @@ void fnCos(uint16_t unusedParamButMandatory) {
 
 void cosLonI(void) {
   convertLongIntegerRegisterToReal34Register(opX, opX);
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), currentAngularMode);
   convertRegister34To16(result);
+
+  if(currentAngularMode == AM_DMS) {
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
 }
 
 
@@ -87,14 +90,13 @@ void cosRe16(void) {
     return;
   }
 
-  if(real16IsSpecial(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
     real16Copy(const16_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
     convertRegister16To34(opX);
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
-    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
+    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), currentAngularMode);
     convertRegister34To16(result);
   }
 }
@@ -133,7 +135,7 @@ void cosCo16(void) {
 
   // calculate exp(iz) - exp(-iz)
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz), REGISTER_COMPLEX34_DATA(opY));
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   addCo34Co34();
@@ -150,21 +152,24 @@ void cosCo16(void) {
 
 
 
-void cosAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
+void cosAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cosAngl:", "cannot use NaN as an input of cos", NULL, NULL);
+      showInfoDialog("In function cosAn16:", "cannot use NaN as an input of cos", NULL, NULL);
     #endif
     return;
   }
 
-  #if (ANGLE16 == 1)
+  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
+    real16Copy(const16_NaN, REGISTER_REAL34_DATA(result));
+  }
+  else {
     convertRegister16To34(opX);
-  #endif
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
-  convertRegister34To16(result);
+    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
+    convertRegister34To16(result);
+  }
 }
 
 
@@ -190,12 +195,11 @@ void cosRe34(void) {
     return;
   }
 
-  if(real34IsSpecial(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX)); // opX in internal units
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), currentAngularMode);
   }
 }
 
@@ -230,7 +234,7 @@ void cosCo34(void) {
 
   // calculate exp(iz) + exp(-iz)
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz), REGISTER_COMPLEX34_DATA(opY));
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   addCo34Co34();
@@ -242,4 +246,23 @@ void cosCo34(void) {
   divCo34Co34();
 
   freeTemporaryRegister(opY);
+}
+
+
+
+void cosAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function cosAn34:", "cannot use NaN as an input of cos", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+  }
+  else {
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
+  }
 }

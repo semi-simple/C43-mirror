@@ -22,10 +22,10 @@
 
 
 
-void (* const ip[12])(void) = {
-// regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
-            ipLonI,      ipRe16,   ipError,   ipError,  ipError,   ipError,   ipError,   ipRm16,      ipError,      ipShoI,         ipRe34,   ipError
+void (* const ip[13])(void) = {
+// regX ==> 1            2       3         4       5        6        7        8          9           10            11      12        13
+//          Long integer Real16  Complex16 Angle16 Time     Date     String   Real16 mat Complex16 m Short integer Real34  Complex34 Angle34
+            ipLonI,      ipRe16, ipError,  ipRe16, ipError, ipError, ipError, ipRm16,    ipError,    ipShoI,       ipRe34, ipError,  ipRe34
 };
 
 

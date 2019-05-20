@@ -67,7 +67,7 @@
 				</Compiler>
 			</Target>
 			<Target title="testSuite">
-				<Option output="bin/Release/wp43s" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/testSuite" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -76,9 +76,6 @@
 					<Add option="-DTESTSUITE_BUILD" />
 					<Add directory="src/testSuite" />
 				</Compiler>
-				<Linker>
-					<Add option="`pkg-config gtk+-3.0 --libs`" />
-				</Linker>
 			</Target>
 		</Build>
 		<VirtualTargets>
@@ -182,6 +179,177 @@
 			<Option compilerVar="CC" />
 			<Option target="generateConstants" />
 		</Unit>
+		<Unit filename="src/testSuite/10pow.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/2pow.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_angle16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_angle34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_complex16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_complex16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_complex34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_date.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_longInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_real16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_real16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_real34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_shortInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_string.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/addition_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/changeSign.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_angle16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_angle34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_complex16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_complex16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_complex34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_date.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_longInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_real16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_real16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_real34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_shortInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_string.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/division_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_angle16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_angle34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_complex16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_complex16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_complex34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_date.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_longInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_real16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_real16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_real34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_shortInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_string.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/multiplication_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/polarToRectangular.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/rectangularToPolar.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_angle16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_angle34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_complex16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_complex16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_complex34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_date.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_longInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_real16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_real16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_real34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_shortInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_string.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/subtraction_time.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/testSuite.c">
 			<Option compilerVar="CC" />
 			<Option target="testSuite" />
@@ -189,7 +357,7 @@
 		<Unit filename="src/testSuite/testSuite.h">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/testSuite.txt">
+		<Unit filename="src/testSuite/testSuiteList.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/ttf2RasterFonts/testTtf2RasterFonts.c">

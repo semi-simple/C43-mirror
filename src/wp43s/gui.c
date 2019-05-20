@@ -1863,6 +1863,13 @@ void setupUI(void) {
   btn15 = gtk_button_new_with_label("^");
   btn16 = gtk_button_new_with_label("^");
 
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn11), "F1");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn12), "F2");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn13), "F3");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn14), "F4");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn15), "F5");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn16), "F6");
+
   gtk_widget_set_size_request(btn11, KEY_WIDTH_1, 0);
   gtk_widget_set_size_request(btn12, KEY_WIDTH_1, 0);
   gtk_widget_set_size_request(btn13, KEY_WIDTH_1, 0);
@@ -1904,7 +1911,6 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), btn16, xPos, yPos);
 
 
-
   // 2nd row
   btn21   = gtk_button_new();
   btn22   = gtk_button_new();
@@ -1912,6 +1918,12 @@ void setupUI(void) {
   btn24   = gtk_button_new();
   btn25   = gtk_button_new();
   btn26   = gtk_button_new();
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn21), "i");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn22), "y");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn23), "t");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn24), "l");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn25), "e");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn26), "q");
   lbl21F  = gtk_label_new("");
   lbl22F  = gtk_label_new("");
   lbl23F  = gtk_label_new("");
@@ -2017,6 +2029,12 @@ void setupUI(void) {
   btn34   = gtk_button_new();
   btn35   = gtk_button_new();
   btn36   = gtk_button_new();
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn31), "s");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn32), "r");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn33), "Page Down");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn34), "C");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn35), "f");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn36), "g");
   lbl31F  = gtk_label_new("");
   lbl32F  = gtk_label_new("");
   lbl33F  = gtk_label_new("");
@@ -2122,6 +2140,11 @@ void setupUI(void) {
   btn43   = gtk_button_new();
   btn44   = gtk_button_new();
   btn45   = gtk_button_new();
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn41), "Enter");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn42), "Tab");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn43), "c");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn44), "E");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn45), "Backspace");
   lbl41F  = gtk_label_new("");
   lbl42F  = gtk_label_new("");
   lbl43F  = gtk_label_new("");
@@ -2215,6 +2238,11 @@ void setupUI(void) {
   btn53   = gtk_button_new();
   btn54   = gtk_button_new();
   btn55   = gtk_button_new();
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn51), "/");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn52), "7");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn53), "8");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn54), "9");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn55), "x");
   lbl51F  = gtk_label_new("");
   lbl52F  = gtk_label_new("");
   lbl53F  = gtk_label_new("");
@@ -2299,6 +2327,11 @@ void setupUI(void) {
   btn63   = gtk_button_new();
   btn64   = gtk_button_new();
   btn65   = gtk_button_new();
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn61), "*");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn62), "4");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn63), "5");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn64), "6");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn65), "Up");
   lbl61F  = gtk_label_new("");
   lbl62F  = gtk_label_new("");
   lbl63F  = gtk_label_new("");
@@ -2387,6 +2420,11 @@ void setupUI(void) {
   btn73   = gtk_button_new();
   btn74   = gtk_button_new();
   btn75   = gtk_button_new();
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn71), "-");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn72), "1");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn73), "2");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn74), "3");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn75), "Down");
   lbl71F  = gtk_label_new("");
   lbl72F  = gtk_label_new("");
   lbl73F  = gtk_label_new("");
@@ -2478,6 +2516,11 @@ void setupUI(void) {
   btn83   = gtk_button_new();
   btn84   = gtk_button_new();
   btn85   = gtk_button_new();
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn81), "+");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn82), "0");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn83), ". ,");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn84), "Ctrl");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn85), "Esc");
   lbl81F  = gtk_label_new("");
   lbl82F  = gtk_label_new("");
   lbl83F  = gtk_label_new("");

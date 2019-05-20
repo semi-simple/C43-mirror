@@ -22,10 +22,10 @@
 
 
 
-void (* const tenPow[12])(void) = {
-// regX ==> 1            2            3            4             5             6             7             8              9               10             11           12
-//          Long integer real16       complex16    Date          Time          Date          String        real16 mat     complex16 m     Short integer  real34       complex34
-            tenPowLonI,  tenPowRe16,  tenPowCo16,  tenPowError,  tenPowError,  tenPowError,  tenPowError,  tenPowRm16,    tenPowCm16,     tenPowShoI,    tenPowRe34,  tenPowCo34
+void (* const tenPow[13])(void) = {
+// regX ==> 1            2           3           4           5            6            7            8           9           10            11          12          13
+//          Long integer Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
+            tenPowLonI,  tenPowRe16, tenPowCo16, tenPowAn16, tenPowError, tenPowError, tenPowError, tenPowRm16, tenPowCm16, tenPowShoI,   tenPowRe34, tenPowCo34, tenPowAn34
 };
 
 
@@ -98,13 +98,8 @@ void tenPowRe16(void) {
     return;
   }
 
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
-  real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
-
-  powRe16Re16();
-
-  freeTemporaryRegister(opY);
+  real16Power(const16_10, REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  setRegisterDataType(result, dtReal16, TAG_NONE);
 }
 
 
@@ -119,12 +114,27 @@ void tenPowCo16(void) {
   }
 
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal16, REAL16_SIZE, 0);
+  reallocateRegister(opY, dtReal16, REAL16_SIZE, TAG_NONE);
   real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
 
   powRe16Co16();
 
   freeTemporaryRegister(opY);
+}
+
+
+
+void tenPowAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tenPowAn16:", "cannot use NaN as an input of 10^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real16Power(const16_10, REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  setRegisterDataType(result, dtReal16, TAG_NONE);
 }
 
 
@@ -156,13 +166,8 @@ void tenPowRe34(void) {
     return;
   }
 
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
-  real34Copy(const34_10, REGISTER_REAL34_DATA(opY));
-
-  powRe34Re34();
-
-  freeTemporaryRegister(opY);
+  real34Power(const34_10, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  setRegisterDataType(result, dtReal34, TAG_NONE);
 }
 
 
@@ -177,10 +182,25 @@ void tenPowCo34(void) {
   }
 
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(opY, dtReal34, REAL34_SIZE, TAG_NONE);
   real34Copy(const34_10, REGISTER_REAL34_DATA(opY));
 
   powRe34Co34();
 
   freeTemporaryRegister(opY);
+}
+
+
+
+void tenPowAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tenPowAn34:", "cannot use NaN as an input of 10^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34Power(const34_10, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  setRegisterDataType(result, dtReal34, TAG_NONE);
 }

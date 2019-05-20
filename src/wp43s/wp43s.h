@@ -75,13 +75,13 @@
   #define STACK_LIFT_DEBUG 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
-  #define addItemToBuffer toBeCoded
-  #define fnOff           toBeCoded
-  #define fnAim           toBeCoded
-  #define fnComplexCCCC   toBeCoded
-  #define registerBrowser toBeCoded
-  #define flagBrowser     toBeCoded
-  #define fontBrowser     toBeCoded
+  #define addItemToBuffer fnNop
+  #define fnOff           fnNop
+  #define fnAim           fnNop
+  #define fnComplexCCCC   fnNop
+  #define registerBrowser fnNop
+  #define flagBrowser     fnNop
+  #define fontBrowser     fnNop
   #define refreshRegisterLine(a)  {}
   #define clearScreen(a, b, c)    {}
   #define toggleUserMode()        {}
@@ -106,9 +106,11 @@
 #include <math.h>
 
 #ifdef PC_BUILD
-  #include <glib.h>
-  #include <gtk/gtk.h>
-  #include <gdk/gdk.h>
+  #ifndef TESTSUITE_BUILD
+    #include <glib.h>
+    #include <gtk/gtk.h>
+    #include <gdk/gdk.h>
+  #endif
 #endif
 
 #ifdef DMCP_BUILD
@@ -218,12 +220,18 @@ typedef int16_t calcRegister_t;
 #define DO_ENG                  1
 
 // Angular mode 3 bits
-#define AM_INTERNAL             0
-#define AM_DEGREE               1
-#define AM_GRAD                 2
-#define AM_RADIAN               3
-#define AM_MULTPI               4
-#define AM_DMS                  5
+#define AM_DEGREE               0 // degree must be 0
+#define AM_GRAD                 1 // grad   must be 1
+#define AM_RADIAN               2 // radian must be 2
+#define AM_MULTPI               3 // multpi must be 3
+#define AM_DMS                  4 // dms    must be 4
+
+// Long integer sign
+#define LI_POSITIVE             0
+#define LI_NEGATIVE             1
+
+// Data type tag
+#define TAG_NONE                0
 
 // Time format 1 bit
 #define TF_H24                  0
@@ -432,10 +440,10 @@ extern const item_t     indexOfItems[];
 extern const char       *errorMessages[NUMBER_OF_ERROR_CODES];
 extern const calcKey_t  kbd_std[37];
 extern const font_t     standardFont, numericFont;
-extern void             (* const addition[12][12])(void);
-extern void             (* const subtraction[12][12])(void);
-extern void             (* const multiplication[12][12])(void);
-extern void             (* const division[12][12])(void);
+extern void             (* const addition[13][13])(void);
+extern void             (* const subtraction[13][13])(void);
+extern void             (* const multiplication[13][13])(void);
+extern void             (* const division[13][13])(void);
 extern const softmenu_t softmenu[];
 extern const int16_t    softkeyRow[];
 
@@ -443,7 +451,7 @@ extern const int16_t    softkeyRow[];
 extern decContext       ctxtReal16;
 extern decContext       ctxtReal34;
 extern decContext       ctxtReal51;
-extern decContext       ctxtReal450;
+extern decContext       ctxtReal451;
 extern uint16_t         flags[7];
 #define TMP_STR_LENGTH  3000
 #define ERROR_MESSAGE_LENGTH 512
@@ -529,7 +537,7 @@ extern uint8_t          timeFormat;
 extern uint8_t          temporaryInformation;
 extern uint8_t          rbrMode;
 extern uint8_t          numScreensNumericFont;
-extern uint8_t          angularMode;
+extern uint8_t          currentAngularMode;
 extern bool_t           hourGlassIconEnabled;
 extern bool_t           watchIconEnabled;
 extern bool_t           userModeEnabled;

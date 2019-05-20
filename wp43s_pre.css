@@ -286,3 +286,17 @@
   font-weight:   normal;
   font-size:     18px;
 }
+
+tooltip {
+  font-family:      WP43S_StandardFont;
+  font-size:        20px;
+  background-color: #808080;
+  color:            black;
+  font-weight:      normal;
+  padding:          0px 0px 0px 0px;
+  margin:           0px 0px 0px 0px;
+  border-width:     0px;
+  border-style:     solid;
+  border-color:     #808080;
+  /* text-shadow: 5px 5px 3px #bbbbbb, 7px 7px 3px #ccccFF; */
+}

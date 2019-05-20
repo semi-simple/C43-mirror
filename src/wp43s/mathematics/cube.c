@@ -22,10 +22,10 @@
 
 
 
-void (* const cube[12])(void) = {
-// regX ==> 1             2             3             4           5           6           7           8             9             10             11            12
-//          Long integer  real16        complex16     Angle       Time        Angle       String      real16 mat    complex16 m   Short integer  real34        complex34
-            mulLonILonI,  mulRe16Re16,  mulCo16Co16,  cubeError,  cubeError,  cubeError,  cubeError,  mulRm16Rm16,  mulCm16Cm16,  mulShoIShoI,   mulRe34Re34,  mulCo34Co34
+void (* const cube[13])(void) = {
+// regX ==> 1            2            3            4            5          6          7          8            9            10            11           12           13
+//          Long integer Real16       Complex16    Angle16      Time       Angle      String     Real16 mat   Complex16 m  Short integer Real34       complex34    Angle34
+            mulLonILonI, mulRe16Re16, mulCo16Co16, mulRe16Re16, cubeError, cubeError, cubeError, mulRm16Rm16, mulCm16Cm16, mulShoIShoI,  mulRe34Re34, mulCo34Co34, mulRe34Re34
 };
 
 

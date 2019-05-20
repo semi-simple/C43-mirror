@@ -23,7 +23,7 @@
 void fnChangeBase(uint16_t base) {
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     if(2 <= base && base <= 16) {
-      setRegisterBase(REGISTER_X, base);
+      setRegisterTag(REGISTER_X, base);
       refreshStack();
     }
     else {
@@ -38,7 +38,7 @@ void fnChangeBase(uint16_t base) {
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     if(2 <= base && base <= 16) {
       convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
-      setRegisterBase(REGISTER_X, base);
+      setRegisterTag(REGISTER_X, base);
       refreshStack();
     }
     else {

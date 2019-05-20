@@ -22,10 +22,10 @@
 
 
 
-void (* const Exp[12])(void) = {
-// regX ==> 1            2         3          4          5          6          7          8           9            10             11        12
-//          Long integer real16    complex16  Date       Time       Date       String     real16 mat  complex16 m  Short integer  real34    complex34
-            expLonI,     expRe16,  expCo16,   expError,  expError,  expError,  expError,  expRm16,    expCm16,     expShoI,       expRe34,  expCo34
+void (* const Exp[13])(void) = {
+// regX ==> 1            2        3         4        5         6         7         8          9           10            11       12        13
+//          Long integer Real16   Complex16 Anfle16  Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34 Angle34
+            expLonI,     expRe16, expCo16,  expAn16, expError, expError, expError, expRm16,   expCm16,    expShoI,      expRe34, expCo34,  expAn34
 };
 
 
@@ -73,7 +73,7 @@ void expLonI(void) {
 
   convertLongIntegerRegisterToReal34Register(opX, opX);
   real34Exp(REGISTER_REAL34_DATA(opX), &real34);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
   real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
 }
 
@@ -111,15 +111,33 @@ void expCo16(void) {
 
   convertRegister16To34(opX);
   real34Exp(REGISTER_REAL34_DATA(opX), &factor);
-  savedAngularMode = angularMode;
-  angularMode = AM_RADIAN;
-  convertAngle34ToInternal(REGISTER_IMAG34_DATA(opX), AM_RADIAN);
-  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal units
-  angularMode = savedAngularMode;
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+  savedAngularMode = currentAngularMode;
+  currentAngularMode = AM_RADIAN;
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal radian
+  currentAngularMode = savedAngularMode;
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
   convertRegister34To16(result);
+}
+
+
+
+void expAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expAn16:", "cannot use NaN as an input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34_t real34;
+
+  convertRegister16To34(opX);
+  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
+  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
+  setRegisterDataType(result, dtReal16, TAG_NONE);
 }
 
 
@@ -141,7 +159,7 @@ void expShoI(void) {
 
   convertShortIntegerRegisterToReal34Register(opX, opX);
   real34Exp(REGISTER_REAL34_DATA(opX), &real34);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
   real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
 }
 
@@ -174,11 +192,25 @@ void expCo34(void) {
   uint8_t savedAngularMode;
 
   real34Exp(REGISTER_REAL34_DATA(opX), &factor);
-  savedAngularMode = angularMode;
-  angularMode = AM_RADIAN;
-  convertAngle34ToInternal(REGISTER_IMAG34_DATA(opX), AM_RADIAN);
+  savedAngularMode = currentAngularMode;
+  currentAngularMode = AM_RADIAN;
   real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal units
-  angularMode = savedAngularMode;
+  currentAngularMode = savedAngularMode;
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
+}
+
+
+
+void expAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expAn34:", "cannot use NaN as an input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34Exp(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  setRegisterDataType(result, dtReal34, TAG_NONE);
 }

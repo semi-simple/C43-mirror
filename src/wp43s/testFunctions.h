@@ -20,7 +20,7 @@
 
 #ifdef PC_BUILD
 void testFunctions     (void);
-void registerShouldBe  (calcRegister_t regist, uint32_t dataType, const char *function, const char *real, const char *imag, uint32_t dataInfo);
+void registerShouldBe  (calcRegister_t regist, uint32_t dataType, const char *function, const char *real, const char *imag, uint32_t tag);
 void tmpStr1390ShouldBe(calcRegister_t regist, const char *shouldBe);
-void initializeRegister(calcRegister_t regist, uint32_t dataType, const char *real, const char *imag, uint32_t dataInfo);
+void initializeRegister(calcRegister_t regist, uint32_t dataType, const char *real, const char *imag, uint32_t tag);
 #endif

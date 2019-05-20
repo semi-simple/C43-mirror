@@ -22,10 +22,10 @@
 
 
 
-void (* const realPart[12])(void) = {
-// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12
-//          Long integer   real16         complex16     Date           Time           Date           String         real16 mat     complex16 m   Short integer  real34         complex34
-            realPartError, realPartError, realPartCo16, realPartError, realPartError, realPartError, realPartError, realPartError, realPartCm16, realPartError, realPartError, realPartCo34
+void (* const realPart[13])(void) = {
+// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12            13
+//          Long integer   Real16         Complex16     Angle16        Time           Date           String         Real16 mat     Complex16 m   Short integer  Real34         Complex34     Angle34
+            realPartError, realPartError, realPartCo16, realPartError, realPartError, realPartError, realPartError, realPartError, realPartCm16, realPartError, realPartError, realPartCo34, realPartError
 };
 
 
@@ -84,7 +84,7 @@ void realPartCo16(void) {
     return;
   }
 
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
   real16Copy(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
@@ -104,6 +104,6 @@ void realPartCo34(void) {
     return;
   }
 
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
   real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }

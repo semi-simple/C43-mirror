@@ -40,7 +40,7 @@ void notError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate not(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("In function norError:", errorMessage, NULL, NULL);
+    showInfoDialog("In function notError:", errorMessage, NULL, NULL);
   #endif
 }
 

@@ -23,53 +23,88 @@
 
 
 void fnToRect(uint16_t unusedParamButMandatory) {
-  if(   (getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtLongInteger)
-     && (getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtAngle)) {
+  uint32_t dataTypeX, dataTypeY;
 
-    if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
+  dataTypeX = getRegisterDataType(REGISTER_X);
+  dataTypeY = getRegisterDataType(REGISTER_Y);
+
+  if(   (dataTypeX == dtReal16 || dataTypeX == dtAngle16 || dataTypeX == dtReal34 || dataTypeX == dtAngle34 || dataTypeX == dtLongInteger)
+     && (dataTypeY == dtReal16 || dataTypeY == dtAngle16 || dataTypeY == dtReal34 || dataTypeY == dtAngle34 || dataTypeY == dtLongInteger)) {
+    if(   ((dataTypeX == dtReal16 || dataTypeX == dtAngle16) && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)))
+       || ((dataTypeX == dtReal34 || dataTypeX == dtAngle34) && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)))
+       || ((dataTypeY == dtReal16 || dataTypeY == dtAngle16) && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)))
+       || ((dataTypeY == dtReal34 || dataTypeY == dtAngle34) && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)))) {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnToPolar:", "cannot use NaN as an input of " STD_RIGHT_ARROW "Pol", NULL, NULL);
+        showInfoDialog("In function fnToRect:", "cannot use NaN as an input of " STD_RIGHT_ARROW "Rect", NULL, NULL);
       #endif
       return;
     }
 
-    bool_t real16 = (getRegisterDataType(REGISTER_X) != dtReal34 && getRegisterDataType(REGISTER_Y) != dtReal34);
-
+    bool_t real16 = false;
     saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    // Magnitude
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    if(dataTypeX == dtLongInteger && dataTypeY == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    }
-    else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-      convertRegister16To34(REGISTER_X);
+      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), currentAngularMode, AM_RADIAN);
+      real16 = true;
     }
 
-    // Theta
-    if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
-      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-      convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_Y), angularMode);
-    }
-    else if(getRegisterDataType(REGISTER_Y) == dtReal16) {
-      convertRegister16To34(REGISTER_Y);
-      convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_Y), angularMode);
-    }
-    else if(getRegisterDataType(REGISTER_Y) == dtAngle) {
-      #if (ANGLE16 == 1)
+    else if(dataTypeX == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      if(dataTypeY == dtReal16) {
         convertRegister16To34(REGISTER_Y);
-      #endif
-      setRegisterDataType(REGISTER_Y, dtReal34);
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), currentAngularMode, AM_RADIAN);
+        real16 = true;
+      }
+      else if(dataTypeY == dtAngle16) {
+        convertRegister16To34(REGISTER_Y);
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterAngularMode(REGISTER_Y), AM_RADIAN);
+        real16 = true;
+      }
+      else {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), dataTypeY == dtAngle34 ? getRegisterAngularMode(REGISTER_Y) : currentAngularMode, AM_RADIAN);
+      }
     }
-    else { // real34
-      convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_Y), angularMode);
+
+    else if(dataTypeY == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), currentAngularMode, AM_RADIAN);
+      if(dataTypeX == dtReal16 || dataTypeX == dtAngle16) {
+        convertRegister16To34(REGISTER_X);
+        real16 = true;
+      }
+    }
+
+    else if((dataTypeX == dtReal16 || dataTypeX == dtAngle16) && (dataTypeY == dtReal34 || dataTypeY == dtAngle34)) {
+      convertRegister16To34(REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), dataTypeY == dtAngle34 ? getRegisterAngularMode(REGISTER_Y) : currentAngularMode, AM_RADIAN);
+    }
+
+    else if((dataTypeX == dtReal34 || dataTypeX == dtAngle34) && (dataTypeY == dtReal16 || dataTypeY == dtAngle16)) {
+      convertRegister16To34(REGISTER_Y);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), dataTypeY == dtAngle16 ? getRegisterAngularMode(REGISTER_Y) : currentAngularMode, AM_RADIAN);
+    }
+
+    else {
+      if((dataTypeX == dtReal16 || dataTypeX == dtAngle16) && (dataTypeY == dtReal16 || dataTypeY == dtAngle16)) {
+        real16 = true;
+        convertRegister16To34(REGISTER_X);
+        convertRegister16To34(REGISTER_Y);
+      }
+
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), dataTypeY == dtAngle34 ? getRegisterAngularMode(REGISTER_Y) : currentAngularMode, AM_RADIAN);
     }
 
     real34_t magnitude34, theta34;
 
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &magnitude34);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), &theta34);
-    real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // theta34 in internal units
+    real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // theta34 radian
+    setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+    setRegisterDataType(REGISTER_Y, dtReal34, TAG_NONE);
 
     if(real16) {
       convertRegister34To16(REGISTER_X);
@@ -92,13 +127,13 @@ void fnToRect(uint16_t unusedParamButMandatory) {
 
 
 
-void real16PolarToRectangular(const real16_t *magnitude16, const real16_t *theta16, real16_t *real16, real16_t *imag16) {  // theta16 in internal units
+void real16PolarToRectangular(const real16_t *magnitude16, const real16_t *theta16, real16_t *real16, real16_t *imag16) {  // theta16 in radian
   real34_t real34, imag34, magnitude34, theta34;
 
   real16ToReal34(magnitude16, &magnitude34);
   real16ToReal34(theta16, &theta34);
 
-  real34PolarToRectangular(&magnitude34, &theta34, &real34, &imag34);  // theta34 in internal units
+  real34PolarToRectangular(&magnitude34, &theta34, &real34, &imag34);  // theta34 in radian
 
   real34ToReal16(&real34, real16);
   real34ToReal16(&imag34, imag16);
@@ -106,10 +141,10 @@ void real16PolarToRectangular(const real16_t *magnitude16, const real16_t *theta
 
 
 
-void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta34, real34_t *real34, real34_t *imag34) {  // theta34 in internal units
+void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta34, real34_t *real34, real34_t *imag34) {
   real34_t sin, cos;
 
-  WP34S_cvt_2rad_sincos(&sin, &cos, theta34); // theta34 in internal units
+  WP34S_cvt_2rad_sincos(&sin, &cos, theta34, AM_RADIAN);
   real34Multiply(magnitude34, &cos, real34);
   real34Multiply(magnitude34, &sin, imag34);
 }

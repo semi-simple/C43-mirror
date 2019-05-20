@@ -407,40 +407,28 @@ void fnRoundingMode(uint16_t RM) {
 /********************************************//**
  * \brief Sets the angular mode
  *
- * \param[in] angularMode uint16_t Angular mode
+ * \param[in] am uint16_t Angular mode
  * \return void
  ***********************************************/
 void fnAngularMode(uint16_t am) {
-  angularMode = am;
+  currentAngularMode = am;
   //if(am == AM_DMS && (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)) {
   //  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
   //    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
   //    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
   //    setRegisterDataType(REGISTER_X, dtAngle);
-  //    setRegisterAngularMode(REGISTER_X, AM_DMS);
+  //    setRegisterTag(REGISTER_X, AM_DMS);
   //  }
-  //
-  //  #if (ANGLE16 == 1)
-  //    if(getRegisterDataType(REGISTER_X) == dtReal34) {
-  //      convertRegister34To16(REGISTER_X);
-  //    }
-  //  #endif
-  //
-  //  #if (ANGLE34 == 1)
-  //    if(getRegisterDataType(REGISTER_X) == dtReal16) {
-  //      convertRegister16To34(REGISTER_X);
-  //    }
-  //  #endif
   //
   //  convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
   //  setRegisterDataType(REGISTER_X, dtAngle);
-  //  setRegisterAngularMode(REGISTER_X, AM_DMS);
+  //  setRegisterTag(REGISTER_X, AM_DMS);
   //
   //  refreshRegisterLine(REGISTER_X);
   //}
 
   showAngularMode();
-  refreshStack();
+  //refreshStack();
 }
 
 
@@ -632,7 +620,7 @@ void fnReset(uint16_t confirmation) {
     //allocateLocalRegisters(2);
     //fnSetFlag(FIRST_LOCAL_REGISTER+0);
     //fnSetFlag(NUMBER_OF_LOCAL_FLAGS+2);
-    //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, 0);
+    //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, RT_REAL);
     //stringToReal16("5.555", REGISTER_REAL16_DATA(FIRST_LOCAL_REGISTER));
 
     //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");

@@ -35,7 +35,7 @@ void   refreshDebugPanel                  (void);
 char *getDataTypeName                     (uint16_t dt, bool_t article, bool_t padWithBlanks);
 char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article, bool_t padWithBlanks);
 char *getShortIntegerModeName             (uint16_t im);
-char *getAngularModeName                  (uint16_t am);
+char *getAngularModeName                  (uint16_t angularMode);
 void  debugNIM                            (void);
 
 #if (DEBUG_PANEL == 1)
@@ -63,13 +63,6 @@ void  debugNIM                            (void);
 
 
 #if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
-  #if (ANGLE16 == 1)
-    #define formatAngleDebug(str, addr) formatReal16Debug(str, addr)
-  #endif
-  #if (ANGLE34 == 1)
-    #define formatAngleDebug(str, addr) formatReal34Debug(str, addr)
-  #endif
-
   void   formatReal16Debug                  (char *str, uint32_t addr);
   void   formatComplex16Debug               (char *str, uint32_t addr);
   void   formatReal34Debug                  (char *str, uint32_t addr);

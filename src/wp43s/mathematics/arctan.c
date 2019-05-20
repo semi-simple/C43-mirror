@@ -22,10 +22,10 @@
 
 
 
-void (* const arctan[12])(void) = {
-// regX ==> 1            2            3            4             5             6             7             8               9            10             11           12
-//          Long integer real16       complex16    angle         Time          Date          String        real16 mat      complex16 m  Short integer  real34       complex34
-            arctanLonI,  arctanRe16,  arctanCo16,  arctanError,  arctanError,  arctanError,  arctanError,  arctanRm16,     arctanCm16,  arctanError,   arctanRe34,  arctanCo34
+void (* const arctan[13])(void) = {
+// regX ==> 1            2           3           4            5           6            7            8           9           10            11          12          13
+//          Long integer Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
+            arctanLonI,  arctanRe16, arctanCo16, arctanRe16, arctanError, arctanError, arctanError, arctanRm16, arctanCm16, arctanError,  arctanRe34, arctanCo34, arctanRe34
 };
 
 
@@ -70,14 +70,12 @@ void fnArctan(uint16_t unusedParamButMandatory) {
 
 void arctanLonI(void) {
   convertLongIntegerRegisterToReal34Register(opX, opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, currentAngularMode);
   WP34S_do_atan(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
-  #if (ANGLE16 == 1)
-    convertRegister34To16(result);
-  #endif
-  setRegisterDataType(result, dtAngle);
-  setRegisterAngularMode(result, angularMode);
+  convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
+  convertRegister34To16(result);
+
+  setRegisterDataType(result, dtAngle16, currentAngularMode);
 }
 
 
@@ -92,35 +90,33 @@ void arctanRe16(void) {
   }
 
   convertRegister16To34(opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, currentAngularMode);
   if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
       if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
         real34SetNegativeSign(REGISTER_REAL34_DATA(result));
       }
-      convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_MULTPI);
-      #if (ANGLE16 == 1)
-        convertRegister34To16(result);
-      #endif
-      setRegisterDataType(result, dtAngle);
-      setRegisterAngularMode(result, angularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_MULTPI, currentAngularMode);
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnArctan:", "X = " STD_PLUS_MINUS STD_INFINITY, NULL, NULL);
+        showInfoDialog("In function arctanRe16:", "X = " STD_PLUS_MINUS STD_INFINITY, NULL, NULL);
       #endif
+      return;
     }
   }
   else {
     WP34S_do_atan(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
-    #if (ANGLE16 == 1)
-      convertRegister34To16(result);
-    #endif
-    setRegisterDataType(result, dtAngle);
-    setRegisterAngularMode(result, angularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
+    convertRegister34To16(result);
+  }
+
+  setRegisterDataType(result, dtAngle16, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    checkDms16(REGISTER_REAL16_DATA(result));
   }
 }
 
@@ -140,11 +136,11 @@ void arctanCo16(void) {
   calcRegister_t opY;
 
   convertRegister16To34(opX);
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // calculate iz
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
   real34Copy(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX));
   real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX));
@@ -203,34 +199,32 @@ void arctanRe34(void) {
     return;
   }
 
+  setRegisterTag(result, currentAngularMode);
   if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
       if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
         real34SetNegativeSign(REGISTER_REAL34_DATA(result));
       }
-      convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_MULTPI);
-      #if (ANGLE16 == 1)
-        convertRegister34To16(result);
-      #endif
-      setRegisterDataType(result, dtAngle);
-      setRegisterAngularMode(result, angularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_MULTPI, currentAngularMode);
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnArctan:", "X = " STD_PLUS_MINUS STD_INFINITY " and Danger flag not set!", NULL, NULL);
+        showInfoDialog("In function arctanRe34:", "X = " STD_PLUS_MINUS STD_INFINITY " and Danger flag not set!", NULL, NULL);
       #endif
+      return;
     }
   }
   else {
     WP34S_do_atan(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(result), AM_RADIAN);
-    #if (ANGLE16 == 1)
-      convertRegister34To16(result);
-    #endif
-    setRegisterDataType(result, dtAngle);
-    setRegisterAngularMode(result, angularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
+  }
+
+  setRegisterDataType(result, dtAngle34, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    checkDms34(REGISTER_REAL34_DATA(result));
   }
 }
 
@@ -251,7 +245,7 @@ void arctanCo34(void) {
 
   // calculate iz
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
   real34Copy(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX));
   real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX));

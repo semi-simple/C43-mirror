@@ -22,10 +22,10 @@
 
 
 
-void (* const fact[12])(void) = {
-// regX ==> 1            2          3          4           5           6           7           8           9            10             11         12
-//          Long integer real16     complex16  Date        Time        Date        String      real16 mat  complex16 m  Short integer  real34     complex34
-            factLonI,    factRe16,  factCo16,  factError,  factError,  factError,  factError,  factError,  factError,   factShoI,      factRe34,  factCo34
+void (* const fact[13])(void) = {
+// regX ==> 1            2         3         4         5          6          7          8          9           10            11        12        13
+//          Long integer Real16    Complex16 Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34 Angle34
+            factLonI,    factRe16, factCo16, factAn16, factError, factError, factError, factError, factError,  factShoI,     factRe34, factCo34, factAn34
 };
 
 
@@ -116,7 +116,7 @@ void factRe16(void) {
   }
 
   convertRegister16To34(opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
   WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   convertRegister34To16(result);
 }
@@ -133,6 +133,23 @@ void factCo16(void) {
   }
 
   fnToBeCoded();
+}
+
+
+
+void factAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function factRe16:", "cannot use NaN as an input of x!", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+  WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  convertRegister34To16(result);
 }
 
 
@@ -176,7 +193,7 @@ void factShoI(void) {
     fnSetFlag(FLAG_OVERFLOW);
   }
 
-  convertUInt64ToShortIntegerRegister(0, fact, getRegisterBase(opX), result);
+  convertUInt64ToShortIntegerRegister(0, fact, getRegisterTag(opX), result);
 }
 
 
@@ -205,4 +222,19 @@ void factCo34(void) {
   }
 
   fnToBeCoded();
+}
+
+
+
+void factAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function factAn34:", "cannot use NaN as an input of x!", NULL, NULL);
+    #endif
+    return;
+  }
+
+  WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  setRegisterDataType(result, dtReal34, TAG_NONE);
 }

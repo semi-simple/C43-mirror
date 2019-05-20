@@ -25,50 +25,63 @@ void subError   (void);
 void subLonILonI(void);
 void subLonIRe16(void);
 void subLonICo16(void);
-void subLonIAngl(void);
+void subLonIAn16(void);
 void subLonITime(void);
 void subLonIDate(void);
 void subLonIShoI(void);
 void subLonIRe34(void);
 void subLonICo34(void);
+void subLonIAn34(void);
 
 //      RegYRegX
 void subRe16LonI(void);
 void subRe16Re16(void);
 void subRe16Co16(void);
-void subRe16Angl(void);
+void subRe16An16(void);
 void subRe16Time(void);
 void subRe16Date(void);
 void subRe16ShoI(void);
 void subRe16Re34(void);
 void subRe16Co34(void);
+void subRe16An34(void);
 
 //      RegYRegX
 void subCo16LonI(void);
 void subCo16Re16(void);
 void subCo16Co16(void);
+void subCo16An16(void);
 void subCo16ShoI(void);
 void subCo16Re34(void);
 void subCo16Co34(void);
+void subCo16An34(void);
 
 //      RegYRegX
-void subAnglLonI(void);
-void subAnglRe16(void);
-void subAnglAngl(void);
-void subAnglShoI(void);
-void subAnglRe34(void);
+void subAn16LonI(void);
+void subAn16Re16(void);
+void subAn16Co16(void);
+void subAn16An16(void);
+void subAn16Time(void);
+void subAn16Date(void);
+void subAn16ShoI(void);
+void subAn16Re34(void);
+void subAn16Co34(void);
+void subAn16An34(void);
 
 //      RegYRegX
 void subTimeLonI(void);
 void subTimeRe16(void);
+void subTimeAn16(void);
 void subTimeTime(void);
 void subTimeRe34(void);
+void subTimeAn34(void);
 
 //      RegYRegX
 void subDateLonI(void);
 void subDateRe16(void);
+void subDateAn16(void);
 void subDateDate(void);
 void subDateRe34(void);
+void subDateAn34(void);
 
 //      RegYRegX
 void subRm16Rm16(void);
@@ -82,26 +95,42 @@ void subCm16Cm16(void);
 void subShoILonI(void);
 void subShoIRe16(void);
 void subShoICo16(void);
-void subShoIAngl(void);
+void subShoIAn16(void);
 void subShoIShoI(void);
 void subShoIRe34(void);
 void subShoICo34(void);
+void subShoIAn34(void);
 
 //      RegYRegX
 void subRe34LonI(void);
 void subRe34Re16(void);
 void subRe34Co16(void);
-void subRe34Angl(void);
+void subRe34An16(void);
 void subRe34Time(void);
 void subRe34Date(void);
 void subRe34ShoI(void);
 void subRe34Re34(void);
 void subRe34Co34(void);
+void subRe34An34(void);
 
 //      RegYRegX
 void subCo34LonI(void);
 void subCo34Re16(void);
 void subCo34Co16(void);
+void subCo34An16(void);
 void subCo34ShoI(void);
 void subCo34Re34(void);
 void subCo34Co34(void);
+void subCo34An34(void);
+
+//      RegYRegX
+void subAn34LonI(void);
+void subAn34Re16(void);
+void subAn34Co16(void);
+void subAn34An16(void);
+void subAn34Time(void);
+void subAn34Date(void);
+void subAn34ShoI(void);
+void subAn34Re34(void);
+void subAn34Co34(void);
+void subAn34An34(void);

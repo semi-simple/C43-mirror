@@ -27,35 +27,18 @@ typedef struct {
                        /* range: -1999999997 through 999999999      */
   uint8_t bits;        /* Indicator bits (see above)                */
                        /* Coefficient, from least significant unit  */
-  decNumberUnit lsu[(450+DECDPUN-1)/DECDPUN];
-} real450_t;
-
-#define angle_t                                           real16_t
-#define ANGLE16                                           1
-#define ANGLE34                                           0
-
-#if (ANGLE16 != 0 && ANGLE16 != 1)
-  #error ANGLE16 must be 0 or 1
-#endif
-#if (ANGLE34 != 0 && ANGLE34 != 1)
-  #error ANGLE34 must be 0 or 1
-#endif
-#if (ANGLE16 == 1 && ANGLE34 == 1)
-  #error Only one of ANGLE16 and ANGLE34 must be 1
-#endif
-#if (ANGLE16 == 0 && ANGLE34 == 0)
-  #error One of ANGLE16 or ANGLE34 must be 1
-#endif
+  decNumberUnit lsu[(451+DECDPUN-1)/DECDPUN];
+} real451_t;
 
 typedef struct {real16_t x[2];}                           complex16_t;
 typedef struct {real34_t x[2];}                           complex34_t;
 
 #define REAL16_SIZE                                       sizeof(real16_t)
 #define REAL34_SIZE                                       sizeof(real34_t)
-#define REAL51_SIZE                                       sizeof(real51_t)
-#define ANGLE_SIZE                                        sizeof(angle_t)
 #define COMPLEX16_SIZE                                    (2*sizeof(real16_t))
 #define COMPLEX34_SIZE                                    (2*sizeof(real34_t))
+#define REAL51_SIZE                                       sizeof(real51_t)
+#define REAL451_SIZE                                      sizeof(real451_t)
 
 #define POINTER_TO_REGISTER_NAME(a)                       ((char     *)(ram + getRegisterNamePointer(a)))
 #define POINTER_TO_LOCAL_FLAGS                            ((uint16_t *)(ram + allLocalRegisterPointer))
@@ -74,9 +57,8 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define REGISTER_REAL34_DATA(a)                           ((real34_t    *)(ram + getRegisterDataPointer(a)))
 #define REGISTER_IMAG34_DATA(a)                           ((real34_t    *)(ram + getRegisterDataPointer(a) + REAL34_SIZE))
 #define REGISTER_COMPLEX34_DATA(a)                        ((complex34_t *)(ram + getRegisterDataPointer(a)))
-#define REGISTER_ANGLE_DATA(a)                            ((angle_t     *)(ram + getRegisterDataPointer(a)))
 #define REGISTER_STRING_DATA(a)                           ((char        *)(ram + getRegisterDataPointer(a) + 2)) // Memory pointer to the string of a register
-#define REGISTER_LONG_INTEGER_DATA(a)                      ((uint8_t     *)(ram + getRegisterDataPointer(a) + 2)) // Memory pointer to the long integer of a register
+#define REGISTER_LONG_INTEGER_DATA(a)                     ((uint8_t     *)(ram + getRegisterDataPointer(a) + 2)) // Memory pointer to the long integer of a register
 #define REGISTER_DATA_MAX_LEN(a)                          ((uint16_t    *)(ram + getRegisterDataPointer(a)))     // Memory pointer to the lenght of string or long integer
 #define REGISTER_SHORT_INTEGER_DATA(a)                    ((uint64_t    *)(ram + getRegisterDataPointer(a)))
 #define VARIABLE_REAL16_DATA(a)                           ((real16_t    *)(a))
@@ -85,16 +67,16 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define VARIABLE_REAL34_DATA(a)                           ((real34_t    *)(a))
 #define VARIABLE_IMAG34_DATA(a)                           ((real34_t    *)((char *)(a) + REAL34_SIZE))
 #define VARIABLE_COMPLEX34_DATA(a)                        ((complex34_t *)(a))
-#define VARIABLE_ANGLE_DATA(a)                            ((angle_t     *)(a))
 
 
 #define real16ToString(source, destination)               decDoubleToString        (source,      destination)
 #define real34ToString(source, destination)               decQuadToString          (source,      destination)
 #define real51ToString(source, destination)               decNumberToString        (source,      destination)
-#define real450ToString(source, destination)              decNumberToString        (source,      destination)
+#define real451ToString(source, destination)              decNumberToString        (source,      destination)
 #define stringToReal16(source, destination)               decDoubleFromString      (destination, source, &ctxtReal16)
 #define stringToReal34(source, destination)               decQuadFromString        (destination, source, &ctxtReal34)
 #define stringToReal51(source, destination)               decNumberFromString      (destination, source, &ctxtReal51)
+#define stringToReal451(source, destination)              decNumberFromString      ((decNumber *)(destination), source, &ctxtReal451)
 #define stringToReal51Ctxt(source, destination, ctxt)     decNumberFromString      (destination, source, ctxt)
 #define int32ToReal16(source, destination)                decDoubleFromInt32       (destination, source)
 #define int32ToReal34(source, destination)                decQuadFromInt32         (destination, source)
@@ -108,10 +90,10 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real34ToReal16(source, destination)               decDoubleFromWider       (destination, source, &ctxtReal16)
 #define real16ToReal51(source, destination)               decDoubleToNumber        (source,      destination)
 #define real34ToReal51(source, destination)               decQuadToNumber          (source,      destination)
-#define real34ToReal450(source, destination)              decQuadToNumber          (source,      destination)
+#define real34ToReal451(source, destination)              decQuadToNumber          (source,      destination)
 #define real51ToReal16(source, destination)               decDoubleFromNumber      (destination, source, &ctxtReal16)
 #define real51ToReal34(source, destination)               decQuadFromNumber        (destination, source, &ctxtReal34)
-#define real450ToReal34(source, destination)              decQuadFromNumber        (destination, source, &ctxtReal34)
+#define real451ToReal34(source, destination)              decQuadFromNumber        (destination, source, &ctxtReal34)
 #define real16AbsToReal16(source, destination)            decDoubleCopyAbs         (destination, source)
 #define real34AbsToReal34(source, destination)            decQuadCopyAbs           (destination, source)
 #define real16ToUInt32(source)                            decDoubleToUInt32        (source,      &ctxtReal16, DEC_ROUND_DOWN)
@@ -123,7 +105,8 @@ typedef struct {real34_t x[2];}                           complex34_t;
 
 #define real16ToIntegral(source, destination)             decDoubleToIntegralValue (destination, source, &ctxtReal16, DEC_ROUND_DOWN)
 #define real34ToIntegral(source, destination)             decQuadToIntegralValue   (destination, source, &ctxtReal34, DEC_ROUND_DOWN)
-#define real34ToIntegralRound(source, destination)        decQuadToIntegralValue   (destination, source, &ctxtReal16, DEC_ROUND_HALF_UP)
+#define real16ToIntegralRound(source, destination)        decDoubleToIntegralValue (destination, source, &ctxtReal16, DEC_ROUND_HALF_UP)
+#define real34ToIntegralRound(source, destination)        decQuadToIntegralValue   (destination, source, &ctxtReal34, DEC_ROUND_HALF_UP)
 
 
 #define real16IsInfinite(source)                          decDoubleIsInfinite      (source)
@@ -131,7 +114,7 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real16IsNaN(source)                               decDoubleIsNaN           (source)
 #define real34IsNaN(source)                               decQuadIsNaN             (source)
 #define real51IsNaN(source)                               decNumberIsNaN           (source)
-#define real450IsNaN(source)                              decNumberIsNaN           (source)
+#define real451IsNaN(source)                              decNumberIsNaN           (source)
 #define real16IsZero(source)                              decDoubleIsZero          (source)
 #define real34IsZero(source)                              decQuadIsZero            (source)
 #define real51IsZero(source)                              decNumberIsZero          (source)
@@ -172,7 +155,7 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real51Compare(operand1, operand2, res)            decNumberCompare         (res, operand1, operand2, &ctxtReal51)
 #define real16Remainder(operand1, operand2, res)          decDoubleRemainder       (res, operand1, operand2, &ctxtReal16)
 #define real34Remainder(operand1, operand2, res)          decQuadRemainder         (res, operand1, operand2, &ctxtReal34)
-#define real450Remainder(operand1, operand2, res)         decNumberRemainder       (res, operand1, operand2, &ctxtReal450)
+#define real451Remainder(operand1, operand2, res)         decNumberRemainder       (res, operand1, operand2, &ctxtReal451)
 #define real16FMA(factor1, factor2, term, res)            decDoubleFMA             (res, factor1,  factor2,  term, &ctxtReal16)
 #define real34FMA(factor1, factor2, term, res)            decQuadFMA               (res, factor1,  factor2,  term, &ctxtReal34)
 
@@ -201,6 +184,7 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real16Copy(source, destination)                   memcpy(destination, source, REAL16_SIZE)
 #define real34Copy(source, destination)                   memcpy(destination, source, REAL34_SIZE)
 #define real51Copy(source, destination)                   decNumberCopy((decNumber *)(destination), (decNumber *)(source))
+#define real451Copy(source, destination)                  decNumberCopy((decNumber *)(destination), (decNumber *)(source))
 #define complex16Copy(source, destination)                memcpy(destination, source, COMPLEX16_SIZE)
 #define complex34Copy(source, destination)                memcpy(destination, source, COMPLEX34_SIZE)
 #define angleCopy(source, destination)                    memcpy(destination, source, ANGLE_SIZE)
@@ -225,18 +209,3 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real34SquareRoot(operand, res)                    {real51_t real51;           real34ToReal51(operand,  &real51);                                      real51SquareRoot(&real51, &real51);        real51ToReal34(&real51,  res);}
 #define real34Exp(operand, res)                           {real51_t real51;           real34ToReal51(operand,  &real51);                                      real51Exp(&real51, &real51);               real51ToReal34(&real51,  res);}
 #define real34Ln(operand, res)                            {real51_t real51;           real34ToReal51(operand,  &real51);                                      real51Ln(&real51, &real51);                real51ToReal34(&real51,  res);}
-
-#if (ANGLE16 == 1)
-  #define angleAdd(operand1, operand2, res)               real16Add(operand1, operand2, res)
-  #define angleSubtract(operand1, operand2, res)          real16Subtract(operand1, operand2, res)
-  #define angleDivide(operand1, operand2, res)            real16Divide(operand1, operand2, res)
-  #define angleMultiply(operand1, operand2, res)          real16Multiply(operand1, operand2, res)
-  #define angleIsNaN(operand)                             real16IsNaN(operand)
-#endif
-#if (ANGLE34 == 1)
-  #define angleAdd(operand1, operand2, res)               real34Add(operand1, operand2, res)
-  #define angleSubtract(operand1, operand2, res)          real34Subtract(operand1, operand2, res)
-  #define angleDivide(operand1, operand2, res)            real34Divide(operand1, operand2, res)
-  #define angleMultiply(operand1, operand2, res)          real34Multiply(operand1, operand2, res)
-  #define angleIsNaN(operand)                             real34IsNaN(operand)
-#endif

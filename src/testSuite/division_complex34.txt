@@ -1,0 +1,60 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                    COMPLEX34 / ...                      **
+;**                    ... / COMPLEX34                      **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnDivide
+
+
+
+;==================================================================
+; Complex34 / Long Integer      see in division_longInteger.txt
+; Complex34 / Real16            see in division_real16.txt
+; Complex34 / Complex16         see in division_complex16.txt
+; Complex34 / Angle16           see in division_angle16.txt
+; Complex34 / Time              see in division_time.txt
+; Complex34 / Date              see in division_date.txt
+; Complex34 / String            see in division_string.txt
+; Complex34 / Real16 Matrix     see in division_real16Matrix.txt
+; Complex34 / Complex16 Matrix  see in division_complex16Matrix.txt
+; Complex34 / Short Integer     see in division_shortInteger.txt
+; Complex34 / Real34            see in division_real34.txt
+;==================================================================
+
+
+
+;=======================================
+; Complex34 / Complex34 --> Complex34
+;=======================================
+In:  SL=0 FI=0 NCSD=34 RY=Co34:"123.456 i -6.78" RX=Co34:"-12540 i 7.541235"
+Out: EC=0 FI=1 SL=1 RL=Co34:"-12540 i 7.541235" RX=Co34:"-0.0098452976610031543389062829053730924644497397862711756995776511 i 5.3474914646678029325271436025790261140740473417726310130169023e-4"
+
+In:  SL=0 FI=0 RY=Co34:"NaN i -6.78" RX=Co34:"-12540 i 7.541235"
+Out: EC=1 FI=0 SL=0 RX=Co34:"-12540 i 7.541235"
+
+In:  SL=1 FI=0 RY=Co34:"123.456 i NaN" RX=Co34:"-12540 i 7.541235"
+Out: EC=1 FI=0 SL=1 RX=Co34:"-12540 i 7.541235"
+
+In:  SL=0 FI=0 RY=Co34:"123.456 i -6.78" RX=Co34:"NaN i 7.541235"
+Out: EC=1 FI=0 SL=0 RX=Co34:"NaN i 7.541235"
+
+In:  SL=1 FI=0 RY=Co34:"123.456 i -6.78" RX=Co34:"-12540 i NaN"
+Out: EC=1 FI=0 SL=1 RX=Co34:"-12540 i NaN"
+
+
+
+;=======================================
+; Complex34 / Angle34 --> Complex34
+;=======================================
+In:  SL=0 FI=0 NCSD=34 RY=Co34:"123.456 i -6.78" RX=An34:"12540":DEG
+Out: EC=0 FI=1 SL=1 RL=An34:"12540":DEG RX=Co34:"0.0098449760765550239234449760765550239234449760765550239234449761 i -5.4066985645933014354066985645933014354066985645933014354066986e-4"
+
+;=======================================
+; Angle34 / Complex34 --> Complex34
+;=======================================
+In:  SL=0 FI=0 NCSD=34 RY=An34:"12540":DEG RX=Co34:"123.456 i -6.78"
+Out: EC=0 FI=1 SL=1 RL=Co34:"123.456 i -6.78" RX=Co34:"101.26921954655994264774300155830463486479821262883202772543202 i 5.5615385929049735221592919790476398423999796010196438243457516"

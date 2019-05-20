@@ -22,10 +22,10 @@
 
 
 
-void (* const chs[12])(void) = {
-// regX ==> 1            2         3          4         5          6          7          8            9             10              11        12
-//          Long integer real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
-            chsLonI,     chsRe16,  chsCo16,   chsAngl,  chsError,  chsError,  chsError,  chsRm16,     chsCm16,      chsShoI,       chsRe34,  chsCo34
+void (* const chs[13])(void) = {
+// regX ==> 1            2        3         4        5          6         7         8          9           10            11       12        13
+//          Long integer real16   Complex16 Angle16  Time       Date      String    Real16 mat Complex16 m Short integer Real34   Complex34 Angle34
+            chsLonI,     chsRe16, chsCo16,  chsRe16, chsError,  chsError, chsError, chsRm16,   chsCm16,    chsShoI,      chsRe34, chsCo34,  chsRe34
 };
 
 
@@ -76,7 +76,7 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
 
 
 void chsLonI(void) {
-  setRegisterSign(result, getRegisterDataInfo(opX) ^ 1);
+  setRegisterTag(result, getRegisterTag(opX) ^ 1);
 }
 
 
@@ -90,7 +90,16 @@ void chsRe16(void) {
     return;
   }
 
+  if(!getFlag(FLAG_DANGER) && real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(opX)) ? 5 : 4 , ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function chsRe16:", "cannot change infinity sign while D flag is clear", NULL, NULL);
+    #endif
+    return;
+  }
+
   real16ChangeSign(REGISTER_REAL16_DATA(result));
+
   if(real16IsZero(REGISTER_REAL16_DATA(result))) {
     real16SetPositiveSign(REGISTER_REAL16_DATA(result));
   }
@@ -107,41 +116,34 @@ void chsCo16(void) {
     return;
   }
 
+  if(!getFlag(FLAG_DANGER)) {
+    if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
+      displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(opX)) ? 5 : 4 , ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function chsCo16:", "cannot change infinity sign of real part while D flag is clear", NULL, NULL);
+      #endif
+      return;
+    }
+
+    if(real16IsInfinite(REGISTER_IMAG16_DATA(opX))) {
+      displayCalcErrorMessage(real16IsPositive(REGISTER_IMAG16_DATA(opX)) ? 5 : 4 , ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function chsCo16:", "cannot change infinity sign of imaginary part while D flag is clear", NULL, NULL);
+      #endif
+      return;
+    }
+  }
+
   real16ChangeSign(REGISTER_REAL16_DATA(result));
+  real16ChangeSign(REGISTER_IMAG16_DATA(result));
+
   if(real16IsZero(REGISTER_REAL16_DATA(result))) {
     real16SetPositiveSign(REGISTER_REAL16_DATA(result));
   }
 
-  real16ChangeSign(REGISTER_IMAG16_DATA(result));
   if(real16IsZero(REGISTER_IMAG16_DATA(result))) {
     real16SetPositiveSign(REGISTER_IMAG16_DATA(result));
   }
-}
-
-
-
-void chsAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsAngl:", "cannot use NaN as an input of +/-", NULL, NULL);
-    #endif
-    return;
-  }
-
-  #if (ANGLE16 == 1)
-    real16ChangeSign(REGISTER_REAL16_DATA(result));
-    if(real16IsZero(REGISTER_REAL16_DATA(result))) {
-      real16SetPositiveSign(REGISTER_REAL16_DATA(result));
-    }
-  #endif
-
-  #if (ANGLE34 == 1)
-    real34ChangeSign(REGISTER_REAL34_DATA(result));
-    if(real34IsZero(REGISTER_REAL34_DATA(result))) {
-      real34SetPositiveSign(REGISTER_REAL34_DATA(result));
-    }
-  #endif
 }
 
 
@@ -173,7 +175,16 @@ void chsRe34(void) {
     return;
   }
 
+  if(!getFlag(FLAG_DANGER) && real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(opX)) ? 5 : 4 , ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function chsRe34:", "cannot change infinity sign while D flag is clear", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34ChangeSign(REGISTER_REAL34_DATA(result));
+
   if(real34IsZero(REGISTER_REAL34_DATA(result))) {
     real34SetPositiveSign(REGISTER_REAL34_DATA(result));
   }
@@ -190,12 +201,31 @@ void chsCo34(void) {
     return;
   }
 
+  if(!getFlag(FLAG_DANGER)) {
+    if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
+      displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(opX)) ? 5 : 4 , ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function chsCo34:", "cannot change infinity sign of real part while D flag is clear", NULL, NULL);
+      #endif
+      return;
+    }
+
+    if(real34IsInfinite(REGISTER_IMAG34_DATA(opX))) {
+      displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(opX)) ? 5 : 4 , ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function chsCo34:", "cannot change infinity sign of imaginary part while D flag is clear", NULL, NULL);
+      #endif
+      return;
+    }
+  }
+
   real34ChangeSign(REGISTER_REAL34_DATA(result));
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
+
   if(real34IsZero(REGISTER_REAL34_DATA(result))) {
     real34SetPositiveSign(REGISTER_REAL34_DATA(result));
   }
 
-  real34ChangeSign(REGISTER_IMAG34_DATA(result));
   if(real34IsZero(REGISTER_IMAG34_DATA(result))) {
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
   }

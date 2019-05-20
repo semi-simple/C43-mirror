@@ -835,25 +835,11 @@ void addItemToNimBuffer(int16_t item) {
         closeNim();
         if(calcMode != CM_NIM && lastErrorCode == 0) {
           if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-            convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
+            convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
           }
-          #if (ANGLE16 == 1)
-            convertAngle16ToInternal(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS);
-          #endif
-          #if (ANGLE34 == 1)
-            convertAngle34ToInternal(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS);
-          #endif
 
-          if(lastErrorCode == 0) {
-            setRegisterDataType(REGISTER_X, dtAngle);
-            setRegisterAngularMode(REGISTER_X, AM_DMS);
-          }
-          else {
-            #if (ANGLE34 == 1)
-              convertRegister34To16(REGISTER_X, REGISTER_X);
-            #endif
-            setRegisterDataType(REGISTER_X, dtReal16);
-          }
+          checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
+          setRegisterTag(REGISTER_X, AM_DMS);
 
           refreshRegisterLine(REGISTER_X);
           STACK_LIFT_ENABLE;
@@ -1898,28 +1884,21 @@ void closeNim(void) {
           }
 
           if(shortIntegerMode == SIM_UNSIGN) {
-            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
           else if(shortIntegerMode == SIM_2COMPL) {
             if(value.sign) {
               val = (~val + 1) & shortIntegerMask;
             }
-
-            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
           else if(shortIntegerMode == SIM_1COMPL) {
             if(value.sign) {
               val = ~val & shortIntegerMask;
             }
-
-            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
           else if(shortIntegerMode == SIM_SIGNMT) {
             if(value.sign) {
-              val += shortIntegerMask;
+              val = (val & shortIntegerMask) | shortIntegerSignBit;
             }
-
-            *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           }
           else {
             sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for shortIntegerMode!", shortIntegerMode);
@@ -1927,15 +1906,16 @@ void closeNim(void) {
             *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = 0;
           }
 
+          *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           lastIntegerBase = base;
         }
         else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           if(nimInputIsReal34) {
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, 0);
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
             stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
           }
           else {
-            reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
+            reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
             stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
           }
           if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
@@ -2012,7 +1992,7 @@ void closeNim(void) {
             return;
           }
 
-          reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, 0);
+          reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
           int32ToReal16(numer, REGISTER_REAL16_DATA(REGISTER_X));
           int32ToReal16(denom, &temp);
           real16Divide(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
@@ -2032,7 +2012,7 @@ void closeNim(void) {
         else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
           int16_t imaginarySign;
 
-          reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, 0);
+          reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
 
           if(nimBuffer[imaginaryMantissaSignLocation] == '+') {
             imaginarySign = 1;
@@ -2075,8 +2055,7 @@ void closeNim(void) {
                 real16Add(&theta16, const16_pi, &theta16);
                 real16Remainder(&theta16, const16_2pi, &theta16);
               }
-              convertAngle16ToInternal(&theta16, angularMode);
-              real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in internal units
+              real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
             }
           }
         }

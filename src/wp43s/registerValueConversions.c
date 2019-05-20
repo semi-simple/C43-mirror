@@ -32,35 +32,41 @@
  * \return void
  ***********************************************/
 void convertRegister16To34(calcRegister_t regist) {
-  // Register is already a real34 or complex34
-  #if (ANGLE16 == 1)
-    if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtComplex34) {
-      return;
-    }
-  #endif
-  #if (ANGLE34 == 1)
-    if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtComplex34 || getRegisterDataType(regist) == dtAngle) {
-      return;
-    }
-  #endif
+  calcRegister_t temp;
 
-  if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtAngle) {
-    calcRegister_t temp = allocateTemporaryRegister();
-    reallocateRegister(temp, dtReal34, REAL34_SIZE, getRegisterDataInfo(regist));
-    real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
-    copySourceRegisterToDestRegister(temp, regist);
-    freeTemporaryRegister(temp);
-  }
-  else if(getRegisterDataType(regist) == dtComplex16) {
-    calcRegister_t temp = allocateTemporaryRegister();
-    reallocateRegister(temp, dtComplex34, COMPLEX34_SIZE, getRegisterDataInfo(regist));
-    real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
-    real16ToReal34(REGISTER_IMAG16_DATA(regist), REGISTER_IMAG34_DATA(temp));
-    copySourceRegisterToDestRegister(temp, regist);
-    freeTemporaryRegister(temp);
-  }
-  else {
-    displayBugScreen("In function convertRegister16To34: the register to convert must be real16 or complex16!");
+  switch(getRegisterDataType(regist)) {
+    case dtReal16:
+      temp = allocateTemporaryRegister();
+      reallocateRegister(temp, dtReal34, REAL34_SIZE, getRegisterTag(regist));
+      real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
+      copySourceRegisterToDestRegister(temp, regist);
+      freeTemporaryRegister(temp);
+      break;
+
+    case dtComplex16:
+      temp = allocateTemporaryRegister();
+      reallocateRegister(temp, dtComplex34, COMPLEX34_SIZE, getRegisterTag(regist));
+      real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
+      real16ToReal34(REGISTER_IMAG16_DATA(regist), REGISTER_IMAG34_DATA(temp));
+      copySourceRegisterToDestRegister(temp, regist);
+      freeTemporaryRegister(temp);
+      break;
+
+    case dtAngle16:
+      temp = allocateTemporaryRegister();
+      reallocateRegister(temp, dtAngle34, REAL34_SIZE, getRegisterAngularMode(regist));
+      real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
+      copySourceRegisterToDestRegister(temp, regist);
+      freeTemporaryRegister(temp);
+      break;
+
+    case dtReal34:
+    case dtComplex34:
+    case dtAngle34:
+      break;
+
+    default:
+    displayBugScreen("In function convertRegister16To34: the register to convert must be real16, angle16 or complex16!");
   }
 }
 
@@ -72,39 +78,45 @@ void convertRegister16To34(calcRegister_t regist) {
  *        error if X is not a single or double
  *        precision real or complex.
  *
- * \param r calcRegister_t Register number
+    * \param r calcRegister_t Register number
  * \return void
  ***********************************************/
 void convertRegister34To16(calcRegister_t regist) {
-  // Register is already a real16 or complex16
-  #if (ANGLE16 == 1)
-    if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtComplex16 || getRegisterDataType(regist) == dtAngle) {
-      return;
-    }
-  #endif
-  #if (ANGLE34 == 1)
-    if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtComplex16) {
-      return;
-    }
-  #endif
+  calcRegister_t temp;
 
-  if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtAngle) {
-    calcRegister_t temp = allocateTemporaryRegister();
-    reallocateRegister(temp, dtReal16, REAL16_SIZE, getRegisterDataInfo(regist));
-    real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
-    copySourceRegisterToDestRegister(temp, regist);
-    freeTemporaryRegister(temp);
-  }
-  else if(getRegisterDataType(regist) == dtComplex34) {
-    calcRegister_t temp = allocateTemporaryRegister();
-    reallocateRegister(temp, dtComplex16, COMPLEX16_SIZE, getRegisterDataInfo(regist));
-    real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
-    real34ToReal16(REGISTER_IMAG34_DATA(regist), REGISTER_IMAG16_DATA(temp));
-    copySourceRegisterToDestRegister(temp, regist);
-    freeTemporaryRegister(temp);
-  }
-  else {
-    displayBugScreen("In function convertRegister34To16: the register to convert must be real34 or complex34!");
+  switch(getRegisterDataType(regist)) {
+    case dtReal16:
+    case dtComplex16:
+    case dtAngle16:
+      break;
+
+    case dtReal34:
+      temp = allocateTemporaryRegister();
+      reallocateRegister(temp, dtReal16, REAL16_SIZE, getRegisterTag(regist));
+      real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
+      copySourceRegisterToDestRegister(temp, regist);
+      freeTemporaryRegister(temp);
+      break;
+
+    case dtComplex34:
+      temp = allocateTemporaryRegister();
+      reallocateRegister(temp, dtComplex16, COMPLEX16_SIZE, getRegisterTag(regist));
+      real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
+      real34ToReal16(REGISTER_IMAG34_DATA(regist), REGISTER_IMAG16_DATA(temp));
+      copySourceRegisterToDestRegister(temp, regist);
+      freeTemporaryRegister(temp);
+      break;
+
+    case dtAngle34:
+      temp = allocateTemporaryRegister();
+      reallocateRegister(temp, dtAngle16, REAL16_SIZE, getRegisterTag(regist));
+      real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
+      copySourceRegisterToDestRegister(temp, regist);
+      freeTemporaryRegister(temp);
+      break;
+
+    default:
+      displayBugScreen("In function convertRegister34To16: the register to convert must be real34, angle34 or complex34!");
   }
 }
 
@@ -119,7 +131,7 @@ void convertLongIntegerToLongIntegerRegister(const longInteger_t *longInteger, c
 
 void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_t *longInteger) {
   longIntegerSetZero(longInteger);
-  longInteger->sign = getRegisterDataInfo(regist);
+  longInteger->sign = getRegisterLongIntegerSign(regist);
   longInteger->used = *REGISTER_DATA_MAX_LEN(regist);
   memcpy(longInteger, REGISTER_LONG_INTEGER_DATA(regist), longInteger->used);
   longInteger->used = (longInteger->used * CHAR_BIT) / DIGIT_BIT;
@@ -132,7 +144,7 @@ void convertLongIntegerRegisterToReal16Register(calcRegister_t source, calcRegis
 
   convertLongIntegerRegisterToLongInteger(source, &tmp);
   longIntegerToString(&tmp, tmpStr3000, 10);
-  reallocateRegister(destination, dtReal16, REAL16_SIZE, 0);
+  reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
 
@@ -142,7 +154,7 @@ void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, cal
   longInteger_t tmp;
 
   convertLongIntegerRegisterToLongInteger(source, &tmp);
-  reallocateRegister(destination, dtShortInteger, SHORT_INTEGER_SIZE, 0);
+  reallocateRegister(destination, dtShortInteger, SHORT_INTEGER_SIZE, 10);
   *(REGISTER_SHORT_INTEGER_DATA(destination)) = tmp.dp[0] & shortIntegerMask;
   if(longIntegerIsNegative(&tmp)) {
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
@@ -156,7 +168,7 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
 
   convertLongIntegerRegisterToLongInteger(source, &tmp);
   longIntegerToString(&tmp, tmpStr3000, 10);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
 
@@ -194,7 +206,7 @@ void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
   }
 
   longIntegerToString(&tmp, tmpStr3000, 10);
-  reallocateRegister(destination, dtReal16, REAL16_SIZE, 0);
+  reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
 
@@ -232,7 +244,7 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
   }
 
   longIntegerToString(&tmp, tmpStr3000, 10);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, 0);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
 

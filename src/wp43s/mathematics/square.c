@@ -22,10 +22,10 @@
 
 
 
-void (* const square[12])(void) = {
-// regX ==> 1             2             3             4             5             6             7             8             9             10             11            12
-//          Long integer  real16        complex16     Angle         Time          Angle         String        real16 mat    complex16 m   Short integer  real34        complex34
-            mulLonILonI,  mulRe16Re16,  mulCo16Co16,  errorSquare,  errorSquare,  errorSquare,  errorSquare,  mulRm16Rm16,  mulCm16Cm16,  mulShoIShoI,   mulRe34Re34,  mulCo34Co34
+void (* const square[13])(void) = {
+// regX ==> 1            2            3            4            5            6            7            8            9            10            11           12           13
+//          Long integer Real16       Complex16    Angle16      Time         Date         String       Real16 mat   Complex16 m  Short integer Real34       Complex34    Angle34
+            mulLonILonI, mulRe16Re16, mulCo16Co16, mulAn16An16, squareError, squareError, squareError, mulRm16Rm16, mulCm16Cm16, mulShoIShoI,  mulRe34Re34, mulCo34Co34, mulAn34An34
 };
 
 
@@ -36,7 +36,7 @@ void (* const square[12])(void) = {
  * \param[in] unusedParamButMandatory
  * \return void
  ***********************************************/
-void errorSquare(void) {
+void squareError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot square %s", getRegisterDataTypeName(REGISTER_X, true, false));

@@ -22,10 +22,10 @@
 
 
 
-void (* const Sqrt[12])(void) = {
-// regX ==> 1             2          3          4           5           6           7           8           9            10             11         12
-//          Long integer  real16     complex16  angle       Time        Date        String      real16 mat  complex16 m  Short integer  real34     complex34
-            sqrtLonI,     sqrtRe16,  sqrtCo16,  sqrtError,  sqrtError,  sqrtError,  sqrtError,  sqrtRm16,   sqrtCm16,    sqrtShoI,      sqrtRe34,  sqrtCo34
+void (* const Sqrt[13])(void) = {
+// regX ==> 1            2         3         4         5          6          7          8          9           10            11        12        13
+//          Long integer Real16    Complex16 Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34 Angle34
+            sqrtLonI,    sqrtRe16, sqrtCo16, sqrtRe16, sqrtError, sqrtError, sqrtError, sqrtRm16,  sqrtCm16,   sqrtShoI,     sqrtRe34, sqrtCo34, sqrtAn34
 };
 
 
@@ -110,7 +110,7 @@ void sqrtLonI(void) {
       }
       else {
         convertLongIntegerRegisterToReal34Register(opX, opX);
-        reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+        reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
         real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
         convertRegister34To16(result);
       }
@@ -121,7 +121,7 @@ void sqrtLonI(void) {
 
     convertLongIntegerRegisterToReal34Register(opX, opX);
     real34Copy(REGISTER_REAL34_DATA(opX), &real34);
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
     real34SetPositiveSign(&real34);
     real34SquareRoot(&real34, REGISTER_IMAG34_DATA(result));
     real34Zero(REGISTER_REAL34_DATA(result));
@@ -150,12 +150,12 @@ void sqrtRe16(void) {
   convertRegister16To34(opX);
 
   if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
     real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
     convertRegister34To16(result);
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
     real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
     real34Zero(REGISTER_REAL34_DATA(result));
@@ -183,17 +183,17 @@ void sqrtCo16(void) {
   }
 
   real34_t magnitude34, theta34;
-  uint8_t savedAngularMode = angularMode;
+  uint8_t savedAngularMode = currentAngularMode;
 
-  angularMode = AM_RADIAN;
+  currentAngularMode = AM_RADIAN;
   convertRegister16To34(opX);
   real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
   convertRegister34To16(result);
-  angularMode = savedAngularMode;
+  currentAngularMode = savedAngularMode;
 }
 
 
@@ -229,7 +229,7 @@ void sqrtRe34(void) {
     real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
     real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
     real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
     real34Zero(REGISTER_REAL34_DATA(result));
@@ -256,12 +256,43 @@ void sqrtCo34(void) {
   }
 
   real34_t magnitude34, theta34;
-  uint8_t savedAngularMode = angularMode;
+  uint8_t savedAngularMode = currentAngularMode;
 
-  angularMode = AM_RADIAN;
+  currentAngularMode = AM_RADIAN;
   real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
   real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
-  angularMode = savedAngularMode;
+  currentAngularMode = savedAngularMode;
+}
+
+
+
+void sqrtAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sqrtAn34:", "cannot use NaN as an input of sqrt", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
+    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    setRegisterDataType(result, dtReal34, TAG_NONE);
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
+    real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
+    real34Zero(REGISTER_REAL34_DATA(result));
+    real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
+  }
+  else {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // 1 = argument exceeds functions domain
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
+      showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
+    #endif
+  }
 }

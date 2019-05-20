@@ -22,21 +22,22 @@
 
 
 
-void (* const subtraction[12][12])(void) = {
-// regX |    regY ==>    1            2            3            4            5            6            7            8            9            10            11           12
-//      V                Long integer real16       complex16    angle34      Time         Date         String       real16 mat   complex16 m  Short integer real34       complex34
-/*  1 Long integer   */ {subLonILonI, subRe16LonI, subCo16LonI, subAnglLonI, subTimeLonI, subDateLonI, subError,    subError,    subError,    subShoILonI,  subRe34LonI, subCo34LonI},
-/*  2 real16         */ {subLonIRe16, subRe16Re16, subCo16Re16, subAnglRe16, subTimeRe16, subDateRe16, subError,    subError,    subError,    subShoIRe16,  subRe34Re16, subCo34Re16},
-/*  3 complex16      */ {subLonICo16, subRe16Co16, subCo16Co16, subError,    subError,    subError,    subError,    subError,    subError,    subShoICo16,  subRe34Co16, subCo34Co16},
-/*  4 angle34        */ {subLonIAngl, subRe16Angl, subError,    subAnglAngl, subError,    subError,    subError,    subError,    subError,    subShoIAngl,  subRe34Angl, subError   },
-/*  5 Time           */ {subLonITime, subRe16Time, subError,    subError,    subTimeTime, subError,    subError,    subError,    subError,    subError,     subRe34Time, subError   },
-/*  6 Date           */ {subLonIDate, subRe16Date, subError,    subError,    subError,    subDateDate, subError,    subError,    subError,    subError,     subRe34Date, subError   },
-/*  7 String         */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,     subError,    subError   },
-/*  8 real16 mat     */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Rm16, subCm16Rm16, subError,     subError,    subError   },
-/*  9 complex16 mat  */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Cm16, subCm16Cm16, subError,     subError,    subError   },
-/* 10 Short integer  */ {subLonIShoI, subRe16ShoI, subCo16ShoI, subAnglShoI, subError,    subError,    subError,    subError,    subError,    subShoIShoI,  subRe34ShoI, subCo34ShoI},
-/* 11 real34         */ {subLonIRe34, subRe16Re34, subCo16Re34, subAnglRe34, subTimeRe34, subDateRe34, subError,    subError,    subError,    subShoIRe34,  subRe34Re34, subCo34Re34},
-/* 12 complex34      */ {subLonICo34, subRe16Co34, subCo16Co34, subError,    subError,    subError,    subError,    subError,    subError,    subShoICo34,  subRe34Co34, subCo34Co34}
+void (* const subtraction[13][13])(void) = {
+// regX |    regY ==>   1            2            3            4            5            6            7            8            9            10            11           12           13
+//      V               Long integer Real16       Complex16    Angle16      Time         Date         String       Real16 mat   Complex16 m  Short integer Real34       Complex34    Angle34
+/*  1 Long integer  */ {subLonILonI, subRe16LonI, subCo16LonI, subAn16LonI, subTimeLonI, subDateLonI, subError,    subError,    subError,    subShoILonI,  subRe34LonI, subCo34LonI, subAn34LonI},
+/*  2 Real16        */ {subLonIRe16, subRe16Re16, subCo16Re16, subAn16Re16, subTimeRe16, subDateRe16, subError,    subError,    subError,    subShoIRe16,  subRe34Re16, subCo34Re16, subAn34Re16},
+/*  3 Complex16     */ {subLonICo16, subRe16Co16, subCo16Co16, subAn16Co16, subError,    subError,    subError,    subError,    subError,    subShoICo16,  subRe34Co16, subCo34Co16, subAn34Co16},
+/*  4 Angle16       */ {subLonIAn16, subRe16An16, subCo16An16, subAn16An16, subTimeAn16, subDateAn16, subError,    subError,    subError,    subShoIAn16,  subRe34An16, subCo34An16, subAn34An16},
+/*  5 Time          */ {subLonITime, subRe16Time, subError,    subAn16Time, subTimeTime, subError,    subError,    subError,    subError,    subError,     subRe34Time, subError,    subAn34Time},
+/*  6 Date          */ {subLonIDate, subRe16Date, subError,    subAn16Date, subError,    subDateDate, subError,    subError,    subError,    subError,     subRe34Date, subError,    subAn34Date},
+/*  7 String        */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,    subError,     subError,    subError,    subError   },
+/*  8 Real16 mat    */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Rm16, subCm16Rm16, subError,     subError,    subError,    subError   },
+/*  9 Complex16 mat */ {subError,    subError,    subError,    subError,    subError,    subError,    subError,    subRm16Cm16, subCm16Cm16, subError,     subError,    subError,    subError   },
+/* 10 Short integer */ {subLonIShoI, subRe16ShoI, subCo16ShoI, subAn16ShoI, subError,    subError,    subError,    subError,    subError,    subShoIShoI,  subRe34ShoI, subCo34ShoI, subAn34ShoI},
+/* 11 Real34        */ {subLonIRe34, subRe16Re34, subCo16Re34, subAn16Re34, subTimeRe34, subDateRe34, subError,    subError,    subError,    subShoIRe34,  subRe34Re34, subCo34Re34, subAn34Re34},
+/* 12 Complex34     */ {subLonICo34, subRe16Co34, subCo16Co34, subAn16Co34, subError,    subError,    subError,    subError,    subError,    subShoICo34,  subRe34Co34, subCo34Co34, subAn34Co34},
+/* 13 Angle34       */ {subLonIAn34, subRe16An34, subCo16An34, subAn16An34, subTimeAn34, subDateAn34, subError,    subError,    subError,    subShoIAn34,  subRe34An34, subCo34An34, subAn34An34},
 };
 
 
@@ -82,6 +83,10 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
 
 
 
+/******************************************************************************************************************************************************************************************/
+/* long integer - ...                                                                                                                                                                     */
+/******************************************************************************************************************************************************************************************/
+
 /********************************************//**
  * \brief opY(long integer) - opX(long integer) ==> result(long integer)
  *
@@ -112,13 +117,34 @@ void subLonIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subLonIRe16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonIRe16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   convertLongIntegerRegisterToReal16Register(opY, opY);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+}
+
+
+
+/********************************************//**
+ * \brief opY(real16) - opX(long integer) ==> result(real16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe16LonI(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe16LonI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertLongIntegerRegisterToReal16Register(opX, opX);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
@@ -134,39 +160,107 @@ void subLonICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subLonICo16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonICo16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
   convertLongIntegerRegisterToReal16Register(opY, opY);
-  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16ChangeSign(REGISTER_IMAG16_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(long integer) - opX(angle) ==> result(angle)
+ * \brief opY(complex16) - opX(long integer) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void subLonIAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+void subCo16LonI(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subLonIAngl:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo16LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertLongIntegerRegisterToAngleRegister(opY, opY);
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  convertLongIntegerRegisterToReal16Register(opX, opX);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(long integer) - opX(angle16) ==> result(angle16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subLonIAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subLonIAn16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertLongIntegerRegisterToReal34Register(opY, opY);
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    convertRegister34To16(result);
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
+  else {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle16) - opX(long integer) ==> result(angle16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16LonI(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16LonI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opY);
+  convertLongIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterTag(opY), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    convertRegister34To16(result);
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
+  else {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterTag(opY), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
+  }
 }
 
 
@@ -178,6 +272,18 @@ void subLonIAngl(void) {
  * \return void
  ***********************************************/
 void subLonITime(void) {
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(time) - opX(long integer) ==> result(time)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subTimeLonI(void) {
   fnToBeCoded();
 }
 
@@ -196,14 +302,57 @@ void subLonIDate(void) {
 
 
 /********************************************//**
+ * \brief opY(date) - opX(long integer) ==> result(date)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subDateLonI(void) {
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
  * \brief opY(long integer) - opX(64bits integer) ==> result(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void subLonIShoI(void) {
+  longInteger_t iOp1;
+  longInteger_t iOp2;
+
   convertShortIntegerRegisterLongIntegerRegister(opX, opX);
-  subLonILonI();
+
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+
+  longIntegerSubtract(&iOp1, &iOp2, &iOp1);
+
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
+}
+
+
+
+/********************************************//**
+ * \brief opY(64bits integer) - opX(long integer) ==> result(long integer)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subShoILonI(void) {
+  longInteger_t iOp1;
+  longInteger_t iOp2;
+
+  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
+
+  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+
+  longIntegerSubtract(&iOp1, &iOp2, &iOp1);
+
+  convertLongIntegerToLongIntegerRegister(&iOp1, result);
 }
 
 
@@ -218,13 +367,35 @@ void subLonIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subLonIRe34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonIRe34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
   convertLongIntegerRegisterToReal34Register(opY, opY);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+}
+
+
+
+/********************************************//**
+ * \brief opY(real34) - opX(long integer) ==> result(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe34LonI(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe34LonI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertLongIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
@@ -240,40 +411,108 @@ void subLonICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subLonICo34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subLonICo34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(result)); // result = opX
   convertLongIntegerRegisterToReal34Register(opY, opY);
-  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(real16) - opX(long integer) ==> result(real16)
+ * \brief opY(complex34) - opX(long integer) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subRe16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+void subCo34LonI(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe16LonI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo34LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  convertLongIntegerRegisterToReal16Register(opX, opX);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
-  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  convertLongIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
+
+/********************************************//**
+ * \brief opY(long integer) - opX(angle34) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subLonIAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subLonIAn34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertLongIntegerRegisterToReal34Register(opY, opY);
+  setRegisterDataType(result, dtAngle34, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle34) - opX(long integer) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34LonI(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34LonI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertLongIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterTag(opY), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterTag(opY), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* real16 - ...                                                                                                                                                                           */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(real16) - opX(real16) ==> result(real16)
@@ -285,12 +524,11 @@ void subRe16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe16Re16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe16Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtReal16, REAL16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
@@ -306,41 +544,115 @@ void subRe16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe16Co16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe16Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(REGISTER_COMPLEX16_DATA(opX), REGISTER_COMPLEX16_DATA(result)); // result = opX
-  complex16ChangeSign(REGISTER_REAL16_DATA(result)); // result = -result
-  real16Add(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result)); // real part
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16ChangeSign(REGISTER_IMAG16_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(real16) - opX(angle) ==> result(angle)
+ * \brief opY(complex16) - opX(real16) ==> result(complex16)
  *
  * \param void
  * \return void
  ***********************************************/
-void subRe16Angl(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
+void subCo16Re16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe16Angl:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo16Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  #if (ANGLE34 == 1)
-    convertRegister16To34(opY)
-  #endif
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(real16) - opX(angle16) ==> result(angle16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe16An16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe16An16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opY);
+  convertRegister16To34(opX);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), AM_DMS, AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, AM_DMS);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    convertRegister34To16(result);
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle16) - opX(real16) ==> result(angle16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16Re16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16Re16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opY);
+  convertRegister16To34(opX);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), AM_DMS, AM_DEGREE);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, AM_DMS);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    convertRegister34To16(result);
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
+  }
 }
 
 
@@ -356,6 +668,26 @@ void subRe16Time(void) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function subRe16Time:", "cannot use NaN as an input of -", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(time) - opX(real16) ==> result(time)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subTimeRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subTimeRe16:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
@@ -386,14 +718,64 @@ void subRe16Date(void) {
 
 
 /********************************************//**
+ * \brief opY(date) - opX(real16) ==> result(date)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subDateRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subDateRe16:", "cannot use NaN as an input of -", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
  * \brief opY(real16) - opX(64bits integer) ==> result(real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void subRe16ShoI(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe16ShoI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertShortIntegerRegisterToReal16Register(opX, opX);
-  subRe16Re16();
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+}
+
+
+
+/********************************************//**
+ * \brief opY(64bits integer) - opX(real16) ==> result(real16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subShoIRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subShoIRe16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertShortIntegerRegisterToReal16Register(opY, opY);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
 
@@ -405,8 +787,39 @@ void subRe16ShoI(void) {
  * \return void
  ***********************************************/
 void subRe16Re34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe16Re34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opY);
-  subRe34Re34();
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+}
+
+
+
+/********************************************//**
+ * \brief opY(real34) - opX(real16) ==> result(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe34Re16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe34Re16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opX);
+
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
 
@@ -418,56 +831,121 @@ void subRe16Re34(void) {
  * \return void
  ***********************************************/
 void subRe16Co34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe16Co34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opY);
-  subRe34Co34();
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(complex16) - opX(long integer) ==> result(complex16)
+ * \brief opY(complex34) - opX(real16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subCo16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
+void subCo34Re16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subCo16LonI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo34Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  complex16Copy(REGISTER_COMPLEX16_DATA(opY), REGISTER_COMPLEX16_DATA(result)); // result = opX
-  convertLongIntegerRegisterToReal16Register(opX, opX);
-  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(complex16) - opX(real16) ==> result(complex16)
+ * \brief opY(real16) - opX(angle34) ==> result(angle34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subCo16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+void subRe16An34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subCo16Re16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe16An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
-  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
-  real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
+  convertRegister16To34(opY);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), AM_DMS, AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, AM_DMS);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
 }
 
 
+
+/********************************************//**
+ * \brief opY(angle34) - opX(real16) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34Re16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34Re16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opX);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), AM_DMS, AM_DEGREE);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, AM_DMS);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+
+    reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* complex16 - ...                                                                                                                                                                        */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(complex16) - opX(complex16) ==> result(complex16)
@@ -479,14 +957,57 @@ void subCo16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subCo16Co16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo16Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, 0);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
   real16Subtract(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(complex16) - opX(angle16) ==> result(complex16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subCo16An16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subCo16An16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle16) - opX(complex16) ==> result(complex16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16Co16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16Co16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16ChangeSign(REGISTER_IMAG16_DATA(opX));
+  real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
 }
 
 
@@ -498,8 +1019,40 @@ void subCo16Co16(void) {
  * \return void
  ***********************************************/
 void subCo16ShoI(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subCo16ShoI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertShortIntegerRegisterToReal16Register(opX, opX);
-  subCo16Re16();
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16Copy(REGISTER_IMAG16_DATA(opY), REGISTER_IMAG16_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(64bits integer) - opX(complex16) ==> result(complex16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subShoICo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subShoICo16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertShortIntegerRegisterToReal16Register(opY, opY);
+  real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
+  real16ChangeSign(REGISTER_IMAG16_DATA(result)); // imaginary part
 }
 
 
@@ -511,8 +1064,42 @@ void subCo16ShoI(void) {
  * \return void
  ***********************************************/
 void subCo16Re34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subCo16Re34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opY);
-  subCo34Re34();
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(real34) - opX(complex16) ==> result(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe34Co16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe34Co16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 }
 
 
@@ -524,164 +1111,474 @@ void subCo16Re34(void) {
  * \return void
  ***********************************************/
 void subCo16Co34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subCo16Co34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertRegister16To34(opY);
-  subCo34Co34();
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Subtract(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(angle) - opX(long integer) ==> result(angle)
+ * \brief opY(complex34) - opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subAnglLonI(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
+void subCo34Co16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subAnglLonI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo34Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertLongIntegerRegisterToAngleRegister(opX, opX);
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Subtract(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(angle) - opX(real16) ==> result(angle)
+ * \brief opY(complex16) - opX(angle34) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subAnglRe16(void) {
-  if(real16IsNaN(REGISTER_ANGLE_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+void subCo16An34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subAnglRe16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo16An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  #if (ANGLE34 == 1)
-    convertRegister16To34(opX)
-  #endif
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
+  convertRegister16To34(opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
 
 /********************************************//**
- * \brief opY(angle) - opX(angle) ==> result(angle)
+ * \brief opY(angle34) - opX(complex16) ==> result(complex34)
  *
  * \param void
  * \return void
  ***********************************************/
-void subAnglAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
+void subAn34Co16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subAnglAngl:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subAn34Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34ChangeSign(REGISTER_IMAG34_DATA(opX));
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
 
+/******************************************************************************************************************************************************************************************/
+/* angle16 - ...                                                                                                                                                                          */
+/******************************************************************************************************************************************************************************************/
+
 /********************************************//**
- * \brief opY(angle) - opX(short integer) ==> result(angle)
+ * \brief opY(angle16) - opX(angle16) ==> result(angle16)
  *
  * \param void
  * \return void
  ***********************************************/
-void subAnglShoI(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opY))) {
+void subAn16An16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subAnglShoI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subAn16An16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertShortIntegerRegisterToAngleRegister(opX, opX);
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
+  convertRegister16To34(opY);
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    convertRegister34To16(result);
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
+  }
 }
 
 
 
 /********************************************//**
- * \brief opY(angle) - opX(real34) ==> result(angle)
+ * \brief opY(angle16) - opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void subAnglRe34(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+void subAn16Time(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subAnglRe34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subAn16Time:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  #if (ANGLE16 == 1)
-    convertRegister34To16(opX);
-  #endif
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opX), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
-}
-
-
-
-/********************************************//**
- * \brief opY(time) - opX(long integer) ==> result(time)
- *
- * \param void
- * \return void
- ***********************************************/
-void subTimeLonI(void) {
   fnToBeCoded();
 }
 
 
 
 /********************************************//**
- * \brief opY(time) - opX(real16) ==> result(time)
+ * \brief opY(time) - opX(angle16) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void subTimeRe16(void) {
+void subTimeAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subTimeAn16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle16) - opX(date) ==> result(date)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16Date(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16Date:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(date) - opX(angle16) ==> result(date)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subDateAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subDateAn16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle16) - opX(64bits integer) ==> result(angle16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16ShoI(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16ShoI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opY);
+  convertShortIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    convertRegister34To16(result);
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(64bits integer) - opX(angle16) ==> result(angle16)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subShoIAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subTimeRe16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subShoIAn16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  fnToBeCoded();
+  convertShortIntegerRegisterToReal34Register(opY, opY);
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    convertRegister34To16(result);
+    checkDms16(REGISTER_REAL16_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
+  }
 }
 
 
+
+/********************************************//**
+ * \brief opY(angle16) - opX(real34) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16Re34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16Re34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opY);
+  setRegisterDataType(result, dtAngle34, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), AM_DMS, AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(real34) - opX(angle16) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe34An16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe34An16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), AM_DMS, AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle16) - opX(complex34) ==> result(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16Co34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16Co34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opY);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34ChangeSign(REGISTER_IMAG34_DATA(opX));
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(complex34) - opX(angle16) ==> result(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subCo34An16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subCo34An16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle16) - opX(angle34) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn16An34(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn16An34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opY);
+  setRegisterAngularMode(result, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle34) - opX(angle16) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34An16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34An16:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* time - ...                                                                                                                                                                             */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(time) - opX(time) ==> result(time)
@@ -716,28 +1613,16 @@ void subTimeRe34(void) {
 
 
 /********************************************//**
- * \brief opY(date) - opX(long integer) ==> result(date)
+ * \brief opY(real34) - opX(time) ==> result(time)
  *
  * \param void
  * \return void
  ***********************************************/
-void subDateLonI(void) {
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief opY(date) - opX(real16) ==> result(date)
- *
- * \param void
- * \return void
- ***********************************************/
-void subDateRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+void subRe34Time(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subDateRe16:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe34Time:", "cannot use NaN as an input of -", NULL, NULL);
     #endif
     return;
   }
@@ -746,6 +1631,50 @@ void subDateRe16(void) {
 }
 
 
+
+/********************************************//**
+ * \brief opY(time) - opX(angle34) ==> result(time)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subTimeAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subTimeAn34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle34) - opX(time) ==> result(time)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34Time(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34Time:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* date - ...                                                                                                                                                                             */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(date) - opX(date) ==> result(long integer)
@@ -778,6 +1707,74 @@ void subDateRe34(void) {
 }
 
 
+
+/********************************************//**
+ * \brief opY(real34) - opX(date) ==> result(date)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe34Date(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe34Date:", "cannot use NaN as an input of -", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(date) - opX(angle34) ==> result(date)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subDateAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subDateAn34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle34) - opX(date) ==> result(date)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34Date(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34Date:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  fnToBeCoded();
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* string - ...                                                                                                                                                                           */
+/******************************************************************************************************************************************************************************************/
+
+/******************************************************************************************************************************************************************************************/
+/* real16 matrix - ...                                                                                                                                                                    */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(real16 matrix) - opX(real16 matrix) ==> result(real16 matrix)
@@ -815,6 +1812,10 @@ void subCm16Rm16(void) {
 
 
 
+/******************************************************************************************************************************************************************************************/
+/* complex16 matrix - ...                                                                                                                                                                 */
+/******************************************************************************************************************************************************************************************/
+
 /********************************************//**
  * \brief opY(complex16 matrix) - opX(complex16 matrix) ==> result(complex16 matrix)
  *
@@ -827,68 +1828,9 @@ void subCm16Cm16(void) {
 
 
 
-/********************************************//**
- * \brief opY(64bits integer) - opX(long integer) ==> result(long integer)
- *
- * \param void
- * \return void
- ***********************************************/
-void subShoILonI(void) {
-  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
-  subLonILonI();
-}
-
-
-
-/********************************************//**
- * \brief opY(64bits integer) - opX(real16) ==> result(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void subShoIRe16(void) {
-  convertShortIntegerRegisterToReal16Register(opY, opY);
-  subRe16Re16();
-}
-
-
-
-/********************************************//**
- * \brief opY(64bits integer) - opX(complex16) ==> result(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void subShoICo16(void) {
-  convertShortIntegerRegisterToReal16Register(opY, opY);
-  subRe16Co16();
-}
-
-
-
-/********************************************//**
- * \brief opY(short integer) - opX(angle) ==> result(angle)
- *
- * \param void
- * \return void
- ***********************************************/
-void subShoIAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subShoIAngl:", "cannot use NaN as an input of -", NULL, NULL);
-    #endif
-    return;
-  }
-
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  convertShortIntegerRegisterToAngleRegister(opY, opY);
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
-}
-
-
+/******************************************************************************************************************************************************************************************/
+/* short integer + ...                                                                                                                                                                    */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(Short integer) - opX(Short integer) ==> result(Short integer)
@@ -897,7 +1839,7 @@ void subShoIAngl(void) {
  * \return void
  ***********************************************/
 void subShoIShoI(void) {
-  reallocateRegister(result, dtShortInteger, SHORT_INTEGER_SIZE, getRegisterBase(opY));
+  reallocateRegister(result, dtShortInteger, SHORT_INTEGER_SIZE, getRegisterTag(opY));
   *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intSubtract(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
 }
 
@@ -910,135 +1852,16 @@ void subShoIShoI(void) {
  * \return void
  ***********************************************/
 void subShoIRe34(void) {
-  convertShortIntegerRegisterToReal34Register(opY, opY);
-  subRe34Re34();
-}
-
-
-
-/********************************************//**
- * \brief opY(64bits integer) - opX(complex34) ==> result(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subShoICo34(void) {
-  convertShortIntegerRegisterToReal34Register(opY, opY);
-  subRe34Co34();
-}
-
-
-
-/********************************************//**
- * \brief opY(real34) - opX(long integer) ==> result(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subRe34LonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe34LonI:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subShoIRe34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(opX, opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
+  convertShortIntegerRegisterToReal34Register(opY, opY);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-}
-
-
-
-/********************************************//**
- * \brief opY(real34) - opX(real16) ==> result(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subRe34Re16(void) {
-  convertRegister16To34(opX);
-  subRe34Re34();
-}
-
-
-
-/********************************************//**
- * \brief opY(real34) - opX(complex16) ==> result(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subRe34Co16(void) {
-  convertRegister16To34(opX);
-  subRe34Co34();
-}
-
-
-
-/********************************************//**
- * \brief opY(real34) - opX(angle) ==> result(angle)
- *
- * \param void
- * \return void
- ***********************************************/
-void subRe34Angl(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe34Angl:", "cannot use NaN as an input of -", NULL, NULL);
-    #endif
-    return;
-  }
-
-  reallocateRegister(result, dtAngle, ANGLE_SIZE, 0);
-  #if (ANGLE16 == 1)
-    convertRegister34To16(opY);
-  #endif
-  convertAngleToInternal(REGISTER_ANGLE_DATA(opY), angularMode);
-  angleSubtract(REGISTER_ANGLE_DATA(opY), REGISTER_ANGLE_DATA(opX), REGISTER_ANGLE_DATA(result));
-  setRegisterAngularMode(result, angularMode);
-}
-
-
-
-/********************************************//**
- * \brief opY(real34) - opX(time) ==> result(time)
- *
- * \param void
- * \return void
- ***********************************************/
-void subRe34Time(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe34Time:", "cannot use NaN as an input of -", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief opY(real34) - opX(date) ==> result(date)
- *
- * \param void
- * \return void
- ***********************************************/
-void subRe34Date(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe34Date:", "cannot use NaN as an input of -", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
 }
 
 
@@ -1050,11 +1873,120 @@ void subRe34Date(void) {
  * \return void
  ***********************************************/
 void subRe34ShoI(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe34ShoI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
   convertShortIntegerRegisterToReal34Register(opX, opX);
-  subRe34Re34();
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
 
+
+/********************************************//**
+ * \brief opY(64bits integer) - opX(complex34) ==> result(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subShoICo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subShoICo34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertShortIntegerRegisterToReal34Register(opY, opY);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+
+/********************************************//**
+ * \brief opY(complex34) - opX(64bits integer) ==> result(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subCo34ShoI(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function addCo34ShoI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertShortIntegerRegisterToReal34Register(opX, opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(64bits integer) - opX(angle34) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subShoIAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subShoIAn34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertShortIntegerRegisterToReal34Register(opY, opY);
+
+  convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), currentAngularMode);
+  setRegisterTag(result, currentAngularMode);
+
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle34) - opX(64bits integer) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34ShoI(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34ShoI:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertShortIntegerRegisterToReal34Register(opX, opX);
+
+  convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterTag(opY), currentAngularMode);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* real34 - ...                                                                                                                                                                           */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(real34) - opX(real34) ==> result(real34)
@@ -1066,12 +1998,11 @@ void subRe34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe34Re34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe34Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
@@ -1084,80 +2015,16 @@ void subRe34Re34(void) {
  * \return void
  ***********************************************/
 void subRe34Co34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subRe34Co34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subRe34Co34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
-  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
-  real34ChangeSign(REGISTER_IMAG34_DATA(result));
-}
-
-
-
-/********************************************//**
- * \brief opY(complex34) - opX(long integer) ==> result(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subCo34LonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subCo34LonI:", "cannot use NaN as an input of -", NULL, NULL);
-    #endif
-    return;
-  }
-
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
-  complex34Copy(REGISTER_COMPLEX34_DATA(opY), REGISTER_COMPLEX34_DATA(result)); // result = opY
-  convertLongIntegerRegisterToReal34Register(opX, opX);
-  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-}
-
-
-
-/********************************************//**
- * \brief opY(complex34) - opX(real16) ==> result(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subCo34Re16(void) {
-  convertRegister16To34(opX);
-  subCo34Re34();
-}
-
-
-
-/********************************************//**
- * \brief opY(complex34) - opX(complex16) ==> result(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subCo34Co16(void) {
-  convertRegister16To34(opX);
-  subCo34Co34();
-}
-
-
-
-/********************************************//**
- * \brief opY(complex34) - opX(64bits integer) ==> result(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void subCo34ShoI(void) {
-  convertShortIntegerRegisterToReal34Register(opX, opX);
-  subCo34Re34();
+  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
@@ -1172,17 +2039,87 @@ void subCo34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function subCo34Re34:", "cannot use NaN as an input of -", NULL, NULL);
+      showInfoDialog("In function subCo34Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
 
 
+
+/********************************************//**
+ * \brief opY(real34) - opX(angle34) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subRe34An34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subRe34An34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  setRegisterAngularMode(result, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), AM_DMS, AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle34) - opX(real34) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34Re34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34Re34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  setRegisterDataType(result, dtAngle34, currentAngularMode);
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), AM_DMS, AM_DEGREE);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* complex34 - ...                                                                                                                                                                        */
+/******************************************************************************************************************************************************************************************/
 
 /********************************************//**
  * \brief opY(complex34) - opX(complex34) ==> result(complex34)
@@ -1199,7 +2136,90 @@ void subCo34Co34(void) {
     return;
   }
 
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, 0);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Subtract(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(complex34) - opX(angle34) ==> result(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subCo34An34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subCo34An34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+/********************************************//**
+ * \brief opY(angle34) - opX(complex34) ==> result(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34Co34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34Co34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
+  real34ChangeSign(REGISTER_IMAG34_DATA(opX));
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* angle34 - ...                                                                                                                                                                          */
+/******************************************************************************************************************************************************************************************/
+
+/********************************************//**
+ * \brief opY(angle34) - opX(angle34) ==> result(angle34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void subAn34An34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function subAn34An34:", "cannot use NaN as an input of +", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(currentAngularMode == AM_DMS) {
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), AM_DEGREE);
+
+    setRegisterTag(result, AM_DMS);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
+    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_DEGREE, AM_DMS);
+    checkDms34(REGISTER_REAL34_DATA(result));
+  }
+  else { //current angular mode is not DMS
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), currentAngularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX), currentAngularMode);
+
+    setRegisterTag(result, currentAngularMode);
+    real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  }
 }

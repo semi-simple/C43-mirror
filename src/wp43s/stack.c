@@ -89,8 +89,7 @@ void liftStack(void) {
   }
 
   setRegisterDataPointer(REGISTER_X, allocateMemory(REAL16_SIZE));
-  setRegisterDataType(REGISTER_X, dtReal16);
-  setRegisterDataInfo(REGISTER_X, 0);
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
@@ -210,13 +209,12 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
 void fnFillStack(uint16_t unusedParamButMandatory) {
   uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
   uint16_t dataSizeX = getRegisterFullSize(REGISTER_X);
-  uint16_t dataInfo  = getRegisterDataInfo(REGISTER_X);
+  uint16_t tag       = getRegisterTag(REGISTER_X);
   uint16_t newDataPointer;
 
   for(uint16_t i=REGISTER_Y; i<=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
     freeRegisterData(i);
-    setRegisterDataType(i, dataTypeX);
-    setRegisterDataInfo(i, dataInfo);
+    setRegisterDataType(i, dataTypeX, tag);
     newDataPointer = allocateMemory(dataSizeX);
     setRegisterDataPointer(i, newDataPointer);
     memcpy(ram + newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeX);

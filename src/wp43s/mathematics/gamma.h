@@ -20,15 +20,22 @@
 
 void fnGamma     (uint16_t unusedParamButMandatory);
 void fnLnGamma   (uint16_t unusedParamButMandatory);
+
 void gammaError  (void);
 void lnGammaError(void);
+
 void gammaLonI   (void);
-void lnGammaLonI (void);
 void gammaRe16   (void);
-void lnGammaRe16 (void);
 void gammaCo16   (void);
-void lnGammaCo16 (void);
+void gammaAn16   (void);
 void gammaRe34   (void);
-void lnGammaRe34 (void);
 void gammaCo34   (void);
+void gammaAn34   (void);
+
+void lnGammaLonI (void);
+void lnGammaRe16 (void);
+void lnGammaCo16 (void);
+void lnGammaAn16 (void);
+void lnGammaRe34 (void);
 void lnGammaCo34 (void);
+void lnGammaAn34 (void);

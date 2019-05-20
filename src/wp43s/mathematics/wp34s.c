@@ -45,6 +45,34 @@ const real51_t * const gamma_consts[] = {
   (real51_t *)"\x33\x00\x00\x00\xc3\xff\xff\xff\x00\x00\x8a\x02\x6a\x03\x24\x00\xc3\x03\xc7\x01\xb0\x00\x14\x00\x48\x02\xe3\x00\x00\x00\x6a\x00\x6e\x02\x48\x02\x07\x02\xba\x01\xde\x02\xa5\x00"  // const_gammaC21 = +1.657344425195846221060002275840201764559630368746500000e-11
 };
 
+const real34_t * const angle360[] = {
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x70\x00\x2e", // 360 deg
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00\x32", // 400 grad
+  (real34_t *)"\x06\x64\x6b\xbe\x5a\xad\xda\xa9\x6e\x3e\x87\x2d\xb3\xd2\xff\x39", // 2pi rad
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0\xff\x29"  // 2   multpi
+};
+
+const real34_t * const angle180[] = {
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0\x40\x00\x26", // 180 deg
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00\x2a", // 200 grad
+  (real34_t *)"\x83\xe6\xb5\xda\xd0\x62\xe2\xb4\xfb\xb3\x53\xeb\x1a\xcc\xff\x2d", // pi  rad
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc0\xff\x25"  // 1   multpi
+};
+
+const real34_t * const angle90[]  = {
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x6e", // 90 deg
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00\x26", // 100 grad
+  (real34_t *)"\xd1\xe7\xbc\x71\x68\x31\x65\xec\xb1\xf6\xa6\xe9\x0f\xef\xff\x25", // pi/2 rad
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\xff\x35"  // 1/2 multpi
+};
+
+const real34_t * const angle45[]  = {
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x28\x00\x32", // 45 deg
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x36", // 50 grad
+  (real34_t *)"\xd7\x7b\x83\x25\xc2\xd6\xe8\xb1\x22\xbf\x33\x3f\xd2\x95\xff\x3d", // pi/4 rad
+  (real34_t *)"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xa8\xff\x29"  // 1/4 multpi
+};
+
 
 /******************************************************
  * This functions are borrowed from the WP34S project
@@ -53,13 +81,17 @@ const real51_t * const gamma_consts[] = {
 /* Have to be careful here to ensure that every function we call can handle
  * the increased size of the numbers we're using.
  */
-void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle) { // angle in internal units
+void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle, uint32_t angularMode) {
 	 bool_t sinNeg = false, cosNeg = false, swap = false;
   real34_t angle34;
-  real450_t real450;
-  real51_t real51;
+  real451_t angle451;
 
   real34Copy(angle, &angle34);
+
+	 if(angularMode == AM_DMS) {
+    angularMode = AM_DEGREE;
+    convertAngle34FromTo(&angle34, AM_DMS, AM_DEGREE);
+	 }
 
 	 // sin(-x) = -sin(x), cos(-x) = cos(x)
 	 if(real34IsNegative(&angle34)) {
@@ -67,10 +99,28 @@ void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle) 
 	  	real34SetPositiveSign(&angle34);
 	 }
 
- 	real34ToReal450(&angle34, (decNumber *)&real450);
- 	real34ToReal51(const34_1296, &real51);
-	 real450Remainder((decNumber *)&real450, (decNumber *)&real51, (decNumber *)&real450); // mod(angle34, 360°) --> angle34
-	 if(real450IsNaN(&real450)) {
+ 	real34ToReal451(&angle34, (decNumber *)&angle451);
+ 	switch(angularMode) {
+    case AM_DEGREE:
+    	 real451Remainder((decNumber *)&angle451, (decNumber *)const51_360, (decNumber *)&angle451); // mod(angle34, 360°) --> angle34
+     	break;
+
+    case AM_GRAD:
+    	 real451Remainder((decNumber *)&angle451, (decNumber *)const51_400, (decNumber *)&angle451); // mod(angle34, 360°) --> angle34
+     	break;
+
+    case AM_RADIAN:
+    	 real451Remainder((decNumber *)&angle451, (decNumber *)const451_2pi, (decNumber *)&angle451); // mod(angle34, 360°) --> angle34
+     	break;
+
+    case AM_MULTPI:
+    	 real451Remainder((decNumber *)&angle451, (decNumber *)const51_2, (decNumber *)&angle451); // mod(angle34, 360°) --> angle34
+     	break;
+
+    default: {}
+ 	}
+
+	 if(real451IsNaN(&angle451)) {
 	   if(sin != NULL) {
 	 	  real34Copy(const34_NaN, sin);
 	 	 }
@@ -80,24 +130,24 @@ void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle) 
    return;
 	 }
 
-	 real450ToReal34((decNumber *)&real450, &angle34);
+	 real451ToReal34((decNumber *)&angle451, &angle34);
 
 	 // sin(180+x) = -sin(x), cos(180+x) = -cos(x)
- 	if(real34CompareGreaterEqual(&angle34, const34_648)) { // angle34 >= 180°
-	  	real34Subtract(&angle34, const34_648, &angle34);     // angle34 - 180° --> angle34
+ 	if(real34CompareGreaterEqual(&angle34, angle180[angularMode])) { // angle34 >= 180°
+	  	real34Subtract(&angle34, angle180[angularMode], &angle34);     // angle34 - 180° --> angle34
 	  	sinNeg = !sinNeg;
 	  	cosNeg = !cosNeg;
   }
 
 	 // sin(90+x) = cos(x), cos(90+x) = -sin(x)
-	 if(real34CompareGreaterEqual(&angle34, const34_324)) { // angle34 >= 90°
-		  real34Subtract(&angle34, const34_324, &angle34);     // angle34 - 90° --> angle34
+	 if(real34CompareGreaterEqual(&angle34, angle90[angularMode])) { // angle34 >= 90°
+		  real34Subtract(&angle34, angle90[angularMode], &angle34);     // angle34 - 90° --> angle34
 		  swap = true;
 		  cosNeg = !cosNeg;
   }
 
 	 // sin(90-x) = cos(x), cos(90-x) = sin(x)
-	 if(real34CompareEqual(&angle34, const34_162)) { // angle34 == 45°
+	 if(real34CompareEqual(&angle34, angle45[angularMode])) { // angle34 == 45°
 	   if(sin != NULL) {
 	 	  real34Copy(const34_root2on2, sin);
 	 	 }
@@ -106,11 +156,12 @@ void WP34S_cvt_2rad_sincos(real34_t *sin, real34_t *cos, const real34_t *angle) 
 	  	}
   }
 	 else { // angle34 < 90
-		  if(real34CompareGreaterThan(&angle34, const34_162)) { // angle34 > 45°
-		   	real34Subtract(const34_324, &angle34, &angle34);    // 90° - angle34  --> angle34
+		  if(real34CompareGreaterThan(&angle34, angle45[angularMode])) { // angle34 > 45°
+		   	real34Subtract(angle90[angularMode], &angle34, &angle34);    // 90° - angle34  --> angle34
 			   swap = !swap;
    	}
-    real34Divide(&angle34, const34_648onPi, &angle34);        // convertion from internal to radian
+
+    convertAngle34FromTo(&angle34, angularMode, AM_RADIAN);
 		  WP34S_sincosTaylor(&angle34, swap?cos:sin, swap?sin:cos); // angle34 in radian
   }
 

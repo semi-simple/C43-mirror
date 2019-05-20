@@ -65,11 +65,6 @@
 
 #define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
-#define getRegisterBase(regist)            getRegisterDataInfo(regist)       // Only for a short integer
-#define getRegisterAngularMode(regist)     getRegisterDataInfo(regist)       // Only for a real 34
-#define setRegisterBase(regist, base)      setRegisterDataInfo(regist, base) // Only for a short integer
-#define setRegisterAngularMode(regist, am) setRegisterDataInfo(regist, am)   // Only for a real34
-#define setRegisterSign(regist, sign)      setRegisterDataInfo(regist, sign) // Only for a long integer
 #define freeRegisterData(regist)           freeMemory(getRegisterDataPointer(regist), getRegisterFullSize(regist))
 
 
@@ -92,10 +87,10 @@
  * \brief Different data types
  ***********************************************/
 typedef enum {
-  dtLongInteger      =  0,  ///< Z arbitrary precision integer
+  dtLongInteger     =  0,  ///< Z arbitrary precision integer
   dtReal16          =  1,  ///< R single precision real (64 bits)
   dtComplex16       =  2,  ///< C single precision complex (2x 64 bits), RegDataInfo contains rectangular or polar mode
-  dtAngle           =  3,  ///< Angle stored in 1296 units per 360°
+  dtAngle16         =  3,  ///< Single precision angle
   dtTime            =  4,  ///< Time
   dtDate            =  5,  ///< Date in various formats
   dtString          =  6,  ///< Alphanumeric string
@@ -103,25 +98,26 @@ typedef enum {
   dtComplex16Matrix =  8,  ///< Double precision vector or matrix
   dtShortInteger    =  9,  ///< Short integer (64 bit)
   dtReal34          = 10,  ///< R double precision real (128 bits)
-  dtComplex34       = 11   ///< C double precision complex (2x 128 bits)
-  //dtLabel           = 12,  ///< Label
-  //dtSystemInteger   = 13,  ///< System integer (64 bits)
-  //dtFlags           = 14,  ///< Flags
-  //dtConfig          = 15,  ///< Configuration
-  //dtPgmStep         = 16,  ///< Program step
-  //dtDirectory       = 17,  ///< Program
+  dtComplex34       = 11,  ///< C double precision complex (2x 128 bits)
+  dtAngle34         = 12   ///< Double precision angle
+  //dtLabel           = 13,  ///< Label
+  //dtSystemInteger   = 14,  ///< System integer (64 bits)
+  //dtFlags           = 15,  ///< Flags
+  //dtConfig          = 16,  ///< Configuration
+  //dtPgmStep         = 17,  ///< Program step
+  //dtDirectory       = 18,  ///< Program
 } dataType_t; // 4 bits (NOT 5 BITS)
 
 
 uint32_t          getRegisterDataType             (calcRegister_t regist);
 uint32_t          getRegisterDataPointer          (calcRegister_t regist);
-uint32_t          getRegisterDataInfo             (calcRegister_t regist);
+uint32_t          getRegisterTag                  (calcRegister_t regist);
 uint32_t          getRegisterNameLength           (calcRegister_t regist);
 uint32_t          getRegisterNamePointer          (calcRegister_t regist);
 uint16_t          getRegisterMaxDataLength        (calcRegister_t regist);
-void              setRegisterDataType             (calcRegister_t regist, uint16_t dataType);
+void              setRegisterDataType             (calcRegister_t regist, uint16_t dataType, uint16_t tag);
 void              setRegisterDataPointer          (calcRegister_t regist, uint32_t dataPointer);
-void              setRegisterDataInfo             (calcRegister_t regist, uint16_t dataInfo);
+void              setRegisterTag                  (calcRegister_t regist, uint16_t tag);
 void              setRegisterNameLength           (calcRegister_t regist, uint16_t length);
 void              setRegisterNamePointer          (calcRegister_t regist, uint32_t pointer);
 void              setRegisterMaxDataLength        (calcRegister_t regist, uint16_t maxDataLen);
@@ -169,8 +165,19 @@ void              printReal34ToConsole            (const real34_t *value);
 void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
-void              printReal450ToConsole           (const real450_t *value);
+void              printReal451ToConsole           (const real451_t *value);
 void              printLongIntegerToConsole        (longInteger_t *value);
-void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t dataInfo);
+void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t tag);
 calcRegister_t    allocateTemporaryRegister       (void);
 void              freeTemporaryRegister           (calcRegister_t tmpReg);
+
+#define getRegisterAngularMode(reg)          getRegisterTag(reg)
+#define setRegisterAngularMode(reg, am)      setRegisterTag(reg, am)
+#define getRegisterShortIntegerBase(reg)     getRegisterTag(reg)
+#define setRegisterShortIntegerBase(reg, am) setRegisterTag(reg, am)
+#define getRegisterLongIntegerSign(reg)      getRegisterTag(reg)
+#define setRegisterLongIntegerSign(reg, am)  setRegisterTag(reg, am)
+
+#ifdef TESTSUITE_BUILD
+  void            printRegisterToString           (calcRegister_t regist, char *registerContent);
+#endif // TESTSUITE_BUILD

@@ -22,10 +22,10 @@
 
 
 
-void (* const Tan[12])(void) = {
-//  regX ==> 1             2         3          4         5          6          7          8            9             10              11        12
-//           Long integer  real16    complex16  angle     Time       Date       String     real16 mat   complex16 m   Short integer   real34    complex34
-             tanLonI,      tanRe16,  tanCo16,   tanAngl,  errorTan,  errorTan,  errorTan,  tanRm16,     tanCm16,      errorTan,       tanRe34,  tanCo34
+void (* const Tan[13])(void) = {
+// regX ==> 1            2        3         4        5         6         7         8          9           10            11       12        13
+//          Long integer Real16   Complex16 Angle16  Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34 Angle34
+            tanLonI,     tanRe16, tanCo16,  tanAn16, tanError, tanError, tanError, tanRm16,   tanCm16,    tanError,     tanRe34, tanCo34,  tanAn34
 };
 
 
@@ -36,7 +36,7 @@ void (* const Tan[12])(void) = {
  * \param void
  * \return void
  ***********************************************/
-void errorTan(void) {
+void tanError(void) {
   displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Tan for %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -72,9 +72,8 @@ void tanLonI(void) {
   real34_t cos;
 
   convertLongIntegerRegisterToReal34Register(opX, opX);
-  convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX)); // opX in internal units
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+  WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), currentAngularMode);
   if(real34IsZero(&cos)) {
     if(getFlag(FLAG_DANGER)) {
       real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
@@ -104,16 +103,16 @@ void tanRe16(void) {
     return;
   }
 
-  if(real16IsSpecial(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
     real34_t cos;
 
     convertRegister16To34(opX);
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
-    reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX)); // opX in internal units
+    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), currentAngularMode);
+
     if(real34IsZero(&cos)) {
       if(getFlag(FLAG_DANGER)) {
       	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
@@ -168,7 +167,7 @@ void tanCo16(void) {
 
   // calculate exp(iz) - exp(-iz)
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz),  REGISTER_COMPLEX34_DATA(opY));
   complex34Copy(VARIABLE_COMPLEX34_DATA(&expMIz), REGISTER_COMPLEX34_DATA(opX));
   subCo34Co34();
@@ -194,37 +193,42 @@ void tanCo16(void) {
 
 
 
-void tanAngl(void) {
-  if(angleIsNaN(REGISTER_ANGLE_DATA(opX))) {
+void tanAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tanAngl:", "cannot use NaN as an input of tan", NULL, NULL);
+      showInfoDialog("In function tanAn16:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t cos;
-
-  #if (ANGLE16 == 1)
-    convertRegister16To34(opX);
-  #endif
-  reallocateRegister(result, dtReal34, REAL34_SIZE, 0);
-  WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX)); // opX in internal units
-  if(real34IsZero(&cos)) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
-    }
-    else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function tanRe34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
-      #endif
-    }
+  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
-   real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+    real34_t cos;
+
+    convertRegister16To34(opX);
+    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
+
+    if(real34IsZero(&cos)) {
+      if(getFlag(FLAG_DANGER)) {
+      	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+      }
+      else {
+        displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function tanAn16:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
+        #endif
+        return;
+      }
+    }
+    else {
+   	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+    }
+    convertRegister34To16(result);
   }
-  convertRegister34To16(result);
 }
 
 
@@ -250,14 +254,14 @@ void tanRe34(void) {
     return;
   }
 
-  if(real34IsSpecial(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
     real34_t cos;
 
-    convertAngle34ToInternal(REGISTER_REAL34_DATA(opX), angularMode);
-    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX)); // opX in internal units
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), currentAngularMode);
+
     if(real34IsZero(&cos)) {
       if(getFlag(FLAG_DANGER)) {
       	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
@@ -307,7 +311,7 @@ void tanCo34(void) {
 
   // calculate exp(iz) - exp(-iz)
   opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, 0);
+  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz),  REGISTER_COMPLEX34_DATA(opY));
   complex34Copy(VARIABLE_COMPLEX34_DATA(&expMIz), REGISTER_COMPLEX34_DATA(opX));
   subCo34Co34();
@@ -328,4 +332,40 @@ void tanCo34(void) {
   real34ChangeSign(REGISTER_IMAG34_DATA(result));
 
   freeTemporaryRegister(opY);
+}
+
+
+
+void tanAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tanAn34:", "cannot use NaN as an input of tan", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+  }
+  else {
+    real34_t cos;
+
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
+
+    if(real34IsZero(&cos)) {
+      if(getFlag(FLAG_DANGER)) {
+      	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+      }
+      else {
+        displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function tanAn34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
+        #endif
+      }
+    }
+    else {
+   	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+    }
+  }
 }

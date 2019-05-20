@@ -92,27 +92,27 @@ void showAngularMode(void) {
 
   x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9+3 pixel wide
 
-  if(angularMode == AM_DEGREE) {
+  if(currentAngularMode == AM_DEGREE) {
     x = showGlyph(STD_DEGREE,             &standardFont, x, 0, vmNormal, true, true); // °  is 0+6+2 pixel wide
     showGlyph(STD_SPACE_HAIR,             &standardFont, x, 0, vmNormal, true, true); //    is 0+0+1 pixel wide
   }
-  else if(angularMode == AM_GRAD) {
+  else if(currentAngularMode == AM_GRAD) {
     x = showGlyph(STD_SUP_g,              &standardFont, x, 0, vmNormal, true, true); // g  is 0+6+2 pixel wide
     showGlyph(STD_SPACE_HAIR,             &standardFont, x, 0, vmNormal, true, true); //    is 0+0+1 pixel wide
   }
-  else if(angularMode == AM_RADIAN) {
+  else if(currentAngularMode == AM_RADIAN) {
     x = showGlyph(STD_SUP_r,              &standardFont, x, 0, vmNormal, true, true); // r  is 0+6+2 pixel wide
     showGlyph(STD_SPACE_HAIR,             &standardFont, x, 0, vmNormal, true, true); //    is 0+0+1 pixel wide
   }
-  else if(angularMode == AM_MULTPI) {
+  else if(currentAngularMode == AM_MULTPI) {
     showGlyph(STD_pi,                     &standardFont, x, 0, vmNormal, true, true); // pi is 0+9+2 pixel wide
   }
-  else if(angularMode == AM_DMS) {
+  else if(currentAngularMode == AM_DMS) {
     x = showGlyph(STD_RIGHT_DOUBLE_QUOTE, &standardFont, x, 0, vmNormal, true, true); // "  is 0+6+2 pixel wide
     showGlyph(STD_SPACE_HAIR,             &standardFont, x, 0, vmNormal, true, true); //    is 0+0+1 pixel wide
   }
   else {
-    sprintf(errorMessage, "In function showAngularMode: %" FMT8U " is an unexpected value for angularMode!", angularMode);
+    sprintf(errorMessage, "In function showAngularMode: %" FMT8U " is an unexpected value for currentAngularMode!", currentAngularMode);
     displayBugScreen(errorMessage);
   }
 }

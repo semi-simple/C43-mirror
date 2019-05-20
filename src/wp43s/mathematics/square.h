@@ -19,4 +19,4 @@
  ***********************************************/
 
 void fnSquare   (uint16_t unusedParamButMandatory);
-void errorSquare(void);
+void squareError(void);

@@ -1,0 +1,107 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                   ANGLE34 / ...                         **
+;**                    ... / ANGLE34                        **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnDivide
+
+
+
+;==================================================================
+; Angle34 / Long Integer      see in division_longInteger.txt
+; Angle34 / Real16            see in division_real16.txt
+; Angle34 / Complex16         see in division_complex16.txt
+; Angle34 / Angle16           see in division_angle16.txt
+; Angle34 / Time              see in division_time.txt
+; Angle34 / Date              see in division_date.txt
+; Angle34 / String            see in division_string.txt
+; Angle34 / Real16 Matrix     see in division_real16Matrix.txt
+; Angle34 / Complex16 Matrix  see in division_complex16Matrix.txt
+; Angle34 / Short Integer     see in division_shortInteger.txt
+; Angle34 / Real34            see in division_real34.txt
+; Angle34 / Complex34         see in division_complex34.txt
+;==================================================================
+
+
+
+;=======================================
+; Angle34 / Angle34 --> Real34
+;=======================================
+In:  AM=DEG FI=0 SL=0 NCSD=34 RY=An34:"123.4":DEG RX=An34:"2":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DEG RX=Re34:"61.7"
+
+In:  AM=DMS FI=0 SL=0 RY=An34:"123.4":DEG RX=An34:"2":DMS
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DMS RX=Re34:"61.7"
+
+In:  AM=GRAD FI=0 SL=0 RY=An34:"123.4":DEG RX=An34:"2":GRAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":GRAD RX=Re34:"68.555555555555555555555555555555555555555555555555555555555556"
+
+In:  AM=RAD FI=0 SL=0 RY=An34:"123.4":DEG RX=An34:"2":RAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":RAD RX=Re34:"1.0768681484805013489619172041574740441942519552302446064119671"
+
+In:  AM=MULTPI FI=0 SL=0 RY=An34:"123.4":DEG RX=An34:"2":MULTPI
+Out: EC=0 FI=0 SL=1 RL=An34:"2":MULTPI RX=Re34:"0.34277777777777777777777777777777777777777777777777777777777778"
+
+In:  AM=DEG FI=0 SL=0 RY=An34:"123.453099":DMS RX=An34:"2":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DEG RX=Re34:"61.879304166666666666666666666666666666666666666666666666666667"
+
+In:  AM=DMS FI=0 SL=0 RY=An34:"123.453099":DMS RX=An34:"2":DMS
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DMS RX=Re34:"61.879304166666666666666666666666666666666666666666666666666667"
+
+In:  AM=GRAD FI=0 SL=0 RY=An34:"123.453099":DMS RX=An34:"2":GRAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":GRAD RX=Re34:"68.754782407407407407407407407407407407407407407407407407407407"
+
+In:  AM=RAD FI=0 SL=0 RY=An34:"123.453099":DMS RX=An34:"2":RAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":RAD RX=Re34:"1.0799975965513793483237404201924894804816514179793952760599767"
+
+In:  AM=MULTPI FI=0 SL=0 RY=An34:"123.453099":DMS RX=An34:"2":MULTPI
+Out: EC=0 FI=0 SL=1 RL=An34:"2":MULTPI RX=Re34:"0.34377391203703703703703703703703703703703703703703703703703704"
+
+In:  AM=DEG FI=0 SL=0 RY=An34:"123.453099":GRAD RX=An34:"2":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DEG RX=Re34:"55.55389455"
+
+In:  AM=DMS FI=0 SL=0 RY=An34:"123.453099":GRAD RX=An34:"2":DMS
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DMS RX=Re34:"55.55389455"
+
+In:  AM=GRAD FI=0 SL=0 RY=An34:"123.453099":GRAD RX=An34:"2":GRAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":GRAD RX=Re34:"61.7265495"
+
+In:  AM=RAD FI=0 SL=0 RY=An34:"123.453099":GRAD RX=An34:"2":RAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":RAD RX=Re34:"0.96959837220323362514364830349424853558394672345206369263074028"
+
+In:  AM=MULTPI FI=0 SL=0 RY=An34:"123.453099":GRAD RX=An34:"2":MULTPI
+Out: EC=0 FI=0 SL=1 RL=An34:"2":MULTPI RX=Re34:"0.3086327475"
+
+In:  AM=DEG FI=0 SL=0 RY=An34:"3.453099789":RAD RX=An34:"2":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DEG RX=Re34:"98.9240220736075424796510016920879489493191984183692841481667"
+
+In:  AM=DMS FI=0 SL=0 RY=An34:"3.453099789":RAD RX=An34:"2":DMS
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DMS RX=Re34:"98.9240220736075424796510016920879489493191984183692841481667"
+
+In:  AM=GRAD FI=0 SL=0 RY=An34:"3.453099789":RAD RX=An34:"2":GRAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":GRAD RX=Re34:"109.91558008178615831072333521343105438813244268707698238685188"
+
+In:  AM=RAD FI=0 SL=0 RY=An34:"3.453099789":RAD RX=An34:"2":RAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":RAD RX=Re34:"1.7265498945"
+
+In:  AM=MULTPI FI=0 SL=0 RY=An34:"3.453099789":RAD RX=An34:"2":MULTPI
+Out: EC=0 FI=0 SL=1 RL=An34:"2":MULTPI RX=Re34:"0.54957790040893079155361667606715527194066221343538491193425942"
+
+In:  AM=DEG FI=0 SL=0 RY=An34:"3.453099789":MULTPI RX=An34:"2":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DEG RX=Re34:"310.77898101"
+
+In:  AM=DMS FI=0 SL=0 RY=An34:"3.453099789":MULTPI RX=An34:"2":DMS
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DMS RX=Re34:"310.77898101"
+
+In:  AM=GRAD FI=0 SL=0 RY=An34:"3.453099789":MULTPI RX=An34:"2":GRAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":GRAD RX=Re34:"345.3099789"
+
+In:  AM=RAD FI=0 SL=0 RY=An34:"3.453099789":MULTPI RX=An34:"2":RAD
+Out: EC=0 FI=0 SL=1 RL=An34:"2":RAD RX=Re34:"5.4241164646174325621444902755923487687230685436897173211306265"
+
+In:  AM=MULTPI FI=0 SL=0 RY=An34:"3.453099789":MULTPI RX=An34:"2":MULTPI
+Out: EC=0 FI=0 SL=1 RL=An34:"2":MULTPI RX=Re34:"1.7265498945"

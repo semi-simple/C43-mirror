@@ -763,7 +763,13 @@ void btnPressed(void *notUsed, void *data) {
             break;
 
           case dtReal16 :
-            setRegisterTag(REGISTER_X, TAG_NONE);
+            break;
+
+          case dtAngle16:
+            if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+              convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+            }
+            setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
             refreshRegisterLine(REGISTER_X);
             break;
 
@@ -774,6 +780,14 @@ void btnPressed(void *notUsed, void *data) {
 
           case dtReal34 :
             convertRegister34To16(REGISTER_X);
+            refreshRegisterLine(REGISTER_X);
+            break;
+
+          case dtAngle34:
+            if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+              convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+            }
+            setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
             refreshRegisterLine(REGISTER_X);
             break;
 

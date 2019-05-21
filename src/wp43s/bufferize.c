@@ -839,7 +839,7 @@ void addItemToNimBuffer(int16_t item) {
           }
 
           checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-          setRegisterTag(REGISTER_X, AM_DMS);
+          setRegisterDataType(REGISTER_X, dtAngle16, AM_DMS);
 
           refreshRegisterLine(REGISTER_X);
           STACK_LIFT_ENABLE;

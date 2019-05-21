@@ -71,11 +71,23 @@ void fnArccos(uint16_t unusedParamButMandatory) {
 void arccosLonI(void) {
  convertLongIntegerRegisterToReal16Register(opX, opX);
   if(real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(opX), const16_1)) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccosLonI:", "|X| > 1", NULL, NULL);
-    #endif
-    return;
+    if(getFlag(FLAG_CPXRES)) {
+      real16_t temp;
+
+      real16Copy(REGISTER_REAL16_DATA(opX), &temp);
+      reallocateRegister(opX, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      real16Copy(&temp, REGISTER_REAL16_DATA(opX));
+      real16Zero(REGISTER_IMAG16_DATA(opX));
+      arccosCo16();
+      return;
+    }
+    else {
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function arccosLonI:", "|X| > 1", "and CPXRES is not set!", NULL);
+      #endif
+      return;
+    }
   }
 
   reallocateRegister(result, dtReal16, REAL16_SIZE, currentAngularMode);
@@ -109,11 +121,23 @@ void arccosRe16(void) {
   }
 
   if(real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(opX), const16_1)) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccosRe16:", "|X| > 1", NULL, NULL);
-    #endif
-    return;
+    if(getFlag(FLAG_CPXRES)) {
+      real16_t temp;
+
+      real16Copy(REGISTER_REAL16_DATA(opX), &temp);
+      reallocateRegister(opX, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      real16Copy(&temp, REGISTER_REAL16_DATA(opX));
+      real16Zero(REGISTER_IMAG16_DATA(opX));
+      arccosCo16();
+      return;
+    }
+    else {
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function arccosRe16:", "|X| > 1", "and CPXRES is not set!", NULL);
+      #endif
+      return;
+    }
   }
 
   convertRegister16To34(opX);
@@ -147,38 +171,45 @@ void arccosCo16(void) {
 
   // store z
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), &z);
+printf("z = "); printRegisterToConsole(opX, 0); printf("\n");
 
   // calculate z*z
   opY = allocateTemporaryRegister();
   reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
   mulCo34Co34();
+printf("z*z = "); printRegisterToConsole(result, 0); printf("\n");
 
   // calculate z*z - 1
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
   real34Copy(const34_1, REGISTER_REAL34_DATA(opX));
   real34Zero(REGISTER_IMAG34_DATA(opX));
   subCo34Co34();
+printf("z*z - 1 = "); printRegisterToConsole(result, 0); printf("\n");
 
   // calculate sqrt(z*z - 1)
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   sqrtCo34();
+printf("sqrt(z*z - 1) = "); printRegisterToConsole(result, 0); printf("\n");
 
   // calculate z + sqrt(z*z - 1)
   complex34Copy(VARIABLE_COMPLEX34_DATA(&z), REGISTER_COMPLEX34_DATA(opY));
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   addCo34Co34();
+printf("z + sqrt(z*z - 1) = "); printRegisterToConsole(result, 0); printf("\n");
   freeTemporaryRegister(opY);
 
   // calculate ln(z + sqtr(1 - z*z))
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   lnCo34();
+printf("ln(z + sqrt(z*z - 1)) = "); printRegisterToConsole(result, 0); printf("\n");
 
   // calculate = -i.ln(iz + sqtr(1 - z*z))
   complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
   real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
   real34ChangeSign(REGISTER_IMAG34_DATA(result));
+printf("-i*ln(z + sqrt(z*z - 1)) = "); printRegisterToConsole(result, 0); printf("\n");
 
   convertRegister34To16(result);
 }
@@ -207,11 +238,23 @@ void arccosRe34(void) {
   }
 
   if(real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(opX), const34_1)) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccosRe34:", "|X| > 1", NULL, NULL);
-    #endif
-    return;
+    if(getFlag(FLAG_CPXRES)) {
+      real34_t temp;
+
+      real34Copy(REGISTER_REAL34_DATA(opX), &temp);
+      reallocateRegister(opX, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      real34Copy(&temp, REGISTER_REAL34_DATA(opX));
+      real34Zero(REGISTER_IMAG34_DATA(opX));
+      arccosCo34();
+      return;
+    }
+    else {
+      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function arccosRe34:", "|X| > 1", "and CPXRES is not set!", NULL);
+      #endif
+      return;
+    }
   }
 
   WP34S_do_acos(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));

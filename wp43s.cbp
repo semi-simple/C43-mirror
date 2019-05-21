@@ -224,6 +224,9 @@
 		<Unit filename="src/testSuite/addition_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/arccos.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/changeSign.txt">
 			<Option target="testSuite" />
 		</Unit>

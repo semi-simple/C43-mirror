@@ -183,17 +183,14 @@ void sqrtCo16(void) {
   }
 
   real34_t magnitude34, theta34;
-  uint8_t savedAngularMode = currentAngularMode;
 
-  currentAngularMode = AM_RADIAN;
   convertRegister16To34(opX);
   real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
+  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in RADIAN
   convertRegister34To16(result);
-  currentAngularMode = savedAngularMode;
 }
 
 
@@ -256,14 +253,11 @@ void sqrtCo34(void) {
   }
 
   real34_t magnitude34, theta34;
-  uint8_t savedAngularMode = currentAngularMode;
 
-  currentAngularMode = AM_RADIAN;
   real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
   real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
-  currentAngularMode = savedAngularMode;
 }
 
 

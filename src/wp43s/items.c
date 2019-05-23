@@ -1654,7 +1654,7 @@ const item_t indexOfItems[] = {
 /* 1527 */  { itemToBeCoded,               NOPARAM,                     "",                                            ".d",                                                                         SLS_UNCHANGED},
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,                                          SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",                                          SLS_ENABLED  },
-/* 1530 */  { fnConvertXToReal16,          NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                                                         SLS_ENABLED  },
+/* 1530 */  { fnConvertXToReal16,          NOPARAM,                     "SP" STD_LEFT_ARROW,                           "SP" STD_LEFT_ARROW,                                                          SLS_ENABLED  },
 /* 1531 */  { itemToBeCoded,               NOPARAM,                     "SHOW",                                        "SHOW",                                                                       SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                                                     SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    STD_MEASURED_ANGLE STD_RIGHT_DOUBLE_QUOTE STD_RIGHT_ARROW STD_MEASURED_ANGLE STD_DEGREE, SLS_ENABLED},

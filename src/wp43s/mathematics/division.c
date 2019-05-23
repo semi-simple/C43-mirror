@@ -148,6 +148,8 @@ void divLonIRe16(void) {
     return;
   }
 
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
+
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
@@ -308,7 +310,7 @@ void divLonIAn16(void) {
     return;
   }
 
-  setRegisterDataType(result, dtReal16, TAG_NONE);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
   convertLongIntegerRegisterToReal16Register(opY, opY);
 
   if(real16IsZero(REGISTER_REAL16_DATA(opY)) && real16IsZero(REGISTER_REAL16_DATA(opX))) {
@@ -477,6 +479,7 @@ void divLonIRe34(void) {
   }
 
   convertLongIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -576,6 +579,7 @@ void divLonICo34(void) {
   real34_t temp;
 
   convertLongIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // Denominator
   real34Multiply(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX), &temp); // c*c
@@ -632,7 +636,7 @@ void divLonIAn34(void) {
   }
 
   convertLongIntegerRegisterToReal34Register(opY, opY);
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -1006,6 +1010,7 @@ void divShoIRe16(void) {
   }
 
   convertShortIntegerRegisterToReal16Register(opY, opY);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
 
   if(real16IsZero(REGISTER_REAL16_DATA(opY)) && real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -1054,6 +1059,7 @@ void divRe16Re34(void) {
   }
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -1153,6 +1159,7 @@ void divRe16Co34(void) {
   real34_t temp;
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // Denominator
   real34Multiply(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX), &temp); // c*c
@@ -1209,7 +1216,7 @@ void divRe16An34(void) {
   }
 
   convertRegister16To34(opY);
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -1537,6 +1544,7 @@ void divCo16Co34(void) {
   real34_t temp;
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // Denominator
   real34Multiply(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX), &temp); // c*c
@@ -1795,7 +1803,6 @@ void divAn16ShoI(void) {
  ***********************************************/
 void divShoIAn16(void) {
   convertShortIntegerRegisterToReal16Register(opY, opY);
-  setRegisterDataType(result, dtReal16, TAG_NONE);
 
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
@@ -1804,6 +1811,8 @@ void divShoIAn16(void) {
     #endif
     return;
   }
+
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
 
   if(real16IsZero(REGISTER_REAL16_DATA(opY)) && real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -1852,7 +1861,7 @@ void divAn16Re34(void) {
   }
 
   convertRegister16To34(opY);
-  setRegisterDataType(result, dtAngle34, currentAngularMode);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -1961,6 +1970,7 @@ void divAn16Co34(void) {
   real34_t temp;
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // Denominator
   real34Multiply(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX), &temp); // c*c
@@ -2017,7 +2027,7 @@ void divAn16An34(void) {
   }
 
   convertRegister16To34(opY);
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -2574,6 +2584,7 @@ void divShoIRe34(void) {
   }
 
   convertShortIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
@@ -2673,6 +2684,7 @@ void divShoICo34(void) {
   real34_t temp;
 
   convertShortIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // Denominator
   real34Multiply(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX), &temp); // c*c
@@ -2729,7 +2741,7 @@ void divShoIAn34(void) {
   }
 
   convertShortIntegerRegisterToReal34Register(opY, opY);
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
 
   if(real34IsZero(REGISTER_REAL34_DATA(opY)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {

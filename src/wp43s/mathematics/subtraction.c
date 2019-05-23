@@ -123,6 +123,7 @@ void subLonIRe16(void) {
   }
 
   convertLongIntegerRegisterToReal16Register(opY, opY);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
@@ -165,9 +166,11 @@ void subLonICo16(void) {
     return;
   }
 
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
   convertLongIntegerRegisterToReal16Register(opY, opY);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
-  real16ChangeSign(REGISTER_IMAG16_DATA(result)); // imaginary part
+  real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
+  real16ChangeSign(REGISTER_IMAG16_DATA(result));
 }
 
 
@@ -373,6 +376,7 @@ void subLonIRe34(void) {
   }
 
   convertLongIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
@@ -417,8 +421,10 @@ void subLonICo34(void) {
   }
 
   convertLongIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
-  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 }
 
 
@@ -462,7 +468,7 @@ void subLonIAn34(void) {
   }
 
   convertLongIntegerRegisterToReal34Register(opY, opY);
-  setRegisterDataType(result, dtAngle34, currentAngularMode);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {
     convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), AM_DEGREE);
@@ -549,8 +555,10 @@ void subRe16Co16(void) {
     return;
   }
 
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
-  real16ChangeSign(REGISTER_IMAG16_DATA(result)); // imaginary part
+  real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
+  real16ChangeSign(REGISTER_IMAG16_DATA(result));
 }
 
 
@@ -775,6 +783,7 @@ void subShoIRe16(void) {
   }
 
   convertShortIntegerRegisterToReal16Register(opY, opY);
+  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
@@ -796,6 +805,7 @@ void subRe16Re34(void) {
   }
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
@@ -840,8 +850,10 @@ void subRe16Co34(void) {
   }
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
-  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 }
 
 
@@ -1005,6 +1017,7 @@ void subAn16Co16(void) {
     return;
   }
 
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
   real16ChangeSign(REGISTER_IMAG16_DATA(opX));
   real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
@@ -1051,8 +1064,10 @@ void subShoICo16(void) {
   }
 
   convertShortIntegerRegisterToReal16Register(opY, opY);
+  reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
   real16Subtract(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result)); // real part
-  real16ChangeSign(REGISTER_IMAG16_DATA(result)); // imaginary part
+  real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(result)); // imaginary part
+  real16ChangeSign(REGISTER_IMAG16_DATA(result));
 }
 
 
@@ -1120,6 +1135,7 @@ void subCo16Co34(void) {
   }
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34Subtract(REGISTER_IMAG34_DATA(opY), REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
 }
@@ -1408,7 +1424,7 @@ void subAn16Re34(void) {
   }
 
   convertRegister16To34(opY);
-  setRegisterDataType(result, dtAngle34, currentAngularMode);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {
     convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
@@ -1476,6 +1492,7 @@ void subAn16Co34(void) {
   }
 
   convertRegister16To34(opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34ChangeSign(REGISTER_IMAG34_DATA(opX));
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
@@ -1522,7 +1539,7 @@ void subAn16An34(void) {
   }
 
   convertRegister16To34(opY);
-  setRegisterAngularMode(result, currentAngularMode);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {
     convertAngle34FromTo(REGISTER_REAL34_DATA(opY), getRegisterAngularMode(opY), AM_DEGREE);
@@ -1861,6 +1878,7 @@ void subShoIRe34(void) {
   }
 
   convertShortIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 
@@ -1904,8 +1922,10 @@ void subShoICo34(void) {
   }
 
   convertShortIntegerRegisterToReal34Register(opY, opY);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
-  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 }
 
 
@@ -1952,7 +1972,7 @@ void subShoIAn34(void) {
   convertShortIntegerRegisterToReal34Register(opY, opY);
 
   convertAngle34FromTo(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), currentAngularMode);
-  setRegisterTag(result, currentAngularMode);
+  reallocateRegister(result, dtAngle34, REAL34_SIZE, currentAngularMode);
 
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
@@ -2023,8 +2043,10 @@ void subRe34Co34(void) {
     return;
   }
 
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
-  real34ChangeSign(REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part
+  real34ChangeSign(REGISTER_IMAG34_DATA(result));
 }
 
 
@@ -2179,6 +2201,7 @@ void subAn34Co34(void) {
     return;
   }
 
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Subtract(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result)); // real part
   real34ChangeSign(REGISTER_IMAG34_DATA(opX));
   real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(result)); // imaginary part

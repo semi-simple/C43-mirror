@@ -112,5 +112,12 @@ polarToRectangular.txt
 2pow.txt
 
 arccos.txt
-;arcsin.txt
-;arctan.txt
+arcsin.txt
+arctan.txt
+
+cos.txt
+sin.txt
+tan.txt
+
+;The standard calculator performance test arcsin(arccos(arctan(tan(cos(sin(9°))))))-9
+trig.txt

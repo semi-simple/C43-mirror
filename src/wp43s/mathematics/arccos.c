@@ -252,7 +252,6 @@ void arccosRe34(void) {
 
   WP34S_do_acos(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
-  setRegisterTag(result, currentAngularMode);
   setRegisterDataType(result, dtAngle34, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {

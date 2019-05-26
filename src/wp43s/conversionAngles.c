@@ -74,7 +74,20 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
         return;
       }
 
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
+      if(getRegisterAngularMode(REGISTER_X) == fromAngularMode) {
+        convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
+        setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
+      }
+      else {
+        displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "input angle16 must be tagged %s!", getAngularModeName(fromAngularMode));
+          showInfoDialog("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
+        #endif
+        restoreStack();
+        refreshStack();
+        return;
+      }
       break;
 
     case dtAngle34:
@@ -88,14 +101,27 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
         return;
       }
 
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
+      if(getRegisterAngularMode(REGISTER_X) == fromAngularMode) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
+        setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
+      }
+      else {
+        displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "input angle34 must be tagged %s!", getAngularModeName(fromAngularMode));
+          showInfoDialog("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
+        #endif
+        restoreStack();
+        refreshStack();
+        return;
+      }
       break;
 
     default:
       displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnCvtToCurrentAngularMode:", "the input value must be a long integer, a real16, a real34, an angle16 ot an angle34", errorMessage, NULL);
+        showInfoDialog("In function fnCvtToCurrentAngularMode:", "the input value must be a long integer, a real16, a real34, an angle16 or an angle34", errorMessage, NULL);
       #endif
       restoreStack();
       refreshStack();

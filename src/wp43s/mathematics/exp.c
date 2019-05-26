@@ -107,14 +107,10 @@ void expCo16(void) {
   }
 
   real34_t factor, real34, imag34;
-  uint8_t savedAngularMode;
 
   convertRegister16To34(opX);
   real34Exp(REGISTER_REAL34_DATA(opX), &factor);
-  savedAngularMode = currentAngularMode;
-  currentAngularMode = AM_RADIAN;
-  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal radian
-  currentAngularMode = savedAngularMode;
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in radian
   reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
@@ -189,13 +185,9 @@ void expCo34(void) {
   }
 
   real34_t factor, real34, imag34;
-  uint8_t savedAngularMode;
 
   real34Exp(REGISTER_REAL34_DATA(opX), &factor);
-  savedAngularMode = currentAngularMode;
-  currentAngularMode = AM_RADIAN;
   real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal units
-  currentAngularMode = savedAngularMode;
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
 }

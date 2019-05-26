@@ -189,10 +189,7 @@ void log2Co16(void) {
   else {
     real34_t magnitude34, theta34;
     real51_t real51;
-    uint8_t savedAngularMode;
 
-    savedAngularMode = currentAngularMode;
-    currentAngularMode = AM_RADIAN;
     convertRegister16To34(opX);
     real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
     real34ToReal51(&magnitude34, &real51);
@@ -201,7 +198,6 @@ void log2Co16(void) {
     real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
     real34Divide(&theta34, const34_ln2, &theta34);
     real34ToReal16(&theta34, REGISTER_IMAG16_DATA(result));
-    currentAngularMode = savedAngularMode;
   }
 }
 
@@ -353,10 +349,7 @@ void log2Co34(void) {
   else {
     real34_t magnitude34, theta34;
     real51_t real51;
-    uint8_t savedAngularMode;
 
-    savedAngularMode = currentAngularMode;
-    currentAngularMode = AM_RADIAN;
     real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
     real34ToReal51(&magnitude34, &real51);
     real51Ln(&real51, &real51);
@@ -364,7 +357,6 @@ void log2Co34(void) {
     real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
     real34Divide(&theta34, const34_ln2, &theta34);
     real34Copy(&theta34, REGISTER_IMAG34_DATA(result));
-    currentAngularMode = savedAngularMode;
   }
 }
 

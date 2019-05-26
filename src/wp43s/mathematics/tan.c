@@ -202,6 +202,8 @@ void tanAn16(void) {
     return;
   }
 
+  setRegisterDataType(result, dtReal16, TAG_NONE);
+
   if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
@@ -344,6 +346,8 @@ void tanAn34(void) {
     #endif
     return;
   }
+
+  setRegisterDataType(result, dtReal34, TAG_NONE);
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));

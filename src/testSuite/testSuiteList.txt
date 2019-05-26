@@ -46,6 +46,7 @@
 ;
 ; This file is only a list of files containing the tests to perform
 
+arccos.txt
 changeSign.txt
 
 addition_longInteger.txt
@@ -110,6 +111,13 @@ polarToRectangular.txt
 10pow.txt
 2pow.txt
 
-;arccos.txt
-;arcsin.txt
-;arctan.txt
+arccos.txt
+arcsin.txt
+arctan.txt
+
+cos.txt
+sin.txt
+tan.txt
+
+;The standard calculator performance test arcsin(arccos(arctan(tan(cos(sin(9°))))))-9
+trig.txt

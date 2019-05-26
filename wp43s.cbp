@@ -224,7 +224,25 @@
 		<Unit filename="src/testSuite/addition_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/arccos.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/arcsin.txt">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/arctan.txt">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/changeSign.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cos.txt">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_angle16.txt">
@@ -311,6 +329,11 @@
 		<Unit filename="src/testSuite/rectangularToPolar.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/sin.txt">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/subtraction_angle16.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -350,6 +373,11 @@
 		<Unit filename="src/testSuite/subtraction_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/tan.txt">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/testSuite.c">
 			<Option compilerVar="CC" />
 			<Option target="testSuite" />
@@ -358,6 +386,11 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/testSuiteList.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/trig.txt">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/ttf2RasterFonts/testTtf2RasterFonts.c">

@@ -902,7 +902,7 @@ void complexToDisplayString2(const void *complex, bool_t complex34, char *displa
 
     strcat(displayString, COMPLEX_UNIT);
     strcat(displayString, PRODUCT_SIGN);
-    strcat(displayString, displayString + i);
+    memmove(strchr(displayString, '\0'), displayString + i, strlen(displayString + i) + 1);
   }
   else { // POLAR
     real34_t angle34;

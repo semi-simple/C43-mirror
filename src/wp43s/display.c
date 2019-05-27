@@ -1131,6 +1131,13 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     }
 
     real16ToString(&degrees, degStr);
+    for(int32_t i=0; degStr[i]!=0; i++) {
+      if(degStr[i] == '.') {
+        degStr[i] = 0;
+        break;
+      }
+    }
+
     sprintf(displayString, "%s%s" STD_DEGREE "%s%" FMT32U STD_QUOTE "%s%" FMT32U "%s%02" FMT32U STD_DOUBLE_QUOTE,
                             sign==-1 ? "-" : "",
                               degStr,         m < 10 ? STD_SPACE_FIGURE : "",
@@ -1235,6 +1242,13 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     }
 
     real34ToString(&degrees, degStr);
+    for(int32_t i=0; degStr[i]!=0; i++) {
+      if(degStr[i] == '.') {
+        degStr[i] = 0;
+        break;
+      }
+    }
+
     sprintf(displayString, "%s%s" STD_DEGREE "%s%" FMT32U STD_QUOTE "%s%" FMT32U "%s%02" FMT32U STD_DOUBLE_QUOTE,
                             sign==-1 ? "-" : "",
                               degStr,         m < 10 ? STD_SPACE_FIGURE : "",

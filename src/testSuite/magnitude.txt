@@ -1,34 +1,40 @@
 ;*************************************************************
 ;*************************************************************
 ;**                                                         **
-;**                          sin                            **
+;**                       magnitude                         **
 ;**                                                         **
 ;*************************************************************
 ;*************************************************************
 In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
-Func: fnSin
+Func: fnMagnitude
 
 
 
 ;=======================================
-; sin(Long Integer) --> Real16
+; magnitude(Long Integer) --> Long Integer
 ;=======================================
 In:  AM=DEG SL=0 FI=0 RX=LonI:"5"
-Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=Re16:"0.087155742747658173558064270837473551377701156149702672613743368"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=LonI:"5"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"-5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-5" RX=LonI:"5"
 
 
 
 ;=======================================
-; sin(Real16) --> Real16
+; magnitude(Real16) --> Real16
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"0.0001"
-Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001" RX=Re16:"1.7453292519934434807679896054327863376270373123161763888733909e-6"
+Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001" RX=Re16:"0.0001"
 
 In:  AM=GRAD SL=0 FI=0 RX=Re16:"50"
-Out: EC=0 FI=0 SL=1 RL=Re16:"50" RX=Re16:"0.70710678118654752440084436210484903928483593768847403658833987"
+Out: EC=0 FI=0 SL=1 RL=Re16:"50" RX=Re16:"50"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"89.99999"
-Out: EC=0 FI=0 SL=1 RL=Re16:"89.99999" RX=Re16:"0.99999999999998476912901066460869590133816095260363995283737583"
+Out: EC=0 FI=0 SL=1 RL=Re16:"89.99999" RX=Re16:"89.99999"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"-123.456"
+Out: EC=0 FI=0 SL=1 RL=Re16:"-123.456" RX=Re16:"123.456"
 
 ; NaN
 In:  SL=0 FI=0 RX=Re16:"NaN"
@@ -39,29 +45,29 @@ In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
 Out: EC=0 FI=0 SL=1 RL=Re16:"inf" RX=Re16:"NaN"
 
 In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
-Out: EC=0 FI=0 SL=1 RL=Re16:"inf" RX=Re16:"NaN"
+Out: EC=4 FI=0 SL=0 RX=Re16:"inf"
 
 In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
-Out: EC=0 FI=0 SL=1 RL=Re16:"-inf" RX=Re16:"NaN"
+Out: EC=4 FI=0 SL=0 RX=Re16:"-inf"
 
 
 
 ;=======================================
-; sin(Complex16) --> Complex16
+; magnitude(Complex16) --> Real16
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
-Out: EC=0 FI=1 SL=1 RL=Co16:"6.2 i -7.6" RX=Co16:"-83.01447260939246956731822669252684923564585757420744504303291 i -995.64291442466093439279120216534258799576102786745168590567828"
+Out: EC=0 FI=0 SL=1 RL=Co16:"6.2 i -7.6" RX=Re16:"9.8081598681913826154186097680415343588218978912800102069046454"
 
 
 
 ;=======================================
-; sin(Angle16) --> Real16
+; magnitude(Angle16) --> Real16
 ;=======================================
 In:  SL=0 FI=0 NCSD=16 RX=An16:"5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=An16:"5.32564":DMS RX=Re16:"0.096696991476460354326283571253429965320146817585929223842090412"
+Out: EC=0 FI=0 SL=1 RL=An16:"5.32564":DMS RX=Re16:"5.32564"
 
 In:  SL=0 FI=0 RX=An16:"-5.32564":GRAD
-Out: EC=0 FI=0 SL=1 RL=An16:"-5.32564":GRAD RX=Re16:"-0.083557419950215407618637047940570976539667684341254230403366529"
+Out: EC=0 FI=0 SL=1 RL=An16:"-5.32564":GRAD RX=Re16:"5.32564"
 
 ; NaN
 In:  SL=0 FI=0 RX=An16:"NaN":RAD
@@ -72,27 +78,27 @@ In:  SL=0 FI=0 FD=1 RX=An16:"inf":DEG
 Out: EC=0 FI=0 SL=1 RL=An16:"inf":DEG RX=Re16:"NaN"
 
 In:  SL=0 FI=0 FD=0 RX=An16:"inf":MULTPI
-Out: EC=0 FI=0 SL=1 RL=An16:"inf":MULTPI RX=Re16:"NaN"
+Out: EC=4 FI=0 SL=0 RX=An16:"inf":MULTPI
 
 In:  SL=0 FI=0 FD=0 RX=An16:"-inf":RAD
-Out: EC=0 FI=0 SL=1 RL=An16:"-inf":RAD RX=Re16:"NaN"
+Out: EC=4 FI=0 SL=0 RX=An16:"-inf":RAD
 
 
 
 ;=======================================
-; sin(Time)
-;=======================================
-
-
-
-;=======================================
-; sin(Date)
+; magnitude(Time)
 ;=======================================
 
 
 
 ;=======================================
-; sin(String) --> Error24
+; magnitude(Date)
+;=======================================
+
+
+
+;=======================================
+; magnitude(String) --> Error24
 ;=======================================
 In:  SL=0 RX=Stri:"String test"
 Out: EC=24 SL=0 RX=Stri:"String test"
@@ -100,36 +106,39 @@ Out: EC=24 SL=0 RX=Stri:"String test"
 
 
 ;=======================================
-; sin(Real16 Matrix)
+; magnitude(Real16 Matrix)
 ;=======================================
 
 
 
 ;=======================================
-; sin(Complex16 Matrix)
+; magnitude(Complex16 Matrix)
 ;=======================================
 
 
 
 ;=======================================
-; sin(Short Integer) --> Error24
+; magnitude(Short Integer) --> Error24
 ;=======================================
 In:  SL=0 FI=0 RX=ShoI:"5#7"
-Out: EC=24 FI=0 SL=0 RX=ShoI:"5#7"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"5#7" RX=ShoI:"5#7"
 
 
 
 ;=======================================
-; sin(Real34) --> Real34
+; magnitude(Real34) --> Real34
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"0.0001"
-Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001" RX=Re34:"1.7453292519934434807679896054327863376270373123161763888733909e-6"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001" RX=Re34:"0.0001"
 
 In:  AM=GRAD SL=0 FI=0 RX=Re34:"50"
-Out: EC=0 FI=0 SL=1 RL=Re34:"50" RX=Re34:"0.70710678118654752440084436210484903928483593768847403658833987"
+Out: EC=0 FI=0 SL=1 RL=Re34:"50" RX=Re34:"50"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"89.99999"
-Out: EC=0 FI=0 SL=1 RL=Re34:"89.99999" RX=Re34:"0.99999999999998476912901066460869590133816095260363995283737583"
+Out: EC=0 FI=0 SL=1 RL=Re34:"89.99999" RX=Re34:"89.99999"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"-123.456"
+Out: EC=0 FI=0 SL=1 RL=Re34:"-123.456" RX=Re34:"123.456"
 
 ; NaN
 In:  SL=0 FI=0 RX=Re34:"NaN"
@@ -140,29 +149,29 @@ In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
 Out: EC=0 FI=0 SL=1 RL=Re34:"inf" RX=Re34:"NaN"
 
 In:  SL=0 FI=0 FD=0 RX=Re34:"inf"
-Out: EC=0 FI=0 SL=1 RL=Re34:"inf" RX=Re34:"NaN"
+Out: EC=4 FI=0 SL=0 RX=Re34:"inf"
 
 In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
-Out: EC=0 FI=0 SL=1 RL=Re34:"-inf" RX=Re34:"NaN"
+Out: EC=4 FI=0 SL=0 RX=Re34:"-inf"
 
 
 
 ;=======================================
-; sin(Complex34) --> Complex34
+; magnitude(Complex34) --> Complex34
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
-Out: EC=0 FI=1 SL=1 RL=Co34:"6.2 i -7.6" RX=Co34:"-83.01447260939246956731822669252684923564585757420744504303291 i -995.64291442466093439279120216534258799576102786745168590567828"
+Out: EC=0 FI=0 SL=1 RL=Co34:"6.2 i -7.6" RX=Re34:"9.8081598681913826154186097680415343588218978912800102069046454"
 
 
 
 ;=======================================
-; sin(Angle34) --> Real34
+; magnitude(Angle34) --> Real34
 ;=======================================
 In:  SL=0 FI=0 NCSD=34 RX=An34:"5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=An34:"5.32564":DMS RX=Re34:"0.096696991476460354326283571253429965320146817585929223842090412"
+Out: EC=0 FI=0 SL=1 RL=An34:"5.32564":DMS RX=Re34:"5.32564"
 
 In:  SL=0 FI=0 RX=An34:"-5.32564":GRAD
-Out: EC=0 FI=0 SL=1 RL=An34:"-5.32564":GRAD RX=Re34:"-0.083557419950215407618637047940570976539667684341254230403366529"
+Out: EC=0 FI=0 SL=1 RL=An34:"-5.32564":GRAD RX=Re34:"5.32564"
 
 ; NaN
 In:  SL=0 FI=0 RX=An34:"NaN":RAD
@@ -173,7 +182,7 @@ In:  SL=0 FI=0 FD=1 RX=An34:"inf":DEG
 Out: EC=0 FI=0 SL=1 RL=An34:"inf":DEG RX=Re34:"NaN"
 
 In:  SL=0 FI=0 FD=0 RX=An34:"inf":MULTPI
-Out: EC=0 FI=0 SL=1 RL=An34:"inf":MULTPI RX=Re34:"NaN"
+Out: EC=4 FI=0 SL=0 RX=An34:"inf":MULTPI
 
 In:  SL=0 FI=0 FD=0 RX=An34:"-inf":RAD
-Out: EC=0 FI=0 SL=1 RL=An34:"-inf":RAD RX=Re34:"NaN"
+Out: EC=4 FI=0 SL=0 RX=An34:"-inf":RAD

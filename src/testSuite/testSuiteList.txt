@@ -28,7 +28,7 @@
 ;                             Co34 is a  Complex34 (DP)
 ;                             An34 is an Angle34 (DP)
 ;      after the colon there is the value of the register between double quotes
-;      special value infinity for Re16 and Re34 is "9e9999"
+;      special value infinity for Re16 and Re34 is "inf" (lower case inf is mandatory)
 ;      special value NaN for Re16 and Re34 is "NaN"
 ;      The decimal separator is a . or a ,
 ;      A complex is always in rectangular mode: 2 reals separated by an i example "1.2i-3.4"
@@ -46,8 +46,8 @@
 ;
 ; This file is only a list of files containing the tests to perform
 
-arccos.txt
 changeSign.txt
+sign.txt
 
 addition_longInteger.txt
 addition_real16.txt
@@ -105,11 +105,32 @@ division_real34.txt
 division_complex34.txt
 division_angle34.txt
 
+power_longInteger.txt
+power_real16.txt
+power_complex16.txt
+power_angle16.txt
+power_time.txt
+power_date.txt
+power_string.txt
+power_real16Matrix.txt
+power_complex16Matrix.txt
+power_shortInteger.txt
+power_real34.txt
+power_complex34.txt
+power_angle34.txt
+
+invert.txt
+
 rectangularToPolar.txt
 polarToRectangular.txt
 
 10pow.txt
 2pow.txt
+minusOnePow.txt
+exp.txt
+log10.txt
+log2.txt
+ln.txt
 
 arccos.txt
 arcsin.txt
@@ -121,3 +142,25 @@ tan.txt
 
 ;The standard calculator performance test arcsin(arccos(arctan(tan(cos(sin(9°))))))-9
 trig.txt
+
+conjugate.txt
+
+square.txt
+sqrt.txt
+cube.txt
+
+factorial.txt ;TODO tests for complex factorial
+gamma.txt     ;TODO tests for complex gamma
+lnGamma.txt   ;TODO tests for complex lnGamma
+
+fractionalPart.txt
+integerPart.txt
+realPart.txt
+imaginaryPart.txt
+swapRealImaginary.txt
+
+gcd.txt
+lcm.txt
+
+magnitude.txt
+unitVector.txt

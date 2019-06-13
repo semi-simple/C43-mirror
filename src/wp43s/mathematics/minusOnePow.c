@@ -93,6 +93,9 @@ void m1PowRe16(void) {
 
   convertRegister16To34(opX);
   reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+
   WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
   convertRegister34To16(result);
 }
@@ -108,7 +111,17 @@ void m1PowCo16(void) {
     return;
   }
 
-  fnToBeCoded();
+  convertRegister16To34(opX);
+  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX));
+  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(opX));
+
+  uint8_t savedAngularMode = currentAngularMode;
+  currentAngularMode = AM_RADIAN;
+  cosCo34();
+  currentAngularMode = savedAngularMode;
+  convertRegister34To16(result);
 }
 
 
@@ -140,6 +153,7 @@ void m1PowRe34(void) {
     return;
   }
 
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
   WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
 }
 
@@ -154,7 +168,13 @@ void m1PowCo34(void) {
     return;
   }
 
-  fnToBeCoded();
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX));
+  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(opX));
+
+  uint8_t savedAngularMode = currentAngularMode;
+  currentAngularMode = AM_RADIAN;
+  cosCo34();
+  currentAngularMode = savedAngularMode;
 }
 
 
@@ -169,5 +189,6 @@ void m1PowAn34(void) {
   }
 
   setRegisterDataType(result, dtReal34, TAG_NONE);
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
   WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
 }

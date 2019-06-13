@@ -94,12 +94,18 @@ void factLonI(void) {
   }
 
   longInteger_t fact;
-  uint32_t counter;
 
-  longIntegerCopy(&temp, &fact);
-  counter = longIntegerToUInt(&temp) - 1;
-  while(counter > 1) {
-    longIntegerMultiplyUInt(&fact, counter--, &fact);
+  if(longIntegerIsZero(&temp)) {
+    uIntToLongInteger(1, &fact);
+  }
+  else {
+    uint32_t counter;
+
+    longIntegerCopy(&temp, &fact);
+    counter = longIntegerToUInt(&temp) - 1;
+    while(counter > 1) {
+      longIntegerMultiplyUInt(&fact, counter--, &fact);
+    }
   }
   convertLongIntegerToLongIntegerRegister(&fact, result);
 }
@@ -181,12 +187,18 @@ void factShoI(void) {
   }
 
   uint64_t fact;
-  uint32_t counter;
 
-  fact = value;
-  counter = value - 1;
-  while(counter > 1) {
-    fact *= counter--;
+  if(value <= 1) {
+    fact = 1;
+  }
+  else {
+    uint32_t counter;
+
+    fact = value;
+    counter = value - 1;
+    while(counter > 1) {
+      fact *= counter--;
+    }
   }
 
   if(fact > shortIntegerMask) {

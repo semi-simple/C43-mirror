@@ -182,14 +182,12 @@ void lnCo16(void) {
   }
   else {
     real34_t magnitude34, theta34;
-    real51_t real51;
 
     convertRegister16To34(opX);
-    real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
-    real34ToReal51(&magnitude34, &real51);
-    real51Ln(&real51, &real51);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
-    real34ToReal16(&theta34, REGISTER_IMAG16_DATA(result));
+    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, REGISTER_IMAG34_DATA(result));
+    real34Ln(&magnitude34, REGISTER_REAL34_DATA(result));
+    convertRegister34To16(result);
   }
 }
 
@@ -370,12 +368,9 @@ void lnCo34(void) {
   }
   else {
     real34_t magnitude34, theta34;
-    real51_t real51;
 
     real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
-    real34ToReal51(&magnitude34, &real51);
-    real51Ln(&real51, &real51);
-    real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
+    real34Ln(&magnitude34, REGISTER_REAL34_DATA(result));
     real34Copy(&theta34, REGISTER_IMAG34_DATA(result));
   }
 }

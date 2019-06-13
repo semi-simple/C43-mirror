@@ -187,7 +187,7 @@ void expCo34(void) {
   real34_t factor, real34, imag34;
 
   real34Exp(REGISTER_REAL34_DATA(opX), &factor);
-  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in internal units
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in radian
   real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
   real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
 }

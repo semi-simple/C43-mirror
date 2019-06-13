@@ -32,13 +32,13 @@ In:  SL=0 FI=0 RX=Re16:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 NCSD=16 RX=Re16:"9e9999"
-Out: EC=0 FI=0 SL=1 RL=Re16:"9e9999" RX=Re16:"9e9999"
+In:  SL=0 FI=0 FD=1 NCSD=16 RX=Re16:"inf"
+Out: EC=0 FI=0 SL=1 RL=Re16:"inf" RX=Re16:"inf"
 
-In:  SL=0 FI=0 FD=0 NCSD=16 RX=Re16:"9e9999"
-Out: EC=4 FI=0 SL=0 RX=Re16:"9e9999"
+In:  SL=0 FI=0 FD=0 NCSD=16 RX=Re16:"inf"
+Out: EC=4 FI=0 SL=0 RX=Re16:"inf"
 
-In:  SL=0 FI=0 FD=0 NCSD=16 RX=Re16:"-9e9999"
+In:  SL=0 FI=0 FD=0 NCSD=16 RX=Re16:"-inf"
 Out: EC=0 FI=0 SL=1 RX=Re16:"0"
 
 
@@ -63,13 +63,13 @@ In:  SL=0 FI=0 RX=An16:"NaN":RAD
 Out: EC=1 FI=0 SL=0 RX=An16:"NaN":RAD
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 NCSD=16 RX=An16:"9e9999":DEG
-Out: EC=0 FI=0 SL=1 RL=An16:"9e9999":DEG RX=Re16:"9e9999"
+In:  SL=0 FI=0 FD=1 NCSD=16 RX=An16:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=An16:"inf":DEG RX=Re16:"inf"
 
-In:  SL=0 FI=0 FD=0 NCSD=16 RX=An16:"9e9999":MULTPI
-Out: EC=4 FI=0 SL=0 RX=An16:"9e9999":MULTPI
+In:  SL=0 FI=0 FD=0 NCSD=16 RX=An16:"inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=An16:"inf":MULTPI
 
-In:  SL=0 FI=0 FD=0 NCSD=16 RX=An16:"-9e9999":RAD
+In:  SL=0 FI=0 FD=0 NCSD=16 RX=An16:"-inf":RAD
 Out: EC=0 FI=0 SL=1 RX=Re16:"0"
 
 
@@ -128,13 +128,13 @@ In:  SL=0 FI=0 RX=Re34:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 NCSD=34 RX=Re34:"9e9999"
-Out: EC=0 FI=0 SL=1 RL=Re34:"9e9999" RX=Re34:"9e9999"
+In:  SL=0 FI=0 FD=1 NCSD=34 RX=Re34:"inf"
+Out: EC=0 FI=0 SL=1 RL=Re34:"inf" RX=Re34:"inf"
 
-In:  SL=0 FI=0 FD=0 NCSD=34 RX=Re34:"9e9999"
-Out: EC=4 FI=0 SL=0 RX=Re34:"9e9999"
+In:  SL=0 FI=0 FD=0 NCSD=34 RX=Re34:"inf"
+Out: EC=4 FI=0 SL=0 RX=Re34:"inf"
 
-In:  SL=0 FI=0 FD=0 NCSD=34 RX=Re34:"-9e9999"
+In:  SL=0 FI=0 FD=0 NCSD=34 RX=Re34:"-inf"
 Out: EC=0 FI=0 SL=1 RX=Re34:"0"
 
 
@@ -159,11 +159,11 @@ In:  SL=0 FI=0 RX=An34:"NaN":RAD
 Out: EC=1 FI=0 SL=0 RX=An34:"NaN":RAD
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 NCSD=34 RX=An34:"9e9999":DEG
-Out: EC=0 FI=0 SL=1 RL=An34:"9e9999":DEG RX=Re34:"9e9999"
+In:  SL=0 FI=0 FD=1 NCSD=34 RX=An34:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"inf":DEG RX=Re34:"inf"
 
-In:  SL=0 FI=0 FD=0 NCSD=34 RX=An34:"9e9999":MULTPI
-Out: EC=4 FI=0 SL=0 RX=An34:"9e9999":MULTPI
+In:  SL=0 FI=0 FD=0 NCSD=34 RX=An34:"inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=An34:"inf":MULTPI
 
-In:  SL=0 FI=0 FD=0 NCSD=34 RX=An34:"-9e9999":RAD
+In:  SL=0 FI=0 FD=0 NCSD=34 RX=An34:"-inf":RAD
 Out: EC=0 FI=0 SL=1 RX=Re34:"0"

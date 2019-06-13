@@ -909,6 +909,8 @@ void inParameters(char *token) {
   char parameter[300];
   int32_t index, lg;
 
+  strReplace(token, "inf", "9e9999");
+
   while(*token == ' ') token++;
   while(*token != 0) {
     index = 0;
@@ -1052,13 +1054,13 @@ int relativeErrorReal34(real34_t *expectedValue, real34_t *value, char *numberPa
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
-    if(correctSignificantDigits < 32 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
+    if(correctSignificantDigits < 31 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
       puts(registerExpectedAndValue);
       exit(-1);
     }
   }
 
-  return (correctSignificantDigits < 32 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) ? RE_INACCURATE : RE_ACCURATE;
+  return (correctSignificantDigits < 31 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) ? RE_INACCURATE : RE_ACCURATE;
 }
 
 
@@ -1756,6 +1758,8 @@ void checkExpectedOutParameter(char *p) {
 void outParameters(char *token) {
   char parameter[300];
   int32_t index, lg;
+
+  strReplace(token, "inf", "9e9999");
 
   while(*token == ' ') token++;
   while(*token != 0) {

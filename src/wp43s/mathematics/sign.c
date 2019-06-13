@@ -62,15 +62,8 @@ void fnSign(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, opX);
 
   sign[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
-    restoreStack();
-    refreshStack();
-  }
+  adjustResult(result, false, true, opX, -1, -1);
 }
 
 
@@ -131,17 +124,25 @@ void signRm16(void) {
 
 void signShoI(void) {
   longInteger_t temp;
-  int64_t sign = WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX)));
 
-  if(sign == 0) {
-    uIntToLongInteger(0, &temp);
-  }
-  else if(sign == -1) {
-    uIntToLongInteger(1, &temp);
-    longIntegerSetNegativeSign(&temp);
-  }
-  else {
-    uIntToLongInteger(1, &temp);
+  switch(WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX)))) {
+    case -1 :
+      uIntToLongInteger(1, &temp);
+      longIntegerSetNegativeSign(&temp);
+      break;
+
+    case 0 :
+      uIntToLongInteger(0, &temp);
+      break;
+
+    case 1 :
+      uIntToLongInteger(1, &temp);
+      break;
+
+    default :
+      uIntToLongInteger(0, &temp);
+      sprintf(errorMessage, "In function signShoI: %" FMT64U " is an unexpected value returned by WP34S_intSign!", WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX))));
+      displayBugScreen(errorMessage);
   }
 
   convertLongIntegerToLongIntegerRegister(&temp, result);

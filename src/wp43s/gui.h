@@ -47,8 +47,11 @@
 #ifdef PC_BUILD
   void setupUI          (void);
   void moveLabels       (void);
-  void strReplace       (char *haystack, const char *needle, const char *newNeedle);
   void calcModeNormalGui(void);
   void calcModeAimGui   (void);
   void calcModeTamGui   (void);
+#endif
+
+#ifndef DMCP_BUILD
+  void strReplace       (char *haystack, const char *needle, const char *newNeedle);
 #endif

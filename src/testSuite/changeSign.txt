@@ -27,15 +27,15 @@ In:  SL=0 FI=0 RX=Re16:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Re16:"9e9999"
-Out: EC=0 FI=0 SL=1 RX=Re16:"-9e9999"
-Out: EC=0 FI=0 SL=1 RX=Re16:"9e9999"
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
+Out: EC=0 FI=0 SL=1 RX=Re16:"-inf"
+Out: EC=0 FI=0 SL=1 RX=Re16:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re16:"9e9999"
-Out: EC=5 FI=0 SL=0 RX=Re16:"9e9999"
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
+Out: EC=5 FI=0 SL=0 RX=Re16:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re16:"-9e9999"
-Out: EC=4 FI=0 SL=0 RX=Re16:"-9e9999"
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
+Out: EC=4 FI=0 SL=0 RX=Re16:"-inf"
 
 ;=======================================
 ; - Complex16
@@ -52,35 +52,35 @@ In:  SL=0 FI=0 RX=Co16:"-1.56 i Nan"
 Out: EC=1 FI=0 SL=0 RX=Co16:"-1.56 i NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Co16:"9e9999 i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"-9e9999 i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"9e9999 i -58.67141"
+In:  SL=0 FI=0 FD=1 RX=Co16:"inf i -58.67141"
+Out: EC=0 FI=0 SL=1 RX=Co16:"-inf i 58.67141"
+Out: EC=0 FI=0 SL=1 RX=Co16:"inf i -58.67141"
 
-In:  SL=0 FI=0 FD=0 RX=Co16:"9e9999 i -58.67141"
-Out: EC=5 FI=0 SL=0 RX=Co16:"9e9999 i -58.67141"
+In:  SL=0 FI=0 FD=0 RX=Co16:"inf i -58.67141"
+Out: EC=5 FI=0 SL=0 RX=Co16:"inf i -58.67141"
 
-In:  SL=0 FI=0 FD=0 RX=Co16:"-9e9999 i -58.67141"
-Out: EC=4 FI=0 SL=0 RX=Co16:"-9e9999 i -58.67141"
+In:  SL=0 FI=0 FD=0 RX=Co16:"-inf i -58.67141"
+Out: EC=4 FI=0 SL=0 RX=Co16:"-inf i -58.67141"
 
-In:  SL=0 FI=0 FD=1 RX=Co16:"6.9 i 9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co16:"-6.9 i -9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i 9e9999"
+In:  SL=0 FI=0 FD=1 RX=Co16:"6.9 i inf"
+Out: EC=0 FI=0 SL=1 RX=Co16:"-6.9 i -inf"
+Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co16:"6.9 i 9e9999"
-Out: EC=5 FI=0 SL=0 RX=Co16:"6.9 i 9e9999"
+In:  SL=0 FI=0 FD=0 RX=Co16:"6.9 i inf"
+Out: EC=5 FI=0 SL=0 RX=Co16:"6.9 i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co16:"6.9 i -9e9999"
-Out: EC=4 FI=0 SL=0 RX=Co16:"6.9 i -9e9999"
+In:  SL=0 FI=0 FD=0 RX=Co16:"6.9 i -inf"
+Out: EC=4 FI=0 SL=0 RX=Co16:"6.9 i -inf"
 
-In:  SL=0 FI=0 FD=1 RX=Co16:"9e9999 i 9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co16:"-9e9999 i -9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co16:"9e9999 i 9e9999"
+In:  SL=0 FI=0 FD=1 RX=Co16:"inf i inf"
+Out: EC=0 FI=0 SL=1 RX=Co16:"-inf i -inf"
+Out: EC=0 FI=0 SL=1 RX=Co16:"inf i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co16:"9e9999 i 9e9999"
-Out: EC=5 FI=0 SL=0 RX=Co16:"9e9999 i 9e9999"
+In:  SL=0 FI=0 FD=0 RX=Co16:"inf i inf"
+Out: EC=5 FI=0 SL=0 RX=Co16:"inf i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co16:"9e9999 i -9e9999"
-Out: EC=5 FI=0 SL=0 RX=Co16:"9e9999 i -9e9999"
+In:  SL=0 FI=0 FD=0 RX=Co16:"inf i -inf"
+Out: EC=5 FI=0 SL=0 RX=Co16:"inf i -inf"
 
 ;=======================================
 ; - Angle16
@@ -94,15 +94,15 @@ In:  SL=0 FI=0 RX=An16:"NaN":RAD
 Out: EC=1 FI=0 SL=0 RX=An16:"NaN":RAD
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=An16:"9e9999":GRAD
-Out: EC=0 FI=0 SL=1 RX=An16:"-9e9999":GRAD
-Out: EC=0 FI=0 SL=1 RX=An16:"9e9999":GRAD
+In:  SL=0 FI=0 FD=1 RX=An16:"inf":GRAD
+Out: EC=0 FI=0 SL=1 RX=An16:"-inf":GRAD
+Out: EC=0 FI=0 SL=1 RX=An16:"inf":GRAD
 
-In:  SL=0 FI=0 FD=0 RX=An16:"9e9999":MULTPI
-Out: EC=5 FI=0 SL=0 RX=An16:"9e9999":MULTPI
+In:  SL=0 FI=0 FD=0 RX=An16:"inf":MULTPI
+Out: EC=5 FI=0 SL=0 RX=An16:"inf":MULTPI
 
-In:  SL=0 FI=0 FD=0 RX=An16:"-9e9999":MULTPI
-Out: EC=4 FI=0 SL=0 RX=An16:"-9e9999":MULTPI
+In:  SL=0 FI=0 FD=0 RX=An16:"-inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=An16:"-inf":MULTPI
 
 ;=======================================
 ; - Time
@@ -157,15 +157,15 @@ In:  SL=0 FI=0 RX=Re34:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Re34:"9e9999"
-Out: EC=0 FI=0 SL=1 RX=Re34:"-9e9999"
-Out: EC=0 FI=0 SL=1 RX=Re34:"9e9999"
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
+Out: EC=0 FI=0 SL=1 RX=Re34:"-inf"
+Out: EC=0 FI=0 SL=1 RX=Re34:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"9e9999"
-Out: EC=5 FI=0 SL=0 RX=Re34:"9e9999"
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf"
+Out: EC=5 FI=0 SL=0 RX=Re34:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"-9e9999"
-Out: EC=4 FI=0 SL=0 RX=Re34:"-9e9999"
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
+Out: EC=4 FI=0 SL=0 RX=Re34:"-inf"
 
 ;=======================================
 ; - Complex34
@@ -182,35 +182,35 @@ In:  SL=0 FI=0 RX=Co34:"-1.56 i Nan"
 Out: EC=1 FI=0 SL=0 RX=Co34:"-1.56 i NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Co34:"9e9999 i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"-9e9999 i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"9e9999 i -58.67141"
+In:  SL=0 FI=0 FD=1 RX=Co34:"inf i -58.67141"
+Out: EC=0 FI=0 SL=1 RX=Co34:"-inf i 58.67141"
+Out: EC=0 FI=0 SL=1 RX=Co34:"inf i -58.67141"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"9e9999 i -58.67141"
-Out: EC=5 FI=0 SL=0 RX=Co34:"9e9999 i -58.67141"
+In:  SL=0 FI=0 FD=0 RX=Co34:"inf i -58.67141"
+Out: EC=5 FI=0 SL=0 RX=Co34:"inf i -58.67141"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"-9e9999 i -58.67141"
-Out: EC=4 FI=0 SL=0 RX=Co34:"-9e9999 i -58.67141"
+In:  SL=0 FI=0 FD=0 RX=Co34:"-inf i -58.67141"
+Out: EC=4 FI=0 SL=0 RX=Co34:"-inf i -58.67141"
 
-In:  SL=0 FI=0 FD=1 RX=Co34:"6.9 i 9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co34:"-6.9 i -9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i 9e9999"
+In:  SL=0 FI=0 FD=1 RX=Co34:"6.9 i inf"
+Out: EC=0 FI=0 SL=1 RX=Co34:"-6.9 i -inf"
+Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"6.9 i 9e9999"
-Out: EC=5 FI=0 SL=0 RX=Co34:"6.9 i 9e9999"
+In:  SL=0 FI=0 FD=0 RX=Co34:"6.9 i inf"
+Out: EC=5 FI=0 SL=0 RX=Co34:"6.9 i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"6.9 i -9e9999"
-Out: EC=4 FI=0 SL=0 RX=Co34:"6.9 i -9e9999"
+In:  SL=0 FI=0 FD=0 RX=Co34:"6.9 i -inf"
+Out: EC=4 FI=0 SL=0 RX=Co34:"6.9 i -inf"
 
-In:  SL=0 FI=0 FD=1 RX=Co34:"9e9999 i 9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co34:"-9e9999 i -9e9999"
-Out: EC=0 FI=0 SL=1 RX=Co34:"9e9999 i 9e9999"
+In:  SL=0 FI=0 FD=1 RX=Co34:"inf i inf"
+Out: EC=0 FI=0 SL=1 RX=Co34:"-inf i -inf"
+Out: EC=0 FI=0 SL=1 RX=Co34:"inf i inf"
 
-In:  SL=0 FI=0 FD=0 NCSD=34 RX=Co34:"9e9999 i 9e9999"
-Out: EC=5 FI=0 SL=0 RX=Co34:"9e9999 i 9e9999"
+In:  SL=0 FI=0 FD=0 NCSD=34 RX=Co34:"inf i inf"
+Out: EC=5 FI=0 SL=0 RX=Co34:"inf i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"9e9999 i -9e9999"
-Out: EC=5 FI=0 SL=0 RX=Co34:"9e9999 i -9e9999"
+In:  SL=0 FI=0 FD=0 RX=Co34:"inf i -inf"
+Out: EC=5 FI=0 SL=0 RX=Co34:"inf i -inf"
 
 ;=======================================
 ; - Angle34
@@ -224,12 +224,12 @@ In:  SL=0 FI=0 RX=An34:"NaN":RAD
 Out: EC=1 FI=0 SL=0 RX=An34:"NaN":RAD
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=An34:"9e9999":GRAD
-Out: EC=0 FI=0 SL=1 RX=An34:"-9e9999":GRAD
-Out: EC=0 FI=0 SL=1 RX=An34:"9e9999":GRAD
+In:  SL=0 FI=0 FD=1 RX=An34:"inf":GRAD
+Out: EC=0 FI=0 SL=1 RX=An34:"-inf":GRAD
+Out: EC=0 FI=0 SL=1 RX=An34:"inf":GRAD
 
-In:  SL=0 FI=0 FD=0 RX=An34:"9e9999":MULTPI
-Out: EC=5 FI=0 SL=0 RX=An34:"9e9999":MULTPI
+In:  SL=0 FI=0 FD=0 RX=An34:"inf":MULTPI
+Out: EC=5 FI=0 SL=0 RX=An34:"inf":MULTPI
 
-In:  SL=0 FI=0 FD=0 RX=An34:"-9e9999":MULTPI
-Out: EC=4 FI=0 SL=0 RX=An34:"-9e9999":MULTPI
+In:  SL=0 FI=0 FD=0 RX=An34:"-inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=An34:"-inf":MULTPI

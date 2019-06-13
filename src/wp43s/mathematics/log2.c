@@ -150,7 +150,7 @@ void log2Re16(void) {
     reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
     real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
     real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
-    real16Divide(REGISTER_IMAG16_DATA(result), const16_2, REGISTER_IMAG16_DATA(result));
+    real16Divide(REGISTER_IMAG16_DATA(result), const16_ln2, REGISTER_IMAG16_DATA(result));
   }
   else if(getFlag(FLAG_DANGER)) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
@@ -241,7 +241,7 @@ void log2An16(void) {
     reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
     real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
     real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
-    real16Divide(REGISTER_IMAG16_DATA(result), const16_2, REGISTER_IMAG16_DATA(result));
+    real16Divide(REGISTER_IMAG16_DATA(result), const16_ln2, REGISTER_IMAG16_DATA(result));
   }
   else if(getFlag(FLAG_DANGER)) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));

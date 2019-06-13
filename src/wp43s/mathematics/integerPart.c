@@ -81,6 +81,14 @@ void ipLonI(void) {
 
 
 void ipRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function ipRe16:", "cannot use NaN as an input of ip", NULL, NULL);
+    #endif
+    return;
+  }
+
   real16ToIntegral(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
 }
 
@@ -93,6 +101,14 @@ void ipRm16(void) {
 
 
 void ipRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function ipRe34:", "cannot use NaN as an input of ip", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34ToIntegral(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 }
 

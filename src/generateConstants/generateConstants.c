@@ -40,9 +40,8 @@ real451_t  real451;
 decContext ctxtReal16, ctxtReal34, ctxtReal51, ctxtReal451;
 char       whiteSpace[50], temp[1000];
 char       defines[1000000], externalDeclarations[1000000]; // .h file
-char       realArray[1000000], real16PointerDeclarations[1000000], real34PointerDeclarations[1000000], real51PointerDeclarations[1000000], real451PointerDeclarations[1000000]; // .c file
-FILE       *constantsc;
-FILE       *constantsh;
+char       realArray[1000000], real16PointerDeclarations[1000000], real34PointerDeclarations[1000000], real51PointerDeclarations[1000000], real451PointerDeclarations[1000000], gammaConstants[1000000]; // .c file
+FILE       *constantsC, *constantsH, *gammaConstantsH;
 int        idx, c;
 
 void generateConstant16Array(char *name, char *value) {
@@ -171,6 +170,22 @@ void generateConstant451Array(char *name, char *value) {
   strcat(realArray, "  // const_");
   strcat(realArray, name);
   strcat(realArray, "\n");
+}
+
+
+void generateGammaConstant51Array(char *value) {
+  stringToReal51(value, &real51);
+
+  strcat(gammaConstants, "  (real51_t *)\"");
+
+  for(uint32_t i=0; i<REAL51_SIZE; i++) {
+    sprintf(temp, "\\x%02x", *(((uint8_t *)(&real51)) + i));
+    strcat(gammaConstants, temp);
+  }
+
+  strcat(gammaConstants, "\", // ");
+  strcat(gammaConstants, value);
+  strcat(gammaConstants, "\n");
 }
 
 
@@ -413,29 +428,32 @@ void generateAllConstants(void) {
   generateConstant51Array("gammaR",      		"+2.311891000000000000000000000000000000000000000000000000e+01");
   generateConstant51Array("plusInfinity",  "+9.999999999999999999999999999999999999999999999999999999e+9999");
 
-  // constants from the WP34S project
+
+  // constants from the WP34S project for gamma function evaluation
+  strcat(gammaConstants, "const real51_t * const gamma_consts[] = {\n");
   generateConstant51Array("gammaC00",    		"+2.506628274631000502415765284810246218192434922852200000e+00");
-  //generateConstant51Array("gammaC01",    		"+1.898901420935934892121516421489444871168609546626500000e+10");
-  //generateConstant51Array("gammaC02",    	 "-1.441562000905355882360184024174589398958958098464000000e+11");
-  //generateConstant51Array("gammaC03",    		"+4.960354542573828137004589453751102261431713060461700000e+11");
-  //generateConstant51Array("gammaC04",    		"-1.023780406198473219243634817725018768614756637869000000e+12");
-  //generateConstant51Array("gammaC05",    		"+1.413597258976513273633654064270590550203826819201000000e+12");
-  //generateConstant51Array("gammaC06",    		"-1.379067427882918397935921608473404106184422506006400000e+12");
-  //generateConstant51Array("gammaC07",    		"+9.788204370638776727185550760421099285080573468010600000e+11");
-  //generateConstant51Array("gammaC08",    		"-5.128994840924296233163734159776272986286618224185900000e+11");
-  //generateConstant51Array("gammaC09",    		"+1.993214894537074020805536689790757910433414961972700000e+11");
-  //generateConstant51Array("gammaC10",    		"-5.724477320502851934636585463308820853275031385884600000e+10");
-  //generateConstant51Array("gammaC11",    		"+1.201655806354758157534702176970523540126160063763500000e+10");
-  //generateConstant51Array("gammaC12",    		"-1.809010182477543231013601652705978674843239030982400000e+09");
-  //generateConstant51Array("gammaC13",    		"+1.898547541983866894247106006196860226824584577849300000e+08");
-  //generateConstant51Array("gammaC14",    		"-1.334263251277484954309483416034294789837141075939300000e+07");
-  //generateConstant51Array("gammaC15",    		"+5.933439303341291714765684565665519642875431331800600000e+05");
-  //generateConstant51Array("gammaC16",    		"-1.540327280024945239238770671101236126255474738855800000e+04");
-  //generateConstant51Array("gammaC17",    		"+2.074489944028394131423303914773173203290039991596900000e+02");
-  //generateConstant51Array("gammaC18",    		"-1.209628455273317304906775384272224647465224630149300000e+00");
-  //generateConstant51Array("gammaC19",    		"+2.269611174612194091242737654897071322781041945531800000e-03");
-  //generateConstant51Array("gammaC20",    		"-7.988885866262706189425849079070082330881632208400100000e-07");
-  //generateConstant51Array("gammaC21",    		"+1.657344425195846221060002275840201764559630368746500000e-11");
+  generateGammaConstant51Array(            "+1.898901420935934892121516421489444871168609546626500000e+10");
+  generateGammaConstant51Array(            "-1.441562000905355882360184024174589398958958098464000000e+11");
+  generateGammaConstant51Array(            "+4.960354542573828137004589453751102261431713060461700000e+11");
+  generateGammaConstant51Array(            "-1.023780406198473219243634817725018768614756637869000000e+12");
+  generateGammaConstant51Array(            "+1.413597258976513273633654064270590550203826819201000000e+12");
+  generateGammaConstant51Array(            "-1.379067427882918397935921608473404106184422506006400000e+12");
+  generateGammaConstant51Array(            "+9.788204370638776727185550760421099285080573468010600000e+11");
+  generateGammaConstant51Array(            "-5.128994840924296233163734159776272986286618224185900000e+11");
+  generateGammaConstant51Array(            "+1.993214894537074020805536689790757910433414961972700000e+11");
+  generateGammaConstant51Array(            "-5.724477320502851934636585463308820853275031385884600000e+10");
+  generateGammaConstant51Array(            "+1.201655806354758157534702176970523540126160063763500000e+10");
+  generateGammaConstant51Array(            "-1.809010182477543231013601652705978674843239030982400000e+09");
+  generateGammaConstant51Array(            "+1.898547541983866894247106006196860226824584577849300000e+08");
+  generateGammaConstant51Array(            "-1.334263251277484954309483416034294789837141075939300000e+07");
+  generateGammaConstant51Array(            "+5.933439303341291714765684565665519642875431331800600000e+05");
+  generateGammaConstant51Array(            "-1.540327280024945239238770671101236126255474738855800000e+04");
+  generateGammaConstant51Array(            "+2.074489944028394131423303914773173203290039991596900000e+02");
+  generateGammaConstant51Array(            "-1.209628455273317304906775384272224647465224630149300000e+00");
+  generateGammaConstant51Array(            "+2.269611174612194091242737654897071322781041945531800000e-03");
+  generateGammaConstant51Array(            "-7.988885866262706189425849079070082330881632208400100000e-07");
+  generateGammaConstant51Array(            "+1.657344425195846221060002275840201764559630368746500000e-11");
+  strcat(gammaConstants, "};\n");
 
   generateConstant51Array("9on10",       		"+9.000000000000000000000000000000000000000000000000000000e-01");
   generateConstant51Array("pi",          		"+3.141592653589793238462643383279502884197169399375105821e+00");
@@ -480,87 +498,124 @@ int main(void) {
   generateAllConstants(); // x86
 
 
-  constantsh = fopen("src/wp43s/constantPointers.h", "wb");
-  if(constantsh == NULL) {
+  constantsH = fopen("src/wp43s/constantPointers.h", "wb");
+  if(constantsH == NULL) {
     fprintf(stderr, "Cannot create file src/wp43s/constantPointers.h\n");
     exit(1);
   }
 
-  fprintf(constantsh, "/* This file is part of 43S.\n");
-  fprintf(constantsh, " *\n");
-  fprintf(constantsh, " * 43S is free software: you can redistribute it and/or modify\n");
-  fprintf(constantsh, " * it under the terms of the GNU General Public License as published by\n");
-  fprintf(constantsh, " * the Free Software Foundation, either version 3 of the License, or\n");
-  fprintf(constantsh, " * (at your option) any later version.\n");
-  fprintf(constantsh, " *\n");
-  fprintf(constantsh, " * 43S is distributed in the hope that it will be useful,\n");
-  fprintf(constantsh, " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-  fprintf(constantsh, " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
-  fprintf(constantsh, " * GNU General Public License for more details.\n");
-  fprintf(constantsh, " *\n");
-  fprintf(constantsh, " * You should have received a copy of the GNU General Public License\n");
-  fprintf(constantsh, " * along with 43S.  If not, see <http://www.gnu.org/licenses/>.\n");
-  fprintf(constantsh, " */\n\n");
+  fprintf(constantsH, "/* This file is part of 43S.\n");
+  fprintf(constantsH, " *\n");
+  fprintf(constantsH, " * 43S is free software: you can redistribute it and/or modify\n");
+  fprintf(constantsH, " * it under the terms of the GNU General Public License as published by\n");
+  fprintf(constantsH, " * the Free Software Foundation, either version 3 of the License, or\n");
+  fprintf(constantsH, " * (at your option) any later version.\n");
+  fprintf(constantsH, " *\n");
+  fprintf(constantsH, " * 43S is distributed in the hope that it will be useful,\n");
+  fprintf(constantsH, " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
+  fprintf(constantsH, " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
+  fprintf(constantsH, " * GNU General Public License for more details.\n");
+  fprintf(constantsH, " *\n");
+  fprintf(constantsH, " * You should have received a copy of the GNU General Public License\n");
+  fprintf(constantsH, " * along with 43S.  If not, see <http://www.gnu.org/licenses/>.\n");
+  fprintf(constantsH, " */\n\n");
 
-  fprintf(constantsh, "/********************************************//**\n");
-  fprintf(constantsh, "* \\file constantPointers.h constants\n");
-  fprintf(constantsh, "***********************************************/\n\n");
+  fprintf(constantsH, "/********************************************//**\n");
+  fprintf(constantsH, "* \\file constantPointers.h constants\n");
+  fprintf(constantsH, "***********************************************/\n\n");
 
-  fprintf(constantsh, "/************************************************************************************************\n");
-  fprintf(constantsh, "* Do not edit this file manually! It's automagically generated by the program generateConstants *\n");
-  fprintf(constantsh, "*************************************************************************************************/\n\n");
+  fprintf(constantsH, "/************************************************************************************************\n");
+  fprintf(constantsH, "* Do not edit this file manually! It's automagically generated by the program generateConstants *\n");
+  fprintf(constantsH, "*************************************************************************************************/\n\n");
 
-  fprintf(constantsh, defines);
-  fprintf(constantsh, "\n");
-  fprintf(constantsh, externalDeclarations);
+  fprintf(constantsH, defines);
+  fprintf(constantsH, "\n");
+  fprintf(constantsH, externalDeclarations);
 
-  fclose(constantsh);
+  fclose(constantsH);
 
 
 
-  constantsc = fopen("src/wp43s/constantPointers.c", "wb");
-  if(constantsc == NULL) {
+  constantsC = fopen("src/wp43s/constantPointers.c", "wb");
+  if(constantsC == NULL) {
     fprintf(stderr, "Cannot create file src/wp43s/constantPointers.c\n");
     exit(1);
   }
 
-  fprintf(constantsc, "/* This file is part of 43S.\n");
-  fprintf(constantsc, " *\n");
-  fprintf(constantsc, " * 43S is free software: you can redistribute it and/or modify\n");
-  fprintf(constantsc, " * it under the terms of the GNU General Public License as published by\n");
-  fprintf(constantsc, " * the Free Software Foundation, either version 3 of the License, or\n");
-  fprintf(constantsc, " * (at your option) any later version.\n");
-  fprintf(constantsc, " *\n");
-  fprintf(constantsc, " * 43S is distributed in the hope that it will be useful,\n");
-  fprintf(constantsc, " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-  fprintf(constantsc, " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
-  fprintf(constantsc, " * GNU General Public License for more details.\n");
-  fprintf(constantsc, " *\n");
-  fprintf(constantsc, " * You should have received a copy of the GNU General Public License\n");
-  fprintf(constantsc, " * along with 43S.  If not, see <http://www.gnu.org/licenses/>.\n");
-  fprintf(constantsc, " */\n\n");
+  fprintf(constantsC, "/* This file is part of 43S.\n");
+  fprintf(constantsC, " *\n");
+  fprintf(constantsC, " * 43S is free software: you can redistribute it and/or modify\n");
+  fprintf(constantsC, " * it under the terms of the GNU General Public License as published by\n");
+  fprintf(constantsC, " * the Free Software Foundation, either version 3 of the License, or\n");
+  fprintf(constantsC, " * (at your option) any later version.\n");
+  fprintf(constantsC, " *\n");
+  fprintf(constantsC, " * 43S is distributed in the hope that it will be useful,\n");
+  fprintf(constantsC, " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
+  fprintf(constantsC, " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
+  fprintf(constantsC, " * GNU General Public License for more details.\n");
+  fprintf(constantsC, " *\n");
+  fprintf(constantsC, " * You should have received a copy of the GNU General Public License\n");
+  fprintf(constantsC, " * along with 43S.  If not, see <http://www.gnu.org/licenses/>.\n");
+  fprintf(constantsC, " */\n\n");
 
-  fprintf(constantsc, "/********************************************//**\n");
-  fprintf(constantsc, "* \\file constantPointers.c constants\n");
-  fprintf(constantsc, "***********************************************/\n\n");
+  fprintf(constantsC, "/********************************************//**\n");
+  fprintf(constantsC, "* \\file constantPointers.c constants\n");
+  fprintf(constantsC, "***********************************************/\n\n");
 
-  fprintf(constantsc, "/************************************************************************************************\n");
-  fprintf(constantsc, "* Do not edit this file manually! It's automagically generated by the program generateConstants *\n");
-  fprintf(constantsc, "*************************************************************************************************/\n\n");
+  fprintf(constantsC, "/************************************************************************************************\n");
+  fprintf(constantsC, "* Do not edit this file manually! It's automagically generated by the program generateConstants *\n");
+  fprintf(constantsC, "*************************************************************************************************/\n\n");
 
-  fprintf(constantsc, "#include \"wp43s.h\"\n\n");
+  fprintf(constantsC, "#include \"wp43s.h\"\n\n");
 
-  fprintf(constantsc, realArray);
-  fprintf(constantsc, "\n");
-  fprintf(constantsc, real16PointerDeclarations);
-  fprintf(constantsc, "\n");
-  fprintf(constantsc, real34PointerDeclarations);
-  fprintf(constantsc, "\n");
-  fprintf(constantsc, real51PointerDeclarations);
-  fprintf(constantsc, "\n");
-  fprintf(constantsc, real451PointerDeclarations);
+  fprintf(constantsC, realArray);
+  fprintf(constantsC, "\n");
+  fprintf(constantsC, real16PointerDeclarations);
+  fprintf(constantsC, "\n");
+  fprintf(constantsC, real34PointerDeclarations);
+  fprintf(constantsC, "\n");
+  fprintf(constantsC, real51PointerDeclarations);
+  fprintf(constantsC, "\n");
+  fprintf(constantsC, real451PointerDeclarations);
 
-  fclose(constantsc);
+  fclose(constantsC);
+
+
+
+  gammaConstantsH = fopen("src/wp43s/mathematics/gammaConstants.h", "wb");
+  if(gammaConstantsH == NULL) {
+    fprintf(stderr, "Cannot create file src/wp43s/mathematics/gammaConstants.h\n");
+    exit(1);
+  }
+
+  fprintf(gammaConstantsH, "/* This file is part of 43S.\n");
+  fprintf(gammaConstantsH, " *\n");
+  fprintf(gammaConstantsH, " * 43S is free software: you can redistribute it and/or modify\n");
+  fprintf(gammaConstantsH, " * it under the terms of the GNU General Public License as published by\n");
+  fprintf(gammaConstantsH, " * the Free Software Foundation, either version 3 of the License, or\n");
+  fprintf(gammaConstantsH, " * (at your option) any later version.\n");
+  fprintf(gammaConstantsH, " *\n");
+  fprintf(gammaConstantsH, " * 43S is distributed in the hope that it will be useful,\n");
+  fprintf(gammaConstantsH, " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
+  fprintf(gammaConstantsH, " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
+  fprintf(gammaConstantsH, " * GNU General Public License for more details.\n");
+  fprintf(gammaConstantsH, " *\n");
+  fprintf(gammaConstantsH, " * You should have received a copy of the GNU General Public License\n");
+  fprintf(gammaConstantsH, " * along with 43S.  If not, see <http://www.gnu.org/licenses/>.\n");
+  fprintf(gammaConstantsH, " */\n\n");
+
+  fprintf(gammaConstantsH, "/********************************************//**\n");
+  fprintf(gammaConstantsH, "* \\file gammaConstants.h\n");
+  fprintf(gammaConstantsH, "***********************************************/\n\n");
+
+  fprintf(gammaConstantsH, "/************************************************************************************************\n");
+  fprintf(gammaConstantsH, "* Do not edit this file manually! It's automagically generated by the program generateConstants *\n");
+  fprintf(gammaConstantsH, "*************************************************************************************************/\n\n\n");
+
+  fprintf(gammaConstantsH, gammaConstants);
+  fprintf(gammaConstantsH, "\n");
+
+  fclose(gammaConstantsH);
 
   return 0;
 }

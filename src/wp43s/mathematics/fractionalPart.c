@@ -85,6 +85,14 @@ void fpLonI(void) {
 
 
 void fpRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fpRe16:", "cannot use NaN as an input of fp", NULL, NULL);
+    #endif
+    return;
+  }
+
   real16_t integerPart;
 
   real16ToIntegral(REGISTER_REAL16_DATA(opX), &integerPart);
@@ -100,6 +108,14 @@ void fpRm16(void) {
 
 
 void fpRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fpRe34:", "cannot use NaN as an input of fp", NULL, NULL);
+    #endif
+    return;
+  }
+
   real34_t integerPart;
 
   real34ToIntegral(REGISTER_REAL34_DATA(opX), &integerPart);

@@ -557,6 +557,7 @@ void mulRe16Re16(void) {
   }
 
   real16Multiply(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  setRegisterDataType(result, dtReal16, TAG_NONE);
 }
 
 
@@ -2374,6 +2375,7 @@ void mulRe34Re34(void) {
   }
 
   real34Multiply(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  setRegisterDataType(result, dtReal34, TAG_NONE);
 }
 
 

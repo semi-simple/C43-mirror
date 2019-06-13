@@ -240,9 +240,15 @@
 		<Unit filename="src/testSuite/changeSign.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/conjugate.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/cos.txt">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cube.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_angle16.txt">
@@ -282,6 +288,51 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/exp.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/factorial.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/fractionalPart.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gamma.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gcd.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/imaginaryPart.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/integerPart.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/invert.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/lcm.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/ln.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/lnGamma.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/log10.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/log2.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/magnitude.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/minusOnePow.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_angle16.txt">
@@ -326,12 +377,63 @@
 		<Unit filename="src/testSuite/polarToRectangular.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/power_angle16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_angle34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_complex16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_complex16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_complex34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_date.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_longInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_real16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_real16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_real34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_shortInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_string.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/power_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/realPart.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/rectangularToPolar.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/sign.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/sin.txt">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/sqrt.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/square.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/subtraction_angle16.txt">
@@ -373,6 +475,9 @@
 		<Unit filename="src/testSuite/subtraction_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/swapRealImaginary.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/tan.txt">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
@@ -391,6 +496,9 @@
 		<Unit filename="src/testSuite/trig.txt">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/unitVector.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/ttf2RasterFonts/testTtf2RasterFonts.c">
@@ -853,6 +961,11 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/gamma.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaConstants.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

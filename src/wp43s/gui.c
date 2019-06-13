@@ -353,9 +353,10 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
   }
   return FALSE;
 }
+#endif
 
 
-
+#ifndef DMCP_BUILD
 void strReplace(char *haystack, const char *needle, const char *newNeedle) {
   ////////////////////////////////////////////////////////
   // There MUST be enough memory allocated to *haystack //
@@ -368,10 +369,12 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
     needleLg = strlen(needle);
     needleLocation = strstr(haystack, needle);
     tmpString = malloc(strlen(needleLocation + needleLg) + 1);
-    if(tmpString == NULL) {
-      showInfoDialog("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
-      exit(1);
-    }
+    #ifdef PC_BUILD
+      if(tmpString == NULL) {
+        showInfoDialog("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
+        exit(1);
+      }
+    #endif
 
     strcpy(tmpString, needleLocation + needleLg);
     *strstr(haystack, needle) = 0;
@@ -380,9 +383,10 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
     free(tmpString);
   }
 }
+#endif
 
 
-
+#ifdef PC_BUILD
 /********************************************//**
  * \brief Reads the CSS file to configure the calc's GUI style
  *
@@ -1832,6 +1836,7 @@ void setupUI(void) {
   // LCD screen 400x240
   screen = gtk_drawing_area_new();
   gtk_widget_set_size_request(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "h(ardcopy) copies screen image to clipboard");
   gtk_fixed_put(GTK_FIXED(grid), screen, 63, 72);
   screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
   numBytes = screenStride * SCREEN_HEIGHT * 4;

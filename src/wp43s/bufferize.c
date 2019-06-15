@@ -280,6 +280,7 @@ void addItemToNimBuffer(int16_t item) {
         nimBuffer[1] = '1';
         nimBuffer[2] = 0;
         nimNumberPart = NP_REAL_FLOAT_PART;
+        lastIntegerBase = 0;
         break;
 
       case CHR_PERIOD :
@@ -480,6 +481,8 @@ void addItemToNimBuffer(int16_t item) {
         strcat(nimBuffer, "0");
       }
 
+      lastIntegerBase = 0;
+
       switch(nimNumberPart) {
         case NP_INT_10 :
           strcat(nimBuffer, ".");
@@ -524,6 +527,8 @@ void addItemToNimBuffer(int16_t item) {
         strcat(nimBuffer, "1");
       }
 
+      lastIntegerBase = 0;
+
       switch(nimNumberPart) {
         case NP_INT_10 :
           strcat(nimBuffer, "."); // no break here
@@ -555,6 +560,8 @@ void addItemToNimBuffer(int16_t item) {
 
     case ITM_toINT : // #
       done = true;
+
+      lastIntegerBase = 0;
 
       if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
         strcat(nimBuffer, "#");
@@ -623,6 +630,8 @@ void addItemToNimBuffer(int16_t item) {
       lastChar = strlen(nimBuffer) - 1;
 
       done = true;
+
+      lastIntegerBase = 0;
 
       switch(nimNumberPart) {
        case NP_REAL_EXPONENT :

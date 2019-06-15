@@ -587,8 +587,8 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
  * \return void
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
-  int16_t w, prefixWidth, lineWidth = 0;
-  char    prefix[15];
+  int16_t w, wLastBase, prefixWidth, lineWidth = 0;
+  char    prefix[15], lastBase[4];
 
   #if (DEBUG_PANEL == 1)
     refreshDebugPanel();
@@ -725,14 +725,29 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(regist == NIM_REGISTER_LINE && calcMode == CM_NIM) {
-            w = stringWidth(nimBufferDisplay, &numericFont, true, true) + 13;
-            if(w <= SCREEN_WIDTH) {
+            if(lastIntegerBase != 0) {
+              sprintf(lastBase, "#%d", lastIntegerBase);
+              wLastBase = stringWidth(lastBase, &numericFont, true, true);
+            }
+            else {
+              wLastBase = 0;
+            }
+
+            if(stringWidth(nimBufferDisplay, &numericFont, true, true) + wLastBase <= SCREEN_WIDTH - 16) { // 16 is the standard font cursor widh
               xCursor = showString(nimBufferDisplay, &numericFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
               cursorFont = CF_NUMERIC;
+
+              if(lastIntegerBase != 0) {
+                showString(lastBase, &numericFont, xCursor + 16, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+              }
             }
             else {
               xCursor = showString(nimBufferDisplay, &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
               cursorFont = CF_STANDARD;
+
+              if(lastIntegerBase != 0) {
+                showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+              }
             }
           }
 

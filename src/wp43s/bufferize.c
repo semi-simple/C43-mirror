@@ -168,6 +168,12 @@ void addItemToBuffer(uint16_t item) {
         tamOperation = item;
         tamTransitionSystem(TT_OPERATION);
       }
+      else if(tamFunction == ITM_toINT && item == ITM_ST_D) {
+          tamTransitionSystem(TT_BASE10);
+      }
+      else if(tamFunction == ITM_toINT && item == ITM_HEX) {
+        tamTransitionSystem(TT_BASE16);
+      }
       else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_K) { // Lettered register
         tamLetteredRegister = indexOfItems[item].param;
         tamTransitionSystem(TT_LETTER);
@@ -1223,6 +1229,18 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_BACKSPACE :
+          calcModeNormal();
+          return;
+          break;
+
+        case TT_BASE10 :
+          indexOfItems[tamFunction].func(10);
+          calcModeNormal();
+          return;
+          break;
+
+        case TT_BASE16 :
+          indexOfItems[tamFunction].func(16);
           calcModeNormal();
           return;
           break;

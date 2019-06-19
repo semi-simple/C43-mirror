@@ -1700,6 +1700,7 @@ const item_t indexOfItems[] = {
 /* 1573 */  { fnStatSum,                   20,                          STD_SIGMA STD_SUP_1 "/y" STD_SUP_2,            STD_SIGMA STD_SUP_1 "/y" STD_SUP_2,                                           SLS_ENABLED  },
 /* 1574 */  { fnStatSum,                   21,                          STD_SIGMA "x" STD_SUP_3,                       STD_SIGMA "x" STD_SUP_3,                                                      SLS_ENABLED  },
 /* 1575 */  { fnStatSum,                   22,                          STD_SIGMA "x" STD_SUP_4,                       STD_SIGMA "x" STD_SUP_4,                                                      SLS_ENABLED  },
+/* 1576 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "",                                                                           SLS_UNCHANGED},
 
-/* 1576 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
+/* 1577 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
 };

@@ -1609,8 +1609,9 @@
 #define ITM_SIGMA1ony2                1573
 #define ITM_SIGMAx3                   1574
 #define ITM_SIGMAx4                   1575
+#define ITM_HEX                       1576
 
-#define LAST_ITEM                     1576
+#define LAST_ITEM                     1577
 
 #define CHR_PROD_SIGN                 9999
 

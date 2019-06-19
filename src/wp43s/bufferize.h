@@ -30,7 +30,9 @@
 #define TT_DOT             5
 #define TT_INDIRECT        6
 #define TT_BACKSPACE       7
-#define TT_NOTHING         8
+#define TT_BASE10          8
+#define TT_BASE16          9
+#define TT_NOTHING        10
 
 #ifndef TESTSUITE_BUILD
   void    fnAim                   (uint16_t unusedParamButMandatory);

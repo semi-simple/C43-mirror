@@ -914,7 +914,7 @@ const item_t indexOfItems[] = {
 /*  790 */  { fnCvtFromCurrentAngularMode, AM_GRAD,                     STD_RIGHT_ARROW "GRAD",                        STD_RIGHT_ARROW "GRAD",                                                       SLS_ENABLED  },
 /*  791 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "HR",                          ".d",                                                                         SLS_ENABLED  },
 /*  792 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "H.MS",                        "h.ms",                                                                       SLS_UNCHANGED},
-/*  793 */  { fnChangeBase,                TM_VALUE,                    STD_RIGHT_ARROW "INT",                         "#",                                                                          SLS_UNCHANGED},
+/*  793 */  { fnChangeBase,                TM_VALUE_CHB,                STD_RIGHT_ARROW "INT",                         "#",                                                                          SLS_UNCHANGED},
 /*  794 */  { fnCvtFromCurrentAngularMode, AM_MULTPI,                   STD_RIGHT_ARROW "MUL" STD_pi,                  STD_RIGHT_ARROW "MUL" STD_pi,                                                 SLS_ENABLED  },
 /*  795 */  { fnToPolar,                   NOPARAM,                     STD_RIGHT_ARROW "POL",                         STD_RIGHT_ARROW "P",                                                          SLS_ENABLED  },
 /*  796 */  { fnCvtFromCurrentAngularMode, AM_RADIAN,                   STD_RIGHT_ARROW "RAD",                         STD_RIGHT_ARROW "RAD",                                                        SLS_ENABLED  },
@@ -1700,7 +1700,7 @@ const item_t indexOfItems[] = {
 /* 1573 */  { fnStatSum,                   20,                          STD_SIGMA STD_SUP_1 "/y" STD_SUP_2,            STD_SIGMA STD_SUP_1 "/y" STD_SUP_2,                                           SLS_ENABLED  },
 /* 1574 */  { fnStatSum,                   21,                          STD_SIGMA "x" STD_SUP_3,                       STD_SIGMA "x" STD_SUP_3,                                                      SLS_ENABLED  },
 /* 1575 */  { fnStatSum,                   22,                          STD_SIGMA "x" STD_SUP_4,                       STD_SIGMA "x" STD_SUP_4,                                                      SLS_ENABLED  },
-/* 1576 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "",                                                                           SLS_UNCHANGED},
+/* 1576 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "H",                                                                          SLS_UNCHANGED},
 
 /* 1577 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
 };

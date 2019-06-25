@@ -1147,7 +1147,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
   uint8_t lbl[22];
 
-  if(key->primaryTam == 0) {
+  if(key->primaryTam == 0 || (key->keyId == 32 && tamMode != TM_VALUE_CHB)) { // Display H for changing base to hexadecimal
     lbl[0] = 0;
   }
   else {
@@ -2791,7 +2791,7 @@ void calcModeTAM(void) {
     closeNim();
   }
 
-  if(tamMode == TM_VALUE || tamMode == TM_REGISTER || tamMode == TM_FLAG) {
+  if(tamMode == TM_VALUE || tamMode == TM_VALUE_CHB || tamMode == TM_REGISTER || tamMode == TM_FLAG) {
     showSoftmenu(NULL, -MNU_TAM, true);
   }
   else if(tamMode == TM_CMP) {

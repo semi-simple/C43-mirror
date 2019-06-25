@@ -315,10 +315,11 @@ typedef int16_t calcRegister_t;
 
 // TAM mode
 #define TM_VALUE            10001 // TM_VALUE must be the 1st in this list
-#define TM_REGISTER         10002
-#define TM_FLAG             10003
-#define TM_STORCL           10004
-#define TM_CMP              10005 // TM_CMP must be the last in this list
+#define TM_VALUE_CHB        10002 // same as TM_VALUE but for ->INT (#) change base
+#define TM_REGISTER         10003
+#define TM_FLAG             10004
+#define TM_STORCL           10005
+#define TM_CMP              10006 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                0

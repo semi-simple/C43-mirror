@@ -1183,7 +1183,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_LETTER :
-          if(tamMode != TM_VALUE) {
+          if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
             indexOfItems[tamFunction].func(tamLetteredRegister);
             calcModeNormal();
             return;
@@ -1191,7 +1191,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_VARIABLE :
-          if(tamMode != TM_VALUE) {
+          if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
           }
           break;
 
@@ -1215,7 +1215,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_DOT :
-          if(tamMode != TM_VALUE) {
+          if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
             if((tamMode == TM_FLAG && numberOfLocalFlags > 0) || (tamMode != TM_FLAG && numberOfLocalRegisters > 0)) {
               sprintf(tamBuffer, "%s .__", indexOfItems[tamFunction].itemPrinted);
               transitionSystemState = 3;

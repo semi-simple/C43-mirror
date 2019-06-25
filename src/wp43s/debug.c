@@ -344,10 +344,11 @@ void debugNIM(void) {
    * \return char*          Name of the TAM mode
    ***********************************************/
   char * getTamModeName(uint16_t cm) {
-    if(cm == TM_VALUE)    return "Value   ";
-    if(cm == TM_REGISTER) return "Register";
-    if(cm == TM_CMP)      return "Compare ";
-    if(cm == TM_STORCL)   return "STORCL  ";
+    if(cm == TM_VALUE)     return "Value   ";
+    if(cm == TM_VALUE_CHB) return "Valuechb"; // change base (->#)
+    if(cm == TM_REGISTER)  return "Register";
+    if(cm == TM_CMP)       return "Compare ";
+    if(cm == TM_STORCL)    return "STORCL  ";
 
     return "???     ";
   }

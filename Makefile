@@ -68,7 +68,7 @@ SRC_WP43S                = \
 		rasterFontsData.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c testFunctions.c timer.c tomsfastmath.c \
-		wp43s.c) \
+		wp43s.c memory.c) \
 	$(addprefix src/wp43s/mathematics/, \
 		10pow.c 2pow.c addition.c arccos.c arcsin.c arctan.c \
 		changeSign.c comparisonReals.c conjugate.c cos.c cube.c \
@@ -256,7 +256,7 @@ $(WP43S_APP): GTK_LIBS   = `pkg-config --libs   gtk+-3.0`
 $(WP43S_APP): GTK_CFLAGS = `pkg-config --cflags gtk+-3.0`
 $(WP43S_APP): $(OBJ_WP43S)
 	@echo -e "\n====> wp43s $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) $(GTK_LIBS)
+	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) $(GTK_LIBS) -lgmp
 
 src/wp43s/%.o: src/wp43s/%.c .stamp-constantPointers
 	@echo -e "\n====> wp43s $@ <===="

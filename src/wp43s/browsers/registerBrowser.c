@@ -126,7 +126,11 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             longIntegerToDisplayString(regist, tmpStr3000, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
-            sprintf(tmpStr3000, "%" FMT16U " bits := 2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
+            #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
+              sprintf(tmpStr3000, "%" FMT32U " bits := 2+%" FMT32U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
+            #else
+              sprintf(tmpStr3000, "%" FMT16U " bits := 2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
+            #endif
           }
         }
         else if(getRegisterDataType(regist) == dtShortInteger) {
@@ -154,7 +158,11 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
           }
           else {
-            sprintf(tmpStr3000, "%" FMT32S " character%s := 2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
+            #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
+              sprintf(tmpStr3000, "%" FMT32S " character%s := 2+%" FMT32U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
+            #else
+              sprintf(tmpStr3000, "%" FMT32S " character%s := 2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
+            #endif
           }
         }
         else {
@@ -238,7 +246,11 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
                 longIntegerToDisplayString(regist, tmpStr3000, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
-                sprintf(tmpStr3000, "%" FMT16U " bits := 4+2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
+                #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
+                  sprintf(tmpStr3000, "%" FMT32U " bits := 4+2+%" FMT32U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
+                #else
+                  sprintf(tmpStr3000, "%" FMT16U " bits := 4+2+%" FMT16U " bytes", *(REGISTER_DATA_MAX_LEN(regist)) * 8, *(REGISTER_DATA_MAX_LEN(regist)));
+                #endif
               }
             }
             else if(getRegisterDataType(regist) == dtShortInteger) {
@@ -266,7 +278,11 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
                 }
               }
               else {
-                sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
+                #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
+                  sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
+                #else
+                  sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT32U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
+                #endif
               }
             }
             else {

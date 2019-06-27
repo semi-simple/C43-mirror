@@ -509,9 +509,9 @@ void debugNIM(void) {
     char     string[1000], *p;
     uint16_t i, k, n=0;
 
-    if(1000 <= regist && regist < 1000+numberOfNamedRegisters) { // Named register
-      n = stringByteLength(POINTER_TO_REGISTER_NAME(regist));
-      for(i=0, p=POINTER_TO_REGISTER_NAME(regist); i<=n; i++, p++) {
+    if(1000 <= regist && regist < 1000+numberOfNamedVariables) { // Named register
+      n = stringByteLength(getRegisterNamePointer(regist));
+      for(i=0, p=getRegisterNamePointer(regist); i<=n; i++, p++) {
         string[i] = *p;
       }
 
@@ -551,7 +551,11 @@ void debugNIM(void) {
 
     else if(getRegisterDataType(regist) == dtString) {
       if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(chkHexaString))) {
-        sprintf(string + n, "%04x", *(REGISTER_DATA_MAX_LEN(regist)));
+        #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
+          sprintf(string + n, "%" FMT32U, *(REGISTER_DATA_MAX_LEN(regist)));
+        #else
+          sprintf(string + n, "%" FMT16U, *(REGISTER_DATA_MAX_LEN(regist)));
+        #endif
         k = 4;
         for(i=2; i<getRegisterFullSize(regist); i++) {
           sprintf(string + n + k, STD_SPACE_3_PER_EM "%02x", *(unsigned char *)(REGISTER_DATA(regist) + i));
@@ -612,331 +616,319 @@ void debugNIM(void) {
       row = 0;
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "1stFreeByte                  = %6u",        firstFreeByte);
+        sprintf(string, "numberOfLocalRegisters                     = %6u",        numberOfLocalRegisters);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "lastFreeByte                 = %6u",        lastFreeByte);
+        sprintf(string, "MEMPTR_TO_RAMPTR(allLocalRegisterPointer)  = %6u",        MEMPTR_TO_RAMPTR(allLocalRegisterPointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "numberOfLocalRegisters       = %6u",        numberOfLocalRegisters);
+        sprintf(string, "MEMPTR_TO_RAMPTR(statisticalSumsPointer)  = %6u",         MEMPTR_TO_RAMPTR(statisticalSumsPointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "allLocalRegisterPointer      = %6u",        allLocalRegisterPointer);
+        sprintf(string, "numberOfNamedVariables                    = %6u",         numberOfNamedVariables);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "statisticalSumsPointer       = %6u",        statisticalSumsPointer);
+        sprintf(string, "MEMPTR_TO_RAMPTR(allNamedVariablePointer) = %6u",        MEMPTR_TO_RAMPTR(allNamedVariablePointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "numberOfNamedRegisters       = %6u",        numberOfNamedRegisters);
+        sprintf(string, "stackSize                                 = %6u = %s",    stackSize,            getStackSizeName(stackSize));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "allNamedRegisterPointer      = %6u",        allNamedRegisterPointer);
+        sprintf(string, "softmenuStackPointer                      = %6u\n",       softmenuStackPointer);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "stackSize                    = %6u = %s",   stackSize,            getStackSizeName(stackSize));
+        sprintf(string, "fractionType                              = %6u = %s",    fractionType,         getFractionTypeName(fractionType));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "softmenuStackPointer         = %6u\n",      softmenuStackPointer);
+        sprintf(string, "denominatorMode                           = %6u = %s",    denominatorMode,      getDenModeName(denominatorMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "fractionType                 = %6u = %s",   fractionType,         getFractionTypeName(fractionType));
+        sprintf(string, "denMax                                    = %6u\n",       denMax);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "denominatorMode              = %6u = %s",   denominatorMode,      getDenModeName(denominatorMode));
+        sprintf(string, "PC                                        = %6u",         programCounter);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "denMax                       = %6u\n",      denMax);
+        sprintf(string, "shortIntegerMode                          = %6u = %s",    shortIntegerMode,     getShortIntegerModeName(shortIntegerMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "PC                           = %6u",        programCounter);
+        sprintf(string, "shortIntegerWordSize                      = %6u",         shortIntegerWordSize);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "shortIntegerMode             = %6u = %s",   shortIntegerMode,     getShortIntegerModeName(shortIntegerMode));
+        sprintf(string, "displatFormat                             = %6u = %s",    displayFormat,        getDisplayFormatName(displayFormat));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "shortIntegerWordSize         = %6u",        shortIntegerWordSize);
+        sprintf(string, "displatFormatDigits                       = %6u",         displayFormatDigits);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "displatFormat                = %6u = %s",   displayFormat,        getDisplayFormatName(displayFormat));
+        sprintf(string, "displayModeOverride                       = %6u = %s",    displayModeOverride,  getDisplayOvrName(displayModeOverride));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "displatFormatDigits          = %6u",        displayFormatDigits);
+        sprintf(string, "groupingGap                               = %6u",         groupingGap);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "displayModeOverride          = %6u = %s",   displayModeOverride,  getDisplayOvrName(displayModeOverride));
+        sprintf(string, "significantDigits                         = %6u",         significantDigits);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "groupingGap                  = %6u",        groupingGap);
+        sprintf(string, "roundingMode                              = %6u = %s",    roundingMode,         getRoundingModeName(roundingMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "significantDigits            = %6u",        significantDigits);
+        sprintf(string, "currentAngularMode                        = %6u = %s",    currentAngularMode,   getAngularModeName(currentAngularMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "roundingMode                 = %6u = %s",   roundingMode,         getRoundingModeName(roundingMode));
+        sprintf(string, "timeFormat                                = %6u = %s",    timeFormat,           getTimeFormatName(timeFormat));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "currentAngularMode           = %6u = %s",   currentAngularMode,   getAngularModeName(currentAngularMode));
+        sprintf(string, "dateFormat                                = %6u = %s",    dateFormat,           getDateFormatName(dateFormat));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "timeFormat                   = %6u = %s",   timeFormat,           getTimeFormatName(timeFormat));
+        sprintf(string, "firstGregorianDay                         = %6u",         firstGregorianDay);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "dateFormat                   = %6u = %s",   dateFormat,           getDateFormatName(dateFormat));
+        sprintf(string, "complexUnit                               = %6u = %s",    complexUnit,          getComplexUnitName(complexUnit));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "firstGregorianDay            = %6u",        firstGregorianDay);
+        sprintf(string, "displayLeadingZeros                       = %6u = %s",    displayLeadingZeros,  getBooleanName(displayLeadingZeros));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "complexUnit                  = %6u = %s",   complexUnit,          getComplexUnitName(complexUnit));
+        sprintf(string, "productSign                               = %6u = %s",    productSign,          getProductSignName(productSign));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "displayLeadingZeros          = %6u = %s",   displayLeadingZeros,  getBooleanName(displayLeadingZeros));
+        sprintf(string, "radixMark                                 = %6u = %s",    radixMark,            getRadixMarkName(radixMark));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "productSign                  = %6u = %s",   productSign,          getProductSignName(productSign));
+        sprintf(string, "complexMode                               = %6u = %s",    complexMode,          getComplexModeName(complexMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "radixMark                    = %6u = %s",   radixMark,            getRadixMarkName(radixMark));
+        sprintf(string, "alphaCase                                 = %6u = %s",    alphaCase,            getAlphaCaseName(alphaCase));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "complexMode                  = %6u = %s",   complexMode,          getComplexModeName(complexMode));
+        sprintf(string, "hourGlassIconEnabled                      = %6u = %s",    hourGlassIconEnabled, getBooleanName(hourGlassIconEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "alphaCase                    = %6u = %s",   alphaCase,            getAlphaCaseName(alphaCase));
+        sprintf(string, "watchIconEnabled                          = %6u = %s",    watchIconEnabled,     getBooleanName(watchIconEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "hourGlassIconEnabled         = %6u = %s",   hourGlassIconEnabled, getBooleanName(hourGlassIconEnabled));
+        sprintf(string, "userModeEnabled                           = %6u = %s",    userModeEnabled,      getBooleanName(userModeEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "watchIconEnabled             = %6u = %s",   watchIconEnabled,     getBooleanName(watchIconEnabled));
+        sprintf(string, "serialIOIconEnabled                       = %6u = %s",    serialIOIconEnabled,  getBooleanName(serialIOIconEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "userModeEnabled              = %6u = %s",   userModeEnabled,      getBooleanName(userModeEnabled));
+        sprintf(string, "printerIconEnabled                        = %6u = %s",    printerIconEnabled,   getBooleanName(printerIconEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "serialIOIconEnabled          = %6u = %s",   serialIOIconEnabled,  getBooleanName(serialIOIconEnabled));
+        sprintf(string, "batteryIconEnabled                        = %6u = %s",    batteryIconEnabled,   getBooleanName(batteryIconEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "printerIconEnabled           = %6u = %s",   printerIconEnabled,   getBooleanName(printerIconEnabled));
+        sprintf(string, "stackLiftEnabled                          = %6u = %s",    stackLiftEnabled,     getBooleanName(stackLiftEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "batteryIconEnabled           = %6u = %s",   batteryIconEnabled,   getBooleanName(batteryIconEnabled));
+        sprintf(string, "curveFitting                              = %6u = %s\n",  curveFitting,         getCurveFittingName(curveFitting));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "stackLiftEnabled             = %6u = %s",   stackLiftEnabled,     getBooleanName(stackLiftEnabled));
+        sprintf(string, "calcMode                                  = %6u = %s",    calcMode,             getCalcModeName(calcMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "curveFitting                 = %6u = %s\n", curveFitting,         getCurveFittingName(curveFitting));
+        sprintf(string, "nextChar                                  = %6u = %s",    nextChar,             getNextCharName(nextChar));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "calcMode                     = %6u = %s",   calcMode,             getCalcModeName(calcMode));
+        sprintf(string, "TAM mode                                  = %6u = %s",    tamMode,              getTamModeName(tamMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "nextChar                     = %6u = %s",   nextChar,             getNextCharName(nextChar));
+        sprintf(string, "transitionSystemState                     = %6u",         transitionSystemState);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "TAM mode                     = %6u = %s",   tamMode,              getTamModeName(tamMode));
+        sprintf(string, "shiftF                                    = %6u = %s",    shiftF,               getBooleanName(shiftF));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "transitionSystemState        = %6u",        transitionSystemState);
+        sprintf(string, "shiftG                                    = %6u = %s\n",  shiftG,               getBooleanName(shiftG));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "shiftF                       = %6u = %s",   shiftF,               getBooleanName(shiftF));
+        sprintf(string, "xCursor                                   = %6u",         xCursor);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "shiftG                       = %6u = %s\n", shiftG,               getBooleanName(shiftG));
+        sprintf(string, "yCursor                                   = %6u",         yCursor);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "xCursor                      = %6u",        xCursor);
+        sprintf(string, "cursorEnabled                             = %6u = %s",    cursorEnabled,        getBooleanName(cursorEnabled));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "yCursor                      = %6u",        yCursor);
+        sprintf(string, "cursorFont                                = %6u = %s",    cursorFont,           getCursorFontName(cursorFont));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "cursorEnabled                = %6u = %s",   cursorEnabled,        getBooleanName(cursorEnabled));
+        sprintf(string, "currentFntScr                             = %6u",         currentFntScr);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "cursorFont                   = %6u = %s",   cursorFont,           getCursorFontName(cursorFont));
+        sprintf(string, "cursorBlinkCounter                        = %6u\n",       cursorBlinkCounter);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "currentFntScr                = %6u",        currentFntScr);
+        sprintf(string, "currentRegisterBrowserScreen              = %6u",         currentRegisterBrowserScreen);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "cursorBlinkCounter           = %6u\n",      cursorBlinkCounter);
+        sprintf(string, "currentFlgScr                             = %6u",         currentFlgScr);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "currentRegisterBrowserScreen = %6u",        currentRegisterBrowserScreen);
+        sprintf(string, "rbrMode                                   = %6u = %s",    rbrMode,              getRbrModeName(rbrMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "currentFlgScr                = %6u",        currentFlgScr);
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-        gtk_widget_show(lbl1[row++]);
-      }
-
-      if(row < DEBUG_LINES) {
-        sprintf(string, "rbrMode                      = %6u = %s",   rbrMode,              getRbrModeName(rbrMode));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-        gtk_widget_show(lbl1[row++]);
-      }
-
-      if(row < DEBUG_LINES) {
-        sprintf(string, "showContent                  = %6u = %s",   showContent,          getBooleanName(showContent));
+        sprintf(string, "showContent                               = %6u = %s",    showContent,          getBooleanName(showContent));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -1019,32 +1011,32 @@ void debugNIM(void) {
       gtk_widget_show(lbl2[row++]);
 
       for(int i=REGISTER_K; i>=REGISTER_I; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_I+'I', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_I+'I', getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
       for(int i=REGISTER_D; i>=REGISTER_A; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_A+'A', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_A+'A', getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
-      sprintf(string, "103 T %s %7d %7d", getRegisterDataTypeName(REGISTER_T, false, true), getRegisterDataPointer(REGISTER_T), getRegisterFullSize(REGISTER_T));
+      sprintf(string, "103 T %s %7d %7d", getRegisterDataTypeName(REGISTER_T, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(REGISTER_T)), getRegisterFullSize(REGISTER_T));
       gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
       gtk_widget_show(lbl1[row]);
       debugRegisterValue(REGISTER_T, row++);
 
       for(int i=REGISTER_Z; i>=REGISTER_X; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_X+'X', getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_X+'X', getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
-      sprintf(string, "108 L %s %7d %7d", getRegisterDataTypeName(REGISTER_L, false, true), getRegisterDataPointer(REGISTER_L), getRegisterFullSize(REGISTER_L));
+      sprintf(string, "108 L %s %7d %7d", getRegisterDataTypeName(REGISTER_L, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(REGISTER_L)), getRegisterFullSize(REGISTER_L));
       gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
       gtk_widget_show(lbl1[row]);
       debugRegisterValue(REGISTER_L, row++);
@@ -1052,7 +1044,7 @@ void debugNIM(void) {
       row++;
       for(int i=0; i<100; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, "  %02d  %s %7d %7d", i, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+          sprintf(string, "  %02d  %s %7d %7d", i, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row);
@@ -1077,7 +1069,7 @@ void debugNIM(void) {
 
       for(uint16_t i=FIRST_LOCAL_REGISTER; i<FIRST_LOCAL_REGISTER+numberOfLocalRegisters; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, ".%02d   %s %7d %7d", i-FIRST_LOCAL_REGISTER, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+          sprintf(string, ".%02d   %s %7d %7d", i-FIRST_LOCAL_REGISTER, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row++);
@@ -1093,12 +1085,12 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Sum");
-      sprintf(string, "Content of the statistical sums (%d)", statisticalSumsPointer);
+      sprintf(string, "Content of the statistical sums (%d)", MEMPTR_TO_RAMPTR(statisticalSumsPointer));
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);
 
-      if(statisticalSumsPointer != 0) {
+      if(statisticalSumsPointer != NULL) {
         gtk_label_set_label(GTK_LABEL(lbl1[row]), "n");
         gtk_widget_show(lbl1[row]);
         formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*0);
@@ -1283,7 +1275,7 @@ void debugNIM(void) {
       }
     }
 
-    else if(debugWindow == DBG_NAMED_REGISTERS) {
+    else if(debugWindow == DBG_NAMED_VARIABLES) {
       for(int i=0; i<DEBUG_LINES; i++) {
         gtk_widget_hide(lbl1[i]);
         gtk_widget_hide(lbl2[i]);
@@ -1291,14 +1283,14 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
-      sprintf(string, "Content of the %" FMT16U " named registers", numberOfNamedRegisters);
+      sprintf(string, "Content of the %" FMT16U " named registers", numberOfNamedVariables);
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);
 
-      for(uint16_t i=1000; i<1000+numberOfNamedRegisters; i++) {
+      for(uint16_t i=1000; i<1000+numberOfNamedVariables; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, "%03d   %s %7d %7d", i-1000, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+          sprintf(string, "%03d   %s %7d %7d", i-1000, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row++);
@@ -1320,7 +1312,7 @@ void debugNIM(void) {
       gtk_widget_show(lbl2[row++]);
 
       for(uint16_t i=FIRST_TEMPORARY_REGISTER; i<FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS; i++) {
-        sprintf(string, "%3d   %s %7d %7d", i-FIRST_TEMPORARY_REGISTER, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+        sprintf(string, "%3d   %s %7d %7d", i-FIRST_TEMPORARY_REGISTER, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
@@ -1329,7 +1321,7 @@ void debugNIM(void) {
       row ++;
 
       for(uint16_t i=SAVED_REGISTER_X; i<=SAVED_REGISTER_L; i++) {
-        sprintf(string, "%3d   %s %7d %7d", i-SAVED_REGISTER_X, getRegisterDataTypeName(i, false, true), getRegisterDataPointer(i), getRegisterFullSize(i));
+        sprintf(string, "%3d   %s %7d %7d", i-SAVED_REGISTER_X, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
@@ -1372,9 +1364,9 @@ void debugNIM(void) {
     refreshDebugPanel();
   }
 
-  void btnNamedRegistersClicked(GtkWidget* w, gpointer data) {
+  void btnNamedVariablesClicked(GtkWidget* w, gpointer data) {
     allowScreenUpdate = true;
-    debugWindow = DBG_NAMED_REGISTERS;
+    debugWindow = DBG_NAMED_VARIABLES;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
   }
@@ -1402,23 +1394,23 @@ void debugNIM(void) {
    * \param[in] x real16_t* Value
    * \return void
    ***********************************************/
-  void formatReal16Debug(char *str, uint32_t addr) {
+  void formatReal16Debug(char *str, void *addr) {
     uint8_t ch, coef, digit;
     uint8_t bcd[DECDOUBLE_Pmax];
     int32_t sign, exponent;
 
-    if(real16IsInfinite(RAM_REAL16(addr)) || real16IsNaN(RAM_REAL16(addr))) {
-      real16ToString(RAM_REAL16(addr), str);
+    if(real16IsInfinite(addr) || real16IsNaN(addr)) {
+      real16ToString(addr, str);
       return;
     }
 
-    if(real16IsZero(RAM_REAL16(addr))) {
+    if(real16IsZero(addr)) {
       strcpy(str, "+0.000000000000000e+0");
       return;
     }
 
-    sign = real16GetCoefficient(RAM_REAL16(addr), bcd);
-    exponent = real16GetExponent(RAM_REAL16(addr));
+    sign = real16GetCoefficient(addr, bcd);
+    exponent = real16GetExponent(addr);
     if(sign) {
       str[0] = '-';
     }
@@ -1456,7 +1448,7 @@ void debugNIM(void) {
    * \param[in] x real16_t* Value
    * \return void
    ***********************************************/
-  void formatComplex16Debug(char *str, uint32_t addr) {
+  void formatComplex16Debug(char *str, void *addr) {
     formatReal16Debug(str     , addr               );
     formatReal16Debug(str + 64, addr + REAL16_SIZE);
 
@@ -1473,23 +1465,23 @@ void debugNIM(void) {
    * \param[in] x real34_t* Value
    * \return void
    ***********************************************/
-  void formatReal34Debug(char *str, uint32_t addr) {
+  void formatReal34Debug(char *str, void *addr) {
     uint8_t ch, coef, digit;
     uint8_t bcd[DECQUAD_Pmax];
     int32_t sign, exponent;
 
-    if(real34IsInfinite(RAM_REAL34(addr)) || real34IsNaN(RAM_REAL34(addr))) {
-      real34ToString(RAM_REAL34(addr), str);
+    if(real34IsInfinite(addr) || real34IsNaN(addr)) {
+      real34ToString(addr, str);
       return;
     }
 
-    if(real34IsZero(RAM_REAL34(addr))) {
+    if(real34IsZero(addr)) {
       strcpy(str, "+0.000000000000000000000000000000000e+0");
       return;
     }
 
-    sign = real34GetCoefficient(RAM_REAL34(addr), bcd);
-    exponent = real34GetExponent(RAM_REAL34(addr));
+    sign = real34GetCoefficient(addr, bcd);
+    exponent = real34GetExponent(addr);
     if(sign) {
       str[0] = '-';
     }
@@ -1528,7 +1520,7 @@ void debugNIM(void) {
    * \param[in] x real34_t* Value
    * \return void
    ***********************************************/
-  void formatComplex34Debug(char *str, uint32_t addr) {
+  void formatComplex34Debug(char *str, void *addr) {
     formatReal34Debug(str     , addr             );
     formatReal34Debug(str + 64, addr + REAL34_SIZE);
 

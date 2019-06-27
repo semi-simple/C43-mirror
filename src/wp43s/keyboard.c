@@ -293,7 +293,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           int16_t mem = stringByteLength(aimBuffer);
 
-          reallocateRegister(REGISTER_X, dtString, mem, 0);
+          reallocateRegister(REGISTER_X, dtString, mem, TAG_NONE);
           memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
 
           STACK_LIFT_ENABLE;
@@ -362,7 +362,7 @@ void btnPressed(void *notUsed, void *data) {
           else {
             int16_t len = stringByteLength(aimBuffer);
 
-            reallocateRegister(REGISTER_X, dtString, len, 0);
+            reallocateRegister(REGISTER_X, dtString, len, TAG_NONE);
 
             memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len + 1);
             aimBuffer[0] = 0;
@@ -658,7 +658,7 @@ void btnPressed(void *notUsed, void *data) {
           registerBrowser(NOPARAM);
         }
         else if(rbrMode == RBR_NAMED) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 + 1, numberOfNamedRegisters) + 1000;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 + 1, numberOfNamedVariables) + 1000;
           registerBrowser(NOPARAM);
         }
         else {
@@ -717,7 +717,7 @@ void btnPressed(void *notUsed, void *data) {
           registerBrowser(NOPARAM);
         }
         else if(rbrMode == RBR_NAMED) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, numberOfNamedRegisters) + 1000;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, numberOfNamedVariables) + 1000;
           registerBrowser(NOPARAM);
         }
         else {

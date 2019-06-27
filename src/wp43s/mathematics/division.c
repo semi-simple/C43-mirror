@@ -164,7 +164,7 @@ void divLonIRe16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -217,7 +217,7 @@ void divRe16LonI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -327,7 +327,7 @@ void divLonIAn16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -376,7 +376,7 @@ void divAn16LonI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -495,7 +495,7 @@ void divLonIRe34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -544,7 +544,7 @@ void divRe34LonI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -652,7 +652,7 @@ void divLonIAn34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -701,7 +701,7 @@ void divAn34LonI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -760,7 +760,7 @@ void divRe16Re16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -865,7 +865,7 @@ void divRe16An16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -913,7 +913,7 @@ void divAn16Re16(void) {
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
       setRegisterDataType(result, dtAngle16, currentAngularMode);
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -977,7 +977,7 @@ void divRe16ShoI(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1026,7 +1026,7 @@ void divShoIRe16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1075,7 +1075,7 @@ void divRe16Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1124,7 +1124,7 @@ void divRe34Re16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1232,7 +1232,7 @@ void divRe16An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1281,7 +1281,7 @@ void divAn34Re16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1696,7 +1696,7 @@ void divAn16An16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1764,7 +1764,7 @@ void divAn16ShoI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1828,7 +1828,7 @@ void divShoIAn16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1877,7 +1877,7 @@ void divAn16Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -1935,7 +1935,7 @@ void divRe34An16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2043,7 +2043,7 @@ void divAn16An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2107,7 +2107,7 @@ void divAn34An16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2600,7 +2600,7 @@ void divShoIRe34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2649,7 +2649,7 @@ void divRe34ShoI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2757,7 +2757,7 @@ void divShoIAn34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2806,7 +2806,7 @@ void divAn34ShoI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2865,7 +2865,7 @@ void divRe34Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -2971,7 +2971,7 @@ void divRe34An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -3019,7 +3019,7 @@ void divAn34Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
@@ -3178,7 +3178,7 @@ void divAn34An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
       displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error

@@ -41,7 +41,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
   if(currentFlgScr == 1) { // Memory and flags from 0 to 79
     clearScreen(false, true, true);
 
-    sprintf(tmpStr3000, "%" FMT32U " words free in RAM, %" FMT32U " in flash.", (lastFreeByte - firstFreeByte + 1) / 2, getFreeFlash() / 2);
+    sprintf(tmpStr3000, "%" FMT32U " words free in RAM, %" FMT32U " in flash.", getFreeRamMemory() / 2, getFreeFlash() / 2);
     showString(tmpStr3000, &standardFont, 1, 22-1, vmNormal, true, true);
     showString("Global flag status:", &standardFont, 1, 44-1, vmNormal, true, true);
 

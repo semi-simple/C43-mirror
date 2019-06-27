@@ -363,7 +363,7 @@ void getString(char *str) {
 
 
 void setParameter(char *p) {
-  char l[200], r[200], real[200], imag[200], angMod[200], letter;
+  char l[200], r[200], real[200], imag[200], angMod[200]; //, letter;
   int32_t i, am;
   longInteger_t temp;
 
@@ -645,7 +645,7 @@ void setParameter(char *p) {
     //Lettered register
     if(l[1] >= 'A' && l[2] == 0) {
       if(strstr("XYZTABCDLIJK", l + 1) != NULL) {
-        letter = l[1];
+        //letter = l[1];
         regist = l[1] == 'T' ? 103 :
                  l[1] == 'L' ? 108 :
                  l[1] <= 'D' ? l[1] + 39 :
@@ -667,7 +667,7 @@ void setParameter(char *p) {
         printf("\nMissformed numbered register setting. Th number after R shall be a number from 0 to 111.\n");
         abortTest();
       }
-      letter = 0;
+      //letter = 0;
     }
 
     else {
@@ -800,7 +800,7 @@ void setParameter(char *p) {
     }
     else if(strcmp(l, "STRI") == 0) {
       getString(r + 1);
-      reallocateRegister(regist, dtString, stringByteLength(r + 1), 0);
+      reallocateRegister(regist, dtString, stringByteLength(r + 1), TAG_NONE);
       strcpy(REGISTER_STRING_DATA(regist), r + 1);
     }
     else if(strcmp(l, "SHOI") == 0) {
@@ -943,7 +943,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
       printf("\nRegister %c should be %s but it is %s!\n", letter, getDataTypeName(expectedDataType, true, false), getDataTypeName(getRegisterDataType(regist), true, false));
       printf("R%c = ", letter);
     }
-    printRegisterToConsole(regist, 0);
+    printRegisterToConsole(regist);
     printf("\n");
     abortTest();
   }
@@ -958,7 +958,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
         printf("\nRegister %c is a short integer base %u but it should be base %u!\n", letter, expectedTag, getRegisterShortIntegerBase(regist));
         printf("R%c = ", letter);
       }
-      printRegisterToConsole(regist, 0);
+      printRegisterToConsole(regist);
       printf("\n");
       abortTest();
     }
@@ -971,7 +971,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
         printf("\nRegister %c should be a real tagged %s but it is tagged %s!\n", letter, getAngularModeName(expectedTag), getAngularModeName(getRegisterAngularMode(regist)));
         printf("R%c = ", letter);
       }
-      printRegisterToConsole(regist, 0);
+      printRegisterToConsole(regist);
       printf("\n");
       abortTest();
     }
@@ -984,7 +984,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
         printf("\nRegister %c should be a long integer tagged %d but it is tagged %d!\n", letter, expectedTag, getRegisterLongIntegerSign(regist));
         printf("R%c = ", letter);
       }
-      printRegisterToConsole(regist, 0);
+      printRegisterToConsole(regist);
       printf("\n");
       abortTest();
     }
@@ -1073,7 +1073,7 @@ void wrongRegisterValue(calcRegister_t regist, char letter, char *expectedValue)
     printf("\nRegister %c value should be ", letter);
   }
   printf("%s\nbut it is ", expectedValue);
-  printRegisterToConsole(regist, 0);
+  printRegisterToConsole(regist);
   printf("\n");
   abortTest();
 }

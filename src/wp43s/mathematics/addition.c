@@ -1766,7 +1766,7 @@ void addStriLonI(void) {
   longIntegerToDisplayString(opX, tmpStr3000, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result),        REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -1787,7 +1787,7 @@ void addStriRe16(void) {
   realToDisplayString(REGISTER_REAL16_DATA(opX), false, getRegisterTag(opX), tmpStr3000, &standardFont, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result),        REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -1808,7 +1808,7 @@ void addStriCo16(void) {
   complexToDisplayString(REGISTER_COMPLEX16_DATA(opX), false, tmpStr3000, &numericFont, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -1829,7 +1829,7 @@ void addStriAn16(void) {
   angle16ToDisplayString(REGISTER_REAL16_DATA(opX), getRegisterTag(opX), tmpStr3000, &standardFont, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result),        REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -1850,7 +1850,7 @@ void addStriTime(void) {
   timeToDisplayString(opX, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -1871,7 +1871,7 @@ void addStriDate(void) {
   dateToDisplayString(opX, tmpStr3000);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -1891,7 +1891,7 @@ void addStriStri(void) {
   len1 = stringByteLength(REGISTER_STRING_DATA(opY));
   len2 = stringByteLength(REGISTER_STRING_DATA(opX));
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, REGISTER_STRING_DATA(opX), len2 + 1);
@@ -1938,7 +1938,7 @@ void addStriShoI(void) {
   shortIntegerToDisplayString(opX, errorMessage, &font); // We use errorMessage here because this string can become very long
   len2 = stringByteLength(errorMessage) + 1; // +1 for the trailing 0
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, errorMessage,              len2 + 1);
@@ -1959,7 +1959,7 @@ void addStriRe34(void) {
   realToDisplayString(REGISTER_REAL34_DATA(opX), true, getRegisterTag(opX), tmpStr3000, &standardFont, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result),        REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -1980,7 +1980,7 @@ void addStriCo34(void) {
   complexToDisplayString(REGISTER_COMPLEX34_DATA(opX), true, tmpStr3000, &numericFont, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result)       , REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);
@@ -2001,7 +2001,7 @@ void addStriAn34(void) {
   angle34ToDisplayString(REGISTER_REAL34_DATA(opX), getRegisterTag(opX), tmpStr3000, &standardFont, SCREEN_WIDTH);
   len2 = stringByteLength(tmpStr3000);
 
-  reallocateRegister(result, dtString, len1 + len2, 0);
+  reallocateRegister(result, dtString, len1 + len2, TAG_NONE);
 
   memcpy(REGISTER_STRING_DATA(result),        REGISTER_STRING_DATA(opY), len1    );
   memcpy(REGISTER_STRING_DATA(result) + len1, tmpStr3000,                len2 + 1);

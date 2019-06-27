@@ -78,7 +78,7 @@ GtkWidget                                         *lblOn;
 
 #if (DEBUG_PANEL == 1)
   GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
-  GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedRegisters, *btnTmpAndSavedStackRegisters;
+  GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedVariables, *btnTmpAndSavedStackRegisters;
   GtkWidget *chkHexaString;
   int16_t debugWidgetDx, debugWidgetDy;
 #endif
@@ -2632,7 +2632,7 @@ void setupUI(void) {
     btnRegisters                 = gtk_button_new_with_label("Registers");
     btnLocalRegisters            = gtk_button_new_with_label("Local registers");
     btnStatisticalSums           = gtk_button_new_with_label("Statistical sums");
-    btnNamedRegisters            = gtk_button_new_with_label("Named registers");
+    btnNamedVariables            = gtk_button_new_with_label("Named registers");
     btnTmpAndSavedStackRegisters = gtk_button_new_with_label("Tmp & saved stack registers");
     chkHexaString                = gtk_check_button_new_with_label("Strings in hexadecimal form");
 
@@ -2641,7 +2641,7 @@ void setupUI(void) {
     gtk_widget_set_name(btnRegisters,                 "debugButton");
     gtk_widget_set_name(btnLocalRegisters,            "debugButton");
     gtk_widget_set_name(btnStatisticalSums,           "debugButton");
-    gtk_widget_set_name(btnNamedRegisters,            "debugButton");
+    gtk_widget_set_name(btnNamedVariables,            "debugButton");
     gtk_widget_set_name(btnTmpAndSavedStackRegisters, "debugButton");
     gtk_widget_set_name(chkHexaString,                "debugCheckbox");
 
@@ -2650,7 +2650,7 @@ void setupUI(void) {
     g_signal_connect(btnRegisters,                 "clicked", G_CALLBACK(btnRegistersClicked),                 NULL);
     g_signal_connect(btnLocalRegisters,            "clicked", G_CALLBACK(btnLocalRegistersClicked),            NULL);
     g_signal_connect(btnStatisticalSums,           "clicked", G_CALLBACK(btnStatisticalSumsClicked),           NULL);
-    g_signal_connect(btnNamedRegisters,            "clicked", G_CALLBACK(btnNamedRegistersClicked),            NULL);
+    g_signal_connect(btnNamedVariables,            "clicked", G_CALLBACK(btnNamedVariablesClicked),            NULL);
     g_signal_connect(btnTmpAndSavedStackRegisters, "clicked", G_CALLBACK(btnTmpAndSavedStackRegistersClicked), NULL);
     g_signal_connect(chkHexaString,                "clicked", G_CALLBACK(chkHexaStringClicked),                NULL);
 
@@ -2659,7 +2659,7 @@ void setupUI(void) {
     gtk_fixed_put(GTK_FIXED(grid), btnRegisters,                 101 + debugWidgetDx, 1 + debugWidgetDy);
     gtk_fixed_put(GTK_FIXED(grid), btnLocalRegisters,            166 + debugWidgetDx, 1 + debugWidgetDy);
     gtk_fixed_put(GTK_FIXED(grid), btnStatisticalSums,           260 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnNamedRegisters,            360 + debugWidgetDx, 1 + debugWidgetDy);
+    gtk_fixed_put(GTK_FIXED(grid), btnNamedVariables,            360 + debugWidgetDx, 1 + debugWidgetDy);
     gtk_fixed_put(GTK_FIXED(grid), btnTmpAndSavedStackRegisters, 465 + debugWidgetDx, 1 + debugWidgetDy);
     gtk_fixed_put(GTK_FIXED(grid), chkHexaString,                630 + debugWidgetDx, 1 + debugWidgetDy);
 
@@ -2668,7 +2668,7 @@ void setupUI(void) {
     gtk_widget_show(btnRegisters);
     gtk_widget_show(btnLocalRegisters);
     gtk_widget_show(btnStatisticalSums);
-    gtk_widget_show(btnNamedRegisters);
+    gtk_widget_show(btnNamedVariables);
     gtk_widget_show(btnTmpAndSavedStackRegisters);
     gtk_widget_show(chkHexaString);
 

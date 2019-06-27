@@ -2084,7 +2084,6 @@ void closeNim(void) {
                 real16Remainder(&theta16, const16_2pi, &theta16);
               }
               real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
-              printf("X = "); printRegisterToConsole(REGISTER_X, 0); printf("\n");
             }
           }
         }

@@ -6,7 +6,7 @@
 ;**                                                      **
 ;**********************************************************
 ;**********************************************************
-In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+;In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
 Func: fnMultiply
 
 
@@ -63,13 +63,13 @@ Out: EC=0 FI=1 SL=1 RL=Co16:"123.456 i -6.78" RX=Co16:"1548138.24 i -85021.2"
 ;=======================================
 ; Complex16 x String --> Error24
 ;=======================================
-In:  SL=0 RY=Co16:"12540 i 5" RX=Stri:"String test"
+In:  SL=0 FI=0 RY=Co16:"12540 i 5" RX=Stri:"String test"
 Out: EC=24 SL=0 RX=Stri:"String test"
 
 ;=======================================
 ; String x Complex16 --> Error24
 ;=======================================
-In:  SL=0 FI=0 RY=Stri:"String test " RX=Co16:"-12.34 i 52"
+In:  SL=0 FI=0 RY=Stri:"String test" RX=Co16:"-12.34 i 52"
 Out: EC=24 FI=0 SL=0 RX=Co16:"-12.34 i 52"
 
 

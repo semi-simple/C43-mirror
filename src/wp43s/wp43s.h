@@ -104,6 +104,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <math.h>
+#include <gmp.h>
 
 #ifdef PC_BUILD
   #ifndef TESTSUITE_BUILD
@@ -175,6 +176,7 @@ typedef int16_t calcRegister_t;
 #include "keyboard.h"
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
+#include "memory.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
@@ -190,6 +192,17 @@ typedef int16_t calcRegister_t;
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))
 #define modulo(a, b)            (((a)%(b))<0 ? ((a)%(b))+(b) : ((a)%(b))) // the % operator is remainder rather than modulo!
+
+#define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
+#define MEMORY_ALLOCATION_MASK      (MEMORY_ALLOCATION_ALIGNMENT - 1)
+#define MEMORY_ALLOCATION_SHIFT     (MEMORY_ALLOCATION_ALIGNMENT >> 1) // only valid for 1, 2 or 4
+#define BYTES_TO_BLOCKS(n)          (((n) >> MEMORY_ALLOCATION_SHIFT) + (((n) & MEMORY_ALLOCATION_MASK) == 0 ? 0 : 1))
+#define BLOCKS_TO_BYTES(n)          ((n) << MEMORY_ALLOCATION_SHIFT)
+#define RAMPTR_TO_MEMPTR(p)         ((void *)(ram + ((p) << MEMORY_ALLOCATION_SHIFT)))
+#define MEMPTR_TO_RAMPTR(p)         ((uint32_t)(((char *)(p) - ram) >> MEMORY_ALLOCATION_SHIFT))
+
+#define RAM_SIZE        (64*1024) // 96*1024 = 96kb
+#define MAX_FREE_BLOCKS 50
 
 // On/Off 1 bit
 #define OFF                     0
@@ -356,49 +369,53 @@ typedef int16_t calcRegister_t;
 #define DBG_REGISTERS                  2
 #define DBG_LOCAL_REGISTERS            3
 #define DBG_STATISTICAL_SUMS           4
-#define DBG_NAMED_REGISTERS            5
+#define DBG_NAMED_VARIABLES            5
 #define DBG_TMP_SAVED_STACK_REGISTERS  6
 
 #if (__linux__ == 1)
-  #define FMT64U "lu"
-  #define FMT64S "ld"
-  #define FMT32U "u"
-  #define FMT32S "d"
-  #define FMT16U "u"
-  #define FMT16S "d"
-  #define FMT8U  "u"
-  #define FMT8S  "d"
-  #define FMTPTR "lu"
+  #define FMT64U  "lu"
+  #define FMT64S  "ld"
+  #define FMT32U  "u"
+  #define FMT32S  "d"
+  #define FMT16U  "u"
+  #define FMT16S  "d"
+  #define FMT8U   "u"
+  #define FMT8S   "d"
+  #define FMTPTR  "lu"
+  #define FMTSIZE "zd"
 #elif defined(__arm__)
-  #define FMT64U "llu"
-  #define FMT64S "lld"
-  #define FMT32U "lu"
-  #define FMT32S "ld"
-  #define FMT16U "u"
-  #define FMT16S "d"
-  #define FMT8U  "u"
-  #define FMT8S  "d"
-  #define FMTPTR "d"
+  #define FMT64U  "llu"
+  #define FMT64S  "lld"
+  #define FMT32U  "lu"
+  #define FMT32S  "ld"
+  #define FMT16U  "u"
+  #define FMT16S  "d"
+  #define FMT8U   "u"
+  #define FMT8S   "d"
+  #define FMTPTR  "d"
+  #define FMTSIZE "d"
 #elif defined(__MINGW64__)
-  #define FMT64U "I64u"
-  #define FMT64S "I64d"
-  #define FMT32U "u"
-  #define FMT32S "d"
-  #define FMT16U "u"
-  #define FMT16S "d"
-  #define FMT8U  "u"
-  #define FMT8S  "d"
-  #define FMTPTR "lu"
+  #define FMT64U  "I64u"
+  #define FMT64S  "I64d"
+  #define FMT32U  "u"
+  #define FMT32S  "d"
+  #define FMT16U  "u"
+  #define FMT16S  "d"
+  #define FMT8U   "u"
+  #define FMT8S   "d"
+  #define FMTPTR  "lu"
+  #define FMTSIZE "I64u"
 #elif defined(__APPLE__)
-  #define FMT64U "llu"
-  #define FMT64S "lld"
-  #define FMT32U "u"
-  #define FMT32S "d"
-  #define FMT16U "u"
-  #define FMT16S "d"
-  #define FMT8U  "u"
-  #define FMT8S  "d"
-  #define FMTPTR "lu"
+  #define FMT64U  "llu"
+  #define FMT64S  "lld"
+  #define FMT32U  "u"
+  #define FMT32S  "d"
+  #define FMT16U  "u"
+  #define FMT16S  "d"
+  #define FMT8U   "u"
+  #define FMT8S   "d"
+  #define FMTPTR  "lu"
+  #define FMTSIZE "zd"
 #else
   #error Only Linux, MacOS, ARM and Windows MINGW64 are supported for now
 #endif
@@ -431,7 +448,6 @@ typedef int16_t calcRegister_t;
   #endif
 #endif
 
-#define RAM_SIZE        32768 //98304 // 96kb
 extern char             *ram;
 extern bool_t           allowScreenUpdate;
 extern bool_t           funcOK;
@@ -485,12 +501,10 @@ extern calcRegister_t   opX;
 extern calcRegister_t   opY;
 extern uint16_t         numberOfLocalRegisters;
 extern uint16_t         numberOfLocalFlags;
-extern uint16_t         numberOfNamedRegisters;
-extern uint32_t         allLocalRegisterPointer;
-extern uint32_t         allNamedRegisterPointer;
-extern uint32_t         statisticalSumsPointer;
-extern uint32_t         firstFreeByte;
-extern uint32_t         lastFreeByte;
+extern uint16_t         numberOfNamedVariables;
+extern char             *allLocalRegisterPointer;
+extern char             *allNamedVariablePointer;
+extern char             *statisticalSumsPointer;
 extern uint16_t         programCounter;
 extern uint16_t         xCursor;
 extern uint16_t         yCursor;
@@ -566,6 +580,10 @@ extern int16_t          exponentSignLocation;
 extern int16_t          denominatorLocation;
 extern int16_t          imaginaryExponentSignLocation;
 extern int16_t          imaginaryMantissaSignLocation;
+extern size_t           gmpMem;
+extern size_t           wp43sMem;
+extern freeBlock_t      *freeBlocks;
+extern int32_t          numberOfFreeBlocks;
 extern void             (*confirmedFunction)(uint16_t);
 
 #ifdef DMCP_BUILD

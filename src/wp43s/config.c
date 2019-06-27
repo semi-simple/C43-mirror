@@ -193,7 +193,7 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
 
   liftStack();
 
-  uIntToLongInteger(lastFreeByte - firstFreeByte + 1, &mem);
+  uIntToLongInteger(getFreeRamMemory(), &mem);
   convertLongIntegerToLongIntegerRegister(&mem, REGISTER_X);
 
   refreshStack();
@@ -533,9 +533,9 @@ void fnClPAll(uint16_t confirmation) {
 
 
 void fnClSigma(uint16_t unusedParamButMandatory) {
-  if(statisticalSumsPointer != 0) {
-    freeMemory(statisticalSumsPointer, 14*REAL34_SIZE);
-    statisticalSumsPointer = 0;
+  if(statisticalSumsPointer != NULL) {
+    freeWp43s(statisticalSumsPointer, 14*REAL34_SIZE);
+    statisticalSumsPointer = NULL;
   }
 }
 
@@ -624,13 +624,13 @@ void fnReset(uint16_t confirmation) {
     //stringToReal16("5.555", REGISTER_REAL16_DATA(FIRST_LOCAL_REGISTER));
 
     //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
-    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), 0);
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), TAG_NONE);
     //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
 
 
-    //allocateNamedRegister("Z" STD_a_DIARESIS "hler");
-    //allocateNamedRegister(STD_omega STD_SUB_1);
-    //allocateNamedRegister(STD_omega STD_SUB_2);
+    //allocateNamedVariable("Z" STD_a_DIARESIS "hler");
+    //allocateNamedVariable(STD_omega STD_SUB_1);
+    //allocateNamedVariable(STD_omega STD_SUB_2);
 
     #if (DEBUG_PANEL == 1)
       debugWindow = DBG_REGISTERS;

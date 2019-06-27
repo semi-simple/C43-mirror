@@ -23,7 +23,6 @@
 #ifdef PC_BUILD
   bool_t        calcLandscape;
   bool_t        calcAutoLandscapePortrait;
-  bool_t        runTestsOnly;
   GtkWidget     *screen;
   GtkWidget     *frmCalc;
   int16_t       screenStride;
@@ -75,12 +74,10 @@ calcRegister_t  opX;
 calcRegister_t  opY;
 uint16_t        numberOfLocalRegisters;
 uint16_t        numberOfLocalFlags;
-uint16_t        numberOfNamedRegisters;
-uint32_t        allLocalRegisterPointer;
-uint32_t        allNamedRegisterPointer;
-uint32_t        statisticalSumsPointer;
-uint32_t        firstFreeByte;
-uint32_t        lastFreeByte;
+uint16_t        numberOfNamedVariables;
+char            *allLocalRegisterPointer;
+char            *allNamedVariablePointer;
+char            *statisticalSumsPointer;
 uint16_t        programCounter;
 uint16_t        xCursor;
 uint16_t        yCursor;
@@ -156,6 +153,10 @@ int16_t         exponentSignLocation;
 int16_t         denominatorLocation;
 int16_t         imaginaryExponentSignLocation;
 int16_t         imaginaryMantissaSignLocation;
+size_t          gmpMem;
+size_t          wp43sMem;
+freeBlock_t     *freeBlocks;
+int32_t         numberOfFreeBlocks;
 void            (*confirmedFunction)(uint16_t);
 
 #ifdef DMCP_BUILD
@@ -172,10 +173,13 @@ void            (*confirmedFunction)(uint16_t);
  * \return void
  ***********************************************/
 void setupDefaults(void) {
-  ram = malloc(RAM_SIZE);
+  void *memPtr;
 
-  firstFreeByte = 0;
-  lastFreeByte = RAM_SIZE - 1;
+  ram = malloc(RAM_SIZE);
+  freeBlocks = (freeBlock_t *)ram;
+  numberOfFreeBlocks = 1;
+  freeBlocks[0].address = (MAX_FREE_BLOCKS * sizeof(freeBlock_t)) >> MEMORY_ALLOCATION_SHIFT;
+  freeBlocks[0].size    = BYTES_TO_BLOCKS(RAM_SIZE - MAX_FREE_BLOCKS * sizeof(freeBlock_t));
 
   glyphNotFound.data   = malloc(38);
   strncpy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
@@ -195,28 +199,27 @@ void setupDefaults(void) {
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     setRegisterDataType(regist, dtReal16, TAG_NONE);
-    setRegisterDataPointer(regist, firstFreeByte);
-    real16Zero(RAM_REAL16(firstFreeByte));
-    firstFreeByte += REAL16_SIZE;                                            // 112 * 8 = 896 bytes
+    memPtr = allocWp43s(REAL16_SIZE);
+    setRegisterDataPointer(regist, memPtr);
+    real16Zero(memPtr);
   }
 
   // initialize the temporary registers
   for(calcRegister_t regist=FIRST_TEMPORARY_REGISTER; regist<FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS; regist++) {
     tempRegistersInUse[regist - FIRST_TEMPORARY_REGISTER] = false;
     setRegisterDataType(regist, dtReal16, TAG_NONE);
-    setRegisterDataPointer(regist, firstFreeByte);
-    real16Zero(RAM_REAL16(firstFreeByte));
-    firstFreeByte += REAL16_SIZE;                                            // 8 * 8 = 64 bytes
+    memPtr = allocWp43s(REAL16_SIZE);
+    setRegisterDataPointer(regist, memPtr);
+    real16Zero(memPtr);
   }
 
   // initialize the 9 saved stack registers
   for(calcRegister_t regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_L; regist++) {
     setRegisterDataType(regist, dtReal16, TAG_NONE);
-    setRegisterDataPointer(regist, firstFreeByte);
-    real16Zero(RAM_REAL16(firstFreeByte));
-    firstFreeByte += REAL16_SIZE;                                            // 9 * 8 = 64 bytes
+    memPtr = allocWp43s(REAL16_SIZE);
+    setRegisterDataPointer(regist, memPtr);
+    real16Zero(memPtr);
   }
-
 
   #ifdef PC_BUILD
     debugWindow = DBG_REGISTERS;
@@ -234,13 +237,7 @@ void setupDefaults(void) {
   ctxtReal451.digits = 451;
   ctxtReal451.traps = 0;
 
-  statisticalSumsPointer = 0;
-
-  #ifdef PC_BUILD
-    printf("First free byte in RAM: %5" FMT32U "\n", firstFreeByte);
-    printf("Last  free byte in RAM: %5" FMT32U "\n", lastFreeByte);
-    printf("Free RAM:               %5" FMT32U "\n", lastFreeByte - firstFreeByte + 1);
-  #endif
+  statisticalSumsPointer = NULL;
 
   fnSetWordSize(64); // word size from 1 to 64
   fnIntegerMode(SIM_2COMPL);
@@ -305,10 +302,10 @@ void setupDefaults(void) {
 
   numberOfLocalRegisters = 0;
   numberOfLocalFlags = 0;
-  allLocalRegisterPointer = 0;
+  allLocalRegisterPointer = NULL;
 
-  numberOfNamedRegisters = 0;
-  allNamedRegisterPointer = 0;
+  numberOfNamedVariables = 0;
+  allNamedVariablePointer = NULL;
 
   STACK_LIFT_ENABLE;
 
@@ -331,9 +328,12 @@ void setupDefaults(void) {
 
 #ifdef PC_BUILD
 int main(int argc, char* argv[]) {
+  gmpMem = 0;
+  wp43sMem = 0;
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+
   calcLandscape             = false;
   calcAutoLandscapePortrait = true;
-  runTestsOnly              = false;
 
   for(int arg=1; arg<=argc-1; arg++) {
     if(strcmp(argv[arg], "--landscape") == 0) {
@@ -350,10 +350,6 @@ int main(int argc, char* argv[]) {
       calcLandscape             = false;
       calcAutoLandscapePortrait = true;
     }
-
-    if(strcmp(argv[arg], "--run-tests-only") == 0) {
-      runTestsOnly              = true;
-    }
   }
 
   if(strcmp(indexOfItems[LAST_ITEM].itemPrinted, "Last item") != 0) {
@@ -367,10 +363,6 @@ int main(int argc, char* argv[]) {
   setupUI();
 
   setupDefaults();
-  if(runTestsOnly) {
-    testFunctions();
-    exit(0);
-  }
 
   // Without the following 8 lines of code
   // the f- and g-shifted labels are
@@ -399,6 +391,10 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
+
+  gmpMem = 0;
+  wp43sMem = 0;
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   // Initialization
   //program_init();
@@ -501,10 +497,14 @@ void program_main(void) {
 
 
 int main(void) {
+  gmpMem = 0;
+  wp43sMem = 0;
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+
   setupDefaults();
   fnReset(CONFIRMED);
-
   processTests();
+  debugMemory();
 
   return 0;
 }

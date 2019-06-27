@@ -62,7 +62,7 @@ void fnDrop(uint16_t unusedParamButMandatory) {
     reg[regist] = reg[regist + 1];
   }
 
-  setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterFullSize(getStackTop())));
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(getRegisterFullSize(getStackTop())));
   memcpy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
   refreshStack();
 }
@@ -88,7 +88,7 @@ void liftStack(void) {
     freeRegisterData(REGISTER_X);
   }
 
-  setRegisterDataPointer(REGISTER_X, allocateMemory(REAL16_SIZE));
+  setRegisterDataPointer(REGISTER_X, allocWp43s(REAL16_SIZE));
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
@@ -106,7 +106,7 @@ void fnDropY(uint16_t unusedParamButMandatory) {
     reg[i] = reg[i+1];
   }
 
-  setRegisterDataPointer(getStackTop() - 1, allocateMemory(getRegisterFullSize(getStackTop())));
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(getRegisterFullSize(getStackTop())));
   memcpy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
   refreshStack();
 }
@@ -210,14 +210,14 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
   uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
   uint16_t dataSizeX = getRegisterFullSize(REGISTER_X);
   uint16_t tag       = getRegisterTag(REGISTER_X);
-  uint16_t newDataPointer;
+  void *newDataPointer;
 
   for(uint16_t i=REGISTER_Y; i<=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
-    newDataPointer = allocateMemory(dataSizeX);
+    newDataPointer = allocWp43s(dataSizeX);
     setRegisterDataPointer(i, newDataPointer);
-    memcpy(ram + newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeX);
+    memcpy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeX);
   }
 
   refreshStack();

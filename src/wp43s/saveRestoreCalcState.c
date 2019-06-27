@@ -21,12 +21,13 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 13  // 13 = lastIntegerBase
+#define BACKUP_VERSION 15  // 15 = new memory allocator
 
 void saveCalc(void) {
   size_t size;
   uint32_t backupVersion = BACKUP_VERSION;
   uint32_t ramSize       = RAM_SIZE;
+  uint32_t ramPtr;
   FILE *backup;
 
   backup = fopen("backup.bin", "wb");
@@ -77,12 +78,13 @@ void saveCalc(void) {
   size += fwrite(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
   size += fwrite(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
   size += fwrite(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
-  size += fwrite(&numberOfNamedRegisters,             1, sizeof(numberOfNamedRegisters),             backup); //printf("%8lu numberOfNamedRegisters\n",             (unsigned long)size);
-  size += fwrite(&allLocalRegisterPointer,            1, sizeof(allLocalRegisterPointer),            backup); //printf("%8lu allLocalRegisterPointer\n",            (unsigned long)size);
-  size += fwrite(&allNamedRegisterPointer,            1, sizeof(allNamedRegisterPointer),            backup); //printf("%8lu allNamedRegisterPointer\n",            (unsigned long)size);
-  size += fwrite(&statisticalSumsPointer,             1, sizeof(statisticalSumsPointer),             backup); //printf("%8lu statisticalSumsPointer\n",             (unsigned long)size);
-  size += fwrite(&firstFreeByte,                      1, sizeof(firstFreeByte),                      backup); //printf("%8lu firstFreeByte\n",                      (unsigned long)size);
-  size += fwrite(&lastFreeByte,                       1, sizeof(lastFreeByte),                       backup); //printf("%8lu lastFreeByte\n",                       (unsigned long)size);
+  size += fwrite(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);
+  ramPtr = MEMPTR_TO_RAMPTR(allLocalRegisterPointer);
+  size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
+  ramPtr = MEMPTR_TO_RAMPTR(allNamedVariablePointer);
+  size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
+  ramPtr = MEMPTR_TO_RAMPTR(statisticalSumsPointer);
+  size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
   size += fwrite(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
   size += fwrite(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
   size += fwrite(&yCursor,                            1, sizeof(yCursor),                            backup); //printf("%8lu yCursor\n",                            (unsigned long)size);
@@ -159,6 +161,9 @@ void saveCalc(void) {
   size += fwrite(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
   size += fwrite(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
   size += fwrite(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
+  size += fwrite(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
+  size += fwrite(&wp43sMem,                           1, sizeof(wp43sMem),                           backup); //printf("%8lu wp43sMem\n",                           (unsigned long)size);
+  size += fwrite(&gmpMem,                             1, sizeof(gmpMem),                             backup); //printf("%8lu gmpMem\n",                             (unsigned long)size);
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
 
@@ -170,7 +175,7 @@ void saveCalc(void) {
 
 void restoreCalc(void) {
   size_t size;
-  uint32_t backupVersion, ramSize;
+  uint32_t backupVersion, ramSize, ramPtr;
   FILE *backup;
 
   backup = fopen("backup.bin", "rb");
@@ -235,12 +240,13 @@ void restoreCalc(void) {
     size += fread(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
     size += fread(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
     size += fread(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
-    size += fread(&numberOfNamedRegisters,             1, sizeof(numberOfNamedRegisters),             backup); //printf("%8lu numberOfNamedRegisters\n",             (unsigned long)size);
-    size += fread(&allLocalRegisterPointer,            1, sizeof(allLocalRegisterPointer),            backup); //printf("%8lu allLocalRegisterPointer\n",            (unsigned long)size);
-    size += fread(&allNamedRegisterPointer,            1, sizeof(allNamedRegisterPointer),            backup); //printf("%8lu allNamedRegisterPointer\n",            (unsigned long)size);
-    size += fread(&statisticalSumsPointer,             1, sizeof(statisticalSumsPointer),             backup); //printf("%8lu statisticalSumsPointer\n",             (unsigned long)size);
-    size += fread(&firstFreeByte,                      1, sizeof(firstFreeByte),                      backup); //printf("%8lu firstFreeByte\n",                      (unsigned long)size);
-    size += fread(&lastFreeByte,                       1, sizeof(lastFreeByte),                       backup); //printf("%8lu lastFreeByte\n",                       (unsigned long)size);
+    size += fread(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);
+    size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
+    allLocalRegisterPointer = RAMPTR_TO_MEMPTR(ramPtr);
+    size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
+    allNamedVariablePointer = RAMPTR_TO_MEMPTR(ramPtr);
+    size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
+    statisticalSumsPointer = RAMPTR_TO_MEMPTR(ramPtr);
     size += fread(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
     size += fread(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
     size += fread(&yCursor,                            1, sizeof(yCursor),                            backup); //printf("%8lu yCursor\n",                            (unsigned long)size);
@@ -321,6 +327,9 @@ void restoreCalc(void) {
     size += fread(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
     size += fread(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
     size += fread(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
+    size += fread(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
+    size += fread(&wp43sMem,                           1, sizeof(wp43sMem),                           backup); //printf("%8lu wp43sMem\n",                           (unsigned long)size);
+    size += fread(&gmpMem,                             1, sizeof(gmpMem),                             backup); //printf("%8lu gmpMem\n",                             (unsigned long)size);
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);
 

@@ -14,6 +14,10 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/********************************************//**
+ * \file registers.h
+ ***********************************************/
+
 #define FIRST_LOCAL_REGISTER 112
 
 #define REGISTER_X  100
@@ -65,13 +69,9 @@
 
 #define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
-#define freeRegisterData(regist)           freeMemory(getRegisterDataPointer(regist), getRegisterFullSize(regist))
+#define freeRegisterData(regist)           freeWp43s(getRegisterDataPointer(regist), getRegisterFullSize(regist))
 
 
-
-/********************************************//**
- * \file registers.h
- ***********************************************/
 
 ///////////////////////////////////////////////////////
 // Register numbering:
@@ -110,24 +110,20 @@ typedef enum {
 
 
 uint32_t          getRegisterDataType             (calcRegister_t regist);
-uint32_t          getRegisterDataPointer          (calcRegister_t regist);
+void             *getRegisterDataPointer          (calcRegister_t regist);
 uint32_t          getRegisterTag                  (calcRegister_t regist);
 uint32_t          getRegisterNameLength           (calcRegister_t regist);
-uint32_t          getRegisterNamePointer          (calcRegister_t regist);
+char             *getRegisterNamePointer          (calcRegister_t regist);
 uint16_t          getRegisterMaxDataLength        (calcRegister_t regist);
-void              setRegisterDataType             (calcRegister_t regist, uint16_t dataType, uint16_t tag);
-void              setRegisterDataPointer          (calcRegister_t regist, uint32_t dataPointer);
-void              setRegisterTag                  (calcRegister_t regist, uint16_t tag);
+void              setRegisterDataType             (calcRegister_t regist, uint16_t dataType, uint32_t tag);
+void              setRegisterDataPointer          (calcRegister_t regist, void *memPtr);
+void              setRegisterTag                  (calcRegister_t regist, uint32_t tag);
 void              setRegisterNameLength           (calcRegister_t regist, uint16_t length);
-void              setRegisterNamePointer          (calcRegister_t regist, uint32_t pointer);
-void              setRegisterMaxDataLength        (calcRegister_t regist, uint16_t maxDataLen);
+void              setRegisterNamePointer          (calcRegister_t regist, void *namePointer);
+void              setRegisterMaxDataLength        (calcRegister_t regist, uint32_t maxDataLen);
 void              allocateLocalRegisters          (uint16_t n);
-void              allocateNamedRegister           (const char *registerName);
-uint32_t          allocateMemory                  (uint32_t numBytes);
-void              allocateMemoryInsert            (uint32_t address, uint32_t numBytes);
-void              freeMemory                      (uint32_t address, uint32_t numBytes);
+void              allocateNamedVariable           (const char *variableName);
 uint32_t          getRegisterFullSize             (calcRegister_t regist);
-uint32_t          getRegisterDataOnlySize         (calcRegister_t regist);
 void              clearRegister                   (calcRegister_t regist);
 void              fnClearRegisters                (uint16_t unusedParamButMandatory);
 void              fnGetLocR                       (uint16_t unusedParamButMandatory);
@@ -159,17 +155,22 @@ void              fnRecallElement                 (uint16_t r);
 void              fnRecallIJ                      (uint16_t r);
 void              fnXLessThan                     (uint16_t unusedParamButMandatory);
 int16_t           indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
-void              printRegisterToConsole          (calcRegister_t regist, int16_t line);
 void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);
 void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
 void              printReal451ToConsole           (const real451_t *value);
-void              printLongIntegerToConsole        (longInteger_t *value);
+void              printLongIntegerToConsole       (longInteger_t *value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t tag);
 calcRegister_t    allocateTemporaryRegister       (void);
 void              freeTemporaryRegister           (calcRegister_t tmpReg);
+
+#ifdef DMCP_BUILD
+  void            printRegisterToConsole(calcRegister_t regist, int16_t line);
+#else
+  void            printRegisterToConsole(calcRegister_t regist);
+#endif
 
 #define getRegisterAngularMode(reg)          getRegisterTag(reg)
 #define setRegisterAngularMode(reg, am)      setRegisterTag(reg, am)

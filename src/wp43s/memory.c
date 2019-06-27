@@ -126,7 +126,7 @@ void *wp43sAllocate(size_t size) {
       //debugMemory();
       return memPtr;
     }
-    else if(freeBlocks[i].size > blocks && freeBlocks[i].size < minBlock) {
+    else if(freeBlocks[i].size > blocks && freeBlocks[i].size < minSize) {
       minSize = freeBlocks[i].size;
       minBlock = i;
     }

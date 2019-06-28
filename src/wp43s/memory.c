@@ -205,6 +205,14 @@ void wp43sFree(void *memPtr, size_t size) {
 
   // new free block
   if(!done) {
+    if(numberOfFreeBlocks == MAX_FREE_BLOCKS) {
+      printf("\n**********************************************************************\n");
+      printf("* The maximum number of free memory blocks has been exceeded!        *\n");
+      printf("* This number must be increased or the compaction function improved. *\n");
+      printf("**********************************************************************\n");
+      exit(-2);
+    }
+
     i = 0;
     while(i<numberOfFreeBlocks && freeBlocks[i].address < ramPtr) {
       i++;
@@ -212,14 +220,6 @@ void wp43sFree(void *memPtr, size_t size) {
 
     if(i < numberOfFreeBlocks) {
       memmove(ram + (i+1)*sizeof(freeBlock_t), ram + i*sizeof(freeBlock_t), (numberOfFreeBlocks-i)*sizeof(freeBlock_t));
-    }
-
-    if(i == MAX_FREE_BLOCKS) {
-      printf("\n**********************************************************************\n");
-      printf("* The maximum number of free memory blocks has been exceeded!        *\n");
-      printf("* This number must be increased or the compaction function improved. *\n");
-      printf("**********************************************************************\n");
-      exit(-2);
     }
 
     freeBlocks[i].address = ramPtr;

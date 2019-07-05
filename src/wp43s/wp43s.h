@@ -196,7 +196,7 @@ typedef int16_t calcRegister_t;
 #define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
 #define MEMORY_ALLOCATION_MASK      (MEMORY_ALLOCATION_ALIGNMENT - 1)
 #define MEMORY_ALLOCATION_SHIFT     (MEMORY_ALLOCATION_ALIGNMENT >> 1) // only valid for 1, 2 or 4
-#define BYTES_TO_BLOCKS(n)          (((n) >> MEMORY_ALLOCATION_SHIFT) + (((n) & MEMORY_ALLOCATION_MASK) == 0 ? 0 : 1))
+#define BYTES_TO_BLOCKS(n)          (((n) + MEMORY_ALLOCATION_MASK) >> MEMORY_ALLOCATION_SHIFT)
 #define BLOCKS_TO_BYTES(n)          ((n) << MEMORY_ALLOCATION_SHIFT)
 #define RAMPTR_TO_MEMPTR(p)         ((void *)(ram + ((p) << MEMORY_ALLOCATION_SHIFT)))
 #define MEMPTR_TO_RAMPTR(p)         ((uint32_t)(((char *)(p) - ram) >> MEMORY_ALLOCATION_SHIFT))

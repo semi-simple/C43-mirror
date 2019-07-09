@@ -261,6 +261,7 @@ extern const real34_t * const const34_3;
 extern const real34_t * const const34_pi;
 extern const real34_t * const const34_3piOn2;
 extern const real34_t * const const34_5;
+extern const real34_t * const const34_2pi;
 extern const real34_t * const const34_10;
 extern const real34_t * const const34_20;
 extern const real34_t * const const34_32;

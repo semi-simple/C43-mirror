@@ -811,7 +811,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
           else if(getRegisterDataType(regist) == dtReal16) {
             if(temporaryInformation == TI_RADIUS_THETA) {
-              if(regist == REGISTER_X) {
+              if(regist == REGISTER_Y) {
                 strcpy(prefix, "r" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
@@ -850,7 +850,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
           else if(getRegisterDataType(regist) == dtAngle16) {
             if(temporaryInformation == TI_RADIUS_THETA) {
-              if(regist == REGISTER_Y) {
+              if(regist == REGISTER_X) {
                 strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
@@ -868,7 +868,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
           else if(getRegisterDataType(regist) == dtReal34) {
             if(temporaryInformation == TI_RADIUS_THETA) {
-              if(regist == REGISTER_X) {
+              if(regist == REGISTER_Y) {
                 strcpy(prefix, "r" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
@@ -897,7 +897,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
           else if(getRegisterDataType(regist) == dtAngle34) {
             if(temporaryInformation == TI_RADIUS_THETA) {
-              if(regist == REGISTER_Y) {
+              if(regist == REGISTER_X) {
                 strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }

@@ -100,5 +100,11 @@
 2019-05-07 New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
 
-2019-05-12 Corrected glyph U+0061 (lower case a) in numeric font
-           New WP43S_NumericFont.ttf generated.
+2019-07-10 Changed 12 characters in standard font:
+             - U+0061 Lower case a
+             - U+00E0...6: Respective accented a's, Danish ae
+             - U+0101, ..3, and ..5: More accented a's
+             - U+24A0 Subscript e
+           Changed 1 character in numeric font:
+             - U+249C Subscript a
+

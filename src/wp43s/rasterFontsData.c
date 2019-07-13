@@ -1022,7 +1022,7 @@ const font_t numericFont = {
 
   // PARENTHESIZED LATIN SMALL LETTER A 
   .glyphs[248] = {.charCode=0xa49c, .colsBeforeGlyph= 0, .colsGlyph= 7, .colsAfterGlyph= 1, .rowsAboveGlyph=22, .rowsGlyph= 9, .rowsBelowGlyph= 1,
-                  .data="\x3c\x7e\x06\x06\x7e\xe6\xce\xfe\x76"},
+                  .data="\x3c\x7e\x06\x0e\x7e\xe6\xce\xfe\x76"},
 
   // PARENTHESIZED LATIN SMALL LETTER B 
   .glyphs[249] = {.charCode=0xa49d, .colsBeforeGlyph= 0, .colsGlyph= 7, .colsAfterGlyph= 1, .rowsAboveGlyph=18, .rowsGlyph=13, .rowsBelowGlyph= 1,
@@ -1490,7 +1490,7 @@ const font_t standardFont = {
 
   // LATIN SMALL LETTER A 
   .glyphs[ 64] = {.charCode=0x0061, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4,
-                  .data="\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN SMALL LETTER B 
   .glyphs[ 65] = {.charCode=0x0062, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 3, .rowsGlyph=13, .rowsBelowGlyph= 4,
@@ -1818,31 +1818,31 @@ const font_t standardFont = {
 
   // LATIN SMALL LETTER A WITH GRAVE 
   .glyphs[146] = {.charCode=0x80e0, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 2, .rowsGlyph=14, .rowsBelowGlyph= 4,
-                  .data="\x30\x3c\x0c\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x30\x3c\x0c\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN SMALL LETTER A WITH ACUTE 
   .glyphs[147] = {.charCode=0x80e1, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 2, .rowsGlyph=14, .rowsBelowGlyph= 4,
-                  .data="\x0c\x3c\x30\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x0c\x3c\x30\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN SMALL LETTER A WITH CIRCUMFLEX 
   .glyphs[148] = {.charCode=0x80e2, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 2, .rowsGlyph=14, .rowsBelowGlyph= 4,
-                  .data="\x18\x7e\x66\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x18\x7e\x66\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN SMALL LETTER A WITH TILDE 
   .glyphs[149] = {.charCode=0x80e3, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 2, .rowsGlyph=14, .rowsBelowGlyph= 4,
-                  .data="\x33\xff\xcc\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x33\xff\xcc\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN SMALL LETTER A WITH DIAERESIS 
   .glyphs[150] = {.charCode=0x80e4, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 3, .rowsGlyph=13, .rowsBelowGlyph= 4,
-                  .data="\x66\x66\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x66\x66\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN SMALL LETTER A WITH RING ABOVE 
   .glyphs[151] = {.charCode=0x80e5, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 1, .rowsGlyph=15, .rowsBelowGlyph= 4,
-                  .data="\x3c\x24\x24\x3c\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x3c\x24\x24\x3c\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN SMALL LETTER AE 
   .glyphs[152] = {.charCode=0x80e6, .colsBeforeGlyph= 0, .colsGlyph=11, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4,
-                  .data="\x3b\xc0\x7f\xe0\x0e\x60\x0e\xe0\x7f\xc0\xef\x00\xce\x00\xff\xe0\x77\xc0"},
+                  .data="\x3b\xc0\x7f\xe0\x0e\x60\x1e\xe0\x7f\xc0\xef\x00\xce\x00\xff\xe0\x77\xc0"},
 
   // LATIN SMALL LETTER C WITH CEDILLA 
   .glyphs[153] = {.charCode=0x80e7, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph=13, .rowsBelowGlyph= 0,
@@ -1946,7 +1946,7 @@ const font_t standardFont = {
 
   // LATIN SMALL LETTER A WITH MACRON 
   .glyphs[178] = {.charCode=0x8101, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 3, .rowsGlyph=13, .rowsBelowGlyph= 4,
-                  .data="\x7e\x7e\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x7e\x7e\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN CAPITAL LETTER A WITH BREVE 
   .glyphs[179] = {.charCode=0x8102, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 0, .rowsGlyph=16, .rowsBelowGlyph= 4,
@@ -1954,7 +1954,7 @@ const font_t standardFont = {
 
   // LATIN SMALL LETTER A WITH BREVE 
   .glyphs[180] = {.charCode=0x8103, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 2, .rowsGlyph=14, .rowsBelowGlyph= 4,
-                  .data="\x66\x7e\x18\x00\x00\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b"},
+                  .data="\x66\x7e\x18\x00\x00\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b"},
 
   // LATIN CAPITAL LETTER A WITH OGONEK 
   .glyphs[181] = {.charCode=0x8104, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=16, .rowsBelowGlyph= 0,
@@ -1962,7 +1962,7 @@ const font_t standardFont = {
 
   // LATIN SMALL LETTER A WITH OGONEK 
   .glyphs[182] = {.charCode=0x8105, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph=13, .rowsBelowGlyph= 0,
-                  .data="\x3c\x7e\x03\x03\x7f\xe3\xc7\xff\x7b\x02\x06\x06\x07"},
+                  .data="\x3c\x7e\x03\x0f\x7f\xe3\xc7\xff\x7b\x02\x06\x06\x07"},
 
   // LATIN CAPITAL LETTER C WITH ACUTE 
   .glyphs[183] = {.charCode=0x8106, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 0, .rowsGlyph=16, .rowsBelowGlyph= 4,

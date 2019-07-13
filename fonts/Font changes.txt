@@ -108,3 +108,5 @@
            Changed 1 character in numeric font:
              - U+249C Subscript a
 
+2019-07-13 New WP43S_NumericFont.ttf generated.
+           New WP43S_StandardFont.ttf generated.

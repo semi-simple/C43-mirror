@@ -828,6 +828,17 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
+            else if(temporaryInformation == TI_RE_IM) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "Im" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "Re" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
             else if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
                 sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(statisticalSumsPointer));
@@ -881,6 +892,16 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
               else if(regist == REGISTER_Y) {
                 strcpy(prefix, "y" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+            else if(temporaryInformation == TI_RE_IM) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "Im" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "Re" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
             }

@@ -574,9 +574,10 @@ void btnPressed(void *notUsed, void *data) {
 
           STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
-            real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
-            liftStack();
             real16Copy(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
+            liftStack();
+            real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
+            temporaryInformation = TI_RE_IM;
           }
           else { // CM_POLAR mode
             liftStack();
@@ -595,10 +596,11 @@ void btnPressed(void *notUsed, void *data) {
 
           STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
-            real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
+            real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
             liftStack();
             reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-            real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
+            real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
+            temporaryInformation = TI_RE_IM;
           }
           else { // CM_POLAR mode
             liftStack();

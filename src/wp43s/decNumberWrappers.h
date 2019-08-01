@@ -194,12 +194,12 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define complex34SetNegativeSign(operand)                 {real34SetNegativeSign((real34_t *)(operand)); real34SetNegativeSign((real34_t *)((char *)(operand) + REAL34_SIZE));}
 
 
-#define real16Copy(source, destination)                   memcpy((real16_t *)destination, (real16_t *)source, REAL16_SIZE)
-#define real34Copy(source, destination)                   memcpy((real34_t *)destination, (real34_t *)source, REAL34_SIZE)
+#define real16Copy(source, destination)                   memcpy(destination, source, REAL16_SIZE)
+#define real34Copy(source, destination)                   memcpy(destination, source, REAL34_SIZE)
 #define real51Copy(source, destination)                   decNumberCopy((decNumber *)(destination), (decNumber *)(source))
 #define real451Copy(source, destination)                  decNumberCopy((decNumber *)(destination), (decNumber *)(source))
-#define complex16Copy(source, destination)                memcpy((complex16_t *)destination, (complex16_t *)source, COMPLEX16_SIZE)
-#define complex34Copy(source, destination)                memcpy((complex34_t *)destination, (complex34_t *)source, COMPLEX34_SIZE)
+#define complex16Copy(source, destination)                memcpy(destination, source, COMPLEX16_SIZE)
+#define complex34Copy(source, destination)                memcpy(destination, source, COMPLEX34_SIZE)
 
 
 #define real51Log10(operand, res)                         decNumberLog10           ((real51_t *)res, (real51_t *)operand, &ctxtReal51)

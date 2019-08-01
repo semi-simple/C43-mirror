@@ -96,7 +96,6 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
     }
 
     temporaryInformation = TI_RADIUS_THETA;
-printf("temporaryInformation = TI_RADIUS_THETA\n");
     refreshRegisterLine(REGISTER_X);
     refreshRegisterLine(REGISTER_Y);
   }

@@ -138,7 +138,13 @@ void *wp43sAllocate(size_t size) {
       minSize += freeBlocks[i].size;
     }
     printf("\nOUT OF MEMORY\nMemory claimed: %" FMTSIZE " bytes\nFragmented free memory: %u bytes\n", size, minSize * MEMORY_ALLOCATION_ALIGNMENT);
-    exit(0);
+    #ifdef PC_BUILD
+      exit(0);
+    #endif
+
+    #ifdef DMCP_BUILD
+      backToSystem(NOPARAM);
+    #endif
   }
 
   memPtr = RAMPTR_TO_MEMPTR(freeBlocks[minBlock].address);
@@ -210,7 +216,13 @@ void wp43sFree(void *memPtr, size_t size) {
       printf("* The maximum number of free memory blocks has been exceeded!        *\n");
       printf("* This number must be increased or the compaction function improved. *\n");
       printf("**********************************************************************\n");
-      exit(-2);
+      #ifdef PC_BUILD
+        exit(-2);
+      #endif
+
+      #ifdef DMCP_BUILD
+        backToSystem(NOPARAM);
+      #endif
     }
 
     i = 0;

@@ -104,7 +104,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <math.h>
-#include <gmp.h>
+//#include <gmp.h>
 
 #ifdef PC_BUILD
   #ifndef TESTSUITE_BUILD

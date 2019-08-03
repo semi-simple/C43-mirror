@@ -330,7 +330,7 @@ void setupDefaults(void) {
 int main(int argc, char* argv[]) {
   gmpMem = 0;
   wp43sMem = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   calcLandscape             = false;
   calcAutoLandscapePortrait = true;
@@ -394,7 +394,7 @@ void program_main(void) {
 
   gmpMem = 0;
   wp43sMem = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   // Initialization
   //program_init();
@@ -499,7 +499,7 @@ void program_main(void) {
 int main(void) {
   gmpMem = 0;
   wp43sMem = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   setupDefaults();
   fnReset(CONFIRMED);

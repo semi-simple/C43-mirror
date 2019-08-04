@@ -76,10 +76,11 @@ void fnFp(uint16_t unusedParamButMandatory) {
 
 
 void fpLonI(void) {
-  longInteger_t temp;
+  longInteger_t lgInt;
 
-  longIntegerSetZero(&temp);
-  convertLongIntegerToLongIntegerRegister(&temp, result);
+  longIntegerInit(lgInt);
+  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  longIntegerFree(lgInt);
 }
 
 

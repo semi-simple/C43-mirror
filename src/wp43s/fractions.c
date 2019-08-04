@@ -70,11 +70,13 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     int32_t den = real16ToInt32(REGISTER_REAL16_DATA(tmp));
 
     if(den == 1) {
-      longInteger_t longInteger;
+      longInteger_t lgInt;
 
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-      uIntToLongInteger(denMax, &longInteger);
-      convertLongIntegerToLongIntegerRegister(&longInteger, REGISTER_X);
+      longIntegerInit(lgInt);
+      uIntToLongInteger(denMax, lgInt);
+      convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+      longIntegerFree(lgInt);
     }
     else {
       denMax = den;

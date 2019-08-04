@@ -15,30 +15,22 @@
  */
 
 #if (DEBUG_PANEL == 1)
-#define DEBUG_LINES 68
-extern GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
-extern GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnTmpAndSavedStackRegisters;
-extern GtkWidget *chkHexaString;
-extern int16_t debugWidgetDx, debugWidgetDy;
+  #define DEBUG_LINES 68
+  extern GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
+  extern GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnTmpAndSavedStackRegisters;
+  extern GtkWidget *chkHexaString;
+  extern int16_t debugWidgetDx, debugWidgetDy;
 
-void   btnBitFieldsClicked                (GtkWidget* w ,gpointer data);
-void   btnFlagsClicked                    (GtkWidget* w ,gpointer data);
-void   btnRegistersClicked                (GtkWidget* w ,gpointer data);
-void   btnLocalRegistersClicked           (GtkWidget* w ,gpointer data);
-void   btnStatisticalSumsClicked          (GtkWidget* w ,gpointer data);
-void   btnNamedVariablesClicked           (GtkWidget* w ,gpointer data);
-void   btnTmpAndSavedStackRegistersClicked(GtkWidget* w ,gpointer data);
-void   chkHexaStringClicked               (GtkWidget* w ,gpointer data);
-void   refreshDebugPanel                  (void);
-#endif
+  void   btnBitFieldsClicked                (GtkWidget* w ,gpointer data);
+  void   btnFlagsClicked                    (GtkWidget* w ,gpointer data);
+  void   btnRegistersClicked                (GtkWidget* w ,gpointer data);
+  void   btnLocalRegistersClicked           (GtkWidget* w ,gpointer data);
+  void   btnStatisticalSumsClicked          (GtkWidget* w ,gpointer data);
+  void   btnNamedVariablesClicked           (GtkWidget* w ,gpointer data);
+  void   btnTmpAndSavedStackRegistersClicked(GtkWidget* w ,gpointer data);
+  void   chkHexaStringClicked               (GtkWidget* w ,gpointer data);
+  void   refreshDebugPanel                  (void);
 
-char *getDataTypeName                     (uint16_t dt, bool_t article, bool_t padWithBlanks);
-char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article, bool_t padWithBlanks);
-char *getShortIntegerModeName             (uint16_t im);
-char *getAngularModeName                  (uint16_t angularMode);
-void  debugNIM                            (void);
-
-#if (DEBUG_PANEL == 1)
   char * getDenModeName                     (uint16_t dm);
   char * getDisplayFormatName               (uint16_t df);
   char * getTimeFormatName                  (uint16_t tf);
@@ -61,7 +53,6 @@ void  debugNIM                            (void);
   void   memoryDump                         (bool_t bitFields, bool_t globalFlags, bool_t globalRegisters, bool_t localFlags, bool_t FIRSTLOCALREGISTERs, bool_t otherVars);
 #endif
 
-
 #if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
   void   formatReal16Debug                  (char *str, void *addr);
   void   formatComplex16Debug               (char *str, void *addr);
@@ -69,6 +60,19 @@ void  debugNIM                            (void);
   void   formatComplex34Debug               (char *str, void *addr);
 #endif
 
+char *getDataTypeName                     (uint16_t dt, bool_t article, bool_t padWithBlanks);
+char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article, bool_t padWithBlanks);
+char *getRegisterTagName                  (calcRegister_t regist, bool_t padWithBlanks);
+char *getShortIntegerModeName             (uint16_t im);
+char *getAngularModeName                  (uint16_t angularMode);
+void  debugNIM                            (void);
+
 #ifdef PC_BUILD
   void dumpScreenToConsole(void);
+#endif
+
+#if defined(PC_BUILD )|| defined(TESTSUITE_BUILD)
+  void testRegisters  (const char *text);
+  void testLongInteger(const longInteger_t lgInt , const char *text);
+  void memoryDump2    (const char *text);
 #endif

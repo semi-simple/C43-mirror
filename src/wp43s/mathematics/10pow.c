@@ -70,21 +70,23 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
 
 void tenPowLonI(void) {
   int16_t exponent;
-  longInteger_t temp;
+  longInteger_t power;
 
-  convertLongIntegerRegisterToLongInteger(opX, &temp);
-  exponent = (longIntegerCompareUInt(&temp, 1234) == LONG_INTEGER_GREATER_THAN ? 1234 : temp.dp[0]);
+  convertLongIntegerRegisterToLongInteger(opX, power);
+  exponent = (longIntegerCompareUInt(power, 1234) > 0 ? 1234 : longIntegerToUInt(power));
 
-  uIntToLongInteger(10, &temp);
+  uIntToLongInteger(10, power);
   opY = allocateTemporaryRegister();
-  convertLongIntegerToLongIntegerRegister(&temp, opY);
+  convertLongIntegerToLongIntegerRegister(power, opY);
 
-  uIntToLongInteger(exponent, &temp);
-  convertLongIntegerToLongIntegerRegister(&temp, opX);
+  uIntToLongInteger(exponent, power);
+  convertLongIntegerToLongIntegerRegister(power, opX);
 
   powLonILonI();
 
   freeTemporaryRegister(opY);
+
+  longIntegerFree(power);
 }
 
 

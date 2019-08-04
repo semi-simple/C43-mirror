@@ -79,7 +79,7 @@ void *allocGmp(size_t size) {
   size = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(size));
   gmpMem += size;
 
-  //printf("GMP   claims %6" FMTSIZE " bytes\n", size);
+  //printf("GMP claimed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", size, gmpMem);
   return wp43sAllocate(size);
 }
 
@@ -89,8 +89,7 @@ void *reallocGmp(void *memPtr, size_t oldSize, size_t newSize) {
   oldSize = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(oldSize));
 
   gmpMem += newSize - oldSize;
-  //printf("GMP   claims %6" FMTSIZE " bytes\n", newSize);
-  //printf(" and frees  %6" FMTSIZE " bytes\n", oldSize);
+  //printf("GMP claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSize, oldSize, gmpMem);
 
   return wp43sReallocate(memPtr, oldSize, newSize);
 }
@@ -100,7 +99,7 @@ void freeGmp(void *memPtr, size_t size) {
   size = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(size));
   gmpMem -= size;
 
-  //printf("GMP   frees  %6" FMTSIZE " bytes\n", size);
+  //printf("GMP freed   %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", size, gmpMem);
   wp43sFree(memPtr, size);
 }
 

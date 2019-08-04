@@ -94,14 +94,17 @@ void fnLcm(uint16_t unusedParamButMandatory) {
 void lcmLonILonI(void) {
   longInteger_t iOp1, iOp2;
 
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  iOp1.sign = 0;
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
-  iOp2.sign = 0;
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  longIntegerSetPositiveSign(iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
+  longIntegerSetPositiveSign(iOp2);
 
-  longIntegerLcm(&iOp1, &iOp2, &iOp1);
+  longIntegerLcm(iOp1, iOp2, iOp1);
 
-  convertLongIntegerToLongIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(iOp1, result);
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 
@@ -109,15 +112,18 @@ void lcmLonILonI(void) {
 void lcmLonIShoI(void) {
   longInteger_t iOp1, iOp2;
 
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  iOp1.sign = 0;
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  longIntegerSetPositiveSign(iOp1);
   convertShortIntegerRegisterLongIntegerRegister(opX, opX);
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
-  iOp2.sign = 0;
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
+  longIntegerSetPositiveSign(iOp2);
 
-  longIntegerLcm(&iOp1, &iOp2, &iOp1);
+  longIntegerLcm(iOp1, iOp2, iOp1);
 
-  convertLongIntegerToLongIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(iOp1, result);
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 
@@ -125,15 +131,18 @@ void lcmLonIShoI(void) {
 void lcmShoILonI(void) {
   longInteger_t iOp1, iOp2;
 
-  convertLongIntegerRegisterToLongInteger(opX, &iOp1);
-  iOp1.sign = 0;
+  convertLongIntegerRegisterToLongInteger(opX, iOp1);
+  longIntegerSetPositiveSign(iOp1);
   convertShortIntegerRegisterLongIntegerRegister(opY, opY);
-  convertLongIntegerRegisterToLongInteger(opY, &iOp2);
-  iOp2.sign = 0;
+  convertLongIntegerRegisterToLongInteger(opY, iOp2);
+  longIntegerSetPositiveSign(iOp2);
 
-  longIntegerLcm(&iOp1, &iOp2, &iOp1);
+  longIntegerLcm(iOp1, iOp2, iOp1);
 
-  convertLongIntegerToLongIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(iOp1, result);
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 

@@ -46,6 +46,8 @@
 ;
 ; This file is only a list of files containing the tests to perform
 
+;debug.txt
+
 changeSign.txt
 sign.txt
 

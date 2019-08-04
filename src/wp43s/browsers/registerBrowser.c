@@ -266,11 +266,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
                 }
               }
               else {
-                #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
-                  sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT16U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
-                #else
-                  sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT32U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
-                #endif
+                sprintf(tmpStr3000, "%" FMT32S " character%s := 4+2+%" FMT32U " bytes", stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", *(REGISTER_DATA_MAX_LEN(regist)));
               }
             }
             else {

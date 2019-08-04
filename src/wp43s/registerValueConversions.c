@@ -122,28 +122,35 @@ void convertRegister34To16(calcRegister_t regist) {
 
 
 
-void convertLongIntegerToLongIntegerRegister(const longInteger_t *longInteger, calcRegister_t regist) {
-  reallocateRegister(regist, dtLongInteger, longInteger->used * SIZEOF_FP_DIGIT, longInteger->sign);
-  memcpy(REGISTER_LONG_INTEGER_DATA(regist), longInteger, longInteger->used * SIZEOF_FP_DIGIT);
+void convertLongIntegerToLongIntegerRegister(const longInteger_t lgInt, calcRegister_t regist) {
+  reallocateRegister(regist, dtLongInteger, longIntegerSizeInBytes(lgInt), longIntegerSignTag(lgInt));
+  memcpy(REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_d, longIntegerSizeInBytes(lgInt));
 }
 
 
 
-void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_t *longInteger) {
-  longIntegerSetZero(longInteger);
-  longInteger->sign = getRegisterLongIntegerSign(regist);
-  longInteger->used = *REGISTER_DATA_MAX_LEN(regist);
-  memcpy(longInteger, REGISTER_LONG_INTEGER_DATA(regist), longInteger->used);
-  longInteger->used = (longInteger->used * CHAR_BIT) / DIGIT_BIT;
+void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_t lgInt) {
+  longIntegerInitSizeInBits(lgInt, *REGISTER_DATA_MAX_LEN(regist) * 8);
+  lgInt->_mp_size = *REGISTER_DATA_MAX_LEN(regist);
+
+  memcpy(lgInt->_mp_d, REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_size);
+
+  if(getRegisterLongIntegerSign(regist) == LONG_INTEGER_NEGATIVE) {
+    lgInt->_mp_size = -(lgInt->_mp_size / LIMB_SIZE);
+  }
+  else {
+    lgInt->_mp_size = lgInt->_mp_size / LIMB_SIZE;
+  }
 }
 
 
 
 void convertLongIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t tmp;
+  longInteger_t lgInt;
 
-  convertLongIntegerRegisterToLongInteger(source, &tmp);
-  longIntegerToString(&tmp, tmpStr3000, 10);
+  convertLongIntegerRegisterToLongInteger(source, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
@@ -151,23 +158,26 @@ void convertLongIntegerRegisterToReal16Register(calcRegister_t source, calcRegis
 
 
 void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t tmp;
+  longInteger_t lgInt;
 
-  convertLongIntegerRegisterToLongInteger(source, &tmp);
+  convertLongIntegerRegisterToLongInteger(source, lgInt);
   reallocateRegister(destination, dtShortInteger, SHORT_INTEGER_SIZE, 10);
-  *(REGISTER_SHORT_INTEGER_DATA(destination)) = tmp.dp[0] & shortIntegerMask;
-  if(longIntegerIsNegative(&tmp)) {
+  *(REGISTER_SHORT_INTEGER_DATA(destination)) = longIntegerToUInt(lgInt) & shortIntegerMask;
+  if(longIntegerIsNegative(lgInt)) {
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
   }
+
+  longIntegerFree(lgInt);
 }
 
 
 
 void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t tmp;
+  longInteger_t lgInt;
 
-  convertLongIntegerRegisterToLongInteger(source, &tmp);
-  longIntegerToString(&tmp, tmpStr3000, 10);
+  convertLongIntegerRegisterToLongInteger(source, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
@@ -175,11 +185,12 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
 
 
 void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t tmp;
+  longInteger_t lgInt;
   uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(source));
 
+  longIntegerInit(lgInt);
   if(shortIntegerMode == SIM_UNSIGN) {
-    uIntToLongInteger(value, &tmp);
+    uIntToLongInteger(value, lgInt);
   }
   else {
     if(value & shortIntegerSignBit) { // Negative value
@@ -197,15 +208,16 @@ void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
         displayBugScreen(errorMessage);
       }
 
-      uIntToLongInteger(value, &tmp);
-      longIntegerSetNegativeSign(&tmp);
+      uIntToLongInteger(value, lgInt);
+      longIntegerSetNegativeSign(lgInt);
     }
     else { // Positive value
-      uIntToLongInteger(value, &tmp);
+      uIntToLongInteger(value, lgInt);
     }
   }
 
-  longIntegerToString(&tmp, tmpStr3000, 10);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
@@ -213,11 +225,12 @@ void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
 
 
 void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t tmp;
+  longInteger_t lgInt;
   uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(source));
 
+  longIntegerInit(lgInt);
   if(shortIntegerMode == SIM_UNSIGN) {
-    uIntToLongInteger(value, &tmp);
+    uIntToLongInteger(value, lgInt);
   }
   else {
     if(value & shortIntegerSignBit) { // Negative value
@@ -235,15 +248,16 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
         displayBugScreen(errorMessage);
       }
 
-      uIntToLongInteger(value, &tmp);
-      longIntegerSetNegativeSign(&tmp);
+      uIntToLongInteger(value, lgInt);
+      longIntegerSetNegativeSign(lgInt);
     }
     else { // Positive value
-      uIntToLongInteger(value, &tmp);
+      uIntToLongInteger(value, lgInt);
     }
   }
 
-  longIntegerToString(&tmp, tmpStr3000, 10);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
@@ -285,11 +299,12 @@ void convertShortIntegerRegisterToUInt64(calcRegister_t regist, int16_t *sign, u
 
 
 void convertShortIntegerRegisterLongIntegerRegister(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t tmp;
+  longInteger_t lgInt;
   uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(source));
 
+  longIntegerInit(lgInt);
   if(shortIntegerMode == SIM_UNSIGN) {
-    uIntToLongInteger(value, &tmp);
+    uIntToLongInteger(value, lgInt);
   }
   else {
     if(value & shortIntegerSignBit) { // Negative value
@@ -307,15 +322,16 @@ void convertShortIntegerRegisterLongIntegerRegister(calcRegister_t source, calcR
         displayBugScreen(errorMessage);
       }
 
-      uIntToLongInteger(value, &tmp);
-      longIntegerSetNegativeSign(&tmp);
+      uIntToLongInteger(value, lgInt);
+      longIntegerSetNegativeSign(lgInt);
     }
     else {// Positive value
-      uIntToLongInteger(value, &tmp);
+      uIntToLongInteger(value, lgInt);
     }
   }
 
-  convertLongIntegerToLongIntegerRegister(&tmp, destination);
+  convertLongIntegerToLongIntegerRegister(lgInt, destination);
+  longIntegerFree(lgInt);
 }
 
 

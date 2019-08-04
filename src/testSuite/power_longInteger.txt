@@ -14,7 +14,10 @@ Func: fnPower
 ;=======================================
 ; Long Integer ^ Long Integer --> Long Integer
 ;=======================================
-In:  WS=64 SL=0 RY=LonI:"2" RX=LonI:"200"
+In:  SL=0 RY=LonI:"2" RX=LonI:"11"
+Out: EC=0 FI=0 SL=1 RL=LonI:"11" RX=LonI:"2048"
+
+In:  SL=0 RY=LonI:"2" RX=LonI:"200"
 Out: EC=0 FI=0 SL=1 RL=LonI:"200" RX=LonI:"1606938044258990275541962092341162602522202993782792835301376"
 
 

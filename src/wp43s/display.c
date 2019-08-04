@@ -1557,11 +1557,34 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int16_t maxWidth) {
-  int16_t len;
-  longInteger_t tempLongInteger;
+  int16_t len, exponentStep;
+  uint32_t exponentShift, exponentShiftLimit;
+  longInteger_t lgInt;
+  real34_t value;
 
-  convertLongIntegerRegisterToLongInteger(regist, &tempLongInteger);
-  longIntegerToString(&tempLongInteger, displayString, 10);
+  convertLongIntegerRegisterToLongInteger(regist, lgInt);
+
+  uInt32ToReal34(longIntegerBits(lgInt) - 1, &value);
+  real34Multiply(&value, const34_ln2, &value);
+  real34Divide(&value, const34_ln10, &value);
+  exponentShift = real34ToInt32(&value);
+  exponentStep = (groupingGap == 0 ? 1 : groupingGap);
+  exponentShiftLimit = (50 / exponentStep + 1) * exponentStep;
+  if(exponentShift > exponentShiftLimit) {
+    longInteger_t divisor;
+
+    exponentShift -= exponentShiftLimit;
+    longIntegerInit(divisor);
+    longIntegerPowerUIntUInt(10, exponentShift, divisor);
+    longIntegerDivide(lgInt, divisor, lgInt);
+    longIntegerFree(divisor);
+  }
+  else {
+    exponentShift = 0;
+  }
+
+  longIntegerToAllocatedString(lgInt, displayString, 10);
+  longIntegerFree(lgInt);
 
   if(groupingGap > 0) {
     len = strlen(displayString);
@@ -1577,11 +1600,10 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int1
 
   if(stringWidth(displayString, &standardFont, false, false) > maxWidth) {
     char exponentString[14];
-    int16_t lastChar, stringStep, exponentStep, tenExponent;
+    int16_t lastChar, stringStep, tenExponent;
 
     stringStep = (groupingGap == 0 ? 1 : groupingGap + 2);
-    exponentStep = (groupingGap == 0 ? 1 : groupingGap);
-    tenExponent = exponentStep;
+    tenExponent = exponentStep + exponentShift;
     lastChar = strlen(displayString) - stringStep;
     displayString[lastChar] = 0;
     exponentString[0] = 0;

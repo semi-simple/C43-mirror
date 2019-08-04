@@ -94,15 +94,17 @@ void fnSubtract(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void subLonILonI(void) {
-  longInteger_t iOp1;
-  longInteger_t iOp2;
+  longInteger_t iOp1, iOp2;
 
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
-  longIntegerSubtract(&iOp1, &iOp2, &iOp1);
+  longIntegerSubtract(iOp1, iOp2, iOp1);
 
-  convertLongIntegerToLongIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(iOp1, result);
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 
@@ -323,17 +325,19 @@ void subDateLonI(void) {
  * \return void
  ***********************************************/
 void subLonIShoI(void) {
-  longInteger_t iOp1;
-  longInteger_t iOp2;
+  longInteger_t iOp1, iOp2;
 
   convertShortIntegerRegisterLongIntegerRegister(opX, opX);
 
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
-  longIntegerSubtract(&iOp1, &iOp2, &iOp1);
+  longIntegerSubtract(iOp1, iOp2, iOp1);
 
-  convertLongIntegerToLongIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(iOp1, result);
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 
@@ -345,17 +349,19 @@ void subLonIShoI(void) {
  * \return void
  ***********************************************/
 void subShoILonI(void) {
-  longInteger_t iOp1;
-  longInteger_t iOp2;
+  longInteger_t iOp1, iOp2;
 
   convertShortIntegerRegisterLongIntegerRegister(opY, opY);
 
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
-  longIntegerSubtract(&iOp1, &iOp2, &iOp1);
+  longIntegerSubtract(iOp1, iOp2, iOp1);
 
-  convertLongIntegerToLongIntegerRegister(&iOp1, result);
+  convertLongIntegerToLongIntegerRegister(iOp1, result);
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 

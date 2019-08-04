@@ -27,8 +27,8 @@ void convertShortIntegerRegisterToReal16Register     (calcRegister_t source, cal
 void convertShortIntegerRegisterToReal34Register     (calcRegister_t source, calcRegister_t destination);
 void convertShortIntegerRegisterLongIntegerRegister  (calcRegister_t source, calcRegister_t destination);
 
-void convertLongIntegerToLongIntegerRegister         (const longInteger_t *longInteger, calcRegister_t regist);
-void convertLongIntegerRegisterToLongInteger         (calcRegister_t regist, longInteger_t *longInteger);
+void convertLongIntegerToLongIntegerRegister         (const longInteger_t longInteger, calcRegister_t regist);
+void convertLongIntegerRegisterToLongInteger         (calcRegister_t regist, longInteger_t longInteger);
 
 void convertShortIntegerRegisterToUInt64             (calcRegister_t regist, int16_t *sign, uint64_t *value);
 void convertUInt64ToShortIntegerRegister             (int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist);

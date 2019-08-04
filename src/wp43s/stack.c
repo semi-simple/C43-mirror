@@ -120,7 +120,7 @@ void fnDropY(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnRollUp(uint16_t unusedParamButMandatory) {
-  uint32_t savedRegister = reg[stackSize==SS_4 ? REGISTER_T : REGISTER_D];
+  registerDescriptor_t savedRegister = reg[stackSize==SS_4 ? REGISTER_T : REGISTER_D];
 
   for(uint16_t i=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i>REGISTER_X; i--) {
     reg[i] = reg[i-1];
@@ -138,7 +138,7 @@ void fnRollUp(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnRollDown(uint16_t unusedParamButMandatory) {
-  uint32_t savedRegister = reg[REGISTER_X];
+  registerDescriptor_t savedRegister = reg[REGISTER_X];
 
   for(uint16_t i=REGISTER_X; i<(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
     reg[i] = reg[i+1];
@@ -190,7 +190,7 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
  * \return void
  ***********************************************/
 void fnSwapXY(uint16_t unusedParamButMandatory) {
-  uint32_t savedRegister = reg[REGISTER_X];
+  registerDescriptor_t savedRegister = reg[REGISTER_X];
 
   reg[REGISTER_X] = reg[REGISTER_Y];
   reg[REGISTER_Y] = savedRegister;
@@ -232,12 +232,14 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetStackSize(uint16_t unusedParamButMandatory) {
-  longInteger_t ss;
+  longInteger_t stack;
 
   liftStack();
 
-  uIntToLongInteger(stackSize==SS_4 ? 4 : 8, &ss);
-  convertLongIntegerToLongIntegerRegister(&ss, REGISTER_X);
+  longIntegerInit(stack);
+  uIntToLongInteger(stackSize==SS_4 ? 4 : 8, stack);
+  convertLongIntegerToLongIntegerRegister(stack, REGISTER_X);
+  longIntegerFree(stack);
 
   refreshStack();
 }

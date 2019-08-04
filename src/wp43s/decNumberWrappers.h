@@ -27,6 +27,15 @@ typedef struct {
                        /* range: -1999999997 through 999999999      */
   uint8_t bits;        /* Indicator bits (see above)                */
                        /* Coefficient, from least significant unit  */
+  decNumberUnit lsu[(39+DECDPUN-1)/DECDPUN];
+} real39_t;
+
+typedef struct {
+  int32_t digits;      /* Count of digits in the coefficient; >0    */
+  int32_t exponent;    /* Unadjusted exponent, unbiased, in         */
+                       /* range: -1999999997 through 999999999      */
+  uint8_t bits;        /* Indicator bits (see above)                */
+                       /* Coefficient, from least significant unit  */
   decNumberUnit lsu[(451+DECDPUN-1)/DECDPUN];
 } real451_t;
 
@@ -40,19 +49,14 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define REAL51_SIZE                                       sizeof(real51_t)
 #define REAL451_SIZE                                      sizeof(real451_t)
 
-#if (MEMORY_ALLOCATION_ALIGNMENT == 4)
-  #define POINTER_TO_LOCAL_FLAGS                            ((uint32_t *)(allLocalRegisterPointer))
-  #define POINTER_TO_LOCAL_REGISTER(a)                      ((uint32_t *)(allLocalRegisterPointer + 4u + 4u*(a)))
-#else
-  #define POINTER_TO_LOCAL_FLAGS                            ((uint16_t *)(allLocalRegisterPointer))
-  #define POINTER_TO_LOCAL_REGISTER(a)                      ((uint32_t *)(allLocalRegisterPointer + 2u + 4u*(a)))
-#endif
+#define POINTER_TO_LOCAL_FLAGS                            ((dataSize_t  *)(allLocalRegisterPointer))
+#define POINTER_TO_LOCAL_REGISTER(a)                      ((registerDescriptor_t *)(allLocalRegisterPointer + sizeof(dataSize_t) + 4u*(a)))
 
-#define POINTER_TO_NAMED_VARIABLE(a)                      ((uint32_t *)(allNamedVariablePointer      + 6u*(a)))
-#define POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a)      ((uint16_t *)(allNamedVariablePointer + 4u + 6u*(a)))
-#define POINTER_TO_NAMED_VARIABLE_NAME(a)                 ((char     *)(*POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a) << 1))
-#define RAM_REAL16(a)                                     ((real16_t *)(ram + (a)))
-#define RAM_REAL34(a)                                     ((real34_t *)(ram + (a)))
+#define POINTER_TO_NAMED_VARIABLE(a)                      ((registerDescriptor_t *)(allNamedVariablePointer      + 6u*(a)))
+#define POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a)      ((uint16_t    *)(allNamedVariablePointer + 4u + 6u*(a)))
+#define POINTER_TO_NAMED_VARIABLE_NAME(a)                 ((char        *)(*POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a) << 1))
+#define RAM_REAL16(a)                                     ((real16_t    *)(ram + (a)))
+#define RAM_REAL34(a)                                     ((real34_t    *)(ram + (a)))
 
 
 #define REGISTER_DATA(a)                                  ((void        *)(getRegisterDataPointer(a)))
@@ -63,15 +67,9 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define REGISTER_IMAG34_DATA(a)                           ((real34_t    *)(getRegisterDataPointer(a) + REAL34_SIZE))
 #define REGISTER_COMPLEX34_DATA(a)                        ((complex34_t *)(getRegisterDataPointer(a)))
 
-#if (MEMORY_ALLOCATION_ALIGNMENT == 4)
-  #define REGISTER_STRING_DATA(a)                           ((char        *)(getRegisterDataPointer(a) + 4)) // Memory pointer to the string of a register
-  #define REGISTER_LONG_INTEGER_DATA(a)                     ((uint8_t     *)(getRegisterDataPointer(a) + 4)) // Memory pointer to the long integer of a register
-  #define REGISTER_DATA_MAX_LEN(a)                          ((uint32_t    *)(getRegisterDataPointer(a)))     // Memory pointer to the lenght of string or long integer
-#else
-  #define REGISTER_STRING_DATA(a)                           ((char        *)(getRegisterDataPointer(a) + 2)) // Memory pointer to the string of a register
-  #define REGISTER_LONG_INTEGER_DATA(a)                     ((uint8_t     *)(getRegisterDataPointer(a) + 2)) // Memory pointer to the long integer of a register
-  #define REGISTER_DATA_MAX_LEN(a)                          ((uint16_t    *)(getRegisterDataPointer(a)))     // Memory pointer to the lenght of string or long integer
-#endif
+#define REGISTER_STRING_DATA(a)                           ((char        *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the string of a register
+#define REGISTER_LONG_INTEGER_DATA(a)                     ((uint8_t     *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the long integer of a register
+#define REGISTER_DATA_MAX_LEN(a)                          ((dataSize_t  *)(getRegisterDataPointer(a)))                      // Memory pointer to the lenght of string or long integer
 
 #define REGISTER_SHORT_INTEGER_DATA(a)                    ((uint64_t    *)(getRegisterDataPointer(a)))
 #define VARIABLE_REAL16_DATA(a)                           ((real16_t    *)(a))

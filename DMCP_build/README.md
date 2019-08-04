@@ -5,4 +5,4 @@ You can download such a tool chain here: https://developer.arm.com/open-source/g
 
 The compileGMP script download the gmplib sources and compiles a static library for ARM. This script should only be run once. Only 2 files are used for the next step: gmp.h and libgmp.a
 
-The compileDMCP script builds the file wp43s.pgm in the build directory. This file must be copied to the DM42's FAT file system with a USB cable.
+The compileDMCP script builds the file WP43S.pgm in the build directory. This file must be copied to the DM42's FAT file system with a USB cable.

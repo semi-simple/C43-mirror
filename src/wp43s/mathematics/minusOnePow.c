@@ -69,15 +69,20 @@ void fnM1Pow(uint16_t unusedParamButMandatory) {
 
 
 void m1PowLonI(void) {
-  longInteger_t tmp;
+  longInteger_t lgInt, exponent;
 
-  uIntToLongInteger(1, &tmp);
+  longIntegerInit(lgInt);
+  uIntToLongInteger(1, lgInt);
 
-  if(longIntegerIsOdd(LONG_INTEGER_POINTER(REGISTER_LONG_INTEGER_DATA(opX)))) {
-    longIntegerChangeSign(&tmp);
+  convertLongIntegerRegisterToLongInteger(opX, exponent);
+  if(longIntegerIsOdd(exponent)) {
+    longIntegerChangeSign(lgInt);
   }
 
-  convertLongIntegerToLongIntegerRegister(&tmp, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, result);
+
+  longIntegerFree(lgInt);
+  longIntegerFree(exponent);
 }
 
 

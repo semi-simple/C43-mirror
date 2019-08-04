@@ -50,14 +50,14 @@ int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
 
 #ifdef PC_BUILD
-gboolean drawScreen           (GtkWidget *widget, cairo_t *cr, gpointer data);
-void     copyScreenToClipboard(void);
-void     waitAndSee           (void);
-gboolean refreshScreen        (gpointer data);
+  gboolean drawScreen           (GtkWidget *widget, cairo_t *cr, gpointer data);
+  void     copyScreenToClipboard(void);
+  void     waitAndSee           (void);
+  gboolean refreshScreen        (gpointer data);
 #endif
 
 #ifdef DMCP_BUILD
-void     refreshScreen        (void);
+  void     refreshScreen        (void);
 #endif
 
 #ifndef TESTSUITE_BUILD

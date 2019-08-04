@@ -69,45 +69,38 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
 
 
 void factLonI(void) {
-  longInteger_t temp;
+  longInteger_t lgInt;
 
-  convertLongIntegerRegisterToLongInteger(opX, &temp);
+  convertLongIntegerRegisterToLongInteger(opX, lgInt);
 
-  if(longIntegerIsNegative(&temp)) {
+  if(longIntegerIsNegative(lgInt)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerToDisplayString(opX, errorMessage + 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
+    longIntegerFree(lgInt);
     return;
   }
 
-  if(longIntegerCompareUInt(&temp, 294) == LONG_INTEGER_GREATER_THAN) {
+  if(longIntegerCompareUInt(lgInt, 294) > 0) {
     displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerToDisplayString(opX, errorMessage + 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
+    longIntegerFree(lgInt);
     return;
   }
 
   longInteger_t fact;
-
-  if(longIntegerIsZero(&temp)) {
-    uIntToLongInteger(1, &fact);
-  }
-  else {
-    uint32_t counter;
-
-    longIntegerCopy(&temp, &fact);
-    counter = longIntegerToUInt(&temp) - 1;
-    while(counter > 1) {
-      longIntegerMultiplyUInt(&fact, counter--, &fact);
-    }
-  }
-  convertLongIntegerToLongIntegerRegister(&fact, result);
+  longIntegerInit(fact);
+  longIntegerFactorial(longIntegerToUInt(lgInt), fact);
+  convertLongIntegerToLongIntegerRegister(fact, result);
+  longIntegerFree(fact);
+  longIntegerFree(lgInt);
 }
 
 

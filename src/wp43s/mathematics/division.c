@@ -94,39 +94,47 @@ void fnDivide(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void divLonILonI(void) {
-  longInteger_t iOp1;
-  longInteger_t iOp2;
+  longInteger_t iOp1, iOp2;
 
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
-  if(longIntegerIsZero(&iOp2)) {
+  if(longIntegerIsZero(iOp2)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonILonI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
   }
   else {
-    longIntegerDivideRemainder(&iOp1, &iOp2, &iOp1, &iOp2);
+    longInteger_t quotient, remainder;
 
-    if(longIntegerCompareUInt(&iOp2, 0) == LONG_INTEGER_EQUAL) {
-      convertLongIntegerToLongIntegerRegister(&iOp1, result);
+    longIntegerInit(quotient);
+    longIntegerInit(remainder);
+    longIntegerDivideRemainder(iOp1, iOp2, quotient, remainder);
+
+    if(longIntegerIsZero(remainder)) {
+      convertLongIntegerToLongIntegerRegister(quotient, result);
     }
     else {
-      convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-      convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+      longIntegerToAllocatedString(iOp1, tmpStr3000, 10);
+      reallocateRegister(opY, dtReal34, REAL34_SIZE, TAG_NONE);
+      stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(opY));
+      longIntegerToAllocatedString(iOp2, tmpStr3000, 10);
+      reallocateRegister(opX, dtReal34, REAL34_SIZE, TAG_NONE);
+      stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(opX));
 
-      longIntegerToString(&iOp1, tmpStr3000, 10);
-      reallocateRegister(opY, dtReal16, REAL16_SIZE, TAG_NONE);
-      stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(opY));
-      longIntegerToString(&iOp2, tmpStr3000, 10);
-      reallocateRegister(opX, dtReal16, REAL16_SIZE, TAG_NONE);
-      stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(opX));
+      reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+      real34Divide(REGISTER_REAL34_DATA(opY), REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
 
-      reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-      real16Divide(REGISTER_REAL16_DATA(opY), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+      convertRegister34To16(result);
     }
+
+    longIntegerFree(quotient);
+    longIntegerFree(remainder);
   }
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 
@@ -414,23 +422,25 @@ void divAn16LonI(void) {
  * \return void
  ***********************************************/
 void divLonIShoI(void) {
-  longInteger_t iOp1;
-  longInteger_t iOp2;
+  longInteger_t iOp1, iOp2;
 
   convertShortIntegerRegisterLongIntegerRegister(opX, opX);
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
-  if(longIntegerIsZero(&iOp2)) {
+  if(longIntegerIsZero(iOp2)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonIShoI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
   }
   else {
-    longIntegerDivideRemainder(&iOp1, &iOp2, &iOp1, &iOp2);
-    convertLongIntegerToLongIntegerRegister(&iOp1, result);
+    longIntegerDivideRemainder(iOp1, iOp2, iOp1, iOp2);
+    convertLongIntegerToLongIntegerRegister(iOp1, result);
   }
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 
@@ -442,23 +452,25 @@ void divLonIShoI(void) {
  * \return void
  ***********************************************/
 void divShoILonI(void) {
-  longInteger_t iOp1;
-  longInteger_t iOp2;
+  longInteger_t iOp1, iOp2;
 
   convertShortIntegerRegisterLongIntegerRegister(opY, opY);
-  convertLongIntegerRegisterToLongInteger(opY, &iOp1);
-  convertLongIntegerRegisterToLongInteger(opX, &iOp2);
+  convertLongIntegerRegisterToLongInteger(opY, iOp1);
+  convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
-  if(longIntegerIsZero(&iOp2)) {
+  if(longIntegerIsZero(iOp2)) {
     displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoILonI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
   }
   else {
-    longIntegerDivideRemainder(&iOp1, &iOp2, &iOp1, &iOp2);
-    convertLongIntegerToLongIntegerRegister(&iOp1, result);
+    longIntegerDivideRemainder(iOp1, iOp2, iOp1, iOp2);
+    convertLongIntegerToLongIntegerRegister(iOp1, result);
   }
+
+  longIntegerFree(iOp2);
+  longIntegerFree(iOp1);
 }
 
 

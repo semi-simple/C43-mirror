@@ -52,21 +52,6 @@
 #define SAVED_REGISTER_D 3007
 #define SAVED_REGISTER_L 3008
 
-#define OFFSET_REGISTER_POINTER        0
-#define LENGTH_REGISTER_POINTER       16
-
-#define OFFSET_REGISTER_DATA_TYPE     16
-#define LENGTH_REGISTER_DATA_TYPE      4
-
-#define OFFSET_REGISTER_INFORMATION   20
-#define LENGTH_REGISTER_INFORMATION    5 // Angular mode (3 bits) or base (5 bits)
-
-#define OFFSET_FILLER                 25
-#define LENGTH_FILLER                  2 // free bits
-
-#define OFFSET_REGISTER_NAME_LENGTH   27
-#define LENGTH_REGISTER_NAME_LENGTH    5 // variable name memory area length in byte, 0, 1, ..., 30. 2 to 16 used for now. 16 = 7 glyphs × 2 + terminating 0  + 1 to be even
-
 #define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
 #define freeRegisterData(regist)           freeWp43s(getRegisterDataPointer(regist), getRegisterFullSize(regist))
@@ -108,13 +93,24 @@ typedef enum {
   //dtDirectory       = 18,  ///< Program
 } dataType_t; // 4 bits (NOT 5 BITS)
 
+typedef union {
+  uint32_t descriptor;
+  struct {
+    uint32_t dataPointer     : 16; // Memory block number
+    uint32_t dataType        :  4; // dtLongInteger, dtReal16, ...
+    uint32_t tag             :  5; // TAG_NONE, Short integer base, AM_DEGREE, AM_DMS,...
+    uint32_t notUsed         :  2;
+    uint32_t variableNameLen :  5;
+  };
+} registerDescriptor_t;
+
 
 uint32_t          getRegisterDataType             (calcRegister_t regist);
 void             *getRegisterDataPointer          (calcRegister_t regist);
 uint32_t          getRegisterTag                  (calcRegister_t regist);
 uint32_t          getRegisterNameLength           (calcRegister_t regist);
 char             *getRegisterNamePointer          (calcRegister_t regist);
-uint16_t          getRegisterMaxDataLength        (calcRegister_t regist);
+uint32_t          getRegisterMaxDataLength        (calcRegister_t regist);
 void              setRegisterDataType             (calcRegister_t regist, uint16_t dataType, uint32_t tag);
 void              setRegisterDataPointer          (calcRegister_t regist, void *memPtr);
 void              setRegisterTag                  (calcRegister_t regist, uint32_t tag);
@@ -161,23 +157,24 @@ void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printReal51ToConsole            (const real51_t *value);
 void              printReal451ToConsole           (const real451_t *value);
-void              printLongIntegerToConsole       (longInteger_t *value);
-void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSize, uint32_t tag);
+void              printLongIntegerToConsole       (longInteger_t value);
+void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
 calcRegister_t    allocateTemporaryRegister       (void);
 void              freeTemporaryRegister           (calcRegister_t tmpReg);
 
 #ifdef DMCP_BUILD
-  void            printRegisterToConsole(calcRegister_t regist, int16_t line);
+  void            printRegisterToConsole          (calcRegister_t regist, int16_t line);
 #else
-  void            printRegisterToConsole(calcRegister_t regist);
+  void            printRegisterToConsole          (calcRegister_t regist);
 #endif
+void              printRegisterDescriptorToConsole(calcRegister_t regist);
 
-#define getRegisterAngularMode(reg)          getRegisterTag(reg)
-#define setRegisterAngularMode(reg, am)      setRegisterTag(reg, am)
-#define getRegisterShortIntegerBase(reg)     getRegisterTag(reg)
-#define setRegisterShortIntegerBase(reg, am) setRegisterTag(reg, am)
-#define getRegisterLongIntegerSign(reg)      getRegisterTag(reg)
-#define setRegisterLongIntegerSign(reg, am)  setRegisterTag(reg, am)
+#define getRegisterAngularMode(reg)            getRegisterTag(reg)
+#define setRegisterAngularMode(reg, am)        setRegisterTag(reg, am)
+#define getRegisterShortIntegerBase(reg)       getRegisterTag(reg)
+#define setRegisterShortIntegerBase(reg, base) setRegisterTag(reg, base)
+#define getRegisterLongIntegerSign(reg)        getRegisterTag(reg)
+#define setRegisterLongIntegerSign(reg, sign)  setRegisterTag(reg, sign)
 
 #ifdef TESTSUITE_BUILD
   void            printRegisterToString           (calcRegister_t regist, char *registerContent);

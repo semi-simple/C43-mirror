@@ -52,12 +52,14 @@ void fnChangeBase(uint16_t base) {
 
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     if(2 <= base && base <= 16) {
-      longInteger_t tmp;
+      longInteger_t lgInt;
 
       fnIp(NOPARAM);
       real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
-      stringToLongInteger(tmpStr3000, 10, &tmp);
-      convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
+      longIntegerInit(lgInt);
+      stringToLongInteger(tmpStr3000, 10, lgInt);
+      convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+      longIntegerFree(lgInt);
       fnChangeBase(base);
     }
     else {
@@ -71,12 +73,14 @@ void fnChangeBase(uint16_t base) {
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(2 <= base && base <= 16) {
-      longInteger_t tmp;
+      longInteger_t lgInt;
 
       fnIp(NOPARAM);
       real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
-      stringToLongInteger(tmpStr3000, 10, &tmp);
-      convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
+      longIntegerInit(lgInt);
+      stringToLongInteger(tmpStr3000, 10, lgInt);
+      convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+      longIntegerFree(lgInt);
       fnChangeBase(base);
     }
     else {
@@ -122,6 +126,19 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_isPrime(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
   }
 
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    int prime;
+    longInteger_t value;
+
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, value);
+    prime = longIntegerProbabPrime(value); // 0=composite 1=probably prime 2=prime
+    uIntToLongInteger(prime, value);
+
+    convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
+
+    longIntegerFree(value);
+  }
+
   else {
     displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -135,64 +152,16 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
 
 
 
-#if (TOMS_FAST_MATH == 1)
-uint32_t countBitsLongInteger(longInteger_t *value) {
-  uint32_t bits;
-  uint64_t mostSignificantDigit, mask;
-
-  if(longIntegerIsZero(value)) {
-    bits = 1;
+void longIntegerMultiply(longInteger_t opY, longInteger_t opX, longInteger_t result) {
+  if(longIntegerBits(opY) + longIntegerBits(opX) <= MAX_LONG_INTEGER_SIZE_IN_BITS) {
+    mpz_mul(result, opY, opX);
   }
   else {
-    bits = value->used * DIGIT_BIT;
-    mostSignificantDigit = value->dp[value->used - 1];
-    mask = ((uint64_t)1) << (DIGIT_BIT - 1);
-
-    while((mostSignificantDigit & mask) == 0) {
-      bits--;
-      mostSignificantDigit <<= 1;
-    }
-  }
-
-  return bits;
-}
-
-
-
-uint32_t countBitsLongIntegerRegister(calcRegister_t regist) {
-  uint16_t *addr = (uint16_t *)(REGISTER_DATA(regist));
-  uint32_t bits;
-  uint64_t mostSignificantDigit, mask;
-
-  if(longIntegerIsZero((longInteger_t *)addr)) {
-    bits = 1;
-  }
-  else {
-    bits = *addr * CHAR_BIT;
-    mostSignificantDigit = *(uint64_t *)(addr + 1 + (*addr - SIZEOF_FP_DIGIT) / 2);
-    mask = ((uint64_t)1) << (DIGIT_BIT - 1);
-
-    while((mostSignificantDigit & mask) == 0) {
-      bits--;
-      mostSignificantDigit <<= 1;
-    }
-  }
-
-  return bits;
-}
-
-
-
-void longIntegerMultiply(longInteger_t *opY, longInteger_t *opX, longInteger_t *result) {
-  if(countBitsLongInteger(opY) + countBitsLongInteger(opX) <= MAX_LONG_INTEGER_SIZE_IN_BITS) {
-    fp_mul(opY, opX, result);
-  }
-  else {
-    displayCalcErrorMessage(opY->sign == opX->sign ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(longIntegerSign(opY) == longIntegerSign(opX) ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Multiplying this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(opY), countBitsLongInteger(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToString(opY, tmpStr3000, 10);
-      longIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      sprintf(errorMessage, "Multiplying this 2 values (%" FMTSIZE " bits " STD_CROSS " %" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(opY), longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToAllocatedString(opY, tmpStr3000, 10);
+      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
       showInfoDialog("In function longIntegerMultiply:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
@@ -200,15 +169,15 @@ void longIntegerMultiply(longInteger_t *opY, longInteger_t *opX, longInteger_t *
 
 
 
-void longIntegerSquare(longInteger_t *op, longInteger_t *result) {
-  if(countBitsLongInteger(op) * 2 <= MAX_LONG_INTEGER_SIZE_IN_BITS) {
-    fp_sqr(op, result);
+void longIntegerSquare(longInteger_t op, longInteger_t result) {
+  if(longIntegerBits(op) * 2 <= MAX_LONG_INTEGER_SIZE_IN_BITS) {
+    mpz_mul(result, op, op);
   }
   else {
     displayCalcErrorMessage(4, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Squaring this value (%" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(op), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToString(op, tmpStr3000, 10);
+      sprintf(errorMessage, "Squaring this value (%" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(op), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToAllocatedString(op, tmpStr3000, 10);
       showInfoDialog("In function longIntegerSquare:", errorMessage, tmpStr3000, NULL);
     #endif
   }
@@ -216,16 +185,16 @@ void longIntegerSquare(longInteger_t *op, longInteger_t *result) {
 
 
 
-void longIntegerAdd(longInteger_t *opY, longInteger_t *opX, longInteger_t *result) {
-  if(opY->sign != opX->sign || max(countBitsLongInteger(opY), countBitsLongInteger(opX)) <= MAX_LONG_INTEGER_SIZE_IN_BITS - 1) {
-    fp_add(opY, opX, result);
+void longIntegerAdd(longInteger_t opY, longInteger_t opX, longInteger_t result) {
+  if(longIntegerSign(opY) != longIntegerSign(opX) || max(longIntegerBits(opY), longIntegerBits(opX)) <= MAX_LONG_INTEGER_SIZE_IN_BITS - 1) {
+    mpz_add(result, opY, opX);
   }
   else {
-    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(longIntegerSign(opY) == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Adding this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(opY), countBitsLongInteger(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToString(opY, tmpStr3000, 10);
-      longIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      sprintf(errorMessage, "Adding this 2 values (%" FMTSIZE " bits " STD_CROSS " %" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(opY), longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToAllocatedString(opY, tmpStr3000, 10);
+      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
       showInfoDialog("In function longIntegerAdd:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
@@ -233,21 +202,20 @@ void longIntegerAdd(longInteger_t *opY, longInteger_t *opX, longInteger_t *resul
 
 
 
-void longIntegerSubtract(longInteger_t *opY, longInteger_t *opX, longInteger_t *result) {
-  if(opY->sign == opX->sign || max(countBitsLongInteger(opY), countBitsLongInteger(opX)) <= MAX_LONG_INTEGER_SIZE_IN_BITS - 1) {
-    fp_sub(opY, opX, result);
+void longIntegerSubtract(longInteger_t opY, longInteger_t opX, longInteger_t result) {
+  if(longIntegerSign(opY) == longIntegerSign(opX) || max(longIntegerBits(opY), longIntegerBits(opX)) <= MAX_LONG_INTEGER_SIZE_IN_BITS - 1) {
+    mpz_sub(result, opY, opX);
   }
   else {
-    displayCalcErrorMessage(opY->sign == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(longIntegerSign(opY) == 0 ? 4 : 5, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Subtracting this 2 values (%" FMT32U " bits " STD_CROSS " %" FMT32U " bits) would result in a value exceeding %" FMT16S " bits!", countBitsLongInteger(opY), countBitsLongInteger(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToString(opY, tmpStr3000, 10);
-      longIntegerToString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
+      sprintf(errorMessage, "Subtracting this 2 values (%" FMTSIZE " bits " STD_CROSS " %" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(opY), longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
+      longIntegerToAllocatedString(opY, tmpStr3000, 10);
+      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, 10);
       showInfoDialog("In function longIntegerSubtract:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
 }
-#endif
 
 
 

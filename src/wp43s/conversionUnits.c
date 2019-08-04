@@ -120,10 +120,12 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
     real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), const34_32, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    longInteger_t longInteger;
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, &longInteger);
-    longIntegerSubtractUInt(&longInteger, 32, &longInteger);
-    convertLongIntegerToLongIntegerRegister(&longInteger, REGISTER_X);
+    longInteger_t lgInt;
+
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+    longIntegerSubtractUInt(lgInt, 32, lgInt);
+    convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+    longIntegerFree(lgInt);
   }
 
   unitConversion(const34_1_8, divide);

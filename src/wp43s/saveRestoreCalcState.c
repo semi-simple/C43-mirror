@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 15  // 15 = new memory allocator
+#define BACKUP_VERSION 16  // 16 = string and long integer size are 32 bits
 
 void saveCalc(void) {
   size_t size;

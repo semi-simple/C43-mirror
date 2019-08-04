@@ -74,7 +74,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-g" />
+					<Add option="-ggdb" />
+					<Add option="-Warray-bounds=2" />
 					<Add option="-DTESTSUITE_BUILD" />
 					<Add directory="src/testSuite" />
 				</Compiler>
@@ -254,6 +255,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/cube.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_angle16.txt">
@@ -730,6 +734,11 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/fractions.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/gmpWrappers.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1382,16 +1391,6 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/tfm.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/wp43s/tfm_private.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/wp43s/timer.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1399,17 +1398,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/timer.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/wp43s/tomsFastMathWrappers.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/wp43s/tomsfastmath.c">
-			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

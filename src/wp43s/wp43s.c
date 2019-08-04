@@ -21,144 +21,145 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-  bool_t        calcLandscape;
-  bool_t        calcAutoLandscapePortrait;
-  GtkWidget     *screen;
-  GtkWidget     *frmCalc;
-  int16_t       screenStride;
-  int16_t       debugWindow;
-  uint32_t      *screenData;
-  bool_t        screenChange;
+  bool_t             calcLandscape;
+  bool_t             calcAutoLandscapePortrait;
+  GtkWidget          *screen;
+  GtkWidget          *frmCalc;
+  int16_t            screenStride;
+  int16_t            debugWindow;
+  uint32_t           *screenData;
+  bool_t             screenChange;
   #if (DEBUG_REGISTER_L == 1)
-    GtkWidget   *lblRegisterL1;
-    GtkWidget   *lblRegisterL2;
+    GtkWidget        *lblRegisterL1;
+    GtkWidget        *lblRegisterL2;
   #endif
 #endif
 
-char            *ram;
-bool_t          allowScreenUpdate;
-bool_t          funcOK;
+char                 *ram;
+bool_t               allowScreenUpdate;
+bool_t               funcOK;
 
 // Variables stored in RAM
-decContext      ctxtReal16;
-decContext      ctxtReal34;
-decContext      ctxtReal51;
-decContext      ctxtReal451;
-uint16_t        flags[7];
-char            tmpStr3000[TMP_STR_LENGTH];
-char            errorMessage[ERROR_MESSAGE_LENGTH];
-char            aimBuffer[AIM_BUFFER_LENGTH];
-char            nimBuffer[NIM_BUFFER_LENGTH];
-char            nimBufferDisplay[NIM_BUFFER_LENGTH];
-char            tamBuffer[TAM_BUFFER_LENGTH];
-char            oldTime[8];
-char            dateTimeString[12];
-softmenuStack_t softmenuStack[7];
-uint32_t        reg[112];
-uint32_t        savedStackRegister[9];
-uint32_t        tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
-int16_t         tamFunction;
-int16_t         tamNumber;
-int16_t         tamNumberMin;
-int16_t         tamNumberMax;
-int16_t         tamDigit;
-int16_t         tamOperation;
-int16_t         tamLetteredRegister;
-int16_t         tamCurrentOperation;
-int16_t         currentRegisterBrowserScreen;
-int16_t         lineTWidth;
-int16_t         rbrRegister;
-int16_t         displayHasNDigits;
-calcRegister_t  result;
-calcRegister_t  opX;
-calcRegister_t  opY;
-uint16_t        numberOfLocalRegisters;
-uint16_t        numberOfLocalFlags;
-uint16_t        numberOfNamedVariables;
-char            *allLocalRegisterPointer;
-char            *allNamedVariablePointer;
-char            *statisticalSumsPointer;
-uint16_t        programCounter;
-uint16_t        xCursor;
-uint16_t        yCursor;
-uint16_t        tamMode;
-uint32_t        firstGregorianDay;
-uint32_t        denMax;
-uint32_t        lastIntegerBase;
-uint8_t         softmenuStackPointer;
-uint8_t         transitionSystemState;
-uint8_t         cursorBlinkCounter;
-uint8_t         numScreensStandardFont;
-uint8_t         currentFntScr;
-uint8_t         currentFlgScr;
-uint8_t         displayFormat;
-uint8_t         displayFormatDigits;
-uint8_t         shortIntegerWordSize;
-uint8_t         denominatorMode;
-uint8_t         significantDigits;
-uint8_t         shortIntegerMode;
-uint8_t         previousCalcMode;
-uint8_t         groupingGap;
-uint8_t         dateFormat;
-uint8_t         curveFitting;
-uint8_t         roundingMode;
-uint8_t         calcMode;
-uint8_t         nextChar;
-uint8_t         complexUnit;
-uint8_t         displayStack;
-uint8_t         productSign;
-uint8_t         fractionType;
-uint8_t         radixMark;
-uint8_t         displayModeOverride;
-uint8_t         stackSize;
-uint8_t         complexMode;
-uint8_t         alphaCase;
-uint8_t         numLinesNumericFont;
-uint8_t         numLinesStandardFont;
-uint8_t         cursorEnabled;
-uint8_t         cursorFont;
-uint8_t         nimNumberPart;
-uint8_t         hexDigits;
-uint8_t         lastErrorCode;
-uint8_t         serialIOIconEnabled;
-uint8_t         timeFormat;
-uint8_t         temporaryInformation;
-uint8_t         rbrMode;
-uint8_t         numScreensNumericFont;
-uint8_t         currentAngularMode;
-bool_t          hourGlassIconEnabled;
-bool_t          watchIconEnabled;
-bool_t          userModeEnabled;
-bool_t          printerIconEnabled;
-bool_t          batteryIconEnabled;
-bool_t          shiftF;
-bool_t          shiftG;
-bool_t          showContent;
-bool_t          stackLiftEnabled;
-bool_t          displayLeadingZeros;
-bool_t          displayRealAsFraction;
-bool_t          savedStackLiftEnabled;
-bool_t          tempRegistersInUse[NUMBER_OF_TEMPORARY_REGISTERS];
-bool_t          rbr1stDigit;
-bool_t          nimInputIsReal34;
-calcKey_t       kbd_usr[37];
-calcRegister_t  errorMessageRegisterLine;
-calcRegister_t  errorRegisterLine;
-uint16_t        row[100];
-uint64_t        shortIntegerMask;
-uint64_t        shortIntegerSignBit;
-glyph_t         glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
-char            transitionSystemOperation[4];
-int16_t         exponentSignLocation;
-int16_t         denominatorLocation;
-int16_t         imaginaryExponentSignLocation;
-int16_t         imaginaryMantissaSignLocation;
-size_t          gmpMem;
-size_t          wp43sMem;
-freeBlock_t     *freeBlocks;
-int32_t         numberOfFreeBlocks;
-void            (*confirmedFunction)(uint16_t);
-
+decContext           ctxtReal16;
+decContext           ctxtReal34;
+decContext           ctxtReal51;
+decContext           ctxtReal451;
+uint16_t             flags[7];
+char                 tmpStr3000[TMP_STR_LENGTH];
+char                 errorMessage[ERROR_MESSAGE_LENGTH];
+char                 aimBuffer[AIM_BUFFER_LENGTH];
+char                 nimBuffer[NIM_BUFFER_LENGTH];
+char                 nimBufferDisplay[NIM_BUFFER_LENGTH];
+char                 tamBuffer[TAM_BUFFER_LENGTH];
+char                 oldTime[8];
+char                 dateTimeString[12];
+softmenuStack_t      softmenuStack[7];
+registerDescriptor_t reg[112];
+registerDescriptor_t savedStackRegister[9];
+registerDescriptor_t tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
+int16_t              tamFunction;
+int16_t              tamNumber;
+int16_t              tamNumberMin;
+int16_t              tamNumberMax;
+int16_t              tamDigit;
+int16_t              tamOperation;
+int16_t              tamLetteredRegister;
+int16_t              tamCurrentOperation;
+int16_t              currentRegisterBrowserScreen;
+int16_t              lineTWidth;
+int16_t              rbrRegister;
+int16_t              displayHasNDigits;
+calcRegister_t       result;
+calcRegister_t       opX;
+calcRegister_t       opY;
+uint16_t             numberOfLocalRegisters;
+uint16_t             numberOfLocalFlags;
+uint16_t             numberOfNamedVariables;
+char                 *allLocalRegisterPointer;
+char                 *allNamedVariablePointer;
+char                 *statisticalSumsPointer;
+uint16_t             programCounter;
+uint16_t             xCursor;
+uint16_t             yCursor;
+uint16_t             tamMode;
+uint32_t             firstGregorianDay;
+uint32_t             denMax;
+uint32_t             lastIntegerBase;
+uint8_t              softmenuStackPointer;
+uint8_t              transitionSystemState;
+uint8_t              cursorBlinkCounter;
+uint8_t              numScreensStandardFont;
+uint8_t              currentFntScr;
+uint8_t              currentFlgScr;
+uint8_t              displayFormat;
+uint8_t              displayFormatDigits;
+uint8_t              shortIntegerWordSize;
+uint8_t              denominatorMode;
+uint8_t              significantDigits;
+uint8_t              shortIntegerMode;
+uint8_t              previousCalcMode;
+uint8_t              groupingGap;
+uint8_t              dateFormat;
+uint8_t              curveFitting;
+uint8_t              roundingMode;
+uint8_t              calcMode;
+uint8_t              nextChar;
+uint8_t              complexUnit;
+uint8_t              displayStack;
+uint8_t              productSign;
+uint8_t              fractionType;
+uint8_t              radixMark;
+uint8_t              displayModeOverride;
+uint8_t              stackSize;
+uint8_t              complexMode;
+uint8_t              alphaCase;
+uint8_t              numLinesNumericFont;
+uint8_t              numLinesStandardFont;
+uint8_t              cursorEnabled;
+uint8_t              cursorFont;
+uint8_t              nimNumberPart;
+uint8_t              hexDigits;
+uint8_t              lastErrorCode;
+uint8_t              serialIOIconEnabled;
+uint8_t              timeFormat;
+uint8_t              temporaryInformation;
+uint8_t              rbrMode;
+uint8_t              numScreensNumericFont;
+uint8_t              currentAngularMode;
+bool_t               hourGlassIconEnabled;
+bool_t               watchIconEnabled;
+bool_t               userModeEnabled;
+bool_t               printerIconEnabled;
+bool_t               batteryIconEnabled;
+bool_t               shiftF;
+bool_t               shiftG;
+bool_t               showContent;
+bool_t               stackLiftEnabled;
+bool_t               displayLeadingZeros;
+bool_t               displayRealAsFraction;
+bool_t               savedStackLiftEnabled;
+bool_t               tempRegistersInUse[NUMBER_OF_TEMPORARY_REGISTERS];
+bool_t               rbr1stDigit;
+bool_t               nimInputIsReal34;
+calcKey_t            kbd_usr[37];
+calcRegister_t       errorMessageRegisterLine;
+calcRegister_t       errorRegisterLine;
+uint16_t             row[100];
+uint64_t             shortIntegerMask;
+uint64_t             shortIntegerSignBit;
+glyph_t              glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
+char                 transitionSystemOperation[4];
+int16_t              exponentSignLocation;
+int16_t              denominatorLocation;
+int16_t              imaginaryExponentSignLocation;
+int16_t              imaginaryMantissaSignLocation;
+size_t               gmpMem;
+size_t               wp43sMem;
+freeBlock_t          *freeBlocks;
+int32_t              numberOfFreeBlocks;
+void                 (*confirmedFunction)(uint16_t);
+bool_t debug;
+int32_t debugCounter;
 #ifdef DMCP_BUILD
   bool_t               endOfProgram;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
@@ -174,8 +175,9 @@ void            (*confirmedFunction)(uint16_t);
  ***********************************************/
 void setupDefaults(void) {
   void *memPtr;
-
+debug = false;
   ram = malloc(RAM_SIZE);
+  memset(ram, 0, RAM_SIZE);
   freeBlocks = (freeBlock_t *)ram;
   numberOfFreeBlocks = 1;
   freeBlocks[0].address = (MAX_FREE_BLOCKS * sizeof(freeBlock_t)) >> MEMORY_ALLOCATION_SHIFT;
@@ -333,7 +335,7 @@ void setupDefaults(void) {
 int main(int argc, char* argv[]) {
   gmpMem = 0;
   wp43sMem = 0;
-  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   calcLandscape             = false;
   calcAutoLandscapePortrait = true;
@@ -397,7 +399,7 @@ void program_main(void) {
 
   gmpMem = 0;
   wp43sMem = 0;
-  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   // Initialization
   //program_init();
@@ -502,10 +504,36 @@ void program_main(void) {
 int main(void) {
   gmpMem = 0;
   wp43sMem = 0;
-  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   setupDefaults();
+
   fnReset(CONFIRMED);
+/*
+longInteger_t lgInt;
+longIntegerInit(lgInt);
+
+uIntToLongInteger(4096, lgInt);
+convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+fn2Pow(NOPARAM);
+printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
+printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+fnRollUp(NOPARAM);
+printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+uIntToLongInteger(4090, lgInt);
+convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+longIntegerFree(lgInt);
+fn2Pow(NOPARAM);
+printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
+printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+fnDivide(NOPARAM);
+printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
+printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
+return 0;
+*/
   processTests();
   debugMemory();
 

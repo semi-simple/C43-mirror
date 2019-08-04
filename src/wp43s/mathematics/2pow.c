@@ -69,24 +69,27 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
 
 
 void twoPowLonI(void) {
-  int16_t exponent;
   longInteger_t power;
 
-  convertLongIntegerRegisterToLongInteger(opX, &power);
-  if(longIntegerCompareUInt(&power, MAX_LONG_INTEGER_SIZE_IN_BITS) != LONG_INTEGER_GREATER_THAN) {
-    exponent = power.dp[0];
+  convertLongIntegerRegisterToLongInteger(opX, power);
+  if(longIntegerCompareUInt(power, MAX_LONG_INTEGER_SIZE_IN_BITS) <= 0) {
+    longInteger_t res;
 
-    longInteger2Exp(exponent, &power);
-    convertLongIntegerToLongIntegerRegister(&power, result);
+    longIntegerInit(res);
+    longInteger2Pow(longIntegerToUInt(power), res);
+    convertLongIntegerToLongIntegerRegister(res, result);
+    longIntegerFree(res);
   }
   else {
     displayCalcErrorMessage(4, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "2^ this value would result in a value exceeding %" FMT16S " bits!", MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToString(&power, tmpStr3000, 10);
+      longIntegerToAllocatedString(power, tmpStr3000, 10);
       showInfoDialog("In function twoPowLonI:", errorMessage, tmpStr3000, NULL);
     #endif
   }
+
+  longIntegerFree(power);
 }
 
 

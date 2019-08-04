@@ -21,12 +21,10 @@
 void     fnChangeBase               (uint16_t base);
 void     fnMirror                   (uint16_t unusedButMandatoryParameter);
 void     fnIsPrime                  (uint16_t unusedButMandatoryParameter);
-uint32_t countBitsLongInteger        (longInteger_t *value);
-uint32_t countBitsLongIntegerRegister(calcRegister_t regist);
-void     longIntegerMultiply         (longInteger_t *opY, longInteger_t *opX, longInteger_t *result);
-void     longIntegerSquare           (longInteger_t *op, longInteger_t *result);
-void     longIntegerAdd              (longInteger_t *opY, longInteger_t *opX, longInteger_t *result);
-void     longIntegerSubtract         (longInteger_t *opY, longInteger_t *opX, longInteger_t *result);
+void     longIntegerMultiply         (longInteger_t opY, longInteger_t opX, longInteger_t result);
+void     longIntegerSquare           (longInteger_t op,  longInteger_t result);
+void     longIntegerAdd              (longInteger_t opY, longInteger_t opX, longInteger_t result);
+void     longIntegerSubtract         (longInteger_t opY, longInteger_t opX, longInteger_t result);
 
 /*
  * The functions below are borrowed

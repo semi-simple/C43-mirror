@@ -83,16 +83,18 @@ void fnLogicalNot(uint16_t unusedParamButMandatory) {
 void notLonI(void) {
   longInteger_t res;
 
-  convertLongIntegerRegisterToLongInteger(opX, &res);
+  convertLongIntegerRegisterToLongInteger(opX, res);
 
-  if(longIntegerIsZero(&res)) {
-    uIntToLongInteger(1, &res);
+  if(longIntegerIsZero(res)) {
+    uIntToLongInteger(1, res);
   }
   else {
-    uIntToLongInteger(0, &res);
+    uIntToLongInteger(0, res);
   }
 
-  convertLongIntegerToLongIntegerRegister(&res, result);
+  convertLongIntegerToLongIntegerRegister(res, result);
+
+  longIntegerFree(res);
 }
 
 
@@ -100,14 +102,14 @@ void notLonI(void) {
 void notRe16(void) {
   longInteger_t res;
 
+  longIntegerInit(res);
   if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
-    uIntToLongInteger(1, &res);
-  }
-  else {
-    uIntToLongInteger(0, &res);
+    uIntToLongInteger(1, res);
   }
 
-  convertLongIntegerToLongIntegerRegister(&res, result);
+  convertLongIntegerToLongIntegerRegister(res, result);
+
+  longIntegerFree(res);
 }
 
 
@@ -121,12 +123,12 @@ void notShoI(void) {
 void notRe34(void) {
   longInteger_t res;
 
+  longIntegerInit(res);
   if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
-    uIntToLongInteger(1, &res);
-  }
-  else {
-    uIntToLongInteger(0, &res);
+    uIntToLongInteger(1, res);
   }
 
-  convertLongIntegerToLongIntegerRegister(&res, result);
+  convertLongIntegerToLongIntegerRegister(res, result);
+
+  longIntegerFree(res);
 }

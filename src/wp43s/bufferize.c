@@ -1801,14 +1801,16 @@ void closeNim(void) {
         calcModeNormal();
 
         if(nimNumberPart == NP_INT_10) {
-          longInteger_t tmp;
+          longInteger_t lgInt;
 
-          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), 10, &tmp);
-          convertLongIntegerToLongIntegerRegister(&tmp, REGISTER_X);
+          longIntegerInit(lgInt);
+          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), 10, lgInt);
+          convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+          longIntegerFree(lgInt);
         }
         else if(nimNumberPart == NP_INT_BASE) {
           //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          // Any change in this part is to be reported in the function strToShortInteger from file testSuite.c after the line: else if(nimNumberPart == NP_INT_BASE) {
+          // Any change in this part must be reported in the function strToShortInteger from file testSuite.c after the line: else if(nimNumberPart == NP_INT_BASE) {
           //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           longInteger_t minVal, value, maxVal;
           int16_t posHash, i, lg;
@@ -1856,57 +1858,66 @@ void closeNim(void) {
             }
           }
 
-          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), base, &value);
+          longIntegerInit(value);
+          nimBuffer[posHash] = 0;
+          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), base, value);
 
           // maxVal = 2^shortIntegerWordSize
+          longIntegerInit(maxVal);
           if(shortIntegerWordSize >= 1 && shortIntegerWordSize <= 64) {
-            longInteger2Exp(shortIntegerWordSize, &maxVal);
+            longInteger2Pow(shortIntegerWordSize, maxVal);
           }
           else {
             sprintf(errorMessage, "In function closeNIM: %d is an unexpected value for shortIntegerWordSize!", shortIntegerWordSize);
             displayBugScreen(errorMessage);
+            longIntegerFree(maxVal);
+            longIntegerFree(value);
             return;
           }
 
           // minVal = -maxVal/2
-          longIntegerSetZero(&minVal); // Mandatory! Else segmentation fault at next instruction
-          longIntegerDivideUInt(&maxVal, 2, &minVal); // minVal = maxVal / 2
-          longIntegerSetNegativeSign(&minVal); // minVal = -minVal
+          longIntegerInit(minVal);
+          longIntegerSetZero(minVal); // Mandatory! Else segmentation fault at next instruction
+          longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
+          longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
           if(shortIntegerMode != SIM_UNSIGN) {
-            longIntegerDivideUInt(&maxVal, 2, &maxVal); // maxVal /= 2
+            longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
           }
 
-          longIntegerSubtractUInt(&maxVal, 1, &maxVal); // maxVal--
+          longIntegerSubtractUInt(maxVal, 1, maxVal); // maxVal--
 
           if(shortIntegerMode == SIM_UNSIGN) {
-            longIntegerSetZero(&minVal); // minVal = 0
+            longIntegerSetZero(minVal); // minVal = 0
           }
 
           if(shortIntegerMode == SIM_1COMPL || shortIntegerMode == SIM_SIGNMT) {
-            longIntegerAddUInt(&minVal, 1, &minVal); // minVal++
+            longIntegerAddUInt(minVal, 1, minVal); // minVal++
           }
 
-          if(longIntegerCompare(&value, &minVal) == LONG_INTEGER_LESS_THAN || longIntegerCompare(&value, &maxVal) == LONG_INTEGER_GREATER_THAN) {
+          if(longIntegerCompare(value, minVal) < 0 || longIntegerCompare(value, maxVal) > 0) {
             displayCalcErrorMessage(14, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               char strMin[22], strMax[22];
-              longIntegerToString(&minVal, strMin, 10);
-              longIntegerToString(&maxVal, strMax, 10);
+              longIntegerToAllocatedString(minVal, strMin, 10);
+              longIntegerToAllocatedString(maxVal, strMax, 10);
               sprintf(errorMessage, "For word size of %d bit%s and integer mode %s,", shortIntegerWordSize, shortIntegerWordSize>1 ? "s" : "", getShortIntegerModeName(shortIntegerMode));
               sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "the entered number must be from %s to %s!", strMin, strMax);
               showInfoDialog("In function closeNIM:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
             #endif
+            longIntegerFree(maxVal);
+            longIntegerFree(minVal);
+            longIntegerFree(value);
             return;
           }
 
           reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
 
           char strValue[22];
-          longIntegerToString(&value, strValue, 10);
+          longIntegerToAllocatedString(value, strValue, 10);
 
           uint64_t val;
-          if(value.sign) {
+          if(longIntegerIsNegative(value)) {
             val = atoll(strValue + 1); // value is negative: discard the minus sign
           }
           else {
@@ -1916,17 +1927,17 @@ void closeNim(void) {
           if(shortIntegerMode == SIM_UNSIGN) {
           }
           else if(shortIntegerMode == SIM_2COMPL) {
-            if(value.sign) {
+            if(longIntegerIsNegative(value)) {
               val = (~val + 1) & shortIntegerMask;
             }
           }
           else if(shortIntegerMode == SIM_1COMPL) {
-            if(value.sign) {
+            if(longIntegerIsNegative(value)) {
               val = ~val & shortIntegerMask;
             }
           }
           else if(shortIntegerMode == SIM_SIGNMT) {
-            if(value.sign) {
+            if(longIntegerIsNegative(value)) {
               val = (val & shortIntegerMask) | shortIntegerSignBit;
             }
           }
@@ -1938,6 +1949,10 @@ void closeNim(void) {
 
           *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           lastIntegerBase = base;
+
+          longIntegerFree(maxVal);
+          longIntegerFree(minVal);
+          longIntegerFree(value);
         }
         else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           if(nimInputIsReal34) {

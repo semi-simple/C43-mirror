@@ -186,7 +186,7 @@ char *endOfString(char *string) { // string must point on the 1st "
 
 void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Any change in this function is to be reported in the function closeNim from file bufferize.c after the line: else if(nimNumberPart == NP_INT_BASE) {
+  // Any change in this function must be reported in the function closeNim from file bufferize.c after the line: else if(nimNumberPart == NP_INT_BASE) {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   longInteger_t minVal, value, maxVal;
   int16_t posHash, i, lg;
@@ -221,11 +221,14 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
     }
   }
 
-  stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), base, &value);
+  longIntegerInit(value);
+  nimBuffer[posHash] = 0;
+  stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), base, value);
 
   // maxVal = 2^shortIntegerWordSize
+  longIntegerInit(maxVal);
   if(shortIntegerWordSize >= 1 && shortIntegerWordSize <= 64) {
-    longInteger2Exp(shortIntegerWordSize, &maxVal);
+    longInteger2Pow(shortIntegerWordSize, maxVal);
   }
   else {
     printf("\nError while initializing a short integer: shortIntegerWordSize must be fom 1 to 64\n");
@@ -233,28 +236,28 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   }
 
   // minVal = -maxVal/2
-  longIntegerSetZero(&minVal); // Mandatory! Else segmentation fault at next instruction
-  longIntegerDivideUInt(&maxVal, 2, &minVal); // minVal = maxVal / 2
-  longIntegerSetNegativeSign(&minVal); // minVal = -minVal
+  longIntegerInit(minVal);
+  longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
+  longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
   if(shortIntegerMode != SIM_UNSIGN) {
-    longIntegerDivideUInt(&maxVal, 2, &maxVal); // maxVal /= 2
+    longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
   }
 
-  longIntegerSubtractUInt(&maxVal, 1, &maxVal); // maxVal--
+  longIntegerSubtractUInt(maxVal, 1, maxVal); // maxVal--
 
   if(shortIntegerMode == SIM_UNSIGN) {
-    longIntegerSetZero(&minVal); // minVal = 0
+    longIntegerSetZero(minVal); // minVal = 0
   }
 
   if(shortIntegerMode == SIM_1COMPL || shortIntegerMode == SIM_SIGNMT) {
-    longIntegerAddUInt(&minVal, 1, &minVal); // minVal++
+    longIntegerAddUInt(minVal, 1, minVal); // minVal++
   }
 
-  if(longIntegerCompare(&value, &minVal) == LONG_INTEGER_LESS_THAN || longIntegerCompare(&value, &maxVal) == LONG_INTEGER_GREATER_THAN) {
+  if(longIntegerCompare(value, minVal) < 0 || longIntegerCompare(value, maxVal) > 0) {
     char strMin[22], strMax[22];
-    longIntegerToString(&minVal, strMin, 10);
-    longIntegerToString(&maxVal, strMax, 10);
+    longIntegerToAllocatedString(minVal, strMin, 10);
+    longIntegerToAllocatedString(maxVal, strMax, 10);
     printf("\nError while initializing a short integer: for a word size of %d bit%s and integer mode %s, the entered number must be from %s to %s!\n", shortIntegerWordSize, shortIntegerWordSize>1 ? "s" : "", getShortIntegerModeName(shortIntegerMode), strMin, strMax);
     abortTest();
   }
@@ -262,10 +265,10 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   reallocateRegister(regist, dtShortInteger, SHORT_INTEGER_SIZE, base);
 
   char strValue[22];
-  longIntegerToString(&value, strValue, 10);
+  longIntegerToAllocatedString(value, strValue, 10);
 
   uint64_t val;
-  if(value.sign) {
+  if(longIntegerIsNegative(value)) {
     val = atoll(strValue + 1); // value is negative: discard the minus sign
   }
   else {
@@ -275,17 +278,17 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   if(shortIntegerMode == SIM_UNSIGN) {
   }
   else if(shortIntegerMode == SIM_2COMPL) {
-    if(value.sign) {
+    if(longIntegerIsNegative(value)) {
       val = (~val + 1) & shortIntegerMask;
     }
   }
   else if(shortIntegerMode == SIM_1COMPL) {
-    if(value.sign) {
+    if(longIntegerIsNegative(value)) {
       val = ~val & shortIntegerMask;
     }
   }
   else if(shortIntegerMode == SIM_SIGNMT) {
-    if(value.sign) {
+    if(longIntegerIsNegative(value)) {
       val = (val & shortIntegerMask) | shortIntegerSignBit;
     }
   }
@@ -295,6 +298,10 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   }
 
   *(REGISTER_SHORT_INTEGER_DATA(regist)) = val;
+
+  longIntegerFree(minVal);
+  longIntegerFree(value);
+  longIntegerFree(maxVal);
 }
 
 
@@ -365,7 +372,6 @@ void getString(char *str) {
 void setParameter(char *p) {
   char l[200], r[200], real[200], imag[200], angMod[200]; //, letter;
   int32_t i, am;
-  longInteger_t temp;
 
   //printf("  setting %s\n", p);
 
@@ -663,7 +669,7 @@ void setParameter(char *p) {
             || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] == 0)
             || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] >= '0' && l[3] <= '9' && l[4] == 0)) {
       regist = atoi(l + 1);
-      if(regist > 111) {
+      if(regist > 111 || regist < 0) {
         printf("\nMissformed numbered register setting. Th number after R shall be a number from 0 to 111.\n");
         abortTest();
       }
@@ -689,13 +695,17 @@ void setParameter(char *p) {
     memmove(r, r + i + 1, strlen(r + i + 1) + 1);
 
     if(strcmp(l, "LONI") == 0) {
+      longInteger_t lgInt;
+
       // remove beginning and ending " and removing leading spaces
       memmove(r, r + 1, strlen(r));
       while(r[0] == ' ') memmove(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
-      stringToLongInteger(r, 10, &temp);
-      convertLongIntegerToLongIntegerRegister(&temp, regist);
+      longIntegerInit(lgInt);
+      stringToLongInteger(r, 10, lgInt);
+      convertLongIntegerToLongIntegerRegister(lgInt, regist);
+      longIntegerFree(lgInt);
     }
     else if(strcmp(l, "RE16") == 0) {
       // remove beginning and ending " and removing leading spaces
@@ -1416,8 +1426,8 @@ void checkExpectedOutParameter(char *p) {
             || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] == 0)
             || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] >= '0' && l[3] <= '9' && l[4] == 0)) {
       regist = atoi(l + 1);
-      if(regist > 111) {
-        printf("\nMissformed numbered register checking. Th number after R shall be a number from 0 to 111.\n");
+      if(regist > 111 || regist < 0) {
+        printf("\nMissformed numbered register checking. The number after R shall be a number from 0 to 111.\n");
         abortTest();
       }
       letter = 0;
@@ -1449,12 +1459,16 @@ void checkExpectedOutParameter(char *p) {
       while(r[0] == ' ') memmove(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
-      stringToLongInteger(r, 10, &expectedLongInteger);
-      checkRegisterType(regist, letter, dtLongInteger, expectedLongInteger.sign);
-      convertLongIntegerRegisterToLongInteger(regist, &registerLongInteger);
-      if(longIntegerCompare(&expectedLongInteger, &registerLongInteger) != LONG_INTEGER_EQUAL) {
+      longIntegerInit(expectedLongInteger);
+      stringToLongInteger(r, 10, expectedLongInteger);
+      checkRegisterType(regist, letter, dtLongInteger, longIntegerSignTag(expectedLongInteger));
+      convertLongIntegerRegisterToLongInteger(regist, registerLongInteger);
+      if(longIntegerCompare(expectedLongInteger, registerLongInteger) != 0) {
         wrongRegisterValue(regist, letter, r);
       }
+
+      longIntegerFree(expectedLongInteger);
+      longIntegerFree(registerLongInteger);
     }
     else if(strcmp(l, "RE16") == 0) {
       checkRegisterType(regist, letter, dtReal16, TAG_NONE);
@@ -2003,12 +2017,12 @@ void processOneFile(void) {
   funcNoParam = fnNop;
   funcType = FUNC_NOPARAM;
 
-  fgets(line, 999, testSuite);
+  fgets(line, 9999, testSuite);
   lineNumber = 1;
   while(!feof(testSuite)) {
     standardizeLine();
     processLine();
-    fgets(line, 999, testSuite);
+    fgets(line, 9999, testSuite);
     lineNumber++;
   }
 
@@ -2034,13 +2048,13 @@ void processTests(void) {
     exit(-1);
   }
 
-  fgets(line, 999, fileList);
+  fgets(line, 9999, fileList);
   while(!feof(fileList)) {
     standardizeLine();
     if(line[0] != 0) {
       processOneFile();
     }
-    fgets(line, 999, fileList);
+    fgets(line, 9999, fileList);
   }
 
   fclose(fileList);

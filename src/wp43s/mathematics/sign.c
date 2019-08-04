@@ -15,7 +15,7 @@
  */
 
 /********************************************//**
- * \file dign.c
+ * \file sign.c
  ***********************************************/
 
 #include "wp43s.h"
@@ -69,22 +69,24 @@ void fnSign(uint16_t unusedParamButMandatory) {
 
 
 void signLonI(void) {
-  longInteger_t temp;
+  longInteger_t lgInt;
 
-  convertLongIntegerRegisterToLongInteger(opX, &temp);
+  longIntegerInit(lgInt);
 
-  if(longIntegerIsZero(&temp)) {
-    uIntToLongInteger(0, &temp);
-  }
-  else if(longIntegerCompareUInt(&temp, 0) < 0) {
-    uIntToLongInteger(1, &temp);
-    longIntegerSetNegativeSign(&temp);
-  }
-  else {
-    uIntToLongInteger(1, &temp);
+  switch(getRegisterLongIntegerSign(opX)) {
+    case LONG_INTEGER_POSITIVE:
+      intToLongInteger(1, lgInt);
+      break;
+
+    case LONG_INTEGER_NEGATIVE:
+      intToLongInteger(-1, lgInt);
+      break;
+
+    default: {}
   }
 
-  convertLongIntegerToLongIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  longIntegerFree(lgInt);
 }
 
 
@@ -98,20 +100,23 @@ void signRe16(void) {
     return;
   }
 
-  longInteger_t temp;
+  longInteger_t lgInt;
+
+  longIntegerInit(lgInt);
 
   if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
-    uIntToLongInteger(0, &temp);
+    uIntToLongInteger(0, lgInt);
   }
   else if(real16IsNegative(REGISTER_REAL16_DATA(opX))) {
-    uIntToLongInteger(1, &temp);
-    longIntegerSetNegativeSign(&temp);
+    uIntToLongInteger(1, lgInt);
+    longIntegerSetNegativeSign(lgInt);
   }
   else {
-    uIntToLongInteger(1, &temp);
+    uIntToLongInteger(1, lgInt);
   }
 
-  convertLongIntegerToLongIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  longIntegerFree(lgInt);
 }
 
 
@@ -123,29 +128,33 @@ void signRm16(void) {
 
 
 void signShoI(void) {
-  longInteger_t temp;
+  longInteger_t lgInt;
+
+  longIntegerInit(lgInt);
 
   switch(WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX)))) {
     case -1 :
-      uIntToLongInteger(1, &temp);
-      longIntegerSetNegativeSign(&temp);
+      uIntToLongInteger(1, lgInt);
+      longIntegerSetNegativeSign(lgInt);
       break;
 
     case 0 :
-      uIntToLongInteger(0, &temp);
+      uIntToLongInteger(0, lgInt);
       break;
 
     case 1 :
-      uIntToLongInteger(1, &temp);
+      uIntToLongInteger(1, lgInt);
       break;
 
     default :
-      uIntToLongInteger(0, &temp);
+      uIntToLongInteger(0, lgInt);
       sprintf(errorMessage, "In function signShoI: %" FMT64U " is an unexpected value returned by WP34S_intSign!", WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX))));
       displayBugScreen(errorMessage);
   }
 
-  convertLongIntegerToLongIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, result);
+
+  longIntegerFree(lgInt);
 }
 
 
@@ -159,18 +168,18 @@ void signRe34(void) {
     return;
   }
 
-  longInteger_t temp;
+  longInteger_t lgInt;
+  longIntegerInit(lgInt);
 
-  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
-    uIntToLongInteger(0, &temp);
-  }
-  else if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-    uIntToLongInteger(1, &temp);
-    longIntegerSetNegativeSign(&temp);
-  }
-  else {
-    uIntToLongInteger(1, &temp);
+  if(!real34IsZero(REGISTER_REAL34_DATA(opX))) {
+    if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
+      intToLongInteger(-1, lgInt);
+    }
+    else {
+      intToLongInteger(1, lgInt);
+    }
   }
 
-  convertLongIntegerToLongIntegerRegister(&temp, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  longIntegerFree(lgInt);
 }

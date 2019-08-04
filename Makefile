@@ -67,7 +67,7 @@ SRC_WP43S                = \
 		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
 		rasterFontsData.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
-		stats.c statusBar.c testFunctions.c timer.c tomsfastmath.c \
+		stats.c statusBar.c testFunctions.c timer.c \
 		wp43s.c memory.c) \
 	$(addprefix src/wp43s/mathematics/, \
 		10pow.c 2pow.c addition.c arccos.c arcsin.c arctan.c \

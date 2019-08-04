@@ -33,12 +33,25 @@
   #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
 
-#define EXTRA_INFO_ON_CALC_ERROR 1
-#define DEBUG_PANEL              1
-#define DEBUG_REGISTER_L         1
-#define STACK_LIFT_DEBUG         1
-#define IBM_DECIMAL              1
-#define TOMS_FAST_MATH           1
+#define EXTRA_INFO_ON_CALC_ERROR    1
+#define DEBUG_PANEL                 1
+#define DEBUG_REGISTER_L            1
+#define STACK_LIFT_DEBUG            1
+#define IBM_DECIMAL                 1
+#define LIBGMP                      1
+#define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
+#define MEMORY_ALLOCATION_MASK      (MEMORY_ALLOCATION_ALIGNMENT - 1)
+#define MEMORY_ALLOCATION_SHIFT     (MEMORY_ALLOCATION_ALIGNMENT >> 1) // only valid for 1, 2 and 4
+#define BYTES_TO_BLOCKS(n)          (((n) + MEMORY_ALLOCATION_MASK) >> MEMORY_ALLOCATION_SHIFT)
+#define BLOCKS_TO_BYTES(n)          ((n) << MEMORY_ALLOCATION_SHIFT)
+#define RAMPTR_TO_MEMPTR(p)         ((void *)(ram + ((p) << MEMORY_ALLOCATION_SHIFT)))
+#define MEMPTR_TO_RAMPTR(p)         ((uint32_t)(((char *)(p) - ram) >> MEMORY_ALLOCATION_SHIFT))
+
+#if (MEMORY_ALLOCATION_ALIGNMENT == 4)
+  #define dataSize_t                uint32_t
+#else
+  #define dataSize_t                uint16_t
+#endif
 
 #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
   #error One of PC_BUILD and DMCP_BUILD must be defined
@@ -104,7 +117,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <math.h>
-//#include <gmp.h>
+#include <gmp.h>
 
 #ifdef PC_BUILD
   #ifndef TESTSUITE_BUILD
@@ -140,13 +153,11 @@ typedef int16_t calcRegister_t;
   #include "decNumberWrappers.h"
 #endif
 
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 4096
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 8192
 
-#if (TOMS_FAST_MATH == 1)
-  #define FP_MAX_SIZE (MAX_LONG_INTEGER_SIZE_IN_BITS+(8*DIGIT_BIT))
-
-  #include "tfm.h"
-  #include "tomsFastMathWrappers.h"
+#if (LIBGMP == 1)
+  #include <gmp.h>
+  #include "gmpWrappers.h"
 #endif
 
 #if defined(__MINGW64__)
@@ -193,14 +204,6 @@ typedef int16_t calcRegister_t;
 #define max(a,b)                ((a)>(b)?(a):(b))
 #define modulo(a, b)            (((a)%(b))<0 ? ((a)%(b))+(b) : ((a)%(b))) // the % operator is remainder rather than modulo!
 
-#define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
-#define MEMORY_ALLOCATION_MASK      (MEMORY_ALLOCATION_ALIGNMENT - 1)
-#define MEMORY_ALLOCATION_SHIFT     (MEMORY_ALLOCATION_ALIGNMENT >> 1) // only valid for 1, 2 or 4
-#define BYTES_TO_BLOCKS(n)          (((n) + MEMORY_ALLOCATION_MASK) >> MEMORY_ALLOCATION_SHIFT)
-#define BLOCKS_TO_BYTES(n)          ((n) << MEMORY_ALLOCATION_SHIFT)
-#define RAMPTR_TO_MEMPTR(p)         ((void *)(ram + ((p) << MEMORY_ALLOCATION_SHIFT)))
-#define MEMPTR_TO_RAMPTR(p)         ((uint32_t)(((char *)(p) - ram) >> MEMORY_ALLOCATION_SHIFT))
-
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50
 
@@ -238,10 +241,6 @@ typedef int16_t calcRegister_t;
 #define AM_RADIAN               2 // radian must be 2
 #define AM_MULTPI               3 // multpi must be 3
 #define AM_DMS                  4 // dms    must be 4
-
-// Long integer sign
-#define LI_POSITIVE             0
-#define LI_NEGATIVE             1
 
 // Data type tag
 #define TAG_NONE                0
@@ -434,159 +433,160 @@ typedef int16_t calcRegister_t;
 
 // Variables for the simulator
 #ifdef PC_BUILD
-  extern bool_t         calcLandscape;
-  extern bool_t         calcAutoLandscapePortrait;
-  extern bool_t         runTestsOnly;
-  extern GtkWidget      *screen;
-  extern GtkWidget      *frmCalc;
-  extern int16_t        screenStride;
-  extern int16_t        debugWindow;
-  extern uint32_t       *screenData;
-  extern bool_t         screenChange;
+  extern bool_t             calcLandscape;
+  extern bool_t             calcAutoLandscapePortrait;
+  extern bool_t             runTestsOnly;
+  extern GtkWidget          *screen;
+  extern GtkWidget          *frmCalc;
+  extern int16_t            screenStride;
+  extern int16_t            debugWindow;
+  extern uint32_t           *screenData;
+  extern bool_t             screenChange;
   #if (DEBUG_REGISTER_L == 1)
-    extern GtkWidget    *lblRegisterL1;
-    extern GtkWidget    *lblRegisterL2;
+    extern GtkWidget        *lblRegisterL1;
+    extern GtkWidget        *lblRegisterL2;
   #endif
 #endif
 
-extern char             *ram;
-extern bool_t           allowScreenUpdate;
-extern bool_t           funcOK;
+extern char                 *ram;
+extern bool_t               allowScreenUpdate;
+extern bool_t               funcOK;
 
 // Variables stored in FLASH
-extern const item_t     indexOfItems[];
-extern const char       *errorMessages[NUMBER_OF_ERROR_CODES];
-extern const calcKey_t  kbd_std[37];
-extern const font_t     standardFont, numericFont;
-extern void             (* const addition[13][13])(void);
-extern void             (* const subtraction[13][13])(void);
-extern void             (* const multiplication[13][13])(void);
-extern void             (* const division[13][13])(void);
-extern const softmenu_t softmenu[];
-extern const int16_t    softkeyRow[];
+extern const item_t         indexOfItems[];
+extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
+extern const calcKey_t      kbd_std[37];
+extern const font_t         standardFont, numericFont;
+extern void                 (* const addition[13][13])(void);
+extern void                 (* const subtraction[13][13])(void);
+extern void                 (* const multiplication[13][13])(void);
+extern void                 (* const division[13][13])(void);
+extern const softmenu_t     softmenu[];
+extern const int16_t        softkeyRow[];
 
 // Variables stored in RAM
-extern decContext       ctxtReal16;
-extern decContext       ctxtReal34;
-extern decContext       ctxtReal51;
-extern decContext       ctxtReal451;
-extern uint16_t         flags[7];
+extern decContext           ctxtReal16;
+extern decContext           ctxtReal34;
+extern decContext           ctxtReal51;
+extern decContext           ctxtReal451;
+extern uint16_t             flags[7];
 #define TMP_STR_LENGTH  3000
 #define ERROR_MESSAGE_LENGTH 512
-extern char             tmpStr3000[TMP_STR_LENGTH];
-extern char             errorMessage[ERROR_MESSAGE_LENGTH];
-extern char             aimBuffer[AIM_BUFFER_LENGTH];
-extern char             nimBuffer[NIM_BUFFER_LENGTH];
-extern char             nimBufferDisplay[NIM_BUFFER_LENGTH];
-extern char             tamBuffer[TAM_BUFFER_LENGTH];
-extern char             oldTime[8];
-extern char             dateTimeString[12];
-extern softmenuStack_t  softmenuStack[7];
-extern uint32_t         reg[112];
-extern uint32_t         savedStackRegister[9];
-extern uint32_t         tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
-extern int16_t          tamFunction;
-extern int16_t          tamNumber;
-extern int16_t          tamNumberMin;
-extern int16_t          tamNumberMax;
-extern int16_t          tamDigit;
-extern int16_t          tamOperation;
-extern int16_t          tamLetteredRegister;
-extern int16_t          tamCurrentOperation;
-extern int16_t          currentRegisterBrowserScreen;
-extern int16_t          lineTWidth;
-extern int16_t          rbrRegister;
-extern int16_t          displayHasNDigits;
-extern calcRegister_t   result;
-extern calcRegister_t   opX;
-extern calcRegister_t   opY;
-extern uint16_t         numberOfLocalRegisters;
-extern uint16_t         numberOfLocalFlags;
-extern uint16_t         numberOfNamedVariables;
-extern char             *allLocalRegisterPointer;
-extern char             *allNamedVariablePointer;
-extern char             *statisticalSumsPointer;
-extern uint16_t         programCounter;
-extern uint16_t         xCursor;
-extern uint16_t         yCursor;
-extern uint16_t         tamMode;
-extern uint32_t         firstGregorianDay;
-extern uint32_t         denMax;
-extern uint32_t         lastIntegerBase;
-extern uint8_t          softmenuStackPointer;
-extern uint8_t          transitionSystemState;
-extern uint8_t          cursorBlinkCounter;
-extern uint8_t          numScreensStandardFont;
-extern uint8_t          currentFntScr;
-extern uint8_t          currentFlgScr;
-extern uint8_t          displayFormat;
-extern uint8_t          displayFormatDigits;
-extern uint8_t          shortIntegerWordSize;
-extern uint8_t          denominatorMode;
-extern uint8_t          significantDigits;
-extern uint8_t          shortIntegerMode;
-extern uint8_t          previousCalcMode;
-extern uint8_t          groupingGap;
-extern uint8_t          dateFormat;
-extern uint8_t          curveFitting;
-extern uint8_t          roundingMode;
-extern uint8_t          calcMode;
-extern uint8_t          nextChar;
-extern uint8_t          complexUnit;
-extern uint8_t          displayStack;
-extern uint8_t          productSign;
-extern uint8_t          fractionType;
-extern uint8_t          radixMark;
-extern uint8_t          displayModeOverride;
-extern uint8_t          stackSize;
-extern uint8_t          complexMode;
-extern uint8_t          alphaCase;
-extern uint8_t          numLinesNumericFont;
-extern uint8_t          numLinesStandardFont;
-extern uint8_t          cursorEnabled;
-extern uint8_t          cursorFont;
-extern uint8_t          nimNumberPart;
-extern uint8_t          hexDigits;
-extern uint8_t          lastErrorCode;
-extern uint8_t          serialIOIconEnabled;
-extern uint8_t          timeFormat;
-extern uint8_t          temporaryInformation;
-extern uint8_t          rbrMode;
-extern uint8_t          numScreensNumericFont;
-extern uint8_t          currentAngularMode;
-extern bool_t           hourGlassIconEnabled;
-extern bool_t           watchIconEnabled;
-extern bool_t           userModeEnabled;
-extern bool_t           printerIconEnabled;
-extern bool_t           batteryIconEnabled;
-extern bool_t           shiftF;
-extern bool_t           shiftG;
-extern bool_t           showContent;
-extern bool_t           stackLiftEnabled;
-extern bool_t           displayLeadingZeros;
-extern bool_t           displayRealAsFraction;
-extern bool_t           savedStackLiftEnabled;
-extern bool_t           tempRegistersInUse[NUMBER_OF_TEMPORARY_REGISTERS];
-extern bool_t           rbr1stDigit;
-extern bool_t           nimInputIsReal34;
-extern calcKey_t        kbd_usr[37];
-extern calcRegister_t   errorMessageRegisterLine;
-extern calcRegister_t   errorRegisterLine;
-extern uint16_t         row[100];
-extern uint64_t         shortIntegerMask;
-extern uint64_t         shortIntegerSignBit;
-extern glyph_t          glyphNotFound;
-extern char             transitionSystemOperation[4];
-extern int16_t          exponentSignLocation;
-extern int16_t          denominatorLocation;
-extern int16_t          imaginaryExponentSignLocation;
-extern int16_t          imaginaryMantissaSignLocation;
-extern size_t           gmpMem;
-extern size_t           wp43sMem;
-extern freeBlock_t      *freeBlocks;
-extern int32_t          numberOfFreeBlocks;
-extern void             (*confirmedFunction)(uint16_t);
-
+extern char                 tmpStr3000[TMP_STR_LENGTH];
+extern char                 errorMessage[ERROR_MESSAGE_LENGTH];
+extern char                 aimBuffer[AIM_BUFFER_LENGTH];
+extern char                 nimBuffer[NIM_BUFFER_LENGTH];
+extern char                 nimBufferDisplay[NIM_BUFFER_LENGTH];
+extern char                 tamBuffer[TAM_BUFFER_LENGTH];
+extern char                 oldTime[8];
+extern char                 dateTimeString[12];
+extern softmenuStack_t      softmenuStack[7];
+extern registerDescriptor_t reg[112];
+extern registerDescriptor_t savedStackRegister[9];
+extern registerDescriptor_t tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
+extern int16_t              tamFunction;
+extern int16_t              tamNumber;
+extern int16_t              tamNumberMin;
+extern int16_t              tamNumberMax;
+extern int16_t              tamDigit;
+extern int16_t              tamOperation;
+extern int16_t              tamLetteredRegister;
+extern int16_t              tamCurrentOperation;
+extern int16_t              currentRegisterBrowserScreen;
+extern int16_t              lineTWidth;
+extern int16_t              rbrRegister;
+extern int16_t              displayHasNDigits;
+extern calcRegister_t       result;
+extern calcRegister_t       opX;
+extern calcRegister_t       opY;
+extern uint16_t             numberOfLocalRegisters;
+extern uint16_t             numberOfLocalFlags;
+extern uint16_t             numberOfNamedVariables;
+extern char                 *allLocalRegisterPointer;
+extern char                 *allNamedVariablePointer;
+extern char                 *statisticalSumsPointer;
+extern uint16_t             programCounter;
+extern uint16_t             xCursor;
+extern uint16_t             yCursor;
+extern uint16_t             tamMode;
+extern uint32_t             firstGregorianDay;
+extern uint32_t             denMax;
+extern uint32_t             lastIntegerBase;
+extern uint8_t              softmenuStackPointer;
+extern uint8_t              transitionSystemState;
+extern uint8_t              cursorBlinkCounter;
+extern uint8_t              numScreensStandardFont;
+extern uint8_t              currentFntScr;
+extern uint8_t              currentFlgScr;
+extern uint8_t              displayFormat;
+extern uint8_t              displayFormatDigits;
+extern uint8_t              shortIntegerWordSize;
+extern uint8_t              denominatorMode;
+extern uint8_t              significantDigits;
+extern uint8_t              shortIntegerMode;
+extern uint8_t              previousCalcMode;
+extern uint8_t              groupingGap;
+extern uint8_t              dateFormat;
+extern uint8_t              curveFitting;
+extern uint8_t              roundingMode;
+extern uint8_t              calcMode;
+extern uint8_t              nextChar;
+extern uint8_t              complexUnit;
+extern uint8_t              displayStack;
+extern uint8_t              productSign;
+extern uint8_t              fractionType;
+extern uint8_t              radixMark;
+extern uint8_t              displayModeOverride;
+extern uint8_t              stackSize;
+extern uint8_t              complexMode;
+extern uint8_t              alphaCase;
+extern uint8_t              numLinesNumericFont;
+extern uint8_t              numLinesStandardFont;
+extern uint8_t              cursorEnabled;
+extern uint8_t              cursorFont;
+extern uint8_t              nimNumberPart;
+extern uint8_t              hexDigits;
+extern uint8_t              lastErrorCode;
+extern uint8_t              serialIOIconEnabled;
+extern uint8_t              timeFormat;
+extern uint8_t              temporaryInformation;
+extern uint8_t              rbrMode;
+extern uint8_t              numScreensNumericFont;
+extern uint8_t              currentAngularMode;
+extern bool_t               hourGlassIconEnabled;
+extern bool_t               watchIconEnabled;
+extern bool_t               userModeEnabled;
+extern bool_t               printerIconEnabled;
+extern bool_t               batteryIconEnabled;
+extern bool_t               shiftF;
+extern bool_t               shiftG;
+extern bool_t               showContent;
+extern bool_t               stackLiftEnabled;
+extern bool_t               displayLeadingZeros;
+extern bool_t               displayRealAsFraction;
+extern bool_t               savedStackLiftEnabled;
+extern bool_t               tempRegistersInUse[NUMBER_OF_TEMPORARY_REGISTERS];
+extern bool_t               rbr1stDigit;
+extern bool_t               nimInputIsReal34;
+extern calcKey_t            kbd_usr[37];
+extern calcRegister_t       errorMessageRegisterLine;
+extern calcRegister_t       errorRegisterLine;
+extern uint16_t             row[100];
+extern uint64_t             shortIntegerMask;
+extern uint64_t             shortIntegerSignBit;
+extern glyph_t              glyphNotFound;
+extern char                 transitionSystemOperation[4];
+extern int16_t              exponentSignLocation;
+extern int16_t              denominatorLocation;
+extern int16_t              imaginaryExponentSignLocation;
+extern int16_t              imaginaryMantissaSignLocation;
+extern size_t               gmpMem;
+extern size_t               wp43sMem;
+extern freeBlock_t          *freeBlocks;
+extern int32_t              numberOfFreeBlocks;
+extern void                 (*confirmedFunction)(uint16_t);
+extern bool_t debug;
+extern int32_t debugCounter;
 #ifdef DMCP_BUILD
   extern bool_t               endOfProgram;
 #endif // DMCP_BUILD

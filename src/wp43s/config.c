@@ -193,8 +193,10 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
 
   liftStack();
 
-  uIntToLongInteger(getFreeRamMemory(), &mem);
-  convertLongIntegerToLongIntegerRegister(&mem, REGISTER_X);
+  longIntegerInit(mem);
+  uIntToLongInteger(getFreeRamMemory(), mem);
+  convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
+  longIntegerFree(mem);
 
   refreshStack();
 }
@@ -208,12 +210,14 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
-  longInteger_t rm;
+  longInteger_t rounding;
 
   liftStack();
 
-  uIntToLongInteger(roundingMode, &rm);
-  convertLongIntegerToLongIntegerRegister(&rm, REGISTER_X);
+  longIntegerInit(rounding);
+  uIntToLongInteger(roundingMode, rounding);
+  convertLongIntegerToLongIntegerRegister(rounding, REGISTER_X);
+  longIntegerFree(rounding);
 
   refreshStack();
 }
@@ -230,8 +234,10 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
 
   liftStack();
 
-  uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), &ism);
-  convertLongIntegerToLongIntegerRegister(&ism, REGISTER_X);
+  longIntegerInit(ism);
+  uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), ism);
+  convertLongIntegerToLongIntegerRegister(ism, REGISTER_X);
+  longIntegerFree(ism);
 
   refreshStack();
 }
@@ -245,12 +251,14 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGetWordSize(uint16_t unusedParamButMandatory) {
-  longInteger_t ws;
+  longInteger_t wordSize;
 
   liftStack();
 
-  uIntToLongInteger(shortIntegerWordSize, &ws);
-  convertLongIntegerToLongIntegerRegister(&ws, REGISTER_X);
+  longIntegerInit(wordSize);
+  uIntToLongInteger(shortIntegerWordSize, wordSize);
+  convertLongIntegerToLongIntegerRegister(wordSize, REGISTER_X);
+  longIntegerFree(wordSize);
 
   refreshStack();
 }
@@ -315,8 +323,10 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
 
   liftStack();
 
-  uIntToLongInteger(getFreeFlash(), &flashMem);
-  convertLongIntegerToLongIntegerRegister(&flashMem, REGISTER_X);
+  longIntegerInit(flashMem);
+  uIntToLongInteger(getFreeFlash(), flashMem);
+  convertLongIntegerToLongIntegerRegister(flashMem, REGISTER_X);
+  longIntegerFree(flashMem);
 
   refreshStack();
 }
@@ -370,8 +380,10 @@ void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
 
   liftStack();
 
-  uIntToLongInteger(significantDigits, &sigDigits);
-  convertLongIntegerToLongIntegerRegister(&sigDigits, REGISTER_X);
+  longIntegerInit(sigDigits);
+  uIntToLongInteger(significantDigits, sigDigits);
+  convertLongIntegerToLongIntegerRegister(sigDigits, REGISTER_X);
+  longIntegerFree(sigDigits);
 
   refreshStack();
 }
@@ -546,7 +558,6 @@ void fnReset(uint16_t confirmation) {
     setConfirmationMode(fnReset);
   }
   else {
-    //printf("Running RESET\n");
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers

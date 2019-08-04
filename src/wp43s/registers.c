@@ -1982,8 +1982,8 @@ void printRegisterToConsole(calcRegister_t regist) {
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "real16 %s", str);
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "real16 %s", str);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
@@ -1994,8 +1994,8 @@ void printRegisterToConsole(calcRegister_t regist) {
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "angle16 %s $s", str, getAngularModeName(getRegisterAngularMode(regist)));
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "angle16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
@@ -2006,8 +2006,8 @@ void printRegisterToConsole(calcRegister_t regist) {
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "real34 %s", str);
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "real34 %s", str);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
@@ -2018,8 +2018,8 @@ void printRegisterToConsole(calcRegister_t regist) {
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "real34 %s $s", str, getAngularModeName(getRegisterAngularMode(regist)));
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
@@ -2030,8 +2030,8 @@ void printRegisterToConsole(calcRegister_t regist) {
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "complex16 %s", str);
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "complex16 %s", str);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
 
     real16ToString(REGISTER_IMAG16_DATA(regist), str);
@@ -2046,12 +2046,12 @@ void printRegisterToConsole(calcRegister_t regist) {
 
     #ifdef DMCP_BUILD
       if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-        sprintf(errorMessage, "-ix%s", str + 1);
+        sprintf(tmpStr3000, "-ix%s", str + 1);
       }
       else {
-        sprintf(errorMessage, "+ix%s", str);
+        sprintf(tmpStr3000, "+ix%s", str);
       }
-      lcd_putsAt(t20, line, errorMessage);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
@@ -2062,8 +2062,8 @@ void printRegisterToConsole(calcRegister_t regist) {
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "complex34 %s", str);
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "complex34 %s", str);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
 
     real34ToString(REGISTER_IMAG34_DATA(regist), str);
@@ -2078,32 +2078,24 @@ void printRegisterToConsole(calcRegister_t regist) {
 
     #ifdef DMCP_BUILD
       if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-        sprintf(errorMessage, "-ix%s", str + 1);
+        sprintf(tmpStr3000, "-ix%s", str + 1);
       }
       else {
-        sprintf(errorMessage, "+ix%s", str);
+        sprintf(tmpStr3000, "+ix%s", str);
       }
-      lcd_putsAt(t20, line, errorMessage);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
   else if(getRegisterDataType(regist) == dtString) {
     stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
-        printf("string (%" FMT32U " bytes) |%s|", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #else
-        printf("string (%" FMT16U " bytes) |%s|", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #endif
+      printf("string (%" FMT32U " bytes) |%s|", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
     #endif
 
     #ifdef DMCP_BUILD
-      #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
-        sprintf(errorMessage, "STR (%" FMT32U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #else
-        sprintf(errorMessage, "STR (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #endif
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "STR (%" FMT32U ") %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
@@ -2111,12 +2103,12 @@ void printRegisterToConsole(calcRegister_t regist) {
     uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(regist));
 
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("short integer %08x-%08x (base %u)", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
+      printf("short integer %08x-%08x (base %" FMT32U ")", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
     #endif
 
     #ifdef DMCP_BUILD
-      sprintf(errorMessage, "SI %08x-%08x (base %u)", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "SI %08x-%08x (base %" FMT32U ")", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 
@@ -2126,20 +2118,12 @@ void printRegisterToConsole(calcRegister_t regist) {
     convertLongIntegerRegisterToLongInteger(regist, &tmp);
     longIntegerToString(&tmp, str, 10);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
-        printf("long integer (%" FMT32U " bytes) %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #else
-        printf("long integer (%" FMT16U " bytes) %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #endif
+      printf("long integer (%" FMT32U " bytes) %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
     #endif
 
     #ifdef DMCP_BUILD
-      #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
-        sprintf(errorMessage, "BI (%" FMT32U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #else
-        sprintf(errorMessage, "BI (%" FMT16U ") %s", *(REGISTER_DATA_MAX_LEN(regist)), str);
-      #endif
-      lcd_putsAt(t20, line, errorMessage);
+      sprintf(tmpStr3000, "BI (%" FMT32U ") %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
+      lcd_putsAt(t20, line, tmpStr3000);
     #endif
   }
 

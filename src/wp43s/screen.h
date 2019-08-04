@@ -56,6 +56,10 @@ void     waitAndSee           (void);
 gboolean refreshScreen        (gpointer data);
 #endif
 
+#ifdef DMCP_BUILD
+void     refreshScreen        (void);
+#endif
+
 #ifndef TESTSUITE_BUILD
 void     setPixel             (int16_t x, int16_t y);
 void     clearPixel           (int16_t x, int16_t y);

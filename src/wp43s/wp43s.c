@@ -182,7 +182,10 @@ void setupDefaults(void) {
   freeBlocks[0].size    = BYTES_TO_BLOCKS(RAM_SIZE - MAX_FREE_BLOCKS * sizeof(freeBlock_t));
 
   glyphNotFound.data   = malloc(38);
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wstringop-truncation"
   strncpy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
+  #pragma GCC diagnostic pop
 
   // Initialization of user key assignments
   memcpy(kbd_usr, kbd_std, sizeof(kbd_std));

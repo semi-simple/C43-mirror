@@ -140,7 +140,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   return TRUE;
 }
 #elif defined DMCP_BUILD
-void refreshScreen() {// This function is called roughly every 100 ms from the main loop
+void refreshScreen(void) {// This function is called roughly every 100 ms from the main loop
   // Cursor blinking
   if(cursorEnabled) {
     cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
@@ -726,7 +726,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
           else if(regist == NIM_REGISTER_LINE && calcMode == CM_NIM) {
             if(lastIntegerBase != 0) {
-              sprintf(lastBase, "#%d", lastIntegerBase);
+              sprintf(lastBase, "#%" FMT32U, lastIntegerBase);
               wLastBase = stringWidth(lastBase, &numericFont, true, true);
             }
             else {

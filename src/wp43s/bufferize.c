@@ -1021,6 +1021,8 @@ void addItemToNimBuffer(int16_t item) {
       }
     }
 
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wstringop-truncation"
     if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
         if(nimBufferDisplay[index] == '.') {
@@ -1037,6 +1039,7 @@ void addItemToNimBuffer(int16_t item) {
         }
       }
     }
+    #pragma GCC diagnostic pop
 
     refreshRegisterLine(NIM_REGISTER_LINE);
   }

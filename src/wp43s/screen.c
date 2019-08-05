@@ -601,7 +601,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
         #ifdef PC_BUILD
           #if (DEBUG_REGISTER_L == 1)
-            char     string1[500], string2[1000], *p;
+            char     string1[100], string2[200], *p;
             uint16_t i;
 
             strcpy(string1, "L = ");
@@ -672,6 +672,14 @@ void refreshRegisterLine(calcRegister_t regist) {
             gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr3000 + 1000);
             gtk_widget_show(lblRegisterL1);
             gtk_widget_show(lblRegisterL2);
+          #endif
+          #if (SHOW_MEMORY_STATUS == 1)
+            char string[200];
+
+            sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43S %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMem, (uint32_t)gmpMem);
+            stringToUtf8(string, (uint8_t *)tmpStr3000);
+            gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr3000);
+            gtk_widget_show(lblMemoryStatus);
           #endif
         #endif
 

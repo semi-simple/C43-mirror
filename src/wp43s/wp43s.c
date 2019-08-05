@@ -33,6 +33,9 @@
     GtkWidget        *lblRegisterL1;
     GtkWidget        *lblRegisterL2;
   #endif
+  #if (SHOW_MEMORY_STATUS == 1)
+    GtkWidget        *lblMemoryStatus;
+  #endif
 #endif
 
 char                 *ram;
@@ -333,8 +336,8 @@ debug = false;
 
 #ifdef PC_BUILD
 int main(int argc, char* argv[]) {
+  wp43sMem = MAX_FREE_BLOCKS * sizeof(freeBlock_t);
   gmpMem = 0;
-  wp43sMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   calcLandscape             = false;
@@ -397,8 +400,8 @@ void program_main(void) {
   int key = 0;
   char charKey[3];
 
+  wp43sMem = MAX_FREE_BLOCKS * sizeof(freeBlock_t);
   gmpMem = 0;
-  wp43sMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   // Initialization
@@ -502,8 +505,8 @@ void program_main(void) {
 
 
 int main(void) {
+  wp43sMem = MAX_FREE_BLOCKS * sizeof(freeBlock_t);
   gmpMem = 0;
-  wp43sMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   setupDefaults();

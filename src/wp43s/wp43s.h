@@ -36,6 +36,7 @@
 #define EXTRA_INFO_ON_CALC_ERROR    1
 #define DEBUG_PANEL                 1
 #define DEBUG_REGISTER_L            1
+#define SHOW_MEMORY_STATUS          1
 #define STACK_LIFT_DEBUG            1
 #define IBM_DECIMAL                 1
 #define LIBGMP                      1
@@ -73,6 +74,8 @@
   #define DEBUG_PANEL 0
   #undef  DEBUG_REGISTER_L
   #define DEBUG_REGISTER_L 0
+  #undef  SHOW_MEMORY_STATUS
+  #define SHOW_MEMORY_STATUS 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
 #endif
@@ -84,6 +87,8 @@
   #define DEBUG_PANEL 0
   #undef  DEBUG_REGISTER_L
   #define DEBUG_REGISTER_L 0
+  #undef  SHOW_MEMORY_STATUS
+  #define SHOW_MEMORY_STATUS 0
   #undef  STACK_LIFT_DEBUG
   #define STACK_LIFT_DEBUG 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
@@ -445,6 +450,9 @@ typedef int16_t calcRegister_t;
   #if (DEBUG_REGISTER_L == 1)
     extern GtkWidget        *lblRegisterL1;
     extern GtkWidget        *lblRegisterL2;
+  #endif
+  #if (SHOW_MEMORY_STATUS == 1)
+    extern GtkWidget        *lblMemoryStatus;
   #endif
 #endif
 

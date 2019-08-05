@@ -1860,6 +1860,12 @@ void setupUI(void) {
     gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 30, 46);
   #endif
 
+  #if (SHOW_MEMORY_STATUS == 1)
+    lblMemoryStatus = gtk_label_new("");
+    gtk_widget_set_name(lblMemoryStatus, "memoryStatus");
+    gtk_fixed_put(GTK_FIXED(grid), lblMemoryStatus, 5, 5);
+  #endif
+
   // 1st row: F1 to F6 buttons
   btn11 = gtk_button_new_with_label("^");
   btn12 = gtk_button_new_with_label("^");

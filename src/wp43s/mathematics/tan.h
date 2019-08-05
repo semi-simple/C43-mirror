@@ -18,15 +18,16 @@
  * \file tan.h
  ***********************************************/
 
-void fnTan   (uint16_t unusedParamButMandatory);
-void tanError(void);
-void tanLonI (void);
-void tanRe16 (void);
-void tanCo16 (void);
-void tanAn16 (void);
-void tanAngl (void);
-void tanRm16 (void);
-void tanCm16 (void);
-void tanRe34 (void);
-void tanCo34 (void);
-void tanAn34 (void);
+void fnTan                    (uint16_t unusedParamButMandatory);
+void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode);
+void tanError                 (void);
+void tanLonI                  (void);
+void tanRe16                  (void);
+void tanCo16                  (void);
+void tanAn16                  (void);
+void tanAngl                  (void);
+void tanRm16                  (void);
+void tanCm16                  (void);
+void tanRe34                  (void);
+void tanCo34                  (void);
+void tanAn34                  (void);

@@ -30,6 +30,33 @@ void (* const Tan[13])(void) = {
 
 
 
+void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode) {
+  uint32_t oneTurn;
+
+  switch(angularMode) {
+    case AM_DEGREE:
+    case AM_DMS:    oneTurn = 360; break;
+    case AM_GRAD:   oneTurn = 400; break;
+    case AM_MULTPI: oneTurn =   2; break;
+    default:        oneTurn =   0;
+  }
+
+  if(oneTurn == 0) {
+    convertLongIntegerRegisterToReal34Register(regist, regist);
+  }
+  else {
+    longInteger_t angle;
+
+    longIntegerInit(angle);
+    convertLongIntegerRegisterToLongInteger(regist, angle);
+    reallocateRegister(regist, dtReal34, REAL34_SIZE, TAG_NONE);
+    uInt32ToReal34(longIntegerModuloUInt(angle, oneTurn), REGISTER_REAL34_DATA(regist));
+    longIntegerFree(angle);
+  }
+}
+
+
+
 /********************************************//**
  * \brief Data type error in tan
  *
@@ -71,7 +98,8 @@ void fnTan(uint16_t unusedParamButMandatory) {
 void tanLonI(void) {
   real34_t cos;
 
-  convertLongIntegerRegisterToReal34Register(opX, opX);
+  longIntegerAngleReduction(opX, currentAngularMode);
+
   reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
   WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), currentAngularMode);
   if(real34IsZero(&cos)) {

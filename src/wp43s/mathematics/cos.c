@@ -69,7 +69,7 @@ void fnCos(uint16_t unusedParamButMandatory) {
 
 
 void cosLonI(void) {
-  convertLongIntegerRegisterToReal34Register(opX, opX);
+  longIntegerAngleReduction(opX, currentAngularMode);
   reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
   WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), currentAngularMode);
   convertRegister34To16(result);

@@ -57,9 +57,8 @@ void *reallocWp43s(void *memPtr, size_t oldSize, size_t newSize) {
   oldSize = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(oldSize));
 
   wp43sMem += newSize - oldSize;
-  //printf("WP43S claims %6" FMTSIZE " bytes\n", newSize);
-  //printf(" and frees %6" FMTSIZE " bytes\n", oldSize);
 
+  //printf("WP43S claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSize, oldSize, wp43sMem);
   return wp43sReallocate(memPtr, oldSize, newSize);
 }
 
@@ -89,8 +88,8 @@ void *reallocGmp(void *memPtr, size_t oldSize, size_t newSize) {
   oldSize = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(oldSize));
 
   gmpMem += newSize - oldSize;
-  //printf("GMP claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSize, oldSize, gmpMem);
 
+  //printf("GMP claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSize, oldSize, gmpMem);
   return wp43sReallocate(memPtr, oldSize, newSize);
 }
 
@@ -138,7 +137,7 @@ void *wp43sAllocate(size_t size) {
     }
     printf("\nOUT OF MEMORY\nMemory claimed: %" FMTSIZE " bytes\nFragmented free memory: %u bytes\n", size, minSize * MEMORY_ALLOCATION_ALIGNMENT);
     #ifdef PC_BUILD
-      exit(0);
+      exit(-3);
     #endif
 
     #ifdef DMCP_BUILD

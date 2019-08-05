@@ -1560,6 +1560,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int1
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
+  longInteger_t divisor;
   real34_t value;
 
   convertLongIntegerRegisterToLongInteger(regist, lgInt);
@@ -1569,13 +1570,13 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int1
   real34Divide(&value, const34_ln10, &value);
   exponentShift = real34ToInt32(&value);
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);
+  exponentShift = (exponentShift / exponentStep + 1) * exponentStep;
   exponentShiftLimit = (50 / exponentStep + 1) * exponentStep;
   if(exponentShift > exponentShiftLimit) {
-    longInteger_t divisor;
 
     exponentShift -= exponentShiftLimit;
-    longIntegerInit(divisor);
-    longIntegerPowerUIntUInt(10, exponentShift, divisor);
+    longIntegerInitSizeInBits(divisor, longIntegerBits(lgInt));
+    longIntegerPowerUIntUInt(10u, exponentShift, divisor);
     longIntegerDivide(lgInt, divisor, lgInt);
     longIntegerFree(divisor);
   }

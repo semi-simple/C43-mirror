@@ -590,7 +590,7 @@ extern int16_t              imaginaryExponentSignLocation;
 extern int16_t              imaginaryMantissaSignLocation;
 extern size_t               gmpMem;
 extern size_t               wp43sMem;
-extern freeBlock_t          *freeBlocks;
+extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 extern int32_t              numberOfFreeBlocks;
 extern void                 (*confirmedFunction)(uint16_t);
 extern bool_t debug;

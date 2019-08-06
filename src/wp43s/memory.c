@@ -119,7 +119,7 @@ void *wp43sAllocate(size_t size) {
   for(i=0; i<numberOfFreeBlocks; i++) {
     if(freeBlocks[i].size == blocks) {
       memPtr = RAMPTR_TO_MEMPTR(freeBlocks[i].address);
-      memmove(ram + i*sizeof(freeBlock_t), ram + (i+1)*sizeof(freeBlock_t), (numberOfFreeBlocks-i-1)*sizeof(freeBlock_t));
+      memmove(freeBlocks + i, freeBlocks + i + 1, (numberOfFreeBlocks-i-1) * sizeof(freeBlock_t));
       numberOfFreeBlocks--;
       //debugMemory();
       return memPtr;
@@ -197,7 +197,7 @@ void wp43sFree(void *memPtr, size_t size) {
     if(freeBlocks[i].address + freeBlocks[i].size == ramPtr) {
       freeBlocks[i].size += blocks;
       if(done) {
-        memmove(ram + j*sizeof(freeBlock_t), ram + (j+1)*sizeof(freeBlock_t), (numberOfFreeBlocks-j-1)*sizeof(freeBlock_t));
+        memmove(freeBlocks + j, freeBlocks + j + 1, (numberOfFreeBlocks-j-1) * sizeof(freeBlock_t));
         numberOfFreeBlocks--;
       }
       else {
@@ -229,7 +229,7 @@ void wp43sFree(void *memPtr, size_t size) {
     }
 
     if(i < numberOfFreeBlocks) {
-      memmove(ram + (i+1)*sizeof(freeBlock_t), ram + i*sizeof(freeBlock_t), (numberOfFreeBlocks-i)*sizeof(freeBlock_t));
+      memmove(freeBlocks + i + 1, freeBlocks + i, (numberOfFreeBlocks-i) * sizeof(freeBlock_t));
     }
 
     freeBlocks[i].address = ramPtr;

@@ -158,7 +158,7 @@ int16_t              imaginaryExponentSignLocation;
 int16_t              imaginaryMantissaSignLocation;
 size_t               gmpMem;
 size_t               wp43sMem;
-freeBlock_t          *freeBlocks;
+freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 void                 (*confirmedFunction)(uint16_t);
 bool_t debug;
@@ -181,10 +181,9 @@ void setupDefaults(void) {
 debug = false;
   ram = malloc(RAM_SIZE);
   memset(ram, 0, RAM_SIZE);
-  freeBlocks = (freeBlock_t *)ram;
   numberOfFreeBlocks = 1;
-  freeBlocks[0].address = (MAX_FREE_BLOCKS * sizeof(freeBlock_t)) >> MEMORY_ALLOCATION_SHIFT;
-  freeBlocks[0].size    = BYTES_TO_BLOCKS(RAM_SIZE - MAX_FREE_BLOCKS * sizeof(freeBlock_t));
+  freeBlocks[0].address = 0;
+  freeBlocks[0].size    = BYTES_TO_BLOCKS(RAM_SIZE);
 
   glyphNotFound.data   = malloc(38);
   #pragma GCC diagnostic push
@@ -336,7 +335,7 @@ debug = false;
 
 #ifdef PC_BUILD
 int main(int argc, char* argv[]) {
-  wp43sMem = MAX_FREE_BLOCKS * sizeof(freeBlock_t);
+  wp43sMem = 0;
   gmpMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
@@ -400,7 +399,7 @@ void program_main(void) {
   int key = 0;
   char charKey[3];
 
-  wp43sMem = MAX_FREE_BLOCKS * sizeof(freeBlock_t);
+  wp43sMem = 0;
   gmpMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
@@ -505,7 +504,7 @@ void program_main(void) {
 
 
 int main(void) {
-  wp43sMem = MAX_FREE_BLOCKS * sizeof(freeBlock_t);
+  wp43sMem = 0;
   gmpMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 

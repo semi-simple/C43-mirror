@@ -47,7 +47,6 @@ void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode) {
   else {
     longInteger_t angle;
 
-    longIntegerInit(angle);
     convertLongIntegerRegisterToLongInteger(regist, angle);
     reallocateRegister(regist, dtReal34, REAL34_SIZE, TAG_NONE);
     uInt32ToReal34(longIntegerModuloUInt(angle, oneTurn), REGISTER_REAL34_DATA(regist));

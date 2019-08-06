@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 16  // 16 = string and long integer size are 32 bits
+#define BACKUP_VERSION 17  // 17 = freeBlocks no longer in ram
 
 void saveCalc(void) {
   size_t size;
@@ -47,6 +47,8 @@ void saveCalc(void) {
   size  = fwrite(&backupVersion,                      1, sizeof(backupVersion),                      backup); //printf("%8lu backupVersion\n",                      (unsigned long)size);
   size += fwrite(&ramSize,                            1, sizeof(ramSize),                            backup); //printf("%8lu ramSize\n",                            (unsigned long)size);
   size += fwrite(ram,                                 1, RAM_SIZE,                                   backup); //printf("%8lu ram\n",                                (unsigned long)size);
+  size += fwrite(freeBlocks,                          1, MAX_FREE_BLOCKS * sizeof(freeBlock_t),      backup); //printf("%8lu freeBlocks\n",                         (unsigned long)size);
+  size += fwrite(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
   size += fwrite(flags,                               1, sizeof(flags),                              backup); //printf("%8lu flags\n",                              (unsigned long)size);
   size += fwrite(tmpStr3000,                          1, TMP_STR_LENGTH,                             backup); //printf("%8lu tmpStr3000\n",                         (unsigned long)size);
   size += fwrite(errorMessage,                        1, ERROR_MESSAGE_LENGTH,                       backup); //printf("%8lu errorMessage\n",                       (unsigned long)size);
@@ -161,7 +163,6 @@ void saveCalc(void) {
   size += fwrite(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
   size += fwrite(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
   size += fwrite(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
-  size += fwrite(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
   size += fwrite(&wp43sMem,                           1, sizeof(wp43sMem),                           backup); //printf("%8lu wp43sMem\n",                           (unsigned long)size);
   size += fwrite(&gmpMem,                             1, sizeof(gmpMem),                             backup); //printf("%8lu gmpMem\n",                             (unsigned long)size);
 
@@ -202,8 +203,8 @@ void restoreCalc(void) {
     printf("Begin of calc's restoration\n");
 
     size += fread(ram,                                 1, RAM_SIZE,                                   backup); //printf("%8lu ram\n",                                (unsigned long)size);
-    freeBlocks = (freeBlock_t *)ram;
-
+    size += fread(freeBlocks,                          1, MAX_FREE_BLOCKS * sizeof(freeBlock_t),      backup); //printf("%8lu freeBlocks\n",                         (unsigned long)size);
+    size += fread(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
     size += fread(flags,                               1, sizeof(flags),                              backup); //printf("%8lu flags\n",                              (unsigned long)size);
     size += fread(tmpStr3000,                          1, TMP_STR_LENGTH,                             backup); //printf("%8lu tmpStr3000\n",                         (unsigned long)size);
     size += fread(errorMessage,                        1, ERROR_MESSAGE_LENGTH,                       backup); //printf("%8lu errorMessage\n",                       (unsigned long)size);
@@ -322,7 +323,6 @@ void restoreCalc(void) {
     size += fread(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
     size += fread(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
     size += fread(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
-    size += fread(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
     size += fread(&wp43sMem,                           1, sizeof(wp43sMem),                           backup); //printf("%8lu wp43sMem\n",                           (unsigned long)size);
     size += fread(&gmpMem,                             1, sizeof(gmpMem),                             backup); //printf("%8lu gmpMem\n",                             (unsigned long)size);
 

@@ -615,7 +615,7 @@ void btnPressed(void *notUsed, void *data) {
         }
 
         else {
-          displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+          displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
@@ -867,7 +867,7 @@ void btnPressed(void *notUsed, void *data) {
             break;
 
           default :
-            displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               sprintf(errorMessage, "data type %s cannot be converted to a real16!", getRegisterDataTypeName(REGISTER_X, false, false));
               showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);

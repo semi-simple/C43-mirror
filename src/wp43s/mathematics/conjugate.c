@@ -37,7 +37,7 @@ void (* const conjugate[13])(void) = {
  * \return void
  ***********************************************/
 void conjError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate conj for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnConjugate:", errorMessage, NULL, NULL);
@@ -77,7 +77,7 @@ void fnConjugate(uint16_t unusedParamButMandatory) {
 
 void conjCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function conjCo16:", "cannot use NaN as an input of conjugate", NULL, NULL);
     #endif
@@ -100,7 +100,7 @@ void conjCm16(void) {
 
 void conjCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function conjCo34:", "cannot use NaN as an input of conjugate", NULL, NULL);
     #endif

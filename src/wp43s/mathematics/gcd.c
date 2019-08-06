@@ -49,7 +49,7 @@ void (* const gcd[13][13])(void) = {
  * \return void
  ***********************************************/
 void gcdError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate gcd (%s, %s)", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnGcd:", errorMessage, NULL, NULL);

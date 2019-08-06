@@ -49,7 +49,7 @@ void (* const addition[13][13])(void) = {
  * \return void
  ***********************************************/
 void addError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot add %s", getRegisterDataTypeName(REGISTER_X, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_Y, true, false));
@@ -117,7 +117,7 @@ void addLonILonI(void) {
  ***********************************************/
 void addLonIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addLonIRe16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -139,7 +139,7 @@ void addLonIRe16(void) {
  ***********************************************/
 void addRe16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -161,7 +161,7 @@ void addRe16LonI(void) {
  ***********************************************/
 void addLonICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addLonICo16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -184,7 +184,7 @@ void addLonICo16(void) {
  ***********************************************/
 void addCo16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -207,7 +207,7 @@ void addCo16LonI(void) {
  ***********************************************/
 void addLonIAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addLonIAn16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -242,7 +242,7 @@ void addLonIAn16(void) {
  ***********************************************/
 void addAn16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -373,7 +373,7 @@ void addShoILonI(void) {
  ***********************************************/
 void addLonIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addLonIRe34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -395,7 +395,7 @@ void addLonIRe34(void) {
  ***********************************************/
 void addRe34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -418,7 +418,7 @@ void addRe34LonI(void) {
  ***********************************************/
 void addLonICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addLonICo34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -441,7 +441,7 @@ void addLonICo34(void) {
  ***********************************************/
 void addCo34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -464,7 +464,7 @@ void addCo34LonI(void) {
  ***********************************************/
 void addLonIAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addLonIAn34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -496,7 +496,7 @@ void addLonIAn34(void) {
  ***********************************************/
 void addAn34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34LonI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -532,7 +532,7 @@ void addAn34LonI(void) {
  ***********************************************/
 void addRe16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -552,7 +552,7 @@ void addRe16Re16(void) {
  ***********************************************/
 void addRe16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -574,7 +574,7 @@ void addRe16Co16(void) {
  ***********************************************/
 void addCo16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -596,7 +596,7 @@ void addCo16Re16(void) {
  ***********************************************/
 void addRe16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16An16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -636,7 +636,7 @@ void addRe16An16(void) {
  ***********************************************/
 void addAn16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -676,7 +676,7 @@ void addAn16Re16(void) {
  ***********************************************/
 void addRe16Time(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16Time:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -696,7 +696,7 @@ void addRe16Time(void) {
  ***********************************************/
 void addTimeRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addTimeRe16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -716,7 +716,7 @@ void addTimeRe16(void) {
  ***********************************************/
 void addRe16Date(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16Date:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -736,7 +736,7 @@ void addRe16Date(void) {
  ***********************************************/
 void addDateRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addDateRe16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -756,7 +756,7 @@ void addDateRe16(void) {
  ***********************************************/
 void addRe16ShoI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16ShoI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -778,7 +778,7 @@ void addRe16ShoI(void) {
  ***********************************************/
 void addShoIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addShoIRe16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -800,7 +800,7 @@ void addShoIRe16(void) {
  ***********************************************/
 void addRe16Re34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -822,7 +822,7 @@ void addRe16Re34(void) {
  ***********************************************/
 void addRe34Re16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -845,7 +845,7 @@ void addRe34Re16(void) {
  ***********************************************/
 void addRe16Co34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16Co34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -868,7 +868,7 @@ void addRe16Co34(void) {
  ***********************************************/
 void addCo34Re16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -891,7 +891,7 @@ void addCo34Re16(void) {
  ***********************************************/
 void addRe16An34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe16An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -928,7 +928,7 @@ void addRe16An34(void) {
  ***********************************************/
 void addAn34Re16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34Re16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -969,7 +969,7 @@ void addAn34Re16(void) {
  ***********************************************/
 void addCo16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -990,7 +990,7 @@ void addCo16Co16(void) {
  ***********************************************/
 void addCo16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16An16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1012,7 +1012,7 @@ void addCo16An16(void) {
  ***********************************************/
 void addAn16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1034,7 +1034,7 @@ void addAn16Co16(void) {
  ***********************************************/
 void addCo16ShoI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16ShoI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1057,7 +1057,7 @@ void addCo16ShoI(void) {
  ***********************************************/
 void addShoICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addShoICo16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1080,7 +1080,7 @@ void addShoICo16(void) {
  ***********************************************/
 void addCo16Re34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1103,7 +1103,7 @@ void addCo16Re34(void) {
  ***********************************************/
 void addRe34Co16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1126,7 +1126,7 @@ void addRe34Co16(void) {
  ***********************************************/
 void addCo16Co34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16Co34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1149,7 +1149,7 @@ void addCo16Co34(void) {
  ***********************************************/
 void addCo34Co16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1172,7 +1172,7 @@ void addCo34Co16(void) {
  ***********************************************/
 void addCo16An34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo16An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1195,7 +1195,7 @@ void addCo16An34(void) {
  ***********************************************/
 void addAn34Co16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34Co16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1222,7 +1222,7 @@ void addAn34Co16(void) {
  ***********************************************/
 void addAn16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16An16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1263,7 +1263,7 @@ void addAn16An16(void) {
  ***********************************************/
 void addAn16Time(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16Time:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1283,7 +1283,7 @@ void addAn16Time(void) {
  ***********************************************/
 void addTimeAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addTimeAn16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1303,7 +1303,7 @@ void addTimeAn16(void) {
  ***********************************************/
 void addAn16Date(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16Date:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1323,7 +1323,7 @@ void addAn16Date(void) {
  ***********************************************/
 void addDateAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addDateAn16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1343,7 +1343,7 @@ void addDateAn16(void) {
  ***********************************************/
 void addAn16ShoI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16ShoI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1368,7 +1368,7 @@ void addAn16ShoI(void) {
  ***********************************************/
 void addShoIAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addShoIAn16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1393,7 +1393,7 @@ void addShoIAn16(void) {
  ***********************************************/
 void addAn16Re34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1428,7 +1428,7 @@ void addAn16Re34(void) {
  ***********************************************/
 void addRe34An16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34An16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1465,7 +1465,7 @@ void addRe34An16(void) {
  ***********************************************/
 void addAn16Co34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16Co34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1488,7 +1488,7 @@ void addAn16Co34(void) {
  ***********************************************/
 void addCo34An16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34An16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1511,7 +1511,7 @@ void addCo34An16(void) {
  ***********************************************/
 void addAn16An34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn16An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1547,7 +1547,7 @@ void addAn16An34(void) {
  ***********************************************/
 void addAn34An16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34An16:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1599,7 +1599,7 @@ void addTimeTime(void) {
  ***********************************************/
 void addTimeRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addTimeRe34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1619,7 +1619,7 @@ void addTimeRe34(void) {
  ***********************************************/
 void addRe34Time(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34Time:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1639,7 +1639,7 @@ void addRe34Time(void) {
  ***********************************************/
 void addTimeAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addTimeAn3434:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1659,7 +1659,7 @@ void addTimeAn34(void) {
  ***********************************************/
 void addAn34Time(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34Time:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1683,7 +1683,7 @@ void addAn34Time(void) {
  ***********************************************/
 void addDateRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addDateRe34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1703,7 +1703,7 @@ void addDateRe34(void) {
  ***********************************************/
 void addRe34Date(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34Date:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1723,7 +1723,7 @@ void addRe34Date(void) {
  ***********************************************/
 void addDateAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addDateAn34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -1743,7 +1743,7 @@ void addDateAn34(void) {
  ***********************************************/
 void addAn34Date(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34Date:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2096,7 +2096,7 @@ void addShoIShoI(void) {
  ***********************************************/
 void addShoIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addShoIRe34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2118,7 +2118,7 @@ void addShoIRe34(void) {
  ***********************************************/
 void addRe34ShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34ShoI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2140,7 +2140,7 @@ void addRe34ShoI(void) {
  ***********************************************/
 void addShoICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addShoICo34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2163,7 +2163,7 @@ void addShoICo34(void) {
  ***********************************************/
 void addCo34ShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34ShoI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2186,7 +2186,7 @@ void addCo34ShoI(void) {
  ***********************************************/
 void addShoIAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addShoIAn34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2211,7 +2211,7 @@ void addShoIAn34(void) {
  ***********************************************/
 void addAn34ShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34ShoI:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2240,7 +2240,7 @@ void addAn34ShoI(void) {
  ***********************************************/
 void addRe34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2260,7 +2260,7 @@ void addRe34Re34(void) {
  ***********************************************/
 void addRe34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34Co34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2282,7 +2282,7 @@ void addRe34Co34(void) {
  ***********************************************/
 void addCo34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2304,7 +2304,7 @@ void addCo34Re34(void) {
  ***********************************************/
 void addRe34An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addRe34An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2339,7 +2339,7 @@ void addRe34An34(void) {
  ***********************************************/
 void addAn34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2377,7 +2377,7 @@ void addAn34Re34(void) {
  ***********************************************/
 void addCo34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34Re34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2398,7 +2398,7 @@ void addCo34Co34(void) {
  ***********************************************/
 void addCo34An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addCo34An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2420,7 +2420,7 @@ void addCo34An34(void) {
  ***********************************************/
 void addAn34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34Co34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif
@@ -2446,7 +2446,7 @@ void addAn34Co34(void) {
  ***********************************************/
 void addAn34An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function addAn34An34:", "cannot use NaN as an input of +", NULL, NULL);
     #endif

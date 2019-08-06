@@ -1037,7 +1037,7 @@ void fnConvertXToReal16(uint16_t unusedParamButMandatory) {
   }
 
   else if(getRegisterDataType(REGISTER_X) != dtReal16 && getRegisterDataType(REGISTER_X) != dtComplex16) {
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert %s to a SP!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnConvertXToReal16:", errorMessage, NULL, NULL);
@@ -1068,7 +1068,7 @@ void fnConvertXToReal34(uint16_t unusedParamButMandatory) {
   }
 
   else if(getRegisterDataType(REGISTER_X) != dtReal34 && getRegisterDataType(REGISTER_X) != dtComplex34) {
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert %s to a DP!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnConvertXToReal34:", errorMessage, NULL, NULL);
@@ -1112,32 +1112,32 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       case dtReal16:
       case dtAngle16:
         if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
-          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         break;
 
       case dtReal34:
       case dtAngle34:
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
-          displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+          displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         break;
 
       case dtComplex16:
         if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
-          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         else if(real16IsInfinite(REGISTER_IMAG16_DATA(res))) {
-          displayCalcErrorMessage(real16IsPositive(REGISTER_IMAG16_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+          displayCalcErrorMessage(real16IsPositive(REGISTER_IMAG16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         break;
 
       case dtComplex34:
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
-          displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+          displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         else if(real34IsInfinite(REGISTER_IMAG34_DATA(res))) {
-          displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(res)) ? 4 : 5 , ERR_REGISTER_LINE, res);
+          displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         break;
 
@@ -1861,7 +1861,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
   int16_t value;
 
   if(regist >= FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "local indirection register .%02d", regist - FIRST_LOCAL_REGISTER);
       showInfoDialog("In function indirectAddressing:", errorMessage, "is not defined!", NULL);
@@ -1871,7 +1871,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
   else if(getRegisterDataType(regist) == dtReal16) {
     if(real16CompareLessThan(REGISTER_REAL16_DATA(regist), const16_0) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(regist), const16_1000)) {
-      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         real16ToString(REGISTER_REAL16_DATA(regist), errorMessage + 200);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
@@ -1884,7 +1884,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
   else if(getRegisterDataType(regist) == dtReal34) {
     if(real34CompareLessThan(REGISTER_REAL34_DATA(regist), const34_0) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(regist), const34_180)) {
-      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         real34ToString(REGISTER_REAL34_DATA(regist), errorMessage + 200);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
@@ -1900,7 +1900,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
     if(longIntegerIsNegative(lgInt) || longIntegerCompareUInt(lgInt, 180) > 0) {
-      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         longIntegerToAllocatedString(lgInt, errorMessage + 200, 10);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
@@ -1919,7 +1919,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
     convertShortIntegerRegisterToUInt64(regist, &sign, &val);
     if(sign == 1 || val > 180) {
-      displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         const font_t *font;
 
@@ -1934,7 +1934,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
   }
 
   else {
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "register %" FMT16S " is %s:", regist, getRegisterDataTypeName(regist, true, false));
       showInfoDialog("In function indirectAddressing:", errorMessage, "not suited for indirect addressing!", NULL);
@@ -1946,7 +1946,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     return value;
   }
   else {
-    displayCalcErrorMessage(8, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "value = %d! Should be from %d to %d.", value, minValue, maxValue);
       showInfoDialog("In function indirectAddressing:", errorMessage, NULL, NULL);

@@ -41,7 +41,7 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
     real16 = true;
   }
   else {
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function unitConversion:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
@@ -49,7 +49,7 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
   }
 
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function unitConversion:", "cannot use NaN as an input of unitConversion", NULL, NULL);
     #endif
@@ -362,7 +362,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as an input of fnCvtRatioDb", NULL, NULL);
       #endif
@@ -381,7 +381,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as an input of fnCvtRatioDb", NULL, NULL);
       #endif
@@ -399,7 +399,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     }
   }
   else {
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
@@ -426,7 +426,7 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as an input of fnCvtDbRatio", NULL, NULL);
       #endif
@@ -446,7 +446,7 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as an input of fnCvtDbRatio", NULL, NULL);
       #endif
@@ -465,7 +465,7 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     real34Power(const34_10, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtDbRatio:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif

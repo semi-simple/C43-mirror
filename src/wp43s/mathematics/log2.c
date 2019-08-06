@@ -37,7 +37,7 @@ void (* const logBase2[13])(void) = {
  * \return void
  ***********************************************/
 void log2Error(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate log2 for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnLog2:", errorMessage, NULL, NULL);
@@ -78,7 +78,7 @@ void log2LonI(void) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function log2LonI:", "cannot calculate log2(0)", NULL, NULL);
       #endif
@@ -105,7 +105,7 @@ void log2LonI(void) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2LonI:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -116,7 +116,7 @@ void log2LonI(void) {
 
 void log2Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2Re16:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
     #endif
@@ -130,7 +130,7 @@ void log2Re16(void) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function log2Re16:", "cannot calculate log" STD_SUB_2, NULL, NULL);
       #endif
@@ -156,7 +156,7 @@ void log2Re16(void) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2Re16:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -167,7 +167,7 @@ void log2Re16(void) {
 
 void log2Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2Co16:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
     #endif
@@ -180,7 +180,7 @@ void log2Co16(void) {
       real16Copy(const16_NaN, REGISTER_IMAG16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function log10Co16:", "cannot calculate log" STD_SUB_2, NULL, NULL);
       #endif
@@ -205,7 +205,7 @@ void log2Co16(void) {
 
 void log2An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2An16:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
     #endif
@@ -221,7 +221,7 @@ void log2An16(void) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function log2An16:", "cannot calculate log" STD_SUB_2, NULL, NULL);
       #endif
@@ -247,7 +247,7 @@ void log2An16(void) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2An16:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -276,7 +276,7 @@ void log2ShoI(void) {
 
 void log2Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2Re34:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
     #endif
@@ -290,7 +290,7 @@ void log2Re34(void) {
       real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function log2Re34:", "cannot calculate log" STD_SUB_2, NULL, NULL);
       #endif
@@ -316,7 +316,7 @@ void log2Re34(void) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2Re34:", "cannot calculate log" STD_SUB_2 " of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -327,7 +327,7 @@ void log2Re34(void) {
 
 void log2Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2Co34:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
     #endif
@@ -340,7 +340,7 @@ void log2Co34(void) {
       real34Copy(const34_NaN, REGISTER_IMAG34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function log10Co34:", "cannot calculate log" STD_SUB_2, NULL, NULL);
       #endif
@@ -364,7 +364,7 @@ void log2Co34(void) {
 
 void log2An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2An34:", "cannot use NaN as an input of log" STD_SUB_2, NULL, NULL);
     #endif
@@ -380,7 +380,7 @@ void log2An34(void) {
       real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function log2An34:", "cannot calculate log" STD_SUB_2, NULL, NULL);
       #endif
@@ -406,7 +406,7 @@ void log2An34(void) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function log2An34:", "cannot calculate log" STD_SUB_2 " of a negative number when CPXRES is not set!", NULL, NULL);
     #endif

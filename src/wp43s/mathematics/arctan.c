@@ -37,7 +37,7 @@ void (* const arctan[13])(void) = {
  * \return void
  ***********************************************/
 void arctanError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arctan for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnArctan:", errorMessage, NULL, NULL);
@@ -82,7 +82,7 @@ void arctanLonI(void) {
 
 void arctanRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function arctanRe16:", "cannot use NaN as an input of arctan", NULL, NULL);
     #endif
@@ -100,7 +100,7 @@ void arctanRe16(void) {
       convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_MULTPI, currentAngularMode);
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function arctanRe16:", "X = " STD_PLUS_MINUS STD_INFINITY, NULL, NULL);
       #endif
@@ -124,7 +124,7 @@ void arctanRe16(void) {
 
 void arctanCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function arctanCo16:", "cannot use NaN as an input of arctan", NULL, NULL);
     #endif
@@ -191,7 +191,7 @@ void arctanCm16(void) {
 
 void arctanRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function arctanRe34:", "cannot use NaN as an input of arctan", NULL, NULL);
     #endif
@@ -208,7 +208,7 @@ void arctanRe34(void) {
       convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_MULTPI, currentAngularMode);
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function arctanRe34:", "X = " STD_PLUS_MINUS STD_INFINITY " and Danger flag not set!", NULL, NULL);
       #endif
@@ -231,7 +231,7 @@ void arctanRe34(void) {
 
 void arctanCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function arctanCo34:", "cannot use NaN as an input of arctan", NULL, NULL);
     #endif

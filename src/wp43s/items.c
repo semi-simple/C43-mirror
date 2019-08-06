@@ -39,7 +39,7 @@ void itemToBeCoded(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnToBeCoded(void) {
-  displayCalcErrorMessage(30, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_FUNCTION_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("Function to be coded", "for that data type(s)!", NULL, NULL);
   #endif
@@ -107,7 +107,7 @@ void runFunction(int16_t func) {
   }
 
   if(!funcOK) {
-    displayCalcErrorMessage(29, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "%" FMT16S " = %s", func, indexOfItems[func].itemPrinted);
       showInfoDialog("In function runFunction:", "Item not implemented", errorMessage, "to be coded");

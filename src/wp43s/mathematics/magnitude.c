@@ -37,7 +37,7 @@ void (* const magnitude[13])(void) = {
  * \return void
  ***********************************************/
 void magnitudeError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate |x| for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnMagnitude:", errorMessage, NULL, NULL);
@@ -75,7 +75,7 @@ void magnitudeLonI(void) {
 
 void magnitudeRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(result))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeRe16:", "cannot use NaN as an input of |x|", NULL, NULL);
     #endif
@@ -89,7 +89,7 @@ void magnitudeRe16(void) {
 
 void magnitudeCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(result)) || real16IsNaN(REGISTER_IMAG16_DATA(result))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeCo16:", "cannot use NaN as an input of |x|", NULL, NULL);
     #endif
@@ -106,7 +106,7 @@ void magnitudeCo16(void) {
 
 void magnitudeAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(result))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeAn16:", "cannot use NaN as an input of |x|", NULL, NULL);
     #endif
@@ -139,7 +139,7 @@ void magnitudeShoI(void) {
 
 void magnitudeRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(result))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeRe34:", "cannot use NaN as an input of |x|", NULL, NULL);
     #endif
@@ -153,7 +153,7 @@ void magnitudeRe34(void) {
 
 void magnitudeCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(result)) || real34IsNaN(REGISTER_IMAG34_DATA(result))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeCo34:", "cannot use NaN as an input of |x|", NULL, NULL);
     #endif
@@ -170,7 +170,7 @@ void magnitudeCo34(void) {
 
 void magnitudeAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(result))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function magnitudeAn34:", "cannot use NaN as an input of |x|", NULL, NULL);
     #endif

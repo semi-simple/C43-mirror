@@ -49,7 +49,7 @@ void (* const division[13][13])(void) = {
  * \return void
  ***********************************************/
 void divError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot divide %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -100,7 +100,7 @@ void divLonILonI(void) {
   convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
   if(longIntegerIsZero(iOp2)) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonILonI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
@@ -149,7 +149,7 @@ void divLonIRe16(void) {
   convertLongIntegerRegisterToReal34Register(opY, opY);
 
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonIRe16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -163,7 +163,7 @@ void divLonIRe16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIRe16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -175,7 +175,7 @@ void divLonIRe16(void) {
       real16Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIRe16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -202,7 +202,7 @@ void divRe16LonI(void) {
   convertLongIntegerRegisterToReal34Register(opX, opX);
 
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16LonI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -216,7 +216,7 @@ void divRe16LonI(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16LonI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -228,7 +228,7 @@ void divRe16LonI(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16LonI:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -253,7 +253,7 @@ void divRe16LonI(void) {
  ***********************************************/
 void divLonICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonICo16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -288,7 +288,7 @@ void divLonICo16(void) {
  ***********************************************/
 void divCo16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16LonI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -311,7 +311,7 @@ void divCo16LonI(void) {
  ***********************************************/
 void divLonIAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonIAn16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -326,7 +326,7 @@ void divLonIAn16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIAn16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -338,7 +338,7 @@ void divLonIAn16(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIAn16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -360,7 +360,7 @@ void divLonIAn16(void) {
  ***********************************************/
 void divAn16LonI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16LonI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -375,7 +375,7 @@ void divAn16LonI(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16LonI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -387,7 +387,7 @@ void divAn16LonI(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16LonI:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -429,7 +429,7 @@ void divLonIShoI(void) {
   convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
   if(longIntegerIsZero(iOp2)) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonIShoI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
@@ -459,7 +459,7 @@ void divShoILonI(void) {
   convertLongIntegerRegisterToLongInteger(opX, iOp2);
 
   if(longIntegerIsZero(iOp2)) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoILonI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
@@ -483,7 +483,7 @@ void divShoILonI(void) {
  ***********************************************/
 void divLonIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonIRe34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -498,7 +498,7 @@ void divLonIRe34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIRe34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -510,7 +510,7 @@ void divLonIRe34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIRe34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -532,7 +532,7 @@ void divLonIRe34(void) {
  ***********************************************/
 void divRe34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -547,7 +547,7 @@ void divRe34LonI(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34Re34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -559,7 +559,7 @@ void divRe34LonI(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34Re34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -581,7 +581,7 @@ void divRe34LonI(void) {
  ***********************************************/
 void divLonICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonICo34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -617,7 +617,7 @@ void divLonICo34(void) {
  ***********************************************/
 void divCo34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34LonI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -640,7 +640,7 @@ void divCo34LonI(void) {
  ***********************************************/
 void divLonIAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonIAn34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -655,7 +655,7 @@ void divLonIAn34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIAn34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -667,7 +667,7 @@ void divLonIAn34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divLonIAn34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -689,7 +689,7 @@ void divLonIAn34(void) {
  ***********************************************/
 void divAn34LonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34LonI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -704,7 +704,7 @@ void divAn34LonI(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34LonI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -716,7 +716,7 @@ void divAn34LonI(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34LonI:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -751,7 +751,7 @@ void divAn34LonI(void) {
  ***********************************************/
 void divRe16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -763,7 +763,7 @@ void divRe16Re16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16Re16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -775,7 +775,7 @@ void divRe16Re16(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16Re16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -797,7 +797,7 @@ void divRe16Re16(void) {
  ***********************************************/
 void divRe16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16Co16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -832,7 +832,7 @@ void divRe16Co16(void) {
  ***********************************************/
 void divCo16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -854,7 +854,7 @@ void divCo16Re16(void) {
  ***********************************************/
 void divRe16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -868,7 +868,7 @@ void divRe16An16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16An16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -880,7 +880,7 @@ void divRe16An16(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16An16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -902,7 +902,7 @@ void divRe16An16(void) {
  ***********************************************/
 void divAn16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -915,7 +915,7 @@ void divAn16Re16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16Re16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -928,7 +928,7 @@ void divAn16Re16(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16Re16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -965,7 +965,7 @@ void divAn16Re16(void) {
  ***********************************************/
 void divRe16ShoI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16ShoI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -980,7 +980,7 @@ void divRe16ShoI(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16ShoI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -992,7 +992,7 @@ void divRe16ShoI(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16ShoI:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -1014,7 +1014,7 @@ void divRe16ShoI(void) {
  ***********************************************/
 void divShoIRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoIRe16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1029,7 +1029,7 @@ void divShoIRe16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIRe16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1041,7 +1041,7 @@ void divShoIRe16(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIRe16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -1063,7 +1063,7 @@ void divShoIRe16(void) {
  ***********************************************/
 void divRe16Re34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1078,7 +1078,7 @@ void divRe16Re34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16Re34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1090,7 +1090,7 @@ void divRe16Re34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16Re34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -1112,7 +1112,7 @@ void divRe16Re34(void) {
  ***********************************************/
 void divRe34Re16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1127,7 +1127,7 @@ void divRe34Re16(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34Re16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1139,7 +1139,7 @@ void divRe34Re16(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34Re16:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -1161,7 +1161,7 @@ void divRe34Re16(void) {
  ***********************************************/
 void divRe16Co34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1197,7 +1197,7 @@ void divRe16Co34(void) {
  ***********************************************/
 void divCo34Re16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1220,7 +1220,7 @@ void divCo34Re16(void) {
  ***********************************************/
 void divRe16An34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe16An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1235,7 +1235,7 @@ void divRe16An34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16An34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1247,7 +1247,7 @@ void divRe16An34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe16An34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -1269,7 +1269,7 @@ void divRe16An34(void) {
  ***********************************************/
 void divAn34Re16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1284,7 +1284,7 @@ void divAn34Re16(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34Re16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1296,7 +1296,7 @@ void divAn34Re16(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34Re16:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -1331,7 +1331,7 @@ void divAn34Re16(void) {
  ***********************************************/
 void divCo16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16Co16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1372,7 +1372,7 @@ void divCo16Co16(void) {
  ***********************************************/
 void divCo16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1394,7 +1394,7 @@ void divCo16An16(void) {
  ***********************************************/
 void divAn16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16Co16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1429,7 +1429,7 @@ void divAn16Co16(void) {
  ***********************************************/
 void divCo16ShoI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16ShoI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1452,7 +1452,7 @@ void divCo16ShoI(void) {
  ***********************************************/
 void divShoICo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoICo16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1487,7 +1487,7 @@ void divShoICo16(void) {
  ***********************************************/
 void divCo16Re34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1510,7 +1510,7 @@ void divCo16Re34(void) {
  ***********************************************/
 void divRe34Co16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1546,7 +1546,7 @@ void divRe34Co16(void) {
  ***********************************************/
 void divCo16Co34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1584,7 +1584,7 @@ void divCo16Co34(void) {
  ***********************************************/
 void divCo16An34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_IMAG16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo16An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1607,7 +1607,7 @@ void divCo16An34(void) {
  ***********************************************/
 void divAn34Co16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34Co16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1643,7 +1643,7 @@ void divAn34Co16(void) {
  ***********************************************/
 void divCo34Co16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34Co16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1685,7 +1685,7 @@ void divCo34Co16(void) {
  ***********************************************/
 void divAn16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1699,7 +1699,7 @@ void divAn16An16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16An16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1711,7 +1711,7 @@ void divAn16An16(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16An16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -1752,7 +1752,7 @@ void divAn16An16(void) {
  ***********************************************/
 void divAn16ShoI(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16ShoI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1767,7 +1767,7 @@ void divAn16ShoI(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16ShoI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1779,7 +1779,7 @@ void divAn16ShoI(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16ShoI:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -1817,7 +1817,7 @@ void divShoIAn16(void) {
   convertShortIntegerRegisterToReal16Register(opY, opY);
 
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoIAn16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1831,7 +1831,7 @@ void divShoIAn16(void) {
       real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIAn16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1843,7 +1843,7 @@ void divShoIAn16(void) {
       real16Copy((real16IsPositive(REGISTER_REAL16_DATA(opY)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIAn16:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
@@ -1865,7 +1865,7 @@ void divShoIAn16(void) {
  ***********************************************/
 void divAn16Re34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1880,7 +1880,7 @@ void divAn16Re34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16Re34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1892,7 +1892,7 @@ void divAn16Re34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16Re34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -1923,7 +1923,7 @@ void divAn16Re34(void) {
  ***********************************************/
 void divRe34An16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -1938,7 +1938,7 @@ void divRe34An16(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34An16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -1950,7 +1950,7 @@ void divRe34An16(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34An16:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -1972,7 +1972,7 @@ void divRe34An16(void) {
  ***********************************************/
 void divAn16Co34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2008,7 +2008,7 @@ void divAn16Co34(void) {
  ***********************************************/
 void divCo34An16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2031,7 +2031,7 @@ void divCo34An16(void) {
  ***********************************************/
 void divAn16An34(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn16An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2046,7 +2046,7 @@ void divAn16An34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16An34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2058,7 +2058,7 @@ void divAn16An34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn16An34:", "cannot divide an angle16 by 0", NULL, NULL);
       #endif
@@ -2095,7 +2095,7 @@ void divAn16An34(void) {
  ***********************************************/
 void divAn34An16(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2110,7 +2110,7 @@ void divAn34An16(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34An16:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2122,7 +2122,7 @@ void divAn34An16(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34An16:", "cannot divide an angle34 by 0", NULL, NULL);
       #endif
@@ -2175,7 +2175,7 @@ void divTimeLonI(void) {
  ***********************************************/
 void divTimeRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divTimeRe16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2195,7 +2195,7 @@ void divTimeRe16(void) {
  ***********************************************/
 void divTimeAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divTimeAn16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2227,7 +2227,7 @@ void divTimeShoI(void) {
  ***********************************************/
 void divTimeRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divTimeRe34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2247,7 +2247,7 @@ void divTimeRe34(void) {
  ***********************************************/
 void divTimeAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divTimeAn34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2291,7 +2291,7 @@ void divRm16LonI(void) {
  ***********************************************/
 void divRm16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRm16Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2311,7 +2311,7 @@ void divRm16Re16(void) {
  ***********************************************/
 void divRm16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRm16Co16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2331,7 +2331,7 @@ void divRm16Co16(void) {
  ***********************************************/
 void divRm16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRm16An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2363,7 +2363,7 @@ void divRm16ShoI(void) {
  ***********************************************/
 void divRm16Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRm16Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2383,7 +2383,7 @@ void divRm16Re34(void) {
  ***********************************************/
 void divRm16Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRm16Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2403,7 +2403,7 @@ void divRm16Co34(void) {
  ***********************************************/
 void divRm16An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRm16An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2439,7 +2439,7 @@ void divCm16LonI(void) {
  ***********************************************/
 void divCm16Re16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCm16Re16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2459,7 +2459,7 @@ void divCm16Re16(void) {
  ***********************************************/
 void divCm16Co16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCm16Co16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2479,7 +2479,7 @@ void divCm16Co16(void) {
  ***********************************************/
 void divCm16An16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCm16An16:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2511,7 +2511,7 @@ void divCm16ShoI(void) {
  ***********************************************/
 void divCm16Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCm16Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2531,7 +2531,7 @@ void divCm16Re34(void) {
  ***********************************************/
 void divCm16Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCm16Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2551,7 +2551,7 @@ void divCm16Co34(void) {
  ***********************************************/
 void divCm16An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCm16An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2588,7 +2588,7 @@ void divShoIShoI(void) {
  ***********************************************/
 void divShoIRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoIRe34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2603,7 +2603,7 @@ void divShoIRe34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIRe34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2615,7 +2615,7 @@ void divShoIRe34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIRe34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -2637,7 +2637,7 @@ void divShoIRe34(void) {
  ***********************************************/
 void divRe34ShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34ShoI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2652,7 +2652,7 @@ void divRe34ShoI(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34ShoI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2664,7 +2664,7 @@ void divRe34ShoI(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34ShoI:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -2686,7 +2686,7 @@ void divRe34ShoI(void) {
  ***********************************************/
 void divShoICo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoICo34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2722,7 +2722,7 @@ void divShoICo34(void) {
  ***********************************************/
 void divCo34ShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34ShoI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2745,7 +2745,7 @@ void divCo34ShoI(void) {
  ***********************************************/
 void divShoIAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoIAn34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2760,7 +2760,7 @@ void divShoIAn34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIAn34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2772,7 +2772,7 @@ void divShoIAn34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divShoIAn34:", "cannot divide a short integer by 0", NULL, NULL);
       #endif
@@ -2794,7 +2794,7 @@ void divShoIAn34(void) {
  ***********************************************/
 void divAn34ShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34ShoI:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2809,7 +2809,7 @@ void divAn34ShoI(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34ShoI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2821,7 +2821,7 @@ void divAn34ShoI(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34ShoI:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -2856,7 +2856,7 @@ void divAn34ShoI(void) {
  ***********************************************/
 void divRe34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2868,7 +2868,7 @@ void divRe34Re34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34Re34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2880,7 +2880,7 @@ void divRe34Re34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34Re34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -2903,7 +2903,7 @@ void divRe34Re34(void) {
  ***********************************************/
 void divRe34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2938,7 +2938,7 @@ void divRe34Co34(void) {
  ***********************************************/
 void divCo34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2960,7 +2960,7 @@ void divCo34Re34(void) {
  ***********************************************/
 void divRe34An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divRe34An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -2974,7 +2974,7 @@ void divRe34An34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34An34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -2986,7 +2986,7 @@ void divRe34An34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divRe34An34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -3008,7 +3008,7 @@ void divRe34An34(void) {
  ***********************************************/
 void divAn34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34Re34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -3022,7 +3022,7 @@ void divAn34Re34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34Re34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -3034,7 +3034,7 @@ void divAn34Re34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34Re34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
@@ -3069,7 +3069,7 @@ void divAn34Re34(void) {
  ***********************************************/
 void divCo34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -3106,7 +3106,7 @@ void divCo34Co34(void) {
  ***********************************************/
 void divCo34An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_IMAG34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divCo34An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -3128,7 +3128,7 @@ void divCo34An34(void) {
  ***********************************************/
 void divAn34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34Co34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -3167,7 +3167,7 @@ void divAn34Co34(void) {
  ***********************************************/
 void divAn34An34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opY)) || real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divAn34An34:", "cannot use NaN as an input of /", NULL, NULL);
     #endif
@@ -3181,7 +3181,7 @@ void divAn34An34(void) {
       real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34An34:", "cannot divide 0 by 0", NULL, NULL);
       #endif
@@ -3193,7 +3193,7 @@ void divAn34An34(void) {
       real34Copy((real34IsPositive(REGISTER_REAL34_DATA(opY)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // error 1 = domain error
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function divAn34An34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif

@@ -37,7 +37,7 @@ void (* const ln[13])(void) = {
  * \return void
  ***********************************************/
 void lnError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Ln for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnLn:", errorMessage, NULL, NULL);
@@ -78,7 +78,7 @@ void lnLonI(void) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnLonI:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -102,7 +102,7 @@ void lnLonI(void) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnLonI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -113,7 +113,7 @@ void lnLonI(void) {
 
 void lnRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnRe16:", "cannot use NaN as an input of ln", NULL, NULL);
     #endif
@@ -127,7 +127,7 @@ void lnRe16(void) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnRe16:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -150,7 +150,7 @@ void lnRe16(void) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnRe16:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -161,7 +161,7 @@ void lnRe16(void) {
 
 void lnCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnCo16:", "cannot use NaN as an input of ln", NULL, NULL);
     #endif
@@ -174,7 +174,7 @@ void lnCo16(void) {
       real16Copy(const16_NaN, REGISTER_IMAG16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnCo16:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -193,7 +193,7 @@ void lnCo16(void) {
 
 void lnAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnAn16:", "cannot use NaN as an input of ln", NULL, NULL);
     #endif
@@ -209,7 +209,7 @@ void lnAn16(void) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnAn16:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -232,7 +232,7 @@ void lnAn16(void) {
     real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnAn16:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -262,7 +262,7 @@ void lnShoI(void) {
       real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnShoI:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -286,7 +286,7 @@ void lnShoI(void) {
     real16Copy(const16_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnShoI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -297,7 +297,7 @@ void lnShoI(void) {
 
 void lnRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnRe34:", "cannot use NaN as an input of ln", NULL, NULL);
     #endif
@@ -311,7 +311,7 @@ void lnRe34(void) {
       real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnRe34:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -334,7 +334,7 @@ void lnRe34(void) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnRe34:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif
@@ -345,7 +345,7 @@ void lnRe34(void) {
 
 void lnCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnCo34:", "cannot use NaN as an input of ln", NULL, NULL);
     #endif
@@ -358,7 +358,7 @@ void lnCo34(void) {
       real34Copy(const34_NaN, REGISTER_IMAG34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnCo34:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -374,7 +374,7 @@ void lnCo34(void) {
 
 void lnAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnAn34:", "cannot use NaN as an input of ln", NULL, NULL);
     #endif
@@ -390,7 +390,7 @@ void lnAn34(void) {
       real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(result));
     }
     else {
-      displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function lnAn34:", "cannot calculate Ln(0)", NULL, NULL);
       #endif
@@ -413,7 +413,7 @@ void lnAn34(void) {
     real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnAn34:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
     #endif

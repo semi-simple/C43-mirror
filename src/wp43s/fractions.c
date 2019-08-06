@@ -55,7 +55,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
 
   else if(getRegisterDataType(tmp) != dtReal16) {
     freeTemporaryRegister(tmp);
-    displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use %s to set or recall DENMAX!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnDenMax:", errorMessage, NULL, NULL);

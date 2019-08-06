@@ -37,7 +37,7 @@ void (* const twoPow[13])(void) = {
  * \return void
  ***********************************************/
 void twoPowError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate 2" STD_SUP_x " for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fn2Pow:", errorMessage, NULL, NULL);
@@ -81,7 +81,7 @@ void twoPowLonI(void) {
     longIntegerFree(res);
   }
   else {
-    displayCalcErrorMessage(4, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_OVERFLOW_PLUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "2^ this value would result in a value exceeding %" FMT16S " bits!", MAX_LONG_INTEGER_SIZE_IN_BITS);
       longIntegerToAllocatedString(power, tmpStr3000, 10);
@@ -96,7 +96,7 @@ void twoPowLonI(void) {
 
 void twoPowRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function twoPowRe16:", "cannot use NaN as an input of 2^", NULL, NULL);
     #endif
@@ -111,7 +111,7 @@ void twoPowRe16(void) {
 
 void twoPowCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function twoPowCo16:", "cannot use NaN as an input of 2^", NULL, NULL);
     #endif
@@ -131,7 +131,7 @@ void twoPowCo16(void) {
 
 void twoPowAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function twoPowAn16:", "cannot use NaN as an input of 2^", NULL, NULL);
     #endif
@@ -164,7 +164,7 @@ void twoPowShoI(void) {
 
 void twoPowRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function twoPowRe34:", "cannot use NaN as an input of 2^", NULL, NULL);
     #endif
@@ -179,7 +179,7 @@ void twoPowRe34(void) {
 
 void twoPowCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function twoPowCo34:", "cannot use NaN as an input of 2^", NULL, NULL);
     #endif
@@ -199,7 +199,7 @@ void twoPowCo34(void) {
 
 void twoPowAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function twoPowAn34:", "cannot use NaN as an input of 2^", NULL, NULL);
     #endif

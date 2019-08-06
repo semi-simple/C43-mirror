@@ -37,7 +37,7 @@ void (* const Sqrt[13])(void) = {
  * \return void
  ***********************************************/
 void sqrtError(void) {
-  displayCalcErrorMessage(24, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate sqrt for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
@@ -140,7 +140,7 @@ void sqrtLonI(void) {
     convertRegister34To16(result);
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // 1 = argument exceeds functions domain
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative long integer when flag I is not set!");
       showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
@@ -154,7 +154,7 @@ void sqrtLonI(void) {
 
 void sqrtRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function sqrtRe16:", "cannot use NaN as an input of sqrt", NULL, NULL);
     #endif
@@ -177,7 +177,7 @@ void sqrtRe16(void) {
     convertRegister34To16(result);
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // 1 = argument exceeds functions domain
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
       showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
@@ -189,7 +189,7 @@ void sqrtRe16(void) {
 
 void sqrtCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function sqrtCo16:", "cannot use NaN as an input of sqrt", NULL, NULL);
     #endif
@@ -229,7 +229,7 @@ void sqrtShoI(void) {
 
 void sqrtRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function sqrtRe34:", "cannot use NaN as an input of sqrt", NULL, NULL);
     #endif
@@ -247,7 +247,7 @@ void sqrtRe34(void) {
     real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // 1 = argument exceeds functions domain
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
       showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
@@ -259,7 +259,7 @@ void sqrtRe34(void) {
 
 void sqrtCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function sqrtCo34:", "cannot use NaN as an input of sqrt", NULL, NULL);
     #endif
@@ -278,7 +278,7 @@ void sqrtCo34(void) {
 
 void sqrtAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function sqrtAn34:", "cannot use NaN as an input of sqrt", NULL, NULL);
     #endif
@@ -297,7 +297,7 @@ void sqrtAn34(void) {
     real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
   }
   else {
-    displayCalcErrorMessage(1, ERR_REGISTER_LINE, REGISTER_X); // 1 = argument exceeds functions domain
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
       showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);

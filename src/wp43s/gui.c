@@ -2695,6 +2695,10 @@ void fnOff(uint16_t unsuedParamButMandatory) {
     saveCalc();
     gtk_main_quit();
   #endif
+
+  #ifdef DMCP_BUILD
+    SET_ST(STAT_PGM_END);
+  #endif
 }
 
 

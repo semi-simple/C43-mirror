@@ -25,7 +25,7 @@
 void (* const Sqrt[13])(void) = {
 // regX ==> 1            2         3         4         5          6          7          8          9           10            11        12        13
 //          Long integer Real16    Complex16 Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34 Angle34
-            sqrtLonI,    sqrtRe16, sqrtCo16, sqrtRe16, sqrtError, sqrtError, sqrtError, sqrtRm16,  sqrtCm16,   sqrtShoI,     sqrtRe34, sqrtCo34, sqrtAn34
+            sqrtLonI,    sqrtRe16, sqrtCo16, sqrtAn16, sqrtError, sqrtError, sqrtError, sqrtRm16,  sqrtCm16,   sqrtShoI,     sqrtRe34, sqrtCo34, sqrtAn34
 };
 
 
@@ -57,13 +57,9 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   Sqrt[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
@@ -71,7 +67,7 @@ void fnSquareRoot(uint16_t unusedParamButMandatory) {
 void sqrtLonI(void) {
   longInteger_t value;
 
-  convertLongIntegerRegisterToLongInteger(opX, value);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, value);
 
   if(longIntegerIsPositiveOrZero(value)) {
     longInteger_t nn0, nn1, nn2;
@@ -109,7 +105,7 @@ void sqrtLonI(void) {
       }
 
       if(longIntegerCompare(nn0, value) == 0) {
-        convertLongIntegerToLongIntegerRegister(nn1, result);
+        convertLongIntegerToLongIntegerRegister(nn1, REGISTER_X);
         longIntegerFree(value);
         longIntegerFree(nn2);
         longIntegerFree(nn1);
@@ -117,10 +113,9 @@ void sqrtLonI(void) {
         return;
       }
       else {
-        convertLongIntegerRegisterToReal34Register(opX, opX);
-        reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-        real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-        convertRegister34To16(result);
+        convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+        real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+        convertRegister34To16(REGISTER_X);
       }
     }
 
@@ -131,19 +126,19 @@ void sqrtLonI(void) {
   else if(getFlag(FLAG_CPXRES)) { // Negative value
     real34_t real34;
 
-    convertLongIntegerRegisterToReal34Register(opX, opX);
-    real34Copy(REGISTER_REAL34_DATA(opX), &real34);
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &real34);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
     real34SetPositiveSign(&real34);
-    real34SquareRoot(&real34, REGISTER_IMAG34_DATA(result));
-    real34Zero(REGISTER_REAL34_DATA(result));
-    convertRegister34To16(result);
+    real34SquareRoot(&real34, REGISTER_IMAG34_DATA(REGISTER_X));
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative long integer when flag I is not set!");
-      showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
+      showInfoDialog("In function sqrtLonI:", errorMessage, NULL, NULL);
     #endif
   }
 
@@ -153,34 +148,37 @@ void sqrtLonI(void) {
 
 
 void sqrtRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtRe16:", "cannot use NaN as an input of sqrt", NULL, NULL);
+      showInfoDialog("In function sqrtRe16:", "cannot use NaN as X input of sqrt", NULL, NULL);
     #endif
     return;
   }
 
-  convertRegister16To34(opX);
+  convertRegister16To34(REGISTER_X);
 
-  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertRegister34To16(result);
+  if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
-    real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
-    real34Zero(REGISTER_REAL34_DATA(result));
-    real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
-    convertRegister34To16(result);
+    real34_t temp;
+
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
+    real34SetPositiveSign(&temp);
+    real34SquareRoot(&temp, &temp);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
+      showInfoDialog("In function sqrtRe16:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -188,23 +186,62 @@ void sqrtRe16(void) {
 
 
 void sqrtCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtCo16:", "cannot use NaN as an input of sqrt", NULL, NULL);
+      showInfoDialog("In function sqrtCo16:", "cannot use NaN as X input of sqrt", NULL, NULL);
     #endif
     return;
   }
 
   real34_t magnitude34, theta34;
 
-  convertRegister16To34(opX);
-  real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
+  convertRegister16To34(REGISTER_X);
+  real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in RADIAN
-  convertRegister34To16(result);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in RADIAN
+  convertRegister34To16(REGISTER_X);
+}
+
+
+
+void sqrtAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sqrtAn16:", "cannot use NaN as X input of sqrt", NULL, NULL);
+    #endif
+    return;
+  }
+
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  convertRegister16To34(REGISTER_X);
+
+  if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    real34_t temp;
+
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
+    real34SetPositiveSign(&temp);
+    real34SquareRoot(&temp, &temp);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
+      showInfoDialog("In function sqrtAn16:", errorMessage, NULL, NULL);
+    #endif
+  }
 }
 
 
@@ -222,35 +259,39 @@ void sqrtCm16(void) {
 
 
 void sqrtShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intSqrt(*(REGISTER_SHORT_INTEGER_DATA(opX)));
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intSqrt(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }
 
 
 
 void sqrtRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtRe34:", "cannot use NaN as an input of sqrt", NULL, NULL);
+      showInfoDialog("In function sqrtRe34:", "cannot use NaN as X input of sqrt", NULL, NULL);
     #endif
     return;
   }
 
-  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
-    real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
-    real34Zero(REGISTER_REAL34_DATA(result));
-    real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
+    real34_t temp;
+
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
+    real34SetPositiveSign(&temp);
+    real34SquareRoot(&temp, &temp);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
+      showInfoDialog("In function sqrtRe34:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -258,49 +299,55 @@ void sqrtRe34(void) {
 
 
 void sqrtCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtCo34:", "cannot use NaN as an input of sqrt", NULL, NULL);
+      showInfoDialog("In function sqrtCo34:", "cannot use NaN as X input of sqrt", NULL, NULL);
     #endif
     return;
   }
 
   real34_t magnitude34, theta34;
 
-  real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), &magnitude34, &theta34);
+  real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &magnitude34, &theta34);
   real34SquareRoot(&magnitude34, &magnitude34);
   real34Multiply(&theta34, const34_0_5, &theta34);
-  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result)); // theta34 in internal units
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in RADIAN
 }
 
 
 
 void sqrtAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtAn34:", "cannot use NaN as an input of sqrt", NULL, NULL);
+      showInfoDialog("In function sqrtAn34:", "cannot use NaN as X input of sqrt", NULL, NULL);
     #endif
     return;
   }
 
-  if(!real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-    real34SquareRoot(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    setRegisterDataType(result, dtReal34, TAG_NONE);
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+
+  if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
-    real34SetPositiveSign(REGISTER_IMAG34_DATA(result));
-    real34Zero(REGISTER_REAL34_DATA(result));
-    real34SquareRoot(REGISTER_IMAG34_DATA(result), REGISTER_IMAG34_DATA(result));
+    real34_t temp;
+
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
+    real34SetPositiveSign(&temp);
+    real34SquareRoot(&temp, &temp);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
+      showInfoDialog("In function sqrtAn34:", errorMessage, NULL, NULL);
     #endif
   }
 }

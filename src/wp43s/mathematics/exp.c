@@ -57,83 +57,68 @@ void fnExp(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   Exp[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
 
 void expLonI(void) {
-  real34_t real34;
-
-  convertLongIntegerRegisterToReal34Register(opX, opX);
-  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void expRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expRe16:", "cannot use NaN as an input of exp", NULL, NULL);
+      showInfoDialog("In function expRe16:", "cannot use NaN as X input of exp", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t real34;
-
-  convertRegister16To34(opX);
-  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
-  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
+  real16Exp(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
 
 void expCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expCo16:", "cannot use NaN as an input of exp", NULL, NULL);
+      showInfoDialog("In function expCo16:", "cannot use NaN as X input of exp", NULL, NULL);
     #endif
     return;
   }
 
   real34_t factor, real34, imag34;
 
-  convertRegister16To34(opX);
-  real34Exp(REGISTER_REAL34_DATA(opX), &factor);
-  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in radian
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
-  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
-  convertRegister34To16(result);
+  convertRegister16To34(REGISTER_X);
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), &factor);
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(REGISTER_X), &real34, &imag34); // X in radian
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(REGISTER_X));
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void expAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expAn16:", "cannot use NaN as an input of exp", NULL, NULL);
+      showInfoDialog("In function expAn16:", "cannot use NaN as X input of exp", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t real34;
-
-  convertRegister16To34(opX);
-  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
-  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
-  setRegisterDataType(result, dtReal16, TAG_NONE);
+  real16Exp(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
@@ -151,58 +136,55 @@ void expCm16(void) {
 
 
 void expShoI(void) {
-  real34_t real34;
-
-  convertShortIntegerRegisterToReal34Register(opX, opX);
-  real34Exp(REGISTER_REAL34_DATA(opX), &real34);
-  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-  real34ToReal16(&real34, REGISTER_REAL16_DATA(result));
+  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void expRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expRe34:", "cannot use NaN as an input of exp", NULL, NULL);
+      showInfoDialog("In function expRe34:", "cannot use NaN as X input of exp", NULL, NULL);
     #endif
     return;
   }
 
-  real34Exp(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void expCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expCo34:", "cannot use NaN as an input of exp", NULL, NULL);
+      showInfoDialog("In function expCo34:", "cannot use NaN as X input of exp", NULL, NULL);
     #endif
     return;
   }
 
   real34_t factor, real34, imag34;
 
-  real34Exp(REGISTER_REAL34_DATA(opX), &factor);
-  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(opX), &real34, &imag34); // X in radian
-  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(result));
-  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(result));
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), &factor);
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(REGISTER_X), &real34, &imag34); // X in radian
+  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
 
 void expAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expAn34:", "cannot use NaN as an input of exp", NULL, NULL);
+      showInfoDialog("In function expAn34:", "cannot use NaN as X input of exp", NULL, NULL);
     #endif
     return;
   }
 
-  real34Exp(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }

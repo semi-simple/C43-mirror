@@ -512,12 +512,6 @@ void fnClAll(uint16_t confirmation) {
       clearRegister(regist);
     }
 
-
-    // initialize the temporary registers
-    for(regist=FIRST_TEMPORARY_REGISTER; regist<FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS; regist++) {
-      tempRegistersInUse[regist - FIRST_TEMPORARY_REGISTER] = false;
-    }
-
     // Clear flags
     for(int32_t sixteenFlags=0; sixteenFlags<7; sixteenFlags++) { // 7 times uint16_t = 112 flags
       flags[sixteenFlags] = 0;

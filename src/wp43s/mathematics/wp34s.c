@@ -628,7 +628,10 @@ static void WP34S_Gamma_LnGamma(const real34_t *xin, const bool_t calculateLn, r
 
 
 void WP34S_real34Gamma(const real34_t *xin, real34_t *res) {
-	 WP34S_Gamma_LnGamma(xin, false, res);
+	 real34_t x;
+
+  real34Copy(xin, &x);
+	 WP34S_Gamma_LnGamma(&x, false, res);
 }
 
 
@@ -637,14 +640,17 @@ void WP34S_real34Factorial(const real34_t *xin, real34_t *res) {
 	 real34_t x;
 
 	 real34Add(xin, const34_1, &x);
-	 WP34S_real34Gamma(&x, res);
+	 WP34S_Gamma_LnGamma(&x, false, res);
 }
 
 
 
 // The log gamma function.
 void WP34S_real34LnGamma(const real34_t *xin, real34_t *res) {
-	 WP34S_Gamma_LnGamma(xin, true, res);
+	 real34_t x;
+
+  real34Copy(xin, &x);
+	 WP34S_Gamma_LnGamma(&x, true, res);
 }
 
 

@@ -22,8 +22,6 @@ void fnIp   (uint16_t unusedButMandatoryParameter);
 void ipError(void);
 void ipLonI (void);
 void ipRe16 (void);
-void ipAn16 (void);
 void ipRm16 (void);
 void ipShoI (void);
 void ipRe34 (void);
-void ipAn34 (void);

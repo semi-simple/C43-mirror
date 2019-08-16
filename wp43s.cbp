@@ -74,12 +74,15 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-pg" />
+					<Add option="-g" />
 					<Add option="-ggdb" />
 					<Add option="-Warray-bounds=2" />
 					<Add option="-DTESTSUITE_BUILD" />
 					<Add directory="src/testSuite" />
 				</Compiler>
 				<Linker>
+					<Add option="-pg" />
 					<Add library="gmp" />
 				</Linker>
 			</Target>

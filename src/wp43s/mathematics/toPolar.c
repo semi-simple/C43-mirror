@@ -126,29 +126,34 @@ void real16RectangularToPolar(const real16_t *real16, const real16_t *imag16, re
 
 
 // The theta34 output angle is in radian
-void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, real34_t *magnitude34, real34_t *theta34) {
-  if(real34IsZero(real34)) {
-    if(real34IsZero(imag34)) {
+void real34RectangularToPolar(const real34_t *r34, const real34_t *i34, real34_t *magnitude34, real34_t *theta34) {
+  real34_t real34, imag34;
+
+  real34Copy(r34, &real34);
+  real34Copy(i34, &imag34);
+
+  if(real34IsZero(&real34)) {
+    if(real34IsZero(&imag34)) {
       real34Zero(magnitude34);
       real34Zero(theta34);
     }
-    else if(real34IsNegative(imag34)) {
-      real34AbsToReal34(imag34, magnitude34);
+    else if(real34IsNegative(&imag34)) {
+      real34AbsToReal34(&imag34, magnitude34);
       real34Copy(const34_3piOn2, theta34); // 270°
     }
     else {
-      real34Copy(imag34, magnitude34);
+      real34Copy(&imag34, magnitude34);
       real34Copy(const34_piOn2, theta34); // 90°
     }
   }
   else { // real34 != 0
     // Magnitude
-    real34Multiply(real34, real34, magnitude34);
-    real34FMA(imag34, imag34, magnitude34, magnitude34);
+    real34Multiply(&real34, &real34, magnitude34);
+    real34FMA(&imag34, &imag34, magnitude34, magnitude34);
     real34SquareRoot(magnitude34, magnitude34);
 
     // Angle
-    real34Divide(imag34, real34, theta34);
-    WP34S_do_atan2(imag34, real34, theta34);
+    real34Divide(&imag34, &real34, theta34);
+    WP34S_do_atan2(&imag34, &real34, theta34);
   }
 }

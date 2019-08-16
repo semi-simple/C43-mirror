@@ -143,8 +143,10 @@ typedef struct {real34_t x[2];}                           complex34_t;
 #define real34GetExponent(source)                         decQuadGetExponent       ((real34_t *)source)
 
 
-#define real16Zero(destination)                           decDoubleZero            ((real16_t  *)destination)
-#define real34Zero(destination)                           decQuadZero              ((real34_t  *)destination)
+//#define real16Zero(destination)                           decDoubleZero            ((real16_t  *)destination)
+#define real16Zero(destination)                           memcpy                   (destination, const16_0, REAL16_SIZE)
+//#define real34Zero(destination)                           decQuadZero              ((real34_t  *)destination)
+#define real34Zero(destination)                           memcpy                   (destination, const34_0, REAL34_SIZE)
 #define real51Zero(destination)                           decNumberZero            ((real51_t  *)destination)
 #define real16Add(operand1, operand2, res)                decDoubleAdd             ((real16_t  *)res, (real16_t  *)operand1, (real16_t  *)operand2, &ctxtReal16)
 #define real34Add(operand1, operand2, res)                decQuadAdd               ((real34_t  *)res, (real34_t  *)operand1, (real34_t  *)operand2, &ctxtReal34)

@@ -56,65 +56,65 @@ void fnMagnitude(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   magnitude[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, false, opX, -1, -1);
+  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
 
 
 void magnitudeLonI(void) {
-  setRegisterLongIntegerSign(result, LONG_INTEGER_POSITIVE);
+  setRegisterLongIntegerSign(REGISTER_X, LONG_INTEGER_POSITIVE);
 }
 
 
 
 void magnitudeRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(result))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeRe16:", "cannot use NaN as an input of |x|", NULL, NULL);
+      showInfoDialog("In function magnitudeRe16:", "cannot use NaN as X input of |x|", NULL, NULL);
     #endif
     return;
   }
 
-  real16SetPositiveSign(REGISTER_REAL16_DATA(result));
+  real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
 
 void magnitudeCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(result)) || real16IsNaN(REGISTER_IMAG16_DATA(result))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeCo16:", "cannot use NaN as an input of |x|", NULL, NULL);
+      showInfoDialog("In function magnitudeCo16:", "cannot use NaN as X input of |x|", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-  real16Multiply(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-  real16FMA(REGISTER_IMAG16_DATA(opX), REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
-  real16SquareRoot(REGISTER_REAL16_DATA(result), REGISTER_REAL16_DATA(result));
+  real34_t magnitude34;
+
+  convertRegister16To34(REGISTER_X);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &magnitude34);
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &magnitude34, &magnitude34);
+  real34SquareRoot(&magnitude34, &magnitude34);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  real34ToReal16(&magnitude34, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
 
 void magnitudeAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(result))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeAn16:", "cannot use NaN as an input of |x|", NULL, NULL);
+      showInfoDialog("In function magnitudeAn16:", "cannot use NaN as X input of |x|", NULL, NULL);
     #endif
     return;
   }
 
-  real16SetPositiveSign(REGISTER_REAL16_DATA(result));
-  setRegisterDataType(result, dtReal16, TAG_NONE);
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -132,51 +132,54 @@ void magnitudeCm16(void) {
 
 
 void magnitudeShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intAbs(*(REGISTER_SHORT_INTEGER_DATA(result)));
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intAbs(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }
 
 
 
 void magnitudeRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(result))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeRe34:", "cannot use NaN as an input of |x|", NULL, NULL);
+      showInfoDialog("In function magnitudeRe34:", "cannot use NaN as X input of |x|", NULL, NULL);
     #endif
     return;
   }
 
-  real34SetPositiveSign(REGISTER_REAL34_DATA(result));
+  real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void magnitudeCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(result)) || real34IsNaN(REGISTER_IMAG34_DATA(result))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeCo34:", "cannot use NaN as an input of |x|", NULL, NULL);
+      showInfoDialog("In function magnitudeCo34:", "cannot use NaN as X input of |x|", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(result));
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
-  real34SquareRoot(REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
+  real34_t magnitude34;
+
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &magnitude34);
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &magnitude34, &magnitude34);
+  real34SquareRoot(&magnitude34, &magnitude34);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  real34Copy(&magnitude34, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void magnitudeAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(result))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeAn34:", "cannot use NaN as an input of |x|", NULL, NULL);
+      showInfoDialog("In function magnitudeAn34:", "cannot use NaN as X input of |x|", NULL, NULL);
     #endif
     return;
   }
 
-  real34SetPositiveSign(REGISTER_REAL34_DATA(result));
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+  real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
 }

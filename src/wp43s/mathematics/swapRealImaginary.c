@@ -57,12 +57,7 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   swapReIm[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
   if(lastErrorCode == 0) {
     refreshRegisterLine(REGISTER_X);
@@ -76,8 +71,11 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
 
 
 void swapReImCo16(void) {
-  real16Copy(REGISTER_IMAG16_DATA(opX), REGISTER_REAL16_DATA(result));
-  real16Copy(REGISTER_REAL16_DATA(opX), REGISTER_IMAG16_DATA(result));
+  real16_t temp;
+
+  real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &temp);
+  real16Copy(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X));
+  real16Copy(&temp,                            REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -88,6 +86,9 @@ void swapReImCm16(void) {
 
 
 void swapReImCo34(void) {
-  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
-  real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
+  real34_t temp;
+
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &temp);
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Copy(&temp,                            REGISTER_REAL34_DATA(REGISTER_X));
 }

@@ -34,10 +34,10 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       break;
 
     case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as an input of fnCvtToCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as X input of fnCvtToCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -49,10 +49,10 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as an input of fnCvtToCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as X input of fnCvtToCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -64,10 +64,10 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       break;
 
     case dtAngle16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as an input of fnCvtToCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as X input of fnCvtToCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -91,10 +91,10 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       break;
 
     case dtAngle34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as an input of fnCvtToCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as X input of fnCvtToCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -145,10 +145,10 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       break;
 
     case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as an input of fnCvtFromCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as X input of fnCvtFromCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -160,10 +160,10 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as an input of fnCvtFromCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as X input of fnCvtFromCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -175,10 +175,10 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       break;
 
     case dtAngle16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as an input of fnCvtFromCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as X input of fnCvtFromCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -190,10 +190,10 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       break;
 
     case dtAngle34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as an input of fnCvtFromCurrentAngularMode", NULL, NULL);
+          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as X input of fnCvtFromCurrentAngularMode", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -232,10 +232,10 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as an input of fnCvtDegToRad", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as X input of fnCvtDegToRad", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -247,10 +247,10 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as an input of fnCvtDegToRad", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as X input of fnCvtDegToRad", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -262,10 +262,10 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as an input of fnCvtDegToRad", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as X input of fnCvtDegToRad", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -288,10 +288,10 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as an input of fnCvtDegToRad", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as X input of fnCvtDegToRad", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -341,10 +341,10 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -356,10 +356,10 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -371,10 +371,10 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -397,10 +397,10 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -450,10 +450,10 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as an input of fnCvtDegToDms", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as X input of fnCvtDegToDms", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -465,10 +465,10 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as an input of fnCvtDegToDms", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as X input of fnCvtDegToDms", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -480,10 +480,10 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as an input of fnCvtDegToDms", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as X input of fnCvtDegToDms", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -506,10 +506,10 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as an input of fnCvtDegToDms", NULL, NULL);
+          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as X input of fnCvtDegToDms", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -559,10 +559,10 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -574,10 +574,10 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -589,10 +589,10 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();
@@ -615,10 +615,10 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtAngle34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
         refreshStack();

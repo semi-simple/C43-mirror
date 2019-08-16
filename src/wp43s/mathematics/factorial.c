@@ -57,13 +57,9 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   fact[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
@@ -71,12 +67,12 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
 void factLonI(void) {
   longInteger_t lgInt;
 
-  convertLongIntegerRegisterToLongInteger(opX, lgInt);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
 
   if(longIntegerIsNegative(lgInt)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(opX, errorMessage + 100, SCREEN_WIDTH);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
@@ -87,7 +83,7 @@ void factLonI(void) {
   if(longIntegerCompareUInt(lgInt, 294) > 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(opX, errorMessage + 100, SCREEN_WIDTH);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
@@ -98,7 +94,7 @@ void factLonI(void) {
   longInteger_t fact;
   longIntegerInit(fact);
   longIntegerFactorial(longIntegerToUInt(lgInt), fact);
-  convertLongIntegerToLongIntegerRegister(fact, result);
+  convertLongIntegerToLongIntegerRegister(fact, REGISTER_X);
   longIntegerFree(fact);
   longIntegerFree(lgInt);
 }
@@ -106,27 +102,26 @@ void factLonI(void) {
 
 
 void factRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factRe16:", "cannot use NaN as an input of x!", NULL, NULL);
+      showInfoDialog("In function factRe16:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }
 
-  convertRegister16To34(opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  convertRegister34To16(result);
+  convertRegister16To34(REGISTER_X);
+  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void factCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factCo16:", "cannot use NaN as an input of x!", NULL, NULL);
+      showInfoDialog("In function factCo16:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }
@@ -137,18 +132,18 @@ void factCo16(void) {
 
 
 void factAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factRe16:", "cannot use NaN as an input of x!", NULL, NULL);
+      showInfoDialog("In function factAn16:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }
 
-  convertRegister16To34(opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  convertRegister34To16(result);
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  convertRegister16To34(REGISTER_X);
+  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  convertRegister34To16(REGISTER_X);
 }
 
 
@@ -157,12 +152,12 @@ void factShoI(void) {
   int16_t sign;
   uint64_t value;
 
-  convertShortIntegerRegisterToUInt64(opX, &sign, &value);
+  convertShortIntegerRegisterToUInt64(REGISTER_X, &sign, &value);
 
   if(sign == 1) { // Negative value
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(opX, errorMessage + 100, SCREEN_WIDTH);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif
@@ -172,7 +167,7 @@ void factShoI(void) {
   if(value > 20) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(opX, errorMessage + 100, SCREEN_WIDTH);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif
@@ -198,30 +193,30 @@ void factShoI(void) {
     fnSetFlag(FLAG_OVERFLOW);
   }
 
-  convertUInt64ToShortIntegerRegister(0, fact, getRegisterTag(opX), result);
+  convertUInt64ToShortIntegerRegister(0, fact, getRegisterTag(REGISTER_X), REGISTER_X);
 }
 
 
 
 void factRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factRe34:", "cannot use NaN as an input of x!", NULL, NULL);
+      showInfoDialog("In function factRe34:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }
 
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void factCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factCo34:", "cannot use NaN as an input of x!", NULL, NULL);
+      showInfoDialog("In function factCo34:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }
@@ -232,14 +227,14 @@ void factCo34(void) {
 
 
 void factAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factAn34:", "cannot use NaN as an input of x!", NULL, NULL);
+      showInfoDialog("In function factAn34:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }
 
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }

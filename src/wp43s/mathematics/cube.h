@@ -20,3 +20,13 @@
 
 void fnCube   (uint16_t unusedParamButMandatory);
 void cubeError(void);
+void cubeLonI (void);
+void cubeRe16 (void);
+void cubeCo16 (void);
+void cubeAn16 (void);
+void cubeRm16 (void);
+void cubeCm16 (void);
+void cubeShoI (void);
+void cubeRe34 (void);
+void cubeCo34 (void);
+void cubeAn34 (void);

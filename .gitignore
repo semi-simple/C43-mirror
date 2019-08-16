@@ -6,6 +6,8 @@
 *.depend
 .stamp-constantPointers
 .stamp-rasterFontsData
+callgrind.out*
+gmon.out
 bin/
 obj/
 build/

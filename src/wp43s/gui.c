@@ -2766,7 +2766,6 @@ void calcModeNIM(uint16_t unusedParamButMandatory) {
   saveStack();
 
   calcMode = CM_NIM;
-  //nimTempRegister = allocateTemporaryRegister();
 
   liftStack();
   real16Zero(REGISTER_REAL16_DATA(REGISTER_X));

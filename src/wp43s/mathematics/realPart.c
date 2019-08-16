@@ -57,12 +57,7 @@ void fnRealPart(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   realPart[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
   if(lastErrorCode == 0) {
     refreshRegisterLine(REGISTER_X);
@@ -76,16 +71,19 @@ void fnRealPart(uint16_t unusedParamButMandatory) {
 
 
 void realPartCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function realPartCo16:", "cannot use NaN as an input of Re", NULL, NULL);
+      showInfoDialog("In function realPartCo16:", "cannot use NaN as X input of Re", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-  real16Copy(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  real16_t realPart;
+
+  real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &realPart);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  real16Copy(&realPart, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -96,14 +94,17 @@ void realPartCm16(void) {
 
 
 void realPartCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function realPartCo34:", "cannot use NaN as an input of Re", NULL, NULL);
+      showInfoDialog("In function realPartCo34:", "cannot use NaN as X input of Re", NULL, NULL);
     #endif
     return;
   }
 
-  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-  real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  real34_t realPart;
+
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &realPart);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));
 }

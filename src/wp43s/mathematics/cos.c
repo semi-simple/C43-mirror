@@ -57,57 +57,47 @@ void fnCos(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   Cos[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
 
 void cosLonI(void) {
-  longIntegerAngleReduction(opX, currentAngularMode);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), currentAngularMode);
-  convertRegister34To16(result);
-
-  if(currentAngularMode == AM_DMS) {
-    checkDms16(REGISTER_REAL16_DATA(result));
-  }
+  longIntegerAngleReduction(REGISTER_X, currentAngularMode);
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void cosRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cosRe16:", "cannot use NaN as an input of cos", NULL, NULL);
+      showInfoDialog("In function cosRe16:", "cannot use NaN as X input of cos", NULL, NULL);
     #endif
     return;
   }
 
-  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
-    real16Copy(const16_NaN, REGISTER_REAL34_DATA(result));
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
+    real16Copy(const16_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    convertRegister16To34(opX);
-    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), currentAngularMode);
-    convertRegister34To16(result);
+    convertRegister16To34(REGISTER_X);
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
+    convertRegister34To16(REGISTER_X);
   }
 }
 
 
 
 void cosCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cosCo16:", "cannot use NaN as an input of cos", NULL, NULL);
+      showInfoDialog("In function cosCo16:", "cannot use NaN as X input of cos", NULL, NULL);
     #endif
     return;
   }
@@ -115,62 +105,55 @@ void cosCo16(void) {
   // cos(z) = (exp(iz) + exp(-iz)) / 2
   complex34_t iz, expIz;
 
-  convertRegister16To34(opX);
-  convertRegister16To34(result);
+  convertRegister16To34(REGISTER_X);
 
   // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(opX), VARIABLE_IMAG34_DATA(&iz));
-  real34Copy(REGISTER_IMAG34_DATA(opX), VARIABLE_REAL34_DATA(&iz));
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&iz));
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&iz));
   real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
 
-  // calculate exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  // calculate expIz = exp(iz)
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expIz));
 
-  // calculate exp(-iz)
+  // calculate X = exp(-iz)
   complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
 
-  // calculate exp(iz) - exp(-iz)
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz), REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  addCo34Co34();
+  // calculate X = exp(iz) + exp(-iz)
+  real34Add(VARIABLE_REAL34_DATA(&expIz), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Add(VARIABLE_IMAG34_DATA(&expIz), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
 
-  // calculate (exp(iz) + exp(-iz)) / 2
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
-  real34Copy(const34_2, REGISTER_REAL34_DATA(opX));
-  real34Zero(REGISTER_IMAG34_DATA(opX));
-  divCo34Co34();
+  // calculate X = (exp(iz) + exp(-iz)) / 2
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_0_5, REGISTER_IMAG34_DATA(REGISTER_X));
 
-  freeTemporaryRegister(opY);
-  convertRegister34To16(result);
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void cosAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cosAn16:", "cannot use NaN as an input of cos", NULL, NULL);
+      showInfoDialog("In function cosAn16:", "cannot use NaN as X input of cos", NULL, NULL);
     #endif
     return;
   }
 
-  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
-    real16Copy(const16_NaN, REGISTER_REAL34_DATA(result));
-    setRegisterDataType(result, dtReal16, TAG_NONE);
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    convertRegister16To34(opX);
-    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
-    convertRegister34To16(result);
+    convertRegister16To34(REGISTER_X);
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
   }
+
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
@@ -188,29 +171,29 @@ void cosCm16(void) {
 
 
 void cosRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cosRe34:", "cannot use NaN as an input of cos", NULL, NULL);
+      showInfoDialog("In function cosRe34:", "cannot use NaN as X input of cos", NULL, NULL);
     #endif
     return;
   }
 
-  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), currentAngularMode);
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
   }
 }
 
 
 
 void cosCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cosCo34:", "cannot use NaN as an input of cos", NULL, NULL);
+      showInfoDialog("In function cosCo34:", "cannot use NaN as X input of cos", NULL, NULL);
     #endif
     return;
   }
@@ -219,53 +202,46 @@ void cosCo34(void) {
   complex34_t iz, expIz;
 
   // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(opX), VARIABLE_IMAG34_DATA(&iz));
-  real34Copy(REGISTER_IMAG34_DATA(opX), VARIABLE_REAL34_DATA(&iz));
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&iz));
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&iz));
   real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
 
-  // calculate exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  // calculate expIz = exp(iz)
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expIz));
 
-  // calculate exp(-iz)
+  // calculate X = exp(-iz)
   complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
 
-  // calculate exp(iz) + exp(-iz)
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz), REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  addCo34Co34();
+  // calculate X = exp(iz) + exp(-iz)
+  real34Add(VARIABLE_REAL34_DATA(&expIz), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Add(VARIABLE_IMAG34_DATA(&expIz), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
 
-  // calculate (exp(iz) - exp(-iz)) / 2i
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
-  real34Copy(const34_2, REGISTER_REAL34_DATA(opX));
-  real34Zero(REGISTER_IMAG34_DATA(opX));
-  divCo34Co34();
-
-  freeTemporaryRegister(opY);
+  // calculate X = (exp(iz) + exp(-iz)) / 2
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_0_5, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
 
 void cosAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cosAn34:", "cannot use NaN as an input of cos", NULL, NULL);
+      showInfoDialog("In function cosAn34:", "cannot use NaN as X input of cos", NULL, NULL);
     #endif
     return;
   }
 
-  setRegisterDataType(result, dtReal34, TAG_NONE);
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
+    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
   }
+
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }

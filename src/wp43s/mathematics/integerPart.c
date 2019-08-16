@@ -57,12 +57,7 @@ void fnIp(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   ip[getRegisterDataType(REGISTER_X)]();
-  freeTemporaryRegister(opX);
 
   if(lastErrorCode == 0) {
     refreshRegisterLine(REGISTER_X);
@@ -81,15 +76,15 @@ void ipLonI(void) {
 
 
 void ipRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ipRe16:", "cannot use NaN as an input of ip", NULL, NULL);
+      showInfoDialog("In function ipRe16:", "cannot use NaN as X input of ip", NULL, NULL);
     #endif
     return;
   }
 
-  real16ToIntegral(REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
+  real16ToIntegral(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -100,19 +95,19 @@ void ipRm16(void) {
 
 
 
-void ipRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ipRe34:", "cannot use NaN as an input of ip", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real34ToIntegral(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+void ipShoI(void) {
 }
 
 
 
-void ipShoI(void) {
+void ipRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function ipRe34:", "cannot use NaN as X input of ip", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34ToIntegral(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }

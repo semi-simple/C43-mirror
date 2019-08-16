@@ -22,8 +22,6 @@ void fnFp   (uint16_t unusedButMandatoryParameter);
 void fpError(void);
 void fpLonI (void);
 void fpRe16 (void);
-void fpAn16 (void);
 void fpRm16 (void);
 void fpShoI (void);
 void fpRe34 (void);
-void fpAn34 (void);

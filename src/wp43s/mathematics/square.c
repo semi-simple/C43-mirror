@@ -23,9 +23,9 @@
 
 
 void (* const square[13])(void) = {
-// regX ==> 1            2            3            4            5            6            7            8            9            10            11           12           13
-//          Long integer Real16       Complex16    Angle16      Time         Date         String       Real16 mat   Complex16 m  Short integer Real34       Complex34    Angle34
-            mulLonILonI, mulRe16Re16, mulCo16Co16, mulAn16An16, squareError, squareError, squareError, mulRm16Rm16, mulCm16Cm16, mulShoIShoI,  mulRe34Re34, mulCo34Co34, mulAn34An34
+// regX ==> 1              2           3           4           5            6            7            8           9           10            11          12          13
+//          Long integer   Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
+            squareLonI,    squareRe16, squareCo16, squareAn16, squareError, squareError, squareError, squareRm16, squareCm16, squareShoI,   squareRe34, squareCo34, squareAn34
 };
 
 
@@ -57,13 +57,152 @@ void fnSquare(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opY    = allocateTemporaryRegister();
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opY);
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   square[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, opY, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+}
+
+
+
+void squareLonI(void) {
+  longInteger_t lgInt;
+
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerMultiply(lgInt, lgInt, lgInt);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+  longIntegerFree(lgInt);
+}
+
+
+
+void squareRe16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function squareRe16:", "cannot use NaN as X input of ^2", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real16Multiply(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+}
+
+
+
+void squareCo16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function squareCo16:", "cannot use NaN as X input of ^2", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34_t imagPart;
+
+  convertRegister16To34(REGISTER_X);
+
+  // (a + bi)² = a² - b² + 2abi
+  // Imaginary part
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_2, &imagPart);
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), &imagPart, &imagPart);
+
+  // real part
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+
+  // real part
+  real34Copy(&imagPart, REGISTER_IMAG34_DATA(REGISTER_X));
+
+  convertRegister34To16(REGISTER_X);
+}
+
+
+
+void squareAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function squareAn16:", "cannot use NaN as X input of ^2", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real16Multiply(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+}
+
+
+
+void squareRm16(void) {
+  fnToBeCoded();
+}
+
+
+
+void squareCm16(void) {
+  fnToBeCoded();
+}
+
+
+
+void squareShoI(void) {
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intMultiply(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)), *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+}
+
+
+
+void squareRe34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function squareRe34:", "cannot use NaN as X input of ^2", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+
+
+void squareCo34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function squareCo34:", "cannot use NaN as X input of ^2", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34_t imagPart;
+
+  // (a + bi)² = a² - b² + 2abi
+  // Imaginary part
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_2, &imagPart);
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), &imagPart, &imagPart);
+
+  // real part
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+
+  // real part
+  real34Copy(&imagPart, REGISTER_IMAG34_DATA(REGISTER_X));
+}
+
+
+
+void squareAn34(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function squareAn34:", "cannot use NaN as X input of ^2", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }

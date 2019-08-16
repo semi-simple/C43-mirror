@@ -32,32 +32,27 @@
  * \return void
  ***********************************************/
 void convertRegister16To34(calcRegister_t regist) {
-  calcRegister_t temp;
+  complex34_t temp;
+  //calcRegister_t temp;
 
   switch(getRegisterDataType(regist)) {
     case dtReal16:
-      temp = allocateTemporaryRegister();
-      reallocateRegister(temp, dtReal34, REAL34_SIZE, getRegisterTag(regist));
-      real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
-      copySourceRegisterToDestRegister(temp, regist);
-      freeTemporaryRegister(temp);
+      real16ToReal34(REGISTER_REAL16_DATA(regist), VARIABLE_REAL34_DATA(&temp));
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, getRegisterTag(regist));
+      real34Copy(&temp, REGISTER_REAL34_DATA(regist));
       break;
 
     case dtComplex16:
-      temp = allocateTemporaryRegister();
-      reallocateRegister(temp, dtComplex34, COMPLEX34_SIZE, getRegisterTag(regist));
-      real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
-      real16ToReal34(REGISTER_IMAG16_DATA(regist), REGISTER_IMAG34_DATA(temp));
-      copySourceRegisterToDestRegister(temp, regist);
-      freeTemporaryRegister(temp);
+      real16ToReal34(REGISTER_REAL16_DATA(regist), VARIABLE_REAL34_DATA(&temp));
+      real16ToReal34(REGISTER_IMAG16_DATA(regist), VARIABLE_IMAG34_DATA(&temp));
+      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, getRegisterTag(regist));
+      complex34Copy(&temp, REGISTER_COMPLEX34_DATA(regist));
       break;
 
     case dtAngle16:
-      temp = allocateTemporaryRegister();
-      reallocateRegister(temp, dtAngle34, REAL34_SIZE, getRegisterAngularMode(regist));
-      real16ToReal34(REGISTER_REAL16_DATA(regist), REGISTER_REAL34_DATA(temp));
-      copySourceRegisterToDestRegister(temp, regist);
-      freeTemporaryRegister(temp);
+      real16ToReal34(REGISTER_REAL16_DATA(regist), VARIABLE_REAL34_DATA(&temp));
+      reallocateRegister(regist, dtAngle34, REAL34_SIZE, getRegisterTag(regist));
+      real34Copy(&temp, REGISTER_REAL34_DATA(regist));
       break;
 
     case dtReal34:
@@ -66,7 +61,7 @@ void convertRegister16To34(calcRegister_t regist) {
       break;
 
     default:
-    displayBugScreen("In function convertRegister16To34: the register to convert must be real16, angle16 or complex16!");
+      displayBugScreen("In function convertRegister16To34: the register to convert must be real16, angle16 or complex16!");
   }
 }
 
@@ -82,7 +77,8 @@ void convertRegister16To34(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void convertRegister34To16(calcRegister_t regist) {
-  calcRegister_t temp;
+  complex16_t temp;
+  //calcRegister_t temp;
 
   switch(getRegisterDataType(regist)) {
     case dtReal16:
@@ -91,28 +87,22 @@ void convertRegister34To16(calcRegister_t regist) {
       break;
 
     case dtReal34:
-      temp = allocateTemporaryRegister();
-      reallocateRegister(temp, dtReal16, REAL16_SIZE, getRegisterTag(regist));
-      real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
-      copySourceRegisterToDestRegister(temp, regist);
-      freeTemporaryRegister(temp);
+      real34ToReal16(REGISTER_REAL34_DATA(regist), VARIABLE_REAL16_DATA(&temp));
+      reallocateRegister(regist, dtReal16, REAL16_SIZE, getRegisterTag(regist));
+      real16Copy(&temp, REGISTER_REAL16_DATA(regist));
       break;
 
     case dtComplex34:
-      temp = allocateTemporaryRegister();
-      reallocateRegister(temp, dtComplex16, COMPLEX16_SIZE, getRegisterTag(regist));
-      real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
-      real34ToReal16(REGISTER_IMAG34_DATA(regist), REGISTER_IMAG16_DATA(temp));
-      copySourceRegisterToDestRegister(temp, regist);
-      freeTemporaryRegister(temp);
+      real34ToReal16(REGISTER_REAL34_DATA(regist), VARIABLE_REAL16_DATA(&temp));
+      real34ToReal16(REGISTER_IMAG34_DATA(regist), VARIABLE_IMAG16_DATA(&temp));
+      reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, getRegisterTag(regist));
+      complex16Copy(&temp, REGISTER_COMPLEX16_DATA(regist));
       break;
 
     case dtAngle34:
-      temp = allocateTemporaryRegister();
-      reallocateRegister(temp, dtAngle16, REAL16_SIZE, getRegisterTag(regist));
-      real34ToReal16(REGISTER_REAL34_DATA(regist), REGISTER_REAL16_DATA(temp));
-      copySourceRegisterToDestRegister(temp, regist);
-      freeTemporaryRegister(temp);
+      real34ToReal16(REGISTER_REAL34_DATA(regist), VARIABLE_REAL16_DATA(&temp));
+      reallocateRegister(regist, dtAngle16, REAL16_SIZE, getRegisterTag(regist));
+      real16Copy(&temp, REGISTER_REAL16_DATA(regist));
       break;
 
     default:
@@ -354,6 +344,6 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
     }
   }
 
-  reallocateRegister(result, dtShortInteger, SHORT_INTEGER_SIZE, base);
-  *(REGISTER_SHORT_INTEGER_DATA(regist)) = value & shortIntegerMask;
+  reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = value & shortIntegerMask;
 }

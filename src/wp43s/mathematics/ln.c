@@ -57,13 +57,9 @@ void fnLn(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   ln[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
@@ -71,11 +67,11 @@ void fnLn(uint16_t unusedParamButMandatory) {
 void lnLonI(void) {
   real51_t real51;
 
-  convertLongIntegerRegisterToReal34Register(opX, opX);
-  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -84,22 +80,23 @@ void lnLonI(void) {
       #endif
     }
   }
-  else if(real34IsPositive(REGISTER_REAL34_DATA(opX))) { // Positive
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+  else if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) { // Positive
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
    }
   else if(getFlag(FLAG_CPXRES)) {
-    real34SetPositiveSign(REGISTER_REAL34_DATA(opX));
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
-    real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
+    real16Copy(const16_pi, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_DANGER)) {
-    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -112,19 +109,19 @@ void lnLonI(void) {
 
 
 void lnRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnRe16:", "cannot use NaN as an input of ln", NULL, NULL);
+      showInfoDialog("In function lnRe16:", "cannot use NaN as X input of ln", NULL, NULL);
     #endif
     return;
   }
 
   real51_t real51;
 
-  if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -133,21 +130,21 @@ void lnRe16(void) {
       #endif
     }
   }
-  else if(real16IsPositive(REGISTER_REAL16_DATA(opX))) { // Positive
-    real16ToReal51(REGISTER_REAL16_DATA(opX), &real51);
+  else if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) { // Positive
+    real16ToReal51(REGISTER_REAL16_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real16SetPositiveSign(REGISTER_REAL16_DATA(opX));
-    real16ToReal51(REGISTER_REAL16_DATA(opX), &real51);
+    real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToReal51(REGISTER_REAL16_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
-    real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
+    real16Copy(const16_pi, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_DANGER)) {
-    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -160,18 +157,18 @@ void lnRe16(void) {
 
 
 void lnCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnCo16:", "cannot use NaN as an input of ln", NULL, NULL);
+      showInfoDialog("In function lnCo16:", "cannot use NaN as X input of ln", NULL, NULL);
     #endif
     return;
   }
 
-  if(real16IsZero(REGISTER_REAL16_DATA(opX)) && real16IsZero(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
-      real16Copy(const16_NaN, REGISTER_IMAG16_DATA(result));
+      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      real16Copy(const16_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -181,32 +178,30 @@ void lnCo16(void) {
     }
   }
   else {
-    convertRegister16To34(opX);
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result));
-    real34Ln(REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
-    convertRegister34To16(result);
+    convertRegister16To34(REGISTER_X);
+    real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+    real34Ln(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
   }
 }
 
 
 
 void lnAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnAn16:", "cannot use NaN as an input of ln", NULL, NULL);
+      showInfoDialog("In function lnAn16:", "cannot use NaN as X input of ln", NULL, NULL);
     #endif
     return;
   }
 
   real51_t real51;
 
-  setRegisterDataType(result, dtReal16, TAG_NONE);
-
-  if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -215,21 +210,23 @@ void lnAn16(void) {
       #endif
     }
   }
-  else if(real16IsPositive(REGISTER_REAL16_DATA(opX))) { // Positive
-    real16ToReal51(REGISTER_REAL16_DATA(opX), &real51);
+  else if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) { // Positive
+    real16ToReal51(REGISTER_REAL16_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
+    setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real16SetPositiveSign(REGISTER_REAL16_DATA(opX));
-    real16ToReal51(REGISTER_REAL16_DATA(opX), &real51);
+    real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToReal51(REGISTER_REAL16_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
-    real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
+    real16Copy(const16_pi, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_DANGER)) {
-    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -256,10 +253,11 @@ void lnCm16(void) {
 void lnShoI(void) {
   real51_t real51;
 
-  convertShortIntegerRegisterToReal34Register(opX, opX);
-  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(result));
+      convertRegister34To16(REGISTER_X);
+      real16Copy(const16_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -268,22 +266,23 @@ void lnShoI(void) {
       #endif
     }
   }
-  else if(real34IsPositive(REGISTER_REAL34_DATA(opX))) { // Positive
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+  else if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) { // Positive
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtReal16, REAL16_SIZE, TAG_NONE);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE,TAG_NONE);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
    }
   else if(getFlag(FLAG_CPXRES)) {
-    real34SetPositiveSign(REGISTER_REAL34_DATA(opX));
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-    real51ToReal16(&real51, REGISTER_REAL16_DATA(result));
-    real16Copy(const16_pi, REGISTER_IMAG16_DATA(result));
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    real51ToReal16(&real51, REGISTER_REAL16_DATA(REGISTER_X));
+    real16Copy(const16_pi, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_DANGER)) {
-    real16Copy(const16_NaN, REGISTER_REAL34_DATA(result));
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE,TAG_NONE);
+    real16Copy(const16_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -296,19 +295,19 @@ void lnShoI(void) {
 
 
 void lnRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnRe34:", "cannot use NaN as an input of ln", NULL, NULL);
+      showInfoDialog("In function lnRe34:", "cannot use NaN as X input of ln", NULL, NULL);
     #endif
     return;
   }
 
   real51_t real51;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -317,21 +316,21 @@ void lnRe34(void) {
       #endif
     }
   }
-  else if(real34IsPositive(REGISTER_REAL34_DATA(opX))) { // Positive
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+  else if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) { // Positive
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
+    real51ToReal34(&real51, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real34SetPositiveSign(REGISTER_REAL34_DATA(opX));
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
-    real34Copy(const34_pi, REGISTER_IMAG34_DATA(result));
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real51ToReal34(&real51, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(const34_pi, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_DANGER)) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -344,18 +343,18 @@ void lnRe34(void) {
 
 
 void lnCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnCo34:", "cannot use NaN as an input of ln", NULL, NULL);
+      showInfoDialog("In function lnCo34:", "cannot use NaN as X input of ln", NULL, NULL);
     #endif
     return;
   }
 
-  if(real34IsZero(REGISTER_REAL34_DATA(opX)) && real34IsZero(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
-      real34Copy(const34_NaN, REGISTER_IMAG34_DATA(result));
+      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const34_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -365,29 +364,28 @@ void lnCo34(void) {
     }
   }
   else {
-    real34RectangularToPolar(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result), REGISTER_IMAG34_DATA(result));
-    real34Ln(REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
+    real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+    real34Ln(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
 
 
 
 void lnAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnAn34:", "cannot use NaN as an input of ln", NULL, NULL);
+      showInfoDialog("In function lnAn34:", "cannot use NaN as X input of ln", NULL, NULL);
     #endif
     return;
   }
 
   real51_t real51;
 
-  setRegisterDataType(result, dtReal34, TAG_NONE);
-
-  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(result));
+      real34Copy(const34_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -396,21 +394,23 @@ void lnAn34(void) {
       #endif
     }
   }
-  else if(real34IsPositive(REGISTER_REAL34_DATA(opX))) { // Positive
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+  else if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) { // Positive
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
+    real51ToReal34(&real51, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real34SetPositiveSign(REGISTER_REAL34_DATA(opX));
-    real34ToReal51(REGISTER_REAL34_DATA(opX), &real51);
+    real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToReal51(REGISTER_REAL34_DATA(REGISTER_X), &real51);
     WP34S_real51Ln(&real51, &real51);
-    reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real51ToReal34(&real51, REGISTER_REAL34_DATA(result));
-    real34Copy(const34_pi, REGISTER_IMAG34_DATA(result));
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    real51ToReal34(&real51, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(const34_pi, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_DANGER)) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

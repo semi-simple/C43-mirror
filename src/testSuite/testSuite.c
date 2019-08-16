@@ -1668,13 +1668,11 @@ void checkExpectedOutParameter(char *p) {
         }
       }
 
-      opX = allocateTemporaryRegister();
-      strToShortInteger(r, opX);
-      checkRegisterType(regist, letter, dtShortInteger, getRegisterTag(opX));
-      if(*REGISTER_SHORT_INTEGER_DATA(opX) != *REGISTER_SHORT_INTEGER_DATA(regist)) {
+      strToShortInteger(r, TEMP_REGISTER);
+      checkRegisterType(regist, letter, dtShortInteger, getRegisterTag(TEMP_REGISTER));
+      if(*REGISTER_SHORT_INTEGER_DATA(TEMP_REGISTER) != *REGISTER_SHORT_INTEGER_DATA(regist)) {
         wrongRegisterValue(regist, letter, r);
       }
-      freeTemporaryRegister(opX);
     }
     else if(strcmp(l, "RE34") == 0) {
       checkRegisterType(regist, letter, dtReal34, TAG_NONE);

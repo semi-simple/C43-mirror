@@ -57,47 +57,40 @@ void fnArctan(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   arctan[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
 
 void arctanLonI(void) {
-  convertLongIntegerRegisterToReal34Register(opX, opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, currentAngularMode);
-  WP34S_do_atan(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
-  convertRegister34To16(result);
-
-  setRegisterDataType(result, dtAngle16, currentAngularMode);
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  WP34S_do_atan(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
+  convertRegister34To16(REGISTER_X);
+  setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
 }
 
 
 
 void arctanRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanRe16:", "cannot use NaN as an input of arctan", NULL, NULL);
+      showInfoDialog("In function arctanRe16:", "cannot use NaN as X input of arctan", NULL, NULL);
     #endif
     return;
   }
 
-  convertRegister16To34(opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, currentAngularMode);
-  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
+  convertRegister16To34(REGISTER_X);
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
-      if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-        real34SetNegativeSign(REGISTER_REAL34_DATA(result));
+      real34Copy(const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+      if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X))) {
+        real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
       }
-      convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_MULTPI, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -108,71 +101,64 @@ void arctanRe16(void) {
     }
   }
   else {
-    WP34S_do_atan(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
-    convertRegister34To16(result);
+    WP34S_do_atan(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
+    convertRegister34To16(REGISTER_X);
   }
 
-  setRegisterDataType(result, dtAngle16, currentAngularMode);
+  setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {
-    checkDms16(REGISTER_REAL16_DATA(result));
+    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
 
 
 
 void arctanCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanCo16:", "cannot use NaN as an input of arctan", NULL, NULL);
+      showInfoDialog("In function arctanCo16:", "cannot use NaN as X input of arctan", NULL, NULL);
     #endif
     return;
   }
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  complex34_t one_iz;
+  real34_t numer, denom;
 
-  convertRegister16To34(opX);
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  convertRegister16To34(REGISTER_X);
 
-  // calculate iz
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
-  real34Copy(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX));
-  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX));
-  real34ChangeSign(REGISTER_REAL34_DATA(opX));
+  // calculate (1 - iz) / (1 + iz)  with z = a + bi
 
-  // calculate 1 - iz
-  real34Copy(const34_1, REGISTER_REAL34_DATA(opY));
-  real34Zero(REGISTER_IMAG34_DATA(opY));
-  subCo34Co34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&one_iz));
+  // 1 - (a + bi)i      1 - (a² + b²)             - 2a
+  // -------------  =  ----------------  +  ---------------- i
+  // 1 + (a + bi)i     a² + b² - 2b + 1     a² + b² - 2b + 1
 
-  // calculate 1 + iz
-  addCo34Co34();
-
-  // calculate (1 - iz) / (1 + iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&one_iz), REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  divCo34Co34();
-  freeTemporaryRegister(opY);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = a²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = a² + b²
+  real34Subtract(const34_1, &denom, &numer);                                                     // numer = 1 - (a² + b²)
+  real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));                                            // b = -b
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), const34_2, &denom, &denom);                        // denom = a² + b² - 2b
+  real34Add(&denom, const34_1, &denom);                                                          // denom = a² + b² - 2b + 1
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_2, REGISTER_IMAG34_DATA(REGISTER_X)); // imag part = 2a
+  real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));                                            // imag part = -2a
+  real34Divide(&numer, &denom, REGISTER_REAL34_DATA(REGISTER_X));                                // real part = numer / denom
+  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));      // imag part = -2a / denom
 
   // calculate ln((1 - iz) / (1 + iz))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  lnCo34();
+  real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Ln(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
-  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
-  real34ChangeSign(REGISTER_REAL34_DATA(result));
-  real34Multiply(REGISTER_REAL34_DATA(result), const34_0_5, REGISTER_REAL34_DATA(result));
-  real34Multiply(REGISTER_IMAG34_DATA(result), const34_0_5, REGISTER_IMAG34_DATA(result));
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_0_5, REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &numer);
+  real34ChangeSign(&numer);
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Copy(&numer, REGISTER_REAL34_DATA(REGISTER_X));
 
-  convertRegister34To16(result);
+  convertRegister34To16(REGISTER_X);
 }
 
 
@@ -190,22 +176,22 @@ void arctanCm16(void) {
 
 
 void arctanRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanRe34:", "cannot use NaN as an input of arctan", NULL, NULL);
+      showInfoDialog("In function arctanRe34:", "cannot use NaN as X input of arctan", NULL, NULL);
     #endif
     return;
   }
 
-  setRegisterTag(result, currentAngularMode);
-  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
+  setRegisterTag(REGISTER_X, currentAngularMode);
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_0_5, REGISTER_REAL34_DATA(result));
-      if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
-        real34SetNegativeSign(REGISTER_REAL34_DATA(result));
+      real34Copy(const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+      if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X))) {
+        real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
       }
-      convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_MULTPI, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -216,63 +202,59 @@ void arctanRe34(void) {
     }
   }
   else {
-    WP34S_do_atan(REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-    convertAngle34FromTo(REGISTER_REAL34_DATA(result), AM_RADIAN, currentAngularMode);
+    WP34S_do_atan(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
   }
 
-  setRegisterDataType(result, dtAngle34, currentAngularMode);
+  setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {
-    checkDms34(REGISTER_REAL34_DATA(result));
+    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
 
 
 
 void arctanCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanCo34:", "cannot use NaN as an input of arctan", NULL, NULL);
+      showInfoDialog("In function arctanCo34:", "cannot use NaN as X input of arctan", NULL, NULL);
     #endif
     return;
   }
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  complex34_t one_iz;
+  real34_t numer, denom;
 
-  // calculate iz
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(opX), REGISTER_COMPLEX34_DATA(opY));
-  real34Copy(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(opX));
-  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(opX));
-  real34ChangeSign(REGISTER_REAL34_DATA(opX));
+  convertRegister16To34(REGISTER_X);
 
-  // calculate 1 - iz
-  real34Copy(const34_1, REGISTER_REAL34_DATA(opY));
-  real34Zero(REGISTER_IMAG34_DATA(opY));
-  subCo34Co34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&one_iz));
+  // calculate (1 - iz) / (1 + iz)  with z = a + bi
 
-  // calculate 1 + iz
-  addCo34Co34();
+  // 1 - (a + bi)i      1 - (a² + b²)             - 2a
+  // -------------  =  ----------------  +  ---------------- i
+  // 1 + (a + bi)i     a² + b² - 2b + 1     a² + b² - 2b + 1
 
-  // calculate (1 - iz) / (1 + iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&one_iz), REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  divCo34Co34();
-  freeTemporaryRegister(opY);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = a²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = a² + b²
+  real34Subtract(const34_1, &denom, &numer);                                                     // numer = 1 - (a² + b²)
+  real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));                                            // b = -b
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), const34_2, &denom, &denom);                        // denom = a² + b² - 2b
+  real34Add(&denom, const34_1, &denom);                                                          // denom = a² + b² - 2b + 1
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_2, REGISTER_IMAG34_DATA(REGISTER_X)); // imag part = 2a
+  real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));                                            // imag part = -2a
+  real34Divide(&numer, &denom, REGISTER_REAL34_DATA(REGISTER_X));                                // real part = numer / denom
+  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));      // imag part = -2a / denom
 
   // calculate ln((1 - iz) / (1 + iz))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  lnCo34();
+  real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Ln(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  real34Copy(REGISTER_REAL34_DATA(opX), REGISTER_IMAG34_DATA(result));
-  real34Copy(REGISTER_IMAG34_DATA(opX), REGISTER_REAL34_DATA(result));
-  real34ChangeSign(REGISTER_REAL34_DATA(result));
-  real34Multiply(REGISTER_REAL34_DATA(result), const34_0_5, REGISTER_REAL34_DATA(result));
-  real34Multiply(REGISTER_IMAG34_DATA(result), const34_0_5, REGISTER_IMAG34_DATA(result));
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_0_5, REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &numer);
+  real34ChangeSign(&numer);
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34Copy(&numer, REGISTER_REAL34_DATA(REGISTER_X));
 }

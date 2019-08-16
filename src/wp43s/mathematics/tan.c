@@ -83,13 +83,9 @@ void fnTan(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   Tan[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
@@ -97,32 +93,33 @@ void fnTan(uint16_t unusedParamButMandatory) {
 void tanLonI(void) {
   real34_t cos;
 
-  longIntegerAngleReduction(opX, currentAngularMode);
+  longIntegerAngleReduction(REGISTER_X, currentAngularMode);
 
-  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-  WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), currentAngularMode);
+  WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
+
   if(real34IsZero(&cos)) {
     if(getFlag(FLAG_DANGER)) {
-      real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function tanRe34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
+        showInfoDialog("In function tanLonI:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
       #endif
       return;
     }
   }
   else {
-   real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
   }
-  convertRegister34To16(result);
+
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void tanRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanRe16:", "cannot use NaN as an input of tan", NULL, NULL);
@@ -130,19 +127,18 @@ void tanRe16(void) {
     return;
   }
 
-  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
-    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     real34_t cos;
 
-    convertRegister16To34(opX);
-    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), currentAngularMode);
+    convertRegister16To34(REGISTER_X);
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
 
     if(real34IsZero(&cos)) {
       if(getFlag(FLAG_DANGER)) {
-      	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+      	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -153,16 +149,16 @@ void tanRe16(void) {
       }
     }
     else {
-   	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+   	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
     }
-    convertRegister34To16(result);
+    convertRegister34To16(REGISTER_X);
   }
 }
 
 
 
 void tanCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanCo16:", "cannot use NaN as an input of tan", NULL, NULL);
@@ -173,55 +169,64 @@ void tanCo16(void) {
   // tan(z) = -i(exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz))
   complex34_t iz, expIz, expMIz, numer;
 
-  convertRegister16To34(opX);
-  convertRegister16To34(result);
+  convertRegister16To34(REGISTER_X);
 
   // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(opX), VARIABLE_IMAG34_DATA(&iz));
-  real34Copy(REGISTER_IMAG34_DATA(opX), VARIABLE_REAL34_DATA(&iz));
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&iz));
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&iz));
   real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
 
-  // calculate exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  // calculate expIz = exp(iz)
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expIz));
 
-  // calculate exp(-iz)
+  // calculate expMIz = exp(-iz)
   complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expMIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expMIz));
 
-  // calculate exp(iz) - exp(-iz)
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz),  REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&expMIz), REGISTER_COMPLEX34_DATA(opX));
-  subCo34Co34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&numer));
+  // calculate nummer =  exp(iz) - exp(-iz)
+  real34Subtract(VARIABLE_REAL34_DATA(&expIz), VARIABLE_REAL34_DATA(&expMIz), VARIABLE_REAL34_DATA(&numer));
+  real34Subtract(VARIABLE_IMAG34_DATA(&expIz), VARIABLE_IMAG34_DATA(&expMIz), VARIABLE_IMAG34_DATA(&numer));
 
-  // calculate exp(iz) + exp(-iz)
-  addCo34Co34();
+  // calculate X = exp(iz) + exp(-iz)
+  real34Add(VARIABLE_REAL34_DATA(&expIz), VARIABLE_REAL34_DATA(&expMIz), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Add(VARIABLE_IMAG34_DATA(&expIz), VARIABLE_IMAG34_DATA(&expMIz), REGISTER_IMAG34_DATA(REGISTER_X));
 
-  // calculate (exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz))
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&numer), REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  divCo34Co34();
+  // calculate X = (exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz)) = numer / X    WARNING using iz, expIz and expMIz as temp variables below
+    // Denominator = expMIz
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &expMIz);     // expMIz = c*c
+    real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &expMIz, &expMIz); // expMIz = c*c + d*d
 
-  // calculate -i(exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
-  real34Copy(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(result));
-  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(result));
-  real34ChangeSign(REGISTER_IMAG34_DATA(result));
+    // real part = iz
+    real34Multiply(VARIABLE_REAL34_DATA(&numer), REGISTER_REAL34_DATA(REGISTER_X), &expIz);           // expIz = a*c
+    real34FMA(VARIABLE_IMAG34_DATA(&numer), REGISTER_IMAG34_DATA(REGISTER_X), &expIz, &expIz);        // expIz = a*c + b*d
+    real34Divide(&expIz, &expMIz, &iz);                                                              // iz = (a*c + b*d) / (c*c + d*d) = expIz / expMIz
 
-  freeTemporaryRegister(opY);
-  convertRegister34To16(result);
+    // imaginary part
+    real34Multiply(VARIABLE_IMAG34_DATA(&numer), REGISTER_REAL34_DATA(REGISTER_X), &expIz);           // expIz = b*c
+    real34ChangeSign(VARIABLE_REAL34_DATA(&numer)); // -a
+    real34FMA(VARIABLE_REAL34_DATA(&numer), REGISTER_IMAG34_DATA(REGISTER_X), &expIz, &expIz);        // expIz = b*c - a*d
+    real34Divide(&expIz, &expMIz, REGISTER_IMAG34_DATA(REGISTER_X));                                 // im(X) = (b*c - a*d) / (c*c + d*d) = expIz / expMIz
+
+    // real part
+    real34Copy(&iz, REGISTER_REAL34_DATA(REGISTER_X));                                               // re(X) = iz
+
+  // calculate -i(exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz))     WARNING using iz as a temp variable below
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &iz);
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34ChangeSign(&iz);
+  real34Copy(&iz, REGISTER_IMAG34_DATA(REGISTER_X));
+
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void tanAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanAn16:", "cannot use NaN as an input of tan", NULL, NULL);
@@ -229,21 +234,18 @@ void tanAn16(void) {
     return;
   }
 
-  setRegisterDataType(result, dtReal16, TAG_NONE);
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(opX))) {
-    real16Copy(const16_NaN, REGISTER_REAL16_DATA(result));
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
+    real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     real34_t cos;
 
-    convertRegister16To34(opX);
-    reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
-    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
+    convertRegister16To34(REGISTER_X);
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
 
     if(real34IsZero(&cos)) {
       if(getFlag(FLAG_DANGER)) {
-      	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+      	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -254,10 +256,12 @@ void tanAn16(void) {
       }
     }
     else {
-   	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+   	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
     }
-    convertRegister34To16(result);
+    convertRegister34To16(REGISTER_X);
   }
+
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
@@ -275,7 +279,7 @@ void tanCm16(void) {
 
 
 void tanRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanRe34:", "cannot use NaN as an input of tan", NULL, NULL);
@@ -283,17 +287,17 @@ void tanRe34(void) {
     return;
   }
 
-  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     real34_t cos;
 
-    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), currentAngularMode);
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
 
     if(real34IsZero(&cos)) {
       if(getFlag(FLAG_DANGER)) {
-      	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+      	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -303,7 +307,7 @@ void tanRe34(void) {
       }
     }
     else {
-   	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+   	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 }
@@ -311,7 +315,7 @@ void tanRe34(void) {
 
 
 void tanCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanCo34:", "cannot use NaN as an input of tan", NULL, NULL);
@@ -323,50 +327,59 @@ void tanCo34(void) {
   complex34_t iz, expIz, expMIz, numer;
 
   // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(opX), VARIABLE_IMAG34_DATA(&iz));
-  real34Copy(REGISTER_IMAG34_DATA(opX), VARIABLE_REAL34_DATA(&iz));
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&iz));
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&iz));
   real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
 
-  // calculate exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  // calculate expIz = exp(iz)
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expIz));
 
-  // calculate exp(-iz)
+  // calculate expMIz = exp(-iz)
   complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(opX));
+  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
   expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&expMIz));
+  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expMIz));
 
-  // calculate exp(iz) - exp(-iz)
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&expIz),  REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&expMIz), REGISTER_COMPLEX34_DATA(opX));
-  subCo34Co34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), VARIABLE_COMPLEX34_DATA(&numer));
+  // calculate nummer =  exp(iz) - exp(-iz)
+  real34Subtract(VARIABLE_REAL34_DATA(&expIz), VARIABLE_REAL34_DATA(&expMIz), VARIABLE_REAL34_DATA(&numer));
+  real34Subtract(VARIABLE_IMAG34_DATA(&expIz), VARIABLE_IMAG34_DATA(&expMIz), VARIABLE_IMAG34_DATA(&numer));
 
-  // calculate exp(iz) + exp(-iz)
-  addCo34Co34();
+  // calculate X = exp(iz) + exp(-iz)
+  real34Add(VARIABLE_REAL34_DATA(&expIz), VARIABLE_REAL34_DATA(&expMIz), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Add(VARIABLE_IMAG34_DATA(&expIz), VARIABLE_IMAG34_DATA(&expMIz), REGISTER_IMAG34_DATA(REGISTER_X));
 
-  // calculate (exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz))
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&numer),  REGISTER_COMPLEX34_DATA(opY));
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opX));
-  divCo34Co34();
+  // calculate X = (exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz)) = numer / X    WARNING using iz, expIz and expMIz as temp variables below
+    // Denominator = expMIz
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &expMIz);     // expMIz = c*c
+    real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &expMIz, &expMIz); // expMIz = c*c + d*d
 
-  // calculate -i(exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz))
-  complex34Copy(REGISTER_COMPLEX34_DATA(result), REGISTER_COMPLEX34_DATA(opY));
-  real34Copy(REGISTER_REAL34_DATA(opY), REGISTER_IMAG34_DATA(result));
-  real34Copy(REGISTER_IMAG34_DATA(opY), REGISTER_REAL34_DATA(result));
-  real34ChangeSign(REGISTER_IMAG34_DATA(result));
+    // real part = iz
+    real34Multiply(VARIABLE_REAL34_DATA(&numer), REGISTER_REAL34_DATA(REGISTER_X), &expIz);           // expIz = a*c
+    real34FMA(VARIABLE_IMAG34_DATA(&numer), REGISTER_IMAG34_DATA(REGISTER_X), &expIz, &expIz);        // expIz = a*c + b*d
+    real34Divide(&expIz, &expMIz, &iz);                                                              // iz = (a*c + b*d) / (c*c + d*d) = expIz / expMIz
 
-  freeTemporaryRegister(opY);
+    // imaginary part
+    real34Multiply(VARIABLE_IMAG34_DATA(&numer), REGISTER_REAL34_DATA(REGISTER_X), &expIz);           // expIz = b*c
+    real34ChangeSign(VARIABLE_REAL34_DATA(&numer)); // -a
+    real34FMA(VARIABLE_REAL34_DATA(&numer), REGISTER_IMAG34_DATA(REGISTER_X), &expIz, &expIz);        // expIz = b*c - a*d
+    real34Divide(&expIz, &expMIz, REGISTER_IMAG34_DATA(REGISTER_X));                                 // im(X) = (b*c - a*d) / (c*c + d*d) = expIz / expMIz
+
+    // real part
+    real34Copy(&iz, REGISTER_REAL34_DATA(REGISTER_X));                                               // re(X) = iz
+
+  // calculate -i(exp(iz) - exp(-iz)) / (exp(iz) + exp(-iz))     WARNING using iz as a temp variable below
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &iz);
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34ChangeSign(&iz);
+  real34Copy(&iz, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
 
 void tanAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanAn34:", "cannot use NaN as an input of tan", NULL, NULL);
@@ -374,19 +387,17 @@ void tanAn34(void) {
     return;
   }
 
-  setRegisterDataType(result, dtReal34, TAG_NONE);
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(opX))) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(result));
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     real34_t cos;
 
-    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(opX), getRegisterAngularMode(opX));
+    WP34S_cvt_2rad_sincos(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
 
     if(real34IsZero(&cos)) {
       if(getFlag(FLAG_DANGER)) {
-      	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+      	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -396,7 +407,9 @@ void tanAn34(void) {
       }
     }
     else {
-   	 real34Divide(REGISTER_REAL34_DATA(result), &cos, REGISTER_REAL34_DATA(result));
+   	 real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &cos, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
+
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }

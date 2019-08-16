@@ -37,24 +37,21 @@ void fnDenMode(uint16_t denMode) {
 
 
 void fnDenMax(uint16_t unusedParamButMandatory) {
-  calcRegister_t tmp = allocateTemporaryRegister();
+  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
 
-  copySourceRegisterToDestRegister(REGISTER_X, tmp);
-
-  if(getRegisterDataType(tmp) == dtReal34) {
-    convertRegister34To16(tmp);
+  if(getRegisterDataType(TEMP_REGISTER) == dtReal34) {
+    convertRegister34To16(TEMP_REGISTER);
   }
 
-  else if(getRegisterDataType(tmp) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(tmp, tmp);
+  else if(getRegisterDataType(TEMP_REGISTER) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(TEMP_REGISTER, TEMP_REGISTER);
   }
 
-  else if(getRegisterDataType(tmp) == dtShortInteger) {
-    convertShortIntegerRegisterToReal16Register(tmp, tmp);
+  else if(getRegisterDataType(TEMP_REGISTER) == dtShortInteger) {
+    convertShortIntegerRegisterToReal16Register(TEMP_REGISTER, TEMP_REGISTER);
   }
 
-  else if(getRegisterDataType(tmp) != dtReal16) {
-    freeTemporaryRegister(tmp);
+  else if(getRegisterDataType(TEMP_REGISTER) != dtReal16) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use %s to set or recall DENMAX!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
@@ -63,11 +60,11 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  if(real16IsSpecial(REGISTER_REAL16_DATA(tmp)) || real16CompareLessThan(REGISTER_REAL16_DATA(tmp), const16_1) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(tmp), const16_9999)) {
+  if(real16IsSpecial(REGISTER_REAL16_DATA(TEMP_REGISTER)) || real16CompareLessThan(REGISTER_REAL16_DATA(TEMP_REGISTER), const16_1) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(TEMP_REGISTER), const16_9999)) {
     denMax = DM_DENMAX;
   }
   else {
-    int32_t den = real16ToInt32(REGISTER_REAL16_DATA(tmp));
+    int32_t den = real16ToInt32(REGISTER_REAL16_DATA(TEMP_REGISTER));
 
     if(den == 1) {
       longInteger_t lgInt;
@@ -83,7 +80,6 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     }
   }
 
-  freeTemporaryRegister(tmp);
   showFracMode();
   refreshStack();
 }

@@ -57,13 +57,9 @@ void fnSign(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   sign[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
@@ -73,7 +69,7 @@ void signLonI(void) {
 
   longIntegerInit(lgInt);
 
-  switch(getRegisterLongIntegerSign(opX)) {
+  switch(getRegisterLongIntegerSign(REGISTER_X)) {
     case LONG_INTEGER_POSITIVE:
       intToLongInteger(1, lgInt);
       break;
@@ -85,17 +81,17 @@ void signLonI(void) {
     default: {}
   }
 
-  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }
 
 
 
 void signRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function signRe16:", "cannot use NaN as an input of sign", NULL, NULL);
+      showInfoDialog("In function signRe16:", "cannot use NaN as X input of sign", NULL, NULL);
     #endif
     return;
   }
@@ -104,10 +100,10 @@ void signRe16(void) {
 
   longIntegerInit(lgInt);
 
-  if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     uIntToLongInteger(0, lgInt);
   }
-  else if(real16IsNegative(REGISTER_REAL16_DATA(opX))) {
+  else if(real16IsNegative(REGISTER_REAL16_DATA(REGISTER_X))) {
     uIntToLongInteger(1, lgInt);
     longIntegerSetNegativeSign(lgInt);
   }
@@ -115,7 +111,7 @@ void signRe16(void) {
     uIntToLongInteger(1, lgInt);
   }
 
-  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }
 
@@ -132,7 +128,7 @@ void signShoI(void) {
 
   longIntegerInit(lgInt);
 
-  switch(WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX)))) {
+  switch(WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)))) {
     case -1 :
       uIntToLongInteger(1, lgInt);
       longIntegerSetNegativeSign(lgInt);
@@ -148,11 +144,11 @@ void signShoI(void) {
 
     default :
       uIntToLongInteger(0, lgInt);
-      sprintf(errorMessage, "In function signShoI: %" FMT64U " is an unexpected value returned by WP34S_intSign!", WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(opX))));
+      sprintf(errorMessage, "In function signShoI: %" FMT64U " is an unexpected value returned by WP34S_intSign!", WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))));
       displayBugScreen(errorMessage);
   }
 
-  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
 
   longIntegerFree(lgInt);
 }
@@ -160,10 +156,10 @@ void signShoI(void) {
 
 
 void signRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function signRe34:", "cannot use NaN as an input of sign", NULL, NULL);
+      showInfoDialog("In function signRe34:", "cannot use NaN as X input of sign", NULL, NULL);
     #endif
     return;
   }
@@ -171,8 +167,8 @@ void signRe34(void) {
   longInteger_t lgInt;
   longIntegerInit(lgInt);
 
-  if(!real34IsZero(REGISTER_REAL34_DATA(opX))) {
-    if(real34IsNegative(REGISTER_REAL34_DATA(opX))) {
+  if(!real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X))) {
       intToLongInteger(-1, lgInt);
     }
     else {
@@ -180,6 +176,6 @@ void signRe34(void) {
     }
   }
 
-  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }

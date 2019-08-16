@@ -51,7 +51,7 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function unitConversion:", "cannot use NaN as an input of unitConversion", NULL, NULL);
+      showInfoDialog("In function unitConversion:", "cannot use NaN as X input of unitConversion", NULL, NULL);
     #endif
     restoreStack();
     refreshStack();
@@ -108,10 +108,7 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnCvtFToC(uint16_t unusedParamButMandatory) {
-  calcRegister_t tempReg;
-
-  tempReg = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, tempReg);
+  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
     real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), const16_32, REGISTER_REAL16_DATA(REGISTER_X));
@@ -131,8 +128,7 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
   unitConversion(const34_1_8, divide);
 
   if(lastErrorCode == 0) {
-    copySourceRegisterToDestRegister(tempReg, REGISTER_L);
-    freeTemporaryRegister(tempReg);
+    copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);
 
     adjustResult(REGISTER_X, false, false, -1, -1, -1);
   }
@@ -361,10 +357,10 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as an input of fnCvtRatioDb", NULL, NULL);
+        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
       #endif
       restoreStack();
       refreshStack();
@@ -380,10 +376,10 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     }
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as an input of fnCvtRatioDb", NULL, NULL);
+        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
       #endif
       restoreStack();
       refreshStack();
@@ -425,10 +421,10 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+    if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as an input of fnCvtDbRatio", NULL, NULL);
+        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as X input of fnCvtDbRatio", NULL, NULL);
       #endif
       restoreStack();
       refreshStack();
@@ -445,10 +441,10 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     real16Power(const16_10, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+    if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as an input of fnCvtDbRatio", NULL, NULL);
+        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as X input of fnCvtDbRatio", NULL, NULL);
       #endif
       restoreStack();
       refreshStack();

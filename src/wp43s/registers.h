@@ -39,18 +39,17 @@
 #define NIM_REGISTER_LINE REGISTER_X
 #define ERR_REGISTER_LINE REGISTER_Z
 
-#define FIRST_TEMPORARY_REGISTER         2000
-#define NUMBER_OF_TEMPORARY_REGISTERS       8 // 7 are used here: [3] [1/x] [f] [a b/c] [1/x]
-
-#define SAVED_REGISTER_X 3000
-#define SAVED_REGISTER_Y 3001
-#define SAVED_REGISTER_Z 3002
-#define SAVED_REGISTER_T 3003
-#define SAVED_REGISTER_A 3004
-#define SAVED_REGISTER_B 3005
-#define SAVED_REGISTER_C 3006
-#define SAVED_REGISTER_D 3007
-#define SAVED_REGISTER_L 3008
+#define SAVED_REGISTER_X    2000
+#define SAVED_REGISTER_Y    2001
+#define SAVED_REGISTER_Z    2002
+#define SAVED_REGISTER_T    2003
+#define SAVED_REGISTER_A    2004
+#define SAVED_REGISTER_B    2005
+#define SAVED_REGISTER_C    2006
+#define SAVED_REGISTER_D    2007
+#define SAVED_REGISTER_L    2008
+#define LAST_SAVED_REGISTER 2009
+#define TEMP_REGISTER       2009
 
 #define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
@@ -63,8 +62,7 @@
 //    0 to  111 global resisters
 //  112 to  199 local registers (.00 to .87)
 // 1000 to 1999 named registers
-// 2000 to 2007 temporary registers
-// 3000 to 3007 saved stack registers (UNDO item)
+// 2000 to 2009 saved stack registers (UNDO item)
 
 
 /********************************************//**
@@ -159,8 +157,6 @@ void              printReal51ToConsole            (const real51_t *value);
 void              printReal451ToConsole           (const real451_t *value);
 void              printLongIntegerToConsole       (longInteger_t value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
-calcRegister_t    allocateTemporaryRegister       (void);
-void              freeTemporaryRegister           (calcRegister_t tmpReg);
 
 #ifdef DMCP_BUILD
   void            printRegisterToConsole          (calcRegister_t regist, int16_t line);

@@ -57,86 +57,137 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   tenPow[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
 
 void tenPowLonI(void) {
-  int16_t exponent;
+	 int32_t exponentSign;
+  longInteger_t base, exponent;
+
+  longIntegerInit(base);
+  intToLongInteger(10, base);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
+
+  longIntegerSetPositiveSign(base);
+
+  exponentSign = longIntegerSign(exponent);
+  longIntegerSetPositiveSign(exponent);
+
+ 	if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
+	   displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function tenPowLonI: Cannot calculate 0^0!", NULL, NULL, NULL);
+    #endif
+
+    longIntegerFree(base);
+    longIntegerFree(exponent);
+	  	return;
+  }
+
+ 	if(longIntegerIsZero(exponent)) {
+	  	uIntToLongInteger(1, base);
+	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    longIntegerFree(base);
+    longIntegerFree(exponent);
+	  	return;
+  }
+	 else if(longIntegerIsZero(base)) {
+	  	uIntToLongInteger(0, base);
+	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    longIntegerFree(base);
+    longIntegerFree(exponent);
+	  	return;
+	 }
+	 else if(exponentSign == -1) {
+	  	uIntToLongInteger(0, base);
+	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    longIntegerFree(base);
+    longIntegerFree(exponent);
+	  	return;
+	 }
+
   longInteger_t power;
 
-  convertLongIntegerRegisterToLongInteger(opX, power);
-  exponent = (longIntegerCompareUInt(power, 1234) > 0 ? 1234 : longIntegerToUInt(power));
+  longIntegerInit(power);
+ 	uIntToLongInteger(1, power);
 
-  uIntToLongInteger(10, power);
-  opY = allocateTemporaryRegister();
-  convertLongIntegerToLongIntegerRegister(power, opY);
+  for(uint32_t i=0; !longIntegerIsZero(exponent); i++) {
+    if(longIntegerIsOdd(exponent)) {
+     longIntegerMultiply(power, base, power);
+    }
 
-  uIntToLongInteger(exponent, power);
-  convertLongIntegerToLongIntegerRegister(power, opX);
+    longIntegerDivideUInt(exponent, 2, exponent);
 
-  powLonILonI();
+    if(!longIntegerIsZero(exponent)) {
+      longIntegerSquare(base, base);
+    }
+  }
 
-  freeTemporaryRegister(opY);
+  convertLongIntegerToLongIntegerRegister(power, REGISTER_X);
 
   longIntegerFree(power);
+  longIntegerFree(base);
+  longIntegerFree(exponent);
 }
 
 
 
 void tenPowRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowRe16:", "cannot use NaN as an input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowRe16:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }
 
-  real16Power(const16_10, REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-  setRegisterDataType(result, dtReal16, TAG_NONE);
+  real16Power(const16_10, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
 
 void tenPowCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowCo16:", "cannot use NaN as an input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowCo16:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }
 
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal16, REAL16_SIZE, TAG_NONE);
-  real16Copy(const16_10, REGISTER_REAL16_DATA(opY));
+  convertRegister16To34(REGISTER_X);
 
-  powRe16Co16();
+  // X = X * ln(10)
+  real34Multiply(const34_ln10, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(const34_ln10, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
 
-  freeTemporaryRegister(opY);
+  // X = exp(X * ln(Y))
+  real34_t factor, real34, imag34;
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), &factor);
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(REGISTER_X), &real34, &imag34); // X in radian
+  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(REGISTER_X));
+
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void tenPowAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowAn16:", "cannot use NaN as an input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowAn16:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }
 
-  real16Power(const16_10, REGISTER_REAL16_DATA(opX), REGISTER_REAL16_DATA(result));
-  setRegisterDataType(result, dtReal16, TAG_NONE);
+  real16Power(const16_10, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
@@ -154,55 +205,57 @@ void tenPowCm16(void) {
 
 
 void tenPowShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_int10pow(*(REGISTER_SHORT_INTEGER_DATA(opX)));
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int10pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }
 
 
 
 void tenPowRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowRe34:", "cannot use NaN as an input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowRe34:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }
 
-  real34Power(const34_10, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  real34Power(const34_10, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void tenPowCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowCo34:", "cannot use NaN as an input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowCo34:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }
 
-  opY = allocateTemporaryRegister();
-  reallocateRegister(opY, dtReal34, REAL34_SIZE, TAG_NONE);
-  real34Copy(const34_10, REGISTER_REAL34_DATA(opY));
+  // X = X * ln(10)
+  real34Multiply(const34_ln10, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(const34_ln10, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
 
-  powRe34Co34();
-
-  freeTemporaryRegister(opY);
+  // X = exp(X * ln(Y))
+  real34_t factor, real34, imag34;
+  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), &factor);
+  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(REGISTER_X), &real34, &imag34); // X in radian
+  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
 
 void tenPowAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowAn34:", "cannot use NaN as an input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowAn34:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }
 
-  real34Power(const34_10, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  setRegisterDataType(result, dtReal34, TAG_NONE);
+  real34Power(const34_10, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }

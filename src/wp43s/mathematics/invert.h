@@ -20,5 +20,12 @@
 
 void fnInvert   (uint16_t unusedParamButMandatory);
 void invertError(void);
+void invertLonI (void);
+void invertRe16 (void);
+void invertCo16 (void);
+void invertAn16 (void);
 void invertRm16 (void);
 void invertCm16 (void);
+void invertRe34 (void);
+void invertCo34 (void);
+void invertAn34 (void);

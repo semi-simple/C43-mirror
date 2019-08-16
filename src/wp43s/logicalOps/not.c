@@ -58,12 +58,7 @@ void fnLogicalNot(uint16_t unusedParamButMandatory) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    result = REGISTER_X;
-    opX    = allocateTemporaryRegister();
-    copySourceRegisterToDestRegister(REGISTER_X, opX);
-
     not[getRegisterDataType(REGISTER_X)]();
-    freeTemporaryRegister(opX);
 
     if(lastErrorCode != 0) {
       restoreStack();
@@ -83,7 +78,7 @@ void fnLogicalNot(uint16_t unusedParamButMandatory) {
 void notLonI(void) {
   longInteger_t res;
 
-  convertLongIntegerRegisterToLongInteger(opX, res);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, res);
 
   if(longIntegerIsZero(res)) {
     uIntToLongInteger(1, res);
@@ -92,7 +87,7 @@ void notLonI(void) {
     uIntToLongInteger(0, res);
   }
 
-  convertLongIntegerToLongIntegerRegister(res, result);
+  convertLongIntegerToLongIntegerRegister(res, REGISTER_X);
 
   longIntegerFree(res);
 }
@@ -103,11 +98,11 @@ void notRe16(void) {
   longInteger_t res;
 
   longIntegerInit(res);
-  if(real16IsZero(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     uIntToLongInteger(1, res);
   }
 
-  convertLongIntegerToLongIntegerRegister(res, result);
+  convertLongIntegerToLongIntegerRegister(res, REGISTER_X);
 
   longIntegerFree(res);
 }
@@ -115,7 +110,7 @@ void notRe16(void) {
 
 
 void notShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(result)) = ~(*(REGISTER_SHORT_INTEGER_DATA(opX))) & shortIntegerMask;
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = ~(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) & shortIntegerMask;
 }
 
 
@@ -124,11 +119,11 @@ void notRe34(void) {
   longInteger_t res;
 
   longIntegerInit(res);
-  if(real34IsZero(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     uIntToLongInteger(1, res);
   }
 
-  convertLongIntegerToLongIntegerRegister(res, result);
+  convertLongIntegerToLongIntegerRegister(res, REGISTER_X);
 
   longIntegerFree(res);
 }

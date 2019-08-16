@@ -69,15 +69,7 @@ void fnGcd(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opY    = allocateTemporaryRegister();
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_Y, opY);
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   gcd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-  freeTemporaryRegister(opY);
-  freeTemporaryRegister(opX);
 
   if(lastErrorCode == 0) {
     fnDropY(NOPARAM);
@@ -92,61 +84,61 @@ void fnGcd(uint16_t unusedParamButMandatory) {
 
 
 void gcdLonILonI(void) {
-  longInteger_t iOp1, iOp2;
+  longInteger_t liX, liY;
 
-  convertLongIntegerRegisterToLongInteger(opY, iOp1);
-  longIntegerSetPositiveSign(iOp1);
-  convertLongIntegerRegisterToLongInteger(opX, iOp2);
-  longIntegerSetPositiveSign(iOp2);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
+  longIntegerSetPositiveSign(liY);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
+  longIntegerSetPositiveSign(liX);
 
-  longIntegerGcd(iOp1, iOp2, iOp1);
+  longIntegerGcd(liY, liX, liX);
 
-  convertLongIntegerToLongIntegerRegister(iOp1, result);
+  convertLongIntegerToLongIntegerRegister(liX, REGISTER_X);
 
-  longIntegerFree(iOp2);
-  longIntegerFree(iOp1);
+  longIntegerFree(liX);
+  longIntegerFree(liY);
 }
 
 
 
 void gcdLonIShoI(void) {
-  longInteger_t iOp1, iOp2;
+  longInteger_t liX, liY;
 
-  convertLongIntegerRegisterToLongInteger(opY, iOp1);
-  longIntegerSetPositiveSign(iOp1);
-  convertShortIntegerRegisterLongIntegerRegister(opX, opX);
-  convertLongIntegerRegisterToLongInteger(opX, iOp2);
-  longIntegerSetPositiveSign(iOp2);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
+  longIntegerSetPositiveSign(liY);
+  convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
+  longIntegerSetPositiveSign(liX);
 
-  longIntegerGcd(iOp1, iOp2, iOp1);
+  longIntegerGcd(liY, liX, liX);
 
-  convertLongIntegerToLongIntegerRegister(iOp1, result);
+  convertLongIntegerToLongIntegerRegister(liX, REGISTER_X);
 
-  longIntegerFree(iOp2);
-  longIntegerFree(iOp1);
+  longIntegerFree(liX);
+  longIntegerFree(liY);
 }
 
 
 
 void gcdShoILonI(void) {
-  longInteger_t iOp1, iOp2;
+  longInteger_t liX, liY;
 
-  convertLongIntegerRegisterToLongInteger(opX, iOp1);
-  longIntegerSetPositiveSign(iOp1);
-  convertShortIntegerRegisterLongIntegerRegister(opY, opY);
-  convertLongIntegerRegisterToLongInteger(opY, iOp2);
-  longIntegerSetPositiveSign(iOp2);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
+  longIntegerSetPositiveSign(liX);
+  convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
+  longIntegerSetPositiveSign(liY);
 
-  longIntegerGcd(iOp1, iOp2, iOp1);
+  longIntegerGcd(liY, liX, liX);
 
-  convertLongIntegerToLongIntegerRegister(iOp1, result);
+  convertLongIntegerToLongIntegerRegister(liX, REGISTER_X);
 
-  longIntegerFree(iOp2);
-  longIntegerFree(iOp1);
+  longIntegerFree(liX);
+  longIntegerFree(liY);
 }
 
 
 
 void gcdShoIShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_intGCD(*(REGISTER_SHORT_INTEGER_DATA(opY)), *(REGISTER_SHORT_INTEGER_DATA(opX)));
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intGCD(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)), *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }

@@ -52,7 +52,7 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       regist -= 1000;
       if(regist < numberOfNamedVariables) {
@@ -70,20 +70,8 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
       displayBugScreen("In function getRegisterDataType: no named variables defined!");
     }
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      return tempRegister[regist - FIRST_TEMPORARY_REGISTER].dataType;
-    }
-    #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "temporary register %" FMT16S, regist - FIRST_TEMPORARY_REGISTER);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16S, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS-1);
-      showInfoDialog("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
-    #endif
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       return savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     }
     #ifdef PC_BUILD
@@ -133,7 +121,7 @@ void *getRegisterDataPointer(calcRegister_t regist) {
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       regist -= 1000;
       if(regist < numberOfNamedVariables) {
@@ -151,20 +139,8 @@ void *getRegisterDataPointer(calcRegister_t regist) {
       displayBugScreen("In function getRegisterDataPointer: no named variables defined!");
     }
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      return RAMPTR_TO_MEMPTR(tempRegister[regist - FIRST_TEMPORARY_REGISTER].dataPointer);
-    }
-    #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "temporary register %" FMT16S, regist - FIRST_TEMPORARY_REGISTER);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16S, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      showInfoDialog("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
-    #endif
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       return RAMPTR_TO_MEMPTR(savedStackRegister[regist - SAVED_REGISTER_X].dataPointer);
     }
     #ifdef PC_BUILD
@@ -215,7 +191,7 @@ uint32_t getRegisterTag(calcRegister_t regist) {
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       regist -= 1000;
       if(regist < numberOfNamedVariables) {
@@ -233,20 +209,8 @@ uint32_t getRegisterTag(calcRegister_t regist) {
       displayBugScreen("In function getRegisterTag: no named variables defined!");
     }
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      return tempRegister[regist - FIRST_TEMPORARY_REGISTER].tag;
-    }
-    #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "temporary register %" FMT16S, regist - FIRST_TEMPORARY_REGISTER);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16S, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      showInfoDialog("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
-    #endif
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       return savedStackRegister[regist - SAVED_REGISTER_X].tag;
     }
     #ifdef PC_BUILD
@@ -366,7 +330,7 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       regist -= 1000;
       if(regist < numberOfNamedVariables) {
@@ -385,21 +349,8 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
       displayBugScreen("In function setRegisterDataType: no named variables defined!");
     }
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      tempRegister[regist - FIRST_TEMPORARY_REGISTER].dataType = dataType;
-      tempRegister[regist - FIRST_TEMPORARY_REGISTER].tag = tag;
-    }
-    #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "temporary register %" FMT16S, regist - FIRST_TEMPORARY_REGISTER);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16S, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      showInfoDialog("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
-    #endif
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       savedStackRegister[regist - SAVED_REGISTER_X].dataType = dataType;
       savedStackRegister[regist - SAVED_REGISTER_X].tag = tag;
     }
@@ -452,7 +403,7 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       regist -= 1000u;
       if(regist < numberOfNamedVariables) {
@@ -472,20 +423,8 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
     }
     #endif
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      tempRegister[regist - FIRST_TEMPORARY_REGISTER].dataPointer = dataPointer;
-    }
-    #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "temporary register %" FMT16S, regist - FIRST_TEMPORARY_REGISTER);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16S, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      showInfoDialog("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
-    #endif
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       savedStackRegister[regist - SAVED_REGISTER_X].dataPointer = dataPointer;
     }
     #ifdef PC_BUILD
@@ -536,7 +475,7 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       regist -= 1000u;
       if(regist < numberOfNamedVariables) {
@@ -554,20 +493,8 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
       displayBugScreen("In function setRegisterDataInfo: no named registers defined!");
     }
    }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      tempRegister[regist - FIRST_TEMPORARY_REGISTER].tag = tag;
-    }
-    #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "temporary register %" FMT16S, regist - FIRST_TEMPORARY_REGISTER);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" FMT16S, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      showInfoDialog("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
-    #endif
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       savedStackRegister[regist - SAVED_REGISTER_X].tag = tag;
     }
     #ifdef PC_BUILD
@@ -804,7 +731,7 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint32_t maxDataLen) {
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named register
+  else if(regist < SAVED_REGISTER_X) { // Named register
     if(numberOfNamedVariables > 0) {
       if(regist-1000 < numberOfNamedVariables) {
         *(dataSize_t *)REGISTER_DATA(regist) = maxDataLen;
@@ -820,17 +747,8 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint32_t maxDataLen) {
     }
     #endif
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      *(dataSize_t *)REGISTER_DATA(regist) = maxDataLen;
-    }
-    else {
-      sprintf(errorMessage, "In function setRegisterMaxDataLength: temporary register %" FMT16S " is not defined! Must be from 0 to %" FMT16S "!", regist - FIRST_TEMPORARY_REGISTER, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      displayBugScreen(errorMessage);
-    }
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       *(dataSize_t *)REGISTER_DATA(regist) = maxDataLen;
     }
     else {
@@ -873,7 +791,7 @@ uint32_t getRegisterMaxDataLength(calcRegister_t regist) {
     }
     #endif
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       if(regist-1000 < numberOfNamedVariables) {
         return *(dataSize_t *)REGISTER_DATA(regist);
@@ -889,17 +807,8 @@ uint32_t getRegisterMaxDataLength(calcRegister_t regist) {
     }
     #endif
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS) {
-      return *(dataSize_t *)REGISTER_DATA(regist);
-    }
-    else {
-      sprintf(errorMessage, "In function getRegisterMaxDataLength: temporary register %" FMT16S " is not defined! Must be from 0 to %" FMT16S "!", regist - FIRST_TEMPORARY_REGISTER, FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS - 1);
-      displayBugScreen(errorMessage);
-    }
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       return *(dataSize_t *)REGISTER_DATA(regist);
     }
     else {
@@ -1086,17 +995,14 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   if(op1 >= 0) {
     oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op1) == dtComplex16 || getRegisterDataType(op1) == dtComplex34;
-    freeTemporaryRegister(op1);
   }
 
   if(op2 >= 0) {
     oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op2) == dtComplex16 || getRegisterDataType(op2) == dtComplex34;
-    freeTemporaryRegister(op2);
   }
 
   if(op3 >= 0) {
     oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op3) == dtComplex16 || getRegisterDataType(op3) == dtComplex34;
-    freeTemporaryRegister(op3);
   }
 
   if(lastErrorCode != 0) {
@@ -1337,26 +1243,19 @@ void fnStore(uint16_t r) {
  * \param[in] registerNumber uint16_t
  * \return void
  ***********************************************/
-void fnStoreAdd(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnStoreAdd(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != addError) {
-      result = regist;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(regist, opY);
-      copySourceRegisterToDestRegister(REGISTER_X, opX);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
-      addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      refreshStack();
-    }
-    else {
-     addError();
-    }
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
+    copySourceRegisterToDestRegister(REGISTER_X, regist);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
+
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
   else {
@@ -1374,26 +1273,19 @@ void fnStoreAdd(uint16_t r) {
  * \param[in] registerNumber calcRegister_t
  * \return void
  ***********************************************/
-void fnStoreSub(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnStoreSub(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != subError) {
-      result = regist;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(regist, opY);
-      copySourceRegisterToDestRegister(REGISTER_X, opX);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
-      subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      refreshStack();
-    }
-    else {
-      subError();
-    }
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
+    copySourceRegisterToDestRegister(REGISTER_X, regist);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
+
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
   else {
@@ -1411,26 +1303,19 @@ void fnStoreSub(uint16_t r) {
  * \param[in] registerNumber uint16_t
  * \return void
  ***********************************************/
-void fnStoreMult(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnStoreMult(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != mulError) {
-      result = regist;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(regist, opY);
-      copySourceRegisterToDestRegister(REGISTER_X, opX);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
-      multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      refreshStack();
-    }
-    else {
-      mulError();
-    }
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
+    copySourceRegisterToDestRegister(REGISTER_X, regist);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
+
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
   else {
@@ -1448,26 +1333,19 @@ void fnStoreMult(uint16_t r) {
  * \param[in] registerNumber uint16_t
  * \return void
  ***********************************************/
-void fnStoreDiv(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnStoreDiv(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(division[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)] != divError) {
-      result = regist;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(regist, opY);
-      copySourceRegisterToDestRegister(REGISTER_X, opX);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
-      division[getRegisterDataType(REGISTER_X)][getRegisterDataType(regist)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      refreshStack();
-    }
-    else {
-      divError();
-    }
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
+    copySourceRegisterToDestRegister(REGISTER_X, regist);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
+
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
     else {
@@ -1569,17 +1447,12 @@ void fnStoreIJ(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecall(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnRecall(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
     if(REGISTER_X <= regist && regist <= getStackTop()) {
-      calcRegister_t temp = allocateTemporaryRegister();
-
-      copySourceRegisterToDestRegister(regist, temp);
+      copySourceRegisterToDestRegister(regist, TEMP_REGISTER);
       liftStack();
-      copySourceRegisterToDestRegister(temp, REGISTER_X);
-      freeTemporaryRegister(temp);
+      copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_X);
     }
     else {
       liftStack();
@@ -1603,28 +1476,18 @@ void fnRecall(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallAdd(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnRecallAdd(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(addition[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != addError) {
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
+    copySourceRegisterToDestRegister(regist, REGISTER_X);
 
-      result = REGISTER_X;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(REGISTER_X, opY);
-      copySourceRegisterToDestRegister(regist, opX);
+    addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      addition[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
 
-      refreshStack();
-    }
-    else {
-      addError();
-    }
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
   else {
@@ -1642,28 +1505,18 @@ void fnRecallAdd(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallSub(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnRecallSub(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(subtraction[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != subError) {
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
+    copySourceRegisterToDestRegister(regist, REGISTER_X);
 
-      result = REGISTER_X;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(REGISTER_X, opY);
-      copySourceRegisterToDestRegister(regist, opX);
+    subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      subtraction[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
 
-      refreshStack();
-    }
-    else {
-      subError();
-    }
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
   else {
@@ -1681,28 +1534,18 @@ void fnRecallSub(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallMult(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnRecallMult(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(multiplication[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != mulError) {
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
+    copySourceRegisterToDestRegister(regist, REGISTER_X);
 
-      result = REGISTER_X;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(REGISTER_X, opY);
-      copySourceRegisterToDestRegister(regist, opX);
+    multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      multiplication[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
 
-      refreshStack();
-    }
-    else {
-      mulError();
-    }
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
   else {
@@ -1720,28 +1563,18 @@ void fnRecallMult(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallDiv(uint16_t r) {
-  calcRegister_t regist = r;
-
+void fnRecallDiv(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
-    if(division[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)] != divError) {
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
+    copySourceRegisterToDestRegister(regist, REGISTER_X);
 
-      result = REGISTER_X;
-      opY    = allocateTemporaryRegister();
-      opX    = allocateTemporaryRegister();
-      copySourceRegisterToDestRegister(REGISTER_X, opY);
-      copySourceRegisterToDestRegister(regist, opX);
+    division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-      division[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)]();
-      freeTemporaryRegister(opY);
-      freeTemporaryRegister(opX);
+    copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_Y);
 
-      refreshStack();
-    }
-    else {
-      divError();
-    }
+    adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
   else {
@@ -2299,7 +2132,7 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
       }
     }
   }
-  else if(regist < FIRST_TEMPORARY_REGISTER) { // Named variable
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       regist -= 1000u;
       if(regist < numberOfNamedVariables) {
@@ -2307,13 +2140,8 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
       }
     }
   }
-  else if(regist < SAVED_REGISTER_X) { // Temporary register
-    if(regist < FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS) {
-      descriptor = tempRegister[regist - FIRST_TEMPORARY_REGISTER];
-    }
-  }
-  else if(regist < 4000) { // Saved stack register
-    if(regist <= SAVED_REGISTER_L) {
+  else if(regist < 3000) { // Saved stack register
+    if(regist <= LAST_SAVED_REGISTER) {
       descriptor = savedStackRegister[regist - SAVED_REGISTER_X];
     }
   }
@@ -2398,37 +2226,4 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataS
   }
 //sprintf(tmpStr3000, "reallocateRegister %d to %s tag=%u (%u bytes including dataLen) done", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithDataLen);
 //memoryDump(tmpStr3000);
-}
-
-
-//uint32_t numberOfTemporaryRegistersAllocated = 0;
-//uint32_t numberOfTemporaryRegisterAllocations = 0;
-
-calcRegister_t allocateTemporaryRegister(void) {
-  //printf("numberOfTemporaryRegisterAllocations = %" FMT32U "\n", ++numberOfTemporaryRegisterAllocations);
-  for(calcRegister_t i=0; i<NUMBER_OF_TEMPORARY_REGISTERS; i++) {
-    if(!tempRegistersInUse[i]) {
-      tempRegistersInUse[i] = true;
-      //numberOfTemporaryRegistersAllocated++;
-      //printf("     numberOfTemporaryRegistersAllocated = %" FMT32U "\n", numberOfTemporaryRegistersAllocated);
-      return FIRST_TEMPORARY_REGISTER + i;
-    }
-  }
-
-  displayBugScreen("In function allocateTemporaryRegister: there is no more temporary register to allocate! Increase the value of NUMBER_OF_TEMPORARY_REGISTERS in registers.h");
-  return FIRST_TEMPORARY_REGISTER;
-}
-
-
-
-void freeTemporaryRegister(calcRegister_t tempRegister) {
-  if(FIRST_TEMPORARY_REGISTER <= tempRegister && tempRegister < FIRST_TEMPORARY_REGISTER + NUMBER_OF_TEMPORARY_REGISTERS) {
-    tempRegistersInUse[tempRegister - FIRST_TEMPORARY_REGISTER] = false;
-    //numberOfTemporaryRegistersAllocated--;
-    //printf("     numberOfTemporaryRegistersAllocated = %" FMT32U "\n", numberOfTemporaryRegistersAllocated);
-  }
-  else {
-    sprintf(errorMessage, "In function freeTemporaryRegister: %" FMT16S " is an unexpected value for tempRegister!\ntempRegister must be from 2000 to %" FMT16S, tempRegister, 1999 + NUMBER_OF_TEMPORARY_REGISTERS);
-    displayBugScreen(errorMessage);
-  }
 }

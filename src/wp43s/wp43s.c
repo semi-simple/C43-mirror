@@ -58,8 +58,7 @@ char                 oldTime[8];
 char                 dateTimeString[12];
 softmenuStack_t      softmenuStack[7];
 registerDescriptor_t reg[112];
-registerDescriptor_t savedStackRegister[9];
-registerDescriptor_t tempRegister[NUMBER_OF_TEMPORARY_REGISTERS];
+registerDescriptor_t savedStackRegister[9+1];
 int16_t              tamFunction;
 int16_t              tamNumber;
 int16_t              tamNumberMin;
@@ -72,9 +71,6 @@ int16_t              currentRegisterBrowserScreen;
 int16_t              lineTWidth;
 int16_t              rbrRegister;
 int16_t              displayHasNDigits;
-calcRegister_t       result;
-calcRegister_t       opX;
-calcRegister_t       opY;
 uint16_t             numberOfLocalRegisters;
 uint16_t             numberOfLocalFlags;
 uint16_t             numberOfNamedVariables;
@@ -141,7 +137,6 @@ bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
 bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
-bool_t               tempRegistersInUse[NUMBER_OF_TEMPORARY_REGISTERS];
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
 calcKey_t            kbd_usr[37];
@@ -211,17 +206,8 @@ debug = false;
     real16Zero(memPtr);
   }
 
-  // initialize the temporary registers
-  for(calcRegister_t regist=FIRST_TEMPORARY_REGISTER; regist<FIRST_TEMPORARY_REGISTER+NUMBER_OF_TEMPORARY_REGISTERS; regist++) {
-    tempRegistersInUse[regist - FIRST_TEMPORARY_REGISTER] = false;
-    setRegisterDataType(regist, dtReal16, TAG_NONE);
-    memPtr = allocWp43s(REAL16_SIZE);
-    setRegisterDataPointer(regist, memPtr);
-    real16Zero(memPtr);
-  }
-
-  // initialize the 9 saved stack registers
-  for(calcRegister_t regist=SAVED_REGISTER_X; regist<=SAVED_REGISTER_L; regist++) {
+  // initialize the 9+1 saved stack registers
+  for(calcRegister_t regist=SAVED_REGISTER_X; regist<=LAST_SAVED_REGISTER; regist++) {
     setRegisterDataType(regist, dtReal16, TAG_NONE);
     memPtr = allocWp43s(REAL16_SIZE);
     setRegisterDataPointer(regist, memPtr);

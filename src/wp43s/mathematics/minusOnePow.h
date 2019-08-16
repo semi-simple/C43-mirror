@@ -23,6 +23,7 @@ void m1PowError(void);
 void m1PowLonI (void);
 void m1PowRe16 (void);
 void m1PowCo16 (void);
+void m1PowAn16 (void);
 void m1PowRm16 (void);
 void m1PowCm16 (void);
 void m1PowShoI (void);

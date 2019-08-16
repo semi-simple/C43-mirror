@@ -25,7 +25,7 @@
 void (* const m1Pow[13])(void) = {
 // regX ==> 1            2          3          4          5           6           7           8          9            10            11         12         13
 //          Long integer Real16     Complex16  Angle16    Time        Date        String      Real16 mat Complex16 m  Short integer Real34     Complex34  Angle34
-            m1PowLonI,   m1PowRe16, m1PowCo16, m1PowRe16, m1PowError, m1PowError, m1PowError, m1PowRm16, m1PowCm16,   m1PowShoI,    m1PowRe34, m1PowCo34, m1PowAn34
+            m1PowLonI,   m1PowRe16, m1PowCo16, m1PowAn16, m1PowError, m1PowError, m1PowError, m1PowRm16, m1PowCm16,   m1PowShoI,    m1PowRe34, m1PowCo34, m1PowAn34
 };
 
 
@@ -57,13 +57,9 @@ void fnM1Pow(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  result = REGISTER_X;
-  opX    = allocateTemporaryRegister();
-  copySourceRegisterToDestRegister(REGISTER_X, opX);
-
   m1Pow[getRegisterDataType(REGISTER_X)]();
 
-  adjustResult(result, false, true, opX, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
@@ -74,12 +70,12 @@ void m1PowLonI(void) {
   longIntegerInit(lgInt);
   uIntToLongInteger(1, lgInt);
 
-  convertLongIntegerRegisterToLongInteger(opX, exponent);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
   if(longIntegerIsOdd(exponent)) {
     longIntegerChangeSign(lgInt);
   }
 
-  convertLongIntegerToLongIntegerRegister(lgInt, result);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
 
   longIntegerFree(lgInt);
   longIntegerFree(exponent);
@@ -88,45 +84,63 @@ void m1PowLonI(void) {
 
 
 void m1PowRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowRe16:", "cannot use NaN as an input of 2^", NULL, NULL);
+      showInfoDialog("In function m1PowRe16:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
 
-  convertRegister16To34(opX);
-  reallocateRegister(result, dtReal34, REAL34_SIZE, TAG_NONE);
+  convertRegister16To34(REGISTER_X);
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
-  convertRegister34To16(result);
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
+  convertRegister34To16(REGISTER_X);
 }
 
 
 
 void m1PowCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(opX)) || real16IsNaN(REGISTER_IMAG16_DATA(opX))) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowCo16:", "cannot use NaN as an input of 2^", NULL, NULL);
+      showInfoDialog("In function m1PowCo16:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
 
-  convertRegister16To34(opX);
-  reallocateRegister(result, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  convertRegister16To34(REGISTER_X);
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX));
-  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(opX));
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
 
   uint8_t savedAngularMode = currentAngularMode;
   currentAngularMode = AM_RADIAN;
   cosCo34();
   currentAngularMode = savedAngularMode;
-  convertRegister34To16(result);
+  convertRegister34To16(REGISTER_X);
+}
+
+
+
+void m1PowAn16(void) {
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function m1PowAn16:", "cannot use NaN as X input of 2^", NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertRegister16To34(REGISTER_X);
+
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
+  convertRegister34To16(REGISTER_X);
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
@@ -144,37 +158,37 @@ void m1PowCm16(void) {
 
 
 void m1PowShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(result)) = WP34S_int_1pow(*(REGISTER_SHORT_INTEGER_DATA(opX)));
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int_1pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
 }
 
 
 
 void m1PowRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowRe34:", "cannot use NaN as an input of 2^", NULL, NULL);
+      showInfoDialog("In function m1PowRe34:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(result));
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
 }
 
 
 
 void m1PowCo34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX)) || real34IsNaN(REGISTER_IMAG34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowCo34:", "cannot use NaN as an input of 2^", NULL, NULL);
+      showInfoDialog("In function m1PowCo34:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(opX), REGISTER_REAL34_DATA(opX));
-  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(opX), REGISTER_IMAG34_DATA(opX));
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
 
   uint8_t savedAngularMode = currentAngularMode;
   currentAngularMode = AM_RADIAN;
@@ -185,15 +199,15 @@ void m1PowCo34(void) {
 
 
 void m1PowAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(opX))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowAn34:", "cannot use NaN as an input of 2^", NULL, NULL);
+      showInfoDialog("In function m1PowAn34:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
 
-  setRegisterDataType(result, dtReal34, TAG_NONE);
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result));
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(result), REGISTER_REAL34_DATA(result), AM_RADIAN);
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
 }

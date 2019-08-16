@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 17  // 17 = freeBlocks no longer in ram
+#define BACKUP_VERSION 18  // 18 = removed opX, opY, result and tempRegister
 
 void saveCalc(void) {
   size_t size;
@@ -61,7 +61,6 @@ void saveCalc(void) {
   size += fwrite(softmenuStack,                       1, sizeof(softmenuStack),                      backup); //printf("%8lu softmenuStack\n",                      (unsigned long)size);
   size += fwrite(reg,                                 1, sizeof(reg),                                backup); //printf("%8lu reg\n",                                (unsigned long)size);
   size += fwrite(savedStackRegister,                  1, sizeof(savedStackRegister),                 backup); //printf("%8lu savedStackRegister\n",                 (unsigned long)size);
-  size += fwrite(tempRegister,                        1, sizeof(tempRegister),                       backup); //printf("%8lu tempRegister\n",                       (unsigned long)size);
   size += fwrite(kbd_usr,                             1, sizeof(kbd_usr),                            backup); //printf("%8lu kbd_usr\n",                            (unsigned long)size);
   size += fwrite(row,                                 1, sizeof(row),                                backup); //printf("%8lu row\n",                                (unsigned long)size);
   size += fwrite(transitionSystemOperation,           1, 4,                                          backup); //printf("%8lu transitionSystemOperation\n",          (unsigned long)size);
@@ -75,9 +74,6 @@ void saveCalc(void) {
   size += fwrite(&tamLetteredRegister,                1, sizeof(tamLetteredRegister),                backup); //printf("%8lu tamLetteredRegister\n",                (unsigned long)size);
   size += fwrite(&tamCurrentOperation,                1, sizeof(tamCurrentOperation),                backup); //printf("%8lu tamCurrentOperation\n",                (unsigned long)size);
   size += fwrite(&rbrRegister,                        1, sizeof(rbrRegister),                        backup); //printf("%8lu rbrRegister\n",                        (unsigned long)size);
-  size += fwrite(&result,                             1, sizeof(result),                             backup); //printf("%8lu result\n",                             (unsigned long)size);
-  size += fwrite(&opY,                                1, sizeof(opY),                                backup); //printf("%8lu opY\n",                                (unsigned long)size);
-  size += fwrite(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
   size += fwrite(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
   size += fwrite(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
   size += fwrite(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);
@@ -217,7 +213,6 @@ void restoreCalc(void) {
     size += fread(softmenuStack,                       1, sizeof(softmenuStack),                      backup); //printf("%8lu softmenuStack\n",                      (unsigned long)size);
     size += fread(reg,                                 1, sizeof(reg),                                backup); //printf("%8lu reg\n",                                (unsigned long)size);
     size += fread(savedStackRegister,                  1, sizeof(savedStackRegister),                 backup); //printf("%8lu savedStackRegister\n",                 (unsigned long)size);
-    size += fread(tempRegister,                        1, sizeof(tempRegister),                       backup); //printf("%8lu tempRegister\n",                       (unsigned long)size);
     size += fread(kbd_usr,                             1, sizeof(kbd_usr),                            backup); //printf("%8lu kbd_usr\n",                            (unsigned long)size);
     size += fread(row,                                 1, sizeof(row),                                backup); //printf("%8lu row\n",                                (unsigned long)size);
     size += fread(transitionSystemOperation,           1, 4,                                          backup); //printf("%8lu transitionSystemOperation\n",          (unsigned long)size);
@@ -231,9 +226,6 @@ void restoreCalc(void) {
     size += fread(&tamLetteredRegister,                1, sizeof(tamLetteredRegister),                backup); //printf("%8lu tamLetteredRegister\n",                (unsigned long)size);
     size += fread(&tamCurrentOperation,                1, sizeof(tamCurrentOperation),                backup); //printf("%8lu tamCurrentOperation\n",                (unsigned long)size);
     size += fread(&rbrRegister,                        1, sizeof(rbrRegister),                        backup); //printf("%8lu rbrRegister\n",                        (unsigned long)size);
-    size += fread(&result,                             1, sizeof(result),                             backup); //printf("%8lu result\n",                             (unsigned long)size);
-    size += fread(&opY,                                1, sizeof(opY),                                backup); //printf("%8lu opY\n",                                (unsigned long)size);
-    size += fread(&opX,                                1, sizeof(opX),                                backup); //printf("%8lu opX\n",                                (unsigned long)size);
     size += fread(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
     size += fread(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
     size += fread(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);

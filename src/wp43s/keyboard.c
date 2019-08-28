@@ -565,6 +565,7 @@ void btnPressed(void *notUsed, void *data) {
           }
 
           fnDropY(NOPARAM);
+          STACK_LIFT_ENABLE;
           refreshStack();
         }
 

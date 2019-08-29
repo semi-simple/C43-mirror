@@ -204,6 +204,8 @@ typedef int16_t calcRegister_t;
 #include "stats.h"
 #include "statusBar.h"
 #include "testFunctions.h"
+#include "jm.h"                                          //JM include
+
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))

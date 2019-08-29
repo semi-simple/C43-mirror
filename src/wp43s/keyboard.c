@@ -28,20 +28,34 @@
  * \param void
  * \return void
  ***********************************************/
+
+
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftF) {
       showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
+      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
+        JM_DOT( -1, 201 );                                                       //JM - Display dot in the f - line
+        JM_DOT( 392, 201 );                                                      //JM - Display dot in the f - line
+      }                                                                         //JM - Display dot in the f - line
     }
     else if(shiftG) {
       showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
+      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
+        JM_DOT( -1, 175 );                                                        //JM - Display dot in the g - line
+        JM_DOT( 392, 175 );                                                       //JM - Display dot in the g - line
+        JM_DOT( -1, 182 );                                                       //JM - Display dot in the g - line
+        JM_DOT( 392, 182 );                                                      //JM - Display dot in the g - line
+      }                                                                         //JM - Display dot in the g - line
     }
     else {
       refreshRegisterLine(REGISTER_T);
+      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
     }
   }
 }
-
 
 
 
@@ -219,6 +233,111 @@ void btnPressed(void *notUsed, void *data) {
   allowScreenUpdate = true;
 
 
+
+#ifdef JM_MULTISHIFT ////MULTISHIFT AND CLRDROP                                //JM TIMER - checks on any key pressed.
+
+    #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
+    uint32_t now;                                     //JM TIMER DMCP SHIFTCANCEL
+    #endif                                            //JM TIMER DMCP SHIFTCANCEL
+    #ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
+    gint64 now;                                       //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
+    #endif                                            //JM TIMER DMCP SHIFTCANCEL
+
+  if(SHTIM) {
+    if(( shiftF || shiftG ) || (key->primary == KEY_f)) {
+      #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
+      now = sys_current_ms();                           //JM TIMER DMCP SHIFTCANCEL
+      if(now > now_MEM + JM_SHIFT_TIMER) {              //JM TIMER DMCP SHIFTCANCEL Reset shifts if no key comes within time
+        resetShiftState();                              //JM TIMER DMCP SHIFTCANCEL
+      }                                                 //JM TIMER DMCP SHIFTCANCEL
+      #endif                                            //JM
+      #ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
+      now = g_get_monotonic_time();                     //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
+      if(now > now_MEM + JM_SHIFT_TIMER*1000) {         //JM TIMER EMULATOR SHIFTCANCEL
+        resetShiftState();                              //JM TIMER EMULATOR SHIFTCANCEL
+      }                                                 //JM TIMER EMULATOR SHIFTCANCEL
+      #endif                                            //JM
+      now_MEM = now;                                    //JM TIMER -- any last key pressed
+    }
+  }
+
+    bool_t JM_auto_drop_enabled;                      //JM TIMER CLRDROP
+    JM_auto_drop_enabled=true;                        //JM TIMER CLRDROP
+  if(key->primary == KEY_BACKSPACE) {
+    #ifdef DMCP_BUILD                                 //JM TIMER DMCP CLRDROP
+    now = sys_current_ms();                           //JM TIMER DMCP SHIFTCANCEL
+    if(now > now_MEM + JM_CLRDROP_TIMER) {            //JM TIMER DMCP CLRDROP Trying out timer shift allow double backspace to DROP
+      JM_auto_drop_enabled=false;                     //JM TIMER DMCP CLRDROP 
+    }                                                 //JM TIMER DMCP CLRDROP 
+    #endif                                            //JM TIMER DMCP CLRDROP 
+    #ifdef PC_BUILD                                   //JM TIMER EMULATOR CLRDROP
+    now = g_get_monotonic_time();                     //JM usec
+    if(now > now_MEM + JM_CLRDROP_TIMER*1000) {       //JM TIMER EMULATOR CLRDROP Trying out timer shift allow double backspace to DROP
+      JM_auto_drop_enabled=false;                     //JM TIMER EMULATOR CLRDROP 
+    }                                                 //JM TIMER EMULATOR CLRDROP 
+    #endif                                            //JM TIMER EMULATOR CLRDROP 
+
+    now_MEM = now;                                    //JM TIMER -- any last key pressed
+    
+    if(JM_auto_drop_activated) {                      //JM TIMER CLRDROP ensure a double drop does not occur
+      JM_auto_drop_enabled = false;                   //JM TIMER CLRDROP
+      JM_auto_drop_activated = false;                 //JM TIMER CLRDROP
+    }
+  }
+
+
+  // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
+  // JM Inserted new section and removed old f and g key processing sections
+    if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {     //JM shifts
+      if(temporaryInformation != TI_NO_INFO) {                                                                                   //JM shifts
+        temporaryInformation = TI_NO_INFO;                                                                                       //JM shifts
+        refreshRegisterLine(REGISTER_X);                                                                                         //JM shifts
+        refreshRegisterLine(REGISTER_Y);                                                                                         //JM shifts
+      }                                                                                                                          //JM shifts
+                                                                                                                                 //JM shifts
+      if(lastErrorCode != 0) {                                                                                                   //JM shifts
+        lastErrorCode = 0;                                                                                                       //JM shifts
+        refreshStack();                                                                                                          //JM shifts
+      }                                                                                                                          //JM shifts
+                                                                                                                                 //JM shifts
+      if (!shiftF && !shiftG) {                                                                                                  //JM shifts
+        shiftF = true;                                                                                                           //JM shifts
+        shiftG = false;      
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;                                                                                                   //JM shifts
+      } else                                                                                                                     //JM shifts
+                                                                                                                                 //JM shifts
+      if (shiftF && !shiftG) {                                                                                                   //JM shifts
+        shiftF = false;                                                                                                          //JM shifts
+        shiftG = true;                                                                                                           //JM shifts
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;                                                                                                   //JM shifts
+      } else                                                                                                                     //JM shifts
+                                                                                                                                 //JM shifts
+      if (!shiftF && shiftG) {                                                                                                   //JM shifts
+        shiftF = false;                                                                                                          //JM shifts
+        shiftG = false;                                                                                                          //JM shifts
+        if (HOME3) {                                                                                                             //JM shifts
+           if( (softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer) ) {                              //JM shifts
+              popSoftmenu();                                                                                                     //JM shifts
+            } else {                                                                                                             //JM shifts
+              showSoftmenu(NULL, -MNU_HOME, true);                                                                               //JM shifts
+              softmenuStackPointer_MEM = softmenuStackPointer;                                                                   //JM shifts
+            }                                                                                                                    //JM shifts
+         }                                                                                                                       //JM shifts Goto menu HOME if triple shift press
+      } else                                                                                                                     //JM shifts
+                                                                                                                                 //JM shifts
+                                                                                                                                 //JM shifts
+      if (shiftF && shiftG) {                                                                                                    //JM shifts  should never be possible. included for completeness
+        shiftF = false;                                                                                                          //JM shifts
+        shiftG = false;                                                                                                          //JM shifts
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;                                                                                                   //JM shifts
+      }                                                                                                                          //JM shifts
+                                                                                                                                 //JM shifts
+      showShiftState();                                                                                                          //JM shifts
+    }                                                                                                                            //JM shifts
+                                                                                                                                 //JM shifts
+#endif
+
+#ifndef JM_MULTISHIFT /* JM shifts. Whole section for shift f and shift g removed here in favour if the f/g shift method */
   // Shift f pressed
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
     if(temporaryInformation != TI_NO_INFO) {
@@ -256,6 +375,7 @@ void btnPressed(void *notUsed, void *data) {
 
     showShiftState();
   }
+#endif //JM shifts. Replaced by MULTISHIFT  *********************************************************************************************************
 
   else {
     int16_t item = determineItem(key);
@@ -319,7 +439,9 @@ void btnPressed(void *notUsed, void *data) {
 
         refreshStack();
 
-        STACK_LIFT_DISABLE;
+        if( eRPN == false ) {                                         //JM eRPN modification. Ensure DUP always set SL
+           STACK_LIFT_DISABLE;
+        }                                                             //JM eRPN modification
       }
 
       else if(calcMode == CM_FONT_BROWSER) {
@@ -618,7 +740,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
+            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -629,7 +751,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
         displayBugScreen(errorMessage);
       }
     }
@@ -644,6 +766,12 @@ void btnPressed(void *notUsed, void *data) {
           fnClX(NOPARAM);
 
           STACK_LIFT_DISABLE;
+
+          if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+            fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE 
+            JM_auto_drop_activated = true;   //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+            STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
         }
       }
 
@@ -1022,14 +1150,16 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     else if(calcMode == CM_CONFIRMATION) {
-      if(item == CHR_3 || item == ITM_XEQ) { // Yes or XEQ
+// JM YN      if(item == CHR_3 || item == ITM_XEQ) { // Yes or XEQ
+      if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ                                // JM YN For Layout DM42, changed "Y" on CHR_3 to ITM_SUB as the alpha character move due to operator swap
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
         confirmedFunction(CONFIRMED);
         refreshStack();
       }
 
-      else if(item == CHR_7) { // No
+// JM YN     else if(item == CHR_7) { // No
+      else if(item == ITEM_CONF_N ) { // No                                                    //JM YN
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
         refreshStack();

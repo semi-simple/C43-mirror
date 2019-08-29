@@ -125,6 +125,11 @@ uint8_t              temporaryInformation;
 uint8_t              rbrMode;
 uint8_t              numScreensNumericFont;
 uint8_t              currentAngularMode;
+uint8_t              SigFigMode;                              //JM SIGFIG
+bool_t eRPN;                                                  //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
+bool_t HOME3;                                                 //JM HOME Create a flag to enable or disable triple shift HOME3.
+bool_t SHTIM;                                                 //JM SHIFT Create a flag to enable or disable SHIFT TIMER CANCEL.
+bool_t UNITDisplay;                                           //JM HOME Create a flag to enable or disable UNIT display in ENG mode
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -264,6 +269,18 @@ debug = false;
 
   shiftF = false;
   shiftG = false;
+
+  eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
+  HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
+  SHTIM = true;                                                  //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
+  UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
+  SigFigMode = 0;                                                //JM SIGFIG Default 0.
+  softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
+  now_MEM = 0;                                                   //JM HOME temporary flag to remember and restore time
+  JM_auto_drop_activated = false;                                //JM TIMER
+  JM_SHIFT_RESET = 0;                                            //JM TIMER
+
+  
   #ifndef TESTSUITE_BUILD
     showShiftState();
   #endif // TESTSUITE_BUILD

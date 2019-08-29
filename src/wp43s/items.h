@@ -1610,8 +1610,29 @@
 #define ITM_SIGMAx3                   1574
 #define ITM_SIGMAx4                   1575
 #define ITM_HEX                       1576
+#define ITM_ERPN                      1577  //JM eRPN
+#define ITM_HOMEx3                    1578  //JM HOME.3
+#define ITM_SHTIM                     1579  //JM SHIFT CANCEL
 
-#define LAST_ITEM                     1577
+#define MNU_HOME                      1580  //JM HOME
+#define ITM_SIGFIG                    1581  //JM SIGFIG
+#define MNU_ALPHA                     1582  //JM ALPHA
+#define MNU_BASE                      1583  //JM BASE
+
+#define ITM_2BIN                      1584  //JM BASE
+#define ITM_2OCT                      1585  //JM BASE
+#define ITM_2DEC                      1586  //JM BASE
+#define ITM_2HEX                      1587  //JM BASE
+#define ITM_WS8                       1588  //JM BASE
+#define ITM_WS16                      1589  //JM BASE
+#define ITM_WS32                      1590  //JM BASE
+#define ITM_WS64                      1591  //JM BASE
+#define ITM_UNIT                      1592  //JM UNIT
+#define ITM_SH_ERPN                   1593  //JM SHOW
+#define ITM_SH_HOME3                  1594  //JM SHOW
+#define ITM_SH_SHTIM                  1595  //JM SHOW
+
+#define LAST_ITEM                     1596  //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -137,6 +137,17 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
+#ifdef JM_MULTISHIFT                           //JM TIMER - checks on any key pressed.
+  if(SHTIM) {
+    if(JM_SHIFT_RESET != 0) {                    //JM TIMER
+      JM_SHIFT_RESET--;                          //JM TIMER
+      if(JM_SHIFT_RESET == 0) {                  //JM TIMER
+         resetShiftState();                      //JM TIMER
+     }                                           //JM TIMER
+   }
+ }                                             //JM TIMER
+#endif                                         //JM TIMER
+
   return TRUE;
 }
 #elif defined DMCP_BUILD
@@ -167,6 +178,18 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     strcpy(oldTime, dateTimeString);
     showDateTime();
   }
+
+#ifdef JM_MULTISHIFT                           //JM TIMER - checks on any key pressed.
+  if(SHTIM) {
+    if(JM_SHIFT_RESET != 0) {                    //JM TIMER
+      JM_SHIFT_RESET--;                          //JM TIMER
+      if(JM_SHIFT_RESET == 0) {                  //JM TIMER
+         resetShiftState();                      //JM TIMER
+     }                                           //JM TIMER
+   }
+ }                                             //JM TIMER
+#endif                                         //JM TIMER
+
 }
 #endif
 
@@ -689,6 +712,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
         else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
           showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+          showString(WHO2, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + 1), vmNormal, true, true);      // JM ID
         }
 
         else if(temporaryInformation == TI_VERSION && regist == REGISTER_X) {

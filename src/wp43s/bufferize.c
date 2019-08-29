@@ -819,10 +819,12 @@ void addItemToNimBuffer(int16_t item) {
         }
 
         STACK_LIFT_ENABLE;
+        if( eRPN == false ) {                                         //JM eRPN modification
         liftStack();
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
         refreshStack();
-        STACK_LIFT_DISABLE;
+        STACK_LIFT_DISABLE;                                           //JM eRPN experiment
+        }                                                             //JM eRPN modification
         return;
       }
       break;

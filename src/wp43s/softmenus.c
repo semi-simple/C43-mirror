@@ -29,7 +29,7 @@
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,              ITM_MA15,                    ITM_MA16,
+const int16_t menu_MyAlpha[]     = {-MNU_ALPHA,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,              ITM_MA15,                    ITM_MA16,
                                      ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                    ITM_MA26,
                                      ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                    ITM_MA36                      };
 
@@ -60,12 +60,12 @@ const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,    
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_CPX[]         = { ITM_DOT,                       ITM_CROSS,                  ITM_UNITV,                ITM_RE,                ITM_CONJ,                    ITM_REexIM,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_SIGN,                 ITM_IM,                ITM_MAGNITUDE,               ITM_ANGLE,
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,                 ITM_NULL,              ITM_POLAR,                   ITM_RECT                      };
+const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,                     ITM_MAGNITUDE,            ITM_ANGLE,             ITM_CONJ,                    ITM_REexIM,                          //JM re-arranged menu. CPX menu
+                                     ITM_DOT,                       ITM_CROSS,                  ITM_SIGN,                 ITM_UNITV,             ITM_NULL,                    ITM_NULL,                            //JM re-arranged menu. CPX menu
+                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                      };    //JM re-arranged menu
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_ROUNDI,                  ITM_ROUND,
-                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_RDP,                     ITM_RSD,
+                                     ITM_SDL,                       ITM_SDR,                    ITM_UNIT,                 ITM_SIGFIG,            ITM_RDP,                     ITM_RSD,                             //JM added SIGFIG & UNIT
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,           ITM_RDXPER,                  ITM_RDXCOM,
                                      ITM_GAP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DSTACK,
@@ -74,13 +74,13 @@ const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,    
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_XTHROOT,                ITM_LOGXY,                ITM_LOG2,              ITM_2X,                      ITM_SQUARE,
-                                     ITM_CUBEROOT,                  ITM_NULL,                   ITM_NULL,                 ITM_LN1X,              ITM_EX1,                     ITM_NULL,
+const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,                     ITM_SQUARE,               ITM_LOG2,              ITM_LN1X,                    ITM_LOGXY,                          //JM re-arranged menu. logxy and square to follow DM42 keyboard. Re-aligned with 42S keys.
+                                     ITM_CUBEROOT,                  ITM_XTHROOT,                ITM_NULL,                 ITM_2X,                ITM_EX1,                     ITM_NULL,                           //JM re-arranged menu. Added YˆX to follow DM42 keyboard. Swapped YˆX and Yˆ(1/X). Re-aligned with 42S keys.
                                      ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
 
-const int16_t menu_TRI[]         = { ITM_sin,                       ITM_arcsin,                 ITM_cos,                  ITM_arccos,            ITM_tan,                     ITM_arctan,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                     ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
+const int16_t menu_TRI[]         = { ITM_toREC,                     ITM_toPOL,                  ITM_pi,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
+                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM re-arranged menu TRIG menu
+                                     ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };    //JM re-arranged menu TRIG menu
 
 const int16_t menu_FIN[]         = { ITM_PC,                        ITM_PCMRR,                  ITM_PCT,                  ITM_PCSIGMA,           ITM_PCPMG,                   -MNU_TVM                      };
 
@@ -96,7 +96,11 @@ const int16_t menu_FLAGS[]       = { ITM_SF,                        ITM_FS,     
 
 const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,                    ITM_RMQ,                  ITM_SMODE,             ITM_WSIZEQ,                  ITM_KTYP,
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
-                                     ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG                 };
+                                     ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,                 
+
+                                     ITM_NULL,                      ITM_SH_ERPN,                ITM_SH_SHTIM,             ITM_SH_HOME3,          ITM_NULL,                    ITM_NULL,                                         //JM INFO
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                     };                 //JM INFO
+
 
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
                                      ITM_IDIV,                      ITM_RMDR,                   ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
@@ -127,11 +131,16 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,             ITM_REALRES,                 ITM_CPXRES,
                                      ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,            ITM_SSIZE4,                  ITM_SSIZE8,
                                      ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_LZON,                    ITM_WSIZE,
-                                     ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                   ITM_NULL,
+                                     ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                   ITM_NULL,                  
 #if DMCP_BUILD
-                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL
+                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+#else
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
 #endif
-                                                                                                                                                                                                         };
+
+                                     ITM_NULL,                      ITM_ERPN,                   ITM_SHTIM,                ITM_HOMEx3,            ITM_NULL,                    ITM_NULL,                           //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
+                                     ITM_NULL,                      ITM_SH_ERPN,                ITM_SH_SHTIM,             ITM_SH_HOME3,          ITM_NULL,                    ITM_NULL                            //J Added
+                                                                                                                                                                                                            };
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
                                      ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,
@@ -141,7 +150,7 @@ const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,     
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
 const int16_t menu_PROB[]        = { -MNU_NORML,                    -MNU_T,                     ITM_COMB,                 ITM_PERM,              -MNU_F,                      -MNU_CHI2,
-                                     -MNU_LGNRM,                    -MNU_CAUCH,                 ITM_NULL,                 -MNU_EXPON,            -MNU_LOGIS,                  -MNU_WEIBL,
+                                     -MNU_LGNRM,                    -MNU_CAUCH,                 ITM_XFACT,                -MNU_EXPON,            -MNU_LOGIS,                  -MNU_WEIBL,                         //JM Added x! where it belongs, directly above Cyx
                                      ITM_NULL,                      -MNU_NBIN,                  -MNU_GEOM,                -MNU_HYPER,            -MNU_BINOM,                  -MNU_POISS,
                                      ITM_RAN,                       ITM_SEED,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GAMMAX                    };
 
@@ -188,7 +197,8 @@ const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx, 
                                      ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_STK[]         = { ITM_Xex,                       ITM_Yex,                    ITM_Zex,                  ITM_Tex,               ITM_ex,                      ITM_DROPY,
-                                     ITM_SSIZE4,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_SSIZE8                    };
+                                     ITM_SSIZE4,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_SSIZE8,                         //JM
+                                     ITM_FILL,                      ITM_LASTX,                  ITM_NULL,                 ITM_Rdown,             ITM_Rup,                     ITM_DROP                 };         //JM Added missing STACK items
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
@@ -405,6 +415,58 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
                                      ITM_Config,                    ITM_Stack,                  ITM_NULL,                 ITM_NULL,              ITM_Max,                     ITM_Min,
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
+const int16_t menu_BASE[]       = {  
+                                     ITM_2HEX,                      ITM_2OCT,                   ITM_2DEC,                 ITM_2BIN,             -MNU_BITS,                   -MNU_INTS,                          //JM BASE MENU ADDED
+                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               ITM_NULL,                    ITM_NULL                       };  //JM BASE MENU ADDED
+
+
+const int16_t menu_HOME[]        = {
+
+          /*-2------*/                                                                                                                                                                                           //JM HOME
+/*expanded functions*/               ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                         //JM HOME
+                                     ITM_toREC,                     ITM_toPOL,                  ITM_PARALLEL,            -MNU_CPX,               ITM_MAGNITUDE,               ITM_ANGLE,                         //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
+          /*-1------*/                                                                                                                                                                                           //JM HOME
+/* 03 */                             ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                         //JM HOME
+                                     ITM_NULL,                      ITM_XFACT,                  ITM_PARALLEL,             ITM_NULL,              CST_09,                      ITM_NULL,                          //JM HOME
+                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
+          /*-3------*/                                                                                                                                                                                           //JM HOME
+                                     ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                         //JM HOME
+/* 02 */                            -MNU_TRI,                      -MNU_EXP,                    -MNU_BASE,                 -MNU_CPX,             -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
+          /*-5------*/                                                                                                                                                                                           //JM HOME
+                                    -MNU_MENUS,                    /*-MNU_MYMENU*/-MNU_MyAlpha,-MNU_INFO,                -MNU_MODE,             -MNU_DISP,                    ITM_CLSTK,                         //JM HOME  MyAlpha is a placeholder for MyMenu which does not yet work.
+/* 02 */                            -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                 -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
+          /*-4------*/                                                                                                                                                                                           //JM HOME
+                                     ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,                        //JM HOME
+/* 02 */                            -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                 -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR   /*LAST ONE NO COMMA*/  //JM HOME
+
+
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
+/* Bottom Prim */  /* 8 */        ,  KEY_PRTX,                      ITM_TIMER,                  ITM_VIEW,                -MNU_STK,               -MNU_PARTS,                  ITM_CLSTK,                         //JM HOME
+/* Middle f    */  /* 7 */           ITM_NULL,                      ITM_SAVE,                  -MNU_LOOP,                -MNU_TEST,              -MNU_ALPHAFN,                ITM_NULL,                          //JM HOME
+/* Top    g    */  /*   */           ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,               ITM_NULL,                   ITM_NULL,                          //JM HOME
+                                                                                                                                                                                                                 //JM HOME
+/* Bottom Prim */  /* 6 */           ITM_STATUS,                   -MNU_CLK,                   -MNU_UNITCONV,           -MNU_BITS,               -MNU_INTS,                   ITM_CLSTK,                         //JM HOME
+/* Middle f    */  /* 5 */           ITM_RBR,                      -MNU_INFO,                  -MNU_CNST,               -MNU_XFN,                -MNU_SUMS,                   ITM_NULL,                          //JM HOME
+/* Top    g    */  /* 4 */           ITM_DROP,                     -MNU_CPX,                   -MNU_EXP,                -MNU_FIN,                 KEY_UNDO,                   ITM_NULL,                          //JM HOME
+                                                                                                                                                                                                                 //JM HOME
+/* Bottom Prim */  /* sample */      ITM_PROFRC,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLSTK,                         //JM HOME
+/* Middle f    */  /* 3 */           ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                           //JM HOME
+/* Top    g    */  /* 2 */           ITM_IMPFRC,                    ITM_toINT,                  ITM_DMS,                  KEY_dotD,              ITM_toHMS,                   ITM_LBL     /*LAST ONE NO COMMA*/  //JM HOME
+#endif //JM END OF LAYOUT 2 DM42 STRICT.
+
+                                     };                                                                                                                                                                         //JM HOME
+
+
+const int16_t menu_ALPHA[]        = { 
+          /*-1------*/                                                                                                                                                                                           //JM HOME
+/* 03 */                            -MNU_MyAlpha,                   ITM_ASSIGN,                 KEY_USERMODE,            -MNU_MODE,             -MNU_ALPHAINTL,              -MNU_ALPHAMATH,                     //JM HOME
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                -MNU_CATALOG,          -MNU_FLAGS,                   ITM_NULL,                          //JM                     
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL };                        //JM                     
+
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numRows = sizeof(menu_MyAlpha    )/sizeof(int16_t)/6, .softkeyRow = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
   {.menuId = -MNU_ADV,         .numRows = sizeof(menu_ADV        )/sizeof(int16_t)/6, .softkeyRow = menu_ADV         },
@@ -498,6 +560,9 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_TAM,         .numRows = sizeof(menu_Tam        )/sizeof(int16_t)/6, .softkeyRow = menu_Tam         },
   {.menuId = -MNU_TAMCMP,      .numRows = sizeof(menu_TamCmp     )/sizeof(int16_t)/6, .softkeyRow = menu_TamCmp      },
   {.menuId = -MNU_TAMSTORCL,   .numRows = sizeof(menu_TamStoRcl  )/sizeof(int16_t)/6, .softkeyRow = menu_TamStoRcl   },
+  {.menuId = -MNU_HOME,        .numRows = sizeof(menu_HOME       )/sizeof(int16_t)/6, .softkeyRow = menu_HOME        },  //JM HOME
+  {.menuId = -MNU_ALPHA,       .numRows = sizeof(menu_ALPHA      )/sizeof(int16_t)/6, .softkeyRow = menu_ALPHA       },  //JM ALPHA
+  {.menuId = -MNU_BASE,        .numRows = sizeof(menu_BASE       )/sizeof(int16_t)/6, .softkeyRow = menu_BASE        },  //JM HOME
   {.menuId =  0,               .numRows = 0,                                          .softkeyRow = NULL             }
 };
 

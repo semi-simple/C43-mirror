@@ -46,7 +46,6 @@ void fnToBeCoded(void) {
 }
 
 
-
 /********************************************//**
  * \brief No OPeration
  *
@@ -78,7 +77,7 @@ void runFunction(int16_t func) {
     tamNumberMin = 0;
     tamNumberMax = 99;
 
-    if(func == ITM_FIX || func == ITM_SCI || func == ITM_ENG || func == ITM_ALL || func == ITM_DSP || func == ITM_GAP) {
+    if(func == ITM_FIX || func == ITM_SCI || func == ITM_ENG || func == ITM_ALL || func == ITM_DSP || func == ITM_GAP || ITM_SIGFIG || ITM_UNIT) {      //JM SIGFIG. Added ITM_SIGFIG to max 15. Added Item ITM_UNIT
       tamNumberMax = 15;
     }
     else if(func == ITM_toINT) {
@@ -145,10 +144,10 @@ const item_t indexOfItems[] = {
 /*   21 */  { fnConstant,                  3,                           "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,                                  SLS_ENABLED  },
 /*   22 */  { itemToBeCoded,               NOPARAM,                     "AND",                                         "AND",                                                                        SLS_UNCHANGED},
 /*   23 */  { itemToBeCoded,               NOPARAM,                     "ANGLES",                                      "ANGLES",                                                                     SLS_UNCHANGED},
-/*   24 */  { fnArccos,                    NOPARAM,                     "arccos",                                      "arccos",                                                                     SLS_ENABLED  },
+/*   24 */  { fnArccos,                    NOPARAM,                     "arccos",                                      "ACOS",                                                                     SLS_ENABLED  },     //JM3 CAPS
 /*   25 */  { itemToBeCoded,               NOPARAM,                     "arcosh",                                      "arcosh",                                                                     SLS_ENABLED  },
-/*   26 */  { fnArcsin,                    NOPARAM,                     "arcsin",                                      "arcsin",                                                                     SLS_ENABLED  },
-/*   27 */  { fnArctan,                    NOPARAM,                     "arctan",                                      "arctan",                                                                     SLS_ENABLED  },
+/*   26 */  { fnArcsin,                    NOPARAM,                     "arcsin",                                      "ASIN",                                                                     SLS_ENABLED  },      //JM3 CAPS
+/*   27 */  { fnArctan,                    NOPARAM,                     "arctan",                                      "ATAN",                                                                     SLS_ENABLED  },     //JM3 CAPS
 /*   28 */  { itemToBeCoded,               NOPARAM,                     "arsinh",                                      "arsinh",                                                                     SLS_ENABLED  },
 /*   29 */  { itemToBeCoded,               NOPARAM,                     "artanh",                                      "artanh",                                                                     SLS_ENABLED  },
 /*   30 */  { itemToBeCoded,               NOPARAM,                     "ASR",                                         "ASR",                                                                        SLS_UNCHANGED},
@@ -182,7 +181,7 @@ const item_t indexOfItems[] = {
 /*   58 */  { fnConstant,                  7,                           "c" STD_SUB_2,                                 "c" STD_SUB_2,                                                                SLS_ENABLED  },
 /*   59 */  { fnCvtCalJ,                   multiply,                    "cal" STD_RIGHT_ARROW "J",                     "cal" STD_RIGHT_ARROW "J",                                                    SLS_ENABLED  },
 /*   60 */  { itemToBeCoded,               NOPARAM,                     "CASE",                                        "CASE",                                                                       SLS_UNCHANGED},
-/*   61 */  { itemToBeCoded,               NOPARAM,                     "CATALOG",                                     "CATALOG",                                                                    SLS_UNCHANGED},
+/*   61 */  { itemToBeCoded,               NOPARAM,                     "CATALOG",                                     "CAT",                                                                        SLS_UNCHANGED},      //JM HOME and also DM42 shift does not allow full text
 /*   62 */  { itemToBeCoded,               NOPARAM,                     "Cauch",                                       "Cauch",                                                                      SLS_UNCHANGED},
 /*   63 */  { itemToBeCoded,               NOPARAM,                     "Cauch" STD_SUB_p,                             "Cauch" STD_SUB_p,                                                            SLS_UNCHANGED},
 /*   64 */  { itemToBeCoded,               NOPARAM,                     "Cauch" STD_SUB_e,                             "Cauch" STD_SUB_e,                                                            SLS_UNCHANGED},
@@ -213,7 +212,7 @@ const item_t indexOfItems[] = {
 /*   89 */  { itemToBeCoded,               NOPARAM,                     "CONST",                                       "CONST",                                                                      SLS_UNCHANGED},
 /*   90 */  { itemToBeCoded,               NOPARAM,                     "CONVG?",                                      "CONVG?",                                                                     SLS_UNCHANGED},
 /*   91 */  { itemToBeCoded,               NOPARAM,                     "CORR",                                        "r",                                                                          SLS_UNCHANGED},
-/*   92 */  { fnCos,                       NOPARAM,                     "cos",                                         "cos",                                                                        SLS_ENABLED  },
+/*   92 */  { fnCos,                       NOPARAM,                     "cos",                                         "COS",                                                                        SLS_ENABLED  },     //JM3 CAPS
 /*   93 */  { itemToBeCoded,               NOPARAM,                     "cosh",                                        "cosh",                                                                       SLS_ENABLED  },
 /*   94 */  { itemToBeCoded,               NOPARAM,                     "COV",                                         "cov",                                                                        SLS_UNCHANGED},
 /*   95 */  { itemToBeCoded,               NOPARAM,                     "CPX",                                         "CPX",                                                                        SLS_UNCHANGED},
@@ -417,7 +416,7 @@ const item_t indexOfItems[] = {
 /*  293 */  { fnConstant,                  23,                          "K" STD_SUB_J,                                 "K" STD_SUB_J,                                                                SLS_ENABLED  },
 /*  294 */  { itemToBeCoded,               NOPARAM,                     "KTYP?",                                       "KTYP?",                                                                      SLS_UNCHANGED},
 /*  295 */  { addItemToBuffer,             REGISTER_L,                  "L",                                           "L",                                                                          SLS_UNCHANGED},
-/*  296 */  { itemToBeCoded,               NOPARAM,                     "LASTx",                                       "LASTx",                                                                      SLS_UNCHANGED},
+/*  296 */  { fnLastX,                     NOPARAM,                     "LASTx",                                       "LASTx",                                                                      SLS_UNCHANGED},     //JM LastX Jaco added the Function in stack.c
 /*  297 */  { fnCvtLbfN,                   multiply,                    "lbf" STD_RIGHT_ARROW "N",                     "lbf" STD_RIGHT_ARROW "N",                                                    SLS_ENABLED  },
 /*  298 */  { itemToBeCoded,               NOPARAM,                     "LBL",                                         "LBL",                                                                        SLS_UNCHANGED},
 /*  299 */  { itemToBeCoded,               NOPARAM,                     "LBL?",                                        "LBL?",                                                                       SLS_UNCHANGED},
@@ -431,7 +430,7 @@ const item_t indexOfItems[] = {
 /*  307 */  { itemToBeCoded,               NOPARAM,                     "LgNrm:",                                      "LgNrm:",                                                                     SLS_UNCHANGED},
 /*  308 */  { fnCurveFitting,              CF_LINEAR_FITTING,           "LinF",                                        "LinF",                                                                       SLS_UNCHANGED},
 /*  309 */  { itemToBeCoded,               NOPARAM,                     "LJ",                                          "LJ",                                                                         SLS_UNCHANGED},
-/*  310 */  { fnLn,                        NOPARAM,                     "LN",                                          "ln",                                                                         SLS_ENABLED  },
+/*  310 */  { fnLn,                        NOPARAM,                     "LN",                                          "LN",                                                                         SLS_ENABLED  },  //JM3 change ln to LN
 /*  311 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m ,                                "L" STD_SUB_m ,                                                               SLS_UNCHANGED},
 /*  312 */  { itemToBeCoded,               NOPARAM,                     "LN1+x",                                       "ln 1+x",                                                                     SLS_ENABLED  },
 /*  313 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m STD_SUB_alpha,                   "L" STD_SUB_m STD_SUB_alpha,                                                  SLS_UNCHANGED},
@@ -444,7 +443,7 @@ const item_t indexOfItems[] = {
 /*  320 */  { itemToBeCoded,               NOPARAM,                     "LOAD" STD_SIGMA,                              "LOAD" STD_SIGMA,                                                             SLS_UNCHANGED},
 /*  321 */  { allocateLocalRegisters,      TM_VALUE,                    "LocR",                                        "LocR",                                                                       SLS_UNCHANGED},
 /*  322 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                                                      SLS_ENABLED  },
-/*  323 */  { fnLog10,                     NOPARAM,                     "LOG" STD_SUB_10,                              "lg",                                                                         SLS_ENABLED  },
+/*  JM 323 */  { fnLog10,                     NOPARAM,                     "LOG" STD_SUB_10,                              "LOG",                                                                         SLS_ENABLED  },  //JM Change lg to LOG
 /*  324 */  { fnLog2,                      NOPARAM,                     "LOG" STD_SUB_2,                               "lb x",                                                                       SLS_ENABLED  },
 /*  325 */  { fnCurveFitting,              CF_LOGARITHMIC_FITTING,      "LogF",                                        "LogF",                                                                       SLS_UNCHANGED},
 /*  326 */  { itemToBeCoded,               NOPARAM,                     "Logis",                                       "Logis",                                                                      SLS_UNCHANGED},
@@ -569,7 +568,7 @@ const item_t indexOfItems[] = {
 /*  445 */  { fnCvtInhgPa,                 divide,                      "Pa" STD_RIGHT_ARROW "iHg",                    "Pa" STD_RIGHT_ARROW,                                                         SLS_ENABLED  },
 /*  446 */  { fnCvtPsiPa,                  divide,                      "Pa" STD_RIGHT_ARROW "psi",                    "Pa" STD_RIGHT_ARROW "psi",                                                   SLS_ENABLED  },
 /*  447 */  { fnCvtTorrPa,                 divide,                      "Pa" STD_RIGHT_ARROW "tor",                    "Pa " STD_RIGHT_ARROW,                                                        SLS_ENABLED  },
-/*  448 */  { itemToBeCoded,               NOPARAM,                     "PARTS",                                       "PARTS",                                                                      SLS_UNCHANGED},
+/*  448 */  { itemToBeCoded,               NOPARAM,                     "PARTS",                                       "PARTS",                                                                      SLS_UNCHANGED},                  //JM
 /*  449 */  { fnCvtPcM,                    multiply,                    "pc" STD_RIGHT_ARROW "m",                      "pc" STD_RIGHT_ARROW "m",                                                     SLS_ENABLED  },
 /*  450 */  { itemToBeCoded,               NOPARAM,                     "PERM",                                        "P" STD_SUB_y STD_SUB_x,                                                      SLS_UNCHANGED},
 /*  451 */  { itemToBeCoded,               NOPARAM,                     "PER/a",                                       "per/a",                                                                      SLS_UNCHANGED},
@@ -608,7 +607,7 @@ const item_t indexOfItems[] = {
 /*  484 */  { fnCvtToCurrentAngularMode,   AM_RADIAN,                   "RAD" STD_RIGHT_ARROW,                         "RAD" STD_RIGHT_ARROW,                                                        SLS_ENABLED  },
 /*  485 */  { itemToBeCoded,               NOPARAM,                     "RAM",                                         "RAM",                                                                        SLS_UNCHANGED},
 /*  486 */  { itemToBeCoded,               NOPARAM,                     "RAN#",                                        "RAN#",                                                                       SLS_UNCHANGED},
-/*  487 */  { registerBrowser,             NOPARAM,                     "RBR",                                         "RBR",                                                                        SLS_UNCHANGED},
+/*  487 */  { registerBrowser,             NOPARAM,                     "RBR",                                         "REGS",                                                                         SLS_UNCHANGED},   //Changed RBR to REGS
 /*  488 */  { fnRecall,                    TM_STORCL,                   "RCL",                                         "RCL",                                                                        SLS_ENABLED  },
 /*  489 */  { fnRecallConfig,              NOPARAM,                     "RCLCFG",                                      "Config",                                                                     SLS_UNCHANGED},
 /*  490 */  { fnRecallElement,             NOPARAM,                     "RCLEL",                                       "RCLEL",                                                                      SLS_ENABLED  },
@@ -690,7 +689,7 @@ const item_t indexOfItems[] = {
 /*  566 */  { fnSign,                      NOPARAM,                     "SIGN",                                        "sign",                                                                       SLS_ENABLED  },
 /*  567 */  { fnIntegerMode,               SIM_SIGNMT,                  "SIGNMT",                                      "SIGNMT",                                                                     SLS_UNCHANGED},
 /*  568 */  { itemToBeCoded,               NOPARAM,                     "SIM_EQ",                                      "SIM EQ",                                                                     SLS_UNCHANGED},
-/*  569 */  { fnSin,                       NOPARAM,                     "sin",                                         "sin",                                                                        SLS_ENABLED  },
+/*  569 */  { fnSin,                       NOPARAM,                     "sin",                                         "SIN",                                                                        SLS_ENABLED  },     //JM3 CAPS
 /*  570 */  { itemToBeCoded,               NOPARAM,                     "sinc",                                        "sinc",                                                                       SLS_UNCHANGED},
 /*  571 */  { itemToBeCoded,               NOPARAM,                     "sinh",                                        "sinh",                                                                       SLS_UNCHANGED},
 /*  572 */  { itemToBeCoded,               NOPARAM,                     "SKIP",                                        "SKIP",                                                                       SLS_UNCHANGED},
@@ -708,7 +707,7 @@ const item_t indexOfItems[] = {
 /*  584 */  { fnStackSize,                 SS_8,                        "SSIZE8",                                      "SSIZE8",                                                                     SLS_UNCHANGED},
 /*  585 */  { fnGetStackSize,              NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                                                     SLS_ENABLED  },
 /*  586 */  { itemToBeCoded,               NOPARAM,                     "STAT",                                        "STAT",                                                                       SLS_UNCHANGED},
-/*  587 */  { flagBrowser,                 NOPARAM,                     "STATUS",                                      "STATUS",                                                                     SLS_UNCHANGED},
+/*  587 */  { flagBrowser,                 NOPARAM,                     "STATUS",                                      "FLAG.V",                                                                     SLS_UNCHANGED},         //JM Changed STATUS
 /*  588 */  { itemToBeCoded,               NOPARAM,                     "STK",                                         "STK",                                                                        SLS_UNCHANGED},
 /*  589 */  { fnStore,                     TM_STORCL,                   "STO",                                         "STO",                                                                        SLS_UNCHANGED},
 /*  590 */  { fnStoreConfig,               NOPARAM,                     "STOCFG",                                      "Config",                                                                     SLS_UNCHANGED},
@@ -739,7 +738,7 @@ const item_t indexOfItems[] = {
 /*  615 */  { fnCvtShorttonKg,             multiply,                    "s.t" STD_RIGHT_ARROW "kg",                    "short",                                                                      SLS_ENABLED  },
 /*  616 */  { fnCvtYearS,                  divide,                      "s" STD_RIGHT_ARROW "year",                    "s" STD_RIGHT_ARROW "year",                                                   SLS_ENABLED  },
 /*  617 */  { fnConstant,                  52,                          "T" STD_SUB_0,                                 "T" STD_SUB_0,                                                                SLS_ENABLED  },
-/*  618 */  { fnTan,                       NOPARAM,                     "tan",                                         "tan",                                                                        SLS_ENABLED  },
+/*  618 */  { fnTan,                       NOPARAM,                     "tan",                                         "TAN",                                                                        SLS_ENABLED  },  //JM3 CHR_L_APOSTROPHE
 /*  619 */  { itemToBeCoded,               NOPARAM,                     "tanh",                                        "tanh",                                                                       SLS_UNCHANGED},
 /*  620 */  { itemToBeCoded,               NOPARAM,                     "TDISP",                                       "TDISP",                                                                      SLS_UNCHANGED},
 /*  621 */  { itemToBeCoded,               NOPARAM,                     "TEST",                                        "TEST",                                                                       SLS_UNCHANGED},
@@ -758,7 +757,7 @@ const item_t indexOfItems[] = {
 /*  634 */  { itemToBeCoded,               NOPARAM,                     "t" STD_SUB_e "(x)",                           "t" STD_SUB_e "(x)",                                                          SLS_UNCHANGED},
 /*  635 */  { itemToBeCoded,               NOPARAM,                     "t(x)",                                        "t(x)",                                                                       SLS_UNCHANGED},
 /*  636 */  { itemToBeCoded,               NOPARAM,                     "t" STD_SUP_MINUS_1 "(p)",                     "t" STD_SUP_MINUS_1 "(p)",                                                    SLS_UNCHANGED},
-/*  637 */  { itemToBeCoded,               NOPARAM,                     "TRI",                                         "TRI",                                                                        SLS_UNCHANGED},
+/*  637 */  { itemToBeCoded,               NOPARAM,                     "TRI",                                         "TRIG",                                                                        SLS_UNCHANGED},
 /*  638 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    "tr.oz",                                                                      SLS_ENABLED  },
 /*  639 */  { itemToBeCoded,               NOPARAM,                     "TVM",                                         "TVM",                                                                        SLS_UNCHANGED},
 /*  640 */  { itemToBeCoded,               NOPARAM,                     "t:",                                          "t:",                                                                         SLS_UNCHANGED},
@@ -767,7 +766,7 @@ const item_t indexOfItems[] = {
 /*  643 */  { itemToBeCoded,               NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                                                SLS_UNCHANGED},
 /*  644 */  { fnUnitVector,                NOPARAM,                     "UNITV",                                       "UNITV",                                                                      SLS_ENABLED  },
 /*  645 */  { fnIntegerMode,               SIM_UNSIGN,                  "UNSIGN",                                      "UNSIGN",                                                                     SLS_UNCHANGED},
-/*  646 */  { itemToBeCoded,               NOPARAM,                     "U" STD_RIGHT_ARROW,                           "U" STD_RIGHT_ARROW,                                                          SLS_UNCHANGED},
+/* JM  646 */  { itemToBeCoded,               NOPARAM,                     "UNIT",                                        "UNIT",                                                          SLS_UNCHANGED},   //JM Change U> arrow to CONV. Changed again to UNIT
 /*  647 */  { itemToBeCoded,               NOPARAM,                     "VARMNU",                                      "VARMNU",                                                                     SLS_UNCHANGED},
 /*  648 */  { itemToBeCoded,               NOPARAM,                     "VARS",                                        "VARS",                                                                       SLS_UNCHANGED},
 /*  649 */  { fnVersion,                   NOPARAM,                     "VERS?",                                       "VERS?",                                                                      SLS_UNCHANGED},
@@ -835,7 +834,7 @@ const item_t indexOfItems[] = {
 /*  711 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "RL",                                STD_alpha "RL",                                                               SLS_UNCHANGED},
 /*  712 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "RR",                                STD_alpha "RR",                                                               SLS_UNCHANGED},
 /*  713 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "SL",                                STD_alpha "SL",                                                               SLS_UNCHANGED},
-/*  714 */  { itemToBeCoded,               NOPARAM,                     STD_alpha ".FN",                               STD_alpha ".FN",                                                              SLS_UNCHANGED},
+/*  714 */  { itemToBeCoded,               NOPARAM,                     /* STD_alpha ".FN",                               STD_alpha ".FN", */  STD_alpha "STR", STD_alpha "STR",                                                             SLS_UNCHANGED},    //JM Changed a.FN to STRNG
 /*  715 */  { itemToBeCoded,               NOPARAM,                     STD_ALPHA STD_ELLIPSIS STD_OMEGA,              STD_ALPHA STD_ELLIPSIS STD_OMEGA,                                             SLS_UNCHANGED},
 /*  716 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_DOT,                             STD_alpha STD_DOT,                                                            SLS_UNCHANGED},
 /*  717 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_RIGHT_ARROW "x",                 STD_alpha STD_RIGHT_ARROW "x",                                                SLS_UNCHANGED},
@@ -900,7 +899,7 @@ const item_t indexOfItems[] = {
 /*  776 */  { fnConstant,                  76,                          STD_omega,                                     STD_omega,                                                                    SLS_ENABLED  },
 /*  777 */  { fnM1Pow,                     NOPARAM,                     "(-1)" STD_SUP_x,                              "(-1)" STD_SUP_x,                                                             SLS_ENABLED  },
 /*  778 */  { fnAdd,                       ITM_ADD,                     "+",                                           "+",                                                                          SLS_ENABLED  },
-/*  779 */  { fnChangeSign,                ITM_CHS,                     "+/-",                                         "+/-",                                                                        SLS_ENABLED  },
+/*  JM 779 */  { fnChangeSign,                ITM_CHS,                     "CHS",                                         "CHS",                                                                        SLS_ENABLED  },   //JM Change +/- to CHS
 /*  780 */  { fnSubtract,                  ITM_SUB,                     "-",                                           "-",                                                                          SLS_ENABLED  },
 /*  781 */  { fnConstant,                  77,                          "-" STD_INFINITY,                              "-" STD_INFINITY,                                                             SLS_ENABLED  },
 /*  782 */  { fnMultiply,                  ITM_MULT,                    STD_CROSS,                                     STD_CROSS,                                                                    SLS_ENABLED  },
@@ -919,7 +918,7 @@ const item_t indexOfItems[] = {
 /*  795 */  { fnToPolar,                   NOPARAM,                     STD_RIGHT_ARROW "POL",                         STD_RIGHT_ARROW "P",                                                          SLS_ENABLED  },
 /*  796 */  { fnCvtFromCurrentAngularMode, AM_RADIAN,                   STD_RIGHT_ARROW "RAD",                         STD_RIGHT_ARROW "RAD",                                                        SLS_ENABLED  },
 /*  797 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "REAL",                        ".d",                                                                         SLS_ENABLED  },
-/*  798 */  { fnToRect,                    NOPARAM,                     STD_RIGHT_ARROW "REC",                         "R" STD_LEFT_ARROW,                                                           SLS_ENABLED  },
+/*  798 */  { fnToRect,                    NOPARAM,                     STD_RIGHT_ARROW "REC",                         STD_RIGHT_ARROW "R",                                                                     SLS_ENABLED  },   //SWAPPED THE ARROW DIRECTION AND POSITION
 /*  799 */  { fnCvtDegToDms,               NOPARAM,                     "D" STD_RIGHT_ARROW "D.MS",                    "D" STD_RIGHT_ARROW "D.MS",                                                   SLS_ENABLED  },
 /*  800 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW "Lim",                            STD_UP_ARROW "Lim",                                                           SLS_UNCHANGED},
 /*  801 */  { itemToBeCoded,               NOPARAM,                     STD_DOWN_ARROW "Lim",                          STD_DOWN_ARROW "Lim",                                                         SLS_UNCHANGED},
@@ -942,7 +941,7 @@ const item_t indexOfItems[] = {
 /*  818 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                                                        SLS_UNCHANGED},
 /*  819 */  { itemToBeCoded,               NOPARAM,                     STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                                                           SLS_UNCHANGED},
 /*  820 */  { fnCvtToCurrentAngularMode,   AM_MULTPI,                   "MUL" STD_pi STD_RIGHT_ARROW,                  "MUL" STD_pi STD_RIGHT_ARROW,                                                 SLS_ENABLED  },
-/*  821 */  { itemToBeCoded,               NOPARAM,                     STD_MEASURED_ANGLE STD_RIGHT_ARROW,            STD_MEASURED_ANGLE STD_RIGHT_ARROW,                                           SLS_UNCHANGED},
+/* JM  821 */  { itemToBeCoded,               NOPARAM,                  "CONV",                                        "CONV",                                                                   SLS_UNCHANGED},    //JM Change to text DRG and change again to CONV
 /*  822 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "ADV",                             STD_PRINTER "ADV",                                                            SLS_UNCHANGED},
 /*  823 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "CHAR",                            STD_PRINTER "CHAR",                                                           SLS_UNCHANGED},
 /*  824 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "DLAY",                            STD_PRINTER "DLAY",                                                           SLS_UNCHANGED},
@@ -1447,7 +1446,7 @@ const item_t indexOfItems[] = {
 /* 1320 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_BACK_SLASH,                                                               SLS_UNCHANGED},
 /* 1321 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_RIGHT_SQUARE_BRACKET,                                                     SLS_UNCHANGED},
 /* 1322 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_CIRCUMFLEX,                                                               SLS_UNCHANGED},
-/* 1323 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UNDERSCORE,                                                               SLS_UNCHANGED},
+/* 1323 */  { addItemToBuffer,               CHR_UNDERSCORE,                     "",                                            STD_UNDERSCORE,                                                               SLS_UNCHANGED},  //JM TEXT
 /* 1324 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_LEFT_CURLY_BRACKET,                                                       SLS_UNCHANGED},
 /* 1325 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_PIPE,                                                                     SLS_UNCHANGED},
 /* 1326 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_RIGHT_CURLY_BRACKET,                                                      SLS_UNCHANGED},
@@ -1472,7 +1471,7 @@ const item_t indexOfItems[] = {
 /* 1345 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_ETH,                                                                      SLS_UNCHANGED},
 /* 1346 */  { addItemToBuffer,             CHR_CROSS,                   "",                                            STD_CROSS,                                                                    SLS_UNCHANGED},
 /* 1347 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_eth,                                                                      SLS_UNCHANGED},
-/* 1348 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_DIVIDE,                                                                   SLS_UNCHANGED},
+/* 1348 */  { addItemToBuffer,               CHR_DIVIDE,                     "",                                            STD_DIVIDE,                                                                   SLS_UNCHANGED},   //JM DIV
 /* 1349 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_E_DOT,                                                                    SLS_UNCHANGED},
 /* 1350 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_e_DOT,                                                                    SLS_UNCHANGED},
 /* 1351 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_E_CARON,                                                                  SLS_UNCHANGED},
@@ -1611,7 +1610,7 @@ const item_t indexOfItems[] = {
 /* 1484 */  { addItemToBuffer,             ITM_dddIJ,                   "",                                            STD_ELLIPSIS "IJ",                                                            SLS_UNCHANGED},
 /* 1485 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0.",                                                                         SLS_UNCHANGED},
 /* 1486 */  { itemToBeCoded,               NOPARAM,                     "",                                            "1.",                                                                         SLS_UNCHANGED},
-/* 1487 */  { addItemToBuffer,             ITM_EXPONENT,                "",                                            "E",                                                                          SLS_UNCHANGED},
+/* JM 1487 */  { addItemToBuffer,             ITM_EXPONENT,                "",                                            "EEX",                                                                          SLS_UNCHANGED}, //JM Change E to EEX
 /* 1488 */  { addItemToBuffer,             ITM_MA11,                    "",                                            STD_a_DIARESIS,                                                               SLS_UNCHANGED},
 /* 1489 */  { addItemToBuffer,             ITM_MA12,                    "",                                            STD_o_DIARESIS,                                                               SLS_UNCHANGED},
 /* 1490 */  { addItemToBuffer,             ITM_MA13,                    "",                                            STD_u_DIARESIS,                                                               SLS_UNCHANGED},
@@ -1631,7 +1630,7 @@ const item_t indexOfItems[] = {
 /* 1504 */  { addItemToBuffer,             ITM_MA35,                    "",                                            "",                                                                           SLS_UNCHANGED},
 /* 1505 */  { addItemToBuffer,             ITM_MA36,                    "",                                            "",                                                                           SLS_UNCHANGED},
 /* 1506 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UNDO,                                                                     SLS_UNCHANGED},
-/* 1507 */  { itemToBeCoded,               NOPARAM,                     "",                                            "P/R",                                                                        SLS_UNCHANGED},
+/* JM 1507 */  { itemToBeCoded,               NOPARAM,                     "",                                            "PRGM",                                                                        SLS_UNCHANGED},  //JM Change P/R to PRGM
 /* 1508 */  { itemToBeCoded,               NOPARAM,                     "",                                            "R/S",                                                                        SLS_UNCHANGED},
 /* 1509 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                                                        SLS_UNCHANGED},
 /* 1510 */  { itemToBeCoded,               NOPARAM,                     "",                                            "yet",                                                                        SLS_UNCHANGED},
@@ -1640,8 +1639,8 @@ const item_t indexOfItems[] = {
 /* 1513 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                                                     SLS_UNCHANGED},
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                                                  SLS_UNCHANGED},
 /* 1515 */  { fnUserMode,                  NOPARAM,                     "",                                            "USER",                                                                       SLS_UNCHANGED},
-/* 1516 */  { fnComplexCCCC,               NOPARAM,                     "",                                            "CC",                                                                         SLS_UNCHANGED},
-/* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f",                                                                          SLS_UNCHANGED},
+/* JM 1516 */  { fnComplexCCCC,               NOPARAM,                     "COMPLEX",                                            "COMPLEX",                                                                         SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                                                          SLS_UNCHANGED},
 /* 1519 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UP_ARROW,                                                                 SLS_UNCHANGED},
 /* 1520 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_HAMBURGER STD_BST,                                                        SLS_UNCHANGED},
@@ -1650,7 +1649,12 @@ const item_t indexOfItems[] = {
 /* 1523 */  { itemToBeCoded,               NOPARAM,                     "",                                            "EXIT",                                                                       SLS_UNCHANGED},
 /* 1524 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_LEFT_ARROW,                                                               SLS_UNCHANGED},
 /* 1525 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_PRINTER "x",                                                              SLS_UNCHANGED},
-/* 1526 */  { fnAim,                       NOPARAM,                     "",                                            STD_alpha,                                                                    SLS_UNCHANGED},
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT. 
+/* 1526 */  { fnAim,                       NOPARAM,                     "",                                            "ALPHA", /*STD_alpha,*/                                                                    SLS_UNCHANGED},             //JM
+#endif //JM END OF LAYOUT 2 DM42 STRICT.
+#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A)
+/* 1526 */  { fnAim,                       NOPARAM,                     "",                                            STD_alpha,                                                                    SLS_UNCHANGED},                             //JM
+#endif //JM END OF LAYOUT 1
 /* 1527 */  { itemToBeCoded,               NOPARAM,                     "",                                            ".d",                                                                         SLS_UNCHANGED},
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,                                          SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",                                          SLS_ENABLED  },
@@ -1701,6 +1705,26 @@ const item_t indexOfItems[] = {
 /* 1574 */  { fnStatSum,                   21,                          STD_SIGMA "x" STD_SUP_3,                       STD_SIGMA "x" STD_SUP_3,                                                      SLS_ENABLED  },
 /* 1575 */  { fnStatSum,                   22,                          STD_SIGMA "x" STD_SUP_4,                       STD_SIGMA "x" STD_SUP_4,                                                      SLS_ENABLED  },
 /* 1576 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "H",                                                                          SLS_UNCHANGED},
+/* 1577 */  { fnSetSetJM,                  1,                           "SETERPN",                                     "eRPN",                                                                       SLS_ENABLED},      //JM eRPN
+/* 1578 */  { fnSetSetJM,                  2,                           "SETHOME3",                                    "HOME.3",                                                                     SLS_ENABLED},      //JM HOME.3
+/* 1579 */  { fnSetSetJM,                  3,                           "SETSHFTTIM",                                  "SH_TIM",                                                                     SLS_ENABLED},      //JM SHIFT CANCEL
+/* 1580 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                                                       SLS_UNCHANGED},      //JM HOME
+/* 1581 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIGFIG",                                      "SIGFIG",                                                                     SLS_UNCHANGED},      //JM SIGFIG
+/* 1582 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                                                      SLS_UNCHANGED},      //JM ALPHA
+/* 1583 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                                                       SLS_UNCHANGED},      //JM BASE
+/* 1584 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1585 */  { fnChangeBase,                8,                           STD_RIGHT_ARROW "OCT",                         STD_RIGHT_ARROW "OCT",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1586 */  { fnChangeBase,                10,                          STD_RIGHT_ARROW "DEC",                         STD_RIGHT_ARROW "DEC",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1587 */  { fnChangeBase,                16,                          STD_RIGHT_ARROW "HEX",                         STD_RIGHT_ARROW "HEX",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1588 */  { fnSetWordSize,               8,                           "8-BIT",                                       "8-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1589 */  { fnSetWordSize,               16,                          "16-BIT",                                      "16-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1590 */  { fnSetWordSize,               32,                          "32-BIT",                                      "32-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1591 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1592 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                                                       SLS_UNCHANGED},      //JM UNIT
+/* 1593 */  { fnShowJM,                    1,                           "eRPN?",                                       "eRPN?",                                                                       SLS_ENABLED  },     //JM SHOW
+/* 1594 */  { fnShowJM,                    2,                           "HOME.3?",                                     "HOME.3?",                                                                     SLS_ENABLED  },     //JM SHOW
+/* 1595 */  { fnShowJM,                    3,                           "SHTIM?",                                      "SHTIM?",                                                                     SLS_ENABLED  },     //JM SHOW
 
-/* 1577 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
+
+/* 1596 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

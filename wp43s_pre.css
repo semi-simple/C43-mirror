@@ -10,7 +10,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU General Public License cb1201
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -154,14 +154,14 @@
 }
 
 #fShiftedUnderline {
-  background:  $bezelBackground;
+  background:  #303030;
   color:       $fGold;
   font-family: WP43S_StandardFont;
   font-style:  normal;
   font-weight: normal;
-  font-size:   18px;
-  text-decoration: underline;
+  font-size:   18px;  
   padding:     0px;
+  /* JM removed "text-decoration: underline;" and changed from "background:  $bezelBackground;" */
 }
 
 #gShifted {
@@ -175,14 +175,14 @@
 }
 
 #gShiftedUnderline {
-  background:  $bezelBackground;
+  background:  #303030;
   color:       $gBlue;
   font-family: WP43S_StandardFont;
   font-style:  normal;
   font-weight: normal;
   font-size:   18px;
-  text-decoration: underline;
   padding:     0px;
+  /* JM removed "text-decoration: underline;" and changed from "background:  $bezelBackground;" */
 }
 
 #greek {
@@ -208,12 +208,14 @@
 
 #On {
   background:  $bezelBackground;
-  color:       $letterGrey;
+  color:       $keyLabelColor;
   font-family: WP43S_StandardFont;
   font-style:  normal;
   font-weight: normal;
   font-size:   18px;
   padding:     0px;
+  text-shadow: 1px 0px $keyLabelColor;
+  /* JM changed colour from lettergrey to keyLabelColor; Added emphasis (shadow) */
 }
 
 #letter {
@@ -224,6 +226,7 @@
   font-weight: normal;
   font-size:   19px;
   padding:     0px;
+  /* JM To make the alpha letters red, change the letter font-size from 19 to 21 and change the lettergrey colour code (above, from grey a5a5a5 to red cb1201 */
 }
 
 #fColor {
@@ -250,15 +253,6 @@
   font-style:  normal;
   font-weight: normal;
   font-size:   16px;
-  padding:     0px;
-  color:       white;
-}
-
-#memoryStatus {
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   13px;
   padding:     0px;
   color:       white;
 }

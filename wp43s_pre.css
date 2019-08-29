@@ -257,6 +257,15 @@
   color:       white;
 }
 
+#memoryStatus {
+  font-family: WP43S_StandardFont;
+  font-style:  normal;
+  font-weight: normal;
+  font-size:   13px;
+  padding:     0px;
+  color:       white;
+}
+
 #debugDejaVu {
   font-family: DejaVu sans mono;
   font-style:  normal;

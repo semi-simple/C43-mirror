@@ -73,7 +73,7 @@ void fnFp(uint16_t unusedParamButMandatory) {
 void fpLonI(void) {
   longInteger_t lgInt;
 
-  longIntegerInit(lgInt);
+  longIntegerInit(lgInt); // Set to 0
   convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }
@@ -91,7 +91,7 @@ void fpRe16(void) {
 
   real16_t integerPart;
 
-  real16ToIntegral(REGISTER_REAL16_DATA(REGISTER_X), &integerPart);
+  real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &integerPart);
   real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &integerPart ,REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -120,6 +120,6 @@ void fpRe34(void) {
 
   real34_t integerPart;
 
-  real34ToIntegral(REGISTER_REAL34_DATA(REGISTER_X), &integerPart);
+  real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &integerPart);
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &integerPart ,REGISTER_REAL34_DATA(REGISTER_X));
 }

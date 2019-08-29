@@ -19,7 +19,7 @@
  ***********************************************/
 
 void fnTan                    (uint16_t unusedParamButMandatory);
-void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode);
+void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, realIc_t *reducedAngle);
 void tanError                 (void);
 void tanLonI                  (void);
 void tanRe16                  (void);

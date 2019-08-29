@@ -656,59 +656,66 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
 
 
 
-void convertAngle16FromTo(real16_t *angle, uint32_t fromAngularMode, uint32_t toAngularMode) {
-  real34_t angle34;
+void convertAngle16FromTo(real16_t *angle16, uint32_t fromAngularMode, uint32_t toAngularMode) {
+  realIc_t angle;
 
-  real16ToReal34(angle, &angle34);
-  convertAngle34FromTo(&angle34, fromAngularMode, toAngularMode);
-  real34ToReal16(&angle34, angle);
+  real16ToRealIc(angle16, &angle);
+  convertAngleIcFromTo(&angle, fromAngularMode, toAngularMode);
+  realIcToReal16(&angle, angle16);
 }
 
 
 
-void convertAngle34FromTo(real34_t *angle, uint32_t fromAngularMode, uint32_t toAngularMode) {
-  int16_t  sign;
+void convertAngle34FromTo(real34_t *angle34, uint32_t fromAngularMode, uint32_t toAngularMode) {
+  realIc_t angle;
+
+  real34ToRealIc(angle34, &angle);
+  convertAngleIcFromTo(&angle, fromAngularMode, toAngularMode);
+  realIcToReal34(&angle, angle34);
+}
+
+
+
+void convertAngleIcFromTo(realIc_t *angle, uint32_t fromAngularMode, uint32_t toAngularMode) {
+  int16_t sign;
   bool_t toDms;
-  real34_t degrees, minutes, seconds;
-  real51_t angle51, real51;
+  realIc_t degrees, minutes, seconds;
 
   if(fromAngularMode == AM_DMS) {
-    sign = real34IsNegative(angle) ? -1 : 1;
-    real34SetPositiveSign(angle);
+    // Convert angle from DMS to DEGREE
+    sign = realIcIsNegative(angle) ? -1 : 1;
+    realIcSetPositiveSign(angle);
 
-    real34ToIntegral(angle, &degrees);
-    real34Subtract(angle, &degrees, angle);
+    ctxtRealIc.round = DEC_ROUND_DOWN;
+    realIcToIntegralValue(angle, &degrees);
 
-    real34Multiply(angle, const34_100, angle);
-    real34ToIntegral(angle, &minutes);
-    real34Subtract(angle, &minutes, angle);
+    realIcSubtract(angle, &degrees, angle);
+    realIcMultiply(angle, const_100, angle);
 
-    real34Multiply(angle, const34_100, &seconds);
+    realIcToIntegralValue(angle, &minutes);
+    ctxtRealIc.round = DEC_ROUND_HALF_UP;
 
-    if(real34CompareGreaterEqual(&seconds, const34_60)) {
-      real34Subtract(&seconds, const34_60, &seconds);
-      real34Add(&minutes, const34_1, &minutes);
+    realIcSubtract(angle, &minutes, angle);
+    realIcMultiply(angle, const_100, &seconds);
+
+    if(realIcCompareGreaterEqual(&seconds, const_60)) {
+      realIcSubtract(&seconds, const_60, &seconds);
+      realIcAdd(&minutes, const_1, &minutes);
     }
 
-    if(real34CompareGreaterEqual(&minutes, const34_60)) {
-      real34Subtract(&minutes, const34_60, &minutes);
-      real34Add(&degrees, const34_1, &degrees);
+    if(realIcCompareGreaterEqual(&minutes, const_60)) {
+      realIcSubtract(&minutes, const_60, &minutes);
+      realIcAdd(&degrees, const_1, &degrees);
     }
 
-    real34ToReal51(&degrees, &angle51);
+    realIcDivide(&minutes, const_60,   &minutes);
+    realIcDivide(&seconds, const_3600, &seconds);
 
-    real34ToReal51(&minutes, &real51);
-    real51Divide(&real51, const51_60, &real51);
-    real51Add(&angle51, &real51, &angle51);
-
-    real34ToReal51(&seconds, &real51);
-    real51Divide(&real51, const51_3600, &real51);
-    real51Add(&angle51, &real51, &angle51);
-
-    real51ToReal34(&angle51, angle);
+    realIcAdd(&degrees, &minutes, angle);
+    realIcAdd(angle,    &seconds, angle);
 
     if(sign == -1) {
-      real34SetNegativeSign(angle);
+      realIcSetNegativeSign(angle);
     }
 
     fromAngularMode = AM_DEGREE;
@@ -722,41 +729,39 @@ void convertAngle34FromTo(real34_t *angle, uint32_t fromAngularMode, uint32_t to
     toDms = false;
   }
 
-  real34ToReal51(angle, &angle51);
-
   switch(fromAngularMode) {
     case AM_DEGREE:
       switch(toAngularMode) {
-        case AM_GRAD:   real51Divide(&angle51, const51_9on10,     &angle51); break;
-        case AM_RADIAN: real51Divide(&angle51, const51_180onPi,   &angle51); break;
-        case AM_MULTPI: real51Divide(&angle51, const51_180,       &angle51); break;
+        case AM_GRAD:   realIcDivide(  angle, const_9on10,   angle); break;
+        case AM_RADIAN: realIcDivide(  angle, const_180onPi, angle); break;
+        case AM_MULTPI: realIcDivide(  angle, const_180,     angle); break;
         default: {}
       }
       break;
 
     case AM_GRAD:
       switch(toAngularMode) {
-        case AM_DEGREE: real51Multiply(&angle51, const51_9on10,   &angle51); break;
-        case AM_RADIAN: real51Divide(  &angle51, const51_200onPi, &angle51); break;
-        case AM_MULTPI: real51Divide(  &angle51, const51_200,     &angle51); break;
+        case AM_DEGREE: realIcMultiply(angle, const_9on10,   angle); break;
+        case AM_RADIAN: realIcDivide(  angle, const_200onPi, angle); break;
+        case AM_MULTPI: realIcDivide(  angle, const_200,     angle); break;
         default: {}
       }
       break;
 
     case AM_RADIAN:
       switch(toAngularMode) {
-        case AM_DEGREE: real51Multiply(&angle51, const51_180onPi, &angle51); break;
-        case AM_GRAD:   real51Multiply(&angle51, const51_200onPi, &angle51); break;
-        case AM_MULTPI: real51Divide(  &angle51, const51_pi,      &angle51); break;
+        case AM_DEGREE: realIcMultiply(angle, const_180onPi, angle); break;
+        case AM_GRAD:   realIcMultiply(angle, const_200onPi, angle); break;
+        case AM_MULTPI: realIcDivide(  angle, const_pi,      angle); break;
         default: {}
       }
       break;
 
     case AM_MULTPI:
       switch(toAngularMode) {
-        case AM_DEGREE: real51Multiply(&angle51, const51_180,     &angle51); break;
-        case AM_GRAD:   real51Multiply(&angle51, const51_200,     &angle51); break;
-        case AM_RADIAN: real51Multiply(&angle51, const51_pi,      &angle51); break;
+        case AM_DEGREE: realIcMultiply(angle, const_180,     angle); break;
+        case AM_GRAD:   realIcMultiply(angle, const_200,     angle); break;
+        case AM_RADIAN: realIcMultiply(angle, const_pi,      angle); break;
         default: {}
       }
       break;
@@ -764,137 +769,115 @@ void convertAngle34FromTo(real34_t *angle, uint32_t fromAngularMode, uint32_t to
     default: {}
   }
 
-  real51ToReal34(&angle51, angle);
-
   if(toDms) {
-    sign = real34IsNegative(angle) ? -1 : 1;
-    real34SetPositiveSign(angle);
+    // Convert angle from DEGREE to DMS
+    sign = realIcIsNegative(angle) ? -1 : 1;
+    realIcSetPositiveSign(angle);
 
-    real34ToIntegral(angle, &degrees);
-    real34Subtract(angle, &degrees, angle);
+    ctxtRealIc.round = DEC_ROUND_DOWN;
+    realIcToIntegralValue(angle, &degrees);
 
-    real34Multiply(angle, const34_60, angle);
-    real34ToIntegral(angle, &minutes);
-    real34Subtract(angle, &minutes, angle);
+    realIcSubtract(angle, &degrees, angle);
+    realIcMultiply(angle, const_60, angle);
 
-    real34Multiply(angle, const34_60, &seconds);
+    realIcToIntegralValue(angle, &minutes);
+    ctxtRealIc.round = DEC_ROUND_HALF_UP;
 
-    real34ToReal51(&degrees, &angle51);
+    realIcSubtract(angle, &minutes, angle);
+    realIcMultiply(angle, const_60, &seconds);
 
-    real34Divide(&minutes, const34_100, &minutes);
-    real34ToReal51(&minutes, &real51);
-    real51Add(&angle51, &real51, &angle51);
+    realIcDivide(&minutes, const_100,   &minutes);
+    realIcDivide(&seconds, const_10000, &seconds);
 
-    real34Divide(&seconds, const34_10000, &seconds);
-    real34ToReal51(&seconds, &real51);
-    real51Add(&angle51, &real51, &angle51);
-
-    real51ToReal34(&angle51, angle);
+    realIcAdd(&degrees, &minutes, angle);
+    realIcAdd(angle,    &seconds, angle);
 
     if(sign == -1) {
-      real34SetNegativeSign(angle);
+      realIcSetNegativeSign(angle);
     }
   }
 }
 
 
 
-//void convertRegisterToAngularMode(calcRegister_t regist, uint16_t toAngularMode) {
-//  uint32_t dataType = getRegisterDataType(regist);
-//
-//  if(dataType == dtReal16 || dataType == dtReal34) {
-//    if(getRegisterAngularMode(regist) == toAngularMode) {
-//      return;
-//    }
-//    else if(getRegisterTag(regist) != RT_REAL) {
-//      if(dataType == dtReal16) {
-//        convertAngle16FromTo(REGISTER_REAL16_DATA(regist), getRegisterTag(regist), toAngularMode);
-//      }
-//      else {
-//        convertAngle34FromTo(REGISTER_REAL34_DATA(regist), getRegisterTag(regist), toAngularMode);
-//      }
-//    }
-//
-//    setRegisterTag(regist, toAngularMode);
-//  }
-//  else {
-//    sprintf(errorMessage, "In function convertRegisterToAngularMode: cannot convert angular modes for %s!", getDataTypeName(dataType, true, false));
-//    displayBugScreen(errorMessage);
-//  }
-//}
-
-
-
-void checkDms16(real16_t *angleDms) {
+void checkDms16(real16_t *angle16Dms) {
   int16_t  sign;
-  real16_t degrees, minutes, seconds;
+  realIc_t angleDms, degrees, minutes, seconds;
 
-  sign = real16IsNegative(angleDms) ? -1 : 1;
-  real16SetPositiveSign(angleDms);
+  real16ToRealIc(angle16Dms, &angleDms);
 
-  real16ToIntegral(angleDms, &degrees);
-  real16Subtract(angleDms, &degrees, angleDms);
+  sign = realIcIsNegative(&angleDms) ? -1 : 1;
+  realIcSetPositiveSign(&angleDms);
 
-  real16Multiply(angleDms, const16_100, angleDms);
-  real16ToIntegral(angleDms, &minutes);
-  real16Subtract(angleDms, &minutes, angleDms);
+  realIcToIntegralValue(&angleDms, &degrees);
+  realIcSubtract(&angleDms, &degrees, &angleDms);
 
-  real16Multiply(angleDms, const16_100, &seconds);
+  realIcMultiply(&angleDms, const_100, &angleDms);
+  realIcToIntegralValue(&angleDms, &minutes);
+  realIcSubtract(&angleDms, &minutes, &angleDms);
 
-  if(real16CompareGreaterEqual(&seconds, const16_60)) {
-    real16Subtract(&seconds, const16_60, &seconds);
-    real16Add(&minutes, const16_1, &minutes);
+  realIcMultiply(&angleDms, const_100, &seconds);
+
+  if(realIcCompareGreaterEqual(&seconds, const_60)) {
+    realIcSubtract(&seconds, const_60, &seconds);
+    realIcAdd(&minutes, const_1, &minutes);
   }
 
-  if(real16CompareGreaterEqual(&minutes, const16_60)) {
-    real16Subtract(&minutes, const16_60, &minutes);
-    real16Add(&degrees, const16_1, &degrees);
+  if(realIcCompareGreaterEqual(&minutes, const_60)) {
+    realIcSubtract(&minutes, const_60, &minutes);
+    realIcAdd(&degrees, const_1, &degrees);
   }
 
-  real16Divide(&minutes, const16_100, &minutes);
-  real16Add(&degrees, &minutes, angleDms);
-  real16Divide(&seconds, const16_10000, &seconds);
-  real16Add(angleDms, &seconds, angleDms);
+  realIcDivide(&minutes, const_100, &minutes);
+  realIcAdd(&degrees, &minutes, &angleDms);
+  realIcDivide(&seconds, const_10000, &seconds);
+  realIcAdd(&angleDms, &seconds, &angleDms);
 
   if(sign == -1) {
-    real16SetNegativeSign(angleDms);
+    realIcSetNegativeSign(&angleDms);
   }
+
+  realIcToReal16(&angleDms, angle16Dms);
 }
 
 
 
-void checkDms34(real34_t *angleDms) {
+void checkDms34(real34_t *angle34Dms) {
   int16_t  sign;
-  real34_t degrees, minutes, seconds;
+  realIc_t angleDms, degrees, minutes, seconds;
 
-  sign = real34IsNegative(angleDms) ? -1 : 1;
-  real34SetPositiveSign(angleDms);
+  real34ToRealIc(angle34Dms, &angleDms);
 
-  real34ToIntegral(angleDms, &degrees);
-  real34Subtract(angleDms, &degrees, angleDms);
+  sign = realIcIsNegative(&angleDms) ? -1 : 1;
+  realIcSetPositiveSign(&angleDms);
 
-  real34Multiply(angleDms, const34_100, angleDms);
-  real34ToIntegral(angleDms, &minutes);
-  real34Subtract(angleDms, &minutes, angleDms);
+  realIcToIntegralValue(&angleDms, &degrees);
+  realIcSubtract(&angleDms, &degrees, &angleDms);
 
-  real34Multiply(angleDms, const34_100, &seconds);
+  realIcMultiply(&angleDms, const_100, &angleDms);
+  realIcToIntegralValue(&angleDms, &minutes);
+  realIcSubtract(&angleDms, &minutes, &angleDms);
 
-  if(real34CompareGreaterEqual(&seconds, const34_60)) {
-    real34Subtract(&seconds, const34_60, &seconds);
-    real34Add(&minutes, const34_1, &minutes);
+  realIcMultiply(&angleDms, const_100, &seconds);
+
+  if(realIcCompareGreaterEqual(&seconds, const_60)) {
+    realIcSubtract(&seconds, const_60, &seconds);
+    realIcAdd(&minutes, const_1, &minutes);
   }
 
-  if(real34CompareGreaterEqual(&minutes, const34_60)) {
-    real34Subtract(&minutes, const34_60, &minutes);
-    real34Add(&degrees, const34_1, &degrees);
+  if(realIcCompareGreaterEqual(&minutes, const_60)) {
+    realIcSubtract(&minutes, const_60, &minutes);
+    realIcAdd(&degrees, const_1, &degrees);
   }
 
-  real34Divide(&minutes, const34_100, &minutes);
-  real34Add(&degrees, &minutes, angleDms);
-  real34Divide(&seconds, const34_10000, &seconds);
-  real34Add(angleDms, &seconds, angleDms);
+  realIcDivide(&minutes, const_100, &minutes);
+  realIcAdd(&degrees, &minutes, &angleDms);
+  realIcDivide(&seconds, const_10000, &seconds);
+  realIcAdd(&angleDms, &seconds, &angleDms);
 
   if(sign == -1) {
-    real34SetNegativeSign(angleDms);
+    realIcSetNegativeSign(&angleDms);
   }
+
+  realIcToReal34(&angleDms, angle34Dms);
 }

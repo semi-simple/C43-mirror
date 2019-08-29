@@ -1064,7 +1064,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   // Round the register value
   switch(resultDataType) {
-    real51_t tmp;
+    realIc_t tmp;
 
     case dtReal16:
     case dtAngle16:
@@ -1078,11 +1078,11 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
       real16ToString(REGISTER_REAL16_DATA(res), tmpStr3000);
 
-      ctxtReal51.digits = significantDigits;
-      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-      ctxtReal51.digits = 51;
+      ctxtRealIc.digits = significantDigits;
+      stringToRealIc(tmpStr3000, &tmp);
+      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
 
-      real51ToReal16(&tmp, REGISTER_REAL16_DATA(res));
+      realIcToReal16(&tmp, REGISTER_REAL16_DATA(res));
       break;
 
     case dtReal34:
@@ -1097,11 +1097,11 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
       real34ToString(REGISTER_REAL34_DATA(res), tmpStr3000);
 
-      ctxtReal51.digits = significantDigits;
-      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-      ctxtReal51.digits = 51;
+      ctxtRealIc.digits = significantDigits;
+      stringToRealIc(tmpStr3000, &tmp);
+      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
 
-      real51ToReal34(&tmp, REGISTER_REAL34_DATA(res));
+      realIcToReal34(&tmp, REGISTER_REAL34_DATA(res));
       break;
 
     case dtComplex16:
@@ -1117,17 +1117,17 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      ctxtReal51.digits = significantDigits;
+      ctxtRealIc.digits = significantDigits;
 
       real16ToString(REGISTER_REAL16_DATA(res), tmpStr3000);
-      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-      real51ToReal16(&tmp, REGISTER_REAL16_DATA(res));
+      stringToRealIc(tmpStr3000, &tmp);
+      realIcToReal16(&tmp, REGISTER_REAL16_DATA(res));
 
       real16ToString(REGISTER_IMAG16_DATA(res), tmpStr3000);
-      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-      real51ToReal16(&tmp, REGISTER_IMAG16_DATA(res));
+      stringToRealIc(tmpStr3000, &tmp);
+      realIcToReal16(&tmp, REGISTER_IMAG16_DATA(res));
 
-      ctxtReal51.digits = 51;
+      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
       break;
 
     case dtComplex34:
@@ -1143,17 +1143,17 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      ctxtReal51.digits = significantDigits;
+      ctxtRealIc.digits = significantDigits;
 
       real34ToString(REGISTER_REAL34_DATA(res), tmpStr3000);
-      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-      real51ToReal34(&tmp, REGISTER_REAL34_DATA(res));
+      stringToRealIc(tmpStr3000, &tmp);
+      realIcToReal34(&tmp, REGISTER_REAL34_DATA(res));
 
       real34ToString(REGISTER_IMAG34_DATA(res), tmpStr3000);
-      stringToReal51Ctxt(tmpStr3000, &tmp, &ctxtReal51);
-      real51ToReal34(&tmp, REGISTER_IMAG34_DATA(res));
+      stringToRealIc(tmpStr3000, &tmp);
+      realIcToReal34(&tmp, REGISTER_IMAG34_DATA(res));
 
-      ctxtReal51.digits = 51;
+      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
       break;
 
     default:
@@ -1716,7 +1716,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
   }
 
   else if(getRegisterDataType(regist) == dtReal34) {
-    if(real34CompareLessThan(REGISTER_REAL34_DATA(regist), const34_0) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(regist), const34_180)) {
+    if(real34CompareLessThan(REGISTER_REAL34_DATA(regist), const34_0) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(regist), const34_1000)) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         real34ToString(REGISTER_REAL34_DATA(regist), errorMessage + 200);
@@ -1942,10 +1942,9 @@ void printRegisterToConsole(calcRegister_t regist) {
 
   else if(getRegisterDataType(regist) == dtLongInteger) {
     longInteger_t lgInt;
-    char *lgIntStr;
 
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
-    lgIntStr = longIntegerToString(lgInt, 10);
+    longIntegerToAllocatedString(lgInt, str, 10);
     longIntegerFree(lgInt);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("long integer (%" FMT32U " bytes) %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
@@ -1955,8 +1954,6 @@ void printRegisterToConsole(calcRegister_t regist) {
       sprintf(tmpStr3000, "BI (%" FMT32U ") %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
       lcd_putsAt(t20, line, tmpStr3000);
     #endif
-
-    freeGmp(lgIntStr, strlen(lgIntStr) + 1);
   }
 
   else {
@@ -2087,6 +2084,15 @@ void printReal34ToConsole(const real34_t *value) {
 
 
 
+void printRealIcToConsole(const realIc_t *value) {
+  char str[1000];
+
+  realIcToString(value, str);
+  printf("realIc %s", str);
+}
+
+
+
 void printComplex34ToConsole(const complex34_t *value) {
   char str[100];
 
@@ -2098,19 +2104,10 @@ void printComplex34ToConsole(const complex34_t *value) {
 
 
 
-void printReal51ToConsole(const real51_t *value) {
-  char str[1000];
-
-  real51ToString(value, str);
-  printf("real51 %s", str);
-}
-
-
-
 void printReal451ToConsole(const real451_t *value) {
   char str[1000];
 
-  real451ToString((decNumber *)value, str);
+  realIcToString((decNumber *)value, str);
   printf("real451 %s", str);
 }
 

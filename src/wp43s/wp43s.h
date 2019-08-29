@@ -108,7 +108,7 @@
   #define showComplexMode()       {}
   #define showPgmBegin()          {}
   #define showFracMode()          {}
-  #define displayBugScreen(a)     {}
+  #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
   #define showRealComplexResult() {}
   #define showOverflowCarry()     {}
   #define hideUserMode()          {}
@@ -149,8 +149,11 @@ typedef enum {
 
 typedef int16_t calcRegister_t;
 
+// If the definition below is changed, this change MUST be carried forward in generateConstants.c and the constants MUST be regenerated before recompiling the program.
+#define DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS 39
+
 #if (IBM_DECIMAL == 1)
-  #define DECNUMDIGITS 51
+  #define DECNUMDIGITS DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS
   #include "decimal128.h"
   #include "decimal64.h"
   #include "decDouble.h"
@@ -475,10 +478,10 @@ extern const softmenu_t     softmenu[];
 extern const int16_t        softkeyRow[];
 
 // Variables stored in RAM
-extern decContext           ctxtReal16;
-extern decContext           ctxtReal34;
-extern decContext           ctxtReal51;
-extern decContext           ctxtReal451;
+extern decContext           ctxtReal16;  // 16 digits
+extern decContext           ctxtReal34;  // 34 digits
+extern decContext           ctxtRealIc;  // Intermediate calculations for 34 digits
+extern decContext           ctxtReal451; // 451 digits
 extern uint16_t             flags[7];
 #define TMP_STR_LENGTH  3000
 #define ERROR_MESSAGE_LENGTH 512
@@ -590,8 +593,10 @@ extern size_t               wp43sMem;
 extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 extern int32_t              numberOfFreeBlocks;
 extern void                 (*confirmedFunction)(uint16_t);
-extern bool_t debug;
-extern int32_t debugCounter;
+extern realIc_t             const *gammaConstants;
+extern realIc_t             const *angle180;
+extern realIc_t             const *angle90;
+extern realIc_t             const *angle45;
 #ifdef DMCP_BUILD
   extern bool_t               endOfProgram;
 #endif // DMCP_BUILD

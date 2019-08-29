@@ -64,6 +64,12 @@ void fnM1Pow(uint16_t unusedParamButMandatory) {
 
 
 
+/**********************************************************************
+ * In all the functions below:
+ * if X is a number then X = a + ib
+ * The variables a and b are used for intermediate calculations
+ ***********************************************************************/
+
 void m1PowLonI(void) {
   longInteger_t lgInt, exponent;
 
@@ -92,12 +98,14 @@ void m1PowRe16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
+  realIc_t a;
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
 
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
-  convertRegister34To16(REGISTER_X);
+  realIcMultiply(const_pi, &a, &a);
+  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -111,10 +119,17 @@ void m1PowCo16(void) {
     return;
   }
 
+  realIc_t real;
+
   convertRegister16To34(REGISTER_X);
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &real);
+  realIcMultiply(const_pi, &real, &real);
+  realIcToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
+
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &real);
+  realIcMultiply(const_pi, &real, &real);
+  realIcToReal34(&real, REGISTER_IMAG34_DATA(REGISTER_X));
 
   uint8_t savedAngularMode = currentAngularMode;
   currentAngularMode = AM_RADIAN;
@@ -134,13 +149,15 @@ void m1PowAn16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
+  realIc_t a;
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
-  convertRegister34To16(REGISTER_X);
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+
+  realIcMultiply(const_pi, &a, &a);
+  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -172,8 +189,14 @@ void m1PowRe34(void) {
     return;
   }
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
+  realIc_t a;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+
+  realIcMultiply(const_pi, &a, &a);
+  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -187,8 +210,15 @@ void m1PowCo34(void) {
     return;
   }
 
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(const34_pi, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIc_t real;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &real);
+  realIcMultiply(const_pi, &real, &real);
+  realIcToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
+
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &real);
+  realIcMultiply(const_pi, &real, &real);
+  realIcToReal34(&real, REGISTER_IMAG34_DATA(REGISTER_X));
 
   uint8_t savedAngularMode = currentAngularMode;
   currentAngularMode = AM_RADIAN;
@@ -207,7 +237,13 @@ void m1PowAn34(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34Multiply(const34_pi, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+
+  realIcMultiply(const_pi, &a, &a);
+  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

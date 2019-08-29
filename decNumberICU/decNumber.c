@@ -235,7 +235,7 @@ static Int         decGetInt(const decNumber *);
 static decNumber * decLnOp(decNumber *, const decNumber *, decContext *, uInt *);
 static decNumber * decMultiplyOp(decNumber *, const decNumber *, const decNumber *, decContext *, uInt *);
 static decNumber * decNaNs(decNumber *, const decNumber *, const decNumber *, decContext *, uInt *);
-//static decNumber * decQuantizeOp(decNumber *, const decNumber *, const decNumber *, decContext *, Flag, uInt *);
+static decNumber * decQuantizeOp(decNumber *, const decNumber *, const decNumber *, decContext *, Flag, uInt *);
 //static void        decReverse(Unit *, Unit *);
 static void        decSetCoeff(decNumber *, decContext *, const Unit *, Int, Int *, uInt *);
 static void        decSetMaxValue(decNumber *, decContext *);
@@ -388,7 +388,7 @@ Int decNumberToInt32(const decNumber *dn, decContext *set) {
   return 0;
   } // decNumberToInt32
 
-/*uInt decNumberToUInt32(const decNumber *dn, decContext *set) {
+uInt decNumberToUInt32(const decNumber *dn, decContext *set) {
   #if DECCHECK
   if (decCheckOperands(DECUNRESU, DECUNUSED, dn, set)) return 0;
   #endif
@@ -416,7 +416,7 @@ Int decNumberToInt32(const decNumber *dn, decContext *set) {
   decContextSetStatus(set, DEC_Invalid_operation); // [may not return]
   return 0;
   } // decNumberToUInt32
-*/
+
 /* ------------------------------------------------------------------ */
 /* to-scientific-string -- conversion to numeric string               */
 /* to-engineering-string -- conversion to numeric string              */
@@ -1075,7 +1075,7 @@ decNumber * decNumberExp(decNumber *res, const decNumber *rhs,
 /*                                                                    */
 /* C must have space for set->digits digits.                          */
 /* ------------------------------------------------------------------ */
-/*decNumber * decNumberFMA(decNumber *res, const decNumber *lhs,
+decNumber * decNumberFMA(decNumber *res, const decNumber *lhs,
                          const decNumber *rhs, const decNumber *fhs,
                          decContext *set) {
   uInt status=0;                   // accumulator
@@ -1151,7 +1151,7 @@ decNumber * decNumberExp(decNumber *res, const decNumber *rhs,
   #endif
   return res;
   } // decNumberFMA
-*/
+
 /* ------------------------------------------------------------------ */
 /* decNumberInvert -- invert a Number, digitwise                      */
 /*                                                                    */
@@ -2265,14 +2265,14 @@ decNumber * decNumberPower(decNumber *res, const decNumber *lhs,
 /* Unless there is an error or the result is infinite, the exponent   */
 /* after the operation is guaranteed to be equal to that of B.        */
 /* ------------------------------------------------------------------ */
-/*decNumber * decNumberQuantize(decNumber *res, const decNumber *lhs,
+decNumber * decNumberQuantize(decNumber *res, const decNumber *lhs,
                               const decNumber *rhs, decContext *set) {
   uInt status=0;                        // accumulator
   decQuantizeOp(res, lhs, rhs, set, 1, &status);
   if (status!=0) decStatus(res, status, set);
   return res;
   } // decNumberQuantize
-*/
+
 /* ------------------------------------------------------------------ */
 /* decNumberReduce -- remove trailing zeros                           */
 /*                                                                    */
@@ -3159,7 +3159,7 @@ decNumber * decNumberSubtract(decNumber *res, const decNumber *lhs,
 /* Inexact if the result differs numerically from rhs; the other      */
 /* never signals Inexact.                                             */
 /* ------------------------------------------------------------------ */
-/*decNumber * decNumberToIntegralExact(decNumber *res, const decNumber *rhs,
+decNumber * decNumberToIntegralExact(decNumber *res, const decNumber *rhs,
                                      decContext *set) {
   decNumber dn;
   decContext workset;              // working context
@@ -3188,8 +3188,8 @@ decNumber * decNumberSubtract(decNumber *res, const decNumber *lhs,
   if (status!=0) decStatus(res, status, set);
   return res;
   } // decNumberToIntegralExact
-*/
-/*decNumber * decNumberToIntegralValue(decNumber *res, const decNumber *rhs,
+
+decNumber * decNumberToIntegralValue(decNumber *res, const decNumber *rhs,
                                      decContext *set) {
   decContext workset=*set;         // working context
   workset.traps=0;                 // no traps
@@ -3199,7 +3199,7 @@ decNumber * decNumberSubtract(decNumber *res, const decNumber *lhs,
   set->status|=workset.status&DEC_Invalid_operation;
   return res;
   } // decNumberToIntegralValue
-*/
+
 /* ------------------------------------------------------------------ */
 /* decNumberXor -- XOR two Numbers, digitwise                         */
 /*                                                                    */
@@ -3373,7 +3373,7 @@ decNumber * decNumberCopy(decNumber *dest, const decNumber *src) {
 /* No exception or error can occur; this is a quiet bitwise operation.*/
 /* See also decNumberAbs for a checking version of this.              */
 /* ------------------------------------------------------------------ */
-/*decNumber * decNumberCopyAbs(decNumber *res, const decNumber *rhs) {
+decNumber * decNumberCopyAbs(decNumber *res, const decNumber *rhs) {
   #if DECCHECK
   if (decCheckOperands(res, DECUNUSED, rhs, DECUNCONT)) return res;
   #endif
@@ -3381,7 +3381,7 @@ decNumber * decNumberCopy(decNumber *dest, const decNumber *src) {
   res->bits&=~DECNEG;                   // turn off sign
   return res;
   } // decNumberCopyAbs
-*/
+
 /* ------------------------------------------------------------------ */
 /* decNumberCopyNegate -- quiet negate value operator                 */
 /*                                                                    */
@@ -5357,7 +5357,7 @@ decNumber * decExpOp(decNumber *res, const decNumber *rhs,
         }
 
       // Now use the usual power series to evaluate exp(x).  The
-      // series starts as 1 + x + x^2/2 ... so prime ready for the
+      // series starts as 1 + x + x²/2 ... so prime ready for the
       // third term by setting the term variable t=x, the accumulator
       // a=1, and the divisor d=2.
 
@@ -5812,7 +5812,7 @@ decNumber * decLnOp(decNumber *res, const decNumber *rhs,
 /* Unless there is an error or the result is infinite, the exponent   */
 /* after the operation is guaranteed to be that requested.            */
 /* ------------------------------------------------------------------ */
-/*static decNumber * decQuantizeOp(decNumber *res, const decNumber *lhs,
+static decNumber * decQuantizeOp(decNumber *res, const decNumber *lhs,
                                  const decNumber *rhs, decContext *set,
                                  Flag quant, uInt *status) {
   #if DECSUBSET
@@ -5954,7 +5954,7 @@ decNumber * decLnOp(decNumber *res, const decNumber *rhs,
   #endif
   return res;
   } // decQuantizeOp
-*/
+
 /* ------------------------------------------------------------------ */
 /* decCompareOp -- compare, min, or max two Numbers                   */
 /*                                                                    */

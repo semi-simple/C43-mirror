@@ -82,17 +82,19 @@ void cubeRe16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeRe16:", "cannot use NaN as X input of ^2", NULL, NULL);
+      showInfoDialog("In function cubeRe16:", "cannot use NaN as X input of ^3", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t square;
+  realIc_t a, aSquared;
 
-  convertRegister16To34(REGISTER_X);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &square);
-  real34Multiply(&square, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+
+  realIcMultiply(&a, &a, &aSquared);
+  realIcMultiply(&aSquared, &a, &a);
+
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -101,35 +103,37 @@ void cubeCo16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeCo16:", "cannot use NaN as X input of ^2", NULL, NULL);
+      showInfoDialog("In function cubeCo16:", "cannot use NaN as X input of ^3", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t aSquared, bSquared, aCubed, bCubed;
+  realIc_t a, b, aSquared, bSquared, aCubed, bCubed;
 
-  convertRegister16To34(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
-  // (a + bi)^3 = a^3 - 3ab²  +  (3ba² - b^3)i
-  // a² and a^3
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &aSquared);
-  real34Multiply(&aSquared,                        REGISTER_REAL34_DATA(REGISTER_X), &aCubed);
+  // (a + bi)³ = a³ - 3ab²  +  (3ba² - b³)i
+  // a² and a³
+  realIcMultiply(&a,        &a, &aSquared);
+  realIcMultiply(&aSquared, &a, &aCubed);
 
-  // b² annd b^3
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &bSquared);
-  real34Multiply(&bSquared,                        REGISTER_IMAG34_DATA(REGISTER_X), &bCubed);
+  // b² and b³
+  realIcMultiply(&b,        &b, &bSquared);
+  realIcMultiply(&bSquared, &b, &bCubed);
 
   // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_3,                        REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &bSquared,                        REGISTER_REAL34_DATA(REGISTER_X));
-  real34Subtract(&aCubed,                          REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIcMultiply(&a,      const_3,   &a);
+  realIcMultiply(&a,      &bSquared, &a);
+  realIcSubtract(&aCubed, &a,        &a);
 
   // imag part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_3,                        REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), &aSquared,                        REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Subtract(REGISTER_IMAG34_DATA(REGISTER_X), &bCubed,                          REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcMultiply(&b, const_3,   &b);
+  realIcMultiply(&b, &aSquared, &b);
+  realIcSubtract(&b, &bCubed,   &b);
 
-  convertRegister34To16(REGISTER_X);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -138,18 +142,20 @@ void cubeAn16(void) {
   if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeAn16:", "cannot use NaN as X input of ^2", NULL, NULL);
+      showInfoDialog("In function cubeAn16:", "cannot use NaN as X input of ^3", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t square;
+  realIc_t a, aSquared;
 
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  convertRegister16To34(REGISTER_X);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &square);
-  real34Multiply(&square, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+
+  realIcMultiply(&a, &a, &aSquared);
+  realIcMultiply(&aSquared, &a, &a);
+
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -178,15 +184,19 @@ void cubeRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeRe34:", "cannot use NaN as X input of ^2", NULL, NULL);
+      showInfoDialog("In function cubeRe34:", "cannot use NaN as X input of ^3", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t square;
+  realIc_t a, aSquared;
 
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &square);
-  real34Multiply(&square, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+
+  realIcMultiply(&a, &a, &aSquared);
+  realIcMultiply(&aSquared, &a, &a);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -195,31 +205,37 @@ void cubeCo34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeCo34:", "cannot use NaN as X input of ^2", NULL, NULL);
+      showInfoDialog("In function cubeCo34:", "cannot use NaN as X input of ^3", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t aSquared, bSquared, aCubed, bCubed;
+  realIc_t a, b, aSquared, bSquared, aCubed, bCubed;
 
-  // (a + bi)^3 = a^3 - 3ab²  +  (3ba² - b^3)i
-  // a² and a^3
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &aSquared);
-  real34Multiply(&aSquared,                        REGISTER_REAL34_DATA(REGISTER_X), &aCubed);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  // b² annd b^3
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &bSquared);
-  real34Multiply(&bSquared,                        REGISTER_IMAG34_DATA(REGISTER_X), &bCubed);
+  // (a + bi)³ = a³ - 3ab²  +  (3ba² - b³)i
+  // a² and a³
+  realIcMultiply(&a,        &a, &aSquared);
+  realIcMultiply(&aSquared, &a, &aCubed);
+
+  // b² annd b³
+  realIcMultiply(&b,        &b, &bSquared);
+  realIcMultiply(&bSquared, &b, &bCubed);
 
   // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_3,                        REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &bSquared,                        REGISTER_REAL34_DATA(REGISTER_X));
-  real34Subtract(&aCubed,                          REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIcMultiply(&a,      const_3,   &a);
+  realIcMultiply(&a,      &bSquared, &a);
+  realIcSubtract(&aCubed, &a,        &a);
 
   // imag part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_3,                        REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), &aSquared,                        REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Subtract(REGISTER_IMAG34_DATA(REGISTER_X), &bCubed,                          REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcMultiply(&b, const_3,   &b);
+  realIcMultiply(&b, &aSquared, &b);
+  realIcSubtract(&b, &bCubed,   &b);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -228,14 +244,18 @@ void cubeAn34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeAn34:", "cannot use NaN as X input of ^2", NULL, NULL);
+      showInfoDialog("In function cubeAn34:", "cannot use NaN as X input of ^3", NULL, NULL);
     #endif
     return;
   }
 
-  real34_t square;
+  realIc_t a, aSquared;
 
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &square);
-  real34Multiply(&square, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+
+  realIcMultiply(&a, &a, &aSquared);
+  realIcMultiply(&aSquared, &a, &a);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
  }

@@ -65,9 +65,13 @@ void fnCos(uint16_t unusedParamButMandatory) {
 
 
 void cosLonI(void) {
-  longIntegerAngleReduction(REGISTER_X, currentAngularMode);
-  WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
-  convertRegister34To16(REGISTER_X);
+  realIc_t cos;
+
+  longIntegerAngleReduction(REGISTER_X, currentAngularMode, &cos);
+  WP34S_cvt_2rad_sincos(NULL, &cos, &cos, currentAngularMode);
+
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  realIcToReal16(&cos, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -82,12 +86,14 @@ void cosRe16(void) {
   }
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    real16Copy(const16_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    convertRegister16To34(REGISTER_X);
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
-    convertRegister34To16(REGISTER_X);
+    realIc_t a;
+
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+    WP34S_cvt_2rad_sincos(NULL, &a, &a, currentAngularMode);
+    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
 
@@ -102,35 +108,39 @@ void cosCo16(void) {
     return;
   }
 
-  // cos(z) = (exp(iz) + exp(-iz)) / 2
-  complex34_t iz, expIz;
+  // cos(a + ib) = cosh(b)*cos(a) - i*sin(a)*sinh(b)
+  //
+  //           e^b + e^(-b)                  e^b - e^(-b)
+  // cosh(b)= --------------       sinh(b)= --------------
+  //                2                             2
+  //
+  // cos(a + ib) = (e^b + e^(-b))*cos(a)/2 + i*(e^(-b) - e^-b)*sin(a)/2
 
-  convertRegister16To34(REGISTER_X);
+  realIc_t expIm, expMIm, a, b, sin, cos;
 
-  // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&iz));
-  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&iz));
-  real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
-  // calculate expIz = exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
-  expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expIz));
+  // expIm = e^b  and expMIm = e^(-b)
+  realIcExp(&b, &expIm);
+  realIcChangeSign(&b);
+  realIcExp(&b, &expMIm);
 
-  // calculate X = exp(-iz)
-  complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
-  expCo34();
+  // Calculate cos and sin
+  WP34S_cvt_2rad_sincos(&sin, &cos, &a, AM_RADIAN);
 
-  // calculate X = exp(iz) + exp(-iz)
-  real34Add(VARIABLE_REAL34_DATA(&expIz), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34Add(VARIABLE_IMAG34_DATA(&expIz), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  // real part = (e^b + e^(-b))*cos(a)/2
+  realIcAdd(&expIm, &expMIm, &a);
+  realIcMultiply(&a, &cos, &a);
+  realIcMultiply(&a, const_0_5, &a);
 
-  // calculate X = (exp(iz) + exp(-iz)) / 2
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_0_5, REGISTER_IMAG34_DATA(REGISTER_X));
+  // imaginary part = (e^(-b) - e^b)*sin(a)/2
+  realIcSubtract(&expMIm, &expIm, &b);
+  realIcMultiply(&b, &sin, &b);
+  realIcMultiply(&b, const_0_5, &b);
 
-  convertRegister34To16(REGISTER_X);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -145,12 +155,14 @@ void cosAn16(void) {
   }
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    convertRegister16To34(REGISTER_X);
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+    realIc_t a;
+
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+    WP34S_cvt_2rad_sincos(NULL, &a, &a, getRegisterAngularMode(REGISTER_X));
+    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
@@ -180,10 +192,14 @@ void cosRe34(void) {
   }
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode);
+    realIc_t a;
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+    WP34S_cvt_2rad_sincos(NULL, &a, &a, currentAngularMode);
+    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
 
@@ -198,31 +214,39 @@ void cosCo34(void) {
     return;
   }
 
-  // cos(z) = (exp(iz) + exp(-iz)) / 2
-  complex34_t iz, expIz;
+  // cos(a + ib) = cosh(b)*cos(a) - i*sin(a)*sinh(b)
+  //
+  //           e^b + e^(-b)                  e^b - e^(-b)
+  // cosh(b)= --------------       sinh(b)= --------------
+  //                2                             2
+  //
+  // cos(a + ib) = (e^b + e^(-b))*cos(a)/2 + i*(e^(-b) - e^-b)*sin(a)/2
 
-  // calculate iz
-  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&iz));
-  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&iz));
-  real34ChangeSign(VARIABLE_REAL34_DATA(&iz));
+  realIc_t expIm, expMIm, a, b, sin, cos;
 
-  // calculate expIz = exp(iz)
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
-  expCo34();
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), VARIABLE_COMPLEX34_DATA(&expIz));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  // calculate X = exp(-iz)
-  complex34ChangeSign(VARIABLE_COMPLEX34_DATA(&iz));
-  complex34Copy(VARIABLE_COMPLEX34_DATA(&iz), REGISTER_COMPLEX34_DATA(REGISTER_X));
-  expCo34();
+  // expIm = e^b  and expMIm = e^(-b)
+  realIcExp(&b, &expIm);
+  realIcChangeSign(&b);
+  realIcExp(&b, &expMIm);
 
-  // calculate X = exp(iz) + exp(-iz)
-  real34Add(VARIABLE_REAL34_DATA(&expIz), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34Add(VARIABLE_IMAG34_DATA(&expIz), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  // Calculate cos and sin
+  WP34S_cvt_2rad_sincos(&sin, &cos, &a, AM_RADIAN);
 
-  // calculate X = (exp(iz) + exp(-iz)) / 2
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_0_5, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), const34_0_5, REGISTER_IMAG34_DATA(REGISTER_X));
+  // real part = (e^b + e^(-b))*cos(a)/2
+  realIcAdd(&expIm, &expMIm, &a);
+  realIcMultiply(&a, &cos, &a);
+  realIcMultiply(&a, const_0_5, &a);
+
+  // imaginary part = (e^(-b) - e^b)*sin(a)/2
+  realIcSubtract(&expMIm, &expIm, &b);
+  realIcMultiply(&b, &sin, &b);
+  realIcMultiply(&b, const_0_5, &b);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -237,10 +261,14 @@ void cosAn34(void) {
   }
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    WP34S_cvt_2rad_sincos(NULL, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X));
+    realIc_t a;
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+    WP34S_cvt_2rad_sincos(NULL, &a, &a, getRegisterAngularMode(REGISTER_X));
+    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);

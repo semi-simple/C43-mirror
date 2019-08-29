@@ -60,7 +60,7 @@ void divError(void) {
 
 
 /********************************************//**
- * \brief regX ==> regL and regY ÷ regX ==> regX
+ * \brief regX ==> regL and regY Ã· regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
  * \param[in] unusedParamButMandatory
@@ -77,23 +77,32 @@ void fnDivide(uint16_t unusedParamButMandatory) {
 
 
 
+/**********************************************************************
+ * In all the functions below:
+ * if Y is a number then Y = a + ib
+ * if X is a number then X = c + id
+ * The variables a, b, c and d are used for intermediate calculations
+ * The result is then X = (ac + bd)/(cÂ² + dÂ²) + i(bc - ad)/(cÂ² + dÂ²)
+ * The variable denom is used to store (cÂ² + dÂ²)
+ ***********************************************************************/
+
 /******************************************************************************************************************************************************************************************/
 /* long integer / ...                                                                                                                                                                     */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(long integer) ==> X(long integer or real16)
+ * \brief Y(long integer) Ã· X(long integer) ==> X(long integer or real16)
  *
  * \param void
  * \return void
  ***********************************************/
 void divLonILonI(void) {
-  longInteger_t liX, liY;
+  longInteger_t a, c;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
 
-  if(longIntegerIsZero(liX)) {
+  if(longIntegerIsZero(c)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonILonI:", "cannot divide a long integer by 0", NULL, NULL);
@@ -104,16 +113,16 @@ void divLonILonI(void) {
 
     longIntegerInit(quotient);
     longIntegerInit(remainder);
-    longIntegerDivideRemainder(liY, liX, quotient, remainder);
+    longIntegerDivideRemainder(a, c, quotient, remainder);
 
     if(longIntegerIsZero(remainder)) {
       convertLongIntegerToLongIntegerRegister(quotient, REGISTER_X);
     }
     else {
-      longIntegerToAllocatedString(liY, tmpStr3000, 10);
+      longIntegerToAllocatedString(a, tmpStr3000, 10);
       reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, TAG_NONE);
       stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_Y));
-      longIntegerToAllocatedString(liX, tmpStr3000, 10);
+      longIntegerToAllocatedString(c, tmpStr3000, 10);
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
       stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 
@@ -127,14 +136,14 @@ void divLonILonI(void) {
     longIntegerFree(remainder);
   }
 
-  longIntegerFree(liX);
-  longIntegerFree(liY);
+  longIntegerFree(a);
+  longIntegerFree(c);
 }
 
 
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(real16) ==> X(real16)
+ * \brief Y(long integer) Ã· X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -148,43 +157,46 @@ void divLonIRe16(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  realIc_t a, c;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
+
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+    if(realIcIsZero(&a)) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIRe16:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIRe16:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real16Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIRe16:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16((realIcIsPositive(&a) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIRe16:", "cannot divide a real16 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
-    convertRegister16To34(REGISTER_X);
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+    realIcDivide(&a, &c, &c);
+    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(long integer) ==> X(real16)
+ * \brief Y(real16) Ã· X(long integer) ==> X(real16)
  *
  * \param void
  * \return void
@@ -198,44 +210,47 @@ void divRe16LonI(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  realIc_t a, c;
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+
+  if(realIcIsZero(&c)) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y))) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIRe16:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe16LonI:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe16LonI:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIRe16:", "cannot divide a real16 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
-    convertRegister16To34(REGISTER_Y);
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+    realIcDivide(&a, &c, &c);
+    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   }
-
-  convertRegister34To16(REGISTER_X);
 }
 
 
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(complex16) ==> X(complex16)
+ * \brief Y(long integer) Ã· X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -249,31 +264,37 @@ void divLonICo16(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t denom, a, c, d;
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-  convertRegister16To34(REGISTER_X);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+
+  //   a        ac         ad
+  // ------ = ------- - i-------
+  // c + id   cÂ² + dÂ²    cÂ² + dÂ²
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom); // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  realIcMultiply(&c, &c, &denom);    // cÂ²
+  realIcFMA(&d, &d, &denom, &denom); // cÂ² + dÂ²
 
   // Real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
+  realIcDivide(&c, &denom, &c);      // c / (cÂ² + dÂ²)
+  realIcMultiply(&c, &a, &c);        // ac / (cÂ² + dÂ²)
 
   // Imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcChangeSign(&denom);          // -(cÂ² + dÂ²)
+  realIcDivide(&d, &denom, &d);      // -d / (cÂ² + dÂ²)
+  realIcMultiply(&d, &a, &d);        // -ad / (cÂ² + dÂ²)
 
-  convertRegister34To16(REGISTER_X);
+  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(long integer) ==> X(complex16)
+ * \brief Y(complex16) Ã· X(long integer) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -287,17 +308,24 @@ void divCo16LonI(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  real16Divide(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_Y)); // real part
-  real16Divide(REGISTER_IMAG16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_Y)); // imaginary part
+  realIc_t a, b, c;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+
+  realIcDivide(&a, &c, &a);
+  realIcDivide(&b, &c, &b);
+
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-  complex16Copy(REGISTER_COMPLEX16_DATA(REGISTER_Y), REGISTER_COMPLEX16_DATA(REGISTER_X));
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(angle16) ==> X(real16)
+ * \brief Y(long integer) Ã· X(angle16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -311,45 +339,47 @@ void divLonIAn16(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  realIc_t a, c;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+    if(realIcIsZero(&a)) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIAn16:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIAn16:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real16Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIAn16:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16((realIcIsPositive(&a) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIAn16:", "cannot divide a real16 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
-    convertRegister16To34(REGISTER_X);
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+    realIcDivide(&a, &c, &c);
+    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   }
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(long integer) ==> X(angle16)
+ * \brief Y(angle16) Ã· X(long integer) ==> X(angle16)
  *
  * \param void
  * \return void
@@ -363,118 +393,118 @@ void divAn16LonI(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  realIc_t a, c;
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, currentAngularMode);
+
+  if(realIcIsZero(&c)) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y))) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divAn16LonI:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divAn16LonI:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divAn16LonI:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divAn16LonI:", "cannot divide a real16 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
-    convertRegister16To34(REGISTER_Y);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
-      convertRegister34To16(REGISTER_X);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertRegister34To16(REGISTER_X);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
     }
-
-    setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(short integer) ==> X(long integer)
+ * \brief Y(long integer) Ã· X(short integer) ==> X(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void divLonIShoI(void) {
-  longInteger_t liX, liY;
+  longInteger_t a, c;
 
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
   convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
 
-  if(longIntegerIsZero(liX)) {
+  if(longIntegerIsZero(c)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divLonIShoI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
   }
   else {
-    longIntegerDivideRemainder(liY, liX, liX, liY);
-    convertLongIntegerToLongIntegerRegister(liX, REGISTER_X);
+    longIntegerDivideRemainder(a, c, a, c);
+    convertLongIntegerToLongIntegerRegister(a, REGISTER_X);
   }
 
-  longIntegerFree(liX);
-  longIntegerFree(liY);
+  longIntegerFree(a);
+  longIntegerFree(c);
 }
 
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(long integer) ==> X(long integer)
+ * \brief Y(64bits integer) Ã· X(long integer) ==> X(long integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void divShoILonI(void) {
-  longInteger_t liX, liY;
+  longInteger_t a, c;
 
   convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
 
-  if(longIntegerIsZero(liX)) {
+  if(longIntegerIsZero(c)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function divShoILonI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
   }
   else {
-    longIntegerDivideRemainder(liY, liX, liX, liY);
-    convertLongIntegerToLongIntegerRegister(liX, REGISTER_X);
+    longIntegerDivideRemainder(a, c, a, c);
+    convertLongIntegerToLongIntegerRegister(a, REGISTER_X);
   }
 
-  longIntegerFree(liX);
-  longIntegerFree(liY);
+  longIntegerFree(a);
+  longIntegerFree(c);
 }
 
 
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(real34) ==> X(real34)
+ * \brief Y(long integer) Ã· X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -488,41 +518,46 @@ void divLonIRe34(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  realIc_t a, c;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
+
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(realIcIsZero(&a)) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIRe34:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIRe34:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIRe34:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34((realIcIsPositive(&a) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIRe34:", "cannot divide a real16 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+    realIcDivide(&a, &c, &c);
+    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(long integer) ==> X(real34)
+ * \brief Y(real34) Ã· X(long integer) ==> X(real34)
  *
  * \param void
  * \return void
@@ -536,41 +571,47 @@ void divRe34LonI(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  realIc_t a, c;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+
+  if(realIcIsZero(&c)) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divRe34LonI:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe34LonI:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe34LonI:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divRe34LonI:", "cannot divide a real16 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+    realIcDivide(&a, &c, &c);
+    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(long integer) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -584,28 +625,37 @@ void divLonICo34(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t denom, a, c, d;
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+
+  //   a        ac         ad
+  // ------ = ------- - i-------
+  // c + id   cÂ² + dÂ²    cÂ² + dÂ²
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  realIcMultiply(&c, &c, &denom);    // cÂ²
+  realIcFMA(&d, &d, &denom, &denom); // cÂ² + dÂ²
 
   // Real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
+  realIcDivide(&c, &denom, &c);      // c / (cÂ² + dÂ²)
+  realIcMultiply(&c, &a, &c);        // ac / (cÂ² + dÂ²)
 
   // Imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcChangeSign(&denom);          // -(cÂ² + dÂ²)
+  realIcDivide(&d, &denom, &d);      // -d / (cÂ² + dÂ²)
+  realIcMultiply(&d, &a, &d);        // -ad / (cÂ² + dÂ²)
+
+  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(long integer) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(long integer) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -619,17 +669,24 @@ void divCo34LonI(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
+  realIc_t a, b, c;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+
+  realIcDivide(&a, &c, &a);
+  realIcDivide(&b, &c, &b);
+
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(angle34) ==> X(real34)
+ * \brief Y(long integer) Ã· X(angle34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -643,43 +700,47 @@ void divLonIAn34(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  realIc_t a, c;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
+  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(realIcIsZero(&a)) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIAn34:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIAn34:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divLonIAn34:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34((realIcIsPositive(&a) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divLonIAn34:", "cannot divide a real34 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+    realIcDivide(&a, &c, &c);
+    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   }
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }
 
 
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(long integer) ==> X(angle34)
+ * \brief Y(angle34) Ã· X(long integer) ==> X(angle34)
  *
  * \param void
  * \return void
@@ -693,46 +754,51 @@ void divAn34LonI(void) {
     return;
   }
 
-  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  realIc_t a, c;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(realIcIsZero(&c)) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divAn34LonI:", "cannot divide 0 by 0", NULL, NULL);
+        #endif
+      }
     }
     else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divAn34LonI:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy((real16IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divAn34LonI:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
+      if(getFlag(FLAG_DANGER)) {
+        realIcToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function divAn34LonI:", "cannot divide a real34 by 0", NULL, NULL);
+        #endif
+      }
     }
   }
 
   else {
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
     }
-
-    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
   }
 }
 
@@ -743,7 +809,7 @@ void divAn34LonI(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(real16) ÷ X(real16) ==> X(real16)
+ * \brief Y(real16) Ã· X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -767,7 +833,7 @@ void divRe16Re16(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      real16Copy(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -779,7 +845,7 @@ void divRe16Re16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -797,7 +863,7 @@ void divRe16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(complex16) ==> X(complex16)
+ * \brief Y(real16) Ã· X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -826,8 +892,8 @@ void divRe16Co16(void) {
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom); // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom); // cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // cÂ² + dÂ²
 
   // Real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -844,7 +910,7 @@ void divRe16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(real16) ==> X(complex16)
+ * \brief Y(complex16) Ã· X(real16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -875,7 +941,7 @@ void divCo16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(angle16) ==> X(real16)
+ * \brief Y(real16) Ã· X(angle16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -899,7 +965,7 @@ void divRe16An16(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      real16Copy(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -911,7 +977,7 @@ void divRe16An16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -931,7 +997,7 @@ void divRe16An16(void) {
 
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(real16) ==> X(angle16)
+ * \brief Y(angle16) Ã· X(real16) ==> X(angle16)
  *
  * \param void
  * \return void
@@ -953,12 +1019,9 @@ void divAn16Re16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -968,10 +1031,9 @@ void divAn16Re16(void) {
     }
   }
 
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -982,29 +1044,32 @@ void divAn16Re16(void) {
   }
 
   else {
-    convertRegister16To34(REGISTER_Y);
+    realIc_t a, c;
+
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+    setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
-      convertRegister34To16(REGISTER_X);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertRegister34To16(REGISTER_X);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
     }
-
-    setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(64bits integer) ==> X(real16)
+ * \brief Y(real16) Ã· X(64bits integer) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1018,11 +1083,14 @@ void divRe16ShoI(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  realIc_t a, c;
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && realIcIsZero(&c)) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1032,9 +1100,9 @@ void divRe16ShoI(void) {
     }
   }
 
-  else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+  else if(realIcIsZero(&c)) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1045,14 +1113,16 @@ void divRe16ShoI(void) {
   }
 
   else {
-    real16Divide(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+    realIcDivide(&a, &c, &c);
+    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(real16) ==> X(real16)
+ * \brief Y(64bits integer) Ã· X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1066,11 +1136,13 @@ void divShoIRe16(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal16Register(REGISTER_Y, REGISTER_Y);
+  realIc_t a, c;
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
+
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && realIcIsZero(&a)) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1082,7 +1154,7 @@ void divShoIRe16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16((realIcIsPositive(&a) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1093,14 +1165,16 @@ void divShoIRe16(void) {
   }
 
   else {
-    real16Divide(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+    realIcDivide(&a, &c, &c);
+    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(real34) ==> X(real34)
+ * \brief Y(real16) Ã· X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1126,7 +1200,7 @@ void divRe16Re34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1138,7 +1212,7 @@ void divRe16Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1156,7 +1230,7 @@ void divRe16Re34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(real16) ==> X(real34)
+ * \brief Y(real34) Ã· X(real16) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1182,7 +1256,7 @@ void divRe34Re16(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1194,7 +1268,7 @@ void divRe34Re16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1212,7 +1286,7 @@ void divRe34Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(real16) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1240,8 +1314,8 @@ void divRe16Co34(void) {
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom); // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom); // cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // cÂ² + dÂ²
 
   // Real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -1256,7 +1330,7 @@ void divRe16Co34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(real16) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(real16) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1288,7 +1362,7 @@ void divCo34Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(angle34) ==> X(real34)
+ * \brief Y(real16) Ã· X(angle34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1314,7 +1388,7 @@ void divRe16An34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1326,7 +1400,7 @@ void divRe16An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1346,7 +1420,7 @@ void divRe16An34(void) {
 
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(real16) ==> X(angle34)
+ * \brief Y(angle34) Ã· X(real16) ==> X(angle34)
  *
  * \param void
  * \return void
@@ -1372,7 +1446,7 @@ void divAn34Re16(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1384,7 +1458,7 @@ void divAn34Re16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1395,18 +1469,25 @@ void divAn34Re16(void) {
   }
 
   else {
+    realIc_t a, c;
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
+
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
     }
-
-    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
   }
 }
 
@@ -1417,7 +1498,7 @@ void divAn34Re16(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(complex16) ==> X(complex16)
+ * \brief Y(complex16) Ã· X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1445,19 +1526,19 @@ void divCo16Co16(void) {
   convertRegister16To34(REGISTER_X);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = a*c
   real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = a*c + b*d
-  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (c² + d²) = numer / denom
+  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (cÂ² + dÂ²) = numer / denom
 
   // imaginary part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = b*c
   real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_Y));                                            // a = -a
   real34FMA(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = b*c - a*d
-  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (c² + d²) = numer / denom
+  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (cÂ² + dÂ²) = numer / denom
 
   // real part
   real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));                                       // re(X) = realPart
@@ -1468,7 +1549,7 @@ void divCo16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(angle16) ==> X(complex16)
+ * \brief Y(complex16) Ã· X(angle16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1499,7 +1580,7 @@ void divCo16An16(void) {
 
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(complex16) ==> X(complex16)
+ * \brief Y(angle16) Ã· X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1527,8 +1608,8 @@ void divAn16Co16(void) {
   convertRegister16To34(REGISTER_X);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -1545,7 +1626,7 @@ void divAn16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(64bits integer) ==> X(complex16)
+ * \brief Y(complex16) Ã· X(64bits integer) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1559,17 +1640,24 @@ void divCo16ShoI(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  real16Divide(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_Y)); // real part
-  real16Divide(REGISTER_IMAG16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_Y)); // imaginary part
+  realIc_t a, b, c;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+
+  realIcDivide(&a, &c, &a);
+  realIcDivide(&b, &c, &b);
+
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-  complex16Copy(REGISTER_COMPLEX16_DATA(REGISTER_Y), REGISTER_COMPLEX16_DATA(REGISTER_X));
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(complex16) ==> X(complex16)
+ * \brief Y(64bits integer) Ã· X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1583,31 +1671,37 @@ void divShoICo16(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t denom, a, c, d;
 
-  convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-  convertRegister16To34(REGISTER_X);
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+
+  //   a        ac         ad
+  // ------ = ------- - i-------
+  // c + id   cÂ² + dÂ²    cÂ² + dÂ²
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  realIcMultiply(&c, &c, &denom);    // cÂ²
+  realIcFMA(&d, &d, &denom, &denom); // cÂ² + dÂ²
 
-  // real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
+  // Real part
+  realIcDivide(&c, &denom, &c);      // c / (cÂ² + dÂ²)
+  realIcMultiply(&c, &a, &c);        // ac / (cÂ² + dÂ²)
 
-  // imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  // Imaginary part
+  realIcChangeSign(&denom);          // -(cÂ² + dÂ²)
+  realIcDivide(&d, &denom, &d);      // -d / (cÂ² + dÂ²)
+  realIcMultiply(&d, &a, &d);        // -ad / (cÂ² + dÂ²)
 
-  convertRegister34To16(REGISTER_X);
+  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(real34) ==> X(complex34)
+ * \brief Y(complex16) Ã· X(real34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1639,7 +1733,7 @@ void divCo16Re34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(complex16) ==> X(complex34)
+ * \brief Y(real34) Ã· X(complex16) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1666,8 +1760,8 @@ void divRe34Co16(void) {
   convertRegister16To34(REGISTER_X);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -1682,7 +1776,7 @@ void divRe34Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(complex16) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1709,19 +1803,19 @@ void divCo16Co34(void) {
   convertRegister16To34(REGISTER_Y);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = a*c
   real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = a*c + b*d
-  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (c² + d²) = numer / denom
+  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (cÂ² + dÂ²) = numer / denom
 
   // imaginary part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = b*c
   real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_Y));                                            // a = -a
   real34FMA(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = b*c - a*d
-  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (c² + d²) = numer / denom
+  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (cÂ² + dÂ²) = numer / denom
 
   // real part
   real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));                                       // re(X) = realPart
@@ -1730,7 +1824,7 @@ void divCo16Co34(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(angle34) ==> X(complex34)
+ * \brief Y(complex16) Ã· X(angle34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1762,7 +1856,7 @@ void divCo16An34(void) {
 
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(complex16) ==> X(complex34)
+ * \brief Y(angle34) Ã· X(complex16) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1789,8 +1883,8 @@ void divAn34Co16(void) {
   convertRegister16To34(REGISTER_X);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -1805,7 +1899,7 @@ void divAn34Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(complex16) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(complex16) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1832,19 +1926,19 @@ void divCo34Co16(void) {
   convertRegister16To34(REGISTER_X);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = a*c
   real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = a*c + b*d
-  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (c² + d²) = numer / denom
+  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (cÂ² + dÂ²) = numer / denom
 
   // imaginary part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = b*c
   real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_Y));                                            // a = -a
   real34FMA(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = b*c - a*d
-  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (c² + d²) = numer / denom
+  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (cÂ² + dÂ²) = numer / denom
 
   // real part
   real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));                                       // re(X) = realPart
@@ -1857,7 +1951,7 @@ void divCo34Co16(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(angle16) ==> X(real16)
+ * \brief Y(angle16) Ã· X(angle16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1881,7 +1975,7 @@ void divAn16An16(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      real16Copy(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1893,7 +1987,7 @@ void divAn16An16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1904,25 +1998,26 @@ void divAn16An16(void) {
   }
 
   else {
-    convertRegister16To34(REGISTER_Y);
-    convertRegister16To34(REGISTER_X);
+    realIc_t a, c;
+
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
 
     // We need to have the same angular units before dividing (and preferably not DMS)
     if(getRegisterAngularMode(REGISTER_Y) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_Y, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_Y) != getRegisterAngularMode(REGISTER_X)) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
+      convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
     }
 
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-
-    convertRegister34To16(REGISTER_X);
+    realIcDivide(&a, &c, &c);
+    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
@@ -1931,7 +2026,7 @@ void divAn16An16(void) {
 
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(64bits integer) ==> X(angle16)
+ * \brief Y(angle16) Ã· X(64bits integer) ==> X(angle16)
  *
  * \param void
  * \return void
@@ -1945,12 +2040,14 @@ void divAn16ShoI(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  realIc_t a, c;
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, currentAngularMode);
+
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && realIcIsZero(&c)) {
     if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1960,10 +2057,9 @@ void divAn16ShoI(void) {
     }
   }
 
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  else if(realIcIsZero(&c)) {
     if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -1974,29 +2070,27 @@ void divAn16ShoI(void) {
   }
 
   else {
-    convertRegister16To34(REGISTER_Y);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
-      convertRegister34To16(REGISTER_X);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertRegister34To16(REGISTER_X);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
     }
   }
-
-  setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
 }
 
 
 
 /********************************************//**
- * \brief Y(short integer) ÷ X(angle16) ==> X(real16)
+ * \brief Y(short integer) Ã· X(angle16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -2010,11 +2104,12 @@ void divShoIAn16(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal16Register(REGISTER_Y, REGISTER_Y);
+  convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2026,7 +2121,8 @@ void divShoIAn16(void) {
 
   else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2037,7 +2133,9 @@ void divShoIAn16(void) {
   }
 
   else {
-    real16Divide(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+    convertRegister16To34(REGISTER_X);
+    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    convertRegister34To16(REGISTER_X);
   }
 
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
@@ -2046,7 +2144,7 @@ void divShoIAn16(void) {
 
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(real34) ==> X(angle34)
+ * \brief Y(angle16) Ã· X(real34) ==> X(angle34)
  *
  * \param void
  * \return void
@@ -2070,7 +2168,7 @@ void divAn16Re34(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2082,7 +2180,7 @@ void divAn16Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2093,27 +2191,32 @@ void divAn16Re34(void) {
   }
 
   else {
-    convertRegister16To34(REGISTER_Y);
+    realIc_t a, c;
+
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal34(&c, REGISTER_REAL16_DATA(REGISTER_X));
     }
-
-    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
   }
 }
 
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(angle16) ==> X(real34)
+ * \brief Y(real34) Ã· X(angle16) ==> X(real34)
  *
  * \param void
  * \return void
@@ -2139,7 +2242,7 @@ void divRe34An16(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2151,7 +2254,7 @@ void divRe34An16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2171,7 +2274,7 @@ void divRe34An16(void) {
 
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(angle16) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -2198,8 +2301,8 @@ void divAn16Co34(void) {
   convertRegister16To34(REGISTER_Y);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -2214,7 +2317,7 @@ void divAn16Co34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(angle16) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(angle16) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -2246,7 +2349,7 @@ void divCo34An16(void) {
 
 
 /********************************************//**
- * \brief Y(angle16) ÷ X(angle34) ==> X(real34)
+ * \brief Y(angle16) Ã· X(angle34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -2270,7 +2373,7 @@ void divAn16An34(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2282,7 +2385,7 @@ void divAn16An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2293,22 +2396,26 @@ void divAn16An34(void) {
   }
 
   else {
-    convertRegister16To34(REGISTER_Y);
+    realIc_t a, c;
+
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
 
     // We need to have the same angular units before dividing (and preferably not DMS)
     if(getRegisterAngularMode(REGISTER_Y) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_Y, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_Y) != getRegisterAngularMode(REGISTER_X)) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
+      convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
     }
 
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    realIcDivide(&a, &c, &c);
+    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
@@ -2317,7 +2424,7 @@ void divAn16An34(void) {
 
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(angle16) ==> X(real34)
+ * \brief Y(angle34) Ã· X(angle16) ==> X(real34)
  *
  * \param void
  * \return void
@@ -2343,7 +2450,7 @@ void divAn34An16(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2355,7 +2462,7 @@ void divAn34An16(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2366,20 +2473,26 @@ void divAn34An16(void) {
   }
 
   else {
+    realIc_t a, c;
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+
     // We need to have the same angular units before dividing (and preferably not DMS)
     if(getRegisterAngularMode(REGISTER_Y) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_Y, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_Y) != getRegisterAngularMode(REGISTER_X)) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
+      convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
     }
 
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    realIcDivide(&a, &c, &c);
+    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
@@ -2392,7 +2505,7 @@ void divAn34An16(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(time) ÷ X(long integer) ==> X(time)
+ * \brief Y(time) Ã· X(long integer) ==> X(time)
  *
  * \param void
  * \return void
@@ -2404,7 +2517,7 @@ void divTimeLonI(void) {
 
 
 /********************************************//**
- * \brief Y(time) ÷ X(real16) ==> X(time)
+ * \brief Y(time) Ã· X(real16) ==> X(time)
  *
  * \param void
  * \return void
@@ -2424,7 +2537,7 @@ void divTimeRe16(void) {
 
 
 /********************************************//**
- * \brief Y(time) ÷ X(angle16) ==> X(time)
+ * \brief Y(time) Ã· X(angle16) ==> X(time)
  *
  * \param void
  * \return void
@@ -2444,7 +2557,7 @@ void divTimeAn16(void) {
 
 
 /********************************************//**
- * \brief Y(time) ÷ X(64bits integer) ==> X(time)
+ * \brief Y(time) Ã· X(64bits integer) ==> X(time)
  *
  * \param void
  * \return void
@@ -2456,7 +2569,7 @@ void divTimeShoI(void) {
 
 
 /********************************************//**
- * \brief Y(time) ÷ X(real34) ==> X(time)
+ * \brief Y(time) Ã· X(real34) ==> X(time)
  *
  * \param void
  * \return void
@@ -2476,7 +2589,7 @@ void divTimeRe34(void) {
 
 
 /********************************************//**
- * \brief Y(time) ÷ X(angle34) ==> X(time)
+ * \brief Y(time) Ã· X(angle34) ==> X(time)
  *
  * \param void
  * \return void
@@ -2508,7 +2621,7 @@ void divTimeAn34(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(long integer) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) Ã· X(long integer) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -2520,7 +2633,7 @@ void divRm16LonI(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(real16) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) Ã· X(real16) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -2540,7 +2653,7 @@ void divRm16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(complex16) ==> X(complex16 matrix)
+ * \brief Y(real16 matrix) Ã· X(complex16) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2560,7 +2673,7 @@ void divRm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(angle16) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) Ã· X(angle16) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -2580,7 +2693,7 @@ void divRm16An16(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(64bits integer) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) Ã· X(64bits integer) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -2592,7 +2705,7 @@ void divRm16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(real34) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) Ã· X(real34) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -2612,7 +2725,7 @@ void divRm16Re34(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(complex34) ==> X(complex16 matrix)
+ * \brief Y(real16 matrix) Ã· X(complex34) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2632,7 +2745,7 @@ void divRm16Co34(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(angle34) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) Ã· X(angle34) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -2656,7 +2769,7 @@ void divRm16An34(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(long integer) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(long integer) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2668,7 +2781,7 @@ void divCm16LonI(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(real16) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(real16) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2688,7 +2801,7 @@ void divCm16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(complex16) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(complex16) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2708,7 +2821,7 @@ void divCm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(angle16) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(angle16) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2728,7 +2841,7 @@ void divCm16An16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(64bits integer) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(64bits integer) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2740,7 +2853,7 @@ void divCm16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(real34) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(real34) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2760,7 +2873,7 @@ void divCm16Re34(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(complex34) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(complex34) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2780,7 +2893,7 @@ void divCm16Co34(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(angle34) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) Ã· X(angle34) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -2804,7 +2917,7 @@ void divCm16An34(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(64bits integer) ==> X(64bits integer)
+ * \brief Y(64bits integer) Ã· X(64bits integer) ==> X(64bits integer)
  *
  * \param void
  * \return void
@@ -2817,7 +2930,7 @@ void divShoIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(real34) ==> X(real34)
+ * \brief Y(64bits integer) Ã· X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -2835,7 +2948,7 @@ void divShoIRe34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2847,7 +2960,7 @@ void divShoIRe34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2865,7 +2978,7 @@ void divShoIRe34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(64bits integer) ==> X(real34)
+ * \brief Y(real34) Ã· X(64bits integer) ==> X(real34)
  *
  * \param void
  * \return void
@@ -2883,7 +2996,7 @@ void divRe34ShoI(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2895,7 +3008,7 @@ void divRe34ShoI(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -2913,7 +3026,7 @@ void divRe34ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(64bits integer) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -2932,8 +3045,8 @@ void divShoICo34(void) {
   convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // cÂ² + dÂ²
 
   // Real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -2948,7 +3061,7 @@ void divShoICo34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(64bits integer) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(64bits integer) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -2972,7 +3085,7 @@ void divCo34ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(angle34) ==> X(real34)
+ * \brief Y(64bits integer) Ã· X(angle34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -2990,7 +3103,7 @@ void divShoIAn34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3002,7 +3115,7 @@ void divShoIAn34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3022,7 +3135,7 @@ void divShoIAn34(void) {
 
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(64bits integer) ==> X(angle34)
+ * \brief Y(angle34) Ã· X(64bits integer) ==> X(angle34)
  *
  * \param void
  * \return void
@@ -3036,46 +3149,50 @@ void divAn34ShoI(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  realIc_t a, c;
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, currentAngularMode);
+
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && realIcIsZero(&c)) {
     if(getFlag(FLAG_DANGER)) {
-      convertRegister34To16(REGISTER_X);
-      real16Copy(const16_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divAn34ShoI:", "cannot divide 0 by 0", NULL, NULL);
+        showInfoDialog("In function divAn16ShoI:", "cannot divide 0 by 0", NULL, NULL);
       #endif
     }
   }
 
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  else if(realIcIsZero(&c)) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real16IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const16_plusInfinity : const16_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divAn34ShoI:", "cannot divide a real16 by 0", NULL, NULL);
+        showInfoDialog("In function divAn16ShoI:", "cannot divide a real16 by 0", NULL, NULL);
       #endif
     }
   }
 
   else {
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
     }
-
-    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
   }
 }
 
@@ -3086,7 +3203,7 @@ void divAn34ShoI(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(real34) ÷ X(real34) ==> X(real34)
+ * \brief Y(real34) Ã· X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -3110,7 +3227,7 @@ void divRe34Re34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3122,7 +3239,7 @@ void divRe34Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3140,7 +3257,7 @@ void divRe34Re34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(real34) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -3165,8 +3282,8 @@ void divRe34Co34(void) {
   real34_t denom;
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -3181,7 +3298,7 @@ void divRe34Co34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(real34) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(real34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -3212,7 +3329,7 @@ void divCo34Re34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(angle34) ==> X(real34)
+ * \brief Y(real34) Ã· X(angle34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -3236,7 +3353,7 @@ void divRe34An34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3248,7 +3365,7 @@ void divRe34An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3268,7 +3385,7 @@ void divRe34An34(void) {
 
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(real34) ==> X(angle34)
+ * \brief Y(angle34) Ã· X(real34) ==> X(angle34)
  *
  * \param void
  * \return void
@@ -3292,7 +3409,7 @@ void divAn34Re34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3304,7 +3421,7 @@ void divAn34Re34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3315,18 +3432,25 @@ void divAn34Re34(void) {
   }
 
   else {
+    realIc_t a, c;
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
+
     if(currentAngularMode == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), AM_DEGREE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
+      realIcDivide(&a, &c, &c);
+      convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), getRegisterTag(REGISTER_Y), currentAngularMode);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
+      realIcDivide(&a, &c, &c);
+      realIcToReal34(&c, REGISTER_REAL16_DATA(REGISTER_X));
     }
-
-    setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
   }
 }
 
@@ -3337,7 +3461,7 @@ void divAn34Re34(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -3383,7 +3507,7 @@ void divCo34Co34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(angle34) ==> X(complex34)
+ * \brief Y(complex34) Ã· X(angle34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -3414,7 +3538,7 @@ void divCo34An34(void) {
 
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(angle34) Ã· X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -3439,8 +3563,8 @@ void divAn34Co34(void) {
   real34_t denom;
 
   // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = cÂ²
+  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = cÂ² + dÂ²
 
   // real part
   real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
@@ -3459,7 +3583,7 @@ void divAn34Co34(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(angle34) ÷ X(angle34) ==> X(real34)
+ * \brief Y(angle34) Ã· X(angle34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -3483,7 +3607,7 @@ void divAn34An34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const34_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3495,7 +3619,7 @@ void divAn34An34(void) {
 
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const34_plusInfinity : const34_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -3506,20 +3630,26 @@ void divAn34An34(void) {
   }
 
   else {
+    realIc_t a, c;
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+
     // We need to have the same angular units before dividing (and preferably not DMS)
     if(getRegisterAngularMode(REGISTER_Y) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_Y), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_Y, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+      convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
     }
     if(getRegisterAngularMode(REGISTER_Y) != getRegisterAngularMode(REGISTER_X)) {
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
+      convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), getRegisterAngularMode(REGISTER_Y));
     }
 
-    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    realIcDivide(&a, &c, &c);
+    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);

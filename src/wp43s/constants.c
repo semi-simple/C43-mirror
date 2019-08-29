@@ -21,6 +21,7 @@
 
 #include "wp43s.h"
 
+// Remember to change NUMBER_OF_PHYSICAL_AND_MATHEMATICAL_CONSTANTS in constants.h if a constant is added or deleted
 const constant_t physicalAndMathConstants[] = {
 /*   0 */  {.label = "1/2",                                       .value = CONST_00}, // 0.5 trivial but helpfull
 /*   1 */  {.label = "a",                                         .value = CONST_01}, // Gregorian year (days) per definition
@@ -80,7 +81,7 @@ const constant_t physicalAndMathConstants[] = {
 /*  55 */  {.label = "V" STD_SUB_m,                               .value = CONST_55}, // Molar volume of an ideal gas at standard conditions
 /*  56 */  {.label = "Z" STD_SUB_0,                               .value = CONST_56}, // Characteristic impedance of vaccum
 /*  57 */  {.label = STD_alpha,                                   .value = CONST_57}, // Fine-structure constant
-/*  58 */  {.label = STD_gamma,                                   .value = CONST_14}, // Newtonian constant of gravitation
+/*  58 */  {.label = STD_gamma,                                   .value = CONST_58}, // Newtonian constant of gravitation (duplicate of CONST_14)
 /*  59 */  {.label = STD_gamma "EM",                              .value = CONST_59}, // Euler-Mascheroni constant
 /*  60 */  {.label = STD_gamma STD_SUB_p,                         .value = CONST_60}, // Proton gyromagnetic ratio
 /*  61 */  {.label = STD_epsilon STD_SUB_0,                       .value = CONST_61}, // Electric constant or vaccum permittivity
@@ -104,7 +105,7 @@ const constant_t physicalAndMathConstants[] = {
 /*  79 */  {.label = "#",                                         .value = CONST_79}  // See the very last command of the IOP
 };
 
-
+// Remember to change NUMBER_OF_PHYSICAL_AND_MATHEMATICAL_CONSTANTS in constants.h if a constant is added or deleted
 
 /********************************************//**
  * \brief Replaces the X content with the selected
@@ -131,6 +132,6 @@ void fnConstant(const uint16_t cst) {
  ***********************************************/
 void fnPi(uint16_t unusedParamButMandatory) {
   liftStack();
-  real16Copy(const16_pi, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 }

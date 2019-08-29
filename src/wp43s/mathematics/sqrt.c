@@ -113,9 +113,12 @@ void sqrtLonI(void) {
         return;
       }
       else {
-        convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-        real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-        convertRegister34To16(REGISTER_X);
+        realIc_t a;
+
+        convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+        realIcSquareRoot(&a, &a);
+        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+        realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
       }
     }
 
@@ -124,15 +127,14 @@ void sqrtLonI(void) {
     longIntegerFree(nn0);
   }
   else if(getFlag(FLAG_CPXRES)) { // Negative value
-    real34_t real34;
+    realIc_t a;
 
-    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &real34);
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real34SetPositiveSign(&real34);
-    real34SquareRoot(&real34, REGISTER_IMAG34_DATA(REGISTER_X));
-    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    realIcSetPositiveSign(&a);
+    realIcSquareRoot(&a, &a);
+    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
+    realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -156,23 +158,20 @@ void sqrtRe16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
+  realIc_t a;
 
-  if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+
+  if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
+    realIcSquareRoot(&a, &a);
+    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real34_t temp;
-
-    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
-    real34SetPositiveSign(&temp);
-    real34SquareRoot(&temp, &temp);
-
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    realIcSetPositiveSign(&a);
+    realIcSquareRoot(&a, &a);
+    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
+    realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -194,15 +193,18 @@ void sqrtCo16(void) {
     return;
   }
 
-  real34_t magnitude34, theta34;
+  realIc_t a, b;
 
-  convertRegister16To34(REGISTER_X);
-  real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &magnitude34, &theta34);
-  real34SquareRoot(&magnitude34, &magnitude34);
-  real34Multiply(&theta34, const34_0_5, &theta34);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in RADIAN
-  convertRegister34To16(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+
+  realIcRectangularToPolar(&a, &b, &a, &b);
+  realIcSquareRoot(&a, &a);
+  realIcMultiply(&b, const_0_5, &b);
+  realIcPolarToRectangular(&a, &b, &a, &b);
+
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -216,24 +218,21 @@ void sqrtAn16(void) {
     return;
   }
 
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  convertRegister16To34(REGISTER_X);
+  realIc_t a;
 
-  if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+
+  if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
+    realIcSquareRoot(&a, &a);
+    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real34_t temp;
-
-    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
-    real34SetPositiveSign(&temp);
-    real34SquareRoot(&temp, &temp);
-
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
-    convertRegister34To16(REGISTER_X);
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    realIcSetPositiveSign(&a);
+    realIcSquareRoot(&a, &a);
+    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
+    realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -273,19 +272,20 @@ void sqrtRe34(void) {
     return;
   }
 
+  realIc_t a;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+
   if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    realIcSquareRoot(&a, &a);
+    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real34_t temp;
-
-    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
-    real34SetPositiveSign(&temp);
-    real34SquareRoot(&temp, &temp);
-
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    realIcSetPositiveSign(&a);
+    realIcSquareRoot(&a, &a);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
+    realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -307,13 +307,18 @@ void sqrtCo34(void) {
     return;
   }
 
-  real34_t magnitude34, theta34;
+  realIc_t a, b;
 
-  real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &magnitude34, &theta34);
-  real34SquareRoot(&magnitude34, &magnitude34);
-  real34Multiply(&theta34, const34_0_5, &theta34);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in RADIAN
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+
+  realIcRectangularToPolar(&a, &b, &a, &b);
+  realIcSquareRoot(&a, &a);
+  realIcMultiply(&b, const_0_5, &b);
+  realIcPolarToRectangular(&a, &b, &a, &b);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -327,21 +332,21 @@ void sqrtAn34(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
 
   if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34SquareRoot(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    realIcSquareRoot(&a, &a);
+    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getFlag(FLAG_CPXRES)) {
-    real34_t temp;
-
-    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
-    real34SetPositiveSign(&temp);
-    real34SquareRoot(&temp, &temp);
-
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    realIcSetPositiveSign(&a);
+    realIcSquareRoot(&a, &a);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-    real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
+    realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

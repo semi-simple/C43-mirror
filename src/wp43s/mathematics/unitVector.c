@@ -73,13 +73,19 @@ void unitVectorCo16(void) {
     return;
   }
 
-  real16_t temp;
+  realIc_t a, b, temp;
 
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X), &temp);
-  real16FMA(REGISTER_IMAG16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X), &temp, &temp);
-  real16SquareRoot(&temp, &temp);
-  real16Divide(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
-  real16Divide(REGISTER_IMAG16_DATA(REGISTER_X), &temp, REGISTER_IMAG16_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+
+  realIcMultiply(&a, &a, &temp);
+  realIcFMA(&b, &b, &temp, &temp);
+  realIcSquareRoot(&temp, &temp);
+  realIcDivide(&a, &temp, &a);
+  realIcDivide(&b, &temp, &b);
+
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -93,11 +99,17 @@ void unitVectorCo34(void) {
     return;
   }
 
-  real34_t temp;
+  realIc_t a, b, temp;
 
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &temp);
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &temp, &temp);
-  real34SquareRoot(&temp, &temp);
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &temp, REGISTER_IMAG34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+
+  realIcMultiply(&a, &a, &temp);
+  realIcFMA(&b, &b, &temp, &temp);
+  realIcSquareRoot(&temp, &temp);
+  realIcDivide(&a, &temp, &a);
+  realIcDivide(&b, &temp, &b);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

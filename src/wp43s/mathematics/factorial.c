@@ -92,6 +92,7 @@ void factLonI(void) {
   }
 
   longInteger_t fact;
+
   longIntegerInit(fact);
   longIntegerFactorial(longIntegerToUInt(lgInt), fact);
   convertLongIntegerToLongIntegerRegister(fact, REGISTER_X);
@@ -110,9 +111,11 @@ void factRe16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  realIc_t a;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  WP34S_Factorial(&a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -140,10 +143,12 @@ void factAn16(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  convertRegister16To34(REGISTER_X);
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  WP34S_Factorial(&a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -207,7 +212,11 @@ void factRe34(void) {
     return;
   }
 
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIc_t a;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  WP34S_Factorial(&a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -235,6 +244,10 @@ void factAn34(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  WP34S_real34Factorial(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  WP34S_Factorial(&a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

@@ -64,7 +64,7 @@ Out: EC=0 FI=1 SL=1 RL=ShoI:"45247#8" RX=Co34:"104345 i -546"
 ;=======================================
 ; Short Integer - Angle34 --> Angle34
 ;=======================================
-In:  AM=DEG FI=0 SL=0 RY=ShoI:"2#10" RX=An34:"123.4":DEG
+In:  AM=DEG FI=0 SL=0 NCSD=34 RY=ShoI:"2#10" RX=An34:"123.4":DEG
 Out: EC=0 FI=0 SL=1 RL=An34:"123.4":DEG RX=An34:"-121.4":DEG
 
 In:  AM=DMS FI=0 SL=0 RY=ShoI:"10#2" RX=An34:"123.4":DEG

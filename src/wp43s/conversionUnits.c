@@ -22,22 +22,23 @@
 
 
 
-static void unitConversion(const real34_t * const coefficient, uint16_t multiplyDivide) {
-  real34_t *pointerToRegisterXData;
+static void unitConversion(const realIc_t * const coefficient, uint16_t multiplyDivide) {
+  realIc_t reX;
   bool_t real16;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    convertRegister16To34(REGISTER_X);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &reX);
     real16 = true;
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &reX);
     real16 = false;
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
     real16 = true;
   }
   else {
@@ -45,10 +46,12 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function unitConversion:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
+    restoreStack();
+    refreshStack();
     return;
   }
 
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+  if(realIcIsNaN(&reX)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function unitConversion:", "cannot use NaN as X input of unitConversion", NULL, NULL);
@@ -58,17 +61,18 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
     return;
   }
 
-  pointerToRegisterXData = REGISTER_REAL34_DATA(REGISTER_X);
-
   if(multiplyDivide == multiply) {
-    real34Multiply(pointerToRegisterXData, coefficient, pointerToRegisterXData);
+    realIcMultiply(&reX, coefficient, &reX);
   }
   else {
-    real34Divide(pointerToRegisterXData, coefficient, pointerToRegisterXData);
+    realIcDivide(&reX, coefficient, &reX);
   }
 
   if(real16) {
-    convertRegister34To16(REGISTER_X);
+    realIcToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    realIcToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);
@@ -84,18 +88,54 @@ static void unitConversion(const real34_t * const coefficient, uint16_t multiply
  * \return void
  ***********************************************/
 void fnCvtCToF(uint16_t unusedParamButMandatory) {
-  unitConversion(const34_1_8, multiply);
+  realIc_t reX;
+  bool_t real16;
 
-  if(lastErrorCode == 0) {
-    if(getRegisterDataType(REGISTER_X) == dtReal16) {
-      real16Add(REGISTER_REAL16_DATA(REGISTER_X), const16_32, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-      real34Add(REGISTER_REAL34_DATA(REGISTER_X), const34_32, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    adjustResult(REGISTER_X, false, false, -1, -1, -1);
+  if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &reX);
+    real16 = true;
   }
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &reX);
+    real16 = false;
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    real16 = true;
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnCvtCToF:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
+    #endif
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  if(realIcIsNaN(&reX)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnCvtCToF:", "cannot use NaN as X input of fnCvtCToF", NULL, NULL);
+    #endif
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  realIcFMA(&reX, const_9on5, const_32, &reX);
+
+  if(real16) {
+    realIcToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    realIcToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+
+  adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
 
 
@@ -108,235 +148,260 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnCvtFToC(uint16_t unusedParamButMandatory) {
-  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+  realIc_t reX;
+  bool_t real16;
+
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), const16_32, REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &reX);
+    real16 = true;
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), const34_32, REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &reX);
+    real16 = false;
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    longInteger_t lgInt;
-
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-    longIntegerSubtractUInt(lgInt, 32, lgInt);
-    convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-    longIntegerFree(lgInt);
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    real16 = true;
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnCvtFToC:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
+    #endif
+    restoreStack();
+    refreshStack();
+    return;
   }
 
-  unitConversion(const34_1_8, divide);
-
-  if(lastErrorCode == 0) {
-    copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);
-
-    adjustResult(REGISTER_X, false, false, -1, -1, -1);
+  if(realIcIsNaN(&reX)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnCvtFToC:", "cannot use NaN as X input of fnCvtFToC", NULL, NULL);
+    #endif
+    restoreStack();
+    refreshStack();
+    return;
   }
+
+  realIcSubtract(&reX, const_32, &reX);
+  realIcDivide(&reX, const_9on5, &reX);
+
+  if(real16) {
+    realIcToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    realIcToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+
+  adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
 
 
 void fnCvtYearS(uint16_t multiplyDivide) {
-  unitConversion(const34_YearToS, multiplyDivide);
+  unitConversion(const_YearToS, multiplyDivide);
 }
 
 
 void fnCvtCalJ(uint16_t multiplyDivide) {
-  unitConversion(const34_CalToJ, multiplyDivide);
+  unitConversion(const_CalToJ, multiplyDivide);
 }
 
 
 void fnCvtBtuJ(uint16_t multiplyDivide) {
-  unitConversion(const34_BtuToJ, multiplyDivide);
+  unitConversion(const_BtuToJ, multiplyDivide);
 }
 
 
 void fnCvtWhJ(uint16_t multiplyDivide) {
-  unitConversion(const34_WhToJ, multiplyDivide);
+  unitConversion(const_WhToJ, multiplyDivide);
 }
 
 
 void fnCvtHpeW(uint16_t multiplyDivide) {
-  unitConversion(const34_HpeToW, multiplyDivide);
+  unitConversion(const_HpeToW, multiplyDivide);
 }
 
 
 void fnCvtHpmW(uint16_t multiplyDivide) {
-  unitConversion(const34_HpmToW, multiplyDivide);
+  unitConversion(const_HpmToW, multiplyDivide);
 }
 
 
 void fnCvtHpukW(uint16_t multiplyDivide) {
-  unitConversion(const34_HpukToW, multiplyDivide);
+  unitConversion(const_HpukToW, multiplyDivide);
 }
 
 
 void fnCvtLbfN(uint16_t multiplyDivide) {
-  unitConversion(const34_LbfToN, multiplyDivide);
+  unitConversion(const_LbfToN, multiplyDivide);
 }
 
 
 void fnCvtBarPa(uint16_t multiplyDivide) {
-  unitConversion(const34_BarToPa, multiplyDivide);
+  unitConversion(const_BarToPa, multiplyDivide);
 }
 
 
 void fnCvtPsiPa(uint16_t multiplyDivide) {
-  unitConversion(const34_PsiToPa, multiplyDivide);
+  unitConversion(const_PsiToPa, multiplyDivide);
 }
 
 
 void fnCvtInhgPa(uint16_t multiplyDivide) {
-  unitConversion(const34_InhgToPa, multiplyDivide);
+  unitConversion(const_InhgToPa, multiplyDivide);
 }
 
 
 void fnCvtTorrPa(uint16_t multiplyDivide) {
-  unitConversion(const34_TorrToPa, multiplyDivide);
+  unitConversion(const_TorrToPa, multiplyDivide);
 }
 
 
 void fnCvtAtmPa(uint16_t multiplyDivide) {
-  unitConversion(const34_AtmToPa, multiplyDivide);
+  unitConversion(const_AtmToPa, multiplyDivide);
 }
 
 
 void fnCvtLbKg(uint16_t multiplyDivide) {
-  unitConversion(const34_LbToKg, multiplyDivide);
+  unitConversion(const_LbToKg, multiplyDivide);
 }
 
 
 void fnCvtCwtKg(uint16_t multiplyDivide) {
-  unitConversion(const34_CwtToKg, multiplyDivide);
+  unitConversion(const_CwtToKg, multiplyDivide);
 }
 
 
 void fnCvtOzKg(uint16_t multiplyDivide) {
-  unitConversion(const34_OzToKg, multiplyDivide);
+  unitConversion(const_OzToKg, multiplyDivide);
 }
 
 
 void fnCvtStoneKg(uint16_t multiplyDivide) {
-  unitConversion(const34_StoneToKg, multiplyDivide);
+  unitConversion(const_StoneToKg, multiplyDivide);
 }
 
 
 void fnCvtShortcwtKg(uint16_t multiplyDivide) {
-  unitConversion(const34_ShortcwtToKg, multiplyDivide);
+  unitConversion(const_ShortcwtToKg, multiplyDivide);
 }
 
 
 void fnCvtTrozKg(uint16_t multiplyDivide) {
-  unitConversion(const34_TrozToKg, multiplyDivide);
+  unitConversion(const_TrozToKg, multiplyDivide);
 }
 
 
 void fnCvtTonKg(uint16_t multiplyDivide) {
-  unitConversion(const34_TonToKg, multiplyDivide);
+  unitConversion(const_TonToKg, multiplyDivide);
 }
 
 
 void fnCvtShorttonKg(uint16_t multiplyDivide) {
-  unitConversion(const34_ShorttonToKg, multiplyDivide);
+  unitConversion(const_ShorttonToKg, multiplyDivide);
 }
 
 
 void fnCvtCaratKg(uint16_t multiplyDivide) {
-  unitConversion(const34_CaratToKg, multiplyDivide);
+  unitConversion(const_CaratToKg, multiplyDivide);
 }
 
 
 void fnCvtAuM(uint16_t multiplyDivide) {
-  unitConversion(const34_AuToM, multiplyDivide);
+  unitConversion(const_AuToM, multiplyDivide);
 }
 
 
 void fnCvtMiM(uint16_t multiplyDivide) {
-  unitConversion(const34_MiToM, multiplyDivide);
+  unitConversion(const_MiToM, multiplyDivide);
 }
 
 
 void fnCvtLyM(uint16_t multiplyDivide) {
-  unitConversion(const34_LyToM, multiplyDivide);
+  unitConversion(const_LyToM, multiplyDivide);
 }
 
 
 void fnCvtNmiM(uint16_t multiplyDivide) {
-  unitConversion(const34_NmiToM, multiplyDivide);
+  unitConversion(const_NmiToM, multiplyDivide);
 }
 
 
 void fnCvtFtM(uint16_t multiplyDivide) {
-  unitConversion(const34_FtToM, multiplyDivide);
+  unitConversion(const_FtToM, multiplyDivide);
 }
 
 
 void fnCvtPcM(uint16_t multiplyDivide) {
-  unitConversion(const34_PcToM, multiplyDivide);
+  unitConversion(const_PcToM, multiplyDivide);
 }
 
 
 void fnCvtInchM(uint16_t multiplyDivide) {
-  unitConversion(const34_InchToM, multiplyDivide);
+  unitConversion(const_InchToM, multiplyDivide);
 }
 
 
 void fnCvtSfeetM(uint16_t multiplyDivide) {
-  unitConversion(const34_SfeetToM, multiplyDivide);
+  unitConversion(const_SfeetToM, multiplyDivide);
 }
 
 
 void fnCvtYardM(uint16_t multiplyDivide) {
-  unitConversion(const34_YardToM, multiplyDivide);
+  unitConversion(const_YardToM, multiplyDivide);
 }
 
 
 void fnCvtPointM(uint16_t multiplyDivide) {
-  unitConversion(const34_PointToM, multiplyDivide);
+  unitConversion(const_PointToM, multiplyDivide);
 }
 
 
 void fnCvtFathomM(uint16_t multiplyDivide) {
-  unitConversion(const34_FathomToM, multiplyDivide);
+  unitConversion(const_FathomToM, multiplyDivide);
 }
 
 
 void fnCvtGalukM3(uint16_t multiplyDivide) {
-  unitConversion(const34_GalukToM3, multiplyDivide);
+  unitConversion(const_GalukToM3, multiplyDivide);
 }
 
 
 void fnCvtGalusM3(uint16_t multiplyDivide) {
-  unitConversion(const34_GalusToM3, multiplyDivide);
+  unitConversion(const_GalusToM3, multiplyDivide);
 }
 
 
 void fnCvtFlozukM3(uint16_t multiplyDivide) {
-  unitConversion(const34_FlozukToM3, multiplyDivide);
+  unitConversion(const_FlozukToM3, multiplyDivide);
 }
 
 
 void fnCvtFlozusM3(uint16_t multiplyDivide) {
-  unitConversion(const34_FlozusToM3, multiplyDivide);
+  unitConversion(const_FlozusToM3, multiplyDivide);
 }
 
 
 void fnCvtBarrelM3(uint16_t multiplyDivide) {
-  unitConversion(const34_BarrelToM3, multiplyDivide);
+  unitConversion(const_BarrelToM3, multiplyDivide);
 }
 
 
 void fnCvtQuartM3(uint16_t multiplyDivide) {
-  unitConversion(const34_QuartToM3, multiplyDivide);
+  unitConversion(const_QuartToM3, multiplyDivide);
 }
 
 
 void fnCvtAcreM2(uint16_t multiplyDivide) {
-  unitConversion(const34_AccreToM2, multiplyDivide);
+  unitConversion(const_AccreToM2, multiplyDivide);
 }
 
 
 void fnCvtAcreusM2(uint16_t multiplyDivide) {
-  unitConversion(const34_AccreusToM2, multiplyDivide);
+  unitConversion(const_AccreusToM2, multiplyDivide);
 }
 
 
@@ -349,56 +414,52 @@ void fnCvtAcreusM2(uint16_t multiplyDivide) {
  * \return void
  ***********************************************/
 void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
+  realIc_t reX;
+  bool_t real16;
+
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
-      #endif
-      restoreStack();
-      refreshStack();
-      return;
-    }
-
-    real16Log10(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-    if(tenOrTwenty == 10) {
-      real16Multiply(REGISTER_REAL16_DATA(REGISTER_X), const16_10, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      real16Multiply(REGISTER_REAL16_DATA(REGISTER_X), const16_20, REGISTER_REAL16_DATA(REGISTER_X));
-    }
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &reX);
+    real16 = true;
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
-      #endif
-      restoreStack();
-      refreshStack();
-      return;
-    }
-
-    real34Log10(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-    if(tenOrTwenty == 10) {
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_10, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_20, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &reX);
+    real16 = false;
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    real16 = true;
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  if(realIcIsNaN(&reX)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
+    #endif
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  WP34S_Log10(&reX, &reX);
+  realIcMultiply(&reX, (tenOrTwenty == 10 ? const_10 : const_20), &reX);
+
+  if(real16) {
+    realIcToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    realIcToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);
@@ -414,57 +475,52 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
  * \return void
  ***********************************************/
 void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
+  realIc_t reX;
+  bool_t real16;
+
+  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as X input of fnCvtDbRatio", NULL, NULL);
-      #endif
-      restoreStack();
-      refreshStack();
-      return;
-    }
-
-    if(tenOrTwenty == 10) {
-      real16Divide(REGISTER_REAL16_DATA(REGISTER_X), const16_10, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      real16Divide(REGISTER_REAL16_DATA(REGISTER_X), const16_20, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-
-    real16Power(const16_10, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &reX);
+    real16 = true;
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnCvtDbRatio:", "cannot use NaN as X input of fnCvtDbRatio", NULL, NULL);
-      #endif
-      restoreStack();
-      refreshStack();
-      return;
-    }
-
-    if(tenOrTwenty == 10) {
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), const34_10, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), const34_20, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-
-    real34Power(const34_10, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &reX);
+    real16 = false;
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    real16 = true;
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtDbRatio:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
+      showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  if(realIcIsNaN(&reX)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
+    #endif
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  realIcDivide(&reX, (tenOrTwenty == 10 ? const_10 : const_20), &reX);
+  realIcPower(const_10, &reX, &reX);
+
+  if(real16) {
+    realIcToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    realIcToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);

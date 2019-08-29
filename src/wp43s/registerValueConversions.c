@@ -147,6 +147,29 @@ void convertLongIntegerRegisterToReal16Register(calcRegister_t source, calcRegis
 
 
 
+void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
+  longInteger_t lgInt;
+
+  convertLongIntegerRegisterToLongInteger(source, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerFree(lgInt);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
+  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
+}
+
+
+
+void convertLongIntegerRegisterToRealIc(calcRegister_t source, realIc_t *destination) {
+  longInteger_t lgInt;
+
+  convertLongIntegerRegisterToLongInteger(source, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerFree(lgInt);
+  stringToRealIc(tmpStr3000, destination);
+}
+
+
+
 void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, calcRegister_t destination) {
   longInteger_t lgInt;
 
@@ -158,18 +181,6 @@ void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, cal
   }
 
   longIntegerFree(lgInt);
-}
-
-
-
-void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t lgInt;
-
-  convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
-  longIntegerFree(lgInt);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
-  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
 
 
@@ -210,6 +221,41 @@ void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
   longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
+}
+
+
+
+void convertShortIntegerRegisterToRealIc(calcRegister_t source, realIc_t *destination) {
+  uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(source));
+  bool_t negative = false;
+  realIc_t temp;
+
+  if(shortIntegerMode != SIM_UNSIGN) {
+    if(value & shortIntegerSignBit) { // Negative value
+      negative = true;
+      if(shortIntegerMode == SIM_2COMPL) {
+        value = ((~value) + 1) & shortIntegerMask;
+      }
+      else if(shortIntegerMode == SIM_1COMPL) {
+        value = (~value) & shortIntegerMask;
+      }
+      else if(shortIntegerMode == SIM_SIGNMT) {
+        value -= shortIntegerSignBit;
+      }
+      else {
+        sprintf(errorMessage, "In function convertShortIntegerRegisterToRealIc: %" FMT8U " is an unexpected value for shortIntegerMode!", shortIntegerMode);
+        displayBugScreen(errorMessage);
+      }
+    }
+  }
+
+  uInt32ToRealIc(value & 0x00000000ffffffff, destination);
+  uInt32ToRealIc(value >> 32, &temp);
+  realIcFMA(&temp, const_2p32, destination, destination);
+
+  if(negative) {
+    realIcChangeSign(destination);
+  }
 }
 
 

@@ -1099,38 +1099,34 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     char degStr[27];
     uint32_t m, s, fs;
     int16_t sign;
+    realIc_t temp, degrees, minutes, seconds;
 
-    real16_t temp;
-    real16_t degrees;
-    real16_t minutes;
-    real16_t seconds;
+    real16ToRealIc(angle16, &temp);
 
-    real16Copy(angle16, &temp);
-
-    sign = real16IsNegative(&temp) ? -1 : 1;
-    real16SetPositiveSign(&temp);
+    sign = realIcIsNegative(&temp) ? -1 : 1;
+    realIcSetPositiveSign(&temp);
 
     // Get the degrees
-    real16ToIntegral(&temp, &degrees);
+    realIcToIntegralValue(&temp, &degrees);
 
     // Get the minutes
-    real16Subtract(&temp, &degrees, &temp);
-    real16Multiply(&temp, const16_100, &temp);
-    real16ToIntegral(&temp, &minutes);
+    realIcSubtract(&temp, &degrees, &temp);
+    realIcMultiply(&temp, const_100, &temp);
+    realIcToIntegralValue(&temp, &minutes);
 
     // Get the seconds
-    real16Subtract(&temp, &minutes, &temp);
-    real16Multiply(&temp, const16_100, &temp);
-    real16ToIntegral(&temp, &seconds);
+    realIcSubtract(&temp, &minutes, &temp);
+    realIcMultiply(&temp, const_100, &temp);
+    realIcToIntegralValue(&temp, &seconds);
 
     // Get the fractional seconds
-    real16Subtract(&temp, &seconds, &temp);
-    real16Multiply(&temp, const16_100, &temp);
-    real16ToIntegralRound(&temp, &temp);
+    realIcSubtract(&temp, &seconds, &temp);
+    realIcMultiply(&temp, const_100, &temp);
+    realIcToIntegralValue(&temp, &temp);
 
-    fs = real16ToUInt32(&temp);
-    s  = real16ToUInt32(&seconds);
-    m  = real16ToUInt32(&minutes);
+    fs = realIcToUInt32(&temp);
+    s  = realIcToUInt32(&seconds);
+    m  = realIcToUInt32(&minutes);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1144,10 +1140,10 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
 
     if(m >= 60) {
       m -= 60;
-      real16Add(&degrees, const16_1, &degrees);
+      realIcAdd(&degrees, const_1, &degrees);
     }
 
-    real16ToString(&degrees, degStr);
+    realIcToString(&degrees, degStr);
     for(int32_t i=0; degStr[i]!=0; i++) {
       if(degStr[i] == '.') {
         degStr[i] = 0;
@@ -1162,7 +1158,7 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
                                                                        s,         RADIX16_MARK_STRING,
                                                                                     fs);
   }
-  else {
+  else { // Angle is not in DMS
     realToDisplayString2(angle16, false, displayString);
 
          if(mode == AM_DEGREE) strcat(displayString, STD_DEGREE);
@@ -1211,37 +1207,34 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     uint32_t m, s, fs;
     int16_t sign;
 
-    real34_t temp;
-    real34_t degrees;
-    real34_t minutes;
-    real34_t seconds;
+    realIc_t temp, degrees, minutes, seconds;
 
-    real34Copy(angle34, &temp);
+    real34ToRealIc(angle34, &temp);
 
-    sign = real34IsNegative(&temp) ? -1 : 1;
-    real34SetPositiveSign(&temp);
+    sign = realIcIsNegative(&temp) ? -1 : 1;
+    realIcSetPositiveSign(&temp);
 
     // Get the degrees
-    real34ToIntegral(&temp, &degrees);
+    realIcToIntegralValue(&temp, &degrees);
 
     // Get the minutes
-    real34Subtract(&temp, &degrees, &temp);
-    real34Multiply(&temp, const34_100, &temp);
-    real34ToIntegral(&temp, &minutes);
+    realIcSubtract(&temp, &degrees, &temp);
+    realIcMultiply(&temp, const_100, &temp);
+    realIcToIntegralValue(&temp, &minutes);
 
     // Get the seconds
-    real34Subtract(&temp, &minutes, &temp);
-    real34Multiply(&temp, const34_100, &temp);
-    real34ToIntegral(&temp, &seconds);
+    realIcSubtract(&temp, &minutes, &temp);
+    realIcMultiply(&temp, const_100, &temp);
+    realIcToIntegralValue(&temp, &seconds);
 
     // Get the fractional seconds
-    real34Subtract(&temp, &seconds, &temp);
-    real34Multiply(&temp, const34_100, &temp);
-    real34ToIntegralRound(&temp, &temp);
+    realIcSubtract(&temp, &seconds, &temp);
+    realIcMultiply(&temp, const_100, &temp);
+    realIcToIntegralValue(&temp, &temp);
 
-    fs = real34ToUInt32(&temp);
-    s  = real34ToUInt32(&seconds);
-    m  = real34ToUInt32(&minutes);
+    fs = realIcToUInt32(&temp);
+    s  = realIcToUInt32(&seconds);
+    m  = realIcToUInt32(&minutes);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1255,10 +1248,10 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
 
     if(m >= 60) {
       m -= 60;
-      real34Add(&degrees, const34_1, &degrees);
+      realIcAdd(&degrees, const_1, &degrees);
     }
 
-    real34ToString(&degrees, degStr);
+    realIcToString(&degrees, degStr);
     for(int32_t i=0; degStr[i]!=0; i++) {
       if(degStr[i] == '.') {
         degStr[i] = 0;
@@ -1559,16 +1552,15 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int16_t maxWidth) {
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
-  longInteger_t lgInt;
-  longInteger_t divisor;
-  real34_t value;
+  longInteger_t lgInt, divisor;
+  realIc_t value;
 
   convertLongIntegerRegisterToLongInteger(regist, lgInt);
 
-  uInt32ToReal34(longIntegerBits(lgInt) - 1, &value);
-  real34Multiply(&value, const34_ln2, &value);
-  real34Divide(&value, const34_ln10, &value);
-  exponentShift = real34ToInt32(&value);
+  uInt32ToRealIc(longIntegerBits(lgInt) - 1, &value);
+  realIcMultiply(&value, const_ln2, &value);
+  realIcDivide(&value, const_ln10, &value);
+  exponentShift = realIcToInt32(&value);
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);
   exponentShift = (exponentShift / exponentStep + 1) * exponentStep;
   exponentShiftLimit = (50 / exponentStep + 1) * exponentStep;

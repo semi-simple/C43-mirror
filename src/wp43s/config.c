@@ -343,14 +343,14 @@ void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
   liftStack();
 
   #ifdef PC_BUILD
-    uInt32ToReal16(3100, REGISTER_REAL16_DATA(REGISTER_X));
+    int32ToReal16(3100, REGISTER_REAL16_DATA(REGISTER_X));
   #endif
 
   #ifdef DMCP_BUILD
-    uInt32ToReal16(read_power_voltage(), REGISTER_REAL16_DATA(REGISTER_X));
+    int32ToReal16(read_power_voltage(), REGISTER_REAL16_DATA(REGISTER_X));
   #endif
 
-  real16Divide(REGISTER_REAL16_DATA(REGISTER_X), const16_1000, REGISTER_REAL16_DATA(REGISTER_X));
+  real16Divide(REGISTER_REAL16_DATA(REGISTER_X), const_1000, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 }
 

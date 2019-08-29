@@ -43,10 +43,10 @@ bool_t               allowScreenUpdate;
 bool_t               funcOK;
 
 // Variables stored in RAM
-decContext           ctxtReal16;
-decContext           ctxtReal34;
-decContext           ctxtReal51;
-decContext           ctxtReal451;
+decContext           ctxtReal16;  // 16 digits
+decContext           ctxtReal34;  // 34 digits
+decContext           ctxtRealIc;  // Intermediate calculations
+decContext           ctxtReal451; // 451 digits
 uint16_t             flags[7];
 char                 tmpStr3000[TMP_STR_LENGTH];
 char                 errorMessage[ERROR_MESSAGE_LENGTH];
@@ -156,8 +156,10 @@ size_t               wp43sMem;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 void                 (*confirmedFunction)(uint16_t);
-bool_t debug;
-int32_t debugCounter;
+realIc_t             const *gammaConstants;
+realIc_t             const *angle180;
+realIc_t             const *angle90;
+realIc_t             const *angle45;
 #ifdef DMCP_BUILD
   bool_t               endOfProgram;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
@@ -173,7 +175,6 @@ int32_t debugCounter;
  ***********************************************/
 void setupDefaults(void) {
   void *memPtr;
-debug = false;
   ram = malloc(RAM_SIZE);
   memset(ram, 0, RAM_SIZE);
   numberOfFreeBlocks = 1;
@@ -221,14 +222,15 @@ debug = false;
 
   temporaryInformation = TI_NO_INFO;
 
-  decContextDefault(&ctxtReal16, DEC_INIT_DECDOUBLE);
-  decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
-  decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
-  ctxtReal51.digits = 51;
-  ctxtReal51.traps = 0;
-  decContextDefault(&ctxtReal451, DEC_INIT_DECQUAD);
-  ctxtReal451.digits = 451;
-  ctxtReal451.traps = 0;
+  decContextDefault(&ctxtReal16,   DEC_INIT_DECDOUBLE);
+  decContextDefault(&ctxtReal34,   DEC_INIT_DECQUAD);
+  decContextDefault(&ctxtRealIc, DEC_INIT_DECQUAD);
+  ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
+  ctxtRealIc.traps  = 0;
+
+  decContextDefault(&ctxtReal451,  DEC_INIT_DECQUAD);
+  ctxtReal451.digits  = 451;
+  ctxtReal451.traps   = 0;
 
   statisticalSumsPointer = NULL;
 
@@ -310,6 +312,11 @@ debug = false;
 
   hideUserMode();
 
+  gammaConstants = const_gammaC01;
+  angle180 = const_180;
+  angle90  = const_90;
+  angle45  = const_45;
+
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
   #else
@@ -349,8 +356,6 @@ int main(int argc, char* argv[]) {
     printf("The last item of indexOfItems[] is not \"Last item\"\n");
     exit(1);
   }
-
-//test();
 
   gtk_init(&argc, &argv);
   setupUI();
@@ -523,6 +528,7 @@ printf("------------------------------------------------------------------------
 return 0;
 */
   processTests();
+  printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
   debugMemory();
 
   return 0;

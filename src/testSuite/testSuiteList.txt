@@ -51,6 +51,8 @@
 changeSign.txt
 sign.txt
 
+conversionAngles.txt
+
 addition_longInteger.txt
 addition_real16.txt
 addition_complex16.txt
@@ -151,9 +153,9 @@ square.txt
 sqrt.txt
 cube.txt
 
-factorial.txt ;TODO tests for complex factorial
 gamma.txt     ;TODO tests for complex gamma
 lnGamma.txt   ;TODO tests for complex lnGamma
+factorial.txt ;TODO tests for complex factorial
 
 fractionalPart.txt
 integerPart.txt

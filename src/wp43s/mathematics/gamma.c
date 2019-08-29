@@ -105,17 +105,23 @@ void fnLnGamma(uint16_t unusedParamButMandatory) {
 
 
 void gammaLonI(void) {
-  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  WP34S_real34Gamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  realIc_t a;
+
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+  WP34S_Gamma(&a, &a);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
 
 void lnGammaLonI(void) {
-  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  WP34S_real34LnGamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  realIc_t a;
+
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+  WP34S_LnGamma(&a, &a);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -129,9 +135,11 @@ void gammaRe16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
-  WP34S_real34Gamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  realIc_t a;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  WP34S_Gamma(&a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -145,9 +153,11 @@ void lnGammaRe16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
-  WP34S_real34LnGamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  realIc_t a;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  WP34S_LnGamma(&a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -189,10 +199,12 @@ void gammaAn16(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  convertRegister16To34(REGISTER_X);
-  WP34S_real34Gamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  WP34S_Gamma(&a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -206,10 +218,12 @@ void lnGammaAn16(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  convertRegister16To34(REGISTER_X);
-  WP34S_real34LnGamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  convertRegister34To16(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  WP34S_LnGamma(&a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -223,7 +237,11 @@ void gammaRe34(void) {
     return;
   }
 
-  WP34S_real34Gamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIc_t a;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  WP34S_Gamma(&a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -237,7 +255,11 @@ void lnGammaRe34(void) {
     return;
   }
 
-  WP34S_real34LnGamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIc_t a;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  WP34S_LnGamma(&a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -279,8 +301,12 @@ void gammaAn34(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  WP34S_real34Gamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  WP34S_Gamma(&a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -294,6 +320,10 @@ void lnGammaAn34(void) {
     return;
   }
 
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  WP34S_real34LnGamma(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  WP34S_LnGamma(&a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

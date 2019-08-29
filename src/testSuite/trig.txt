@@ -44,4 +44,4 @@ Func: fnSwapXY
 Out:  EC=0
 Func: fnSubtract
 In:   RX=Re34:"9"
-Out:  EC=0 FI=0 RX=An34:"-4.3565e-29":DEG
+Out:  EC=0 FI=0 RX=An34:"-6.2465e-29":DEG

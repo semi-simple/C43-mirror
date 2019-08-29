@@ -64,6 +64,12 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
 
 
 
+/**********************************************************************
+ * In all the functions below:
+ * if X is a number then X = a + ib
+ * The variables a and b are used for intermediate calculations
+ ***********************************************************************/
+
 void twoPowLonI(void) {
 	 int32_t exponentSign;
   longInteger_t base, exponent;
@@ -145,7 +151,11 @@ void twoPowRe16(void) {
     return;
   }
 
-  real16Power(const16_2, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  realIc_t a;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  realIcPower(const_2, &a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -159,20 +169,23 @@ void twoPowCo16(void) {
     return;
   }
 
-  convertRegister16To34(REGISTER_X);
+  realIc_t a, b, factor;
 
-  // X = X * ln(2)
-  real34Multiply(const34_ln2, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(const34_ln2, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
-  // X = exp(X * ln(Y))
-  real34_t factor, real34, imag34;
-  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), &factor);
-  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(REGISTER_X), &real34, &imag34); // X in radian
-  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(REGISTER_X));
+  // ln(2) * (a + bi) --> (a + bi)
+  realIcMultiply(const_ln2, &a, &a);
+  realIcMultiply(const_ln2, &b, &b);
 
-  convertRegister34To16(REGISTER_X);
+  // exp(ln(2) * (a + bi)) --> (a + bi)
+  realIcExp(&a, &factor);
+  realIcPolarToRectangular(const_1, &b, &a, &b);
+  realIcMultiply(&factor, &a, &a);
+  realIcMultiply(&factor, &b, &b);
+
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -186,8 +199,13 @@ void twoPowAn16(void) {
     return;
   }
 
-  real16Power(const16_2, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  realIcPower(const_2, &a, &a);
+  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -219,7 +237,11 @@ void twoPowRe34(void) {
     return;
   }
 
-  real34Power(const34_2, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIc_t a;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  realIcPower(const_2, &a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -233,16 +255,23 @@ void twoPowCo34(void) {
     return;
   }
 
-  // X = X * ln(2)
-  real34Multiply(const34_ln2, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(const34_ln2, REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIc_t a, b, factor;
 
-  // X = exp(X * ln(Y))
-  real34_t factor, real34, imag34;
-  real34Exp(REGISTER_REAL34_DATA(REGISTER_X), &factor);
-  real34PolarToRectangular(const34_1, REGISTER_IMAG34_DATA(REGISTER_X), &real34, &imag34); // X in radian
-  real34Multiply(&factor, &real34, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(&factor, &imag34, REGISTER_IMAG34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+
+  // ln(2) * (a + bi) --> (a + bi)
+  realIcMultiply(const_ln2, &a, &a);
+  realIcMultiply(const_ln2, &b, &b);
+
+  // exp(ln(2) * (a + bi)) --> (a + bi)
+  realIcExp(&a, &factor);
+  realIcPolarToRectangular(const_1, &b, &a, &b);
+  realIcMultiply(&factor, &a, &a);
+  realIcMultiply(&factor, &b, &b);
+
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -256,6 +285,11 @@ void twoPowAn34(void) {
     return;
   }
 
-  real34Power(const34_2, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIc_t a;
+
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  realIcPower(const_2, &a, &a);
+  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

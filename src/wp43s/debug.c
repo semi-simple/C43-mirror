@@ -1629,9 +1629,9 @@ void memoryDump2(const char *text) {
   uint32_t dataType;
   calcRegister_t regist;
 
-  if(debug) {
-    debugCounter++;
-    printf("\n\n%s\nTotal memory = %d bytes = %d blocks     debugCounter = %d\n", text, RAM_SIZE, BYTES_TO_BLOCKS(RAM_SIZE), debugCounter);
+//  if(debug) {
+//    debugCounter++;
+    printf("\n\n%s\nTotal memory = %d bytes = %d blocks\n", text, RAM_SIZE, BYTES_TO_BLOCKS(RAM_SIZE));
     printf("Free blocks (%" FMT32S "):\n", numberOfFreeBlocks);
 
     for(i=0; i<numberOfFreeBlocks; i++) {
@@ -1773,6 +1773,6 @@ void memoryDump2(const char *text) {
     printf("SL  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
     printRegisterToConsole(regist);
     printf("\n");
-  }
+//  }
 }
 #endif

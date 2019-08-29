@@ -23,281 +23,286 @@
 *************************************************************************************************/
 
 #define CONST_00    0
-#define CONST_01    8
-#define CONST_02   16
-#define CONST_03   24
-#define CONST_04   32
-#define CONST_05   40
-#define CONST_06   48
-#define CONST_07   56
-#define CONST_08   64
-#define CONST_09   72
-#define CONST_10   80
-#define CONST_11   88
-#define CONST_12   96
-#define CONST_13  104
-#define CONST_14  112
-#define CONST_15  120
-#define CONST_16  128
-#define CONST_17  136
-#define CONST_18  144
-#define CONST_19  152
-#define CONST_20  160
-#define CONST_21  168
-#define CONST_22  176
-#define CONST_23  184
-#define CONST_24  192
-#define CONST_25  200
-#define CONST_26  208
-#define CONST_27  216
-#define CONST_28  224
-#define CONST_29  232
-#define CONST_30  240
-#define CONST_31  248
-#define CONST_32  256
-#define CONST_33  264
-#define CONST_34  272
-#define CONST_35  280
-#define CONST_36  288
-#define CONST_37  296
-#define CONST_38  304
-#define CONST_39  312
-#define CONST_40  320
-#define CONST_41  328
-#define CONST_42  336
-#define CONST_43  344
-#define CONST_44  352
-#define CONST_45  360
-#define CONST_46  368
-#define CONST_47  376
-#define CONST_48  384
-#define CONST_49  392
-#define CONST_50  400
-#define CONST_51  408
-#define CONST_52  416
-#define CONST_53  424
-#define CONST_54  432
-#define CONST_55  440
-#define CONST_56  448
-#define CONST_57  456
-#define CONST_59  464
-#define CONST_60  472
-#define CONST_61  480
-#define CONST_62  488
-#define CONST_63  496
-#define CONST_64  504
-#define CONST_65  512
-#define CONST_66  520
-#define CONST_67  528
-#define CONST_68  536
-#define CONST_69  544
-#define CONST_70  552
-#define CONST_71  560
-#define CONST_72  568
-#define CONST_73  576
-#define CONST_74  584
-#define CONST_75  592
-#define CONST_76  600
-#define CONST_77  608
-#define CONST_78  616
-#define CONST_79  624
+#define CONST_01   36
+#define CONST_02   72
+#define CONST_03  108
+#define CONST_04  144
+#define CONST_05  180
+#define CONST_06  216
+#define CONST_07  252
+#define CONST_08  288
+#define CONST_09  324
+#define CONST_10  360
+#define CONST_11  396
+#define CONST_12  432
+#define CONST_13  468
+#define CONST_14  504
+#define CONST_15  540
+#define CONST_16  576
+#define CONST_17  612
+#define CONST_18  648
+#define CONST_19  684
+#define CONST_20  720
+#define CONST_21  756
+#define CONST_22  792
+#define CONST_23  828
+#define CONST_24  864
+#define CONST_25  900
+#define CONST_26  936
+#define CONST_27  972
+#define CONST_28 1008
+#define CONST_29 1044
+#define CONST_30 1080
+#define CONST_31 1116
+#define CONST_32 1152
+#define CONST_33 1188
+#define CONST_34 1224
+#define CONST_35 1260
+#define CONST_36 1296
+#define CONST_37 1332
+#define CONST_38 1368
+#define CONST_39 1404
+#define CONST_40 1440
+#define CONST_41 1476
+#define CONST_42 1512
+#define CONST_43 1548
+#define CONST_44 1584
+#define CONST_45 1620
+#define CONST_46 1656
+#define CONST_47 1692
+#define CONST_48 1728
+#define CONST_49 1764
+#define CONST_50 1800
+#define CONST_51 1836
+#define CONST_52 1872
+#define CONST_53 1908
+#define CONST_54 1944
+#define CONST_55 1980
+#define CONST_56 2016
+#define CONST_57 2052
+#define CONST_58 2088
+#define CONST_59 2124
+#define CONST_60 2160
+#define CONST_61 2196
+#define CONST_62 2232
+#define CONST_63 2268
+#define CONST_64 2304
+#define CONST_65 2340
+#define CONST_66 2376
+#define CONST_67 2412
+#define CONST_68 2448
+#define CONST_69 2484
+#define CONST_70 2520
+#define CONST_71 2556
+#define CONST_72 2592
+#define CONST_73 2628
+#define CONST_74 2664
+#define CONST_75 2700
+#define CONST_76 2736
+#define CONST_77 2772
+#define CONST_78 2808
+#define CONST_79 2844
 
 extern const uint8_t constants[];
-extern const real16_t * const const16_0_5;
-extern const real16_t * const const16_a;
-extern const real16_t * const const16_a0;
-extern const real16_t * const const16_aM;
-extern const real16_t * const const16_aEarth;
-extern const real16_t * const const16_c;
-extern const real16_t * const const16_c1;
-extern const real16_t * const const16_c2;
-extern const real16_t * const const16_e;
-extern const real16_t * const const16_eE;
-extern const real16_t * const const16_eme;
-extern const real16_t * const const16_F;
-extern const real16_t * const const16_Falpha;
-extern const real16_t * const const16_Fdelta;
-extern const real16_t * const const16_G;
-extern const real16_t * const const16_G0;
-extern const real16_t * const const16_GC;
-extern const real16_t * const const16_ge;
-extern const real16_t * const const16_GM;
-extern const real16_t * const const16_gEarth;
-extern const real16_t * const const16_Planck;
-extern const real16_t * const const16_PlanckOn2pi;
-extern const real16_t * const const16_k;
-extern const real16_t * const const16_KJ;
-extern const real16_t * const const16_lp;
-extern const real16_t * const const16_me;
-extern const real16_t * const const16_MM;
-extern const real16_t * const const16_mn;
-extern const real16_t * const const16_mnOnmp;
-extern const real16_t * const const16_mPL;
-extern const real16_t * const const16_mp;
-extern const real16_t * const const16_mpOnme;
-extern const real16_t * const const16_mu;
-extern const real16_t * const const16_muc2;
-extern const real16_t * const const16_mmu;
-extern const real16_t * const const16_mSun;
-extern const real16_t * const const16_mEarth;
-extern const real16_t * const const16_NA;
-extern const real16_t * const const16_NaN;
-extern const real16_t * const const16_p0;
-extern const real16_t * const const16_R;
-extern const real16_t * const const16_re;
-extern const real16_t * const const16_RK;
-extern const real16_t * const const16_RM;
-extern const real16_t * const const16_RInfinity;
-extern const real16_t * const const16_RSun;
-extern const real16_t * const const16_REarth;
-extern const real16_t * const const16_Sa;
-extern const real16_t * const const16_Sb;
-extern const real16_t * const const16_Se2;
-extern const real16_t * const const16_Sep2;
-extern const real16_t * const const16_Sfm1;
-extern const real16_t * const const16_T0;
-extern const real16_t * const const16_TP;
-extern const real16_t * const const16_tp;
-extern const real16_t * const const16_Vm;
-extern const real16_t * const const16_Z0;
-extern const real16_t * const const16_alpha;
-extern const real16_t * const const16_gammaEM;
-extern const real16_t * const const16_gammap;
-extern const real16_t * const const16_epsilon0;
-extern const real16_t * const const16_lambdaC;
-extern const real16_t * const const16_lambdaCn;
-extern const real16_t * const const16_lambdaCp;
-extern const real16_t * const const16_mu0;
-extern const real16_t * const const16_muB;
-extern const real16_t * const const16_mue;
-extern const real16_t * const const16_mueOnmuB;
-extern const real16_t * const const16_mun;
-extern const real16_t * const const16_mup;
-extern const real16_t * const const16_muu;
-extern const real16_t * const const16_mumu;
-extern const real16_t * const const16_sigmaB;
-extern const real16_t * const const16_PHI;
-extern const real16_t * const const16_PHI0;
-extern const real16_t * const const16_omega;
-extern const real16_t * const const16_minusInfinity;
-extern const real16_t * const const16_plusInfinity;
+extern const realIc_t * const const_0_5;
+extern const realIc_t * const const_a;
+extern const realIc_t * const const_a0;
+extern const realIc_t * const const_aM;
+extern const realIc_t * const const_aEarth;
+extern const realIc_t * const const_c;
+extern const realIc_t * const const_c1;
+extern const realIc_t * const const_c2;
+extern const realIc_t * const const_e;
+extern const realIc_t * const const_eE;
+extern const realIc_t * const const_eme;
+extern const realIc_t * const const_F;
+extern const realIc_t * const const_Falpha;
+extern const realIc_t * const const_Fdelta;
+extern const realIc_t * const const_G;
+extern const realIc_t * const const_G0;
+extern const realIc_t * const const_GC;
+extern const realIc_t * const const_ge;
+extern const realIc_t * const const_GM;
+extern const realIc_t * const const_gEarth;
+extern const realIc_t * const const_Planck;
+extern const realIc_t * const const_PlanckOn2pi;
+extern const realIc_t * const const_k;
+extern const realIc_t * const const_KJ;
+extern const realIc_t * const const_lp;
+extern const realIc_t * const const_me;
+extern const realIc_t * const const_MM;
+extern const realIc_t * const const_mn;
+extern const realIc_t * const const_mnOnmp;
+extern const realIc_t * const const_mPL;
+extern const realIc_t * const const_mp;
+extern const realIc_t * const const_mpOnme;
+extern const realIc_t * const const_mu;
+extern const realIc_t * const const_muc2;
+extern const realIc_t * const const_mmu;
+extern const realIc_t * const const_mSun;
+extern const realIc_t * const const_mEarth;
+extern const realIc_t * const const_NA;
+extern const realIc_t * const const_NaN;
+extern const realIc_t * const const_p0;
+extern const realIc_t * const const_R;
+extern const realIc_t * const const_re;
+extern const realIc_t * const const_RK;
+extern const realIc_t * const const_RM;
+extern const realIc_t * const const_RInfinity;
+extern const realIc_t * const const_RSun;
+extern const realIc_t * const const_REarth;
+extern const realIc_t * const const_Sa;
+extern const realIc_t * const const_Sb;
+extern const realIc_t * const const_Se2;
+extern const realIc_t * const const_Sep2;
+extern const realIc_t * const const_Sfm1;
+extern const realIc_t * const const_T0;
+extern const realIc_t * const const_TP;
+extern const realIc_t * const const_tp;
+extern const realIc_t * const const_Vm;
+extern const realIc_t * const const_Z0;
+extern const realIc_t * const const_alpha;
+extern const realIc_t * const const_gamma;
+extern const realIc_t * const const_gammaEM;
+extern const realIc_t * const const_gammap;
+extern const realIc_t * const const_epsilon0;
+extern const realIc_t * const const_lambdaC;
+extern const realIc_t * const const_lambdaCn;
+extern const realIc_t * const const_lambdaCp;
+extern const realIc_t * const const_mu0;
+extern const realIc_t * const const_muB;
+extern const realIc_t * const const_mue;
+extern const realIc_t * const const_mueOnmuB;
+extern const realIc_t * const const_mun;
+extern const realIc_t * const const_mup;
+extern const realIc_t * const const_muu;
+extern const realIc_t * const const_mumu;
+extern const realIc_t * const const_sigmaB;
+extern const realIc_t * const const_PHI;
+extern const realIc_t * const const_PHI0;
+extern const realIc_t * const const_omega;
+extern const realIc_t * const const_minusInfinity;
+extern const realIc_t * const const_plusInfinity;
+extern const realIc_t * const const_0;
+extern const realIc_t * const const_gammaC00;
+extern const realIc_t * const const_gammaC01;
+extern const realIc_t * const const_gammaC02;
+extern const realIc_t * const const_gammaC03;
+extern const realIc_t * const const_gammaC04;
+extern const realIc_t * const const_gammaC05;
+extern const realIc_t * const const_gammaC06;
+extern const realIc_t * const const_gammaC07;
+extern const realIc_t * const const_gammaC08;
+extern const realIc_t * const const_gammaC09;
+extern const realIc_t * const const_gammaC10;
+extern const realIc_t * const const_gammaC11;
+extern const realIc_t * const const_gammaC12;
+extern const realIc_t * const const_gammaC13;
+extern const realIc_t * const const_gammaC14;
+extern const realIc_t * const const_gammaC15;
+extern const realIc_t * const const_gammaC16;
+extern const realIc_t * const const_gammaC17;
+extern const realIc_t * const const_gammaC18;
+extern const realIc_t * const const_gammaC19;
+extern const realIc_t * const const_gammaC20;
+extern const realIc_t * const const_gammaC21;
+extern const realIc_t * const const_180;
+extern const realIc_t * const const_200;
+extern const realIc_t * const const_pi;
+extern const realIc_t * const const_1;
+extern const realIc_t * const const_90;
+extern const realIc_t * const const_100;
+extern const realIc_t * const const_piOn2;
+extern const realIc_t * const const_1on2;
+extern const realIc_t * const const_45;
+extern const realIc_t * const const_50;
+extern const realIc_t * const const_piOn4;
+extern const realIc_t * const const_1on4;
+extern const realIc_t * const const_PointToM;
+extern const realIc_t * const const_InchToM;
+extern const realIc_t * const const_FtToM;
+extern const realIc_t * const const_SfeetToM;
+extern const realIc_t * const const_YardToM;
+extern const realIc_t * const const_FathomToM;
+extern const realIc_t * const const_MiToM;
+extern const realIc_t * const const_NmiToM;
+extern const realIc_t * const const_AuToM;
+extern const realIc_t * const const_LyToM;
+extern const realIc_t * const const_PcToM;
+extern const realIc_t * const const_AccreToM2;
+extern const realIc_t * const const_AccreusToM2;
+extern const realIc_t * const const_FlozukToM3;
+extern const realIc_t * const const_FlozusToM3;
+extern const realIc_t * const const_GalusToM3;
+extern const realIc_t * const const_GalukToM3;
+extern const realIc_t * const const_QuartToM3;
+extern const realIc_t * const const_BarrelToM3;
+extern const realIc_t * const const_CaratToKg;
+extern const realIc_t * const const_OzToKg;
+extern const realIc_t * const const_TrozToKg;
+extern const realIc_t * const const_LbToKg;
+extern const realIc_t * const const_StoneToKg;
+extern const realIc_t * const const_ShortcwtToKg;
+extern const realIc_t * const const_CwtToKg;
+extern const realIc_t * const const_ShorttonToKg;
+extern const realIc_t * const const_TonToKg;
+extern const realIc_t * const const_CalToJ;
+extern const realIc_t * const const_BtuToJ;
+extern const realIc_t * const const_WhToJ;
+extern const realIc_t * const const_LbfToN;
+extern const realIc_t * const const_TorrToPa;
+extern const realIc_t * const const_InhgToPa;
+extern const realIc_t * const const_PsiToPa;
+extern const realIc_t * const const_BarToPa;
+extern const realIc_t * const const_AtmToPa;
+extern const realIc_t * const const_HpmToW;
+extern const realIc_t * const const_HpukToW;
+extern const realIc_t * const const_HpeToW;
+extern const realIc_t * const const_YearToS;
+extern const realIc_t * const const_1e_37;
+extern const realIc_t * const const_1e_24;
+extern const realIc_t * const const_1e_6;
+extern const realIc_t * const const_1e_4;
+extern const realIc_t * const const_1on10;
+extern const realIc_t * const const_egamma;
+extern const realIc_t * const const_ln2;
+extern const realIc_t * const const_root2on2;
+extern const realIc_t * const const_9on10;
+extern const realIc_t * const const_9on5;
+extern const realIc_t * const const_2;
+extern const realIc_t * const const_ln10;
+extern const realIc_t * const const_3piOn4;
+extern const realIc_t * const const_3;
+extern const realIc_t * const const_5;
+extern const realIc_t * const const_2pi;
+extern const realIc_t * const const_10;
+extern const realIc_t * const const_20;
+extern const realIc_t * const const_21;
+extern const realIc_t * const const_gammaR;
+extern const realIc_t * const const_32;
+extern const realIc_t * const const_36;
+extern const realIc_t * const const_180onPi;
+extern const realIc_t * const const_60;
+extern const realIc_t * const const_200onPi;
+extern const realIc_t * const const_204;
+extern const realIc_t * const const_360;
+extern const realIc_t * const const_400;
+extern const realIc_t * const const_1000;
+extern const realIc_t * const const_3600;
+extern const realIc_t * const const_9999;
+extern const realIc_t * const const_10000;
+extern const realIc_t * const const_1e6;
+extern const realIc_t * const const_2p32;
+extern const realIc_t * const const451_2pi;
 extern const real16_t * const const16_0;
 extern const real16_t * const const16_1e_4;
-extern const real16_t * const const16_ln2;
 extern const real16_t * const const16_1;
-extern const real16_t * const const16_2;
-extern const real16_t * const const16_ln10;
-extern const real16_t * const const16_pi;
 extern const real16_t * const const16_2pi;
-extern const real16_t * const const16_10;
-extern const real16_t * const const16_20;
-extern const real16_t * const const16_32;
-extern const real16_t * const const16_60;
-extern const real16_t * const const16_100;
 extern const real16_t * const const16_1000;
-extern const real16_t * const const16_9999;
-extern const real16_t * const const16_10000;
 extern const real16_t * const const16_1e6;
-extern const real34_t * const const34_FlozukToM3;
-extern const real34_t * const const34_FlozusToM3;
-extern const real34_t * const const34_CaratToKg;
-extern const real34_t * const const34_PointToM;
-extern const real34_t * const const34_GalusToM3;
-extern const real34_t * const const34_GalukToM3;
-extern const real34_t * const const34_QuartToM3;
-extern const real34_t * const const34_InchToM;
-extern const real34_t * const const34_OzToKg;
-extern const real34_t * const const34_TrozToKg;
-extern const real34_t * const const34_FtToM;
-extern const real34_t * const const34_BarrelToM3;
-extern const real34_t * const const34_SfeetToM;
-extern const real34_t * const const34_LbToKg;
-extern const real34_t * const const34_YardToM;
-extern const real34_t * const const34_FathomToM;
-extern const real34_t * const const34_CalToJ;
-extern const real34_t * const const34_StoneToKg;
-extern const real34_t * const const34_LbfToN;
-extern const real34_t * const const34_ShortcwtToKg;
-extern const real34_t * const const34_CwtToKg;
-extern const real34_t * const const34_TorrToPa;
-extern const real34_t * const const34_HpmToW;
-extern const real34_t * const const34_HpukToW;
-extern const real34_t * const const34_ShorttonToKg;
-extern const real34_t * const const34_HpeToW;
-extern const real34_t * const const34_TonToKg;
-extern const real34_t * const const34_BtuToJ;
-extern const real34_t * const const34_MiToM;
-extern const real34_t * const const34_NmiToM;
-extern const real34_t * const const34_InhgToPa;
-extern const real34_t * const const34_WhToJ;
-extern const real34_t * const const34_AccreToM2;
-extern const real34_t * const const34_AccreusToM2;
-extern const real34_t * const const34_PsiToPa;
-extern const real34_t * const const34_BarToPa;
-extern const real34_t * const const34_AtmToPa;
-extern const real34_t * const const34_YearToS;
-extern const real34_t * const const34_AuToM;
-extern const real34_t * const const34_LyToM;
-extern const real34_t * const const34_PcToM;
-extern const real34_t * const const34_NaN;
-extern const real34_t * const const34_minusInfinity;
 extern const real34_t * const const34_0;
-extern const real34_t * const const34_1e_24;
-extern const real34_t * const const34_1e_6;
 extern const real34_t * const const34_1e_4;
-extern const real34_t * const const34_0_1;
-extern const real34_t * const const34_0_5;
-extern const real34_t * const const34_egamma;
-extern const real34_t * const const34_ln2;
-extern const real34_t * const const34_root2on2;
-extern const real34_t * const const34_piOn4;
 extern const real34_t * const const34_1;
-extern const real34_t * const const34_piOn2;
-extern const real34_t * const const34_1_8;
-extern const real34_t * const const34_2;
-extern const real34_t * const const34_ln10;
-extern const real34_t * const const34_3piOn4;
-extern const real34_t * const const34_3;
-extern const real34_t * const const34_pi;
-extern const real34_t * const const34_3piOn2;
-extern const real34_t * const const34_5;
 extern const real34_t * const const34_2pi;
-extern const real34_t * const const34_10;
-extern const real34_t * const const34_20;
-extern const real34_t * const const34_32;
-extern const real34_t * const const34_36;
-extern const real34_t * const const34_60;
-extern const real34_t * const const34_100;
-extern const real34_t * const const34_180;
-extern const real34_t * const const34_204;
-extern const real34_t * const const34_360;
-extern const real34_t * const const34_400;
-extern const real34_t * const const34_10000;
+extern const real34_t * const const34_1000;
 extern const real34_t * const const34_1e6;
-extern const real34_t * const const34_plusInfinity;
-extern const real51_t * const const51_minusInfinity;
-extern const real51_t * const const51_NaN;
-extern const real51_t * const const51_0;
-extern const real51_t * const const51_1e_37;
-extern const real51_t * const const51_0_5;
-extern const real51_t * const const51_ln2;
-extern const real51_t * const const51_root2on2;
-extern const real51_t * const const51_1;
-extern const real51_t * const const51_2;
-extern const real51_t * const const51_ln10;
-extern const real51_t * const const51_3;
-extern const real51_t * const const51_21;
-extern const real51_t * const const51_gammaR;
-extern const real51_t * const const51_plusInfinity;
-extern const real51_t * const const51_gammaC00;
-extern const real51_t * const const51_9on10;
-extern const real51_t * const const51_pi;
-extern const real51_t * const const51_180onPi;
-extern const real51_t * const const51_60;
-extern const real51_t * const const51_200onPi;
-extern const real51_t * const const51_180;
-extern const real51_t * const const51_200;
-extern const real51_t * const const51_360;
-extern const real51_t * const const51_400;
-extern const real51_t * const const51_3600;
-extern const real451_t * const const451_2pi;

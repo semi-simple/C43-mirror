@@ -37,39 +37,52 @@ void fnDenMode(uint16_t denMode) {
 
 
 void fnDenMax(uint16_t unusedParamButMandatory) {
-  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+  realIc_t reX;
 
-  if(getRegisterDataType(TEMP_REGISTER) == dtReal34) {
-    convertRegister34To16(TEMP_REGISTER);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterDataType(REGISTER_X) == dtReal16) {
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &reX);
   }
-
-  else if(getRegisterDataType(TEMP_REGISTER) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(TEMP_REGISTER, TEMP_REGISTER);
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &reX);
   }
-
-  else if(getRegisterDataType(TEMP_REGISTER) == dtShortInteger) {
-    convertShortIntegerRegisterToReal16Register(TEMP_REGISTER, TEMP_REGISTER);
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
   }
-
-  else if(getRegisterDataType(TEMP_REGISTER) != dtReal16) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+  else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    convertShortIntegerRegisterToRealIc(REGISTER_X, &reX);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot use %s to set or recall DENMAX!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fnDenMax:", errorMessage, NULL, NULL);
+      showInfoDialog("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
+    restoreStack();
+    refreshStack();
     return;
   }
 
-  if(real16IsSpecial(REGISTER_REAL16_DATA(TEMP_REGISTER)) || real16CompareLessThan(REGISTER_REAL16_DATA(TEMP_REGISTER), const16_1) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(TEMP_REGISTER), const16_9999)) {
+  if(realIcIsNaN(&reX)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
+    #endif
+    restoreStack();
+    refreshStack();
+    return;
+  }
+
+  if(realIcIsSpecial(&reX) || realIcCompareLessThan(&reX, const_1) || realIcCompareGreaterEqual(&reX, const_9999)) {
     denMax = DM_DENMAX;
   }
   else {
-    int32_t den = real16ToInt32(REGISTER_REAL16_DATA(TEMP_REGISTER));
+    int32_t den = realIcToInt32(&reX);
 
     if(den == 1) {
       longInteger_t lgInt;
 
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       longIntegerInit(lgInt);
       uIntToLongInteger(denMax, lgInt);
       convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
@@ -104,13 +117,13 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   // delta = difference between the best faction and the real number
 
   //printf("0 regist = "); printRegisterToConsole(regist, 0); printf("\n");
-  real34_t temp0;
+  realIc_t temp0;
 
   if(getRegisterDataType(regist) == dtReal16) {
-    real16ToReal34(REGISTER_REAL16_DATA(regist), &temp0);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &temp0);
   }
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34Copy(REGISTER_REAL34_DATA(regist), &temp0);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &temp0);
   }
   else {
     #ifdef PC_BUILD
@@ -126,7 +139,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     return;
   }
 
-  if(real34IsZero(&temp0)) {
+  if(realIcIsZero(&temp0)) {
     *sign             = 0;
     *intPart          = 0;
     *numer            = 0;
@@ -137,21 +150,21 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   }
 
   //printf("1 temp0 = "); printReal34ToConsole(&temp0); printf("\n");
-  if(real34IsNegative(&temp0)) {
+  if(realIcIsNegative(&temp0)) {
     *sign = -1;
-    real34ChangeSign(&temp0);
+    realIcChangeSign(&temp0);
   }
   else {
     *sign = 1;
   }
 
-  real34_t delta, temp3;
-  uInt32ToReal34(9999, &delta);
+  realIc_t delta, temp3;
+  uInt32ToRealIc(9999, &delta);
   //printf("2 delta = "); printReal34ToConsole(&delta); printf("\n");
 
-  *intPart = real34ToUInt32(&temp0);
-  uInt32ToReal34(*intPart, &temp3);
-  real34Subtract(&temp0, &temp3, &temp0);
+  *intPart = realIcToUInt32(&temp0);
+  uInt32ToRealIc(*intPart, &temp3);
+  realIcSubtract(&temp0, &temp3, &temp0);
   //printf("3 partie_decimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
 
   //*******************
@@ -162,30 +175,30 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     uint32_t invalidOperation=0;
     int16_t i, j;
 
-    real34_t temp1, temp4;
+    realIc_t temp1, temp4;
 
     // Calculate the continued fraction
     *denom = 1;
     i = 0;
     iPart[0] = *intPart;
 
-    real34Copy(&temp0, &temp1);
+    realIcCopy(&temp0, &temp1);
     //printf("4 partie_decimale = temp0 = "); printReal34ToConsole(&temp0); printf("\n");
 
-    if(real34CompareAbsLessThan(&temp1, const34_1e_6)) {
-      real34Zero(&temp1);
+    if(realIcCompareAbsLessThan(&temp1, const_1e_6)) {
+      realIcZero(&temp1);
     }
 
     while(*denom < denMax && !real34IsZero(&temp1) && !invalidOperation) {
-      real34Divide(const34_1, &temp1, &temp1);
+      realIcDivide(const_1, &temp1, &temp1);
       //printf("  5 1/partie_decimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
-      iPart[++i] = real34ToUInt32(&temp1);
-      uInt32ToReal34(iPart[i], &temp3);
+      iPart[++i] = realIcToUInt32(&temp1);
+      uInt32ToRealIc(iPart[i], &temp3);
       invalidOperation = decContextGetStatus(&ctxtReal34) & DEC_Invalid_operation;
       decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
-      real34Subtract(&temp1, &temp3, &temp1);
-      if(real34CompareAbsLessThan(&temp1, const34_1e_6)) {
-        real34Zero(&temp1);
+      realIcSubtract(&temp1, &temp3, &temp1);
+      if(realIcCompareAbsLessThan(&temp1, const_1e_6)) {
+        realIcZero(&temp1);
       }
       //printf("  6 partie_decimale de 1/partie_decimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");
 
@@ -200,29 +213,29 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
       //printf("  9 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
 
       if(*denom <= denMax) {
-        uInt32ToReal34(*numer, &temp3);
+        uInt32ToRealIc(*numer, &temp3);
         //printf("A partie_decimale = temp3 = "); printReal34ToConsole(&temp3); printf("\n");
-        uInt32ToReal34(*denom, &temp4);
+        uInt32ToRealIc(*denom, &temp4);
         //printf("B partie_decimale = temp4 = "); printReal34ToConsole(&temp4); printf("\n");
 
         //printf("   C temp3 "); printReal34ToConsole(&temp3); printf(" / temp4 "); printReal34ToConsole(&temp4);
-        real34Divide(&temp3, &temp4, &temp3);
+        realIcDivide(&temp3, &temp4, &temp3);
         //printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
 
 
         //printf("   D temp3 "); printReal34ToConsole(&temp3); printf(" - temp0 "); printReal34ToConsole(&temp0);
-        real34Subtract(&temp3, &temp0, &temp3);
+        realIcSubtract(&temp3, &temp0, &temp3);
         //printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
 
-        real34SetPositiveSign(&temp3);
+        realIcSetPositiveSign(&temp3);
         //printf("   E temp3 = "); printReal34ToConsole(&temp3); printf("\n");
 
         //printf("   F temp3 "); printReal34ToConsole(&temp3); printf(" - delta "); printReal34ToConsole(&delta);
-        real34Subtract(&temp3, &delta, &temp3);
+        realIcSubtract(&temp3, &delta, &temp3);
         //printf(" = temp3 "); printReal34ToConsole(&temp3); printf("\n");
 
-        if(real34IsNegative(&temp3)) {
-          real34Add(&temp3, &delta, &delta);
+        if(realIcIsNegative(&temp3)) {
+          realIcAdd(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
           //printf("  G bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
@@ -241,14 +254,14 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
       //printf("  K numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
 
       if(*denom <= denMax) {
-        uInt32ToReal34(*numer, &temp3);
-        uInt32ToReal34(*denom, &temp4);
-        real34Divide(&temp3, &temp4, &temp3);
-        real34Subtract(&temp3, &temp0, &temp3);
-        real34SetPositiveSign(&temp3);
-        real34Subtract(&temp3, &delta, &temp3);
-        if(real34IsNegative(&temp3)) {
-          real34Add(&temp3, &delta, &delta);
+        uInt32ToRealIc(*numer, &temp3);
+        uInt32ToRealIc(*denom, &temp4);
+        realIcDivide(&temp3, &temp4, &temp3);
+        realIcSubtract(&temp3, &temp0, &temp3);
+        realIcSetPositiveSign(&temp3);
+        realIcSubtract(&temp3, &delta, &temp3);
+        if(realIcIsNegative(&temp3)) {
+          realIcAdd(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
           //printf("  L bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
@@ -272,9 +285,9 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   else if(denominatorMode == DM_FIX) {
     *denom = denMax;
 
-    uInt32ToReal34(denMax, &delta);
-    real34FMA(&delta, &temp0, const34_0_5, &temp3);
-    *numer = real34ToUInt32(&temp3);
+    uInt32ToRealIc(denMax, &delta);
+    realIcFMA(&delta, &temp0, const_0_5, &temp3);
+    *numer = realIcToUInt32(&temp3);
   }
 
   //******************************
@@ -283,23 +296,23 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   else if(denominatorMode == DM_FAC) {
     uint64_t bestNumer=0, bestDenom=1;
 
-    real34_t temp4;
+    realIc_t temp4;
 
     // TODO: we can certainly do better here
     for(uint32_t i=1; i<=denMax; i++) {
       if(denMax % i == 0) {
-        uInt32ToReal34(i, &temp4);
-        real34FMA(&temp4, &temp0, const34_0_5, &temp3);
-        *numer = real34ToUInt32(&temp3);
+        uInt32ToRealIc(i, &temp4);
+        realIcFMA(&temp4, &temp0, const_0_5, &temp3);
+        *numer = realIcToUInt32(&temp3);
 
-        uInt32ToReal34(*numer, &temp3);
-        uInt32ToReal34(i, &temp4);
-        real34Divide(&temp3, &temp4, &temp3);
-        real34Subtract(&temp3, &temp0, &temp3);
-        real34SetPositiveSign(&temp3);
-        real34Subtract(&temp3, &delta, &temp3);
-        if(real34IsNegative(&temp3)) {
-          real34Add(&temp3, &delta, &delta);
+        uInt32ToRealIc(*numer, &temp3);
+        uInt32ToRealIc(i, &temp4);
+        realIcDivide(&temp3, &temp4, &temp3);
+        realIcSubtract(&temp3, &temp0, &temp3);
+        realIcSetPositiveSign(&temp3);
+        realIcSubtract(&temp3, &delta, &temp3);
+        if(realIcIsNegative(&temp3)) {
+          realIcAdd(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = i;
         }
@@ -323,33 +336,33 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   }
 
   // The register value
-  real51_t r;
+  realIc_t r, f, d;
+
   if(getRegisterDataType(regist) == dtReal16) {
-    real16ToReal51(REGISTER_REAL16_DATA(regist), &r);
+    real16ToRealIc(REGISTER_REAL16_DATA(regist), &r);
   }
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34ToReal51(REGISTER_REAL34_DATA(regist), &r);
+    real34ToRealIc(REGISTER_REAL34_DATA(regist), &r);
   }
 
   // The fraction value
-  real51_t f, d;
-  uInt32ToReal51(*intPart, &f);
-  uInt32ToReal51(*denom, &d);
-  real51Multiply(&f, &d, &f);
-  uInt32ToReal51(*numer, &d);
-  real51Add(&f, &d, &f);
-  uInt32ToReal51(*denom, &d);
-  real51Divide(&f, &d, &f);
+  uInt32ToRealIc(*intPart, &f);
+  uInt32ToRealIc(*denom, &d);
+  realIcMultiply(&f, &d, &f);
+  uInt32ToRealIc(*numer, &d);
+  realIcAdd(&f, &d, &f);
+  uInt32ToRealIc(*denom, &d);
+  realIcDivide(&f, &d, &f);
   if(*sign == -1) {
-    real51ChangeSign(&f);
+    realIcChangeSign(&f);
   }
 
-  real51Subtract(&f, &r, &f);
+  realIcSubtract(&f, &r, &f);
 
-  if(real51IsZero(&f)) {
+  if(realIcIsZero(&f)) {
     *lessEqualGreater = 0;
   }
-  else if(real51IsNegative(&f)) {
+  else if(realIcIsNegative(&f)) {
     *lessEqualGreater = -1;
   }
   else {

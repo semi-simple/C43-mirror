@@ -58,7 +58,6 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define REGISTER_COMPLEX34_DATA(a)                        ((complex34_t *)(getRegisterDataPointer(a)))
 
 #define REGISTER_STRING_DATA(a)                           ((char        *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the string of a register
-#define REGISTER_LONG_INTEGER_DATA(a)                     ((uint8_t     *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the long integer of a register
 #define REGISTER_DATA_MAX_LEN(a)                          ((dataSize_t  *)(getRegisterDataPointer(a)))                      // Memory pointer to the lenght of string or long integer
 
 #define REGISTER_SHORT_INTEGER_DATA(a)                    ((uint64_t    *)(getRegisterDataPointer(a)))

@@ -47,14 +47,8 @@ int        idx, c;
 void generateConstantArray(char *name, char *value) {
   realIc_t realIc;
 
-  memset(&realIc, 0, sizeof(realIc_t));
+  //memset(&realIc, 0, sizeof(realIc));
   stringToRealIc(value, &realIc);
-  //printf("---------------------------------------------------------------------------------------------------------------\n");
-  //printf("realIc.digits = %d\n", realIc.digits);
-  //printf("sizeof(realIc_t) = %u\n", (uint32_t)sizeof(realIc_t));
-  //realIcToString(&realIc, temp);
-  //printf("%s = %s\n", name, temp);
-  //printf("should be %s = %s\n", name, value);
 
   strcpy(whiteSpace, "                                        ");
   whiteSpace[13 - strlen(name)] = 0;
@@ -92,12 +86,8 @@ void generateConstantArray(char *name, char *value) {
 void generateConstantArray16(char *name, char *value) {
   real16_t real16;
 
-  memset(&real16, 0, sizeof(real16_t));
+  //memset(&real16, 0, sizeof(real16_t));
   stringToReal16(value, &real16);
-  //printf("---------------------------------------------------------------------------------------------------------------\n");
-  //real16ToString(&real16, temp);
-  //printf("%s = %s\n", name, temp);
-  //printf("should be %s = %s\n", name, value);
 
   strcpy(whiteSpace, "                                        ");
   whiteSpace[11 - strlen(name)] = 0;
@@ -130,12 +120,8 @@ void generateConstantArray16(char *name, char *value) {
 void generateConstantArray34(char *name, char *value) {
   real34_t real34;
 
-  memset(&real34, 0, sizeof(real34_t));
+  //memset(&real34, 0, sizeof(real34_t));
   stringToReal34(value, &real34);
-  //printf("---------------------------------------------------------------------------------------------------------------\n");
-  //real34ToString(&real34, temp);
-  //printf("%s = %s\n", name, temp);
-  //printf("should be %s = %s\n", name, value);
 
   strcpy(whiteSpace, "                                        ");
   whiteSpace[11 - strlen(name)] = 0;
@@ -168,14 +154,8 @@ void generateConstantArray34(char *name, char *value) {
 void generateConstantArray451(char *name, char *value) {
   real451_t real451;
 
-  memset(&real451, 0, sizeof(real451_t));
+  //memset(&real451, 0, sizeof(real451_t));
   stringToRealIc(value, &real451);
-  //printf("---------------------------------------------------------------------------------------------------------------\n");
-  //printf("real451.digits = %d\n", real451.digits);
-  //printf("sizeof(real451_t) = %u\n", (uint32_t)sizeof(real451_t));
-  //realIcToString(&real451, temp);
-  //printf("%s = %s\n", name, temp);
-  //printf("should be %s = %s\n", name, value);
 
   strcpy(whiteSpace, "                                        ");
   whiteSpace[10 - strlen(name)] = 0;

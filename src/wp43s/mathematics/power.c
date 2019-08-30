@@ -212,7 +212,7 @@ void powRe16LonI(void) {
   }
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
@@ -291,7 +291,7 @@ void powCo16LonI(void) {
   }
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
@@ -374,7 +374,7 @@ void powAn16LonI(void) {
   }
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
@@ -605,7 +605,7 @@ void powRe34LonI(void) {
   }
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
@@ -684,7 +684,7 @@ void powCo34LonI(void) {
   }
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -767,7 +767,7 @@ void powAn34LonI(void) {
   }
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }

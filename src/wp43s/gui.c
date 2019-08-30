@@ -415,7 +415,13 @@ void prepareCssData(void) {
   char *toReplace, *replaceWith, needle[100], newNeedle[100];
   int  i, fileLg;
 
+
+#ifdef JM_LAYOUT_2_DM42_STRICT                    //JM LAYOUT 2
+  #define CSSFILE "wp43s_pre_L2.css"              //JM L
+#endif //JM L
+#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A) //JM LAYOUT 1
   #define CSSFILE "wp43s_pre.css"
+#endif //JM L
 
   // Convert the pre-CSS data to CSS data
   cssFile = fopen(CSSFILE, "rb");
@@ -1973,7 +1979,14 @@ void setupUI(void) {
     backgroundImage = gtk_image_new_from_file("dm42lshort.png");
   }
   else {
+
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM L2
+    backgroundImage = gtk_image_new_from_file("dm42l_L2.png");
+#endif //JM Layout
+#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A) //JM LAYOUT 1
     backgroundImage = gtk_image_new_from_file("dm42l.png");
+#endif //JM Layout
+
   }
 
   gtk_fixed_put(GTK_FIXED(grid), backgroundImage,  0, 0);

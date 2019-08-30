@@ -21,17 +21,19 @@
 
 
 /*********   MAIN OPTION SELECTION                  */
-/*********      Remove // from EITHER layout 1 or layout 2 or layout 1A */
+/*********   Remove // from EITHER layout 1 or layout 2 or layout 1A */
 //#define JM_LAYOUT_2_DM42_STRICT  //DM42 compatible layout
-//#define JM_LAYOUT_1              //Depreciated layout
 #define JM_LAYOUT_1A               //Preferred layout
+
+//depreciated. //#define JM_LAYOUT_1              //Depreciated layout
+
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
-#define JM_MULTISHIFT    //MULTISHIFT AND CLRDROP
-#define JM_SHIFT_TIMER 4000  //ms Inherent problem: Does not clear the visual flag indications on screen when shift state is cancelled.
-#define JM_CLRDROP_TIMER 500  //ms
-#define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //100 ms
+#define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
+#define JM_SHIFT_TIMER 4000    //ms
+#define JM_CLRDROP_TIMER 500   //ms
+#define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second
 
 
 //keyboard.c   

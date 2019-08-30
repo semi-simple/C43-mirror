@@ -1,0 +1,84 @@
+This thread continues from the discussions on an alternate and unofficial key layout on ‘43S News’, page 41.
+
+Original post: 2019-07-22
+1st Edit: 2019-07-26, added Section E below.
+2nd edit: 2019-08-04, added and changed text; added latest image.
+3rd edit: 2019-08-05 updated image.
+4th edit: 2019-08-30 generally updated all old text and image.
+
+In short, I’m making a new key 42S-like variation called WP43C (C for classic) to slap onto the code of the mainstream WP43S project. 
+
+Note that the main project is far from finished and hence this fork is also far from finished. Many changes are happening in both.
+
+A: Goals:
+
+1. To not tax or delay the main project with this effort. 
+2. To make it work on the DM42 and use the primary key labels unchanged from the DM42 keyboard. A shifted function label overlay will still be needed, but no key stickers. 
+2a. Added: To make a version of the WP43C work on an unmodified DM42. 
+3. To maintain some of the legacy and familiarity of the HP42S. 
+4. To tap into and use the brilliant work, features, functions and operation of the main WP43S project. 
+5. Added: To remember this is not a HP42S or DM42 and therefore there is limit to compatibility.
+6. I decided to add a few of the stranger function I wanted on a calculator, i.e. SIGFIG, UNITS, eRPN and Double CLX DROP.
+
+Comments and advice welcome, but be aware I don’t make choices based on logic only, as legacy and whims play a role. 
+
+I test my changes on the both the emulator and DM42 as yet. Code is available as per GPL rules. Source code is published on: https://gitlab.com/Jaymos/wp43c.
+
+B. What is WP43C?
+The WP43C is a variation to the user interface of the WP43S. The math engine and many administrative functions and modules are not modified and operation is largely the same as on the WP43S.
+The main driving force was that many (over the years) have expressed their needs for having the operators on the left side vs. right, and that that has been a division factor from the onset of the WP43S project. This was my personal motivation to start this sub-project.
+The second driving force was that the intended platform of the WP43S is the DM42 hardware and that there is no easy way to use the existing hardware and keyboard in a professional manner for unmodified operation of the WP43S.
+The third driving force was that many of the shifted menus are very alike HP42S and DM42 counterparts but were located in vastly different areas of the keyboard and that for “muscle memory” reasons, this had to be aligned where possible.
+On the WP43C, the key and function key layout aligns with all DM42 primary keys and most yellow labels. This includes dedicated SIN COS TAN buttons and removal of the [g] shift key. A scheme was introduced to have a single yellow shift button as per the DM42, which is used to access both [f] and [g] functions.
+The single shift button operates as follows:
+one shift press is [f],
+two presses render [g],
+three presses clear shifts and also brings up the HOME menu (if enabled),
+EXIT or another triple shift, returns the menu back to the previous menu state.
+Some standard functions not found on the WP43S keyboard were added to the WP43C, i.e. FLAG.V (STATUS) (global flag viewer) and LASTx.
+Many texts of the WP43S were changed to fit the WP43C. There is a list of changed texts in the change doc pdf linked below. This will be needed to follow the standard documentation written by Walter.
+Graphical indications in the form of dots on screen showing which menu line is activated by [f] or [g], was added. These dots are located in the left and right margins of the soft menu to indicate which row is active. It is visible in the image below. The idea is to indicate which line is active, as the DM42 does not have coloured bars on the side of the glass display.
+A HOME menu was added to the menu system, activated with either a triple shift or by pressing the [g] [HOME] button. The HOME soft menu provides easy direct access to:
+Extended math keys such as x!, parallel impedances, Euler’s e and also an unshifted pi for convenience on a primary key.
+Shortcuts to math menus on [f]: [EXP] [CPX] [FIN] [TRI] [DRG] [FN.X]
+Some direct access to settings such as DEG/RAD etc, and FIX, ENG, etc.
+Admin menus on [g]: MENUS] [INFO] [CAT] [MODE] etc.
+Some existing menus were edited such as:
+EXP soft menu: swapped functions around in the menu to align & complement the DM42 math functions in the top row primary keys.
+CPX menu: re-arranged to have a practical arrangement of keys.
+MODE menu: added the toggles for enabling eRPN mode and triple shift system to activate the HOME menu.
+PROB menu: Removed x! From the keyboard, therefore adding it to PROB menu to be located with the Pyx and Cyx functions. Also duplicated it on the HOME menu.
+STK menu: Removed FILL from the keyboard and therefore added FILL (and DROP and X<>Y for good measure) to the STK menu.
+TRI menu: Removed from keyboard, changed to TRIG, re-arranged and added pi, >R & >P for convenience.
+
+C: Some notable changes made already:
+
+The calculator is divided in two distinct parts: The top 4 rows (including the FN keys) are meant to be for direct calculations, no menus, i.e. HP32SII style button interactive calculations.
+Shifted primary labels to duplicate the top row HP42S math keys.
+Shifted primary labels to add the trig functions SIN, COS & TAN.
+Changed some labels to the case and text to align with HP42S, i.e. PRGM, LOG, etc.
+Changed some labels to HP pre-42 legacy, i.e. CHS & EEX.
+Further changes:
+Shifted primary operator labels to the right side.
+Created a tap/double tap shift key to cycle between f, g, clear, with a single button.
+Shifted and swapped some yellow secondary f labels to align with the legacy HP42S.
+Changed CPX, EXP, MODE, PROB, STK, TRI menus.
+Added switchable option for eRPN (to prevent duplication of X to Y after ENTER, RPL style)).
+
+D. The latest WP43C layout:
+
+Image
+WP43C left, WP43C L2 for use on DM42 without modification
+
+The last layout from the main WP43S project:
+
+Official layout: Image
+
+E: Related links:
+Note the main project WP43S links below:
+- Main WP43S project page: https://sourceforge.net/projects/wp43s/
+- Major news thread on this forum: “43S News”: viewtopic.php?f=2&t=1816&sid=3958904447 ... 53a9650290
+- 43S assistance request: https://www.hpmuseum.org/forum/thread-1 ... hlight=43s
+- WP43S code on Gitlab: https://gitlab.com/Over_score/wp43s
+- WP43C code on Gitlab: https://gitlab.com/Jaymos/wp43c
+- I installed the dev system on my Mac after the post from John Boyden on 6 May 2019: viewtopic.php?f=2&t=1816&p=10655&hilit=Xcode#p10655

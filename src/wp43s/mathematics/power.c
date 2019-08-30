@@ -211,6 +211,18 @@ void powRe16LonI(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -275,6 +287,20 @@ void powCo16LonI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo16LonI:", "cannot use NaN as Y input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -344,6 +370,18 @@ void powAn16LonI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn16LonI:", "cannot use NaN as Y input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -566,6 +604,18 @@ void powRe34LonI(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -630,6 +680,20 @@ void powCo34LonI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34LonI:", "cannot use NaN as Y input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -702,6 +766,18 @@ void powAn34LonI(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X)[0])) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -741,6 +817,18 @@ void powRe16Re16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -772,6 +860,20 @@ void powRe16Co16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe16Co16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -820,6 +922,20 @@ void powCo16Re16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo16Re16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -873,6 +989,18 @@ void powRe16An16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -908,6 +1036,18 @@ void powAn16Re16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -931,6 +1071,18 @@ void powRe16ShoI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe16ShoI:", "cannot use NaN as Y input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -995,6 +1147,18 @@ void powRe16Re34(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1026,6 +1190,18 @@ void powRe34Re16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe34Re16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1061,6 +1237,20 @@ void powRe16Co34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe16Co34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1109,6 +1299,20 @@ void powCo34Re16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34Re16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1162,6 +1366,18 @@ void powRe16An34(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1194,6 +1410,18 @@ void powAn34Re16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn34Re16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1236,6 +1464,19 @@ void powCo16Co16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    return;
+  }
 
   realIc_t a, b, c, d, theta;
 
@@ -1284,6 +1525,20 @@ void powCo16An16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo16An16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1337,6 +1592,20 @@ void powAn16Co16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c, d;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1374,6 +1643,20 @@ void powCo16ShoI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo16ShoI:", "cannot use NaN as Y input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1467,6 +1750,20 @@ void powCo16Re34(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, b, c, d;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1514,6 +1811,20 @@ void powRe34Co16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe34Co16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1566,6 +1877,20 @@ void powCo16Co34(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, b, c, d, theta;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1613,6 +1938,20 @@ void powCo34Co16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34Co16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1667,6 +2006,20 @@ void powCo16An34(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, b, c, d;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1714,6 +2067,20 @@ void powAn34Co16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn34Co16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1770,6 +2137,18 @@ void powAn16An16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1795,6 +2174,18 @@ void powAn16ShoI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn16ShoI:", "cannot use NaN as Y input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1860,6 +2251,18 @@ void powAn16Re34(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -1891,6 +2294,18 @@ void powRe34An16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe34An16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1926,6 +2341,20 @@ void powAn16Co34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn16Co34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -1974,6 +2403,20 @@ void powCo34An16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34An16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2027,6 +2470,18 @@ void powAn16An34(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
@@ -2060,6 +2515,18 @@ void powAn34An16(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn34An16:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2442,6 +2909,18 @@ void powRe34ShoI(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -2509,6 +2988,20 @@ void powCo34ShoI(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+    if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, b, c, d;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -2548,6 +3041,18 @@ void powShoIAn34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powShoIAn34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2617,6 +3122,18 @@ void powRe34Re34(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -2648,6 +3165,20 @@ void powRe34Co34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRe34Co34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2696,6 +3227,20 @@ void powCo34Re34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34Re34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2749,6 +3294,18 @@ void powRe34An34(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, c;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -2781,6 +3338,18 @@ void powAn34Re34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn34Re34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2819,6 +3388,20 @@ void powCo34Co34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powCo34Co34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2872,6 +3455,20 @@ void powCo34An34(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t a, b, c, d;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -2919,6 +3516,20 @@ void powAn34Co34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn34Co34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
     return;
   }
 
@@ -2971,6 +3582,18 @@ void powAn34An34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powAn34An34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+    }
     return;
   }
 

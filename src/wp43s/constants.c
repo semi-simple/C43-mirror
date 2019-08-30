@@ -21,7 +21,6 @@
 
 #include "wp43s.h"
 
-// Remember to change NUMBER_OF_PHYSICAL_AND_MATHEMATICAL_CONSTANTS in constants.h if a constant is added or deleted
 const constant_t physicalAndMathConstants[] = {
 /*   0 */  {.label = "1/2",                                       .value = CONST_00}, // 0.5 trivial but helpfull
 /*   1 */  {.label = "a",                                         .value = CONST_01}, // Gregorian year (days) per definition
@@ -105,8 +104,6 @@ const constant_t physicalAndMathConstants[] = {
 /*  79 */  {.label = "#",                                         .value = CONST_79}  // See the very last command of the IOP
 };
 
-// Remember to change NUMBER_OF_PHYSICAL_AND_MATHEMATICAL_CONSTANTS in constants.h if a constant is added or deleted
-
 /********************************************//**
  * \brief Replaces the X content with the selected
  * constant. Enables \b stack \b lift and refreshes the stack
@@ -116,7 +113,7 @@ const constant_t physicalAndMathConstants[] = {
  ***********************************************/
 void fnConstant(const uint16_t cst) {
   liftStack();
-  real16Copy(constants + physicalAndMathConstants[cst].value, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16((realIc_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 }
 

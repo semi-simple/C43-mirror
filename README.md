@@ -1,3 +1,12 @@
+# WP43C
+
+This sub-project is to make the user interface of the WP43S closer to the HP42S, at least from the keyboard point of view.
+Additionally, to not only make it closer to HP42S, but to make it work on the DM42 hardware without a key change.
+
+Two options are being developed. The first version L1A needs only a keyboard overlay for the yellow and blue shifted functions.
+Version L2 needs no overlay as almost all DM42 labels are maintained, and the blue functions are provided on a soft menu.
+
+
 # WP43S
 
 This project is to develop firmware for a pocket calculator that is a super-set of the legendary HP-42S RPN Scientific.  

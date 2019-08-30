@@ -346,8 +346,9 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "34");
       break;
 
-    case 65507: // left Ctrl
-    case 65508: // right Ctrl
+//    case 65507: // left Ctrl
+//    case 65508: // right Ctrl
+    case 92: // \                                //JM R/S changed as on Mac CTRL is something else.
       //printf("key pressed: Ctrl R/S\n");
       btnClicked(w, "35");
       break;
@@ -2712,7 +2713,7 @@ void setupUI(void) {
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn81), "Esc");  //JM
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn82), "0");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn83), ". ,");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn84), "Ctrl");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn84), "\\");   //JM Changed from Ctrl to backslash 92
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn85), "+");    //JM
   lbl81F  = gtk_label_new("");
   lbl82F  = gtk_label_new("");

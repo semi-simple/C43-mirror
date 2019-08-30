@@ -44,7 +44,7 @@
 #define longIntegerSetPositiveSign(op)                              {(op)->_mp_size =  abs((op)->_mp_size);}
 #define longIntegerSetNegativeSign(op)                              {(op)->_mp_size = -abs((op)->_mp_size);}
 #define longIntegerSetZero(op)                                      {mpz_clear(op); mpz_init(op);}
-#define longIntegerIsZero(op)                                       ((op)->_mp_size == 0)
+#define longIntegerIsZero(op)                                       ((*(longInteger_t *)(op))->_mp_size == 0)
 #define longIntegerIsPositive(op)                                   ((op)->_mp_size >  0)
 #define longIntegerIsPositiveOrZero(op)                             ((op)->_mp_size >= 0)
 #define longIntegerIsNegative(op)                                   ((op)->_mp_size <  0)

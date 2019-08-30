@@ -39,6 +39,7 @@ static void unitConversion(const realIc_t * const coefficient, uint16_t multiply
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
     real16 = true;
   }
   else {
@@ -104,6 +105,7 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
     real16 = true;
   }
   else {
@@ -164,6 +166,7 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
     real16 = true;
   }
   else {
@@ -430,6 +433,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
     real16 = true;
   }
   else {
@@ -491,6 +495,7 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
     real16 = true;
   }
   else {

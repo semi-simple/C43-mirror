@@ -20,6 +20,7 @@
 
 #define longInteger_t                                               mpz_t
 #define LONG_INTEGER_POINTER(a)                                     ((longInteger_t *)(a))
+#define REGISTER_LONG_INTEGER_DATA(a)                               ((longInteger_t *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the long integer of a register
 #define LIMB_SIZE                                                   sizeof(mp_limb_t)
 #define LONG_INTEGER_ZERO                                           0 // 0
 #define LONG_INTEGER_NEGATIVE                                       1 // -

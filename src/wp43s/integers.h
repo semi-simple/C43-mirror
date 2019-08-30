@@ -18,6 +18,8 @@
  * \file integers.h
  ***********************************************/
 
+#define shortIntegerIsZero(op) (((*(uint64_t *)(op)) == 0) || (shortIntegerMode == SIM_SIGNMT && (((*(uint64_t *)(op)) == 1u<<((uint64_t)shortIntegerWordSize-1)))))
+
 void     fnChangeBase               (uint16_t base);
 void     fnMirror                   (uint16_t unusedButMandatoryParameter);
 void     fnIsPrime                  (uint16_t unusedButMandatoryParameter);

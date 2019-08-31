@@ -64,8 +64,8 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
                                      ITM_DOT,                       ITM_CROSS,                  ITM_SIGN,                 ITM_UNITV,             ITM_NULL,                    ITM_NULL,                            //JM re-arranged menu. CPX menu
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                      };    //JM re-arranged menu
 
-const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_ROUNDI,                  ITM_ROUND,
-                                     ITM_SDL,                       ITM_SDR,                    ITM_UNIT,                 ITM_SIGFIG,            ITM_RDP,                     ITM_RSD,                             //JM added SIGFIG & UNIT
+const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
+                                     ITM_SDL,                       ITM_SDR,                    ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                             //JM added SIGFIG & UNIT
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,           ITM_RDXPER,                  ITM_RDXCOM,
                                      ITM_GAP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DSTACK,

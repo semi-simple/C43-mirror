@@ -22,6 +22,7 @@ src/qspi_crc.h
 /testSuite
 /ttf2RasterFonts
 /wp43s
+/wp43c
 
 # User-specific files
 .DS_Store

@@ -139,6 +139,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real34ToReal16(source, destination)                    decDoubleFromWider       ((real16_t *)destination, (real34_t *)source, &ctxtReal16)
 #define real34ToRealIc(source, destination)                    decQuadToNumber          ((real34_t *)source, (realIc_t *)destination)
 #define real34ToString(source, destination)                    decQuadToString          ((real34_t *)source, destination)
+#define real34ToUInt32(source)                                 decQuadToUInt32          ((real34_t *)source, &ctxtReal34, DEC_ROUND_DOWN)
 //#define real16Zero(destination)                                decQuadZero              (destination)
 //#define real34Zero(destination)                                memcpy                   (destination, const34_0, REAL34_SIZE)
 #define real34Zero(destination)                                {*(uint64_t *)destination = *(uint64_t *)const34_0; *(((uint64_t *)destination)+1) = *(((uint64_t *)const34_0)+1);}
@@ -190,9 +191,11 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define realIcZero(destination)                                decNumberZero            ((realIc_t *)destination)
 
 #define int32ToReal16(source, destination)                     decDoubleFromInt32       ((real16_t *)destination, source)
+#define int32ToReal34(source, destination)                     decQuadFromInt32         ((real34_t *)destination, source)
 #define int32ToRealIc(source, destination)                     decNumberFromInt32       ((realIc_t *)destination, source)
 #define stringToRealIc(source, destination)                    decNumberFromString      ((realIc_t *)destination, source, &ctxtRealIc)
 #define stringToReal16(source, destination)                    decDoubleFromString      ((real16_t *)destination, source, &ctxtReal16)
 #define stringToReal34(source, destination)                    decQuadFromString        ((real34_t *)destination, source, &ctxtReal34)
 #define stringToReal451(source, destination)                   decQuadFromString        ((real34_t *)destination, source, &ctxtReal451)
+#define uInt32ToReal34(source, destination)                    decQuadFromUInt32        ((real34_t *)destination, source)
 #define uInt32ToRealIc(source, destination)                    decNumberFromUInt32      ((realIc_t *)destination, source)

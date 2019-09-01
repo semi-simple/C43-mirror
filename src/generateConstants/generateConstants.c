@@ -47,7 +47,7 @@ int        idx, c;
 void generateConstantArray(char *name, char *value) {
   realIc_t realIc;
 
-  //memset(&realIc, 0, sizeof(realIc));
+  memset(&realIc, 0, sizeof(realIc));
   stringToRealIc(value, &realIc);
 
   strcpy(whiteSpace, "                                        ");
@@ -86,7 +86,7 @@ void generateConstantArray(char *name, char *value) {
 void generateConstantArray16(char *name, char *value) {
   real16_t real16;
 
-  //memset(&real16, 0, sizeof(real16_t));
+  memset(&real16, 0, sizeof(real16_t));
   stringToReal16(value, &real16);
 
   strcpy(whiteSpace, "                                        ");
@@ -120,7 +120,7 @@ void generateConstantArray16(char *name, char *value) {
 void generateConstantArray34(char *name, char *value) {
   real34_t real34;
 
-  //memset(&real34, 0, sizeof(real34_t));
+  memset(&real34, 0, sizeof(real34_t));
   stringToReal34(value, &real34);
 
   strcpy(whiteSpace, "                                        ");
@@ -154,7 +154,7 @@ void generateConstantArray34(char *name, char *value) {
 void generateConstantArray451(char *name, char *value) {
   real451_t real451;
 
-  //memset(&real451, 0, sizeof(real451_t));
+  memset(&real451, 0, sizeof(real451_t));
   stringToRealIc(value, &real451);
 
   strcpy(whiteSpace, "                                        ");
@@ -434,7 +434,9 @@ void generateAllConstants(void) {
   generateConstantArray16("1e6",         "+1.000000000000000000000000000000000000000000000000000000e+06");
 
   generateConstantArray34("0",           "+0.000000000000000000000000000000000000000000000000000000e+00");
+  generateConstantArray34("1e_6",        "+1.000000000000000000000000000000000000000000000000000000e-06");
   generateConstantArray34("1e_4",        "+1.000000000000000000000000000000000000000000000000000000e-04");
+  generateConstantArray34("1on2",        "+5.000000000000000000000000000000000000000000000000000000e-01");
   generateConstantArray34("1",           "+1.000000000000000000000000000000000000000000000000000000e+00");
   generateConstantArray34("2pi",         "+6.283185307179586476925286766559005768394338798750211642e+00");
   generateConstantArray34("1000",        "+1.000000000000000000000000000000000000000000000000000000e+03");

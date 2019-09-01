@@ -5,7 +5,8 @@ This sub-project is to make the user interface of the WP43S closer to the HP42S,
 Two options are being developed. 
 
    Version L1A needs only a keyboard overlay for the yellow and blue shifted functions.
-   Version L2 needs no keyboard overlay, as almost all DM42 labels are maintained. The blue functions are provided on a soft menu.
+
+   Version L2 needs no keyboard overlay, as almost all DM42 labels are maintained. on L2 the blue functions are provided on a soft menu.
 
 
 # WP43S

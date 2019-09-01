@@ -13,6 +13,7 @@ Note that the main WP43S project is far from finished and hence this WP43C fork 
 Comments, advice and requests are welcomed, but be aware I don’t make choices based on logic only, as legacy and whims play a role.
 
 I test my changes on the both the emulator and DM42. Code is available as per GPL. Source code is published on: https://gitlab.com/Jaymos/wp43c.
+Pre-alpha Windows emulator: [url]http://cocoon-creations.com/download/WP43C_EMU_2019-09-01.zip[/url]
 
 
 A: Goals:
@@ -28,7 +29,7 @@ A: Goals:
 
 B. What is WP43C?
 
-Differences between WP43S and WP43C are documented in https://gitlab.com/Jaymos/wp43c/blob/Ja ... s_v041.pdf and https://gitlab.com/Jaymos/wp43c/blob/Ja ... 0Intro.txt, which is a text copy of this post.
+Differences between WP43S and WP43C are documented in http://cocoon-creations.com/download/WP43C_differences_v042.pdf and http://cocoon-creations.com/download/2019-09-01_WP43C_Intro.txt, which is a text copy of this post.
 The WP43C is a variation to the user interface of the WP43S. The math engine and many administrative and UI functions and modules are not modified and operation is largely the same as on the WP43S.
 The main driving force was that many (over the years) have expressed their needs for having the operators on the left side vs. right, and that that has been a division factor from the onset on the WP43S project. This was my personal motivation to start this sub-project.
 The second driving force was that the intended platform of the WP43S is the DM42 hardware and that there is no easy way to use the existing hardware and keyboard in a professional manner for unmodified operation of the WP43S.

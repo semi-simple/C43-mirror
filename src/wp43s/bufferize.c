@@ -2046,14 +2046,13 @@ void closeNim(void) {
           int32ToReal16(integer, &temp);
           real16Add(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
           if(nimBuffer[0] == '-')
-           real16SetNegativeSign(REGISTER_REAL16_DATA(REGISTER_X));
+           {
+            real16SetNegativeSign(REGISTER_REAL16_DATA(REGISTER_X));
+           }
 
-          displayRealAsFraction = true;
-          if(integer != 0) {
-            fractionType = FT_PROPER;
-          }
-          else {
-            fractionType = FT_IMPROPER;
+          if(!displayRealAsFraction) {
+            displayRealAsFraction = true;
+            fractionType = (integer == 0 ? FT_IMPROPER : FT_PROPER); // d/c or a b/c
           }
         }
         else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {

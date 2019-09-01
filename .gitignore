@@ -22,3 +22,13 @@ src/qspi_crc.h
 /testSuite
 /ttf2RasterFonts
 /wp43s
+
+# User-specific files
+.DS_Store
+*.vcxproj.user
+*.vcxproj.filters
+*.vcxproj
+*.sln
+
+# Visual Studio 2019 cache/options directory
+.vs/

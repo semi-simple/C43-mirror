@@ -8,7 +8,7 @@ GENERATECONSTANTS_APP = generateConstants$(EXE)
 TTF2RASTERFONTS_APP = ttf2RasterFonts$(EXE)
 TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
 TESTSUITE_APP = testSuite$(EXE)
-WP43S_APP = wp43s$(EXE)
+WP43S_APP = wp43c$(EXE)
 EXE =
 
 
@@ -119,7 +119,7 @@ GENERATED_SOURCES        = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA
 
 STAMP_FILES              = .stamp-constantPointers .stamp-rasterFontsData
 
-all: wp43s
+all: wp43c
 
 rebuild:
 	$(MAKE) mrproper
@@ -132,9 +132,9 @@ generateConstants: $(GENERATECONSTANTS_APP)
 ttf2RasterFonts: $(TTF2RASTERFONTS_APP)
 testTtf2RasterFonts: $(TESTTTF2RASTERFONTS_APP)
 testSuite: $(TESTSUITE_APP)
-wp43s: $(WP43S_APP)
+wp43c: $(WP43S_APP)
 
-.PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts testSuite wp43s
+.PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts testSuite wp43c
 endif
 
 sources: $(STAMP_FILES)

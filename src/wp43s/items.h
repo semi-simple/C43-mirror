@@ -1631,14 +1631,48 @@
 #define ITM_SH_ERPN                   1593  //JM SHOW
 #define ITM_SH_HOME3                  1594  //JM SHOW
 #define ITM_SH_SHTIM                  1595  //JM SHOW
-#define CHR_QOPPA                     1596  //JM GREEK
-#define CHR_qoppa                     1597  //JM GREEK
-#define CHR_DIGAMMA                   1598  //JM GREEK
-#define CHR_digamma                   1599  //JM GREEK
-#define CHR_SAMPI                     1600  //JM GREEK
-#define CHR_sampi                     1601  //JM GREEK
 
-#define LAST_ITEM                     1602  //JM
+#define CHR_QOPPA                     1596  //JM GREEK
+#define CHR_DIGAMMA                   1597  //JM GREEK
+#define CHR_SAMPI                     1598  //JM GREEK
+#define CHR_1599                      1599  //JM SPARE
+#define CHR_1600                      1600  //JM SPARE
+#define CHR_1601                      1601  //JM SPARE
+#define CHR_1602                      1602  //JM SPARE
+#define CHR_1603                      1603  //JM SPARE
+#define CHR_1604                      1604  //JM SPARE
+#define CHR_1605                      1605  //JM SPARE
+#define CHR_1606                      1606  //JM SPARE
+#define CHR_1607                      1607  //JM SPARE
+#define CHR_1608                      1608  //JM SPARE
+#define CHR_1609                      1609  //JM SPARE
+#define CHR_1610                      1610  //JM SPARE
+#define CHR_1611                      1611  //JM SPARE
+#define CHR_1612                      1612  //JM SPARE
+#define CHR_1613                      1613  //JM SPARE
+#define CHR_1614                      1614  //JM SPARE
+#define CHR_1615                      1615  //JM SPARE
+#define CHR_1616                      1616  //JM SPARE
+#define CHR_1617                      1617  //JM SPARE
+#define CHR_1618                      1618  //JM SPARE
+#define CHR_1619                      1619  //JM SPARE
+#define CHR_1620                      1620  //JM SPARE
+#define CHR_1621                      1621  //JM SPARE
+#define CHR_1622                      1622  //JM SPARE
+#define CHR_1623                      1623  //JM SPARE
+#define CHR_1624                      1624  //JM SPARE
+#define CHR_1625                      1625  //JM SPARE
+#define CHR_1626                      1626  //JM SPARE
+#define CHR_1627                      1627  //JM SPARE
+#define CHR_1628                      1628  //JM SPARE
+#define CHR_1629                      1629  //JM SPARE
+#define CHR_1630                      1630  //JM SPARE
+#define CHR_1631                      1631  //JM SPARE
+#define CHR_qoppa                     1632  //JM GREEK
+#define CHR_digamma                   1633  //JM GREEK
+#define CHR_sampi                     1634  //JM GREEK
+
+#define LAST_ITEM                     1635  //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -286,7 +286,7 @@ const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     CHR_BETA,   
                                      CHR_ETA,                       CHR_THETA,                  CHR_IOTA,                 CHR_KAPPA,             CHR_LAMBDA,                  CHR_MU,
                                      CHR_NU,                        CHR_XI,                     CHR_OMICRON,              CHR_PI,                CHR_RHO,                     CHR_SIGMA,
                                      ITM_NULL,                      CHR_TAU,                    CHR_UPSILON,              CHR_PHI,               CHR_CHI,                     CHR_PSI,
-                                     CHR_OMEGA,                     CHR_DIGAMMA,                CHR_QOPPA,                CHR_SAMPI,             ITM_NULL,                    ITM_NULL,
+                                     CHR_OMEGA,                     CHR_DIGAMMA,                CHR_QOPPA,                CHR_SAMPI,             ITM_NULL,                    ITM_NULL,                         //JM
                                      CHR_IOTA_DIALYTIKA,            ITM_NULL,                   ITM_NULL,                 CHR_UPSILON_DIALYTIKA, ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,                   CHR_gamma,                CHR_delta,             CHR_epsilon,                 CHR_zeta,
@@ -294,8 +294,8 @@ const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,   
                                      CHR_nu,                        CHR_xi,                     CHR_omicron,              CHR_pi,                CHR_rho,                     CHR_sigma,
                                      CHR_sigma_end,                 CHR_tau,                    CHR_upsilon,              CHR_phi,               CHR_chi,                     CHR_psi,
                                      CHR_omega,                     CHR_alpha_TONOS,            CHR_epsilon_TONOS,        CHR_eta_TONOS,         CHR_iotaTON,                 CHR_iota_DIALYTIKA_TONOS,
-                                     CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS,               
-                                     CHR_digamma,                   CHR_qoppa,                  CHR_sampi,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+                                     CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS,                  //JM
+                                     CHR_digamma,                   CHR_qoppa,                  CHR_sampi,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };  //JM
 
 const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_NULL,              ITM_toDMS,                   ITM_toMULpi,
                                      ITM_DEGto,                     ITM_RADto,                  ITM_GRADto,               ITM_NULL,              ITM_DMSto,                   ITM_MULPIto,

@@ -133,77 +133,90 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
 //ROW 2
 //dr    case 73:  // I
+    case 65:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 97:  // a  //dr
       //printf("key pressed: a Sigma+\n"); //dr
       btnClicked(w, "00");
       break;
 
 //dr    case 89:  // Y
+    case 66:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 118: // v //dr
       //printf("key pressed: v 1/X\n"); //dr
       btnClicked(w, "01");
       break;
 
 //dr    case 84:  // T
+    case 67:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 113: // q //dr
       //printf("key pressed: q SQRT\n"); //dr
       btnClicked(w, "02");
       break;
 
 //dr    case 76:  // L
+    case 68:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 111: // o //dr
       //printf("key pressed: o LOG\n"); //dr
       btnClicked(w, "03");
       break;
 
+    case 69:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 108: // l //dr
       //printf("key pressed: l LN\n"); //dr
       btnClicked(w, "04");
       break;
 
 //dr    case 81:  // Q
+    case 70:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 120: // x //dr
       //printf("key pressed: x XEQ\n"); //dr
       btnClicked(w, "05");
       break;
 //ROW 3
 //dr    case 83:  // S
+    case 71:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 109: // m //dr
       //printf("key pressed: m STO\n"); //dr
       btnClicked(w, "06");
       break;
 
 //dr    case 82:  // R
+    case 72:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 114: // r
       //printf("key pressed: r RCL\n");
       btnClicked(w, "07");
       break;
 
 //dr    case 65366: // PgDn
+    case 73:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 100: // d //dr
       //printf("key pressed: d Rdown\n"); //dr
       btnClicked(w, "08");
       break;
 
-    case 112: // p         //dr
+    case 112: // p         //dr                //JM Special case: p = pi
       //printf("key pressed: p pi\n"); //dr
       shiftF = true;       //dr
+      shiftG = false;      //JM
       btnClicked(w, "08"); //dr
       break;               //dr
 
 //dr    case 67:  // C
+    case 74:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 115: // s //dr
       //printf("key pressed: s SIN\n"); //dr
       btnClicked(w, "09");
       break;
 
 //dr    case 70:  // F
+    case 75:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 99:  // c //dr
       //printf("key pressed: c COS\n"); //dr
       btnClicked(w, "10");
       break;
 
 //dr    case 71:  // G
+    case 76:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 116: // t //dr
       //printf("key pressed: t TAN\n"); //dr
       btnClicked(w, "11");
@@ -216,17 +229,20 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
 
 //dr    case 65289: // Tab
+    case 77:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 119: // w //dr
       //printf("key pressed: w x<>y\n"); //dr
       btnClicked(w, "13");
       break;
 
+    case 78:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 110: // n //dr
       //printf("key pressed: n +/-\n"); //dr
       btnClicked(w, "14");
       break;
 
 //dr    case 69:  // E
+    case 79:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 101: // e //dr
     //printf("key pressed: e EXP\n"); //dr
       btnClicked(w, "15");
@@ -243,24 +259,28 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "17");
       break;
 
+    case 80:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 55:    // 7
     case 65463: // 7
       //printf("key pressed: 7\n");
       btnClicked(w, "18");
       break;
 
+    case 81:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 56:    // 8
     case 65464: // 8
       //printf("key pressed: 8\n");
       btnClicked(w, "19");
       break;
 
+    case 82:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 57:    // 9
     case 65465: // 9
       //printf("key pressed: 9\n");
       btnClicked(w, "20");
       break;
 
+    case 83:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 47:    // / //JM
     case 65455: // / //JM
       //printf("key pressed: divide\n"); //dr
@@ -273,24 +293,28 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "22");
       break;
 
+    case 84:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 52:    // 4
     case 65460: // 4
       //printf("key pressed: 4\n");
       btnClicked(w, "23");
       break;
 
+    case 85:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 53:    // 5
     case 65461: // 5
       //printf("key pressed: 5\n");
       btnClicked(w, "24");
       break;
 
+    case 86:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 54:    // 6
     case 65462: // 6
       //printf("key pressed: 6\n");
       btnClicked(w, "25");
       break;
 
+    case 87:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 42:    // * //JM
     case 65450: // * //JM
       //printf("key pressed: multiply\n"); //dr
@@ -303,24 +327,28 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "27");
       break;
 
+    case 88:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 49:    // 1
     case 65457: // 1
       //printf("key pressed: 1\n");
       btnClicked(w, "28");
       break;
 
+    case 89:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 50:    // 2
     case 65458: // 2
       //printf("key pressed: 2\n");
       btnClicked(w, "29");
       break;
 
+    case 90:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 51:    // 3
     case 65459: // 3
       //printf("key pressed: 3\n");
       btnClicked(w, "30");
       break;
 
+    case 95:  //JM UNDERSCORE FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 45:    // - //JM
     case 65453: // - //JM
       //printf("key pressed: subtract\n"); //dr
@@ -333,6 +361,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "32");
       break;
 
+    case 58:  //JM COLON FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 48:    // 0
     case 65456: // 0
       //printf("key pressed: 0\n");
@@ -348,18 +377,20 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
 
 //    case 65507: // left Ctrl
 //    case 65508: // right Ctrl
+    case 63:  //JM ? for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 92: // \                                //JM R/S changed as on Mac CTRL is something else.
       //printf("key pressed: Ctrl R/S\n");
       btnClicked(w, "35");
       break;
 
+    case 32:  //JM SPACE for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 43:    // + //JM
     case 65451: // + //JM
       //printf("key pressed: add\n"); //dr
       btnClicked(w, "36");
       break;
 
-    case 72:  // H
+//    case 72:  // H    //JM REMOVE CAP H. ONLY lower case wil print
     case 104: // h
       //printf("key pressed: h Hardcopy\n");
       copyScreenToClipboard();
@@ -369,6 +400,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
   }
   return FALSE;
+
 }
 #endif
 
@@ -1173,12 +1205,14 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     stringToUtf8(indexOfItems[max(key->keyLblAim, -key->keyLblAim)].itemPrinted, lbl);
   }
 
-  if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85  //JM Changed CATALOG to CAT
-    lbl[3] = 0;
-  }
+//JM remove this because CAT is not on keyboard anymore, but in menu
+//JM  if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85  //JM Changed CATALOG to CAT. Actually not needed, as the WP43C already has a shortened CAT to start with
+//JM    lbl[3] = 0;
+//JM  }
 
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
 
+//JM Removed this previously added part, as the items.c exchange in chr_divide made works here/.
 //  if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {    //JM if "/", re-do to "÷". Presumed easier than to fix the UTf8 conversion above.
 //  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
 //  }                                                          //JM
@@ -1215,19 +1249,12 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
 
 //Convert Greek CAPITAL and LOWER case to UTF !
-  if(CHR_ALPHA <= key->gShiftedAim && key->gShiftedAim <= CHR_OMEGA) {
+  if( (CHR_ALPHA <= key->gShiftedAim && key->gShiftedAim <= CHR_OMEGA) || (CHR_QOPPA <= key->gShiftedAim && key->gShiftedAim <= CHR_SAMPI) ) {   //JM GREEK. Add extra 36 char greek range
     stringToUtf8(indexOfItems[key->gShiftedAim].itemPrinted, lbl);
     lbl[2] = ' ';
     lbl[3] = 0;
     stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemPrinted, lbl + 3);
   }
-  else 
-    if(CHR_QOPPA <= key->gShiftedAim && key->gShiftedAim <= CHR_SAMPI) {    //JM GREEK. Different scheme than original
-    stringToUtf8(indexOfItems[key->gShiftedAim].itemPrinted, lbl);          //JM GREEK. 
-    lbl[2] = ' ';                                                           //JM GREEK.  
-    lbl[3] = 0;                                                             //JM GREEK. 
-    stringToUtf8(indexOfItems[key->gShiftedAim + 1].itemPrinted, lbl + 3);  //JM GREEK. Different scheme than original
-    }                                                                       //JM GREEK. 
   else {
     stringToUtf8(indexOfItems[max(key->gShiftedAim, -key->gShiftedAim)].itemPrinted, lbl);
   }
@@ -1236,9 +1263,22 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   if(key->gShiftedAim == 0) {
     lbl[0] = 0;
   }
-  else if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85   //JM Changed CATALOG to CAT
-    lbl[3] = 0;
+
+//JM Removed as CAT is not Aim keyboard anymore
+//  else if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85   //JM Changed CATALOG to CAT
+//    lbl[3] = 0;
+//  }
+
+/* JM TEST PROCEDURE TO TEST DISPLAY
+else if(key->gShiftedAim == CHR_DIGAMMA ) {   
+    lbl[0] = 0xCF;
+    lbl[1] = 0x9C;
+    lbl[2] = 32;
+    lbl[3] = 0xCF;
+    lbl[4] = 0x9D;
+    lbl[5] = 0;
   }
+*/
 
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 

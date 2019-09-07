@@ -1030,7 +1030,7 @@ void btnPressed(void *notUsed, void *data) {
         addItemToBuffer(item + 26);
       }
 
-      else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+      else if(alphaCase==AC_LOWER && ( (CHR_ALPHA<=item && item<=CHR_OMEGA) || (CHR_QOPPA<=item && item<=CHR_SAMPI) ))  {  //JM GREEK
         addItemToBuffer(item + 36);
       }
 

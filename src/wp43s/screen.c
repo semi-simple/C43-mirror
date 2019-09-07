@@ -138,7 +138,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   }
 
 #ifdef JM_MULTISHIFT                           //JM TIMER - checks on any key pressed.
-  if(SHTIM) {
+  if(SHTIM && (shiftF || shiftG)) {              //JM TIMER - Only consider if a shift is actually pending
     if(JM_SHIFT_RESET != 0) {                    //JM TIMER
       JM_SHIFT_RESET--;                          //JM TIMER
       if(JM_SHIFT_RESET == 0) {                  //JM TIMER
@@ -180,7 +180,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
   }
 
 #ifdef JM_MULTISHIFT                           //JM TIMER - checks on any key pressed.
-  if(SHTIM) {
+  if(SHTIM && (shiftF || shiftG)) {              //JM TIMER - Only consider if a shift is actually pending
     if(JM_SHIFT_RESET != 0) {                    //JM TIMER
       JM_SHIFT_RESET--;                          //JM TIMER
       if(JM_SHIFT_RESET == 0) {                  //JM TIMER

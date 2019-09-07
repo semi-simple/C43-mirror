@@ -196,14 +196,14 @@
 }
 
 #greekUnderline {
-  background:  $bezelBackground;
+  background:  #303030;
   color:       $gBlue;
   font-family: WP43S_StandardFont;
   font-style:  normal;
   font-weight: normal;
-  font-size:   20px;
-  text-decoration: underline;
+  font-size:   18px;
   padding:     0px;
+  /* JM changed "font size" from 20 to 18; removed "text-decoration: underline;" and changed from "background:  $bezelBackground;" */
 }
 
 #On {

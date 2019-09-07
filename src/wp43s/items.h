@@ -981,7 +981,7 @@
 #define CHR_x                          949
 #define CHR_y                          950
 #define CHR_z                          951
-#define CHR_ALPHA                      952
+#define CHR_ALPHA                      952   //NOTE the RANGE STARTS HERE, with +36 for lower case
 #define ITM_0953                       953
 #define CHR_BETA                       954
 #define CHR_GAMMA                      955
@@ -1015,7 +1015,7 @@
 #define CHR_PHI                        983
 #define CHR_CHI                        984
 #define CHR_PSI                        985
-#define CHR_OMEGA                      986
+#define CHR_OMEGA                      986   //NOTE the RANGE STOPS HERE, with +36 for lower case
 #define CHR_0987                       987
 #define CHR_alpha                      988
 #define CHR_alpha_TONOS                989
@@ -1632,9 +1632,9 @@
 #define ITM_SH_HOME3                  1594  //JM SHOW
 #define ITM_SH_SHTIM                  1595  //JM SHOW
 
-#define CHR_QOPPA                     1596  //JM GREEK
+#define CHR_QOPPA                     1596  //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
 #define CHR_DIGAMMA                   1597  //JM GREEK
-#define CHR_SAMPI                     1598  //JM GREEK
+#define CHR_SAMPI                     1598  //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
 #define CHR_1599                      1599  //JM SPARE
 #define CHR_1600                      1600  //JM SPARE
 #define CHR_1601                      1601  //JM SPARE

@@ -7,3 +7,5 @@ PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-u
 
 make clean
 make -j8 --debug
+
+mv build/WP43S.pgm build/WP43C.pgm

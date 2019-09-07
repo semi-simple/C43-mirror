@@ -418,7 +418,7 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 
 const int16_t menu_BASE[]       = {  
                                      ITM_2HEX,                      ITM_2DEC,                   ITM_2OCT,                 ITM_2BIN,             -MNU_BITS,                   -MNU_INTS,                          //JM BASE MENU ADDED
-                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               ITM_NULL,                    ITM_NULL                       };  //JM BASE MENU ADDED
+                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               ITM_NULL,                    ITM_toINT                       };  //JM BASE MENU ADDED
 
 
 const int16_t menu_HOME[]        = {

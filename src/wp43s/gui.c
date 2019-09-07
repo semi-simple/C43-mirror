@@ -2093,7 +2093,7 @@ void setupUI(void) {
 
   gtk_widget_set_name(frmCalc, "mainWindow");
   gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
-  gtk_window_set_title(GTK_WINDOW(frmCalc), "WP 43S");
+  gtk_window_set_title(GTK_WINDOW(frmCalc), "WP 43C");                   //JM NAME
   g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
   g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
 
@@ -2136,26 +2136,6 @@ void setupUI(void) {
   gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
   gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
 #endif //JM
-
-
-  // Area for the softkeys
-  //lblSoftkeyArea1 = gtk_label_new("");
-  //gtk_widget_set_name(lblSoftkeyArea1, "softkeyArea");
-  //gtk_widget_set_size_request(lblSoftkeyArea1, 460, 40);
-  //gtk_fixed_put(GTK_FIXED(grid), lblSoftkeyArea1, 33, 72+168+50);
-
-  //lblSoftkeyArea2 = gtk_label_new("");
-  //gtk_widget_set_name(lblSoftkeyArea2, "softkeyArea");
-  //gtk_widget_set_size_request(lblSoftkeyArea2, 460, 44);
-  //gtk_fixed_put(GTK_FIXED(grid), lblSoftkeyArea2, 33, 72+168+50+66);
-
-
-
-  // Behind screen
-//  lblBehindScreen = gtk_label_new("");  //JM
-//  gtk_widget_set_name(lblBehindScreen, "behindScreen");  //JM
-//  gtk_widget_set_size_request(lblBehindScreen, 412, 252);  //JM
-//  gtk_fixed_put(GTK_FIXED(grid), lblBehindScreen, 57, 66);  //JM
 
 
   // LCD screen 400x240
@@ -2797,8 +2777,8 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn74, KEY_WIDTH_2, 0);
   gtk_widget_set_size_request(btn75, KEY_WIDTH_2, 0);
 
-  gtk_widget_set_name(lbl72H,  "gShiftedUnderline"); //JM
-  gtk_widget_set_name(lbl73H,  "gShifted");  //JM
+  //JM Removed1 gtk_widget_set_name(lbl72H,  "gShiftedUnderline"); //JM
+  //JM Removed1   gtk_widget_set_name(lbl73H,  "gShifted");  //JM
 
   g_signal_connect(btn71, "pressed", G_CALLBACK(btnPressed), "27");
   g_signal_connect(btn72, "pressed", G_CALLBACK(btnPressed), "28");
@@ -2891,8 +2871,6 @@ void setupUI(void) {
   lbl84Gr = gtk_label_new("");
   lbl85Gr = gtk_label_new("");
   lblOn   = gtk_label_new("ON");
-  //JM7 lblConfirmY = gtk_label_new(""); //JM Y/N
-  //JM7 lblConfirmN = gtk_label_new(""); //JM Y/N
 
   gtk_widget_set_size_request(btn81, KEY_WIDTH_1, 0);
   gtk_widget_set_size_request(btn82, KEY_WIDTH_2, 0);
@@ -2905,10 +2883,8 @@ void setupUI(void) {
   gtk_widget_set_name(lbl84H, "gShiftedUnderline");
   gtk_widget_set_name(lbl85H, "gShiftedUnderline");    //JM
   gtk_widget_set_name(lblOn,  "On");
-  //JM7 gtk_widget_set_name(lblConfirmY,  "On");
-  //JM7 gtk_widget_set_name(lblConfirmN,  "On");
 
-  g_signal_connect(btn81, "pressed", G_CALLBACK(btnPressed), "32");      // JM CHECK THIS btnpress. Does it change?
+  g_signal_connect(btn81, "pressed", G_CALLBACK(btnPressed), "32");
   g_signal_connect(btn82, "pressed", G_CALLBACK(btnPressed), "33");
   g_signal_connect(btn83, "pressed", G_CALLBACK(btnPressed), "34");
   g_signal_connect(btn84, "pressed", G_CALLBACK(btnPressed), "35");
@@ -3083,7 +3059,7 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   liftStack();
   refreshStack();
   showSoftmenu(NULL, -MNU_MyAlpha, true);
-//  showSoftmenu(NULL, -MNU_ALPHA, true);       //JM ALPHA
+//  showSoftmenu(NULL, -MNU_ALPHA, true);       //JM ALPHA. Disabled temporarily. First need to check the stack of pop on pop offs, when not called by keyboard
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;
   showAlphaMode();

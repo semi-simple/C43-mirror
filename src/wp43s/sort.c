@@ -243,6 +243,9 @@ const char sortingOrder[] =
  STD_epsilon
      STD_epsilon_TONOS
 
+  STD_DIGAMMA   //JM GREEK
+  STD_digamma   //JM GREEK
+
  STD_ZETA
  STD_zeta
 
@@ -284,6 +287,9 @@ const char sortingOrder[] =
  STD_PI
  STD_pi
 
+ STD_QOPPA     //JM GREEK
+ STD_qoppa     //JM GREEK
+
  STD_RHO
  STD_rho
 
@@ -313,6 +319,9 @@ const char sortingOrder[] =
  STD_OMEGA
  STD_omega
      STD_omega_TONOS
+
+  STD_SAMPI     //JM GREEK
+  STD_sampi     //JM GREEK
 
 
  "()"

@@ -1724,7 +1724,15 @@ const item_t indexOfItems[] = {
 /* 1593 */  { fnShowJM,                    1,                           "eRPN?",                                       "eRPN?",                                                                       SLS_ENABLED  },     //JM SHOW
 /* 1594 */  { fnShowJM,                    2,                           "HOME.3?",                                     "HOME.3?",                                                                     SLS_ENABLED  },     //JM SHOW
 /* 1595 */  { fnShowJM,                    3,                           "SHTIM?",                                      "SHTIM?",                                                                     SLS_ENABLED  },     //JM SHOW
+/* 1596 */  { addItemToBuffer,             CHR_QOPPA,                    "",                                            STD_QOPPA,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1597 */  { addItemToBuffer,             CHR_qoppa,                    "",                                            STD_qoppa,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1598 */  { addItemToBuffer,             CHR_DIGAMMA,                  "",                                            STD_GAMMA,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1599 */  { addItemToBuffer,             CHR_digamma,                  "",                                            STD_digamma,                                                                 SLS_UNCHANGED},  //JM GREEK
+/* 1600 */  { addItemToBuffer,             CHR_SAMPI,                    "",                                            STD_SAMPI,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1601 */  { addItemToBuffer,             CHR_sampi,                    "",                                            STD_sampi,                                                                   SLS_UNCHANGED},  //JM GREEK
 
 
-/* 1596 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+
+
+/* 1602 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

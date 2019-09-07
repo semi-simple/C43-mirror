@@ -1631,8 +1631,14 @@
 #define ITM_SH_ERPN                   1593  //JM SHOW
 #define ITM_SH_HOME3                  1594  //JM SHOW
 #define ITM_SH_SHTIM                  1595  //JM SHOW
+#define CHR_QOPPA                     1596  //JM GREEK
+#define CHR_qoppa                     1597  //JM GREEK
+#define CHR_DIGAMMA                   1598  //JM GREEK
+#define CHR_digamma                   1599  //JM GREEK
+#define CHR_SAMPI                     1600  //JM GREEK
+#define CHR_sampi                     1601  //JM GREEK
 
-#define LAST_ITEM                     1596  //JM
+#define LAST_ITEM                     1602  //JM
 
 #define CHR_PROD_SIGN                 9999
 

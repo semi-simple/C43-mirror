@@ -907,6 +907,8 @@ void moveLabels(void) {
   gtk_widget_get_preferred_size(  lbl55G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl55F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl55G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+  gtk_widget_get_preferred_size(  lbl55Gr, NULL, &lblG);    //JM GREEK
+  gtk_fixed_move(GTK_FIXED(grid), lbl55Gr, xPos+KEY_WIDTH_2*2/3,                              yPos - Y_OFFSET_GREEK);   //JM GREEK
 
   xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
@@ -1177,10 +1179,11 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
 
-  if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {    //JM if "/", re-do to "÷". Presumed easier than to fix the UTf8 conversion above.
-  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
-  }                                                          //JM
+//  if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {    //JM if "/", re-do to "÷". Presumed easier than to fix the UTf8 conversion above.
+//  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
+//  }                                                          //JM
 
+//Specify the different categories of coloured zones
   if(key->keyLblAim == KEY_f) {
     gtk_widget_set_name(button, "calcKeyF");
   }
@@ -1211,16 +1214,25 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   }
 
 
+//Convert Greek CAPITAL and LOWER case to UTF !
   if(CHR_ALPHA <= key->gShiftedAim && key->gShiftedAim <= CHR_OMEGA) {
     stringToUtf8(indexOfItems[key->gShiftedAim].itemPrinted, lbl);
     lbl[2] = ' ';
     lbl[3] = 0;
     stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemPrinted, lbl + 3);
   }
+  else 
+    if(CHR_QOPPA <= key->gShiftedAim && key->gShiftedAim <= CHR_SAMPI) {    //JM GREEK. Different scheme than original
+    stringToUtf8(indexOfItems[key->gShiftedAim].itemPrinted, lbl);          //JM GREEK. 
+    lbl[2] = ' ';                                                           //JM GREEK.  
+    lbl[3] = 0;                                                             //JM GREEK. 
+    stringToUtf8(indexOfItems[key->gShiftedAim + 1].itemPrinted, lbl + 3);  //JM GREEK. Different scheme than original
+    }                                                                       //JM GREEK. 
   else {
     stringToUtf8(indexOfItems[max(key->gShiftedAim, -key->gShiftedAim)].itemPrinted, lbl);
   }
 
+//GShift set label
   if(key->gShiftedAim == 0) {
     lbl[0] = 0;
   }
@@ -1230,6 +1242,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 
+//GShift colours
   if(key->gShiftedAim < 0) {
     gtk_widget_set_name(lblGreek, "greekUnderline");
   }
@@ -1237,12 +1250,12 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     gtk_widget_set_name(lblGreek, "greek");
   }
 
-
+//Primaries, convert to UTF
   if(key->primaryAim == 0) {
     lbl[0] = 0;
   }
   else {
-   stringToUtf8(indexOfItems[key->primaryAim].itemPrinted, lbl);
+   stringToUtf8(indexOfItems[key->primaryAim].itemPrinted, lbl);  //Convert to UTF !
   }
 
 //  if(lbl[0] == ' ') {    //JM Space replace with lines below
@@ -1710,6 +1723,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl52Gr);
   gtk_widget_show(lbl53Gr);
   gtk_widget_show(lbl54Gr);
+  gtk_widget_show(lbl55Gr);   //JM GREEK
 
   gtk_widget_show(btn61);
   gtk_widget_show(btn62);
@@ -2252,7 +2266,7 @@ void setupUI(void) {
   lbl35G  = gtk_label_new("");
   lbl36G  = gtk_label_new("");
   lbl33H  = gtk_label_new("\u21e9"); // Hollow down
-  lbl34H  = gtk_label_new("\u03b7"); // eta
+  lbl34H  = gtk_label_new("");                          // ("\u03b7"); // eta          //JM removed1
   lbl31L  = gtk_label_new("");
   lbl32L  = gtk_label_new("");
   lbl33L  = gtk_label_new("");
@@ -2274,7 +2288,7 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn36, KEY_WIDTH_1, 0);
 
   gtk_widget_set_name(lbl33H,  "fShifted");
-  gtk_widget_set_name(lbl34H,  "gShifted");
+  // gtk_widget_set_name(lbl34H,  "gShifted");   //JM removed1
 
   g_signal_connect(btn31, "pressed", G_CALLBACK(btnPressed), "06");
   g_signal_connect(btn32, "pressed", G_CALLBACK(btnPressed), "07");
@@ -2546,7 +2560,7 @@ void setupUI(void) {
   lbl63G  = gtk_label_new("");
   lbl64G  = gtk_label_new("");
   lbl65G  = gtk_label_new("");
-  lbl65H  = gtk_label_new("\u03b8");  //JM
+  lbl65H  = gtk_label_new("");          // "\u03b8");  //JM.   //JM Removed1
   lbl61L  = gtk_label_new("");
   lbl62L  = gtk_label_new("");
   lbl63L  = gtk_label_new("");
@@ -2941,7 +2955,8 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   saveStack();
   liftStack();
   refreshStack();
-  showSoftmenu(NULL, -MNU_MyAlpha, true);
+//  showSoftmenu(NULL, -MNU_MyAlpha, true);   //JM
+  showSoftmenu(NULL, -MNU_ALPHA, true);       //JM ALPHA
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;
   showAlphaMode();

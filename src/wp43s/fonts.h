@@ -547,6 +547,12 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
 #define NUM_sampi                     "\x83\xe1"                                                       //JM GREEK
                                                      #define STD_sampi                     "\x83\xe1"  //JM GREEK
 
+#define NUM_case_up                   "\xa1\x02"                                                       //JM CAPS
+                                                     #define STD_case_up                   "\xa1\x02"  //JM CAPS
+#define NUM_case_dn                   "\xa1\x15"                                                       //JM CAPS
+                                                     #define STD_case_dn                   "\xa1\x15"  //JM CAPS
+
+
 
 #define NUM_SUP_x                     "\x9d\x61"
                                                      #define STD_SUP_x                     "\x9d\x61"

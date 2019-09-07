@@ -829,6 +829,11 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
+    else if((calcMode == CM_AIM) && (item == CHR_case_up)) {   //JM CASE
+      alphaCase = AC_UPPER;                                    //JM CASE
+      showAlphaMode();                                         //JM CASE
+     }                                                         //JM CASE
+
     else if(item == KEY_UP) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -887,6 +892,11 @@ void btnPressed(void *notUsed, void *data) {
        displayBugScreen("In function btnPressed: unexpected case while processing key UP!");
       }
     }
+
+    else if((calcMode == CM_AIM) && (item == CHR_case_dn)) {   //JM CASE
+      alphaCase = AC_LOWER;                                    //JM CASE
+      showAlphaMode();                                         //JM CASE
+     }                                                         //JM CASE
 
     else if(item == KEY_DOWN) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {

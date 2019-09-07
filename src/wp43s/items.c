@@ -1763,9 +1763,11 @@ const item_t indexOfItems[] = {
 /* 1632 */  { addItemToBuffer,             CHR_qoppa,                    "",                                            STD_qoppa,                                                                   SLS_UNCHANGED},  //JM GREEK
 /* 1633 */  { addItemToBuffer,             CHR_digamma,                  "",                                            STD_digamma,                                                                 SLS_UNCHANGED},  //JM GREEK
 /* 1634 */  { addItemToBuffer,             CHR_sampi,                    "",                                            STD_sampi,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case_up,                                                             SLS_UNCHANGED},   //JM CASE
+/* 1636 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case_dn,                                                             SLS_UNCHANGED},   //JM CASE
 
 
 
 
-/* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/* 1637 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

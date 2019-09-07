@@ -38,7 +38,7 @@ GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
 GtkWidget *lbl31F,  *lbl32F,  *lbl33F,  *lbl34F,  *lbl35F,  *lbl36F;
 GtkWidget *lbl31G,  *lbl32G,  *lbl33G,  *lbl34G,  *lbl35G,  *lbl36G;
 GtkWidget *lbl31L,  *lbl32L,  *lbl33L,  *lbl34L,  *lbl35L,  *lbl36L;
-GtkWidget                     *lbl33H,  *lbl34H;
+GtkWidget                     *lbl33H,  *lbl34H,  *lbl35H;
 GtkWidget *lbl31Gr, *lbl32Gr, *lbl33Gr, *lbl34Gr, *lbl35Gr, *lbl36Gr;
 
 GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
@@ -72,7 +72,7 @@ GtkWidget *btn81,   *btn82,   *btn83,   *btn84,   *btn85;
 GtkWidget *lbl81F,  *lbl82F,  *lbl83F,  *lbl84F,  *lbl85F;
 GtkWidget *lbl81G,  *lbl82G,  *lbl83G,  *lbl84G,  *lbl85G;
 GtkWidget *lbl81L,  *lbl82L,  *lbl83L,  *lbl84L,  *lbl85L;
-GtkWidget                     *lbl83H,  *lbl84H,  *lbl85H;  //JM
+GtkWidget           *lbl82H,  *lbl83H,  *lbl84H,  *lbl85H;  //JM
 GtkWidget *lbl81Gr, *lbl82Gr, *lbl83Gr, *lbl84Gr, *lbl85Gr;
 GtkWidget *lblOn; //JM
 //JM7 GtkWidget  *lblConfirmY; //JM for Y/N
@@ -266,6 +266,14 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "18");
       break;
 
+    case 38:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "18"); //JM
+      break;               //JM
+
+
+
     case 81:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 56:    // 8
     case 65464: // 8
@@ -273,12 +281,24 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "19");
       break;
 
+
+
+
     case 82:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 57:    // 9
     case 65465: // 9
       //printf("key pressed: 9\n");
       btnClicked(w, "20");
       break;
+
+    case 40:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "20"); //JM
+      break;               //JM
+
+
+
 
     case 83:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 47:    // / //JM
@@ -300,6 +320,14 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "23");
       break;
 
+    case 36:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "23"); //JM
+      break;               //JM
+
+
+
     case 85:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 53:    // 5
     case 65461: // 5
@@ -307,12 +335,28 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "24");
       break;
 
+    case 37:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "24"); //JM
+      break;               //JM
+
+
+
     case 86:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 54:    // 6
     case 65462: // 6
       //printf("key pressed: 6\n");
       btnClicked(w, "25");
       break;
+
+    case 94:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "25"); //JM
+      break;               //JM
+
+
 
     case 87:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 42:    // * //JM
@@ -334,6 +378,14 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "28");
       break;
 
+    case 33:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "28"); //JM
+      break;               //JM
+
+
+
     case 89:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 50:    // 2
     case 65458: // 2
@@ -341,12 +393,29 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "29");
       break;
 
+    case 64:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "29"); //JM
+      break;               //JM
+
+
+
+
     case 90:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 51:    // 3
     case 65459: // 3
       //printf("key pressed: 3\n");
       btnClicked(w, "30");
       break;
+
+    case 35:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      btnClicked(w, "30"); //JM
+      break;               //JM
+
+
 
     case 95:  //JM UNDERSCORE FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 45:    // - //JM
@@ -585,6 +654,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl34L);
   gtk_widget_hide(lbl35F);
   gtk_widget_hide(lbl35G);
+  gtk_widget_hide(lbl34H);  //JM CAPS
   gtk_widget_hide(lbl35L);
   gtk_widget_hide(lbl36F);
   gtk_widget_hide(lbl36G);
@@ -719,20 +789,21 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl81F);
   gtk_widget_hide(lbl81G);
   gtk_widget_hide(lbl81L);
-  gtk_widget_hide(lbl85H);  //JM
   gtk_widget_hide(lbl82F);
   gtk_widget_hide(lbl82G);
+  //gtk_widget_hide(lbl82H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl82L);
   gtk_widget_hide(lbl83F);
   gtk_widget_hide(lbl83G);
   gtk_widget_hide(lbl83L);
-  gtk_widget_hide(lbl83H);
+  //gtk_widget_hide(lbl83H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl84F);
   gtk_widget_hide(lbl84G);
   gtk_widget_hide(lbl84L);
-  gtk_widget_hide(lbl84H);
+  //gtk_widget_hide(lbl84H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl85F);
   gtk_widget_hide(lbl85G);
+  //gtk_widget_hide(lbl85H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl85L);
   gtk_widget_hide(lbl81Gr);
   gtk_widget_hide(lbl82Gr);
@@ -1052,22 +1123,24 @@ gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.
   gtk_widget_get_preferred_size(  lbl82G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl82F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl82G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-  gtk_widget_get_preferred_size(  lbl82Gr, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, xPos+KEY_WIDTH_2*2/3,                              yPos - Y_OFFSET_GREEK);
+  gtk_widget_get_preferred_size(  lbl82Gr, NULL, &lblG);                                                               //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);  //JM ALPHA BLUE MENU LABELS
 
   xPos += DELTA_KEYS_X + 17;
   gtk_widget_get_preferred_size(  lbl83F, NULL, &lblF);
   gtk_widget_get_preferred_size(  lbl83G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl83F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl83G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-  gtk_widget_get_preferred_size(  lbl83Gr, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl83Gr, xPos+KEY_WIDTH_2*2/3,                              yPos - Y_OFFSET_GREEK);
+  gtk_widget_get_preferred_size(  lbl83Gr, NULL, &lblG);                                                               //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl83Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);  //JM ALPHA BLUE MENU LABELS
 
   xPos += DELTA_KEYS_X + 17;
   gtk_widget_get_preferred_size(  lbl84F, NULL, &lblF);
   gtk_widget_get_preferred_size(  lbl84G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl84F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl84G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+  gtk_widget_get_preferred_size(  lbl84Gr, NULL, &lblG);                                                                //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl84Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);   //JM ALPHA BLUE MENU LABELS
 
   xPos += DELTA_KEYS_X + 17;
   gtk_widget_get_preferred_size(  lbl85F, NULL, &lblF);
@@ -1084,6 +1157,8 @@ gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.
   gtk_fixed_move(GTK_FIXED(grid), lbl85F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM
   gtk_fixed_move(GTK_FIXED(grid), lbl85G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM
 #endif //JM END OF LAYOUT 1
+  gtk_widget_get_preferred_size(  lbl85Gr, NULL, &lblG);                                                                //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl85Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);   //JM ALPHA BLUE MENU LABELS
  
 }
 
@@ -1485,6 +1560,7 @@ void calcModeNormalGui(void) {
 
   gtk_widget_show(lbl35F); //JM3 SIN/COS/TAN to DM42
   gtk_widget_show(lbl35G); //JM3 SIN/COS/TAN to DM42
+  gtk_widget_show(lbl35H); //JM CAPS
   gtk_widget_show(lbl36F); //JM3 SIN/COS/TAN to DM42
   gtk_widget_show(lbl36G); //JM3 SIN/COS/TAN to DM42
 
@@ -1590,9 +1666,9 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl81F);
   gtk_widget_show(lbl81G);
   gtk_widget_show(lbl81L);
-  gtk_widget_show(lbl85H); //JM
   gtk_widget_show(lbl82F);
   gtk_widget_show(lbl82G);
+  gtk_widget_show(lbl82H); //JM
   gtk_widget_show(lbl82L);
   gtk_widget_show(lbl83F);
   gtk_widget_show(lbl83G);
@@ -1604,6 +1680,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl84L);
   gtk_widget_show(lbl85F);
   gtk_widget_show(lbl85G);
+  gtk_widget_show(lbl85H); //JM
   gtk_widget_show(lbl85L);  //JM add ?
 
   gtk_widget_show(lblOn);
@@ -1717,7 +1794,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl35L); // JM !!
   gtk_widget_show(lbl36L); // JM !!
 //#endif //JM END OF LAYOUT 2 DM42 STRICT.
-  //gtk_widget_show(lbl34H);
+  gtk_widget_show(lbl34H);  //JM reinstate
   gtk_widget_show(lbl31Gr);
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);
@@ -1814,7 +1891,6 @@ void calcModeAimGui(void) {
 
   gtk_widget_show(lbl81L);
   gtk_widget_show(lbl81F); //JM added OFF with Layout2
-  //gtk_widget_show(lbl81G);  //JM add OFF. Removed again with new layout2.
   gtk_widget_show(lbl82L);
   gtk_widget_show(lbl83L);
   gtk_widget_show(lbl84L);
@@ -1822,17 +1898,19 @@ void calcModeAimGui(void) {
   //gtk_widget_show(lbl85F); //JM
   //gtk_widget_show(lbl85G); //JM
   gtk_widget_show(lbl85L);  //JM add ?
-  gtk_widget_show(lbl85Gr); //JM
+  
   gtk_widget_show(lbl82Gr);
   gtk_widget_show(lbl83Gr);
-
+  gtk_widget_show(lbl84Gr); //JM TT
+  gtk_widget_show(lbl85Gr); //JM
+  
   gtk_widget_show(lblOn);
   //JM7 gtk_widget_show(lblConfirmY);  //JM Y/N
   //JM7 gtk_widget_show(lblConfirmN);  //JM Y/N
 
-  gtk_widget_show(lbl31G);
+//  gtk_widget_show(lbl31G);   //JM Remnanty from 43S. Not sure why. Removed.
   moveLabels();
-  gtk_widget_hide(lbl31G);
+//  gtk_widget_hide(lbl31G);   //JM Remnanty from 43S. Not sure why. Removed.
 }
 
 
@@ -2306,13 +2384,16 @@ void setupUI(void) {
   lbl35G  = gtk_label_new("");
   lbl36G  = gtk_label_new("");
   lbl33H  = gtk_label_new("\u21e9"); // Hollow down
-  lbl34H  = gtk_label_new("");                          // ("\u03b7"); // eta          //JM removed1
-  lbl31L  = gtk_label_new("");
+  lbl34H  = gtk_label_new("\u2102"); //JM CAPS                          // ("\u03b7"); // eta          //JM removed1
+  lbl35H  = gtk_label_new("\u2115"); //JM CAPS NORM                          // ("\u03b7"); // eta          //JM removed1
+
+  lbl31L  = gtk_label_new(""); 
   lbl32L  = gtk_label_new("");
   lbl33L  = gtk_label_new("");
   lbl34L  = gtk_label_new("");
   lbl35L  = gtk_label_new("");
   lbl36L  = gtk_label_new("");
+
   lbl31Gr = gtk_label_new("");
   lbl32Gr = gtk_label_new("");
   lbl33Gr = gtk_label_new("");
@@ -2328,6 +2409,8 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn36, KEY_WIDTH_1, 0);
 
   gtk_widget_set_name(lbl33H,  "fShifted");
+  gtk_widget_set_name(lbl34H,  "fShifted");  //JM CAPS
+  gtk_widget_set_name(lbl35H,  "fShifted");  //JM NORM
   // gtk_widget_set_name(lbl34H,  "gShifted");   //JM removed1
 
   g_signal_connect(btn31, "pressed", G_CALLBACK(btnPressed), "06");
@@ -2385,6 +2468,7 @@ void setupUI(void) {
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn35,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl35L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
+  gtk_fixed_put(GTK_FIXED(grid), lbl35H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);               //JM CAPS
 
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn36,  xPos,                         yPos);
@@ -2694,8 +2778,8 @@ void setupUI(void) {
   lbl73G  = gtk_label_new("");
   lbl74G  = gtk_label_new("");
   lbl75G  = gtk_label_new("");
-  lbl72H  = gtk_label_new("M");      // Menu alphaMATH for AIM //JM
-  lbl73H  = gtk_label_new("\u03c8"); // psi  //JM
+  lbl72H  = gtk_label_new("");      //M Menu alphaMATH for AIM //JM REMOVED
+  lbl73H  = gtk_label_new("");  //"\u03c8"); // psi  //JM REMOVED
   lbl71L  = gtk_label_new("");
   lbl72L  = gtk_label_new("");
   lbl73L  = gtk_label_new("");
@@ -2792,9 +2876,10 @@ void setupUI(void) {
   lbl83G  = gtk_label_new("");
   lbl84G  = gtk_label_new("");
   lbl85G  = gtk_label_new("");
-  lbl85H  = gtk_label_new("I");      // Menu alphaINTL for AIM //JM
-  lbl83H  = gtk_label_new("\u2218"); // Menu alphaDOT for AIM
-  lbl84H  = gtk_label_new("");
+  lbl82H  = gtk_label_new("\u221D"); //JM ALPHA
+  lbl83H  = gtk_label_new("\u221D\u2218");  //JM Alphadot -  Menu alphaDOT for AIM
+  lbl84H  = gtk_label_new("\u221D\u03C0");  //JM Alpha MATH
+  lbl85H  = gtk_label_new("\u221D\u1F30");  //JM Alpha Intnl - Menu alphaINTL for AIM //JM
   lbl81L  = gtk_label_new("");
   lbl82L  = gtk_label_new("");
   lbl83L  = gtk_label_new("");
@@ -2815,9 +2900,10 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn84, KEY_WIDTH_2, 0);
   gtk_widget_set_size_request(btn85, KEY_WIDTH_2, 0);
 
-  gtk_widget_set_name(lbl85H, "gShiftedUnderline");    //JM
+  gtk_widget_set_name(lbl82H, "gShiftedUnderline");    //JM
   gtk_widget_set_name(lbl83H, "gShiftedUnderline");
-  gtk_widget_set_name(lbl84H, "fShifted");
+  gtk_widget_set_name(lbl84H, "gShiftedUnderline");
+  gtk_widget_set_name(lbl85H, "gShiftedUnderline");    //JM
   gtk_widget_set_name(lblOn,  "On");
   //JM7 gtk_widget_set_name(lblConfirmY,  "On");
   //JM7 gtk_widget_set_name(lblConfirmN,  "On");
@@ -2861,6 +2947,7 @@ void setupUI(void) {
   xPos += DELTA_KEYS_X + 18;
   gtk_fixed_put(GTK_FIXED(grid), btn82,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl82L, xPos + KEY_WIDTH_2 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
+  gtk_fixed_put(GTK_FIXED(grid), lbl82H, xPos + KEY_WIDTH_2 + X_OFFSET_LETTER, yPos -  1);                //JM
 
   xPos += DELTA_KEYS_X + 17;
   gtk_fixed_put(GTK_FIXED(grid), btn83,  xPos,                         yPos);
@@ -2995,8 +3082,8 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   saveStack();
   liftStack();
   refreshStack();
-//  showSoftmenu(NULL, -MNU_MyAlpha, true);   //JM
-  showSoftmenu(NULL, -MNU_ALPHA, true);       //JM ALPHA
+  showSoftmenu(NULL, -MNU_MyAlpha, true);
+//  showSoftmenu(NULL, -MNU_ALPHA, true);       //JM ALPHA
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;
   showAlphaMode();

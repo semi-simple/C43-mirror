@@ -23,7 +23,7 @@
 //This variable is to store in flash memory
 const calcKey_t kbd_std[37] = {
 
-#ifdef JM_LAYOUT_1  //JM LAYOUT 1. FINAL. DEPRECIATED
+#ifdef JM_LAYOUT_1  //JM LAYOUT 1. FINAL. DEPRECIATED. Not maintained since 2019-09-01
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM2 changed top line primary to DM42 keyboard
  {22,   ITM_1X,           ITM_YX,          ITM_toINT,    ITM_NULL,       CHR_B,             ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM2 changed top line primary to DM42 keyboard
@@ -94,8 +94,8 @@ const calcKey_t kbd_std[37] = {
  {31,   ITM_STO,          ITM_MAGNITUDE,   ITM_ANGLE,    ITM_NULL,       CHR_G,             ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
  {32,   ITM_RCL,          ITM_PC,          ITM_DELTAPC,  ITM_NULL,       CHR_H,             ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
  {33,   ITM_Rdown,        ITM_pi,          ITM_Rup,      ITM_NULL,       CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
- {34,   ITM_sin,          ITM_arcsin,      ITM_toREC,    ITM_NULL,       CHR_J,             ITM_NULL,        CHR_THETA,     ITM_REGJ     }, //JM3 adding SIN/COS/TAN according to DM42
- {35,   ITM_cos,          ITM_arccos,      ITM_toPOL,    ITM_NULL,       CHR_K,             ITM_NULL,        CHR_KAPPA,     ITM_REGK     }, //JM3 adding SIN/COS/TAN according to DM42
+ {34,   ITM_sin,          ITM_arcsin,      ITM_toREC,    ITM_NULL,       CHR_J,             CHR_case_up,     CHR_THETA,     ITM_REGJ     }, //JM3 adding SIN/COS/TAN according to DM42
+ {35,   ITM_cos,          ITM_arccos,      ITM_toPOL,    ITM_NULL,       CHR_K,             CHR_case_dn,     CHR_KAPPA,     ITM_REGK     }, //JM3 adding SIN/COS/TAN according to DM42
  {36,   ITM_tan,          ITM_arctan,      ITM_RTN,      ITM_NULL,       CHR_L,             ITM_NULL,        CHR_LAMBDA,    ITM_REGL     }, //JM3 adding SIN/COS/TAN according to DM42
        
  {41,   ITM_ENTER,        KEY_CC,          ITM_DROP,     ITM_ENTER,      ITM_ENTER,         ITM_NULL,        ITM_NULL,      ITM_ENTER    }, //JM
@@ -123,10 +123,10 @@ const calcKey_t kbd_std[37] = {
  {75,   ITM_SUB,         -MNU_STK,        -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,    CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM swap DN/MIN & roll
 
  {81,   KEY_EXIT,         ITM_OFF,         KEY_PRTX,     KEY_EXIT,       KEY_EXIT,          ITM_OFF,         ITM_NULL,      KEY_EXIT     }, //JM swap EXIT/ADD
- {82,   CHR_0,            ITM_TIMER,       ITM_VIEW,     CHR_0,          CHR_COLON,         CHR_0,           CHR_COLON,     CHR_0        }, //JM
+ {82,   CHR_0,            ITM_TIMER,       ITM_VIEW,     CHR_0,          CHR_COLON,         CHR_0,          -MNU_ALPHA,   CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,       -MNU_INFO,     CHR_PERIOD,     CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
- {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, ITM_NULL,        ITM_NULL,      ITM_NULL     }, //JM swap
- {85,   ITM_ADD,         -MNU_CATALOG,    -MNU_IO,       CHR_PLUS,       CHR_SPACE,         CHR_PLUS,        ITM_NULL,      ITM_ADD      }  //JM swap EXIT/ADD
+ {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, ITM_NULL,       -MNU_ALPHAMATH, ITM_NULL     }, //JM swap
+ {85,   ITM_ADD,         -MNU_CATALOG,    -MNU_IO,       CHR_PLUS,       CHR_SPACE,         CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      }  //JM swap EXIT/ADD
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
 #endif //JM END OF LAYOUT 1a.
 

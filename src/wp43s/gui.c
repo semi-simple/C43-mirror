@@ -654,7 +654,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl34L);
   gtk_widget_hide(lbl35F);
   gtk_widget_hide(lbl35G);
-  gtk_widget_hide(lbl34H);  //JM CAPS
+  gtk_widget_hide(lbl35H);  //JM CAPS
   gtk_widget_hide(lbl35L);
   gtk_widget_hide(lbl36F);
   gtk_widget_hide(lbl36G);
@@ -1794,7 +1794,8 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl35L); // JM !!
   gtk_widget_show(lbl36L); // JM !!
 //#endif //JM END OF LAYOUT 2 DM42 STRICT.
-  gtk_widget_show(lbl34H);  //JM reinstate
+  gtk_widget_show(lbl34H);  //JM reinstate CAPS
+  gtk_widget_show(lbl35H);  //JM CAPS
   gtk_widget_show(lbl31Gr);
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);

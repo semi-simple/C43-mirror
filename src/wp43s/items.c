@@ -1652,7 +1652,7 @@ const item_t indexOfItems[] = {
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT. 
 /* 1526 */  { fnAim,                       NOPARAM,                     "",                                            "ALPHA", /*STD_alpha,*/                                                                    SLS_UNCHANGED},             //JM
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
-#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A)
+#ifdef JM_LAYOUT_1A
 /* 1526 */  { fnAim,                       NOPARAM,                     "",                                            STD_alpha,                                                                    SLS_UNCHANGED},                             //JM
 #endif //JM END OF LAYOUT 1
 /* 1527 */  { itemToBeCoded,               NOPARAM,                     "",                                            ".d",                                                                         SLS_UNCHANGED},
@@ -1763,11 +1763,12 @@ const item_t indexOfItems[] = {
 /* 1632 */  { addItemToBuffer,             CHR_qoppa,                    "",                                            STD_qoppa,                                                                   SLS_UNCHANGED},  //JM GREEK
 /* 1633 */  { addItemToBuffer,             CHR_digamma,                  "",                                            STD_digamma,                                                                 SLS_UNCHANGED},  //JM GREEK
 /* 1634 */  { addItemToBuffer,             CHR_sampi,                    "",                                            STD_sampi,                                                                   SLS_UNCHANGED},  //JM GREEK
-/* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case_up,                                                             SLS_UNCHANGED},   //JM CASE
-/* 1636 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case_dn,                                                             SLS_UNCHANGED},   //JM CASE
+/* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                                             SLS_UNCHANGED},   //JM CASE
+/* 1636 */  { fnBASE_Hash,         /*TEST!*/        NOPARAM,                     "##",                                            "##",                                                                         SLS_UNCHANGED},   //JM ##
+/* 1637 */  { addItemToBuffer,     /*TEST!*/        CHR_NUMBER_SIGN,              "###",                                         "###",                                                                   SLS_UNCHANGED},
 
 
 
 
-/* 1637 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/* 1638 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

@@ -38,7 +38,7 @@ GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
 GtkWidget *lbl31F,  *lbl32F,  *lbl33F,  *lbl34F,  *lbl35F,  *lbl36F;
 GtkWidget *lbl31G,  *lbl32G,  *lbl33G,  *lbl34G,  *lbl35G,  *lbl36G;
 GtkWidget *lbl31L,  *lbl32L,  *lbl33L,  *lbl34L,  *lbl35L,  *lbl36L;
-GtkWidget                     *lbl33H,  *lbl34H,  *lbl35H;
+GtkWidget                     *lbl33H,  *lbl34H;
 GtkWidget *lbl31Gr, *lbl32Gr, *lbl33Gr, *lbl34Gr, *lbl35Gr, *lbl36Gr;
 
 GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
@@ -198,6 +198,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       //printf("key pressed: p pi\n"); //dr
       shiftF = true;       //dr
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "08"); //dr
       break;               //dr
 
@@ -269,6 +270,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     case 38:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "18"); //JM
       break;               //JM
 
@@ -294,6 +296,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     case 40:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "20"); //JM
       break;               //JM
 
@@ -323,6 +326,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     case 36:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "23"); //JM
       break;               //JM
 
@@ -338,6 +342,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     case 37:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "24"); //JM
       break;               //JM
 
@@ -353,6 +358,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     case 94:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "25"); //JM
       break;               //JM
 
@@ -381,6 +387,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     case 33:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "28"); //JM
       break;               //JM
 
@@ -412,6 +419,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
     case 35:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
       btnClicked(w, "30"); //JM
       break;               //JM
 
@@ -436,6 +444,15 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       //printf("key pressed: 0\n");
       btnClicked(w, "33");
       break;
+
+    case 41:  //JM SHIFTED NUMERAL  //JM
+      shiftF = true;       //JM
+      shiftG = false;      //JM
+      Reset_Shift_Mem();   //JM
+      btnClicked(w, "33"); //JM
+      break;               //JM
+
+
 
     case 44:    // ,
     case 46:    // .
@@ -520,7 +537,7 @@ void prepareCssData(void) {
 #ifdef JM_LAYOUT_2_DM42_STRICT                    //JM LAYOUT 2
   #define CSSFILE "wp43s_pre_L2.css"              //JM L
 #endif //JM L
-#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A) //JM LAYOUT 1
+#ifdef JM_LAYOUT_1A                               //JM LAYOUT 1
   #define CSSFILE "wp43s_pre.css"
 #endif //JM L
 
@@ -650,11 +667,10 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl33L);
   gtk_widget_hide(lbl34F);
   gtk_widget_hide(lbl34G);
-  gtk_widget_hide(lbl34H);
+  gtk_widget_hide(lbl34H);  //JM CAPS
   gtk_widget_hide(lbl34L);
   gtk_widget_hide(lbl35F);
   gtk_widget_hide(lbl35G);
-  gtk_widget_hide(lbl35H);  //JM CAPS
   gtk_widget_hide(lbl35L);
   gtk_widget_hide(lbl36F);
   gtk_widget_hide(lbl36G);
@@ -791,19 +807,19 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl81L);
   gtk_widget_hide(lbl82F);
   gtk_widget_hide(lbl82G);
-  //gtk_widget_hide(lbl82H);  //JM Keep menu appreviation on AIM to identify with menu name
+  gtk_widget_hide(lbl82H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl82L);
   gtk_widget_hide(lbl83F);
   gtk_widget_hide(lbl83G);
   gtk_widget_hide(lbl83L);
-  //gtk_widget_hide(lbl83H);  //JM Keep menu appreviation on AIM to identify with menu name
+  gtk_widget_hide(lbl83H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl84F);
   gtk_widget_hide(lbl84G);
   gtk_widget_hide(lbl84L);
-  //gtk_widget_hide(lbl84H);  //JM Keep menu appreviation on AIM to identify with menu name
+  gtk_widget_hide(lbl84H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl85F);
   gtk_widget_hide(lbl85G);
-  //gtk_widget_hide(lbl85H);  //JM Keep menu appreviation on AIM to identify with menu name
+  gtk_widget_hide(lbl85H);  //JM Keep menu appreviation on AIM to identify with menu name
   gtk_widget_hide(lbl85L);
   gtk_widget_hide(lbl81Gr);
   gtk_widget_hide(lbl82Gr);
@@ -1108,7 +1124,7 @@ void moveLabels(void) {
 //  gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-lblF.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //JM
   gtk_fixed_move(GTK_FIXED(grid), lbl81G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
 //#endif
-//#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A)
+//#ifdef JM_LAYOUT_1A
 //  gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-lblF.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //JM
 //  gtk_fixed_move(GTK_FIXED(grid), lbl81G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos + 38); //JM
 //#endif
@@ -1124,7 +1140,7 @@ gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.
   gtk_fixed_move(GTK_FIXED(grid), lbl82F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl82G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl82Gr, NULL, &lblG);                                                               //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);  //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos + GAP - Y_OFFSET_SHIFTED_LABEL);  //JM ALPHA BLUE MENU LABELS
 
   xPos += DELTA_KEYS_X + 17;
   gtk_widget_get_preferred_size(  lbl83F, NULL, &lblF);
@@ -1132,7 +1148,7 @@ gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.
   gtk_fixed_move(GTK_FIXED(grid), lbl83F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl83G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl83Gr, NULL, &lblG);                                                               //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl83Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);  //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl83Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos + GAP - Y_OFFSET_SHIFTED_LABEL);  //JM ALPHA BLUE MENU LABELS
 
   xPos += DELTA_KEYS_X + 17;
   gtk_widget_get_preferred_size(  lbl84F, NULL, &lblF);
@@ -1140,7 +1156,7 @@ gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.
   gtk_fixed_move(GTK_FIXED(grid), lbl84F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl84G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl84Gr, NULL, &lblG);                                                                //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl84Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);   //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl84Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos + GAP - Y_OFFSET_SHIFTED_LABEL);   //JM ALPHA BLUE MENU LABELS
 
   xPos += DELTA_KEYS_X + 17;
   gtk_widget_get_preferred_size(  lbl85F, NULL, &lblF);
@@ -1153,12 +1169,12 @@ gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.
   gtk_fixed_move(GTK_FIXED(grid), lbl85F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP*1.4-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM align provision for CAT
   gtk_fixed_move(GTK_FIXED(grid), lbl85G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM align provision for CAT
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
-#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A) //JM LAYOUT 1
+#ifdef JM_LAYOUT_1A                                                                                                             //JM LAYOUT 1
   gtk_fixed_move(GTK_FIXED(grid), lbl85F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM
   gtk_fixed_move(GTK_FIXED(grid), lbl85G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM
 #endif //JM END OF LAYOUT 1
   gtk_widget_get_preferred_size(  lbl85Gr, NULL, &lblG);                                                                //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl85Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos - Y_OFFSET_GREEK);   //JM ALPHA BLUE MENU LABELS
+  gtk_fixed_move(GTK_FIXED(grid), lbl85Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,                              yPos + GAP - Y_OFFSET_SHIFTED_LABEL);   //JM ALPHA BLUE MENU LABELS
  
 }
 
@@ -1560,7 +1576,6 @@ void calcModeNormalGui(void) {
 
   gtk_widget_show(lbl35F); //JM3 SIN/COS/TAN to DM42
   gtk_widget_show(lbl35G); //JM3 SIN/COS/TAN to DM42
-  gtk_widget_show(lbl35H); //JM CAPS
   gtk_widget_show(lbl36F); //JM3 SIN/COS/TAN to DM42
   gtk_widget_show(lbl36G); //JM3 SIN/COS/TAN to DM42
 
@@ -1795,7 +1810,6 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl36L); // JM !!
 //#endif //JM END OF LAYOUT 2 DM42 STRICT.
   gtk_widget_show(lbl34H);  //JM reinstate CAPS
-  gtk_widget_show(lbl35H);  //JM CAPS
   gtk_widget_show(lbl31Gr);
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);
@@ -1895,7 +1909,10 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl82L);
   gtk_widget_show(lbl83L);
   gtk_widget_show(lbl84L);
-  gtk_widget_show(lbl84H);
+  gtk_widget_show(lbl82H);  //JM AIM MENU
+  gtk_widget_show(lbl83H);  //JM AIM MENU
+  gtk_widget_show(lbl84H);  //JM AIM MENU
+  gtk_widget_show(lbl85H);  //JM AIM MENU
   //gtk_widget_show(lbl85F); //JM
   //gtk_widget_show(lbl85G); //JM
   gtk_widget_show(lbl85L);  //JM add ?
@@ -2116,7 +2133,7 @@ void setupUI(void) {
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM L2
     backgroundImage = gtk_image_new_from_file("dm42l_L2.png");
 #endif //JM Layout
-#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A) //JM LAYOUT 1
+#if defined(JM_LAYOUT_1A) //JM LAYOUT 1
     backgroundImage = gtk_image_new_from_file("dm42l.png");
 #endif //JM Layout
 
@@ -2124,7 +2141,7 @@ void setupUI(void) {
 
   gtk_fixed_put(GTK_FIXED(grid), backgroundImage,  0, 0);
 
-#if defined(JM_LAYOUT_1) || defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
+#if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
   // Areas for the g shifted softkeys
   lblGSoftkeyArea = gtk_label_new("");
   gtk_widget_set_name(lblGSoftkeyArea, "gSoftkeyArea");
@@ -2365,8 +2382,8 @@ void setupUI(void) {
   lbl35G  = gtk_label_new("");
   lbl36G  = gtk_label_new("");
   lbl33H  = gtk_label_new("\u21e9"); // Hollow down
-  lbl34H  = gtk_label_new("\u2102"); //JM CAPS                          // ("\u03b7"); // eta          //JM removed1
-  lbl35H  = gtk_label_new("\u2115"); //JM CAPS NORM                          // ("\u03b7"); // eta          //JM removed1
+  lbl34H  = gtk_label_new("\u2102"); //JM CAPS LOCK                          // ("\u03b7"); // eta          //JM removed1
+//JM  lbl35H  = gtk_label_new("");                                               // ("\u03b7"); // eta          //JM removed1
 
   lbl31L  = gtk_label_new(""); 
   lbl32L  = gtk_label_new("");
@@ -2391,7 +2408,6 @@ void setupUI(void) {
 
   gtk_widget_set_name(lbl33H,  "fShifted");
   gtk_widget_set_name(lbl34H,  "fShifted");  //JM CAPS
-  gtk_widget_set_name(lbl35H,  "fShifted");  //JM NORM
   // gtk_widget_set_name(lbl34H,  "gShifted");   //JM removed1
 
   g_signal_connect(btn31, "pressed", G_CALLBACK(btnPressed), "06");
@@ -2444,12 +2460,11 @@ void setupUI(void) {
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn34,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl34L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
-  gtk_fixed_put(GTK_FIXED(grid), lbl34H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);
+  gtk_fixed_put(GTK_FIXED(grid), lbl34H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);               //JM CAPS
 
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn35,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl35L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
-  gtk_fixed_put(GTK_FIXED(grid), lbl35H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);               //JM CAPS
 
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn36,  xPos,                         yPos);
@@ -2857,10 +2872,10 @@ void setupUI(void) {
   lbl83G  = gtk_label_new("");
   lbl84G  = gtk_label_new("");
   lbl85G  = gtk_label_new("");
-  lbl82H  = gtk_label_new("\u221D"); //JM ALPHA
+  lbl82H  = gtk_label_new("\u221D");        //JM ALPHA
   lbl83H  = gtk_label_new("\u221D\u2218");  //JM Alphadot -  Menu alphaDOT for AIM
-  lbl84H  = gtk_label_new("\u221D\u03C0");  //JM Alpha MATH
-  lbl85H  = gtk_label_new("\u221D\u1F30");  //JM Alpha Intnl - Menu alphaINTL for AIM //JM
+  lbl84H  = gtk_label_new("\u221D\u222E");  //JM Alpha MATH - also considered pi \u03C0
+  lbl85H  = gtk_label_new("\u221D\u00f1");  //JM Alpha Intnl - also considered \u2139
   lbl81L  = gtk_label_new("");
   lbl82L  = gtk_label_new("");
   lbl83L  = gtk_label_new("");
@@ -2879,10 +2894,10 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn84, KEY_WIDTH_2, 0);
   gtk_widget_set_size_request(btn85, KEY_WIDTH_2, 0);
 
-  gtk_widget_set_name(lbl82H, "gShiftedUnderline");    //JM
-  gtk_widget_set_name(lbl83H, "gShiftedUnderline");
-  gtk_widget_set_name(lbl84H, "gShiftedUnderline");
-  gtk_widget_set_name(lbl85H, "gShiftedUnderline");    //JM
+  gtk_widget_set_name(lbl82H, "greekUnderline");    //JM was gShiftedUnderline, changed to greekUnderline, x4
+  gtk_widget_set_name(lbl83H, "greekUnderline");
+  gtk_widget_set_name(lbl84H, "greekUnderline");
+  gtk_widget_set_name(lbl85H, "greekUnderline");    //JM
   gtk_widget_set_name(lblOn,  "On");
 
   g_signal_connect(btn81, "pressed", G_CALLBACK(btnPressed), "32");

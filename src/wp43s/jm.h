@@ -21,11 +21,8 @@
 
 
 /*********   MAIN OPTION SELECTION                  */
-/*********   Remove // from EITHER layout 1 or layout 2 or layout 1A */
 //#define JM_LAYOUT_2_DM42_STRICT  //DM42 compatible layout
 #define JM_LAYOUT_1A               //Preferred layout
-
-//depreciated. //#define JM_LAYOUT_1              //Depreciated layout
 
 
 
@@ -52,13 +49,21 @@ uint32_t now_MEM;
 gint64 now_MEM;
 #endif
 
+#ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
+uint32_t now;                                     //JM TIMER DMCP SHIFTCANCEL
+#endif                                            //JM TIMER DMCP SHIFTCANCEL
+#ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
+gint64 now;                                       //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
+#endif                                            //JM TIMER DMCP SHIFTCANCEL
+
+
 
 // Confirmation Y or N changed from original WP43S because the alpha keys order changed
 #define ITEM_CONF_Y CHR_2 
 #define ITEM_CONF_N ITM_CHS
 
 // Define the second tagline
-#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
+#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Sep.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
 extern bool_t eRPN;                                                  //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
@@ -79,6 +84,9 @@ void fnDisplayFormatUnit(uint16_t displayFormatN);
 
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);
+void Reset_Shift_Mem(void);
+void fnBASE_Hash(uint16_t unusedParamButMandatory);
+
 
 //display.c
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode);

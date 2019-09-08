@@ -20,6 +20,7 @@
 
 #include "wp43s.h"
 
+
 #ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Displays the f or g shift state in the
@@ -235,14 +236,6 @@ void btnPressed(void *notUsed, void *data) {
 
 
 #ifdef JM_MULTISHIFT ////MULTISHIFT AND CLRDROP                                //JM TIMER - checks on any key pressed.
-
-    #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
-    uint32_t now;                                     //JM TIMER DMCP SHIFTCANCEL
-    #endif                                            //JM TIMER DMCP SHIFTCANCEL
-    #ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
-    gint64 now;                                       //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
-    #endif                                            //JM TIMER DMCP SHIFTCANCEL
-
   if(SHTIM) {
     if(( shiftF || shiftG ) || (key->primary == KEY_f)) {
       #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
@@ -829,10 +822,10 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if((calcMode == CM_AIM) && (item == CHR_case_up)) {   //JM CASE
-      alphaCase = AC_UPPER;                                    //JM CASE
-      showAlphaMode();                                         //JM CASE
-     }                                                         //JM CASE
+    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {   //JM CASE JM CAPS
+      alphaCase = AC_UPPER;                                    //JM CASE JM CAPS
+      showAlphaMode();                                         //JM CASE JM CAPS
+     }                                                         //JM CASE JM CAPS
 
     else if(item == KEY_UP) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
@@ -893,10 +886,10 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if((calcMode == CM_AIM) && (item == CHR_case_dn)) {   //JM CASE
-      alphaCase = AC_LOWER;                                    //JM CASE
-      showAlphaMode();                                         //JM CASE
-     }                                                         //JM CASE
+    else if((calcMode == CM_AIM) && (item == CHR_case)  && (alphaCase == AC_UPPER)) {   //JM CASE JM CAPS
+      alphaCase = AC_LOWER;                                    //JM CASE JM CAPS
+      showAlphaMode();                                         //JM CASE JM CAPS
+     }                                                         //JM CASE JM CAPS
 
     else if(item == KEY_DOWN) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
@@ -1208,6 +1201,37 @@ void btnReleased(void *notUsed, void *data) {
 
 
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
+ #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. CHALLENGE.
+  shiftF = true;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "12");
+  #endif
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "12");
+  #endif
+#endif
+
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
+  shiftF = true;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "06");
+  #endif
+
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "06");
+  #endif
+#endif
+
+
+}
+
+
+/*
+void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   shiftF = true;
 
   #ifdef PC_BUILD
@@ -1218,4 +1242,6 @@ void fnComplexCCCC(uint16_t unusedParamButMandatory) {
     btnClicked(NULL, "02");
   #endif
 }
+*/
+
 #endif // TESTSUITE_BUILD

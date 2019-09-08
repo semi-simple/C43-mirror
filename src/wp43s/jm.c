@@ -23,6 +23,55 @@
 
 #include "wp43s.h"
 
+
+/********************************************//**
+ * RESET TIME FOR SHIFT CANCELLING
+ * THIS IS STANDALONE RESET FOR SHIFT TO BE SET BY EMU KEYS. IT ALSO GETS RESET IN KEYBOARD.C
+ *
+ * FROM keyboard.c 
+ ***********************************************/
+
+void Reset_Shift_Mem(void) {                            //JM
+      #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
+      now = sys_current_ms();                           //JM TIMER DMCP SHIFTCANCEL
+      #endif                                            //JM
+      #ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
+      now = g_get_monotonic_time();                     //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
+      #endif                                            //JM
+      now_MEM = now;                                    //JM TIMER -- any last key pressed
+}
+
+
+
+/********************************************//**
+ * NOT TESTED YET. NOT WORKING. CALLED FROM ## in BASE
+ *
+ * FROM keyboard.c 
+ ***********************************************/
+void fnBASE_Hash(uint16_t unusedParamButMandatory) {
+      shiftF = false;       //JM
+      shiftG = true;        //JM
+      Reset_Shift_Mem();    //JM
+//      calcMode = CM_NIM;    //JM Trying to put the calculator into Number Input Mode
+
+  #ifdef PC_BUILD
+    btnClicked(NULL, "01");
+  #endif
+
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "01");
+  #endif
+  
+
+//   addItemToNimBuffer(/*CHR_NUMBER_SIGN*/KEY_HASH); //Trying out different things
+//The point is I am trying to do: 12 # 10, i.e. activate # while input buffer is active, like the true button.
+
+}
+
+
+
+
+
 /********************************************//**
  * \Set SIGFIG mode
  *

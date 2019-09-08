@@ -260,7 +260,7 @@ void setupDefaults(void) {
   fnComplexResult(false);
   fnComplexMode(CM_RECTANGULAR);
   fnDisplayOvr(DO_SCI);
-  fnStackSize(SS_4);
+  fnStackSize(SS_8);                                             //JM SSTACK Stack size 8 default. Tired of changing it every time I reset. Was SS_4 before.
   fnDateFormat(DF_YMD);
   showFracMode();
   significantDigits = 0;

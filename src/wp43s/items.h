@@ -1671,11 +1671,12 @@
 #define CHR_qoppa                     1632  //JM GREEK
 #define CHR_digamma                   1633  //JM GREEK
 #define CHR_sampi                     1634  //JM GREEK
-#define CHR_case_up                   1635  //JM CAPS
-#define CHR_case_dn                   1636  //JM CAPS
+#define CHR_case                      1635  //JM CAPS
+#define KEY_HASH                      1636  //JM BASE ## test
+#define ITM_HASH                      1637  //JM BASE ### test
 
 
-#define LAST_ITEM                     1637  //JM
+#define LAST_ITEM                     1638  //JM
 
 #define CHR_PROD_SIGN                 9999
 

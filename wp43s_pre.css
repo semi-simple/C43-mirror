@@ -196,7 +196,7 @@
 }
 
 #greekUnderline {
-  background:  #303030;
+  background:  $bezelBackground;
   color:       $gBlue;
   font-family: WP43S_StandardFont;
   font-style:  normal;

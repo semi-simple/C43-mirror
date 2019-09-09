@@ -340,17 +340,20 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
+  realIc_t value;
+
   liftStack();
 
   #ifdef PC_BUILD
-    int32ToReal16(3100, REGISTER_REAL16_DATA(REGISTER_X));
+    int32ToRealIc(3100, &value);
   #endif
 
   #ifdef DMCP_BUILD
-    int32ToReal16(read_power_voltage(), REGISTER_REAL16_DATA(REGISTER_X));
+    int32ToRealIc(read_power_voltage(), &value);
   #endif
 
-  real16Divide(REGISTER_REAL16_DATA(REGISTER_X), const_1000, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcDivide(&value, const_1000, &value);
+  realIcToReal16(&value, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 }
 

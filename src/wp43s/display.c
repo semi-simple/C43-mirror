@@ -71,7 +71,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
-//  SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG only if FIX is chosen. ENG and SCI and all does not react to SIGFIG
+//  SigFigMode = 0;                                              //JM SIGFIG Reset SIGFIG only if FIX is chosen. ENG and SCI and all does not react to SIGFIG
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
@@ -126,7 +126,7 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG only if FIX is chosen. ENG and SCI and all does not react to SIGFIG
-//  UNITDisplay = false;                                           //JM UNIT display Reset. Allowed in the ENG display
+  UNITDisplay = false;        //was out                                   //JM UNIT display Reset. Allowed in the ENG display
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);

@@ -94,9 +94,21 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
 void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
    SigFigMode = 0;                                                //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
    UNITDisplay = true;                                            //JM UNIT display 
-//   fnInfo(UNITDisplay);                                         //JM UNIT
+   //fnInfo(UNITDisplay);                                         //JM UNIT
    if (displayFormatN != 0) {                                     //JM UNIT
-     fnDisplayFormatEng(displayFormatN);                          //JM UNIT
+      //original:      fnDisplayFormatEng(displayFormatN);                          //JM UNIT
+      displayFormat = DF_ENG;
+      displayFormatDigits = displayFormatN;
+      displayRealAsFraction = false;
+      if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+        convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+      }
+      #ifdef PC_BUILD
+        else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+          showInfoDialog("In function fnDisplayFormatEng:", "converting an integer to a real16", "is to be coded", NULL);
+        }
+      #endif
+      refreshStack();
    }                                                              //JM UNIT
 }                                                                 //JM UNIT
 

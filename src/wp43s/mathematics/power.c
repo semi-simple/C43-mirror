@@ -97,9 +97,11 @@ void fnPower(uint16_t unusedParamButMandatory) {
 void powLonILonI(void) {
 	 int32_t exponentSign, baseSign;
   longInteger_t base, exponent;
+  bool_t exponentIsOdd;
 
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
+  exponentIsOdd = longIntegerIsOdd(exponent);
 
   baseSign = longIntegerSign(base);
   longIntegerSetPositiveSign(base);
@@ -157,7 +159,7 @@ void powLonILonI(void) {
     }
   }
 
-  if(baseSign == -1 && longIntegerIsOdd(exponent)) {
+  if(baseSign == -1 && exponentIsOdd) {
     longIntegerSetNegativeSign(power);
   }
 
@@ -406,10 +408,12 @@ void powAn16LonI(void) {
 void powLonIShoI(void) {
 	 int32_t exponentSign, baseSign;
   longInteger_t base, exponent;
+  bool_t exponentIsOdd;
 
   convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
+  exponentIsOdd = longIntegerIsOdd(exponent);
 
   baseSign = longIntegerSign(base);
   longIntegerSetPositiveSign(base);
@@ -467,7 +471,7 @@ void powLonIShoI(void) {
     }
   }
 
-  if(baseSign == -1 && longIntegerIsOdd(exponent)) {
+  if(baseSign == -1 && exponentIsOdd) {
     longIntegerSetNegativeSign(power);
   }
 
@@ -489,10 +493,12 @@ void powLonIShoI(void) {
 void powShoILonI(void) {
 	 int32_t exponentSign, baseSign;
   longInteger_t base, exponent;
+  bool_t exponentIsOdd;
 
   convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
+  exponentIsOdd = longIntegerIsOdd(exponent);
 
   baseSign = longIntegerSign(base);
   longIntegerSetPositiveSign(base);
@@ -550,7 +556,7 @@ void powShoILonI(void) {
     }
   }
 
-  if(baseSign == -1 && longIntegerIsOdd(exponent)) {
+  if(baseSign == -1 && exponentIsOdd) {
     longIntegerSetNegativeSign(power);
   }
 

@@ -17,6 +17,15 @@ Func: fnPower
 In:  SL=0 RY=LonI:"2" RX=LonI:"11"
 Out: EC=0 FI=0 SL=1 RL=LonI:"11" RX=LonI:"2048"
 
+In:  SL=0 RY=LonI:"-2" RX=LonI:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"-8"
+
+In:  SL=0 RY=LonI:"-2" RX=LonI:"4"
+Out: EC=0 FI=0 SL=1 RL=LonI:"4" RX=LonI:"16"
+
+In:  SL=0 RY=LonI:"-2" RX=LonI:"5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=LonI:"-32"
+
 In:  SL=0 RY=LonI:"2" RX=LonI:"200"
 Out: EC=0 FI=0 SL=1 RL=LonI:"200" RX=LonI:"1606938044258990275541962092341162602522202993782792835301376"
 
@@ -268,11 +277,29 @@ Out: EC=24 SL=0 RX=LonI:"-1234"
 In:  SL=0 FI=0 IM=2COMPL RY=LonI:"1234" RX=ShoI:"24#8" ;RX=20
 Out: EC=0 FI=0 SL=1 RL=ShoI:"24#8" RX=LonI:"67035243914691711794360082394262505332216263021359359696306176"
 
+In:  SL=0 RY=LonI:"-2" RX=ShoI:"3#4"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"3#4" RX=LonI:"-8"
+
+In:  SL=0 RY=LonI:"-2" RX=ShoI:"4#5"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"4#5" RX=LonI:"16"
+
+In:  SL=0 RY=LonI:"-2" RX=ShoI:"5#6"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"5#6" RX=LonI:"-32"
+
 ;=======================================
 ; Short Integer ^ Long Integer --> Long Integer
 ;=======================================
 In:  SL=0 FI=0 IM=2COMPL RY=ShoI:"45247#8" RX=LonI:"12" ;RY=19111
 Out: EC=0 FI=0 SL=1 RL=LonI:"12" RX=LonI:"2373564019290369461237013706532355389404645845877921"
+
+In:  SL=0 RY=ShoI:"-2#4" RX=LonI:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"-8"
+
+In:  SL=0 RY=ShoI:"-2#5" RX=LonI:"4"
+Out: EC=0 FI=0 SL=1 RL=LonI:"4" RX=LonI:"16"
+
+In:  SL=0 RY=ShoI:"-2#6" RX=LonI:"5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=LonI:"-32"
 
 
 

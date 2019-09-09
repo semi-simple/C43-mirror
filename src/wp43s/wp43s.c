@@ -239,33 +239,34 @@ void setupDefaults(void) {
 
   statisticalSumsPointer = NULL;
 
-  fnSetWordSize(64); // word size from 1 to 64
-  fnIntegerMode(SIM_2COMPL);
+//JM below, indented if fnReset is over-writing the content of setupdefaults
+   fnSetWordSize(64); // word size from 1 to 64              //JM bug: Overwritten by fnReset
+   fnIntegerMode(SIM_2COMPL);            //JM bug: Overwritten by fnReset
 
-  groupingGap = 3;
+   groupingGap = 3;                     //JM bug: Overwritten by fnReset. equivalent function, not directly set.
 
-  displayFormat = DF_ALL;
-  displayFormatDigits = 0;
-  fnTimeFormat(TF_H24);
-  fnComplexUnit(CU_I);
-  fnAngularMode(AM_DEGREE);
-  fnDenMode(DM_ANY);
+   displayFormat = DF_ALL;              //JM bug: Overwritten by fnReset. equivalent function, not directly set.
+   displayFormatDigits = 0;             //JM bug: Overwritten by fnReset. equivalent function, not directly set.
+   fnTimeFormat(TF_H24);                //JM bug: Overwritten by fnReset
+   fnComplexUnit(CU_I);                 //JM bug: Overwritten by fnReset
+   fnAngularMode(AM_DEGREE);            //JM bug: Overwritten by fnReset
+   fnDenMode(DM_ANY);                   //JM bug: Overwritten by fnReset
   denMax = DM_DENMAX;
-  fnCurveFitting(CF_LINEAR_FITTING);
-  fnLeadingZeros(false);
-  fnProductSign(PS_CROSS);
-  fnFractionType(FT_PROPER);
-  displayRealAsFraction = false;
-  fnRadixMark(RM_PERIOD);
-  fnComplexResult(false);
-  fnComplexMode(CM_RECTANGULAR);
-  fnDisplayOvr(DO_SCI);
-  fnStackSize(SS_8);                                             //JM SSTACK Stack size 8 default. Tired of changing it every time I reset. Was SS_4 before.
-  fnDateFormat(DF_YMD);
+   fnCurveFitting(CF_LINEAR_FITTING);   //JM bug: Overwritten by fnReset
+   fnLeadingZeros(false);               //JM bug: Overwritten by fnReset
+   fnProductSign(PS_CROSS);             //JM bug: Overwritten by fnReset
+   fnFractionType(FT_PROPER);           //JM bug: Overwritten by fnReset
+   displayRealAsFraction = false;       //JM bug: Overwritten by fnReset
+   fnRadixMark(RM_PERIOD);              //JM bug: Overwritten by fnReset
+  fnComplexResult(true);                //JM change: Also overwritten by fnReset. CPXRES set default
+   fnComplexMode(CM_RECTANGULAR);       //JM bug: Overwritten by fnReset
+   fnDisplayOvr(DO_SCI);                //JM bug: Overwritten by fnReset
+   fnStackSize(SS_8);                   //JM change: Also overwritten by fnReset. SSTACK Stack size 8 default. Tired of changing it every time I reset. Was SS_4 before.
+   fnDateFormat(DF_YMD);                //JM bug: Overwritten by fnReset
   showFracMode();
   significantDigits = 0;
-  fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN
-  fnDisplayStack(4);
+   fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN.        //JM bug: Overwritten by fnReset
+   fnDisplayStack(4);                   //JM bug: Overwritten by fnReset
 
   showDateTime();
 
@@ -300,7 +301,7 @@ void setupDefaults(void) {
   fnClearFlag(FLAG_CARRY);
   showOverflowCarry();
 
-  fnClearFlag(FLAG_CPXRES);
+  fnSetFlag(FLAG_CPXRES);                //JM change: Also overwritten by fnReset. CPXRES set default
   showRealComplexResult();
 
   showAlphaMode();
@@ -393,7 +394,7 @@ int main(int argc, char* argv[]) {
 
 
   restoreCalc();
-
+  
   gdk_threads_add_timeout(100, refreshScreen, NULL); // refreshScreen is called every 100 ms
 
   gtk_main();

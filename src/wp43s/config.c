@@ -558,33 +558,34 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
-
-    fnTimeFormat(TF_H24);
-    fnIntegerMode(SIM_2COMPL);
-    fnDisplayFormatAll(0);
-    fnDisplayFormatGap(3);
-    fnComplexUnit(CU_I);
-    fnAngularMode(AM_DEGREE);
-    fnDenMode(DM_ANY);
+//JM below, indented if over-writing the content of setupdefaults
+     fnTimeFormat(TF_H24);
+     fnIntegerMode(SIM_2COMPL);
+     fnDisplayFormatAll(0);
+     fnDisplayFormatGap(3);
+     fnComplexUnit(CU_I);
+     fnAngularMode(AM_DEGREE);
+     fnDenMode(DM_ANY);
     fnDenMax(0);
-    fnDisplayStack(4);
+     fnDisplayStack(4);
     firstGregorianDay = 1752;
-    fnCurveFitting(CF_LINEAR_FITTING);
-    fnLeadingZeros(false);
-    fnProductSign(PS_CROSS);
-    fnFractionType(FT_PROPER);
-    fnRadixMark(RM_PERIOD);
-    fnRoundingMode(RM_HALF_EVEN);
-    fnDisplayOvr(DO_SCI);
-    fnStackSize(SS_4);
+     fnCurveFitting(CF_LINEAR_FITTING);
+     fnLeadingZeros(false);
+     fnProductSign(PS_CROSS);
+     fnFractionType(FT_PROPER);
+     fnRadixMark(RM_PERIOD);
+     fnRoundingMode(RM_HALF_EVEN);
+     fnDisplayOvr(DO_SCI);
+     fnStackSize(SS_8);                 //JM Changed default from 4 to 8
     //tDisp = -1;
-    fnSetWordSize(64);
-    fnDateFormat(DF_YMD);
-    fnComplexMode(CM_RECTANGULAR);
+     fnSetWordSize(64);
+     fnDateFormat(DF_YMD);
+     fnComplexMode(CM_RECTANGULAR);
+     fnComplexResult(true);              //JM added: to CPXRES set default
     showRealComplexResult();
     allocateLocalRegisters(0);
-
-    displayRealAsFraction = false;
+     displayRealAsFraction = false;
+//JM above
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();

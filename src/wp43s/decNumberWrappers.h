@@ -99,6 +99,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real16ToIntegralValue(source, destination)             decDoubleToIntegralValue ((real16_t *)destination, (real16_t *)source, &ctxtReal16, DEC_ROUND_DOWN)
 #define real16ToReal34(source, destination)                    decDoubleToWider         ((real16_t *)source, (real34_t *)destination)
 #define real16ToString(source, destination)                    decDoubleToString        ((real16_t *)source, destination)
+//#define real16ToUInt32(source)                                 decDoubleToUInt32        ((real16_t *)source, &ctxtReal16, DEC_ROUND_DOWN)
 //#define real16Zero(destination)                                decDoubleZero            (destination)
 //#define real16Zero(destination)                                memcpy                   (destination, const16_0, REAL16_SIZE)
 #define real16Zero(destination)                                {*(uint64_t *)destination = *(uint64_t *)const16_0;}

@@ -53,11 +53,31 @@ void fnChangeBase(uint16_t base) {
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;
+      realIc_t x, value;
+      bool_t isNegative;
 
-      fnIp(NOPARAM);
-      real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
+      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+      isNegative = realIcIsNegative(&x);
+      realIcSetPositiveSign(&x);
+      realIcToIntegralValue(&x, &x);
+
+      // Calculate 32 bit high word
+      realIcDivide(&x, const_2p32, &value);
+      realIcToIntegralValue(&value, &value);
+
       longIntegerInit(lgInt);
-      stringToLongInteger(tmpStr3000, 10, lgInt);
+      uIntToLongInteger(realIcToUInt32(&value), lgInt);
+      longIntegerLeftShift(lgInt, 32, lgInt);
+
+      // Calculate 32 bit low word
+      realIcRemainder(&x, const_2p32, &value);
+      realIcToIntegralValue(&value, &value);
+
+      longIntegerAddUInt(lgInt, realIcToUInt32(&value), lgInt);
+      if(isNegative) {
+        longIntegerSetNegativeSign(lgInt);
+      }
+
       convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
       longIntegerFree(lgInt);
       fnChangeBase(base);
@@ -74,11 +94,31 @@ void fnChangeBase(uint16_t base) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;
+      realIc_t x, value;
+      bool_t isNegative;
 
-      fnIp(NOPARAM);
-      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
+      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+      isNegative = realIcIsNegative(&x);
+      realIcSetPositiveSign(&x);
+      realIcToIntegralValue(&x, &x);
+
+      // Calculate 32 bit high word
+      realIcDivide(&x, const_2p32, &value);
+      realIcToIntegralValue(&value, &value);
+
       longIntegerInit(lgInt);
-      stringToLongInteger(tmpStr3000, 10, lgInt);
+      uIntToLongInteger(realIcToUInt32(&value), lgInt);
+      longIntegerLeftShift(lgInt, 32, lgInt);
+
+      // Calculate 32 bit low word
+      realIcRemainder(&x, const_2p32, &value);
+      realIcToIntegralValue(&value, &value);
+
+      longIntegerAddUInt(lgInt, realIcToUInt32(&value), lgInt);
+      if(isNegative) {
+        longIntegerSetNegativeSign(lgInt);
+      }
+
       convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
       longIntegerFree(lgInt);
       fnChangeBase(base);

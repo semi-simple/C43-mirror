@@ -175,7 +175,8 @@ void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, cal
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
   reallocateRegister(destination, dtShortInteger, SHORT_INTEGER_SIZE, 10);
-  *(REGISTER_SHORT_INTEGER_DATA(destination)) = longIntegerToUInt(lgInt) & shortIntegerMask;
+  //*(REGISTER_SHORT_INTEGER_DATA(destination)) = longIntegerToUInt(lgInt) & shortIntegerMask;
+  *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
   if(longIntegerIsNegative(lgInt)) {
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
   }

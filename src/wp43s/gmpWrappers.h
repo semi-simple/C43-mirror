@@ -64,8 +64,8 @@
 #define longInteger2Pow(exp, result)                                mpz_setbit    (result, exp)                 /* result = 2^exp (result MUST be 0 before)*/
 //#define longIntegerDivide2(op, result)                              fp_div_2    (op, result)                    /* result = op / 2 */
 //#define longIntegerRightShift(op, number)                           fp_rshd     (op, number);
-#define longIntegerMultiply2(op, result)                            mpz_mul_2exp  (op, op, 1);                  /* result = op * 2 */
-//#define longIntegerLeftShift(op, number)                            fp_lshd     (op, number);
+#define longIntegerMultiply2(op, result)                            mpz_mul_2exp  (result, op, 1);              /* result = op * 2 */
+#define longIntegerLeftShift(op, number, result)                    mpz_mul_2exp  (result, op, number);         /* result = op * 2^number */
 
 #define longIntegerCompareUInt(op, uint)                            mpz_cmp_ui    (op, uint)
 #define longIntegerAddUInt(op, uint, result)                        mpz_add_ui    (result, op, uint)

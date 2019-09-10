@@ -98,7 +98,7 @@ void showInfoDialog(const char *m1, const char *m2, const char *m3, const char *
   }
 
   gtk_widget_set_name(dialog, "errorBox");
-  gtk_window_set_title(GTK_WINDOW(dialog), "WP 43S error message");
+  gtk_window_set_title(GTK_WINDOW(dialog), "WP 43C error message");    //JM 43C
   gtk_dialog_run(GTK_DIALOG(dialog));
   gtk_widget_destroy(dialog);
 }

@@ -33,7 +33,7 @@ int32_t getFreeRamMemory(void) {
 
 #ifndef DMCP_BUILD
 void debugMemory(void) {
-  printf("WP43S owns %6" FMTSIZE " bytes and GMP owns %6" FMTSIZE " bytes (%" FMT32S " bytes free)\n", wp43sMem, gmpMem, getFreeRamMemory());
+  printf("WP43C owns %6" FMTSIZE " bytes and GMP owns %6" FMTSIZE " bytes (%" FMT32S " bytes free)\n", wp43sMem, gmpMem, getFreeRamMemory());    //JM 43C
   printf("    Addr   Size\n");
   for(int i=0; i<numberOfFreeBlocks; i++) {
     printf("%2d%6u%7u\n", i, freeBlocks[i].address, freeBlocks[i].size);

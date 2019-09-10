@@ -699,7 +699,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           #if (SHOW_MEMORY_STATUS == 1)
             char string[200];
 
-            sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43S %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMem, (uint32_t)gmpMem);
+            sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43C %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMem, (uint32_t)gmpMem);    //JM 43C
             stringToUtf8(string, (uint8_t *)tmpStr3000);
             gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr3000);
             gtk_widget_show(lblMemoryStatus);

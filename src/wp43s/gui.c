@@ -98,8 +98,315 @@ static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
 
 
 
+
+
+//JM ALPHA SECTION FOR ALPHAMODE - FORCE LOWER CASE
+void btnClicked_LC(GtkWidget *w, gpointer data) {
+  uint8_t alphaCase_MEM;
+
+  alphaCase_MEM = alphaCase;
+  alphaCase = AC_LOWER;
+  btnPressed(w, data);
+  btnReleased(w, data);
+  alphaCase = alphaCase_MEM;
+}
+
+
+//JM ALPHA SECTION FOR ALPHAMODE - FORCE Numeral
+void btnClicked_NU(GtkWidget *w, gpointer data) {
+  shiftF = true;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  btnPressed(w, data);
+  btnReleased(w, data);
+}
+
+
+
 gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
   //printf("%d\n", event->keyval);
+
+
+//JM ALPHA SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
+if (calcMode == CM_AIM) {
+switch (event->keyval) {
+//ROW 1
+    case 65470: // F1
+      btnFnClicked(w, "1");
+      break;
+    case 65471: // F2
+      btnFnClicked(w, "2");
+      break;
+    case 65472: // F3
+      btnFnClicked(w, "3");
+      break;
+    case 65473: // F4
+      btnFnClicked(w, "4");
+      break;
+    case 65474: // F5
+      btnFnClicked(w, "5");
+      break;
+    case 65475: // F6
+      btnFnClicked(w, "6");
+      break;
+//ROW 2
+    case 65:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "00");
+      break;
+    case 66:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "01");
+      break;
+    case 67:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "02");
+      break;
+    case 68:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "03");
+      break;
+    case 69:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "04");
+      break;
+    case 70:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "05");
+      break;
+//ROW 3
+    case 71:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "06");
+      break;
+    case 72:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "07");
+      break;
+    case 73:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "08");
+      break;
+    case 74:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "09");
+      break;
+    case 75:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "10");
+      break;
+    case 76:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "11");
+      break;
+//ROW 4
+    case 65421: // Enter
+    case 65293: // Enter
+      btnClicked(w, "12");
+      break;
+    case 77:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "13");
+      break;
+    case 78:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "14");
+      break;
+    case 79:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "15");
+      break;
+    case 65288: // Backspace
+      btnClicked(w, "16");
+      break;
+
+//ROW 5
+    case 65362: // CursorUp //JM
+      btnClicked(w, "17");
+      break;
+    case 80:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "18");
+      break;
+    case 81:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "19");
+      break;
+    case 82:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "20");
+      break;
+    case 83:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "21");
+      break;
+//ROW 6
+    case 65364: // CursorDown //JM
+      btnClicked(w, "22");
+      break;
+    case 84:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "23");
+      break;
+    case 85:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "24");
+      break;
+    case 86:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "25");
+      break;
+    case 87:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "26");
+      break;
+//ROW 7
+    case 65505: // left shift  //JM
+    //case 65506: // right shift //JM
+      btnClicked(w, "27");
+      break;
+    case 88:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "28");
+      break;
+    case 89:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "29");
+      break;
+    case 90:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "30");
+      break;
+//ROW 8
+    case 65307: // Esc EXIT //JM
+      btnClicked(w, "32");
+      break;
+    case 58:  //JM COLON FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "33");
+      break;
+
+    case 44:    // ,
+    case 46:    // .
+    case 65454: // .
+      btnClicked(w, "34");
+      break;
+
+    case 63:  //JM ? for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "35");
+      break;
+
+    case 32:  //JM SPACE for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked(w, "36");
+      break;
+
+
+
+
+//JM ALPHA LOWER CASE SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
+//ROW 2
+    case 65+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "00");
+      break;
+    case 66+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "01");
+      break;
+    case 67+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "02");
+      break;
+    case 68+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "03");
+      break;
+    case 69+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "04");
+      break;
+    case 70+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "05");
+      break;
+//ROW 3
+    case 71+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "06");
+      break;
+    case 72+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "07");
+      break;
+    case 73+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "08");
+      break;
+    case 74+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "09");
+      break;
+    case 75+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "10");
+      break;
+    case 76+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "11");
+      break;
+//ROW 4
+    case 77+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "13");
+      break;
+    case 78+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "14");
+      break;
+    case 79+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "15");
+      break;
+//ROW 5
+    case 80+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "18");
+      break;
+    case 81+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "19");
+      break;
+    case 82+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "20");
+      break;
+    case 83+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "21");
+      break;
+//ROW 6
+    case 84+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "23");
+      break;
+    case 85+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "24");
+      break;
+    case 86+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "25");
+      break;
+    case 87+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "26");
+      break;
+//ROW 7
+    case 88+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "28");
+      break;
+    case 89+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "29");
+      break;
+    case 90+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_LC(w, "30");
+      break;
+
+
+//JM ALPHA NUMERALS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
+//ROW 5
+    case 48+7:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "18");
+      break;
+    case 48+8:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "19");
+      break;
+    case 48+9:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "20");
+      break;
+//ROW 6
+    case 48+4:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "23");
+      break;
+    case 48+5:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "24");
+      break;
+    case 48+6:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "25");
+      break;
+//ROW 7
+    case 48+1:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "28");
+      break;
+    case 48+2:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "29");
+      break;
+    case 48+3:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "30");
+      break;
+//ROW 8
+    case 48+0:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+      btnClicked_NU(w, "33");
+      break;
+  }
+return FALSE;
+}
+
+
+
+
+//ORIGINAL MODIFEIED KEYBOARD DETECTION
+
   switch (event->keyval) {
 //ROW 1
     case 65470: // F1
@@ -133,62 +440,62 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
 //ROW 2
 //dr    case 73:  // I
-    case 65:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 65:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 97:  // a  //dr
       //printf("key pressed: a Sigma+\n"); //dr
       btnClicked(w, "00");
       break;
 
 //dr    case 89:  // Y
-    case 66:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 66:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 118: // v //dr
       //printf("key pressed: v 1/X\n"); //dr
       btnClicked(w, "01");
       break;
 
 //dr    case 84:  // T
-    case 67:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 67:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 113: // q //dr
       //printf("key pressed: q SQRT\n"); //dr
       btnClicked(w, "02");
       break;
 
 //dr    case 76:  // L
-    case 68:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 68:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 111: // o //dr
       //printf("key pressed: o LOG\n"); //dr
       btnClicked(w, "03");
       break;
 
-    case 69:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 69:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 108: // l //dr
       //printf("key pressed: l LN\n"); //dr
       btnClicked(w, "04");
       break;
 
 //dr    case 81:  // Q
-    case 70:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 70:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 120: // x //dr
       //printf("key pressed: x XEQ\n"); //dr
       btnClicked(w, "05");
       break;
 //ROW 3
 //dr    case 83:  // S
-    case 71:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-   case 71:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 109: // m //dr
       //printf("key pressed: m STO\n"); //dr
       btnClicked(w, "06");
       break;
 
 //dr    case 82:  // R
-    case 72:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 72:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 114: // r
       //printf("key pressed: r RCL\n");
       btnClicked(w, "07");
       break;
 
 //dr    case 65366: // PgDn
-    case 73:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 73:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 100: // d //dr
       //printf("key pressed: d Rdown\n"); //dr
       btnClicked(w, "08");
@@ -203,21 +510,21 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;               //dr
 
 //dr    case 67:  // C
-    case 74:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 74:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 115: // s //dr
       //printf("key pressed: s SIN\n"); //dr
       btnClicked(w, "09");
       break;
 
 //dr    case 70:  // F
-    case 75:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 75:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 99:  // c //dr
       //printf("key pressed: c COS\n"); //dr
       btnClicked(w, "10");
       break;
 
 //dr    case 71:  // G
-    case 76:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 76:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 116: // t //dr
       //printf("key pressed: t TAN\n"); //dr
       btnClicked(w, "11");
@@ -230,20 +537,20 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
 
 //dr    case 65289: // Tab
-    case 77:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 77:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 119: // w //dr
       //printf("key pressed: w x<>y\n"); //dr
       btnClicked(w, "13");
       break;
 
-    case 78:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 78:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 110: // n //dr
       //printf("key pressed: n +/-\n"); //dr
       btnClicked(w, "14");
       break;
 
 //dr    case 69:  // E
-    case 79:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 79:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 101: // e //dr
     //printf("key pressed: e EXP\n"); //dr
       btnClicked(w, "15");
@@ -260,14 +567,14 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "17");
       break;
 
-    case 80:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 80:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 55:    // 7
     case 65463: // 7
       //printf("key pressed: 7\n");
       btnClicked(w, "18");
       break;
 
-    case 38:  //JM SHIFTED NUMERAL  //JM
+//JM-    case 38:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
@@ -276,7 +583,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
 
 
 
-    case 81:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 81:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 56:    // 8
     case 65464: // 8
       //printf("key pressed: 8\n");
@@ -284,26 +591,24 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
 
 
-
-
-    case 82:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 82:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 57:    // 9
     case 65465: // 9
       //printf("key pressed: 9\n");
       btnClicked(w, "20");
       break;
 
-    case 40:  //JM SHIFTED NUMERAL  //JM
+/*    case 40:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "20"); //JM
       break;               //JM
+*/
 
 
 
-
-    case 83:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 83:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 47:    // / //JM
     case 65455: // / //JM
       //printf("key pressed: divide\n"); //dr
@@ -316,116 +621,118 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "22");
       break;
 
-    case 84:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 84:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 52:    // 4
     case 65460: // 4
       //printf("key pressed: 4\n");
       btnClicked(w, "23");
       break;
 
-    case 36:  //JM SHIFTED NUMERAL  //JM
+/*    case 36:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "23"); //JM
       break;               //JM
+*/
 
 
-
-    case 85:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 85:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 53:    // 5
     case 65461: // 5
       //printf("key pressed: 5\n");
       btnClicked(w, "24");
       break;
 
-    case 37:  //JM SHIFTED NUMERAL  //JM
+/*    case 37:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "24"); //JM
       break;               //JM
+*/
 
 
-
-    case 86:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 86:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 54:    // 6
     case 65462: // 6
       //printf("key pressed: 6\n");
       btnClicked(w, "25");
       break;
 
-    case 94:  //JM SHIFTED NUMERAL  //JM
+/*    case 94:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "25"); //JM
       break;               //JM
+*/
 
 
-
-    case 87:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 87:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 42:    // * //JM
     case 65450: // * //JM
       //printf("key pressed: multiply\n"); //dr
       btnClicked(w, "26");
       break;
+
 //ROW 7
     case 65505: // left shift  //JM
-//JM    case 65506: //JM right shift. 65453: // -  //JM Remove Right Shift, to allow * & +
+//JM- Reinstated:
+    case 65506: //JM right shift. 65453: // -  //JM Remove Right Shift, to allow * & +
       //printf("key pressed: Shift\n"); //dr
       btnClicked(w, "27");
       break;
 
-    case 88:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 88:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 49:    // 1
     case 65457: // 1
       //printf("key pressed: 1\n");
       btnClicked(w, "28");
       break;
 
-    case 33:  //JM SHIFTED NUMERAL  //JM
+/*    case 33:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "28"); //JM
       break;               //JM
+*/
 
 
-
-    case 89:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 89:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 50:    // 2
     case 65458: // 2
       //printf("key pressed: 2\n");
       btnClicked(w, "29");
       break;
 
-    case 64:  //JM SHIFTED NUMERAL  //JM
+/*    case 64:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       btnClicked(w, "29"); //JM
       break;               //JM
+*/
 
 
 
-
-    case 90:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 90:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 51:    // 3
     case 65459: // 3
       //printf("key pressed: 3\n");
       btnClicked(w, "30");
       break;
 
-    case 35:  //JM SHIFTED NUMERAL  //JM
+/*    case 35:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "30"); //JM
       break;               //JM
+*/
 
 
-
-    case 95:  //JM UNDERSCORE FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 95:  //JM UNDERSCORE FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 45:    // - //JM
     case 65453: // - //JM
       //printf("key pressed: subtract\n"); //dr
@@ -438,20 +745,20 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "32");
       break;
 
-    case 58:  //JM COLON FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//    case 58:  //JM COLON FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 48:    // 0
     case 65456: // 0
       //printf("key pressed: 0\n");
       btnClicked(w, "33");
       break;
 
-    case 41:  //JM SHIFTED NUMERAL  //JM
+/*    case 41:  //JM SHIFTED NUMERAL  //JM
       shiftF = true;       //JM
       shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "33"); //JM
       break;               //JM
-
+*/
 
 
     case 44:    // ,
@@ -463,20 +770,21 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
 
 //    case 65507: // left Ctrl
 //    case 65508: // right Ctrl
-    case 63:  //JM ? for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 63:  //JM ? for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 92: // \                                //JM R/S changed as on Mac CTRL is something else.
       //printf("key pressed: Ctrl R/S\n");
       btnClicked(w, "35");
       break;
 
-    case 32:  //JM SPACE for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
+//JM-    case 32:  //JM SPACE for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
     case 43:    // + //JM
     case 65451: // + //JM
       //printf("key pressed: add\n"); //dr
       btnClicked(w, "36");
       break;
 
-//    case 72:  // H    //JM REMOVE CAP H. ONLY lower case wil print
+//JM- Reinstated
+    case 72:  // H    //JM REMOVE CAP H. ONLY lower case wil print
     case 104: // h
       //printf("key pressed: h Hardcopy\n");
       copyScreenToClipboard();

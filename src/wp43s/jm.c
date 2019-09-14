@@ -211,6 +211,72 @@ void fnShowJM(uint16_t What) {
 
 
 
+/********************************************//**
+ * RPN PROGRAM. 
+ *
+ * \param[in] JM_OPCODE
+ * \return void
+ ***********************************************/
+void fnJM(uint16_t JM_OPCODE) {
+uint16_t cm;
+
+  if(JM_OPCODE == 1) {                                         // JM_OPCODE = 1 : Parallel, not using the stack, destroying I, J & K
+                                                               //                    * DO THE PARALLEL FUNCTION
+                                                               //                    * Drops X and Y, enables stack lift and refreshes the stack
+                                                               //                    * Leaves answer in X
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I
+    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO Y > J
+    fnMultiply(0);                                             // *
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_K);  // STO K
+    fnDrop(0);                                                 // DROP
+
+    fnRecall(REGISTER_I);                                      //
+    STACK_LIFT_ENABLE;
+    fnRecall(REGISTER_J);                                      //
+
+    fnAdd(0);
+    fnRecall(REGISTER_K);
+    fnSwapXY(0);
+    fnDivide(0);
+
+    copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO LAST X
+    refreshStack();
+
+  } else
+
+  if(JM_OPCODE == 2) {                                         // JM_OPCODE = 2 : Angle from complex number. 
+                                                               //                    * Using the stack
+                                                               //                    * Leaves angle in X
+     cm = complexMode;        // STO POLAR MODE
+
+     STACK_LIFT_ENABLE;
+     btnClicked(NULL, "28");  //1     // Get unity complex number & multiply with X, for the sole reason to convert X to complex type.
+     btnClicked(NULL, "14");  //CHS   //   I do not know how to set up the unity complex vector ootherwise
+     btnClicked(NULL, "02");  //sqrt  // Force i
+     shiftF = true;           //.     // Force i.i
+     shiftG = false;          //.
+     Reset_Shift_Mem();       //.
+     btnClicked(NULL, "02");  //sq.   // Force -1 
+     btnClicked(NULL, "14");  //-1    // Force 1
+     btnClicked(NULL, "26");  //*.    // Multiply with X
+
+     complexMode = CM_POLAR;  // SET POLAR
+     fnComplexCCCC(0);        // COMPLEX
+     fnDropY(0);              // DROP Y
+     complexMode = cm;        // RCL POLAR MODE
+
+     refreshStack();
+
+//     shiftF = false;          //JM Make sure we are in decimal degrees mode.
+//     shiftG = true;           //JM
+//     Reset_Shift_Mem();       //JM
+//     btnClicked(NULL, "03");  // .d
+  }
+}
+
+
+
+
 
 
 

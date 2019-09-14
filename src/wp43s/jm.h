@@ -78,6 +78,9 @@ void fnSetHOME3(uint16_t unusedParamButMandatory);
 void fnSetSetJM(uint16_t What);
 void fnInfo(uint16_t Info);
 
+void fnJM(uint16_t JM_OPCODE);
+
+
 //items.c
 void fnDisplayFormatSigFig(uint16_t displayFormatN);
 void fnDisplayFormatUnit(uint16_t displayFormatN);

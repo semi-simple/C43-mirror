@@ -100,25 +100,45 @@ static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
 
 
 
-//JM ALPHA SECTION FOR ALPHAMODE - FORCE LOWER CASE
-void btnClicked_LC(GtkWidget *w, gpointer data) {
-  uint8_t alphaCase_MEM;
+//JM Lower case alpha letters from PC --> produce letters in the current case.
+//JM Upper case alpha letters from PC --> change case and produce letter. Restore case.
 
+
+//JM ALPHA SECTION FOR ALPHAMODE - LOWER CASE PC LETTER INPUT. USE LETTER
+void btnClicked_LC(GtkWidget *w, gpointer data) {
+  btnPressed(w, data);
+  btnReleased(w, data);
+}
+
+
+//JM ALPHA SECTION FOR ALPHAMODE -  UPPER CASE PC LETTER INPUT. INVERT 43C CASE. USE LETTER.
+void btnClicked_UC(GtkWidget *w, gpointer data) {
+  uint8_t alphaCase_MEM;
   alphaCase_MEM = alphaCase;
-  alphaCase = AC_LOWER;
+  if(alphaCase == AC_UPPER) {alphaCase = AC_LOWER;} 
+  else if (alphaCase == AC_LOWER) {alphaCase = AC_UPPER;}
   btnPressed(w, data);
   btnReleased(w, data);
   alphaCase = alphaCase_MEM;
 }
 
 
-//JM ALPHA SECTION FOR ALPHAMODE - FORCE Numeral
+//JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.  
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   shiftF = true;       //JM
   shiftG = false;      //JM
   Reset_Shift_Mem();   //JM
   btnPressed(w, data);
   btnReleased(w, data);
+}
+
+//Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
+void btnClicked_SNU(GtkWidget *w, gpointer data) {
+  shiftF = false;       //JM
+  shiftG = true;        //JM
+  Reset_Shift_Mem();    //JM
+  btnClicked(NULL, "34");     //Alphadot
+  //Only : is working at this point
 }
 
 
@@ -131,7 +151,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
 if (calcMode == CM_AIM) {
 switch (event->keyval) {
 //ROW 1
-    case 65470: // F1
+    case 65470: // F1                                                    //**************-- FUNCTION KEYS --***************//
       btnFnClicked(w, "1");
       break;
     case 65471: // F2
@@ -150,136 +170,118 @@ switch (event->keyval) {
       btnFnClicked(w, "6");
       break;
 //ROW 2
-    case 65:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "00");
+    case 65:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM.    //**************-- ALPHA KEYS UPPER CASE --***************//
+      btnClicked_UC(w, "00");                                          //UPPER CASE PC LETTER INPUT. INVERT 43C CASE. USE LETTER.
       break;
     case 66:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "01");
+      btnClicked_UC(w, "01");
       break;
     case 67:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "02");
+      btnClicked_UC(w, "02");
       break;
     case 68:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "03");
+      btnClicked_UC(w, "03");
       break;
     case 69:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "04");
+      btnClicked_UC(w, "04");
       break;
     case 70:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "05");
+      btnClicked_UC(w, "05");
       break;
 //ROW 3
     case 71:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "06");
+      btnClicked_UC(w, "06");
       break;
     case 72:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "07");
+      btnClicked_UC(w, "07");
       break;
     case 73:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "08");
+      btnClicked_UC(w, "08");
       break;
     case 74:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "09");
+      btnClicked_UC(w, "09");
       break;
     case 75:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "10");
+      btnClicked_UC(w, "10");
       break;
     case 76:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "11");
+      btnClicked_UC(w, "11");
       break;
 //ROW 4
-    case 65421: // Enter
-    case 65293: // Enter
+    case 65421:                                               //JM    // Enter
+    case 65293:                                               //JM    // Enter
       btnClicked(w, "12");
       break;
     case 77:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "13");
+      btnClicked_UC(w, "13");
       break;
     case 78:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "14");
+      btnClicked_UC(w, "14");
       break;
     case 79:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "15");
+      btnClicked_UC(w, "15");
       break;
     case 65288: // Backspace
       btnClicked(w, "16");
       break;
 
 //ROW 5
-    case 65362: // CursorUp //JM
+    case 65362:                                               //JM     // CursorUp //JM
       btnClicked(w, "17");
       break;
     case 80:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "18");
+      btnClicked_UC(w, "18");
       break;
     case 81:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "19");
+      btnClicked_UC(w, "19");
       break;
     case 82:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "20");
+      btnClicked_UC(w, "20");
       break;
     case 83:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "21");
+      btnClicked_UC(w, "21");
       break;
 //ROW 6
-    case 65364: // CursorDown //JM
+    case 65364:                                               //JM     // CursorDown //JM
       btnClicked(w, "22");
       break;
     case 84:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "23");
+      btnClicked_UC(w, "23");
       break;
     case 85:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "24");
+      btnClicked_UC(w, "24");
       break;
     case 86:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "25");
+      btnClicked_UC(w, "25");
       break;
     case 87:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "26");
+      btnClicked_UC(w, "26");
       break;
 //ROW 7
-    case 65505: // left shift  //JM
-    //case 65506: // right shift //JM
+    case 65505:                                               //JM     // left shift  //JM
+  //case 65506: // right shift //JM
       btnClicked(w, "27");
       break;
     case 88:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "28");
+      btnClicked_UC(w, "28");
       break;
     case 89:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "29");
+      btnClicked_UC(w, "29");
       break;
     case 90:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "30");
-      break;
-//ROW 8
-    case 65307: // Esc EXIT //JM
-      btnClicked(w, "32");
-      break;
-    case 58:  //JM COLON FOR SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "33");
+      btnClicked_UC(w, "30");
       break;
 
-    case 44:    // ,
-    case 46:    // .
-    case 65454: // .
-      btnClicked(w, "34");
-      break;
 
-    case 63:  //JM ? for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "35");
-      break;
 
-    case 32:  //JM SPACE for SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked(w, "36");
-      break;
 
 
 
 
 //JM ALPHA LOWER CASE SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
 //ROW 2
-    case 65+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked_LC(w, "00");
+    case 65+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM     //**************-- ALPHA KEYS LOWER CASE --***************//
+      btnClicked_LC(w, "00");                                             //LOWER CASE PC LETTER INPUT. USE LETTER IN THE CURRENT 43C CASE.
       break;
     case 66+32:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
       btnClicked_LC(w, "01");
@@ -363,10 +365,14 @@ switch (event->keyval) {
       break;
 
 
-//JM ALPHA NUMERALS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
+
+
+
+
+//JM  NUMERALS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
 //ROW 5
-    case 48+7:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
-      btnClicked_NU(w, "18");
+    case 48+7:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM     //**************-- NUM KEYS  --***************//
+      btnClicked_NU(w, "18");                                            // Numbers from PC --> produce numbers.
       break;
     case 48+8:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
       btnClicked_NU(w, "19");
@@ -398,6 +404,43 @@ switch (event->keyval) {
     case 48+0:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
       btnClicked_NU(w, "33");
       break;
+
+
+
+//JM  CHARACTERS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD -                //*****. USE MENUS TO GET DEEP DOWN CHARACTERS *******//
+//Only colon is working
+// The issue is that the international letters are not working as yet.
+//   Once working, all letters available on the PC keyboard must be mapped here 
+    case 158:                   //JM changed from 58 to 158, to avoid duplicasting the Colon. Colon exists above.
+      btnClicked_SNU(w, "2");   //Switch to ALphadot; press FN2
+      break;
+
+
+
+//ROW 8
+    case 65307:              // Esc EXIT //JM                   //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
+      btnClicked(w, "32");
+      break;
+
+    case 58:                 // COLON.   //JM
+      btnClicked(w, "33");
+      break;
+
+    case 44:                 // ,        //JM
+    case 46:                 // .        //JM
+    case 65454:              // .        //JM
+      btnClicked(w, "34");
+      break;
+
+    case 63:                 // ?        //JM
+      btnClicked(w, "35");
+      break;
+
+    case 32:                //JM SPACE   //JM
+      btnClicked(w, "36");
+      break;
+
+
   }
 return FALSE;
 }
@@ -679,7 +722,7 @@ return FALSE;
 //ROW 7
     case 65505: // left shift  //JM
 //JM- Reinstated:
-    case 65506: //JM right shift. 65453: // -  //JM Remove Right Shift, to allow * & +
+//    case 65506: //JM right shift. 65453: // -  //JM Remove Right Shift, to allow * & +
       //printf("key pressed: Shift\n"); //dr
       btnClicked(w, "27");
       break;

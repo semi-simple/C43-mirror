@@ -133,7 +133,7 @@ void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, re
 
 
 
-void realIcRectangularToPolar(const realIc_t *re, const realIc_t *im, realIc_t *magnitude, realIc_t *theta) {
+void realIcRectangularToPolar(const realIc_t *re, const realIc_t *im, realIc_t *magnitude, realIc_t *theta) { // theta is in ]-pi, pi]
   if(realIcIsZero(re)) {
     if(realIcIsZero(im)) {
       realIcZero(magnitude);

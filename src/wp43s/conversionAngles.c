@@ -686,14 +686,12 @@ void convertAngleIcFromTo(realIc_t *angle, uint32_t fromAngularMode, uint32_t to
     sign = realIcIsNegative(angle) ? -1 : 1;
     realIcSetPositiveSign(angle);
 
-    ctxtRealIc.round = DEC_ROUND_DOWN;
     realIcToIntegralValue(angle, &degrees);
 
     realIcSubtract(angle, &degrees, angle);
     realIcMultiply(angle, const_100, angle);
 
     realIcToIntegralValue(angle, &minutes);
-    ctxtRealIc.round = DEC_ROUND_HALF_UP;
 
     realIcSubtract(angle, &minutes, angle);
     realIcMultiply(angle, const_100, &seconds);
@@ -774,14 +772,12 @@ void convertAngleIcFromTo(realIc_t *angle, uint32_t fromAngularMode, uint32_t to
     sign = realIcIsNegative(angle) ? -1 : 1;
     realIcSetPositiveSign(angle);
 
-    ctxtRealIc.round = DEC_ROUND_DOWN;
     realIcToIntegralValue(angle, &degrees);
 
     realIcSubtract(angle, &degrees, angle);
     realIcMultiply(angle, const_60, angle);
 
     realIcToIntegralValue(angle, &minutes);
-    ctxtRealIc.round = DEC_ROUND_HALF_UP;
 
     realIcSubtract(angle, &minutes, angle);
     realIcMultiply(angle, const_60, &seconds);

@@ -77,6 +77,55 @@ void fnDivide(uint16_t unusedParamButMandatory) {
 
 
 
+void divCoIcCoIc(const complexIc_t *numer, const complexIc_t *denom, complexIc_t *quotient) {
+  realIc_t realNumer, realDenom, a, b, c, d;
+
+  realIcCopy(&numer->real, &a);
+  realIcCopy(&numer->imag, &b);
+  realIcCopy(&denom->real, &c);
+  realIcCopy(&denom->imag, &d);
+
+  // Denominator
+  realIcMultiply(&c, &c, &realDenom);                    // realDenom = c²
+  realIcFMA(&d, &d, &realDenom, &realDenom);             // realDenom = c² + d²
+
+  // real part
+  realIcMultiply(&a, &c, &realNumer);                    // realNumer = a*c
+  realIcFMA(&b, &d, &realNumer, &realNumer);             // realNumer = a*c + b*d
+  realIcDivide(&realNumer, &realDenom, &quotient->real); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
+
+  // imaginary part
+  realIcMultiply(&b, &c, &realNumer);                    // realNumer = b*c
+  realIcChangeSign(&a);                                  // a = -a
+  realIcFMA(&a, &d, &realNumer, &realNumer);             // realNumer = b*c - a*d
+  realIcDivide(&realNumer, &realDenom, &quotient->imag); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+}
+
+
+
+void divReIcCoIc(const realIc_t *numer, const complexIc_t *denom, complexIc_t *quotient) {
+  realIc_t realNumer, realDenom, a, c, d;
+
+  realIcCopy(numer, &a);
+  realIcCopy(&denom->real, &c);
+  realIcCopy(&denom->imag, &d);
+
+  // Denominator
+  realIcMultiply(&c, &c, &realDenom);                    // realDenom = c²
+  realIcFMA(&d, &d, &realDenom, &realDenom);             // realDenom = c² + d²
+
+  // real part
+  realIcMultiply(&a, &c, &realNumer);                    // realNumer = a*c
+  realIcDivide(&realNumer, &realDenom, &quotient->real); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+
+  // imaginary part
+  realIcChangeSign(&a);                                  // a = -a
+  realIcMultiply(&a, &d, &realNumer);                    // realNumer = -a*d
+  realIcDivide(&realNumer, &realDenom, &quotient->imag); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+}
+
+
+
 /**********************************************************************
  * In all the functions below:
  * if Y is a number then Y = a + ib
@@ -264,31 +313,17 @@ void divLonICo16(void) {
     return;
   }
 
-  realIc_t denom, a, c, d;
+  realIc_t y;
+  complexIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-  //   a        ac         ad
-  // ------ = ------- - i-------
-  // c + id   c² + d²    c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // Denominator
-  realIcMultiply(&c, &c, &denom);    // c²
-  realIcFMA(&d, &d, &denom, &denom); // c² + d²
-
-  // Real part
-  realIcDivide(&c, &denom, &c);      // c / (c² + d²)
-  realIcMultiply(&c, &a, &c);        // ac / (c² + d²)
-
-  // Imaginary part
-  realIcChangeSign(&denom);          // -(c² + d²)
-  realIcDivide(&d, &denom, &d);      // -d / (c² + d²)
-  realIcMultiply(&d, &a, &d);        // -ad / (c² + d²)
-
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -313,11 +348,11 @@ void divCo16LonI(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
 
   realIcDivide(&a, &c, &a);
   realIcDivide(&b, &c, &b);
 
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
@@ -625,31 +660,17 @@ void divLonICo34(void) {
     return;
   }
 
-  realIc_t denom, a, c, d;
+  realIc_t y;
+  complexIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  //   a        ac         ad
-  // ------ = ------- - i-------
-  // c + id   c² + d²    c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // Denominator
-  realIcMultiply(&c, &c, &denom);    // c²
-  realIcFMA(&d, &d, &denom, &denom); // c² + d²
-
-  // Real part
-  realIcDivide(&c, &denom, &c);      // c / (c² + d²)
-  realIcMultiply(&c, &a, &c);        // ac / (c² + d²)
-
-  // Imaginary part
-  realIcChangeSign(&denom);          // -(c² + d²)
-  realIcDivide(&d, &denom, &d);      // -d / (c² + d²)
-  realIcMultiply(&d, &a, &d);        // -ad / (c² + d²)
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -885,26 +906,17 @@ void divRe16Co16(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  convertRegister16To34(REGISTER_Y);
-  convertRegister16To34(REGISTER_X);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom); // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // Real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
-
-  // Imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
-
-  convertRegister34To16(REGISTER_X);
+  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1308,23 +1320,17 @@ void divRe16Co34(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  convertRegister16To34(REGISTER_Y);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom); // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // Real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
-
-  // Imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1520,30 +1526,17 @@ void divCo16Co16(void) {
     return;
   }
 
-  real34_t numer, denom, realPart;
+  complexIc_t y, x;
 
-  convertRegister16To34(REGISTER_Y);
-  convertRegister16To34(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  divCoIcCoIc(&y, &x, &x);
 
-  // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = a*c
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = a*c + b*d
-  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (c² + d²) = numer / denom
-
-  // imaginary part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = b*c
-  real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_Y));                                            // a = -a
-  real34FMA(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = b*c - a*d
-  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (c² + d²) = numer / denom
-
-  // real part
-  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));                                       // re(X) = realPart
-
-  convertRegister34To16(REGISTER_X);
+  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1602,25 +1595,17 @@ void divAn16Co16(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  convertRegister16To34(REGISTER_Y);
-  convertRegister16To34(REGISTER_X);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
-
-  // imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
-
-  convertRegister34To16(REGISTER_X);
+  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1671,31 +1656,17 @@ void divShoICo16(void) {
     return;
   }
 
-  realIc_t denom, a, c, d;
+  realIc_t y;
+  complexIc_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-  //   a        ac         ad
-  // ------ = ------- - i-------
-  // c + id   c² + d²    c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // Denominator
-  realIcMultiply(&c, &c, &denom);    // c²
-  realIcFMA(&d, &d, &denom, &denom); // c² + d²
-
-  // Real part
-  realIcDivide(&c, &denom, &c);      // c / (c² + d²)
-  realIcMultiply(&c, &a, &c);        // ac / (c² + d²)
-
-  // Imaginary part
-  realIcChangeSign(&denom);          // -(c² + d²)
-  realIcDivide(&d, &denom, &d);      // -d / (c² + d²)
-  realIcMultiply(&d, &a, &d);        // -ad / (c² + d²)
-
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1755,22 +1726,18 @@ void divRe34Co16(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  convertRegister16To34(REGISTER_X);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
-
-  // imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1798,27 +1765,56 @@ void divCo16Co34(void) {
     return;
   }
 
-  real34_t numer, denom, realPart;
+  complexIc_t y, x;
 
-  convertRegister16To34(REGISTER_Y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  divCoIcCoIc(&y, &x, &x);
 
-  // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = a*c
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = a*c + b*d
-  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (c² + d²) = numer / denom
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+}
 
-  // imaginary part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = b*c
-  real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_Y));                                            // a = -a
-  real34FMA(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = b*c - a*d
-  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (c² + d²) = numer / denom
 
-  // real part
-  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));                                       // re(X) = realPart
+
+/********************************************//**
+ * \brief Y(complex34) ÷ X(complex16) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void divCo34Co16(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function divCo34Co16:", "cannot use NaN as Y input of /", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function divCo34Co16:", "cannot use NaN as X input of /", NULL, NULL);
+    #endif
+    return;
+  }
+
+  complexIc_t y, x;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+
+  divCoIcCoIc(&y, &x, &x);
+
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1878,70 +1874,18 @@ void divAn34Co16(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  convertRegister16To34(REGISTER_X);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
-
-  // imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) ÷ X(complex16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo34Co16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Co16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Co16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real34_t numer, denom, realPart;
-
-  convertRegister16To34(REGISTER_X);
-
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
-
-  // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = a*c
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = a*c + b*d
-  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (c² + d²) = numer / denom
-
-  // imaginary part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = b*c
-  real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_Y));                                            // a = -a
-  real34FMA(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = b*c - a*d
-  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (c² + d²) = numer / denom
-
-  // real part
-  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));                                       // re(X) = realPart
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2208,7 +2152,7 @@ void divAn16Re34(void) {
     else {
       convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
       realIcDivide(&a, &c, &c);
-      realIcToReal34(&c, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 }
@@ -2296,22 +2240,17 @@ void divAn16Co34(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  convertRegister16To34(REGISTER_Y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
-
-  // imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -3040,22 +2979,17 @@ void divShoICo34(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // c² + d²
+  divReIcCoIc(&y, &x, &x);
 
-  // Real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
-
-  // Imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -3279,20 +3213,17 @@ void divRe34Co34(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
+  divReIcCoIc(&y, &x, &x);
 
-  // imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -3449,7 +3380,7 @@ void divAn34Re34(void) {
     else {
       convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
       realIcDivide(&a, &c, &c);
-      realIcToReal34(&c, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 }
@@ -3483,25 +3414,17 @@ void divCo34Co34(void) {
     return;
   }
 
-  real34_t numer, denom, realPart;
+  complexIc_t y, x;
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c*c
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c*c + d*d
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = a*c
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = a*c + b*d
-  real34Divide(&numer, &denom, &realPart);                                                       // realPart = (a*c + b*d) / (c*c + d*d) = numer / denom
+  divCoIcCoIc(&y, &x, &x);
 
-  // imaginary part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &numer);    // numer = b*c
-  real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_Y)); // -a
-  real34FMA(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &numer, &numer); // numer = b*c - a*d
-  real34Divide(&numer, &denom, REGISTER_IMAG34_DATA(REGISTER_X));                                // im(X) = (b*c - a*d) / (c*c + d*d)
-
-  // real part
-  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));                                       // re(X) = realPart
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -3560,20 +3483,17 @@ void divAn34Co34(void) {
     return;
   }
 
-  real34_t denom;
+  realIc_t y;
+  complexIc_t x;
 
-  // Denominator
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &denom);    // denom = c²
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &denom, &denom); // denom = c² + d²
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // real part
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &denom, REGISTER_REAL34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X));
+  divReIcCoIc(&y, &x, &x);
 
-  // imaginary part
-  real34ChangeSign(&denom);
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_X), &denom, REGISTER_IMAG34_DATA(REGISTER_X));
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 

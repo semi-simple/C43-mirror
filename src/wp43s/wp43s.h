@@ -23,9 +23,9 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.08"
+#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.09"
 #define COPYRIGHT "The WP43S team"
-#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.08" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.09" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -478,8 +478,9 @@ extern const int16_t        softkeyRow[];
 // Variables stored in RAM
 extern decContext           ctxtReal16;  // 16 digits
 extern decContext           ctxtReal34;  // 34 digits
-extern decContext           ctxtRealIc;  // Intermediate calculations for 34 digits
-extern decContext           ctxtReal451; // 451 digits
+extern decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
+extern decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
+extern decContext           ctxtReal451; // 451 digits: used in radian angle reduction
 extern uint16_t             flags[7];
 #define TMP_STR_LENGTH  3000
 #define ERROR_MESSAGE_LENGTH 512

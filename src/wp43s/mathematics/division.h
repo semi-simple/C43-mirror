@@ -18,8 +18,11 @@
  * \file division.h
  ***********************************************/
 
-void fnDivide   (uint16_t unusedParamButMandatory);
-void divError   (void);
+void fnDivide(uint16_t unusedParamButMandatory);
+void divError(void);
+
+void divCoIcCoIc(const complexIc_t *numer, const complexIc_t *denom, complexIc_t *quotient);
+void divReIcCoIc(const realIc_t *numer, const complexIc_t *denom, complexIc_t *quotient);
 
 //      RegYRegX
 void divLonILonI(void);

@@ -45,8 +45,9 @@ bool_t               funcOK;
 // Variables stored in RAM
 decContext           ctxtReal16;  // 16 digits
 decContext           ctxtReal34;  // 34 digits
-decContext           ctxtRealIc;  // Intermediate calculations
-decContext           ctxtReal451; // 451 digits
+decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
+decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
+decContext           ctxtReal451; // 451 digits: used in radian angle reduction
 uint16_t             flags[7];
 char                 tmpStr3000[TMP_STR_LENGTH];
 char                 errorMessage[ERROR_MESSAGE_LENGTH];
@@ -222,11 +223,15 @@ void setupDefaults(void) {
 
   temporaryInformation = TI_NO_INFO;
 
-  decContextDefault(&ctxtReal16,   DEC_INIT_DECDOUBLE);
-  decContextDefault(&ctxtReal34,   DEC_INIT_DECQUAD);
+  decContextDefault(&ctxtReal16, DEC_INIT_DECDOUBLE);
+  decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
   decContextDefault(&ctxtRealIc, DEC_INIT_DECQUAD);
   ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
   ctxtRealIc.traps  = 0;
+
+  decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
+  ctxtReal51.digits = 51;
+  ctxtReal51.traps  = 0;
 
   decContextDefault(&ctxtReal451,  DEC_INIT_DECQUAD);
   ctxtReal451.digits  = 451;
@@ -249,7 +254,7 @@ void setupDefaults(void) {
   fnCurveFitting(CF_LINEAR_FITTING);
   fnLeadingZeros(false);
   fnProductSign(PS_CROSS);
-  fnFractionType(FT_PROPER);
+  fnFractionType(FT_PROPER); // a b/c
   displayRealAsFraction = false;
   fnRadixMark(RM_PERIOD);
   fnComplexResult(false);
@@ -459,11 +464,68 @@ void program_main(void) {
       reset_auto_off();
     }
 
+/////////////////////////////////////////////////
+// For key reassignment see:
+// https://www.swissmicros.com/dm42/devel/dmcp_devel_manual/#_system_key_table
+//
+// Output of keymap2layout keymap.txt
+//
+//    +-----+-----+-----+-----+-----+-----+
+// 1: | F1  | F2  | F3  | F4  | F5  | F6  |
+//    |38:38|39:39|40:40|41:41|42:42|43:43|
+//    +-----+-----+-----+-----+-----+-----+
+// 2: | 1/x |Sum+ | SIN | LN  | LOG |SQRT |
+//    | 1: 2| 2: 1| 3:10| 4: 5| 5: 4| 6: 3|
+//    +-----+-----+-----+-----+-----+-----+
+// 3: | STO | RCL | RDN | COS |SHIFT| TAN |
+//    | 7: 7| 8: 8| 9: 9|10:11|11:28|12:12|
+//    +-----+-----+-----+-----+-----+-----+
+// 4: |   ENTER   |x<>y | CHS |  E  | <-- |
+//    |   13:13   |14:14|15:15|16:16|17:17|
+//    +-----------+-----+-----+-----+-----+
+// 5: |  DIV |   7  |   8  |   9  |  XEQ  |
+//    | 18:22| 19:19| 20:20| 21:21| 22: 6 |
+//    +------+------+------+------+-------+
+// 6: |  MUL |   4  |   5  |   6  |  UP   |
+//    | 23:27| 24:24| 25:25| 26:26| 27:18 |
+//    +------+------+------+------+-------+
+// 7: |  SUB |   1  |   2  |   3  | DOWN  |
+//    | 28:32| 29:29| 30:30| 31:31| 32:23 |
+//    +------+------+------+------+-------+
+// 8: |  ADD |   0  |  DOT |  RUN | EXIT  |
+//    | 33:37| 34:34| 35:35| 36:36| 37:33 |
+//    +------+------+------+------+-------+
+//
+
     // Fetch the key
     //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
     key = key_pop();
+
+    //The switch instruction below is implemented as follows e.g. for the up arrow key:
+    //  the output of keymap2layout for yhis key is UP 27:18
+    //  so we need the line:
+    //    case 18: key = 27; break;
+    switch(key) {
+      case  1: key =  2; break;
+      case  2: key =  1; break;
+      case  3: key =  6; break;
+      case  4: key =  5; break;
+      case  5: key =  4; break;
+      case  6: key = 22; break;
+      case 10: key =  3; break;
+      case 11: key = 10; break;
+      case 18: key = 27; break;
+      case 22: key = 18; break;
+      case 23: key = 32; break;
+      case 27: key = 23; break;
+      case 28: key = 11; break;
+      case 32: key = 28; break;
+      case 33: key = 37; break;
+      case 37: key = 33; break;
+      default: {}
+    }
 
     if(38 <= key && key <=43) {
       sprintf(charKey, "%c", key+11);
@@ -474,15 +536,16 @@ void program_main(void) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);
       lcd_refresh();
-    } else if(key==0) {
+    } else if(key == 0) {
       btnReleased(NULL,NULL);
       lcd_refresh();
     }
 
     uint32_t now = sys_current_ms();
-    if(nextScreenRefresh<=now) {
-        nextScreenRefresh+=100;
-        if(nextScreenRefresh<now) nextScreenRefresh=now+100;    // we were out longer than expected; just skip ahead.
+    if(nextScreenRefresh <= now) {
+        nextScreenRefresh += 100;
+        if(nextScreenRefresh < now)
+          nextScreenRefresh = now + 100; // we were out longer than expected; just skip ahead.
         refreshScreen();
         lcd_refresh();
     }

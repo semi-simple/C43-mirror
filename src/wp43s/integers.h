@@ -33,6 +33,7 @@ void     longIntegerSubtract         (longInteger_t opY, longInteger_t opX, long
  * from the WP34S project and sligtly
  * modified and adapted
  */
+int64_t  WP34S_build_value          (const uint64_t x, const int32_t sign);
 uint64_t WP34S_intAdd               (uint64_t term1,      uint64_t term2);
 uint64_t WP34S_intSubtract          (uint64_t term1,      uint64_t term2);
 uint64_t WP34S_intMultiply          (uint64_t multiplier, uint64_t multiplicand);

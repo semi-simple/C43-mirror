@@ -64,10 +64,17 @@
 #define longInteger2Pow(exp, result)                                mpz_setbit    (result, exp)                 /* result = 2^exp (result MUST be 0 before)*/
 //#define longIntegerDivide2(op, result)                              fp_div_2    (op, result)                    /* result = op / 2 */
 //#define longIntegerRightShift(op, number)                           fp_rshd     (op, number);
+//#define longIntegerMultiply2(op, result)                            mpz_mul_2exp  (op, op, 1);                  /* result = op * 2 */
+#define longIntegerSquareRoot(op, result)                           mpz_sqrt      (result, op)
+#define longIntegerRoot(op, n, result)                              mpz_root      (result, op, n)
+#define longIntegerPerfectSquare(op)                                mpz_perfect_square_p(op)
 #define longIntegerMultiply2(op, result)                            mpz_mul_2exp  (result, op, 1);              /* result = op * 2 */
 #define longIntegerLeftShift(op, number, result)                    mpz_mul_2exp  (result, op, number);         /* result = op * 2^number */
 
+
+
 #define longIntegerCompareUInt(op, uint)                            mpz_cmp_ui    (op, uint)
+#define longIntegerCompareInt(op, sint)                             mpz_cmp_si    (op, sint)
 #define longIntegerAddUInt(op, uint, result)                        mpz_add_ui    (result, op, uint)
 #define longIntegerSubtractUInt(op, uint, result)                   mpz_mul_ui    (result, op, uint)
 #define longIntegerMultiplyUInt(op, uint, result)                   mpz_mul_ui    (result, op, uint)

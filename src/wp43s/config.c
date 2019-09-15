@@ -572,7 +572,7 @@ void fnReset(uint16_t confirmation) {
     fnCurveFitting(CF_LINEAR_FITTING);
     fnLeadingZeros(false);
     fnProductSign(PS_CROSS);
-    fnFractionType(FT_PROPER);
+    fnFractionType(FT_PROPER); // a b/c
     fnRadixMark(RM_PERIOD);
     fnRoundingMode(RM_HALF_EVEN);
     fnDisplayOvr(DO_SCI);

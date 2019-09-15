@@ -47,7 +47,7 @@ const char sortingOrder[] =
  "3"
      STD_SUP_3
      STD_SUB_3
-     STD_CUBIC_ROOT
+     STD_CUBE_ROOT
 
  "4"
      STD_SUP_4

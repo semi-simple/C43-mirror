@@ -78,7 +78,9 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     denMax = DM_DENMAX;
   }
   else {
-    int32_t den = realIcToInt32(&reX);
+    int32_t den;
+
+    realIcToInt32(&reX, den);
 
     if(den == 1) {
       longInteger_t lgInt;

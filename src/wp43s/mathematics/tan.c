@@ -90,10 +90,10 @@ void fnTan(uint16_t unusedParamButMandatory) {
 
 
 void tanLonI(void) {
-  realIc_t sin, cos;
+  realIc_t sin, cos, tan;
 
-  longIntegerAngleReduction(REGISTER_X, currentAngularMode, &cos);
-  WP34S_cvt_2rad_sincos(&sin, &cos, &cos, currentAngularMode);
+  longIntegerAngleReduction(REGISTER_X, currentAngularMode, &tan);
+  WP34S_cvt_2rad_sincostan(&tan, currentAngularMode, &sin, &cos, &tan);
 
   if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -102,12 +102,9 @@ void tanLonI(void) {
     #endif
     return;
   }
-  else {
-   realIcDivide(&sin, &cos, &cos);
-  }
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&cos, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -125,10 +122,10 @@ void tanRe16(void) {
     realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    realIc_t sin, cos;
+    realIc_t sin, cos, tan;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &cos);
-    WP34S_cvt_2rad_sincos(&sin, &cos, &cos, currentAngularMode);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tan);
+    WP34S_cvt_2rad_sincostan(&tan, currentAngularMode, &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -138,8 +135,7 @@ void tanRe16(void) {
       return;
     }
     else {
-    	 realIcDivide(&sin, &cos, &cos);
-      realIcToReal16(&cos, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
     }
   }
 }
@@ -187,7 +183,7 @@ void tanCo16(void) {
   realIcSubtract(&chb2, &shb2, &cshb);
 
   // Calculate cos(a), sin(a) and cos(a)²
-  WP34S_cvt_2rad_sincos(&sa, &ca, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sa, &ca, NULL);
   realIcMultiply(&ca, &ca, &ca2);
 
   // Calculate denom
@@ -221,10 +217,10 @@ void tanAn16(void) {
     realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    realIc_t sin, cos;
+    realIc_t sin, cos, tan;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &cos);
-    WP34S_cvt_2rad_sincos(&sin, &cos, &cos, getRegisterAngularMode(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tan);
+    WP34S_cvt_2rad_sincostan(&tan, getRegisterAngularMode(REGISTER_X), &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -234,8 +230,7 @@ void tanAn16(void) {
       return;
     }
     else {
-    	 realIcDivide(&sin, &cos, &cos);
-      realIcToReal16(&cos, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
     }
   }
 
@@ -269,10 +264,10 @@ void tanRe34(void) {
     realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realIc_t sin, cos;
+    realIc_t sin, cos, tan;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &cos);
-    WP34S_cvt_2rad_sincos(&sin, &cos, &cos, currentAngularMode);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tan);
+    WP34S_cvt_2rad_sincostan(&tan, currentAngularMode, &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -282,8 +277,7 @@ void tanRe34(void) {
       return;
     }
     else {
-    	 realIcDivide(&sin, &cos, &cos);
-      realIcToReal34(&cos, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 }
@@ -331,7 +325,7 @@ void tanCo34(void) {
   realIcSubtract(&chb2, &shb2, &cshb);
 
   // Calculate cos(a), sin(a) and cos(a)²
-  WP34S_cvt_2rad_sincos(&sa, &ca, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sa, &ca, NULL);
   realIcMultiply(&ca, &ca, &ca2);
 
   // Calculate denom
@@ -365,10 +359,10 @@ void tanAn34(void) {
     realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realIc_t sin, cos;
+    realIc_t sin, cos, tan;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &cos);
-    WP34S_cvt_2rad_sincos(&sin, &cos, &cos, getRegisterAngularMode(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tan);
+    WP34S_cvt_2rad_sincostan(&tan, getRegisterAngularMode(REGISTER_X), &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -378,8 +372,7 @@ void tanAn34(void) {
       return;
     }
     else {
-    	 realIcDivide(&sin, &cos, &cos);
-      realIcToReal34(&cos, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 

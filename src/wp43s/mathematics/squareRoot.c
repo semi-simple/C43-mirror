@@ -70,61 +70,18 @@ void sqrtLonI(void) {
   convertLongIntegerRegisterToLongInteger(REGISTER_X, value);
 
   if(longIntegerIsPositiveOrZero(value)) {
-    longInteger_t nn0, nn1, nn2;
-
-    longIntegerInit(nn0);
-    longIntegerInit(nn1);
-    longIntegerInit(nn2);
-
-    if(longIntegerIsZero(value)) {
-      uIntToLongInteger(0, nn1);
+    if(longIntegerPerfectSquare(value)) { // value is a perfect square
+      longIntegerSquareRoot(value, value);
+      convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
     }
     else {
-      // n0 = value / 2 + 1;
-      longIntegerDivideUInt(value, 2, nn0);
-      longIntegerAddUInt(nn0, 1, nn0);
+      realIc_t a;
 
-      // n1 = value / n0 + n0 / 2;
-      longIntegerDivide(value, nn0, nn1);
-      longIntegerDivideUInt(nn0, 2, nn2);
-      longIntegerAdd(nn1, nn2, nn1);
-      while(longIntegerCompare(nn0, nn1) > 0) {
-        //n0 = n1;
-        longIntegerToLongInteger(nn1, nn0);
-
-        //n1 = (n0 + value / n0) / 2;
-        longIntegerDivide(value, nn0, nn1);
-        longIntegerAdd(nn1, nn0, nn1);
-        longIntegerDivideUInt(nn1, 2, nn1);
-      }
-
-      // n0 = n1 * n1;
-      longIntegerMultiply(nn1, nn1, nn0);
-      if(longIntegerCompare(nn0, value) > 0) {
-        longIntegerSubtractUInt(nn1, 1, nn1);
-      }
-
-      if(longIntegerCompare(nn0, value) == 0) {
-        convertLongIntegerToLongIntegerRegister(nn1, REGISTER_X);
-        longIntegerFree(value);
-        longIntegerFree(nn2);
-        longIntegerFree(nn1);
-        longIntegerFree(nn0);
-        return;
-      }
-      else {
-        realIc_t a;
-
-        convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-        realIcSquareRoot(&a, &a);
-        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-        realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-      }
+      convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+      realIcSquareRoot(&a, &a);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
     }
-
-    longIntegerFree(nn2);
-    longIntegerFree(nn1);
-    longIntegerFree(nn0);
   }
   else if(getFlag(FLAG_CPXRES)) { // Negative value
     realIc_t a;

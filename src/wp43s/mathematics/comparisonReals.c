@@ -158,65 +158,92 @@ bool_t real34CompareLessThan(const real34_t *number1, const real34_t *number2) {
 
 bool_t realIcCompareAbsGreaterThan(const realIc_t *number1, const realIc_t *number2) {
   realIc_t compare, num1, num2;
+  int32_t cmp;
 
   realIcCopyAbs(number1, &num1);
   realIcCopyAbs(number2, &num2);
   realIcCompare(&num1, &num2, &compare);
-  return realIcToInt32(&compare) > 0;
+  realIcToInt32(&compare, cmp);
+  return cmp > 0;
+}
+
+
+
+bool_t realIcCompareAbsGreaterEqual(const realIc_t *number1, const realIc_t *number2) {
+  realIc_t compare, num1, num2;
+  int32_t cmp;
+
+  realIcCopyAbs(number1, &num1);
+  realIcCopyAbs(number2, &num2);
+  realIcCompare(&num1, &num2, &compare);
+  realIcToInt32(&compare, cmp);
+  return cmp >= 0;
 }
 
 
 
 bool_t realIcCompareAbsLessThan(const realIc_t *number1, const realIc_t *number2) {
   realIc_t compare, num1, num2;
+  int32_t cmp;
 
   realIcCopyAbs(number1, &num1);
   realIcCopyAbs(number2, &num2);
   realIcCompare(&num1, &num2, &compare);
-  return realIcToInt32(&compare) < 0;
+  realIcToInt32(&compare, cmp);
+  return cmp < 0;
 }
 
 
 
 bool_t realIcCompareEqual(const realIc_t *number1, const realIc_t *number2) {
   realIc_t compare;
+  int32_t cmp;
 
   realIcCompare(number1, number2, &compare);
-  return realIcToInt32(&compare) == 0;
+  realIcToInt32(&compare, cmp);
+  return cmp == 0;
 }
 
 
 
 bool_t realIcCompareGreaterEqual(const realIc_t *number1, const realIc_t *number2) {
   realIc_t compare;
+  int32_t cmp;
 
   realIcCompare(number1, number2, &compare);
-  return realIcToInt32(&compare) >= 0;
+  realIcToInt32(&compare, cmp);
+  return cmp >= 0;
 }
 
 
 
 bool_t realIcCompareGreaterThan(const realIc_t *number1, const realIc_t *number2) {
   realIc_t compare;
+  int32_t cmp;
 
   realIcCompare(number1, number2, &compare);
-  return realIcToInt32(&compare) > 0;
+  realIcToInt32(&compare, cmp);
+  return cmp > 0;
 }
 
 
 
 bool_t realIcCompareLessEqual(const realIc_t *number1, const realIc_t *number2) {
   realIc_t compare;
+  int32_t cmp;
 
   realIcCompare(number1, number2, &compare);
-  return realIcToInt32(&compare) <= 0;
+  realIcToInt32(&compare, cmp);
+  return cmp <= 0;
 }
 
 
 
 bool_t realIcCompareLessThan(const realIc_t *number1, const realIc_t *number2) {
   realIc_t compare;
+  int32_t cmp;
 
   realIcCompare(number1, number2, &compare);
-  return realIcToInt32(&compare) < 0;
+  realIcToInt32(&compare, cmp);
+  return cmp < 0;
 }

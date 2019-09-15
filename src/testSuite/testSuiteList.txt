@@ -123,6 +123,9 @@ power_real34.txt
 power_complex34.txt
 power_angle34.txt
 
+;Answer to the Ultimate Question of Life
+ultimateQuestionOfLife.txt
+
 invert.txt
 
 rectangularToPolar.txt
@@ -144,14 +147,23 @@ cos.txt
 sin.txt
 tan.txt
 
+arccosh.txt
+arcsinh.txt
+arctanh.txt
+
+cosh.txt
+sinh.txt
+tanh.txt
+
 ;The standard calculator performance test arcsin(arccos(arctan(tan(cos(sin(9°))))))-9
 trig.txt
 
 conjugate.txt
 
 square.txt
-sqrt.txt
+squareRoot.txt
 cube.txt
+cubeRoot.txt
 
 gamma.txt     ;TODO tests for complex gamma
 lnGamma.txt   ;TODO tests for complex lnGamma

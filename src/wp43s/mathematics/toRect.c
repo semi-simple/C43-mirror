@@ -152,7 +152,7 @@ void realIcPolarToRectangular(const realIc_t *mag, const realIc_t *theta, realIc
 
   realIcCopy(mag, &magnitude);
 
-  WP34S_cvt_2rad_sincos(&sin, &cos, theta, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(theta, AM_RADIAN, &sin, &cos, NULL);
   realIcMultiply(&magnitude, &cos, real);
   realIcMultiply(&magnitude, &sin, imag);
 }

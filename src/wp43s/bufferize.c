@@ -2043,10 +2043,9 @@ void closeNim(void) {
           real16Divide(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
           int32ToReal16(integer, &temp);
           real16Add(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
-          if(nimBuffer[0] == '-')
-           {
+          if(nimBuffer[0] == '-') {
             real16SetNegativeSign(REGISTER_REAL16_DATA(REGISTER_X));
-           }
+          }
 
           if(!displayRealAsFraction) {
             displayRealAsFraction = true;

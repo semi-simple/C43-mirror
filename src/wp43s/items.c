@@ -739,7 +739,7 @@ const item_t indexOfItems[] = {
 /*  615 */  { fnCvtShorttonKg,             multiply,                    "s.t" STD_RIGHT_ARROW "kg",                    "short",                                                                      SLS_ENABLED  },
 /*  616 */  { fnCvtYearS,                  divide,                      "s" STD_RIGHT_ARROW "year",                    "s" STD_RIGHT_ARROW "year",                                                   SLS_ENABLED  },
 /*  617 */  { fnConstant,                  52,                          "T" STD_SUB_0,                                 "T" STD_SUB_0,                                                                SLS_ENABLED  },
-/*  618 */  { fnTan,                       NOPARAM,                     "tan",                                         "TAN",                                                                        SLS_ENABLED  },     /JM3
+/*  618 */  { fnTan,                       NOPARAM,                     "tan",                                         "TAN",                                                                        SLS_ENABLED  },     //JM3
 /*  619 */  { fnTanh,                      NOPARAM,                     "tanh",                                        "tanh",                                                                       SLS_ENABLED  },
 /*  620 */  { itemToBeCoded,               NOPARAM,                     "TDISP",                                       "TDISP",                                                                      SLS_UNCHANGED},
 /*  621 */  { itemToBeCoded,               NOPARAM,                     "TEST",                                        "TEST",                                                                       SLS_UNCHANGED},

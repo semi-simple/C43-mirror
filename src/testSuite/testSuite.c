@@ -35,8 +35,11 @@ const funcTest_t funcTestNoParam[] = {
   {"fnAdd",                  fnAdd                 },
   {"fnAim",                  fnAim                 },
   {"fnArccos",               fnArccos              },
+  {"fnArccosh",              fnArccosh             },
   {"fnArcsin",               fnArcsin              },
+  {"fnArcsinh",              fnArcsinh             },
   {"fnArctan",               fnArctan              },
+  {"fnArctanh",              fnArctanh             },
   {"fnBatteryVoltage",       fnBatteryVoltage      },
   {"fnChangeSign",           fnChangeSign          },
   {"fnClearRegisters",       fnClearRegisters      },
@@ -55,7 +58,9 @@ const funcTest_t funcTestNoParam[] = {
   {"fnConvertXToReal16",     fnConvertXToReal16    },
   {"fnConvertXToReal34",     fnConvertXToReal34    },
   {"fnCos",                  fnCos                 },
+  {"fnCosh",                 fnCosh                },
   {"fnCube",                 fnCube                },
+  {"fnCubeRoot",             fnCubeRoot            },
   {"fnCvtCToF",              fnCvtCToF             },
   {"fnCvtDegToDms",          fnCvtDegToDms         },
   {"fnCvtDegToRad",          fnCvtDegToRad         },
@@ -102,12 +107,14 @@ const funcTest_t funcTestNoParam[] = {
   {"fnRollUp",               fnRollUp              },
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
+  {"fnSinh",                 fnSinh                },
   {"fnSquare",               fnSquare              },
   {"fnSquareRoot",           fnSquareRoot          },
   {"fnSubtract",             fnSubtract            },
   {"fnSwapRealImaginary",    fnSwapRealImaginary   },
   {"fnSwapXY",               fnSwapXY              },
   {"fnTan",                  fnTan                 },
+  {"fnTanh",                 fnTanh                },
   {"fnToPolar",              fnToPolar             },
   {"fnToRect",               fnToRect              },
   {"fnUnitVector",           fnUnitVector          },
@@ -1066,13 +1073,13 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
-    if(correctSignificantDigits < 31 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
+    if(correctSignificantDigits < 22 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
       puts(registerExpectedAndValue);
       exit(-1);
     }
   }
 
-  return (correctSignificantDigits < 31 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) ? RE_INACCURATE : RE_ACCURATE;
+  return (correctSignificantDigits < 22 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) ? RE_INACCURATE : RE_ACCURATE;
 }
 
 

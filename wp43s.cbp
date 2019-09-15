@@ -98,6 +98,8 @@
 			<Add option="-m64" />
 			<Add option="-funsigned-bitfields" />
 			<Add option="-fshort-enums" />
+			<Add option="-fstrict-aliasing" />
+			<Add option="-Wstrict-aliasing" />
 			<Add option="`pkg-config gtk+-3.0 --cflags`" />
 			<Add option="-DPC_BUILD" />
 			<Add option="-DTFM_NO_ASM" />
@@ -236,14 +238,23 @@
 		<Unit filename="src/testSuite/arccos.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/arccosh.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/arcsin.txt">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/arcsinh.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/arctan.txt">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/arctanh.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/changeSign.txt">
@@ -260,7 +271,13 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/cosh.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/cube.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cubeRoot.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/debug.txt">
@@ -445,10 +462,13 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/sqrt.txt">
+		<Unit filename="src/testSuite/sinh.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/square.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/squareRoot.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/subtraction_angle16.txt">
@@ -498,6 +518,9 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/tanh.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/testSuite.c">
 			<Option compilerVar="CC" />
 			<Option target="testSuite" />
@@ -511,6 +534,9 @@
 		<Unit filename="src/testSuite/trig.txt">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/ultimateQuestionOfLife.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/unitVector.txt">
@@ -853,6 +879,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/arccosh.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/arccosh.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/arcsin.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -864,6 +901,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/arcsinh.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/arcsinh.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/arctan.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -871,6 +919,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/arctan.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/arctanh.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/arctanh.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -919,6 +978,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/cosh.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/cosh.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/cube.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -926,6 +996,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/cube.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/cubeRoot.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/cubeRoot.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1155,13 +1236,13 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/mathematics/sqrt.c">
+		<Unit filename="src/wp43s/mathematics/sinh.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/mathematics/sqrt.h">
+		<Unit filename="src/wp43s/mathematics/sinh.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1173,6 +1254,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/square.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/squareRoot.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/squareRoot.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1206,6 +1298,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/tan.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/tanh.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/tanh.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -25,19 +25,31 @@ typedef struct {
   uint8_t bits;        // Indicator bits (see above)
                        // Coefficient, from least significant unit
   decNumberUnit lsu[(451+DECDPUN-1)/DECDPUN];
-} real451_t;
+} real451_t; // used for radian angle reduction
 
-#define realIc_t                                          decNumber    // Intermediate calculations
+typedef struct {
+  int32_t digits;      // Count of digits in the coefficient; >0
+  int32_t exponent;    // Unadjusted exponent, unbiased, in
+                       // range: -1999999997 through 999999999
+  uint8_t bits;        // Indicator bits (see above)
+                       // Coefficient, from least significant unit
+  decNumberUnit lsu[(51+DECDPUN-1)/DECDPUN];
+} real51_t; // used for trigonometric functions borrowed from WP34S
+
 #define real16_t                                          decDouble    // 16 digits
 #define real34_t                                          decQuad      // 34 digits
+#define realIc_t                                          decNumber    // 39 digits: Intermediate calculations
 typedef struct {real16_t real, imag;}                     complex16_t;
 typedef struct {real34_t real, imag;}                     complex34_t;
+typedef struct {realIc_t real, imag;}                     complexIc_t;
 
 #define REAL16_SIZE                                       sizeof(real16_t)
 #define REAL34_SIZE                                       sizeof(real34_t)
+#define REALIC_SIZE                                       sizeof(realIc_t)
 #define REAL451_SIZE                                      sizeof(real451_t)
 #define COMPLEX16_SIZE                                    sizeof(complex16_t)
 #define COMPLEX34_SIZE                                    sizeof(complex34_t)
+#define COMPLEXIC_SIZE                                    sizeof(complexIc_t)
 
 #define POINTER_TO_LOCAL_FLAGS                            ((dataSize_t  *)(allLocalRegisterPointer))
 #define POINTER_TO_LOCAL_REGISTER(a)                      ((registerDescriptor_t *)(allLocalRegisterPointer + sizeof(dataSize_t) + 4u*(a)))
@@ -100,9 +112,9 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real16ToReal34(source, destination)                    decDoubleToWider         ((real16_t *)source, (real34_t *)destination)
 #define real16ToString(source, destination)                    decDoubleToString        ((real16_t *)source, destination)
 //#define real16ToUInt32(source)                                 decDoubleToUInt32        ((real16_t *)source, &ctxtReal16, DEC_ROUND_DOWN)
-//#define real16Zero(destination)                                decDoubleZero            (destination)
+#define real16Zero(destination)                                decDoubleZero            (destination)
 //#define real16Zero(destination)                                memcpy                   (destination, const16_0, REAL16_SIZE)
-#define real16Zero(destination)                                {*(uint64_t *)destination = *(uint64_t *)const16_0;}
+//#define real16Zero(destination)                                {*(uint64_t *)destination = *(uint64_t *)const16_0;}
 
 #define complex16ChangeSign(operand)                           {real16ChangeSign((real16_t *)(operand)); real16ChangeSign((real16_t *)((char *)(operand) + REAL16_SIZE));}
 #define complex16Copy(source, destination)                     {*(uint64_t *)destination = *(uint64_t *)source; *(((uint64_t *)destination)+1) = *(((uint64_t *)source)+1);}
@@ -141,9 +153,9 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real34ToRealIc(source, destination)                    decQuadToNumber          ((real34_t *)source, (realIc_t *)destination)
 #define real34ToString(source, destination)                    decQuadToString          ((real34_t *)source, destination)
 #define real34ToUInt32(source)                                 decQuadToUInt32          ((real34_t *)source, &ctxtReal34, DEC_ROUND_DOWN)
-//#define real16Zero(destination)                                decQuadZero              (destination)
+#define real34Zero(destination)                                decQuadZero              (destination)
 //#define real34Zero(destination)                                memcpy                   (destination, const34_0, REAL34_SIZE)
-#define real34Zero(destination)                                {*(uint64_t *)destination = *(uint64_t *)const34_0; *(((uint64_t *)destination)+1) = *(((uint64_t *)const34_0)+1);}
+//#define real34Zero(destination)                                {*(uint64_t *)destination = *(uint64_t *)const34_0; *(((uint64_t *)destination)+1) = *(((uint64_t *)const34_0)+1);}
 
 #define complex34ChangeSign(operand)                           {real34ChangeSign((real34_t *)(operand)); real34ChangeSign((real34_t *)((char *)(operand) + REAL34_SIZE));}
 #define complex34Copy(source, destination)                     {*(uint64_t *)destination = *(uint64_t *)source; *(((uint64_t *)destination)+1) = *(((uint64_t *)source)+1); *(((uint64_t *)destination)+2) = *(((uint64_t *)source)+2); *(((uint64_t *)destination)+3) = *(((uint64_t *)source)+3);}
@@ -182,7 +194,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define realIcSetPositiveSign(operand)                         ((realIc_t *)operand)->bits &= 0x7F
 #define realIcSquareRoot(operand, res)                         decNumberSquareRoot      ((realIc_t *)res, (realIc_t *)operand, &ctxtRealIc)
 #define realIcSubtract(operand1, operand2, res)                decNumberSubtract        ((realIc_t *)res, (realIc_t *)operand1, (realIc_t *)operand2, &ctxtRealIc)
-#define realIcToInt32(source)                                  decNumberToInt32         ((realIc_t *)source, &ctxtRealIc)
+#define realIcToInt32(source, destination)                     {enum rounding savedRoundingMode; savedRoundingMode = ctxtRealIc.round; ctxtRealIc.round = DEC_ROUND_DOWN; destination = decNumberToInt32((realIc_t *)source, &ctxtRealIc); ctxtRealIc.round = savedRoundingMode;}
 //#define realIcToIntegralValue(source, destination)             decNumberToIntegralValue ((realIc_t *)destination, (realIc_t *)source, &ctxtRealIc)
 #define realIcToIntegralValue(source, destination)             {real34_t real34; decQuadFromNumber(&real34, (realIc_t *)source, &ctxtReal34); decQuadToIntegralValue(&real34, &real34, &ctxtReal34, DEC_ROUND_DOWN); decQuadToNumber(&real34, (realIc_t *)destination);}
 #define realIcToReal16(source, destination)                    decDoubleFromNumber      ((real16_t *)destination, (realIc_t *)source, &ctxtReal16)
@@ -190,6 +202,21 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define realIcToString(source, destination)                    decNumberToString        ((realIc_t *)source, destination)
 #define realIcToUInt32(source)                                 decNumberToUInt32        ((realIc_t *)source, &ctxtRealIc)
 #define realIcZero(destination)                                decNumberZero            ((realIc_t *)destination)
+
+//#define complexIcCopy(source, destination)                     {decNumberCopy(&(destination)->real, &(source)->real); decNumberCopy(&(destination)->imag, &(source)->imag);}
+#define complexIcCopy(source, destination)                     memcpy                   (destination, source, COMPLEXIC_SIZE)
+
+
+
+#define real51Add(operand1, operand2, res)                     decNumberAdd             ((realIc_t *)res, (realIc_t *)operand1, (realIc_t *)operand2, &ctxtReal51)
+#define real51Compare(operand1, operand2, res)                 decNumberCompare         ((realIc_t *)res, (realIc_t *)operand1, (realIc_t *)operand2, &ctxtReal51)
+#define real51Copy(source, destination)                        decNumberCopy            ((realIc_t *)destination, (realIc_t *)source)
+#define real51Divide(operand1, operand2, res)                  decNumberDivide          ((realIc_t *)res, (realIc_t *)operand1, (realIc_t *)operand2, &ctxtReal51)
+#define real51Multiply(operand1, operand2, res)                decNumberMultiply        ((realIc_t *)res, (realIc_t *)operand1, (realIc_t *)operand2, &ctxtReal51)
+#define real51Subtract(operand1, operand2, res)                decNumberSubtract        ((realIc_t *)res, (realIc_t *)operand1, (realIc_t *)operand2, &ctxtReal51)
+#define real51ToInt32(source, destination)                     {enum rounding savedRoundingMode; savedRoundingMode = ctxtReal51.round; ctxtReal51.round = DEC_ROUND_DOWN; destination = decNumberToInt32((realIc_t *)source, &ctxtReal51); ctxtReal51.round = savedRoundingMode;}
+
+
 
 #define int32ToReal16(source, destination)                     decDoubleFromInt32       ((real16_t *)destination, source)
 #define int32ToReal34(source, destination)                     decQuadFromInt32         ((real34_t *)destination, source)
@@ -200,3 +227,4 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define stringToReal451(source, destination)                   decQuadFromString        ((real34_t *)destination, source, &ctxtReal451)
 #define uInt32ToReal34(source, destination)                    decQuadFromUInt32        ((real34_t *)destination, source)
 #define uInt32ToRealIc(source, destination)                    decNumberFromUInt32      ((realIc_t *)destination, source)
+#define uInt32ToReal51(source, destination)                    decNumberFromUInt32      ((realIc_t *)destination, source)

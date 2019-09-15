@@ -70,13 +70,13 @@ SRC_WP43S                = \
 		stats.c statusBar.c testFunctions.c timer.c \
 		wp43s.c memory.c) \
 	$(addprefix src/wp43s/mathematics/, \
-		10pow.c 2pow.c addition.c arccos.c arcsin.c arctan.c \
-		changeSign.c comparisonReals.c conjugate.c cos.c cube.c \
+		10pow.c 2pow.c addition.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \
+		changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cube.c cubeRoot.c \
 		division.c exp.c factorial.c fractionalPart.c gamma.c gcd.c \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \
 		log2.c magnitude.c minusOnePow.c multiplication.c power.c \
-		realPart.c sign.c sin.c sqrt.c square.c subtraction.c \
-		swapRealImaginary.c tan.c toPolar.c toRect.c unitVector.c \
+		realPart.c sign.c sin.c sinh.c square.c squareRoot.c subtraction.c \
+		swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c unitVector.c \
 		wp34s.c) \
 	$(addprefix src/wp43s/logicalOps/, \
 		not.c) \

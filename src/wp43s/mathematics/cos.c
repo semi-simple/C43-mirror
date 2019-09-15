@@ -68,7 +68,7 @@ void cosLonI(void) {
   realIc_t cos;
 
   longIntegerAngleReduction(REGISTER_X, currentAngularMode, &cos);
-  WP34S_cvt_2rad_sincos(NULL, &cos, &cos, currentAngularMode);
+  WP34S_cvt_2rad_sincostan(&cos, currentAngularMode, NULL, &cos, NULL);
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
   realIcToReal16(&cos, REGISTER_REAL16_DATA(REGISTER_X));
@@ -92,7 +92,7 @@ void cosRe16(void) {
     realIc_t a;
 
     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincos(NULL, &a, &a, currentAngularMode);
+    WP34S_cvt_2rad_sincostan(&a, currentAngularMode, NULL, &a, NULL);
     realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
@@ -127,7 +127,7 @@ void cosCo16(void) {
   realIcExp(&b, &expMIm);
 
   // Calculate cos and sin
-  WP34S_cvt_2rad_sincos(&sin, &cos, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sin, &cos, NULL);
 
   // real part = (e^b + e^(-b))*cos(a)/2
   realIcAdd(&expIm, &expMIm, &a);
@@ -161,7 +161,7 @@ void cosAn16(void) {
     realIc_t a;
 
     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincos(NULL, &a, &a, getRegisterAngularMode(REGISTER_X));
+    WP34S_cvt_2rad_sincostan(&a, getRegisterAngularMode(REGISTER_X), NULL, &a, NULL);
     realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
@@ -198,7 +198,7 @@ void cosRe34(void) {
     realIc_t a;
 
     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincos(NULL, &a, &a, currentAngularMode);
+    WP34S_cvt_2rad_sincostan(&a, currentAngularMode, NULL, &a, NULL);
     realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
@@ -233,7 +233,7 @@ void cosCo34(void) {
   realIcExp(&b, &expMIm);
 
   // Calculate cos and sin
-  WP34S_cvt_2rad_sincos(&sin, &cos, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sin, &cos, NULL);
 
   // real part = (e^b + e^(-b))*cos(a)/2
   realIcAdd(&expIm, &expMIm, &a);
@@ -267,7 +267,7 @@ void cosAn34(void) {
     realIc_t a;
 
     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincos(NULL, &a, &a, getRegisterAngularMode(REGISTER_X));
+    WP34S_cvt_2rad_sincostan(&a, getRegisterAngularMode(REGISTER_X), NULL, &a, NULL);
     realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
 

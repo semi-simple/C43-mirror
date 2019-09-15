@@ -77,6 +77,26 @@ void fnMultiply(uint16_t unusedParamButMandatory) {
 
 
 
+void mulCoIcCoIc(const complexIc_t *factor1, const complexIc_t *factor2, complexIc_t *product) {
+  realIc_t a, b, c, d;
+
+  realIcCopy(&factor1->real, &a);
+  realIcCopy(&factor1->imag, &b);
+  realIcCopy(&factor2->real, &c);
+  realIcCopy(&factor2->imag, &d);
+
+  // imaginary part
+  realIcMultiply(&a, &d, &product->imag);            // a*d
+  realIcFMA(&b, &c, &product->imag, &product->imag); // a*d + b*c
+
+  // real part
+  realIcChangeSign(&b);                              // -b
+  realIcMultiply(&a, &c, &product->real);            // a*c
+  realIcFMA(&b, &d, &product->real, &product->real); // a*c - b*d
+}
+
+
+
 /**********************************************************************
  * In all the functions below:
  * if Y is a number then Y = a + ib
@@ -1212,18 +1232,17 @@ void mulCo16Co16(void) {
     return;
   }
 
-  real16_t imagPart;
+  complexIc_t y, x;
 
-  // imaginary part
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_IMAG16_DATA(REGISTER_X), &imagPart);
-  real16FMA(REGISTER_IMAG16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), &imagPart, &imagPart);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-  //real part
-  real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_Y));
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-  real16FMA(REGISTER_IMAG16_DATA(REGISTER_Y), REGISTER_IMAG16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  mulCoIcCoIc(&y, &x, &x);
 
-  real16Copy(&imagPart, REGISTER_IMAG16_DATA(REGISTER_X));
+  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1514,20 +1533,17 @@ void mulCo16Co34(void) {
     return;
   }
 
-  real34_t imagPart;
+  complexIc_t y, x;
 
-  convertRegister16To34(REGISTER_Y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  // imaginary part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &imagPart);
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &imagPart, &imagPart);
+  mulCoIcCoIc(&y, &x, &x);
 
-  //real part
-  real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_Y));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-
-  real34Copy(&imagPart, REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1555,20 +1571,18 @@ void mulCo34Co16(void) {
     return;
   }
 
-  real34_t imagPart;
+  complexIc_t y, x;
 
-  convertRegister16To34(REGISTER_X);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
 
-  // imaginary part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &imagPart);
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &imagPart, &imagPart);
+  mulCoIcCoIc(&y, &x, &x);
 
-  //real part
-  real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_Y));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-
-  real34Copy(&imagPart, REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2934,18 +2948,17 @@ void mulCo34Co34(void) {
     return;
   }
 
-  real34_t imagPart;
+  complexIc_t y, x;
 
-  // imaginary part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), &imagPart);
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), &imagPart, &imagPart);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-  //real part
-  real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_Y));
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  real34FMA(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  mulCoIcCoIc(&y, &x, &x);
 
-  real34Copy(&imagPart, REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 

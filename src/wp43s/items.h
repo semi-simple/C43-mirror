@@ -1450,7 +1450,7 @@
 #define CHR_RING                      1415
 #define CHR_BULLET                    1416
 #define CHR_SQUARE_ROOT               1417
-#define CHR_CUBIC_ROOT                1418
+#define CHR_CUBE_ROOT                 1418
 #define CHR_xTH_ROOT                  1419
 #define CHR_PROPORTIONAL              1420
 #define CHR_INFINITY                  1421

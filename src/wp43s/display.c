@@ -1625,7 +1625,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int1
   uInt32ToRealIc(longIntegerBits(lgInt) - 1, &value);
   realIcMultiply(&value, const_ln2, &value);
   realIcDivide(&value, const_ln10, &value);
-  exponentShift = realIcToInt32(&value);
+  realIcToInt32(&value, exponentShift);
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);
   exponentShift = (exponentShift / exponentStep + 1) * exponentStep;
   exponentShiftLimit = (50 / exponentStep + 1) * exponentStep;

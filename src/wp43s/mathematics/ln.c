@@ -64,6 +64,13 @@ void fnLn(uint16_t unusedParamButMandatory) {
 
 
 
+void lnCoIc(const complexIc_t *x, complexIc_t *ln) {
+  realIcRectangularToPolar(&x->real, &x->imag, &ln->real, &ln->imag);
+  WP34S_Ln(&ln->real, &ln->real);
+}
+
+
+
 /**********************************************************************
  * In all the functions below:
  * if X is a number then X = a + ib
@@ -192,16 +199,15 @@ void lnCo16(void) {
     }
   }
   else {
-    realIc_t a, b;
+    complexIc_t x;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+    real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-    realIcRectangularToPolar(&a, &b, &a, &b);
-    WP34S_Ln(&a, &a);
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-    realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+    lnCoIc(&x, &x);
+
+    realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+    realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
   }
 }
 
@@ -289,7 +295,7 @@ void lnShoI(void) {
   else {
     if(realIcIsPositive(&a)) {
       WP34S_Ln(&a, &a);
-      realIcToReal16(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
       realIcSetPositiveSign(&a);
@@ -383,16 +389,15 @@ void lnCo34(void) {
     }
   }
   else {
-    realIc_t a, b;
+    complexIc_t x;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+    real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-    realIcRectangularToPolar(&a, &b, &a, &b);
-    WP34S_Ln(&a, &a);
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-    realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+    lnCoIc(&x, &x);
+
+    realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+    realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
   }
 }
 

@@ -558,34 +558,33 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
-//JM below, indented if over-writing the content of setupdefaults
-     fnTimeFormat(TF_H24);
-     fnIntegerMode(SIM_2COMPL);
-     fnDisplayFormatAll(0);
-     fnDisplayFormatGap(3);
-     fnComplexUnit(CU_I);
-     fnAngularMode(AM_DEGREE);
-     fnDenMode(DM_ANY);
+    fnTimeFormat(TF_H24);                                //JM bug. over-writing the content of setupdefaults
+    fnIntegerMode(SIM_2COMPL);                           //JM bug. over-writing the content of setupdefaults
+    fnDisplayFormatAll(0);                               //JM bug. over-writing the content of setupdefaults
+    fnDisplayFormatGap(3);                               //JM bug. over-writing the content of setupdefaults
+    fnComplexUnit(CU_I);                                 //JM bug. over-writing the content of setupdefaults
+    fnAngularMode(AM_DEGREE);                            //JM bug. over-writing the content of setupdefaults
+    fnDenMode(DM_ANY);                                   //JM bug. over-writing the content of setupdefaults
     fnDenMax(0);
-     fnDisplayStack(4);
+    fnDisplayStack(4);                                   //JM bug. over-writing the content of setupdefaults
     firstGregorianDay = 1752;
-     fnCurveFitting(CF_LINEAR_FITTING);
-     fnLeadingZeros(false);
-     fnProductSign(PS_CROSS);
-     fnFractionType(FT_PROPER);
-     fnRadixMark(RM_PERIOD);
-     fnRoundingMode(RM_HALF_EVEN);
-     fnDisplayOvr(DO_SCI);
-     fnStackSize(SS_8);                 //JM Changed default from 4 to 8
+    fnCurveFitting(CF_LINEAR_FITTING);                   //JM bug. over-writing the content of setupdefaults
+    fnLeadingZeros(false);                               //JM bug. over-writing the content of setupdefaults
+    fnProductSign(PS_CROSS);                             //JM bug. over-writing the content of setupdefaults
+    fnFractionType(FT_PROPER); // a b/c                  //JM bug. over-writing the content of setupdefaults
+    fnRadixMark(RM_PERIOD);                              //JM bug. over-writing the content of setupdefaults
+    fnRoundingMode(RM_HALF_EVEN);                        //JM bug. over-writing the content of setupdefaults
+    fnDisplayOvr(DO_SCI);                                //JM bug. over-writing the content of setupdefaults
+    fnStackSize(SS_8);               //JM Changed 4 to 8 //JM bug. over-writing the content of setupdefaults
     //tDisp = -1;
-     fnSetWordSize(64);
-     fnDateFormat(DF_YMD);
-     fnComplexMode(CM_RECTANGULAR);
-     fnComplexResult(true);              //JM added: to CPXRES set default
+    fnSetWordSize(64);                                   //JM bug. over-writing the content of setupdefaults
+    fnDateFormat(DF_YMD);                                //JM bug. over-writing the content of setupdefaults
+    fnComplexMode(CM_RECTANGULAR);                       //JM bug. over-writing the content of setupdefaults
+    fnComplexResult(true);           //JM CPXRES set     //JM bug. over-writing the content of setupdefaults
     showRealComplexResult();
     allocateLocalRegisters(0);
-     displayRealAsFraction = false;
-//JM above
+    displayRealAsFraction = false;                       //JM bug. over-writing the content of setupdefaults
+
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();

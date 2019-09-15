@@ -50,7 +50,7 @@ void fnChangeBase(uint16_t base) {
     }
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
+  else if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtAngle16) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;
       realIc_t x, value;
@@ -91,7 +91,7 @@ void fnChangeBase(uint16_t base) {
     }
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  else if(getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtAngle34) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;
       realIc_t x, value;
@@ -375,7 +375,7 @@ static uint64_t WP34S_extract_value(const uint64_t val, int32_t *const sign) {
 
 /* Helper routine to construct a value from the magnitude and sign
  */
-static int64_t WP34S_build_value(const uint64_t x, const int32_t sign) {
+int64_t WP34S_build_value(const uint64_t x, const int32_t sign) {
  	int64_t value = x & shortIntegerMask;
 
  	if(sign == 0 || shortIntegerMode == SIM_UNSIGN) {

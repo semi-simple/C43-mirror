@@ -1076,12 +1076,9 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      real16ToString(REGISTER_REAL16_DATA(res), tmpStr3000);
-
       ctxtRealIc.digits = significantDigits;
-      stringToRealIc(tmpStr3000, &tmp);
+      real16ToRealIc(REGISTER_REAL16_DATA(res), &tmp);
       ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
-
       realIcToReal16(&tmp, REGISTER_REAL16_DATA(res));
       break;
 
@@ -1095,12 +1092,9 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      real34ToString(REGISTER_REAL34_DATA(res), tmpStr3000);
-
       ctxtRealIc.digits = significantDigits;
-      stringToRealIc(tmpStr3000, &tmp);
+      real34ToRealIc(REGISTER_REAL34_DATA(res), &tmp);
       ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
-
       realIcToReal34(&tmp, REGISTER_REAL34_DATA(res));
       break;
 
@@ -1118,15 +1112,10 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       }
 
       ctxtRealIc.digits = significantDigits;
-
-      real16ToString(REGISTER_REAL16_DATA(res), tmpStr3000);
-      stringToRealIc(tmpStr3000, &tmp);
+      real16ToRealIc(REGISTER_REAL16_DATA(res), &tmp);
       realIcToReal16(&tmp, REGISTER_REAL16_DATA(res));
-
-      real16ToString(REGISTER_IMAG16_DATA(res), tmpStr3000);
-      stringToRealIc(tmpStr3000, &tmp);
+      real16ToRealIc(REGISTER_IMAG16_DATA(res), &tmp);
       realIcToReal16(&tmp, REGISTER_IMAG16_DATA(res));
-
       ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
       break;
 
@@ -1144,15 +1133,10 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       }
 
       ctxtRealIc.digits = significantDigits;
-
-      real34ToString(REGISTER_REAL34_DATA(res), tmpStr3000);
-      stringToRealIc(tmpStr3000, &tmp);
+      real34ToRealIc(REGISTER_REAL34_DATA(res), &tmp);
       realIcToReal34(&tmp, REGISTER_REAL34_DATA(res));
-
-      real34ToString(REGISTER_IMAG34_DATA(res), tmpStr3000);
-      stringToRealIc(tmpStr3000, &tmp);
+      real34ToRealIc(REGISTER_IMAG34_DATA(res), &tmp);
       realIcToReal34(&tmp, REGISTER_IMAG34_DATA(res));
-
       ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
       break;
 
@@ -2093,6 +2077,17 @@ void printRealIcToConsole(const realIc_t *value) {
 
 
 
+void printComplexIcToConsole(const complexIc_t *value) {
+  char str[100];
+
+  realIcToString(&value->real, str);
+  printf("complexIc %s + ", str);
+  real34ToString(&value->imag, str);
+  printf("%si", str);
+}
+
+
+
 void printComplex34ToConsole(const complex34_t *value) {
   char str[100];
 
@@ -2104,10 +2099,19 @@ void printComplex34ToConsole(const complex34_t *value) {
 
 
 
+void printReal51ToConsole(const real51_t *value) {
+  char str[1000];
+
+  realIcToString(value, str);
+  printf("real51 %s", str);
+}
+
+
+
 void printReal451ToConsole(const real451_t *value) {
   char str[1000];
 
-  realIcToString((decNumber *)value, str);
+  realIcToString(value, str);
   printf("real451 %s", str);
 }
 

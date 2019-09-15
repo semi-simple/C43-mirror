@@ -45,8 +45,9 @@ bool_t               funcOK;
 // Variables stored in RAM
 decContext           ctxtReal16;  // 16 digits
 decContext           ctxtReal34;  // 34 digits
-decContext           ctxtRealIc;  // Intermediate calculations
-decContext           ctxtReal451; // 451 digits
+decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
+decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
+decContext           ctxtReal451; // 451 digits: used in radian angle reduction
 uint16_t             flags[7];
 char                 tmpStr3000[TMP_STR_LENGTH];
 char                 errorMessage[ERROR_MESSAGE_LENGTH];
@@ -227,11 +228,15 @@ void setupDefaults(void) {
 
   temporaryInformation = TI_NO_INFO;
 
-  decContextDefault(&ctxtReal16,   DEC_INIT_DECDOUBLE);
-  decContextDefault(&ctxtReal34,   DEC_INIT_DECQUAD);
+  decContextDefault(&ctxtReal16, DEC_INIT_DECDOUBLE);
+  decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
   decContextDefault(&ctxtRealIc, DEC_INIT_DECQUAD);
   ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
   ctxtRealIc.traps  = 0;
+
+  decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
+  ctxtReal51.digits = 51;
+  ctxtReal51.traps  = 0;
 
   decContextDefault(&ctxtReal451,  DEC_INIT_DECQUAD);
   ctxtReal451.digits  = 451;
@@ -240,33 +245,33 @@ void setupDefaults(void) {
   statisticalSumsPointer = NULL;
 
 //JM below, indented if fnReset is over-writing the content of setupdefaults
-   fnSetWordSize(64); // word size from 1 to 64              //JM bug: Overwritten by fnReset
-   fnIntegerMode(SIM_2COMPL);            //JM bug: Overwritten by fnReset
+  fnSetWordSize(64); // word size from 1 to 64               //JM bug: Overwritten by fnReset
+  fnIntegerMode(SIM_2COMPL);                                 //JM bug: Overwritten by fnReset
 
-   groupingGap = 3;                     //JM bug: Overwritten by fnReset. equivalent function, not directly set.
+  groupingGap = 3;                                           //JM bug: Overwritten by fnReset. equivalent function, not directly set.
 
-   displayFormat = DF_ALL;              //JM bug: Overwritten by fnReset. equivalent function, not directly set.
-   displayFormatDigits = 0;             //JM bug: Overwritten by fnReset. equivalent function, not directly set.
-   fnTimeFormat(TF_H24);                //JM bug: Overwritten by fnReset
-   fnComplexUnit(CU_I);                 //JM bug: Overwritten by fnReset
-   fnAngularMode(AM_DEGREE);            //JM bug: Overwritten by fnReset
-   fnDenMode(DM_ANY);                   //JM bug: Overwritten by fnReset
+  displayFormat = DF_ALL;                                    //JM bug: Overwritten by fnReset. equivalent function, not directly set.
+  displayFormatDigits = 0;                                   //JM bug: Overwritten by fnReset. equivalent function, not directly set.
+  fnTimeFormat(TF_H24);                                      //JM bug: Overwritten by fnReset
+  fnComplexUnit(CU_I);                                       //JM bug: Overwritten by fnReset
+  fnAngularMode(AM_DEGREE);                                  //JM bug: Overwritten by fnReset
+  fnDenMode(DM_ANY);                                         //JM bug: Overwritten by fnReset
   denMax = DM_DENMAX;
-   fnCurveFitting(CF_LINEAR_FITTING);   //JM bug: Overwritten by fnReset
-   fnLeadingZeros(false);               //JM bug: Overwritten by fnReset
-   fnProductSign(PS_CROSS);             //JM bug: Overwritten by fnReset
-   fnFractionType(FT_PROPER);           //JM bug: Overwritten by fnReset
-   displayRealAsFraction = false;       //JM bug: Overwritten by fnReset
-   fnRadixMark(RM_PERIOD);              //JM bug: Overwritten by fnReset
-  fnComplexResult(true);                //JM change: Also overwritten by fnReset. CPXRES set default
-   fnComplexMode(CM_RECTANGULAR);       //JM bug: Overwritten by fnReset
-   fnDisplayOvr(DO_SCI);                //JM bug: Overwritten by fnReset
-   fnStackSize(SS_8);                   //JM change: Also overwritten by fnReset. SSTACK Stack size 8 default. Tired of changing it every time I reset. Was SS_4 before.
-   fnDateFormat(DF_YMD);                //JM bug: Overwritten by fnReset
+  fnCurveFitting(CF_LINEAR_FITTING);                         //JM bug: Overwritten by fnReset
+  fnLeadingZeros(false);                                     //JM bug: Overwritten by fnReset
+  fnProductSign(PS_CROSS);                                   //JM bug: Overwritten by fnReset
+  fnFractionType(FT_PROPER);                                 //JM bug: Overwritten by fnReset
+  displayRealAsFraction = false;                             //JM bug: Overwritten by fnReset
+  fnRadixMark(RM_PERIOD);                                    //JM bug: Overwritten by fnReset
+  fnComplexResult(true);                        //JM change: //JM bug: Overwritten by fnReset. CPXRES set default
+  fnComplexMode(CM_RECTANGULAR);                             //JM bug: Overwritten by fnReset
+  fnDisplayOvr(DO_SCI);                                      //JM bug: Overwritten by fnReset
+  fnStackSize(SS_8);                            //JM change: //JM bug: Overwritten by fnReset. SSTACK Stack size 8 default. Tired of changing it every time I reset. Was SS_4 before.
+  fnDateFormat(DF_YMD);                                      //JM bug: Overwritten by fnReset
   showFracMode();
   significantDigits = 0;
-   fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN.        //JM bug: Overwritten by fnReset
-   fnDisplayStack(4);                   //JM bug: Overwritten by fnReset
+  fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN.      //JM bug: Overwritten by fnReset
+  fnDisplayStack(4);                                         //JM bug: Overwritten by fnReset
 
   showDateTime();
 
@@ -394,7 +399,7 @@ int main(int argc, char* argv[]) {
 
 
   restoreCalc();
-  
+
   gdk_threads_add_timeout(100, refreshScreen, NULL); // refreshScreen is called every 100 ms
 
   gtk_main();
@@ -492,15 +497,16 @@ void program_main(void) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);
       lcd_refresh();
-    } else if(key==0) {
+    } else if(key == 0) {
       btnReleased(NULL,NULL);
       lcd_refresh();
     }
 
     uint32_t now = sys_current_ms();
-    if(nextScreenRefresh<=now) {
-        nextScreenRefresh+=100;
-        if(nextScreenRefresh<now) nextScreenRefresh=now+100;    // we were out longer than expected; just skip ahead.
+    if(nextScreenRefresh <= now) {
+        nextScreenRefresh += 100;
+        if(nextScreenRefresh < now)
+          nextScreenRefresh = now + 100; // we were out longer than expected; just skip ahead.
         refreshScreen();
         lcd_refresh();
     }

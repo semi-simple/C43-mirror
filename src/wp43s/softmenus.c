@@ -403,7 +403,7 @@ const int16_t menu_alphaMATH[]   = { CHR_LESS_THAN,                 CHR_LESS_EQU
                                      CHR_LEFT_CURLY_BRACKET,        CHR_LEFT_SQUARE_BRACKET,    CHR_LEFT_PARENTHESIS,     CHR_RIGHT_PARENTHESIS, CHR_RIGHT_SQUARE_BRACKET,    CHR_RIGHT_CURLY_BRACKET,
                                      CHR_PROD_SIGN,                 CHR_DIVIDE,                 CHR_INTEGRAL,             CHR_SUB_INFINITY,      CHR_SUP_INFINITY,            CHR_INFINITY,
                                      CHR_NOT,                       CHR_AND,                    CHR_OR,                   CHR_NOT_EQUAL,         CHR_PIPE,                    CHR_AMPERSAND,
-                                     CHR_MEASURED_ANGLE,            CHR_RIGHT_ANGLE,            CHR_PERPENDICULAR,        CHR_CUBIC_ROOT,        CHR_SQUARE_ROOT,             CHR_xTH_ROOT,
+                                     CHR_MEASURED_ANGLE,            CHR_RIGHT_ANGLE,            CHR_PERPENDICULAR,        CHR_CUBE_ROOT,         CHR_SQUARE_ROOT,             CHR_xTH_ROOT,
                                      CHR_x_BAR,                     CHR_y_BAR,                  CHR_x_CIRC,               CHR_y_CIRC,            CHR_x_UNDER_ROOT,            CHR_y_UNDER_ROOT,
                                      CHR_COLON_EQUALS,              CHR_ESTIMATES,              CHR_CORRESPONDS_TO,       CHR_SUB_E_OUTLINE,     CHR_COMPLEX_C,               CHR_REAL_R,
                                      CHR_SUN,                       CHR_SUB_SUN,                CHR_SUB_EARTH,            ITM_NULL,              ITM_NULL,                    CHR_NEG_EXCLAMATION_MARK,

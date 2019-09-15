@@ -104,7 +104,7 @@ void arccosLonI(void) {
       convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
     }
     else{
-      real34Zero(REGISTER_REAL16_DATA(REGISTER_X));
+      real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 }

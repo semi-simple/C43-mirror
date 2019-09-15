@@ -46,6 +46,7 @@ void fnToBeCoded(void) {
 }
 
 
+
 /********************************************//**
  * \brief No OPeration
  *
@@ -129,7 +130,7 @@ const item_t indexOfItems[] = {
 /*    6 */  { fnInvert,                    NOPARAM,                     "1/x",                                         "1/x",                                                                        SLS_ENABLED  },
 /*    7 */  { fnIntegerMode,               SIM_2COMPL,                  "2COMPL",                                      "2COMPL",                                                                     SLS_UNCHANGED},
 /*    8 */  { fn2Pow,                      NOPARAM,                     "2" STD_SUP_x,                                 "2" STD_SUP_x,                                                                SLS_ENABLED  },
-/*    9 */  { itemToBeCoded,               NOPARAM,                     STD_CUBIC_ROOT STD_x_UNDER_ROOT,               STD_CUBIC_ROOT STD_x_UNDER_ROOT,                                              SLS_ENABLED  },
+/*    9 */  { fnCubeRoot,                  NOPARAM,                     STD_CUBE_ROOT STD_x_UNDER_ROOT,                STD_CUBE_ROOT STD_x_UNDER_ROOT,                                               SLS_ENABLED  },
 /*   10 */  { itemToBeCoded,               NOPARAM,                     "A",                                           "A",                                                                          SLS_UNCHANGED},
 /*   11 */  { fnConstant,                  1,                           "a",                                           "a",                                                                          SLS_ENABLED  },
 /*   12 */  { fnConstant,                  2,                           "a" STD_SUB_0,                                 "a" STD_SUB_0,                                                                SLS_ENABLED  },
@@ -144,12 +145,12 @@ const item_t indexOfItems[] = {
 /*   21 */  { fnConstant,                  3,                           "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,                                  SLS_ENABLED  },
 /*   22 */  { itemToBeCoded,               NOPARAM,                     "AND",                                         "AND",                                                                        SLS_UNCHANGED},
 /*   23 */  { itemToBeCoded,               NOPARAM,                     "ANGLES",                                      "ANGLES",                                                                     SLS_UNCHANGED},
-/*   24 */  { fnArccos,                    NOPARAM,                     "arccos",                                      "ACOS",                                                                     SLS_ENABLED  },     //JM3 CAPS
-/*   25 */  { itemToBeCoded,               NOPARAM,                     "arcosh",                                      "arcosh",                                                                     SLS_ENABLED  },
-/*   26 */  { fnArcsin,                    NOPARAM,                     "arcsin",                                      "ASIN",                                                                     SLS_ENABLED  },      //JM3 CAPS
-/*   27 */  { fnArctan,                    NOPARAM,                     "arctan",                                      "ATAN",                                                                     SLS_ENABLED  },     //JM3 CAPS
-/*   28 */  { itemToBeCoded,               NOPARAM,                     "arsinh",                                      "arsinh",                                                                     SLS_ENABLED  },
-/*   29 */  { itemToBeCoded,               NOPARAM,                     "artanh",                                      "artanh",                                                                     SLS_ENABLED  },
+/*   24 */  { fnArccos,                    NOPARAM,                     "arccos",                                      "ACOS",                                                                     SLS_ENABLED  },          //JM3
+/*   25 */  { fnArccosh,                   NOPARAM,                     "arcosh",                                      "arcosh",                                                                     SLS_ENABLED  },
+/*   26 */  { fnArcsin,                    NOPARAM,                     "arcsin",                                      "ASIN",                                                                     SLS_ENABLED  },          //JM3
+/*   27 */  { fnArctan,                    NOPARAM,                     "arctan",                                      "ATAN",                                                                     SLS_ENABLED  },          //JM3
+/*   28 */  { fnArcsinh,                   NOPARAM,                     "arsinh",                                      "arsinh",                                                                     SLS_ENABLED  },
+/*   29 */  { fnArctanh,                   NOPARAM,                     "artanh",                                      "artanh",                                                                     SLS_ENABLED  },
 /*   30 */  { itemToBeCoded,               NOPARAM,                     "ASR",                                         "ASR",                                                                        SLS_UNCHANGED},
 /*   31 */  { itemToBeCoded,               NOPARAM,                     "ASSIGN",                                      "ASN",                                                                        SLS_UNCHANGED},
 /*   32 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    "atm" STD_RIGHT_ARROW "Pa",                                                   SLS_ENABLED  },
@@ -212,8 +213,8 @@ const item_t indexOfItems[] = {
 /*   89 */  { itemToBeCoded,               NOPARAM,                     "CONST",                                       "CONST",                                                                      SLS_UNCHANGED},
 /*   90 */  { itemToBeCoded,               NOPARAM,                     "CONVG?",                                      "CONVG?",                                                                     SLS_UNCHANGED},
 /*   91 */  { itemToBeCoded,               NOPARAM,                     "CORR",                                        "r",                                                                          SLS_UNCHANGED},
-/*   92 */  { fnCos,                       NOPARAM,                     "cos",                                         "COS",                                                                        SLS_ENABLED  },     //JM3 CAPS
-/*   93 */  { itemToBeCoded,               NOPARAM,                     "cosh",                                        "cosh",                                                                       SLS_ENABLED  },
+/*   92 */  { fnCos,                       NOPARAM,                     "cos",                                         "COS",                                                                        SLS_ENABLED  },     //JM3
+/*   93 */  { fnCosh,                      NOPARAM,                     "cosh",                                        "cosh",                                                                       SLS_ENABLED  },
 /*   94 */  { itemToBeCoded,               NOPARAM,                     "COV",                                         "cov",                                                                        SLS_UNCHANGED},
 /*   95 */  { itemToBeCoded,               NOPARAM,                     "CPX",                                         "CPX",                                                                        SLS_UNCHANGED},
 /*   96 */  { fnComplexUnit,               CU_I,                        "CPXi",                                        "CPXi",                                                                       SLS_UNCHANGED},
@@ -568,7 +569,7 @@ const item_t indexOfItems[] = {
 /*  445 */  { fnCvtInhgPa,                 divide,                      "Pa" STD_RIGHT_ARROW "iHg",                    "Pa" STD_RIGHT_ARROW,                                                         SLS_ENABLED  },
 /*  446 */  { fnCvtPsiPa,                  divide,                      "Pa" STD_RIGHT_ARROW "psi",                    "Pa" STD_RIGHT_ARROW "psi",                                                   SLS_ENABLED  },
 /*  447 */  { fnCvtTorrPa,                 divide,                      "Pa" STD_RIGHT_ARROW "tor",                    "Pa " STD_RIGHT_ARROW,                                                        SLS_ENABLED  },
-/*  448 */  { itemToBeCoded,               NOPARAM,                     "PARTS",                                       "PARTS",                                                                      SLS_UNCHANGED},                  //JM
+/*  448 */  { itemToBeCoded,               NOPARAM,                     "PARTS",                                       "PARTS",                                                                      SLS_UNCHANGED},
 /*  449 */  { fnCvtPcM,                    multiply,                    "pc" STD_RIGHT_ARROW "m",                      "pc" STD_RIGHT_ARROW "m",                                                     SLS_ENABLED  },
 /*  450 */  { itemToBeCoded,               NOPARAM,                     "PERM",                                        "P" STD_SUB_y STD_SUB_x,                                                      SLS_UNCHANGED},
 /*  451 */  { itemToBeCoded,               NOPARAM,                     "PER/a",                                       "per/a",                                                                      SLS_UNCHANGED},
@@ -689,9 +690,9 @@ const item_t indexOfItems[] = {
 /*  566 */  { fnSign,                      NOPARAM,                     "SIGN",                                        "sign",                                                                       SLS_ENABLED  },
 /*  567 */  { fnIntegerMode,               SIM_SIGNMT,                  "SIGNMT",                                      "SIGNMT",                                                                     SLS_UNCHANGED},
 /*  568 */  { itemToBeCoded,               NOPARAM,                     "SIM_EQ",                                      "SIM EQ",                                                                     SLS_UNCHANGED},
-/*  569 */  { fnSin,                       NOPARAM,                     "sin",                                         "SIN",                                                                        SLS_ENABLED  },     //JM3 CAPS
-/*  570 */  { itemToBeCoded,               NOPARAM,                     "sinc",                                        "sinc",                                                                       SLS_UNCHANGED},
-/*  571 */  { itemToBeCoded,               NOPARAM,                     "sinh",                                        "sinh",                                                                       SLS_UNCHANGED},
+/*  569 */  { fnSin,                       NOPARAM,                     "sin",                                         "SIN",                                                                        SLS_ENABLED  },    //JM3
+/*  570 */  { itemToBeCoded,               NOPARAM,                     "sinc",                                        "sinc",                                                                       SLS_ENABLED  },
+/*  571 */  { fnSinh,                      NOPARAM,                     "sinh",                                        "sinh",                                                                       SLS_ENABLED  },
 /*  572 */  { itemToBeCoded,               NOPARAM,                     "SKIP",                                        "SKIP",                                                                       SLS_UNCHANGED},
 /*  573 */  { itemToBeCoded,               NOPARAM,                     "SL",                                          "SL",                                                                         SLS_UNCHANGED},
 /*  574 */  { itemToBeCoded,               NOPARAM,                     "SLOW",                                        "SLOW",                                                                       SLS_UNCHANGED},
@@ -738,8 +739,8 @@ const item_t indexOfItems[] = {
 /*  615 */  { fnCvtShorttonKg,             multiply,                    "s.t" STD_RIGHT_ARROW "kg",                    "short",                                                                      SLS_ENABLED  },
 /*  616 */  { fnCvtYearS,                  divide,                      "s" STD_RIGHT_ARROW "year",                    "s" STD_RIGHT_ARROW "year",                                                   SLS_ENABLED  },
 /*  617 */  { fnConstant,                  52,                          "T" STD_SUB_0,                                 "T" STD_SUB_0,                                                                SLS_ENABLED  },
-/*  618 */  { fnTan,                       NOPARAM,                     "tan",                                         "TAN",                                                                        SLS_ENABLED  },  //JM3 CHR_L_APOSTROPHE
-/*  619 */  { itemToBeCoded,               NOPARAM,                     "tanh",                                        "tanh",                                                                       SLS_UNCHANGED},
+/*  618 */  { fnTan,                       NOPARAM,                     "tan",                                         "TAN",                                                                        SLS_ENABLED  },     /JM3
+/*  619 */  { fnTanh,                      NOPARAM,                     "tanh",                                        "tanh",                                                                       SLS_ENABLED  },
 /*  620 */  { itemToBeCoded,               NOPARAM,                     "TDISP",                                       "TDISP",                                                                      SLS_UNCHANGED},
 /*  621 */  { itemToBeCoded,               NOPARAM,                     "TEST",                                        "TEST",                                                                       SLS_UNCHANGED},
 /*  622 */  { itemToBeCoded,               NOPARAM,                     "TICKS",                                       "TICKS",                                                                      SLS_UNCHANGED},
@@ -1541,7 +1542,7 @@ const item_t indexOfItems[] = {
 /* 1415 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_RING,                                                                     SLS_UNCHANGED},
 /* 1416 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_BULLET,                                                                   SLS_UNCHANGED},
 /* 1417 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_SQUARE_ROOT,                                                              SLS_UNCHANGED},
-/* 1418 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_CUBIC_ROOT,                                                               SLS_UNCHANGED},
+/* 1418 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_CUBE_ROOT,                                                                SLS_UNCHANGED},
 /* 1419 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_xTH_ROOT,                                                                 SLS_UNCHANGED},
 /* 1420 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_PROPORTIONAL,                                                             SLS_UNCHANGED},
 /* 1421 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_INFINITY,                                                                 SLS_UNCHANGED},

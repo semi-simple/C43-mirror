@@ -103,7 +103,7 @@ void m1PowRe16(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
 
   realIcMultiply(const_pi, &a, &a);
-  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, NULL, &a, NULL);
 
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
@@ -155,7 +155,7 @@ void m1PowAn16(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
 
   realIcMultiply(const_pi, &a, &a);
-  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, NULL, &a, NULL);
 
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
@@ -194,7 +194,7 @@ void m1PowRe34(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
 
   realIcMultiply(const_pi, &a, &a);
-  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, NULL, &a, NULL);
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -243,7 +243,7 @@ void m1PowAn34(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
 
   realIcMultiply(const_pi, &a, &a);
-  WP34S_cvt_2rad_sincos(NULL, &a, &a, AM_RADIAN);
+  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, NULL, &a, NULL);
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

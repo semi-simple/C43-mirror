@@ -1,0 +1,218 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                          sinh                           **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnSinh
+
+
+
+;=======================================
+; sinh(Long Integer) --> Real16
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=Re16:"74.20321057778875897700947199606456559961940900442581698066127"
+
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"605"
+Out: EC=0 FI=0 SL=1 RL=LonI:"605" RX=Re16:"2.7998293110958330698960856457790086626380084506050858348638298e262"
+
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"-595"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-595" RX=Re16:"-1.2711205407069717016503807475754516506872117364758988416941983e258"
+
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Re16:"0"
+
+
+
+;=======================================
+; sinh(Real16) --> Real16
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"0"
+Out: EC=0 FI=0 SL=1 RL=Re16:"0" RX=Re16:"0"
+
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001" RX=Re16:"1.0000000016666666675000000001984126984402557319249037999039605e-4"
+
+In:  AM=GRAD SL=0 FI=0 RX=Re16:"50"
+Out: EC=0 FI=0 SL=1 RL=Re16:"50" RX=Re16:"2592352764293536232043.7266614667426924137344538544308027561393"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"9.999999999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"9.999999999" RX=Re16:"11013.232863690160462639817850641146181523497684024435311708163"
+
+; NaN
+In:  SL=0 FI=0 RX=Re16:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
+
+; Infinity
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
+Out: EC=4 FI=0 SL=0 RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
+Out: EC=0 FI=0 SL=1 RL=Re16:"inf" RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
+Out: EC=5 FI=0 SL=0 RX=Re16:"-inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re16:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Re16:"-inf" RX=Re16:"-inf"
+
+
+
+;=======================================
+; sinh(Complex16) --> Complex16
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
+Out: EC=0 FI=1 SL=1 RL=Co16:"6.2 i -7.6" RX=Co16:"61.903768291613323355620984960713988217315656185239068929429946 i -238.47172728732495776240281548076859679543279877012533924894352"
+
+
+
+;=======================================
+; sinh(Angle16) --> Real16
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=An16:"0":DEG
+Out: EC=0 FI=0 SL=1 RL=An16:"0":DEG RX=Re16:"0"
+
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=An16:"0.0001":DMS
+Out: EC=0 FI=0 SL=1 RL=An16:"0.0001":DMS RX=Re16:"1.0000000016666666675000000001984126984402557319249037999039605e-4"
+
+In:  AM=GRAD SL=0 FI=0 RX=An16:"50":GRAD
+Out: EC=0 FI=0 SL=1 RL=An16:"50":GRAD RX=Re16:"2592352764293536232043.7266614667426924137346467294155991479176"
+
+In:  AM=DEG SL=0 FI=0 RX=An16:"9.999999999":RAD
+Out: EC=0 FI=0 SL=1 RL=An16:"9.999999999":RAD RX=Re16:"11013.232863690160462639817850641146181523497684024435311708163"
+
+; NaN
+In:  SL=0 FI=0 RX=An16:"NaN":MULTPI
+Out: EC=1 FI=0 SL=0 RX=An16:"NaN":MULTPI
+
+; Infinity
+In:  SL=0 FI=0 FD=0 RX=An16:"inf":DMS
+Out: EC=4 FI=0 SL=0 RX=An16:"inf":DMS
+
+In:  SL=0 FI=0 FD=1 RX=An16:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=An16:"inf":DEG RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=An16:"-inf":RAD
+Out: EC=5 FI=0 SL=0 RX=An16:"-inf":RAD
+
+In:  SL=0 FI=0 FD=1 RX=An16:"-inf":MULTPI
+Out: EC=0 FI=0 SL=1 RL=An16:"-inf":MULTPI RX=Re16:"-inf"
+
+
+
+;=======================================
+; sinh(Time)
+;=======================================
+
+
+
+;=======================================
+; sinh(Date)
+;=======================================
+
+
+
+;=======================================
+; sinh(String) --> Error24
+;=======================================
+In:  SL=0 RX=Stri:"String test"
+Out: EC=24 SL=0 RX=Stri:"String test"
+
+
+
+;=======================================
+; sinh(Real16 Matrix)
+;=======================================
+
+
+
+;=======================================
+; sinh(Complex16 Matrix)
+;=======================================
+
+
+
+;=======================================
+; sinh(Short Integer) --> Error24
+;=======================================
+In:  SL=0 FI=0 RX=ShoI:"5#7"
+Out: EC=24 FI=0 SL=0 RX=ShoI:"5#7"
+
+
+
+;=======================================
+; sinh(Real34) --> Real34
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"0"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0" RX=Re34:"0"
+
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001" RX=Re34:"1.0000000016666666675000000001984126984402557319249037999039605e-4"
+
+In:  AM=GRAD SL=0 FI=0 RX=Re34:"50"
+Out: EC=0 FI=0 SL=1 RL=Re34:"50" RX=Re34:"2592352764293536232043.7266614667426924137346467294155991479176"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"9.999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"9.999999999" RX=Re34:"11013.232863690160462639817850641146181523497684024435311708163"
+
+; NaN
+In:  SL=0 FI=0 RX=Re34:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
+
+; Infinity
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf"
+Out: EC=4 FI=0 SL=0 RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
+Out: EC=0 FI=0 SL=1 RL=Re34:"inf" RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
+Out: EC=5 FI=0 SL=0 RX=Re34:"-inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re34:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Re34:"-inf" RX=Re34:"-inf"
+
+
+
+;=======================================
+; sinh(Complex34) --> Complex34
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
+Out: EC=0 FI=1 SL=1 RL=Co34:"6.2 i -7.6" RX=Co34:"61.903768291613323355620984960713988217315656185239068929429946 i -238.47172728732495776240281548076859679543279877012533924894352"
+
+
+
+;=======================================
+; sinh(Angle34) --> Real34
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=An34:"0":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"0":DEG RX=Re34:"0"
+
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=An34:"0.0001":DMS
+Out: EC=0 FI=0 SL=1 RL=An34:"0.0001":DMS RX=Re34:"1.0000000016666666675000000001984126984402557319249037999039605e-4"
+
+In:  AM=GRAD SL=0 FI=0 RX=An34:"50":GRAD
+Out: EC=0 FI=0 SL=1 RL=An34:"50":GRAD RX=Re34:"2592352764293536232043.7266614667426924137346467294155991479176"
+
+In:  AM=DEG SL=0 FI=0 RX=An34:"9.999999999":RAD
+Out: EC=0 FI=0 SL=1 RL=An34:"9.999999999":RAD RX=Re34:"11013.232863690160462639817850641146181523497684024435311708163"
+
+; NaN
+In:  SL=0 FI=0 RX=An34:"NaN":MULTPI
+Out: EC=1 FI=0 SL=0 RX=An34:"NaN":MULTPI
+
+; Infinity
+In:  SL=0 FI=0 FD=0 RX=An34:"inf":DMS
+Out: EC=4 FI=0 SL=0 RX=An34:"inf":DMS
+
+In:  SL=0 FI=0 FD=1 RX=An34:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"inf":DEG RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=An34:"-inf":RAD
+Out: EC=5 FI=0 SL=0 RX=An34:"-inf":RAD
+
+In:  SL=0 FI=0 FD=1 RX=An34:"-inf":MULTPI
+Out: EC=0 FI=0 SL=1 RL=An34:"-inf":MULTPI RX=Re34:"-inf"

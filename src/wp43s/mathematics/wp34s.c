@@ -28,10 +28,23 @@
 /* Have to be careful here to ensure that every function we call can handle
  * the increased size of the numbers we're using.
  */
-void WP34S_cvt_2rad_sincos(realIc_t *sin, realIc_t *cos, const realIc_t *an, uint32_t angularMode) {
+void WP34S_cvt_2rad_sincostan(const realIc_t *an, uint32_t angularMode, realIc_t *sin, realIc_t *cos, realIc_t *tan) {
 	 bool_t sinNeg = false, cosNeg = false, swap = false;
   realIc_t angle;
   real451_t angle451;
+
+	 if(realIcIsNaN(an)) {
+	   if(sin != NULL) {
+	 	  realIcCopy(const_NaN, sin);
+	 	 }
+	   if(cos != NULL) {
+	  	  realIcCopy(const_NaN, cos);
+	  	}
+	   if(tan != NULL) {
+	  	  realIcCopy(const_NaN, tan);
+	  	}
+   return;
+	 }
 
   realIcCopy(an, &angle);
 
@@ -67,16 +80,6 @@ void WP34S_cvt_2rad_sincos(realIc_t *sin, realIc_t *cos, const realIc_t *an, uin
     default: {}
  	}
 
-	 if(realIcIsNaN(&angle451)) {
-	   if(sin != NULL) {
-	 	  realIcCopy(const_NaN, sin);
-	 	 }
-	   if(cos != NULL) {
-	  	  realIcCopy(const_NaN, cos);
-	  	}
-   return;
-	 }
-
 	 realIcPlus((realIc_t *)&angle451, &angle);
 
 	 // sin(180+x) = -sin(x), cos(180+x) = -cos(x)
@@ -101,6 +104,9 @@ void WP34S_cvt_2rad_sincos(realIc_t *sin, realIc_t *cos, const realIc_t *an, uin
 	   if(cos != NULL) {
 	  	  realIcCopy(const_root2on2, cos);
 	  	}
+	   if(tan != NULL) {
+	  	  realIcCopy(const_1, tan);
+	  	}
   }
 	 else { // angle < 90
 		  if(realIcCompareGreaterThan(&angle, angle45 + angularMode)) { // angle > 45°
@@ -109,21 +115,26 @@ void WP34S_cvt_2rad_sincos(realIc_t *sin, realIc_t *cos, const realIc_t *an, uin
    	}
 
     convertAngleIcFromTo(&angle, angularMode, AM_RADIAN);
-		  WP34S_sincosTaylor(&angle, swap?cos:sin, swap?sin:cos); // angle in radian
+		  WP34S_sincostanTaylor(&angle, swap, swap?cos:sin, swap?sin:cos, tan); // angle in radian
   }
 
   if(sin != NULL) {
     if(sinNeg) {
       realIcSetNegativeSign(sin);
+      if(tan != NULL) realIcSetNegativeSign(tan);
     }
 		  if(realIcIsZero(sin)) {
       realIcSetPositiveSign(sin);
+      if(tan != NULL) {
+        realIcSetPositiveSign(tan);
+      }
 		  }
   }
 
   if(cos != NULL) {
     if(cosNeg) {
       realIcSetNegativeSign(cos);
+      if(tan != NULL) realIcChangeSign(tan);
     }
 		  if(realIcIsZero(cos)) {
       realIcSetPositiveSign(cos);
@@ -132,67 +143,85 @@ void WP34S_cvt_2rad_sincos(realIc_t *sin, realIc_t *cos, const realIc_t *an, uin
 }
 
 
-/* Calculate sin and cos by Taylor series
+/* Calculate sin, cos by Taylor series and tan by division
  */
-void WP34S_sincosTaylor(const realIc_t *a, realIc_t *sinOut, realIc_t *cosOut) { // a in radian
- 	realIc_t angle, a2, t, j, z, one, sin, cos, compare;
+void WP34S_sincostanTaylor(const realIc_t *a, bool_t swap, realIc_t *sinOut, realIc_t *cosOut, realIc_t *tanOut) { // a in radian
+ 	real51_t angle, a2, t, j, z, sin, cos, compare;
  	int i, odd;
  	bool_t finSin = (sinOut == NULL), finCos = (cosOut == NULL);
+ 	int32_t cmp;
 
  	realIcCopy(a, &angle);
- 	realIcMultiply(&angle, &angle, &a2);
- 	uInt32ToRealIc(1, &j);
- 	uInt32ToRealIc(1, &t);
- 	uInt32ToRealIc(1, &sin);
- 	uInt32ToRealIc(1, &cos);
- 	uInt32ToRealIc(1, &one);
+ 	real51Multiply(&angle, &angle, &a2);
+ 	uInt32ToReal51(1, &j);
+ 	uInt32ToReal51(1, &t);
+ 	uInt32ToReal51(1, &sin);
+ 	uInt32ToReal51(1, &cos);
 
  	for(i=1; !(finSin && finCos) && i < 1000; i++) {
 	  	odd = i & 1;
 
-  		realIcAdd(&j, &one, &j);
-	  	realIcDivide(&a2, &j, &z);
-  		realIcMultiply(&t, &z, &t);
+  		real51Add(&j, const_1, &j);
+	  	real51Divide(&a2, &j, &z);
+  		real51Multiply(&t, &z, &t);
 
 	  	if(!finCos) {
-	   		realIcCopy(&cos, &z);
+	   		real51Copy(&cos, &z);
 
 		   	if(odd) {
-			   	 realIcSubtract(&cos, &t, &cos);
+			   	 real51Subtract(&cos, &t, &cos);
       }
 			   else {
-			   	 realIcAdd(&cos, &t, &cos);
+			   	 real51Add(&cos, &t, &cos);
       }
 
-      realIcCompare(&cos, &z, &compare);
-		   	finCos = (realIcToInt32(&compare) == 0);
+      real51Compare(&cos, &z, &compare);
+      real51ToInt32(&compare, cmp);
+		   	finCos = (cmp == 0);
 		  }
 
-  		realIcAdd(&j, &one, &j);
-		  realIcDivide(&t, &j, &t);
+  		real51Add(&j, const_1, &j);
+		  real51Divide(&t, &j, &t);
 
 	  	if(!finSin) {
-		   	realIcCopy(&sin, &z);
+		   	real51Copy(&sin, &z);
 
 			   if(odd) {
-		   	  realIcSubtract(&sin, &t, &sin);
+		   	  real51Subtract(&sin, &t, &sin);
 		   	}
 		   	else {
-		   	  realIcAdd(&sin, &t, &sin);
+		   	  real51Add(&sin, &t, &sin);
 		    }
 
-      realIcCompare(&sin, &z, &compare);
-		   	finSin = (realIcToInt32(&compare) == 0);
+      real51Compare(&sin, &z, &compare);
+      real51ToInt32(&compare, cmp);
+		   	finSin = (cmp == 0);
 	  	}
 	 }
 
 	 if(sinOut != NULL) {
-		  realIcMultiply(&sin, &angle, &angle);
-		  realIcCopy(&angle, sinOut);
-  }
+		  real51Multiply(&sin, &angle, &sin);
+		  //realIcCopy(&sin, sinOut);
+		  realIcAdd(&sin, const_0, sinOut);
+	 }
 
  	if(cosOut != NULL) {
- 		 realIcCopy(&cos, cosOut);
+ 		 //realIcCopy(&cos, cosOut);
+		  realIcAdd(&cos, const_0, cosOut);
+		}
+
+ 	if(tanOut != NULL) {
+ 	  if(sinOut == NULL || cosOut == NULL) {
+      realIcCopy(const_NaN, tanOut);
+ 	  }
+ 	  else {
+ 	    if(swap) {
+   	    realIcDivide(&cos, &sin, tanOut);
+   	  }
+ 	    else {
+   	    realIcDivide(&sin, &cos, tanOut);
+ 	    }
+ 	  }
 		}
 }
 
@@ -234,7 +263,7 @@ void WP34S_atan(const realIc_t *x, realIc_t *angle) {
 	 }
 
 	 // Now Taylor series
-	 // tan(x) = x(1-x²/3+x⁴/5-x⁶/7...)
+	 // atan(x) = x(1-x²/3+x⁴/5-x⁶/7...)
 	 // We calculate pairs of terms and stop when the estimate doesn't change
  	realIcCopy(const_3, angle);
  	realIcCopy(const_5, &j);
@@ -280,8 +309,8 @@ void WP34S_atan(const realIc_t *x, realIc_t *angle) {
 
 void WP34S_atan2(const realIc_t *y, const realIc_t *x, realIc_t *atan) {
 	 realIc_t r, t;
-	 const int xNeg = realIcIsNegative(x);
-	 const int yNeg = realIcIsNegative(y);
+	 const bool_t xNeg = realIcIsNegative(x);
+	 const bool_t yNeg = realIcIsNegative(y);
 
 	 if(realIcIsNaN(x) || realIcIsNaN(y)) {
 	   realIcCopy(const_NaN, atan);
@@ -323,7 +352,6 @@ void WP34S_atan2(const realIc_t *y, const realIc_t *x, realIc_t *atan) {
 			     realIcZero(atan);
 			   }
 		  }
-
 		  return;
 	 }
 
@@ -332,7 +360,6 @@ void WP34S_atan2(const realIc_t *y, const realIc_t *x, realIc_t *atan) {
 	  	if(yNeg) {
       realIcSetNegativeSign(atan);
     }
-
 		  return;
 	 }
 
@@ -365,7 +392,6 @@ void WP34S_atan2(const realIc_t *y, const realIc_t *x, realIc_t *atan) {
         }
 			   }
 		  }
-
 		  return;
 	 }
 
@@ -374,7 +400,6 @@ void WP34S_atan2(const realIc_t *y, const realIc_t *x, realIc_t *atan) {
 	  	if(yNeg) {
       realIcSetNegativeSign(atan);
     }
-
 		  return;
 	 }
 
@@ -403,14 +428,12 @@ void WP34S_asin(const realIc_t *x, realIc_t *angle) {
 
 	 if(realIcIsNaN(x)) {
 	  	realIcCopy(const_NaN, angle);
-
 	  	return;
 	 }
 
   realIcCopyAbs(x, &abx);
 	 if(realIcCompareGreaterThan(&abx, const_1)) {
 	  	realIcCopy(const_NaN, angle);
-
 	  	return;
 	 }
 
@@ -431,14 +454,12 @@ void WP34S_acos(const realIc_t *x, realIc_t *angle) {
 
 	 if(realIcIsNaN(x)) {
 	  	realIcCopy(const_NaN, angle);
-
 	  	return;
 	 }
 
   realIcCopyAbs(x, &abx);
 	 if(realIcCompareGreaterThan(&abx, const_1)) {
 	  	realIcCopy(const_NaN, angle);
-
 	  	return;
 	 }
 
@@ -484,7 +505,7 @@ static void WP34S_CalcLnGamma(const realIc_t *xin, realIc_t *res) {
 	 int32_t k;
 
  	realIcZero(&s);
- 	realIcAdd(&xin, const_21, &t);
+ 	realIcAdd(xin, const_21, &t);
  	for(k=20; k>=0; k--) {
 	  	realIcDivide(gammaConstants + k, &t, &u);
 	  	realIcSubtract(&t, const_1, &t);
@@ -495,11 +516,11 @@ static void WP34S_CalcLnGamma(const realIc_t *xin, realIc_t *res) {
 	 WP34S_Ln(&t, &s);
 
   //		r = z + g + .5;
-	 realIcAdd(&xin, const_gammaR, &r);
+	 realIcAdd(xin, const_gammaR, &r);
 
   //		r = log(R[0][0]) + (z+.5) * log(r) - r;
 	 WP34S_Ln(&r, &u);
-	 realIcAdd(&xin, const_0_5, &t);
+	 realIcAdd(xin, const_0_5, &t);
 	 realIcMultiply(&u, &t, &v);
 
 	 realIcSubtract(&v, &r, &u);
@@ -580,7 +601,7 @@ static void WP34S_Gamma_LnGamma(const realIc_t *xin, const bool_t calculateLn, r
  	 	// figure out xin * PI mod 2PI
  	 	realIcRemainder(xin, const_2, &t);
  	 	realIcMultiply(&t, const_pi, &t);
- 	 	WP34S_sincosTaylor(&t, &x, NULL); // t in radian
+ 	 	WP34S_sincostanTaylor(&t, false, &x, NULL, NULL); // t in radian
   		if(calculateLn) {
   		 	realIcDivide(const_pi, &x, &t);
   		 	WP34S_Ln(&t, &t);
@@ -773,1499 +794,142 @@ bool_t WP34S_relative_error(const realIc_t *x, const realIc_t *y, const realIc_t
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#ifdef DO_NOT_COMPILE
-#include "decn.h"
-#include "xeq.h"
-#include "consts.h"
-#include "complex.h"
-#include "stats.h"
-#include "int.h"
-#include "serial.h"
-#include "lcd.h"
-
-// #define DUMP1
-#ifdef DUMP1
-#include <stdio.h>
-static FILE *debugf = NULL;
-
-static void open_debug(void) {
-	if(debugf == NULL) {
-		debugf = fopen("/dev/ttys001", "w");
-	}
-}
-static void dump1(const decNumber *a, const char *msg) {
-	char buf[2000], *b = buf;
-
-	open_debug();
-	if(decNumberIsNaN(a)) b= "NaN";
-	else if(decNumberIsInfinite(a)) b = decNumberIsNegative(a)?"-inf":"inf";
-	else
-		decNumberToString(a, b);
-	fprintf(debugf, "%s: %s\n", msg ? msg : "???", b);
-	fflush(debugf);
-}
-#else
-#define dump1(a,b)
-#endif
-
-
-#define MOD_DIGITS	450		/* Big enough for 1e384 mod short integer */
-#define BIGMOD_DIGITS	820		/* Big enough for maxreal mod minreal */
-
-
-/* Some basic conditional tests */
-int dn_lt0(const decNumber *x) {
-	return decNumberIsNegative(x) && ! decNumberIsZero(x);
-}
-
-int dn_le0(const decNumber *x) {
-	return decNumberIsNegative(x) || decNumberIsZero(x);
-}
-
-int dn_eq0(const decNumber *x) {
-	return decNumberIsZero(x);
-}
-
-int dn_eq(const decNumber *x, const decNumber *y) {
-	sincosNumber a;
-	return decNumberIsZero(dn_compare(&a.n, x, y));
-}
-
-int dn_eq1(const decNumber *x) {
-	return dn_eq(x, &const_1);
-}
-
-int dn_lt(const decNumber *x, const decNumber *y) {
-	sincosNumber a;
-	return dn_lt0(dn_compare(&a.n, x, y));
-}
-
-int dn_abs_lt(const decNumber *x, const decNumber *tol) {
-	decNumber a;
-	return dn_lt(dn_abs(&a, x), tol);
-}
-
-int absolute_error(const decNumber *x, const decNumber *y, const decNumber *tol) {
-	decNumber a;
-	return dn_abs_lt(dn_subtract(&a, x, y), tol);
-}
-
-const decNumber *convergence_threshold(void) {
-	return is_dblmode() ? &const_1e_32 : &const_1e_24;
-}
-
-
-/* Some wrapper rountines to save space
- */
-decNumber *dn_compare(decNumber *r, const decNumber *a, const decNumber *b) {
-	return decNumberCompare(r, a, b, &Ctx);
-}
-
-decNumber *dn_min(decNumber *r, const decNumber *a, const decNumber *b) {
-	return decNumberMin(r, a, b, &Ctx);
-}
-
-decNumber *dn_max(decNumber *r, const decNumber *a, const decNumber *b) {
-	return decNumberMax(r, a, b, &Ctx);
-}
-
-decNumber *dn_abs(decNumber *r, const decNumber *a) {
-	return decNumberAbs(r, a, &Ctx);
-}
-
-decNumber *dn_minus(decNumber *r, const decNumber *a) {
-	return decNumberMinus(r, a, &Ctx);
-}
-
-decNumber *dn_plus(decNumber *r, const decNumber *a) {
-	return decNumberPlus(r, a, &Ctx);
-}
-
-decNumber *dn_sqrt(decNumber *r, const decNumber *a) {
-	return decNumberSquareRoot(r, a, &Ctx);
-}
-
-decNumber *dn_exp(decNumber *r, const decNumber *a) {
-	return decNumberExp(r, a, &Ctx);
-}
-
-
-decNumber *dn_average(decNumber *r, const decNumber *a, const decNumber *b) {
-	decNumber z;
-
-	dn_add(&z, a, b);
-	return dn_div2(r, &z);
-}
-
-
-#if 0
-/* Define a table of short integers.
- * This should be equal or larger than any of the summation integers required in the
- * various series approximations to avoid needless computation.
- */
-#define MAX_SMALL_INT	9
-static const decNumber *const small_ints[MAX_SMALL_INT+1] = {
-	&const_0, &const_1, &const_2, &const_3, &const_4,
-	&const_5, &const_6, &const_7, &const_8, &const_9,
-};
-
-void ullint_to_dn(decNumber *x, unsigned long long int n) {
-	/* Check to see if the number is small enough to be in our table */
-	if(n <= MAX_SMALL_INT) {
-		decNumberCopy(x, small_ints[n]);
-	} else {
-		/* Got to do this the long way */
-		decNumber z;
-		int shift = 0;
-
-		decNumberZero(x);
-
-		while(n != 0) {
-			const int r = n % 10;
-			n /= 10;
-			if(r != 0) {
-				dn_mulpow10(&z, small_ints[r], shift);
-				dn_add(x, x, &z);
-			}
-			++shift;
-		}
-	}
-}
-#endif
-
-void int_to_dn(decNumber *x, int n) {
-	int sgn;
-
-	/* Account for negatives */
-	if(n < 0) {
-		sgn = 1;
-		n = -n;
-	} else
-		sgn = 0;
-
-	ullint_to_dn(x, n);
-
-	if(sgn)
-		dn_minus(x, x);
-}
-
-int dn_to_int(const decNumber *x) {
-	decNumber y;
-#if 0
-	char buf[64];
-
-	decNumberRescale(&y, x, &const_0, &Ctx);
-	decNumberToString(&y, buf);
-	return s_to_i(buf);
-#else
-	return decGetInt(decNumberTrunc(&y, x));
-#endif
-}
-
-unsigned long long int dn_to_ull(const decNumber *x, int *sgn) {
-	decNumber y, z;
-	char buf[64];
-
-	decNumberTrunc(&z, x);
-	decNumberRescale(&y, &z, &const_0, &Ctx);
-	if(decNumberIsNegative(&z)) {
-		dn_minus(&y, &y);
-		*sgn = 1;
-	} else
-		*sgn = 0;
-	decNumberToString(&y, buf);
-	return s_to_ull(buf, 10);
-}
-
-
-
-decNumber *set_inf(decNumber *x) {
-	return decNumberCopy(x, &const_inf);
-}
-
-decNumber *set_neginf(decNumber *x) {
-	return decNumberCopy(x, &const__inf);
-}
-
-
-void decNumberPI(decNumber *pi) {
-	decNumberCopy(pi, &const_PI);
-}
-void decNumberPIon2(decNumber *pion2) {
-	decNumberCopy(pion2, &const_PIon2);
-}
-
-/* Utility routine that checks if the X register is even or odd or neither.
- * Returns positive if even, zero if odd, -1 for special, -2 for fractional.
- */
-int is_even(const decNumber *x) {
-	decNumber y, z;
-
-	if(decNumberIsSpecial(x))
-		return -1;
-	dn_abs(&z, x);
-	decNumberMod(&y, &z, &const_2);
-	if(dn_eq0(&y))
-		return 1;
-	if(dn_eq1(&y))
-		return 0;
-	return -2;
-}
-
-decNumber *dn_1(decNumber *r) {
-	return decNumberCopy(r, &const_1);
-}
-
-decNumber *dn__1(decNumber *r) {
-	return decNumberCopy(r, &const__1);
-}
-
-decNumber *dn_p2(decNumber *r, const decNumber *x) {
-	return dn_add(r, x, &const_2);
-}
-
-decNumber *dn_mul2(decNumber *r, const decNumber *x) {
-	return dn_multiply(r, x, &const_2);
-}
-
-decNumber *dn_div2(decNumber *r, const decNumber *x) {
-	return dn_multiply(r, x, &const_0_5);
-}
-
-decNumber *dn_mul100(decNumber *r, const decNumber *x) {
-	return dn_mulpow10(r, x, 2);
-}
-
-decNumber *dn_mulPI(decNumber *r, const decNumber *x) {
-	return dn_multiply(r, x, &const_PI);
-}
-
-decNumber *dn_mulpow10(decNumber *r, const decNumber *x, int p) {
-	decNumberCopy(r, x);
-	r->exponent += p;
-	return r;
-}
-
-/* Mantissa of a number
- */
-#ifdef INCLUDE_MANTISSA
-decNumber *decNumberMantissa(decNumber *r, const decNumber *x) {
-	if(decNumberIsSpecial(x))
-		return set_NaN(r);
-	if(dn_eq0(x))
-		return decNumberCopy(r, x);
-	decNumberCopy(r, x);
-	r->exponent = 1 - r->digits;
-	return r;
-}
-
-/* Exponenet of a number
- */
-decNumber *decNumberExponent(decNumber *r, const decNumber *x) {
-	if(decNumberIsSpecial(x))
-		return set_NaN(r);
-	if(dn_eq0(x))
-		return decNumberZero(r);
-	int_to_dn(r, x->exponent + x->digits - 1);
-	return r;
-}
-
-/* 1 ULP
- */
-static int realULP(decNumber *r, const decNumber *x) {
-	int dblmode;
-	int subnormal = 0;
-	int expshift;
-	int minexp;
-
-	if(decNumberIsSpecial(x)) {
-		if(decNumberIsInfinite(x))
-			set_inf(r);
-		else
-			set_NaN(r);
-		return 0;
-	}
-
-	dblmode = is_dblmode();
-
-	if(dblmode) {
-		expshift = DECIMAL128_Pmax;
-		minexp = DECIMAL128_Emin - DECIMAL128_Pmax + 1;
-		if(x->exponent < DECIMAL128_Emin)
-			subnormal = 1;
-	} else {
-		expshift = DECIMAL64_Pmax;
-		minexp = DECIMAL64_Emin - DECIMAL64_Pmax + 1;
-		if(x->exponent < DECIMAL64_Emin)
-			subnormal = 1;
-	}
-
-	dn_1(r);
-	if(dn_eq0(x) || subnormal)
-		r->exponent = minexp;
-	else
-		r->exponent = x->exponent + x->digits - expshift;
-	return subnormal;
-}
-
-decNumber *decNumberULP(decNumber *r, const decNumber *x) {
-	realULP(r, x);
-	return r;
-}
-
-decNumber *decNumberNeighbour(decNumber *r, const decNumber *y, const decNumber *x) {
-	decNumber ulp;
-	int down, subnormal;
-
-	if(decNumberIsNaN(y))
-		return set_NaN(r);
-	if(decNumberIsSpecial(x))
-		return decNumberCopy(r, x);
-	dn_compare(&ulp, y, x);
-	if(dn_eq0(&ulp))
-		return decNumberCopy(r, y);
-
-	down = decNumberIsNegative(&ulp) ? 1 : 0;
-	subnormal = realULP(&ulp, x);
-
-	if(! subnormal && x->digits == 1 && x->lsu[0] == 1)
-		ulp.exponent -= (! decNumberIsNegative(x)) == down;
-	if(down)
-		dn_subtract(r, x, &ulp);
-	else
-		dn_add(r, x, &ulp);
-	return r;
-}
-#endif
-
-/* Multiply Add: x + y * z
- */
-#ifdef INCLUDE_MULADD
-decNumber *decNumberMAdd(decNumber *r, const decNumber *z, const decNumber *y, const decNumber *x) {
-	decNumber t;
-
-	dn_multiply(&t, x, y);
-	return dn_add(r, &t, z);
-}
-#endif
-
-
-/* Reciprocal of a number.
- * Division is correctly rounded so we just use that instead of coding
- * something special (that could be more efficient).
- */
-decNumber *decNumberRecip(decNumber *r, const decNumber *x) {
-	return dn_divide(r, &const_1, x);
-}
-
-/* Reciprocal of a function's result.
- * This routine calls the specified function and then multiplicatively
- * inverts its result.
- */
-#if 0
-static decNumber *dn_recip(decNumber *r, const decNumber *x,
-		decNumber *(*func)(decNumber *r, const decNumber *x)) {
-	decNumber z;
-
-	(*func)(&z, x);
-	return decNumberRecip(r, &z);
-}
-#endif
-
-/* A plethora of round to integer functions to support the large variety
- * of possibilities in this area.  Start with a common utility function
- * that saves the current rounding mode, rounds as required and restores
- * the rounding mode properly.
- */
-static decNumber *round2int(decNumber *r, const decNumber *x, enum rounding mode) {
-	enum rounding a = Ctx.round;
-
-	Ctx.round = mode;
-	decNumberToIntegralValue(r, x, &Ctx);
-	Ctx.round = a;
-	return r;
-}
-
-/* Floor - truncate to minus infinity.
- */
-decNumber *decNumberFloor(decNumber *r, const decNumber *x) {
-	return round2int(r, x, DEC_ROUND_FLOOR);
-}
-
-/* Ceiling - truncate to plus infinity.
- */
-decNumber *decNumberCeil(decNumber *r, const decNumber *x) {
-	return round2int(r, x, DEC_ROUND_CEILING);
-}
-
-/* Trunc - truncate to zero.
- */
-decNumber *decNumberTrunc(decNumber *r, const decNumber *x) {
-	return round2int(r, x, DEC_ROUND_DOWN);
-}
-
-/* Round - round 0.5 up.
- */
-decNumber *decNumberRound(decNumber *r, const decNumber *x) {
-	return round2int(r, x, DEC_ROUND_HALF_UP);
-}
-
-/* Intg - round 0.5 even.
- */
-static decNumber *decNumberIntg(decNumber *r, const decNumber *x) {
-	return round2int(r, x, DEC_ROUND_HALF_EVEN);
-}
-
-/* Frac - round 0.5 up.
- */
-decNumber *decNumberFrac(decNumber *r, const decNumber *x) {
-	decNumber y;
-
-	round2int(&y, x, DEC_ROUND_DOWN);
-	return dn_subtract(r, x, &y);
-}
-
-
-static void dn_gcd(decNumber *r, const decNumber *x, const decNumber *y, int bigmod) {
-	decNumber b, t;
-
-	decNumberCopy(&b, y);
-	decNumberCopy(r, x);
-	while(! dn_eq0(&b)) {
-		decNumberCopy(&t, &b);
-		if(bigmod)
-			decNumberBigMod(&b, r, &t);
-		else
-			decNumberMod(&b, r, &t);
-		decNumberCopy(r, &t);
-	}
-}
-
-static int dn_check_gcd(decNumber *r, const decNumber *x, const decNumber *y,
-		decNumber *a, decNumber *b) {
-	if(decNumberIsSpecial(x) || decNumberIsSpecial(y)) {
-		if(decNumberIsNaN(x) || decNumberIsNaN(y))
-			set_NaN(r);
-		else
-			set_inf(r);
-	} else if(!is_int(x) || !is_int(y))
-		set_NaN(r);
-	else {
-		dn_abs(a, x);
-		dn_abs(b, y);
-		return 0;
-	}
-	return 1;
-}
-
-decNumber *decNumberGCD(decNumber *r, const decNumber *x, const decNumber *y) {
-	decNumber a, b;
-
-	if(dn_check_gcd(r, x, y, &a, &b))
-		return r;
-
-	if(dn_eq0(x))
-		decNumberCopy(r, &b);
-	else if(dn_eq0(y))
-		decNumberCopy(r, &a);
-	else
-		dn_gcd(r, &a, &b, 1);
-	return r;
-}
-
-decNumber *decNumberLCM(decNumber *r, const decNumber *x, const decNumber *y) {
-	decNumber gcd, a, b, t;
-
-	if(dn_check_gcd(r, x, y, &a, &b))
-		return r;
-
-	if(dn_eq0(x) || dn_eq0(y))
-		decNumberCopy(r, x);
-	dn_gcd(&gcd, &a, &b, 1);
-	dn_divide(&t, &a, &gcd);
-	return dn_multiply(r, &t, &b);
-}
-
-
-/* The extra logarithm and power functions */
-
-/* Raise y^x */
-decNumber *dn_power_internal(decNumber *r, const decNumber *y, const decNumber *x, const decNumber *logy) {
-	decNumber s, t, my;
-	int isxint, xodd, ynegative;
-	int negate = 0;
-
-	if(dn_eq1(y))
-		return dn_1(r);				// 1^x = 1
-
-	if(dn_eq0(x))
-		return dn_1(r);				// y^0 = 1
-
-	if(decNumberIsNaN(x) || decNumberIsNaN(y))
-		return set_NaN(r);
-
-	if(dn_eq1(x))
-		return decNumberCopy(r, y); 		// y^1 = y
-
-	if(decNumberIsInfinite(x)) {
-		int ylt1;
-		if(dn_eq(y, &const__1))
-			return dn_1(r);			// -1 ^ +/-inf = 1
-
-		ylt1 = dn_abs_lt(y, &const_1);
-		if(decNumberIsNegative(x)) {
-			if(ylt1)
-				return set_inf(r);		// y^-inf |y|<1 = +inf
-			return decNumberZero(r);		// y^-inf |y|>1 = +0
-		}
-		if(ylt1)
-			return decNumberZero(r);		// y^inf |y|<1 = +0
-		return set_inf(r);				// y^inf |y|>1 = +inf
-	}
-
-	isxint = is_int(x);
-	ynegative = decNumberIsNegative(y);
-	if(decNumberIsInfinite(y)) {
-		if(ynegative) {
-			xodd = isxint && is_even(x) == 0;
-			if(decNumberIsNegative(x)) {
-				decNumberZero(r);		// -inf^x x<0 = +0
-				if(xodd)			// -inf^x odd x<0 = -0
-					return decNumberCopy(r, &const__0);
-				return r;
-			}
-			if(xodd)
-				return set_neginf(r);		// -inf^x odd x>0 = -inf
-			return set_inf(r);			// -inf^x x>0 = +inf
-		}
-		if(decNumberIsNegative(x))
-			return decNumberZero(r);		// +inf^x x<0 = +0
-		return set_inf(r);				// +inf^x x>0 = +inf
-	}
-
-	if(dn_eq0(y)) {
-		xodd = isxint && is_even(x) == 0;
-		if(decNumberIsNegative(x)) {
-			if(xodd && ynegative)
-				return set_neginf(r);		// -0^x odd x<0 = -inf
-			return set_inf(r);			// 0^x x<0 = +inf
-		}
-		if(xodd && ynegative)
-			return decNumberCopy(r, &const__0);	// -0^x odd x>0 = -/+0
-		return decNumberZero(r);			// 0^x x>0 = +0
-	}
-
-	if(ynegative) {
-		if(!isxint)
-			return set_NaN(r);			// y^x y<0, x not odd int = NaN
-		if(is_even(x) == 0)				// y^x, y<0, x odd = - ((-y)^x)
-			negate = 1;
-		dn_minus(&my, y);
-		y = &my;
-	}
-	if(logy == NULL) {
-		dn_ln(&t, y);
-		logy = &t;
-	}
-	dn_multiply(&s, logy, x);
-	dn_exp(r, &s);
-	if(negate)
-		return dn_minus(r, r);
-	return r;
-}
-
-decNumber *dn_power(decNumber *r, const decNumber *y, const decNumber *x) {
-	return dn_power_internal(r, y, x, NULL);
-}
-
-
-/* ln(1+x) */
-decNumber *decNumberLn1p(decNumber *r, const decNumber *x) {
-	decNumber u, v, w;
-
-	if(decNumberIsSpecial(x) || dn_eq0(x)) {
-		return decNumberCopy(r, x);
-	}
-	dn_p1(&u, x);
-	dn_m1(&v, &u);
-	if(dn_eq0(&v)) {
-		return decNumberCopy(r, x);
-	}
-	dn_divide(&w, x, &v);
-	dn_ln(&v, &u);
-	return dn_multiply(r, &v, &w);
-}
-
-/* exp(x)-1 */
-decNumber *decNumberExpm1(decNumber *r, const decNumber *x) {
-	decNumber u, v, w;
-
-	if(decNumberIsSpecial(x)) {
-		return decNumberCopy(r, x);
-	}
-	dn_exp(&u, x);
-	dn_m1(&v, &u);
-	if(dn_eq0(&v)) {
-		return decNumberCopy(r, x);
-	}
-	if(dn_eq(&v, &const__1)) {
-		return dn__1(r);
-	}
-	dn_multiply(&w, &v, x);
-	dn_ln(&v, &u);
-	return dn_divide(r, &w, &v);
-}
-
-
-decNumber *decNumberPow2(decNumber *r, const decNumber *x) {
-	return dn_power_internal(r, &const_2, x, &const_ln2);
-}
-
-decNumber *decNumberPow10(decNumber *r, const decNumber *x) {
-	return dn_power_internal(r, &const_10, x, &const_ln10);
-}
-
-decNumber *decNumberPow_1(decNumber *r, const decNumber *x) {
-	int even = is_even(x);
-	decNumber t, u;
-
-	if(even == 1)
-		return dn_1(r);
-	if(even == 0)
-		return dn__1(r);
-	decNumberMod(&u, x, &const_2);
-	dn_mulPI(&t, &u);
-	sincosTaylor(&t, NULL, r);
-	return r;
-}
-
-/* Square - this almost certainly could be done more efficiently
- */
-decNumber *decNumberSquare(decNumber *r, const decNumber *x) {
-	return dn_multiply(r, x, x);
-}
-
-/* Cube - again could be done more efficiently */
-decNumber *decNumberCube(decNumber *r, const decNumber *x) {
-	decNumber z;
-
-	decNumberSquare(&z, x);
-	return dn_multiply(r, &z, x);
-}
-Fait un makefile bordel de merde
-/* Cube root */
-decNumber *decNumberCubeRoot(decNumber *r, const decNumber *x) {
-	decNumber third, t;
-
-	decNumberRecip(&third, &const_3);
-
-	if(decNumberIsNegative(x)) {
-		dn_minus(r, x);
-		dn_power(&t, r, &third);
-		return dn_minus(r, &t);
-	}
-	return dn_power(r, x, &third);
-}
-
-#ifdef INCLUDE_XROOT
-decNumber *decNumberXRoot(decNumber *r, const decNumber *a, const decNumber *b) {
-	decNumber s, t;
-
-	decNumberRecip(&s, b);
-
-	if(decNumberIsNegative(a)) {
-		if(is_even(b) == 0) {
-			dn_minus(r, a);
-			dn_power(&t, r, &s);
-			return dn_minus(r, &t);
-		}
-		return set_NaN(r);
-	}
-	return dn_power(r, a, &s);
-}
-#endif
-
-
-
-decNumber *decNumberBigMod(decNumber *res, const decNumber *x, const decNumber *y) {
-	/* Declare a structure large enough to hold a really long number.
-	 * This structure is likely to be larger than is required.
-	 */
-	struct {
-		decNumber n;
-		decNumberUnit extra[((BIGMOD_DIGITS-DECNUMDIGITS+DECDPUN-1)/DECDPUN)];
-	} out;
-
-	int digits = Ctx.digits;
-
-	Ctx.digits = BIGMOD_DIGITS;
-	decNumberRemainder(&out.n, x, y, &Ctx);
-	Ctx.digits = digits;
-
-#ifdef INCLUDE_MOD41
-	decNumberPlus(res, &out.n, &Ctx);
-	if(XeqOpCode == (OP_DYA | OP_MOD41) && decNumberIsNegative(x) != decNumberIsNegative(y) && !dn_eq0(res))
-		dn_add(res, res, y);
-	return res;
-#else
-	return 	decNumberPlus(res, &out.n, &Ctx);
-#endif
-}
-
-
-/*
- *  Common helper for angle conversions
- *  Checks the present mode and converts accordingly
- */
-static decNumber *decNumberDRG_internal(decNumber *res, const decNumber *x, s_opcode op) {
-#define DRG(op,mode) (((op) << 2) | (mode))
-
-	switch (DRG(argKIND(op), get_trig_mode())) {
-
-	case DRG(OP_2DEG,  TRIG_RAD):
-	case DRG(OP_RAD2,  TRIG_DEG):
-		return decNumberR2D(res, x);
-
-	case DRG(OP_2DEG,  TRIG_GRAD):
-	case DRG(OP_GRAD2, TRIG_DEG):
-		return decNumberG2D(res, x);
-
-	case DRG(OP_2RAD,  TRIG_DEG):
-	case DRG(OP_DEG2,  TRIG_RAD):
-		return decNumberD2R(res, x);
-
-	case DRG(OP_2RAD,  TRIG_GRAD):
-	case DRG(OP_GRAD2, TRIG_RAD):
-		return decNumberG2R(res, x);
-
-	case DRG(OP_2GRAD, TRIG_DEG):
-	case DRG(OP_DEG2,  TRIG_GRAD):
-		return decNumberD2G(res, x);
-
-	case DRG(OP_2GRAD, TRIG_RAD):
-	case DRG(OP_RAD2,  TRIG_GRAD):
-		return decNumberR2G(res, x);
-
-	default:
-		return decNumberCopy(res, x);
-	}
-#undef DRG
-}
-
-static void cvt_rad2(decNumber *res, const decNumber *x) {
-	decNumberDRG_internal(res, x, OP_RAD2);
-}
-
-/* Calculate sin and cos of the given number in radians.
- * We need to do some range reduction to guarantee that our Taylor series
- * converges rapidly.
- */
-void dn_sincos(const decNumber *v, decNumber *sinv, decNumber *cosv)
-{
-	decNumber x;
-
-	if(decNumberIsSpecial(v))
-		cmplx_NaN(sinv, cosv);
-	else {
-		decNumberMod(&x, v, &const_2PI);
-		sincosTaylor(&x, sinv, cosv);
-	}
-}
-
-
-
-/* Have to be careful here to ensure that every function we call can handle
- * the increased size of the numbers we're using.
- */
-decNumber *decNumberTan(decNumber *res, const decNumber *x) {
-	sincosNumber x2, s, c;
-
-	if(decNumberIsSpecial(x))
-		return set_NaN(res);
-	else {
-		const int digits = Ctx.digits;
-		Ctx.digits = SINCOS_DIGITS;
-		cvt_2rad_sincos(&s.n, &c.n, x);
-		if(decNumberIsZero(&c.n))
-			return set_NaN(res);
-		dn_divide(&x2.n, &s.n, &c.n);
-		Ctx.digits = digits;
-		return dn_plus(res, &x2.n);
-	}
-}
-
-#if 0
-decNumber *decNumberSec(decNumber *res, const decNumber *x) {
-	return dn_recip(res, x, &decNumberCos);
-}
-
-decNumber *decNumberCosec(decNumber *res, const decNumber *x) {
-	return dn_recip(res, x, &decNumberSin);
-}
-
-decNumber *decNumberCot(decNumber *res, const decNumber *x) {
-	return dn_recip(res, x, &decNumberTan);
-}
-#endif
-
-decNumber *decNumberSinc(decNumber *res, const decNumber *x) {
-	decNumber s;
-
-	decNumberSquare(&s, x);
-	if(dn_eq1(dn_p1(&s, &s)))
-		return dn_1(res);
-	decNumberMod(res, x, &const_2PI);
-	sincosTaylor(res, &s, NULL);
-	return dn_divide(res, &s, x);
-}
-
-
-
-
-decNumber *decNumberArcTan2(decNumber *res, const decNumber *a, const decNumber *b) {
-	decNumber z;
-
-	do_atan2(&z, a, b);
-	cvt_rad2(res, &z);
-	return res;
-}
-
-void op_r2p(enum nilop op) {
-	decNumber x, y, rx, ry;
-
-	getXY(&x, &y);
-	cmplxToPolar(&rx, &ry, &x, &y);
-	cvt_rad2(&y, &ry);
-	setlastX();
-	setXY(&rx, &y);
-#ifdef RP_PREFIX
-	RectPolConv = 1;
-#endif
-}
-
-void op_p2r(enum nilop op) {
-	decNumber x, y, t, range, angle;
-
-	getXY(&range, &angle);
-	decNumberCos(&t, &angle);
-	dn_multiply(&x, &t, &range);
-	decNumberSin(&t, &angle);
-	dn_multiply(&y, &t, &range);
-	setlastX();
-	setXY(&x, &y);
-#ifdef RP_PREFIX
-	RectPolConv = 2;
-#endif
-}
-
-
 /* Hyperbolic functions.
  * We start with a utility routine that calculates sinh and cosh.
  * We do the sihn as (e^x - 1) (e^x + 1) / (2 e^x) for numerical stability
  * reasons if the value of x is smallish.
  */
-void dn_sinhcosh(const decNumber *x, decNumber *sinhv, decNumber *coshv) {
-	decNumber t, u, v;
+void WP34S_sinhcosh(const realIc_t *x, realIc_t *sinhOut, realIc_t *coshOut) {
+ 	realIc_t t, u, v;
 
-	if(sinhv != NULL) {
-		if(dn_abs_lt(x, &const_0_5)) {
-			decNumberExpm1(&u, x);
-			dn_div2(&t, &u);
-			dn_inc(&u);
-			dn_divide(&v, &t, &u);
-			dn_inc(&u);
-			dn_multiply(sinhv, &u, &v);
-		} else {
-			dn_exp(&u, x);			// u = e^x
-			decNumberRecip(&v, &u);		// v = e^-x
-			dn_subtract(&t, &u, &v);	// r = e^x - e^-x
-			dn_div2(sinhv, &t);
-		}
-	}
-	if(coshv != NULL) {
-		dn_exp(&u, x);			// u = e^x
-		decNumberRecip(&v, &u);		// v = e^-x
-		dn_average(coshv, &v, &u);	// r = (e^x + e^-x)/2
-	}
-}
+ 	if(sinhOut != NULL) {
+	  	if(realIcCompareAbsLessThan(x, const_1on2)) {
+      WP34S_Expm1(x, &u);                           // u = e^x - 1
+    		realIcMultiply(&u, const_1on2, &t);           // t = (e^x - 1) / 2
 
-decNumber *decNumberSinh(decNumber *res, const decNumber *x) {
-	if(decNumberIsSpecial(x)) {
-		if(decNumberIsNaN(x))
-			return set_NaN(res);
-		return decNumberCopy(res, x);
-	}
-	dn_sinhcosh(x, res, NULL);
-	return res;
-}
+   			realIcAdd(&u, const_1, &u);                   // u = e^x
+   			realIcDivide(&t, &u, &v);                     // v = (e^x - 1) / 2e^x
 
-decNumber *decNumberCosh(decNumber *res, const decNumber *x) {
-	if(decNumberIsSpecial(x)) {
-		if(decNumberIsNaN(x))
-			return set_NaN(res);
-		return set_inf(res);
-	}
-	dn_sinhcosh(x, NULL, res);
-	return res;
-}
-
-decNumber *decNumberTanh(decNumber *res, const decNumber *x) {
-	decNumber a, b;
-
-	if(decNumberIsNaN(x))
-		return set_NaN(res);
-	if(!dn_abs_lt(x, &const_100)) {
-		if(decNumberIsNegative(x))
-			return dn__1(res);
-		return dn_1(res);
-	}
-	dn_add(&a, x, x);
-	decNumberExpm1(&b, &a);
-	dn_p2(&a, &b);
-	return dn_divide(res, &b, &a);
-}
-
-
-#if 0
-decNumber *decNumberSech(decNumber *res, const decNumber *x) {
-	return dn_recip(res, x, &decNumberCosh);
-}
-
-decNumber *decNumberCosech(decNumber *res, const decNumber *x) {
-	return dn_recip(res, x, &decNumberSinh);
-}
-
-decNumber *decNumberCoth(decNumber *res, const decNumber *x) {
-	return dn_recip(res, x, &decNumberTanh);
-}
-#endif
-
-decNumber *decNumberArcSinh(decNumber *res, const decNumber *x) {
-	decNumber y, z;
-
-	decNumberSquare(&y, x);		// y = x²
-	dn_p1(&z, &y);			// z = x² + 1
-	dn_sqrt(&y, &z);		// y = sqrt(x²+1)
-	dn_inc(&y);			// y = sqrt(x²+1)+1
-	dn_divide(&z, x, &y);
-	dn_inc(&z);
-	dn_multiply(&y, x, &z);
-	return decNumberLn1p(res, &y);
-}
-
-
-decNumber *decNumberArcCosh(decNumber *res, const decNumber *x) {
-	decNumber z;
-
-	decNumberSquare(res, x);	// r = x²
-	dn_m1(&z, res);			// z = x² + 1
-	dn_sqrt(res, &z);		// r = sqrt(x²+1)
-	dn_add(&z, res, x);		// z = x + sqrt(x²+1)
-	return dn_ln(res, &z);
-}
-
-decNumber *decNumberArcTanh(decNumber *res, const decNumber *x) {
-	decNumber y, z;
-
-	if(decNumberIsNaN(x))
-		return set_NaN(res);
-	dn_abs(&y, x);
-	if(dn_eq1(&y)) {
-		if(decNumberIsNegative(x))
-			return set_neginf(res);
-		return set_inf(res);
-	}
-	// Not the obvious formula but more stable...
-	dn_1m(&z, x);
-	dn_divide(&y, x, &z);
-	dn_mul2(&z, &y);
-	decNumberLn1p(&y, &z);
-	return dn_div2(res, &y);
-}
-
-
-decNumber *decNumberD2R(decNumber *res, const decNumber *x) {
-	return dn_multiply(res, x, &const_PIon180);
-}
-
-decNumber *decNumberR2D(decNumber *res, const decNumber *x) {
-	return dn_divide(res, x, &const_PIon180);
-}
-
-
-decNumber *decNumberG2R(decNumber *res, const decNumber *x) {
-	return dn_multiply(res, x, &const_PIon200);
-}
-
-decNumber *decNumberR2G(decNumber *res, const decNumber *x) {
-	return dn_divide(res, x, &const_PIon200);
-}
-
-decNumber *decNumberG2D(decNumber *res, const decNumber *x) {
-	return dn_multiply(res, x, &const_0_9);
-}
-
-decNumber *decNumberD2G(decNumber *res, const decNumber *x) {
-	return dn_divide(res, x, &const_0_9);
-}
-
-decNumber *decNumberDRG(decNumber *res, const decNumber *x) {
-	return decNumberDRG_internal(res, x, XeqOpCode);
-}
-
-/* Check the arguments a little and perform the computation of
- * ln(permutation) which is common across both our callers.
- *
- * This is the real version.
- */
-enum perm_opts { PERM_INVALID=0, PERM_INTG, PERM_NORMAL };
-static enum perm_opts perm_helper(decNumber *r, const decNumber *x, const decNumber *y) {
-	decNumber n, s;
-
-	if(decNumberIsSpecial(x) || decNumberIsSpecial(y) || dn_lt0(x) || dn_lt0(y)) {
-		if(decNumberIsInfinite(x) && !decNumberIsInfinite(y))
-			set_inf(r);
-		else
-			set_NaN(r);
-		return PERM_INVALID;
-	}
-	dn_p1(&n, x);				// x+1
-	decNumberLnGamma(&s, &n);		// lnGamma(x+1) = Ln x!
-
-	dn_subtract(r, &n, y);	// x-y+1
-	if(dn_le0(r)) {
-		set_NaN(r);
-		return PERM_INVALID;
-	}
-	decNumberLnGamma(&n, r);		// LnGamma(x-y+1) = Ln (x-y)!
-	dn_subtract(r, &s, &n);
-
-	if(is_int(x) && is_int(y))
-		return PERM_INTG;
-	return PERM_NORMAL;
-}
-
-
-/* Calculate permutations:
- * C(x, y) = P(x, y) / y! = x! / ( (x-y)! y! )
- */
-decNumber *decNumberComb(decNumber *res, const decNumber *x, const decNumber *y) {
-	decNumber r, n, s;
-	const enum perm_opts code = perm_helper(&r, x, y);
-
-	if(code != PERM_INVALID) {
-		dn_p1(&n, y);				// y+1
-		decNumberLnGamma(&s, &n);		// LnGamma(y+1) = Ln y!
-		dn_subtract(&n, &r, &s);
-
-		dn_exp(res, &n);
-		if(code == PERM_INTG)
-			decNumberIntg(res, res);
-	} else
-		decNumberCopy(res, &r);
-	return res;
-}
-
-/* Calculate permutations:
- * P(x, y) = x! / (x-y)!
- */
-decNumber *decNumberPerm(decNumber *res, const decNumber *x, const decNumber *y) {
-	decNumber t;
-	const enum perm_opts code = perm_helper(&t, x, y);
-
-	if(code != PERM_INVALID) {
-		dn_exp(res, &t);
-		if(code == PERM_INTG)
-			decNumberIntg(res, res);
-	} else
-		decNumberCopy(res, &t);
-	return res;
-}
-
-#ifdef _DEBUG_
-#include <stdio.h>
-char dump[DECNUMDIGITS + 10];
-#define DUMP(d, s) ((int) decNumberToString(d, dump), fprintf(f, s "=%s\n", dump))
-
-#endif
-
-const decNumber *const gammaConstants[21] = {
-	&const_gammaC01, &const_gammaC02, &const_gammaC03,
-	&const_gammaC04, &const_gammaC05, &const_gammaC06,
-	&const_gammaC07, &const_gammaC08, &const_gammaC09,
-	&const_gammaC10, &const_gammaC11, &const_gammaC12,
-	&const_gammaC13, &const_gammaC14, &const_gammaC15,
-	&const_gammaC16, &const_gammaC17, &const_gammaC18,
-	&const_gammaC19, &const_gammaC20, &const_gammaC21,
-};
-
-// lnBeta(x, y) = lngamma(x) + lngamma(y) - lngamma(x+y)
-decNumber *decNumberLnBeta(decNumber *res, const decNumber *x, const decNumber *y) {
-	decNumber s, t, u;
-
-	decNumberLnGamma(&s, x);
-	busy();
-	decNumberLnGamma(&t, y);
-	busy();
-	dn_add(&u, &s, &t);
-	dn_add(&s, x, y);
-	decNumberLnGamma(&t, &s);
-	dn_subtract(res, &u, &t);
-	return res;
-}
-
-decNumber *decNumberHMS2HR(decNumber *res, const decNumber *xin) {
-	decNumber m, s, t, x;
-	const int neg = decNumberIsNegative(xin);
-
-	// decode hhhh.mmss...
-	dn_abs(&x, xin);
-	decNumberFrac(&t, &x);			// t = .mmss
-	dn_mul100(&s, &t);			// s = mm.ss
-	decNumberTrunc(&m, &s);			// m = mm
-	decNumberFrac(&t, &s);			// t = .ss
-	dn_multiply(&s, &t, &const_1on60);	// s = ss.sss / 60
-	dn_mulpow10(&s, &s, 2);
-	dn_add(&t, &m, &s);			// s = mm + ss.sss / 60
-	dn_multiply(&m, &t, &const_1on60);
-	decNumberTrunc(&s, &x);			// s = hh
-	dn_add(res, &m, &s);
-	if(neg) dn_minus(res, res);
-	return res;
-}
-
-decNumber *decNumberHR2HMS(decNumber *res, const decNumber *xin) {
-	decNumber m, s, t, x;
-	const int neg = decNumberIsNegative(xin);
-
-	dn_abs(&x, xin);
-	decNumberFrac(&t, &x);			// t = .mmssss
-	dn_multiply(&s, &t, &const_60);		// s = mm.ssss
-	decNumberTrunc(&m, &s);			// m = mm
-	decNumberFrac(&t, &s);			// t = .ssss
-	dn_multiply(&s, &t, &const_0_6);	// scale down by 60/100
-	dn_add(&t, &s, &m);			// t = mm.ss
-	dn_mulpow10(&m, &t, -2);		// t = .mmss
-	decNumberTrunc(&s, &x);			// s = hh
-	dn_add(&t, &m, &s);			// t = hh.mmss = result
-
-	// Round to the appropriate number of digits for the result
-	decNumberRoundDigits(&t, &t, is_dblmode() ? 34 : 16, DEC_ROUND_HALF_EVEN);
-
-	// Now fix any rounding/carry issues
-	dn_mulpow10(&s, &t, 2);			// hhmm.ssss
-	decNumberFrac(&m, &s);			// .ssss
-	if(dn_ge(&m, &const_0_6))
-		dn_add(&s, &s, &const_0_4);
-	dn_mulpow10(res, &s, -2);		// hh.mmssss
-	decNumberFrac(&m, res);
-	if(dn_ge(&m, &const_0_6))
-		dn_add(res, res, &const_0_4);
-	if(neg) dn_minus(res, res);
-	return res;
-}
-
-decNumber *decNumberHMSAdd(decNumber *res, const decNumber *x, const decNumber *y) {
-	decNumber a, b, c;
-
-	decNumberHMS2HR(&a, x);
-	decNumberHMS2HR(&b, y);
-	dn_add(&c, &a, &b);
-	decNumberHR2HMS(res, &c);
-	return res;
-}
-
-decNumber *decNumberHMSSub(decNumber *res, const decNumber *x, const decNumber *y) {
-	decNumber a, b, c;
-
-	decNumberHMS2HR(&a, x);
-	decNumberHMS2HR(&b, y);
-	dn_subtract(&c, &a, &b);
-	decNumberHR2HMS(res, &c);
-	return res;
-}
-
-/* Logical operations on decNumbers.
- * We treat 0 as false and non-zero as true.
- */
-static int dn2bool(const decNumber *x) {
-	return dn_eq0(x)?0:1;
-}
-
-static decNumber *bool2dn(decNumber *res, int l) {
-	if(l)
-		dn_1(res);
-	else
-		decNumberZero(res);
-	return res;
-}
-
-decNumber *decNumberNot(decNumber *res, const decNumber *x) {
-	return bool2dn(res, !dn2bool(x));
-}
-
-/*
- *  Execute the logical operations via a truth table.
- *  Each nibble encodes a single operation.
- */
-decNumber *decNumberBooleanOp(decNumber *res, const decNumber *x, const decNumber *y) {
-	const unsigned int TRUTH_TABLE = 0x9176E8;
-	const unsigned int bit = ((argKIND(XeqOpCode) - OP_LAND) << 2) + (dn2bool(y) << 1) + dn2bool(x);
-	return bool2dn(res, (TRUTH_TABLE >> bit) & 1);
-}
-
-
-/*
- * Round a number to a given number of digits and with a given mode
- */
-decNumber *decNumberRoundDigits(decNumber *res, const decNumber *x, const int digits, const enum rounding round) {
-	enum rounding default_round = Ctx.round;
-	int default_digits = Ctx.digits;
-
-	Ctx.round = round;
-	Ctx.digits = digits;
-	decNumberPlus(res, x, &Ctx);
-	Ctx.digits = default_digits;
-	Ctx.round = default_round;
-	return res;
-}
-
-
-/*
- *  Round to display accuracy
- */
-decNumber *decNumberRnd(decNumber *res, const decNumber *x) {
-	decNumber t, u;
-#if defined(INCLUDE_SIGFIG_MODE)
-	int numdig;
-	enum display_modes dmode;
-#else
-	int numdig = UState.dispdigs + 1;
-	enum display_modes dmode = (enum display_modes) UState.dispmode;
-#endif
-
-	if(decNumberIsSpecial(x))
-		return decNumberCopy(res, x);
-
-	if(UState.fract) {
-		decNumber2Fraction(&t, &u, x);
-		return dn_divide(res, &t, &u);
-	}
-
-#if defined(INCLUDE_SIGFIG_MODE)
-	dmode = get_dispmode_digs(&numdig);
-	numdig++;
-	if(dmode == MODE_STD) {
-		// to fit new definition of std_round_fix in display.c
-		dmode = std_round_fix(x, &numdig, dmode, numdig-1);
-		numdig = DISPLAY_DIGITS;
+   			realIcAdd(&u, const_1, &u);                   // u = e^x + 1
+   			realIcMultiply(&u, &v, sinhOut);              // sinhOut = (e^x - 1)(e^x + 1) / 2e^x
+  		}
+  		else {
+    		realIcExp(x, &u);			                          // u = e^x
+  		  realIcDivide(const_1, &u, &v);              		// v = e^-x
+    		realIcSubtract(&u, &v, sinhOut);	             // sinhOut = (e^x + e^-x)
+  	  	realIcMultiply(sinhOut, const_1on2, sinhOut); // sinhOut = (e^x + e^-x)/2
+  		}
  	}
-#else
-	if(dmode == MODE_STD) {
-		dmode = std_round_fix(x);
-		numdig = DISPLAY_DIGITS;
-	}
-#endif
-
-	if(dmode == MODE_FIX)
-		/* FIX is different since the number of digits changes */
-		return decNumberRoundDecimals(res, x, numdig-1, DEC_ROUND_HALF_UP);
-
-	return decNumberRoundDigits(res, x, numdig, DEC_ROUND_HALF_UP);
+ 	if(coshOut != NULL) {
+ 		realIcExp(x, &u);			                             // u = e^x
+ 		realIcDivide(const_1, &u, &v);                 		// v = e^-x
+ 		realIcAdd(&u, &v, coshOut);	                     // coshOut = (e^x + e^-x)
+ 		realIcMultiply(coshOut, const_1on2, coshOut);    // coshOut = (e^x + e^-x)/2
+ 	}
 }
 
-decNumber *decNumberRoundDecimals(decNumber *r, const decNumber *x, const int n, const enum rounding round) {
-	decNumber t;
-#if 0
-	/* The slow but always correct way */
-	decNumber u, p10;
 
-	int_to_dn(&u, n);
-	decNumberPow10(&p10, &u);
-	dn_multiply(&t, x, &p10);
-	round2int(&u, &t, round);
-	return dn_divide(r, &u, &p10);
-#else
-	/* The much faster way but relying on base 10 numbers with exponents */
-	if(decNumberIsSpecial(x))
-		return decNumberCopy(r, x);
 
-	decNumberCopy(&t, x);
-	t.exponent += n;
-	round2int(r, &t, round);
-	r->exponent -= n;
-	return r;
-#endif
+void WP34S_tanh(const realIc_t *x, realIc_t *res) {
+ 	if(realIcCompareAbsGreaterThan(x, const_47)) { // equals 1 to 39 digits
+    realIcCopy((realIcIsPositive(x) ? const_1 : const__1), res);
+ 	}
+ 	else {
+ 	  realIc_t a, b;
+
+   	realIcAdd(x, x, &a);        // a = 2x
+   	WP34S_Expm1(&a, &b);        // b = exp(2x) - 1
+   	realIcAdd(&b, const_2, &a); // a = exp(2x) - 1 + 2 = exp(2x) + 1
+	   realIcDivide(&b, &a, res); // res = (exp(2x) - 1) / (exp(2x) + 1)
+ 	}
 }
 
-static decNumber *gser(decNumber *res, const decNumber *a, const decNumber *x, const decNumber *gln) {
-	decNumber ap, del, sum, t, u;
-	int i;
 
-	if(dn_le0(x))
-		return decNumberZero(res);
-	decNumberCopy(&ap, a);
-	decNumberRecip(&sum, a);
-	decNumberCopy(&del, &sum);
-	for(i=0; i<1000; i++) {
-		dn_inc(&ap);
-		dn_divide(&t, x, &ap);
-		dn_multiply(&del, &del, &t);
-		dn_add(&t, &sum, &del);
-		if(dn_eq(&t, &sum))
-			break;
-		decNumberCopy(&sum, &t);
-	}
-	dn_ln(&t, x);
-	dn_multiply(&u, &t, a);
-	dn_subtract(&t, &u, x);
-	dn_subtract(&u, &t, gln);
-	dn_exp(&t, &u);
-	return dn_multiply(res, &sum, &t);
+
+void WP34S_ArcSinh(const realIc_t *x, realIc_t *res) {
+	 realIc_t a;
+
+ 	realIcMultiply(x, x, &a);	 	// a = x²
+ 	realIcAdd(&a, const_1, &a);	// a = x² + 1
+  realIcSquareRoot(&a, &a);		 // a = sqrt(x²+1)
+ 	realIcAdd(&a, const_1, &a);	// a = sqrt(x²+1)+1
+ 	realIcDivide(x, &a, &a);    // a = x / (sqrt(x²+1)+1)
+ 	realIcAdd(&a, const_1, &a);	// a = x / (sqrt(x²+1)+1) + 1
+  realIcMultiply(x, &a, &a);  // y = x * (x / (sqrt(x²+1)+1) + 1)
+ 	WP34S_Ln1p(&a, res);        // res = ln(1 + (x * (x / (sqrt(x²+1)+1) + 1)))
 }
 
-static void gcheckSmall(decNumber *v)
-{
-	const decNumber * const threshold = &const_1e_10000;
 
-	if(dn_abs_lt(v, threshold))
-		decNumberCopy(v, threshold);
+
+void WP34S_ArcCosh(const realIc_t *xin, realIc_t *res) {
+ 	realIc_t x, z;
+
+  realIcCopy(xin, &x);
+ 	realIcMultiply(&x, &x, res);	     // res = x²
+ 	realIcSubtract(res, const_1, &z);	// z = x² - 1
+ 	realIcSquareRoot(&z, res);	      	// res = sqrt(x²-1)
+ 	realIcAdd(res, &x, &z);	         	// z = x + sqrt(x²-1)
+ 	WP34S_Ln(&z, res);                // res = ln(x + sqrt(x²-1))
 }
 
-static decNumber *gcf(decNumber *res, const decNumber *a, const decNumber *x, const decNumber *gln) {
-	decNumber an, b, c, d, h, t, u, v, i;
-	int n;
 
-	dn_p1(&t, x);
-	gcheckSmall(dn_subtract(&b, &t, a));		// b = (x+1) - a
-	set_inf(&c);
-	decNumberRecip(&d, &b);
-	decNumberCopy(&h, &d);
-	decNumberZero(&i);
-	for(n=0; n<1000; n++) {
-		dn_inc(&i);
-		dn_subtract(&t, a, &i);		// t = a-i
-		dn_multiply(&an, &i, &t);		// an = -i (i-a)
-		dn_p2(&b, &b);
-		dn_multiply(&t, &an, &d);
-		dn_add(&v, &t, &b);
-		gcheckSmall(&v);
-		decNumberRecip(&d, &v);
-		dn_divide(&t, &an, &c);
-		dn_add(&c, &b, &t);
-		gcheckSmall(&c);
-		dn_multiply(&t, &d, &c);
-		dn_multiply(&u, &h, &t);
-		if(dn_eq(&h, &u))
-			break;
-		decNumberCopy(&h, &u);
-	}
-	dn_ln(&t, x);
-	dn_multiply(&u, &t, a);
-	dn_subtract(&t, &u, x);
-	dn_subtract(&u, &t, gln);
-	dn_exp(&t, &u);
-	return dn_multiply(res, &t, &h);
+
+void WP34S_ArcTanh(const realIc_t *x, realIc_t *res) {
+ 	realIc_t y, z;
+
+ 	// Not the obvious formula but more stable...
+ 	realIcSubtract(const_1, x, &z);      // z = 1-x
+  realIcDivide(x, &z, &y);             // y = x / (1-x)
+ 	realIcMultiply(&y, const_2, &z);     // z = 2x / (1-x)
+ 	WP34S_Ln1p(&z, &y);                  // y = ln(1 + 2x / (1-x))
+  realIcMultiply(&y, const_1on2, res); // res = ln(1 + 2x / (1-x)) / 2
 }
 
-decNumber *decNumberGammap(decNumber *res, const decNumber *x, const decNumber *a) {
-	decNumber z, lga;
-	const int op = XeqOpCode - (OP_DYA | OP_GAMMAg);
-	const int regularised = op & 2;
-	const int upper = op & 1;
 
-	if(decNumberIsNegative(x) || dn_le0(a) ||
-			decNumberIsNaN(x) || decNumberIsNaN(a) || decNumberIsInfinite(a)) {
-		return set_NaN(res);
-	}
-	if(decNumberIsInfinite(x)) {
-		if(upper) {
-			if(regularised)
-				return dn_1(res);
-			return decNumberGamma(res, a);
-		}
-		return decNumberZero(res);
-	}
 
-	dn_p1(&lga, a);
-	dn_compare(&z, x, &lga);
-	if(regularised)
-		decNumberLnGamma(&lga, a);
-	else
-		decNumberZero(&lga);
-	if(decNumberIsNegative(&z)) {
-		/* Deal with a difficult case by using the other expansion */
-		if(dn_gt(a, &const_9000) && dn_gt(x, dn_multiply(&z, a, &const_0_995)))
-			goto use_cf;
-		gser(res, a, x, &lga);
-		if(upper)
-			goto invert;
-	} else {
-use_cf:		gcf(res, a, x, &lga);
-		if(! upper)
-			goto invert;
-	}
-	return res;
+/* ln(1+x) */
+void WP34S_Ln1p(const realIc_t *x, realIc_t *res) {
+	 realIc_t u, v, w;
 
-invert:	if(regularised)
-		return dn_1m(res, res);
-	decNumberGamma(&z, a);
-	return dn_subtract(res, &z, res);
+ 	if(realIcIsZero(x)) {
+ 		 realIcZero(res);
+ 	}
+ 	else {
+   	realIcAdd(x, const_1, &u);       // u = x+1
+   	realIcSubtract(&u, const_1, &v); // v = x
+ 	  if(realIcIsZero(&v)) {
+   		 realIcCopy(x, res);
+   	}
+   	else {
+   	  realIcDivide(x, &v, &w);
+     	WP34S_Ln(&u, &v);
+   	  realIcMultiply(&v, &w, res);
+   	}
+ 	}
 }
 
-#ifdef INCLUDE_FACTOR
-decNumber *decFactor(decNumber *r, const decNumber *x) {
-	int sgn;
-	unsigned long long int i;
 
-	if(decNumberIsSpecial(x) || ! is_int(x))
-		return set_NaN(r);
-	i = dn_to_ull(x, &sgn);
-	ullint_to_dn(r, doFactor(i));
-	if(sgn)
-		dn_minus(r, r);
-	return r;
+
+/* exp(x)-1 */
+void WP34S_Expm1(const realIc_t *x, realIc_t *res) {
+ 	realIc_t u, v, w;
+
+ 	realIcExp(x, &u);
+ 	realIcSubtract(&u, const_1, &v);
+ 	if(realIcIsZero(&v)) { // |x| is very little
+ 		 realIcCopy(x, res);
+ 	}
+ 	else {
+ 	  if(realIcCompareEqual(&v, const__1)) {
+   		 realIcCopy(const__1, res);
+   	}
+   	else {
+   	  realIcMultiply(&v, x, &w);
+   	  WP34S_Ln(&u, &v);
+   	  realIcDivide(&w, &v, res);
+   	}
+ 	}
 }
-#endif
 
-#ifdef INCLUDE_USER_IO
-decNumber *decRecv(decNumber *r, const decNumber *x) {
-	int to;
 
-	if(decNumberIsSpecial(x) || decNumberIsNegative(x)) {
-		to = -1;
-		if(decNumberIsInfinite(x) && ! decNumberIsNegative(x))
-			to = 0x7fffffff;
-	} else
-		to = dn_to_int(x);
-	int_to_dn(r, recv_byte(to));
-	return r;
-}
-#endif
-#endif
+

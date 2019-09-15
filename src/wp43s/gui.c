@@ -405,6 +405,20 @@ switch (event->keyval) {
       btnClicked_NU(w, "33");
       break;
 
+//OPERATORS / * - +
+    case 47:              // divide                   //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
+      btnClicked_NU(w, "21");
+      break;
+    case 42:              // mult                     //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
+      btnClicked_NU(w, "26");
+      break;
+    case 45:              // sub                      //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
+      btnClicked_NU(w, "31");
+      break;
+    case 43:              // plus                     //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
+      btnClicked_NU(w, "36");
+      break;
+
 
 
 //JM  CHARACTERS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD -                //*****. USE MENUS TO GET DEEP DOWN CHARACTERS *******//
@@ -417,7 +431,11 @@ switch (event->keyval) {
 
 
 
-//ROW 8
+//ROW 7/8
+    case 95:                //JM UNDERSCORE   //JM
+      btnClicked(w, "31");
+      break;
+
     case 65307:              // Esc EXIT //JM                   //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
       btnClicked(w, "32");
       break;
@@ -441,6 +459,16 @@ switch (event->keyval) {
       break;
 
 
+    case 65507: // left Ctrl
+    case 65508: // right Ctrl
+      //printf("key pressed: CTRL Hardcopy\n");
+      copyScreenToClipboard();
+      break;
+
+
+
+
+
   }
 return FALSE;
 }
@@ -448,7 +476,7 @@ return FALSE;
 
 
 
-//ORIGINAL MODIFEIED KEYBOARD DETECTION
+//ORIGINAL MODIFIED KEYBOARD DETECTION
 
   switch (event->keyval) {
 //ROW 1
@@ -826,13 +854,13 @@ return FALSE;
       btnClicked(w, "36");
       break;
 
-//JM- Reinstated
+/*//JM- Reinstated
     case 72:  // H    //JM REMOVE CAP H. ONLY lower case wil print
     case 104: // h
       //printf("key pressed: h Hardcopy\n");
       copyScreenToClipboard();
       break;
-
+*/
     default:
       break;
   }
@@ -2510,7 +2538,7 @@ void setupUI(void) {
   // LCD screen 400x240
   screen = gtk_drawing_area_new();
   gtk_widget_set_size_request(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "h(ardcopy) copies screen image to clipboard");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "CTRL: hardcopy, copies screen image to clipboard");
   gtk_fixed_put(GTK_FIXED(grid), screen, 63, 72);
   screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
   numBytes = screenStride * SCREEN_HEIGHT * 4;

@@ -148,7 +148,7 @@ void addItemToBuffer(uint16_t item) {
         displayBugScreen(errorMessage);
       }
       else {
-        strcat(aimBuffer, indexOfItems[item].itemPrinted);
+        strncpy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemPrinted, stringByteLength(indexOfItems[item].itemPrinted) + 1);
         if(stringWidth(aimBuffer, &standardFont, true, true) >= SCREEN_WIDTH-9) {
           btnClicked(NULL, "16"); // back space
           #ifdef PC_BUILD

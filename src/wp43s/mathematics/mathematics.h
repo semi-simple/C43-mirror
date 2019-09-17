@@ -52,6 +52,7 @@
 #include "magnitude.h"
 #include "minusOnePow.h"
 #include "multiplication.h"
+#include "parallel.h"
 #include "power.h"
 #include "realPart.h"
 #include "sign.h"

@@ -74,7 +74,7 @@ SRC_WP43S                = \
 		changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cube.c cubeRoot.c \
 		division.c exp.c factorial.c fractionalPart.c gamma.c gcd.c \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \
-		log2.c magnitude.c minusOnePow.c multiplication.c power.c \
+		log2.c magnitude.c minusOnePow.c multiplication.c parallel.c power.c \
 		realPart.c sign.c sin.c sinh.c square.c squareRoot.c subtraction.c \
 		swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c unitVector.c \
 		wp34s.c) \

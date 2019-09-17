@@ -100,6 +100,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnMirror",               fnMirror              },
   {"fnMultiply",             fnMultiply            },
   {"fnNop",                  fnNop                 },
+  {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
   {"fnPower",                fnPower               },
   {"fnRealPart",             fnRealPart            },

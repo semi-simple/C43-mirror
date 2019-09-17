@@ -123,6 +123,20 @@ power_real34.txt
 power_complex34.txt
 power_angle34.txt
 
+parallel_longInteger.txt
+parallel_real16.txt
+parallel_complex16.txt
+parallel_angle16.txt
+parallel_time.txt
+parallel_date.txt
+parallel_string.txt
+parallel_real16Matrix.txt
+parallel_complex16Matrix.txt
+parallel_shortInteger.txt
+parallel_real34.txt
+parallel_complex34.txt
+parallel_angle34.txt
+
 ;Answer to the Ultimate Question of Life
 ultimateQuestionOfLife.txt
 

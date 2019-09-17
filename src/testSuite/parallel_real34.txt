@@ -1,0 +1,85 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                     REAL34 | | ...                      **
+;**                     ... | | REAL34                      **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnParallel
+
+
+
+;==================================================================
+; Real34  || Long Integer      see in multiplication_longInteger.txt
+; Real34  || Real16            see in multiplication_real16.txt
+; Real34  || Complex16         see in multiplication_complex16.txt
+; Real34  || Angle16           see in multiplication_angle16.txt
+; Real34  || Time              see in multiplication_time.txt
+; Real34  || Date              see in multiplication_date.txt
+; Real34  || String            see in multiplication_string.txt
+; Real34  || Real16 Matrix     see in multiplication_real16Matrix.txt
+; Real34  || Complex16 Matrix  see in multiplication_complex16Matrix.txt
+; Real34  || Short Integer     see in multiplication_shortInteger.txt
+;==================================================================
+
+
+
+;=======================================
+; Real34 || Real34 --> Real34
+;=======================================
+In:  SL=0 NCSD=34 RY=Re34:"0" RX=Re34:"0"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0" RX=Re34:"0"
+
+In:  SL=0 RY=Re34:"1" RX=Re34:"2"
+Out: EC=0 FI=0 SL=1 RL=Re34:"2" RX=Re34:"0.6666666666666666666666666666666666666666666666666666666666667"
+
+In:  SL=0 RY=Re34:"2200" RX=Re34:"4700"
+Out: EC=0 FI=0 SL=1 RL=Re34:"4700" RX=Re34:"1498.5507246376811594202898550724637681159420289855072463768116"
+
+
+
+;=======================================
+; Real34 || Complex34 --> Complex34
+;=======================================
+In:  SL=0 FI=0 NCSD=34 RY=Re34:"0" RX=Co34:"0 i 0"
+Out: EC=0 FI=1 SL=1 RL=Co34:"0 i 0" RX=Co34:"0 i 0"
+
+In:  SL=0 FI=0 RY=Re34:"7" RX=Co34:"2 i -1"
+Out: EC=0 FI=1 SL=1 RL=Co34:"2 i -1" RX=Co34:"1.6219512195121951219512195121951219512195121951219512195121951 i -0.5975609756097560975609756097560975609756097560975609756097561"
+
+;=======================================
+; Complex34 || Real34 --> Complex34
+;=======================================
+In:  SL=0 FI=0 NCSD=34 RY=Co34:"0 i 0" RX=Re34:"0"
+Out: EC=0 FI=1 SL=1 RL=Re34:"0" RX=Co34:"0 i 0"
+
+In:  SL=0 FI=0 RY=Co34:"2 i -1" RX=Re34:"7"
+Out: EC=0 FI=1 SL=1 RL=Re34:"7" RX=Co34:"1.6219512195121951219512195121951219512195121951219512195121951 i -0.5975609756097560975609756097560975609756097560975609756097561"
+
+
+
+;=======================================
+; Real34 || Angle34 -> Angle34
+;=======================================
+In:  SL=0 FI=0 NCSD=34 RY=Re34:"0" RX=An34:"0":DEG
+Out: EC=0 FI=0 SL=1 RL=An34:"0":DEG RX=Re34:"0"
+
+In:  SL=0 RY=Re34:"1" RX=An34:"2":DMS
+Out: EC=0 FI=0 SL=1 RL=An34:"2":DMS RX=Re34:"0.6666666666666666666666666666666666666666666666666666666666667"
+
+In:  SL=0 RY=Re34:"2200" RX=An34:"4700":GRAD
+Out: EC=0 FI=0 SL=1 RL=An34:"4700":GRAD RX=Re34:"1498.5507246376811594202898550724637681159420289855072463768116"
+
+;=======================================
+; Angle34 || Real34 -> Angle34
+;=======================================
+In:  SL=0 FI=0 NCSD=34 RY=An34:"0":RAD RX=Re34:"0"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0" RX=Re34:"0"
+
+In:  SL=0 RY=An34:"1":MULTPI RX=Re34:"2"
+Out: EC=0 FI=0 SL=1 RL=Re34:"2" RX=Re34:"0.6666666666666666666666666666666666666666666666666666666666667"
+
+In:  SL=0 RY=An34:"2200":DEG RX=Re34:"4700"
+Out: EC=0 FI=0 SL=1 RL=Re34:"4700" RX=Re34:"1498.5507246376811594202898550724637681159420289855072463768116"

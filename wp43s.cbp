@@ -406,6 +406,45 @@
 		<Unit filename="src/testSuite/multiplication_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/parallel_angle16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_angle34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_complex16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_complex16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_complex34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_date.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_longInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_real16.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_real16Matrix.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_real34.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_shortInteger.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_string.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/parallel_time.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/polarToRectangular.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1188,6 +1227,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/multiplication.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/parallel.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/parallel.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

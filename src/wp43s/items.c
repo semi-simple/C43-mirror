@@ -937,7 +937,7 @@ const item_t indexOfItems[] = {
 /*  813 */  { itemToBeCoded,               NOPARAM,                     "^MOD",                                        "^MOD",                                                                       SLS_UNCHANGED},
 /*  814 */  { itemToBeCoded,               NOPARAM,                     "|M|",                                         "|M|",                                                                        SLS_UNCHANGED},
 /*  815 */  { fnMagnitude,                 NOPARAM,                     "|x|",                                         "|x|",                                                                        SLS_ENABLED  },
-/*  816 */  { fnJM,                        001,       /*JMCALC*/        "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                                                   SLS_UNCHANGED},    //JM CALC
+/*  816 */  { fnParallel,                  NOPARAM,                     "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                                                   SLS_ENABLED  },
 /*  817 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                                                              SLS_UNCHANGED},
 /*  818 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                                                        SLS_UNCHANGED},
 /*  819 */  { fnJM,                        002,       /*JMCALC*/        STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                                                           SLS_UNCHANGED},    //JM CALC

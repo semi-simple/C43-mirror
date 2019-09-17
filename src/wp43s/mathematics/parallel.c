@@ -1035,7 +1035,7 @@ void parallelCo16Co16(void) {
   if(!realIcIsZero(&x.real) || !realIcIsZero(&x.imag)) {
     mulCoIcCoIc(&y, &x, &product);
     realIcAdd(&y.real, &x.real, &sum.real);
-    realIcAdd(&y.real, &x.imag, &sum.imag);
+    realIcAdd(&y.imag, &x.imag, &sum.imag);
     divCoIcCoIc(&product, &sum, &x);
   }
 
@@ -1262,7 +1262,7 @@ void parallelCo16Co34(void) {
   if(!realIcIsZero(&x.real) || !realIcIsZero(&x.real)) {
     mulCoIcCoIc(&y, &x, &product);
     realIcAdd(&y.real, &x.real, &sum.real);
-    realIcAdd(&y.real, &x.imag, &sum.imag);
+    realIcAdd(&y.imag, &x.imag, &sum.imag);
     divCoIcCoIc(&product, &sum, &x);
   }
 
@@ -1307,7 +1307,7 @@ void parallelCo34Co16(void) {
   if(!realIcIsZero(&x.real) || !realIcIsZero(&x.real)) {
     mulCoIcCoIc(&y, &x, &product);
     realIcAdd(&y.real, &x.real, &sum.real);
-    realIcAdd(&y.real, &x.imag, &sum.imag);
+    realIcAdd(&y.imag, &x.imag, &sum.imag);
     divCoIcCoIc(&product, &sum, &x);
   }
 
@@ -1962,7 +1962,7 @@ void parallelCo34Co34(void) {
   if(!realIcIsZero(&x.real) || !realIcIsZero(&x.imag)) {
     mulCoIcCoIc(&y, &x, &product);
     realIcAdd(&y.real, &x.real, &sum.real);
-    realIcAdd(&y.real, &x.imag, &sum.imag);
+    realIcAdd(&y.imag, &x.imag, &sum.imag);
     divCoIcCoIc(&product, &sum, &x);
   }
 

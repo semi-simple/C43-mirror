@@ -1028,7 +1028,7 @@ void parallelCo16Co16(void) {
 
   // y || x = xy / (x + y)
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.imag);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
@@ -1255,7 +1255,7 @@ void parallelCo16Co34(void) {
 
   // y || x = xy / (x + y)
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.imag);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
@@ -1299,7 +1299,7 @@ void parallelCo34Co16(void) {
 
   // y || x = xy / (x + y)
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.imag);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);

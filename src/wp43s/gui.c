@@ -3789,6 +3789,7 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   liftStack();
   refreshStack();
   showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+  softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
 //  showSoftmenu(NULL, -MNU_ALPHA, true);       //JM ALPHA. Disabled temporarily. First need to check the stack of pop on pop offs, when not called by keyboard
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;

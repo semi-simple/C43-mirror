@@ -311,8 +311,14 @@ void btnPressed(void *notUsed, void *data) {
         if (HOME3) {                                                                                                             //JM shifts
            if( (softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer) ) {                              //JM shifts
               popSoftmenu();                                                                                                     //JM shifts
-            } else {                                                                                                             //JM shifts
-              showSoftmenu(NULL, -MNU_HOME, true);                                                                               //JM shifts
+            } else { 
+                                                                                                                                 //JM shifts
+              if (calcMode == CM_AIM) {                                                                                          //JM shifts
+                showSoftmenu(NULL, -MNU_ALPHA, true);                                                                            //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
+                }                                                                                                                //JM SHIFTS
+              else {                                                                                                             //JM shifts
+                showSoftmenu(NULL, -MNU_HOME, true);                                                                             //JM shifts  //JM ALPHA-HOME 
+                }                                                                                                                //JM shifts                                                                                                                  //JM shifts
               softmenuStackPointer_MEM = softmenuStackPointer;                                                                   //JM shifts
             }                                                                                                                    //JM shifts
          }                                                                                                                       //JM shifts Goto menu HOME if triple shift press
@@ -469,7 +475,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_AIM) {
-        if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU) {
+        if((softmenuStackPointer == 1) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)) {             //JM ALPHA-HOME make sure we are at the bottom of the stack
           calcModeNormal();
           showAlphaMode();
           popSoftmenu();

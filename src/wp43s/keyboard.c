@@ -443,6 +443,9 @@ void btnPressed(void *notUsed, void *data) {
       else if(calcMode == CM_FLAG_BROWSER) {
       }
 
+      else if(calcMode == CM_REGISTER_BROWSER) {
+      }
+
       else if(calcMode == CM_CONFIRMATION) {
         calcMode = previousCalcMode;
         confirmedFunction(CONFIRMED);
@@ -743,6 +746,9 @@ void btnPressed(void *notUsed, void *data) {
         addItemToNimBuffer(KEY_CC);
       }
 
+      else if(calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_REGISTER_BROWSER) {
+      }
+
       else {
         sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
         displayBugScreen(errorMessage);
@@ -1017,6 +1023,9 @@ void btnPressed(void *notUsed, void *data) {
               showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
             #endif
         }
+      }
+
+      else if(calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_REGISTER_BROWSER) {
       }
 
       else {

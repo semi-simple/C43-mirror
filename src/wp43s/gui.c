@@ -1524,7 +1524,8 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl82F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl82G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl82Gr, NULL, &lblG);                                                                            //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL); //JM ALPHA BLUE MENU LABELS
+//gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL); //JM ALPHA BLUE MENU LABELS //vv dr - new AIM
+  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);      //JM ALPHA BLUE MENU LABELS //^^
   gtk_widget_get_preferred_size(  lbl82Fa, NULL, &lblF);                                                                        //vv dr - new AIM
   gtk_fixed_move(GTK_FIXED(grid), lbl82Fa, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //^^
 
@@ -1534,7 +1535,8 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl83F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl83G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl83Gr, NULL, &lblG);                                                                            //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl83Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL); //JM ALPHA BLUE MENU LABELS
+//gtk_fixed_move(GTK_FIXED(grid), lbl83Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL); //JM ALPHA BLUE MENU LABELS //vv dr - new AIM
+  gtk_fixed_move(GTK_FIXED(grid), lbl83Gr, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);      //JM ALPHA BLUE MENU LABELS //^^
   gtk_widget_get_preferred_size(  lbl83Fa, NULL, &lblF);                                                                        //vv dr - new AIM
   gtk_fixed_move(GTK_FIXED(grid), lbl83Fa, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //^^
 
@@ -1544,7 +1546,8 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl84F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl84G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl84Gr, NULL, &lblG);                                                                            //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl84Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL); //JM ALPHA BLUE MENU LABELS
+//gtk_fixed_move(GTK_FIXED(grid), lbl84Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL); //JM ALPHA BLUE MENU LABELS //vv dr - new AIM
+  gtk_fixed_move(GTK_FIXED(grid), lbl84Gr, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);      //JM ALPHA BLUE MENU LABELS //^^
   gtk_widget_get_preferred_size(  lbl84Fa, NULL, &lblF);                                                                        //vv dr - new AIM
   gtk_fixed_move(GTK_FIXED(grid), lbl84Fa, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //^^
 
@@ -1563,8 +1566,9 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl85F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM
   gtk_fixed_move(GTK_FIXED(grid), lbl85G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM
 #endif //JM END OF LAYOUT 1
-  gtk_widget_get_preferred_size(  lbl85Gr, NULL, &lblG);                                                                //JM ALPHA BLUE MENU LABELS
-  gtk_fixed_move(GTK_FIXED(grid), lbl85Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL);   //JM ALPHA BLUE MENU LABELS
+  gtk_widget_get_preferred_size(  lbl85Gr, NULL, &lblG);                                                                              //JM ALPHA BLUE MENU LABELS
+//gtk_fixed_move(GTK_FIXED(grid), lbl85Gr, (2*xPos+KEY_WIDTH_2-GAP-lblG.width+2)/2,           yPos + GAP - Y_OFFSET_SHIFTED_LABEL);   //JM ALPHA BLUE MENU LABELS //vv dr - new AIM
+  gtk_fixed_move(GTK_FIXED(grid), lbl85Gr, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);        //JM ALPHA BLUE MENU LABELS //^^
   gtk_widget_get_preferred_size(  lbl85Fa, NULL, &lblF);                                                                        //vv dr - new AIM
   gtk_fixed_move(GTK_FIXED(grid), lbl85Fa, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //^^
  
@@ -1693,6 +1697,21 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
 
 
 
+void labelCaptionAimFaChr(const calcKey_t* key, GtkWidget* lblF, int chrF) {
+  uint8_t lbl[22];
+
+  stringToUtf8(indexOfItems[chrF].itemPrinted, lbl);
+
+  if (key->primary == 0) {
+    lbl[0] = 0;
+  }
+
+  gtk_label_set_label(GTK_LABEL(lblF), (gchar*)lbl);
+  if (key->primary < 0) gtk_widget_set_name(lblF, "fShiftedUnderline"); else  gtk_widget_set_name(lblF, "fShifted");
+}
+
+
+
 void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGreek, GtkWidget *lblL) {
   uint8_t lbl[22];
 
@@ -1801,7 +1820,7 @@ else if(key->gShiftedAim == CHR_DIGAMMA ) {
 
 //GShift colours
   if(key->gShiftedAim < 0) {
-    gtk_widget_set_name(lblGreek, "greekUnderline");
+    gtk_widget_set_name(lblGreek, "gShiftedUnderline");     //dr - new AIM
   }
   else {
     gtk_widget_set_name(lblGreek, "greek");
@@ -2155,15 +2174,15 @@ void calcModeAimGui(void) {
   labelCaptionAim(keys++, btn35A, lbl35Gr, lbl35L);
   labelCaptionAim(keys++, btn36A, lbl36Gr, lbl36L);     //^^
 
-  labelCaptionAim(keys++, btn41, lbl41Gr, lbl41L);
-  labelCaptionAimFa(keys, lbl42Fa);                     //vv dr - new AIM
+  labelCaptionAim(keys++, btn41,  lbl41Gr, lbl41L);
+  labelCaptionAimFaChr(   keys,   lbl42Fa, CHR_ex);          //vv dr - new AIM
   labelCaptionAim(keys++, btn42A, lbl42Gr, lbl42L);
-  labelCaptionAimFa(keys, lbl43Fa);
+  labelCaptionAimFaChr(   keys,   lbl43Fa, CHR_PLUS_MINUS);
   labelCaptionAim(keys++, btn43A, lbl43Gr, lbl43L);
   labelCaptionAim(keys++, btn44A, lbl44Gr, lbl44L);     //^^
-  labelCaptionAim(keys++, btn45, lbl45Gr, lbl45L);
+  labelCaptionAim(keys++, btn45,  lbl45Gr, lbl45L);
 
-  labelCaptionAim(keys++, btn51, lbl51Gr, lbl51L);
+  labelCaptionAim(keys++, btn51,  lbl51Gr, lbl51L);
   labelCaptionAimFa(keys, lbl52Fa);                     //vv dr - new AIM
   labelCaptionAim(keys++, btn52A, lbl52Gr, lbl52L);
   labelCaptionAimFa(keys, lbl53Fa);
@@ -2173,7 +2192,7 @@ void calcModeAimGui(void) {
   labelCaptionAimFa(keys, lbl55Fa);
   labelCaptionAim(keys++, btn55A, lbl55Gr, lbl55L);     //^^
 
-  labelCaptionAim(keys++, btn61, lbl61Gr, lbl61L);
+  labelCaptionAim(keys++, btn61,  lbl61Gr, lbl61L);
   labelCaptionAimFa(keys, lbl62Fa);                     //vv dr - new AIM
   labelCaptionAim(keys++, btn62A, lbl62Gr, lbl62L);
   labelCaptionAimFa(keys, lbl63Fa);
@@ -2183,7 +2202,7 @@ void calcModeAimGui(void) {
   labelCaptionAimFa(keys, lbl65Fa);
   labelCaptionAim(keys++, btn65A, lbl65Gr, lbl65L);     //^^
 
-  labelCaptionAim(keys++, btn71, lbl71Gr, lbl71L);
+  labelCaptionAim(keys++, btn71,  lbl71Gr, lbl71L);
   labelCaptionAimFa(keys, lbl72Fa);                     //vv dr - new AIM
   labelCaptionAim(keys++, btn72A, lbl72Gr, lbl72L);
   labelCaptionAimFa(keys, lbl73Fa);
@@ -2193,7 +2212,7 @@ void calcModeAimGui(void) {
   labelCaptionAimFa(keys, lbl75Fa);
   labelCaptionAim(keys++, btn75A, lbl75Gr, lbl75L);     //^^
 
-  labelCaptionAim(keys++, btn81, lbl81Gr, lbl81L);
+  labelCaptionAim(keys++, btn81,  lbl81Gr, lbl81L);
   labelCaptionAimFa(keys, lbl82Fa);                     //vv dr - new AIM
   labelCaptionAim(keys++, btn82A, lbl82Gr, lbl82L);
   labelCaptionAimFa(keys, lbl83Fa);
@@ -2373,10 +2392,10 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl83Fa);
   gtk_widget_show(lbl84Fa);
   gtk_widget_show(lbl85Fa);     //^^
-  gtk_widget_show(lbl82H);  //JM AIM MENU
+/*gtk_widget_show(lbl82H);  //JM AIM MENU   //vv dr - new AIM
   gtk_widget_show(lbl83H);  //JM AIM MENU
   gtk_widget_show(lbl84H);  //JM AIM MENU
-  gtk_widget_show(lbl85H);  //JM AIM MENU
+  gtk_widget_show(lbl85H);  //JM AIM MENU*/ //^^
   //gtk_widget_show(lbl85F); //JM
   //gtk_widget_show(lbl85G); //JM
   

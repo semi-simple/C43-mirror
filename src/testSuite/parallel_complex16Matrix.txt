@@ -1,0 +1,69 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**               COMPLEX16 MATRIX | | ...                  **
+;**               ... | | COMPLEX16 MATRIX                  **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnParallel
+
+
+
+;==================================================================
+; Complex16 Matrix || Long Integer   see in multiplication_longInteger.txt
+; Complex16 Matrix || Real16         see in multiplication_real16.txt
+; Complex16 Matrix || Complex16      see in multiplication_complex16.txt
+; Complex16 Matrix || Angle16        see in multiplication_angle16.txt
+; Complex16 Matrix || Time           see in multiplication_time.txt
+; Complex16 Matrix || Date           see in multiplication_date.txt
+; Complex16 Matrix || String         see in multiplication_string.txt
+; Complex16 Matrix || Real16 Matrix  see in multiplication_real16Matrix.txt
+;==================================================================
+
+
+
+;=======================================
+; Complex16 Matrix || Complex16 Matrix
+;=======================================
+
+
+
+;=======================================
+; Complex16 Matrix || Short Integer
+;=======================================
+
+;=======================================
+; Short Integer || Complex16 Matrix
+;=======================================
+
+
+
+;=======================================
+; Complex16 Matrix || Real34
+;=======================================
+
+;=======================================
+; Real34 || Complex16 Matrix
+;=======================================
+
+
+
+;=======================================
+; Complex16 Matrix || Complex34
+;=======================================
+
+;=======================================
+; Complex34 || Complex16 Matrix
+;=======================================
+
+
+
+;=======================================
+; Complex16 Matrix || Angle34
+;=======================================
+
+;=======================================
+; Angle34 || Complex16 Matrix
+;=======================================

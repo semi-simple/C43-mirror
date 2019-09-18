@@ -84,7 +84,34 @@ void ipRe16(void) {
     return;
   }
 
+  uint8_t bcd[DECDOUBLE_Pmax];
+  int32_t sign, exponent;
+  longInteger_t intPart, coef;
+
   real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+
+  sign = real16GetCoefficient(REGISTER_REAL16_DATA(REGISTER_X), bcd);
+  exponent = real16GetExponent(REGISTER_REAL16_DATA(REGISTER_X));
+
+  longIntegerInit(intPart);
+  longIntegerInit(coef);
+  uIntToLongInteger(bcd[0], intPart);
+
+  for(int i=1; i<DECDOUBLE_Pmax; i++) {
+    longIntegerMultiplyUInt(intPart, 10, intPart);
+    longIntegerAddUInt(intPart, bcd[i], intPart);
+  }
+
+  longIntegerPowerUIntUInt(10, exponent, coef);
+  longIntegerMultiply(intPart, coef, intPart);
+
+  if(sign) {
+    longIntegerChangeSign(intPart);
+  }
+
+  convertLongIntegerToLongIntegerRegister(intPart, REGISTER_X);
+  longIntegerFree(coef);
+  longIntegerFree(intPart);
 }
 
 
@@ -109,5 +136,32 @@ void ipRe34(void) {
     return;
   }
 
+  uint8_t bcd[DECQUAD_Pmax];
+  int32_t sign, exponent;
+  longInteger_t intPart, coef;
+
   real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+
+  sign = real34GetCoefficient(REGISTER_REAL34_DATA(REGISTER_X), bcd);
+  exponent = real34GetExponent(REGISTER_REAL34_DATA(REGISTER_X));
+
+  longIntegerInit(intPart);
+  longIntegerInit(coef);
+  uIntToLongInteger(bcd[0], intPart);
+
+  for(int i=1; i<DECQUAD_Pmax; i++) {
+    longIntegerMultiplyUInt(intPart, 10, intPart);
+    longIntegerAddUInt(intPart, bcd[i], intPart);
+  }
+
+  longIntegerPowerUIntUInt(10, exponent, coef);
+  longIntegerMultiply(intPart, coef, intPart);
+
+  if(sign) {
+    longIntegerChangeSign(intPart);
+  }
+
+  convertLongIntegerToLongIntegerRegister(intPart, REGISTER_X);
+  longIntegerFree(coef);
+  longIntegerFree(intPart);
 }

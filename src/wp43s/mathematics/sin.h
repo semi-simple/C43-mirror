@@ -20,6 +20,7 @@
 
 void fnSin   (uint16_t unusedParamButMandatory);
 void sinError(void);
+void sinCoIc (const complexIc_t *z, complexIc_t *res);
 void sinLonI (void);
 void sinRe16 (void);
 void sinCo16 (void);

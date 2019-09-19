@@ -64,6 +64,23 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 
+void expCoIc(const complexIc_t *z, complexIc_t *res) {
+ 	realIc_t expa, sin, cos;
+
+ 	if(realIcIsZero(&z->imag)) {
+ 		realIcExp(&z->real, &res->real);
+ 		realIcZero(&res->imag);
+ 	}
+ 	else {
+ 		realIcExp(&z->real, &expa);
+ 		WP34S_Cvt2RadSinCosTan(&z->imag, AM_RADIAN, &sin, &cos, NULL);
+ 		realIcMultiply(&expa, &cos, &res->real);
+ 		realIcMultiply(&expa, &sin, &res->imag);
+ 	}
+}
+
+
+
 /**********************************************************************
  * In all the functions below:
  * if X is a number then X = a + ib
@@ -108,18 +125,15 @@ void expCo16(void) {
     return;
   }
 
-  realIc_t a, b, factor;
+  complexIc_t z;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
 
-  realIcExp(&a, &factor);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&factor, &a, &a);
-  realIcMultiply(&factor, &b, &b);
+  expCoIc(&z, &z);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -193,18 +207,15 @@ void expCo34(void) {
     return;
   }
 
-  realIc_t a, b, factor;
+  complexIc_t z;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
 
-  realIcExp(&a, &factor);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&factor, &a, &a);
-  realIcMultiply(&factor, &b, &b);
+  expCoIc(&z, &z);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 

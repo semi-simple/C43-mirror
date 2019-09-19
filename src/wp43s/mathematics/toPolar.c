@@ -162,6 +162,6 @@ void realIcRectangularToPolar(const realIc_t *re, const realIc_t *im, realIc_t *
 
     // Angle
     realIcDivide(&imag, &real, theta);
-    WP34S_atan2(&imag, &real, theta);
+    WP34S_Atan2(&imag, &real, theta);
   }
 }

@@ -74,7 +74,7 @@ void arctanLonI(void) {
   realIc_t a;
 
   convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  WP34S_atan(&a, &a);
+  WP34S_Atan(&a, &a);
   convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
   reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, currentAngularMode);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
@@ -114,7 +114,7 @@ void arctanRe16(void) {
     realIc_t a;
 
     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_atan(&a, &a);
+    WP34S_Atan(&a, &a);
     convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
     realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
@@ -220,7 +220,7 @@ void arctanRe34(void) {
     realIc_t a;
 
     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_atan(&a, &a);
+    WP34S_Atan(&a, &a);
     convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
     realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }

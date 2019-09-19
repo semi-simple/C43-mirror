@@ -2082,7 +2082,7 @@ void printComplexIcToConsole(const complexIc_t *value) {
 
   realIcToString(&value->real, str);
   printf("complexIc %s + ", str);
-  real34ToString(&value->imag, str);
+  realIcToString(&value->imag, str);
   printf("%si", str);
 }
 

@@ -179,9 +179,9 @@ squareRoot.txt
 cube.txt
 cubeRoot.txt
 
-gamma.txt     ;TODO tests for complex gamma
-lnGamma.txt   ;TODO tests for complex lnGamma
-factorial.txt ;TODO tests for complex factorial
+gamma.txt
+lnGamma.txt
+factorial.txt
 
 fractionalPart.txt
 integerPart.txt

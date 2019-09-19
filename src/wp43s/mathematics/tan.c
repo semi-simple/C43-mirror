@@ -89,11 +89,33 @@ void fnTan(uint16_t unusedParamButMandatory) {
 
 
 
+void tanCoIc(const complexIc_t *zin, complexIc_t *zout) {
+  //                sin(a)*cosh(b) + i*cos(a)*sinh(b)
+  // tan(a + ib) = -----------------------------------
+  //                cos(a)*cosh(b) - i*sin(a)*sinh(b)
+  realIc_t sina, cosa, sinhb, coshb;
+  complexIc_t numer, denom;
+
+  WP34S_Cvt2RadSinCosTan(&zin->real, AM_RADIAN, &sina, &cosa, NULL);
+  WP34S_SinhCosh(&zin->imag, &sinhb, &coshb);
+
+  realIcMultiply(&sina, &coshb, &numer.real);
+  realIcMultiply(&cosa, &sinhb, &numer.imag);
+
+  realIcMultiply(&cosa, &coshb, &denom.real);
+  realIcMultiply(&sina, &sinhb, &denom.imag);
+  realIcChangeSign(&denom.imag);
+
+  divCoIcCoIc(&numer, &denom, zout);
+}
+
+
+
 void tanLonI(void) {
   realIc_t sin, cos, tan;
 
   longIntegerAngleReduction(REGISTER_X, currentAngularMode, &tan);
-  WP34S_cvt_2rad_sincostan(&tan, currentAngularMode, &sin, &cos, &tan);
+  WP34S_Cvt2RadSinCosTan(&tan, currentAngularMode, &sin, &cos, &tan);
 
   if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -125,7 +147,7 @@ void tanRe16(void) {
     realIc_t sin, cos, tan;
 
     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tan);
-    WP34S_cvt_2rad_sincostan(&tan, currentAngularMode, &sin, &cos, &tan);
+    WP34S_Cvt2RadSinCosTan(&tan, currentAngularMode, &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -151,55 +173,15 @@ void tanCo16(void) {
     return;
   }
 
-  //                  ca*sa*cshb              chb*shb
-  // tan(a + ib) = ----------------- + i*-----------------   with   ca=cos(a), sa=sin(a), shb=sinh(b), chb=cosh(b) and cshb=chb²-shb²
-  //                ca²*cshb + shb²       ca²*cshb + shb²
-  //
-  //           e^b + e^(-b)                  e^b - e^(-b)
-  // cosh(b)= --------------       sinh(b)= --------------
-  //                2                             2
-  //
+  complexIc_t z;
 
-  realIc_t ca, ca2, sa, expb, expmb, chb, shb, chb2, shb2, cshb, denom, a, b;
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  tanCoIc(&z, &z);
 
-  // Calculate cosh(b), sinh(b), cosh(b)² and sinh(b)²
-  realIcExp(&b, &expb);
-  realIcChangeSign(&b);
-  realIcExp(&b, &expmb);
-
-  realIcAdd(&expb, &expmb, &chb);
-  realIcMultiply(&chb, const_0_5, &chb);
-
-  realIcSubtract(&expb, &expmb, &shb);
-  realIcMultiply(&shb, const_0_5, &shb);
-
-  realIcMultiply(&chb, &chb, &chb2);
-  realIcMultiply(&shb, &shb, &shb2);
-
-  // Calculate cosh(b)² - sinh(b)²
-  realIcSubtract(&chb2, &shb2, &cshb);
-
-  // Calculate cos(a), sin(a) and cos(a)²
-  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sa, &ca, NULL);
-  realIcMultiply(&ca, &ca, &ca2);
-
-  // Calculate denom
-  realIcFMA(&ca2, &cshb, &shb2, &denom);
-
-  // Real part
-  realIcMultiply(&ca, &sa, &a);
-  realIcMultiply(&a, &cshb, &a);
-  realIcDivide(&a, &denom, &a);
-
-  // Imaginary part
-  realIcMultiply(&chb, &shb, &b);
-  realIcDivide(&b, &denom, &b);
-
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -220,7 +202,7 @@ void tanAn16(void) {
     realIc_t sin, cos, tan;
 
     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tan);
-    WP34S_cvt_2rad_sincostan(&tan, getRegisterAngularMode(REGISTER_X), &sin, &cos, &tan);
+    WP34S_Cvt2RadSinCosTan(&tan, getRegisterAngularMode(REGISTER_X), &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -267,7 +249,7 @@ void tanRe34(void) {
     realIc_t sin, cos, tan;
 
     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tan);
-    WP34S_cvt_2rad_sincostan(&tan, currentAngularMode, &sin, &cos, &tan);
+    WP34S_Cvt2RadSinCosTan(&tan, currentAngularMode, &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -293,55 +275,15 @@ void tanCo34(void) {
     return;
   }
 
-  //                  ca*sa*cshb              chb*shb
-  // tan(a + ib) = ----------------- + i*-----------------   with   ca=cos(a), sa=sin(a), shb=sinh(b), chb=cosh(b) and cshb=chb²-shb²
-  //                ca²*cshb + shb²       ca²*cshb + shb²
-  //
-  //           e^b + e^(-b)                  e^b - e^(-b)
-  // cosh(b)= --------------       sinh(b)= --------------
-  //                2                             2
-  //
+  complexIc_t z;
 
-  realIc_t ca, ca2, sa, expb, expmb, chb, shb, chb2, shb2, cshb, denom, a, b;
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  tanCoIc(&z, &z);
 
-  // Calculate cosh(b), sinh(b), cosh(b)² and sinh(b)²
-  realIcExp(&b, &expb);
-  realIcChangeSign(&b);
-  realIcExp(&b, &expmb);
-
-  realIcAdd(&expb, &expmb, &chb);
-  realIcMultiply(&chb, const_0_5, &chb);
-
-  realIcSubtract(&expb, &expmb, &shb);
-  realIcMultiply(&shb, const_0_5, &shb);
-
-  realIcMultiply(&chb, &chb, &chb2);
-  realIcMultiply(&shb, &shb, &shb2);
-
-  // Calculate cosh(b)² - sinh(b)²
-  realIcSubtract(&chb2, &shb2, &cshb);
-
-  // Calculate cos(a), sin(a) and cos(a)²
-  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sa, &ca, NULL);
-  realIcMultiply(&ca, &ca, &ca2);
-
-  // Calculate denom
-  realIcFMA(&ca2, &cshb, &shb2, &denom);
-
-  // Real part
-  realIcMultiply(&ca, &sa, &a);
-  realIcMultiply(&a, &cshb, &a);
-  realIcDivide(&a, &denom, &a);
-
-  // Imaginary part
-  realIcMultiply(&chb, &shb, &b);
-  realIcDivide(&b, &denom, &b);
-
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -362,7 +304,7 @@ void tanAn34(void) {
     realIc_t sin, cos, tan;
 
     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tan);
-    WP34S_cvt_2rad_sincostan(&tan, getRegisterAngularMode(REGISTER_X), &sin, &cos, &tan);
+    WP34S_Cvt2RadSinCosTan(&tan, getRegisterAngularMode(REGISTER_X), &sin, &cos, &tan);
 
     if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

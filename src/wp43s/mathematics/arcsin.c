@@ -140,7 +140,7 @@ void arcsinRe16(void) {
     }
   }
 
-  WP34S_asin(&a, &a);
+  WP34S_Asin(&a, &a);
   convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 
@@ -246,7 +246,7 @@ void arcsinRe34(void) {
     }
   }
 
-  WP34S_asin(&a, &a);
+  WP34S_Asin(&a, &a);
   convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 

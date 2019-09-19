@@ -64,8 +64,8 @@ void fnLn(uint16_t unusedParamButMandatory) {
 
 
 
-void lnCoIc(const complexIc_t *x, complexIc_t *ln) {
-  realIcRectangularToPolar(&x->real, &x->imag, &ln->real, &ln->imag);
+void lnCoIc(const complexIc_t *z, complexIc_t *ln) {
+  realIcRectangularToPolar(&z->real, &z->imag, &ln->real, &ln->imag);
   WP34S_Ln(&ln->real, &ln->real);
 }
 

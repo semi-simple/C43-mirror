@@ -129,7 +129,16 @@ void factCo16(void) {
     return;
   }
 
-  fnToBeCoded();
+  complexIc_t z;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+
+  realIcAdd(&z.real, const_1, &z.real);
+  WP34S_ComplexGamma(&z, &z);
+
+  realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -230,7 +239,16 @@ void factCo34(void) {
     return;
   }
 
-  fnToBeCoded();
+  complexIc_t z;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+
+  realIcAdd(&z.real, const_1, &z.real);
+  WP34S_ComplexGamma(&z, &z);
+
+  realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 

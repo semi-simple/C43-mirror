@@ -20,6 +20,7 @@
 
 void fnExp   (uint16_t unusedParamButMandatory);
 void expError(void);
+void expCoIc (const complexIc_t *z, complexIc_t *res);
 void expLonI (void);
 void expRe16 (void);
 void expCo16 (void);

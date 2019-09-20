@@ -394,6 +394,7 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
+  bool_t wp43sKbdLayout;
 
   wp43sMem = 0;
   gmpMem = 0;
@@ -401,6 +402,20 @@ void program_main(void) {
 
   // Initialization
   //program_init();
+
+  lcd_clear_buf();
+  lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");
+  lcd_refresh();
+  while(key != 33 && key != 37) {
+    key = key_pop();
+    while(key == -1) {
+      sys_sleep();
+      key = key_pop();
+    }
+  }
+
+  wp43sKbdLayout = (key == 37); // bottom left key
+  key = 0;
 
   lcd_clear_buf();
   setupDefaults();
@@ -415,7 +430,7 @@ void program_main(void) {
   //   ST(STAT_SUSPENDED) - Program signals it is ready for off and doesn't need to be woken-up again
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
-  for(;!endOfProgram;) {
+  while(!endOfProgram) {
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
@@ -464,67 +479,76 @@ void program_main(void) {
       reset_auto_off();
     }
 
-/////////////////////////////////////////////////
-// For key reassignment see:
-// https://www.swissmicros.com/dm42/devel/dmcp_devel_manual/#_system_key_table
-//
-// Output of keymap2layout keymap.txt
-//
-//    +-----+-----+-----+-----+-----+-----+
-// 1: | F1  | F2  | F3  | F4  | F5  | F6  |
-//    |38:38|39:39|40:40|41:41|42:42|43:43|
-//    +-----+-----+-----+-----+-----+-----+
-// 2: | 1/x |Sum+ | SIN | LN  | LOG |SQRT |
-//    | 1: 2| 2: 1| 3:10| 4: 5| 5: 4| 6: 3|
-//    +-----+-----+-----+-----+-----+-----+
-// 3: | STO | RCL | RDN | COS |SHIFT| TAN |
-//    | 7: 7| 8: 8| 9: 9|10:11|11:28|12:12|
-//    +-----+-----+-----+-----+-----+-----+
-// 4: |   ENTER   |x<>y | CHS |  E  | <-- |
-//    |   13:13   |14:14|15:15|16:16|17:17|
-//    +-----------+-----+-----+-----+-----+
-// 5: |  DIV |   7  |   8  |   9  |  XEQ  |
-//    | 18:22| 19:19| 20:20| 21:21| 22: 6 |
-//    +------+------+------+------+-------+
-// 6: |  MUL |   4  |   5  |   6  |  UP   |
-//    | 23:27| 24:24| 25:25| 26:26| 27:18 |
-//    +------+------+------+------+-------+
-// 7: |  SUB |   1  |   2  |   3  | DOWN  |
-//    | 28:32| 29:29| 30:30| 31:31| 32:23 |
-//    +------+------+------+------+-------+
-// 8: |  ADD |   0  |  DOT |  RUN | EXIT  |
-//    | 33:37| 34:34| 35:35| 36:36| 37:33 |
-//    +------+------+------+------+-------+
-//
+    if(wp43sKbdLayout) {
+      /////////////////////////////////////////////////
+      // For key reassignment see:
+      // https://www.swissmicros.com/dm42/devel/dmcp_devel_manual/#_system_key_table
+      //
+      // Output of keymap2layout keymap.txt
+      //
+      //    +-----+-----+-----+-----+-----+-----+
+      // 1: | F1  | F2  | F3  | F4  | F5  | F6  |
+      //    |38:38|39:39|40:40|41:41|42:42|43:43|
+      //    +-----+-----+-----+-----+-----+-----+
+      // 2: | 1/x |Sum+ | SIN | LN  | LOG |SQRT |
+      //    | 1: 2| 2: 1| 3:10| 4: 5| 5: 4| 6: 3|
+      //    +-----+-----+-----+-----+-----+-----+
+      // 3: | STO | RCL | RDN | COS |SHIFT| TAN |
+      //    | 7: 7| 8: 8| 9: 9|10:11|11:28|12:12|
+      //    +-----+-----+-----+-----+-----+-----+
+      // 4: |   ENTER   |x<>y | CHS |  E  | <-- |
+      //    |   13:13   |14:14|15:15|16:16|17:17|
+      //    +-----------+-----+-----+-----+-----+
+      // 5: |  DIV |   7  |   8  |   9  |  XEQ  |
+      //    | 18:22| 19:19| 20:20| 21:21| 22: 6 |
+      //    +------+------+------+------+-------+
+      // 6: |  MUL |   4  |   5  |   6  |  UP   |
+      //    | 23:27| 24:24| 25:25| 26:26| 27:18 |
+      //    +------+------+------+------+-------+
+      // 7: |  SUB |   1  |   2  |   3  | DOWN  |
+      //    | 28:32| 29:29| 30:30| 31:31| 32:23 |
+      //    +------+------+------+------+-------+
+      // 8: |  ADD |   0  |  DOT |  RUN | EXIT  |
+      //    | 33:37| 34:34| 35:35| 36:36| 37:33 |
+      //    +------+------+------+------+-------+
+      //
 
-    // Fetch the key
-    //  < 0 -> No key event
-    //  > 0 -> Key pressed
-    // == 0 -> Key released
-    key = key_pop();
+      // Fetch the key
+      //  < 0 -> No key event
+      //  > 0 -> Key pressed
+      // == 0 -> Key released
+      key = key_pop();
 
-    //The switch instruction below is implemented as follows e.g. for the up arrow key:
-    //  the output of keymap2layout for yhis key is UP 27:18
-    //  so we need the line:
-    //    case 18: key = 27; break;
-    switch(key) {
-      case  1: key =  2; break;
-      case  2: key =  1; break;
-      case  3: key =  6; break;
-      case  4: key =  5; break;
-      case  5: key =  4; break;
-      case  6: key = 22; break;
-      case 10: key =  3; break;
-      case 11: key = 10; break;
-      case 18: key = 27; break;
-      case 22: key = 18; break;
-      case 23: key = 32; break;
-      case 27: key = 23; break;
-      case 28: key = 11; break;
-      case 32: key = 28; break;
-      case 33: key = 37; break;
-      case 37: key = 33; break;
-      default: {}
+      //The switch instruction below is implemented as follows e.g. for the up arrow key:
+      //  the output of keymap2layout for yhis key is UP 27:18
+      //  so we need the line:
+      //    case 18: key = 27; break;
+      switch(key) {
+        case  1: key =  2; break;
+        case  2: key =  1; break;
+        case  3: key =  6; break;
+        case  4: key =  5; break;
+        case  5: key =  4; break;
+        case  6: key = 22; break;
+        case 10: key =  3; break;
+        case 11: key = 10; break;
+        case 18: key = 27; break;
+        case 22: key = 18; break;
+        case 23: key = 32; break;
+        case 27: key = 23; break;
+        case 28: key = 11; break;
+        case 32: key = 28; break;
+        case 33: key = 37; break;
+        case 37: key = 33; break;
+        default: {}
+      }
+    }
+    else {
+      // Fetch the key
+      //  < 0 -> No key event
+      //  > 0 -> Key pressed
+      // == 0 -> Key released
+      key = key_pop();
     }
 
     if(38 <= key && key <=43) {

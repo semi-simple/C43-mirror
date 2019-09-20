@@ -68,7 +68,7 @@ void coshLonI(void) {
   realIc_t cosh;
 
   convertLongIntegerRegisterToRealIc(REGISTER_X, &cosh);
-  WP34S_sinhcosh(&cosh, NULL, &cosh);
+  WP34S_SinhCosh(&cosh, NULL, &cosh);
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
   realIcToReal16(&cosh, REGISTER_REAL16_DATA(REGISTER_X));
@@ -88,7 +88,7 @@ void coshRe16(void) {
   realIc_t a;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  WP34S_sinhcosh(&a, NULL, &a);
+  WP34S_SinhCosh(&a, NULL, &a);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -109,8 +109,8 @@ void coshCo16(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
- 	WP34S_sinhcosh(&a, &sha, &cha);
- 	WP34S_cvt_2rad_sincostan(&b, AM_RADIAN, &sb, &cb, NULL);
+ 	WP34S_SinhCosh(&a, &sha, &cha);
+ 	WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sb, &cb, NULL);
 
  	realIcMultiply(&cha, &cb, &a);
  	realIcMultiply(&sha, &sb, &b);
@@ -134,7 +134,7 @@ void coshAn16(void) {
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  WP34S_sinhcosh(&a, NULL, &a);
+  WP34S_SinhCosh(&a, NULL, &a);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -164,7 +164,7 @@ void coshRe34(void) {
   realIc_t a;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  WP34S_sinhcosh(&a, NULL, &a);
+  WP34S_SinhCosh(&a, NULL, &a);
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -185,8 +185,8 @@ void coshCo34(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
- 	WP34S_sinhcosh(&a, &sha, &cha);
- 	WP34S_cvt_2rad_sincostan(&b, AM_RADIAN, &sb, &cb, NULL);
+ 	WP34S_SinhCosh(&a, &sha, &cha);
+ 	WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sb, &cb, NULL);
 
  	realIcMultiply(&cha, &cb, &a);
  	realIcMultiply(&sha, &sb, &b);
@@ -210,6 +210,6 @@ void coshAn34(void) {
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  WP34S_sinhcosh(&a, NULL, &a);
+  WP34S_SinhCosh(&a, NULL, &a);
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

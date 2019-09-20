@@ -142,7 +142,7 @@ void arccosRe16(void) {
       return;
     }
   }
-  WP34S_acos(&a, &a);
+  WP34S_Acos(&a, &a);
   convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 
@@ -245,7 +245,7 @@ void arccosRe34(void) {
       return;
     }
   }
-  WP34S_acos(&a, &a);
+  WP34S_Acos(&a, &a);
   convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 

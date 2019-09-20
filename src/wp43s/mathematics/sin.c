@@ -64,11 +64,24 @@ void fnSin(uint16_t unusedParamButMandatory) {
 
 
 
+void sinCoIc(const complexIc_t *z, complexIc_t *res) {
+  // sin(a + ib) = sin(a)*cosh(b) + i*cos(a)*sinh(b)
+  realIc_t sina, cosa, sinhb, coshb;
+
+  WP34S_Cvt2RadSinCosTan(&z->real, AM_RADIAN, &sina, &cosa, NULL);
+  WP34S_SinhCosh(&z->imag, &sinhb, &coshb);
+
+  realIcMultiply(&sina, &coshb, &res->real);
+  realIcMultiply(&cosa, &sinhb, &res->imag);
+}
+
+
+
 void sinLonI(void) {
   realIc_t sin;
 
   longIntegerAngleReduction(REGISTER_X, currentAngularMode, &sin);
-  WP34S_cvt_2rad_sincostan(&sin, currentAngularMode, &sin, NULL, NULL);
+  WP34S_Cvt2RadSinCosTan(&sin, currentAngularMode, &sin, NULL, NULL);
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
   realIcToReal16(&sin, REGISTER_REAL16_DATA(REGISTER_X));
@@ -92,7 +105,7 @@ void sinRe16(void) {
     realIc_t a;
 
     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincostan(&a, currentAngularMode, &a, NULL, NULL);
+    WP34S_Cvt2RadSinCosTan(&a, currentAngularMode, &a, NULL, NULL);
     realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
@@ -108,39 +121,15 @@ void sinCo16(void) {
     return;
   }
 
-  // sin(a + ib) = cosh(b)*sin(a) + i*cos(a)*sinh(b)
-  //
-  //           e^b + e^(-b)                  e^b - e^(-b)
-  // cosh(b)= --------------       sinh(b)= --------------
-  //                2                             2
-  //
-  // sin(a + ib) = (e^b + e^(-b))*sin(a)/2 + i*(e^b - e^(-b))*cos(a)/2
+  complexIc_t z;
 
-  realIc_t expIm, expMIm, a, b, sin, cos;
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
+  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  sinCoIc(&z, &z);
 
-  // expIm = e^b  and expMIm = e^(-b)
-  realIcExp(&b, &expIm);
-  realIcChangeSign(&b);
-  realIcExp(&b, &expMIm);
-
-  // Calculate cos and sin
-  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sin, &cos, NULL);
-
-  // real part = (e^b + e^(-b))*sin(a)/2
-  realIcAdd(&expIm, &expMIm, &a);
-  realIcMultiply(&a, &sin, &a);
-  realIcMultiply(&a, const_0_5, &a);
-
-  // imaginary part = (e^b - e^(-b))*cos(a)/2
-  realIcSubtract(&expIm, &expMIm, &b);
-  realIcMultiply(&b, &cos, &b);
-  realIcMultiply(&b, const_0_5, &b);
-
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -161,7 +150,7 @@ void sinAn16(void) {
     realIc_t a;
 
     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincostan(&a, getRegisterAngularMode(REGISTER_X), &a, NULL, NULL);
+    WP34S_Cvt2RadSinCosTan(&a, getRegisterAngularMode(REGISTER_X), &a, NULL, NULL);
     realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
@@ -198,7 +187,7 @@ void sinRe34(void) {
     realIc_t a;
 
     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincostan(&a, currentAngularMode, &a, NULL, NULL);
+    WP34S_Cvt2RadSinCosTan(&a, currentAngularMode, &a, NULL, NULL);
     realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
@@ -214,39 +203,15 @@ void sinCo34(void) {
     return;
   }
 
-  // sin(a + ib) = cosh(b)*sin(a) + i*cos(a)*sinh(b)
-  //
-  //           e^b + e^(-b)                  e^b - e^(-b)
-  // cosh(b)= --------------       sinh(b)= --------------
-  //                2                             2
-  //
-  // sin(a + ib) = (e^b + e^(-b))*sin(a)/2 + i*(e^b - e^(-b))*cos(a)/2
+  complexIc_t z;
 
-  realIc_t expIm, expMIm, a, b, sin, cos;
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
+  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  sinCoIc(&z, &z);
 
-  // expIm = e^b  and expMIm = e^(-b)
-  realIcExp(&b, &expIm);
-  realIcChangeSign(&b);
-  realIcExp(&b, &expMIm);
-
-  // Calculate cos and sin
-  WP34S_cvt_2rad_sincostan(&a, AM_RADIAN, &sin, &cos, NULL);
-
-  // real part = (e^b + e^(-b))*sin(a)/2
-  realIcAdd(&expIm, &expMIm, &a);
-  realIcMultiply(&a, &sin, &a);
-  realIcMultiply(&a, const_0_5, &a);
-
-  // imaginary part = (e^b - e^(-b))*cos(a)/2
-  realIcSubtract(&expIm, &expMIm, &b);
-  realIcMultiply(&b, &cos, &b);
-  realIcMultiply(&b, const_0_5, &b);
-
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -267,7 +232,7 @@ void sinAn34(void) {
     realIc_t a;
 
     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_cvt_2rad_sincostan(&a, getRegisterAngularMode(REGISTER_X), &a, NULL, NULL);
+    WP34S_Cvt2RadSinCosTan(&a, getRegisterAngularMode(REGISTER_X), &a, NULL, NULL);
     realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   }
 

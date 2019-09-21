@@ -1719,7 +1719,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     if(longIntegerIsNegative(lgInt) || longIntegerCompareUInt(lgInt, 180) > 0) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        longIntegerToAllocatedString(lgInt, errorMessage + 200, 10);
+        longIntegerToAllocatedString(lgInt, errorMessage + 200);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
         showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
       #endif
@@ -1928,7 +1928,7 @@ void printRegisterToConsole(calcRegister_t regist) {
     longInteger_t lgInt;
 
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
-    longIntegerToAllocatedString(lgInt, str, 10);
+    longIntegerToAllocatedString(lgInt, str);
     longIntegerFree(lgInt);
     #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("long integer (%" FMT32U " bytes) %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
@@ -2167,9 +2167,9 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void printLongIntegerToConsole(longInteger_t value) {
-  char *str;
+  char str[3000];
 
-  str = longIntegerToString(value, 10);
+  longIntegerToAllocatedString(value, str);
   printf("LI (%" FMT64U ") %s", (uint64_t)longIntegerSizeInBytes(value), str);
 
   freeGmp(str, strlen(str) + 1);

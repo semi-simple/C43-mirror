@@ -139,7 +139,7 @@ void convertLongIntegerRegisterToReal16Register(calcRegister_t source, calcRegis
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerToAllocatedString(lgInt, tmpStr3000);
   longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
@@ -151,7 +151,7 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerToAllocatedString(lgInt, tmpStr3000);
   longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
@@ -163,7 +163,7 @@ void convertLongIntegerRegisterToRealIc(calcRegister_t source, realIc_t *destina
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerToAllocatedString(lgInt, tmpStr3000);
   longIntegerFree(lgInt);
   stringToRealIc(tmpStr3000, destination);
 }
@@ -218,7 +218,7 @@ void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
     }
   }
 
-  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerToAllocatedString(lgInt, tmpStr3000);
   longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
@@ -293,7 +293,7 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
     }
   }
 
-  longIntegerToAllocatedString(lgInt, tmpStr3000, 10);
+  longIntegerToAllocatedString(lgInt, tmpStr3000);
   longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));

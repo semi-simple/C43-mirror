@@ -1674,9 +1674,13 @@
 #define CHR_case                      1635  //JM CAPS
 #define KEY_HASH                      1636  //JM BASE ## test
 #define ITM_HASH                      1637  //JM BASE ### test
+#define ITM_op_a                      1638  //JM BASE ### test
+#define ITM_op_a2                     1639  //JM BASE ### test
+#define ITM_op_j                      1640  //JM BASE ### test
 
 
-#define LAST_ITEM                     1638  //JM
+
+#define LAST_ITEM                     1641  //JM
 
 #define CHR_PROD_SIGN                 9999
 

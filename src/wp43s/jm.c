@@ -257,7 +257,8 @@ uint16_t cm;
      btnClicked(NULL, "26");  // *.    // Multiply with X  */
      
      liftStack();                                              // Prepare for new X
-     setRegisterDataType(REGISTER_X, dtComplex16, TAG_NONE);   // Convert X to Complex16
+//     setRegisterDataType(REGISTER_X, dtComplex16, TAG_NONE);   // Convert X to Complex16
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
      stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));    // Set X real = 0
      stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));    // Set X imag = 0
      fnAdd(0);                                                 // +
@@ -266,7 +267,62 @@ uint16_t cm;
      fnDropY(0);                                               // DROP Y
      complexMode = cm;                                         // RCL POLAR MODE
      refreshStack();
+
+  } else
+
+  if(JM_OPCODE == 3) {                                        
+                                                              
+                                                              
+ //    cm = complexMode;                                        
+ //    complexMode = CM_POLAR;                                  
+
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+
+//     complexMode = cm;                                        
+     refreshStack();
+
+  } else
+
+  if(JM_OPCODE == 4) {                                        
+                                                              
+                                                              
+ //    cm = complexMode;                                        
+ //    complexMode = CM_POLAR;                                  
+
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));
+
+//     complexMode = cm;                                        
+     refreshStack();
+
+  } else
+
+  if(JM_OPCODE == 5) {                                        
+                                                              
+                                                              
+ //    cm = complexMode;                                        
+ //    complexMode = CM_POLAR;                                  
+
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
+
+//     complexMode = cm;                                        
+     refreshStack();
   }
+
+
+
+
 }
 
 

@@ -1767,9 +1767,11 @@ const item_t indexOfItems[] = {
 /* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                                             SLS_UNCHANGED},   //JM CASE
 /* 1636 */  { fnBASE_Hash,         /*TEST!*/        NOPARAM,                     "##",                                            "##",                                                                         SLS_UNCHANGED},   //JM ##
 /* 1637 */  { addItemToBuffer,     /*TEST!*/        CHR_NUMBER_SIGN,              "###",                                         "###",                                                                   SLS_UNCHANGED},
+/* 1638 */  { fnJM,                        003,                        "op_a",                                         "a",                                                                       SLS_ENABLED  },  //JM Operator a
+/* 1639 */  { fnJM,                        004,                        "op_a" STD_SUP_2,                               "a" STD_SUP_2,                                                             SLS_ENABLED  },  //JM Operator a
+/* 1640 */  { fnJM,                        005,                        "op_j",                                         "j",                                                                       SLS_ENABLED  },  //JM Operator a
 
 
 
-
-/* 1638 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/* 1641 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

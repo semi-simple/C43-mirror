@@ -30,8 +30,8 @@
 
 #define longIntegerInit(op)                                         mpz_init(op);
 #define longIntegerInitSizeInBits(op, bits)                         mpz_init2(op, bits);
-#define longIntegerToString(source, radix)                          mpz_get_str(NULL, radix, source)
-#define longIntegerToAllocatedString(source, destination, radix)    mpz_get_str(destination, radix, source)
+//#define longIntegerToString(source)                                 mpz_get_str(NULL, 10, source)
+#define longIntegerToAllocatedString(source, destination)           mpz_get_str(destination, 10, source)
 #define uIntToLongInteger(source, destination)                      mpz_set_ui(destination, source)
 #define intToLongInteger(source, destination)                       mpz_set_si(destination, source)
 #define longIntegerToUInt(op)                                       mpz_get_ui(op)

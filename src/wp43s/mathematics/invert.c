@@ -105,7 +105,7 @@ void invertLonI(void) {
     else {
       realIc_t reX;
 
-      longIntegerToAllocatedString(a, tmpStr3000, 10);
+      longIntegerToAllocatedString(a, tmpStr3000);
       stringToRealIc(tmpStr3000, &reX);
 
       realIcDivide(const_1, &reX, &reX);

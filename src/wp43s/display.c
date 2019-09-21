@@ -1576,7 +1576,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int1
     exponentShift = 0;
   }
 
-  longIntegerToAllocatedString(lgInt, displayString, 10);
+  longIntegerToAllocatedString(lgInt, displayString);
   longIntegerFree(lgInt);
 
   if(groupingGap > 0) {

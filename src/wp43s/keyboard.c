@@ -254,8 +254,8 @@ void btnPressed(void *notUsed, void *data) {
     }
   }
 
-    bool_t JM_auto_drop_enabled;                      //JM TIMER CLRDROP
-    JM_auto_drop_enabled=true;                        //JM TIMER CLRDROP
+
+  JM_auto_drop_enabled=true;                          //JM TIMER CLRDROP
   if(key->primary == KEY_BACKSPACE) {
     #ifdef DMCP_BUILD                                 //JM TIMER DMCP CLRDROP
     now = sys_current_ms();                           //JM TIMER DMCP SHIFTCANCEL
@@ -272,7 +272,7 @@ void btnPressed(void *notUsed, void *data) {
 
     now_MEM = now;                                    //JM TIMER -- any last key pressed
     
-    if(JM_auto_drop_activated) {                      //JM TIMER CLRDROP ensure a double drop does not occur
+    if(JM_auto_drop_activated) {                      //JM TIMER CLRDROP ensure multiple drops don't not occur
       JM_auto_drop_enabled = false;                   //JM TIMER CLRDROP
       JM_auto_drop_activated = false;                 //JM TIMER CLRDROP
     }

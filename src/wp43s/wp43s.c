@@ -285,7 +285,8 @@ void setupDefaults(void) {
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and restore time
-  JM_auto_drop_activated = false;                                //JM TIMER
+  JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
+  JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = 0;                                            //JM TIMER
 
   

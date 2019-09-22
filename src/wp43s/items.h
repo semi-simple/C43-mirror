@@ -1674,13 +1674,21 @@
 #define CHR_case                      1635  //JM CAPS
 #define KEY_HASH                      1636  //JM BASE ## test
 #define ITM_HASH                      1637  //JM BASE ### test
-#define ITM_op_a                      1638  //JM BASE ### test
-#define ITM_op_a2                     1639  //JM BASE ### test
-#define ITM_op_j                      1640  //JM BASE ### test
+#define ITM_op_a                      1638  //JM OPERATORS
+#define ITM_op_a2                     1639  //JM OPERATORS
+#define ITM_op_j                      1640  //JM OPERATORS
+#define ITM_BASE_HOME                 1641  //JM BASEMENU //fnSetSetJM
+#define ITM_BASE_MYMENU               1642  //JM BASEMENU
+#define ITM_BASE_AHOME                1643  //JM BASEMENU
+#define ITM_BASE_MYA                  1644  //JM BASEMENU
+#define ITM_SH_BASE_HOME              1645  //JM BASEMENU //fnShowJM
+#define ITM_SH_BASE_MYMENU            1646  //JM BASEMENU
+#define ITM_SH_BASE_AHOME             1647  //JM BASEMENU
+#define ITM_SH_BASE_MYA               1648  //JM BASEMENU
 
 
 
-#define LAST_ITEM                     1641  //JM
+#define LAST_ITEM                     1649  //JM
 
 #define CHR_PROD_SIGN                 9999
 

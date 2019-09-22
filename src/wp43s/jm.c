@@ -155,7 +155,27 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
   if(What == 3) {
     SHTIM = !SHTIM;                                                //JM SHIFT TIM CCL
     fnInfo(SHTIM);                                                 //JM SHIFT TIM CCL
+  } else
+  if(What == 4) {
+    SH_BASE_HOME = !SH_BASE_HOME;                                  //JM SHIFT TIM CCL
+    fnInfo(SH_BASE_HOME);                                          //JM SHIFT TIM CCL
+  } else
+  if(What == 5) {
+    SH_BASE_MYMENU = !SH_BASE_MYMENU;                              //JM SHIFT TIM CCL
+    fnInfo(SH_BASE_MYMENU);                                        //JM SHIFT TIM CCL
+  } else
+  if(What == 6) {
+    SH_BASE_AHOME = !SH_BASE_AHOME;                                //JM SHIFT TIM CCL
+    fnInfo(SH_BASE_AHOME);                                         //JM SHIFT TIM CCL
+  } else
+  if(What == 7) {
+    SH_BASE_MYA = !SH_BASE_MYA;                                    //JM SHIFT TIM CCL
+    fnInfo(SH_BASE_MYA);                                           //JM SHIFT TIM CCL
   }
+
+
+
+
 }                                                                 //JM SHIFT TIM CCL
 
 
@@ -201,6 +221,22 @@ void fnShowJM(uint16_t What) {
   if(What == 3 && SHTIM == true) { stringToLongInteger("1",10,mem); }
   else
   if(What == 3 && SHTIM == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 4 && SH_BASE_HOME == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 4 && SH_BASE_HOME == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 5 && SH_BASE_MYMENU == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 5 && SH_BASE_MYMENU == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 6 && SH_BASE_AHOME == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 6 && SH_BASE_AHOME == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 7 && SH_BASE_MYA == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 7 && SH_BASE_MYA == false) { stringToLongInteger("0",10,mem); }
 
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);

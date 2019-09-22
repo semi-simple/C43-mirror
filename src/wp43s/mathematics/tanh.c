@@ -68,7 +68,7 @@ void tanhLonI(void) {
   realIc_t tanh;
 
   convertLongIntegerRegisterToRealIc(REGISTER_X, &tanh);
-  WP34S_tanh(&tanh, &tanh);
+  WP34S_Tanh(&tanh, &tanh);
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
   realIcToReal16(&tanh, REGISTER_REAL16_DATA(REGISTER_X));
@@ -88,7 +88,7 @@ void tanhRe16(void) {
   realIc_t tanh;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tanh);
-  WP34S_tanh(&tanh, &tanh);
+  WP34S_Tanh(&tanh, &tanh);
   realIcToReal16(&tanh, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -111,12 +111,12 @@ void tanhCo16(void) {
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   if(realIcIsZero(&b)) {
-    WP34S_tanh(&a, &numer.real);
+    WP34S_Tanh(&a, &numer.real);
     realIcZero(&numer.imag);
   }
   else {
-    WP34S_tanh(&a, &numer.real);
-    WP34S_cvt_2rad_sincostan(&b, AM_RADIAN, &sa, &ca, &numer.imag);
+    WP34S_Tanh(&a, &numer.real);
+    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sa, &ca, &numer.imag);
 
     realIcCopy(const_1, &denom.real);
     realIcMultiply(&numer.real, &numer.imag, &denom.imag);
@@ -143,7 +143,7 @@ void tanhAn16(void) {
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tanh);
   setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  WP34S_tanh(&tanh, &tanh);
+  WP34S_Tanh(&tanh, &tanh);
   realIcToReal16(&tanh, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -173,7 +173,7 @@ void tanhRe34(void) {
   realIc_t tanh;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tanh);
-  WP34S_tanh(&tanh, &tanh);
+  WP34S_Tanh(&tanh, &tanh);
   realIcToReal34(&tanh, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -196,12 +196,12 @@ void tanhCo34(void) {
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   if(realIcIsZero(&b)) {
-    WP34S_tanh(&a, &numer.real);
+    WP34S_Tanh(&a, &numer.real);
     realIcZero(&numer.imag);
   }
   else {
-    WP34S_tanh(&a, &numer.real);
-    WP34S_cvt_2rad_sincostan(&b, AM_RADIAN, &sa, &ca, &numer.imag);
+    WP34S_Tanh(&a, &numer.real);
+    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sa, &ca, &numer.imag);
 
     realIcCopy(const_1, &denom.real);
     realIcMultiply(&numer.real, &numer.imag, &denom.imag);
@@ -228,6 +228,6 @@ void tanhAn34(void) {
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tanh);
   setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  WP34S_tanh(&tanh, &tanh);
+  WP34S_Tanh(&tanh, &tanh);
   realIcToReal34(&tanh, REGISTER_REAL34_DATA(REGISTER_X));
 }

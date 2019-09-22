@@ -223,57 +223,59 @@ void addItemToBuffer(uint16_t item) {
 
 
 
-void addItemToNimBuffer(int16_t item) {
-  bool_t isRealDp(const char *buffer) {
-    int16_t firstDigit, lastDigit, numDigits, decimalSeparator, exponent, exponentLocation;
+static bool_t isRealDp(const char *buffer) {
+  int16_t firstDigit, lastDigit, numDigits, decimalSeparator, exponent, exponentLocation;
 
-    //printf("   %s : ", buffer);
-    // The first digit is the first character that is neither a . nor a 0
-    firstDigit = 0;
-    while(buffer[firstDigit] != 0 && (buffer[firstDigit] == '0' || buffer[firstDigit] == '.')) {
-      firstDigit++;
+  //printf("   %s : ", buffer);
+  // The first digit is the first character that is neither a . nor a 0
+  firstDigit = 0;
+  while(buffer[firstDigit] != 0 && (buffer[firstDigit] == '0' || buffer[firstDigit] == '.')) {
+    firstDigit++;
+  }
+  if(buffer[firstDigit] == 0) {
+    lastDigit = firstDigit;
+  }
+  else {
+    // The last digit is the last character that is neither a . nor a 0
+    lastDigit = firstDigit;
+    while(buffer[lastDigit] != 0 && buffer[lastDigit] != 'e' && buffer[lastDigit] != '+' && buffer[lastDigit] != '-') {
+      lastDigit++;
     }
-    if(buffer[firstDigit] == 0) {
-      lastDigit = firstDigit;
-    }
-    else {
-      // The last digit is the last character that is neither a . nor a 0
-      lastDigit = firstDigit;
-      while(buffer[lastDigit] != 0 && buffer[lastDigit] != 'e' && buffer[lastDigit] != '+' && buffer[lastDigit] != '-') {
-        lastDigit++;
-      }
+    lastDigit--;
+
+    while(buffer[lastDigit] == '0' || buffer[lastDigit] == '.') {
       lastDigit--;
-
-      while(buffer[lastDigit] == '0' || buffer[lastDigit] == '.') {
-        lastDigit--;
-      }
     }
-
-    for(decimalSeparator=0; buffer[decimalSeparator]!=0 && buffer[decimalSeparator]!='.'; decimalSeparator++);
-
-    numDigits = lastDigit - firstDigit + (firstDigit<=decimalSeparator && decimalSeparator<=lastDigit ? 0 : 1);
-    //printf("firstDigit=%d  lastDigit=%d  numDigits=%d  decimalSeparator=%d\n", firstDigit, lastDigit, numDigits, decimalSeparator);
-
-    if(numDigits > 16) {
-      return true;
-    }
-    else {
-      exponentLocation = 0;
-      while(buffer[exponentLocation] != 0 && buffer[exponentLocation] != 'e') {
-        exponentLocation++;
-      }
-      if(buffer[exponentLocation] == 'e') {
-        exponent = atoi(buffer + exponentLocation + 1);
-        //printf("      exponentLocation=%d  exponent=%d\n", exponentLocation, exponent);
-        exponent += decimalSeparator - firstDigit - (decimalSeparator > firstDigit ? 1 : 0);
-        //printf("      corrected exponent=%d\n", exponent);
-        return (exponent < -383 || exponent > 384);
-      }
-    }
-
-    return false;
   }
 
+  for(decimalSeparator=0; buffer[decimalSeparator]!=0 && buffer[decimalSeparator]!='.'; decimalSeparator++);
+
+  numDigits = lastDigit - firstDigit + (firstDigit<=decimalSeparator && decimalSeparator<=lastDigit ? 0 : 1);
+  //printf("firstDigit=%d  lastDigit=%d  numDigits=%d  decimalSeparator=%d\n", firstDigit, lastDigit, numDigits, decimalSeparator);
+
+  if(numDigits > 16) {
+    return true;
+  }
+  else {
+    exponentLocation = 0;
+    while(buffer[exponentLocation] != 0 && buffer[exponentLocation] != 'e') {
+      exponentLocation++;
+    }
+    if(buffer[exponentLocation] == 'e') {
+      exponent = atoi(buffer + exponentLocation + 1);
+      //printf("      exponentLocation=%d  exponent=%d\n", exponentLocation, exponent);
+      exponent += decimalSeparator - firstDigit - (decimalSeparator > firstDigit ? 1 : 0);
+      //printf("      corrected exponent=%d\n", exponent);
+      return (exponent < -383 || exponent > 384);
+    }
+  }
+
+  return false;
+}
+
+
+
+void addItemToNimBuffer(int16_t item) {
   int16_t lastChar, index;
   uint8_t savedNimNumberPart;
   bool_t done;
@@ -1056,33 +1058,35 @@ void addItemToNimBuffer(int16_t item) {
 
 
 
+static int16_t insertGapIP(char *displayBuffer, int16_t numDigits, int16_t nth) {
+  if(groupingGap == 0)         return 0; // no gap when none is required!
+  if(numDigits <= groupingGap) return 0; // there are less than groupingGap digits
+  if(nth + 1 == numDigits)     return 0; // no gap after the last digit
+
+  if((numDigits - nth) % groupingGap == 1 || groupingGap == 1) {
+    strcpy(displayBuffer, NUM_SPACE_PUNCTUATION);
+    return 2;
+  }
+
+  return 0;
+}
+
+static int16_t insertGapFP(char *displayBuffer, int16_t numDigits, int16_t nth) {
+  if(groupingGap == 0)         return 0; // no gap when none is required!
+  if(numDigits <= groupingGap) return 0; // there are less than groupingGap digits
+  if(nth + 1 == numDigits)     return 0; // no gap after the last digit
+
+  if(nth % groupingGap == groupingGap - 1) {
+    strcpy(displayBuffer, NUM_SPACE_PUNCTUATION);
+    return 2;
+  }
+
+  return 0;
+}
+
+
+
 void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
-  int16_t insertGapIP(char *displayBuffer, int16_t numDigits, int16_t nth) {
-    if(groupingGap == 0)         return 0; // no gap when none is required!
-    if(numDigits <= groupingGap) return 0; // there are less than groupingGap digits
-    if(nth + 1 == numDigits)     return 0; // no gap after the last digit
-
-    if((numDigits - nth) % groupingGap == 1 || groupingGap == 1) {
-      strcpy(displayBuffer, NUM_SPACE_PUNCTUATION);
-      return 2;
-    }
-
-    return 0;
-  }
-
-  int16_t insertGapFP(char *displayBuffer, int16_t numDigits, int16_t nth) {
-    if(groupingGap == 0)         return 0; // no gap when none is required!
-    if(numDigits <= groupingGap) return 0; // there are less than groupingGap digits
-    if(nth + 1 == numDigits)     return 0; // no gap after the last digit
-
-    if(nth % groupingGap == groupingGap - 1) {
-      strcpy(displayBuffer, NUM_SPACE_PUNCTUATION);
-      return 2;
-    }
-
-    return 0;
-  }
-
   int16_t numDigits, source, dest;
 
   if(*nimBuffer == '-') {
@@ -1901,8 +1905,8 @@ void closeNim(void) {
             displayCalcErrorMessage(ERROR_WORD_SIZE_TOO_SMALL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               char strMin[22], strMax[22];
-              longIntegerToAllocatedString(minVal, strMin, 10);
-              longIntegerToAllocatedString(maxVal, strMax, 10);
+              longIntegerToAllocatedString(minVal, strMin, sizeof(strMin));
+              longIntegerToAllocatedString(maxVal, strMax, sizeof(strMax));
               sprintf(errorMessage, "For word size of %d bit%s and integer mode %s,", shortIntegerWordSize, shortIntegerWordSize>1 ? "s" : "", getShortIntegerModeName(shortIntegerMode));
               sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "the entered number must be from %s to %s!", strMin, strMax);
               showInfoDialog("In function closeNIM:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
@@ -1916,7 +1920,7 @@ void closeNim(void) {
           reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
 
           char strValue[22];
-          longIntegerToAllocatedString(value, strValue, 10);
+          longIntegerToAllocatedString(value, strValue, sizeof(strValue));
 
           uint64_t val;
           if(longIntegerIsNegative(value)) {

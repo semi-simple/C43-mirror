@@ -1614,34 +1614,36 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int16_t maxWidth) {
+void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth) {
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
-  longInteger_t lgInt, divisor;
-  realIc_t value;
+  longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(regist, lgInt);
 
-  uInt32ToRealIc(longIntegerBits(lgInt) - 1, &value);
-  realIcMultiply(&value, const_ln2, &value);
-  realIcDivide(&value, const_ln10, &value);
-  realIcToInt32(&value, exponentShift);
+  exponentShift = (longIntegerBits(lgInt) - 1) * 0.3010299956639811952137;
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);
   exponentShift = (exponentShift / exponentStep + 1) * exponentStep;
   exponentShiftLimit = (50 / exponentStep + 1) * exponentStep;
   if(exponentShift > exponentShiftLimit) {
-
     exponentShift -= exponentShiftLimit;
-    longIntegerInitSizeInBits(divisor, longIntegerBits(lgInt));
-    longIntegerPowerUIntUInt(10u, exponentShift, divisor);
-    longIntegerDivide(lgInt, divisor, lgInt);
-    longIntegerFree(divisor);
+
+    // Why do the following lines not work (for a big exponentShift) instead of the for loop below ?
+    //longIntegerInitSizeInBits(divisor, longIntegerBits(lgInt));
+    //longIntegerPowerUIntUInt(10u, exponentShift, divisor);
+    //longIntegerDivide(lgInt, divisor, lgInt);
+    //longIntegerFree(divisor);
+    for(int32_t i=(int32_t)exponentShift; i>=1; i--) {
+      if(i >= 9)      {longIntegerDivideUInt(lgInt, 1000000000, lgInt); i -= 8;}
+      else if(i >= 3) {longIntegerDivideUInt(lgInt,       1000, lgInt); i -= 2;}
+      else            {longIntegerDivideUInt(lgInt,         10, lgInt);}
+    }
   }
   else {
     exponentShift = 0;
   }
 
-  longIntegerToAllocatedString(lgInt, displayString, 10);
+  longIntegerToAllocatedString(lgInt, displayString, strLg);
   longIntegerFree(lgInt);
 
   if(groupingGap > 0) {
@@ -1676,6 +1678,53 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int1
 
     strcat(displayString, exponentString);
   }
+}
+
+
+
+void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLg) {
+  int32_t digits, stringLg, counter;
+  longInteger_t x;
+
+  str[0] = '0';
+  str[1] = 0;
+  if(longIntegerIsZero(lgInt)) {
+    return;
+  }
+
+  digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
+  if(longIntegerIsNegative(lgInt)) {
+    stringLg = digits + 2; // 1 for the trailing 0 and 1 for the minus sign
+    str[0] = '-';
+  }
+  else {
+    stringLg = digits + 1; // 1 for the trailing 0
+  }
+
+  if(strLg < stringLg) {
+    printf("In function longIntegerToAllocatedString: the string str (%d bytes) is too small to hold the base 10 representation of lgInt, %d are needed!\n", strLg, stringLg);
+    return;
+  }
+
+  str[stringLg - 1] = 0;
+
+  longIntegerInitSizeInBits(x, longIntegerBits(lgInt));
+  longIntegerAddUInt(lgInt, 0, x);
+  longIntegerSetPositiveSign(x);
+
+  stringLg -= 2; // set stringLg to the last digit of the base 10 representation
+  counter = digits;
+  while(!longIntegerIsZero(x)) {
+    str[stringLg--] = '0' + mpz_tdiv_ui(x, 10);
+    longIntegerDivideUInt(x, 10, x);
+    counter--;
+  }
+
+  if(counter == 1) { // digit is 1 too big
+    memmove(str+stringLg, str+stringLg+1, digits);
+  }
+
+  longIntegerFree(x);
 }
 
 

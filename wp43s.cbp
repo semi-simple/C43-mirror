@@ -1425,11 +1425,6 @@
 			<Option target="testTtf2RasterFonts" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/rasterFontsTypes.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/wp43s/registerValueConversions.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

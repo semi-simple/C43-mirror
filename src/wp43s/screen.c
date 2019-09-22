@@ -624,7 +624,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
         #ifdef PC_BUILD
           #if (DEBUG_REGISTER_L == 1)
-            char     string1[100], string2[200], *p;
+            char     string1[1000], string2[1000], *p;
             uint16_t i;
 
             strcpy(string1, "L = ");
@@ -681,7 +681,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
               strcat(string1, "long integer = ");
-              longIntegerToDisplayString(REGISTER_L, string2, SCREEN_WIDTH);
+              longIntegerToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH);
             }
 
             else {
@@ -689,15 +689,15 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
 
             stringToUtf8(string1, (uint8_t *)tmpStr3000);
-            stringToUtf8(string2, (uint8_t *)tmpStr3000 + 1000);
+            stringToUtf8(string2, (uint8_t *)tmpStr3000 + TMP_STR_LENGTH / 2);
 
             gtk_label_set_label(GTK_LABEL(lblRegisterL1), tmpStr3000);
-            gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr3000 + 1000);
+            gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr3000 + TMP_STR_LENGTH / 2);
             gtk_widget_show(lblRegisterL1);
             gtk_widget_show(lblRegisterL2);
           #endif
           #if (SHOW_MEMORY_STATUS == 1)
-            char string[200];
+            char string[1000];
 
             sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43C %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMem, (uint32_t)gmpMem);    //JM 43C
             stringToUtf8(string, (uint8_t *)tmpStr3000);
@@ -1004,7 +1004,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtLongInteger) {
-            longIntegerToDisplayString(regist, tmpStr3000, SCREEN_WIDTH);
+            longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

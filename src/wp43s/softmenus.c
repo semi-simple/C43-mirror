@@ -138,9 +138,9 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
 #endif
 
-                                     ITM_NULL,                      ITM_ERPN,                   ITM_SHTIM,                ITM_HOMEx3,            ITM_NULL,                    ITM_NULL,                           //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
-                                     ITM_NULL,                      ITM_SH_ERPN,                ITM_SH_SHTIM,             ITM_SH_HOME3,          ITM_NULL,                    ITM_NULL                            //J Added
-                                                                                                                                                                                                            };
+                                     ITM_ERPN,                      ITM_SH_ERPN,                ITM_BASE_HOME,            ITM_SH_BASE_HOME,      ITM_BASE_AHOME,              ITM_SH_BASE_AHOME,                           //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
+                                     ITM_SHTIM,                     ITM_SH_SHTIM,               ITM_BASE_MYMENU,          ITM_SH_BASE_MYMENU,    ITM_BASE_MYA,                ITM_SH_BASE_MYA,                            //J Added
+                                     ITM_HOMEx3,                    ITM_SH_HOME3,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
                                      ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,
@@ -450,7 +450,7 @@ const int16_t menu_HOME[]        = {
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-1------*/                                                                                                                                                                                           //JM HOME
 /* 03 */                             ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                         //JM HOME
-                                     ITM_NULL,                      ITM_XFACT,                  ITM_PARALLEL,             ITM_NULL,              CST_09,                      ITM_NULL,                          //JM HOME
+                                     ITM_op_a,                      ITM_op_a2,                  ITM_op_j,                -MNU_CPX,               CST_09,                      ITM_NULL,                          //JM HOME
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-3------*/                                                                                                                                                                                           //JM HOME
                                      ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                         //JM HOME

@@ -39,6 +39,7 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 //keyboard.c  screen.c
 bool_t JM_auto_drop_activated;
+bool_t JM_auto_drop_enabled;      //JM TIMER CLRDROP
 uint8_t JM_SHIFT_RESET;           //JM non-stored non-changeable mode
 
 //keyboard.c
@@ -66,11 +67,17 @@ gint64 now;                                       //JM usec  //JM TIMER EMULATOR
 #define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Sep.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
+extern uint8_t SigFigMode;                                           //J SIGFIG 
 extern bool_t eRPN;                                                  //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 extern bool_t HOME3;                                                 //JM HOME Create a flag to enable or disable triple shift HOME3.
 extern bool_t SHTIM;                                                 //JM HOME Create a flag to enable or disable SHIFT TIMER CANCEL.
 extern bool_t UNITDisplay;                                           //JM UNIT Create a flag to enable or disable unit display 
-extern uint8_t SigFigMode;                                           //J SIGFIG 
+extern bool_t SH_BASE_HOME;                                          //JM BASEHOME Create a flag to enable or disable triple shift
+extern bool_t SH_BASE_MYMENU;                                        //JM BASEHOME Create a flag to enable or disable triple shift
+extern bool_t SH_BASE_AHOME;                                         //JM BASEHOME Create a flag to enable or disable triple shift
+extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
+
+
 
 // Additional routines needed in jm.c
 void fnSeteRPN(uint16_t unusedParamButMandatory);

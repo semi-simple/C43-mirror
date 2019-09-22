@@ -3767,6 +3767,11 @@ void calcModeNormal(void) {
     STACK_LIFT_ENABLE;
   }
 
+//  if (SH_BASE_HOME && (softmenuStackPointer_MEM == -1)) {  //JM HOMEBASE
+//     showSoftmenu(NULL, -MNU_HOME, false);      //JM HOME  Change to initialize the menu stack. it was true.
+//    }
+//  if (SH_BASE_MYMENU) {}
+
   calcMode = CM_NORMAL;
   hideCursor();
   cursorEnabled = false;
@@ -3788,9 +3793,15 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   saveStack();
   liftStack();
   refreshStack();
-  showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-  softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
-//  showSoftmenu(NULL, -MNU_ALPHA, true);       //JM ALPHA. Disabled temporarily. First need to check the stack of pop on pop offs, when not called by keyboard
+  if (SH_BASE_MYA) {
+     showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+     }
+  if (SH_BASE_AHOME) {
+     showSoftmenu(NULL, -MNU_ALPHA, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+     }
+  
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;
   showAlphaMode();

@@ -30,7 +30,7 @@
 
 #define longIntegerInit(op)                                         mpz_init(op);
 #define longIntegerInitSizeInBits(op, bits)                         mpz_init2(op, bits);
-#define longIntegerToAllocatedString(source, destination)           mpz_get_str(destination, 10, source)
+//#define longIntegerToAllocatedString(source, destination)           mpz_get_str(destination, 10, source)
 #define uIntToLongInteger(source, destination)                      mpz_set_ui(destination, source)
 #define intToLongInteger(source, destination)                       mpz_set_si(destination, source)
 #define longIntegerToUInt(op)                                       mpz_get_ui(op)
@@ -53,6 +53,7 @@
 #define longIntegerSign(op)                                         mpz_sgn(op)
 #define longIntegerSignTag(op)                                      ((op)->_mp_size == 0 ? LONG_INTEGER_ZERO : ((op)->_mp_size > 0 ? LONG_INTEGER_POSITIVE : LONG_INTEGER_NEGATIVE))
 #define longIntegerBits(op)                                         mpz_sizeinbase(op, 2)
+#define longIntegerBase10Digits(op)                                 mpz_sizeinbase(op, 10)
 #define longIntegerProbabPrime(op)                                  mpz_probab_prime_p(op, 15); // 0=composite 1=probably prime 2=prime  A composite number will be identified as a prime with a probability of less than 4^(-15)
 #define longIntegerFree(op)                                         mpz_clear(op)
 

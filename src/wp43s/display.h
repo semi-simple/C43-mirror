@@ -33,9 +33,10 @@ void angle16ToDisplayString2      (const real16_t *angle16, uint8_t mode, char *
 void angle34ToDisplayString       (const real34_t *angle34, uint8_t mode, char *displayString, const font_t *font, int16_t maxWidth);
 void angle34ToDisplayString2      (const real34_t *angle34, uint8_t mode, char *displayString);
 void shortIntegerToDisplayString  (calcRegister_t regist, char *displayString, const font_t **font);
-void longIntegerToDisplayString   (calcRegister_t regist, char *displayString, int16_t maxWidth);
+void longIntegerToDisplayString   (calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth);
 void dateToDisplayString          (calcRegister_t regist, char *displayString);
 void timeToDisplayString          (calcRegister_t regist, char *displayString);
 void exponentToDisplayString      (int32_t exponent, char *displayString, bool_t nimMode);
 void supNumberToDisplayString     (int32_t supNumber, char *displayString, bool_t insertGap);
 void subNumberToDisplayString     (int32_t subNumber, char *displayString);
+void longIntegerToAllocatedString (longInteger_t lgInt, char *str, int32_t strLg);

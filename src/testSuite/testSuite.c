@@ -264,8 +264,8 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
 
   if(longIntegerCompare(value, minVal) < 0 || longIntegerCompare(value, maxVal) > 0) {
     char strMin[22], strMax[22];
-    longIntegerToAllocatedString(minVal, strMin, 10);
-    longIntegerToAllocatedString(maxVal, strMax, 10);
+    longIntegerToAllocatedString(minVal, strMin, sizeof(strMin));
+    longIntegerToAllocatedString(maxVal, strMax, sizeof(strMax));
     printf("\nError while initializing a short integer: for a word size of %d bit%s and integer mode %s, the entered number must be from %s to %s!\n", shortIntegerWordSize, shortIntegerWordSize>1 ? "s" : "", getShortIntegerModeName(shortIntegerMode), strMin, strMax);
     abortTest();
   }
@@ -273,7 +273,7 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   reallocateRegister(regist, dtShortInteger, SHORT_INTEGER_SIZE, base);
 
   char strValue[22];
-  longIntegerToAllocatedString(value, strValue, 10);
+  longIntegerToAllocatedString(value, strValue, sizeof(strValue));
 
   uint64_t val;
   if(longIntegerIsNegative(value)) {

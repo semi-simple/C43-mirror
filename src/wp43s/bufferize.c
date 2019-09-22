@@ -1903,8 +1903,8 @@ void closeNim(void) {
             displayCalcErrorMessage(ERROR_WORD_SIZE_TOO_SMALL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               char strMin[22], strMax[22];
-              longIntegerToAllocatedString(minVal, strMin);
-              longIntegerToAllocatedString(maxVal, strMax);
+              longIntegerToAllocatedString(minVal, strMin, sizeof(strMin));
+              longIntegerToAllocatedString(maxVal, strMax, sizeof(strMax));
               sprintf(errorMessage, "For word size of %d bit%s and integer mode %s,", shortIntegerWordSize, shortIntegerWordSize>1 ? "s" : "", getShortIntegerModeName(shortIntegerMode));
               sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "the entered number must be from %s to %s!", strMin, strMax);
               showInfoDialog("In function closeNIM:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
@@ -1918,7 +1918,7 @@ void closeNim(void) {
           reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
 
           char strValue[22];
-          longIntegerToAllocatedString(value, strValue);
+          longIntegerToAllocatedString(value, strValue, sizeof(strValue));
 
           uint64_t val;
           if(longIntegerIsNegative(value)) {

@@ -1710,7 +1710,7 @@ void powShoICo16(void) {
 
   realIc_t a, c, d;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
 

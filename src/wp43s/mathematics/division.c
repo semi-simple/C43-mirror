@@ -168,10 +168,10 @@ void divLonILonI(void) {
       convertLongIntegerToLongIntegerRegister(quotient, REGISTER_X);
     }
     else {
-      longIntegerToAllocatedString(a, tmpStr3000);
+      longIntegerToAllocatedString(a, tmpStr3000, TMP_STR_LENGTH);
       reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, TAG_NONE);
       stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_Y));
-      longIntegerToAllocatedString(c, tmpStr3000);
+      longIntegerToAllocatedString(c, tmpStr3000, TMP_STR_LENGTH);
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
       stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 

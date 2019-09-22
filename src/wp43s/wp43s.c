@@ -23,6 +23,7 @@
 #ifdef PC_BUILD
   bool_t             calcLandscape;
   bool_t             calcAutoLandscapePortrait;
+  bool_t             debugMemAllocation;
   GtkWidget          *screen;
   GtkWidget          *frmCalc;
   int16_t            screenStride;
@@ -176,6 +177,11 @@ realIc_t             const *angle45;
  ***********************************************/
 void setupDefaults(void) {
   void *memPtr;
+
+  #ifdef PC_BUILD
+    debugMemAllocation = false;
+  #endif
+
   ram = malloc(RAM_SIZE);
   memset(ram, 0, RAM_SIZE);
   numberOfFreeBlocks = 1;
@@ -593,25 +599,10 @@ int main(void) {
 longInteger_t lgInt;
 longIntegerInit(lgInt);
 
-uIntToLongInteger(4096, lgInt);
+uIntToLongInteger(900, lgInt);
 convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-fn2Pow(NOPARAM);
+fnFactorial(NOPARAM);
 printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
-printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
-
-fnRollUp(NOPARAM);
-printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
-
-uIntToLongInteger(4090, lgInt);
-convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-longIntegerFree(lgInt);
-fn2Pow(NOPARAM);
-printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
-printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
-
-fnDivide(NOPARAM);
-printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
-printf("--------------------------------------------------------------------------------------------------------------------------------------------\n");
 return 0;
 */
   processTests();

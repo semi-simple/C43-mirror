@@ -159,12 +159,7 @@ void              printComplex34ToConsole         (const complex34_t *value);
 void              printComplexIcToConsole         (const complexIc_t *value);
 void              printLongIntegerToConsole       (longInteger_t value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
-
-#ifdef DMCP_BUILD
-  void            printRegisterToConsole          (calcRegister_t regist, int16_t line);
-#else
-  void            printRegisterToConsole          (calcRegister_t regist);
-#endif
+void              printRegisterToConsole          (calcRegister_t regist);
 void              printRegisterDescriptorToConsole(calcRegister_t regist);
 
 #define getRegisterAngularMode(reg)            getRegisterTag(reg)

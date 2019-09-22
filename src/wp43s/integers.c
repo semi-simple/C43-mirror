@@ -200,8 +200,8 @@ void longIntegerMultiply(longInteger_t opY, longInteger_t opX, longInteger_t res
     displayCalcErrorMessage(longIntegerSign(opY) == longIntegerSign(opX) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Multiplying this 2 values (%" FMTSIZE " bits " STD_CROSS " %" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(opY), longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(opY, tmpStr3000);
-      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opY, tmpStr3000, TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
       showInfoDialog("In function longIntegerMultiply:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
@@ -217,7 +217,7 @@ void longIntegerSquare(longInteger_t op, longInteger_t result) {
     displayCalcErrorMessage(ERROR_OVERFLOW_PLUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Squaring this value (%" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(op), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(op, tmpStr3000);
+      longIntegerToAllocatedString(op, tmpStr3000, TMP_STR_LENGTH);
       showInfoDialog("In function longIntegerSquare:", errorMessage, tmpStr3000, NULL);
     #endif
   }
@@ -233,8 +233,8 @@ void longIntegerAdd(longInteger_t opY, longInteger_t opX, longInteger_t result) 
     displayCalcErrorMessage(longIntegerSign(opY) == 0 ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Adding this 2 values (%" FMTSIZE " bits " STD_CROSS " %" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(opY), longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(opY, tmpStr3000);
-      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opY, tmpStr3000, TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
       showInfoDialog("In function longIntegerAdd:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }
@@ -250,8 +250,8 @@ void longIntegerSubtract(longInteger_t opY, longInteger_t opX, longInteger_t res
     displayCalcErrorMessage(longIntegerSign(opY) == 0 ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Subtracting this 2 values (%" FMTSIZE " bits " STD_CROSS " %" FMTSIZE " bits) would result in a value exceeding %" FMT16S " bits!", longIntegerBits(opY), longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(opY, tmpStr3000);
-      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opY, tmpStr3000, TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
       showInfoDialog("In function longIntegerSubtract:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
     #endif
   }

@@ -65,14 +65,14 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
 
 
 void factLonI(void) {
-  longInteger_t lgInt;
+  longInteger_t lgInt, fact;
 
   convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
 
   if(longIntegerIsNegative(lgInt)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
@@ -80,21 +80,26 @@ void factLonI(void) {
     return;
   }
 
-  if(longIntegerCompareUInt(lgInt, 294) > 0) {
+  if(longIntegerCompareUInt(lgInt, 965) > 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
-      sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH);
+      sprintf(errorMessage, "cannot calculate factorial(%s), the limit is 965, it's to ensure that the 8192-bit limit is not exceeded", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
     longIntegerFree(lgInt);
     return;
   }
 
-  longInteger_t fact;
+  uint32_t n = longIntegerToUInt(lgInt);
 
-  longIntegerInit(fact);
-  longIntegerFactorial(longIntegerToUInt(lgInt), fact);
+  longIntegerInitSizeInBits(fact, 1 + (uint32_t)((n * log(n) - n)/log(2)));
+  //longIntegerFactorial(longIntegerToUInt(lgInt), fact);
+  uIntToLongInteger(1, fact);
+  for(uint32_t i=n; i>1; i--) {
+    longIntegerMultiplyUInt(fact, i, fact);
+  }
+
   convertLongIntegerToLongIntegerRegister(fact, REGISTER_X);
   longIntegerFree(fact);
   longIntegerFree(lgInt);
@@ -171,7 +176,7 @@ void factShoI(void) {
   if(sign == 1) { // Negative value
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif
@@ -181,7 +186,7 @@ void factShoI(void) {
   if(value > 20) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, SCREEN_WIDTH);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif

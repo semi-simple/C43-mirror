@@ -1719,7 +1719,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     if(longIntegerIsNegative(lgInt) || longIntegerCompareUInt(lgInt, 180) > 0) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        longIntegerToAllocatedString(lgInt, errorMessage + 200, 10);
+        longIntegerToAllocatedString(lgInt, errorMessage + 200, sizeof(errorMessage) - 200);
         sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
         showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
       #endif
@@ -1774,170 +1774,80 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
 
 
+#ifndef DMCP_BUILD
 /********************************************//**
  * \brief Prints the content of a register to the console
  *
  * \param r calcRegister_t Register number
  * \return void
  ***********************************************/
-#ifdef DMCP_BUILD
-void printRegisterToConsole(calcRegister_t regist, int16_t line) {
-#else
 void printRegisterToConsole(calcRegister_t regist) {
-#endif
-  char str[1000];
+  char str[3000];
 
   if(getRegisterDataType(regist) == dtReal16) {
     real16ToString(REGISTER_REAL16_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("real16 %s", str);
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "real16 %s", str);
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("real16 %s", str);
   }
 
   else if(getRegisterDataType(regist) == dtAngle16) {
     real16ToString(REGISTER_REAL16_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("angle16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "angle16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("angle16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
   }
 
   else if(getRegisterDataType(regist) == dtReal34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("real34 %s", str);
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "real34 %s", str);
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("real34 %s", str);
   }
 
   else if(getRegisterDataType(regist) == dtAngle34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
   }
 
   else if(getRegisterDataType(regist) == dtComplex16) {
     real16ToString(REGISTER_REAL16_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("complex16 %s ", str);
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "complex16 %s", str);
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("complex16 %s ", str);
 
     real16ToString(REGISTER_IMAG16_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-        printf("- ix%s", str + 1);
-      }
-      else {
-        printf("+ ix%s", str);
-      }
-    #endif
-
-    #ifdef DMCP_BUILD
-      if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-        sprintf(tmpStr3000, "-ix%s", str + 1);
-      }
-      else {
-        sprintf(tmpStr3000, "+ix%s", str);
-      }
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
+      printf("- ix%s", str + 1);
+    }
+    else {
+      printf("+ ix%s", str);
+    }
   }
 
   else if(getRegisterDataType(regist) == dtComplex34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("complex34 %s ", str);
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "complex34 %s", str);
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("complex34 %s ", str);
 
     real34ToString(REGISTER_IMAG34_DATA(regist), str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-        printf("- ix%s", str + 1);
-      }
-      else {
-        printf("+ ix%s", str);
-      }
-    #endif
-
-    #ifdef DMCP_BUILD
-      if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-        sprintf(tmpStr3000, "-ix%s", str + 1);
-      }
-      else {
-        sprintf(tmpStr3000, "+ix%s", str);
-      }
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
+      printf("- ix%s", str + 1);
+    }
+    else {
+      printf("+ ix%s", str);
+    }
   }
 
   else if(getRegisterDataType(regist) == dtString) {
     stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("string (%" FMT32U " bytes) |%s|", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "STR (%" FMT32U ") %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("string (%" FMT32U " bytes) |%s|", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
   }
 
   else if(getRegisterDataType(regist) == dtShortInteger) {
     uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(regist));
 
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("short integer %08x-%08x (base %" FMT32U ")", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "SI %08x-%08x (base %" FMT32U ")", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("short integer %08x-%08x (base %" FMT32U ")", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
   }
 
   else if(getRegisterDataType(regist) == dtLongInteger) {
     longInteger_t lgInt;
 
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
-    longIntegerToAllocatedString(lgInt, str, 10);
+    longIntegerToAllocatedString(lgInt, str, sizeof(str));
     longIntegerFree(lgInt);
-    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
-      printf("long integer (%" FMT32U " bytes) %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
-    #endif
-
-    #ifdef DMCP_BUILD
-      sprintf(tmpStr3000, "BI (%" FMT32U ") %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
-      lcd_putsAt(t20, line, tmpStr3000);
-    #endif
+    printf("long integer (%" FMT32U " bytes) %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
   }
 
   else {
@@ -1945,6 +1855,7 @@ void printRegisterToConsole(calcRegister_t regist) {
     displayBugScreen(errorMessage);
   }
 }
+#endif
 
 
 
@@ -2021,14 +1932,12 @@ void printRegisterToString(calcRegister_t regist, char *registerContent) {
 
   else if(getRegisterDataType(regist) == dtLongInteger) {
     longInteger_t lgInt;
-    char *lgIntStr;
+    char lgIntStr[3000];
 
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
-    lgIntStr = longIntegerToString(lgInt, 10);
+    longIntegerToAllocatedString(lgInt, lgIntStr, sizeof(lgIntStr));
     longIntegerFree(lgInt);
     sprintf(registerContent, "long integer (%" FMT32U " bytes) %s", *(REGISTER_DATA_MAX_LEN(regist)), lgIntStr);
-
-    freeGmp(lgIntStr, strlen(lgIntStr) + 1);
   }
 
   else {
@@ -2167,9 +2076,9 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void printLongIntegerToConsole(longInteger_t value) {
-  char *str;
+  char str[3000];
 
-  str = longIntegerToString(value, 10);
+  longIntegerToAllocatedString(value, str, sizeof(str));
   printf("LI (%" FMT64U ") %s", (uint64_t)longIntegerSizeInBytes(value), str);
 
   freeGmp(str, strlen(str) + 1);

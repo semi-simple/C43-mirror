@@ -1767,19 +1767,24 @@ const item_t indexOfItems[] = {
 /* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                                                    SLS_UNCHANGED},   //JM CASE
 /* 1636 */  { fnBASE_Hash,      /*TEST!*/  NOPARAM,                     "##",                                          "##",                                                                        SLS_UNCHANGED},   //JM ##
 /* 1637 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "###",                                         "###",                                                                       SLS_UNCHANGED},
-/* 1638 */  { fnJM,                        003,                         "op_a",                                         "a",                                                                       SLS_ENABLED  },  //JM Operator a
-/* 1639 */  { fnJM,                        004,                         "op_a" STD_SUP_2,                               "a" STD_SUP_2,                                                             SLS_ENABLED  },  //JM Operator a
-/* 1640 */  { fnJM,                        005,                         "op_j",                                         "j",                                                                       SLS_ENABLED  },  //JM Operator a
-/* 1641 */  { fnSetSetJM,                  4,                           "SET_BASE_HOME",                               "HOME",                                                                    SLS_ENABLED},      //JM eRPN
+/* 1638 */  { fnJM,                        3,                          "op_a",                                         "a",                                                                       SLS_ENABLED  },  //JM Operator a
+/* 1639 */  { fnJM,                        4,                          "op_a" STD_SUP_2,                               "a" STD_SUP_2,                                                             SLS_ENABLED  },  //JM Operator a
+/* 1640 */  { fnJM,                        5,                          "op_j",                                         "j",                                                                       SLS_ENABLED  },  //JM Operator a
+/* 1641 */  { fnSetSetJM,                  4,                           "SET_BASE_HOME",                               "HOME",                                                                     SLS_ENABLED},      //JM eRPN
 /* 1642 */  { fnSetSetJM,                  5,                           "SET_BASE_MYMENU",                             "MYMNU",                                                                    SLS_ENABLED},      //JM eRPN
-/* 1643 */  { fnSetSetJM,                  6,                           "SET_BASE_AHOME",                              STD_alpha "HOME",                                                                   SLS_ENABLED},      //JM eRPN
-/* 1644 */  { fnSetSetJM,                  7,                           "SET_BASE_MYA",                                "MY" STD_alpha,                                                                     SLS_ENABLED},      //JM eRPN
-/* 1645 */  { fnShowJM,                    4,                           "BASE_HOME?",                                  "HOME?",                                                                   SLS_ENABLED  },     //JM SHOW
+/* 1643 */  { fnSetSetJM,                  6,                           "SET_BASE_AHOME",                              STD_alpha "HOME",                                                           SLS_ENABLED},      //JM eRPN
+/* 1644 */  { fnSetSetJM,                  7,                           "SET_BASE_MYA",                                "MY" STD_alpha,                                                             SLS_ENABLED},      //JM eRPN
+/* 1645 */  { fnShowJM,                    4,                           "BASE_HOME?",                                  "HOME?",                                                                    SLS_ENABLED  },     //JM SHOW
 /* 1646 */  { fnShowJM,                    5,                           "BASE_MYMENU?",                                "MYMNU?",                                                                   SLS_ENABLED  },     //JM SHOW
-/* 1647 */  { fnShowJM,                    6,                           "BASE_AHOME?",                                 STD_alpha "HOME?",                                                                  SLS_ENABLED  },     //JM SHOW
-/* 1648 */  { fnShowJM,                    7,                           "BASE_MYA?",                                   "MY" STD_alpha "?",                                                                   SLS_ENABLED  },     //JM SHOW
+/* 1647 */  { fnShowJM,                    6,                           "BASE_AHOME?",                                 STD_alpha "HOME?",                                                             SLS_ENABLED  },     //JM SHOW
+/* 1648 */  { fnShowJM,                    7,                           "BASE_MYA?",                                   "MY" STD_alpha "?",                                                            SLS_ENABLED  },     //JM SHOW
+/* 1649 */  { fnJM,                        7,                          "YtoD",                                         "YtoD",                                                                       SLS_ENABLED  },  //JM EE 
+/* 1650 */  { fnJM,                        6,                          "DtoY",                                         "DtoY",                                                                       SLS_ENABLED  },  //JM EE 
+/* 1651 */  { fnJM,                        9,                          "AtoSYM",                                       "A->SYM",                                                                     SLS_ENABLED  },  //JM EE 
+/* 1652 */  { fnJM,                        8,                          "SYMtoA",                                       "SYM->A",                                                                     SLS_ENABLED  },  //JM EE 
+/* 1653 */  { itemToBeCoded,               NOPARAM,                     "E.ENG",                                       "E.ENG",                                                                       SLS_UNCHANGED},   //JM EE
 
 
 
-/* 1649 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/* 1654 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

@@ -967,10 +967,59 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex16) {
+
+             if(temporaryInformation == TI_ABC) {                             //JM EE \/ 
+              if(regist == REGISTER_X) {                                         
+                strcpy(prefix, "c" STD_SPACE_FIGURE "=");                        
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "b" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Z) {
+                strcpy(prefix, "a" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            else if(temporaryInformation == TI_ABBCCA) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "ca" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "bc" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Z) {
+                strcpy(prefix, "ab" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            else if(temporaryInformation == TI_012) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "sym2" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "sym1" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Z) {
+                strcpy(prefix, "sym0" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }                                                                       //JM EE ^
+
             complexToDisplayString(REGISTER_COMPLEX16_DATA(regist), false, tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
+            if(prefixWidth > 0) {
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+            }
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 

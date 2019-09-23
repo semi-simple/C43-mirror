@@ -29,6 +29,8 @@
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
+const int16_t menu_MYMENU[]     = {  ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                     };     //JM PLACEHOLDER - WAIT FOR OFFICIAL MYMENU
+
 const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,/*-MNU_ALPHA*/ITM_MA15,                    ITM_MA16,                                //JM ALPHA
                                      ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                    ITM_MA26,
                                      ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                    ITM_MA36                      };
@@ -441,6 +443,10 @@ const int16_t menu_BASE[]       = {
                                      ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               KEY_HASH,                    ITM_toINT,            //JM                      
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              /*ITM_HASH*/ITM_NULL,                    ITM_NULL          };  //JM BASE MENU ADDED
 
+const int16_t menu_EE[]       = {  
+                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_NULL,                    ITM_NULL,             //JM EE
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL          };  //JM EE
+
 
 const int16_t menu_HOME[]        = {
 
@@ -450,14 +456,14 @@ const int16_t menu_HOME[]        = {
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-1------*/                                                                                                                                                                                           //JM HOME
 /* 03 */                             ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                         //JM HOME
-                                     ITM_op_a,                      ITM_op_a2,                  ITM_op_j,                -MNU_CPX,               CST_09,                      ITM_NULL,                          //JM HOME
+                                     ITM_op_a,                      ITM_op_a2,                  ITM_op_j,                -MNU_CPX,               CST_09,                     -MNU_EE,                            //JM HOME
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-3------*/                                                                                                                                                                                           //JM HOME
                                      ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                         //JM HOME
 /* 02 */                            -MNU_TRI,                      -MNU_EXP,                    -MNU_BASE,                 -MNU_CPX,             -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-5------*/                                                                                                                                                                                           //JM HOME
-                                    -MNU_MENUS,                    /*-MNU_MYMENU*/-MNU_MyAlpha,-MNU_INFO,                -MNU_MODE,             -MNU_DISP,                    ITM_CLSTK,                         //JM HOME  MyAlpha is a placeholder for MyMenu which does not yet work.
+                                    -MNU_MENUS,                    -MNU_MYMENU,                -MNU_INFO,                -MNU_MODE,             -MNU_DISP,                    ITM_CLSTK,                         //JM HOME  MyAlpha is a placeholder for MyMenu which does not yet work.
 /* 02 */                            -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                 -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-4------*/                                                                                                                                                                                           //JM HOME
@@ -491,6 +497,7 @@ const int16_t menu_ALPHA[]        = {
 
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numRows = sizeof(menu_MyAlpha    )/sizeof(int16_t)/6, .softkeyRow = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
+  {.menuId = -MNU_MYMENU,      .numRows = sizeof(menu_MYMENU     )/sizeof(int16_t)/6, .softkeyRow = menu_MYMENU      }, // JM PLACEHOLDER MYMENU
   {.menuId = -MNU_ADV,         .numRows = sizeof(menu_ADV        )/sizeof(int16_t)/6, .softkeyRow = menu_ADV         },
   {.menuId = -MNU_Sfdx,        .numRows = sizeof(menu_Sfdx       )/sizeof(int16_t)/6, .softkeyRow = menu_Sfdx        },
   {.menuId = -MNU_BITS,        .numRows = sizeof(menu_BITS       )/sizeof(int16_t)/6, .softkeyRow = menu_BITS        },
@@ -585,6 +592,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_HOME,        .numRows = sizeof(menu_HOME       )/sizeof(int16_t)/6, .softkeyRow = menu_HOME        },  //JM HOME
   {.menuId = -MNU_ALPHA,       .numRows = sizeof(menu_ALPHA      )/sizeof(int16_t)/6, .softkeyRow = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numRows = sizeof(menu_BASE       )/sizeof(int16_t)/6, .softkeyRow = menu_BASE        },  //JM HOME
+  {.menuId = -MNU_EE,          .numRows = sizeof(menu_EE         )/sizeof(int16_t)/6, .softkeyRow = menu_EE          },  //JM EE
   {.menuId =  0,               .numRows = 0,                                          .softkeyRow = NULL             }
 };
 

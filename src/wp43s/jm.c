@@ -306,56 +306,260 @@ uint16_t cm;
 
   } else
 
-  if(JM_OPCODE == 3) {                                        
-                                                              
-                                                              
- //    cm = complexMode;                                        
- //    complexMode = CM_POLAR;                                  
+  if(JM_OPCODE == 3) {                                                                                                      //operator a
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     refreshStack();
+  } else
+
+  if(JM_OPCODE == 4) {                                        //operater a sq                                                                                                        
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));
+     refreshStack();
+  } else
+
+  if(JM_OPCODE == 5) {                                        //Operator j                                          
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
+     refreshStack();
+  } else
+
+  if(JM_OPCODE == 6) {                                        //Delta to Star   ZYX to ZYX; destroys IJKL & 99                                           
+     STACK_LIFT_ENABLE;     
+     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I
+     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J
+     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);  // STO K
+     fnAdd(0);                                                  // +
+     fnSwapXY(0);                                               // X<>Y
+     
+     fnAdd(0);                                                  // +
+     copySourceRegisterToDestRegister(REGISTER_X, 99);  // STO L
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // RCL I
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // RCL J     // z = (zx yz) / (x+y+z)
+     fnMultiply(0);                                             // *
+     fnSwapXY(0);                                               // X<>Y
+     fnDivide(0);                                               // /
+
+     STACK_LIFT_ENABLE;     
+     fnRecall(99);                                      // RCL L
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // RCL J
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // RCL K     // y = (xy yz) / (x+y+z)
+     fnMultiply(0);                                             // *
+     fnSwapXY(0);                                               // X<>Y
+     fnDivide(0);                                               // /
+
+     STACK_LIFT_ENABLE;     
+     fnRecall(99);                                      // RCL L
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // RCL I
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // RCL K     // z = (xy zx) / (x+y+z)
+     fnMultiply(0);                                             // *
+     fnSwapXY(0);                                               // X<>Y
+     fnDivide(0);                                               // /
+
+     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
+
+     refreshStack();
+  } else
+
+  if(JM_OPCODE == 7) {                                        //Star to Delta ZYX to ZYX; destroys IJKL & 99                                           
+     STACK_LIFT_ENABLE;     
+     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I
+     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J
+     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);  // STO K
+
+     fnMultiply(0);                          //IJ                   // *
+     fnSwapXY(0);
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // RCL J
+     fnMultiply(0);                          //IK                   // *
+     fnAdd(0);
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // RCL J
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // RCL K
+     fnMultiply(0);                          //JK                   // *
+     fnAdd(0);
+     copySourceRegisterToDestRegister(REGISTER_X, 99);  // STO K
+                                                                // RCL J    zx = () / y
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // RCL K
+     fnDivide(0);                                             // *
+
+     STACK_LIFT_ENABLE;
+     fnRecall(99);                                      // RCL J    yz = () / x
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // RCL K
+     fnDivide(0);                                             // *
+
+     STACK_LIFT_ENABLE;
+     fnRecall(99);                                      // RCL J    xy = () / z
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // RCL K
+     fnDivide(0);                                             // *
+
+     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
+
+     refreshStack();
+  } else
+
+  if(JM_OPCODE == 8) {                                        //SYMMETRICAL COMP to ABC   ZYX to ZYX; destroys IJKL & 99                                           
+     STACK_LIFT_ENABLE;     
+     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I  //A2
+     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J  //A1
+     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);  // STO K  //A0
+     fnAdd(0);                                                  // +
+     fnAdd(0);                                                  // + Va = Vao + Va1 +Va2
 
      STACK_LIFT_ENABLE;     
      liftStack();                                             
      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-
-//     complexMode = cm;                                        
      refreshStack();
-
-  } else
-
-  if(JM_OPCODE == 4) {                                        
-                                                              
-                                                              
- //    cm = complexMode;                                        
- //    complexMode = CM_POLAR;                                  
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // A2
+     fnMultiply(0);                                             // * a
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     refreshStack();
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // A1
+     fnMultiply(0);                                             // * aa
+     fnAdd(0);                                                  // +
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // A0
+     fnAdd(0);                                                  // + Vb = Vao + aaVa1 +aVa2
 
      STACK_LIFT_ENABLE;     
      liftStack();                                             
      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
-     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));
-
-//     complexMode = cm;                                        
+     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
-
-  } else
-
-  if(JM_OPCODE == 5) {                                        
-                                                              
-                                                              
- //    cm = complexMode;                                        
- //    complexMode = CM_POLAR;                                  
-
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // A2
+     fnMultiply(0);                                             // * a
      STACK_LIFT_ENABLE;     
      liftStack();                                             
      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-     stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));   
-     stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
-
-//     complexMode = cm;                                        
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
-  }
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // A1
+     fnMultiply(0);                                             // * aa
+     fnAdd(0);                                                  // +
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // A0
+     fnAdd(0);                                                  // + Vb = Vao + aaVa1 +aVa2
 
+     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
+
+    temporaryInformation = TI_ABC;
+    refreshRegisterLine(REGISTER_X);
+    refreshRegisterLine(REGISTER_Y);
+    refreshRegisterLine(REGISTER_Z);
+
+//     refreshStack();
+  } else
+
+  if(JM_OPCODE == 9) {                                        //ABC to SYMMETRICAL COMP   ZYX to ZYX; destroys IJKL & 99                                           
+     STACK_LIFT_ENABLE;     
+     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I  //c
+     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J  //b
+     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);  // STO K  //a
+     fnAdd(0);                                                  // +
+     fnAdd(0);                                                  // + Va0 = (Va + Vb +Vc)/3
+      liftStack();                                             
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      stringToReal16("3", REGISTER_REAL16_DATA(REGISTER_X));   
+      stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+      refreshStack();
+      copySourceRegisterToDestRegister(REGISTER_X, 99);  // STO
+     fnDivide(0);
+
+
+     STACK_LIFT_ENABLE;     	
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     refreshStack();
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // VB
+     fnMultiply(0);                                             // * a
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     refreshStack();
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // VC
+     fnMultiply(0);                                             // * aa
+     fnAdd(0);                                                  // +
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // VA
+     fnAdd(0);                                                  // + V1 = (VA +aVb +aaVc) /3
+     fnRecall(99);                                            // 3
+     fnDivide(0);                                             // /
+
+
+     STACK_LIFT_ENABLE;     	
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     refreshStack();
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_J);                                      // VB
+     fnMultiply(0);                                             // * a
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     refreshStack();
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_I);                                      // VC
+     fnMultiply(0);                                             // * aa
+     fnAdd(0);                                                  // +
+     STACK_LIFT_ENABLE;
+     fnRecall(REGISTER_K);                                      // VA
+     fnAdd(0);                                                  // + V1 = (VA +aVb +aaVc) /3
+     fnRecall(99);                                            // 3
+     fnDivide(0);                                             // /
+
+
+
+      copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
+
+
+    temporaryInformation = TI_012;
+    refreshRegisterLine(REGISTER_X);
+    refreshRegisterLine(REGISTER_Y);
+    refreshRegisterLine(REGISTER_Z);
+
+//     refreshStack();
+  }
 
 
 

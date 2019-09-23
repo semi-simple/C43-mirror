@@ -1685,10 +1685,16 @@
 #define ITM_SH_BASE_MYMENU            1646  //JM BASEMENU
 #define ITM_SH_BASE_AHOME             1647  //JM BASEMENU
 #define ITM_SH_BASE_MYA               1648  //JM BASEMENU
+#define ITM_EE_D2Y                    1649  //JM EE
+#define ITM_EE_Y2D                    1650  //JM EE
+#define ITM_EE_A2S                    1651  //JM EE
+#define ITM_EE_S2A                    1652  //JM EE
+#define MNU_EE                        1653  //JM EE
 
 
 
-#define LAST_ITEM                     1649  //JM
+
+#define LAST_ITEM                     1654  //JM
 
 #define CHR_PROD_SIGN                 9999
 

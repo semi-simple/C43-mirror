@@ -577,43 +577,43 @@ uint16_t cm;
   } else
 
   if(JM_OPCODE == 11) {                                        //STO Z                                          
-     STACK_LIFT_ENABLE;                                                  
+     STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      copySourceRegisterToDestRegister(REGISTER_X, 90);
      copySourceRegisterToDestRegister(REGISTER_Y, 91);
      copySourceRegisterToDestRegister(REGISTER_Z, 92);
   } else
   if(JM_OPCODE == 13) {                                        //STO V                                          
-     STACK_LIFT_ENABLE;                                                  
+     STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      copySourceRegisterToDestRegister(REGISTER_X, 93);
      copySourceRegisterToDestRegister(REGISTER_Y, 94);
      copySourceRegisterToDestRegister(REGISTER_Z, 95);
   } else
   if(JM_OPCODE == 15) {                                        //STO I                                          
-     STACK_LIFT_ENABLE;                                                  
+     STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      copySourceRegisterToDestRegister(REGISTER_X, 96);
      copySourceRegisterToDestRegister(REGISTER_Y, 97);
      copySourceRegisterToDestRegister(REGISTER_Z, 98);
   } else
-  if(JM_OPCODE == 12) {                                        //STO Z                                          
-     STACK_LIFT_ENABLE;
+  if(JM_OPCODE == 12) {                                        //RCL Z                                          
+     STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(92);                                                  
      fnRecall(91);                                                  
      fnRecall(90);                                                  
   } else
-  if(JM_OPCODE == 14) {                                        //STO V                                          
-     STACK_LIFT_ENABLE;                                                  
+  if(JM_OPCODE == 14) {                                        //RCL V                                          
+     STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(95);                                                  
      fnRecall(94);                                                  
      fnRecall(93);                                                  
   } else
-  if(JM_OPCODE == 16) {                                        //STO I                                          
-     STACK_LIFT_ENABLE;                                                  
+  if(JM_OPCODE == 16) {                                        //RCL I                                          
+     STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(98);                                                  
      fnRecall(97);                                                  
      fnRecall(96);                                                  
   } else
   if(JM_OPCODE == 17) {                                        // V/I                                          
-     STACK_LIFT_ENABLE;                                                  
+     STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(95);                                                  
      fnRecall(98);                                                  
      fnDivide(0);

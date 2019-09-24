@@ -215,7 +215,8 @@ const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,     
                                      ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
-                                     ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_toDP,              ITM_toSP,                    ITM_PARALLEL                  };
+                                     ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_toDP,              ITM_toSP,                    ITM_PARALLEL,                 
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_EE                        };    //JM Added 
 
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -447,9 +448,9 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,               -MNU_CPX,             //JM EE
                                      ITM_DEG,                       ITM_RAD,                    ITM_DtoR,                 ITM_RtoD,              ITM_RECT,                    ITM_POLAR,            //JM EE
 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                   ITM_CLSTK,            //JM EE           
-                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_EE_EXP_TH,              -MNU_CPX,             //JM EE
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL          };  //JM EE
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLSTK,            //JM EE           
+                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,               -MNU_CPX,             //JM EE
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_EE_EXP_TH,               ITM_NULL          };  //JM EE
 
 
 const int16_t menu_HOME[]        = {

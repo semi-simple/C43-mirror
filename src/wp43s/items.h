@@ -1692,10 +1692,18 @@
 #define MNU_EE                        1653  //JM EE
 #define ITM_EE_EXP_TH                 1654  //JM EE
 
+#define ITM_EE_STO_Z                  1655  //JM EE
+#define ITM_EE_RCL_Z                  1656  //JM EE
+#define ITM_EE_STO_V                  1657  //JM EE
+#define ITM_EE_RCL_V                  1658  //JM EE
+#define ITM_EE_STO_I                  1659  //JM EE
+#define ITM_EE_RCL_I                  1660  //JM EE
+#define ITM_EE_STO_V_I                1661  //JM EE
+#define ITM_EE_STO_IR                 1662  //JM EE
+#define ITM_EE_STO_V_Z                1663  //JM EE
+#define ITM_EE_X2BAL                  1664  //JM EE
 
-
-
-#define LAST_ITEM                     1655  //JM
+#define LAST_ITEM                     1665  //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -574,6 +574,107 @@ uint16_t cm;
      fnMultiply(0);                                             // * aa
      fnExp(0);
      refreshStack();
+  } else
+
+  if(JM_OPCODE == 11) {                                        //STO Z                                          
+     STACK_LIFT_ENABLE;                                                  
+     copySourceRegisterToDestRegister(REGISTER_X, 90);
+     copySourceRegisterToDestRegister(REGISTER_Y, 91);
+     copySourceRegisterToDestRegister(REGISTER_Z, 92);
+  } else
+  if(JM_OPCODE == 13) {                                        //STO V                                          
+     STACK_LIFT_ENABLE;                                                  
+     copySourceRegisterToDestRegister(REGISTER_X, 93);
+     copySourceRegisterToDestRegister(REGISTER_Y, 94);
+     copySourceRegisterToDestRegister(REGISTER_Z, 95);
+  } else
+  if(JM_OPCODE == 15) {                                        //STO I                                          
+     STACK_LIFT_ENABLE;                                                  
+     copySourceRegisterToDestRegister(REGISTER_X, 96);
+     copySourceRegisterToDestRegister(REGISTER_Y, 97);
+     copySourceRegisterToDestRegister(REGISTER_Z, 98);
+  } else
+  if(JM_OPCODE == 12) {                                        //STO Z                                          
+     STACK_LIFT_ENABLE;
+     fnRecall(92);                                                  
+     fnRecall(91);                                                  
+     fnRecall(90);                                                  
+  } else
+  if(JM_OPCODE == 14) {                                        //STO V                                          
+     STACK_LIFT_ENABLE;                                                  
+     fnRecall(95);                                                  
+     fnRecall(94);                                                  
+     fnRecall(93);                                                  
+  } else
+  if(JM_OPCODE == 16) {                                        //STO I                                          
+     STACK_LIFT_ENABLE;                                                  
+     fnRecall(98);                                                  
+     fnRecall(97);                                                  
+     fnRecall(96);                                                  
+  } else
+  if(JM_OPCODE == 17) {                                        // V/I                                          
+     STACK_LIFT_ENABLE;                                                  
+     fnRecall(95);                                                  
+     fnRecall(98);                                                  
+     fnDivide(0);
+     fnRecall(94);                                                  
+     fnRecall(97);                                                  
+     fnDivide(0);
+     fnRecall(93);                                                  
+     fnRecall(96);                                                  
+     fnDivide(0);
+     refreshStack();
+  } else
+  if(JM_OPCODE == 18) {                                        // IR                                          
+     STACK_LIFT_ENABLE;                                                  
+     fnRecall(98);                                                  
+     fnRecall(92);                                                  
+     fnMultiply(0);
+     fnRecall(97);                                                  
+     fnRecall(91);                                                  
+     fnMultiply(0);
+     fnRecall(96);                                                  
+     fnRecall(91);                                                  
+     fnMultiply(0);
+     refreshStack();
+  } else
+  if(JM_OPCODE == 19) {                                        // V/Z                                          
+     STACK_LIFT_ENABLE;                                                  
+     fnRecall(95);                                                  
+     fnRecall(92);                                                  
+     fnDivide(0);
+     fnRecall(94);                                                  
+     fnRecall(91);                                                  
+     fnDivide(0);
+     fnRecall(93);                                                  
+     fnRecall(90);                                                  
+     fnDivide(0);
+     refreshStack();
+  } else
+  if(JM_OPCODE == 20) {                                        //Copy Create X>ABC                                          
+     STACK_LIFT_ENABLE;                                                  
+     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
+
+     fnRecall(REGISTER_I);       //
+     STACK_LIFT_ENABLE;       
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
+     fnMultiply(0);
+
+     fnRecall(REGISTER_I);       //
+     STACK_LIFT_ENABLE;       
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
+     fnMultiply(0);
+
+     refreshStack();
+
   }
 
 

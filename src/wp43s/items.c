@@ -1785,7 +1785,18 @@ const item_t indexOfItems[] = {
 /* 1653 */  { itemToBeCoded,               NOPARAM,                     "E.ENG",                                       "E.ENG",                                                                       SLS_UNCHANGED},   //JM EE
 /* 1654 */  { fnJM,                        10,                          "e^theta_j",                                   "e^" STD_THETA "j",                                                            SLS_ENABLED  },  //JM EE 
 
+/* 1655 */  { fnJM,                        11,                          "",                                             "STO" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE 
+/* 1656 */  { fnJM,                        12,                          "",                                             "RCL" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE 
+/* 1657 */  { fnJM,                        13,                          "",                                             "STO" STD_SPACE_3_PER_EM "V",                      SLS_ENABLED  },  //JM EE 
+/* 1658 */  { fnJM,                        14,                          "",                                             "RCL" STD_SPACE_3_PER_EM "V",                      SLS_ENABLED  },  //JM EE 
+/* 1659 */  { fnJM,                        15,                          "",                                             "STO" STD_SPACE_3_PER_EM "I",                      SLS_ENABLED  },  //JM EE 
+/* 1660 */  { fnJM,                        16,                          "",                                             "RCL" STD_SPACE_3_PER_EM "I",                      SLS_ENABLED  },  //JM EE 
+/* 1661 */  { fnJM,                        17,                          "",                                             "V" STD_DIVIDE "I",             SLS_ENABLED  },  //JM EE 
+/* 1662 */  { fnJM,                        18,                          "",                                             "I" STD_CROSS "R",              SLS_ENABLED  },  //JM EE 
+/* 1663 */  { fnJM,                        19,                          "",                                             "V" STD_DIVIDE "Z",             SLS_ENABLED  },  //JM EE 
+/* 1664 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",             SLS_ENABLED  },  //JM EE 
 
 
-/* 1655 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+
+/* 1665 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

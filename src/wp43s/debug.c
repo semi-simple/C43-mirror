@@ -1619,7 +1619,9 @@ void testRegisters(const char *text) {
 void testLongInteger(const longInteger_t lgInt, const char *text) {
   if(abs(lgInt->_mp_size) * LIMB_SIZE > 24 || MEMPTR_TO_RAMPTR(lgInt->_mp_d) > BYTES_TO_BLOCKS(RAM_SIZE)) {
     printf("\nbad long integer %s\n", text);
-    printf("    ->_mp_size = %d limbs = %" FMT64U " bytes\n", abs(lgInt->_mp_size), abs(lgInt->_mp_size) * LIMB_SIZE);
+//JM    printf("    ->_mp_size = %d limbs = %" FMT64U " bytes\n", abs(lgInt->_mp_size), abs(lgInt->_mp_size) * LIMB_SIZE);
+//JM - fixed by Harald
+    printf("    ->_mp_size = %d limbs = %llu bytes\n", abs(lgInt->_mp_size), (unsigned long long) abs(lgInt->_mp_size) * LIMB_SIZE);
     printf("    ->_mp_d = %u (%u)\n", MEMPTR_TO_RAMPTR(lgInt->_mp_d), BLOCKS_TO_BYTES(MEMPTR_TO_RAMPTR(lgInt->_mp_d)));
   }
 }

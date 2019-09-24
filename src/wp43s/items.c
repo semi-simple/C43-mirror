@@ -1778,13 +1778,14 @@ const item_t indexOfItems[] = {
 /* 1646 */  { fnShowJM,                    5,                           "BASE_MYMENU?",                                "MYMNU?",                                                                   SLS_ENABLED  },     //JM SHOW
 /* 1647 */  { fnShowJM,                    6,                           "BASE_AHOME?",                                 STD_alpha "HOME?",                                                             SLS_ENABLED  },     //JM SHOW
 /* 1648 */  { fnShowJM,                    7,                           "BASE_MYA?",                                   "MY" STD_alpha "?",                                                            SLS_ENABLED  },     //JM SHOW
-/* 1649 */  { fnJM,                        7,                          "YtoD",                                         "YtoD",                                                                       SLS_ENABLED  },  //JM EE 
-/* 1650 */  { fnJM,                        6,                          "DtoY",                                         "DtoY",                                                                       SLS_ENABLED  },  //JM EE 
-/* 1651 */  { fnJM,                        9,                          "AtoSYM",                                       "A->SYM",                                                                     SLS_ENABLED  },  //JM EE 
-/* 1652 */  { fnJM,                        8,                          "SYMtoA",                                       "SYM->A",                                                                     SLS_ENABLED  },  //JM EE 
+/* 1649 */  { fnJM,                        7,                          "YtoD",                                         "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA,           SLS_ENABLED  },  //JM EE 
+/* 1650 */  { fnJM,                        6,                          "DtoY",                                         STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y",           SLS_ENABLED  },  //JM EE 
+/* 1651 */  { fnJM,                        9,                          "AtoSYM",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "012",                                      SLS_ENABLED  },  //JM EE 
+/* 1652 */  { fnJM,                        8,                          "SYMtoA",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",                                      SLS_ENABLED  },  //JM EE 
 /* 1653 */  { itemToBeCoded,               NOPARAM,                     "E.ENG",                                       "E.ENG",                                                                       SLS_UNCHANGED},   //JM EE
+/* 1654 */  { fnJM,                        10,                          "e^theta_j",                                   "e^" STD_THETA "j",                                                            SLS_ENABLED  },  //JM EE 
 
 
 
-/* 1654 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/* 1655 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

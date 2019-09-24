@@ -443,8 +443,12 @@ const int16_t menu_BASE[]       = {
                                      ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               KEY_HASH,                    ITM_toINT,            //JM                      
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              /*ITM_HASH*/ITM_NULL,                    ITM_NULL          };  //JM BASE MENU ADDED
 
-const int16_t menu_EE[]       = {  
-                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_NULL,                    ITM_NULL,             //JM EE
+const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,            //JM EE           
+                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,               -MNU_CPX,             //JM EE
+                                     ITM_DEG,                       ITM_RAD,                    ITM_DtoR,                 ITM_RtoD,              ITM_RECT,                    ITM_POLAR,            //JM EE
+
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                   ITM_CLSTK,            //JM EE           
+                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_EE_EXP_TH,              -MNU_CPX,             //JM EE
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL          };  //JM EE
 
 
@@ -456,7 +460,7 @@ const int16_t menu_HOME[]        = {
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-1------*/                                                                                                                                                                                           //JM HOME
 /* 03 */                             ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                         //JM HOME
-                                     ITM_op_a,                      ITM_op_a2,                  ITM_op_j,                -MNU_CPX,               CST_09,                     -MNU_EE,                            //JM HOME
+                                     ITM_NULL,                      ITM_NULL,                   ITM_op_j,                 ITM_NULL,              CST_09,                     -MNU_EE,                            //JM HOME
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-3------*/                                                                                                                                                                                           //JM HOME
                                      ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                         //JM HOME

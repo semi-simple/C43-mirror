@@ -373,7 +373,11 @@ uint16_t cm;
 
      copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
 
-     refreshStack();
+    temporaryInformation = TI_ABC;
+    refreshRegisterLine(REGISTER_X);
+    refreshRegisterLine(REGISTER_Y);
+    refreshRegisterLine(REGISTER_Z);
+
   } else
 
   if(JM_OPCODE == 7) {                                        //Star to Delta ZYX to ZYX; destroys IJKL & 99                                           
@@ -414,7 +418,11 @@ uint16_t cm;
 
      copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
 
-     refreshStack();
+    temporaryInformation = TI_ABBCCA;
+    refreshRegisterLine(REGISTER_X);
+    refreshRegisterLine(REGISTER_Y);
+    refreshRegisterLine(REGISTER_Z);
+
   } else
 
   if(JM_OPCODE == 8) {                                        //SYMMETRICAL COMP to ABC   ZYX to ZYX; destroys IJKL & 99                                           
@@ -478,7 +486,6 @@ uint16_t cm;
     refreshRegisterLine(REGISTER_Y);
     refreshRegisterLine(REGISTER_Z);
 
-//     refreshStack();
   } else
 
   if(JM_OPCODE == 9) {                                        //ABC to SYMMETRICAL COMP   ZYX to ZYX; destroys IJKL & 99                                           
@@ -548,9 +555,7 @@ uint16_t cm;
      fnRecall(99);                                            // 3
      fnDivide(0);                                             // /
 
-
-
-      copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
+     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO 
 
 
     temporaryInformation = TI_012;
@@ -558,7 +563,17 @@ uint16_t cm;
     refreshRegisterLine(REGISTER_Y);
     refreshRegisterLine(REGISTER_Z);
 
-//     refreshStack();
+  } else
+
+  if(JM_OPCODE == 10) {                                        //e^theta.j j                                          
+     STACK_LIFT_ENABLE;     
+     liftStack();                                             
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));   
+     stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
+     fnMultiply(0);                                             // * aa
+     fnExp(0);
+     refreshStack();
   }
 
 

@@ -1690,11 +1690,12 @@
 #define ITM_EE_A2S                    1651  //JM EE
 #define ITM_EE_S2A                    1652  //JM EE
 #define MNU_EE                        1653  //JM EE
+#define ITM_EE_EXP_TH                 1654  //JM EE
 
 
 
 
-#define LAST_ITEM                     1654  //JM
+#define LAST_ITEM                     1655  //JM
 
 #define CHR_PROD_SIGN                 9999
 

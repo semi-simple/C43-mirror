@@ -22,22 +22,21 @@
 
 
 
-void (* const parallel[13][13])(void) = {
-// regX |    regY ==>   1                 2                 3                 4                 5              6              7              8              9              10              11                12                34
-//      V               Long integer      Real16            Complex16         Angle16           Time           Date           String         Real16 mat     Complex16 m    Short integer   Real34            Complex34         Angle34
-/*  1 Long integer  */ {parallelLonILonI, parallelRe16LonI, parallelCo16LonI, parallelAn16LonI, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34LonI, parallelCo34LonI, parallelAn34LonI},
-/*  2 Real16        */ {parallelLonIRe16, parallelRe16Re16, parallelCo16Re16, parallelAn16Re16, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Re16, parallelCo34Re16, parallelAn34Re16},
-/*  3 Complex16     */ {parallelLonICo16, parallelRe16Co16, parallelCo16Co16, parallelAn16Co16, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Co16, parallelCo34Co16, parallelAn34Co16},
-/*  4 Angle16       */ {parallelLonIAn16, parallelRe16An16, parallelCo16An16, parallelAn16An16, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34An16, parallelCo34An16, parallelAn34An16},
-/*  5 Time          */ {parallelError,    parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError,    parallelError   },
-/*  6 Date          */ {parallelError,    parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError,    parallelError   },
-/*  7 String        */ {parallelError,    parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError,    parallelError   },
-/*  8 Real16 mat    */ {parallelError,    parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError,    parallelError   },
-/*  9 Complex16 mat */ {parallelError,    parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError,    parallelError   },
-/* 10 Short integer */ {parallelError,    parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError,    parallelError   },
-/* 11 Real34        */ {parallelLonIRe34, parallelRe16Re34, parallelCo16Re34, parallelAn16Re34, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Re34, parallelCo34Re34, parallelAn34Re34},
-/* 12 Complex34     */ {parallelLonICo34, parallelRe16Co34, parallelCo16Co34, parallelAn16Co34, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Co34, parallelCo34Co34, parallelAn34Co34},
-/* 13 Angle34       */ {parallelLonIAn34, parallelRe16An34, parallelCo16An34, parallelAn16An34, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34An34, parallelCo34An34, parallelAn34An34}
+void (* const parallel[12][12])(void) = {
+// regX |    regY ==>   1                 2                 3                 4                 5              6              7              8              9              10              11                12
+//      V               Long integer      Real16            Complex16         Angle16           Time           Date           String         Real16 mat     Complex16 m    Short integer   Real34            Complex34
+/*  1 Long integer  */ {parallelLonILonI, parallelRe16LonI, parallelCo16LonI, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34LonI, parallelCo34LonI},
+/*  2 Real16        */ {parallelLonIRe16, parallelRe16Re16, parallelCo16Re16, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Re16, parallelCo34Re16},
+/*  3 Complex16     */ {parallelLonICo16, parallelRe16Co16, parallelCo16Co16, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Co16, parallelCo34Co16},
+/*  4 Angle16       */ {parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError   },
+/*  5 Time          */ {parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError   },
+/*  6 Date          */ {parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError   },
+/*  7 String        */ {parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError   },
+/*  8 Real16 mat    */ {parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError   },
+/*  9 Complex16 mat */ {parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError   },
+/* 10 Short integer */ {parallelError,    parallelError,    parallelError,    parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelError,    parallelError   },
+/* 11 Real34        */ {parallelLonIRe34, parallelRe16Re34, parallelCo16Re34, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Re34, parallelCo34Re34},
+/* 12 Complex34     */ {parallelLonICo34, parallelRe16Co34, parallelCo16Co34, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError,  parallelRe34Co34, parallelCo34Co34}
 };
 
 
@@ -77,16 +76,8 @@ void fnParallel(uint16_t unusedParamButMandatory) {
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if Y is a number then Y = a + ib
- * if X is a number then X = c + id
- * The variables a, b, c and d are used for intermediate calculations
- * The result is then X = (ac - bd) + i(ad + bc)
- ***********************************************************************/
-
 /******************************************************************************************************************************************************************************************/
-/* long integer || ...                                                                                                                                                                     */
+/* long integer || ...                                                                                                                                                                    */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
@@ -101,7 +92,7 @@ void parallelLonILonI(void) {
   // y || x = xy / (x+y)
   convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
   if(!realIcIsZero(&x)) {
     realIcMultiply(&y, &x, &product);
@@ -142,6 +133,7 @@ void parallelLonIRe16(void) {
   }
 
   realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -166,7 +158,7 @@ void parallelRe16LonI(void) {
   // y || x = xy / (x+y)
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
   if(!realIcIsZero(&x)) {
     realIcMultiply(&y, &x, &product);
@@ -175,6 +167,7 @@ void parallelRe16LonI(void) {
   }
 
   realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -238,7 +231,7 @@ void parallelCo16LonI(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
     realIcMultiply(&x, &y.real, &product.real);
@@ -250,72 +243,6 @@ void parallelCo16LonI(void) {
 
   realIcToReal16(&y.real, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&y.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) || X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelLonIAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelLonIAn16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) || X(long integer) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16LonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -348,6 +275,7 @@ void parallelLonIRe34(void) {
   }
 
   realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -372,7 +300,7 @@ void parallelRe34LonI(void) {
   // y || x = xy / (x+y)
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&x)) {
     realIcMultiply(&y, &x, &product);
@@ -381,6 +309,7 @@ void parallelRe34LonI(void) {
   }
 
   realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -444,7 +373,7 @@ void parallelCo34LonI(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
     realIcMultiply(&x, &y.real, &product.real);
@@ -460,74 +389,8 @@ void parallelCo34LonI(void) {
 
 
 
-/********************************************//**
- * \brief Y(long integer) || X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelLonIAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelLonIAn34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) || X(long integer) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn34LonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34LonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
 /******************************************************************************************************************************************************************************************/
-/* real16 || ...                                                                                                                                                                           */
+/* real16 || ...                                                                                                                                                                          */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
@@ -566,6 +429,7 @@ void parallelRe16Re16(void) {
   }
 
   realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -645,7 +509,7 @@ void parallelCo16Re16(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
     realIcMultiply(&x, &y.real, &product.real);
@@ -657,88 +521,6 @@ void parallelCo16Re16(void) {
 
   realIcToReal16(&y.real, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&y.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) || X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelRe16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe16An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) || X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Re16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Re16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -779,6 +561,7 @@ void parallelRe16Re34(void) {
   }
 
   realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -811,7 +594,7 @@ void parallelRe34Re16(void) {
   // y || x = xy / (x+y)
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&x)) {
     realIcMultiply(&y, &x, &product);
@@ -820,6 +603,7 @@ void parallelRe34Re16(void) {
   }
 
   realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -899,7 +683,7 @@ void parallelCo34Re16(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
     realIcMultiply(&x, &y.real, &product.real);
@@ -915,90 +699,8 @@ void parallelCo34Re16(void) {
 
 
 
-/********************************************//**
- * \brief Y(real16) || X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelRe16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe16An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) || X(real16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn34Re16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Re16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Re16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
 /******************************************************************************************************************************************************************************************/
-/* complex16 || ...                                                                                                                                                                        */
+/* complex16 || ...                                                                                                                                                                       */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
@@ -1046,97 +748,6 @@ void parallelCo16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) || X(angle16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelCo16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo16An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t x;
-  complexIc_t y, product, sum;
-
-  // y || x = xy / (x + y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
-    realIcMultiply(&x, &y.real, &product.real);
-    realIcMultiply(&x, &y.imag, &product.imag);
-    realIcAdd(&x, &y.real, &sum.real);
-    realIcCopy(&y.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &y);
-  }
-
-  realIcToReal16(&y.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&y.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) || X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn16Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Co16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Co16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y;
-  complexIc_t x, product, sum;
-
-  // y || x = xy / (x + y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-
-  if(!realIcIsZero(&x.real) || !realIcIsZero(&x.imag)) {
-    realIcMultiply(&y, &x.real, &product.real);
-    realIcMultiply(&y, &x.imag, &product.imag);
-    realIcAdd(&y, &x.real, &sum.real);
-    realIcCopy(&x.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &x);
-  }
-
-  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
  * \brief Y(complex16) || X(real34) ==> X(complex34)
  *
  * \param void
@@ -1166,7 +777,7 @@ void parallelCo16Re34(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
     realIcMultiply(&x, &y.real, &product.real);
@@ -1212,7 +823,7 @@ void parallelRe34Co16(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&x.real) || !realIcIsZero(&x.imag)) {
     realIcMultiply(&y, &x.real, &product.real);
@@ -1302,7 +913,7 @@ void parallelCo34Co16(void) {
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&x.real) || !realIcIsZero(&x.real)) {
     mulCoIcCoIc(&y, &x, &product);
@@ -1317,399 +928,8 @@ void parallelCo34Co16(void) {
 
 
 
-/********************************************//**
- * \brief Y(complex16) || X(angle34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelCo16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo16An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t x;
-  complexIc_t y, product, sum;
-
-  // y || x = xy / (x + y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
-    realIcMultiply(&x, &y.real, &product.real);
-    realIcMultiply(&x, &y.imag, &product.imag);
-    realIcAdd(&x, &y.real, &sum.real);
-    realIcCopy(&y.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &y);
-  }
-
-  realIcToReal34(&y.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&y.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) || X(complex16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn34Co16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Co16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Co16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y;
-  complexIc_t x, product, sum;
-
-  // y || x = xy / (x + y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&x.real) || !realIcIsZero(&x.imag)) {
-    realIcMultiply(&y, &x.real, &product.real);
-    realIcMultiply(&y, &x.imag, &product.imag);
-    realIcAdd(&y, &x.real, &sum.real);
-    realIcCopy(&x.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &x);
-  }
-
-  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
 /******************************************************************************************************************************************************************************************/
-/* angle16 || ...                                                                                                                                                                          */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(angle16) || X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) || X(real34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn16Re34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Re34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Re34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) || X(angle16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelRe34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe34An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe34An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) || X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn16Co34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Co34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16Co34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y;
-  complexIc_t x, product, sum;
-
-  // y || x = xy / (x + y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
-
-  if(!realIcIsZero(&x.real) || !realIcIsZero(&x.imag)) {
-    realIcMultiply(&y, &x.real, &product.real);
-    realIcMultiply(&y, &x.imag, &product.imag);
-    realIcAdd(&y, &x.real, &sum.real);
-    realIcCopy(&x.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &x);
-  }
-
-  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) || X(angle16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelCo34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo34An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo34An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t x;
-  complexIc_t y, product, sum;
-
-  // y || x = xy / (x + y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
-    realIcMultiply(&x, &y.real, &product.real);
-    realIcMultiply(&x, &y.imag, &product.imag);
-    realIcAdd(&x, &y.real, &sum.real);
-    realIcCopy(&y.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &y);
-  }
-
-  realIcToReal34(&y.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&y.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) || X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) || X(angle16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* real34 || ...                                                                                                                                                                           */
+/* real34 || ...                                                                                                                                                                          */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
@@ -1748,6 +968,7 @@ void parallelRe34Re34(void) {
   }
 
   realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -1827,7 +1048,7 @@ void parallelCo34Re34(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
     realIcMultiply(&x, &y.real, &product.real);
@@ -1843,89 +1064,8 @@ void parallelCo34Re34(void) {
 
 
 
-/********************************************//**
- * \brief Y(real34) || X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelRe34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe34An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRe34An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) || X(real34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn34Re34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Re34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Re34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
 /******************************************************************************************************************************************************************************************/
-/* complex34 || ...                                                                                                                                                                        */
+/* complex34 || ...                                                                                                                                                                       */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
@@ -1968,140 +1108,4 @@ void parallelCo34Co34(void) {
 
   realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) || X(angle34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelCo34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo34An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCo34An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t x;
-  complexIc_t y, product, sum;
-
-  // y || x = xy / (x + y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  if(!realIcIsZero(&y.real) || !realIcIsZero(&y.imag)) {
-    realIcMultiply(&x, &y.real, &product.real);
-    realIcMultiply(&x, &y.imag, &product.imag);
-    realIcAdd(&x, &y.real, &sum.real);
-    realIcCopy(&y.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &y);
-  }
-
-  realIcToReal34(&y.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&y.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) || X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn34Co34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Co34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34Co34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y;
-  complexIc_t x, product, sum;
-
-  // y || x = xy / (x + y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
-
-  if(!realIcIsZero(&x.real) || !realIcIsZero(&x.imag)) {
-    realIcMultiply(&y, &x.real, &product.real);
-    realIcMultiply(&y, &x.imag, &product.imag);
-    realIcAdd(&y, &x.real, &sum.real);
-    realIcCopy(&x.imag, &sum.imag);
-    divCoIcCoIc(&product, &sum, &x);
-  }
-
-  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* angle34 || ...                                                                                                                                                                     */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(angle34) || X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void parallelAn34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelAn34An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t y, x, product;
-
-  // y || x = xy / (x+y)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  if(!realIcIsZero(&x)) {
-    realIcMultiply(&y, &x, &product);
-    realIcAdd(&y, &x, &y);
-    realIcDivide(&product, &y, &x);
-  }
-
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }

@@ -15,7 +15,6 @@ Func: fnAdd
 ; Complex16 Matrix + Long Integer   see in addition_longInteger.txt
 ; Complex16 Matrix + Real16         see in addition_real16.txt
 ; Complex16 Matrix + Complex16      see in addition_complex16.txt
-; Complex16 Matrix + Angle16        see in addition_angle16.txt
 ; Complex16 Matrix + Time           see in addition_time.txt
 ; Complex16 Matrix + Date           see in addition_date.txt
 ; Complex16 Matrix + String         see in addition_string.txt
@@ -56,14 +55,4 @@ Func: fnAdd
 
 ;=======================================
 ; Complex34 + Complex16 Matrix
-;=======================================
-
-
-
-;=======================================
-; Complex16 Matrix + Angle34
-;=======================================
-
-;=======================================
-; Angle34 + Complex16 Matrix
 ;=======================================

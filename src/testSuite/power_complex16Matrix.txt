@@ -15,7 +15,6 @@ Func: fnPower
 ; Complex16 Matrix ^ Long Integer   see in power_longInteger.txt
 ; Complex16 Matrix ^ Real16         see in power_real16.txt
 ; Complex16 Matrix ^ Complex16      see in power_complex16.txt
-; Complex16 Matrix ^ Angle16        see in power_angle16.txt
 ; Complex16 Matrix ^ Time           see in power_time.txt
 ; Complex16 Matrix ^ Date           see in power_date.txt
 ; Complex16 Matrix ^ String         see in power_string.txt
@@ -56,14 +55,4 @@ Func: fnPower
 
 ;=======================================
 ; Complex34 ^ Complex16 Matrix
-;=======================================
-
-
-
-;=======================================
-; Complex16 Matrix ^ Angle34
-;=======================================
-
-;=======================================
-; Angle34 ^ Complex16 Matrix
 ;=======================================

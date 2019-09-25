@@ -715,23 +715,6 @@ void setParameter(char *p) {
       convertLongIntegerToLongIntegerRegister(lgInt, regist);
       longIntegerFree(lgInt);
     }
-    else if(strcmp(l, "RE16") == 0) {
-      // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
-      r[strlen(r) - 1] = 0;
-
-      // removing trailing spaces
-      while(r[strlen(r) - 1] == ' ') r[strlen(r) - 1] = 0;
-
-      // replace , with .
-      for(int i=0; i<(int)strlen(r); i++) {
-        if(r[i] == ',') r[i] = '.';
-      }
-
-      reallocateRegister(regist, dtReal16, REAL16_SIZE, TAG_NONE);
-      stringToReal16(r, REGISTER_REAL16_DATA(regist));
-    }
     else if(strcmp(l, "CO16") == 0) {
       // remove beginning and ending " and removing leading spaces
       memmove(r, r + 1, strlen(r));
@@ -770,20 +753,19 @@ void setParameter(char *p) {
         if(imag[i] == ',') imag[i] = '.';
       }
 
-      reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       stringToReal16(real, REGISTER_REAL16_DATA(regist));
       stringToReal16(imag, REGISTER_IMAG16_DATA(regist));
     }
-    else if(strcmp(l, "AN16") == 0 || strcmp(l, "AN34") == 0) {
-      // find the : separating the angle value from the angular mode
+    else if(strcmp(l, "RE16") == 0 || strcmp(l, "RE34") == 0) {
+      // find the : separating the real value from the angular mode
       i = 0;
       while(r[i] != ':' && r[i] != 0) i++;
       if(r[i] == 0) {
-        printf("\nMissformed register angle%d value. Missing colon between angle value and angular mode.\n", strcmp(l, "AN16") == 0 ? 16 : 34);
-        abortTest();
+        strcat(r, ":NONE");
       }
 
-      // separate angle value and angular mode
+      // separate real value and angular mode
       r[i] = 0;
       strcpy(angMod, r + i + 1);
 
@@ -792,8 +774,9 @@ void setParameter(char *p) {
       else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
       else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
       else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
+      else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
       else {
-        printf("\nMissformed register angle%d unit. Unknown unit after angle value.\n", strcmp(l, "AN16") == 0 ? 16 : 34);
+        printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
         abortTest();
       }
 
@@ -807,18 +790,18 @@ void setParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      if(strcmp(l, "AN16") == 0) {
-        reallocateRegister(regist, dtAngle16, REAL16_SIZE, am);
+      if(strcmp(l, "RE16") == 0) {
+        reallocateRegister(regist, dtReal16, REAL16_SIZE, am);
         stringToReal16(r, REGISTER_REAL16_DATA(regist));
       }
       else {
-        reallocateRegister(regist, dtAngle34, REAL34_SIZE, am);
+        reallocateRegister(regist, dtReal34, REAL34_SIZE, am);
         stringToReal34(r, REGISTER_REAL34_DATA(regist));
       }
     }
     else if(strcmp(l, "STRI") == 0) {
       getString(r + 1);
-      reallocateRegister(regist, dtString, stringByteLength(r + 1), TAG_NONE);
+      reallocateRegister(regist, dtString, stringByteLength(r + 1), AM_NONE);
       strcpy(REGISTER_STRING_DATA(regist), r + 1);
     }
     else if(strcmp(l, "SHOI") == 0) {
@@ -843,19 +826,6 @@ void setParameter(char *p) {
       }
 
       strToShortInteger(r, regist);
-    }
-    else if(strcmp(l, "RE34") == 0) {
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
-      r[strlen(r) - 1] = 0;
-
-      while(r[strlen(r) - 1] == ' ') r[strlen(r) - 1] = 0;
-      for(int i=0; i<(int)strlen(r); i++) {
-        if(r[i] == ',') r[i] = '.';
-      }
-
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, TAG_NONE);
-      stringToReal34(r, REGISTER_REAL34_DATA(regist));
     }
     else if(strcmp(l, "CO34") == 0) {
       // remove beginning and ending " and removing leading spaces
@@ -895,7 +865,7 @@ void setParameter(char *p) {
         if(imag[i] == ',') imag[i] = '.';
       }
 
-      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       stringToReal34(real, REGISTER_REAL34_DATA(regist));
       stringToReal34(imag, REGISTER_IMAG34_DATA(regist));
     }
@@ -1480,32 +1450,8 @@ void checkExpectedOutParameter(char *p) {
       longIntegerFree(expectedLongInteger);
       longIntegerFree(registerLongInteger);
     }
-    else if(strcmp(l, "RE16") == 0) {
-      checkRegisterType(regist, letter, dtReal16, TAG_NONE);
-
-      // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
-      r[strlen(r) - 1] = 0;
-
-      // removing trailing spaces
-      while(r[strlen(r) - 1] == ' ') r[strlen(r) - 1] = 0;
-
-      // replace , with .
-      for(int i=0; i<(int)strlen(r); i++) {
-        if(r[i] == ',') r[i] = '.';
-      }
-
-      stringToReal16(r, &expectedReal16);
-      if(!real16CompareEqual(&expectedReal16, REGISTER_REAL16_DATA(regist))) {
-        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real") == RE_INACCURATE) {
-          wrongRegisterValue(regist, letter, r);
-        }
-      }
-    }
     else if(strcmp(l, "CO16") == 0) {
-      checkRegisterType(regist, letter, dtComplex16, TAG_NONE);
+      checkRegisterType(regist, letter, dtComplex16, AM_NONE);
 
       // remove beginning and ending " and removing leading spaces
       memmove(r, r + 1, strlen(r));
@@ -1563,28 +1509,27 @@ void checkExpectedOutParameter(char *p) {
         }
       }
     }
-    else if(strcmp(l, "AN16") == 0 || strcmp(l, "AN34") == 0) {
-      // find the : separating the angle value from the angular mode
+    else if(strcmp(l, "RE16") == 0 || strcmp(l, "RE34") == 0) {
+      // find the : separating the real value from the angular mode
       i = 0;
       while(r[i] != ':' && r[i] != 0) i++;
-      if(r[i] != 0) {
-        // separate angle value and angular mode
-        r[i] = 0;
-        strcpy(angMod, r + i + 1);
-
-             if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
-        else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
-        else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
-        else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
-        else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
-        else {
-          printf("\nMissformed register angle%d unit. Unknown unit after angle value.\n", strcmp(l, "AN16") == 0 ? 16 : 34);
-          abortTest();
-        }
+      if(r[i] == 0) {
+        strcat(r, ":NONE");
       }
+
+      // separate real value and angular mode
+      r[i] = 0;
+      strcpy(angMod, r + i + 1);
+
+           if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
+      else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
+      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
+      else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
+      else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
+      else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
       else {
-          printf("\nMissformed register angle%d value. Missing colon between angle value and angular mode.\n", strcmp(l, "AN16") == 0 ? 16 : 34);
-          abortTest();
+        printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
+        abortTest();
       }
 
 
@@ -1598,8 +1543,8 @@ void checkExpectedOutParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      if(strcmp(l, "AN16") == 0) {
-        checkRegisterType(regist, letter, dtAngle16, am);
+      if(strcmp(l, "RE16") == 0) {
+        checkRegisterType(regist, letter, dtReal16, am);
         stringToReal16(r, &expectedReal16);
         if(!real16CompareEqual(&expectedReal16, REGISTER_REAL16_DATA(regist))) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
@@ -1609,7 +1554,7 @@ void checkExpectedOutParameter(char *p) {
         }
       }
       else {
-        checkRegisterType(regist, letter, dtAngle34, am);
+        checkRegisterType(regist, letter, dtReal34, am);
         stringToReal34(r, &expectedReal34);
         if(!real34CompareEqual(&expectedReal34, REGISTER_REAL34_DATA(regist))) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
@@ -1620,7 +1565,7 @@ void checkExpectedOutParameter(char *p) {
       }
     }
     else if(strcmp(l, "STRI") == 0) {
-      checkRegisterType(regist, letter, dtString, TAG_NONE);
+      checkRegisterType(regist, letter, dtString, AM_NONE);
       getString(r + 1);
 
       char *expected, *is, stringUtf8[200];
@@ -1684,28 +1629,8 @@ void checkExpectedOutParameter(char *p) {
         wrongRegisterValue(regist, letter, r);
       }
     }
-    else if(strcmp(l, "RE34") == 0) {
-      checkRegisterType(regist, letter, dtReal34, TAG_NONE);
-
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
-      r[strlen(r) - 1] = 0;
-
-      while(r[strlen(r) - 1] == ' ') r[strlen(r) - 1] = 0;
-      for(int i=0; i<(int)strlen(r); i++) {
-        if(r[i] == ',') r[i] = '.';
-      }
-
-      stringToReal34(r, &expectedReal34);
-      if(!real34CompareEqual(&expectedReal34, REGISTER_REAL34_DATA(regist))) {
-        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
-          wrongRegisterValue(regist, letter, r);
-        }
-      }
-    }
     else if(strcmp(l, "CO34") == 0) {
-      checkRegisterType(regist, letter, dtComplex34, TAG_NONE);
+      checkRegisterType(regist, letter, dtComplex34, AM_NONE);
 
       // remove beginning and ending " and removing leading spaces
       memmove(r, r + 1, strlen(r));

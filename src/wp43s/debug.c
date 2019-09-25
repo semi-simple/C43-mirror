@@ -33,7 +33,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtLongInteger     ) return "a long integer       ";
     if(dt == dtReal16          ) return "a real16             ";
     if(dt == dtComplex16       ) return "a complex16          ";
-    if(dt == dtAngle16         ) return "an angle16           ";
     if(dt == dtTime            ) return "a time               ";
     if(dt == dtDate            ) return "a date               ";
     if(dt == dtString          ) return "a string             ";
@@ -42,7 +41,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer      ";
     if(dt == dtReal34          ) return "a real34             ";
     if(dt == dtComplex34       ) return "a complex34          ";
-    if(dt == dtAngle34         ) return "an angle34           ";
     //if(dt == dtLabel           ) return "a label              ";
     //if(dt == dtSystemInteger   ) return "a system integer     ";
     //if(dt == dtFlags           ) return "a flags              ";
@@ -55,7 +53,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtLongInteger     ) return "a long integer";
     if(dt == dtReal16          ) return "a real16";
     if(dt == dtComplex16       ) return "a complex16";
-    if(dt == dtAngle16         ) return "an angle16";
     if(dt == dtTime            ) return "a time";
     if(dt == dtDate            ) return "a date";
     if(dt == dtString          ) return "a string";
@@ -64,7 +61,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer";
     if(dt == dtReal34          ) return "a real34";
     if(dt == dtComplex34       ) return "a complex34";
-    if(dt == dtAngle34         ) return "an angle34";
     //if(dt == dtLabel           ) return "a label";
     //if(dt == dtSystemInteger   ) return "a system integer";
     //if(dt == dtFlags           ) return "a flags";
@@ -77,7 +73,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtLongInteger     ) return "long integer         ";
     if(dt == dtReal16          ) return "real16               ";
     if(dt == dtComplex16       ) return "complex16            ";
-    if(dt == dtAngle16         ) return "angle16              ";
     if(dt == dtTime            ) return "time                 ";
     if(dt == dtDate            ) return "date                 ";
     if(dt == dtString          ) return "string               ";
@@ -86,7 +81,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer        ";
     if(dt == dtReal34          ) return "real34               ";
     if(dt == dtComplex34       ) return "complex34            ";
-    if(dt == dtAngle34         ) return "angle34              ";
     //if(dt == dtLabel           ) return "label                ";
     //if(dt == dtSystemInteger   ) return "system integer       ";
     //if(dt == dtFlags           ) return "flags                ";
@@ -99,7 +93,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtLongInteger     ) return "long integer";
     if(dt == dtReal16          ) return "real16";
     if(dt == dtComplex16       ) return "complex16";
-    if(dt == dtAngle16         ) return "angle16";
     if(dt == dtTime            ) return "time";
     if(dt == dtDate            ) return "date";
     if(dt == dtString          ) return "string";
@@ -108,7 +101,6 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer";
     if(dt == dtReal34          ) return "real34";
     if(dt == dtComplex34       ) return "complex34";
-    if(dt == dtAngle34         ) return "angle34";
     //if(dt == dtLabel           ) return "label";
     //if(dt == dtSystemInteger   ) return "system integer";
     //if(dt == dtFlags           ) return "flags";
@@ -148,6 +140,16 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
 
     case dtReal16:
     case dtReal34:
+      switch(getRegisterTag(regist)) {
+        case AM_DEGREE:             return "degree  ";
+        case AM_DMS:                return "dms     ";
+        case AM_RADIAN:             return "radian  ";
+        case AM_GRAD:               return "grad    ";
+        case AM_MULTPI:             return "multPi  ";
+        case AM_NONE:               return "        ";
+        default:                    return "???     ";
+      }
+
     case dtComplex16:
     case dtComplex34:
     case dtString:
@@ -155,18 +157,7 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
     case dtDate:
     case dtTime:
       switch(getRegisterTag(regist)) {
-        case TAG_NONE:              return "none    ";
-        default:                    return "???     ";
-      }
-
-    case dtAngle16:
-    case dtAngle34:
-      switch(getRegisterTag(regist)) {
-        case AM_DEGREE:             return "degree  ";
-        case AM_DMS:                return "dms     ";
-        case AM_RADIAN:             return "radian  ";
-        case AM_GRAD:               return "grad    ";
-        case AM_MULTPI:             return "multPi  ";
+        case AM_NONE:               return "        ";
         default:                    return "???     ";
       }
 
@@ -192,6 +183,7 @@ char * getAngularModeName(uint16_t angularMode) {
   if(angularMode == AM_GRAD  ) return "grad  ";
   if(angularMode == AM_MULTPI) return "multPi";
   if(angularMode == AM_RADIAN) return "radian";
+  if(angularMode == AM_NONE)   return "      ";
 
   return "???   ";
 }
@@ -561,24 +553,20 @@ void debugNIM(void) {
 
     if(getRegisterDataType(regist) == dtReal16) {
       formatReal16Debug(string + n, getRegisterDataPointer(regist));
-    }
-
-    else if(getRegisterDataType(regist) == dtAngle16) {
-      formatReal16Debug(string + n, getRegisterDataPointer(regist));
-      n = stringByteLength(string);
-      strcpy(string + n++, " ");
-      strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));
+      if(getRegisterAngularMode(regist) != AM_NONE) {
+        n = stringByteLength(string);
+        strcpy(string + n++, " ");
+        strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));
+      }
     }
 
     else if(getRegisterDataType(regist) == dtReal34) {
       formatReal34Debug(string + n, getRegisterDataPointer(regist));
-    }
-
-    else if(getRegisterDataType(regist) == dtAngle34) {
-      formatReal34Debug(string + n, getRegisterDataPointer(regist));
-      n = stringByteLength(string);
-      strcpy(string + n++, " ");
-      strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));
+      if(getRegisterAngularMode(regist) != AM_NONE) {
+        n = stringByteLength(string);
+        strcpy(string + n++, " ");
+        strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));
+      }
     }
 
     else if(getRegisterDataType(regist) == dtComplex16) {

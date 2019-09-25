@@ -15,7 +15,6 @@ Func: fnParallel
 ; Complex34 || Long Integer      see in multiplication_longInteger.txt
 ; Complex34 || Real16            see in multiplication_real16.txt
 ; Complex34 || Complex16         see in multiplication_complex16.txt
-; Complex34 || Angle16           see in multiplication_angle16.txt
 ; Complex34 || Time              see in multiplication_time.txt
 ; Complex34 || Date              see in multiplication_date.txt
 ; Complex34 || String            see in multiplication_string.txt
@@ -35,23 +34,3 @@ Out: EC=0 FI=1 SL=1 RL=Co34:"0 i 0" RX=Co34:"0 i 0"
 
 In:  SL=0 FI=0 NCSD=16 RY=Co34:"1 i 1" RX=Co34:"2 i -1"
 Out: EC=0 FI=1 SL=1 RL=Co34:"2 i -1" RX=Co34:"1 i +0.33333333333333333333333333333333333333333333333333333333333333"
-
-
-
-;=======================================
-; Complex34 || Angle34 --> Complex34
-;=======================================
-In:  SL=0 FI=0 NCSD=16 RY=Co34:"0 i 0" RX=An34:"0":DEG
-Out: EC=0 FI=1 SL=1 RL=An34:"0":DEG RX=Co34:"0 i 0"
-
-In:  SL=0 FI=0 RY=Co34:"2 i -1" RX=An34:"7":DMS
-Out: EC=0 FI=1 SL=1 RL=An34:"7":DMS RX=Co34:"1.6219512195121951219512195121951219512195121951219512195121951 i -0.5975609756097560975609756097560975609756097560975609756097561"
-
-;=======================================
-; Angle34 || Complex34 --> Complex34
-;=======================================
-In:  SL=0 FI=0 NCSD=16 RY=An34:"0":GRAD RX=Co34:"0 i 0"
-Out: EC=0 FI=1 SL=1 RL=Co34:"0 i 0" RX=Co34:"0 i 0"
-
-In:  SL=0 FI=0 RY=An34:"7":RAD RX=Co34:"2 i -1"
-Out: EC=0 FI=1 SL=1 RL=Co34:"2 i -1" RX=Co34:"1.6219512195121951219512195121951219512195121951219512195121951 i -0.5975609756097560975609756097560975609756097560975609756097561"

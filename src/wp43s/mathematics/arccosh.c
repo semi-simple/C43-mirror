@@ -22,10 +22,10 @@
 
 
 
-void (* const arccosh[13])(void) = {
-// regX ==> 1             2            3            4            5             6             7             8            9            10             11           12           13
-//          Long integer  Real16       Complex16    Angle16      Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34    Angle34
-            arccoshLonI,  arccoshRe16, arccoshCo16, arccoshRe16, arccoshError, arccoshError, arccoshError, arccoshRm16, arccoshCm16, arccoshError,  arccoshRe34, arccoshCo34, arccoshRe34
+void (* const arccosh[12])(void) = {
+// regX ==> 1             2            3            4             5             6             7             8            9            10             11           12
+//          Long integer  Real16       Complex16    Angle16       Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34
+            arccoshLonI,  arccoshRe16, arccoshCo16, arccoshError, arccoshError, arccoshError, arccoshError, arccoshRm16, arccoshCm16, arccoshError,  arccoshRe34, arccoshCo34
 };
 
 
@@ -64,20 +64,14 @@ void fnArccosh(uint16_t unusedParamButMandatory) {
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- ***********************************************************************/
-
 void arccoshLonI(void) {
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  if(realIcCompareLessThan(&a, const_1)) {
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  if(realIcCompareLessThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccoshCo34();
       convertRegister34To16(REGISTER_X);
@@ -92,16 +86,16 @@ void arccoshLonI(void) {
     }
   }
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  // arccosh(a) = ln(a + sqrt(a² - 1))
-  realIcMultiply(&a, &a, &aSquared);
-  realIcSubtract(&aSquared, const_1, &aSquared);
-  realIcSquareRoot(&aSquared, &aSquared);
-  realIcAdd(&aSquared, &a, &a);
-  WP34S_Ln(&a, &a);
+  // arccosh(x) = ln(x + sqrt(x² - 1))
+  realIcMultiply(&x, &x, &xSquared);
+  realIcSubtract(&xSquared, const_1, &xSquared);
+  realIcSquareRoot(&xSquared, &xSquared);
+  realIcAdd(&xSquared, &x, &x);
+  WP34S_Ln(&x, &x);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -115,18 +109,18 @@ void arccoshRe16(void) {
     return;
   }
 
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  if(realIcCompareLessThan(&a, const_1)) {
+  if(realIcCompareLessThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccoshCo34();
       convertRegister34To16(REGISTER_X);
+      setRegisterAngularMode(REGISTER_X, AM_NONE);
       return;
     }
     else {
@@ -138,14 +132,15 @@ void arccoshRe16(void) {
     }
   }
 
-  // arccosh(a) = ln(a + sqrt(a² - 1))
-  realIcMultiply(&a, &a, &aSquared);
-  realIcSubtract(&aSquared, const_1, &aSquared);
-  realIcSquareRoot(&aSquared, &aSquared);
-  realIcAdd(&aSquared, &a, &a);
-  WP34S_Ln(&a, &a);
+  // arccosh(x) = ln(x + sqrt(x² - 1))
+  realIcMultiply(&x, &x, &xSquared);
+  realIcSubtract(&xSquared, const_1, &xSquared);
+  realIcSquareRoot(&xSquared, &xSquared);
+  realIcAdd(&xSquared, &x, &x);
+  WP34S_Ln(&x, &x);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -218,17 +213,17 @@ void arccoshRe34(void) {
     return;
   }
 
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  if(realIcCompareLessThan(&a, const_1)) {
+  if(realIcCompareLessThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccoshCo34();
+      setRegisterAngularMode(REGISTER_X, AM_NONE);
       return;
     }
     else {
@@ -240,14 +235,15 @@ void arccoshRe34(void) {
     }
   }
 
-  // arccosh(a) = ln(a + sqrt(a² - 1))
-  realIcMultiply(&a, &a, &aSquared);
-  realIcSubtract(&aSquared, const_1, &aSquared);
-  realIcSquareRoot(&aSquared, &aSquared);
-  realIcAdd(&aSquared, &a, &a);
-  WP34S_Ln(&a, &a);
+  // arccosh(x) = ln(x + sqrt(x² - 1))
+  realIcMultiply(&x, &x, &xSquared);
+  realIcSubtract(&xSquared, const_1, &xSquared);
+  realIcSquareRoot(&xSquared, &xSquared);
+  realIcAdd(&xSquared, &x, &x);
+  WP34S_Ln(&x, &x);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 

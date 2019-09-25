@@ -22,22 +22,21 @@
 
 
 
-void (* const power[13][13])(void) = {
-// regX |    regY ==>   1            2            3            4            5         6         7         8            9            10            11           12           13
-//      V               Long integer Real16       Complex16    Angle16      Time      Date      String    Real16 mat   Complex16 m  Short integer Real34       Complex34    Angle34
-/*  1 Long integer  */ {powLonILonI, powRe16LonI, powCo16LonI, powAn16LonI, powError, powError, powError, powRm16LonI, powCm16LonI, powShoILonI,  powRe34LonI, powCo34LonI, powAn34LonI},
-/*  2 Real16        */ {powLonIRe16, powRe16Re16, powCo16Re16, powAn16Re16, powError, powError, powError, powRm16Re16, powCm16Re16, powShoIRe16,  powRe34Re16, powCo34Re16, powAn34Re16},
-/*  3 Complex16     */ {powLonICo16, powRe16Co16, powCo16Co16, powAn16Co16, powError, powError, powError, powRm16Co16, powCm16Co16, powShoICo16,  powRe34Co16, powCo34Co16, powAn34Co16},
-/*  4 Angle16       */ {powLonIAn16, powRe16An16, powCo16An16, powAn16An16, powError, powError, powError, powRm16An16, powCm16An16, powShoIAn16,  powRe34An16, powCo34An16, powAn34An16},
-/*  5 Time          */ {powError,    powError,    powError,    powError,    powError, powError, powError, powError,    powError,    powError,     powError,    powError,    powError   },
-/*  6 Date          */ {powError,    powError,    powError,    powError,    powError, powError, powError, powError,    powError,    powError,     powError,    powError,    powError   },
-/*  7 String        */ {powError,    powError,    powError,    powError,    powError, powError, powError, powError,    powError,    powError,     powError,    powError,    powError   },
-/*  8 Real16 mat    */ {powError,    powError,    powError,    powError,    powError, powError, powError, powError,    powError,    powError,     powError,    powError,    powError   },
-/*  9 Complex16 mat */ {powError,    powError,    powError,    powError,    powError, powError, powError, powError,    powError,    powError,     powError,    powError,    powError   },
-/* 10 Short integer */ {powLonIShoI, powRe16ShoI, powCo16ShoI, powAn16ShoI, powError, powError, powError, powRm16ShoI, powCm16ShoI, powShoIShoI,  powRe34ShoI, powCo34ShoI, powAn34ShoI},
-/* 11 Real34        */ {powLonIRe34, powRe16Re34, powCo16Re34, powAn16Re34, powError, powError, powError, powRm16Re34, powCm16Re34, powShoIRe34,  powRe34Re34, powCo34Re34, powAn34Re34},
-/* 12 Complex34     */ {powLonICo34, powRe16Co34, powCo16Co34, powAn16Co34, powError, powError, powError, powRm16Co34, powCm16Co34, powShoICo34,  powRe34Co34, powCo34Co34, powAn34Co34},
-/* 13 Angle34       */ {powLonIAn34, powRe16An34, powCo16An34, powAn16An34, powError, powError, powError, powRm16An34, powCm16An34, powShoIAn34,  powRe34An34, powCo34An34, powAn34An34}
+void (* const power[12][12])(void) = {
+// regX |    regY ==>   1            2            3            4         5         6         7         8            9            10            11           12
+//      V               Long integer Real16       Complex16    Angle16   Time      Date      String    Real16 mat   Complex16 m  Short integer Real34       Complex34
+/*  1 Long integer  */ {powLonILonI, powRe16LonI, powCo16LonI, powError, powError, powError, powError, powRm16LonI, powCm16LonI, powShoILonI,  powRe34LonI, powCo34LonI},
+/*  2 Real16        */ {powLonIRe16, powRe16Re16, powCo16Re16, powError, powError, powError, powError, powRm16Re16, powCm16Re16, powShoIRe16,  powRe34Re16, powCo34Re16},
+/*  3 Complex16     */ {powLonICo16, powRe16Co16, powCo16Co16, powError, powError, powError, powError, powRm16Co16, powCm16Co16, powShoICo16,  powRe34Co16, powCo34Co16},
+/*  4 Angle16       */ {powError,    powError,    powError,    powError, powError, powError, powError, powError,    powError,    powError,     powError,    powError   },
+/*  5 Time          */ {powError,    powError,    powError,    powError, powError, powError, powError, powError,    powError,    powError,     powError,    powError   },
+/*  6 Date          */ {powError,    powError,    powError,    powError, powError, powError, powError, powError,    powError,    powError,     powError,    powError   },
+/*  7 String        */ {powError,    powError,    powError,    powError, powError, powError, powError, powError,    powError,    powError,     powError,    powError   },
+/*  8 Real16 mat    */ {powError,    powError,    powError,    powError, powError, powError, powError, powError,    powError,    powError,     powError,    powError   },
+/*  9 Complex16 mat */ {powError,    powError,    powError,    powError, powError, powError, powError, powError,    powError,    powError,     powError,    powError   },
+/* 10 Short integer */ {powLonIShoI, powRe16ShoI, powCo16ShoI, powError, powError, powError, powError, powRm16ShoI, powCm16ShoI, powShoIShoI,  powRe34ShoI, powCo34ShoI},
+/* 11 Real34        */ {powLonIRe34, powRe16Re34, powCo16Re34, powError, powError, powError, powError, powRm16Re34, powCm16Re34, powShoIRe34,  powRe34Re34, powCo34Re34},
+/* 12 Complex34     */ {powLonICo34, powRe16Co34, powCo16Co34, powError, powError, powError, powError, powRm16Co34, powCm16Co34, powShoICo34,  powRe34Co34, powCo34Co34}
 };
 
 
@@ -76,13 +75,6 @@ void fnPower(uint16_t unusedParamButMandatory) {
 }
 
 
-
-/**********************************************************************
- * In all the functions below:
- * if Y is a number then Y = a + ib
- * if X is a number then X = c + id
- * The variables a, b, c and d are used for intermediate calculations
- ***********************************************************************/
 
 /******************************************************************************************************************************************************************************************/
 /* long integer ^ ...                                                                                                                                                                     */
@@ -187,13 +179,14 @@ void powLonIRe16(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -215,24 +208,26 @@ void powRe16LonI(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -294,12 +289,12 @@ void powCo16LonI(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
@@ -311,7 +306,7 @@ void powCo16LonI(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -329,72 +324,6 @@ void powCo16LonI(void) {
 
   realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) ^ X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powLonIAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powLonIAn16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) ^ X(long integer) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16LonI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -584,13 +513,14 @@ void powLonIRe34(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -612,24 +542,26 @@ void powRe34LonI(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -691,12 +623,12 @@ void powCo34LonI(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -708,7 +640,7 @@ void powCo34LonI(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -726,72 +658,6 @@ void powCo34LonI(void) {
 
   realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) ^ X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powLonIAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powLonIAn34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) ^ X(long integer) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34LonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34LonI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -825,23 +691,25 @@ void powRe16Re16(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -871,12 +739,12 @@ void powRe16Co16(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
@@ -933,12 +801,12 @@ void powCo16Re16(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
@@ -950,7 +818,7 @@ void powCo16Re16(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -973,99 +841,6 @@ void powCo16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) ^ X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powRe16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe16An16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe16An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) ^ X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Re16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Re16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
  * \brief Y(real16) ^ X(64bits integer) ==> X(real16)
  *
  * \param void
@@ -1082,24 +857,26 @@ void powRe16ShoI(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -1119,13 +896,14 @@ void powShoIRe16(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -1155,23 +933,25 @@ void powRe16Re34(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -1201,24 +981,26 @@ void powRe34Re16(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -1248,12 +1030,12 @@ void powRe16Co34(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -1310,12 +1092,12 @@ void powCo34Re16(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -1327,7 +1109,7 @@ void powCo34Re16(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -1345,100 +1127,6 @@ void powCo34Re16(void) {
 
   realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) ^ X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powRe16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe16An34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe16An34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) ^ X(real16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34Re16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Re16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Re16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -1472,12 +1160,12 @@ void powCo16Co16(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
@@ -1512,132 +1200,6 @@ void powCo16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ^ X(angle16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powCo16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo16An16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo16An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, b, c, d;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-
-  // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  WP34S_Ln(&a, &a);
-
-  // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
-
-  // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) ^ X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Co16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Co16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c, d;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
-
-  // ln(a) --> a
-  WP34S_Ln(&a, &a);
-
-  // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
  * \brief Y(complex16) ^ X(64bits integer) ==> X(complex16)
  *
  * \param void
@@ -1654,12 +1216,12 @@ void powCo16ShoI(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
@@ -1671,7 +1233,7 @@ void powCo16ShoI(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
   convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -1758,12 +1320,12 @@ void powCo16Re34(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -1775,7 +1337,7 @@ void powCo16Re34(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -1822,12 +1384,12 @@ void powRe34Co16(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -1839,7 +1401,7 @@ void powRe34Co16(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
@@ -1885,12 +1447,12 @@ void powCo16Co34(void) {
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -1949,12 +1511,12 @@ void powCo34Co16(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -1967,7 +1529,7 @@ void powCo34Co16(void) {
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   realIcRectangularToPolar(&a, &b, &a, &theta);
   WP34S_Ln(&a, &a);
@@ -1985,566 +1547,6 @@ void powCo34Co16(void) {
 
   realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) ^ X(angle34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powCo16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo16An34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo16An34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, b, c, d;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  WP34S_Ln(&a, &a);
-
-  // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
-
-  // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) ^ X(complex16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34Co16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Co16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Co16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c, d;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  // ln(a) --> a
-  WP34S_Ln(&a, &a);
-
-  // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* angle16 ^ ...                                                                                                                                                                          */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(angle16) ^ X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16An16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) ^ X(64bits integer) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16ShoI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16ShoI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(64bits integer) ^ X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void powShoIAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powShoIAn16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) ^ X(real34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16Re34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Re34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Re34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) ^ X(angle16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powRe34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe34An16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe34An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) ^ X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16Co34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Co34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16Co34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c, d;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
-
-  // ln(a) --> a
-  WP34S_Ln(&a, &a);
-
-  // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) ^ X(angle16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powCo34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo34An16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo34An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, b, c, d;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  WP34S_Ln(&a, &a);
-
-  // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
-
-  // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) ^ X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16An34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn16An34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) ^ X(angle16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34An16:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -2618,26 +1620,6 @@ void powRm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ^ X(angle16) ==> X(real16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void powRm16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRm16An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
  * \brief Y(real16 matrix) ^ X(64bits integer) ==> X(real16 matrix)
  *
  * \param void
@@ -2680,26 +1662,6 @@ void powRm16Co34(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powRm16Co34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(real16 matrix) ^ X(angle34) ==> X(real16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void powRm16An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRm16An34:", "cannot use NaN as X input of ^", NULL, NULL);
     #endif
     return;
   }
@@ -2766,26 +1728,6 @@ void powCm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ^ X(angle16) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void powCm16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCm16An16:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
  * \brief Y(complex16 matrix) ^ X(64bits integer) ==> X(complex16 matrix)
  *
  * \param void
@@ -2837,26 +1779,6 @@ void powCm16Co34(void) {
 
 
 
-/********************************************//**
- * \brief Y(complex16 matrix) ^ X(angle34) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void powCm16An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCm16An34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
 /******************************************************************************************************************************************************************************************/
 /* short integer ^ ...                                                                                                                                                                    */
 /******************************************************************************************************************************************************************************************/
@@ -2889,13 +1811,14 @@ void powShoIRe34(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -2917,24 +1840,26 @@ void powRe34ShoI(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     return;
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -2996,12 +1921,12 @@ void powCo34ShoI(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -3013,7 +1938,7 @@ void powCo34ShoI(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -3031,72 +1956,6 @@ void powCo34ShoI(void) {
 
   realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(64bits integer) ^ X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powShoIAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powShoIAn34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) ^ X(64bits integer) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34ShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34ShoI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -3130,23 +1989,25 @@ void powRe34Re34(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcPower(&y, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -3176,12 +2037,12 @@ void powRe34Co34(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -3238,12 +2099,12 @@ void powCo34Re34(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -3255,7 +2116,7 @@ void powCo34Re34(void) {
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
   realIcRectangularToPolar(&a, &b, &a, &b);
@@ -3273,99 +2134,6 @@ void powCo34Re34(void) {
 
   realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) ^ X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powRe34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe34An34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRe34An34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) ^ X(real34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34Re34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Re34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Re34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  realIcPower(&a, &c, &c);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -3399,12 +2167,12 @@ void powCo34Co34(void) {
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -3434,182 +2202,4 @@ void powCo34Co34(void) {
 
   realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) ^ X(angle34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powCo34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo34An34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCo34An34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, b, c, d;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-
-  // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  WP34S_Ln(&a, &a);
-
-  // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
-
-  // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) ^ X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34Co34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Co34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34Co34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c, d;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
-
-  // ln(a) --> a
-  WP34S_Ln(&a, &a);
-
-  // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* angle34 + ...                                                                                                                                                                          */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(angle34) ^ X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void powAn34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34An34:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powAn34An34:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  realIcPower(&a, &c, &c);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }

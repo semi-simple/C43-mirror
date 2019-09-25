@@ -22,10 +22,10 @@
 
 
 
-void (* const cube[13])(void) = {
-// regX ==> 1            2         3         4         5          6          7          8          9           10            11        12        13
-//          Long integer Real16    Complex16 Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    complex34 Angle34
-            cubeLonI,    cubeRe16, cubeCo16, cubeAn16, cubeError, cubeError, cubeError, cubeRm16,  cubeCm16,   cubeShoI,     cubeRe34, cubeCo34, cubeAn34
+void (* const cube[12])(void) = {
+// regX ==> 1            2         3         4          5          6          7          8          9           10            11        12
+//          Long integer Real16    Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    complex34
+            cubeLonI,    cubeRe16, cubeCo16, cubeError, cubeError, cubeError, cubeError, cubeRm16,  cubeCm16,   cubeShoI,     cubeRe34, cubeCo34
 };
 
 
@@ -65,14 +65,14 @@ void fnCube(uint16_t unusedParamButMandatory) {
 
 
 void cubeLonI(void) {
-  longInteger_t lgInt, cube;
+  longInteger_t x, cube;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
   longIntegerInit(cube);
-  longIntegerMultiply(lgInt, lgInt, cube);
-  longIntegerMultiply(cube, lgInt, cube);
+  longIntegerMultiply(x, x, cube);
+  longIntegerMultiply(cube, x, cube);
   convertLongIntegerToLongIntegerRegister(cube, REGISTER_X);
-  longIntegerFree(lgInt);
+  longIntegerFree(x);
   longIntegerFree(cube);
 }
 
@@ -87,14 +87,15 @@ void cubeRe16(void) {
     return;
   }
 
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcMultiply(&a, &a, &aSquared);
-  realIcMultiply(&aSquared, &a, &a);
+  realIcMultiply(&x, &x, &xSquared);
+  realIcMultiply(&xSquared, &x, &x);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -138,28 +139,6 @@ void cubeCo16(void) {
 
 
 
-void cubeAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeAn16:", "cannot use NaN as X input of ^3", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, aSquared;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  realIcMultiply(&a, &a, &aSquared);
-  realIcMultiply(&aSquared, &a, &a);
-
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
 void cubeRm16(void) {
   fnToBeCoded();
 }
@@ -189,14 +168,15 @@ void cubeRe34(void) {
     return;
   }
 
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcMultiply(&a, &a, &aSquared);
-  realIcMultiply(&aSquared, &a, &a);
+  realIcMultiply(&x, &x, &xSquared);
+  realIcMultiply(&xSquared, &x, &x);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -237,25 +217,3 @@ void cubeCo34(void) {
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
-
-
-
-void cubeAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function cubeAn34:", "cannot use NaN as X input of ^3", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, aSquared;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  realIcMultiply(&a, &a, &aSquared);
-  realIcMultiply(&aSquared, &a, &a);
-
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
- }

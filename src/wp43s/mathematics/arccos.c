@@ -22,10 +22,10 @@
 
 
 
-void (* const arccos[13])(void) = {
-// regX ==> 1            2           3           4           5            6            7            8           9           10            11          12          13
-//          Long integer Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
-            arccosLonI,  arccosRe16, arccosCo16, arccosRe16, arccosError, arccosError, arccosError, arccosRm16, arccosCm16, arccosError,  arccosRe34, arccosCo34, arccosRe34
+void (* const arccos[12])(void) = {
+// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
+//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
+            arccosLonI,  arccosRe16, arccosCo16, arccosError, arccosError, arccosError, arccosError, arccosRm16, arccosCm16, arccosError,  arccosRe34, arccosCo34
 };
 
 
@@ -64,20 +64,14 @@ void fnArccos(uint16_t unusedParamButMandatory) {
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- ***********************************************************************/
-
 void arccosLonI(void) {
-  realIc_t a;
+  realIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  if(realIcCompareAbsGreaterThan(&a, const_1)) {
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  if(realIcCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccosCo34();
       convertRegister34To16(REGISTER_X);
@@ -92,14 +86,14 @@ void arccosLonI(void) {
     }
   }
 
-  reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, currentAngularMode);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
 
-  if(realIcIsZero(&a)) {
+  if(realIcIsZero(&x)) {
     realIcToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
     convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
   }
   else {
-    if(realIcIsNegative(&a)) {
+    if(realIcIsNegative(&x)) {
       realIcToReal16(const_1, REGISTER_REAL16_DATA(REGISTER_X));
       convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
     }
@@ -120,15 +114,15 @@ void arccosRe16(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
-  if(realIcCompareAbsGreaterThan(&a, const_1)) {
+  if(realIcCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccosCo34();
       convertRegister34To16(REGISTER_X);
@@ -142,9 +136,9 @@ void arccosRe16(void) {
       return;
     }
   }
-  WP34S_Acos(&a, &a);
-  convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  WP34S_Acos(&x, &x);
+  convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 
   if(currentAngularMode == AM_DMS) {
     checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
@@ -224,15 +218,15 @@ void arccosRe34(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
-  if(realIcCompareAbsGreaterThan(&a, const_1)) {
+  if(realIcCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccosCo34();
       return;
@@ -245,9 +239,9 @@ void arccosRe34(void) {
       return;
     }
   }
-  WP34S_Acos(&a, &a);
-  convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  WP34S_Acos(&x, &x);
+  convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 
   if(currentAngularMode == AM_DMS) {
     checkDms34(REGISTER_REAL34_DATA(REGISTER_X));

@@ -22,10 +22,10 @@
 
 
 
-void (* const Sin[13])(void) = {
-// regX ==> 1            2        3         4        5         6         7         8          9           10            11       12        13
-//          Long integer Real16   Complex16 Angle16  Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34 Angle16
-            sinLonI,     sinRe16, sinCo16,  sinAn16, sinError, sinError, sinError, sinRm16,   sinCm16,    sinError,     sinRe34, sinCo34,  sinAn34
+void (* const Sin[12])(void) = {
+// regX ==> 1            2        3         4         5         6         7         8          9           10            11       12
+//          Long integer Real16   Complex16 Angle16   Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34
+            sinLonI,     sinRe16, sinCo16,  sinError, sinError, sinError, sinError, sinRm16,   sinCm16,    sinError,     sinRe34, sinCo34
 };
 
 
@@ -78,13 +78,13 @@ void sinCoIc(const complexIc_t *z, complexIc_t *res) {
 
 
 void sinLonI(void) {
-  realIc_t sin;
+  realIc_t x;
 
-  longIntegerAngleReduction(REGISTER_X, currentAngularMode, &sin);
-  WP34S_Cvt2RadSinCosTan(&sin, currentAngularMode, &sin, NULL, NULL);
+  longIntegerAngleReduction(REGISTER_X, currentAngularMode, &x);
+  WP34S_Cvt2RadSinCosTan(&x, currentAngularMode, &x, NULL, NULL);
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&sin, REGISTER_REAL16_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -102,12 +102,15 @@ void sinRe16(void) {
     realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    realIc_t a;
+    realIc_t x;
+    uint32_t xAngularMode;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_Cvt2RadSinCosTan(&a, currentAngularMode, &a, NULL, NULL);
-    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+    xAngularMode = getRegisterAngularMode(REGISTER_X);
+    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &x, NULL, NULL);
+    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -130,31 +133,6 @@ void sinCo16(void) {
 
   realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void sinAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sinAn16:", "cannot use NaN as X input of sin", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    realIc_t a;
-
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_Cvt2RadSinCosTan(&a, getRegisterAngularMode(REGISTER_X), &a, NULL, NULL);
-    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
 }
 
 
@@ -184,12 +162,15 @@ void sinRe34(void) {
     realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realIc_t a;
+    realIc_t x;
+    uint32_t xAngularMode;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_Cvt2RadSinCosTan(&a, currentAngularMode, &a, NULL, NULL);
-    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    xAngularMode = getRegisterAngularMode(REGISTER_X);
+    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &x, NULL, NULL);
+    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -212,29 +193,4 @@ void sinCo34(void) {
 
   realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void sinAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sinAn34:", "cannot use NaN as X input of sin", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
-    realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    realIc_t a;
-
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_Cvt2RadSinCosTan(&a, getRegisterAngularMode(REGISTER_X), &a, NULL, NULL);
-    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }

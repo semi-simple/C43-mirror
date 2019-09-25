@@ -22,10 +22,10 @@
 
 
 
-void (* const arctanh[13])(void) = {
-// regX ==> 1             2            3            4             5            6             7             8            9            10             11           12           13
-//          Long integer  Real16       Complex16    Angle16      Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34    Angle34
-            arctanhLonI,  arctanhRe16, arctanhCo16, arctanhRe16, arctanhError, arctanhError, arctanhError, arctanhRm16, arctanhCm16, arctanhError,  arctanhRe34, arctanhCo34, arctanhRe34
+void (* const arctanh[12])(void) = {
+// regX ==> 1             2            3            4             5             6             7             8            9            10             11           12
+//          Long integer  Real16       Complex16    Angle16       Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34
+            arctanhLonI,  arctanhRe16, arctanhCo16, arctanhError, arctanhError, arctanhError, arctanhError, arctanhRm16, arctanhCm16, arctanhError,  arctanhRe34, arctanhCo34
 };
 
 
@@ -64,25 +64,19 @@ void fnArctanh(uint16_t unusedParamButMandatory) {
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- ***********************************************************************/
-
 void arctanhLonI(void) {
-  realIc_t a;
+  realIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
 
-  if(realIcIsZero(&a)) {
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  if(realIcIsZero(&x)) {
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    if(realIcCompareEqual(&a, const_1)) {
+    if(realIcCompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
-        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
         realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
@@ -92,9 +86,9 @@ void arctanhLonI(void) {
         #endif
        }
     }
-    else if(realIcCompareEqual(&a, const__1)) {
+    else if(realIcCompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
-        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
         realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
@@ -106,8 +100,8 @@ void arctanhLonI(void) {
     }
     else {
       if(getFlag(FLAG_CPXRES)) {
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-        realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
         real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
         arctanhCo34();
         convertRegister34To16(REGISTER_X);
@@ -133,18 +127,16 @@ void arctanhRe16(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  if(realIcIsZero(&a)) {
-    setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  if(realIcIsZero(&x)) {
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    if(realIcCompareEqual(&a, const_1)) {
+    if(realIcCompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
-        setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
         realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
@@ -154,9 +146,8 @@ void arctanhRe16(void) {
         #endif
        }
     }
-    else if(realIcCompareEqual(&a, const__1)) {
+    else if(realIcCompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
-        setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
         realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
@@ -167,10 +158,10 @@ void arctanhRe16(void) {
        }
     }
     else {
-      if(realIcCompareAbsGreaterThan(&a, const_1)) {
+      if(realIcCompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
-          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-          realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+          realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
           real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
           arctanhCo34();
           convertRegister34To16(REGISTER_X);
@@ -183,12 +174,12 @@ void arctanhRe16(void) {
         }
       }
       else {
-        setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-        WP34S_ArcTanh(&a, &a);
-        realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+        WP34S_ArcTanh(&x, &x);
+        realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       }
     }
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -256,19 +247,16 @@ void arctanhRe34(void) {
     return;
   }
 
+  realIc_t x;
 
-  realIc_t a;
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-
-  if(realIcIsZero(&a)) {
-    setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+  if(realIcIsZero(&x)) {
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(realIcCompareEqual(&a, const_1)) {
+    if(realIcCompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
-        setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
         realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
@@ -278,9 +266,8 @@ void arctanhRe34(void) {
         #endif
        }
     }
-    else if(realIcCompareEqual(&a, const__1)) {
+    else if(realIcCompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
-        setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
         realIcToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
@@ -291,10 +278,10 @@ void arctanhRe34(void) {
        }
     }
     else {
-      if(realIcCompareAbsGreaterThan(&a, const_1)) {
+      if(realIcCompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
-          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-          realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+          realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
           real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
           arctanhCo34();
         }
@@ -306,12 +293,12 @@ void arctanhRe34(void) {
         }
       }
       else {
-        setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-        WP34S_ArcTanh(&a, &a);
-        realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+        WP34S_ArcTanh(&x, &x);
+        realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 

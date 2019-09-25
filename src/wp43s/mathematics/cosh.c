@@ -22,10 +22,10 @@
 
 
 
-void (* const Cosh[13])(void) = {
-// regX ==> 1             2         3          4         5          6          7          8           9            10             11        12         13
-//          Long integer  Real16    Complex16  Angle16   Time       Date       String     Real16 mat  Complex16 m  Short integer  Real34    Complex34  Angle34
-            coshLonI,     coshRe16, coshCo16,  coshAn16, coshError, coshError, coshError, coshRm16,   coshCm16,    coshError,     coshRe34, coshCo34,  coshAn34
+void (* const Cosh[12])(void) = {
+// regX ==> 1             2         3          4          5          6          7          8           9            10             11        12
+//          Long integer  Real16    Complex16  Angle16    Time       Date       String     Real16 mat  Complex16 m  Short integer  Real34    Complex34
+            coshLonI,     coshRe16, coshCo16,  coshError, coshError, coshError, coshError, coshRm16,   coshCm16,    coshError,     coshRe34, coshCo34
 };
 
 
@@ -70,7 +70,7 @@ void coshLonI(void) {
   convertLongIntegerRegisterToRealIc(REGISTER_X, &cosh);
   WP34S_SinhCosh(&cosh, NULL, &cosh);
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
   realIcToReal16(&cosh, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -90,6 +90,7 @@ void coshRe16(void) {
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
   WP34S_SinhCosh(&a, NULL, &a);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -104,38 +105,19 @@ void coshCo16(void) {
   }
 
   // cosh(a + i b) = cosh(a) cos(b) + i sinh(a) sin(b)
-  realIc_t a, b, sha, cha, sb, cb;
+  realIc_t a, b, sinha, cosha, sinb, cosb;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
- 	WP34S_SinhCosh(&a, &sha, &cha);
- 	WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sb, &cb, NULL);
+ 	WP34S_SinhCosh(&a, &sinha, &cosha);
+ 	WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sinb, &cosb, NULL);
 
- 	realIcMultiply(&cha, &cb, &a);
- 	realIcMultiply(&sha, &sb, &b);
+ 	realIcMultiply(&cosha, &cosb, &a);
+ 	realIcMultiply(&sinha, &sinb, &b);
 
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void coshAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshAn16:", "cannot use NaN as X input of cosh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  WP34S_SinhCosh(&a, NULL, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -161,11 +143,12 @@ void coshRe34(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  WP34S_SinhCosh(&a, NULL, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  WP34S_SinhCosh(&x, NULL, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -180,36 +163,17 @@ void coshCo34(void) {
   }
 
   // cosh(a + i b) = cosh(a) cos(b) + i sinh(a) sin(b)
-  realIc_t a, b, sha, cha, sb, cb;
+  realIc_t a, b, sinha, cosha, sinb, cosb;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
- 	WP34S_SinhCosh(&a, &sha, &cha);
- 	WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sb, &cb, NULL);
+ 	WP34S_SinhCosh(&a, &sinha, &cosha);
+ 	WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sinb, &cosb, NULL);
 
- 	realIcMultiply(&cha, &cb, &a);
- 	realIcMultiply(&sha, &sb, &b);
+ 	realIcMultiply(&cosha, &cosb, &a);
+ 	realIcMultiply(&sinha, &sinb, &b);
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void coshAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshAn34:", "cannot use NaN as X input of cosh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  WP34S_SinhCosh(&a, NULL, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

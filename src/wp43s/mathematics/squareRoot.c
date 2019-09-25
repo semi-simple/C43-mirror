@@ -22,10 +22,10 @@
 
 
 
-void (* const Sqrt[13])(void) = {
-// regX ==> 1            2         3         4         5          6          7          8          9           10            11        12        13
-//          Long integer Real16    Complex16 Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34 Angle34
-            sqrtLonI,    sqrtRe16, sqrtCo16, sqrtAn16, sqrtError, sqrtError, sqrtError, sqrtRm16,  sqrtCm16,   sqrtShoI,     sqrtRe34, sqrtCo34, sqrtAn34
+void (* const Sqrt[12])(void) = {
+// regX ==> 1            2         3         4          5          6          7          8          9           10            11        12
+//          Long integer Real16    Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
+            sqrtLonI,    sqrtRe16, sqrtCo16, sqrtError, sqrtError, sqrtError, sqrtError, sqrtRm16,  sqrtCm16,   sqrtShoI,     sqrtRe34, sqrtCo34
 };
 
 
@@ -79,7 +79,7 @@ void sqrtLonI(void) {
 
       convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
       realIcSquareRoot(&a, &a);
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
     }
   }
@@ -87,7 +87,7 @@ void sqrtLonI(void) {
     realIc_t a;
 
     convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
     realIcSetPositiveSign(&a);
     realIcSquareRoot(&a, &a);
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
@@ -122,9 +122,10 @@ void sqrtRe16(void) {
   if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
     realIcSquareRoot(&a, &a);
     realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
     realIcSetPositiveSign(&a);
     realIcSquareRoot(&a, &a);
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
@@ -166,42 +167,6 @@ void sqrtCo16(void) {
 
 
 
-void sqrtAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtAn16:", "cannot use NaN as X input of sqrt", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-
-  if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-    realIcSquareRoot(&a, &a);
-    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-    realIcSetPositiveSign(&a);
-    realIcSquareRoot(&a, &a);
-    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-    realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-  else {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function sqrtAn16:", errorMessage, NULL, NULL);
-    #endif
-  }
-}
-
-
-
 void sqrtRm16(void) {
   fnToBeCoded();
 }
@@ -236,9 +201,10 @@ void sqrtRe34(void) {
   if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
     realIcSquareRoot(&a, &a);
     realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
     realIcSetPositiveSign(&a);
     realIcSquareRoot(&a, &a);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
@@ -276,40 +242,4 @@ void sqrtCo34(void) {
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void sqrtAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtAn34:", "cannot use NaN as X input of sqrt", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-
-  if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-    realIcSquareRoot(&a, &a);
-    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-    realIcSetPositiveSign(&a);
-    realIcSquareRoot(&a, &a);
-    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-    realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
-  }
-  else {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function sqrtAn34:", errorMessage, NULL, NULL);
-    #endif
-  }
 }

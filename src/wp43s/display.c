@@ -311,12 +311,18 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
 
 
 
-void realToDisplayString(const void *real, bool_t real34, uint32_t tag, char *displayString, const font_t *font, int16_t maxWidth) {
+void real16ToDisplayString(const real16_t *real16, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
   displayHasNDigits = 16;
 
-  realToDisplayString2(real, real34, displayString);
+  if(angulaMode == AM_NONE) {
+    realToDisplayString2(real16, false, displayString);
+  }
+  else {
+    angle16ToDisplayString2(real16, angulaMode, displayString);
+  }
+
   while(stringWidth(displayString, font, true, true) > maxWidth) {
     if(displayFormat == DF_ALL) {
       if(displayHasNDigits == 2) {
@@ -331,7 +337,45 @@ void realToDisplayString(const void *real, bool_t real34, uint32_t tag, char *di
       displayFormatDigits--;
     }
 
-    realToDisplayString2(real, real34, displayString);
+    if(angulaMode == AM_NONE) {
+      realToDisplayString2(real16, false, displayString);
+    }
+    else {
+      angle16ToDisplayString2(real16, angulaMode, displayString);
+    }
+  }
+  displayFormatDigits = savedDisplayFormatDigits;
+}
+
+
+
+void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth) {
+  uint8_t savedDisplayFormatDigits = displayFormatDigits;
+
+  displayHasNDigits = 16;
+
+  if(angulaMode == AM_NONE) {
+    realToDisplayString2(real34, true, displayString);
+  }
+  else {
+    angle34ToDisplayString2(real34, angulaMode, displayString);
+  }
+
+  while(stringWidth(displayString, font, true, true) > maxWidth) {
+    if(displayFormat == DF_ALL) {
+      if(displayHasNDigits == 2) {
+        break;
+      }
+      displayHasNDigits--;
+    }
+    else {
+      if(displayFormatDigits == 0) {
+        break;
+      }
+      displayFormatDigits--;
+    }
+
+    realToDisplayString2(real34, true, displayString);
   }
   displayFormatDigits = savedDisplayFormatDigits;
 }
@@ -837,12 +881,12 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
 
 
 
-void complexToDisplayString(const void *complex, bool_t complex34, char *displayString, const font_t *font, int16_t maxWidth) {
+void complex16ToDisplayString(const complex16_t *complex16, char *displayString, const font_t *font, int16_t maxWidth) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
   displayHasNDigits = 16;
 
-  complexToDisplayString2(complex, complex34, displayString);
+  complex16ToDisplayString2(complex16, displayString);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
     if(displayFormat == DF_ALL) {
       if(displayHasNDigits == 2) {
@@ -856,44 +900,58 @@ void complexToDisplayString(const void *complex, bool_t complex34, char *display
       }
       displayFormatDigits--;
     }
-    complexToDisplayString2(complex, complex34, displayString);
+    complex16ToDisplayString2(complex16, displayString);
   }
   displayFormatDigits = savedDisplayFormatDigits;
 }
 
 
 
-void complexToDisplayString2(const void *complex, bool_t complex34, char *displayString) {
+void complex34ToDisplayString(const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth) {
+  uint8_t savedDisplayFormatDigits = displayFormatDigits;
+
+  displayHasNDigits = 16;
+
+  complex34ToDisplayString2(complex34, displayString);
+  while(stringWidth(displayString, font, true, true) > maxWidth) {
+    if(displayFormat == DF_ALL) {
+      if(displayHasNDigits == 2) {
+        break;
+      }
+      displayHasNDigits--;
+    }
+    else {
+      if(displayFormatDigits == 0) {
+        break;
+      }
+      displayFormatDigits--;
+    }
+    complex34ToDisplayString2(complex34, displayString);
+  }
+  displayFormatDigits = savedDisplayFormatDigits;
+}
+
+
+
+void complex16ToDisplayString2(const complex16_t *complex16, char *displayString) {
   int16_t i=100;
   real34_t real, imag;
 
   if(complexMode == CM_RECTANGULAR) {
-    if(complex34) {
-      real34Copy(VARIABLE_REAL34_DATA(complex), &real);
-      real34Copy(VARIABLE_IMAG34_DATA(complex), &imag);
-    }
-    else {
-      real16Copy(VARIABLE_REAL16_DATA(complex), &real);
-      real16Copy(VARIABLE_IMAG16_DATA(complex), &imag);
-    }
+    real16Copy(VARIABLE_REAL16_DATA(complex16), &real);
+    real16Copy(VARIABLE_IMAG16_DATA(complex16), &imag);
   }
   else if(complexMode == CM_POLAR) {
-    if(complex34) {
-      real34RectangularToPolar(VARIABLE_REAL34_DATA(complex), VARIABLE_IMAG34_DATA(complex), &real, &imag); // imag in radian
-      convertAngle34FromTo(&imag, AM_RADIAN, currentAngularMode);
-    }
-    else {
-      real16RectangularToPolar(VARIABLE_REAL16_DATA(complex), VARIABLE_IMAG16_DATA(complex), (real16_t *)&real, (real16_t *)&imag); // imag16 in radian
-      convertAngle16FromTo((real16_t *)&imag, AM_RADIAN, currentAngularMode);
-    }
+    real16RectangularToPolar(VARIABLE_REAL16_DATA(complex16), VARIABLE_IMAG16_DATA(complex16), (real16_t *)&real, (real16_t *)&imag); // imag16 in radian
+    convertAngle16FromTo((real16_t *)&imag, AM_RADIAN, currentAngularMode);
   }
   else {
     sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
     displayBugScreen(errorMessage);
   }
 
-  realToDisplayString2(&real, complex34, displayString);
-  realToDisplayString2(&imag, complex34, displayString + i);
+  realToDisplayString2(&real, false, displayString);
+  realToDisplayString2(&imag, false, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
     if(strncmp(displayString + stringByteLength(displayString) - 2, NUM_SPACE_HAIR, 2) != 0) {
@@ -914,12 +972,52 @@ void complexToDisplayString2(const void *complex, bool_t complex34, char *displa
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    if(complex34) {
-      angle34ToDisplayString2(&imag, currentAngularMode, displayString + stringByteLength(displayString));
+    angle16ToDisplayString2((real16_t *)&imag, currentAngularMode, displayString + stringByteLength(displayString));
+  }
+}
+
+
+
+void complex34ToDisplayString2(const complex34_t *complex34, char *displayString) {
+  int16_t i=100;
+  real34_t real, imag;
+
+  if(complexMode == CM_RECTANGULAR) {
+    real34Copy(VARIABLE_REAL34_DATA(complex34), &real);
+    real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag);
+  }
+  else if(complexMode == CM_POLAR) {
+    real34RectangularToPolar(VARIABLE_REAL34_DATA(complex34), VARIABLE_IMAG34_DATA(complex34), &real, &imag); // imag in radian
+    convertAngle34FromTo(&imag, AM_RADIAN, currentAngularMode);
+  }
+  else {
+    sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
+    displayBugScreen(errorMessage);
+  }
+
+  realToDisplayString2(&real, true, displayString);
+  realToDisplayString2(&imag, true, displayString + i);
+
+  if(complexMode == CM_RECTANGULAR) {
+    if(strncmp(displayString + stringByteLength(displayString) - 2, NUM_SPACE_HAIR, 2) != 0) {
+      strcat(displayString, NUM_SPACE_HAIR);
+    }
+
+    if(displayString[i] == '-') {
+      strcat(displayString, "-");
+      i++;
     }
     else {
-      angle16ToDisplayString2((real16_t *)&imag, currentAngularMode, displayString + stringByteLength(displayString));
+      strcat(displayString, "+");
     }
+
+    strcat(displayString, COMPLEX_UNIT);
+    strcat(displayString, PRODUCT_SIGN);
+    memmove(strchr(displayString, '\0'), displayString + i, strlen(displayString + i) + 1);
+  }
+  else { // POLAR
+    strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
+    angle34ToDisplayString2(&imag, currentAngularMode, displayString + stringByteLength(displayString));
   }
 }
 
@@ -1068,32 +1166,6 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 
-void angle16ToDisplayString(const real16_t *angle16, uint8_t mode, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits = displayFormatDigits;
-
-  displayHasNDigits = 16;
-
-  angle16ToDisplayString2(angle16, mode, displayString);
-  while(stringWidth(displayString, font, true, true) > maxWidth) {
-    if(displayFormat == DF_ALL) {
-      if(displayHasNDigits == 2) {
-        break;
-      }
-      displayHasNDigits--;
-    }
-    else {
-      if(displayFormatDigits == 0) {
-        break;
-      }
-      displayFormatDigits--;
-    }
-    angle16ToDisplayString2(angle16, mode, displayString);
-  }
-  displayFormatDigits = savedDisplayFormatDigits;
-}
-
-
-
 void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displayString) {
   if(mode == AM_DMS) {
     char degStr[27];
@@ -1167,36 +1239,10 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     else if(mode == AM_RADIAN) strcat(displayString, STD_SUP_r);
     else {
       strcat(displayString, "?");
-      sprintf(errorMessage, "In function angle16ToDisplayString: %" FMT8U " is an unexpected value for mode!", mode);
+      sprintf(errorMessage, "In function realToDisplayString2: %" FMT8U " is an unexpected value for mode!", mode);
       displayBugScreen(errorMessage);
     }
   }
-}
-
-
-
-void angle34ToDisplayString(const real34_t *angle34, uint8_t mode, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits = displayFormatDigits;
-
-  displayHasNDigits = 16;
-
-  angle34ToDisplayString2(angle34, mode, displayString);
-  while(stringWidth(displayString, font, true, true) > maxWidth) {
-    if(displayFormat == DF_ALL) {
-      if(displayHasNDigits == 2) {
-        break;
-      }
-      displayHasNDigits--;
-    }
-    else {
-      if(displayFormatDigits == 0) {
-        break;
-      }
-      displayFormatDigits--;
-    }
-    angle34ToDisplayString2(angle34, mode, displayString);
-  }
-  displayFormatDigits = savedDisplayFormatDigits;
 }
 
 
@@ -1275,7 +1321,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     else if(mode == AM_RADIAN) strcat(displayString, STD_SUP_r);
     else {
       strcat(displayString, "?");
-      sprintf(errorMessage, "In function angle34ToDisplayString: %" FMT8U " is an unexpected value for mode!", mode);
+      sprintf(errorMessage, "In function angle34ToDisplayString2: %" FMT8U " is an unexpected value for mode!", mode);
       displayBugScreen(errorMessage);
     }
   }
@@ -1637,7 +1683,7 @@ void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLg)
   }
 
   if(strLg < stringLg) {
-    printf("In function longIntegerToAllocatedString: the string str (%d bytes) is too small to hold the base 10 representation of lgInt, %d are needed!\n", strLg, stringLg);
+    printf("In function longIntegerToAllocatedString: the string str (%" FMT32S " bytes) is too small to hold the base 10 representation of lgInt, %" FMT32S " are needed!\n", strLg, stringLg);
     return;
   }
 
@@ -1655,8 +1701,8 @@ void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLg)
     counter--;
   }
 
-  if(counter == 1) { // digit is 1 too big
-    memmove(str+stringLg, str+stringLg+1, digits);
+  if(counter == 1) { // digit was 1 too big
+    memmove(str + stringLg, str + stringLg + 1, digits);
   }
 
   longIntegerFree(x);

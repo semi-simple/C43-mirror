@@ -22,10 +22,10 @@
 
 
 
-void (* const Tanh[13])(void) = {
-// regX ==> 1             2         3          4         5          6          7          8           9            10             11        12         13
-//          Long integer  Real16    Complex16  Angle16   Time       Date       String     Real16 mat  Complex16 m  Short integer  Real34    Complex34  Angle34
-            tanhLonI,     tanhRe16, tanhCo16,  tanhAn16, tanhError, tanhError, tanhError, tanhRm16,   tanhCm16,    tanhError,     tanhRe34, tanhCo34,  tanhAn34
+void (* const Tanh[12])(void) = {
+// regX ==> 1             2         3          4          5          6          7          8           9            10             11        12
+//          Long integer  Real16    Complex16  Angle16    Time       Date       String     Real16 mat  Complex16 m  Short integer  Real34    Complex34
+            tanhLonI,     tanhRe16, tanhCo16,  tanhError, tanhError, tanhError, tanhError, tanhRm16,   tanhCm16,    tanhError,     tanhRe34, tanhCo34
 };
 
 
@@ -65,13 +65,13 @@ void fnTanh(uint16_t unusedParamButMandatory) {
 
 
 void tanhLonI(void) {
-  realIc_t tanh;
+  realIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &tanh);
-  WP34S_Tanh(&tanh, &tanh);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  WP34S_Tanh(&x, &x);
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&tanh, REGISTER_REAL16_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -85,11 +85,12 @@ void tanhRe16(void) {
     return;
   }
 
-  realIc_t tanh;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tanh);
-  WP34S_Tanh(&tanh, &tanh);
-  realIcToReal16(&tanh, REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  WP34S_Tanh(&x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -104,7 +105,7 @@ void tanhCo16(void) {
   }
 
   // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
-  realIc_t a, b, sa, ca;
+  realIc_t a, b, sina, cosa;
   complexIc_t numer, denom;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
@@ -116,7 +117,7 @@ void tanhCo16(void) {
   }
   else {
     WP34S_Tanh(&a, &numer.real);
-    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sa, &ca, &numer.imag);
+    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numer.imag);
 
     realIcCopy(const_1, &denom.real);
     realIcMultiply(&numer.real, &numer.imag, &denom.imag);
@@ -126,25 +127,6 @@ void tanhCo16(void) {
 
   realIcToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void tanhAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tanhAn16:", "cannot use NaN as an input of tanh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t tanh;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tanh);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  WP34S_Tanh(&tanh, &tanh);
-  realIcToReal16(&tanh, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -170,11 +152,12 @@ void tanhRe34(void) {
     return;
   }
 
-  realIc_t tanh;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tanh);
-  WP34S_Tanh(&tanh, &tanh);
-  realIcToReal34(&tanh, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  WP34S_Tanh(&x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -189,7 +172,7 @@ void tanhCo34(void) {
   }
 
   // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
-  realIc_t a, b, sa, ca;
+  realIc_t a, b, sina, cosa;
   complexIc_t numer, denom;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
@@ -201,7 +184,7 @@ void tanhCo34(void) {
   }
   else {
     WP34S_Tanh(&a, &numer.real);
-    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sa, &ca, &numer.imag);
+    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numer.imag);
 
     realIcCopy(const_1, &denom.real);
     realIcMultiply(&numer.real, &numer.imag, &denom.imag);
@@ -211,23 +194,4 @@ void tanhCo34(void) {
 
   realIcToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void tanhAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tanhAn34:", "cannot use NaN as an input of tanh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t tanh;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tanh);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  WP34S_Tanh(&tanh, &tanh);
-  realIcToReal34(&tanh, REGISTER_REAL34_DATA(REGISTER_X));
 }

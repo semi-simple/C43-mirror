@@ -22,10 +22,10 @@
 
 
 
-void (* const Curt[13])(void) = {
-// regX ==> 1            2         3         4         5          6          7          8          9           10            11        12        13
-//          Long integer Real16    Complex16 Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34 Angle34
-            curtLonI,    curtRe16, curtCo16, curtAn16, curtError, curtError, curtError, curtRm16,  curtCm16,   curtShoI,     curtRe34, curtCo34, curtAn34
+void (* const Curt[12])(void) = {
+// regX ==> 1            2         3         4          5          6          7          8          9           10            11        12
+//          Long integer Real16    Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
+            curtLonI,    curtRe16, curtCo16, curtError, curtError, curtError, curtError, curtRm16,  curtCm16,   curtShoI,     curtRe34, curtCo34
 };
 
 
@@ -73,12 +73,12 @@ void curtLonI(void) {
     convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
   }
   else {
-    realIc_t a;
+    realIc_t x;
 
-    convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-    realIcPower(&a, const_1on3, &a);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+    realIcPower(&x, const_1on3, &x);
+    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
   longIntegerFree(value);
@@ -95,19 +95,20 @@ void curtRe16(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  if(realIcIsPositive(&a)) {
-    realIcPower(&a, const_1on3, &a);
+  if(realIcIsPositive(&x)) {
+    realIcPower(&x, const_1on3, &x);
   }
   else {
-    realIcSetPositiveSign(&a);
-    realIcPower(&a, const_1on3, &a);
-    realIcSetNegativeSign(&a);
+    realIcSetPositiveSign(&x);
+    realIcPower(&x, const_1on3, &x);
+    realIcSetNegativeSign(&x);
   }
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -137,33 +138,6 @@ void curtCo16(void) {
 
 
 
-void curtAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function curtAn16:", "cannot use NaN as X input of curt", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  if(realIcIsPositive(&a)) {
-    realIcPower(&a, const_1on3, &a);
-  }
-  else {
-    realIcSetPositiveSign(&a);
-    realIcPower(&a, const_1on3, &a);
-    realIcSetNegativeSign(&a);
-  }
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
 void curtRm16(void) {
   fnToBeCoded();
 }
@@ -177,22 +151,22 @@ void curtCm16(void) {
 
 
 void curtShoI(void) {
-  realIc_t a;
+  realIc_t x;
   int32_t cubeRoot;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &a);
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
 
-  if(realIcIsPositive(&a)) {
-    realIcPower(&a, const_1on3, &a);
+  if(realIcIsPositive(&x)) {
+    realIcPower(&x, const_1on3, &x);
   }
   else {
-    realIcSetPositiveSign(&a);
-    realIcPower(&a, const_1on3, &a);
-    realIcSetNegativeSign(&a);
+    realIcSetPositiveSign(&x);
+    realIcPower(&x, const_1on3, &x);
+    realIcSetNegativeSign(&x);
   }
 
-  realIcToIntegralValue(&a, &a); // TODO: doesn't work without this line
-  realIcToInt32(&a, cubeRoot);
+  realIcToIntegralValue(&x, &x); // TODO: doesn't work without this line
+  realIcToInt32(&x, cubeRoot);
 
   if(cubeRoot >= 0) {
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_build_value((int64_t)cubeRoot, 0);
@@ -213,19 +187,20 @@ void curtRe34(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  if(realIcIsPositive(&a)) {
-    realIcPower(&a, const_1on3, &a);
+  if(realIcIsPositive(&x)) {
+    realIcPower(&x, const_1on3, &x);
   }
   else {
-    realIcSetPositiveSign(&a);
-    realIcPower(&a, const_1on3, &a);
-    realIcSetNegativeSign(&a);
+    realIcSetPositiveSign(&x);
+    realIcPower(&x, const_1on3, &x);
+    realIcSetNegativeSign(&x);
   }
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -251,31 +226,4 @@ void curtCo34(void) {
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void curtAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function curtAn34:", "cannot use NaN as X input of curt", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  if(realIcIsPositive(&a)) {
-    realIcPower(&a, const_1on3, &a);
-  }
-  else {
-    realIcSetPositiveSign(&a);
-    realIcPower(&a, const_1on3, &a);
-    realIcSetNegativeSign(&a);
-  }
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

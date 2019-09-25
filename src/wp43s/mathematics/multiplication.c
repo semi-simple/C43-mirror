@@ -22,22 +22,21 @@
 
 
 
-void (* const multiplication[13][13])(void) = {
-// regX |    regY ==>   1            2            3            4            5            6            7            8            9            10            11           12           34
-//      V               Long integer Real16       Complex16    Angle16      Time         Date         String       Real16 mat   Complex16 m  Short integer Real34       Complex34    Angle34
-/*  1 Long integer  */ {mulLonILonI, mulRe16LonI, mulCo16LonI, mulAn16LonI, mulTimeLonI, mulError,    mulError,    mulRm16LonI, mulCm16LonI, mulShoILonI,  mulRe34LonI, mulCo34LonI, mulAn34LonI},
-/*  2 Real16        */ {mulLonIRe16, mulRe16Re16, mulCo16Re16, mulAn16Re16, mulTimeRe16, mulError,    mulError,    mulRm16Re16, mulCm16Re16, mulShoIRe16,  mulRe34Re16, mulCo34Re16, mulAn34Re16},
-/*  3 Complex16     */ {mulLonICo16, mulRe16Co16, mulCo16Co16, mulAn16Co16, mulError,    mulError,    mulError,    mulRm16Co16, mulCm16Co16, mulShoICo16,  mulRe34Co16, mulCo34Co16, mulAn34Co16},
-/*  4 Angle16       */ {mulLonIAn16, mulRe16An16, mulCo16An16, mulAn16An16, mulTimeAn16, mulError,    mulError,    mulRm16An16, mulCm16An16, mulShoIAn16,  mulRe34An16, mulCo34An16, mulAn34An16},
-/*  5 Time          */ {mulLonITime, mulRe16Time, mulError,    mulAn16Time, mulError,    mulError,    mulError,    mulError,    mulError,    mulShoITime,  mulRe34Time, mulError,    mulError   },
-/*  6 Date          */ {mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,     mulError,    mulError,    mulError   },
-/*  7 String        */ {mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,    mulError,     mulError,    mulError,    mulError   },
-/*  8 Real16 mat    */ {mulLonIRm16, mulRe16Rm16, mulCo16Rm16, mulAn16Rm16, mulError,    mulError,    mulError,    mulRm16Rm16, mulCm16Rm16, mulShoIRm16,  mulRe34Rm16, mulCo34Rm16, mulAn34Rm16},
-/*  9 Complex16 mat */ {mulLonICm16, mulRe16Cm16, mulCo16Cm16, mulAn16Cm16, mulError,    mulError,    mulError,    mulRm16Cm16, mulCm16Cm16, mulShoICm16,  mulRe34Cm16, mulCo34Cm16, mulAn34Cm16},
-/* 10 Short integer */ {mulLonIShoI, mulRe16ShoI, mulCo16ShoI, mulAn16ShoI, mulTimeShoI, mulError,    mulError,    mulRm16ShoI, mulCm16ShoI, mulShoIShoI,  mulRe34ShoI, mulCo34ShoI, mulAn34ShoI},
-/* 11 Real34        */ {mulLonIRe34, mulRe16Re34, mulCo16Re34, mulAn16Re34, mulTimeRe34, mulError,    mulError,    mulRm16Re34, mulCm16Re34, mulShoIRe34,  mulRe34Re34, mulCo34Re34, mulAn34Re34},
-/* 12 Complex34     */ {mulLonICo34, mulRe16Co34, mulCo16Co34, mulAn16Co34, mulError,    mulError,    mulError,    mulRm16Co34, mulCm16Co34, mulShoICo34,  mulRe34Co34, mulCo34Co34, mulAn34Co34},
-/* 13 Angle34       */ {mulLonIAn34, mulRe16An34, mulCo16An34, mulAn16An34, mulTimeAn34, mulError,    mulError,    mulRm16An34, mulCm16An34, mulShoIAn34,  mulRe34An34, mulCo34An34, mulAn34An34}
+void (* const multiplication[12][12])(void) = {
+// regX |    regY ==>   1            2            3            4            5            6            7            8            9            10            11           12
+//      V               Long integer Real16       Complex16    Angle16      Time         Date         String       Real16 mat   Complex16 m  Short integer Real34       Complex34
+/*  1 Long integer  */ {mulLonILonI, mulRe16LonI, mulCo16LonI, mulError, mulTimeLonI, mulError,    mulError,    mulRm16LonI, mulCm16LonI, mulShoILonI,  mulRe34LonI, mulCo34LonI},
+/*  2 Real16        */ {mulLonIRe16, mulRe16Re16, mulCo16Re16, mulError, mulTimeRe16, mulError,    mulError,    mulRm16Re16, mulCm16Re16, mulShoIRe16,  mulRe34Re16, mulCo34Re16},
+/*  3 Complex16     */ {mulLonICo16, mulRe16Co16, mulCo16Co16, mulError, mulError,    mulError,    mulError,    mulRm16Co16, mulCm16Co16, mulShoICo16,  mulRe34Co16, mulCo34Co16},
+/*  4 Angle16       */ {mulError,    mulError,    mulError,    mulError, mulError,    mulError,    mulError,    mulError,    mulError,    mulError,     mulError,    mulError   },
+/*  5 Time          */ {mulLonITime, mulRe16Time, mulError,    mulError, mulError,    mulError,    mulError,    mulError,    mulError,    mulShoITime,  mulRe34Time, mulError   },
+/*  6 Date          */ {mulError,    mulError,    mulError,    mulError, mulError,    mulError,    mulError,    mulError,    mulError,    mulError,     mulError,    mulError   },
+/*  7 String        */ {mulError,    mulError,    mulError,    mulError, mulError,    mulError,    mulError,    mulError,    mulError,    mulError,     mulError,    mulError   },
+/*  8 Real16 mat    */ {mulLonIRm16, mulRe16Rm16, mulCo16Rm16, mulError, mulError,    mulError,    mulError,    mulRm16Rm16, mulCm16Rm16, mulShoIRm16,  mulRe34Rm16, mulCo34Rm16},
+/*  9 Complex16 mat */ {mulLonICm16, mulRe16Cm16, mulCo16Cm16, mulError, mulError,    mulError,    mulError,    mulRm16Cm16, mulCm16Cm16, mulShoICm16,  mulRe34Cm16, mulCo34Cm16},
+/* 10 Short integer */ {mulLonIShoI, mulRe16ShoI, mulCo16ShoI, mulError, mulTimeShoI, mulError,    mulError,    mulRm16ShoI, mulCm16ShoI, mulShoIShoI,  mulRe34ShoI, mulCo34ShoI},
+/* 11 Real34        */ {mulLonIRe34, mulRe16Re34, mulCo16Re34, mulError, mulTimeRe34, mulError,    mulError,    mulRm16Re34, mulCm16Re34, mulShoIRe34,  mulRe34Re34, mulCo34Re34},
+/* 12 Complex34     */ {mulLonICo34, mulRe16Co34, mulCo16Co34, mulError, mulError,    mulError,    mulError,    mulRm16Co34, mulCm16Co34, mulShoICo34,  mulRe34Co34, mulCo34Co34}
 };
 
 
@@ -97,14 +96,6 @@ void mulCoIcCoIc(const complexIc_t *factor1, const complexIc_t *factor2, complex
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if Y is a number then Y = a + ib
- * if X is a number then X = c + id
- * The variables a, b, c and d are used for intermediate calculations
- * The result is then X = (ac - bd) + i(ad + bc)
- ***********************************************************************/
-
 /******************************************************************************************************************************************************************************************/
 /* long integer × ...                                                                                                                                                                     */
 /******************************************************************************************************************************************************************************************/
@@ -116,17 +107,17 @@ void mulCoIcCoIc(const complexIc_t *factor1, const complexIc_t *factor2, complex
  * \return void
  ***********************************************/
 void mulLonILonI(void) {
-  longInteger_t a, c;
+  longInteger_t y, x;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
-  longIntegerMultiply(a, c, c);
+  longIntegerMultiply(y, x, x);
 
-  convertLongIntegerToLongIntegerRegister(c, REGISTER_X);
+  convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
 
-  longIntegerFree(a);
-  longIntegerFree(c);
+  longIntegerFree(y);
+  longIntegerFree(x);
 }
 
 
@@ -146,14 +137,32 @@ void mulLonIRe16(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
+  uint32_t xAngularMode;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  realIcMultiply(&a, &c, &c);
-
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  if(xAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -173,15 +182,33 @@ void mulRe16LonI(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
+  uint32_t yAngularMode;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  realIcMultiply(&a, &c, &c);
-
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  if(yAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -240,83 +267,9 @@ void mulCo16LonI(void) {
   realIcMultiply(&a, &c, &a);
   realIcMultiply(&b, &c, &b);
 
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) × X(angle16) ==> X(angle16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulLonIAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulLonIAn16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(long integer) ==> X(angle16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16LonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, AM_DMS);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, currentAngularMode);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  }
 }
 
 
@@ -400,19 +353,19 @@ void mulCm16LonI(void) {
  * \return void
  ***********************************************/
 void mulLonIShoI(void) {
-  longInteger_t a, c;
+  longInteger_t y, x;
 
   convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
-  longIntegerMultiply(a, c, c);
+  longIntegerMultiply(y, x, x);
 
-  convertLongIntegerToLongIntegerRegister(c, REGISTER_X);
+  convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
 
-  longIntegerFree(a);
-  longIntegerFree(c);
+  longIntegerFree(y);
+  longIntegerFree(x);
 }
 
 
@@ -424,19 +377,19 @@ void mulLonIShoI(void) {
  * \return void
  ***********************************************/
 void mulShoILonI(void) {
-  longInteger_t a, c;
+  longInteger_t y, x;
 
   convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
-  longIntegerMultiply(a, c, c);
+  longIntegerMultiply(y, x, x);
 
-  convertLongIntegerToLongIntegerRegister(c, REGISTER_X);
+  convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
 
-  longIntegerFree(a);
-  longIntegerFree(c);
+  longIntegerFree(y);
+  longIntegerFree(x);
 }
 
 
@@ -456,14 +409,32 @@ void mulLonIRe34(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
+  uint32_t xAngularMode;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  realIcMultiply(&a, &c, &c);
-
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  if(xAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -483,15 +454,33 @@ void mulRe34LonI(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
+  uint32_t yAngularMode;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  realIcMultiply(&a, &c, &c);
-
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  if(yAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -550,85 +539,9 @@ void mulCo34LonI(void) {
   realIcMultiply(&a, &c, &a);
   realIcMultiply(&b, &c, &b);
 
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) × X(angle34) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulLonIAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulLonIAn34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-
-  setRegisterAngularMode(REGISTER_X, currentAngularMode);
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(long integer) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34LonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34LonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, currentAngularMode);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
 }
 
 
@@ -660,7 +573,50 @@ void mulRe16Re16(void) {
     return;
   }
 
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  uint32_t yAngularMode, xAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(yAngularMode == AM_NONE && xAngularMode == AM_NONE) {
+    real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) {
+    real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
+  else {
+    realIc_t y, x;
+
+    if(yAngularMode == AM_NONE) {
+      yAngularMode = currentAngularMode;
+    }
+    else if(xAngularMode == AM_NONE) {
+      xAngularMode = currentAngularMode;
+    }
+
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+
+      realIcMultiply(&y, &x, &x);
+
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else { //current angular mode is not DMS
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+
+      realIcMultiply(&y, &x, &x);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -719,101 +675,8 @@ void mulCo16Re16(void) {
 
   real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_Y)); // real part
   real16Multiply(REGISTER_IMAG16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
   complex16Copy(REGISTER_COMPLEX16_DATA(REGISTER_Y), REGISTER_COMPLEX16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) × X(angle16) ==> X(angle16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulRe16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe16An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-
-  setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(real16) ==> X(angle16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Re16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Re16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  }
 }
 
 
@@ -953,15 +816,33 @@ void mulRe16ShoI(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
+  uint32_t yAngularMode;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  realIcMultiply(&a, &c, &c);
-
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  if(yAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -981,14 +862,32 @@ void mulShoIRe16(void) {
     return;
   }
 
-  realIc_t a, c;
+  realIc_t y, x;
+  uint32_t xAngularMode;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  realIcMultiply(&a, &c, &c);
-
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  if(xAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -1016,8 +915,52 @@ void mulRe16Re34(void) {
     return;
   }
 
+  uint32_t yAngularMode, xAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
   convertRegister16To34(REGISTER_Y);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+
+  if(yAngularMode == AM_NONE && xAngularMode == AM_NONE) {
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) {
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
+  else {
+    realIc_t y, x;
+
+    if(yAngularMode == AM_NONE) {
+      yAngularMode = currentAngularMode;
+    }
+    else if(xAngularMode == AM_NONE) {
+      xAngularMode = currentAngularMode;
+    }
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+
+      realIcMultiply(&y, &x, &x);
+
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else { //current angular mode is not DMS
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+
+      realIcMultiply(&y, &x, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -1045,8 +988,52 @@ void mulRe34Re16(void) {
     return;
   }
 
+  uint32_t yAngularMode, xAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
   convertRegister16To34(REGISTER_X);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+
+  if(yAngularMode == AM_NONE && xAngularMode == AM_NONE) {
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) {
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
+  else {
+    realIc_t y, x;
+
+    if(yAngularMode == AM_NONE) {
+      yAngularMode = currentAngularMode;
+    }
+    else if(xAngularMode == AM_NONE) {
+      xAngularMode = currentAngularMode;
+    }
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+
+      realIcMultiply(&y, &x, &x);
+
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else { //current angular mode is not DMS
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+
+      realIcMultiply(&y, &x, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -1107,100 +1094,8 @@ void mulCo34Re16(void) {
   convertRegister16To34(REGISTER_X);
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) × X(angle34) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulRe16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe16An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(real16) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34Re16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Re16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Re16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, currentAngularMode);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
 }
 
 
@@ -1243,66 +1138,6 @@ void mulCo16Co16(void) {
 
   realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) × X(angle16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulCo16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo16An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_Y)); // real part
-  real16Multiply(REGISTER_IMAG16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-  complex16Copy(REGISTER_COMPLEX16_DATA(REGISTER_Y), REGISTER_COMPLEX16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Co16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Co16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X)); // real part
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_IMAG16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // imaginary part
 }
 
 
@@ -1411,7 +1246,7 @@ void mulCo16ShoI(void) {
   realIcMultiply(&a, &c, &a);
   realIcMultiply(&b, &c, &b);
 
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
@@ -1474,7 +1309,7 @@ void mulCo16Re34(void) {
   convertRegister16To34(REGISTER_Y);
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
 }
 
@@ -1577,517 +1412,12 @@ void mulCo34Co16(void) {
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   mulCoIcCoIc(&y, &x, &x);
 
   realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) × X(angle34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulCo16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo16An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_Y);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(complex16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34Co16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Co16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Co16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_X);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // imaginary part
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* angle16 × ...                                                                                                                                                                          */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(angle16) × X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  real16Multiply(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(time) ==> X(time)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16Time(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Time:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(time) × X(angle16) ==> X(time)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulTimeAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulTimeAn16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(real16 matrix) ==> X(real16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16Rm16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Rm16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(real16 matrix) × X(angle16) ==> X(real16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulRm16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRm16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(complex16 matrix) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16Cm16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Cm16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16 matrix) × X(angle16) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulCm16An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCm16An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(64bits integer) ==> X(angle16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16ShoI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16ShoI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, AM_DMS);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, currentAngularMode);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(64bits integer) × X(angle16) ==> X(angle16)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulShoIAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulShoIAn16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(real34) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16Re34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Re34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Re34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    setRegisterDataType(REGISTER_X, dtAngle34, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    setRegisterDataType(REGISTER_X, dtAngle34, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) × X(angle16) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulRe34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe34An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe34An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, currentAngularMode);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16Co34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Co34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16Co34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_Y);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // imaginary part
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) × X(angle16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulCo34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo34An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo34An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_X);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle16) × X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn16An34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_Y);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(angle16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34An16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34An16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34An16:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_X);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -2151,46 +1481,6 @@ void mulRe34Time(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function mulRe34Time:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(time) × X(angle34) ==> X(time)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulTimeAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulTimeAn34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(time) ==> X(time)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34Time(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Time:", "cannot use NaN as Y input of x", NULL, NULL);
     #endif
     return;
   }
@@ -2356,46 +1646,6 @@ void mulCo34Rm16(void) {
 
 
 
-/********************************************//**
- * \brief Y(real16 matrix) × X(angle34) ==> X(real16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulRm16An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRm16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(real16 matrix) ==> X(real16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34Rm16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Rm16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
 /******************************************************************************************************************************************************************************************/
 /* complex16 matrix × ...                                                                                                                                                                 */
 /******************************************************************************************************************************************************************************************/
@@ -2516,46 +1766,6 @@ void mulCo34Cm16(void) {
 
 
 
-/********************************************//**
- * \brief Y(complex16 matrix) × X(angle34) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulCm16An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCm16An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(complex16 matrix) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34Cm16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Cm16:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
 /******************************************************************************************************************************************************************************************/
 /* short integer × ...                                                                                                                                                                    */
 /******************************************************************************************************************************************************************************************/
@@ -2588,8 +1798,32 @@ void mulShoIRe34(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIc_t y, x;
+  uint32_t xAngularMode;
+
+  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -2609,8 +1843,33 @@ void mulRe34ShoI(void) {
     return;
   }
 
-  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  realIc_t y, x;
+  uint32_t yAngularMode;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+
+  if(yAngularMode == AM_NONE) {
+    realIcMultiply(&y, &x, &x);
+    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      realIcMultiply(&y, &x, &x);
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      realIcMultiply(&y, &x, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -2655,84 +1914,8 @@ void mulCo34ShoI(void) {
   convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(64bits integer) × X(angle34) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulShoIAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulShoIAn34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterTag(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-
-  setRegisterAngularMode(REGISTER_X, currentAngularMode);
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(64bits integer) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34ShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34ShoI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    reallocateRegister(REGISTER_X, dtAngle34, REAL34_SIZE, currentAngularMode);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
 }
 
 
@@ -2764,7 +1947,50 @@ void mulRe34Re34(void) {
     return;
   }
 
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  uint32_t yAngularMode, xAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(yAngularMode == AM_NONE && xAngularMode == AM_NONE) {
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) {
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
+  else {
+    realIc_t y, x;
+
+    if(yAngularMode == AM_NONE) {
+      yAngularMode = currentAngularMode;
+    }
+    else if(xAngularMode == AM_NONE) {
+      xAngularMode = currentAngularMode;
+    }
+
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+    if(currentAngularMode == AM_DMS) {
+      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+
+      realIcMultiply(&y, &x, &x);
+
+      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else { //current angular mode is not DMS
+      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
+      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+
+      realIcMultiply(&y, &x, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
+  }
 }
 
 
@@ -2823,100 +2049,8 @@ void mulCo34Re34(void) {
 
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X)); // imaginary part
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) × X(angle34) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulRe34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe34An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRe34An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, AM_DMS, AM_DEGREE);
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&c, getRegisterAngularMode(REGISTER_X), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(real34) ==> X(angle34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34Re34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Re34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Re34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a, c;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-
-  if(currentAngularMode == AM_DMS) {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), AM_DEGREE);
-    convertAngleIcFromTo(&c, AM_DMS, AM_DEGREE);
-    realIcMultiply(&a, &c, &c);
-    convertAngleIcFromTo(&c, AM_DEGREE, AM_DMS);
-    setRegisterDataType(REGISTER_X, dtAngle34, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
-  else {
-    convertAngleIcFromTo(&a, getRegisterAngularMode(REGISTER_Y), currentAngularMode);
-    realIcMultiply(&a, &c, &c);
-    setRegisterDataType(REGISTER_X, dtAngle34, AM_DMS);
-    realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  }
 }
 
 
@@ -2959,97 +2093,4 @@ void mulCo34Co34(void) {
 
   realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) × X(angle34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulCo34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo34An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCo34An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X)); // imaginary part
-}
-
-
-
-/********************************************//**
- * \brief Y(angle34) × X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34Co34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Co34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34Co34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // real part
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // imaginary part
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* angle34 × ...                                                                                                                                                                     */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(angle34) × X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void mulAn34An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34An34:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulAn34An34:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }

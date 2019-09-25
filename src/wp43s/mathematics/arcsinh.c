@@ -22,10 +22,10 @@
 
 
 
-void (* const arcsinh[13])(void) = {
-// regX ==> 1             2            3            4            5             6             7             8            9            10             11           12           13
-//          Long integer  Real16       Complex16    Angle16      Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34    Angle34
-            arcsinhLonI,  arcsinhRe16, arcsinhCo16, arcsinhRe16, arcsinhError, arcsinhError, arcsinhError, arcsinhRm16, arcsinhCm16, arcsinhError,  arcsinhRe34, arcsinhCo34, arcsinhRe34
+void (* const arcsinh[12])(void) = {
+// regX ==> 1             2            3            4             5             6             7             8            9            10             11           12
+//          Long integer  Real16       Complex16    Angle16       Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34
+            arcsinhLonI,  arcsinhRe16, arcsinhCo16, arcsinhError, arcsinhError, arcsinhError, arcsinhError, arcsinhRm16, arcsinhCm16, arcsinhError,  arcsinhRe34, arcsinhCo34
 };
 
 
@@ -64,26 +64,20 @@ void fnArcsinh(uint16_t unusedParamButMandatory) {
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- ***********************************************************************/
-
 void arcsinhLonI(void) {
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  // arcsinh(a) = ln(a + sqrt(a² + 1))
-  realIcMultiply(&a, &a, &aSquared);
-  realIcAdd(&aSquared, const_1, &aSquared);
-  realIcSquareRoot(&aSquared, &aSquared);
-  realIcAdd(&aSquared, &a, &a);
-  WP34S_Ln(&a, &a);
+  // arcsinh(x) = ln(x + sqrt(x² + 1))
+  realIcMultiply(&x, &x, &xSquared);
+  realIcAdd(&xSquared, const_1, &xSquared);
+  realIcSquareRoot(&xSquared, &xSquared);
+  realIcAdd(&xSquared, &x, &x);
+  WP34S_Ln(&x, &x);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -97,19 +91,19 @@ void arcsinhRe16(void) {
     return;
   }
 
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  // arcsinh(a) = ln(a + sqrt(a² + 1))
-  realIcMultiply(&a, &a, &aSquared);
-  realIcAdd(&aSquared, const_1, &aSquared);
-  realIcSquareRoot(&aSquared, &aSquared);
-  realIcAdd(&aSquared, &a, &a);
-  WP34S_Ln(&a, &a);
+  // arcsinh(x) = ln(x + sqrt(x² + 1))
+  realIcMultiply(&x, &x, &xSquared);
+  realIcAdd(&xSquared, const_1, &xSquared);
+  realIcSquareRoot(&xSquared, &xSquared);
+  realIcAdd(&xSquared, &x, &x);
+  WP34S_Ln(&x, &x);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -182,19 +176,19 @@ void arcsinhRe34(void) {
     return;
   }
 
-  realIc_t a, aSquared;
+  realIc_t x, xSquared;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  // arcsinh(a) = ln(a + sqrt(a² + 1))
-  realIcMultiply(&a, &a, &aSquared);
-  realIcAdd(&aSquared, const_1, &aSquared);
-  realIcSquareRoot(&aSquared, &aSquared);
-  realIcAdd(&aSquared, &a, &a);
-  WP34S_Ln(&a, &a);
+  // arcsinh(x) = ln(x + sqrt(x² + 1))
+  realIcMultiply(&x, &x, &xSquared);
+  realIcAdd(&xSquared, const_1, &xSquared);
+  realIcSquareRoot(&xSquared, &xSquared);
+  realIcAdd(&xSquared, &x, &x);
+  WP34S_Ln(&x, &x);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 

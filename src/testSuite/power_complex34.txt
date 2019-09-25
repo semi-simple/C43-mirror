@@ -15,7 +15,6 @@ Func: fnPower
 ; Complex34 ^ Long Integer      see in power_longInteger.txt
 ; Complex34 ^ Real16            see in power_real16.txt
 ; Complex34 ^ Complex16         see in power_complex16.txt
-; Complex34 ^ Angle16           see in power_angle16.txt
 ; Complex34 ^ Time              see in power_time.txt
 ; Complex34 ^ Date              see in power_date.txt
 ; Complex34 ^ String            see in power_string.txt
@@ -32,17 +31,3 @@ Func: fnPower
 ;=======================================
 In:  SL=0 FI=0 NCSD=34 RY=Co34:"1.23456 i -6.78" RX=Co34:"-1.254 i 7.541235"
 Out: EC=0 FI=1 SL=1 RL=Co34:"-1.254 i 7.541235" RX=Co34:"-2643.5259601628883080378974068256945580068612144918176355187774 i -1780.31910638893445028977232041694885428536067215736423604308"
-
-
-
-;=======================================
-; Complex34 ^ Angle34 --> Complex34
-;=======================================
-In:  SL=0 FI=0 NCSD=34 RY=Co34:"1.23456 i -6.78" RX=An34:"1.254":DEG
-Out: EC=0 FI=1 SL=1 RL=An34:"1.254":DEG RX=Co34:"-1.9382712381619504996777309908652991321175519153316073251293241 i -11.084177900742122954570030539978654932210674382128852817280235"
-
-;=======================================
-; Angle34 ^ Complex34 --> Complex34
-;=======================================
-In:  SL=0 FI=0 NCSD=34 RY=An34:"1.254":DEG RX=Co34:"1.23456 i -6.78"
-Out: EC=0 FI=1 SL=1 RL=Co34:"1.23456 i -6.78" RX=Co34:"0.047888135536504034575377391279415596380094194470740482592417863 i -1.3215063211366105645701185457387635616107619349016956586274085"

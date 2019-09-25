@@ -427,20 +427,6 @@ void fnRoundingMode(uint16_t RM) {
  ***********************************************/
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
-  //if(am == AM_DMS && (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)) {
-  //  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-  //    convertLongIntegerRegisterToAngleRegister(REGISTER_X, REGISTER_X);
-  //    convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
-  //    setRegisterDataType(REGISTER_X, dtAngle);
-  //    setRegisterTag(REGISTER_X, AM_DMS);
-  //  }
-  //
-  //  convertAngleToInternal(REGISTER_ANGLE_DATA(REGISTER_X), AM_DMS);
-  //  setRegisterDataType(REGISTER_X, dtAngle);
-  //  setRegisterTag(REGISTER_X, AM_DMS);
-  //
-  //  refreshRegisterLine(REGISTER_X);
-  //}
 
   showAngularMode();
   refreshStack();
@@ -632,7 +618,7 @@ void fnReset(uint16_t confirmation) {
     //stringToReal16("5.555", REGISTER_REAL16_DATA(FIRST_LOCAL_REGISTER));
 
     //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
-    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), TAG_NONE);
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), AM_NONE);
     //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
 
 

@@ -22,10 +22,10 @@
 
 
 
-void (* const conjugate[13])(void) = {
-// regX ==> 1            2          3         4          5          6          7          8          9           10            11         12        13
-//          Long integer Real16     Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34     Complex34 Angle34
-            conjError,   conjError, conjCo16, conjError, conjError, conjError, conjError, conjError, conjCm16,   conjError,    conjError, conjCo34, conjError
+void (* const conjugate[12])(void) = {
+// regX ==> 1            2          3         4          5          6          7          8          9           10            11         12
+//          Long integer Real16     Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34     Complex34
+            conjError,   conjError, conjCo16, conjError, conjError, conjError, conjError, conjError, conjCm16,   conjError,    conjError, conjCo34
 };
 
 

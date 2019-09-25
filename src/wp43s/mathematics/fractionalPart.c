@@ -22,10 +22,10 @@
 
 
 
-void (* const fp[13])(void) = {
-// regX ==> 1            2       3         4       5        6        7        8          9           10            11      12        13
-//          Long integer Real16  Complex16 Angle16 Time     Date     String   Real16 mat Complex16 m Short integer Real34  Complex34 Angle34
-            fpLonI,      fpRe16, fpError,  fpRe16, fpError, fpError, fpError, fpRm16,    fpError,    fpShoI,       fpRe34, fpError,  fpRe34
+void (* const fp[12])(void) = {
+// regX ==> 1            2       3         4        5        6        7        8          9           10            11      12
+//          Long integer Real16  Complex16 Angle16  Time     Date     String   Real16 mat Complex16 m Short integer Real34  Complex34
+            fpLonI,      fpRe16, fpError,  fpError, fpError, fpError, fpError, fpRm16,    fpError,    fpShoI,       fpRe34, fpError
 };
 
 
@@ -71,11 +71,11 @@ void fnFp(uint16_t unusedParamButMandatory) {
 
 
 void fpLonI(void) {
-  longInteger_t lgInt;
+  longInteger_t x;
 
-  longIntegerInit(lgInt); // Set to 0
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  longIntegerFree(lgInt);
+  longIntegerInit(x); // Set to 0
+  convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
+  longIntegerFree(x);
 }
 
 
@@ -89,10 +89,10 @@ void fpRe16(void) {
     return;
   }
 
-  real16_t integerPart;
+  real16_t x;
 
-  real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &integerPart);
-  real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &integerPart ,REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x ,REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -118,8 +118,8 @@ void fpRe34(void) {
     return;
   }
 
-  real34_t integerPart;
+  real34_t x;
 
-  real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &integerPart);
-  real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &integerPart ,REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x ,REGISTER_REAL34_DATA(REGISTER_X));
 }

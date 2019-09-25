@@ -22,10 +22,10 @@
 
 
 
-void (* const magnitude[13])(void) = {
-// regX ==> 1              2              3              4              5               6               7               8              9              10             11             12             13
-//          Long integer   Real16         Complex16      Angle16        Time            Date            String          Real16 mat     Complex16 m    Short integer  Real34         Complex34      Angle34
-            magnitudeLonI, magnitudeRe16, magnitudeCo16, magnitudeAn16, magnitudeError, magnitudeError, magnitudeError, magnitudeRm16, magnitudeCm16, magnitudeShoI, magnitudeRe34, magnitudeCo34, magnitudeAn34
+void (* const magnitude[12])(void) = {
+// regX ==> 1              2              3              4               5               6               7               8              9              10             11             12
+//          Long integer   Real16         Complex16      Angle16         Time            Date            String          Real16 mat     Complex16 m    Short integer  Real34         Complex34
+            magnitudeLonI, magnitudeRe16, magnitudeCo16, magnitudeError, magnitudeError, magnitudeError, magnitudeError, magnitudeRm16, magnitudeCm16, magnitudeShoI, magnitudeRe34, magnitudeCo34
 };
 
 
@@ -79,6 +79,7 @@ void magnitudeRe16(void) {
   }
 
   real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -96,28 +97,13 @@ void magnitudeCo16(void) {
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
   real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
   realIcMultiply(&a, &a, &a);
   realIcFMA(&b, &b, &a, &a);
   realIcSquareRoot(&a, &a);
 
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-void magnitudeAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeAn16:", "cannot use NaN as X input of |x|", NULL, NULL);
-    #endif
-    return;
-  }
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -150,6 +136,7 @@ void magnitudeRe34(void) {
   }
 
   real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -167,26 +154,11 @@ void magnitudeCo34(void) {
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
   realIcMultiply(&a, &a, &a);
   realIcFMA(&b, &b, &a, &a);
   realIcSquareRoot(&a, &a);
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-void magnitudeAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function magnitudeAn34:", "cannot use NaN as X input of |x|", NULL, NULL);
-    #endif
-    return;
-  }
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
 }

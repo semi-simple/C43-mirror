@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 18  // 18 = removed opX, opY, result and tempRegister
+#define BACKUP_VERSION 19  // 19 = Changed angle tags
 
 void saveCalc(void) {
   size_t size;

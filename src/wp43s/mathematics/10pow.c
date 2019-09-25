@@ -22,10 +22,10 @@
 
 
 
-void (* const tenPow[13])(void) = {
-// regX ==> 1            2           3           4           5            6            7            8           9           10            11          12          13
-//          Long integer Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
-            tenPowLonI,  tenPowRe16, tenPowCo16, tenPowAn16, tenPowError, tenPowError, tenPowError, tenPowRm16, tenPowCm16, tenPowShoI,   tenPowRe34, tenPowCo34, tenPowAn34
+void (* const tenPow[12])(void) = {
+// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
+//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
+            tenPowLonI,  tenPowRe16, tenPowCo16, tenPowError, tenPowError, tenPowError, tenPowError, tenPowRm16, tenPowCm16, tenPowShoI,   tenPowRe34, tenPowCo34
 };
 
 
@@ -63,12 +63,6 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
 }
 
 
-
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- ***********************************************************************/
 
 void tenPowLonI(void) {
 	 int32_t exponentSign;
@@ -151,11 +145,12 @@ void tenPowRe16(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  realIcPower(const_10, &a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realIcPower(const_10, &x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -190,26 +185,6 @@ void tenPowCo16(void) {
 
 
 
-void tenPowAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowAn16:", "cannot use NaN as X input of 10^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  realIcPower(const_10, &a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
 void tenPowRm16(void) {
   fnToBeCoded();
 }
@@ -237,11 +212,12 @@ void tenPowRe34(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  realIcPower(const_10, &a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realIcPower(const_10, &x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -272,24 +248,4 @@ void tenPowCo34(void) {
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void tenPowAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowAn34:", "cannot use NaN as X input of 10^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  realIcPower(const_10, &a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

@@ -15,7 +15,6 @@ Func: fnDivide
 ; Date / Long Integer  see in division_longInteger.txt
 ; Date / Real16        see in division_real16.txt
 ; Date / Complex16     see in division_complex16.txt
-; Date / Angle16       see in division_angle16.txt
 ; Date / Time          see in division_time.txt
 ;==================================================================
 
@@ -83,14 +82,4 @@ Func: fnDivide
 
 ;=======================================
 ; Complex34 / Date
-;=======================================
-
-
-
-;=======================================
-; Date / Angle34
-;=======================================
-
-;=======================================
-; Angle34 / Date
 ;=======================================

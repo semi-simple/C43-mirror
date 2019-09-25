@@ -22,10 +22,10 @@
 
 
 
-void (* const sign[13])(void) = {
-// regX ==> 1            2         3               4         5          6          7          8          9           10            11        12              13
-//          Long integer Real16    Complex16       Angle16   Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34       Angle34
-            signLonI,    signRe16, unitVectorCo16, signRe16, signError, signError, signError, signRm16,  signError,  signShoI,     signRe34, unitVectorCo34, signRe34
+void (* const sign[12])(void) = {
+// regX ==> 1            2         3               4          5          6          7          8          9           10            11        12
+//          Long integer Real16    Complex16       Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
+            signLonI,    signRe16, unitVectorCo16, signError, signError, signError, signError, signRm16,  signError,  signShoI,     signRe34, unitVectorCo34
 };
 
 

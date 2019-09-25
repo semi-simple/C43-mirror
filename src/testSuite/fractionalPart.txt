@@ -30,6 +30,16 @@ Out: EC=0 FI=0 SL=1 RL=Re16:"50" RX=Re16:"0"
 In:  AM=DEG SL=0 FI=0 RX=Re16:"89.99999"
 Out: EC=0 FI=0 SL=1 RL=Re16:"89.99999" RX=Re16:"0.99999"
 
+In:  SL=0 FI=0 NCSD=16 RX=Re16:"5.32564":DMS
+Out: EC=0 FI=0 SL=1 RL=Re16:"5.32564":DMS RX=Re16:"0.32564":DMS
+
+In:  SL=0 FI=0 RX=Re16:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re16:"-5.32564":GRAD RX=Re16:"-0.32564":GRAD
+
+; NaN
+In:  SL=0 FI=0 RX=Re16:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":RAD
+
 ; NaN
 In:  SL=0 FI=0 RX=Re16:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
@@ -41,21 +51,6 @@ Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
 Out: EC=24 FI=0 SL=0 RX=Co16:"6.2 i -7.6"
-
-
-
-;=======================================
-; fp(Angle16) --> Real16
-;=======================================
-In:  SL=0 FI=0 NCSD=16 RX=An16:"5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=An16:"5.32564":DMS RX=An16:"0.32564":DMS
-
-In:  SL=0 FI=0 RX=An16:"-5.32564":GRAD
-Out: EC=0 FI=0 SL=1 RL=An16:"-5.32564":GRAD RX=An16:"-0.32564":GRAD
-
-; NaN
-In:  SL=0 FI=0 RX=An16:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=An16:"NaN":RAD
 
 
 
@@ -111,6 +106,16 @@ Out: EC=0 FI=0 SL=1 RL=Re34:"50" RX=Re34:"0"
 In:  AM=DEG SL=0 FI=0 RX=Re34:"89.99999"
 Out: EC=0 FI=0 SL=1 RL=Re34:"89.99999" RX=Re34:"0.99999"
 
+In:  SL=0 FI=0 NCSD=34 RX=Re34:"5.32564":DMS
+Out: EC=0 FI=0 SL=1 RL=Re34:"5.32564":DMS RX=Re34:"0.32564":DMS
+
+In:  SL=0 FI=0 RX=Re34:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re34:"-5.32564":GRAD RX=Re34:"-0.32564":GRAD
+
+; NaN
+In:  SL=0 FI=0 RX=Re34:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":RAD
+
 ; NaN
 In:  SL=0 FI=0 RX=Re34:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
@@ -122,18 +127,3 @@ Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
 Out: EC=24 FI=0 SL=0 RX=Co34:"6.2 i -7.6"
-
-
-
-;=======================================
-; fp(Angle34) --> Real34
-;=======================================
-In:  SL=0 FI=0 NCSD=34 RX=An34:"5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=An34:"5.32564":DMS RX=An34:"0.32564":DMS
-
-In:  SL=0 FI=0 RX=An34:"-5.32564":GRAD
-Out: EC=0 FI=0 SL=1 RL=An34:"-5.32564":GRAD RX=An34:"-0.32564":GRAD
-
-; NaN
-In:  SL=0 FI=0 RX=An34:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=An34:"NaN":RAD

@@ -36,6 +36,26 @@ Out: EC=0 FI=0 SL=1 RL=Re16:"89.99999" RX=Re16:"89.99999"
 In:  AM=DEG SL=0 FI=0 RX=Re16:"-123.456"
 Out: EC=0 FI=0 SL=1 RL=Re16:"-123.456" RX=Re16:"123.456"
 
+In:  SL=0 FI=0 NCSD=16 RX=Re16:"5.32564":DMS
+Out: EC=0 FI=0 SL=1 RL=Re16:"5.32564":DMS RX=Re16:"5.32564"
+
+In:  SL=0 FI=0 RX=Re16:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re16:"-5.32564":GRAD RX=Re16:"5.32564"
+
+; NaN
+In:  SL=0 FI=0 RX=Re16:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Re16:"inf":DEG RX=Re16:"NaN"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=Re16:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":RAD
+Out: EC=4 FI=0 SL=0 RX=Re16:"-inf":RAD
+
 ; NaN
 In:  SL=0 FI=0 RX=Re16:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
@@ -57,31 +77,6 @@ Out: EC=4 FI=0 SL=0 RX=Re16:"-inf"
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
 Out: EC=0 FI=0 SL=1 RL=Co16:"6.2 i -7.6" RX=Re16:"9.8081598681913826154186097680415343588218978912800102069046454"
-
-
-
-;=======================================
-; magnitude(Angle16) --> Real16
-;=======================================
-In:  SL=0 FI=0 NCSD=16 RX=An16:"5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=An16:"5.32564":DMS RX=Re16:"5.32564"
-
-In:  SL=0 FI=0 RX=An16:"-5.32564":GRAD
-Out: EC=0 FI=0 SL=1 RL=An16:"-5.32564":GRAD RX=Re16:"5.32564"
-
-; NaN
-In:  SL=0 FI=0 RX=An16:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=An16:"NaN":RAD
-
-; Infinity
-In:  SL=0 FI=0 FD=1 RX=An16:"inf":DEG
-Out: EC=0 FI=0 SL=1 RL=An16:"inf":DEG RX=Re16:"NaN"
-
-In:  SL=0 FI=0 FD=0 RX=An16:"inf":MULTPI
-Out: EC=4 FI=0 SL=0 RX=An16:"inf":MULTPI
-
-In:  SL=0 FI=0 FD=0 RX=An16:"-inf":RAD
-Out: EC=4 FI=0 SL=0 RX=An16:"-inf":RAD
 
 
 
@@ -140,6 +135,26 @@ Out: EC=0 FI=0 SL=1 RL=Re34:"89.99999" RX=Re34:"89.99999"
 In:  AM=DEG SL=0 FI=0 RX=Re34:"-123.456"
 Out: EC=0 FI=0 SL=1 RL=Re34:"-123.456" RX=Re34:"123.456"
 
+In:  SL=0 FI=0 NCSD=34 RX=Re34:"5.32564":DMS
+Out: EC=0 FI=0 SL=1 RL=Re34:"5.32564":DMS RX=Re34:"5.32564"
+
+In:  SL=0 FI=0 RX=Re34:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re34:"-5.32564":GRAD RX=Re34:"5.32564"
+
+; NaN
+In:  SL=0 FI=0 RX=Re34:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Re34:"inf":DEG RX=Re34:"NaN"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=Re34:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":RAD
+Out: EC=4 FI=0 SL=0 RX=Re34:"-inf":RAD
+
 ; NaN
 In:  SL=0 FI=0 RX=Re34:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
@@ -161,28 +176,3 @@ Out: EC=4 FI=0 SL=0 RX=Re34:"-inf"
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
 Out: EC=0 FI=0 SL=1 RL=Co34:"6.2 i -7.6" RX=Re34:"9.8081598681913826154186097680415343588218978912800102069046454"
-
-
-
-;=======================================
-; magnitude(Angle34) --> Real34
-;=======================================
-In:  SL=0 FI=0 NCSD=34 RX=An34:"5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=An34:"5.32564":DMS RX=Re34:"5.32564"
-
-In:  SL=0 FI=0 RX=An34:"-5.32564":GRAD
-Out: EC=0 FI=0 SL=1 RL=An34:"-5.32564":GRAD RX=Re34:"5.32564"
-
-; NaN
-In:  SL=0 FI=0 RX=An34:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=An34:"NaN":RAD
-
-; Infinity
-In:  SL=0 FI=0 FD=1 RX=An34:"inf":DEG
-Out: EC=0 FI=0 SL=1 RL=An34:"inf":DEG RX=Re34:"NaN"
-
-In:  SL=0 FI=0 FD=0 RX=An34:"inf":MULTPI
-Out: EC=4 FI=0 SL=0 RX=An34:"inf":MULTPI
-
-In:  SL=0 FI=0 FD=0 RX=An34:"-inf":RAD
-Out: EC=4 FI=0 SL=0 RX=An34:"-inf":RAD

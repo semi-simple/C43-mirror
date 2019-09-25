@@ -1782,7 +1782,7 @@ const item_t indexOfItems[] = {
 /* 1650 */  { fnJM,                        6,                          "DtoY",                                         STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y",           SLS_ENABLED  },  //JM EE 
 /* 1651 */  { fnJM,                        9,                          "AtoSYM",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "012",                                      SLS_ENABLED  },  //JM EE 
 /* 1652 */  { fnJM,                        8,                          "SYMtoA",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",                                      SLS_ENABLED  },  //JM EE 
-/* 1653 */  { itemToBeCoded,               NOPARAM,                     "E.ENG",                                       "E.ENG",                                                                       SLS_UNCHANGED},   //JM EE
+/* 1653 */  { itemToBeCoded,               NOPARAM,                     "E.ENG",                                       "ELEC",                                                                       SLS_UNCHANGED},   //JM EE
 /* 1654 */  { fnJM,                        10,                          "e^theta_j",                                   "e^" STD_THETA "j",                                                            SLS_ENABLED  },  //JM EE 
 
 /* 1655 */  { fnJM,                        11,                          "",                                             "STO" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE 
@@ -1794,7 +1794,7 @@ const item_t indexOfItems[] = {
 /* 1661 */  { fnJM,                        17,                          "",                                             "V" STD_DIVIDE "I",             SLS_ENABLED  },  //JM EE 
 /* 1662 */  { fnJM,                        18,                          "",                                             "I" STD_CROSS "R",              SLS_ENABLED  },  //JM EE 
 /* 1663 */  { fnJM,                        19,                          "",                                             "V" STD_DIVIDE "Z",             SLS_ENABLED  },  //JM EE 
-/* 1664 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",             SLS_ENABLED  },  //JM EE 
+/* 1664 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",             SLS_ENABLED  },  //JM EE 
 
 
 

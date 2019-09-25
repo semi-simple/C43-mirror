@@ -15,7 +15,6 @@ Func: fnSubtract
 ; Time - Long Integer  see in subtraction_longInteger.txt
 ; Time - Real16        see in subtraction_real16.txt
 ; Time - Complex16     see in subtraction_complex16.txt
-; Time - Angle16       see in subtraction_angle16.txt
 ;==================================================================
 
 
@@ -92,14 +91,4 @@ Func: fnSubtract
 
 ;=======================================
 ; Complex34 - Time
-;=======================================
-
-
-
-;=======================================
-; Time - Angle34
-;=======================================
-
-;=======================================
-; Angle34 - Time
 ;=======================================

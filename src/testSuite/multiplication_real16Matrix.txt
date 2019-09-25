@@ -15,7 +15,6 @@ Func: fnMultiply
 ; Real16 Matrix x Long Integer  see in multiplication_longInteger.txt
 ; Real16 Matrix x Real16        see in multiplication_real16.txt
 ; Real16 Matrix x Complex16     see in multiplication_complex16.txt
-; Real16 Matrix x Angle16       see in multiplication_angle16.txt
 ; Real16 Matrix x Time          see in multiplication_time.txt
 ; Real16 Matrix x Date          see in multiplication_date.txt
 ; Real16 Matrix x String        see in multiplication_string.txt
@@ -65,14 +64,4 @@ Func: fnMultiply
 
 ;=======================================
 ; Complex34 x Real16 Matrix
-;=======================================
-
-
-
-;=======================================
-; Real16 Matrix x Angle34
-;=======================================
-
-;=======================================
-; Angle34 x Real16 Matrix
 ;=======================================

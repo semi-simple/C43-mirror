@@ -22,10 +22,10 @@
 
 
 
-void (* const logBase10[13])(void) = {
-// regX ==> 1            2          3          4          5           6           7           8          9           10            11         12         13
-//          Long integer Real16     Complex16  Angle16    Time        Date        String      Real16 mat Complex16 m Short integer Real34     Complex34  Angle34
-            log10LonI,   log10Re16, log10Co16, log10An16, log10Error, log10Error, log10Error, log10Rm16, log10Cm16,  log10ShoI,    log10Re34, log10Co34, log10An34
+void (* const logBase10[12])(void) = {
+// regX ==> 1            2          3          4           5           6           7           8          9           10            11         12
+//          Long integer Real16     Complex16  Angle16     Time        Date        String      Real16 mat Complex16 m Short integer Real34     Complex34
+            log10LonI,   log10Re16, log10Co16, log10Error, log10Error, log10Error, log10Error, log10Rm16, log10Cm16,  log10ShoI,    log10Re34, log10Co34
 };
 
 
@@ -71,13 +71,13 @@ void fnLog10(uint16_t unusedParamButMandatory) {
  ***********************************************************************/
 
 void log10LonI(void) {
-  longInteger_t x;
+  longInteger_t lgInt;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
 
-  if(longIntegerIsZero(x)) {
+  if(longIntegerIsZero(lgInt)) {
     if(getFlag(FLAG_DANGER)) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
@@ -88,27 +88,27 @@ void log10LonI(void) {
     }
   }
   else {
-    realIc_t a;
+    realIc_t x;
 
-    convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+    convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
 
-    if(longIntegerIsPositive(x)) {
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+    if(longIntegerIsPositive(lgInt)) {
+      WP34S_Ln(&x, &x);
+      realIcDivide(&x, const_ln10, &x);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&a);
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcDivide(const_pi, const_ln10, &a);
-      realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
+      realIcSetPositiveSign(&x);
+      WP34S_Ln(&x, &x);
+      realIcDivide(&x, const_ln10, &x);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcDivide(const_pi, const_ln10, &x);
+      realIcToReal16(&x, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
@@ -119,7 +119,7 @@ void log10LonI(void) {
     }
   }
 
-  longIntegerFree(x);
+  longIntegerFree(lgInt);
 }
 
 
@@ -145,22 +145,22 @@ void log10Re16(void) {
     }
   }
   else {
-    realIc_t a;
+    realIc_t x;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
     if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+      WP34S_Ln(&x, &x);
+      realIcDivide(&x, const_ln10, &x);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&a);
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcDivide(const_pi, const_ln10, &a);
-      realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
+      realIcSetPositiveSign(&x);
+      WP34S_Ln(&x, &x);
+      realIcDivide(&x, const_ln10, &x);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realIcDivide(const_pi, const_ln10, &x);
+      realIcToReal16(&x, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
       realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
@@ -172,6 +172,7 @@ void log10Re16(void) {
       #endif
     }
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -206,63 +207,10 @@ void log10Co16(void) {
     realIcRectangularToPolar(&a, &b, &a, &b);
     WP34S_Ln(&a, &a);
     realIcDivide(&a, const_ln10, &a);
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
     realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
     realIcDivide(&b, const_ln10, &b);
     realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-}
-
-
-
-void log10An16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log10An16:", "cannot use NaN as X input of log10", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10An16:", "cannot calculate log10(0)", NULL, NULL);
-      #endif
-    }
-  }
-  else {
-    realIc_t a;
-
-    setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-     }
-    else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&a);
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
-      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcDivide(const_pi, const_ln10, &a);
-      realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    else if(getFlag(FLAG_DANGER)) {
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10An16:", "cannot calculate log10 of a negative number when CPXRES is not set!", NULL, NULL);
-      #endif
-    }
   }
 }
 
@@ -307,22 +255,22 @@ void log10Re34(void) {
     }
   }
   else {
-    realIc_t a;
+    realIc_t x;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
     if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+      WP34S_Ln(&x, &x);
+      realIcDivide(&x, const_ln10, &x);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&a);
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcDivide(const_pi, const_ln10, &a);
-      realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
+      realIcSetPositiveSign(&x);
+      WP34S_Ln(&x, &x);
+      realIcDivide(&x, const_ln10, &x);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcDivide(const_pi, const_ln10, &x);
+      realIcToReal34(&x, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
       realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
@@ -334,6 +282,7 @@ void log10Re34(void) {
       #endif
     }
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -368,62 +317,9 @@ void log10Co34(void) {
     realIcRectangularToPolar(&a, &b, &a, &b);
     WP34S_Ln(&a, &a);
     realIcDivide(&a, const_ln10, &a);
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
     realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
     realIcDivide(&b, const_ln10, &b);
     realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
-  }
-}
-
-
-
-void log10An34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log10An34:", "cannot use NaN as X input of log10", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realIcToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10An34:", "cannot calculate log10(0)", NULL, NULL);
-      #endif
-    }
-  }
-  else {
-    realIc_t a;
-
-    setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-     }
-    else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&a);
-      WP34S_Ln(&a, &a);
-      realIcDivide(&a, const_ln10, &a);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
-      realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcDivide(const_pi, const_ln10, &a);
-      realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else if(getFlag(FLAG_DANGER)) {
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10An34:", "cannot calculate log10 of a negative number when CPXRES is not set!", NULL, NULL);
-      #endif
-    }
   }
 }

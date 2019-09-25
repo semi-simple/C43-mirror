@@ -293,8 +293,8 @@ uint16_t cm;
      btnClicked(NULL, "26");  // *.    // Multiply with X  */
      
      liftStack();                                              // Prepare for new X
-//     setRegisterDataType(REGISTER_X, dtComplex16, TAG_NONE);   // Convert X to Complex16
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+//     setRegisterDataType(REGISTER_X, dtComplex16, AM_NONE);   // Convert X to Complex16
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));    // Set X real = 0
      stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));    // Set X imag = 0
      fnAdd(0);                                                 // +
@@ -309,7 +309,7 @@ uint16_t cm;
   if(JM_OPCODE == 3) {                                                                                                      //operator a
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -318,7 +318,7 @@ uint16_t cm;
   if(JM_OPCODE == 4) {                                        //operater a sq                                                                                                        
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));
      refreshStack();
@@ -327,7 +327,7 @@ uint16_t cm;
   if(JM_OPCODE == 5) {                                        //Operator j                                          
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
      refreshStack();
@@ -435,7 +435,7 @@ uint16_t cm;
 
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -444,7 +444,7 @@ uint16_t cm;
      fnMultiply(0);                                             // * a
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -458,7 +458,7 @@ uint16_t cm;
 
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -467,7 +467,7 @@ uint16_t cm;
      fnMultiply(0);                                             // * a
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -496,7 +496,7 @@ uint16_t cm;
      fnAdd(0);                                                  // +
      fnAdd(0);                                                  // + Va0 = (Va + Vb +Vc)/3
       liftStack();                                             
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
       stringToReal16("3", REGISTER_REAL16_DATA(REGISTER_X));   
       stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
       refreshStack();
@@ -506,7 +506,7 @@ uint16_t cm;
 
      STACK_LIFT_ENABLE;     	
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -515,7 +515,7 @@ uint16_t cm;
      fnMultiply(0);                                             // * a
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -532,7 +532,7 @@ uint16_t cm;
 
      STACK_LIFT_ENABLE;     	
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -541,7 +541,7 @@ uint16_t cm;
      fnMultiply(0);                                             // * a
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      refreshStack();
@@ -568,7 +568,7 @@ uint16_t cm;
   if(JM_OPCODE == 10) {                                        //e^theta.j j                                          
      STACK_LIFT_ENABLE;     
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
      fnMultiply(0);                                             // * aa
@@ -658,7 +658,7 @@ uint16_t cm;
      fnRecall(REGISTER_I);       //
      STACK_LIFT_ENABLE;       
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
@@ -667,7 +667,7 @@ uint16_t cm;
      fnRecall(REGISTER_I);       //
      STACK_LIFT_ENABLE;       
      liftStack();                                             
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
      stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));   
      stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);

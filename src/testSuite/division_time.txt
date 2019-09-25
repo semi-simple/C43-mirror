@@ -15,7 +15,6 @@ Func: fnDivide
 ; Time / Long Integer  see in division_longInteger.txt
 ; Time / Real16        see in division_real16.txt
 ; Time / Complex16     see in division_complex16.txt
-; Time / Angle16       see in division_angle16.txt
 ;==================================================================
 
 
@@ -92,14 +91,4 @@ Func: fnDivide
 
 ;=======================================
 ; Complex34 / Time
-;=======================================
-
-
-
-;=======================================
-; Time / Angle34
-;=======================================
-
-;=======================================
-; Angle34 / Time
 ;=======================================

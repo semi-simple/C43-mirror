@@ -22,10 +22,10 @@
 
 
 
-void (* const arctan[13])(void) = {
-// regX ==> 1            2           3           4            5           6            7            8           9           10            11          12          13
-//          Long integer Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
-            arctanLonI,  arctanRe16, arctanCo16, arctanRe16, arctanError, arctanError, arctanError, arctanRm16, arctanCm16, arctanError,  arctanRe34, arctanCo34, arctanRe34
+void (* const arctan[12])(void) = {
+// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
+//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
+            arctanLonI,  arctanRe16, arctanCo16, arctanError, arctanError, arctanError, arctanError, arctanRm16, arctanCm16, arctanError,  arctanRe34, arctanCo34
 };
 
 
@@ -64,20 +64,14 @@ void fnArctan(uint16_t unusedParamButMandatory) {
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- ***********************************************************************/
-
 void arctanLonI(void) {
-  realIc_t a;
+  realIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  WP34S_Atan(&a, &a);
-  convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
-  reallocateRegister(REGISTER_X, dtAngle16, REAL16_SIZE, currentAngularMode);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  WP34S_Atan(&x, &x);
+  convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -111,15 +105,15 @@ void arctanRe16(void) {
     }
   }
   else {
-    realIc_t a;
+    realIc_t x;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    WP34S_Atan(&a, &a);
-    convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
-    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+    WP34S_Atan(&x, &x);
+    convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
+    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
-  setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
+  setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {
     checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
@@ -217,15 +211,15 @@ void arctanRe34(void) {
     }
   }
   else {
-    realIc_t a;
+    realIc_t x;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-    WP34S_Atan(&a, &a);
-    convertAngleIcFromTo(&a, AM_RADIAN, currentAngularMode);
-    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    WP34S_Atan(&x, &x);
+    convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
+    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
-  setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
+  setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
   if(currentAngularMode == AM_DMS) {
     checkDms34(REGISTER_REAL34_DATA(REGISTER_X));

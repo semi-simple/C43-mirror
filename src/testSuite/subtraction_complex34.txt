@@ -15,7 +15,6 @@ Func: fnSubtract
 ; Complex34 - Long Integer        see in subtraction_longInteger.txt
 ; Complex34 - Real16              see in subtraction_real16.txt
 ; Complex34 - Complex16           see in subtraction_complex16.txt
-; Complex34 - Angle16             see in subtraction_angle16.txt
 ; Complex34 - Time                see in subtraction_time.txt
 ; Complex34 - Date                see in subtraction_date.txt
 ; Complex34 - String              see in subtraction_string.txt
@@ -44,17 +43,3 @@ Out: EC=1 FI=0 SL=0 RL=Co34:"NaN i 7.541235"
 
 In:  SL=1 FI=0 RY=Co34:"123.456 i -6.78" RX=Co34:"-12540 i NaN"
 Out: EC=1 FI=0 SL=1 RL=Co34:"-12540 i NaN"
-
-
-
-;=======================================
-; Complex34 - Angle34 --> Complex34
-;=======================================
-In:  SL=0 FI=0 NCSD=34 RY=Co34:"123.456 i -6.78" RX=An34:"12540":DEG
-Out: EC=0 FI=1 SL=1 RL=An34:"12540":DEG RX=Co34:"-12416.544 i -6.78"
-
-;=======================================
-; Angle34 - Complex34 --> Complex34
-;=======================================
-In:  SL=0 FI=0 NCSD=34 RY=An34:"12540":DEG RX=Co34:"123.456 i -6.78"
-Out: EC=0 FI=1 SL=1 RL=Co34:"123.456 i -6.78" RX=Co34:"12416.544 i 6.78"

@@ -217,7 +217,7 @@ void setupDefaults(void) {
 
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal16, TAG_NONE);
+    setRegisterDataType(regist, dtReal16, AM_NONE);
     memPtr = allocWp43s(REAL16_SIZE);
     setRegisterDataPointer(regist, memPtr);
     real16Zero(memPtr);
@@ -225,7 +225,7 @@ void setupDefaults(void) {
 
   // initialize the 9+1 saved stack registers
   for(calcRegister_t regist=SAVED_REGISTER_X; regist<=LAST_SAVED_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal16, TAG_NONE);
+    setRegisterDataType(regist, dtReal16, AM_NONE);
     memPtr = allocWp43s(REAL16_SIZE);
     setRegisterDataPointer(regist, memPtr);
     real16Zero(memPtr);

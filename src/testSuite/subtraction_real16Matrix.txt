@@ -15,7 +15,6 @@ Func: fnSubtract
 ; Real16 Matrix - Long Integer  see in subtraction_longInteger.txt
 ; Real16 Matrix - Real16        see in subtraction_real16.txt
 ; Real16 Matrix - Complex16     see in subtraction_complex16.txt
-; Real16 Matrix - Angle16       see in subtraction_angle16.txt
 ; Real16 Matrix - Time          see in subtraction_time.txt
 ; Real16 Matrix - Date          see in subtraction_date.txt
 ; Real16 Matrix - String        see in subtraction_string.txt
@@ -65,14 +64,4 @@ Func: fnSubtract
 
 ;=======================================
 ; Complex34 - Real16 Matrix
-;=======================================
-
-
-
-;=======================================
-; Real16 Matrix - Angle34
-;=======================================
-
-;=======================================
-; Angle34 - Real16 Matrix
 ;=======================================

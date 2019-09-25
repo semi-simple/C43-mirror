@@ -251,9 +251,7 @@ typedef int16_t calcRegister_t;
 #define AM_RADIAN               2 // radian must be 2
 #define AM_MULTPI               3 // multpi must be 3
 #define AM_DMS                  4 // dms    must be 4
-
-// Data type tag
-#define TAG_NONE                0
+#define AM_NONE                 5
 
 // Time format 1 bit
 #define TF_H24                  0
@@ -475,10 +473,10 @@ extern const item_t         indexOfItems[];
 extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
 extern const calcKey_t      kbd_std[37];
 extern const font_t         standardFont, numericFont;
-extern void                 (* const addition[13][13])(void);
-extern void                 (* const subtraction[13][13])(void);
-extern void                 (* const multiplication[13][13])(void);
-extern void                 (* const division[13][13])(void);
+extern void                 (* const addition[12][12])(void);
+extern void                 (* const subtraction[12][12])(void);
+extern void                 (* const multiplication[12][12])(void);
+extern void                 (* const division[12][12])(void);
 extern const softmenu_t     softmenu[];
 extern const int16_t        softkeyRow[];
 

@@ -196,12 +196,6 @@
 		<Unit filename="src/testSuite/2pow.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/addition_angle16.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/addition_angle34.txt">
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/testSuite/addition_complex16.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -283,12 +277,6 @@
 		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/division_angle16.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/division_angle34.txt">
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/testSuite/division_complex16.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -367,12 +355,6 @@
 		<Unit filename="src/testSuite/minusOnePow.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/multiplication_angle16.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/multiplication_angle34.txt">
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/testSuite/multiplication_complex16.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -404,12 +386,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_time.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/parallel_angle16.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/parallel_angle34.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/parallel_complex16.txt">
@@ -446,12 +422,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/polarToRectangular.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/power_angle16.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/power_angle34.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/power_complex16.txt">
@@ -508,12 +478,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/squareRoot.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/subtraction_angle16.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/subtraction_angle34.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/subtraction_complex16.txt">

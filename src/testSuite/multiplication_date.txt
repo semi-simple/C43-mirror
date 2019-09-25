@@ -15,7 +15,6 @@ Func: fnMultiply
 ; Date x Long Integer  see in multiplication_longInteger.txt
 ; Date x Real16        see in multiplication_real16.txt
 ; Date x Complex16     see in multiplication_complex16.txt
-; Date x Angle16       see in multiplication_angle16.txt
 ; Date x Time          see in multiplication_time.txt
 ;==================================================================
 
@@ -83,14 +82,4 @@ Func: fnMultiply
 
 ;=======================================
 ; Complex34 x Date
-;=======================================
-
-
-
-;=======================================
-; Date x Angle34
-;=======================================
-
-;=======================================
-; Angle34 x Date
 ;=======================================

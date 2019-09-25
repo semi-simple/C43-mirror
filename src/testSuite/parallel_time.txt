@@ -15,7 +15,6 @@ Func: fnParallel
 ; Time || Long Integer  see in multiplication_longInteger.txt
 ; Time || Real16        see in multiplication_real16.txt
 ; Time || Complex16     see in multiplication_complex16.txt
-; Time || Angle16       see in multiplication_angle16.txt
 ;==================================================================
 
 
@@ -92,14 +91,4 @@ Func: fnParallel
 
 ;=======================================
 ; Complex34 || Time
-;=======================================
-
-
-
-;=======================================
-; Time || Angle34
-;=======================================
-
-;=======================================
-; Angle34 || Time
 ;=======================================

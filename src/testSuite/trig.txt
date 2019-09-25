@@ -24,7 +24,7 @@ Func: fnSwapXY
 Out:  EC=0
 Func: fnSubtract
 In:   RX=LonI:"9"
-Out:  EC=0 FI=0 RX=An16:"2.9361e-11":DEG
+Out:  EC=0 FI=0 RX=Re16:"2.9361e-11":DEG
 
 ; Real34 version
 In: FD=0 FI=0 SD=0 RM=0 AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"9"
@@ -44,4 +44,4 @@ Func: fnSwapXY
 Out:  EC=0
 Func: fnSubtract
 In:   RX=Re34:"9"
-Out:  EC=0 FI=0 RX=An34:"-6.2465e-29":DEG
+Out:  EC=0 FI=0 RX=Re34:"-6.2465e-29":DEG

@@ -72,15 +72,6 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-  #ifdef PC_BUILD
-  else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    showInfoDialog("In function fnDisplayFormatFix:", "converting an integer to a real16", "is to be coded", NULL);
-  }
-  #endif
-
   refreshStack();
 }
 
@@ -96,15 +87,6 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
-
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-  #ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-      showInfoDialog("In function fnDisplayFormatSci:", "converting an integer to a real16", "is to be coded", NULL);
-  }
-  #endif
 
   refreshStack();
 }
@@ -122,15 +104,6 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-  #ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-      showInfoDialog("In function fnDisplayFormatEng:", "converting an integer to a real16", "is to be coded", NULL);
-    }
-  #endif
-
   refreshStack();
 }
 
@@ -147,15 +120,6 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     displayFormat = DF_ALL;
     displayFormatDigits = displayFormatN;
     displayRealAsFraction = false;
-
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-    }
-    #ifdef PC_BUILD
-      else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-        showInfoDialog("In function fnDisplayFormatAll:", "converting an integer to a real16", "is to be coded", NULL);
-      }
-    #endif
 
     refreshStack();
   //}

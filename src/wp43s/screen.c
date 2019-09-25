@@ -993,7 +993,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }                                                                       //JM EE ^
 
-            complexToDisplayString(REGISTER_COMPLEX16_DATA(regist), false, tmpStr3000, &numericFont, SCREEN_WIDTH);
+            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

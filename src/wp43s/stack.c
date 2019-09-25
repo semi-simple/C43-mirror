@@ -89,7 +89,7 @@ void liftStack(void) {
   }
 
   setRegisterDataPointer(REGISTER_X, allocWp43s(REAL16_SIZE));
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+  setRegisterDataType(REGISTER_X, dtReal16, AM_NONE);
 }
 
 
@@ -168,17 +168,8 @@ void fnStackSize(uint16_t ss) {
  * \return void
  ***********************************************/
 void fnDisplayStack(uint16_t numberOfStackLines) {
-  //if(1 <= numberOfStackLines && numberOfStackLines <= 4) {
-    displayStack = numberOfStackLines;
-    refreshStack();
-  //}
-  //else {
-  //  displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-  //  #ifdef PC_BUILD
-  //    sprintf(errorMessage, "numberOfStackLines = %u is out of range for DSTACK!", numberOfStackLines);
-  //    showInfoDialog("In function fnDisplayStack:", errorMessage, "The value should be from 1 to 4.", NULL);
-  //  #endif
-  //}
+  displayStack = numberOfStackLines;
+  refreshStack();
 }
 
 

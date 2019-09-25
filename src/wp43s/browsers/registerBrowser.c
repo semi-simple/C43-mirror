@@ -75,15 +75,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
         if(getRegisterDataType(regist) == dtReal16) {
           if(showContent) {
-            realToDisplayString(REGISTER_REAL16_DATA(regist), false, TAG_NONE, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
-          }
-          else {
-            sprintf(tmpStr3000, "%d bytes", (int16_t)REAL16_SIZE);
-          }
-        }
-        else if(getRegisterDataType(regist) == dtAngle16) {
-          if(showContent) {
-            angle16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            real16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)REAL16_SIZE);
@@ -91,15 +83,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtReal34) {
           if(showContent) {
-            realToDisplayString(REGISTER_REAL34_DATA(regist), true, TAG_NONE, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
-          }
-          else {
-            sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
-          }
-        }
-        else if(getRegisterDataType(regist) == dtAngle34) {
-          if(showContent) {
-            angle34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
@@ -107,7 +91,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex16) {
           if(showContent) {
-            complexToDisplayString(REGISTER_COMPLEX16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)COMPLEX16_SIZE);
@@ -115,7 +99,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex34) {
           if(showContent) {
-            complexToDisplayString(REGISTER_COMPLEX34_DATA(regist), true, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)COMPLEX34_SIZE);
@@ -187,15 +171,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
             if(getRegisterDataType(regist) == dtReal16) {
               if(showContent) {
-                realToDisplayString(REGISTER_REAL16_DATA(regist), false, TAG_NONE, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
-              }
-              else {
-                sprintf(tmpStr3000, "%d bytes", (int16_t)REAL16_SIZE);
-              }
-            }
-            else if(getRegisterDataType(regist) == dtAngle16) {
-              if(showContent) {
-                angle16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                real16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 sprintf(tmpStr3000, "%d bytes", (int16_t)REAL16_SIZE);
@@ -203,15 +179,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtReal34) {
               if(showContent) {
-                realToDisplayString(REGISTER_REAL34_DATA(regist), true, TAG_NONE, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
-              }
-              else {
-                sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
-              }
-            }
-            else if(getRegisterDataType(regist) == dtAngle34) {
-              if(showContent) {
-                angle34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
@@ -219,7 +187,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex16) {
               if(showContent) {
-                complexToDisplayString(REGISTER_COMPLEX16_DATA(regist), false, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 sprintf(tmpStr3000, "4+%d bytes", (int16_t)COMPLEX16_SIZE);
@@ -227,7 +195,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex34) {
               if(showContent) {
-                complexToDisplayString(REGISTER_COMPLEX34_DATA(regist), true, tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
               }
               else {
                 sprintf(tmpStr3000, "4+%d bytes", (int16_t)COMPLEX34_SIZE);

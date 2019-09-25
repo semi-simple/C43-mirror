@@ -858,7 +858,7 @@ void addItemToNimBuffer(int16_t item) {
           }
 
           checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-          setRegisterDataType(REGISTER_X, dtAngle16, AM_DMS);
+          setRegisterAngularMode(REGISTER_X, AM_DMS);
 
           refreshRegisterLine(REGISTER_X);
           STACK_LIFT_ENABLE;
@@ -1962,11 +1962,11 @@ void closeNim(void) {
         }
         else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           if(nimInputIsReal34) {
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
             stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
           }
           else {
-            reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
             stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
           }
           if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
@@ -2043,7 +2043,7 @@ void closeNim(void) {
             return;
           }
 
-          reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+          reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
           int32ToReal16(numer, REGISTER_REAL16_DATA(REGISTER_X));
           int32ToReal16(denom, &temp);
           real16Divide(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
@@ -2061,7 +2061,7 @@ void closeNim(void) {
         else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
           int16_t imaginarySign;
 
-          reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+          reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
           if(nimBuffer[imaginaryMantissaSignLocation] == '+') {
             imaginarySign = 1;

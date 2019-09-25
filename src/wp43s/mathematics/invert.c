@@ -22,10 +22,10 @@
 
 
 
-void (* const invert[13])(void) = {
-// regX ==> 1            2           3           4           5            6            7            8           9           10            11          12          13
-//          Long integer Real16      Complex16   Angle16     Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34   Angle34
-            invertLonI,  invertRe16, invertCo16, invertAn16, invertError, invertError, invertError, invertRm16, invertCm16, invertError,  invertRe34, invertCo34, invertAn34
+void (* const invert[12])(void) = {
+// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
+//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
+            invertLonI,  invertRe16, invertCo16, invertError, invertError, invertError, invertError, invertRm16, invertCm16, invertError,  invertRe34, invertCo34
 };
 
 
@@ -63,14 +63,6 @@ void fnInvert(uint16_t unusedParamButMandatory) {
 }
 
 
-
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- * The result is then X = a/(a² + b²) - ib/(a² + b²)
- * The variable denom is used to store (a² + b²)
- ***********************************************************************/
 
 /********************************************//**
  * \brief 1 ÷ X(long integer) ==> X(long integer or real16)
@@ -110,7 +102,7 @@ void invertLonI(void) {
 
       realIcDivide(const_1, &reX, &reX);
 
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       realIcToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
     }
 
@@ -141,7 +133,7 @@ void invertRe16(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -154,6 +146,7 @@ void invertRe16(void) {
   else {
     real16Divide(const16_1, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -191,42 +184,6 @@ void invertCo16(void) {
 
 
 
-/********************************************//**
- * \brief 1 ÷ X(angle16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void invertAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertAn16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real16Copy((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-      setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function invertAn16:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else {
-    setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-    real16Divide(const16_1, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
 void invertRm16(void) {
   fnToBeCoded();
 }
@@ -256,7 +213,7 @@ void invertRe34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      real34Copy(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -269,6 +226,7 @@ void invertRe34(void) {
   else {
     real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -302,40 +260,4 @@ void invertCo34(void) {
 
   realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief 1 ÷ X(angle34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void invertAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertAn34:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      real34Copy((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function invertAn34:", "cannot divide a real34 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else {
-    setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-    real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-  }
 }

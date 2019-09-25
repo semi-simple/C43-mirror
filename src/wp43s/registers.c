@@ -612,7 +612,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        setRegisterDataType(r, dtReal16, TAG_NONE);
+        setRegisterDataType(r, dtReal16, AM_NONE);
         setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
         real16Zero(REGISTER_REAL16_DATA(r));
       }
@@ -626,7 +626,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumRegs; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        setRegisterDataType(r, dtReal16, TAG_NONE);
+        setRegisterDataType(r, dtReal16, AM_NONE);
         setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
         real16Zero(REGISTER_REAL16_DATA(r));
       }
@@ -687,7 +687,7 @@ void allocateNamedVariable(const char *variableName) {
   }
 
   // The new named variable is a real16 initialized to 0.0
-  setRegisterDataType(regist, dtReal16, TAG_NONE);
+  setRegisterDataType(regist, dtReal16, AM_NONE);
 
   len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
 
@@ -836,7 +836,6 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
     case dtLongInteger:  return *(REGISTER_DATA_MAX_LEN(regist)) + sizeof(dataSize_t);
     case dtReal16:       return REAL16_SIZE;
     case dtComplex16:    return COMPLEX16_SIZE;
-    case dtAngle16:      return REAL16_SIZE;
     //case dtTime:
     //case dtDate:
     case dtString:       return *(REGISTER_DATA_MAX_LEN(regist)) + sizeof(dataSize_t);
@@ -845,7 +844,6 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
     case dtShortInteger: return SHORT_INTEGER_SIZE;
     case dtReal34:       return REAL34_SIZE;
     case dtComplex34:    return COMPLEX34_SIZE;
-    case dtAngle34:      return REAL34_SIZE;
 
     default:
       sprintf(errorMessage, "In function getRegisterFullSize: data type %s is unknown!", getDataTypeName(getRegisterDataType(regist), true, false));
@@ -863,13 +861,13 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
-  if(getRegisterDataType(regist) != dtReal16 || getRegisterDataType(regist) != dtAngle16) {
-    reallocateRegister(regist, dtReal16, REAL16_SIZE, TAG_NONE);
+  if(getRegisterDataType(regist) == dtReal16) {
     real16Zero(REGISTER_REAL16_DATA(regist));
+    setRegisterTag(regist, AM_NONE);
   }
   else{
+    reallocateRegister(regist, dtReal16, REAL16_SIZE, AM_NONE);
     real16Zero(REGISTER_REAL16_DATA(regist));
-    setRegisterTag(regist, TAG_NONE);
   }
 }
 
@@ -937,7 +935,7 @@ void fnGetLocR(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConvertXToReal16(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtComplex34 || getRegisterDataType(REGISTER_X) == dtAngle34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtComplex34) {
     convertRegister34To16(REGISTER_X);
   }
 
@@ -968,7 +966,7 @@ void fnConvertXToReal16(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConvertXToReal34(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtComplex16 || getRegisterDataType(REGISTER_X) == dtAngle16) {
+  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtComplex16) {
     convertRegister16To34(REGISTER_X);
   }
 
@@ -1016,14 +1014,12 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
     // D is clear: test infinite values
     switch(resultDataType) {
       case dtReal16:
-      case dtAngle16:
         if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
           displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         break;
 
       case dtReal34:
-      case dtAngle34:
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
@@ -1067,7 +1063,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
     realIc_t tmp;
 
     case dtReal16:
-    case dtAngle16:
       if(real16IsZero(REGISTER_REAL16_DATA(res))) {
         real16SetPositiveSign(REGISTER_REAL16_DATA(res));
       }
@@ -1083,7 +1078,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       break;
 
     case dtReal34:
-    case dtAngle34:
       if(real34IsZero(REGISTER_REAL34_DATA(res))) {
         real34SetPositiveSign(REGISTER_REAL34_DATA(res));
       }
@@ -1172,7 +1166,6 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
       case dtLongInteger:  size = *(REGISTER_DATA_MAX_LEN(sourceRegister));     break;
       case dtReal16:       size = REAL16_SIZE;                                  break;
       case dtComplex16:    size = COMPLEX16_SIZE;                               break;
-      case dtAngle16:      size = REAL16_SIZE;                                  break;
       //case dtTime:
       //case dtDate:
       case dtString:       size = *(REGISTER_DATA_MAX_LEN(sourceRegister)) - 1; break;
@@ -1181,7 +1174,6 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
       case dtShortInteger: size = SHORT_INTEGER_SIZE;                           break;
       case dtReal34:       size = REAL34_SIZE;                                  break;
       case dtComplex34:    size = COMPLEX34_SIZE;                               break;
-      case dtAngle34:      size = REAL34_SIZE;                                  break;
 
       default:
         sprintf(errorMessage, "In function copySourceRegisterToDestRegister: data type %s is unknown!", getDataTypeName(getRegisterDataType(sourceRegister), true, false));
@@ -1786,20 +1778,10 @@ void printRegisterToConsole(calcRegister_t regist) {
 
   if(getRegisterDataType(regist) == dtReal16) {
     real16ToString(REGISTER_REAL16_DATA(regist), str);
-    printf("real16 %s", str);
-  }
-
-  else if(getRegisterDataType(regist) == dtAngle16) {
-    real16ToString(REGISTER_REAL16_DATA(regist), str);
-    printf("angle16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
+    printf("real16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
   }
 
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34ToString(REGISTER_REAL34_DATA(regist), str);
-    printf("real34 %s", str);
-  }
-
-  else if(getRegisterDataType(regist) == dtAngle34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
     printf("real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
   }
@@ -1871,20 +1853,10 @@ void printRegisterToString(calcRegister_t regist, char *registerContent) {
 
   if(getRegisterDataType(regist) == dtReal16) {
     real16ToString(REGISTER_REAL16_DATA(regist), str);
-    sprintf(registerContent, "real16 %s", str);
-  }
-
-  else if(getRegisterDataType(regist) == dtAngle16) {
-    real16ToString(REGISTER_REAL16_DATA(regist), str);
     sprintf(registerContent, "real16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
   }
 
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34ToString(REGISTER_REAL34_DATA(regist), str);
-    sprintf(registerContent, "real34 %s", str);
-  }
-
-  else if(getRegisterDataType(regist) == dtAngle34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
     sprintf(registerContent, "real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
   }
@@ -2090,11 +2062,11 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataS
   uint32_t dataSizeWithDataLen = dataSizeWithoutDataLen;
 
 //printf("reallocateRegister: %d to %s tag=%u (%u bytes including maxSize) begin\n", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithoutDataLen);
-  if((dataType == dtReal16 || dataType == dtAngle16) && dataSizeWithoutDataLen != REAL16_SIZE) {
+  if(dataType == dtReal16 && dataSizeWithoutDataLen != REAL16_SIZE) {
     sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real16 or an angle16! It should be REAL16_SIZE=%" FMT32U "!", dataSizeWithoutDataLen, (uint32_t)REAL16_SIZE);
     displayBugScreen(errorMessage);
   }
-  else if((dataType == dtReal34 || dataType == dtAngle34) && dataSizeWithoutDataLen != REAL34_SIZE) {
+  else if(dataType == dtReal34 && dataSizeWithoutDataLen != REAL34_SIZE) {
     sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real34 or an angle34! It should be REAL34_SIZE=%" FMT32U "!", dataSizeWithoutDataLen, (uint32_t)REAL34_SIZE);
     displayBugScreen(errorMessage);
   }

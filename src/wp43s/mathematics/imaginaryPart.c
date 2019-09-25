@@ -22,10 +22,10 @@
 
 
 
-void (* const imagPart[13])(void) = {
-// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12            13
-//          Long integer   Real16         Complex16     Angle16        Time           Date           String         Real16 mat     Complex16 m   Short integer  Real34         Complex34     Angle34
-            imagPartError, imagPartError, imagPartCo16, imagPartError, imagPartError, imagPartError, imagPartError, imagPartError, imagPartCm16, imagPartError, imagPartError, imagPartCo34, imagPartError
+void (* const imagPart[12])(void) = {
+// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12
+//          Long integer   Real16         Complex16     Angle16        Time           Date           String         Real16 mat     Complex16 m   Short integer  Real34         Complex34
+            imagPartError, imagPartError, imagPartCo16, imagPartError, imagPartError, imagPartError, imagPartError, imagPartError, imagPartCm16, imagPartError, imagPartError, imagPartCo34
 };
 
 
@@ -82,7 +82,7 @@ void imagPartCo16(void) {
   real16_t imagPart;
 
   real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &imagPart);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
   real16Copy(&imagPart, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -105,6 +105,6 @@ void imagPartCo34(void) {
   real34_t imagPart;
 
   real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &imagPart);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   real34Copy(&imagPart, REGISTER_REAL34_DATA(REGISTER_X));
 }

@@ -28,12 +28,12 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
   dataTypeX = getRegisterDataType(REGISTER_X);
   dataTypeY = getRegisterDataType(REGISTER_Y);
 
-  if(   (dataTypeX == dtReal16 || dataTypeX == dtAngle16 || dataTypeX == dtReal34 || dataTypeX == dtAngle34 || dataTypeX == dtLongInteger)
-     && (dataTypeY == dtReal16 || dataTypeY == dtAngle16 || dataTypeY == dtReal34 || dataTypeY == dtAngle34 || dataTypeY == dtLongInteger)) {
-    if(   ((dataTypeX == dtReal16 || dataTypeX == dtAngle16) && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)))
-       || ((dataTypeX == dtReal34 || dataTypeX == dtAngle34) && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)))
-       || ((dataTypeY == dtReal16 || dataTypeY == dtAngle16) && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)))
-       || ((dataTypeY == dtReal34 || dataTypeY == dtAngle34) && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)))) {
+  if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+     && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
+    if(   (dataTypeX == dtReal16 && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)))
+       || (dataTypeX == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)))
+       || (dataTypeY == dtReal16 && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)))
+       || (dataTypeY == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnToPolar:", "cannot use NaN as an input of " STD_RIGHT_ARROW "Pol", NULL, NULL);
@@ -49,10 +49,8 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
 
     switch(dataTypeX) {
       case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_X, &x);   break;
-      case dtReal16:
-      case dtAngle16:     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x); break;
-      case dtReal34:
-      case dtAngle34:     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x); real16 = false; break;
+      case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x); break;
+      case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x); real16 = false; break;
       default: {
         sprintf(errorMessage, "In function fnToPolar: %" FMT32U " is an unexpected dataTypeX value!", dataTypeX);
         displayBugScreen(errorMessage);
@@ -61,29 +59,26 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
 
     switch(dataTypeY) {
       case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);   break;
-      case dtReal16:
-      case dtAngle16:     real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y); break;
-      case dtReal34:
-      case dtAngle34:     real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y); real16 = false; break;
+      case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y); break;
+      case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y); real16 = false; break;
       default: {
         sprintf(errorMessage, "In function fnToPolar: %" FMT32U " is an unexpected dataTypeY value!", dataTypeY);
         displayBugScreen(errorMessage);
       }
     }
 
-
     realIcRectangularToPolar(&x, &y, &x, &y);
     convertAngleIcFromTo(&y, AM_RADIAN, currentAngularMode);
 
     if(real16) {
-      reallocateRegister(REGISTER_X, dtReal16,  REAL16_SIZE, TAG_NONE);
-      reallocateRegister(REGISTER_Y, dtAngle16, REAL16_SIZE, currentAngularMode);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, currentAngularMode);
       realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       realIcToReal16(&y, REGISTER_REAL16_DATA(REGISTER_Y));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34,  REAL34_SIZE, TAG_NONE);
-      reallocateRegister(REGISTER_Y, dtAngle34, REAL34_SIZE, currentAngularMode);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, currentAngularMode);
       realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       realIcToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
     }

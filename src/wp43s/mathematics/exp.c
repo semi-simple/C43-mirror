@@ -22,10 +22,10 @@
 
 
 
-void (* const Exp[13])(void) = {
-// regX ==> 1            2        3         4        5         6         7         8          9           10            11       12        13
-//          Long integer Real16   Complex16 Anfle16  Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34 Angle34
-            expLonI,     expRe16, expCo16,  expAn16, expError, expError, expError, expRm16,   expCm16,    expShoI,      expRe34, expCo34,  expAn34
+void (* const Exp[12])(void) = {
+// regX ==> 1            2        3         4         5         6         7         8          9           10            11       12
+//          Long integer Real16   Complex16 Anfle16   Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34
+            expLonI,     expRe16, expCo16,  expError, expError, expError, expError, expRm16,   expCm16,    expShoI,      expRe34, expCo34
 };
 
 
@@ -92,7 +92,7 @@ void expLonI(void) {
 
   convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
   realIcExp(&a, &a);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
   realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -107,11 +107,12 @@ void expRe16(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  realIcExp(&a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realIcExp(&x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -138,25 +139,6 @@ void expCo16(void) {
 
 
 
-void expAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expAn16:", "cannot use NaN as X input of exp", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  realIcExp(&a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-}
-
-
-
 void expRm16(void) {
   fnToBeCoded();
 }
@@ -170,12 +152,12 @@ void expCm16(void) {
 
 
 void expShoI(void) {
-  realIc_t a;
+  realIc_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &a);
-  realIcExp(&a, &a);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  realIcExp(&x, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -189,11 +171,12 @@ void expRe34(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  realIcExp(&a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realIcExp(&x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -216,23 +199,4 @@ void expCo34(void) {
 
   realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void expAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function expAn34:", "cannot use NaN as X input of exp", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  realIcExp(&a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
 }

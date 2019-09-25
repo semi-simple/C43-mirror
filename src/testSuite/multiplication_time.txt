@@ -15,7 +15,6 @@ Func: fnMultiply
 ; Time x Long Integer  see in multiplication_longInteger.txt
 ; Time x Real16        see in multiplication_real16.txt
 ; Time x Complex16     see in multiplication_complex16.txt
-; Time x Angle16       see in multiplication_angle16.txt
 ;==================================================================
 
 
@@ -92,14 +91,4 @@ Func: fnMultiply
 
 ;=======================================
 ; Complex34 x Time
-;=======================================
-
-
-
-;=======================================
-; Time x Angle34
-;=======================================
-
-;=======================================
-; Angle34 x Time
 ;=======================================

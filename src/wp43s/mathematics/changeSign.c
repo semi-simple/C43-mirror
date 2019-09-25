@@ -22,10 +22,10 @@
 
 
 
-void (* const chs[13])(void) = {
-// regX ==> 1            2        3         4        5          6         7         8          9           10            11       12        13
-//          Long integer real16   Complex16 Angle16  Time       Date      String    Real16 mat Complex16 m Short integer Real34   Complex34 Angle34
-            chsLonI,     chsRe16, chsCo16,  chsRe16, chsError,  chsError, chsError, chsRm16,   chsCm16,    chsShoI,      chsRe34, chsCo34,  chsRe34
+void (* const chs[12])(void) = {
+// regX ==> 1            2        3         4         5          6         7         8          9           10            11       12
+//          Long integer real16   Complex16 Angle16   Time       Date      String    Real16 mat Complex16 m Short integer Real34   Complex34
+            chsLonI,     chsRe16, chsCo16,  chsError, chsError,  chsError, chsError, chsRm16,   chsCm16,    chsShoI,      chsRe34, chsCo34
 };
 
 

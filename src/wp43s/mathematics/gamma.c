@@ -22,16 +22,16 @@
 
 
 
-void (* const Gamma[13])(void) = {
-// regX ==> 1            2            3            4            5             6             7             8             9             10             11           12           13
-//          Long integer Real16       Complex16    Angle16      Time          Date          String        Real16 mat    Complex16 m   Short integer  Real34       Complex34    Angle34
-            gammaLonI,   gammaRe16,   gammaCo16,   gammaAn16,   gammaError,   gammaError,   gammaError,   gammaError,   gammaError,   gammaError,    gammaRe34,   gammaCo34,   gammaAn34
+void (* const Gamma[12])(void) = {
+// regX ==> 1            2            3            4             5             6             7             8             9             10             11           12
+//          Long integer Real16       Complex16    Angle16       Time          Date          String        Real16 mat    Complex16 m   Short integer  Real34       Complex34
+            gammaLonI,   gammaRe16,   gammaCo16,   gammaError,   gammaError,   gammaError,   gammaError,   gammaError,   gammaError,   gammaError,    gammaRe34,   gammaCo34
 };
 
-void (* const lnGamma[13])(void) = {
-// regX ==> 1            2            3            4            5             6             7             8             9             10             11           12           13
-//          Long integer Real16       Complex16    Angle16      Time          Date          String        Real16 mat    Complex16 m   Short integer  Real34       Complex34    Angle34
-            lnGammaLonI, lnGammaRe16, lnGammaCo16, lnGammaAn16, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError,  lnGammaRe34, lnGammaCo34, lnGammaAn34
+void (* const lnGamma[12])(void) = {
+// regX ==> 1            2            3            4             5             6             7             8             9             10             11           12
+//          Long integer Real16       Complex16    Angle16       Time          Date          String        Real16 mat    Complex16 m   Short integer  Real34       Complex34
+            lnGammaLonI, lnGammaRe16, lnGammaCo16, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError,  lnGammaRe34, lnGammaCo34
 };
 
 
@@ -105,23 +105,23 @@ void fnLnGamma(uint16_t unusedParamButMandatory) {
 
 
 void gammaLonI(void) {
-  realIc_t a;
+  realIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  WP34S_Gamma(&a, &a);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  WP34S_Gamma(&x, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
 
 void lnGammaLonI(void) {
-  realIc_t a;
+  realIc_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  WP34S_LnGamma(&a, &a);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  WP34S_LnGamma(&x, &x);
+  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -135,11 +135,12 @@ void gammaRe16(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  WP34S_Gamma(&a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  WP34S_Gamma(&x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -153,11 +154,12 @@ void lnGammaRe16(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  WP34S_LnGamma(&a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  WP34S_LnGamma(&x, &x);
+  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -206,44 +208,6 @@ void lnGammaCo16(void) {
 
 
 
-void gammaAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function gammaAn16:", "cannot use NaN as X input of gamma", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  WP34S_Gamma(&a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-void lnGammaAn16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnGammaAn16:", "cannot use NaN as X input of lnGamma", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  WP34S_LnGamma(&a, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
 void gammaRe34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -253,11 +217,12 @@ void gammaRe34(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  WP34S_Gamma(&a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  WP34S_Gamma(&x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -271,11 +236,12 @@ void lnGammaRe34(void) {
     return;
   }
 
-  realIc_t a;
+  realIc_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  WP34S_LnGamma(&a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  WP34S_LnGamma(&x, &x);
+  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
@@ -320,42 +286,4 @@ void lnGammaCo34(void) {
 
   realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-void gammaAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function gammaAn34:", "cannot use NaN as X input of gamma", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  WP34S_Gamma(&a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-void lnGammaAn34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnGammaAn34:", "cannot use NaN as X input of lnGamma", NULL, NULL);
-    #endif
-    return;
-  }
-
-  realIc_t a;
-
-  setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  WP34S_LnGamma(&a, &a);
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }

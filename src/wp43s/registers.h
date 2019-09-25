@@ -73,7 +73,7 @@ typedef enum {
   dtLongInteger     =  0,  ///< Z arbitrary precision integer
   dtReal16          =  1,  ///< R single precision real (64 bits)
   dtComplex16       =  2,  ///< C single precision complex (2x 64 bits), RegDataInfo contains rectangular or polar mode
-  dtAngle16         =  3,  ///< Single precision angle
+  dtAngle           =  3,  ///< Single precision angle. No longer in use
   dtTime            =  4,  ///< Time
   dtDate            =  5,  ///< Date in various formats
   dtString          =  6,  ///< Alphanumeric string
@@ -82,13 +82,12 @@ typedef enum {
   dtShortInteger    =  9,  ///< Short integer (64 bit)
   dtReal34          = 10,  ///< R double precision real (128 bits)
   dtComplex34       = 11,  ///< C double precision complex (2x 128 bits)
-  dtAngle34         = 12   ///< Double precision angle
-  //dtLabel           = 13,  ///< Label
-  //dtSystemInteger   = 14,  ///< System integer (64 bits)
-  //dtFlags           = 15,  ///< Flags
-  //dtConfig          = 16,  ///< Configuration
-  //dtPgmStep         = 17,  ///< Program step
-  //dtDirectory       = 18,  ///< Program
+  //dtLabel           = 12,  ///< Label
+  //dtSystemInteger   = 13,  ///< System integer (64 bits)
+  //dtFlags           = 14,  ///< Flags
+  //dtConfig          = 15,  ///< Configuration
+  //dtPgmStep         = 16,  ///< Program step
+  //dtDirectory       = 17,  ///< Program
 } dataType_t; // 4 bits (NOT 5 BITS)
 
 typedef union {
@@ -96,7 +95,7 @@ typedef union {
   struct {
     uint32_t dataPointer     : 16; // Memory block number
     uint32_t dataType        :  4; // dtLongInteger, dtReal16, ...
-    uint32_t tag             :  5; // TAG_NONE, Short integer base, AM_DEGREE, AM_DMS,...
+    uint32_t tag             :  5; // AM_NONE, Short integer base, AM_DEGREE, AM_DMS,...
     uint32_t notUsed         :  2;
     uint32_t variableNameLen :  5;
   };

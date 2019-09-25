@@ -33,7 +33,6 @@
  ***********************************************/
 void convertRegister16To34(calcRegister_t regist) {
   complex34_t temp;
-  //calcRegister_t temp;
 
   switch(getRegisterDataType(regist)) {
     case dtReal16:
@@ -49,15 +48,8 @@ void convertRegister16To34(calcRegister_t regist) {
       complex34Copy(&temp, REGISTER_COMPLEX34_DATA(regist));
       break;
 
-    case dtAngle16:
-      real16ToReal34(REGISTER_REAL16_DATA(regist), VARIABLE_REAL34_DATA(&temp));
-      reallocateRegister(regist, dtAngle34, REAL34_SIZE, getRegisterTag(regist));
-      real34Copy(&temp, REGISTER_REAL34_DATA(regist));
-      break;
-
     case dtReal34:
     case dtComplex34:
-    case dtAngle34:
       break;
 
     default:
@@ -78,12 +70,10 @@ void convertRegister16To34(calcRegister_t regist) {
  ***********************************************/
 void convertRegister34To16(calcRegister_t regist) {
   complex16_t temp;
-  //calcRegister_t temp;
 
   switch(getRegisterDataType(regist)) {
     case dtReal16:
     case dtComplex16:
-    case dtAngle16:
       break;
 
     case dtReal34:
@@ -97,12 +87,6 @@ void convertRegister34To16(calcRegister_t regist) {
       real34ToReal16(REGISTER_IMAG34_DATA(regist), VARIABLE_IMAG16_DATA(&temp));
       reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, getRegisterTag(regist));
       complex16Copy(&temp, REGISTER_COMPLEX16_DATA(regist));
-      break;
-
-    case dtAngle34:
-      real34ToReal16(REGISTER_REAL34_DATA(regist), VARIABLE_REAL16_DATA(&temp));
-      reallocateRegister(regist, dtAngle16, REAL16_SIZE, getRegisterTag(regist));
-      real16Copy(&temp, REGISTER_REAL16_DATA(regist));
       break;
 
     default:
@@ -141,7 +125,7 @@ void convertLongIntegerRegisterToReal16Register(calcRegister_t source, calcRegis
   convertLongIntegerRegisterToLongInteger(source, lgInt);
   longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
-  reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(destination, dtReal16, REAL16_SIZE, AM_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
 
@@ -153,7 +137,7 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
   convertLongIntegerRegisterToLongInteger(source, lgInt);
   longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
 
@@ -220,7 +204,7 @@ void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
 
   longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
-  reallocateRegister(destination, dtReal16, REAL16_SIZE, TAG_NONE);
+  reallocateRegister(destination, dtReal16, REAL16_SIZE, AM_NONE);
   stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
 }
 
@@ -295,7 +279,7 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
 
   longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, TAG_NONE);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
 }
 

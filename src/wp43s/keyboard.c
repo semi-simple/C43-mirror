@@ -412,7 +412,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           int16_t mem = stringByteLength(aimBuffer);
 
-          reallocateRegister(REGISTER_X, dtString, mem, TAG_NONE);
+          reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
           memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
 
           STACK_LIFT_ENABLE;
@@ -486,7 +486,7 @@ void btnPressed(void *notUsed, void *data) {
           else {
             int16_t len = stringByteLength(aimBuffer);
 
-            reallocateRegister(REGISTER_X, dtString, len, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtString, len, AM_NONE);
 
             memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len + 1);
             aimBuffer[0] = 0;
@@ -547,43 +547,25 @@ void btnPressed(void *notUsed, void *data) {
         uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
         bool_t xIsAReal;
 
-        if(   (dataTypeX == dtReal16 || dataTypeX == dtAngle16 || dataTypeX == dtReal34 || dataTypeX == dtAngle34 || dataTypeX == dtLongInteger)
-           && (dataTypeY == dtReal16 || dataTypeY == dtAngle16 || dataTypeY == dtReal34 || dataTypeY == dtAngle34 || dataTypeY == dtLongInteger)) {
+        if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+           && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
           fnSetFlag(FLAG_CPXRES);
 
           xIsAReal = true;
           if(complexMode == CM_POLAR) {
-            if(dataTypeX == dtAngle16) {
+            if(dataTypeX == dtReal16 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
               convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), AM_RADIAN);
-              setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
+              setRegisterAngularMode(REGISTER_X, AM_NONE);
               dataTypeX = dtReal16;
               xIsAReal = false;
             }
-            else if(dataTypeX == dtAngle34) {
+            else if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
               convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), AM_RADIAN);
-              setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
+              setRegisterAngularMode(REGISTER_X, AM_NONE);
               dataTypeX = dtReal34;
               xIsAReal = false;
             }
-          }
-
-          if(dataTypeX == dtAngle16) {
-            setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-            dataTypeX = dtReal16;
-          }
-          else if(dataTypeX == dtAngle34) {
-            setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-            dataTypeX = dtReal34;
-          }
-
-          if(dataTypeY == dtAngle16) {
-            setRegisterDataType(REGISTER_Y, dtReal16, TAG_NONE);
-            dataTypeY = dtReal16;
-          }
-          else if(dataTypeY == dtAngle34) {
-            setRegisterDataType(REGISTER_Y, dtReal34, TAG_NONE);
-            dataTypeY = dtReal34;
           }
 
           if(dataTypeX == dtLongInteger) {
@@ -612,7 +594,7 @@ void btnPressed(void *notUsed, void *data) {
             real34_t temp;
 
             real16ToReal34(REGISTER_REAL16_DATA(REGISTER_X), &temp);
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
             real34Copy(&temp, REGISTER_REAL34_DATA(REGISTER_X));
             dataTypeX = dtReal34;
           }
@@ -621,7 +603,7 @@ void btnPressed(void *notUsed, void *data) {
             real34_t temp;
 
             real16ToReal34(REGISTER_REAL16_DATA(REGISTER_Y), &temp);
-            reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
             real34Copy(&temp, REGISTER_REAL34_DATA(REGISTER_Y));
           }
 
@@ -630,7 +612,7 @@ void btnPressed(void *notUsed, void *data) {
 
             real16Copy(REGISTER_REAL16_DATA(REGISTER_Y), &temp);
             real16Copy(REGISTER_REAL16_DATA(REGISTER_X), VARIABLE_IMAG16_DATA(&temp));
-            reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
             if(complexMode == CM_POLAR) {
               if(real16CompareEqual(VARIABLE_REAL16_DATA(&temp), const16_0)) {
@@ -661,7 +643,7 @@ void btnPressed(void *notUsed, void *data) {
 
             real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), &temp);
             real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&temp));
-            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
             if(complexMode == CM_POLAR) {
               if(real34CompareEqual(VARIABLE_REAL34_DATA(&temp), const34_0)) {
@@ -695,7 +677,7 @@ void btnPressed(void *notUsed, void *data) {
 
         else if(dataTypeX == dtComplex16) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-          reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, TAG_NONE);
+          reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
           STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
@@ -708,7 +690,7 @@ void btnPressed(void *notUsed, void *data) {
             liftStack();
             real16RectangularToPolar(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X)); // X in radians
             convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
-            setRegisterDataType(REGISTER_X, dtAngle16, currentAngularMode);
+            setRegisterAngularMode(REGISTER_X, currentAngularMode);
             temporaryInformation = TI_RADIUS_THETA;
           }
 
@@ -717,22 +699,22 @@ void btnPressed(void *notUsed, void *data) {
 
         else if(dataTypeX == dtComplex34) {
           copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-          reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+          reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
           STACK_LIFT_ENABLE;
           if(complexMode == CM_RECTANGULAR) {
             real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
             liftStack();
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
             real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
             temporaryInformation = TI_RE_IM;
           }
           else { // CM_POLAR mode
             liftStack();
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, TAG_NONE);
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
             real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X)); // X in radians
             convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
-            setRegisterDataType(REGISTER_X, dtAngle34, currentAngularMode);
+            setRegisterAngularMode(REGISTER_X, currentAngularMode);
             temporaryInformation = TI_RADIUS_THETA;
           }
 
@@ -993,15 +975,14 @@ void btnPressed(void *notUsed, void *data) {
             refreshRegisterLine(REGISTER_X);
             break;
 
-          case dtReal16 :
-            break;
-
-          case dtAngle16:
-            if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-              convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+          case dtReal16:
+            if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+              if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+                convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+              }
+              setRegisterAngularMode(REGISTER_X, AM_NONE);
+              refreshRegisterLine(REGISTER_X);
             }
-            setRegisterDataType(REGISTER_X, dtReal16, TAG_NONE);
-            refreshRegisterLine(REGISTER_X);
             break;
 
           case dtShortInteger :
@@ -1009,17 +990,18 @@ void btnPressed(void *notUsed, void *data) {
             refreshRegisterLine(REGISTER_X);
             break;
 
-          case dtReal34 :
-            convertRegister34To16(REGISTER_X);
-            refreshRegisterLine(REGISTER_X);
-            break;
-
-          case dtAngle34:
-            if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-              convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+          case dtReal34:
+            if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+              convertRegister34To16(REGISTER_X);
+              refreshRegisterLine(REGISTER_X);
             }
-            setRegisterDataType(REGISTER_X, dtReal34, TAG_NONE);
-            refreshRegisterLine(REGISTER_X);
+            else {
+              if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+                convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+              }
+              setRegisterAngularMode(REGISTER_X, AM_NONE);
+              refreshRegisterLine(REGISTER_X);
+            }
             break;
 
           default :

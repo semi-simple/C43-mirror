@@ -15,7 +15,6 @@ Func: fnAdd
 ; Date + Long Integer  see in addition_longInteger.txt
 ; Date + Real16        see in addition_real16.txt
 ; Date + Complex16     see in addition_complex16.txt
-; Date + Angle16       see in addition_angle16.txt
 ; Date + Time          see in addition_time.txt
 ;==================================================================
 
@@ -83,14 +82,4 @@ Func: fnAdd
 
 ;=======================================
 ; Complex34 + Date
-;=======================================
-
-
-
-;=======================================
-; Date + Angle34
-;=======================================
-
-;=======================================
-; Angle34 + Date
 ;=======================================

@@ -30,6 +30,26 @@ Out: EC=24 FI=0 SL=0 RX=Re16:"50"
 In:  AM=DEG SL=0 FI=0 RX=Re16:"89.99999"
 Out: EC=24 FI=0 SL=0 RX=Re16:"89.99999"
 
+In:  SL=0 FI=0 NCSD=16 RX=Re16:"5.32564":DMS
+Out: EC=24 FI=0 SL=0 RX=Re16:"5.32564":DMS
+
+In:  SL=0 FI=0 RX=Re16:"-5.32564":GRAD
+Out: EC=24 FI=0 SL=0 RX=Re16:"-5.32564":GRAD
+
+; NaN
+In:  SL=0 FI=0 RX=Re16:"NaN":RAD
+Out: EC=24 FI=0 SL=0 RX=Re16:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
+Out: EC=24 FI=0 SL=0 RX=Re16:"inf":DEG
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf":MULTPI
+Out: EC=24 FI=0 SL=0 RX=Re16:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":RAD
+Out: EC=24 FI=0 SL=0 RX=Re16:"-inf":RAD
+
 ; NaN
 In:  SL=0 FI=0 RX=Re16:"NaN"
 Out: EC=24 FI=0 SL=0 RX=Re16:"NaN"
@@ -51,32 +71,6 @@ Out: EC=24 FI=0 SL=0 RX=Re16:"-inf"
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
 Out: EC=0 FI=1 SL=1 RL=Co16:"6.2 i -7.6" RX=Co16:"0.63212672747179388997500395594446479235650485369995907778387528 i -0.77486502077187638125968226857708587450152207872898209534797615"
-
-
-
-;=======================================
-; unitVector(Angle16) --> Error24
-;=======================================
-In:  SL=0 FI=0 NCSD=16 RX=An16:"5.32564":DMS
-Out: EC=24 FI=0 SL=0 RX=An16:"5.32564":DMS
-
-In:  SL=0 FI=0 RX=An16:"-5.32564":GRAD
-Out: EC=24 FI=0 SL=0 RX=An16:"-5.32564":GRAD
-
-; NaN
-In:  SL=0 FI=0 RX=An16:"NaN":RAD
-Out: EC=24 FI=0 SL=0 RX=An16:"NaN":RAD
-
-; Infinity
-In:  SL=0 FI=0 FD=1 RX=An16:"inf":DEG
-Out: EC=24 FI=0 SL=0 RX=An16:"inf":DEG
-
-In:  SL=0 FI=0 FD=0 RX=An16:"inf":MULTPI
-Out: EC=24 FI=0 SL=0 RX=An16:"inf":MULTPI
-
-In:  SL=0 FI=0 FD=0 RX=An16:"-inf":RAD
-Out: EC=24 FI=0 SL=0 RX=An16:"-inf":RAD
-
 
 
 ;=======================================
@@ -131,6 +125,26 @@ Out: EC=24 FI=0 SL=0 RX=Re34:"50"
 In:  AM=DEG SL=0 FI=0 RX=Re34:"89.99999"
 Out: EC=24 FI=0 SL=0 RX=Re34:"89.99999"
 
+In:  SL=0 FI=0 NCSD=34 RX=Re34:"5.32564":DMS
+Out: EC=24 FI=0 SL=0 RX=Re34:"5.32564":DMS
+
+In:  SL=0 FI=0 RX=Re34:"-5.32564":GRAD
+Out: EC=24 FI=0 SL=0 RX=Re34:"-5.32564":GRAD
+
+; NaN
+In:  SL=0 FI=0 RX=Re34:"NaN":RAD
+Out: EC=24 FI=0 SL=0 RX=Re34:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
+Out: EC=24 FI=0 SL=0 RX=Re34:"inf":DEG
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf":MULTPI
+Out: EC=24 FI=0 SL=0 RX=Re34:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":RAD
+Out: EC=24 FI=0 SL=0 RX=Re34:"-inf":RAD
+
 ; NaN
 In:  SL=0 FI=0 RX=Re34:"NaN"
 Out: EC=24 FI=0 SL=0 RX=Re34:"NaN"
@@ -152,28 +166,3 @@ Out: EC=24 FI=0 SL=0 RX=Re34:"-inf"
 ;=======================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
 Out: EC=0 FI=1 SL=1 RL=Co34:"6.2 i -7.6" RX=Co34:"0.63212672747179388997500395594446479235650485369995907778387528 i -0.77486502077187638125968226857708587450152207872898209534797615"
-
-
-
-;=======================================
-; unitVector(Angle34) --> Error24
-;=======================================
-In:  SL=0 FI=0 NCSD=34 RX=An34:"5.32564":DMS
-Out: EC=24 FI=0 SL=0 RX=An34:"5.32564":DMS
-
-In:  SL=0 FI=0 RX=An34:"-5.32564":GRAD
-Out: EC=24 FI=0 SL=0 RX=An34:"-5.32564":GRAD
-
-; NaN
-In:  SL=0 FI=0 RX=An34:"NaN":RAD
-Out: EC=24 FI=0 SL=0 RX=An34:"NaN":RAD
-
-; Infinity
-In:  SL=0 FI=0 FD=1 RX=An34:"inf":DEG
-Out: EC=24 FI=0 SL=0 RX=An34:"inf":DEG
-
-In:  SL=0 FI=0 FD=0 RX=An34:"inf":MULTPI
-Out: EC=24 FI=0 SL=0 RX=An34:"inf":MULTPI
-
-In:  SL=0 FI=0 FD=0 RX=An34:"-inf":RAD
-Out: EC=24 FI=0 SL=0 RX=An34:"-inf":RAD

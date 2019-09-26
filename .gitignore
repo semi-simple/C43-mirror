@@ -22,4 +22,5 @@ src/qspi_crc.h
 /generateConstants
 /testSuite
 /ttf2RasterFonts
+/testTtf2RasterFonts
 /wp43s

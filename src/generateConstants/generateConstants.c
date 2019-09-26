@@ -452,7 +452,7 @@ void generateAllConstants(void) {
 }
 
 
-int main(int argc, char* argv[]) {
+int main(void) {
 
 #if defined __APPLE__
   // we take the directory where the application is as the root for this application.

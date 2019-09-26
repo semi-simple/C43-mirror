@@ -49,13 +49,118 @@ void copyScreenToClipboard(void) {
   cairo_surface_t *imageSurface;
   GtkClipboard *clipboard;
 
-  printf("Screen copy to clipboard\n");
-
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);
 
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride*4);
   gtk_clipboard_set_image(clipboard, gdk_pixbuf_get_from_surface(imageSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+}
+
+
+
+void copyRegisterXToClipboard(void) {
+  longInteger_t lgInt;
+  GtkClipboard *clipboard;
+  int16_t base, sign, n;
+  uint64_t shortInt;
+  static const char digits[17] = "0123456789ABCDEF";
+
+  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_clear(clipboard);
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+      longIntegerToAllocatedString(lgInt, tmpStr3000, sizeof(tmpStr3000));
+      longIntegerFree(lgInt);
+      break;
+
+    case dtReal16:
+      real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
+      break;
+
+    case dtComplex16:
+      real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
+      if(real16IsNegative(REGISTER_IMAG16_DATA(REGISTER_X))) {
+        strcat(tmpStr3000, " - ix");
+        real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
+        real16ToString(REGISTER_IMAG16_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
+        real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
+      }
+      else {
+        strcat(tmpStr3000, " + ix");
+        real16ToString(REGISTER_IMAG16_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
+      }
+      break;
+
+    case dtTime:
+      strcpy(tmpStr3000, "Copying a time to the clipboard is to be coded!");
+      break;
+
+    case dtDate:
+      strcpy(tmpStr3000, "Copying a date to the clipboard is to be coded!");
+      break;
+
+    case dtString:
+      memcpy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
+      stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
+      break;
+
+    case dtReal16Matrix:
+      strcpy(tmpStr3000, "Copying a real16 matrix to the clipboard is to be coded!");
+      break;
+
+    case dtComplex16Matrix:
+      strcpy(tmpStr3000, "Copying a complex16 matrix to the clipboard is to be coded!");
+      break;
+
+    case dtShortInteger:
+      convertShortIntegerRegisterToUInt64(REGISTER_X, &sign, &shortInt);
+      base = getRegisterShortIntegerBase(REGISTER_X);
+
+      n = TMP_STR_LENGTH - 100;
+      sprintf(tmpStr3000 + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
+
+      if(shortInt == 0) {
+        tmpStr3000[n--] = '0';
+      }
+      else {
+        while(shortInt != 0) {
+          tmpStr3000[n--] = digits[shortInt % base];
+          shortInt /= base;
+        }
+        if(sign) {
+          tmpStr3000[n--] = '-';
+        }
+      }
+      n++;
+
+      strcpy(tmpStr3000, tmpStr3000 + n);
+      break;
+
+    case dtReal34:
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
+      break;
+
+    case dtComplex34:
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
+      if(real34IsNegative(REGISTER_IMAG34_DATA(REGISTER_X))) {
+        strcat(tmpStr3000, " - ix");
+        real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
+        real34ToString(REGISTER_IMAG34_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
+        real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
+      }
+      else {
+        strcat(tmpStr3000, " + ix");
+        real34ToString(REGISTER_IMAG34_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
+      }
+      break;
+
+    default:
+      sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" FMT32U " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(REGISTER_X));
+  }
+
+  gtk_clipboard_set_text(clipboard, tmpStr3000, -1);
 }
 
 

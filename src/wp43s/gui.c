@@ -249,7 +249,6 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       break;
 
     case 88:  // X
-    case 120: // x
       //printf("key pressed: XEQ\n");
       btnClicked(w, "21");
       break;
@@ -344,8 +343,13 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
 
     case 72:  // H
     case 104: // h
-      //printf("key pressed: h Hardcopy\n");
+      //printf("key pressed: h Hardcopy to clipboard\n");
       copyScreenToClipboard();
+      break;
+
+    case 120: // x
+      //printf("key pressed: x copy register X to clipboard\n");
+      copyRegisterXToClipboard();
       break;
 
     default:
@@ -1836,7 +1840,7 @@ void setupUI(void) {
   // LCD screen 400x240
   screen = gtk_drawing_area_new();
   gtk_widget_set_size_request(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "h(ardcopy) copies screen image to clipboard");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "h(ardcopy) copies screen image to the clipboard\nx copies the content of register X to the clipboard");
   gtk_fixed_put(GTK_FIXED(grid), screen, 63, 72);
   screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
   numBytes = screenStride * SCREEN_HEIGHT * 4;
@@ -2043,7 +2047,7 @@ void setupUI(void) {
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn31), "s");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn32), "r");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn33), "Page Down");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn34), "C");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn34), "upper C");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn35), "f");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn36), "g");
   lbl31F  = gtk_label_new("");
@@ -2253,7 +2257,7 @@ void setupUI(void) {
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn52), "7");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn53), "8");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn54), "9");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn55), "x");
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn55), "upper X");
   lbl51F  = gtk_label_new("");
   lbl52F  = gtk_label_new("");
   lbl53F  = gtk_label_new("");

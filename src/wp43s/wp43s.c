@@ -607,6 +607,7 @@ void program_main(void) {
 #ifdef TESTSUITE_BUILD
 #include "testSuite.h"
 
+int main(int argc, char* argv[]) {
 #if defined __APPLE__
   // we take the directory where the application is as the root for this application.
   // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':

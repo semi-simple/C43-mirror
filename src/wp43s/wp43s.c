@@ -189,10 +189,14 @@ void setupDefaults(void) {
   freeBlocks[0].size    = BYTES_TO_BLOCKS(RAM_SIZE);
 
   glyphNotFound.data   = malloc(38);
+#ifndef __APPLE__
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
   strncpy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
+#ifndef __APPLE__
   #pragma GCC diagnostic pop
+#endif
 
   // Initialization of user key assignments
   memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -339,6 +343,23 @@ void setupDefaults(void) {
 
 #ifdef PC_BUILD
 int main(int argc, char* argv[]) {
+
+#if defined __APPLE__
+  // we take the directory where the application is as the root for this application.
+  // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
+  if (argc>=1) {
+    char *curdir = malloc(1000);
+    // find last /:
+    char *s = strrchr(argv[0], '/');
+    if (s != 0) {
+      // take the directory before the appname:
+      strncpy(curdir, argv[0], s-argv[0]);
+      chdir(curdir);
+      free(curdir);
+    }
+  }
+#endif
+
   wp43sMem = 0;
   gmpMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
@@ -586,8 +607,22 @@ void program_main(void) {
 #ifdef TESTSUITE_BUILD
 #include "testSuite.h"
 
+#if defined __APPLE__
+  // we take the directory where the application is as the root for this application.
+  // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
+  if (argc>=1) {
+    char *curdir = malloc(1000);
+    // find last /:
+    char *s = strrchr(argv[0], '/');
+    if (s != 0) {
+      // take the directory before the appname:
+      strncpy(curdir, argv[0], s-argv[0]);
+      chdir(curdir);
+      free(curdir);
+    }
+  }
+#endif
 
-int main(void) {
   wp43sMem = 0;
   gmpMem = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);

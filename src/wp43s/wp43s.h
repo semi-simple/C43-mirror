@@ -29,7 +29,7 @@
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
-#ifdef PC_BUILD
+#if defined(PC_BUILD) && !defined(__APPLE__)
   #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
 

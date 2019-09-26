@@ -315,7 +315,8 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
 
 
 char hexToChar(const char *string) {
-  char ch;
+    // the itialisation to zero prevents a 'variable used is not initialized' warning on Mac:
+    char ch=0;
 
   if(   (('0' <= string[0] && string[0] <= '9') || ('A' <= string[0] && string[0] <= 'F') || ('a' <= string[0] && string[0] <= 'f'))
      && (('0' <= string[1] && string[1] <= '9') || ('A' <= string[1] && string[1] <= 'F') || ('a' <= string[1] && string[1] <= 'f'))) {

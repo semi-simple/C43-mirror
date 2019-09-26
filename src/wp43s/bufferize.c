@@ -371,7 +371,7 @@ void addItemToNimBuffer(int16_t item) {
               strcat(nimBuffer, "0");
             }
 
-            if(atoi(nimBuffer + exponentSignLocation) > 9999 || atoi(nimBuffer + exponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + exponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + exponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -382,7 +382,7 @@ void addItemToNimBuffer(int16_t item) {
 
             strcat(nimBuffer, indexOfItems[item].itemPrinted);
 
-            if(atoi(nimBuffer + exponentSignLocation) > 9999 || atoi(nimBuffer + exponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + exponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + exponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -434,7 +434,7 @@ void addItemToNimBuffer(int16_t item) {
               strcat(nimBuffer, "0");
             }
 
-            if(atoi(nimBuffer + imaginaryExponentSignLocation) > 9999 || atoi(nimBuffer + imaginaryExponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + imaginaryExponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + imaginaryExponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -445,7 +445,7 @@ void addItemToNimBuffer(int16_t item) {
 
             strcat(nimBuffer, indexOfItems[item].itemPrinted);
 
-            if(atoi(nimBuffer + imaginaryExponentSignLocation) > 9999 || atoi(nimBuffer + imaginaryExponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + imaginaryExponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + imaginaryExponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -1967,12 +1967,6 @@ void closeNim(void) {
             reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
             stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
           }
-          if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of a real must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
-            #endif
-          }
         }
         else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
           int16_t i, posSpace, posSlash, lg;
@@ -2059,8 +2053,6 @@ void closeNim(void) {
         else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
           int16_t imaginarySign;
 
-          reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-
           if(nimBuffer[imaginaryMantissaSignLocation] == '+') {
             imaginarySign = 1;
           }
@@ -2069,41 +2061,60 @@ void closeNim(void) {
           }
           nimBuffer[imaginaryMantissaSignLocation] = 0;
 
-          stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
-          if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of the real part (or magnitude) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
-            #endif
-          }
+          if(nimInputIsReal34) {
+            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+            stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
 
-          stringToReal16(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG16_DATA(REGISTER_X));
-          if(imaginarySign == -1) {
-            real16SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
-          }
-          if(real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of the imaginary part (or angle) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
-            #endif
-          }
-
-          if(complexMode == CM_POLAR) {
-            if(real16CompareEqual(REGISTER_REAL16_DATA(REGISTER_X), const16_0)) {
-              real16Zero(REGISTER_IMAG16_DATA(REGISTER_X));
+            stringToReal34(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
+            if(imaginarySign == -1) {
+              real34SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
             }
-            else {
-              real16_t magnitude16, theta16;
 
-              real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &magnitude16);
-              real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &theta16);
-              convertAngle16FromTo(&theta16, currentAngularMode, AM_RADIAN);
-              if(real16CompareLessThan(&magnitude16, const16_0)) {
-                real16SetPositiveSign(&magnitude16);
-                real16Add(&theta16, const_pi, &theta16);
-                real16Remainder(&theta16, const16_2pi, &theta16);
+            if(complexMode == CM_POLAR) {
+              if(real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_0)) {
+                real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
               }
-              real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
+              else {
+                real34_t magnitude34, theta34;
+
+                real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &magnitude34);
+                real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &theta34);
+                convertAngle34FromTo(&theta34, currentAngularMode, AM_RADIAN);
+                if(real34CompareLessThan(&magnitude34, const34_0)) {
+                  real34SetPositiveSign(&magnitude34);
+                  real34Add(&theta34, const_pi, &theta34);
+                  real34Remainder(&theta34, const34_2pi, &theta34);
+                }
+                real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in radian
+              }
+            }
+          }
+          else {
+            reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+            stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
+
+            stringToReal16(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG16_DATA(REGISTER_X));
+            if(imaginarySign == -1) {
+              real16SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
+            }
+
+            if(complexMode == CM_POLAR) {
+              if(real16CompareEqual(REGISTER_REAL16_DATA(REGISTER_X), const16_0)) {
+                real16Zero(REGISTER_IMAG16_DATA(REGISTER_X));
+              }
+              else {
+                real16_t magnitude16, theta16;
+
+                real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &magnitude16);
+                real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &theta16);
+                convertAngle16FromTo(&theta16, currentAngularMode, AM_RADIAN);
+                if(real16CompareLessThan(&magnitude16, const16_0)) {
+                  real16SetPositiveSign(&magnitude16);
+                  real16Add(&theta16, const_pi, &theta16);
+                  real16Remainder(&theta16, const16_2pi, &theta16);
+                }
+                real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
+              }
             }
           }
         }

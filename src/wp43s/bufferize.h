@@ -18,9 +18,10 @@
  * \file bufferize.h
  ***********************************************/
 
-#define AIM_BUFFER_LENGTH 50
-#define TAM_BUFFER_LENGTH 30
-#define NIM_BUFFER_LENGTH 70
+#define AIM_BUFFER_LENGTH   50
+#define TAM_BUFFER_LENGTH   30
+#define NIM_BUFFER_LENGTH   70
+#define NIM_EXPONENT_LIMIT 999
 
 #define TT_OPERATION       0
 #define TT_LETTER          1

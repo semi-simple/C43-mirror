@@ -1856,8 +1856,8 @@ void setupUI(void) {
     lblRegisterL2 = gtk_label_new("");
     gtk_widget_set_name(lblRegisterL1, "registerL");
     gtk_widget_set_name(lblRegisterL2, "registerL");
-    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL1, 30, 28);
-    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 30, 46);
+    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL1, 5, 28);
+    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 5, 46);
   #endif
 
   #if (SHOW_MEMORY_STATUS == 1)

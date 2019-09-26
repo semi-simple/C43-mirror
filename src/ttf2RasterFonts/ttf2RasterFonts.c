@@ -134,7 +134,7 @@ void exportCStructure(char const *ttfName) {
   //fprintf(cFile, "  .ascender       = %d,\n", face->ascender/onePixelSize);
   //fprintf(cFile, "  .descender      = %d,\n", face->descender/onePixelSize);
   fprintf(cFile, "  .numberOfGlyphs = %d,\n", numberOfGlyphs);
-  fprintf(cFile, "\n");
+  fprintf(cFile, "  .glyphs = {\n\n");
 
   pen.x = 0;
   pen.y = (fontHeightPixels - face->ascender/onePixelSize)*64;
@@ -185,7 +185,7 @@ void exportCStructure(char const *ttfName) {
       //////////////////////
       // Render the glyph //
       //////////////////////
-      fprintf(cFile, "  // %s \n", glyphName);
+      fprintf(cFile, "    // %s \n", glyphName);
 
       bytesPerRow = colsGlyph;
 
@@ -196,13 +196,9 @@ void exportCStructure(char const *ttfName) {
         bytesPerRow = bytesPerRow/8 + 1;
       }
 
-      //dataLength = bytesPerRow * rowsGlyph;
-
-      //fprintf(cFile, "  .glyphs[%3d] = {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d, .dataLength=%3d,\n",
-      //                                cc,       (unsigned int)charCodes[cc], colsBeforeGlyph,  colsGlyph,        colsAfterGlyph,      rowsAboveGlyph,    rowsGlyph,         rowsBelowGlyph,   dataLength);
-      fprintf(cFile, "  .glyphs[%3d] = {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d,\n",
-                                      cc,       (unsigned int)(charCodes[cc]>=0x0080 ? charCodes[cc]|0x8000 : charCodes[cc]), colsBeforeGlyph, colsGlyph, colsAfterGlyph, rowsAboveGlyph, rowsGlyph, rowsBelowGlyph);
-      fprintf(cFile, "                  .data=\"");
+      fprintf(cFile, "    {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d,\n",
+                      (unsigned int)(charCodes[cc]>=0x0080 ? charCodes[cc]|0x8000 : charCodes[cc]), colsBeforeGlyph, colsGlyph, colsAfterGlyph, rowsAboveGlyph, rowsGlyph, rowsBelowGlyph);
+      fprintf(cFile, "     .data=\"");
 
       for(y=0; y<rowsGlyph; y++) {
         byte = 0;
@@ -223,10 +219,10 @@ void exportCStructure(char const *ttfName) {
     }
   }
 
-  fprintf(cFile, "\n};\n");
+  fprintf(cFile, "}\n};\n");
 
   /////////////////////////////
-  // Free th face ressources //
+  // Free the face ressources //
   /////////////////////////////
   FT_Done_Face(face);
 }

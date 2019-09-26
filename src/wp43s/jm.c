@@ -34,11 +34,12 @@
 void Reset_Shift_Mem(void) {                            //JM
       #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
       now = sys_current_ms();                           //JM TIMER DMCP SHIFTCANCEL
+      now_MEM = now;                                    //JM TIMER -- any last key pressed
       #endif                                            //JM
       #ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
       now = g_get_monotonic_time();                     //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
-      #endif                                            //JM
       now_MEM = now;                                    //JM TIMER -- any last key pressed
+      #endif                                            //JM
 }
 
 
@@ -187,13 +188,7 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
  * \return void
  ***********************************************/
 void fnInfo(uint16_t f) {
-  if( (f == false) ) {
-    temporaryInformation = TI_FALSE;
-  }
-  else {
-    temporaryInformation = TI_TRUE;
-  }
-
+  temporaryInformation = f ? TI_FALSE : TI_TRUE;
   refreshRegisterLine(TAM_REGISTER_LINE);
   refreshRegisterLine(REGISTER_X);
 }

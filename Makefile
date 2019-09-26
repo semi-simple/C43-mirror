@@ -26,7 +26,8 @@ ifeq ($(detected_OS),Windows)
     CFLAGS += -D WIN32
 else ifeq ($(detected_OS),Darwin)        # Mac OS X
     CFLAGS += -D OSX
-    LDFLAGS += -L/opt/local/libs
+    CFLAGS += -I/opt/local/include/
+    LDFLAGS += -L/opt/local/lib
 else ifeq ($(detected_OS),Linux)
     CFLAGS += -D LINUX
 endif
@@ -45,7 +46,7 @@ endif
 ifdef DEBUG_WP43S
 	CFLAGS += -g
 else
-	CFLAGS += -O2 -s
+	CFLAGS += -O2
 endif
 
 CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64 -MMD
@@ -230,7 +231,7 @@ clean_testSuite:
 $(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
 $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 	@echo -e "\n====> testSuite $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -lgmp
+	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -L/opt/local/lib -lgmp
 
 src/testSuite/%.o: src/testSuite/%.c .stamp-constantPointers
 	@echo -e "\n====> testSuite $@ <===="

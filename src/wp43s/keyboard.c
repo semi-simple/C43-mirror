@@ -475,7 +475,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_AIM) {
-        if((softmenuStackPointer == 1) /*&& (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/  ) {             //JM ALPHA-HOME make sure we are at the bottom of the stack
+        if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/  ) {             //JM ALPHA-HOME make sure we are at the bottom of the stack
           calcModeNormal();
           showAlphaMode();
           popSoftmenu();

@@ -223,11 +223,20 @@ void addItemToBuffer(uint16_t item) {
 
 
 
-static bool_t isRealDp(const char *buffer) {
-  int16_t firstDigit, lastDigit, numDigits, decimalSeparator, exponent, exponentLocation;
+static bool_t isRealDp(char *buffer) {
+  int16_t firstDigit, lastDigit, numDigits, decimalSeparator, exponent, exponentLocation, signLocation;
+  char sign;
 
-  //printf("   %s : ", buffer);
-  // The first digit is the first character that is neither a . nor a 0
+  signLocation = -1;
+  for(int32_t i=strlen(buffer)-1; i>0; i--) {
+    if(buffer[i] == 'i') {
+      signLocation = i - 1;
+      sign = buffer[signLocation];
+      buffer[signLocation] = 0;
+      break;
+    }
+  }
+
   firstDigit = 0;
   while(buffer[firstDigit] != 0 && (buffer[firstDigit] == '0' || buffer[firstDigit] == '.')) {
     firstDigit++;
@@ -251,9 +260,11 @@ static bool_t isRealDp(const char *buffer) {
   for(decimalSeparator=0; buffer[decimalSeparator]!=0 && buffer[decimalSeparator]!='.'; decimalSeparator++);
 
   numDigits = lastDigit - firstDigit + (firstDigit<=decimalSeparator && decimalSeparator<=lastDigit ? 0 : 1);
-  //printf("firstDigit=%d  lastDigit=%d  numDigits=%d  decimalSeparator=%d\n", firstDigit, lastDigit, numDigits, decimalSeparator);
 
   if(numDigits > 16) {
+    if(signLocation >= 0) {
+      buffer[signLocation] = sign;
+    }
     return true;
   }
   else {
@@ -263,13 +274,17 @@ static bool_t isRealDp(const char *buffer) {
     }
     if(buffer[exponentLocation] == 'e') {
       exponent = atoi(buffer + exponentLocation + 1);
-      //printf("      exponentLocation=%d  exponent=%d\n", exponentLocation, exponent);
       exponent += decimalSeparator - firstDigit - (decimalSeparator > firstDigit ? 1 : 0);
-      //printf("      corrected exponent=%d\n", exponent);
+      if(signLocation >= 0) {
+        buffer[signLocation] = sign;
+      }
       return (exponent < -383 || exponent > 384);
     }
   }
 
+  if(signLocation >= 0) {
+    buffer[signLocation] = sign;
+  }
   return false;
 }
 
@@ -278,7 +293,7 @@ static bool_t isRealDp(const char *buffer) {
 void addItemToNimBuffer(int16_t item) {
   int16_t lastChar, index;
   uint8_t savedNimNumberPart;
-  bool_t done;
+  bool_t done, nimInputRealPartIsReal34, nimInputImaginaryPartIsReal34;
 
   if(calcMode == CM_NORMAL) {
     switch(item) {
@@ -286,7 +301,8 @@ void addItemToNimBuffer(int16_t item) {
         calcModeNIM(NOPARAM);
         nimBuffer[0] = '+';
         nimBuffer[1] = '1';
-        nimBuffer[2] = 0;
+        nimBuffer[2] = radixMark == RM_PERIOD ? '.' : ',';
+        nimBuffer[3] = 0;
         nimNumberPart = NP_REAL_FLOAT_PART;
         lastIntegerBase = 0;
         break;
@@ -540,9 +556,9 @@ void addItemToNimBuffer(int16_t item) {
       switch(nimNumberPart) {
         case NP_INT_10 :
           strcat(nimBuffer, "."); // no break here
-#ifndef __APPLE__
-          __attribute__ ((fallthrough));
-#endif
+          #ifndef __APPLE__
+            __attribute__ ((fallthrough));
+          #endif
         case NP_REAL_FLOAT_PART :
           strcat(nimBuffer, "e+");
           exponentSignLocation = strlen(nimBuffer) - 1;
@@ -553,9 +569,9 @@ void addItemToNimBuffer(int16_t item) {
 
         case NP_COMPLEX_INT_PART :
           strcat(nimBuffer, "."); // no break here
-#ifndef __APPLE__
-          __attribute__ ((fallthrough));
-#endif
+          #ifndef __APPLE__
+            __attribute__ ((fallthrough));
+          #endif
         case NP_COMPLEX_FLOAT_PART :
           strcat(nimBuffer, "e+");
           imaginaryExponentSignLocation = strlen(nimBuffer) - 1;
@@ -662,10 +678,10 @@ void addItemToNimBuffer(int16_t item) {
 
         case NP_INT_10 :
           strcat(nimBuffer, "."); // no break here
-#ifndef __APPLE__
-          __attribute__ ((fallthrough));
-#endif
-              
+          #ifndef __APPLE__
+            __attribute__ ((fallthrough));
+          #endif
+
         case NP_REAL_FLOAT_PART :
           imaginaryMantissaSignLocation = strlen(nimBuffer);
           strcat(nimBuffer, "+i");
@@ -873,12 +889,12 @@ void addItemToNimBuffer(int16_t item) {
   }
 
   if(done) {
-    //printf("nimBuffer = '%s'\n", nimBuffer);
     //Convert nimBuffer to display string
 
-    nimInputIsReal34 = false;
     strcpy(nimBufferDisplay, NUM_SPACE_HAIR);
 
+    nimInputRealPartIsReal34      = false;
+    nimInputImaginaryPartIsReal34 = false;
     switch(nimNumberPart) {
       case NP_INT_10 :          // +12345
       case NP_INT_16 :          // +123AB
@@ -889,9 +905,7 @@ void addItemToNimBuffer(int16_t item) {
       case NP_REAL_FLOAT_PART : // +12345.6789
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
 
-        //printf("NP_REAL_FLOAT_PART before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-        nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + 1);
-        //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         break;
 
       case NP_REAL_EXPONENT : // +12345.678e+3
@@ -905,9 +919,7 @@ void addItemToNimBuffer(int16_t item) {
           strcat(nimBufferDisplay, NUM_SUP_0);
         }
 
-        //printf("NP_REAL_EXPONENT before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-        nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + 1);
-        //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         break;
 
       case NP_FRACTION_DENOMINATOR : // +123 12/7
@@ -929,9 +941,7 @@ void addItemToNimBuffer(int16_t item) {
       case NP_COMPLEX_FLOAT_PART : // +1.2+i15.69
       case NP_COMPLEX_EXPONENT :   // +1.2+i15.69e2
         // Real part
-        //printf("NP_COMPLEX real part before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-        nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + 1);
-        //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         savedNimNumberPart = nimNumberPart;
 
         for(index=2; index<imaginaryMantissaSignLocation && nimBuffer[index] != '.'; index++); // The ending semi colon is OK here
@@ -982,9 +992,7 @@ void addItemToNimBuffer(int16_t item) {
 
         // Imaginary part
         if(nimBuffer[imaginaryMantissaSignLocation+2] != 0) {
-          //printf("NP_COMPLEX imaginary part before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-          nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + imaginaryMantissaSignLocation + 2);
-          //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+          nimInputImaginaryPartIsReal34 = isRealDp(nimBuffer + imaginaryMantissaSignLocation + 2);
 
           savedNimNumberPart = nimNumberPart;
 
@@ -1027,29 +1035,27 @@ void addItemToNimBuffer(int16_t item) {
       }
     }
 
-#ifndef __APPLE__
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
+    nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34;
     if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
         if(nimBufferDisplay[index] == '.') {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
-            nimBufferDisplay[i+1] = nimBufferDisplay[i];
+            nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          strncpy(nimBufferDisplay + index, NUM_PERIOD34, 2);
+          //strncpy(nimBufferDisplay + index, NUM_PERIOD34, 2);
+          *(nimBufferDisplay + index)     = *(NUM_PERIOD34);
+          *(nimBufferDisplay + index + 1) = *(NUM_PERIOD34 + 1);
         }
         else if(nimBufferDisplay[index] == ',') {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
-            nimBufferDisplay[i+1] = nimBufferDisplay[i];
+            nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          strncpy(nimBufferDisplay + index, NUM_COMMA34, 2);
+          //strncpy(nimBufferDisplay + index, NUM_COMMA34, 2);
+          *(nimBufferDisplay + index)     = *(NUM_COMMA34);
+          *(nimBufferDisplay + index + 1) = *(NUM_COMMA34 + 1);
         }
       }
     }
-#ifndef __APPLE__
-    #pragma GCC diagnostic pop
-#endif
     refreshRegisterLine(NIM_REGISTER_LINE);
   }
 

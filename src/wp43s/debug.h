@@ -73,6 +73,5 @@ void  debugNIM                            (void);
 
 #if defined(PC_BUILD )|| defined(TESTSUITE_BUILD)
   void testRegisters  (const char *text);
-  void testLongInteger(const longInteger_t lgInt , const char *text);
   void memoryDump2    (const char *text);
 #endif

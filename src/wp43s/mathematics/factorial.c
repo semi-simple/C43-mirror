@@ -80,11 +80,11 @@ void factLonI(void) {
     return;
   }
 
-  if(longIntegerCompareUInt(x, 965) > 0) {
+  if(longIntegerCompareUInt(x, 450) > 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH);
-      sprintf(errorMessage, "cannot calculate factorial(%s), the limit is 965, it's to ensure that the 8192-bit limit is not exceeded", errorMessage + 100);
+      sprintf(errorMessage, "cannot calculate factorial(%s), the limit is 450, it's to ensure that the 3328 bits limit is not exceeded", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
     longIntegerFree(x);
@@ -93,10 +93,12 @@ void factLonI(void) {
 
   uint32_t n = longIntegerToUInt(x);
 
-  longIntegerInitSizeInBits(fact, 1 + (uint32_t)((n * log(n) - n)/log(2)));
-  //longIntegerFactorial(longIntegerToUInt(x), fact);
+  // The more precise formula below is: (n*ln(n) - n + (ln(8n³ + 4n² + n + 1/30))/6 + ln(pi)/2) / ln(2)
+  longIntegerInitSizeInBits(fact, 1 + (uint32_t)((n * log(n) - n) / log(2)));
+
+  //longIntegerFactorial(longIntegerToUInt(x), fact); TODO why this line fails?
   uIntToLongInteger(1, fact);
-  for(uint32_t i=n; i>1; i--) {
+  for(uint32_t i=2; i<=n; i++) {
     longIntegerMultiplyUInt(fact, i, fact);
   }
 

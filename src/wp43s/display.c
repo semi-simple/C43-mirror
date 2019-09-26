@@ -217,8 +217,10 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
 
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
+#ifndef __APPLE__
       #pragma GCC diagnostic push
       #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
       if(digit <= 1) {
         strncpy(displayString, NUM_SUP_0, 2);
         displayString[1] += digit;
@@ -236,7 +238,9 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
         memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
         strncpy(displayString, NUM_SPACE_PUNCTUATION, 2);
       }
+#ifndef __APPLE__
       #pragma GCC diagnostic pop
+#endif
     }
   }
 
@@ -264,10 +268,14 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
 
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
+#ifndef __APPLE__
       #pragma GCC diagnostic push
       #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
       strncpy(displayString, NUM_SUB_0, 2);
+#ifndef __APPLE__
       #pragma GCC diagnostic pop
+#endif
       displayString[1] += digit;
     }
   }
@@ -1023,10 +1031,14 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
         gap = 0;
         endingZero++;
         memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
+#ifndef __APPLE__
         #pragma GCC diagnostic push
         #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
         strncpy(displayString+insertAt, NUM_SPACE_PUNCTUATION, 2);
+#ifndef __APPLE__
         #pragma GCC diagnostic pop
+#endif
       }
 
       u = intPart % 10;
@@ -1060,10 +1072,14 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       gap = 0;
       endingZero++;
       memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
+#ifndef __APPLE__
       #pragma GCC diagnostic push
       #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
       strncpy(displayString+insertAt, NUM_SPACE_PUNCTUATION, 2);
+#ifndef __APPLE__
       #pragma GCC diagnostic pop
+#endif
     }
 
     u = numer % 10;
@@ -1071,8 +1087,10 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     endingZero++;
     memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 
+#ifndef __APPLE__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     if(u <= 1) {
       strncpy(displayString + insertAt, NUM_SUP_0, 2);
       displayString[insertAt+1] += u;
@@ -1085,7 +1103,10 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       strncpy(displayString + insertAt, NUM_SUP_4, 2);
       displayString[insertAt+1] += u-4;
     }
+#ifndef __APPLE__
     #pragma GCC diagnostic pop
+#endif
+      
   } while(numer != 0);
 
 
@@ -1097,8 +1118,10 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
   // Denominator
   insertAt = endingZero;
   gap = -1;
+#ifndef __APPLE__
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
   do {
     gap++;
     if(gap == groupingGap) {
@@ -1115,7 +1138,9 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     strncpy(displayString + insertAt, NUM_SUB_0, 2);
     displayString[insertAt+1] += u;
   } while(denom != 0);
+#ifndef __APPLE__
   #pragma GCC diagnostic pop
+#endif
 
   // Comparison sign
        if(lessEqualGreater == -1) strcat(displayString, NUM_SPACE_PUNCTUATION "<" NUM_SPACE_HAIR);

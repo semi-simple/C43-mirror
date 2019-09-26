@@ -540,8 +540,9 @@ void addItemToNimBuffer(int16_t item) {
       switch(nimNumberPart) {
         case NP_INT_10 :
           strcat(nimBuffer, "."); // no break here
+#ifndef __APPLE__
           __attribute__ ((fallthrough));
-
+#endif
         case NP_REAL_FLOAT_PART :
           strcat(nimBuffer, "e+");
           exponentSignLocation = strlen(nimBuffer) - 1;
@@ -552,8 +553,9 @@ void addItemToNimBuffer(int16_t item) {
 
         case NP_COMPLEX_INT_PART :
           strcat(nimBuffer, "."); // no break here
+#ifndef __APPLE__
           __attribute__ ((fallthrough));
-
+#endif
         case NP_COMPLEX_FLOAT_PART :
           strcat(nimBuffer, "e+");
           imaginaryExponentSignLocation = strlen(nimBuffer) - 1;
@@ -660,8 +662,10 @@ void addItemToNimBuffer(int16_t item) {
 
         case NP_INT_10 :
           strcat(nimBuffer, "."); // no break here
+#ifndef __APPLE__
           __attribute__ ((fallthrough));
-
+#endif
+              
         case NP_REAL_FLOAT_PART :
           imaginaryMantissaSignLocation = strlen(nimBuffer);
           strcat(nimBuffer, "+i");
@@ -1023,8 +1027,10 @@ void addItemToNimBuffer(int16_t item) {
       }
     }
 
+#ifndef __APPLE__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
         if(nimBufferDisplay[index] == '.') {
@@ -1041,8 +1047,9 @@ void addItemToNimBuffer(int16_t item) {
         }
       }
     }
+#ifndef __APPLE__
     #pragma GCC diagnostic pop
-
+#endif
     refreshRegisterLine(NIM_REGISTER_LINE);
   }
 

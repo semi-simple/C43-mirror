@@ -78,7 +78,7 @@ void runFunction(int16_t func) {
     tamNumberMin = 0;
     tamNumberMax = 99;
 
-    if(func == ITM_FIX || func == ITM_SCI || func == ITM_ENG || func == ITM_ALL || func == ITM_DSP || func == ITM_GAP || ITM_SIGFIG || ITM_UNIT) {      //JM SIGFIG. Added ITM_SIGFIG to max 15. Added Item ITM_UNIT
+    if(func == ITM_FIX || func == ITM_SCI || func == ITM_ENG || func == ITM_ALL || func == ITM_DSP || func == ITM_GAP || func == ITM_SIGFIG || func == ITM_UNIT) {      //JM SIGFIG. Added ITM_SIGFIG to max 15. Added Item ITM_UNIT
       tamNumberMax = 15;
     }
     else if(func == ITM_toINT) {

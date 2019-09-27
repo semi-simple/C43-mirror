@@ -198,10 +198,14 @@ void setupDefaults(void) {
   freeBlocks[0].size    = BYTES_TO_BLOCKS(RAM_SIZE);
 
   glyphNotFound.data   = malloc(38);
+#ifndef __APPLE__
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
   strncpy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
+#ifndef __APPLE__
   #pragma GCC diagnostic pop
+#endif
 
   // Initialization of user key assignments
   memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -299,7 +303,12 @@ void setupDefaults(void) {
   SH_BASE_MYA    = true;       
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
-  now_MEM = 0;                                                   //JM HOME temporary flag to remember and restore time
+  #ifdef DMCP_BUILD                 //JM TIMER variable tmp mem, to check expired time
+  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  #endif
+  #ifdef PC_BUILD
+  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  #endif
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = 0;                                            //JM TIMER

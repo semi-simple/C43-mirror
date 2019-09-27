@@ -118,24 +118,24 @@ void copyRegisterXToClipboard(void) {
       convertShortIntegerRegisterToUInt64(REGISTER_X, &sign, &shortInt);
       base = getRegisterShortIntegerBase(REGISTER_X);
 
-      n = TMP_STR_LENGTH - 100;
-      sprintf(tmpStr3000 + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
+      n = ERROR_MESSAGE_LENGTH - 100;
+      sprintf(errorMessage + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
 
       if(shortInt == 0) {
-        tmpStr3000[n--] = '0';
+        errorMessage[n--] = '0';
       }
       else {
         while(shortInt != 0) {
-          tmpStr3000[n--] = digits[shortInt % base];
+          errorMessage[n--] = digits[shortInt % base];
           shortInt /= base;
         }
         if(sign) {
-          tmpStr3000[n--] = '-';
+          errorMessage[n--] = '-';
         }
       }
       n++;
 
-      strcpy(tmpStr3000, tmpStr3000 + n);
+      strcpy(tmpStr3000, errorMessage + n);
       break;
 
     case dtReal34:

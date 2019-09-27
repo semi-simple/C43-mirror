@@ -223,11 +223,20 @@ void addItemToBuffer(uint16_t item) {
 
 
 
-static bool_t isRealDp(const char *buffer) {
-  int16_t firstDigit, lastDigit, numDigits, decimalSeparator, exponent, exponentLocation;
+static bool_t isRealDp(char *buffer) {
+  int16_t firstDigit, lastDigit, numDigits, decimalSeparator, exponent, exponentLocation, signLocation;
+  char sign;
 
-  //printf("   %s : ", buffer);
-  // The first digit is the first character that is neither a . nor a 0
+  signLocation = -1;
+  for(int32_t i=strlen(buffer)-1; i>0; i--) {
+    if(buffer[i] == 'i') {
+      signLocation = i - 1;
+      sign = buffer[signLocation];
+      buffer[signLocation] = 0;
+      break;
+    }
+  }
+
   firstDigit = 0;
   while(buffer[firstDigit] != 0 && (buffer[firstDigit] == '0' || buffer[firstDigit] == '.')) {
     firstDigit++;
@@ -251,9 +260,11 @@ static bool_t isRealDp(const char *buffer) {
   for(decimalSeparator=0; buffer[decimalSeparator]!=0 && buffer[decimalSeparator]!='.'; decimalSeparator++);
 
   numDigits = lastDigit - firstDigit + (firstDigit<=decimalSeparator && decimalSeparator<=lastDigit ? 0 : 1);
-  //printf("firstDigit=%d  lastDigit=%d  numDigits=%d  decimalSeparator=%d\n", firstDigit, lastDigit, numDigits, decimalSeparator);
 
   if(numDigits > 16) {
+    if(signLocation >= 0) {
+      buffer[signLocation] = sign;
+    }
     return true;
   }
   else {
@@ -263,13 +274,17 @@ static bool_t isRealDp(const char *buffer) {
     }
     if(buffer[exponentLocation] == 'e') {
       exponent = atoi(buffer + exponentLocation + 1);
-      //printf("      exponentLocation=%d  exponent=%d\n", exponentLocation, exponent);
       exponent += decimalSeparator - firstDigit - (decimalSeparator > firstDigit ? 1 : 0);
-      //printf("      corrected exponent=%d\n", exponent);
+      if(signLocation >= 0) {
+        buffer[signLocation] = sign;
+      }
       return (exponent < -383 || exponent > 384);
     }
   }
 
+  if(signLocation >= 0) {
+    buffer[signLocation] = sign;
+  }
   return false;
 }
 
@@ -278,7 +293,7 @@ static bool_t isRealDp(const char *buffer) {
 void addItemToNimBuffer(int16_t item) {
   int16_t lastChar, index;
   uint8_t savedNimNumberPart;
-  bool_t done;
+  bool_t done, nimInputRealPartIsReal34, nimInputImaginaryPartIsReal34;
 
   if(calcMode == CM_NORMAL) {
     switch(item) {
@@ -286,7 +301,8 @@ void addItemToNimBuffer(int16_t item) {
         calcModeNIM(NOPARAM);
         nimBuffer[0] = '+';
         nimBuffer[1] = '1';
-        nimBuffer[2] = 0;
+        nimBuffer[2] = radixMark == RM_PERIOD ? '.' : ',';
+        nimBuffer[3] = 0;
         nimNumberPart = NP_REAL_FLOAT_PART;
         lastIntegerBase = 0;
         break;
@@ -371,7 +387,7 @@ void addItemToNimBuffer(int16_t item) {
               strcat(nimBuffer, "0");
             }
 
-            if(atoi(nimBuffer + exponentSignLocation) > 9999 || atoi(nimBuffer + exponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + exponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + exponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -382,7 +398,7 @@ void addItemToNimBuffer(int16_t item) {
 
             strcat(nimBuffer, indexOfItems[item].itemPrinted);
 
-            if(atoi(nimBuffer + exponentSignLocation) > 9999 || atoi(nimBuffer + exponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + exponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + exponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -434,7 +450,7 @@ void addItemToNimBuffer(int16_t item) {
               strcat(nimBuffer, "0");
             }
 
-            if(atoi(nimBuffer + imaginaryExponentSignLocation) > 9999 || atoi(nimBuffer + imaginaryExponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + imaginaryExponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + imaginaryExponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -445,7 +461,7 @@ void addItemToNimBuffer(int16_t item) {
 
             strcat(nimBuffer, indexOfItems[item].itemPrinted);
 
-            if(atoi(nimBuffer + imaginaryExponentSignLocation) > 9999 || atoi(nimBuffer + imaginaryExponentSignLocation) < -9999) {
+            if(atoi(nimBuffer + imaginaryExponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + imaginaryExponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
           }
@@ -877,12 +893,12 @@ void addItemToNimBuffer(int16_t item) {
   }
 
   if(done) {
-    //printf("nimBuffer = '%s'\n", nimBuffer);
     //Convert nimBuffer to display string
 
-    nimInputIsReal34 = false;
     strcpy(nimBufferDisplay, NUM_SPACE_HAIR);
 
+    nimInputRealPartIsReal34      = false;
+    nimInputImaginaryPartIsReal34 = false;
     switch(nimNumberPart) {
       case NP_INT_10 :          // +12345
       case NP_INT_16 :          // +123AB
@@ -893,9 +909,7 @@ void addItemToNimBuffer(int16_t item) {
       case NP_REAL_FLOAT_PART : // +12345.6789
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
 
-        //printf("NP_REAL_FLOAT_PART before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-        nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + 1);
-        //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         break;
 
       case NP_REAL_EXPONENT : // +12345.678e+3
@@ -909,9 +923,7 @@ void addItemToNimBuffer(int16_t item) {
           strcat(nimBufferDisplay, NUM_SUP_0);
         }
 
-        //printf("NP_REAL_EXPONENT before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-        nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + 1);
-        //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         break;
 
       case NP_FRACTION_DENOMINATOR : // +123 12/7
@@ -933,9 +945,7 @@ void addItemToNimBuffer(int16_t item) {
       case NP_COMPLEX_FLOAT_PART : // +1.2+i15.69
       case NP_COMPLEX_EXPONENT :   // +1.2+i15.69e2
         // Real part
-        //printf("NP_COMPLEX real part before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-        nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + 1);
-        //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         savedNimNumberPart = nimNumberPart;
 
         for(index=2; index<imaginaryMantissaSignLocation && nimBuffer[index] != '.'; index++); // The ending semi colon is OK here
@@ -986,9 +996,7 @@ void addItemToNimBuffer(int16_t item) {
 
         // Imaginary part
         if(nimBuffer[imaginaryMantissaSignLocation+2] != 0) {
-          //printf("NP_COMPLEX imaginary part before nimInputIsReal34=%s  ", getBooleanName(nimInputIsReal34));
-          nimInputIsReal34 = nimInputIsReal34 || isRealDp(nimBuffer + imaginaryMantissaSignLocation + 2);
-          //printf("after nimInputIsReal34=%s\n", getBooleanName(nimInputIsReal34));
+          nimInputImaginaryPartIsReal34 = isRealDp(nimBuffer + imaginaryMantissaSignLocation + 2);
 
           savedNimNumberPart = nimNumberPart;
 
@@ -1030,7 +1038,7 @@ void addItemToNimBuffer(int16_t item) {
         }
       }
     }
-
+//JM HARALD TO CHECK
 #ifndef __APPLE__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wstringop-truncation"
@@ -1039,18 +1047,23 @@ void addItemToNimBuffer(int16_t item) {
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
         if(nimBufferDisplay[index] == '.') {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
-            nimBufferDisplay[i+1] = nimBufferDisplay[i];
+            nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          strncpy(nimBufferDisplay + index, NUM_PERIOD34, 2);
+          //strncpy(nimBufferDisplay + index, NUM_PERIOD34, 2);
+          *(nimBufferDisplay + index)     = *(NUM_PERIOD34);
+          *(nimBufferDisplay + index + 1) = *(NUM_PERIOD34 + 1);
         }
         else if(nimBufferDisplay[index] == ',') {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
-            nimBufferDisplay[i+1] = nimBufferDisplay[i];
+            nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          strncpy(nimBufferDisplay + index, NUM_COMMA34, 2);
+          //strncpy(nimBufferDisplay + index, NUM_COMMA34, 2);
+          *(nimBufferDisplay + index)     = *(NUM_COMMA34);
+          *(nimBufferDisplay + index + 1) = *(NUM_COMMA34 + 1);
         }
       }
     }
+//JM HARALD TO CHECK
 #ifndef __APPLE__
     #pragma GCC diagnostic pop
 #endif
@@ -1979,12 +1992,6 @@ void closeNim(void) {
             reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
             stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
           }
-          if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of a real must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
-            #endif
-          }
         }
         else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
           int16_t i, posSpace, posSlash, lg;
@@ -2071,8 +2078,6 @@ void closeNim(void) {
         else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
           int16_t imaginarySign;
 
-          reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-
           if(nimBuffer[imaginaryMantissaSignLocation] == '+') {
             imaginarySign = 1;
           }
@@ -2081,41 +2086,60 @@ void closeNim(void) {
           }
           nimBuffer[imaginaryMantissaSignLocation] = 0;
 
-          stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
-          if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of the real part (or magnitude) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
-            #endif
-          }
+          if(nimInputIsReal34) {
+            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+            stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
 
-          stringToReal16(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG16_DATA(REGISTER_X));
-          if(imaginarySign == -1) {
-            real16SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
-          }
-          if(real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function closeNIM:", "the absolute value of the imaginary part (or angle) of a complex must be less than 10^385!", "Unless D flag (Danger) is set.", NULL);
-            #endif
-          }
-
-          if(complexMode == CM_POLAR) {
-            if(real16CompareEqual(REGISTER_REAL16_DATA(REGISTER_X), const16_0)) {
-              real16Zero(REGISTER_IMAG16_DATA(REGISTER_X));
+            stringToReal34(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
+            if(imaginarySign == -1) {
+              real34SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
             }
-            else {
-              real16_t magnitude16, theta16;
 
-              real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &magnitude16);
-              real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &theta16);
-              convertAngle16FromTo(&theta16, currentAngularMode, AM_RADIAN);
-              if(real16CompareLessThan(&magnitude16, const16_0)) {
-                real16SetPositiveSign(&magnitude16);
-                real16Add(&theta16, const_pi, &theta16);
-                real16Remainder(&theta16, const16_2pi, &theta16);
+            if(complexMode == CM_POLAR) {
+              if(real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_0)) {
+                real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
               }
-              real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
+              else {
+                real34_t magnitude34, theta34;
+
+                real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &magnitude34);
+                real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &theta34);
+                convertAngle34FromTo(&theta34, currentAngularMode, AM_RADIAN);
+                if(real34CompareLessThan(&magnitude34, const34_0)) {
+                  real34SetPositiveSign(&magnitude34);
+                  real34Add(&theta34, const_pi, &theta34);
+                  real34Remainder(&theta34, const34_2pi, &theta34);
+                }
+                real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in radian
+              }
+            }
+          }
+          else {
+            reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+            stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
+
+            stringToReal16(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG16_DATA(REGISTER_X));
+            if(imaginarySign == -1) {
+              real16SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
+            }
+
+            if(complexMode == CM_POLAR) {
+              if(real16CompareEqual(REGISTER_REAL16_DATA(REGISTER_X), const16_0)) {
+                real16Zero(REGISTER_IMAG16_DATA(REGISTER_X));
+              }
+              else {
+                real16_t magnitude16, theta16;
+
+                real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &magnitude16);
+                real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &theta16);
+                convertAngle16FromTo(&theta16, currentAngularMode, AM_RADIAN);
+                if(real16CompareLessThan(&magnitude16, const16_0)) {
+                  real16SetPositiveSign(&magnitude16);
+                  real16Add(&theta16, const_pi, &theta16);
+                  real16Remainder(&theta16, const16_2pi, &theta16);
+                }
+                real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
+              }
             }
           }
         }

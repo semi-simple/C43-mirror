@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 19  // 19 = Changed angle tags
+#define BACKUP_VERSION 20  // 20 = NIM real34 detection
 
 void saveCalc(void) {
   size_t size;
@@ -315,7 +315,14 @@ void restoreCalc(void) {
 
     size += fread(&glyphNotFound,                      1, sizeof(glyphNotFound),                      backup); //printf("%8lu glyphNotFound\n",                      (unsigned long)size);
     glyphNotFound.data   = malloc(38);
+    #ifndef __APPLE__
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wstringop-truncation"
+    #endif
     strncpy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
+    #ifndef __APPLE__
+      #pragma GCC diagnostic pop
+    #endif
 
     size += fread(&allowScreenUpdate,                  1, sizeof(allowScreenUpdate),                  backup); //printf("%8lu allowScreenUpdate\n",                  (unsigned long)size);
     size += fread(&funcOK,                             1, sizeof(funcOK),                             backup); //printf("%8lu funcOK\n",                             (unsigned long)size);

@@ -645,20 +645,17 @@ return FALSE;
       btnClicked(w, "17");
       break;
 
-
     case 55:    // 7
     case 65463: // 7
       //printf("key pressed: 7\n");
       btnClicked(w, "18");
       break;
 
-
     case 56:    // 8
     case 65464: // 8
       //printf("key pressed: 8\n");
       btnClicked(w, "19");
       break;
-
 
     case 57:    // 9
     case 65465: // 9
@@ -679,20 +676,17 @@ return FALSE;
       btnClicked(w, "22");
       break;
 
-
     case 52:    // 4
     case 65460: // 4
       //printf("key pressed: 4\n");
       btnClicked(w, "23");
       break;
 
-
     case 53:    // 5
     case 65461: // 5
       //printf("key pressed: 5\n");
       btnClicked(w, "24");
       break;
-
 
     case 54:    // 6
     case 65462: // 6
@@ -720,13 +714,11 @@ return FALSE;
       btnClicked(w, "28");
       break;
 
-
     case 50:    // 2
     case 65458: // 2
       //printf("key pressed: 2\n");
       btnClicked(w, "29");
       break;
-
 
     case 51:    // 3
     case 65459: // 3
@@ -776,7 +768,7 @@ return FALSE;
 /*//JM- Reinstated
     case 72:  // H    //JM REMOVE CAP H. ONLY lower case wil print
     case 104: // h
-      //printf("key pressed: h Hardcopy\n");
+      //printf("key pressed: h Hardcopy to clipboard\n");
       copyScreenToClipboard();
       break;
 */
@@ -787,6 +779,11 @@ return FALSE;
       copyScreenToClipboard();
       break;
 
+
+    case 9: // TAB
+      //printf("key pressed: x copy register TAB to clipboard\n");
+      copyRegisterXToClipboard();
+      break;
 
     default:
       break;
@@ -2671,8 +2668,8 @@ void setupUI(void) {
     lblRegisterL2 = gtk_label_new("");
     gtk_widget_set_name(lblRegisterL1, "registerL");
     gtk_widget_set_name(lblRegisterL2, "registerL");
-    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL1, 30, 28);
-    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 30, 46);
+    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL1, 5, 28);
+    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 5, 46);
   #endif
 
   #if (SHOW_MEMORY_STATUS == 1)

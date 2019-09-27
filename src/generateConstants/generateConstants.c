@@ -452,24 +452,24 @@ void generateAllConstants(void) {
 }
 
 
-#ifdef __APPLE__
-int main(int argc, char* argv[]) {
-    // we take the directory where the application is as the root for this application.
-    // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if (argc>=1) {
-      char *curdir = malloc(1000);
-      // find last /:
-      char *s = strrchr(argv[0], '/');
-      if (s != 0) {
-        // take the directory before the appname:
-        strncpy(curdir, argv[0], s-argv[0]);
-        chdir(curdir);
-        free(curdir);
-      }
-    }
-#else
 int main(void) {
+
+#if defined __APPLE__
+  // we take the directory where the application is as the root for this application.
+  // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
+  if (argc>=1) {
+    char *curdir = malloc(1000);
+    // find last /:
+    char *s = strrchr(argv[0], '/');
+    if (s != 0) {
+      // take the directory before the appname:
+      strncpy(curdir, argv[0], s-argv[0]);
+      chdir(curdir);
+      free(curdir);
+    }
+  }
 #endif
+
   decContextDefault(&ctxtRealIc,   DEC_INIT_DECQUAD);
   decContextDefault(&ctxtReal16,   DEC_INIT_DECDOUBLE);
   decContextDefault(&ctxtReal34,   DEC_INIT_DECQUAD);

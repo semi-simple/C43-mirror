@@ -163,7 +163,7 @@ typedef int16_t calcRegister_t;
   #include "decNumberWrappers.h"
 #endif
 
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 8192
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328
 
 #if (LIBGMP == 1)
   #include <gmp.h>

@@ -454,7 +454,8 @@ void generateAllConstants(void) {
 
 int main(void) {
 
-#if defined __APPLE__
+//JM HARALD TO CHECK. "error: 'argc' undeclared (first use in this function)" I removed the functrion by adding th XXX
+#if defined __APPLE__XXXHARALD
   // we take the directory where the application is as the root for this application.
   // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
   if (argc>=1) {

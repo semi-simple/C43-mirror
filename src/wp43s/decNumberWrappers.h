@@ -108,7 +108,7 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define real16Subtract(operand1, operand2, res)                decDoubleSubtract        ((real16_t *)res, (real16_t *)operand1, (real16_t *)operand2, &ctxtReal16)
 #define real16ToRealIc(source, destination)                    decDoubleToNumber        ((real16_t *)source, (realIc_t *)destination)
 #define real16ToInt32(source)                                  decDoubleToInt32         ((real16_t *)source, &ctxtReal16, DEC_ROUND_DOWN)
-#define real16ToIntegralValue(source, destination)             decDoubleToIntegralValue ((real16_t *)destination, (real16_t *)source, &ctxtReal16, DEC_ROUND_DOWN)
+#define real16ToIntegralValue(source, destination, mode)       decDoubleToIntegralValue ((real16_t *)destination, (real16_t *)source, &ctxtReal16, mode)
 #define real16ToReal34(source, destination)                    decDoubleToWider         ((real16_t *)source, (real34_t *)destination)
 #define real16ToString(source, destination)                    decDoubleToString        ((real16_t *)source, destination)
 //#define real16ToUInt32(source)                                 decDoubleToUInt32        ((real16_t *)source, &ctxtReal16, DEC_ROUND_DOWN)
@@ -148,7 +148,7 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define real34SetPositiveSign(operand)                         ((real34_t *)operand)->bytes[15] &= 0x7F
 #define real34Subtract(operand1, operand2, res)                decQuadSubtract          ((real34_t *)res, (real34_t *)operand1, (real34_t *)operand2, &ctxtReal34)
 #define real34ToInt32(source)                                  decQuadToInt32           ((real34_t *)source, &ctxtReal34, DEC_ROUND_DOWN)
-#define real34ToIntegralValue(source, destination)             decQuadToIntegralValue   ((real34_t *)destination, (real34_t *)source, &ctxtReal34, DEC_ROUND_DOWN)
+#define real34ToIntegralValue(source, destination, mode)       decQuadToIntegralValue   ((real34_t *)destination, (real34_t *)source, &ctxtReal34, mode)
 #define real34ToReal16(source, destination)                    decDoubleFromWider       ((real16_t *)destination, (real34_t *)source, &ctxtReal16)
 #define real34ToRealIc(source, destination)                    decQuadToNumber          ((real34_t *)source, (realIc_t *)destination)
 #define real34ToString(source, destination)                    decQuadToString          ((real34_t *)source, destination)
@@ -195,8 +195,8 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define realIcSquareRoot(operand, res)                         decNumberSquareRoot      ((realIc_t *)res, (realIc_t *)operand, &ctxtRealIc)
 #define realIcSubtract(operand1, operand2, res)                decNumberSubtract        ((realIc_t *)res, (realIc_t *)operand1, (realIc_t *)operand2, &ctxtRealIc)
 #define realIcToInt32(source, destination)                     {enum rounding savedRoundingMode; savedRoundingMode = ctxtRealIc.round; ctxtRealIc.round = DEC_ROUND_DOWN; destination = decNumberToInt32((realIc_t *)source, &ctxtRealIc); ctxtRealIc.round = savedRoundingMode;}
-//#define realIcToIntegralValue(source, destination)             decNumberToIntegralValue ((realIc_t *)destination, (realIc_t *)source, &ctxtRealIc)
-#define realIcToIntegralValue(source, destination)             {real34_t real34; decQuadFromNumber(&real34, (realIc_t *)source, &ctxtReal34); decQuadToIntegralValue(&real34, &real34, &ctxtReal34, DEC_ROUND_DOWN); decQuadToNumber(&real34, (realIc_t *)destination);}
+//#define realIcToIntegralValue(source, destination, mode)       {enum rounding savedRoundingMode; savedRoundingMode = ctxtRealIc.round; ctxtRealIc.round = mode; decNumberToIntegralValue ((realIc_t *)destination, (realIc_t *)source, &ctxtRealIc); ctxtRealIc.round = savedRoundingMode;}
+#define realIcToIntegralValue(source, destination, mode)       {real34_t real34; decQuadFromNumber(&real34, (realIc_t *)source, &ctxtReal34); decQuadToIntegralValue(&real34, &real34, &ctxtReal34, mode); decQuadToNumber(&real34, (realIc_t *)destination);}
 #define realIcToReal16(source, destination)                    decDoubleFromNumber      ((real16_t *)destination, (realIc_t *)source, &ctxtReal16)
 #define realIcToReal34(source, destination)                    decQuadFromNumber        ((real34_t *)destination, (realIc_t *)source, &ctxtReal34)
 #define realIcToString(source, destination)                    decNumberToString        ((realIc_t *)source, destination)

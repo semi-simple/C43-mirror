@@ -15,16 +15,12 @@
  */
 
 /********************************************//**
- * \file sin.h
+ * \file floor.h
  ***********************************************/
 
-void fnSin   (uint16_t unusedParamButMandatory);
-void sinError(void);
-void sinCoIc (const complexIc_t *z, complexIc_t *res);
-void sinLonI (void);
-void sinRe16 (void);
-void sinCo16 (void);
-void sinRm16 (void);
-void sinCm16 (void);
-void sinRe34 (void);
-void sinCo34 (void);
+void fnFloor   (uint16_t unusedParamButMandatory);
+void floorError(void);
+void floorLonI (void);
+void floorRe16 (void);
+void floorRm16 (void);
+void floorRe34 (void);

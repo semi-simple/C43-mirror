@@ -378,3 +378,97 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
   reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
   *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = value & shortIntegerMask;
 }
+
+
+
+void convertReal16ToLongInteger(real16_t *real16, longInteger_t lgInt, enum rounding roundingMode) {
+  uint8_t bcd[DECDOUBLE_Pmax];
+  int32_t sign, exponent;
+  //longInteger_t coef;
+
+  real16ToIntegralValue(real16, real16, roundingMode);
+  sign = real16GetCoefficient(real16, bcd);
+  exponent = real16GetExponent(real16);
+
+  //longIntegerInit(coef);
+  uIntToLongInteger(bcd[0], lgInt);
+
+  for(int i=1; i<DECDOUBLE_Pmax; i++) {
+    longIntegerMultiplyUInt(lgInt, 10, lgInt);
+    longIntegerAddUInt(lgInt, bcd[i], lgInt);
+  }
+
+  //longIntegerPowerUIntUInt(10, exponent, coef);
+  //longIntegerMultiply(lgInt, coef, lgInt);
+  while(exponent > 0) {
+    longIntegerMultiplyUInt(lgInt, 10, lgInt);
+    exponent--;
+  }
+
+  if(sign) {
+    longIntegerChangeSign(lgInt);
+  }
+
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+  //longIntegerFree(coef);
+}
+
+
+
+void convertReal16ToLongIntegerRegister(real16_t *real16, calcRegister_t dest, enum rounding roundingMode) {
+  longInteger_t lgInt;
+
+  longIntegerInit(lgInt);
+
+  convertReal16ToLongInteger(real16, lgInt, roundingMode);
+  convertLongIntegerToLongIntegerRegister(lgInt, dest);
+
+  longIntegerFree(lgInt);
+}
+
+
+
+void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum rounding roundingMode) {
+  uint8_t bcd[DECQUAD_Pmax];
+  int32_t sign, exponent;
+  //longInteger_t coef;
+
+  real34ToIntegralValue(real34, real34, roundingMode);
+  sign = real34GetCoefficient(real34, bcd);
+  exponent = real34GetExponent(real34);
+
+  //longIntegerInit(coef);
+  uIntToLongInteger(bcd[0], lgInt);
+
+  for(int i=1; i<DECQUAD_Pmax; i++) {
+    longIntegerMultiplyUInt(lgInt, 10, lgInt);
+    longIntegerAddUInt(lgInt, bcd[i], lgInt);
+  }
+
+  //longIntegerPowerUIntUInt(10, exponent, coef);
+  //longIntegerMultiply(lgInt, coef, lgInt);
+  while(exponent > 0) {
+    longIntegerMultiplyUInt(lgInt, 10, lgInt);
+    exponent--;
+  }
+
+  if(sign) {
+    longIntegerChangeSign(lgInt);
+  }
+
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+  //longIntegerFree(coef);
+}
+
+
+
+void convertReal34ToLongIntegerRegister(real34_t *real34, calcRegister_t dest, enum rounding roundingMode) {
+  longInteger_t lgInt;
+
+  longIntegerInit(lgInt);
+
+  convertReal34ToLongInteger(real34, lgInt, roundingMode);
+  convertLongIntegerToLongIntegerRegister(lgInt, dest);
+
+  longIntegerFree(lgInt);
+}

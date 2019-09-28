@@ -492,7 +492,7 @@ bool_t WP34S_IsInt(const realIc_t *x) {
  		 return true;
  	}
 
- 	realIcToIntegralValue(x, &y);
+ 	realIcToIntegralValue(x, &y, DEC_ROUND_DOWN);
  	realIcSubtract(x, &y, &r);
 
  	return realIcCompareEqual(&r, const_0);

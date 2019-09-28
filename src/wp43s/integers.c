@@ -59,11 +59,11 @@ void fnChangeBase(uint16_t base) {
       real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
       isNegative = realIcIsNegative(&x);
       realIcSetPositiveSign(&x);
-      realIcToIntegralValue(&x, &x);
+      realIcToIntegralValue(&x, &x, DEC_ROUND_DOWN);
 
       // Calculate 32 bit high word
       realIcDivide(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value);
+      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
       longIntegerInit(lgInt);
       uIntToLongInteger(realIcToUInt32(&value), lgInt);
@@ -71,7 +71,7 @@ void fnChangeBase(uint16_t base) {
 
       // Calculate 32 bit low word
       realIcRemainder(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value);
+      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
       longIntegerAddUInt(lgInt, realIcToUInt32(&value), lgInt);
       if(isNegative) {
@@ -100,11 +100,11 @@ void fnChangeBase(uint16_t base) {
       real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
       isNegative = realIcIsNegative(&x);
       realIcSetPositiveSign(&x);
-      realIcToIntegralValue(&x, &x);
+      realIcToIntegralValue(&x, &x, DEC_ROUND_DOWN);
 
       // Calculate 32 bit high word
       realIcDivide(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value);
+      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
       longIntegerInit(lgInt);
       uIntToLongInteger(realIcToUInt32(&value), lgInt);
@@ -112,7 +112,7 @@ void fnChangeBase(uint16_t base) {
 
       // Calculate 32 bit low word
       realIcRemainder(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value);
+      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
       longIntegerAddUInt(lgInt, realIcToUInt32(&value), lgInt);
       if(isNegative) {

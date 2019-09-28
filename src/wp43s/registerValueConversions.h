@@ -14,6 +14,10 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+
+
+
 /********************************************//**
  * \file registerValueConversions.h
  ***********************************************/
@@ -36,3 +40,8 @@ void convertLongIntegerRegisterToLongInteger         (calcRegister_t regist, lon
 
 void convertShortIntegerRegisterToUInt64             (calcRegister_t regist, int16_t *sign, uint64_t *value);
 void convertUInt64ToShortIntegerRegister             (int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist);
+
+void convertReal16ToLongInteger(real16_t *real16, longInteger_t lgInt, enum rounding roundingMode);
+void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum rounding roundingMode);
+void convertReal16ToLongIntegerRegister(real16_t *real16, calcRegister_t dest, enum rounding roundingMode);
+void convertReal34ToLongIntegerRegister(real34_t *real34, calcRegister_t dest, enum rounding roundingMode);

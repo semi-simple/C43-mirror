@@ -165,7 +165,7 @@ void curtShoI(void) {
     realIcSetNegativeSign(&x);
   }
 
-  realIcToIntegralValue(&x, &x); // TODO: doesn't work without this line
+  realIcToIntegralValue(&x, &x, DEC_ROUND_DOWN); // TODO: doesn't work without this line
   realIcToInt32(&x, cubeRoot);
 
   if(cubeRoot >= 0) {

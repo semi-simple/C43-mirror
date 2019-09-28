@@ -91,7 +91,7 @@ void fpRe16(void) {
 
   real16_t x;
 
-  real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
   real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x ,REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -120,6 +120,6 @@ void fpRe34(void) {
 
   real34_t x;
 
-  real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x ,REGISTER_REAL34_DATA(REGISTER_X));
 }

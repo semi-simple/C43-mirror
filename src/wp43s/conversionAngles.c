@@ -506,12 +506,12 @@ void convertAngleIcFromTo(realIc_t *angle, uint32_t fromAngularMode, uint32_t to
     sign = realIcIsNegative(angle) ? -1 : 1;
     realIcSetPositiveSign(angle);
 
-    realIcToIntegralValue(angle, &degrees);
+    realIcToIntegralValue(angle, &degrees, DEC_ROUND_DOWN);
 
     realIcSubtract(angle, &degrees, angle);
     realIcMultiply(angle, const_100, angle);
 
-    realIcToIntegralValue(angle, &minutes);
+    realIcToIntegralValue(angle, &minutes, DEC_ROUND_DOWN);
 
     realIcSubtract(angle, &minutes, angle);
     realIcMultiply(angle, const_100, &seconds);
@@ -592,12 +592,12 @@ void convertAngleIcFromTo(realIc_t *angle, uint32_t fromAngularMode, uint32_t to
     sign = realIcIsNegative(angle) ? -1 : 1;
     realIcSetPositiveSign(angle);
 
-    realIcToIntegralValue(angle, &degrees);
+    realIcToIntegralValue(angle, &degrees, DEC_ROUND_DOWN);
 
     realIcSubtract(angle, &degrees, angle);
     realIcMultiply(angle, const_60, angle);
 
-    realIcToIntegralValue(angle, &minutes);
+    realIcToIntegralValue(angle, &minutes, DEC_ROUND_DOWN);
 
     realIcSubtract(angle, &minutes, angle);
     realIcMultiply(angle, const_60, &seconds);
@@ -625,11 +625,11 @@ void checkDms16(real16_t *angle16Dms) {
   sign = realIcIsNegative(&angleDms) ? -1 : 1;
   realIcSetPositiveSign(&angleDms);
 
-  realIcToIntegralValue(&angleDms, &degrees);
+  realIcToIntegralValue(&angleDms, &degrees, DEC_ROUND_DOWN);
   realIcSubtract(&angleDms, &degrees, &angleDms);
 
   realIcMultiply(&angleDms, const_100, &angleDms);
-  realIcToIntegralValue(&angleDms, &minutes);
+  realIcToIntegralValue(&angleDms, &minutes, DEC_ROUND_DOWN);
   realIcSubtract(&angleDms, &minutes, &angleDms);
 
   realIcMultiply(&angleDms, const_100, &seconds);
@@ -667,11 +667,11 @@ void checkDms34(real34_t *angle34Dms) {
   sign = realIcIsNegative(&angleDms) ? -1 : 1;
   realIcSetPositiveSign(&angleDms);
 
-  realIcToIntegralValue(&angleDms, &degrees);
+  realIcToIntegralValue(&angleDms, &degrees, DEC_ROUND_DOWN);
   realIcSubtract(&angleDms, &degrees, &angleDms);
 
   realIcMultiply(&angleDms, const_100, &angleDms);
-  realIcToIntegralValue(&angleDms, &minutes);
+  realIcToIntegralValue(&angleDms, &minutes, DEC_ROUND_DOWN);
   realIcSubtract(&angleDms, &minutes, &angleDms);
 
   realIcMultiply(&angleDms, const_100, &seconds);

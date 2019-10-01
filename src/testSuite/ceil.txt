@@ -1,0 +1,176 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                          ceil                           **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnCeil
+
+
+
+;=======================================
+; ceil(Long Integer) --> Long Integer
+;=======================================
+In:  AM=DEG SL=0 FI=0 RX=LonI:"5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=LonI:"5"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"3605"
+Out: EC=0 FI=0 SL=1 RL=LonI:"3605" RX=LonI:"3605"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"-3595"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-3595" RX=LonI:"-3595"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"3600000000000000000000000000000000000000000000000000000000000000000000005"
+Out: EC=0 FI=0 SL=1 RL=LonI:"3600000000000000000000000000000000000000000000000000000000000000000000005" RX=LonI:"3600000000000000000000000000000000000000000000000000000000000000000000005"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"-3599999999999999999999999999999999999999999999999999999999999999999999995"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-3599999999999999999999999999999999999999999999999999999999999999999999995" RX=LonI:"-3599999999999999999999999999999999999999999999999999999999999999999999995"
+
+
+
+;=======================================
+; ceil(Real16) --> Long Integer
+;=======================================
+In:  AM=DEG SL=0 FI=0 RX=Re16:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001" RX=LonI:"1"
+
+In:  AM=GRAD SL=0 FI=0 RX=Re16:"50"
+Out: EC=0 FI=0 SL=1 RL=Re16:"50" RX=LonI:"50"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"89.99999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"89.99999" RX=LonI:"90"
+
+In:  SL=0 FI=0 RX=Re16:"5.32564":DMS
+Out: EC=0 FI=0 SL=1 RL=Re16:"5.32564":DMS RX=LonI:"6"
+
+In:  SL=0 FI=0 RX=Re16:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re16:"-5.32564":GRAD RX=LonI:"-5"
+
+; NaN
+In:  SL=0 FI=0 RX=Re16:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
+
+In:  SL=0 FI=0 RX=Re16:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
+Out: EC=1 FI=0 SL=0 RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
+Out: EC=1 FI=0 SL=0 RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
+Out: EC=1 FI=0 SL=0 RX=Re16:"-inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
+Out: EC=1 FI=0 SL=0 RX=Re16:"inf":DEG
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf":MULTPI
+Out: EC=1 FI=0 SL=0 RX=Re16:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":RAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"-inf":RAD
+
+
+
+;=======================================
+; ceil(Complex16) --> Error24
+;=======================================
+In:  SL=0 FI=0 RX=Co16:"1 i 1"
+Out: EC=24 FI=0 SL=0 RX=Co16:"1 i 1"
+
+
+;=======================================
+; ceil(Time)
+;=======================================
+
+
+
+;=======================================
+; ceil(Date)
+;=======================================
+
+
+
+;=======================================
+; ceil(String) --> Error24
+;=======================================
+In:  SL=0 RX=Stri:"String test"
+Out: EC=24 SL=0 RX=Stri:"String test"
+
+
+
+;=======================================
+; ceil(Real16 Matrix)
+;=======================================
+
+
+
+;=======================================
+; ceil(Complex16 Matrix) --> Error24
+;=======================================
+
+
+
+;=======================================
+; ceil(Short Integer) --> Error24
+;=======================================
+In:  SL=0 FI=0 RX=ShoI:"5#7"
+Out: EC=24 FI=0 SL=0 RX=ShoI:"5#7"
+
+
+
+;=======================================
+; ceil(Real34) --> Long Integer
+;=======================================
+In:  AM=DEG SL=0 FI=0 RX=Re34:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001" RX=LonI:"1"
+
+In:  AM=GRAD SL=0 FI=0 RX=Re34:"50"
+Out: EC=0 FI=0 SL=1 RL=Re34:"50" RX=LonI:"50"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"89.99999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"89.99999" RX=LonI:"90"
+
+In:  SL=0 FI=0 RX=Re34:"5.32564":DMS
+Out: EC=0 FI=0 SL=1 RL=Re34:"5.32564":DMS RX=LonI:"6"
+
+In:  SL=0 FI=0 RX=Re34:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re34:"-5.32564":GRAD RX=LonI:"-5"
+
+; NaN
+In:  SL=0 FI=0 RX=Re34:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
+
+In:  SL=0 FI=0 RX=Re34:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
+Out: EC=1 FI=0 SL=0 RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf"
+Out: EC=1 FI=0 SL=0 RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
+Out: EC=1 FI=0 SL=0 RX=Re34:"-inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
+Out: EC=1 FI=0 SL=0 RX=Re34:"inf":DEG
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf":MULTPI
+Out: EC=1 FI=0 SL=0 RX=Re34:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":RAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"-inf":RAD
+
+
+
+;=======================================
+; ceil(Complex34) --> Error24
+;=======================================
+In:  SL=0 FI=0 RX=Co34:"1 i 1"
+Out: EC=24 FI=0 SL=0 RX=Co34:"1 i 1"

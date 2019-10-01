@@ -1261,22 +1261,22 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     realIcSetPositiveSign(&temp);
 
     // Get the degrees
-    realIcToIntegralValue(&temp, &degrees);
+    realIcToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN);
 
     // Get the minutes
     realIcSubtract(&temp, &degrees, &temp);
     realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &minutes);
+    realIcToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN);
 
     // Get the seconds
     realIcSubtract(&temp, &minutes, &temp);
     realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &seconds);
+    realIcToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN);
 
     // Get the fractional seconds
     realIcSubtract(&temp, &seconds, &temp);
     realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &temp);
+    realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
 
     fs = realIcToUInt32(&temp);
     s  = realIcToUInt32(&seconds);
@@ -1343,22 +1343,22 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     realIcSetPositiveSign(&temp);
 
     // Get the degrees
-    realIcToIntegralValue(&temp, &degrees);
+    realIcToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN);
 
     // Get the minutes
     realIcSubtract(&temp, &degrees, &temp);
     realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &minutes);
+    realIcToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN);
 
     // Get the seconds
     realIcSubtract(&temp, &minutes, &temp);
     realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &seconds);
+    realIcToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN);
 
     // Get the fractional seconds
     realIcSubtract(&temp, &seconds, &temp);
     realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &temp);
+    realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
 
     fs = realIcToUInt32(&temp);
     s  = realIcToUInt32(&seconds);

@@ -15,16 +15,12 @@
  */
 
 /********************************************//**
- * \file sin.h
+ * \file ceil.h
  ***********************************************/
 
-void fnSin   (uint16_t unusedParamButMandatory);
-void sinError(void);
-void sinCoIc (const complexIc_t *z, complexIc_t *res);
-void sinLonI (void);
-void sinRe16 (void);
-void sinCo16 (void);
-void sinRm16 (void);
-void sinCm16 (void);
-void sinRe34 (void);
-void sinCo34 (void);
+void fnCeil   (uint16_t unusedParamButMandatory);
+void ceilError(void);
+void ceilLonI (void);
+void ceilRe16 (void);
+void ceilRm16 (void);
+void ceilRe34 (void);

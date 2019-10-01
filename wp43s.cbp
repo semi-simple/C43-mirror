@@ -251,6 +251,9 @@
 		<Unit filename="src/testSuite/arctanh.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/ceil.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/changeSign.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -314,6 +317,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/factorial.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/floor.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/fractionalPart.txt">
@@ -937,6 +943,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/ceil.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ceil.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/changeSign.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1043,6 +1060,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/factorial.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/floor.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/floor.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

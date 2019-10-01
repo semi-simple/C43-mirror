@@ -470,7 +470,6 @@ int main(int argc, char* argv[]) {
 #else
 int main(void) {
 #endif
-
   decContextDefault(&ctxtRealIc,   DEC_INIT_DECQUAD);
   decContextDefault(&ctxtReal16,   DEC_INIT_DECDOUBLE);
   decContextDefault(&ctxtReal34,   DEC_INIT_DECQUAD);

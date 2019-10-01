@@ -655,6 +655,7 @@ void addItemToNimBuffer(int16_t item) {
       break;
 
     case KEY_CC :
+    case KEY_CC1 :                         //JM CPX Added CC1
       lastChar = strlen(nimBuffer) - 1;
 
       done = true;

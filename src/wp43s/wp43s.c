@@ -207,17 +207,17 @@ void setupDefaults(void) {
     #pragma GCC diagnostic pop
   #endif
 
-  // Initialization of user key assignments
-  memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
-  kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
-  kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
-  kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
-  kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
-  kbd_usr[18].fShifted    = -MNU_VARS;
-  kbd_usr[18].gShifted    = CST_54;
-  kbd_usr[19].fShifted    = ITM_SW;
-  kbd_usr[19].gShifted    = ITM_SXY;
-  kbd_usr[20].gShifted    = ITM_LYtoM;
+  // Initialization of user key assignments          //JM bug: Overwritten by fnReset
+  memcpy(kbd_usr, kbd_std, sizeof(kbd_std));         //JM bug: Overwritten by fnReset
+  kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;             //JM bug: Overwritten by fnReset
+  kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;             //JM bug: Overwritten by fnReset
+  kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;             //JM bug: Overwritten by fnReset
+  kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;             //JM bug: Overwritten by fnReset
+  kbd_usr[18].fShifted    = -MNU_VARS;               //JM bug: Overwritten by fnReset
+  kbd_usr[18].gShifted    = CST_54;                  //JM bug: Overwritten by fnReset
+  kbd_usr[19].fShifted    = ITM_SW;                  //JM bug: Overwritten by fnReset
+  kbd_usr[19].gShifted    = ITM_SXY;                 //JM bug: Overwritten by fnReset
+  kbd_usr[20].gShifted    = ITM_LYtoM;               //JM bug: Overwritten by fnReset
 
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
@@ -258,7 +258,7 @@ void setupDefaults(void) {
 
   statisticalSumsPointer = NULL;
 
-//JM below, indented if fnReset is over-writing the content of setupdefaults
+//JM below, indented if fnReset is over-writing the content of setupdefaults. fnReset is in config.c
   fnSetWordSize(64); // word size from 1 to 64               //JM bug: Overwritten by fnReset
   fnIntegerMode(SIM_2COMPL);                                 //JM bug: Overwritten by fnReset
 

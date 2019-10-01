@@ -111,7 +111,7 @@ void executeFunction(int16_t fn, int16_t shift) {
         addItemToBuffer(func);
       }
       else if(func > 0) { // function
-        if(calcMode == CM_NIM && func != KEY_CC) {
+        if(calcMode == CM_NIM && func != KEY_CC && func != KEY_CC1 ) {     //JM CPX Added CC1 
           closeNim();
         }
 
@@ -541,8 +541,10 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if(item == KEY_CC) {
-      if(calcMode == CM_NORMAL) {
+    else if( (item == KEY_CC) || (item == KEY_COMPLEX) || (item == KEY_CC1) ) {                //JM CPX Add COMPLEX CPX*
+      if( (calcMode == CM_NORMAL) && ((item == KEY_CC1) ) ) {                                  //JM CPX empty function for CC1
+        } 
+      else if( (calcMode == CM_NORMAL) && ((item == KEY_CC) || (item == KEY_COMPLEX)) ) {      //JM CPX
         uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
         uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
         bool_t xIsAReal;
@@ -731,7 +733,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_NIM) {
-        addItemToNimBuffer(KEY_CC);
+        addItemToNimBuffer(item);       //JM Original CPX CC. Change KEY_CC to item to be able to add KEY_CC1. See JM CPX*
       }
 
       else if(calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_REGISTER_BROWSER) {
@@ -1208,17 +1210,17 @@ void btnReleased(void *notUsed, void *data) {
 }
 
 
-
-void fnComplexCCCC(uint16_t unusedParamButMandatory) {
+//JM\/\/\/\/
+void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {
  #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. CHALLENGE.
   shiftF = true;       //JM
   shiftG = false;      //JM
   Reset_Shift_Mem();   //JM
   #ifdef PC_BUILD
-    btnClicked(NULL, "12");
+    btnClicked(NULL, "12");  //JM changed from 02
   #endif
   #ifdef DMCP_BUILD
-    btnClicked(NULL, "12");
+    btnClicked(NULL, "12");  //JM changed from 02
   #endif
 #endif
 
@@ -1227,19 +1229,39 @@ void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   shiftG = false;      //JM
   Reset_Shift_Mem();   //JM
   #ifdef PC_BUILD
-    btnClicked(NULL, "06");
+    btnClicked(NULL, "06");  //JM changed from 02
   #endif
 
   #ifdef DMCP_BUILD
-    btnClicked(NULL, "06");
+    btnClicked(NULL, "06");  //JM changed from 02
   #endif
 #endif
-
-
 }
 
+void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {  //FOR CC1 ON TOP LEFT BUTTON
+  shiftF = false;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+}
+void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {  //FOR CC ON f TOP LEFT BUTTON
+  shiftF = true;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+}
+//JM^^^^^^^
 
-/*
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   shiftF = true;
 
@@ -1251,6 +1273,6 @@ void fnComplexCCCC(uint16_t unusedParamButMandatory) {
     btnClicked(NULL, "02");
   #endif
 }
-*/
+
 
 #endif // TESTSUITE_BUILD

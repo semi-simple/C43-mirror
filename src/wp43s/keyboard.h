@@ -21,6 +21,10 @@
 void resetShiftState(void);
 void showShiftState (void);
 void fnComplexCCCC  (uint16_t unusedParamButMandatory);
+void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
+void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
+void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX
+
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);

@@ -1702,8 +1702,10 @@
 #define ITM_EE_STO_IR                 1662  //JM EE
 #define ITM_EE_STO_V_Z                1663  //JM EE
 #define ITM_EE_X2BAL                  1664  //JM EE
+#define KEY_COMPLEX                   1665  //JM CPX
+#define KEY_CC1                       1666  //JM CPX
 
-#define LAST_ITEM                     1665  //JM
+#define LAST_ITEM                     1667  //JM
 
 #define CHR_PROD_SIGN                 9999
 

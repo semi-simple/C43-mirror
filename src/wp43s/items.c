@@ -1640,7 +1640,7 @@ const item_t indexOfItems[] = {
 /* 1513 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                                                     SLS_UNCHANGED},
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                                                  SLS_UNCHANGED},
 /* 1515 */  { fnUserMode,                  NOPARAM,                     "",                                            "USER",                                                                       SLS_UNCHANGED},
-/* JM 1516 */  { fnComplexCCCC,               NOPARAM,                     "COMPLEX",                                            "COMPLEX",                                                                         SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1516 */  { fnComplexCCCC_CC,               NOPARAM,                     "CC",                                            "CC",                                                                         SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                                                          SLS_UNCHANGED},
 /* 1519 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UP_ARROW,                                                                 SLS_UNCHANGED},
@@ -1766,7 +1766,7 @@ const item_t indexOfItems[] = {
 /* 1634 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                                                   SLS_UNCHANGED},  //JM GREEK
 /* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                                                    SLS_UNCHANGED},   //JM CASE
 /* 1636 */  { fnBASE_Hash,      /*TEST!*/  NOPARAM,                     "##",                                          "##",                                                                        SLS_UNCHANGED},   //JM ##
-/* 1637 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "###",                                         "###",                                                                       SLS_UNCHANGED},
+/* 1637 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "###",                                         "###",                                                                       SLS_UNCHANGED},   //JM ##
 /* 1638 */  { fnJM,                        3,                          "op_a",                                         "a",                                                                       SLS_ENABLED  },  //JM Operator a
 /* 1639 */  { fnJM,                        4,                          "op_a" STD_SUP_2,                               "a" STD_SUP_2,                                                             SLS_ENABLED  },  //JM Operator a
 /* 1640 */  { fnJM,                        5,                          "op_j",                                         "j",                                                                       SLS_ENABLED  },  //JM Operator a
@@ -1795,8 +1795,10 @@ const item_t indexOfItems[] = {
 /* 1662 */  { fnJM,                        18,                          "",                                             "I" STD_CROSS "R",              SLS_ENABLED  },  //JM EE 
 /* 1663 */  { fnJM,                        19,                          "",                                             "V" STD_DIVIDE "Z",             SLS_ENABLED  },  //JM EE 
 /* 1664 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",             SLS_ENABLED  },  //JM EE 
+/* 1665 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                      "COMPLEX",                                                                     SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1666 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                          "CC1",                                                                         SLS_UNCHANGED},   //JM Change CC to CC1
 
 
 
-/* 1665 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/* 1667 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

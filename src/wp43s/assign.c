@@ -40,7 +40,7 @@ const calcKey_t kbd_std[37] = {
  {35,   ITM_cos,          ITM_arccos,      ITM_toPOL,    ITM_NULL,       CHR_K,             ITM_NULL,        CHR_KAPPA,     ITM_REGK     }, //JM
  {36,   ITM_tan,          ITM_arctan,      ITM_RTN,      ITM_NULL,       CHR_L,             ITM_NULL,        CHR_LAMBDA,    ITM_REGL     }, //JM
        
- {41,   ITM_ENTER,        KEY_CC,          ITM_DROP,     ITM_ENTER,      ITM_ENTER,         ITM_NULL,        ITM_NULL,      ITM_ENTER    }, //JM
+ {41,   ITM_ENTER,        KEY_COMPLEX,     ITM_DROP,     ITM_ENTER,      ITM_ENTER,         ITM_NULL,        ITM_NULL,      ITM_ENTER    }, //JM
  {42,   ITM_XexY,         ITM_LASTX,      -MNU_CPX,      CHR_ex,         CHR_M,             CHR_ex,          CHR_MU,        ITM_NULL     }, //JM
  {43,   ITM_CHS,         -MNU_MODE,       -MNU_EXP,      CHR_PLUS_MINUS, CHR_N,             CHR_PLUS_MINUS,  CHR_NU,        ITM_NULL     }, //JM
  {44,   ITM_EXPONENT,    -MNU_DISP,       -MNU_FIN,      ITM_NULL,       CHR_O,             CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
@@ -82,7 +82,7 @@ const calcKey_t kbd_std[37] = {
  {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,            ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_LBL,      ITM_NULL,       CHR_F,            ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
 
- {31,   ITM_STO,          KEY_CC,          ITM_MAGNITUDE,ITM_NULL,       CHR_G,            ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
+ {31,   ITM_STO,          KEY_COMPLEX,     ITM_MAGNITUDE,ITM_NULL,       CHR_G,            ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
  {32,   ITM_RCL,          ITM_PC,          ITM_DELTAPC,  ITM_NULL,       CHR_H,            ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
  {33,   ITM_Rdown,        ITM_pi,          ITM_ANGLE,    ITM_NULL,       CHR_I,            CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {34,   ITM_sin,          ITM_arcsin,      ITM_toREC,    ITM_NULL,       CHR_J,            CHR_case,        CHR_THETA,     ITM_REGJ     }, //JM

@@ -126,6 +126,11 @@
 #include <math.h>
 #include <gmp.h>
 
+#ifdef __APPLE__
+    // needed by chdir
+    #include<unistd.h>
+#endif
+
 #ifdef PC_BUILD
   #ifndef TESTSUITE_BUILD
     #include <glib.h>

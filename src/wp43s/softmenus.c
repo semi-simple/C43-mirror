@@ -183,9 +183,9 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
-const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SQUARE,
-                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     ITM_SUM,
-                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
+const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_SIGMAMINUS,             ITM_XBAR,                 ITM_S,                 ITM_sigma,                   ITM_SM,                              //JM RE-ARRANGED E-
+                                     ITM_SUM,                       ITM_SQUARE,                 ITM_XW,                   ITM_SW,                ITM_sigmaw,                  ITM_SMW,                             //JM RE-ARRANGED E-
+                                     ITM_PLOT,                      ITM_CLSIGMA,                ITM_XG,                   ITM_epsilon,           ITM_epsilonP,                ITM_epsilonM,                        //JM RE-ARRANGED E-
                                      ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_XCIRC,             ITM_YCIRC,                   ITM_SQUARE,
                                      ITM_NULL,                      ITM_XH,                     ITM_COV,                  ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_NULL,                      ITM_XRMS,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,

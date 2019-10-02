@@ -97,6 +97,10 @@ void JM_DOT(int16_t xx, int16_t yy);
 void Reset_Shift_Mem(void);
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
+void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
+void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
+void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX
+
 
 //display.c
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode);

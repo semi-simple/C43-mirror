@@ -893,12 +893,12 @@ void fnClearRegisters(uint16_t unusedParamButMandatory) {
 
   if(stackSize == SS_4) {
     for(regist=REGISTER_A; regist<=REGISTER_D; regist++) {
-      clearRegister(FIRST_LOCAL_REGISTER + regist);
+      clearRegister(regist);
     }
   }
 
   for(regist=REGISTER_I; regist<=REGISTER_K; regist++) {
-    clearRegister(FIRST_LOCAL_REGISTER + regist);
+    clearRegister(regist);
   }
 }
 

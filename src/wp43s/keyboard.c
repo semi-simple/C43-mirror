@@ -1210,58 +1210,6 @@ void btnReleased(void *notUsed, void *data) {
 }
 
 
-//JM\/\/\/\/
-void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {
- #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. CHALLENGE.
-  shiftF = true;       //JM
-  shiftG = false;      //JM
-  Reset_Shift_Mem();   //JM
-  #ifdef PC_BUILD
-    btnClicked(NULL, "12");  //JM changed from 02
-  #endif
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "12");  //JM changed from 02
-  #endif
-#endif
-
-#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
-  shiftF = true;       //JM
-  shiftG = false;      //JM
-  Reset_Shift_Mem();   //JM
-  #ifdef PC_BUILD
-    btnClicked(NULL, "06");  //JM changed from 02
-  #endif
-
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "06");  //JM changed from 02
-  #endif
-#endif
-}
-
-void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {  //FOR CC1 ON TOP LEFT BUTTON
-  shiftF = false;       //JM
-  shiftG = false;      //JM
-  Reset_Shift_Mem();   //JM
-  #ifdef PC_BUILD
-    btnClicked(NULL, "00");  //JM changed from 02
-  #endif
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "00");  //JM changed from 02
-  #endif
-}
-void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {  //FOR CC ON f TOP LEFT BUTTON
-  shiftF = true;       //JM
-  shiftG = false;      //JM
-  Reset_Shift_Mem();   //JM
-  #ifdef PC_BUILD
-    btnClicked(NULL, "00");  //JM changed from 02
-  #endif
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "00");  //JM changed from 02
-  #endif
-}
-//JM^^^^^^^
-
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   shiftF = true;
 

@@ -776,6 +776,74 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
 
 
 
+//*********************
+
+//JM\/\/\/\/
+
+bool_t userModeEnabledMEM;
+
+
+void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {   //JM HARDWAIRED FOR f[COMPLEX]
+  userModeEnabledMEM = userModeEnabled;
+  userModeEnabled = false;
+
+ #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. CHALLENGE.
+  shiftF = true;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "12");  //JM changed from 02
+  #endif
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "12");  //JM changed from 02
+  #endif
+#endif
+
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
+  shiftF = true;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "06");  //JM changed from 02
+  #endif
+
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "06");  //JM changed from 02
+  #endif
+#endif
+  userModeEnabled = userModeEnabledMEM;
+}
+
+void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {  //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
+  userModeEnabledMEM = userModeEnabled;
+  userModeEnabled = true;
+  shiftF = true;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+  userModeEnabled = userModeEnabledMEM;
+}
+void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {  //FOR CC  HARDWIRED FOR TOP LEFT BUTTON
+  userModeEnabledMEM = userModeEnabled;
+  userModeEnabled = true;
+  shiftF = false;       //JM
+  shiftG = false;      //JM
+  Reset_Shift_Mem();   //JM
+  #ifdef PC_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+  #ifdef DMCP_BUILD
+    btnClicked(NULL, "00");  //JM changed from 02
+  #endif
+  userModeEnabled = userModeEnabledMEM;
+}
+//JM^^^^^^^
+
 
 
 

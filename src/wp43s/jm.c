@@ -670,6 +670,87 @@ uint16_t cm;
 
      refreshStack();
 
+  } else
+
+  if(JM_OPCODE == 21) {                               //CONVERT DATA TYPES UP
+/* 
+if Angle mode: change to SP or DP as applicable using .d.
+If SHORTINT: change to SP
+if SP: change to DP
+if DP: change to LONGINT
+if ComplexSP change to ComplexDP
+*/
+     int32_t dataTypeX = getRegisterDataType(REGISTER_X);
+     
+     if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+	   shiftF = false;     //JM. Execur .d
+	   shiftG = true;      //JM
+	   Reset_Shift_Mem();  //JM
+	   #ifdef PC_BUILD
+	     btnClicked(NULL, "03");  //JM changed from 02
+	   #endif
+	   #ifdef DMCP_BUILD
+	     btnClicked(NULL, "03");  //JM changed from 02
+	   #endif
+	 } else
+
+     if(dataTypeX == dtShortInteger) { 
+      convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X); 
+     } else
+
+     if(dataTypeX == dtReal16 || dataTypeX == dtComplex16) { 
+      fnConvertXToReal34(0); 
+     } else
+
+     if(dataTypeX == dtReal34) { 
+      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+
+     }
+     
+
+  refreshStack();
+  }
+
+
+
+  if(JM_OPCODE == 22) {                                           //CONVERT DATA TYPES DOWN
+/*    
+if Angle mode: change to SP or DP, as applicable using .d
+If LONGINT: change to DP
+if DP: change to SP
+if SP: change to ShortInt
+if ComplexDP change to ComplexSP
+
+*/
+     int32_t dataTypeX = getRegisterDataType(REGISTER_X);
+     
+     if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+       shiftF = false;     //JM. Execur .d
+       shiftG = true;      //JM
+       Reset_Shift_Mem();  //JM
+       #ifdef PC_BUILD
+         btnClicked(NULL, "03");  //JM changed from 02
+       #endif
+       #ifdef DMCP_BUILD
+         btnClicked(NULL, "03");  //JM changed from 02
+       #endif
+     } else
+
+     if(dataTypeX == dtLongInteger) { 
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X); 
+     } else
+
+     if(dataTypeX == dtReal34 || dataTypeX == dtComplex34) { 
+      fnConvertXToReal16(0); 
+     } else
+
+     if(dataTypeX == dtReal16) { 
+      convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X); 
+     } 
+     
+
+  refreshStack();
   }
 
 

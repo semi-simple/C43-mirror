@@ -1704,8 +1704,10 @@
 #define ITM_EE_X2BAL                  1664  //JM EE
 #define KEY_COMPLEX                   1665  //JM CPX
 #define KEY_CC1                       1666  //JM CPX
+#define KEY_TYPCON_UP                 1667  //JM CPX
+#define KEY_TYPCON_DN                 1668  //JM CPX
 
-#define LAST_ITEM                     1667  //JM
+#define LAST_ITEM                     1669  //JM
 
 #define CHR_PROD_SIGN                 9999
 

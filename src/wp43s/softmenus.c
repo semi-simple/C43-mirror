@@ -184,9 +184,13 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
+/*
 const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_SIGMAMINUS,             ITM_XBAR,                 ITM_S,                 ITM_sigma,                   ITM_SM,                              //JM RE-ARRANGED E-
                                      ITM_SUM,                       ITM_SQUARE,                 ITM_XW,                   ITM_SW,                ITM_sigmaw,                  ITM_SMW,                             //JM RE-ARRANGED E-
-                                     ITM_PLOT,                      ITM_CLSIGMA,                ITM_XG,                   ITM_epsilon,           ITM_epsilonP,                ITM_epsilonM,                        //JM RE-ARRANGED E-
+                                     ITM_PLOT,                      ITM_CLSIGMA,                ITM_XG,                   ITM_epsilon,           ITM_epsilonP,                ITM_epsilonM,                        //JM RE-ARRANGED E-  */
+const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SQUARE,
+                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     ITM_SUM,
+                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
                                      ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_XCIRC,             ITM_YCIRC,                   ITM_SQUARE,
                                      ITM_NULL,                      ITM_XH,                     ITM_COV,                  ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_NULL,                      ITM_XRMS,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
@@ -463,7 +467,7 @@ const int16_t menu_HOME[]        = {
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-1------*/                                                                                                                                                                                           //JM HOME
 /* 03 */                             ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                         //JM HOME
-                                     ITM_toDP,                      KEY_TYPCON_UP/*ITM_toSP*/,  KEY_TYPCON_DN /*ITM_IP*/,                   ITM_op_j,              CST_09,                     -MNU_EE,                            //JM HOME
+                                     ITM_toDP,                      KEY_TYPCON_DN/*ITM_toSP*/,  KEY_TYPCON_UP /*ITM_IP*/,                   ITM_op_j,              CST_09,                     -MNU_EE,                            //JM HOME
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-3------*/                                                                                                                                                                                           //JM HOME
                                      ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                         //JM HOME

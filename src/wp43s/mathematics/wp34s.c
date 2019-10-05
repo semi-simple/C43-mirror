@@ -995,7 +995,7 @@ static void WP34S_ComplexGammaLnGamma(const complexIc_t *z, const bool_t ln, com
 	   return;
 	 }
 */
-  // Correct out argument and begin the inversion if it is negative
+  // Correct our argument and begin the inversion if it is negative
   if(realIcIsNegative(&z->real)) {
     reflec = true;
     realIcSubtract(const_1, &z->real, &t.real);
@@ -1005,13 +1005,15 @@ static void WP34S_ComplexGammaLnGamma(const complexIc_t *z, const bool_t ln, com
       return;
     }
     realIcSubtract(&t.real, const_1, &x.real);
+    realIcCopy(&z->imag, &x.imag);
+    realIcChangeSign(&x.imag);
   }
   else {
     realIcSubtract(&z->real, const_1, &x.real);
+    realIcCopy(&z->imag, &x.imag);
   }
 
   // Sum the series
-  realIcCopy(&z->imag, &x.imag);
   WP34S_CalcComplexLnGamma(&x, res);
   if(!ln) {
     expCoIc(res, res);
@@ -1022,7 +1024,7 @@ static void WP34S_ComplexGammaLnGamma(const complexIc_t *z, const bool_t ln, com
     realIcMultiply(&z->real, const_pi, &t.real);
     realIcMultiply(&z->imag, const_pi, &t.imag);
     sinCoIc(&t, &s);
-    if(ln) {
+    if(!ln) {
       mulCoIcCoIc(&s, res, &u);
       divReIcCoIc(const_pi, &u, res);
     }

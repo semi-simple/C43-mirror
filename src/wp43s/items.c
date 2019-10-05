@@ -1706,9 +1706,9 @@ const item_t indexOfItems[] = {
 /* 1574 */  { fnStatSum,                   21,                          STD_SIGMA "x" STD_SUP_3,                       STD_SIGMA "x" STD_SUP_3,                                                      SLS_ENABLED  },
 /* 1575 */  { fnStatSum,                   22,                          STD_SIGMA "x" STD_SUP_4,                       STD_SIGMA "x" STD_SUP_4,                                                      SLS_ENABLED  },
 /* 1576 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "H",                                                                          SLS_UNCHANGED},
-/* 1577 */  { fnSetSetJM,                  1,                           "SETERPN",                                     "eRPN",                                                                       SLS_ENABLED},      //JM eRPN
-/* 1578 */  { fnSetSetJM,                  2,                           "SETHOME3",                                    "HOME.3",                                                                     SLS_ENABLED},      //JM HOME.3
-/* 1579 */  { fnSetSetJM,                  3,                           "SETSHFTTIM",                                  "SH_TIM",                                                                     SLS_ENABLED},      //JM SHIFT CANCEL
+/* 1577 */  { fnSetSetJM,                  1,                           "SET_ERPN",                                    "eRPN",                                                                       SLS_ENABLED},      //JM eRPN
+/* 1578 */  { fnSetSetJM,                  2,                           "SET_HOME_TRIPLE",                             "HOME.3",                                                                     SLS_ENABLED},      //JM HOME.3
+/* 1579 */  { fnSetSetJM,                  3,                           "SET_SHFT_4s",                                 "SH_4s",                                                                     SLS_ENABLED},      //JM SHIFT CANCEL
 /* 1580 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                                                       SLS_UNCHANGED},      //JM HOME
 /* 1581 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIGFIG",                                      "SIGFIG",                                                                     SLS_UNCHANGED},      //JM SIGFIG
 /* 1582 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                                                      SLS_UNCHANGED},      //JM ALPHA
@@ -1724,7 +1724,7 @@ const item_t indexOfItems[] = {
 /* 1592 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                                                       SLS_UNCHANGED},      //JM UNIT
 /* 1593 */  { fnShowJM,                    1,                           "eRPN?",                                       "eRPN?",                                                                       SLS_ENABLED  },     //JM SHOW
 /* 1594 */  { fnShowJM,                    2,                           "HOME.3?",                                     "HOME.3?",                                                                     SLS_ENABLED  },     //JM SHOW
-/* 1595 */  { fnShowJM,                    3,                           "SH_TM?",                                      "SH_TM?",                                                                     SLS_ENABLED  },     //JM SHOW
+/* 1595 */  { fnShowJM,                    3,                           "SH_TIM_4s?",                                  "SH_4s?",                                                                     SLS_ENABLED  },     //JM SHOW
 /* 1596 */  { addItemToBuffer,             CHR_QOPPA,                    "",                                            STD_QOPPA,                                                                   SLS_UNCHANGED},  //JM GREEK
 /* 1597 */  { addItemToBuffer,             CHR_DIGAMMA,                  "",                                            STD_DIGAMMA,                                                                   SLS_UNCHANGED},  //JM GREEK
 /* 1598 */  { addItemToBuffer,             CHR_SAMPI,                    "",                                            STD_SAMPI,                                                                   SLS_UNCHANGED},  //JM GREEK
@@ -1782,7 +1782,7 @@ const item_t indexOfItems[] = {
 /* 1650 */  { fnJM,                        6,                          "DtoY",                                         STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y",           SLS_ENABLED  },  //JM EE 
 /* 1651 */  { fnJM,                        9,                          "AtoSYM",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "012",                                      SLS_ENABLED  },  //JM EE 
 /* 1652 */  { fnJM,                        8,                          "SYMtoA",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",                                      SLS_ENABLED  },  //JM EE 
-/* 1653 */  { itemToBeCoded,               NOPARAM,                     "E.ENG",                                       "ELEC",                                                                       SLS_UNCHANGED},   //JM EE
+/* 1653 */  { itemToBeCoded,               NOPARAM,                     "ELEC.ENG",                                    "ELEC",                                                                       SLS_UNCHANGED},   //JM EE
 /* 1654 */  { fnJM,                        10,                          "e^theta_j",                                   "e^" STD_THETA "j",                                                            SLS_ENABLED  },  //JM EE 
 
 /* 1655 */  { fnJM,                        11,                          "",                                             "STO" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE 
@@ -1797,10 +1797,12 @@ const item_t indexOfItems[] = {
 /* 1664 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",             SLS_ENABLED  },  //JM EE 
 /* 1665 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                      "COMPLEX",                                                                     SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1666 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                          "CC1",                                                                         SLS_UNCHANGED},   //JM Change CC to CC1
-/* 1667 */  { fnJM,                        21,     /*up*/               "KEY_TYPCON_UP",                                   ">>",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
-/* 1668 */  { fnJM,                        22,     /*dn*/               "KEY_TYPCON_DN",                                   "<<",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
+/* 1667 */  { fnJM,                        21,     /*up*/               "KEY_TYPCON_UP",                                ">>",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
+/* 1668 */  { fnJM,                        22,     /*dn*/               "KEY_TYPCON_DN",                                "<<",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
+/* 1669 */  { fnSetSetJM,                  8,                           "SH.3T",                                        "SH.3T",                                                                     SLS_ENABLED},      //JM HOME.3T
+/* 1670 */  { fnShowJM,                    8,                           "SH.3T?",                                       "SH.3T?",                                                                     SLS_ENABLED  },     //JM SHOW HOME.3T
 
 
 
-/* 1669 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/* 1671 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

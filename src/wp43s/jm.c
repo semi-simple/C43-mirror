@@ -154,8 +154,8 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
    fnInfo(HOME3);                                                 //JM HOME.3
   } else
   if(What == 3) {
-    SHTIM = !SHTIM;                                                //JM SHIFT TIM CCL
-    fnInfo(SHTIM);                                                 //JM SHIFT TIM CCL
+    ShiftTimoutMode = !ShiftTimoutMode;                            //JM SHIFT TIM CCL
+    fnInfo(ShiftTimoutMode);                                       //JM SHIFT TIM CCL
   } else
   if(What == 4) {
     SH_BASE_HOME = !SH_BASE_HOME;                                  //JM SHIFT TIM CCL
@@ -172,9 +172,11 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
   if(What == 7) {
     SH_BASE_MYA = !SH_BASE_MYA;                                    //JM SHIFT TIM CCL
     fnInfo(SH_BASE_MYA);                                           //JM SHIFT TIM CCL
+  } else
+  if(What == 8) {
+    Home3TimerMode = !Home3TimerMode;                               //JM SHIFT HOME.3 TIM CCL
+    fnInfo(Home3TimerMode);                                         //JM SHIFT HOME.3 TIM CCL
   }
-
-
 
 
 }                                                                 //JM SHIFT TIM CCL
@@ -187,8 +189,8 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
  * \param[in] Info uint16_t
  * \return void
  ***********************************************/
-void fnInfo(uint16_t f) {
-  temporaryInformation = f ? TI_FALSE : TI_TRUE;
+void fnInfo(bool_t f) {
+  temporaryInformation = f ? TI_TRUE : TI_FALSE;
   refreshRegisterLine(TAM_REGISTER_LINE);
   refreshRegisterLine(REGISTER_X);
 }
@@ -213,9 +215,9 @@ void fnShowJM(uint16_t What) {
   else
   if(What == 2 && HOME3 == false) { stringToLongInteger("0",10,mem); }
   else
-  if(What == 3 && SHTIM == true) { stringToLongInteger("1",10,mem); }
+  if(What == 3 && ShiftTimoutMode == true) { stringToLongInteger("1",10,mem); }
   else
-  if(What == 3 && SHTIM == false) { stringToLongInteger("0",10,mem); }
+  if(What == 3 && ShiftTimoutMode == false) { stringToLongInteger("0",10,mem); }
   else
   if(What == 4 && SH_BASE_HOME == true) { stringToLongInteger("1",10,mem); }
   else
@@ -232,7 +234,11 @@ void fnShowJM(uint16_t What) {
   if(What == 7 && SH_BASE_MYA == true) { stringToLongInteger("1",10,mem); }
   else
   if(What == 7 && SH_BASE_MYA == false) { stringToLongInteger("0",10,mem); }
-
+  else
+  if(What == 8 && Home3TimerMode == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 8 && Home3TimerMode == false) { stringToLongInteger("0",10,mem); }
+ 
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
 

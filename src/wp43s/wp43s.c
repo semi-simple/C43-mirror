@@ -130,7 +130,8 @@ uint8_t              currentAngularMode;
 uint8_t              SigFigMode;                              //JM SIGFIG
 bool_t               eRPN;                                    //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 bool_t               HOME3;                                   //JM HOME Create a flag to enable or disable triple shift HOME3.
-bool_t               SHTIM;                                   //JM SHIFT Create a flag to enable or disable SHIFT TIMER CANCEL.
+bool_t               ShiftTimoutMode;                         //JM SHIFT Create a flag to enable or disable SHIFT TIMER CANCEL.
+bool_t               Home3TimerMode;                          //JM SHIFT Create a flag to enable or disable SHIFT TIMER CANCEL.
 bool_t               UNITDisplay;                             //JM HOME Create a flag to enable or disable UNIT display in ENG mode
 bool_t               SH_BASE_HOME;                            //JM BASEHOME
 bool_t               SH_BASE_MYMENU;                          //JM BASEHOME
@@ -295,7 +296,8 @@ void setupDefaults(void) {
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
   HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
-  SHTIM = true;                                                  //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
+  ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
+  Home3TimerMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
   SH_BASE_HOME   = true;      
   SH_BASE_MYMENU = false;    
@@ -312,6 +314,7 @@ void setupDefaults(void) {
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = 0;                                            //JM TIMER
+  JM_SHIFT_HOME_TIMER = 0;                                       //JM TIMER
 
   
   #ifndef TESTSUITE_BUILD

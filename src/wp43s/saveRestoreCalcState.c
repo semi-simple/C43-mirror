@@ -164,13 +164,14 @@ void saveCalc(void) {
 
   size += fwrite(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                            (unsigned long)size);
   size += fwrite(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                           (unsigned long)size);
-  size += fwrite(&SHTIM,                              1, sizeof(SHTIM),                              backup); //JM SHIFT //printf("%8lu SHTIM\n",                           (unsigned long)size);
+  size += fwrite(&ShiftTimoutMode,                    1, sizeof(ShiftTimoutMode),                    backup); //JM SHIFT //printf("%8lu ShiftTimoutMode\n",                           (unsigned long)size);
   size += fwrite(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                           (unsigned long)size);
   size += fwrite(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                        (unsigned long)size);
   size += fwrite(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME      (unsigned long)size);
   size += fwrite(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU     (unsigned long)size);
   size += fwrite(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME     (unsigned long)size);
   size += fwrite(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA       (unsigned long)size);
+  size += fwrite(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",                           (unsigned long)size);
 
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
@@ -338,13 +339,14 @@ void restoreCalc(void) {
 
     size += fread(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                             (unsigned long)size);
     size += fread(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                             (unsigned long)size);
-    size += fread(&SHTIM,                              1, sizeof(SHTIM),                              backup); //JM SHIFT //printf("%8lu SHTIM\n",                             (unsigned long)size);
+    size += fread(&ShiftTimoutMode,                    1, sizeof(ShiftTimoutMode),                    backup); //JM SHIFT //printf("%8lu ShiftTimoutMode\n",                             (unsigned long)size);
     size += fread(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                           (unsigned long)size);
     size += fread(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                             (unsigned long)size);
     size += fread(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME      (unsigned long)size);
     size += fread(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU     (unsigned long)size);
     size += fread(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME     (unsigned long)size);
     size += fread(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA       (unsigned long)size);
+    size += fread(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",                             (unsigned long)size);
 
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);

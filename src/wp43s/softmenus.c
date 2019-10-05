@@ -101,7 +101,7 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
                                      ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,                 
 
-                                     ITM_NULL,                      ITM_SH_ERPN,                ITM_SH_SHTIM,             ITM_SH_HOME3,          ITM_NULL,                    ITM_NULL,                                         //JM INFO
+                                     ITM_NULL,                      ITM_SH_ERPN,                ITM_SH_SHTIM,             ITM_SH_HOMEx3,         ITM_NULL,                    ITM_NULL,                                         //JM INFO
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                     };                 //JM INFO
 
 
@@ -143,7 +143,7 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
 
                                      ITM_ERPN,                      ITM_SH_ERPN,                ITM_BASE_HOME,            ITM_SH_BASE_HOME,      ITM_BASE_AHOME,              ITM_SH_BASE_AHOME,                           //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
                                      ITM_SHTIM,                     ITM_SH_SHTIM,               ITM_BASE_MYMENU,          ITM_SH_BASE_MYMENU,    ITM_BASE_MYA,                ITM_SH_BASE_MYA,                            //J Added
-                                     ITM_HOMEx3,                    ITM_SH_HOME3,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+                                     ITM_HOMEx3,                    ITM_SH_HOMEx3,              ITM_HOMEx3T,              ITM_SH_HOMEx3T,        ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
                                      ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,

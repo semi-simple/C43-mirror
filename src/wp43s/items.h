@@ -1629,7 +1629,7 @@
 #define ITM_WS64                      1591  //JM BASE
 #define ITM_UNIT                      1592  //JM UNIT
 #define ITM_SH_ERPN                   1593  //JM SHOW
-#define ITM_SH_HOME3                  1594  //JM SHOW
+#define ITM_SH_HOMEx3                 1594  //JM SHOW
 #define ITM_SH_SHTIM                  1595  //JM SHOW
 
 #define CHR_QOPPA                     1596  //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
@@ -1706,8 +1706,10 @@
 #define KEY_CC1                       1666  //JM CPX
 #define KEY_TYPCON_UP                 1667  //JM CPX
 #define KEY_TYPCON_DN                 1668  //JM CPX
+#define ITM_HOMEx3T                   1669  //JM HOME.3T
+#define ITM_SH_HOMEx3T                1670  //JM HOME.3T
 
-#define LAST_ITEM                     1669  //JM
+#define LAST_ITEM                     1671  //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -252,6 +252,7 @@ void fnJM(uint16_t JM_OPCODE) {
 uint16_t cm;
 
   if(JM_OPCODE == 1) {                                         // JM_OPCODE = 1 : Parallel, not using the stack, destroying I, J & K
+    saveStack();
                                                                //                    * DO THE PARALLEL FUNCTION XY / (X+Y)
                                                                //                    * Drops X and Y, enables stack lift and refreshes the stack
                                                                //                    * Leaves answer in X and update Last X
@@ -269,10 +270,10 @@ uint16_t cm;
     fnDivide(0);                                               // /
     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);  // STO I into L (To update LAST X)
     refreshStack();
-
   } else
 
   if(JM_OPCODE == 2) {                                         // JM_OPCODE = 2 : Angle from complex number. 
+     saveStack();
                                                                //                    * Using the stack, push once.
                                                                //                    * Leaves angle in X
      cm = complexMode;                                         // STO POLAR MODE
@@ -298,10 +299,10 @@ uint16_t cm;
      fnDropY(0);                                               // DROP Y
      complexMode = cm;                                         // RCL POLAR MODE
      refreshStack();
-
   } else
 
   if(JM_OPCODE == 3) {                                                                                                      //operator a
+     saveStack();
      STACK_LIFT_ENABLE;     
      liftStack();                                             
      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
@@ -311,6 +312,7 @@ uint16_t cm;
   } else
 
   if(JM_OPCODE == 4) {                                        //operater a sq                                                                                                        
+     saveStack();
      STACK_LIFT_ENABLE;     
      liftStack();                                             
      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
@@ -320,6 +322,7 @@ uint16_t cm;
   } else
 
   if(JM_OPCODE == 5) {                                        //Operator j                                          
+     saveStack();
      STACK_LIFT_ENABLE;     
      liftStack();                                             
      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
@@ -329,6 +332,7 @@ uint16_t cm;
   } else
 
   if(JM_OPCODE == 6) {                                        //Delta to Star   ZYX to ZYX; destroys IJKL & 99                                           
+     saveStack();
      STACK_LIFT_ENABLE;     
      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I
      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J
@@ -372,10 +376,10 @@ uint16_t cm;
     refreshRegisterLine(REGISTER_X);
     refreshRegisterLine(REGISTER_Y);
     refreshRegisterLine(REGISTER_Z);
-
   } else
 
   if(JM_OPCODE == 7) {                                        //Star to Delta ZYX to ZYX; destroys IJKL & 99                                           
+     saveStack();
      STACK_LIFT_ENABLE;     
      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I
      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J
@@ -417,10 +421,10 @@ uint16_t cm;
     refreshRegisterLine(REGISTER_X);
     refreshRegisterLine(REGISTER_Y);
     refreshRegisterLine(REGISTER_Z);
-
   } else
 
   if(JM_OPCODE == 8) {                                        //SYMMETRICAL COMP to ABC   ZYX to ZYX; destroys IJKL & 99                                           
+     saveStack();
      STACK_LIFT_ENABLE;     
      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I  //A2
      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J  //A1
@@ -480,10 +484,10 @@ uint16_t cm;
     refreshRegisterLine(REGISTER_X);
     refreshRegisterLine(REGISTER_Y);
     refreshRegisterLine(REGISTER_Z);
-
   } else
 
   if(JM_OPCODE == 9) {                                        //ABC to SYMMETRICAL COMP   ZYX to ZYX; destroys IJKL & 99                                           
+     saveStack();
      STACK_LIFT_ENABLE;     
      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I  //c
      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J  //b
@@ -557,10 +561,10 @@ uint16_t cm;
     refreshRegisterLine(REGISTER_X);
     refreshRegisterLine(REGISTER_Y);
     refreshRegisterLine(REGISTER_Z);
-
   } else
 
   if(JM_OPCODE == 10) {                                        //e^theta.j j                                          
+     saveStack();
      STACK_LIFT_ENABLE;     
      liftStack();                                             
      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
@@ -572,42 +576,55 @@ uint16_t cm;
   } else
 
   if(JM_OPCODE == 11) {                                        //STO Z                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      copySourceRegisterToDestRegister(REGISTER_X, 90);
      copySourceRegisterToDestRegister(REGISTER_Y, 91);
      copySourceRegisterToDestRegister(REGISTER_Z, 92);
   } else
+
   if(JM_OPCODE == 13) {                                        //STO V                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      copySourceRegisterToDestRegister(REGISTER_X, 93);
      copySourceRegisterToDestRegister(REGISTER_Y, 94);
      copySourceRegisterToDestRegister(REGISTER_Z, 95);
   } else
+
   if(JM_OPCODE == 15) {                                        //STO I                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      copySourceRegisterToDestRegister(REGISTER_X, 96);
      copySourceRegisterToDestRegister(REGISTER_Y, 97);
      copySourceRegisterToDestRegister(REGISTER_Z, 98);
   } else
+
   if(JM_OPCODE == 12) {                                        //RCL Z                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(92);                                                  
      fnRecall(91);                                                  
      fnRecall(90);                                                  
   } else
+
   if(JM_OPCODE == 14) {                                        //RCL V                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(95);                                                  
      fnRecall(94);                                                  
      fnRecall(93);                                                  
   } else
+
   if(JM_OPCODE == 16) {                                        //RCL I                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(98);                                                  
      fnRecall(97);                                                  
      fnRecall(96);                                                  
   } else
+
   if(JM_OPCODE == 17) {                                        // V/I                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                        //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
      fnRecall(95);                                                  
      fnRecall(98);                                                  
@@ -620,7 +637,9 @@ uint16_t cm;
      fnDivide(0);
      refreshStack();
   } else
+
   if(JM_OPCODE == 18) {                                        // IR                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                                  
      fnRecall(98);                                                  
      fnRecall(92);                                                  
@@ -633,7 +652,9 @@ uint16_t cm;
      fnMultiply(0);
      refreshStack();
   } else
+
   if(JM_OPCODE == 19) {                                        // V/Z                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                                  
      fnRecall(95);                                                  
      fnRecall(92);                                                  
@@ -646,7 +667,9 @@ uint16_t cm;
      fnDivide(0);
      refreshStack();
   } else
+
   if(JM_OPCODE == 20) {                                        //Copy Create X>ABC                                          
+     saveStack();
      STACK_LIFT_ENABLE;                                                  
      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
 
@@ -669,10 +692,9 @@ uint16_t cm;
      fnMultiply(0);
 
      refreshStack();
-
   } else
 
-  if(JM_OPCODE == 21) {                               //CONVERT DATA TYPES UP
+  if(JM_OPCODE == 21) {           // >>             //CONVERT DATA TYPES UP
 /* 
 if Angle mode: change to SP or DP as applicable using .d.
 If SHORTINT: change to SP
@@ -680,9 +702,10 @@ if SP: change to DP
 if DP: change to LONGINT
 if ComplexSP change to ComplexDP
 */
+     saveStack();
      int32_t dataTypeX = getRegisterDataType(REGISTER_X);
      
-     if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+     if( (dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
 	   shiftF = false;     //JM. Execur .d
 	   shiftG = true;      //JM
 	   Reset_Shift_Mem();  //JM
@@ -694,18 +717,17 @@ if ComplexSP change to ComplexDP
 	   #endif
 	 } else
 
-     if(dataTypeX == dtShortInteger) { 
-      convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X); 
-     } else
+       if(dataTypeX == dtShortInteger) { 
+        convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X); 
+       } else
 
-     if(dataTypeX == dtReal16 || dataTypeX == dtComplex16) { 
-      fnConvertXToReal34(0); 
-     } else
+       if(dataTypeX == dtReal16 || dataTypeX == dtComplex16) { 
+        fnConvertXToReal34(0); 
+       } else
 
-     if(dataTypeX == dtReal34) { 
-      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-
-     }
+       if(dataTypeX == dtReal34) { 
+        JM_convertReal34ToLongInteger(NOT_CONFIRMED);
+       }
      
 
   refreshStack();
@@ -713,7 +735,7 @@ if ComplexSP change to ComplexDP
 
 
 
-  if(JM_OPCODE == 22) {                                           //CONVERT DATA TYPES DOWN
+  if(JM_OPCODE == 22) {         // <<             //CONVERT DATA TYPES DOWN
 /*    
 if Angle mode: change to SP or DP, as applicable using .d
 If LONGINT: change to DP
@@ -722,9 +744,11 @@ if SP: change to ShortInt
 if ComplexDP change to ComplexSP
 
 */
+     saveStack();
      int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-     
-     if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+
+
+     if( (dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
        shiftF = false;     //JM. Execur .d
        shiftG = true;      //JM
        Reset_Shift_Mem();  //JM
@@ -736,19 +760,18 @@ if ComplexDP change to ComplexSP
        #endif
      } else
 
-     if(dataTypeX == dtLongInteger) { 
-      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X); 
-     } else
+       if(dataTypeX == dtLongInteger) {
+  //        fnConvertXToReal34(0);
+        convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X); 
+       } else
 
-     if(dataTypeX == dtReal34 || dataTypeX == dtComplex34) { 
-      fnConvertXToReal16(0); 
-     } else
+       if(dataTypeX == dtReal34 || dataTypeX == dtComplex34) { 
+        fnConvertXToReal16(0); 
+       } else
 
-     if(dataTypeX == dtReal16) { 
-      convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-      convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X); 
-     } 
-     
+       if(dataTypeX == dtReal16) { 
+        JM_convertReal16ToShortInteger(NOT_CONFIRMED);
+       } 
 
   refreshStack();
   }
@@ -757,9 +780,36 @@ if ComplexDP change to ComplexSP
 
 }
 
+void JM_convertReal16ToShortInteger(uint16_t confirmation) {
+   if(!real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+     real16_t x;
+     real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
+     real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x , &x);
+     if(real16IsZero(&x)) { confirmation = CONFIRMED; }
+     if(confirmation == NOT_CONFIRMED) {
+       setConfirmationMode(JM_convertReal16ToShortInteger);
+     }
+     else {
+       convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+       convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X); 
+     }
+   }
+}
 
-
-
+void JM_convertReal34ToLongInteger(uint16_t confirmation) {
+   if(!real34IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+     real34_t x;
+     real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
+     real34Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x , &x);
+     if(real34IsZero(&x)) { confirmation = CONFIRMED; }
+     if(confirmation == NOT_CONFIRMED) {
+       setConfirmationMode(JM_convertReal34ToLongInteger);
+     }
+     else {
+       convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+     }
+   }
+}
 
 
 

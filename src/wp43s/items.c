@@ -1797,8 +1797,8 @@ const item_t indexOfItems[] = {
 /* 1664 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",             SLS_ENABLED  },  //JM EE 
 /* 1665 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                      "COMPLEX",                                                                     SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1666 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                          "CC1",                                                                         SLS_UNCHANGED},   //JM Change CC to CC1
-/* 1667 */  { fnJM,                        21,                          "KEY_TYPCON_UP",                                   ">>",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
-/* 1668 */  { fnJM,                        22,                          "KEY_TYPCON_DN",                                   "<<",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
+/* 1667 */  { fnJM,                        21,     /*up*/               "KEY_TYPCON_UP",                                   ">>",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
+/* 1668 */  { fnJM,                        22,     /*dn*/               "KEY_TYPCON_DN",                                   "<<",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
 
 
 

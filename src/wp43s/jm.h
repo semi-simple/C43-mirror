@@ -86,6 +86,8 @@ void fnSetSetJM(uint16_t What);
 void fnInfo(uint16_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
+void JM_convertReal16ToShortInteger(uint16_t confirmation);
+void JM_convertReal34ToLongInteger(uint16_t confirmation);
 
 
 //items.c

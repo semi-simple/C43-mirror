@@ -29,11 +29,11 @@
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
-#ifdef PC_BUILD
-#ifndef __APPLE__
-  #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
-#endif
+//ifdef PC_BUILD
+//ifndef __APPLE__
+  //pragma GCC diagnostic ignored "-Wstringop-truncation"
+//endif
+//endif
 
 #define EXTRA_INFO_ON_CALC_ERROR    1
 #define DEBUG_PANEL                 1

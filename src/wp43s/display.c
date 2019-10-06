@@ -226,10 +226,10 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
 //JM harald to check
-#ifndef __APPLE__
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
+//ifndef __APPLE__
+      //pragma GCC diagnostic push
+      //pragma GCC diagnostic ignored "-Wstringop-truncation"
+//endif
       if(digit <= 1) {
         //strncpy(displayString, NUM_SUP_0, 2);
         *(displayString)     = *(NUM_SUP_0);
@@ -256,9 +256,9 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
         *(displayString + 1) = *(NUM_SPACE_PUNCTUATION + 1);
       }
 //JM HARALD TO CHECK
-#ifndef __APPLE__
-      #pragma GCC diagnostic pop
-#endif
+//ifndef __APPLE__
+      //pragma GCC diagnostic pop
+//endif
     }
   }
 
@@ -287,16 +287,17 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
 //JM HARALD TO CHECK
-#ifndef __APPLE__
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
+//ifndef __APPLE__
+      //pragma GCC diagnostic push
+      //pragma GCC diagnostic ignored "-Wstringop-truncation"
+//endif
       //strncpy(displayString, NUM_SUB_0, 2);
       *(displayString)     = *(NUM_SUB_0);
       *(displayString + 1) = *(NUM_SUB_0 + 1);
-#ifndef __APPLE__
-      #pragma GCC diagnostic pop
-#endif
+//HARALD TO CHECK
+//ifndef __APPLE__
+      //pragma GCC diagnostic pop
+//endif
       displayString[1] += digit;
     }
   }
@@ -721,13 +722,15 @@ if(SigFigMode == 0) {                                                           
           }
 
           if( (SigFigMode == 0) || (SigFigTmp == 0) || (SigFigTmp == 1 && SigFigCnt+1 <= SigFig)) {  //JM SIGFIG: Put '0' unless number of sigfig digits already reached
-            // Significant digit or zero
+
+              // Significant digit or zero
             if(digitPointer <= lastDigit) {
               displayString[charIndex++] = '0' + bcd[digitPointer];
             }
             else {
               displayString[charIndex++] = '0';
             }
+              
             SigFigCnt++;                                                                       //JM SIGFIG
           }                                                                                    //JM SIGFIG
 
@@ -1110,16 +1113,17 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
         endingZero++;
         memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 //JM HARALD TO CHECK
-#ifndef __APPLE__
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
+//ifndef __APPLE__
+        //pragma GCC diagnostic push
+        //pragma GCC diagnostic ignored "-Wstringop-truncation"
+//endif
         //strncpy(displayString + insertAt, NUM_SPACE_PUNCTUATION, 2);
         *(displayString + insertAt)     = *(NUM_SPACE_PUNCTUATION);
         *(displayString + insertAt + 1) = *(NUM_SPACE_PUNCTUATION + 1);
-#ifndef __APPLE__
-        #pragma GCC diagnostic pop
-#endif
+//JM HARALD TO CHECK
+//ifndef __APPLE__
+        //pragma GCC diagnostic pop
+//endif
       }
 
       u = intPart % 10;
@@ -1154,16 +1158,17 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       endingZero++;
       memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 //JM HARALD TO CHECK
-#ifndef __APPLE__
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
+//ifndef __APPLE__
+      //pragma GCC diagnostic push
+      //pragma GCC diagnostic ignored "-Wstringop-truncation"
+//endif
       //strncpy(displayString + insertAt, NUM_SPACE_PUNCTUATION, 2);
       *(displayString + insertAt)     = *(NUM_SPACE_PUNCTUATION);
       *(displayString + insertAt + 1) = *(NUM_SPACE_PUNCTUATION + 1);
-#ifndef __APPLE__
-      #pragma GCC diagnostic pop
-#endif
+//JM HARALD TO CHECK
+//ifndef __APPLE__
+      //pragma GCC diagnostic pop
+//endif
     }
 
     u = numer % 10;
@@ -1171,10 +1176,11 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     endingZero++;
     memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 
-#ifndef __APPLE__
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
+//JM HARALD TO CHECK
+//ifndef __APPLE__
+    //pragma GCC diagnostic push
+    //pragma GCC diagnostic ignored "-Wstringop-truncation"
+//endif
     if(u <= 1) {
       //strncpy(displayString + insertAt, NUM_SUP_0, 2);
       *(displayString + insertAt)     = *(NUM_SUP_0);
@@ -1193,9 +1199,10 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       *(displayString + insertAt + 1) = *(NUM_SUP_4 + 1);
       displayString[insertAt + 1] += u - 4;
     }
-#ifndef __APPLE__
-    #pragma GCC diagnostic pop
-#endif
+//JM HARALD TO CHECK
+//ifndef __APPLE__
+    //pragma GCC diagnostic pop
+//endif
   } while(numer != 0);
 
 
@@ -1207,10 +1214,11 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
   // Denominator
   insertAt = endingZero;
   gap = -1;
-#ifndef __APPLE__
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wstringop-truncation"
-#endif
+//JM HARALD TO CHECK
+//ifndef __APPLE__
+  //pragma GCC diagnostic push
+  //pragma GCC diagnostic ignored "-Wstringop-truncation"
+//endif
   do {
     gap++;
     if(gap == groupingGap) {
@@ -1231,9 +1239,10 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     *(displayString + insertAt + 1) = *(NUM_SUB_0 + 1);
     displayString[insertAt + 1] += u;
   } while(denom != 0);
-#ifndef __APPLE__
-  #pragma GCC diagnostic pop
-#endif
+//JM HARALD TO CHECK
+//ifndef __APPLE__
+  //pragma GCC diagnostic pop
+//endif
 
   // Comparison sign
        if(lessEqualGreater == -1) strcat(displayString, NUM_SPACE_PUNCTUATION "<" NUM_SPACE_HAIR);

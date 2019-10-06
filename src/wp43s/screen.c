@@ -51,45 +51,41 @@ void copyScreenToClipboard(void) {
 
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);
-
+  gtk_clipboard_set_text(clipboard, "", 0);    //JM TIP TO PROPERLY CLEAR CLIPBOARD
+  
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride*4);
   gtk_clipboard_set_image(clipboard, gdk_pixbuf_get_from_surface(imageSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
 
-
-void copyRegisterXToClipboard(void) {
+void copyRegister(calcRegister_t regist) {
   longInteger_t lgInt;
-  GtkClipboard *clipboard;
   int16_t base, sign, n;
   uint64_t shortInt;
   static const char digits[17] = "0123456789ABCDEF";
 
-  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_clear(clipboard);
-
-  switch(getRegisterDataType(REGISTER_X)) {
+  switch(getRegisterDataType(regist)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+      convertLongIntegerRegisterToLongInteger(regist, lgInt);
       longIntegerToAllocatedString(lgInt, tmpStr3000, sizeof(tmpStr3000));
       longIntegerFree(lgInt);
       break;
 
     case dtReal16:
-      real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
+      real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000);
       break;
 
     case dtComplex16:
-      real16ToString(REGISTER_REAL16_DATA(REGISTER_X), tmpStr3000);
-      if(real16IsNegative(REGISTER_IMAG16_DATA(REGISTER_X))) {
+      real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000);
+      if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
         strcat(tmpStr3000, " - ix");
-        real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
-        real16ToString(REGISTER_IMAG16_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
-        real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
+        real16ChangeSign(REGISTER_IMAG16_DATA(regist));
+        real16ToString(REGISTER_IMAG16_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
+        real16ChangeSign(REGISTER_IMAG16_DATA(regist));
       }
       else {
         strcat(tmpStr3000, " + ix");
-        real16ToString(REGISTER_IMAG16_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
+        real16ToString(REGISTER_IMAG16_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
       }
       break;
 
@@ -102,7 +98,7 @@ void copyRegisterXToClipboard(void) {
       break;
 
     case dtString:
-      memcpy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
+      memcpy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
       stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
       break;
 
@@ -115,8 +111,8 @@ void copyRegisterXToClipboard(void) {
       break;
 
     case dtShortInteger:
-      convertShortIntegerRegisterToUInt64(REGISTER_X, &sign, &shortInt);
-      base = getRegisterShortIntegerBase(REGISTER_X);
+      convertShortIntegerRegisterToUInt64(regist, &sign, &shortInt);
+      base = getRegisterShortIntegerBase(regist);
 
       n = ERROR_MESSAGE_LENGTH - 100;
       sprintf(errorMessage + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
@@ -139,30 +135,72 @@ void copyRegisterXToClipboard(void) {
       break;
 
     case dtReal34:
-      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000);
       break;
 
     case dtComplex34:
-      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
-      if(real34IsNegative(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000);
+      if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
         strcat(tmpStr3000, " - ix");
-        real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
-        real34ToString(REGISTER_IMAG34_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
-        real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
+        real34ChangeSign(REGISTER_IMAG34_DATA(regist));
+        real34ToString(REGISTER_IMAG34_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
+        real34ChangeSign(REGISTER_IMAG34_DATA(regist));
       }
       else {
         strcat(tmpStr3000, " + ix");
-        real34ToString(REGISTER_IMAG34_DATA(REGISTER_X), tmpStr3000 + strlen(tmpStr3000));
+        real34ToString(REGISTER_IMAG34_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
       }
       break;
 
     default:
-      sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" FMT32U " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(REGISTER_X));
+      sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" FMT32U " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
   }
-
-  gtk_clipboard_set_text(clipboard, tmpStr3000, -1);
 }
 
+
+void copyRegisterXToClipboard(void) {
+char tmpStr3000B[TMP_STR_LENGTH];
+char t[50];
+  GtkClipboard *clipboard;
+  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_clear(clipboard);
+  gtk_clipboard_set_text(clipboard, "", 0);    //JM TIP TO PROPERLY CLEAR CLIPBOARD
+
+  strcpy(tmpStr3000B,  "");
+  strcpy(t,  "\r\n");
+  copyRegister(REGISTER_X);
+  strcat(tmpStr3000B,   tmpStr3000); 
+  strcat(tmpStr3000B,   t); 
+ 
+  gtk_clipboard_set_text(clipboard, tmpStr3000B, -1);
+  }
+
+
+void copyRegisterXYZTToClipboard(void) {
+char tmpStr3000B[TMP_STR_LENGTH];
+char t[10];
+  GtkClipboard *clipboard;
+  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_clear(clipboard);
+  gtk_clipboard_set_text(clipboard, "", 0);    //JM TIP TO PROPERLY CLEAR CLIPBOARD
+
+  strcpy(tmpStr3000B,  "");
+  strcpy(t,  "\r\n");
+  copyRegister(REGISTER_T);
+  strcat(tmpStr3000B,   tmpStr3000); 
+  strcat(tmpStr3000B,   t); 
+  copyRegister(REGISTER_Z);
+  strcat(tmpStr3000B,   tmpStr3000); 
+  strcat(tmpStr3000B,   t); 
+  copyRegister(REGISTER_Y);
+  strcat(tmpStr3000B,   tmpStr3000); 
+  strcat(tmpStr3000B,   t); 
+  copyRegister(REGISTER_X);
+  strcat(tmpStr3000B,   tmpStr3000); 
+  strcat(tmpStr3000B,   t); 
+ 
+  gtk_clipboard_set_text(clipboard, tmpStr3000B, -1);
+  }
 
 
 /********************************************//**

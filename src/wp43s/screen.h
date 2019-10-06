@@ -53,6 +53,7 @@ int8_t   showFunctionNameCounter;
   gboolean drawScreen              (GtkWidget *widget, cairo_t *cr, gpointer data);
   void     copyScreenToClipboard   (void);
   void     copyRegisterXToClipboard(void);
+  void     copyRegisterXYZTToClipboard(void);
   void     waitAndSee              (void);
   gboolean refreshScreen           (gpointer data);
 #endif

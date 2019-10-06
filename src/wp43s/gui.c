@@ -154,14 +154,35 @@ void btnClicked_SNU(GtkWidget *w, gpointer data) {
 }
 
 
+uint32_t CTRL_State, event_keyval;
+
+
+gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM 
+  //printf("Released %d\n", event->keyval);
+
+  switch (event->keyval) {
+
+    case 65507: // left Ctrl
+    case 65508: // right Ctrl
+      //printf("key depressed: CTRL De-activate\n");
+      CTRL_State = 0;
+      break;
+
+    default:
+      break;
+
+  }
+  return FALSE;
+}                                                                           //JM 
+
 
 gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
-  //printf("%d\n", event->keyval);
-
+  //printf("Pressed %d\n", event->keyval);                                    //JM
+  event_keyval = event->keyval + CTRL_State;
 
 //JM ALPHA SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
 if (calcMode == CM_AIM) {
-switch (event->keyval) {
+switch (event_keyval) {
 //ROW 1
     case 65470: // F1                                                    //**************-- FUNCTION KEYS --***************//
       btnFnClicked(w, "1");
@@ -488,13 +509,13 @@ switch (event->keyval) {
     case 32:                //JM SPACE   //JM
       btnClicked(w, "36");
       break;
-
+/*
     case 65507: // left Ctrl
     case 65508: // right Ctrl
-      //printf("key pressed: CTRL Hardcopy\n");
+      //printf("key pressed: CTRL_State Hardcopy\n");
       copyScreenToClipboard();
       break;
-
+*/
     default:
       break;
 
@@ -507,7 +528,7 @@ return FALSE;
 //ORIGINAL MODIFIED KEYBOARD DETECTION
 //FOR NON AIM MODE. AIM HAS RETURNED AT THIS POINT SO NO IF NEEDED
 
-  switch (event->keyval) {
+  switch (event_keyval) {
 //ROW 1
     case 65470: // F1
       //printf("key pressed: F1\n");
@@ -775,15 +796,32 @@ return FALSE;
 
     case 65507: // left Ctrl
     case 65508: // right Ctrl
-      //printf("key pressed: CTRL Hardcopy\n");
+      //printf("key pressed: CTRL Activated\n");
+      CTRL_State = 65536;
+      break;
+
+
+    case 72+65536: // Ctrl H
+    case 104+65536: // Ctrl h
+      printf("key pressed: CTRL+h Hardcopy\n");
+      CTRL_State = true;
       copyScreenToClipboard();
       break;
 
 
-    case 9: // TAB
-      //printf("key pressed: x copy register TAB to clipboard\n");
+    case 99+65536: // CTRL c
+    case 67+65536: // CTRL C
+      printf("key pressed: CTRL+c Copy x register to clipboard\n");
       copyRegisterXToClipboard();
       break;
+
+
+    case 100+65536: // CTRL d
+    case 68+65536: // CTRL D
+      printf("key pressed: CTRL+d Copy XYZT registers to clipboard\n");
+      copyRegisterXYZTToClipboard();
+      break;
+
 
     default:
       break;
@@ -2593,6 +2631,7 @@ void setupUI(void) {
   gtk_window_set_title(GTK_WINDOW(frmCalc), "WP 43C");                   //JM NAME
   g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
   g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
+  g_signal_connect(frmCalc, "key_release_event", G_CALLBACK(keyReleased), NULL);  //JM CTRL
 
   gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
   g_signal_connect(G_OBJECT(frmCalc), "configure-event", G_CALLBACK(configureCallback), NULL);
@@ -2648,7 +2687,7 @@ void setupUI(void) {
   // LCD screen 400x240
   screen = gtk_drawing_area_new();
   gtk_widget_set_size_request(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "CTRL: hardcopy, copies screen image to clipboard");  //JM
+  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "CTRL + h: copies screen image to clipboard \n CTRL + c: copies X register to clipboard \n CTRL + d: copies XYZT registers to clipboard");  //JM
   gtk_fixed_put(GTK_FIXED(grid), screen, 63, 72);
   screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
   numBytes = screenStride * SCREEN_HEIGHT * 4;

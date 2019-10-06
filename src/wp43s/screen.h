@@ -53,9 +53,9 @@ int8_t   showFunctionNameCounter;
   #if (__linux__ == 1)
     #define LINEBREAK "\n"
   #elif defined(__MINGW64__)
-    #DEFINE LINEBREAK "\n\r"
+    #define LINEBREAK "\n\r"
   #elif defined(__APPLE__)
-    #DEFINE LINEBREAK "\r\n"
+    #define LINEBREAK "\r\n"
   #else
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
   #endif

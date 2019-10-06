@@ -278,7 +278,7 @@ void btnPressed(void *notUsed, void *data) {
           JM_SHIFT_HOME_TIMER2 = JM_SHIFT_HOME_TIMER1;
           JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP  - JM_SHIFT_RESET;
           //printf("T2 %d T1 %d SR %d SUB %d \n", JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1, JM_SHIFT_RESET, JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2);
-          if (JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2 <= 6) {  //increased limit from 500 to 600 ms
+          if (JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2 <= JM_3_SHIFT_CUTOFF) {  //increased limit from 500 to 600 ms
             JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP; //max
             shiftF = false;  // Set it up, for flags to be cleared below.
             shiftG = true;

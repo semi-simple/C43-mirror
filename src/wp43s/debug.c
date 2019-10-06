@@ -1609,7 +1609,6 @@ void testRegisters(const char *text) {
 
 
 
-//JM HARALD TO CHECK - testLongInteger was removed completely including your mod??
 void memoryDump2(const char *text) {
   int32_t i;
   uint32_t dataType;

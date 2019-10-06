@@ -80,6 +80,8 @@
   #define SHOW_MEMORY_STATUS 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
+
+  #define JM_LAYOUT_2_DM42_STRICT  //DM42 compatible layout.
 #endif
 
 #ifdef TESTSUITE_BUILD
@@ -116,6 +118,8 @@
   #define hideUserMode()          {}
   #define showDateTime()          {}
   #define showAlphaMode()         {}
+
+  #define JM_LAYOUT_1A               //Preferred layout
 #endif // TESTSUITE_BUILD
 
 #include <stdlib.h>

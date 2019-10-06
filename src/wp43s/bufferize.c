@@ -1037,11 +1037,6 @@ void addItemToNimBuffer(int16_t item) {
         }
       }
     }
-//JM HARALD TO CHECK
-//ifndef __APPLE__
-    //pragma GCC diagnostic push
-    //pragma GCC diagnostic ignored "-Wstringop-truncation"
-//endif
       nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34;
       if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
@@ -1049,7 +1044,6 @@ void addItemToNimBuffer(int16_t item) {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
             nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          //strncpy(nimBufferDisplay + index, NUM_PERIOD34, 2);
           *(nimBufferDisplay + index)     = *(NUM_PERIOD34);
           *(nimBufferDisplay + index + 1) = *(NUM_PERIOD34 + 1);
         }
@@ -1057,16 +1051,11 @@ void addItemToNimBuffer(int16_t item) {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
             nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          //strncpy(nimBufferDisplay + index, NUM_COMMA34, 2);
           *(nimBufferDisplay + index)     = *(NUM_COMMA34);
           *(nimBufferDisplay + index + 1) = *(NUM_COMMA34 + 1);
         }
       }
     }
-//JM HARALD TO CHECK
-//ifndef __APPLE__
-    //pragma GCC diagnostic pop
-//endif
 
     refreshRegisterLine(NIM_REGISTER_LINE);
   }

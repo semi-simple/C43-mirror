@@ -1083,7 +1083,7 @@ void debugNIM(void) {
         gtk_widget_hide(lbl2[i]);
       }
 
-  //showInfoDialog(tmpStr3000, NULL, NULL, NULL);
+      //showInfoDialog(tmpStr3000, NULL, NULL, NULL);
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
       sprintf(string, "Content of the %" FMT16U " local registers", numberOfLocalRegisters);
@@ -1109,7 +1109,12 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Sum");
-      sprintf(string, "Content of the statistical sums (%d)", MEMPTR_TO_RAMPTR(statisticalSumsPointer));
+      if(statisticalSumsPointer == NULL) {
+        strcpy(string, "Content of the statistical sums (NULL)");
+      }
+      else {
+        sprintf(string, "Content of the statistical sums (%d)", MEMPTR_TO_RAMPTR(statisticalSumsPointer));
+      }
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);
@@ -1145,6 +1150,14 @@ void debugNIM(void) {
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
+        sprintf(string, STD_SIGMA "(x" STD_SUP_2 "y)");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*4);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
         sprintf(string, STD_SIGMA "(y" STD_SUP_2 ")");
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
@@ -1161,22 +1174,6 @@ void debugNIM(void) {
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
-        sprintf(string, STD_SIGMA "(ln(x))");
-        stringToUtf8(string, (uint8_t *)(string + 50));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
-        gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*8);
-        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
-        gtk_widget_show(lbl2[row++]);
-
-        sprintf(string, STD_SIGMA "(ln(y))");
-        stringToUtf8(string, (uint8_t *)(string + 50));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
-        gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*11);
-        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
-        gtk_widget_show(lbl2[row++]);
-
         sprintf(string, STD_SIGMA "(ln(x) ln(y))");
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
@@ -1185,11 +1182,35 @@ void debugNIM(void) {
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
+        sprintf(string, STD_SIGMA "(ln(x))");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*8);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
         sprintf(string, STD_SIGMA "(ln" STD_SUP_2 "(x))");
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
         formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*9);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(y ln(x))");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*10);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, STD_SIGMA "(ln(y))");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*11);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1206,22 +1227,6 @@ void debugNIM(void) {
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
         formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*13);
-        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
-        gtk_widget_show(lbl2[row++]);
-
-        sprintf(string, STD_SIGMA "(y ln(x))");
-        stringToUtf8(string, (uint8_t *)(string + 50));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
-        gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*10);
-        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
-        gtk_widget_show(lbl2[row++]);
-
-        sprintf(string, STD_SIGMA "(x" STD_SUP_2 "y)");
-        stringToUtf8(string, (uint8_t *)(string + 50));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
-        gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, statisticalSumsPointer + REAL34_SIZE*4);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1386,7 +1391,7 @@ void debugNIM(void) {
     refreshDebugPanel();
   }
 
-  void btnTmpAndSavedStackRegistersClicked(GtkWidget* w, gpointer data) {
+  void btnSavedStackRegistersClicked(GtkWidget* w, gpointer data) {
     allowScreenUpdate = true;
     debugWindow = DBG_TMP_SAVED_STACK_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");

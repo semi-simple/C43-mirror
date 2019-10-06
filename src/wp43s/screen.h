@@ -50,11 +50,25 @@ int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
 
 #ifdef PC_BUILD
-  gboolean drawScreen              (GtkWidget *widget, cairo_t *cr, gpointer data);
-  void     copyScreenToClipboard   (void);
-  void     copyRegisterXToClipboard(void);
-  void     waitAndSee              (void);
-  gboolean refreshScreen           (gpointer data);
+  #if (__linux__ == 1)
+    #define LINEBREAK "\n"
+  #elif defined(__MINGW64__)
+    #DEFINE LINEBREAK "\n\r"
+  #elif defined(__APPLE__)
+    #DEFINE LINEBREAK "\r\n"
+  #else
+    #error Only Linux, MacOS, and Windows MINGW64 are supported for now
+  #endif
+
+  gboolean drawScreen                         (GtkWidget *widget, cairo_t *cr, gpointer data);
+  void     copyScreenToClipboard              (void);
+  void     copyRegisterXToClipboard           (void);
+  void     copyStackRegistersToClipboardString(char *clipboardString);
+  void     copyStackRegistersToClipboard      (void);
+  void     copyAllRegistersToClipboard        (void);
+  void     copyRegisterToClipboardString      (calcRegister_t regist, char *clipboardString);
+  void     waitAndSee                         (void);
+  gboolean refreshScreen                      (gpointer data);
 #endif
 
 #ifdef DMCP_BUILD

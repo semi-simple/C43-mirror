@@ -23,8 +23,6 @@
 
 
 
-#define STATISTICAL_SUMS 23
-
 static void initStatisticalSums(void) {
   if(statisticalSumsPointer == NULL) {
     statisticalSumsPointer = allocWp43s(STATISTICAL_SUMS * REAL34_SIZE);
@@ -43,11 +41,16 @@ static void initStatisticalSums(void) {
  * \return void
  ***********************************************/
 void fnSigma(uint16_t plusMinus) {
-  real34_t tmpReal1, tmpReal2;
+  real34_t tmpReal1, tmpReal2, tmpReal3;
   realIc_t realIc;
 
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)
      && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34)) {
+
+    if(statisticalSumsPointer == NULL) {
+      initStatisticalSums();
+    }
+
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     }
@@ -64,13 +67,9 @@ void fnSigma(uint16_t plusMinus) {
       convertRegister16To34(REGISTER_Y);
     }
 
-    if(statisticalSumsPointer == NULL) {
-      initStatisticalSums();
-    }
-
     if(plusMinus == 1) { // SIGMA+
       // n
-      real34Add(statisticalSumsPointer,                  const_1,                             statisticalSumsPointer);
+      real34Add(statisticalSumsPointer,                  const34_1,                             statisticalSumsPointer);
 
       // sigma x
       real34Add(statisticalSumsPointer + REAL34_SIZE*1,  REGISTER_REAL34_DATA(REGISTER_X),      statisticalSumsPointer + REAL34_SIZE*1);
@@ -99,7 +98,7 @@ void fnSigma(uint16_t plusMinus) {
       real34Add(statisticalSumsPointer + REAL34_SIZE*15,  &tmpReal2,                            statisticalSumsPointer + REAL34_SIZE*15);
 
       // sigma 1/x²
-      real34Divide(const_1, &tmpReal1, &tmpReal2);
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
       real34Add(statisticalSumsPointer + REAL34_SIZE*17,  &tmpReal2,                            statisticalSumsPointer + REAL34_SIZE*17);
 
       // sigma y²
@@ -107,21 +106,18 @@ void fnSigma(uint16_t plusMinus) {
       real34Add(statisticalSumsPointer + REAL34_SIZE*5,  &tmpReal1,                             statisticalSumsPointer + REAL34_SIZE*5);
 
       // sigma 1/y²
-      real34Divide(const_1, &tmpReal1, &tmpReal2);
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
       real34Add(statisticalSumsPointer + REAL34_SIZE*20,  &tmpReal2,                            statisticalSumsPointer + REAL34_SIZE*20);
 
       // sigma xy
       real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Add(statisticalSumsPointer + REAL34_SIZE*6,  &tmpReal1,                             statisticalSumsPointer + REAL34_SIZE*6);
 
-      // sigma ln(x+y)
-      real34Add(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Ln(&tmpReal1, &tmpReal1);
-      real34Add(statisticalSumsPointer + REAL34_SIZE*7,  &tmpReal1,                             statisticalSumsPointer + REAL34_SIZE*7);
-
       // sigma ln(x)
       real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Copy(&tmpReal1 ,&tmpReal3);
       real34Add(statisticalSumsPointer + REAL34_SIZE*8,  &tmpReal1,                             statisticalSumsPointer + REAL34_SIZE*8);
+
 
       // sigma ln²(x)
       real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
@@ -134,6 +130,10 @@ void fnSigma(uint16_t plusMinus) {
       // sigma ln(y)
       real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Add(statisticalSumsPointer + REAL34_SIZE*11, &tmpReal1,                             statisticalSumsPointer + REAL34_SIZE*11);
+
+      // sigma ln(x)×ln(y)
+      real34Multiply(&tmpReal3, &tmpReal1, &tmpReal3);
+      real34Add(statisticalSumsPointer + REAL34_SIZE*7,  &tmpReal3,                             statisticalSumsPointer + REAL34_SIZE*7);
 
       // sigma ln(y)/x
       real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
@@ -148,7 +148,7 @@ void fnSigma(uint16_t plusMinus) {
       real34Add(statisticalSumsPointer + REAL34_SIZE*13, &tmpReal1,                             statisticalSumsPointer + REAL34_SIZE*13);
 
       // sigma 1/x
-      real34Divide(const_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
       real34Add(statisticalSumsPointer + REAL34_SIZE*16,  &tmpReal1,                            statisticalSumsPointer + REAL34_SIZE*16);
 
       // sigma x/y
@@ -156,12 +156,12 @@ void fnSigma(uint16_t plusMinus) {
       real34Add(statisticalSumsPointer + REAL34_SIZE*18,  &tmpReal1,                            statisticalSumsPointer + REAL34_SIZE*18);
 
       // sigma 1/y
-      real34Divide(const_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Add(statisticalSumsPointer + REAL34_SIZE*19,  &tmpReal1,                            statisticalSumsPointer + REAL34_SIZE*19);
     }
     else { // SIGMA-
       // n
-      real34Subtract(statisticalSumsPointer,  const_1,                                        statisticalSumsPointer);
+      real34Subtract(statisticalSumsPointer,  const34_1,                                        statisticalSumsPointer);
 
       // sigma x
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*1,  REGISTER_REAL34_DATA(REGISTER_X), statisticalSumsPointer + REAL34_SIZE*1);
@@ -190,7 +190,7 @@ void fnSigma(uint16_t plusMinus) {
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*15,  &tmpReal2,                       statisticalSumsPointer + REAL34_SIZE*15);
 
       // sigma 1/x²
-      real34Divide(const_1, &tmpReal1, &tmpReal2);
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*17,  &tmpReal2,                       statisticalSumsPointer + REAL34_SIZE*17);
 
       // sigma y²
@@ -198,20 +198,16 @@ void fnSigma(uint16_t plusMinus) {
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*5,  &tmpReal1,                        statisticalSumsPointer + REAL34_SIZE*5);
 
       // sigma 1/y²
-      real34Divide(const_1, &tmpReal1, &tmpReal2);
+      real34Divide(const34_1, &tmpReal1, &tmpReal2);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*20,  &tmpReal2,                       statisticalSumsPointer + REAL34_SIZE*20);
 
       // sigma xy
       real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*6,  &tmpReal1,                        statisticalSumsPointer + REAL34_SIZE*6);
 
-      // sigma ln(x+y)
-      real34Add(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Ln(&tmpReal1, &tmpReal1);
-      real34Subtract(statisticalSumsPointer + REAL34_SIZE*7,  &tmpReal1,                        statisticalSumsPointer + REAL34_SIZE*7);
-
       // sigma ln(x)
       real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Copy(&tmpReal1 ,&tmpReal3);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*8,  &tmpReal1,                        statisticalSumsPointer + REAL34_SIZE*8);
 
       // sigma ln²(x)
@@ -226,6 +222,10 @@ void fnSigma(uint16_t plusMinus) {
       real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*11, &tmpReal1,                        statisticalSumsPointer + REAL34_SIZE*11);
 
+      // sigma ln(x)×ln(y)
+      real34Multiply(&tmpReal3, &tmpReal1, &tmpReal3);
+      real34Subtract(statisticalSumsPointer + REAL34_SIZE*7,  &tmpReal3,                        statisticalSumsPointer + REAL34_SIZE*7);
+
       // sigma ln(y)/x
       real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*14, &tmpReal2,                        statisticalSumsPointer + REAL34_SIZE*14);
@@ -239,7 +239,7 @@ void fnSigma(uint16_t plusMinus) {
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*13, &tmpReal1,                        statisticalSumsPointer + REAL34_SIZE*13);
 
       // sigma 1/x
-      real34Divide(const_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*16,  &tmpReal1,                       statisticalSumsPointer + REAL34_SIZE*16);
 
       // sigma x/y
@@ -247,7 +247,7 @@ void fnSigma(uint16_t plusMinus) {
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*18,  &tmpReal1,                       statisticalSumsPointer + REAL34_SIZE*18);
 
       // sigma 1/y
-      real34Divide(const_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
+      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Subtract(statisticalSumsPointer + REAL34_SIZE*19,  &tmpReal1,                       statisticalSumsPointer + REAL34_SIZE*19);
     }
 
@@ -264,6 +264,9 @@ void fnSigma(uint16_t plusMinus) {
       showInfoDialog("In function fnSigma:", errorMessage, NULL, NULL);
     #endif
   }
+for(int i=0; i<STATISTICAL_SUMS; i++) {
+printf("sum %02d ", i); printReal34ToConsole(((real34_t *)statisticalSumsPointer) + i); printf("\n");
+}
 }
 
 

@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 20  // 20 = NIM real34 detection
+#define BACKUP_VERSION 21  // 21 = Fixed statisticalSumsPointer problem
 
 void saveCalc(void) {
   size_t size;
@@ -81,7 +81,7 @@ void saveCalc(void) {
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
   ramPtr = MEMPTR_TO_RAMPTR(allNamedVariablePointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-  ramPtr = MEMPTR_TO_RAMPTR(statisticalSumsPointer);
+  if(statisticalSumsPointer == NULL) ramPtr = 0; else ramPtr = MEMPTR_TO_RAMPTR(statisticalSumsPointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
   size += fwrite(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
   size += fwrite(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
@@ -234,7 +234,7 @@ void restoreCalc(void) {
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
     allNamedVariablePointer = RAMPTR_TO_MEMPTR(ramPtr);
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-    statisticalSumsPointer = RAMPTR_TO_MEMPTR(ramPtr);
+    if(ramPtr == 0) statisticalSumsPointer = 0; else statisticalSumsPointer = RAMPTR_TO_MEMPTR(ramPtr);
     size += fread(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
     size += fread(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
     size += fread(&yCursor,                            1, sizeof(yCursor),                            backup); //printf("%8lu yCursor\n",                            (unsigned long)size);

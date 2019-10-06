@@ -21,15 +21,15 @@
   extern GtkWidget *chkHexaString;
   extern int16_t debugWidgetDx, debugWidgetDy;
 
-  void   btnBitFieldsClicked                (GtkWidget* w ,gpointer data);
-  void   btnFlagsClicked                    (GtkWidget* w ,gpointer data);
-  void   btnRegistersClicked                (GtkWidget* w ,gpointer data);
-  void   btnLocalRegistersClicked           (GtkWidget* w ,gpointer data);
-  void   btnStatisticalSumsClicked          (GtkWidget* w ,gpointer data);
-  void   btnNamedVariablesClicked           (GtkWidget* w ,gpointer data);
-  void   btnTmpAndSavedStackRegistersClicked(GtkWidget* w ,gpointer data);
-  void   chkHexaStringClicked               (GtkWidget* w ,gpointer data);
-  void   refreshDebugPanel                  (void);
+  void   btnBitFieldsClicked          (GtkWidget* w ,gpointer data);
+  void   btnFlagsClicked              (GtkWidget* w ,gpointer data);
+  void   btnRegistersClicked          (GtkWidget* w ,gpointer data);
+  void   btnLocalRegistersClicked     (GtkWidget* w ,gpointer data);
+  void   btnStatisticalSumsClicked    (GtkWidget* w ,gpointer data);
+  void   btnNamedVariablesClicked     (GtkWidget* w ,gpointer data);
+  void   btnSavedStackRegistersClicked(GtkWidget* w ,gpointer data);
+  void   chkHexaStringClicked         (GtkWidget* w ,gpointer data);
+  void   refreshDebugPanel            (void);
 
   char * getDenModeName                     (uint16_t dm);
   char * getDisplayFormatName               (uint16_t df);

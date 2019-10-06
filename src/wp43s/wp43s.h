@@ -425,7 +425,7 @@ typedef int16_t calcRegister_t;
   #define FMTPTR  "lu"
   #define FMTSIZE "zd"
 #else
-  #error Only Linux, MacOS, ARM and Windows MINGW64 are supported for now
+  #error Only Linux, MacOS, ARM, and Windows MINGW64 are supported for now
 #endif
 
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode
@@ -438,6 +438,8 @@ typedef int16_t calcRegister_t;
   #define STACK_LIFT_ENABLE  stackLiftEnabled = true;
   #define STACK_LIFT_DISABLE stackLiftEnabled = false;
 #endif
+
+#define STATISTICAL_SUMS 23
 
 // Variables for the simulator
 #ifdef PC_BUILD

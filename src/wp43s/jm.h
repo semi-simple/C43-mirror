@@ -35,7 +35,7 @@ Modes available in the mode menu:
 
 /*********   MAIN OPTION SELECTION                  */
 //#define JM_LAYOUT_2_DM42_STRICT  //DM42 compatible layout
-#define JM_LAYOUT_1A               //Preferred layout
+//#define JM_LAYOUT_1A             //Preferred layout
 
 
 

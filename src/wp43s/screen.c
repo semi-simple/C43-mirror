@@ -51,14 +51,29 @@ void copyScreenToClipboard(void) {
 
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);
-  gtk_clipboard_set_text(clipboard, "", 0);    //JM TIP TO PROPERLY CLEAR CLIPBOARD
-  
+  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
+
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride*4);
   gtk_clipboard_set_image(clipboard, gdk_pixbuf_get_from_surface(imageSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
 
-void copyRegister(calcRegister_t regist) {
+
+static void angularUnitToString(uint32_t angularMode, char *string) {
+  switch(angularMode) {
+    case AM_DEGREE: strcpy(string, STD_DEGREE); break;
+    case AM_DMS:    strcpy(string, "d.ms");     break;
+    case AM_GRAD:   strcpy(string, "g");        break;
+    case AM_RADIAN: strcpy(string, "r");        break;
+    case AM_MULTPI: strcpy(string, STD_pi);     break;
+    case AM_NONE:   break;
+    default:        strcpy(string, "?");
+  }
+}
+
+
+
+void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
   longInteger_t lgInt;
   int16_t base, sign, n;
   uint64_t shortInt;
@@ -72,7 +87,12 @@ void copyRegister(calcRegister_t regist) {
       break;
 
     case dtReal16:
-      real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000);
+      real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000 + TMP_STR_LENGTH/2);
+      if(strchr(tmpStr3000 + TMP_STR_LENGTH/2, '.') == NULL && strchr(tmpStr3000 + TMP_STR_LENGTH/2, 'E') == NULL) {
+        strcat(tmpStr3000 + TMP_STR_LENGTH/2, ".");
+      }
+      angularUnitToString(getRegisterAngularMode(regist), tmpStr3000 + TMP_STR_LENGTH/2 + strlen(tmpStr3000 + TMP_STR_LENGTH/2));
+      stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
       break;
 
     case dtComplex16:
@@ -135,7 +155,12 @@ void copyRegister(calcRegister_t regist) {
       break;
 
     case dtReal34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000);
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000 + TMP_STR_LENGTH/2);
+      if(strchr(tmpStr3000 + TMP_STR_LENGTH/2, '.') == NULL && strchr(tmpStr3000 + TMP_STR_LENGTH/2, 'E') == NULL) {
+        strcat(tmpStr3000 + TMP_STR_LENGTH/2, ".");
+      }
+      angularUnitToString(getRegisterAngularMode(regist), tmpStr3000 + TMP_STR_LENGTH/2 + strlen(tmpStr3000 + TMP_STR_LENGTH/2));
+      stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
       break;
 
     case dtComplex34:
@@ -155,52 +180,179 @@ void copyRegister(calcRegister_t regist) {
     default:
       sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" FMT32U " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
   }
+
+  strcpy(clipboardString, tmpStr3000);
 }
 
 
+
 void copyRegisterXToClipboard(void) {
-char tmpStr3000B[TMP_STR_LENGTH];
-char t[50];
   GtkClipboard *clipboard;
+  char clipboardString[3000];
+
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);
-  gtk_clipboard_set_text(clipboard, "", 0);    //JM TIP TO PROPERLY CLEAR CLIPBOARD
+  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
 
-  strcpy(tmpStr3000B,  "");
-  strcpy(t,  "\r\n");
-  copyRegister(REGISTER_X);
-  strcat(tmpStr3000B,   tmpStr3000); 
-  strcat(tmpStr3000B,   t); 
- 
-  gtk_clipboard_set_text(clipboard, tmpStr3000B, -1);
-  }
+  copyRegisterToClipboardString(REGISTER_X, clipboardString);
+
+  gtk_clipboard_set_text(clipboard, tmpStr3000, -1);
+}
 
 
-void copyRegisterXYZTToClipboard(void) {
-char tmpStr3000B[TMP_STR_LENGTH];
-char t[10];
+
+void copyStackRegistersToClipboardString(char *clipboardString) {
+  char *ptr = clipboardString;
+
+  strcpy(ptr, "K = ");
+  ptr += 4;
+  copyRegisterToClipboardString(REGISTER_K, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "J = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_J, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "I = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_I, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "L = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_L, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "D = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_D, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "C = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_C, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "B = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_B, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "A = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_A, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "T = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_T, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "Z = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_Z, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "Y = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_Y, ptr);
+
+  ptr += strlen(ptr);
+  strcpy(ptr, LINEBREAK "X = ");
+  ptr += strlen(ptr);
+  copyRegisterToClipboardString(REGISTER_X, ptr);
+}
+
+
+
+void copyStackRegistersToClipboard(void) {
   GtkClipboard *clipboard;
+  char clipboardString[10000];
+
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);
-  gtk_clipboard_set_text(clipboard, "", 0);    //JM TIP TO PROPERLY CLEAR CLIPBOARD
+  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
 
-  strcpy(tmpStr3000B,  "");
-  strcpy(t,  "\r\n");
-  copyRegister(REGISTER_T);
-  strcat(tmpStr3000B,   tmpStr3000); 
-  strcat(tmpStr3000B,   t); 
-  copyRegister(REGISTER_Z);
-  strcat(tmpStr3000B,   tmpStr3000); 
-  strcat(tmpStr3000B,   t); 
-  copyRegister(REGISTER_Y);
-  strcat(tmpStr3000B,   tmpStr3000); 
-  strcat(tmpStr3000B,   t); 
-  copyRegister(REGISTER_X);
-  strcat(tmpStr3000B,   tmpStr3000); 
-  strcat(tmpStr3000B,   t); 
- 
-  gtk_clipboard_set_text(clipboard, tmpStr3000B, -1);
+  copyStackRegistersToClipboardString(clipboardString);
+
+  gtk_clipboard_set_text(clipboard, clipboardString, -1);
+}
+
+
+
+void copyAllRegistersToClipboard(void) {
+  GtkClipboard *clipboard;
+  char clipboardString[15000], sumName[40], *ptr = clipboardString;
+
+  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_clear(clipboard);
+  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
+
+  copyStackRegistersToClipboardString(ptr);
+
+  for(int32_t regist=99; regist>=0; --regist) {
+    ptr += strlen(ptr);
+    sprintf(ptr, LINEBREAK "R%02d = ", regist);
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(regist, ptr);
   }
+
+  for(int32_t regist=numberOfLocalRegisters-1; regist>=0; --regist) {
+    ptr += strlen(ptr);
+    sprintf(ptr, LINEBREAK "R.%02d = ", regist);
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(FIRST_LOCAL_REGISTER + regist, ptr);
+  }
+
+  if(statisticalSumsPointer != NULL) {
+    for(int32_t regist=0; regist<STATISTICAL_SUMS; regist++) {
+      ptr += strlen(ptr);
+
+      switch(regist) {
+        case  0: strcpy(sumName,           "n             "           ); break;
+        case  1: strcpy(sumName, STD_SIGMA "(x)          "            ); break;
+        case  2: strcpy(sumName, STD_SIGMA "(y)          "            ); break;
+        case  3: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 ")         "); break;
+        case  4: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 "y)        "); break;
+        case  5: strcpy(sumName, STD_SIGMA "(y" STD_SUP_2 ")         "); break;
+        case  6: strcpy(sumName, STD_SIGMA "(xy)         "            ); break;
+        case  7: strcpy(sumName, STD_SIGMA "(ln(x)" STD_CROSS "ln(y))"); break;
+        case  8: strcpy(sumName, STD_SIGMA "(ln(x))      "            ); break;
+        case  9: strcpy(sumName, STD_SIGMA "(ln" STD_SUP_2 "(x))     "); break;
+        case 10: strcpy(sumName, STD_SIGMA "(y ln(x))    "            ); break;
+        case 11: strcpy(sumName, STD_SIGMA "(ln(y))      "            ); break;
+        case 12: strcpy(sumName, STD_SIGMA "(ln" STD_SUP_2 "(y))     "); break;
+        case 13: strcpy(sumName, STD_SIGMA "(x ln(y))    "            ); break;
+        case 14: strcpy(sumName, STD_SIGMA "(ln(y)/x)    "            ); break;
+        case 15: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 "/y)       "); break;
+        case 16: strcpy(sumName, STD_SIGMA "(1/x)        "            ); break;
+        case 17: strcpy(sumName, STD_SIGMA "(1/x" STD_SUP_2 ")       "); break;
+        case 18: strcpy(sumName, STD_SIGMA "(x/y)        "            ); break;
+        case 19: strcpy(sumName, STD_SIGMA "(1/y)        "            ); break;
+        case 20: strcpy(sumName, STD_SIGMA "(1/y" STD_SUP_2 ")       "); break;
+        case 21: strcpy(sumName, STD_SIGMA "(x" STD_SUP_3 ")         "); break;
+        case 22: strcpy(sumName, STD_SIGMA "(x" STD_SUP_4 ")         "); break;
+        default: strcpy(sumName,           "?              "          );
+      }
+
+      sprintf(ptr, LINEBREAK "SR%02d = ", regist);
+      ptr += strlen(ptr);
+      stringToUtf8(sumName, (uint8_t *)ptr);
+      ptr += strlen(ptr);
+      strcpy(ptr, " = ");
+      ptr += strlen(ptr);
+      real34ToString(statisticalSumsPointer + regist*REAL34_SIZE, tmpStr3000);
+      if(strchr(tmpStr3000, '.') == NULL && strchr(tmpStr3000, 'E') == NULL) {
+        strcat(tmpStr3000, ".");
+      }
+      strcpy(ptr, tmpStr3000);
+    }
+  }
+
+  gtk_clipboard_set_text(clipboard, clipboardString, -1);
+}
+
 
 
 /********************************************//**
@@ -283,7 +435,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
   if( (ShiftTimoutMode || Home3TimerMode) ) {    //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
     if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
-         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;  //JM TIMER
+         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP - JM_3_SHIFT_CUTOFF - 1;;  //JM TIMER
          JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;  //JM TIMER //max forces previous delay to max
          if(ShiftTimoutMode) {                   //JM TIMER
            resetShiftState();                    //JM TIMER
@@ -326,7 +478,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
   if( (ShiftTimoutMode || Home3TimerMode) ) {    //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
     if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
-         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;  //JM TIMER
+         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP - JM_3_SHIFT_CUTOFF - 1;  //JM TIMER
          JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;  //JM TIMER //max forces previous delay to max
          resetShiftState();                      //JM TIMER
     }                                            //JM TIMER

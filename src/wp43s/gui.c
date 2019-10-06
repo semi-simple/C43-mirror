@@ -804,7 +804,6 @@ return FALSE;
     case 72+65536: // Ctrl H
     case 104+65536: // Ctrl h
       printf("key pressed: CTRL+h Hardcopy\n");
-      CTRL_State = true;
       copyScreenToClipboard();
       break;
 

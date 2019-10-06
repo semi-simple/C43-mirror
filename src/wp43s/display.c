@@ -71,7 +71,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
-//  SigFigMode = 0;                                              //JM SIGFIG Reset SIGFIG only if FIX is chosen. ENG and SCI and all does not react to SIGFIG
+  SigFigMode = 0;                                              //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   refreshStack();
@@ -89,7 +89,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
-  SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG only if FIX is chosen. ENG and SCI and all does not react to SIGFIG
+  SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   refreshStack();
@@ -107,8 +107,8 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
-  SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG only if FIX is chosen. ENG and SCI and all does not react to SIGFIG
-  UNITDisplay = false;        //was out                                   //JM UNIT display Reset. Allowed in the ENG display
+  SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
+  UNITDisplay = false;                                           //JM UNIT display Reset
 
   refreshStack();
 }
@@ -126,7 +126,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     displayFormat = DF_ALL;
     displayFormatDigits = displayFormatN;
     displayRealAsFraction = false;
-    SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG only if FIX is chosen. ENG and SCI and all does not react to SIGFIG
+    SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
     UNITDisplay = false;                                           //JM UNIT display Reset
 
     refreshStack();

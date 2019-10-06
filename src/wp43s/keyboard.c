@@ -213,7 +213,6 @@ uint16_t determineItem(const calcKey_t *key) {
 }
 
 
-
 /********************************************//**
  * \brief A calc button was pressed
  *
@@ -236,26 +235,6 @@ void btnPressed(void *notUsed, void *data) {
 
 
 #ifdef JM_MULTISHIFT ////MULTISHIFT AND CLRDROP                                //JM TIMER - checks on any key pressed.
-/* Removed to see if this really is relevant still. See comment below.
-  if(ShiftTimoutMode) {
-    if(( shiftF || shiftG ) || (key->primary == KEY_f)) {   //JM COMMENT, I think the reset code here is not used since the timer in SCREEN.C was implemented. 
-      #ifdef DMCP_BUILD                                     //JM TIMER DMCP SHIFTCANCEL
-      now = sys_current_ms();                               //JM TIMER DMCP SHIFTCANCEL
-//      shift-to-shift-time = now - now_MEM;
-      if(now > now_MEM + JM_SHIFT_TIMER) {                  //JM TIMER DMCP SHIFTCANCEL Reset shifts if no key comes within time
-        resetShiftState();                                  //JM TIMER DMCP SHIFTCANCEL
-      }                                                     //JM TIMER DMCP SHIFTCANCEL
-      #endif                                                //JM
-      #ifdef PC_BUILD                                       //JM TIMER EMULATOR SHIFTCANCEL
-      now = g_get_monotonic_time();                         //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
-      if(now > now_MEM + JM_SHIFT_TIMER*1000) {             //JM TIMER EMULATOR SHIFTCANCEL
-        resetShiftState();                                  //JM TIMER EMULATOR SHIFTCANCEL
-      }                                                     //JM TIMER EMULATOR SHIFTCANCEL
-      #endif                                                //JM
-      now_MEM = now;                                        //JM TIMER -- any last key pressed
-    }
-  }
-*/
 
   JM_auto_drop_enabled=true;                          //JM TIMER CLRDROP
   if(key->primary == KEY_BACKSPACE) {
@@ -280,7 +259,6 @@ void btnPressed(void *notUsed, void *data) {
     }
   }
 
-
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
     if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {     //JM shifts
@@ -294,51 +272,52 @@ void btnPressed(void *notUsed, void *data) {
         lastErrorCode = 0;                                                                                                       //JM shifts
         refreshStack();                                                                                                          //JM shifts
       }                                                                                                                          //JM shifts
-                                                                                                                                 //JM shifts
+
+      if(ShiftTimoutMode || Home3TimerMode) {
+        if (Home3TimerMode) {       
+          JM_SHIFT_HOME_TIMER2 = JM_SHIFT_HOME_TIMER1;
+          JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP  - JM_SHIFT_RESET;
+          //printf("T2 %d T1 %d SR %d SUB %d \n", JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1, JM_SHIFT_RESET, JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2);
+          if (JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2 <= 6) {  //increased limit from 500 to 600 ms
+            JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP; //max
+            shiftF = false;  // Set it up, for flags to be cleared below.
+            shiftG = true;
+            if (HOME3) {
+              if( (softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer) ) {                              //JM shifts
+                popSoftmenu();                                                                                                     //JM shifts
+              } else { 
+                if (calcMode == CM_AIM) {                                                                                          //JM shifts
+                  showSoftmenu(NULL, -MNU_ALPHA, true);                                                                            //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
+                } else {                                                                                                                //JM SHIFTS
+                  showSoftmenu(NULL, -MNU_HOME, true);                                                                             //JM shifts  //JM ALPHA-HOME 
+                }                                                                                                                //JM shifts                                                                                                                  //JM shifts
+                softmenuStackPointer_MEM = softmenuStackPointer;                                                                   //JM shifts
+              }
+            }                                                                                                                    //JM shifts
+          }
+        }
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+      }
+
+                                                                                                                              //JM shifts
       if (!shiftF && !shiftG) {                                                                                                  //JM shifts
         shiftF = true;                                                                                                           //JM shifts
         shiftG = false;      
-        if (Home3TimerMode) { 
-           JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
-        }                                                                     //JM SHIFTS CHECK 0: HOW MANY 100ms periods between 1st and last shift. //JM shifts
       } else                                                                                                                     //JM shifts
                                                                                                                                  //JM shifts
       if (shiftF && !shiftG) {                                                                                                   //JM shifts
         shiftF = false;                                                                                                          //JM shifts
         shiftG = true;                                                                                                           //JM shifts
-        if (Home3TimerMode) { 
-          JM_SHIFT_HOME_TIMER = JM_SHIFT_TIMER_LOOP - JM_SHIFT_RESET;
-        }                                                                    //JM SHIFTS ADD HOW MANY 100ms periods between 1st and second shift. //JM shifts
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;                                                                                                   //JM shifts
       } else                                                                                                                     //JM shifts
                                                                                                                                  //JM shifts
       if (!shiftF && shiftG) {                                                                                                   //JM shifts
         shiftF = false;                                                                                                          //JM shifts
         shiftG = false;                                                                                                          //JM shifts
-        if (Home3TimerMode) { 
-          JM_SHIFT_HOME_TIMER = JM_SHIFT_HOME_TIMER + (JM_SHIFT_TIMER_LOOP - JM_SHIFT_RESET);
-        }                                                                  //JM SHIFTS ADD HOW MANY 100ms periods between 2nd and last shift. //JM shifts
-        if (HOME3 && (JM_SHIFT_HOME_TIMER <= 5) ) {                                                                                                             //JM shifts
-           if( (softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer) ) {                              //JM shifts
-              popSoftmenu();                                                                                                     //JM shifts
-            } else { 
-                                                                                                                                 //JM shifts
-              if (calcMode == CM_AIM) {                                                                                          //JM shifts
-                showSoftmenu(NULL, -MNU_ALPHA, true);                                                                            //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
-                }                                                                                                                //JM SHIFTS
-              else {                                                                                                             //JM shifts
-                showSoftmenu(NULL, -MNU_HOME, true);                                                                             //JM shifts  //JM ALPHA-HOME 
-                }                                                                                                                //JM shifts                                                                                                                  //JM shifts
-              softmenuStackPointer_MEM = softmenuStackPointer;                                                                   //JM shifts
-            }                                                                                                                    //JM shifts
-         }                                                                                                                       //JM shifts Goto menu HOME if triple shift press
       } else                                                                                                                     //JM shifts
-                                                                                                                                 //JM shifts
-                                                                                                                                 //JM shifts
+                                                                                                                                 //JM shifts                                                                                                                                 //JM shifts
       if (shiftF && shiftG) {                                                                                                    //JM shifts  should never be possible. included for completeness
         shiftF = false;                                                                                                          //JM shifts
         shiftG = false;                                                                                                          //JM shifts
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;                                                                                                   //JM shifts
       }                                                                                                                          //JM shifts
                                                                                                                                  //JM shifts
       showShiftState();                                                                                                          //JM shifts

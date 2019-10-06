@@ -280,16 +280,17 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
-#ifdef JM_MULTISHIFT                           //JM TIMER - checks on any key pressed.
-  if( (ShiftTimoutMode || Home3TimerMode) && (shiftF || shiftG)) {    //JM TIMER - Only consider if a shift is actually pending
-    if(JM_SHIFT_RESET != 0) {                    //JM TIMER
-      JM_SHIFT_RESET--;                          //JM TIMER
-      if(JM_SHIFT_RESET == 0) {                  //JM TIMER
-         resetShiftState();                      //JM TIMER
-     }                                           //JM TIMER
-   }
- }                                             //JM TIMER
-#endif                                         //JM TIMER
+#ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
+  if( (ShiftTimoutMode || Home3TimerMode) ) {    //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
+    if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
+         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;  //JM TIMER
+         JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;  //JM TIMER //max forces previous delay to max
+         if(ShiftTimoutMode) {                   //JM TIMER
+           resetShiftState();                    //JM TIMER
+         }                                       //JM TIMER
+    }                                            //JM TIMER
+  }                                              //JM TIMER
+#endif                                           //JM TIMER
 
   return TRUE;
 }
@@ -322,16 +323,15 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     showDateTime();
   }
 
-#ifdef JM_MULTISHIFT                           //JM TIMER - checks on any key pressed.
-  if( (ShiftTimoutMode || Home3TimerMode) && (shiftF || shiftG)) {    //JM TIMER - Only consider if a shift is actually pending
-    if(JM_SHIFT_RESET != 0) {                    //JM TIMER
-      JM_SHIFT_RESET--;                          //JM TIMER
-      if(JM_SHIFT_RESET == 0) {                  //JM TIMER
+#ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
+  if( (ShiftTimoutMode || Home3TimerMode) ) {    //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
+    if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
+         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;  //JM TIMER
+         JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;  //JM TIMER //max forces previous delay to max
          resetShiftState();                      //JM TIMER
-     }                                           //JM TIMER
-   }
- }                                             //JM TIMER
-#endif                                         //JM TIMER
+    }                                            //JM TIMER
+  }                                              //JM TIMER
+#endif                                           //JM TIMER
 
 }
 #endif

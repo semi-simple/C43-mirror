@@ -22,9 +22,9 @@
 /*
 Modes available in the mode menu:
 
-1. HOME.3    This switches on/off whether the HOME menu pops on/off due to triple shift
-2. SH.4s     This switches off the 4 second shift time-out
-3. SH.3T.    This switches off the 500 ms triple shift timer
+1. HOME.3    This switches on/off whether the HOME menu pops on/off within SH.3T timeout. This is a testing option, makes no sense in real life.
+2. SH.4s     ShiftTimoutMode:  This switches off the 4 second shift time-out
+3. SH.3T.    Home3TimerMode:   This switches off the 600 ms triple shift timer
 4. ERPN      This disables the stack duplication and lift after entry
 
 5. MYMENU
@@ -43,7 +43,7 @@ Modes available in the mode menu:
 #define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
 #define JM_SHIFT_TIMER 4000    //ms
 #define JM_CLRDROP_TIMER 500   //ms
-#define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second
+#define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
 
 
 //keyboard.c   
@@ -53,7 +53,8 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 //keyboard.c  screen.c
 bool_t JM_auto_drop_activated;
 bool_t JM_auto_drop_enabled;      //JM TIMER CLRDROP
-uint8_t JM_SHIFT_RESET, JM_SHIFT_HOME_TIMER;           //JM non-stored non-changeable mode
+uint8_t JM_SHIFT_RESET;                        //JM non-stored non-changeable mode
+uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;                 //Local to keyboard.c, but defined here
 
 //keyboard.c
 #ifdef DMCP_BUILD                 //JM TIMER variable tmp mem, to check expired time

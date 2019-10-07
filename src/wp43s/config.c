@@ -577,7 +577,10 @@ void fnReset(uint16_t confirmation) {
 
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
-    memcpy(kbd_std, kbd_std1, sizeof(kbd_std));   //JM USER
+
+    #ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
+       memcpy(kbd_std, kbd_std1, sizeof(kbd_std));   //JM USER
+    #endif
 
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {

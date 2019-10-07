@@ -1939,7 +1939,9 @@
 #define Kf27N   1900  //JM USER MODE TEST
 #define Kg27N   1901  //JM USER MODE TEST
 
-#define LAST_ITEM                     1902  //JM
+#define KEY_fg                        1902
+
+#define LAST_ITEM                     1903  //JM
 
 #define CHR_PROD_SIGN                 9999
 

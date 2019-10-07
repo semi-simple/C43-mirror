@@ -46,6 +46,9 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
 #define JM_3_SHIFT_CUTOFF 6 //100ms
 
+
+#define JM_KBD_RAM //JM ASN_USER - Copy to kbd_std array to RAM
+
 //keyboard.c   
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
@@ -101,7 +104,10 @@ void fnSetSetJM(uint16_t What);
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
+
 void fnJMUSERmode(uint16_t JM_KEY);
+void fnJMUSERmode_f(uint16_t JM_KEY);
+void fnJMUSERmode_g(uint16_t JM_KEY);
 void JM_convertReal16ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
 

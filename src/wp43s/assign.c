@@ -21,7 +21,13 @@
 #include "wp43s.h"
 // ITM_ASSIGN  KEY_USERMODE,   -MNU_MODE,  -MNU_CATALOG  -MNU_FLAGS    -MNU_ALPHAMATH    -MNU_ALPHAINTL   // JMTEMP
 //This variable is to store in flash memory
-const calcKey_t kbd_std1[37] = {
+
+#ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
+const calcKey_t kbd_std1[37] = {  
+#endif
+#ifndef JM_KBD_RAM
+const calcKey_t kbd_std[37] = {
+#endif
 
 
  #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. OPTIMAL
@@ -58,8 +64,8 @@ const calcKey_t kbd_std1[37] = {
  {64,   CHR_6,           -MNU_FLAGS,      -MNU_BITS,     CHR_6,          CHR_V,             CHR_6,           CHR_PSI,       CHR_6        }, //JM
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     CHR_CROSS,      CHR_W,             CHR_CROSS,       CHR_OMEGA,     ITM_MULT     }, //JM
 
- {71,   KEY_f,            ITM_NULL,        ITM_NULL,     KEY_f,          KEY_f,             ITM_NULL,        ITM_NULL,      KEY_f        }, //JM
- {72,   CHR_1,            ITM_ASSIGN,      ITM_SAVE,     CHR_1,          CHR_X,             CHR_1,           CHR_XI,        CHR_1        }, //JM
+ {71,   KEY_fg,            ITM_NULL,        ITM_NULL,     KEY_fg,          KEY_fg,             ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
+ {72,   CHR_1,            /*ITM_ASSIGN*/-MNU_ASN,      ITM_SAVE,     CHR_1,          CHR_X,             CHR_1,           CHR_XI,        CHR_1        }, //JM
  {73,   CHR_2,            KEY_USERMODE,   -MNU_LOOP,     CHR_2,          CHR_Y,             CHR_2,           CHR_UPSILON,   CHR_2        }, //JM
  {74,   CHR_3,           -MNU_PARTS,      -MNU_TEST,     CHR_3,          CHR_Z,             CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_STK,        -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,    CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
@@ -107,7 +113,7 @@ const calcKey_t kbd_std1[37] = {
  {64,   CHR_6,           -MNU_FLAGS,      -MNU_BITS,     CHR_6,          CHR_V,            CHR_6,           CHR_PSI,       CHR_6        }, //JM
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     CHR_CROSS,      CHR_W,            CHR_CROSS,       CHR_OMEGA,     ITM_MULT     }, //JM
 
- {71,   KEY_f,            ITM_NULL,        ITM_NULL,     KEY_f,          KEY_f,            ITM_NULL,        ITM_NULL,      KEY_f        }, //JM
+ {71,   KEY_fg,            ITM_NULL,        ITM_NULL,     KEY_fg,          KEY_fg,            ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
  {72,   CHR_1,            ITM_ASSIGN,      ITM_SAVE,     CHR_1,          CHR_X,            CHR_1,           CHR_XI,        CHR_1        }, //JM
  {73,   CHR_2,            KEY_USERMODE,   -MNU_LOOP,     CHR_2,          CHR_Y,            CHR_2,           CHR_UPSILON,   CHR_2        }, //JM
  {74,   CHR_3,           -MNU_PFN,        -MNU_TEST,     CHR_3,          CHR_Z,            CHR_3,           CHR_ZETA,      CHR_3        }, //JM

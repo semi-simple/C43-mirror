@@ -247,7 +247,6 @@ void fnShowJM(uint16_t What) {
 
 
 
-
 //    kbd_usr[0].primary     = KEY_CC;       //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
@@ -260,27 +259,70 @@ void fnShowJM(uint16_t What) {
 
 
 void fnJMUSERmode(uint16_t JM_KEY) {
-uint16_t X_REG;
+int16_t X_REG;
 longInteger_t lgInt;
 
 if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
-
   convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
   longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-  X_REG = longIntegerToUInt(lgInt);
+  X_REG = longIntegerToInt(lgInt);
   longIntegerFree(lgInt);
-
+  //printf("Xreg %d\n", X_REG);
     if (JM_KEY >= 256) { 
       kbd_usr[JM_KEY - 256].primary = X_REG; 
+      printf(".primary %d\n", kbd_usr[JM_KEY - 256].primary);
     } 
-    else {
-      kbd_std[JM_KEY].primary = X_REG;   
-    }
-
+    #ifdef JM_KBD_RAM
+      else {
+        kbd_std[JM_KEY].primary = X_REG;   
+      }
+    #endif
   }
-
 }
 
+void fnJMUSERmode_f(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].fShifted = X_REG; 
+      printf(".fShifted %d\n", kbd_usr[JM_KEY - 256].fShifted);
+    } 
+    #ifdef JM_KBD_RAM
+      else {
+        kbd_std[JM_KEY].fShifted = X_REG;   
+      }
+    #endif
+  }
+}
+
+void fnJMUSERmode_g(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].gShifted = X_REG; 
+      printf(".gShifted %d\n", kbd_usr[JM_KEY - 256].gShifted);
+    } 
+    #ifdef JM_KBD_RAM
+      else {
+        kbd_std[JM_KEY].gShifted = X_REG;   
+      }
+    #endif
+  }
+}
 
 
 

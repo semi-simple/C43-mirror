@@ -155,7 +155,9 @@ bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
 calcKey_t            kbd_usr[37];
-calcKey_t            kbd_std[37];
+#ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
+   calcKey_t         kbd_std[37]; //JM USER
+#endif
 calcRegister_t       errorMessageRegisterLine;
 calcRegister_t       errorRegisterLine;
 uint16_t             row[100];
@@ -210,7 +212,11 @@ void setupDefaults(void) {
 
   // Initialization of user key assignments          //JM bug: Overwritten by fnReset
   memcpy(kbd_usr, kbd_std, sizeof(kbd_std));         //JM bug: Overwritten by fnReset
-  memcpy(kbd_std, kbd_std1, sizeof(kbd_std));         //JM bug: Overwritten by fnReset //JM USER
+  
+  #ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
+     memcpy(kbd_std, kbd_std1, sizeof(kbd_std));         //JM bug: Overwritten by fnReset //JM USER
+  #endif
+  
   kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;             //JM bug: Overwritten by fnReset
   kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;             //JM bug: Overwritten by fnReset
   kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;             //JM bug: Overwritten by fnReset

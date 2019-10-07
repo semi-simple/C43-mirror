@@ -482,7 +482,14 @@ extern bool_t               funcOK;
 // Variables stored in FLASH
 extern const item_t         indexOfItems[];
 extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
-extern const calcKey_t      kbd_std1[37]; //JM USER renamed the read-only version
+
+#ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
+   extern const calcKey_t      kbd_std1[37]; //JM USER renamed the read-only version
+#endif
+#ifndef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
+   extern const calcKey_t      kbd_std[37]; //JM USER renamed the read-only version
+#endif
+
 extern const font_t         standardFont, numericFont;
 extern void                 (* const addition[12][12])(void);
 extern void                 (* const subtraction[12][12])(void);
@@ -593,7 +600,11 @@ extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
 extern calcKey_t            kbd_usr[37];
-extern calcKey_t            kbd_std[37];  //JM USER added ram version
+
+#ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
+  extern calcKey_t            kbd_std[37];  //JM USER added ram version
+#endif
+
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
 extern uint16_t             row[100];

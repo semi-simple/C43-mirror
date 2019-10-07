@@ -344,7 +344,9 @@ void btnPressed(void *notUsed, void *data) {
 
     showShiftState();
   }
-
+#endif //JM shifts. Replaced by MULTISHIFT  *********************************************************************************************************
+//JM USER
+#ifdef JM_MULTISHIFT /* JM shifts. Whole section for shift f and shift g removed here in favour if the f/g shift method */
   // Shift g pressed
   else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
     if(temporaryInformation != TI_NO_INFO) {

@@ -577,6 +577,7 @@ void fnReset(uint16_t confirmation) {
 
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
+    memcpy(kbd_std, kbd_std1, sizeof(kbd_std));   //JM USER
 
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {

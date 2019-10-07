@@ -21,7 +21,7 @@
 #include "wp43s.h"
 // ITM_ASSIGN  KEY_USERMODE,   -MNU_MODE,  -MNU_CATALOG  -MNU_FLAGS    -MNU_ALPHAMATH    -MNU_ALPHAINTL   // JMTEMP
 //This variable is to store in flash memory
-const calcKey_t kbd_std[37] = {
+const calcKey_t kbd_std1[37] = {
 
 
  #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. OPTIMAL

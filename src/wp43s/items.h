@@ -1708,8 +1708,18 @@
 #define KEY_TYPCON_DN                 1668  //JM CPX
 #define ITM_HOMEx3T                   1669  //JM HOME.3T
 #define ITM_SH_HOMEx3T                1670  //JM HOME.3T
+#define MNU_ASN                 1671  //JM USER    
+#define KEY_00U                 1672  //JM USER MODE TEST
+#define KEY_09U                 1673  //JM USER MODE TEST
+#define KEY_10U                 1674  //JM USER MODE TEST
+#define KEY_11U                 1675  //JM USER MODE TEST
+#define KEY_00N                 1676  //JM USER MODE TEST
+#define KEY_09N                 1677  //JM USER MODE TEST
+#define KEY_10N                 1678  //JM USER MODE TEST
+#define KEY_11N                 1679  //JM USER MODE TEST
 
-#define LAST_ITEM                     1671  //JM
+
+#define LAST_ITEM                     1680  //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -1802,7 +1802,17 @@ const item_t indexOfItems[] = {
 /* 1669 */  { fnSetSetJM,                  8,                           "SH.3T",                                        "SH.3T",                                                                     SLS_ENABLED},      //JM HOME.3T
 /* 1670 */  { fnShowJM,                    8,                           "SH.3T?",                                       "SH.3T?",                                                                     SLS_ENABLED  },     //JM SHOW HOME.3T
 
+/* 1671 */  { itemToBeCoded,               NOPARAM,                     "MNUASM",                                       "M_ASM",                                                                        SLS_UNCHANGED}, //JM USER
+/* 1672 */  { fnJMUSERmode,                256+0,                       "KEY00U",                                       "KEY00U",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
+/* 1673 */  { fnJMUSERmode,                256+9,                       "KEY09U",                                       "KEY09U",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
+/* 1674 */  { fnJMUSERmode,                256+10,                      "KEY10U",                                       "KEY10U",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
+/* 1675 */  { fnJMUSERmode,                256+11,                      "KEY11U",                                       "KEY11U",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
+/* 1676 */  { fnJMUSERmode,                0,                           "KEY00N",                                       "KEY00N",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
+/* 1677 */  { fnJMUSERmode,                9,                           "KEY09N",                                       "KEY09N",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
+/* 1678 */  { fnJMUSERmode,                10,                          "KEY10N",                                       "KEY10N",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
+/* 1679 */  { fnJMUSERmode,                11,                          "KEY11N",                                       "KEY11N",                                                                    SLS_UNCHANGED  },  //JM USER MODE TEST 
 
 
-/* 1671 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+
+/* 1680 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
 };

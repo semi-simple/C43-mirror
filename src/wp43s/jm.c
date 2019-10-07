@@ -248,6 +248,42 @@ void fnShowJM(uint16_t What) {
 
 
 
+//    kbd_usr[0].primary     = KEY_CC;       //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
+//    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
+//    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
+//#define ITM_sin                        569
+//#define ITM_cos                         92
+//#define ITM_tan                        618
+//#define KEY_CC                        1516
+//#define KEY_f                         1517
+//#define KEY_g                         1518
+
+
+void fnJMUSERmode(uint16_t JM_KEY) {
+uint16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToUInt(lgInt);
+  longIntegerFree(lgInt);
+
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].primary = X_REG; 
+    } 
+    else {
+      kbd_std[JM_KEY].primary = X_REG;   
+    }
+
+  }
+
+}
+
+
+
+
 /********************************************//**
  * RPN PROGRAM. 
  *

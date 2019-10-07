@@ -55,6 +55,7 @@ void fnChangeBase(uint16_t base) {
       longInteger_t lgInt;
       realIc_t x, value;
       bool_t isNegative;
+      uint32_t tmp32;
 
       real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
       isNegative = realIcIsNegative(&x);
@@ -63,17 +64,17 @@ void fnChangeBase(uint16_t base) {
 
       // Calculate 32 bit high word
       realIcDivide(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
       longIntegerInit(lgInt);
-      uIntToLongInteger(realIcToUInt32(&value), lgInt);
+      realIcToUInt32(&value, tmp32);
+      uIntToLongInteger(tmp32, lgInt);
       longIntegerLeftShift(lgInt, 32, lgInt);
 
       // Calculate 32 bit low word
       realIcRemainder(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
-      longIntegerAddUInt(lgInt, realIcToUInt32(&value), lgInt);
+      realIcToUInt32(&value, tmp32);
+      longIntegerAddUInt(lgInt, tmp32, lgInt);
       if(isNegative) {
         longIntegerSetNegativeSign(lgInt);
       }
@@ -96,6 +97,7 @@ void fnChangeBase(uint16_t base) {
       longInteger_t lgInt;
       realIc_t x, value;
       bool_t isNegative;
+      uint32_t tmp32;
 
       real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
       isNegative = realIcIsNegative(&x);
@@ -107,14 +109,15 @@ void fnChangeBase(uint16_t base) {
       realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
       longIntegerInit(lgInt);
-      uIntToLongInteger(realIcToUInt32(&value), lgInt);
+      realIcToUInt32(&value, tmp32);
+      uIntToLongInteger(tmp32, lgInt);
       longIntegerLeftShift(lgInt, 32, lgInt);
 
       // Calculate 32 bit low word
       realIcRemainder(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
 
-      longIntegerAddUInt(lgInt, realIcToUInt32(&value), lgInt);
+      realIcToUInt32(&value, tmp32);
+      longIntegerAddUInt(lgInt, tmp32, lgInt);
       if(isNegative) {
         longIntegerSetNegativeSign(lgInt);
       }

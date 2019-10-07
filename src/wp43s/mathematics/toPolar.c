@@ -136,8 +136,7 @@ void realIcRectangularToPolar(const realIc_t *re, const realIc_t *im, realIc_t *
     }
     else if(realIcIsNegative(im)) {
       realIcCopyAbs(im, magnitude);
-      realIcCopy(const_piOn2, theta); //  90°
-      realIcChangeSign(theta);        // -90°
+      realIcMinus(const_piOn2, theta); //  -90°
     }
     else {
       realIcCopy(im, magnitude);
@@ -156,7 +155,6 @@ void realIcRectangularToPolar(const realIc_t *re, const realIc_t *im, realIc_t *
     realIcSquareRoot(magnitude, magnitude);
 
     // Angle
-    realIcDivide(&imag, &real, theta);
     WP34S_Atan2(&imag, &real, theta);
   }
 }

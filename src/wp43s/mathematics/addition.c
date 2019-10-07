@@ -300,7 +300,7 @@ void addDateLonI(void) {
 
 
 /********************************************//**
- * \brief Y(long integer) + X(64bits integer) ==> X(long integer)
+ * \brief Y(long integer) + X(short integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -308,10 +308,8 @@ void addDateLonI(void) {
 void addLonIShoI(void) {
   longInteger_t y, x;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
-
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+  convertShortIntegerRegisterToLongInteger(REGISTER_X, x);
 
   longIntegerAdd(y, x, x);
 
@@ -324,7 +322,7 @@ void addLonIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) + X(long integer) ==> X(long integer)
+ * \brief Y(short integer) + X(long integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -332,9 +330,7 @@ void addLonIShoI(void) {
 void addShoILonI(void) {
   longInteger_t y, x;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
-
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertShortIntegerRegisterToLongInteger(REGISTER_Y, y);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
   longIntegerAdd(y, x, x);
@@ -706,7 +702,7 @@ void addDateRe16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) + X(64bits integer) ==> X(real16)
+ * \brief Y(real16) + X(short integer) ==> X(real16)
  *
  * \param void
  * \return void
@@ -752,7 +748,7 @@ void addRe16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) + X(real16) ==> X(real16)
+ * \brief Y(short integer) + X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1028,7 +1024,7 @@ void addCo16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) + X(64bits integer) ==> X(complex16)
+ * \brief Y(complex16) + X(short integer) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1059,7 +1055,7 @@ void addCo16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) + X(complex16) ==> X(complex16)
+ * \brief Y(short integer) + X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1460,7 +1456,7 @@ void addStriCm16(void) {
 
 
 /********************************************//**
- * \brief Y(string) + X(64bits integer) ==> X(string)
+ * \brief Y(string) + X(short integer) ==> X(string)
  *
  * \param void
  * \return void
@@ -1585,7 +1581,7 @@ void addCm16Cm16(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(64bits integer) + X(64bits integer) ==> X(64bits integer)
+ * \brief Y(short integer) + X(short integer) ==> X(short integer)
  *
  * \param void
  * \return void
@@ -1598,7 +1594,7 @@ void addShoIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) + X(real34) ==> X(real34)
+ * \brief Y(short integer) + X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1643,7 +1639,7 @@ void addShoIRe34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) + X(64bits integer) ==> X(real34)
+ * \brief Y(real34) + X(short integer) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1689,7 +1685,7 @@ void addRe34ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) + X(complex34) ==> X(complex34)
+ * \brief Y(short integer) + X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1710,7 +1706,7 @@ void addShoICo34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) + X(64bits integer) ==> X(complex34)
+ * \brief Y(complex34) + X(short integer) ==> X(complex34)
  *
  * \param void
  * \return void

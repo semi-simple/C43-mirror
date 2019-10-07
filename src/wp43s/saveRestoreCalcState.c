@@ -77,11 +77,11 @@ void saveCalc(void) {
   size += fwrite(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
   size += fwrite(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
   size += fwrite(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);
-  ramPtr = MEMPTR_TO_RAMPTR(allLocalRegisterPointer);
+  ramPtr = PCMEMPTR_TO_WP43SMEMPTR(allLocalRegisterPointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-  ramPtr = MEMPTR_TO_RAMPTR(allNamedVariablePointer);
+  ramPtr = PCMEMPTR_TO_WP43SMEMPTR(allNamedVariablePointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-  if(statisticalSumsPointer == NULL) ramPtr = 0; else ramPtr = MEMPTR_TO_RAMPTR(statisticalSumsPointer);
+  if(statisticalSumsPointer == NULL) ramPtr = 0; else ramPtr = PCMEMPTR_TO_WP43SMEMPTR(statisticalSumsPointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
   size += fwrite(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
   size += fwrite(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
@@ -159,8 +159,8 @@ void saveCalc(void) {
   size += fwrite(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
   size += fwrite(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
   size += fwrite(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
-  size += fwrite(&wp43sMem,                           1, sizeof(wp43sMem),                           backup); //printf("%8lu wp43sMem\n",                           (unsigned long)size);
-  size += fwrite(&gmpMem,                             1, sizeof(gmpMem),                             backup); //printf("%8lu gmpMem\n",                             (unsigned long)size);
+  size += fwrite(&wp43sMemInBytes,                    1, sizeof(wp43sMemInBytes),                    backup); //printf("%8lu wp43sMemInBytes\n",                    (unsigned long)size);
+  size += fwrite(&gmpMemInBytes,                      1, sizeof(gmpMemInBytes),                      backup); //printf("%8lu gmpMemInBytes\n",                      (unsigned long)size);
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
 
@@ -230,11 +230,11 @@ void restoreCalc(void) {
     size += fread(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
     size += fread(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-    allLocalRegisterPointer = RAMPTR_TO_MEMPTR(ramPtr);
+    allLocalRegisterPointer = WP43SMEMPTR_TO_PCMEMPTR(ramPtr);
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-    allNamedVariablePointer = RAMPTR_TO_MEMPTR(ramPtr);
+    allNamedVariablePointer = WP43SMEMPTR_TO_PCMEMPTR(ramPtr);
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-    if(ramPtr == 0) statisticalSumsPointer = 0; else statisticalSumsPointer = RAMPTR_TO_MEMPTR(ramPtr);
+    if(ramPtr == 0) statisticalSumsPointer = 0; else statisticalSumsPointer = WP43SMEMPTR_TO_PCMEMPTR(ramPtr);
     size += fread(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
     size += fread(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
     size += fread(&yCursor,                            1, sizeof(yCursor),                            backup); //printf("%8lu yCursor\n",                            (unsigned long)size);
@@ -322,8 +322,8 @@ void restoreCalc(void) {
     size += fread(&imaginaryMantissaSignLocation,      1, sizeof(imaginaryMantissaSignLocation),      backup); //printf("%8lu imaginaryMantissaSignLocation\n",      (unsigned long)size);
     size += fread(&lineTWidth,                         1, sizeof(lineTWidth),                         backup); //printf("%8lu lineTWidth\n",                         (unsigned long)size);
     size += fread(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
-    size += fread(&wp43sMem,                           1, sizeof(wp43sMem),                           backup); //printf("%8lu wp43sMem\n",                           (unsigned long)size);
-    size += fread(&gmpMem,                             1, sizeof(gmpMem),                             backup); //printf("%8lu gmpMem\n",                             (unsigned long)size);
+    size += fread(&wp43sMemInBytes,                    1, sizeof(wp43sMemInBytes),                    backup); //printf("%8lu wp43sMemInBytes\n",                    (unsigned long)size);
+    size += fread(&gmpMemInBytes,                      1, sizeof(gmpMemInBytes),                      backup); //printf("%8lu gmpMemInBytes\n",                      (unsigned long)size);
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);
 

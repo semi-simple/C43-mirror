@@ -85,6 +85,14 @@ void sinhRe16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sinhRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of sinh when flag D is not set", NULL, NULL);
+    #endif
+    return;
+  }
+
   realIc_t x;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
@@ -139,6 +147,14 @@ void sinhRe34(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function sinhRe34:", "cannot use NaN as X input of sinh", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function sinhRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of sinh when flag D is not set", NULL, NULL);
     #endif
     return;
   }

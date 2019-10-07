@@ -368,7 +368,7 @@ const item_t indexOfItems[] = {
 /*  244 */  { itemToBeCoded,               NOPARAM,                     "Hyper:",                                      "Hyper:",                                                                     SLS_UNCHANGED},
 /*  245 */  { fnConstant,                  21,                          STD_PLANCK_2PI,                                STD_PLANCK_2PI,                                                               SLS_ENABLED  },
 /*  246 */  { addItemToBuffer,             REGISTER_I,                  "I",                                           "I",                                                                          SLS_UNCHANGED},
-/*  247 */  { itemToBeCoded,               NOPARAM,                     "IDIV",                                        "IDIV",                                                                       SLS_UNCHANGED},
+/*  247 */  { fnIDiv,                      NOPARAM,                     "IDIV",                                        "IDIV",                                                                       SLS_ENABLED  },
 /*  248 */  { fnCvtInhgPa,                 multiply,                    "iHg" STD_RIGHT_ARROW "Pa",                    "in.Hg",                                                                      SLS_ENABLED  },
 /*  249 */  { itemToBeCoded,               NOPARAM,                     "IINTS",                                       "IINTS",                                                                      SLS_UNCHANGED},
 /*  250 */  { fnImaginaryPart,             NOPARAM,                     "IM",                                          "Im",                                                                         SLS_ENABLED  },
@@ -641,7 +641,7 @@ const item_t indexOfItems[] = {
 /*  517 */  { fnConstant,                  43,                          "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,                                  SLS_ENABLED  },
 /*  518 */  { itemToBeCoded,               NOPARAM,                     "RM",                                          "RM",                                                                         SLS_UNCHANGED},
 /*  519 */  { fnGetRoundingMode,           NOPARAM,                     "RM?",                                         "RM?",                                                                        SLS_ENABLED  },
-/*  520 */  { itemToBeCoded,               NOPARAM,                     "RMDR",                                        "RMDR",                                                                       SLS_UNCHANGED},
+/*  520 */  { itemToBeCoded,               NOPARAM,                     "RMD",                                         "RMD",                                                                        SLS_UNCHANGED},
 /*  521 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                                                      SLS_UNCHANGED},
 /*  522 */  { itemToBeCoded,               NOPARAM,                     "ROUND",                                       "ROUND",                                                                      SLS_UNCHANGED},
 /*  523 */  { itemToBeCoded,               NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                                                     SLS_UNCHANGED},
@@ -1701,6 +1701,7 @@ const item_t indexOfItems[] = {
 /* 1574 */  { fnStatSum,                   21,                          STD_SIGMA "x" STD_SUP_3,                       STD_SIGMA "x" STD_SUP_3,                                                      SLS_ENABLED  },
 /* 1575 */  { fnStatSum,                   22,                          STD_SIGMA "x" STD_SUP_4,                       STD_SIGMA "x" STD_SUP_4,                                                      SLS_ENABLED  },
 /* 1576 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "H",                                                                          SLS_UNCHANGED},
+/* 1577 */  { fnIDivR,                     NOPARAM,                     "IDIVR",                                       "IDIVR",                                                                      SLS_ENABLED  },
 
-/* 1577 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
+/* 1578 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}
 };

@@ -45,6 +45,12 @@
 ;
 ; This file is only a list of files containing the tests to perform
 
+;keisan:
+;y=12545543120284569505847489630102030405;
+;x=123.456;
+;IP(y/x);
+;remainder(y,x)
+
 ;debug.txt
 
 changeSign.txt
@@ -101,6 +107,8 @@ division_real34.txt
 division_complex34.txt
 
 invert.txt
+idiv.txt
+idivr.txt
 
 power_longInteger.txt
 power_real16.txt
@@ -169,8 +177,8 @@ squareRoot.txt
 cube.txt
 cubeRoot.txt
 
-gamma.txt
 lnGamma.txt
+gamma.txt
 factorial.txt
 
 fractionalPart.txt

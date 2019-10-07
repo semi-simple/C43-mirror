@@ -40,9 +40,9 @@
 #define DPD2BIN DPD2BINx
 #define BIN2DPD BIN2DPDx
 extern const uInt   COMBEXP[32], COMBMSD[32];
-//extern const uShort DPD2BIN[1024];
+extern const uShort DPD2BIN[1024];
 //extern const uShort BIN2DPD[1000];      // [not used]
-//extern const uByte  BIN2CHAR[4001];
+extern const uByte  BIN2CHAR[4001];
 
 extern void decDigitsFromDPD(decNumber *, const uInt *, Int);
 extern void decDigitsToDPD(const decNumber *, uInt *, Int);
@@ -268,14 +268,14 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
 /*                                                                    */
 /*  No error is possible, and no status can be set.                   */
 /* ------------------------------------------------------------------ */
-/*char * decimal128ToEngString(const decimal128 *d128, char *string){
+char * decimal128ToEngString(const decimal128 *d128, char *string){
   decNumber dn;                         // work
   decimal128ToNumber(d128, &dn);
   decNumberToEngString(&dn, string);
   return string;
   } // decimal128ToEngString
-*/
-/*char * decimal128ToString(const decimal128 *d128, char *string){
+
+char * decimal128ToString(const decimal128 *d128, char *string){
   uInt msd;                        // coefficient MSD
   Int  exp;                        // exponent top two bits or full
   uInt comb;                       // combination field
@@ -434,7 +434,7 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
   //printf("res %s\n", string);
   return string;
   } // decimal128ToString
-*/
+
 /* ------------------------------------------------------------------ */
 /* to-number -- conversion from numeric string                        */
 /*                                                                    */
@@ -450,7 +450,7 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
 /* (setting of status and traps) and for the rounding mode, only.     */
 /* If an error occurs, the result will be a valid decimal128 NaN.     */
 /* ------------------------------------------------------------------ */
-/*decimal128 * decimal128FromString(decimal128 *result, const char *string,
+decimal128 * decimal128FromString(decimal128 *result, const char *string,
                                   decContext *set) {
   decContext dc;                             // work
   decNumber dn;                              // ..
@@ -465,14 +465,14 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
     }
   return result;
   } // decimal128FromString
-*/
+
 /* ------------------------------------------------------------------ */
 /* decimal128IsCanonical -- test whether encoding is canonical        */
 /*   d128 is the source decimal128                                    */
 /*   returns 1 if the encoding of d128 is canonical, 0 otherwise      */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*uInt decimal128IsCanonical(const decimal128 *d128) {
+uInt decimal128IsCanonical(const decimal128 *d128) {
   decNumber dn;                         // work
   decimal128 canon;                      // ..
   decContext dc;                        // ..
@@ -481,7 +481,7 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
   decimal128FromNumber(&canon, &dn, &dc);// canon will now be canonical
   return memcmp(d128, &canon, DECIMAL128_Bytes)==0;
   } // decimal128IsCanonical
-*/
+
 /* ------------------------------------------------------------------ */
 /* decimal128Canonical -- copy an encoding, ensuring it is canonical  */
 /*   d128 is the source decimal128                                    */
@@ -489,7 +489,7 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
 /*   returns result                                                   */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*decimal128 * decimal128Canonical(decimal128 *result, const decimal128 *d128) {
+decimal128 * decimal128Canonical(decimal128 *result, const decimal128 *d128) {
   decNumber dn;                         // work
   decContext dc;                        // ..
   decContextDefault(&dc, DEC_INIT_DECIMAL128);
@@ -497,7 +497,7 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
   decimal128FromNumber(result, &dn, &dc);// result will now be canonical
   return result;
   } // decimal128Canonical
-*/
+
 #if DECTRACE || DECCHECK
 /* Macros for accessing decimal128 fields.  These assume the argument
    is a reference (pointer) to the decimal128 structure, and the
@@ -530,7 +530,7 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
 /*   d128 -- the number to show                                       */
 /* ------------------------------------------------------------------ */
 // Also shows sign/cob/expconfields extracted
-/*void decimal128Show(const decimal128 *d128) {
+void decimal128Show(const decimal128 *d128) {
   char buf[DECIMAL128_Bytes*2+1];
   Int i, j=0;
 
@@ -552,5 +552,5 @@ decNumber * decimal128ToNumber(const decimal128 *d128, decNumber *dn) {
            decimal128ExpCon(d128));
     }
   } // decimal128Show
-*/
+
 #endif

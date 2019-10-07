@@ -31,7 +31,6 @@
 void WP34S_Cvt2RadSinCosTan(const realIc_t *an, uint32_t angularMode, realIc_t *sin, realIc_t *cos, realIc_t *tan) {
 	 bool_t sinNeg = false, cosNeg = false, swap = false;
   realIc_t angle;
-  real451_t angle451;
 
 	 if(realIcIsNaN(an)) {
 	   if(sin != NULL) {
@@ -59,28 +58,25 @@ void WP34S_Cvt2RadSinCosTan(const realIc_t *an, uint32_t angularMode, realIc_t *
 	  	realIcSetPositiveSign(&angle);
 	 }
 
- 	realIcCopy(&angle, (realIc_t *)&angle451);
  	switch(angularMode) {
     case AM_DEGREE:
-    	 real451Remainder(&angle451, const_360,    &angle451); // mod(angle, 360°) --> angle
+    	 realIcRemainder(&angle, const_360,    &angle); // mod(angle, 360°) --> angle
      	break;
 
     case AM_GRAD:
-    	 real451Remainder(&angle451, const_400,    &angle451); // mod(angle, 360°) --> angle
+    	 realIcRemainder(&angle, const_400,    &angle); // mod(angle, 400g) --> angle
      	break;
 
     case AM_RADIAN:
-    	 real451Remainder(&angle451, const451_2pi, &angle451); // mod(angle, 360°) --> angle
+    	 WP34S_Mod(&angle, const451_2pi, &angle); // mod(angle, 2pi) --> angle
      	break;
 
     case AM_MULTPI:
-    	 real451Remainder(&angle451, const_2,      &angle451); // mod(angle, 360°) --> angle
+    	 realIcRemainder(&angle, const_2,      &angle); // mod(angle, 2) --> angle
      	break;
 
     default: {}
  	}
-
-	 realIcPlus((realIc_t *)&angle451, &angle);
 
 	 // sin(180+x) = -sin(x), cos(180+x) = -cos(x)
  	if(realIcCompareGreaterEqual(&angle, angle180 + angularMode)) { // angle >= 180°
@@ -321,16 +317,14 @@ void WP34S_Atan2(const realIc_t *y, const realIc_t *x, realIc_t *atan) {
 		  if(yNeg) {
 			   if(realIcCompareEqual(x, const_0)) {
 				    if(xNeg) {
-					     realIcCopy(const_pi, atan);
-					     realIcSetNegativeSign(atan);
+					     realIcMinus(const_pi, atan);
 				    }
 				    else {
 					     realIcCopy(y, atan);
 					   }
 			   }
 			   else if(xNeg) {
-			     realIcCopy(const_pi, atan);
-			     realIcSetNegativeSign(atan);
+			     realIcMinus(const_pi, atan);
 			   }
       else {
 			     realIcCopy(y, atan);
@@ -480,26 +474,16 @@ void WP34S_Acos(const realIc_t *x, realIc_t *angle) {
 
 
 
-/* Check if a number is an integer.
- */
-bool_t WP34S_IsInt(const realIc_t *x) {
- 	realIc_t r, y;
-
- 	if(realIcIsNaN(x)) {
- 		 return false;
- 	}
- 	if(realIcIsInfinite(x)) {
- 		 return true;
- 	}
-
- 	realIcToIntegralValue(x, &y, DEC_ROUND_DOWN);
- 	realIcSubtract(x, &y, &r);
-
- 	return realIcCompareEqual(&r, const_0);
-}
-
-
-
+// A more precise program using Taylor series coefficients: https://rosettacode.org/wiki/Gamma_function#Taylor_series.2C_80-digit_coefficients
+// A more precise set of Lanczos coefficients? https://www.boost.org/doc/libs/1_60_0/boost/math/special_functions/lanczos.hpp
+// search for N=24 G=20.3209821879863739013671875
+//
+// https://mrob.com/pub/ries/lanczos-gamma.html
+// https://www.boost.org/doc/libs/master/boost/math/bindings/detail/big_lanczos.hpp
+// Compute the coeficients: http://www.vttoth.com/CMS/projects/41-the-lanczos-approximation
+// https://www.rskey.org/CMS/index.php/the-library/11
+// C'est ça qu'il faut voir: https://www.boost.org/doc/libs/1_64_0/libs/math/doc/html/math_toolkit/lanczos.html
+// C'est ça qu'il faut voir: https://www.boost.org/doc/libs/1_60_0/boost/math/special_functions/lanczos.hpp
 static void WP34S_CalcLnGamma(const realIc_t *xin, realIc_t *res) {
 	 realIc_t r, s, t, u, v;
 	 int32_t k;
@@ -530,9 +514,9 @@ static void WP34S_CalcLnGamma(const realIc_t *xin, realIc_t *res) {
 
 
 // common code for the [GAMMA] and LN[GAMMA]
-static void WP34S_Gamma_LnGamma(const realIc_t *xin, const bool_t calculateLn, realIc_t *res) {
+static void WP34S_Gamma_LnGamma(const realIc_t *xin, const bool_t calculateLnGamma, realIc_t *res) {
 	 realIc_t x, t;
-	 int reflec = 0;
+	 bool_t reflect = false;
 
 	 // Check for special cases
 	 if(realIcIsSpecial(xin)) {
@@ -546,45 +530,42 @@ static void WP34S_Gamma_LnGamma(const realIc_t *xin, const bool_t calculateLn, r
 	 }
 
 	 // Handle x approximately zero case
-	 realIcCopy(xin, &t);
-	 realIcSetPositiveSign(&t);
-	 if(realIcCompareLessThan(&t, const_1e_24)) {
-	  	if(realIcCompareEqual(xin, const_0)) {
+	 if(realIcCompareAbsLessThan(xin, const_1e_24)) {
+	  	if(realIcIsZero(xin)) {
    	  realIcCopy(const_NaN, res);
       return;
     }
 		  realIcDivide(const_1, xin, &x);
 	  	realIcSubtract(&x, const_egamma, res);
-	  	if(calculateLn) {
-	  	 WP34S_Ln(res, res);
+	  	if(calculateLnGamma) {
+	  	  WP34S_Ln(res, res);
 	  	}
 		  return;
 	 }
 
 	 // Correct our argument and begin the inversion if it is negative
 	 if(realIcCompareLessEqual(xin, const_0)) {
-	  	reflec = 1;
-	  	realIcSubtract(const_1, xin, &t);
-	  	if(WP34S_IsInt(&t)) {
+	  	reflect = true;
+	  	realIcSubtract(const_1, xin, &t); // t = 1 - xin
+	  	if(realIcIsAnInteger(&t)) {
    	  realIcCopy(const_NaN, res);
 	  		 return;
     }
-	  	realIcSubtract(&t, const_1, &x);
+	  	realIcSubtract(&t, const_1, &x);  // x = 1 - xin - 1 = -xin
 	 }
 	 else {
-	  	realIcSubtract(xin, const_1, &x);
+	  	realIcSubtract(xin, const_1, &x); // x = xin - 1
 
 	 	 // Provide a fast path evaluation for positive integer arguments that aren't too large
 	 	 // The threshold for overflow is 205! (i.e. 204! is within range and 205! isn't).
-	 	 if(WP34S_IsInt(&x) && !realIcCompareEqual(xin, const_0) && realIcCompareLessEqual(&x, const_204)) {
+	 	 if(realIcIsAnInteger(&x) && !realIcIsZero(xin) && realIcCompareLessEqual(&x, const_204)) {
 	 	  	realIcCopy(const_1, res);
-	 	  	while(realIcCompareGreaterThan(&x, const_0)) {
+	 	  	while(realIcCompareGreaterEqual(&x, const_2)) {
 	 	 	  	realIcMultiply(res, &x, res);
 	 	 		  realIcSubtract(&x, const_1, &x);
 	 	 	 }
-	 	 	 if(calculateLn) {
+	 	 	 if(calculateLnGamma) {
 	 	 	 	 WP34S_Ln(res, res);
-	 	 	 	 return;
       }
 	 	  	return;
 	 	 }
@@ -592,17 +573,17 @@ static void WP34S_Gamma_LnGamma(const realIc_t *xin, const bool_t calculateLn, r
 
  	WP34S_CalcLnGamma(&x, res);
 
- 	if(!calculateLn) {
+ 	if(!calculateLnGamma) {
  	  realIcExp(res, res);
  	}
 
  	// Finally invert if we started with a negative argument
- 	if(reflec) {
+ 	if(reflect) {
  	 	// figure out xin * PI mod 2PI
  	 	realIcRemainder(xin, const_2, &t);
  	 	realIcMultiply(&t, const_pi, &t);
- 	 	WP34S_SinCosTanTaylor(&t, false, &x, NULL, NULL); // t in radian
-  		if(calculateLn) {
+ 	 	WP34S_SinCosTanTaylor(&t, false, &x, NULL, NULL);
+  		if(calculateLnGamma) {
   		 	realIcDivide(const_pi, &x, &t);
   		 	WP34S_Ln(&t, &t);
   		 	realIcSubtract(&t, res, res);
@@ -840,7 +821,7 @@ void WP34S_Tanh(const realIc_t *x, realIc_t *res) {
    	realIcAdd(x, x, &a);        // a = 2x
    	WP34S_ExpM1(&a, &b);        // b = exp(2x) - 1
    	realIcAdd(&b, const_2, &a); // a = exp(2x) - 1 + 2 = exp(2x) + 1
-	   realIcDivide(&b, &a, res); // res = (exp(2x) - 1) / (exp(2x) + 1)
+	   realIcDivide(&b, &a, res);  // res = (exp(2x) - 1) / (exp(2x) + 1)
  	}
 }
 
@@ -968,17 +949,17 @@ static void WP34S_CalcComplexLnGamma(const complexIc_t *z, complexIc_t *res) {
 
 
 
-static void WP34S_ComplexGammaLnGamma(const complexIc_t *z, const bool_t ln, complexIc_t *res) {
-	 complexIc_t s, t, u, x;
-	 bool_t reflec = false;
+static void WP34S_ComplexGammaLnGamma(const complexIc_t *z, const bool_t calculateLnGamma, complexIc_t *res) {
+	 complexIc_t sinPiZ, t, u, x;
+	 bool_t reflect = false;
 
 	 // Check for special cases
-/*	 if(decNumberIsSpecial(xin) || decNumberIsSpecial(y)) {
-    if(decNumberIsNaN(xin) || decNumberIsNaN(y))
+/*	 if(decNumberIsSpecial(xin) || decNumberIsSpecial(yin)) {
+    if(decNumberIsNaN(xin) || decNumberIsNaN(yin))
       cmplx_NaN(rx, ry);
 	  	else {
       if(decNumberIsInfinite(xin)) {
-        if(decNumberIsInfinite(y))
+        if(decNumberIsInfinite(yin))
           cmplx_NaN(rx, ry);
         else if(decNumberIsNegative(xin))
           cmplx_NaN(rx, ry);
@@ -997,16 +978,15 @@ static void WP34S_ComplexGammaLnGamma(const complexIc_t *z, const bool_t ln, com
 */
   // Correct our argument and begin the inversion if it is negative
   if(realIcIsNegative(&z->real)) {
-    reflec = true;
+    reflect = true;
     realIcSubtract(const_1, &z->real, &t.real);
-    if(realIcIsZero(&z->imag) && WP34S_IsInt(&t.real)) {
+    if(realIcIsZero(&z->imag) && realIcIsAnInteger(&t.real)) {
       realIcCopy(const_NaN, &res->real);
       realIcCopy(const_NaN, &res->imag);
       return;
     }
     realIcSubtract(&t.real, const_1, &x.real);
-    realIcCopy(&z->imag, &x.imag);
-    realIcChangeSign(&x.imag);
+    realIcMinus(&z->imag, &x.imag);
   }
   else {
     realIcSubtract(&z->real, const_1, &x.real);
@@ -1015,27 +995,28 @@ static void WP34S_ComplexGammaLnGamma(const complexIc_t *z, const bool_t ln, com
 
   // Sum the series
   WP34S_CalcComplexLnGamma(&x, res);
-  if(!ln) {
+  if(!calculateLnGamma) {
     expCoIc(res, res);
   }
 
   // Finally invert if we started with a negative argument
-  if(reflec) {
+  if(reflect) {
     realIcMultiply(&z->real, const_pi, &t.real);
     realIcMultiply(&z->imag, const_pi, &t.imag);
-    sinCoIc(&t, &s);
-    if(!ln) {
-      mulCoIcCoIc(&s, res, &u);
+    sinCoIc(&t, &sinPiZ);
+    if(!calculateLnGamma) {
+      mulCoIcCoIc(&sinPiZ, res, &u);
       divReIcCoIc(const_pi, &u, res);
     }
     else {
-      divReIcCoIc(const_pi, &s, &u);
+      divReIcCoIc(const_pi, &sinPiZ, &u);
       lnCoIc(&u, &t);
       realIcSubtract(&t.real, &res->real, &res->real);
       realIcSubtract(&t.imag, &res->imag, &res->imag);
     }
   }
 }
+
 
 void WP34S_ComplexGamma(const complexIc_t *zin, complexIc_t *res) {
   complexIc_t z;
@@ -1051,3 +1032,25 @@ void WP34S_ComplexLnGamma(const complexIc_t *zin, complexIc_t *res) {
   WP34S_ComplexGammaLnGamma(&z, true, res);
 }
 
+
+
+void WP34S_Mod(const realIc_t *x, const realIc_t *y, realIc_t *res) {
+	/* Declare a structure large enough to hold a really long number.
+	 * This structure is likely to be larger than is required.
+	 */
+	real451_t out;
+
+	real451Remainder(x, y, &out);
+	realIcPlus(&out, res);
+}
+
+
+void WP34S_BigMod(const realIc_t *x, const realIc_t *y, realIc_t *res) {
+	/* Declare a structure large enough to hold a really long number.
+	 * This structure is likely to be larger than is required.
+	 */
+	real850_t out;
+
+	real850Remainder(x, y, &out);
+	realIcPlus(&out, res);
+}

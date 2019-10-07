@@ -1220,9 +1220,9 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     realIcMultiply(&temp, const_100, &temp);
     realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
 
-    fs = realIcToUInt32(&temp);
-    s  = realIcToUInt32(&seconds);
-    m  = realIcToUInt32(&minutes);
+    realIcToUInt32(&temp, fs);
+    realIcToUInt32(&seconds, s);
+    realIcToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1302,9 +1302,9 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     realIcMultiply(&temp, const_100, &temp);
     realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
 
-    fs = realIcToUInt32(&temp);
-    s  = realIcToUInt32(&seconds);
-    m  = realIcToUInt32(&minutes);
+    realIcToUInt32(&temp, fs);
+    realIcToUInt32(&seconds, s);
+    realIcToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;

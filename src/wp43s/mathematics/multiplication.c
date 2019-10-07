@@ -347,7 +347,7 @@ void mulCm16LonI(void) {
 
 
 /********************************************//**
- * \brief Y(long integer) × X(64bits integer) ==> X(long integer)
+ * \brief Y(long integer) × X(short integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -355,7 +355,7 @@ void mulCm16LonI(void) {
 void mulLonIShoI(void) {
   longInteger_t y, x;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
 
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
@@ -371,7 +371,7 @@ void mulLonIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(long integer) ==> X(long integer)
+ * \brief Y(short integer) × X(long integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -379,9 +379,7 @@ void mulLonIShoI(void) {
 void mulShoILonI(void) {
   longInteger_t y, x;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
-
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertShortIntegerRegisterToLongInteger(REGISTER_Y, y);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
   longIntegerMultiply(y, x, x);
@@ -802,7 +800,7 @@ void mulCm16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) × X(64bits integer) ==> X(real16)
+ * \brief Y(real16) × X(short integer) ==> X(real16)
  *
  * \param void
  * \return void
@@ -848,7 +846,7 @@ void mulRe16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(real16) ==> X(real16)
+ * \brief Y(short integer) × X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1223,7 +1221,7 @@ void mulCm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) × X(64bits integer) ==> X(complex16)
+ * \brief Y(complex16) × X(short integer) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1254,7 +1252,7 @@ void mulCo16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(complex16) ==> X(complex16)
+ * \brief Y(short integer) × X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1427,7 +1425,7 @@ void mulCo34Co16(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(time) × X(64bits integer) ==> X(time)
+ * \brief Y(time) × X(short integer) ==> X(time)
  *
  * \param void
  * \return void
@@ -1439,7 +1437,7 @@ void mulTimeShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(time) ==> X(time)
+ * \brief Y(short integer) × X(time) ==> X(time)
  *
  * \param void
  * \return void
@@ -1543,7 +1541,7 @@ void mulCm16Rm16(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) × X(64bits integer) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) × X(short integer) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -1555,7 +1553,7 @@ void mulRm16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(real16 matrix) ==> X(real16 matrix)
+ * \brief Y(short integer) × X(real16 matrix) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -1663,7 +1661,7 @@ void mulCm16Cm16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) × X(64bits integer) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) × X(short integer) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -1675,7 +1673,7 @@ void mulCm16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(complex16 matrix) ==> X(complex16 matrix)
+ * \brief Y(short integer) × X(complex16 matrix) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -1771,7 +1769,7 @@ void mulCo34Cm16(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(64bits integer) × X(64bits integer) ==> X(64bits integer)
+ * \brief Y(short integer) × X(short integer) ==> X(short integer)
  *
  * \param void
  * \return void
@@ -1784,7 +1782,7 @@ void mulShoIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(real34) ==> X(real34)
+ * \brief Y(short integer) × X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1829,7 +1827,7 @@ void mulShoIRe34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) × X(64bits integer) ==> X(real34)
+ * \brief Y(real34) × X(short integer) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1875,7 +1873,7 @@ void mulRe34ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) × X(complex34) ==> X(complex34)
+ * \brief Y(short integer) × X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1897,7 +1895,7 @@ void mulShoICo34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) × X(64bits integer) ==> X(complex34)
+ * \brief Y(complex34) × X(short integer) ==> X(complex34)
  *
  * \param void
  * \return void

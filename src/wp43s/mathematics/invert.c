@@ -143,6 +143,13 @@ void invertRe16(void) {
     }
   }
 
+  else if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function invertRe16:", "cannot divide a real16 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
+    #endif
+  }
+
   else {
     real16Divide(const16_1, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
   }
@@ -221,6 +228,13 @@ void invertRe34(void) {
         showInfoDialog("In function invertRe34:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
     }
+  }
+
+  else if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function invertRe34:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
+    #endif
   }
 
   else {

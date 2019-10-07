@@ -301,7 +301,7 @@ void subDateLonI(void) {
 
 
 /********************************************//**
- * \brief Y(long integer) - X(64bits integer) ==> X(long integer)
+ * \brief Y(long integer) - X(short integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -309,10 +309,8 @@ void subDateLonI(void) {
 void subLonIShoI(void) {
   longInteger_t y, x;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
-
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+  convertShortIntegerRegisterToLongInteger(REGISTER_X, x);
 
   longIntegerSubtract(y, x, x);
 
@@ -325,7 +323,7 @@ void subLonIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) - X(long integer) ==> X(long integer)
+ * \brief Y(short integer) - X(long integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -333,9 +331,7 @@ void subLonIShoI(void) {
 void subShoILonI(void) {
   longInteger_t y, x;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
-
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertShortIntegerRegisterToLongInteger(REGISTER_Y, y);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
   longIntegerSubtract(y, x, x);
@@ -709,7 +705,7 @@ void subDateRe16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) - X(64bits integer) ==> X(real16)
+ * \brief Y(real16) - X(short integer) ==> X(real16)
  *
  * \param void
  * \return void
@@ -755,7 +751,7 @@ void subRe16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) - X(real16) ==> X(real16)
+ * \brief Y(short integer) - X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1032,7 +1028,7 @@ void subCo16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) - X(64bits integer) ==> X(complex16)
+ * \brief Y(complex16) - X(short integer) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1063,7 +1059,7 @@ void subCo16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) - X(complex16) ==> X(complex16)
+ * \brief Y(short integer) - X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1401,7 +1397,7 @@ void subShoIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) - X(real34) ==> X(real34)
+ * \brief Y(short integer) - X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1446,7 +1442,7 @@ void subShoIRe34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) - X(64bits integer) ==> X(real34)
+ * \brief Y(real34) - X(short integer) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1492,7 +1488,7 @@ void subRe34ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) - X(complex34) ==> X(complex34)
+ * \brief Y(short integer) - X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1515,7 +1511,7 @@ void subShoICo34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) - X(64bits integer) ==> X(complex34)
+ * \brief Y(complex34) - X(short integer) ==> X(complex34)
  *
  * \param void
  * \return void

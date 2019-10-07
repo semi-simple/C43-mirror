@@ -458,8 +458,33 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
                                      ITM_EE_STO_Z,                  ITM_EE_RCL_Z,               ITM_EE_STO_V,             ITM_EE_RCL_V,          ITM_EE_STO_I,                ITM_EE_RCL_I      };       //JM EE
 
 
-const int16_t menu_ASN[]        = {  KEY_00U, KEY_09U, KEY_10U, KEY_11U, ITM_NULL, ITM_NULL,      //JM
-                                     KEY_00N, KEY_09N, KEY_10N, KEY_11N, ITM_NULL, ITM_NULL };    //JM
+
+const int16_t menu_ASN[]        = {     
+      K00N, K09N, K10N, K11N, K12N, K27N,  //JM USER
+      Kf00N, Kf09N, Kf10N, Kf11N, Kf12N, Kf27N,  //JM USER
+      Kg00N, Kg09N, Kg10N, Kg11N, Kg12N, Kg27N,  //JM USER
+      K00U, K01U, K02U, K03U, K04U, K05U,  //JM USER
+      Kf00U, Kf01U, Kf02U, Kf03U, Kf04U, Kf05U,  //JM USER
+      Kg00U, Kg01U, Kg02U, Kg03U, Kg04U, Kg05U,  //JM USER
+      K06U, K07U, K08U, K09U, K10U, K11U,  //JM USER
+      Kf06U, Kf07U, Kf08U, Kf09U, Kf10U, Kf11U,  //JM USER
+      Kg06U, Kg07U, Kg08U, Kg09U, Kg10U, Kg11U,  //JM USER
+      K12U, K13U, K14U, K15U, K16U,   ITM_NULL,  //JM USER
+      Kf12U, Kf13U, Kf14U, Kf15U, Kf16U,   ITM_NULL,  //JM USER
+      Kg12U, Kg13U, Kg14U, Kg15U, Kg16U,   ITM_NULL,  //JM USER
+      K17U, K18U, K19U, K20U, K21U,   ITM_NULL,  //JM USER
+      Kf17U, Kf18U, Kf19U, Kf20U, Kf21U,   ITM_NULL,  //JM USER
+      Kg17U, Kg18U, Kg19U, Kg20U, Kg21U,   ITM_NULL,  //JM USER
+      K22U, K23U, K24U, K25U, K26U,   ITM_NULL,  //JM USER
+      Kf22U, Kf23U, Kf24U, Kf25U, Kf26U,   ITM_NULL,  //JM USER
+      Kg22U, Kg23U, Kg24U, Kg25U, Kg26U,   ITM_NULL,  //JM USER
+      K27U, K28U, K29U, K30U, K31U,   ITM_NULL,  //JM USER
+      Kf27U, Kf28U, Kf29U, Kf30U, Kf31U,   ITM_NULL,  //JM USER
+      Kg27U, Kg28U, Kg29U, Kg30U, Kg31U,   ITM_NULL,  //JM USER
+      K32U, K33U, K34U, K35U, K36U,   ITM_NULL,  //JM USER
+      Kf32U, Kf33U, Kf34U, Kf35U, Kf36U,   ITM_NULL,  //JM USER
+      Kg32U, Kg33U, Kg34U, Kg35U, Kg36U,   ITM_NULL };  //JM USER
+
 
 
 const int16_t menu_HOME[]        = {

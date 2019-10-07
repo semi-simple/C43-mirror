@@ -55,39 +55,36 @@ In:  AM=DEG SL=0 FI=0 RX=Re16:"9.999999999":RAD
 Out: EC=0 FI=0 SL=1 RL=Re16:"9.999999999":RAD RX=Re16:"11013.23290909009027052459917141747816647470421259469785954698"
 
 ; NaN
-In:  SL=0 FI=0 RX=Re16:"NaN":MULTPI
-Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":MULTPI
+In:  SL=0 FI=0 RX=Re16:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":RAD
 
-; Infinity
-In:  SL=0 FI=0 FD=0 RX=Re16:"inf":DMS
-Out: EC=4 FI=0 SL=0 RX=Re16:"inf":DMS
-
-In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
-Out: EC=0 FI=0 SL=1 RL=Re16:"inf":DEG RX=Re16:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":RAD
-Out: EC=4 FI=0 SL=0 RX=Re16:"-inf":RAD
-
-In:  SL=0 FI=0 FD=1 RX=Re16:"-inf":MULTPI
-Out: EC=0 FI=0 SL=1 RL=Re16:"-inf":MULTPI RX=Re16:"inf"
-
-; NaN
 In:  SL=0 FI=0 RX=Re16:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
 
 ; Infinity
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
-Out: EC=4 FI=0 SL=0 RX=Re16:"inf"
-
 In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
 Out: EC=0 FI=0 SL=1 RL=Re16:"inf" RX=Re16:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
-Out: EC=4 FI=0 SL=0 RX=Re16:"-inf"
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
+Out: EC=1 FI=0 SL=0 RX=Re16:"inf"
 
 In:  SL=0 FI=0 FD=1 RX=Re16:"-inf"
 Out: EC=0 FI=0 SL=1 RL=Re16:"-inf" RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
+Out: EC=1 FI=0 SL=0 RX=Re16:"-inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Re16:"inf":DEG RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf":RAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"inf":RAD
+
+In:  SL=0 FI=0 FD=1 RX=Re16:"-inf":MULTPI
+Out: EC=0 FI=0 SL=1 RL=Re16:"-inf":MULTPI RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":GRAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"-inf":GRAD
 
 
 
@@ -167,38 +164,36 @@ In:  AM=DEG SL=0 FI=0 RX=Re34:"9.999999999":RAD
 Out: EC=0 FI=0 SL=1 RL=Re34:"9.999999999":RAD RX=Re34:"11013.23290909009027052459917141747816647470421259469785954698"
 
 ; NaN
-In:  SL=0 FI=0 RX=Re34:"NaN":MULTPI
-Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":MULTPI
+In:  SL=0 FI=0 RX=Re34:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":RAD
 
-; Infinity
-In:  SL=0 FI=0 FD=0 RX=Re34:"inf":DMS
-Out: EC=4 FI=0 SL=0 RX=Re34:"inf":DMS
-
-In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
-Out: EC=0 FI=0 SL=1 RL=Re34:"inf":DEG RX=Re34:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":RAD
-Out: EC=4 FI=0 SL=0 RX=Re34:"-inf":RAD
-
-In:  SL=0 FI=0 FD=1 RX=Re34:"-inf":MULTPI
-Out: EC=0 FI=0 SL=1 RL=Re34:"-inf":MULTPI RX=Re34:"inf"
-
-; NaN
 In:  SL=0 FI=0 RX=Re34:"NaN"
 Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
-Out: EC=4 FI=0 SL=0 RX=Re34:"-inf"
-
 In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
 Out: EC=0 FI=0 SL=1 RL=Re34:"inf" RX=Re34:"inf"
 
 In:  SL=0 FI=0 FD=0 RX=Re34:"inf"
-Out: EC=4 FI=0 SL=0 RX=Re34:"inf"
+Out: EC=1 FI=0 SL=0 RX=Re34:"inf"
 
 In:  SL=0 FI=0 FD=1 RX=Re34:"-inf"
 Out: EC=0 FI=0 SL=1 RL=Re34:"-inf" RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
+Out: EC=1 FI=0 SL=0 RX=Re34:"-inf"
+
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Re34:"inf":DEG RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf":RAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"inf":RAD
+
+In:  SL=0 FI=0 FD=1 RX=Re34:"-inf":MULTPI
+Out: EC=0 FI=0 SL=1 RL=Re34:"-inf":MULTPI RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":GRAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"-inf":GRAD
 
 
 

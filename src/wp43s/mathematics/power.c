@@ -329,7 +329,7 @@ void powCo16LonI(void) {
 
 
 /********************************************//**
- * \brief Y(long integer) ^ X(64bits integer) ==> X(long integer)
+ * \brief Y(long integer) ^ X(short integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -339,7 +339,7 @@ void powLonIShoI(void) {
   longInteger_t base, exponent;
   bool_t exponentIsOdd;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
   exponentIsOdd = longIntegerIsOdd(exponent);
@@ -414,7 +414,7 @@ void powLonIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ^ X(long integer) ==> X(long integer)
+ * \brief Y(short integer) ^ X(long integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -424,8 +424,7 @@ void powShoILonI(void) {
   longInteger_t base, exponent;
   bool_t exponentIsOdd;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
+  convertShortIntegerRegisterToLongInteger(REGISTER_Y, base);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
   exponentIsOdd = longIntegerIsOdd(exponent);
 
@@ -841,7 +840,7 @@ void powCo16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) ^ X(64bits integer) ==> X(real16)
+ * \brief Y(real16) ^ X(short integer) ==> X(real16)
  *
  * \param void
  * \return void
@@ -882,7 +881,7 @@ void powRe16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ^ X(real16) ==> X(real16)
+ * \brief Y(short integer) ^ X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1200,7 +1199,7 @@ void powCo16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ^ X(64bits integer) ==> X(complex16)
+ * \brief Y(complex16) ^ X(short integer) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1256,7 +1255,7 @@ void powCo16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ^ X(complex16) ==> X(complex16)
+ * \brief Y(short integer) ^ X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1620,7 +1619,7 @@ void powRm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ^ X(64bits integer) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) ^ X(short integer) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -1728,7 +1727,7 @@ void powCm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ^ X(64bits integer) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) ^ X(short integer) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -1784,7 +1783,7 @@ void powCm16Co34(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(64bits integer) ^ X(64bits integer) ==> X(64bits integer)
+ * \brief Y(short integer) ^ X(short integer) ==> X(short integer)
  *
  * \param void
  * \return void
@@ -1797,7 +1796,7 @@ void powShoIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ^ X(real34) ==> X(real34)
+ * \brief Y(short integer) ^ X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1824,7 +1823,7 @@ void powShoIRe34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) ^ X(64bits integer) ==> X(real34)
+ * \brief Y(real34) ^ X(short integer) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1865,7 +1864,7 @@ void powRe34ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ^ X(complex34) ==> X(complex34)
+ * \brief Y(short integer) ^ X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1905,7 +1904,7 @@ void powShoICo34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ^ X(64bits integer) ==> X(complex34)
+ * \brief Y(complex34) ^ X(short integer) ==> X(complex34)
  *
  * \param void
  * \return void

@@ -546,7 +546,7 @@
 #define CST_43                         517
 #define ITM_RM                         518
 #define ITM_RMQ                        519
-#define ITM_RMDR                       520
+#define ITM_RMD                        520
 #define ITM_RNORM                      521
 #define ITM_ROUND                      522
 #define ITM_ROUNDI                     523
@@ -1610,8 +1610,9 @@
 #define ITM_SIGMAx3                   1574
 #define ITM_SIGMAx4                   1575
 #define ITM_HEX                       1576
+#define ITM_IDIVR                     1577
 
-#define LAST_ITEM                     1577
+#define LAST_ITEM                     1578
 
 #define CHR_PROD_SIGN                 9999
 

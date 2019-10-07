@@ -42,4 +42,6 @@ void   WP34S_Ln1P            (const realIc_t *x, realIc_t *res);
 void   WP34S_ExpM1           (const realIc_t *x, realIc_t *res);
 void   WP34S_ComplexGamma    (const complexIc_t *zin, complexIc_t *res);
 void   WP34S_ComplexLnGamma  (const complexIc_t *zin, complexIc_t *res);
+void   WP34S_Mod             (const realIc_t *x, const realIc_t *y, realIc_t *res);
+void   WP34S_BigMod          (const realIc_t *x, const realIc_t *y, realIc_t *res);
 bool_t WP34S_RelativeError   (const realIc_t *x, const realIc_t *y, const realIc_t *tol);

@@ -144,6 +144,25 @@ void log10Re16(void) {
       #endif
     }
   }
+
+  else if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log10Re16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log10 when flag D is not set", NULL, NULL);
+      #endif
+      return;
+    }
+    else {
+      if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
+        realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+    }
+  }
+
   else {
     realIc_t x;
 
@@ -172,6 +191,7 @@ void log10Re16(void) {
       #endif
     }
   }
+
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -254,6 +274,25 @@ void log10Re34(void) {
       #endif
     }
   }
+
+  else if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function log10Re34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log10 when flag D is not set", NULL, NULL);
+      #endif
+      return;
+    }
+    else {
+      if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+        realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+    }
+  }
+
   else {
     realIc_t x;
 

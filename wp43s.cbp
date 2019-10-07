@@ -331,6 +331,12 @@
 		<Unit filename="src/testSuite/gcd.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/idiv.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/idivr.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/imaginaryPart.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1104,6 +1110,28 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/gcd.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/idiv.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/idiv.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/idivr.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/idivr.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

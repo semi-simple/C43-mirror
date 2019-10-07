@@ -156,7 +156,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   //printf("1 temp0 = "); printReal34ToConsole(&temp0); printf("\n");
   if(real34IsNegative(&temp0)) {
     *sign = -1;
-    real34ChangeSign(&temp0);
+    real34SetPositiveSign(&temp0);
   }
   else {
     *sign = 1;
@@ -176,7 +176,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   //*******************
   if(denominatorMode == DM_ANY) {
     uint64_t iPart[20], ex, bestNumer=0, bestDenom=1;
-    uint32_t invalidOperation=0;
+    uint32_t invalidOperation;
     int16_t i, j;
 
     real34_t temp1, temp4;
@@ -193,6 +193,8 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
       real34Zero(&temp1);
     }
 
+    decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
+    invalidOperation = 0;
     while(*denom < denMax && !real34IsZero(&temp1) && !invalidOperation) {
       real34Divide(const34_1, &temp1, &temp1);
       //printf("  5 1/partie_decimale = temp1 = "); printReal34ToConsole(&temp1); printf("\n");

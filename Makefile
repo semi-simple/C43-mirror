@@ -73,6 +73,7 @@ SRC_WP43S                = \
 	$(addprefix src/wp43s/mathematics/, \
 		10pow.c 2pow.c addition.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \
 		ceil.c changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cube.c cubeRoot.c \
+		idiv.c idivr.c \
 		division.c exp.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \
 		log2.c magnitude.c minusOnePow.c multiplication.c parallel.c power.c \

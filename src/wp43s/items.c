@@ -368,7 +368,7 @@ const item_t indexOfItems[] = {
 /*  244 */  { itemToBeCoded,               NOPARAM,                     "Hyper:",                                      "Hyper:",                                                                     SLS_UNCHANGED},
 /*  245 */  { fnConstant,                  21,                          STD_PLANCK_2PI,                                STD_PLANCK_2PI,                                                               SLS_ENABLED  },
 /*  246 */  { addItemToBuffer,             REGISTER_I,                  "I",                                           "I",                                                                          SLS_UNCHANGED},
-/*  247 */  { itemToBeCoded,               NOPARAM,                     "IDIV",                                        "IDIV",                                                                       SLS_UNCHANGED},
+/*  247 */  { fnIDiv,                      NOPARAM,                     "IDIV",                                        "IDIV",                                                                       SLS_ENABLED  },
 /*  248 */  { fnCvtInhgPa,                 multiply,                    "iHg" STD_RIGHT_ARROW "Pa",                    "in.Hg",                                                                      SLS_ENABLED  },
 /*  249 */  { itemToBeCoded,               NOPARAM,                     "IINTS",                                       "IINTS",                                                                      SLS_UNCHANGED},
 /*  250 */  { fnImaginaryPart,             NOPARAM,                     "IM",                                          "Im",                                                                         SLS_ENABLED  },
@@ -641,7 +641,7 @@ const item_t indexOfItems[] = {
 /*  517 */  { fnConstant,                  43,                          "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,                                  SLS_ENABLED  },
 /*  518 */  { itemToBeCoded,               NOPARAM,                     "RM",                                          "RM",                                                                         SLS_UNCHANGED},
 /*  519 */  { fnGetRoundingMode,           NOPARAM,                     "RM?",                                         "RM?",                                                                        SLS_ENABLED  },
-/*  520 */  { itemToBeCoded,               NOPARAM,                     "RMDR",                                        "RMDR",                                                                       SLS_UNCHANGED},
+/*  520 */  { itemToBeCoded,               NOPARAM,                     "RMD",                                         "RMD",                                                                        SLS_UNCHANGED},
 /*  521 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                                                      SLS_UNCHANGED},
 /*  522 */  { itemToBeCoded,               NOPARAM,                     "ROUND",                                       "ROUND",                                                                      SLS_UNCHANGED},
 /*  523 */  { itemToBeCoded,               NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                                                     SLS_UNCHANGED},
@@ -1706,235 +1706,336 @@ const item_t indexOfItems[] = {
 /* 1574 */  { fnStatSum,                   21,                          STD_SIGMA "x" STD_SUP_3,                       STD_SIGMA "x" STD_SUP_3,                                                      SLS_ENABLED  },
 /* 1575 */  { fnStatSum,                   22,                          STD_SIGMA "x" STD_SUP_4,                       STD_SIGMA "x" STD_SUP_4,                                                      SLS_ENABLED  },
 /* 1576 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "H",                                                                          SLS_UNCHANGED},
-/* 1577 */  { fnSetSetJM,                  1,                           "SET_ERPN",                                    "eRPN",                                                                       SLS_ENABLED},      //JM eRPN
-/* 1578 */  { fnSetSetJM,                  2,                           "SET_HOME_TRIPLE",                             "HOME.3",                                                                     SLS_ENABLED},      //JM HOME.3
-/* 1579 */  { fnSetSetJM,                  3,                           "SET_SHFT_4s",                                 "SH_4s",                                                                     SLS_ENABLED},      //JM SHIFT CANCEL
-/* 1580 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                                                       SLS_UNCHANGED},      //JM HOME
-/* 1581 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIGFIG",                                      "SIGFIG",                                                                     SLS_UNCHANGED},      //JM SIGFIG
-/* 1582 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                                                      SLS_UNCHANGED},      //JM ALPHA
-/* 1583 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                                                       SLS_UNCHANGED},      //JM BASE
-/* 1584 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                                                        SLS_UNCHANGED},      //JM HEX
-/* 1585 */  { fnChangeBase,                8,                           STD_RIGHT_ARROW "OCT",                         STD_RIGHT_ARROW "OCT",                                                        SLS_UNCHANGED},      //JM HEX
-/* 1586 */  { fnChangeBase,                10,                          STD_RIGHT_ARROW "DEC",                         STD_RIGHT_ARROW "DEC",                                                        SLS_UNCHANGED},      //JM HEX
-/* 1587 */  { fnChangeBase,                16,                          STD_RIGHT_ARROW "HEX",                         STD_RIGHT_ARROW "HEX",                                                        SLS_UNCHANGED},      //JM HEX
-/* 1588 */  { fnSetWordSize,               8,                           "8-BIT",                                       "8-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
-/* 1589 */  { fnSetWordSize,               16,                          "16-BIT",                                      "16-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
-/* 1590 */  { fnSetWordSize,               32,                          "32-BIT",                                      "32-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
-/* 1591 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
-/* 1592 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                                                       SLS_UNCHANGED},      //JM UNIT
-/* 1593 */  { fnShowJM,                    1,                           "eRPN?",                                       "eRPN?",                                                                       SLS_ENABLED  },     //JM SHOW
-/* 1594 */  { fnShowJM,                    2,                           "HOME.3?",                                     "HOME.3?",                                                                     SLS_ENABLED  },     //JM SHOW
-/* 1595 */  { fnShowJM,                    3,                           "SH_TIM_4s?",                                  "SH_4s?",                                                                     SLS_ENABLED  },     //JM SHOW
-/* 1596 */  { addItemToBuffer,             CHR_QOPPA,                    "",                                            STD_QOPPA,                                                                   SLS_UNCHANGED},  //JM GREEK
-/* 1597 */  { addItemToBuffer,             CHR_DIGAMMA,                  "",                                            STD_DIGAMMA,                                                                   SLS_UNCHANGED},  //JM GREEK
-/* 1598 */  { addItemToBuffer,             CHR_SAMPI,                    "",                                            STD_SAMPI,                                                                   SLS_UNCHANGED},  //JM GREEK
-/* 1599 */  { itemToBeCoded,               NOPARAM,                     "1599",                                        "1599",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1600 */  { itemToBeCoded,               NOPARAM,                     "1600",                                        "1600",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1601 */  { itemToBeCoded,               NOPARAM,                     "1601",                                        "1601",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1602 */  { itemToBeCoded,               NOPARAM,                     "1602",                                        "1602",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1603 */  { itemToBeCoded,               NOPARAM,                     "1603",                                        "1603",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1604 */  { itemToBeCoded,               NOPARAM,                     "1604",                                        "1604",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1605 */  { itemToBeCoded,               NOPARAM,                     "1605",                                        "1605",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1606 */  { itemToBeCoded,               NOPARAM,                     "1606",                                        "1606",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1607 */  { itemToBeCoded,               NOPARAM,                     "1607",                                        "1607",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1608 */  { itemToBeCoded,               NOPARAM,                     "1608",                                        "1608",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1609 */  { itemToBeCoded,               NOPARAM,                     "1609",                                        "1609",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1610 */  { itemToBeCoded,               NOPARAM,                     "1610",                                        "1610",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1611 */  { itemToBeCoded,               NOPARAM,                     "1611",                                        "1611",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1612 */  { itemToBeCoded,               NOPARAM,                     "1612",                                        "1612",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1613 */  { itemToBeCoded,               NOPARAM,                     "1613",                                        "1613",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1614 */  { itemToBeCoded,               NOPARAM,                     "1614",                                        "1614",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1615 */  { itemToBeCoded,               NOPARAM,                     "1615",                                        "1615",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1616 */  { itemToBeCoded,               NOPARAM,                     "1616",                                        "1616",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1617 */  { itemToBeCoded,               NOPARAM,                     "1617",                                        "1617",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1618 */  { itemToBeCoded,               NOPARAM,                     "1618",                                        "1618",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1619 */  { itemToBeCoded,               NOPARAM,                     "1619",                                        "1619",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1620 */  { itemToBeCoded,               NOPARAM,                     "1620",                                        "1620",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1621 */  { itemToBeCoded,               NOPARAM,                     "1621",                                        "1621",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1622 */  { itemToBeCoded,               NOPARAM,                     "1622",                                        "1622",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1623 */  { itemToBeCoded,               NOPARAM,                     "1623",                                        "1623",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1624 */  { itemToBeCoded,               NOPARAM,                     "1624",                                        "1624",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1625 */  { itemToBeCoded,               NOPARAM,                     "1625",                                        "1625",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1626 */  { itemToBeCoded,               NOPARAM,                     "1626",                                        "1626",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1627 */  { itemToBeCoded,               NOPARAM,                     "1627",                                        "1627",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1628 */  { itemToBeCoded,               NOPARAM,                     "1628",                                        "1628",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1629 */  { itemToBeCoded,               NOPARAM,                     "1629",                                        "1629",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1630 */  { itemToBeCoded,               NOPARAM,                     "1630",                                        "1630",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1631 */  { itemToBeCoded,               NOPARAM,                     "1631",                                        "1631",                                                                       SLS_UNCHANGED},  //JM GREEK
-/* 1632 */  { addItemToBuffer,             CHR_qoppa,                   "",                                            STD_qoppa,                                                                   SLS_UNCHANGED},  //JM GREEK
-/* 1633 */  { addItemToBuffer,             CHR_digamma,                 "",                                            STD_digamma,                                                                 SLS_UNCHANGED},  //JM GREEK
-/* 1634 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                                                   SLS_UNCHANGED},  //JM GREEK
-/* 1635 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                                                    SLS_UNCHANGED},   //JM CASE
-/* 1636 */  { fnBASE_Hash,      /*TEST!*/  NOPARAM,                     "##",                                          "##",                                                                        SLS_UNCHANGED},   //JM ##
-/* 1637 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "###",                                         "###",                                                                       SLS_UNCHANGED},   //JM ##
-/* 1638 */  { fnJM,                        3,                          "op_a",                                         "a",                                                                       SLS_ENABLED  },  //JM Operator a
-/* 1639 */  { fnJM,                        4,                          "op_a" STD_SUP_2,                               "a" STD_SUP_2,                                                             SLS_ENABLED  },  //JM Operator a
-/* 1640 */  { fnJM,                        5,                          "op_j",                                         "j",                                                                       SLS_ENABLED  },  //JM Operator a
-/* 1641 */  { fnSetSetJM,                  4,                           "SET_BASE_HOME",                               "HOME",                                                                     SLS_ENABLED},      //JM eRPN
-/* 1642 */  { fnSetSetJM,                  5,                           "SET_BASE_MYMENU",                             "MYMNU",                                                                    SLS_ENABLED},      //JM eRPN
-/* 1643 */  { fnSetSetJM,                  6,                           "SET_BASE_AHOME",                              STD_alpha "HOME",                                                           SLS_ENABLED},      //JM eRPN
-/* 1644 */  { fnSetSetJM,                  7,                           "SET_BASE_MYA",                                "MY" STD_alpha,                                                             SLS_ENABLED},      //JM eRPN
-/* 1645 */  { fnShowJM,                    4,                           "BASE_HOME?",                                  "HOME?",                                                                    SLS_ENABLED  },     //JM SHOW
-/* 1646 */  { fnShowJM,                    5,                           "BASE_MYMENU?",                                "MYMNU?",                                                                   SLS_ENABLED  },     //JM SHOW
-/* 1647 */  { fnShowJM,                    6,                           "BASE_AHOME?",                                 STD_alpha "HOME?",                                                             SLS_ENABLED  },     //JM SHOW
-/* 1648 */  { fnShowJM,                    7,                           "BASE_MYA?",                                   "MY" STD_alpha "?",                                                            SLS_ENABLED  },     //JM SHOW
-/* 1649 */  { fnJM,                        7,                          "YtoD",                                         "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA,           SLS_ENABLED  },  //JM EE 
-/* 1650 */  { fnJM,                        6,                          "DtoY",                                         STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y",           SLS_ENABLED  },  //JM EE 
-/* 1651 */  { fnJM,                        9,                          "AtoSYM",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "012",                                      SLS_ENABLED  },  //JM EE 
-/* 1652 */  { fnJM,                        8,                          "SYMtoA",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",                                      SLS_ENABLED  },  //JM EE 
-/* 1653 */  { itemToBeCoded,               NOPARAM,                     "ELEC.ENG",                                    "ELEC",                                                                       SLS_UNCHANGED},   //JM EE
-/* 1654 */  { fnJM,                        10,                          "e^theta_j",                                   "e^" STD_THETA "j",                                                            SLS_ENABLED  },  //JM EE 
+/* 1577 */  { fnIDivR,                     NOPARAM,                     "IDIVR",                                       "IDIVR",                                                                      SLS_ENABLED  },
+/* 1578 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1579 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1580 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1581 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1582 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1583 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1584 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1585 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1586 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1587 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1588 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1589 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1590 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1591 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1592 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1593 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                                               SLS_UNCHANGED},
+/* 1594 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1595 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1596 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1597 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1598 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1599 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1600 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1601 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1602 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1603 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1604 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1605 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1606 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1607 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1608 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1609 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1610 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1611 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1612 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1613 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1615 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1615 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1616 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1617 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1618 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1619 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1620 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1621 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1622 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1623 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1624 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1625 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1626 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1627 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1628 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1629 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1630 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1631 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1632 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1633 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1634 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1635 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1636 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1637 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1638 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1639 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1640 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1641 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1642 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1643 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1644 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1645 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1646 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1647 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1648 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1649 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1650 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1651 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1652 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1653 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1654 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1655 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1656 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1657 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1658 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1659 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1660 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1661 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1662 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1663 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1664 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1665 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1666 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1667 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1668 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1669 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1670 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1671 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1672 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1673 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1674 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1675 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1676 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1677 */  { itemToBeCoded,               NOPARAM,                     "",  "",                                                                                                                SLS_UNCHANGED},
+/* 1678 */  { fnSetSetJM,                  1,                           "SET_ERPN",                                    "eRPN",                                                                       SLS_ENABLED},      //JM eRPN
+/* 1679 */  { fnSetSetJM,                  2,                           "SET_HOME_TRIPLE",                             "HOME.3",                                                                     SLS_ENABLED},      //JM HOME.3
+/* 1680 */  { fnSetSetJM,                  3,                           "SET_SHFT_4s",                                 "SH_4s",                                                                     SLS_ENABLED},      //JM SHIFT CANCEL
+/* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                                                       SLS_UNCHANGED},      //JM HOME
+/* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIGFIG",                                      "SIGFIG",                                                                     SLS_UNCHANGED},      //JM SIGFIG
+/* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                                                      SLS_UNCHANGED},      //JM ALPHA
+/* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                                                       SLS_UNCHANGED},      //JM BASE
+/* 1685 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1686 */  { fnChangeBase,                8,                           STD_RIGHT_ARROW "OCT",                         STD_RIGHT_ARROW "OCT",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1687 */  { fnChangeBase,                10,                          STD_RIGHT_ARROW "DEC",                         STD_RIGHT_ARROW "DEC",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1688 */  { fnChangeBase,                16,                          STD_RIGHT_ARROW "HEX",                         STD_RIGHT_ARROW "HEX",                                                        SLS_UNCHANGED},      //JM HEX
+/* 1689 */  { fnSetWordSize,               8,                           "8-BIT",                                       "8-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1690 */  { fnSetWordSize,               16,                          "16-BIT",                                      "16-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1691 */  { fnSetWordSize,               32,                          "32-BIT",                                      "32-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1692 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                                                      SLS_UNCHANGED},      //JM HEX
+/* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                                                       SLS_UNCHANGED},      //JM UNIT
+/* 1694 */  { fnShowJM,                    1,                           "eRPN?",                                       "eRPN?",                                                                       SLS_ENABLED  },     //JM SHOW
+/* 1695 */  { fnShowJM,                    2,                           "HOME.3?",                                     "HOME.3?",                                                                     SLS_ENABLED  },     //JM SHOW
+/* 1696 */  { fnShowJM,                    3,                           "SH_TIM_4s?",                                  "SH_4s?",                                                                     SLS_ENABLED  },     //JM SHOW
+/* 1697 */  { addItemToBuffer,             CHR_QOPPA,                    "",                                            STD_QOPPA,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1698 */  { addItemToBuffer,             CHR_DIGAMMA,                  "",                                            STD_DIGAMMA,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1699 */  { addItemToBuffer,             CHR_SAMPI,                    "",                                            STD_SAMPI,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1700 */  { itemToBeCoded,               NOPARAM,                     "1599",                                        "1599",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1701 */  { itemToBeCoded,               NOPARAM,                     "1600",                                        "1600",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1702 */  { itemToBeCoded,               NOPARAM,                     "1601",                                        "1601",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1703 */  { itemToBeCoded,               NOPARAM,                     "1602",                                        "1602",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1704 */  { itemToBeCoded,               NOPARAM,                     "1603",                                        "1603",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1705 */  { itemToBeCoded,               NOPARAM,                     "1604",                                        "1604",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1706 */  { itemToBeCoded,               NOPARAM,                     "1605",                                        "1605",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1707 */  { itemToBeCoded,               NOPARAM,                     "1606",                                        "1606",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1708 */  { itemToBeCoded,               NOPARAM,                     "1607",                                        "1607",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1709 */  { itemToBeCoded,               NOPARAM,                     "1608",                                        "1608",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1710 */  { itemToBeCoded,               NOPARAM,                     "1609",                                        "1609",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1711 */  { itemToBeCoded,               NOPARAM,                     "1610",                                        "1610",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1712 */  { itemToBeCoded,               NOPARAM,                     "1611",                                        "1611",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1713 */  { itemToBeCoded,               NOPARAM,                     "1612",                                        "1612",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1714 */  { itemToBeCoded,               NOPARAM,                     "1613",                                        "1613",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1715 */  { itemToBeCoded,               NOPARAM,                     "1614",                                        "1614",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1716 */  { itemToBeCoded,               NOPARAM,                     "1615",                                        "1615",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1717 */  { itemToBeCoded,               NOPARAM,                     "1616",                                        "1616",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1718 */  { itemToBeCoded,               NOPARAM,                     "1617",                                        "1617",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1719 */  { itemToBeCoded,               NOPARAM,                     "1618",                                        "1618",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1720 */  { itemToBeCoded,               NOPARAM,                     "1619",                                        "1619",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1721 */  { itemToBeCoded,               NOPARAM,                     "1620",                                        "1620",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1722 */  { itemToBeCoded,               NOPARAM,                     "1621",                                        "1621",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1723 */  { itemToBeCoded,               NOPARAM,                     "1622",                                        "1622",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1724 */  { itemToBeCoded,               NOPARAM,                     "1623",                                        "1623",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1725 */  { itemToBeCoded,               NOPARAM,                     "1624",                                        "1624",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1726 */  { itemToBeCoded,               NOPARAM,                     "1625",                                        "1625",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1727 */  { itemToBeCoded,               NOPARAM,                     "1626",                                        "1626",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1728 */  { itemToBeCoded,               NOPARAM,                     "1627",                                        "1627",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1729 */  { itemToBeCoded,               NOPARAM,                     "1628",                                        "1628",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1730 */  { itemToBeCoded,               NOPARAM,                     "1629",                                        "1629",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1731 */  { itemToBeCoded,               NOPARAM,                     "1630",                                        "1630",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1732 */  { itemToBeCoded,               NOPARAM,                     "1631",                                        "1631",                                                                       SLS_UNCHANGED},  //JM GREEK
+/* 1733 */  { addItemToBuffer,             CHR_qoppa,                   "",                                            STD_qoppa,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1734 */  { addItemToBuffer,             CHR_digamma,                 "",                                            STD_digamma,                                                                 SLS_UNCHANGED},  //JM GREEK
+/* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                                                   SLS_UNCHANGED},  //JM GREEK
+/* 1736 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                                                    SLS_UNCHANGED},   //JM CASE
+/* 1737 */  { fnBASE_Hash,      /*TEST!*/  NOPARAM,                     "##",                                          "##",                                                                        SLS_UNCHANGED},   //JM ##
+/* 1738 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "###",                                         "###",                                                                       SLS_UNCHANGED},   //JM ##
+/* 1739 */  { fnJM,                        3,                          "op_a",                                         "a",                                                                       SLS_ENABLED  },  //JM Operator a
+/* 1740 */  { fnJM,                        4,                          "op_a" STD_SUP_2,                               "a" STD_SUP_2,                                                             SLS_ENABLED  },  //JM Operator a
+/* 1741 */  { fnJM,                        5,                          "op_j",                                         "j",                                                                       SLS_ENABLED  },  //JM Operator a
+/* 1742 */  { fnSetSetJM,                  4,                           "SET_BASE_HOME",                               "HOME",                                                                     SLS_ENABLED},      //JM eRPN
+/* 1743 */  { fnSetSetJM,                  5,                           "SET_BASE_MYMENU",                             "MYMNU",                                                                    SLS_ENABLED},      //JM eRPN
+/* 1744 */  { fnSetSetJM,                  6,                           "SET_BASE_AHOME",                              STD_alpha "HOME",                                                           SLS_ENABLED},      //JM eRPN
+/* 1745 */  { fnSetSetJM,                  7,                           "SET_BASE_MYA",                                "MY" STD_alpha,                                                             SLS_ENABLED},      //JM eRPN
+/* 1746 */  { fnShowJM,                    4,                           "BASE_HOME?",                                  "HOME?",                                                                    SLS_ENABLED  },     //JM SHOW
+/* 1747 */  { fnShowJM,                    5,                           "BASE_MYMENU?",                                "MYMNU?",                                                                   SLS_ENABLED  },     //JM SHOW
+/* 1748 */  { fnShowJM,                    6,                           "BASE_AHOME?",                                 STD_alpha "HOME?",                                                             SLS_ENABLED  },     //JM SHOW
+/* 1749 */  { fnShowJM,                    7,                           "BASE_MYA?",                                   "MY" STD_alpha "?",                                                            SLS_ENABLED  },     //JM SHOW
+/* 1750 */  { fnJM,                        7,                          "YtoD",                                         "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA,           SLS_ENABLED  },  //JM EE
+/* 1751 */  { fnJM,                        6,                          "DtoY",                                         STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y",           SLS_ENABLED  },  //JM EE
+/* 1752 */  { fnJM,                        9,                          "AtoSYM",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "012",                                      SLS_ENABLED  },  //JM EE
+/* 1753 */  { fnJM,                        8,                          "SYMtoA",                                       STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",                                      SLS_ENABLED  },  //JM EE
+/* 1754 */  { itemToBeCoded,               NOPARAM,                     "ELEC.ENG",                                    "ELEC",                                                                       SLS_UNCHANGED},   //JM EE
+/* 1755 */  { fnJM,                        10,                          "e^theta_j",                                   "e^" STD_THETA "j",                                                            SLS_ENABLED  },  //JM EE6
+/* 1756 */  { fnJM,                        11,                          "",                                             "STO" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE7
+/* 1757 */  { fnJM,                        12,                          "",                                             "RCL" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE8
+/* 1758 */  { fnJM,                        13,                          "",                                             "STO" STD_SPACE_3_PER_EM "V",                      SLS_ENABLED  },  //JM EE9
+/* 1759 */  { fnJM,                        14,                          "",                                             "RCL" STD_SPACE_3_PER_EM "V",                      SLS_ENABLED  },  //JM EE
+/* 1760 */  { fnJM,                        15,                          "",                                             "STO" STD_SPACE_3_PER_EM "I",                      SLS_ENABLED  },  //JM EE
+/* 1761 */  { fnJM,                        16,                          "",                                             "RCL" STD_SPACE_3_PER_EM "I",                      SLS_ENABLED  },  //JM EE
+/* 1762 */  { fnJM,                        17,                          "",                                             "V" STD_DIVIDE "I",             SLS_ENABLED  },  //JM EE
+/* 1763 */  { fnJM,                        18,                          "",                                             "I" STD_CROSS "R",              SLS_ENABLED  },  //JM EE
+/* 1764 */  { fnJM,                        19,                          "",                                             "V" STD_DIVIDE "Z",             SLS_ENABLED  },  //JM EE
+/* 1765 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",             SLS_ENABLED  },  //JM EE
+/* 1766 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                      "COMPLEX",                                                                     SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1767 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                          "CC1",                                                                         SLS_UNCHANGED},   //JM Change CC to CC1
+/* 1768 */  { fnJM,                        21,     /*up*/               "KEY_TYPCON_UP",                                ">>",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT
+/* 1769 */  { fnJM,                        22,     /*dn*/               "KEY_TYPCON_DN",                                "<<",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT
+/* 1770 */  { fnSetSetJM,                  8,                           "SH.3T",                                        "SH.3T",                                                                     SLS_ENABLED},      //JM HOME.3T
+/* 1771 */  { fnShowJM,                    8,                           "SH.3T?",                                       "SH.3T?",                                                                     SLS_ENABLED  },     //JM SHOW HOME.3T
 
-/* 1655 */  { fnJM,                        11,                          "",                                             "STO" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE 
-/* 1656 */  { fnJM,                        12,                          "",                                             "RCL" STD_SPACE_3_PER_EM "Z",                      SLS_ENABLED  },  //JM EE 
-/* 1657 */  { fnJM,                        13,                          "",                                             "STO" STD_SPACE_3_PER_EM "V",                      SLS_ENABLED  },  //JM EE 
-/* 1658 */  { fnJM,                        14,                          "",                                             "RCL" STD_SPACE_3_PER_EM "V",                      SLS_ENABLED  },  //JM EE 
-/* 1659 */  { fnJM,                        15,                          "",                                             "STO" STD_SPACE_3_PER_EM "I",                      SLS_ENABLED  },  //JM EE 
-/* 1660 */  { fnJM,                        16,                          "",                                             "RCL" STD_SPACE_3_PER_EM "I",                      SLS_ENABLED  },  //JM EE 
-/* 1661 */  { fnJM,                        17,                          "",                                             "V" STD_DIVIDE "I",             SLS_ENABLED  },  //JM EE 
-/* 1662 */  { fnJM,                        18,                          "",                                             "I" STD_CROSS "R",              SLS_ENABLED  },  //JM EE 
-/* 1663 */  { fnJM,                        19,                          "",                                             "V" STD_DIVIDE "Z",             SLS_ENABLED  },  //JM EE 
-/* 1664 */  { fnJM,                        20,                          "",                                             "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",             SLS_ENABLED  },  //JM EE 
-/* 1665 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                      "COMPLEX",                                                                     SLS_UNCHANGED},   //JM Change CC to COMPLEX
-/* 1666 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                          "CC1",                                                                         SLS_UNCHANGED},   //JM Change CC to CC1
-/* 1667 */  { fnJM,                        21,     /*up*/               "KEY_TYPCON_UP",                                ">>",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
-/* 1668 */  { fnJM,                        22,     /*dn*/               "KEY_TYPCON_DN",                                "<<",                                                                         SLS_ENABLED  },  //JM TYPE CONVERT 
-/* 1669 */  { fnSetSetJM,                  8,                           "SH.3T",                                        "SH.3T",                                                                     SLS_ENABLED},      //JM HOME.3T
-/* 1670 */  { fnShowJM,                    8,                           "SH.3T?",                                       "SH.3T?",                                                                     SLS_ENABLED  },     //JM SHOW HOME.3T
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                    "M_ASN",                                                                       SLS_UNCHANGED},   //JM USER
 
-/* 1671 */  { itemToBeCoded,               NOPARAM,                     "MNUASM",                                       "M_ASM",                                                                        SLS_UNCHANGED}, //JM USER
-
-/*1672*/  { fnJMUSERmode, 256+0,         "KEY 00U",               "K00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1673*/  { fnJMUSERmode, 256+1,         "KEY f00U",               "Kf00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1674*/  { fnJMUSERmode, 256+2,         "KEY g00U",               "Kg00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1675*/  { fnJMUSERmode, 256+3,         "KEY 01U",               "K01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1676*/  { fnJMUSERmode, 256+4,         "KEY f01U",               "Kf01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1677*/  { fnJMUSERmode, 256+5,         "KEY g01U",               "Kg01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1678*/  { fnJMUSERmode, 256+6,         "KEY 02U",               "K02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1679*/  { fnJMUSERmode, 256+7,         "KEY f02U",               "Kf02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1680*/  { fnJMUSERmode, 256+8,         "KEY g02U",               "Kg02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1681*/  { fnJMUSERmode, 256+9,         "KEY 03U",               "K03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1682*/  { fnJMUSERmode, 256+10,         "KEY f03U",               "Kf03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1683*/  { fnJMUSERmode, 256+11,         "KEY g03U",               "Kg03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1684*/  { fnJMUSERmode, 256+12,         "KEY 04U",               "K04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1685*/  { fnJMUSERmode, 256+13,         "KEY f04U",               "Kf04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1686*/  { fnJMUSERmode, 256+14,         "KEY g04U",               "Kg04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1687*/  { fnJMUSERmode, 256+15,         "KEY 05U",               "K05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1688*/  { fnJMUSERmode, 256+16,         "KEY f05U",               "Kf05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1689*/  { fnJMUSERmode, 256+17,         "KEY g05U",               "Kg05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1690*/  { fnJMUSERmode, 256+18,         "KEY 06U",               "K06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1691*/  { fnJMUSERmode, 256+19,         "KEY f06U",               "Kf06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1692*/  { fnJMUSERmode, 256+20,         "KEY g06U",               "Kg06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1693*/  { fnJMUSERmode, 256+21,         "KEY 07U",               "K07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1694*/  { fnJMUSERmode, 256+22,         "KEY f07U",               "Kf07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1695*/  { fnJMUSERmode, 256+23,         "KEY g07U",               "Kg07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1696*/  { fnJMUSERmode, 256+24,         "KEY 08U",               "K08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1697*/  { fnJMUSERmode, 256+25,         "KEY f08U",               "Kf08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1698*/  { fnJMUSERmode, 256+26,         "KEY g08U",               "Kg08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1699*/  { fnJMUSERmode, 256+27,         "KEY 09U",               "K09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1700*/  { fnJMUSERmode, 256+28,         "KEY f09U",               "Kf09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1701*/  { fnJMUSERmode, 256+29,         "KEY g09U",               "Kg09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1702*/  { fnJMUSERmode, 256+30,         "KEY 10U",               "K10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1703*/  { fnJMUSERmode, 256+31,         "KEY f10U",               "Kf10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1704*/  { fnJMUSERmode, 256+32,         "KEY g10U",               "Kg10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1705*/  { fnJMUSERmode, 256+33,         "KEY 11U",               "K11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1706*/  { fnJMUSERmode, 256+34,         "KEY f11U",               "Kf11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1707*/  { fnJMUSERmode, 256+35,         "KEY g11U",               "Kg11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1708*/  { fnJMUSERmode, 256+36,         "KEY 12U",               "K12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1709*/  { fnJMUSERmode, 256+37,         "KEY f12U",               "Kf12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1710*/  { fnJMUSERmode, 256+38,         "KEY g12U",               "Kg12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1711*/  { fnJMUSERmode, 256+39,         "KEY 13U",               "K13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1712*/  { fnJMUSERmode, 256+40,         "KEY f13U",               "Kf13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1713*/  { fnJMUSERmode, 256+41,         "KEY g13U",               "Kg13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1714*/  { fnJMUSERmode, 256+42,         "KEY 14U",               "K14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1715*/  { fnJMUSERmode, 256+43,         "KEY f14U",               "Kf14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1716*/  { fnJMUSERmode, 256+44,         "KEY g14U",               "Kg14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1717*/  { fnJMUSERmode, 256+45,         "KEY 15U",               "K15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1718*/  { fnJMUSERmode, 256+46,         "KEY f15U",               "Kf15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1719*/  { fnJMUSERmode, 256+47,         "KEY g15U",               "Kg15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1720*/  { fnJMUSERmode, 256+48,         "KEY 16U",               "K16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1721*/  { fnJMUSERmode, 256+49,         "KEY f16U",               "Kf16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1722*/  { fnJMUSERmode, 256+50,         "KEY g16U",               "Kg16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1723*/  { fnJMUSERmode, 256+51,         "KEY 17U",               "K17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1724*/  { fnJMUSERmode, 256+52,         "KEY f17U",               "Kf17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1725*/  { fnJMUSERmode, 256+53,         "KEY g17U",               "Kg17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1726*/  { fnJMUSERmode, 256+54,         "KEY 18U",               "K18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1727*/  { fnJMUSERmode, 256+55,         "KEY f18U",               "Kf18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1728*/  { fnJMUSERmode, 256+56,         "KEY g18U",               "Kg18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1729*/  { fnJMUSERmode, 256+57,         "KEY 19U",               "K19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1730*/  { fnJMUSERmode, 256+58,         "KEY f19U",               "Kf19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1731*/  { fnJMUSERmode, 256+59,         "KEY g19U",               "Kg19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1732*/  { fnJMUSERmode, 256+60,         "KEY 20U",               "K20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1733*/  { fnJMUSERmode, 256+61,         "KEY f20U",               "Kf20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1734*/  { fnJMUSERmode, 256+62,         "KEY g20U",               "Kg20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1735*/  { fnJMUSERmode, 256+63,         "KEY 21U",               "K21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1736*/  { fnJMUSERmode, 256+64,         "KEY f21U",               "Kf21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1737*/  { fnJMUSERmode, 256+65,         "KEY g21U",               "Kg21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1738*/  { fnJMUSERmode, 256+66,         "KEY 22U",               "K22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1739*/  { fnJMUSERmode, 256+67,         "KEY f22U",               "Kf22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1740*/  { fnJMUSERmode, 256+68,         "KEY g22U",               "Kg22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1741*/  { fnJMUSERmode, 256+69,         "KEY 23U",               "K23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1742*/  { fnJMUSERmode, 256+70,         "KEY f23U",               "Kf23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1743*/  { fnJMUSERmode, 256+71,         "KEY g23U",               "Kg23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1744*/  { fnJMUSERmode, 256+72,         "KEY 24U",               "K24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1745*/  { fnJMUSERmode, 256+73,         "KEY f24U",               "Kf24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1746*/  { fnJMUSERmode, 256+74,         "KEY g24U",               "Kg24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1747*/  { fnJMUSERmode, 256+75,         "KEY 25U",               "K25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1748*/  { fnJMUSERmode, 256+76,         "KEY f25U",               "Kf25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1749*/  { fnJMUSERmode, 256+77,         "KEY g25U",               "Kg25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1750*/  { fnJMUSERmode, 256+78,         "KEY 26U",               "K26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1751*/  { fnJMUSERmode, 256+79,         "KEY f26U",               "Kf26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1752*/  { fnJMUSERmode, 256+80,         "KEY g26U",               "Kg26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1753*/  { fnJMUSERmode, 256+81,         "KEY 27U",               "K27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1754*/  { fnJMUSERmode, 256+82,         "KEY f27U",               "Kf27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1755*/  { fnJMUSERmode, 256+83,         "KEY g27U",               "Kg27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1756*/  { fnJMUSERmode, 256+84,         "KEY 28U",               "K28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1757*/  { fnJMUSERmode, 256+85,         "KEY f28U",               "Kf28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1758*/  { fnJMUSERmode, 256+86,         "KEY g28U",               "Kg28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1759*/  { fnJMUSERmode, 256+87,         "KEY 29U",               "K29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1760*/  { fnJMUSERmode, 256+88,         "KEY f29U",               "Kf29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1761*/  { fnJMUSERmode, 256+89,         "KEY g29U",               "Kg29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1762*/  { fnJMUSERmode, 256+90,         "KEY 30U",               "K30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1763*/  { fnJMUSERmode, 256+91,         "KEY f30U",               "Kf30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1764*/  { fnJMUSERmode, 256+92,         "KEY g30U",               "Kg30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1765*/  { fnJMUSERmode, 256+93,         "KEY 31U",               "K31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1766*/  { fnJMUSERmode, 256+94,         "KEY f31U",               "Kf31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1767*/  { fnJMUSERmode, 256+95,         "KEY g31U",               "Kg31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1768*/  { fnJMUSERmode, 256+96,         "KEY 32U",               "K32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1769*/  { fnJMUSERmode, 256+97,         "KEY f32U",               "Kf32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1770*/  { fnJMUSERmode, 256+98,         "KEY g32U",               "Kg32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1771*/  { fnJMUSERmode, 256+99,         "KEY 33U",               "K33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1772*/  { fnJMUSERmode, 256+100,         "KEY f33U",               "Kf33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1773*/  { fnJMUSERmode, 256+101,         "KEY g33U",               "Kg33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1774*/  { fnJMUSERmode, 256+102,         "KEY 34U",               "K34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1775*/  { fnJMUSERmode, 256+103,         "KEY f34U",               "Kf34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1776*/  { fnJMUSERmode, 256+104,         "KEY g34U",               "Kg34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1777*/  { fnJMUSERmode, 256+105,         "KEY 35U",               "K35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1778*/  { fnJMUSERmode, 256+106,         "KEY f35U",               "Kf35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1779*/  { fnJMUSERmode, 256+107,         "KEY g35U",               "Kg35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1780*/  { fnJMUSERmode, 256+108,         "KEY 36U",               "K36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1781*/  { fnJMUSERmode, 256+109,         "KEY f36U",               "Kf36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
-/*1782*/  { fnJMUSERmode, 256+110,         "KEY g36U",               "Kg36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1773*/  { fnJMUSERmode, 256+  0,         "KEY  00U",               "K_00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1774*/  { fnJMUSERmode, 256+  1,         "KEY f00U",               "Kf00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1775*/  { fnJMUSERmode, 256+  2,         "KEY g00U",               "Kg00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1776*/  { fnJMUSERmode, 256+  3,         "KEY 01U",               "K_01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1777*/  { fnJMUSERmode, 256+  4,         "KEY f01U",               "Kf01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1778*/  { fnJMUSERmode, 256+  5,         "KEY g01U",               "Kg01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1779*/  { fnJMUSERmode, 256+  6,         "KEY 02U",               "K_02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1780*/  { fnJMUSERmode, 256+  7,         "KEY f02U",               "Kf02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1781*/  { fnJMUSERmode, 256+  8,         "KEY g02U",               "Kg02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1782*/  { fnJMUSERmode, 256+  9,         "KEY 03U",               "K_03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1783*/  { fnJMUSERmode, 256+ 10,         "KEY f03U",               "Kf03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1784*/  { fnJMUSERmode, 256+ 11,         "KEY g03U",               "Kg03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1785*/  { fnJMUSERmode, 256+ 12,         "KEY 04U",               "K_04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1786*/  { fnJMUSERmode, 256+ 13,         "KEY f04U",               "Kf04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1787*/  { fnJMUSERmode, 256+ 14,         "KEY g04U",               "Kg04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1788*/  { fnJMUSERmode, 256+ 15,         "KEY 05U",               "K_05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1789*/  { fnJMUSERmode, 256+ 16,         "KEY f05U",               "Kf05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1790*/  { fnJMUSERmode, 256+ 17,         "KEY g05U",               "Kg05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1791*/  { fnJMUSERmode, 256+ 18,         "KEY 06U",               "K_06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1792*/  { fnJMUSERmode, 256+ 19,         "KEY f06U",               "Kf06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1793*/  { fnJMUSERmode, 256+ 20,         "KEY g06U",               "Kg06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1794*/  { fnJMUSERmode, 256+ 21,         "KEY 07U",               "K_07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1795*/  { fnJMUSERmode, 256+ 22,         "KEY f07U",               "Kf07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1796*/  { fnJMUSERmode, 256+ 23,         "KEY g07U",               "Kg07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1797*/  { fnJMUSERmode, 256+ 24,         "KEY 08U",               "K_08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1798*/  { fnJMUSERmode, 256+ 25,         "KEY f08U",               "Kf08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1799*/  { fnJMUSERmode, 256+ 26,         "KEY g08U",               "Kg08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1800*/  { fnJMUSERmode, 256+ 27,         "KEY 09U",               "K_09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1801*/  { fnJMUSERmode, 256+ 28,         "KEY f09U",               "Kf09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1802*/  { fnJMUSERmode, 256+ 29,         "KEY g09U",               "Kg09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1803*/  { fnJMUSERmode, 256+ 30,         "KEY 10U",               "K_10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1804*/  { fnJMUSERmode, 256+ 31,         "KEY f10U",               "Kf10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1805*/  { fnJMUSERmode, 256+ 32,         "KEY g10U",               "Kg10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1806*/  { fnJMUSERmode, 256+ 33,         "KEY 11U",               "K_11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1807*/  { fnJMUSERmode, 256+ 34,         "KEY f11U",               "Kf11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1808*/  { fnJMUSERmode, 256+ 35,         "KEY g11U",               "Kg11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1809*/  { fnJMUSERmode, 256+ 36,         "KEY 12U",               "K_12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1810*/  { fnJMUSERmode, 256+ 37,         "KEY f12U",               "Kf12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1811*/  { fnJMUSERmode, 256+ 38,         "KEY g12U",               "Kg12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1812*/  { fnJMUSERmode, 256+ 39,         "KEY 13U",               "K_13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1813*/  { fnJMUSERmode, 256+ 40,         "KEY f13U",               "Kf13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1814*/  { fnJMUSERmode, 256+ 41,         "KEY g13U",               "Kg13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1815*/  { fnJMUSERmode, 256+ 42,         "KEY 14U",               "K_14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1816*/  { fnJMUSERmode, 256+ 43,         "KEY f14U",               "Kf14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1817*/  { fnJMUSERmode, 256+ 44,         "KEY g14U",               "Kg14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1818*/  { fnJMUSERmode, 256+ 45,         "KEY 15U",               "K_15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1819*/  { fnJMUSERmode, 256+ 46,         "KEY f15U",               "Kf15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1820*/  { fnJMUSERmode, 256+ 47,         "KEY g15U",               "Kg15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1821*/  { fnJMUSERmode, 256+ 48,         "KEY 16U",               "K_16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1822*/  { fnJMUSERmode, 256+ 49,         "KEY f16U",               "Kf16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1823*/  { fnJMUSERmode, 256+ 50,         "KEY g16U",               "Kg16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1824*/  { fnJMUSERmode, 256+ 51,         "KEY 17U",               "K_17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1825*/  { fnJMUSERmode, 256+ 52,         "KEY f17U",               "Kf17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1826*/  { fnJMUSERmode, 256+ 53,         "KEY g17U",               "Kg17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1827*/  { fnJMUSERmode, 256+ 54,         "KEY 18U",               "K_18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1828*/  { fnJMUSERmode, 256+ 55,         "KEY f18U",               "Kf18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1829*/  { fnJMUSERmode, 256+ 56,         "KEY g18U",               "Kg18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1830*/  { fnJMUSERmode, 256+ 57,         "KEY 19U",               "K_19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1831*/  { fnJMUSERmode, 256+ 58,         "KEY f19U",               "Kf19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1832*/  { fnJMUSERmode, 256+ 59,         "KEY g19U",               "Kg19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1833*/  { fnJMUSERmode, 256+ 60,         "KEY 20U",               "K_20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1834*/  { fnJMUSERmode, 256+ 61,         "KEY f20U",               "Kf20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1835*/  { fnJMUSERmode, 256+ 62,         "KEY g20U",               "Kg20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1836*/  { fnJMUSERmode, 256+ 63,         "KEY 21U",               "K_21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1837*/  { fnJMUSERmode, 256+ 64,         "KEY f21U",               "Kf21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1838*/  { fnJMUSERmode, 256+ 65,         "KEY g21U",               "Kg21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1839*/  { fnJMUSERmode, 256+ 66,         "KEY 22U",               "K_22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1840*/  { fnJMUSERmode, 256+ 67,         "KEY f22U",               "Kf22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1841*/  { fnJMUSERmode, 256+ 68,         "KEY g22U",               "Kg22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1842*/  { fnJMUSERmode, 256+ 69,         "KEY 23U",               "K_23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1843*/  { fnJMUSERmode, 256+ 70,         "KEY f23U",               "Kf23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1844*/  { fnJMUSERmode, 256+ 71,         "KEY g23U",               "Kg23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1845*/  { fnJMUSERmode, 256+ 72,         "KEY 24U",               "K_24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1846*/  { fnJMUSERmode, 256+ 73,         "KEY f24U",               "Kf24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1847*/  { fnJMUSERmode, 256+ 74,         "KEY g24U",               "Kg24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1848*/  { fnJMUSERmode, 256+ 75,         "KEY 25U",               "K_25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1849*/  { fnJMUSERmode, 256+ 76,         "KEY f25U",               "Kf25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1850*/  { fnJMUSERmode, 256+ 77,         "KEY g25U",               "Kg25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1851*/  { fnJMUSERmode, 256+ 78,         "KEY 26U",               "K_26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1852*/  { fnJMUSERmode, 256+ 79,         "KEY f26U",               "Kf26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1853*/  { fnJMUSERmode, 256+ 80,         "KEY g26U",               "Kg26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1854*/  { fnJMUSERmode, 256+ 81,         "KEY 27U",               "K_27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1855*/  { fnJMUSERmode, 256+ 82,         "KEY f27U",               "Kf27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1856*/  { fnJMUSERmode, 256+ 83,         "KEY g27U",               "Kg27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1857*/  { fnJMUSERmode, 256+ 84,         "KEY 28U",               "K_28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1858*/  { fnJMUSERmode, 256+ 85,         "KEY f28U",               "Kf28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1859*/  { fnJMUSERmode, 256+ 86,         "KEY g28U",               "Kg28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1860*/  { fnJMUSERmode, 256+ 87,         "KEY 29U",               "K_29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1861*/  { fnJMUSERmode, 256+ 88,         "KEY f29U",               "Kf29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1862*/  { fnJMUSERmode, 256+ 89,         "KEY g29U",               "Kg29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1863*/  { fnJMUSERmode, 256+ 90,         "KEY 30U",               "K_30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1864*/  { fnJMUSERmode, 256+ 91,         "KEY f30U",               "Kf30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1865*/  { fnJMUSERmode, 256+ 92,         "KEY g30U",               "Kg30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1866*/  { fnJMUSERmode, 256+ 93,         "KEY 31U",               "K_31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1867*/  { fnJMUSERmode, 256+ 94,         "KEY f31U",               "Kf31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1868*/  { fnJMUSERmode, 256+ 95,         "KEY g31U",               "Kg31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1869*/  { fnJMUSERmode, 256+ 96,         "KEY 32U",               "K_32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1870*/  { fnJMUSERmode, 256+ 97,         "KEY f32U",               "Kf32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1871*/  { fnJMUSERmode, 256+ 98,         "KEY g32U",               "Kg32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1872*/  { fnJMUSERmode, 256+ 99,         "KEY 33U",               "K_33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1873*/  { fnJMUSERmode, 256+100,         "KEY f33U",               "Kf33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1874*/  { fnJMUSERmode, 256+101,         "KEY g33U",               "Kg33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1875*/  { fnJMUSERmode, 256+102,         "KEY 34U",               "K_34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1876*/  { fnJMUSERmode, 256+103,         "KEY f34U",               "Kf34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1877*/  { fnJMUSERmode, 256+104,         "KEY g34U",               "Kg34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1878*/  { fnJMUSERmode, 256+105,         "KEY 35U",               "K_35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1879*/  { fnJMUSERmode, 256+106,         "KEY f35U",               "Kf35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1880*/  { fnJMUSERmode, 256+107,         "KEY g35U",               "Kg35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1881*/  { fnJMUSERmode, 256+108,         "KEY 36U",               "K_36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1882*/  { fnJMUSERmode, 256+109,         "KEY f36U",               "Kf36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1883*/  { fnJMUSERmode, 256+110,         "KEY g36U",               "Kg36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 
 
-/*1783*/  { fnJMUSERmode, 0,         "KEY 00N",               "K00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1784*/  { fnJMUSERmode, 1,         "KEY f00N",               "Kf00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1785*/  { fnJMUSERmode, 2,         "KEY g00N",               "Kg00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1786*/  { fnJMUSERmode, 27,         "KEY 09N",               "K09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1787*/  { fnJMUSERmode, 28,         "KEY f09N",               "Kf09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1788*/  { fnJMUSERmode, 29,         "KEY g09N",               "Kg09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1789*/  { fnJMUSERmode, 30,         "KEY 10N",               "K10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1790*/  { fnJMUSERmode, 31,         "KEY f10N",               "Kf10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1791*/  { fnJMUSERmode, 32,         "KEY g10N",               "Kg10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1792*/  { fnJMUSERmode, 33,         "KEY 11N",               "K11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1793*/  { fnJMUSERmode, 34,         "KEY f11N",               "Kf11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1794*/  { fnJMUSERmode, 35,         "KEY g11N",               "Kg11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1795*/  { fnJMUSERmode, 36,         "KEY 12N",               "K12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1796*/  { fnJMUSERmode, 37,         "KEY f12N",               "Kf12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1797*/  { fnJMUSERmode, 38,         "KEY g12N",               "Kg12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1798*/  { fnJMUSERmode, 81,         "KEY 27N",               "K27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1799*/  { fnJMUSERmode, 82,         "KEY f27N",               "Kf27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1800*/  { fnJMUSERmode, 83,         "KEY g27N",               "Kg27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-  
-/* 1801 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN 
+/*1884*/  { fnJMUSERmode,   0,         "KEY 00N",               "K_00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1885*/  { fnJMUSERmode,   1,         "KEY f00N",               "Kf00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1886*/  { fnJMUSERmode,   2,         "KEY g00N",               "Kg00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1887*/  { fnJMUSERmode,  27,         "KEY 09N",               "K_09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1888*/  { fnJMUSERmode,  28,         "KEY f09N",               "Kf09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1889*/  { fnJMUSERmode,  29,         "KEY g09N",               "Kg09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1890*/  { fnJMUSERmode,  30,         "KEY 10N",               "K_10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1891*/  { fnJMUSERmode,  31,         "KEY f10N",               "Kf10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1892*/  { fnJMUSERmode,  32,         "KEY g10N",               "Kg10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1893*/  { fnJMUSERmode,  33,         "KEY 11N",               "K_11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1894*/  { fnJMUSERmode,  34,         "KEY f11N",               "Kf11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1895*/  { fnJMUSERmode,  35,         "KEY g11N",               "Kg11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1896*/  { fnJMUSERmode,  36,         "KEY 12N",               "K_12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1897*/  { fnJMUSERmode,  37,         "KEY f12N",               "Kf12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1898*/  { fnJMUSERmode,  38,         "KEY g12N",               "Kg12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1899*/  { fnJMUSERmode,  81,         "KEY 27N",               "K_27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1900*/  { fnJMUSERmode,  82,         "KEY f27N",               "Kf27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+/*1901*/  { fnJMUSERmode,  83,         "KEY g27N",               "Kg27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
+
+
+/* 1902 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
 };

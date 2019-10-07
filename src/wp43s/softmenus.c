@@ -460,11 +460,6 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
 
 
 const int16_t menu_ASN[]        = { 
-      #ifdef JM_KBD_RAM
-      K_00N, K_09N, K_10N, K_11N, K_12N, K_27N,  //JM USER
-      Kf00N, Kf09N, Kf10N, Kf11N, Kf12N, Kf27N,  //JM USER
-      Kg00N, Kg09N, Kg10N, Kg11N, Kg12N, Kg27N,  //JM USER
-      #endif
       K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER
       Kf00U, Kf01U, Kf02U, Kf03U, Kf04U, Kf05U,  //JM USER
       Kg00U, Kg01U, Kg02U, Kg03U, Kg04U, Kg05U,  //JM USER
@@ -485,8 +480,15 @@ const int16_t menu_ASN[]        = {
       Kg27U, Kg28U, Kg29U, Kg30U, Kg31U,   ITM_NULL,  //JM USER
       K_32U, K_33U, K_34U, K_35U, K_36U,   ITM_NULL,  //JM USER
       Kf32U, Kf33U, Kf34U, Kf35U, Kf36U,   ITM_NULL,  //JM USER
-      Kg32U, Kg33U, Kg34U, Kg35U, Kg36U,   ITM_NULL };  //JM USER
-      
+      Kg32U, Kg33U, Kg34U, Kg35U, Kg36U,   ITM_NULL  //JM USER
+      #ifdef JM_KBD_RAM
+      ,
+      K_00N, K_09N, K_10N, K_11N, K_12N, K_27N,  //JM USER
+      Kf00N, Kf09N, Kf10N, Kf11N, Kf12N, Kf27N,  //JM USER
+      Kg00N, Kg09N, Kg10N, Kg11N, Kg12N, Kg27N  //JM USER
+      #endif
+      };
+     
 
 
 const int16_t menu_HOME[]        = {

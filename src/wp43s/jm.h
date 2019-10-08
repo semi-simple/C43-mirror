@@ -47,7 +47,7 @@ Modes available in the mode menu:
 #define JM_3_SHIFT_CUTOFF 6 //100ms
 
 
-#define JM_KBD_RAM //JM ASN_USER - Copy to kbd_std array to RAM
+//#define JM_KBD_RAM //JM ASN_USER - Copy to kbd_std array to RAM
 
 //keyboard.c   
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu

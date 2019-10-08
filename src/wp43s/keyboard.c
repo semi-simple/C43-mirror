@@ -366,7 +366,15 @@ void btnPressed(void *notUsed, void *data) {
 
 
   else {
-    int16_t item = determineItem(key);
+                    //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE   \ / 
+    int16_t item;
+    if ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) ) {
+      printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
+      item = -MNU_TRI;
+    } else {
+      item = determineItem(key);
+    }
+                    //JM                                                    ^^
 
     if(item == CHR_PROD_SIGN) {
       item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);

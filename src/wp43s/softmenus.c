@@ -81,7 +81,8 @@ const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,     
                                      ITM_CUBEROOT,                  ITM_XTHROOT,                ITM_NULL,                 ITM_2X,                ITM_EX1,                     ITM_NULL,                           //JM re-arranged menu. Added YˆX to follow DM42 keyboard. Swapped YˆX and Yˆ(1/X). Re-aligned with 42S keys.
                                      ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
 
-const int16_t menu_TRI[]         = { ITM_toREC,                     ITM_toPOL,                  ITM_pi,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
+const int16_t menu_TRI[]         = { ITM_sin,                        ITM_cos,                    ITM_tan,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
+//                                   ITM_toREC,                     ITM_toPOL,                  ITM_pi,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM re-arranged menu TRIG menu
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };    //JM re-arranged menu TRIG menu
 
@@ -469,7 +470,7 @@ const int16_t menu_ASN[]        = {
       K_12U, K_13U, K_14U, K_15U, K_16U,   ITM_NULL,  //JM USER
       Kf12U, Kf13U, Kf14U, Kf15U, Kf16U,   ITM_NULL,  //JM USER
       Kg12U, Kg13U, Kg14U, Kg15U, Kg16U,   ITM_NULL,  //JM USER
-      K_17U, K_18U, K_19U, K_20U, K_21U,   ITM_NULL,  //JM USER
+/*      K_17U, K_18U, K_19U, K_20U, K_21U,   ITM_NULL,  //JM USER
       Kf17U, Kf18U, Kf19U, Kf20U, Kf21U,   ITM_NULL,  //JM USER
       Kg17U, Kg18U, Kg19U, Kg20U, Kg21U,   ITM_NULL,  //JM USER
       K_22U, K_23U, K_24U, K_25U, K_26U,   ITM_NULL,  //JM USER
@@ -481,6 +482,7 @@ const int16_t menu_ASN[]        = {
       K_32U, K_33U, K_34U, K_35U, K_36U,   ITM_NULL,  //JM USER
       Kf32U, Kf33U, Kf34U, Kf35U, Kf36U,   ITM_NULL,  //JM USER
       Kg32U, Kg33U, Kg34U, Kg35U, Kg36U,   ITM_NULL  //JM USER
+ */
       #ifdef JM_KBD_RAM
       ,
       K_00N, K_09N, K_10N, K_11N, K_12N, K_27N,  //JM USER

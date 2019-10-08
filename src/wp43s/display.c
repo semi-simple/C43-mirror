@@ -693,7 +693,7 @@ if(SigFigMode == 0) {                                                           
         SigFigTmp = 0;                                                                         //JM SIGFIG
         SigFigCnt = 0;                                                                         //JM SIGFIG
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) {
-          if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+          if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
             memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
@@ -780,7 +780,7 @@ if(SigFigMode == 0) {                                                           
 
     // Significant digits
     for(digitCount=-1, digitPointer=firstDigit+1; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
@@ -793,7 +793,7 @@ if(SigFigMode == 0) {                                                           
 
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
@@ -872,7 +872,7 @@ if(SigFigMode == 0) {                                                           
 
     // Digits after radix mark
     for(digitCount=-1, digitPointer=firstDigit; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
@@ -885,7 +885,7 @@ if(SigFigMode == 0) {                                                           
 
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
@@ -1220,9 +1220,9 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     realIcMultiply(&temp, const_100, &temp);
     realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
 
-    fs = realIcToUInt32(&temp);
-    s  = realIcToUInt32(&seconds);
-    m  = realIcToUInt32(&minutes);
+    realIcToUInt32(&temp, fs);
+    realIcToUInt32(&seconds, s);
+    realIcToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1302,9 +1302,9 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     realIcMultiply(&temp, const_100, &temp);
     realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
 
-    fs = realIcToUInt32(&temp);
-    s  = realIcToUInt32(&seconds);
-    m  = realIcToUInt32(&minutes);
+    realIcToUInt32(&temp, fs);
+    realIcToUInt32(&seconds, s);
+    realIcToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;

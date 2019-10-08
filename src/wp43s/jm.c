@@ -121,9 +121,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
  * \return void                                     //JM LastX
  ***********************************************/   //JM LastX
 void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
-                                                    //JM LastX
-  reg[REGISTER_X] = reg[REGISTER_L];                //JM LastX
-  refreshRegisterLine(REGISTER_X);                  //JM LastX
+  fnRecall(REGISTER_L);                             //JM LastX
 }                                                   //JM LastX
 
 
@@ -797,7 +795,14 @@ void JM_convertReal16ToShortInteger(uint16_t confirmation) {
      }
      else {
        convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-       convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X); 
+       
+       //setRegisterTag(REGISTER_X,10);
+       longInteger_t lgInt;
+	   convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+	   convertLongIntegerToShortIntegerRegister(lgInt, 10, REGISTER_X);
+	   longIntegerFree(lgInt);
+
+       //convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X); 
      }
    }
 }

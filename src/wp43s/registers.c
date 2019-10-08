@@ -99,13 +99,13 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
  ***********************************************/
 void *getRegisterDataPointer(calcRegister_t regist) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
-    return RAMPTR_TO_MEMPTR(reg[regist].dataPointer);
+    return WP43SMEMPTR_TO_PCMEMPTR(reg[regist].dataPointer);
   }
   else if(regist < 1000) { // Local register
     if(numberOfLocalRegisters > 0) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < numberOfLocalRegisters) {
-        return RAMPTR_TO_MEMPTR(POINTER_TO_LOCAL_REGISTER(regist)->dataPointer);
+        return WP43SMEMPTR_TO_PCMEMPTR(POINTER_TO_LOCAL_REGISTER(regist)->dataPointer);
       }
       #ifdef PC_BUILD
       else {
@@ -125,7 +125,7 @@ void *getRegisterDataPointer(calcRegister_t regist) {
     if(numberOfNamedVariables > 0) {
       regist -= 1000;
       if(regist < numberOfNamedVariables) {
-        return RAMPTR_TO_MEMPTR(POINTER_TO_NAMED_VARIABLE(regist)->dataPointer);
+        return WP43SMEMPTR_TO_PCMEMPTR(POINTER_TO_NAMED_VARIABLE(regist)->dataPointer);
       }
       #ifdef PC_BUILD
       else {
@@ -141,7 +141,7 @@ void *getRegisterDataPointer(calcRegister_t regist) {
   }
   else if(regist < 3000) { // Saved stack register
     if(regist <= LAST_SAVED_REGISTER) {
-      return RAMPTR_TO_MEMPTR(savedStackRegister[regist - SAVED_REGISTER_X].dataPointer);
+      return WP43SMEMPTR_TO_PCMEMPTR(savedStackRegister[regist - SAVED_REGISTER_X].dataPointer);
     }
     #ifdef PC_BUILD
     else {
@@ -378,7 +378,7 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
  * \return void
  ***********************************************/
 void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
-  uint32_t dataPointer = MEMPTR_TO_RAMPTR(memPtr);
+  uint32_t dataPointer = PCMEMPTR_TO_WP43SMEMPTR(memPtr);
 
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
     reg[regist].dataPointer = dataPointer;
@@ -558,7 +558,7 @@ void setRegisterNamePointer(calcRegister_t regist, void *namePointer) {
     if(numberOfNamedVariables > 0) {
       regist -= 1000;
       if(regist < numberOfNamedVariables) {
-        *POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist) = MEMPTR_TO_RAMPTR(namePointer) >> 1;
+        *POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist) = PCMEMPTR_TO_WP43SMEMPTR(namePointer) >> 1;
       }
       else {
         sprintf(errorMessage, "In function setRegisterNamePointer: named variable %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist, numberOfNamedVariables - 1);
@@ -710,7 +710,7 @@ void allocateNamedVariable(const char *variableName) {
  ***********************************************/
 void setRegisterMaxDataLength(calcRegister_t regist, uint32_t maxDataLen) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
-    *(dataSize_t *)RAMPTR_TO_MEMPTR(reg[regist].dataPointer) = maxDataLen;
+    *(dataSize_t *)WP43SMEMPTR_TO_PCMEMPTR(reg[regist].dataPointer) = maxDataLen;
   }
   else if(regist < 1000) { // Local register
     if(numberOfLocalRegisters > 0) {
@@ -773,7 +773,7 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint32_t maxDataLen) {
  ***********************************************/
 uint32_t getRegisterMaxDataLength(calcRegister_t regist) {
   if(regist < FIRST_LOCAL_REGISTER) { // Global register
-    return *(dataSize_t *)RAMPTR_TO_MEMPTR(reg[regist].dataPointer);
+    return *(dataSize_t *)WP43SMEMPTR_TO_PCMEMPTR(reg[regist].dataPointer);
   }
   else if(regist < 1000) { // Local register
     if(numberOfLocalRegisters > 0) {
@@ -2033,7 +2033,7 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
   printf("    data type = %u = %s\n", descriptor.dataType, getDataTypeName(descriptor.dataType, false, false));
   if(descriptor.dataType == dtLongInteger || descriptor.dataType == dtString) {
     printf("    data ptr  = %u\n", descriptor.dataPointer + 1);
-    printf("    data size = %" FMT32U "\n", *(dataSize_t *)RAMPTR_TO_MEMPTR(reg[regist].dataPointer));
+    printf("    data size = %" FMT32U "\n", *(dataSize_t *)WP43SMEMPTR_TO_PCMEMPTR(reg[regist].dataPointer));
   }
   printf("    tag       = %u\n", descriptor.tag);
   printf("    name size = %u\n", descriptor.variableNameLen);
@@ -2052,8 +2052,6 @@ void printLongIntegerToConsole(longInteger_t value) {
 
   longIntegerToAllocatedString(value, str, sizeof(str));
   printf("LI (%" FMT64U ") %s", (uint64_t)longIntegerSizeInBytes(value), str);
-
-  freeGmp(str, strlen(str) + 1);
 }
 
 
@@ -2061,7 +2059,7 @@ void printLongIntegerToConsole(longInteger_t value) {
 void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag) { // dataSize without trailing 0 and without data length
   uint32_t dataSizeWithDataLen = dataSizeWithoutDataLen;
 
-//printf("reallocateRegister: %d to %s tag=%u (%u bytes including maxSize) begin\n", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithoutDataLen);
+  //printf("reallocateRegister: %d to %s tag=%u (%u bytes excluding maxSize) begin\n", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithoutDataLen);
   if(dataType == dtReal16 && dataSizeWithoutDataLen != REAL16_SIZE) {
     sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real16 or an angle16! It should be REAL16_SIZE=%" FMT32U "!", dataSizeWithoutDataLen, (uint32_t)REAL16_SIZE);
     displayBugScreen(errorMessage);
@@ -2094,13 +2092,12 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataS
     dataSizeWithDataLen = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(dataSizeWithoutDataLen + sizeof(dataSize_t))); // +sizeof(dataSize_t) for the length of the data
   }
 
-  dataSizeWithoutDataLen = dataSizeWithDataLen - sizeof(dataSize_t);
   if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtLongInteger) && getRegisterMaxDataLength(regist) != dataSizeWithoutDataLen)) {
     freeRegisterData(regist);
     setRegisterDataPointer(regist, allocWp43s(dataSizeWithDataLen));
     setRegisterDataType(regist, dataType, tag);
     if(dataType == dtString || dataType == dtLongInteger) {
-      setRegisterMaxDataLength(regist, dataSizeWithoutDataLen);
+      setRegisterMaxDataLength(regist, dataSizeWithDataLen - sizeof(dataSize_t));
     }
   }
   else {

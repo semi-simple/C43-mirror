@@ -646,13 +646,13 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "MEMPTR_TO_RAMPTR(allLocalRegisterPointer)  = %6u",        MEMPTR_TO_RAMPTR(allLocalRegisterPointer));
+        sprintf(string, "PCMEMPTR_TO_WP43SMEMPTR(allLocalRegisterPointer)  = %6u",        PCMEMPTR_TO_WP43SMEMPTR(allLocalRegisterPointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "MEMPTR_TO_RAMPTR(statisticalSumsPointer)  = %6u",         MEMPTR_TO_RAMPTR(statisticalSumsPointer));
+        sprintf(string, "PCMEMPTR_TO_WP43SMEMPTR(statisticalSumsPointer)  = %6u",         PCMEMPTR_TO_WP43SMEMPTR(statisticalSumsPointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -664,7 +664,7 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "MEMPTR_TO_RAMPTR(allNamedVariablePointer) = %6u",        MEMPTR_TO_RAMPTR(allNamedVariablePointer));
+        sprintf(string, "PCMEMPTR_TO_WP43SMEMPTR(allNamedVariablePointer) = %6u",        PCMEMPTR_TO_WP43SMEMPTR(allNamedVariablePointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -1035,32 +1035,32 @@ void debugNIM(void) {
       gtk_widget_show(lbl2[row++]);
 
       for(int i=REGISTER_K; i>=REGISTER_I; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_I+'I', getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_I+'I', getRegisterDataTypeName(i, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
       for(int i=REGISTER_D; i>=REGISTER_A; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_A+'A', getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_A+'A', getRegisterDataTypeName(i, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
-      sprintf(string, "103 T %s %7d %7d", getRegisterDataTypeName(REGISTER_T, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(REGISTER_T)), getRegisterFullSize(REGISTER_T));
+      sprintf(string, "103 T %s %7d %7d", getRegisterDataTypeName(REGISTER_T, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(REGISTER_T)), getRegisterFullSize(REGISTER_T));
       gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
       gtk_widget_show(lbl1[row]);
       debugRegisterValue(REGISTER_T, row++);
 
       for(int i=REGISTER_Z; i>=REGISTER_X; i--) {
-        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_X+'X', getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
+        sprintf(string, "%3d %c %s %7d %7d", i, i-REGISTER_X+'X', getRegisterDataTypeName(i, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
       }
 
-      sprintf(string, "108 L %s %7d %7d", getRegisterDataTypeName(REGISTER_L, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(REGISTER_L)), getRegisterFullSize(REGISTER_L));
+      sprintf(string, "108 L %s %7d %7d", getRegisterDataTypeName(REGISTER_L, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(REGISTER_L)), getRegisterFullSize(REGISTER_L));
       gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
       gtk_widget_show(lbl1[row]);
       debugRegisterValue(REGISTER_L, row++);
@@ -1068,7 +1068,7 @@ void debugNIM(void) {
       row++;
       for(int i=0; i<100; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, "  %02d  %s %7d %7d", i, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
+          sprintf(string, "  %02d  %s %7d %7d", i, getRegisterDataTypeName(i, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row);
@@ -1093,7 +1093,7 @@ void debugNIM(void) {
 
       for(uint16_t i=FIRST_LOCAL_REGISTER; i<FIRST_LOCAL_REGISTER+numberOfLocalRegisters; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, ".%02d   %s %7d %7d", i-FIRST_LOCAL_REGISTER, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
+          sprintf(string, ".%02d   %s %7d %7d", i-FIRST_LOCAL_REGISTER, getRegisterDataTypeName(i, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row++);
@@ -1113,7 +1113,7 @@ void debugNIM(void) {
         strcpy(string, "Content of the statistical sums (NULL)");
       }
       else {
-        sprintf(string, "Content of the statistical sums (%d)", MEMPTR_TO_RAMPTR(statisticalSumsPointer));
+        sprintf(string, "Content of the statistical sums (%d)", PCMEMPTR_TO_WP43SMEMPTR(statisticalSumsPointer));
       }
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
@@ -1319,7 +1319,7 @@ void debugNIM(void) {
 
       for(uint16_t i=1000; i<1000+numberOfNamedVariables; i++) {
         if(row < DEBUG_LINES) {
-          sprintf(string, "%03d   %s %7d %7d", i-1000, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
+          sprintf(string, "%03d   %s %7d %7d", i-1000, getRegisterDataTypeName(i, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
           gtk_widget_show(lbl1[row]);
           debugRegisterValue(i, row++);
@@ -1341,7 +1341,7 @@ void debugNIM(void) {
       gtk_widget_show(lbl2[row++]);
 
       for(uint16_t i=SAVED_REGISTER_X; i<=SAVED_REGISTER_L; i++) {
-        sprintf(string, "%3d   %s %7d %7d", i-SAVED_REGISTER_X, getRegisterDataTypeName(i, false, true), MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
+        sprintf(string, "%3d   %s %7d %7d", i-SAVED_REGISTER_X, getRegisterDataTypeName(i, false, true), PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), getRegisterFullSize(i));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row]);
         debugRegisterValue(i, row++);
@@ -1577,7 +1577,7 @@ void testRegisters(const char *text) {
 
   situationIsBad = false;
   for(i=0; i<FIRST_LOCAL_REGISTER; i++) {
-    if(MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)) > BYTES_TO_BLOCKS(RAM_SIZE)) {
+    if(PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)) > BYTES_TO_BLOCKS(RAM_SIZE)) {
       situationIsBad = true;
       break;
     }
@@ -1593,13 +1593,13 @@ void testRegisters(const char *text) {
   if(situationIsBad) {
     printf("\nsituation is bad %s\n", text);
     for(i=0; i<FIRST_LOCAL_REGISTER; i++) {
-      if(MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)) > BYTES_TO_BLOCKS(RAM_SIZE)) {
-        printf("register %d    ptr=%u\n", i, MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)));
+      if(PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)) > BYTES_TO_BLOCKS(RAM_SIZE)) {
+        printf("register %d    ptr=%u\n", i, PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)));
       }
 
       if(getRegisterDataType(i) == dtString || getRegisterDataType(i) == dtLongInteger) {
         if(*REGISTER_DATA_MAX_LEN(i) >= RAM_SIZE) {
-          printf("register %d    ptr=%u     dataLen=%u (%u %u)\n", i, MEMPTR_TO_RAMPTR(getRegisterDataPointer(i)), *REGISTER_DATA_MAX_LEN(i), *(uint16_t *)(REGISTER_DATA_MAX_LEN(i)), *(((uint16_t *)(REGISTER_DATA_MAX_LEN(i)))+1));
+          printf("register %d    ptr=%u     dataLen=%u (%u %u)\n", i, PCMEMPTR_TO_WP43SMEMPTR(getRegisterDataPointer(i)), *REGISTER_DATA_MAX_LEN(i), *(uint16_t *)(REGISTER_DATA_MAX_LEN(i)), *(((uint16_t *)(REGISTER_DATA_MAX_LEN(i)))+1));
         }
       }
     }
@@ -1620,7 +1620,7 @@ void memoryDump2(const char *text) {
     printf("Free blocks (%" FMT32S "):\n", numberOfFreeBlocks);
 
     for(i=0; i<numberOfFreeBlocks; i++) {
-      printf("  %2" FMT32S " starting at %5" FMT16U ": %5" FMT16U " blocks = %6" FMT32U " bytes\n", i, freeBlocks[i].address, freeBlocks[i].size, BLOCKS_TO_BYTES((uint32_t)freeBlocks[i].size));
+      printf("  %2" FMT32S " starting at %5" FMT16U ": %5" FMT16U " blocks = %6" FMT32U " bytes\n", i, freeBlocks[i].address, freeBlocks[i].sizeInBlocks, BLOCKS_TO_BYTES((uint32_t)freeBlocks[i].sizeInBlocks));
     }
 
     printf("Reg  Num DescrAddr DataType                    DataInfo    DataPtr NameLen FullDataLen Content\n");

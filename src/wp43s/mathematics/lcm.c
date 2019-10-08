@@ -105,8 +105,7 @@ void lcmLonIShoI(void) {
 
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
   longIntegerSetPositiveSign(liY);
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
+  convertShortIntegerRegisterToLongInteger(REGISTER_X, liX);
   longIntegerSetPositiveSign(liX);
 
   longIntegerLcm(liY, liX, liX);
@@ -124,8 +123,7 @@ void lcmShoILonI(void) {
 
   convertLongIntegerRegisterToLongInteger(REGISTER_X, liX);
   longIntegerSetPositiveSign(liX);
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, liY);
+  convertShortIntegerRegisterToLongInteger(REGISTER_Y, liY);
   longIntegerSetPositiveSign(liY);
 
   longIntegerLcm(liY, liX, liX);

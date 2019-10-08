@@ -98,6 +98,12 @@ void m1PowRe16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
+    realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    return;
+  }
+
   realIc_t x;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
@@ -165,6 +171,12 @@ void m1PowRe34(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function m1PowRe34:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 

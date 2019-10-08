@@ -76,8 +76,15 @@ void curtLonI(void) {
     realIc_t x;
 
     convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-    realIcPower(&x, const_1on3, &x);
     reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+    if(realIcIsPositive(&x)) {
+      realIcPower(&x, const_1on3, &x);
+    }
+    else {
+      realIcSetPositiveSign(&x);
+      realIcPower(&x, const_1on3, &x);
+      realIcSetNegativeSign(&x);
+    }
     realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
@@ -91,6 +98,14 @@ void curtRe16(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function curtRe16:", "cannot use NaN as X input of curt", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function curtRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of curt when flag D is not set", NULL, NULL);
     #endif
     return;
   }
@@ -165,7 +180,6 @@ void curtShoI(void) {
     realIcSetNegativeSign(&x);
   }
 
-  realIcToIntegralValue(&x, &x, DEC_ROUND_DOWN); // TODO: doesn't work without this line
   realIcToInt32(&x, cubeRoot);
 
   if(cubeRoot >= 0) {
@@ -183,6 +197,14 @@ void curtRe34(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function curtRe34:", "cannot use NaN as X input of curt", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function curtRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of curt when flag D is not set", NULL, NULL);
     #endif
     return;
   }

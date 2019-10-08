@@ -47,8 +47,8 @@
 #define MEMORY_ALLOCATION_SHIFT     (MEMORY_ALLOCATION_ALIGNMENT >> 1) // only valid for 1, 2 and 4
 #define BYTES_TO_BLOCKS(n)          (((n) + MEMORY_ALLOCATION_MASK) >> MEMORY_ALLOCATION_SHIFT)
 #define BLOCKS_TO_BYTES(n)          ((n) << MEMORY_ALLOCATION_SHIFT)
-#define RAMPTR_TO_MEMPTR(p)         ((void *)(ram + ((p) << MEMORY_ALLOCATION_SHIFT)))
-#define MEMPTR_TO_RAMPTR(p)         ((uint32_t)(((char *)(p) - ram) >> MEMORY_ALLOCATION_SHIFT))
+#define WP43SMEMPTR_TO_PCMEMPTR(p)  ((void *)(ram + ((p) << MEMORY_ALLOCATION_SHIFT)))
+#define PCMEMPTR_TO_WP43SMEMPTR(p)  ((uint32_t)(((char *)(p) - ram) >> MEMORY_ALLOCATION_SHIFT))
 
 #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
   #define dataSize_t                uint32_t
@@ -135,11 +135,9 @@
 #endif
 
 #ifdef PC_BUILD
-  #ifndef TESTSUITE_BUILD
     #include <glib.h>
     #include <gtk/gtk.h>
     #include <gdk/gdk.h>
-  #endif
 #endif
 
 #ifdef DMCP_BUILD
@@ -222,7 +220,10 @@ typedef int16_t calcRegister_t;
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))
-#define modulo(a, b)            (((a)%(b))<0 ? ((a)%(b))+(b) : ((a)%(b))) // the % operator is remainder rather than modulo!
+#define rmd(n, d)               ((n)%(d))                                                       // rmd(n,d) = n - d*idiv(n,d)   where idiv is the division with decimal part truncature
+#define mod(n, d)               (((n)%(d) + (d)) % (d))                                         // mod(n,d) = n - d*floor(n/d)  where floor(a) is the biggest integer <= a
+//#define modulo(n, d)            ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
+#define modulo(n, d)            ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
 
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50
@@ -456,11 +457,12 @@ typedef int16_t calcRegister_t;
 #define STATISTICAL_SUMS 23
 
 // Variables for the simulator
+#if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+  extern bool_t             debugMemAllocation;
+#endif
 #ifdef PC_BUILD
   extern bool_t             calcLandscape;
   extern bool_t             calcAutoLandscapePortrait;
-  extern bool_t             runTestsOnly;
-  extern bool_t             debugMemAllocation;
   extern GtkWidget          *screen;
   extern GtkWidget          *frmCalc;
   extern int16_t            screenStride;
@@ -498,6 +500,7 @@ extern decContext           ctxtReal34;  // 34 digits
 extern decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
 extern decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
 extern decContext           ctxtReal451; // 451 digits: used in radian angle reduction
+extern decContext           ctxtReal850; // 850 digits: used for really big modulo
 extern uint16_t             flags[7];
 #define TMP_STR_LENGTH  3000
 #define ERROR_MESSAGE_LENGTH 512
@@ -592,7 +595,6 @@ extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
-extern bool_t               debugMemAllocation;
 extern calcKey_t            kbd_usr[37];
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
@@ -605,8 +607,8 @@ extern int16_t              exponentSignLocation;
 extern int16_t              denominatorLocation;
 extern int16_t              imaginaryExponentSignLocation;
 extern int16_t              imaginaryMantissaSignLocation;
-extern size_t               gmpMem;
-extern size_t               wp43sMem;
+extern size_t               gmpMemInBytes;
+extern size_t               wp43sMemInBytes;
 extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 extern int32_t              numberOfFreeBlocks;
 extern void                 (*confirmedFunction)(uint16_t);
@@ -619,4 +621,16 @@ extern realIc_t             const *angle45;
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"
+
+#define TEST_REGX(s) if(reg[100].dataPointer >= 500+0*(RAM_SIZE/MEMORY_ALLOCATION_ALIGNMENT)) { \
+                       uint32_t a, b; \
+                       a = 1; \
+                       b = 0; \
+                       printf("\n=====> BAD  REGISTER X DATA POINTER: %u <===== %s\n", reg[100].dataPointer, s); \
+                       reg[100].dataType = a/b; \
+                     } \
+                     else { \
+                       printf("\n=====> good register X data pointer: %u <===== %s\n", reg[100].dataPointer, s); \
+                     }
+
 #endif // wp43s_H_INCLUDED

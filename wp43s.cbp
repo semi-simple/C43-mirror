@@ -331,6 +331,12 @@
 		<Unit filename="src/testSuite/gcd.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/idiv.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/idivr.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/imaginaryPart.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -359,6 +365,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/minusOnePow.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/modulo.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_complex16.txt">
@@ -467,6 +476,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/rectangularToPolar.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/remainder.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/sign.txt">
@@ -1108,6 +1120,28 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/idiv.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/idiv.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/idivr.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/idivr.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/imaginaryPart.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1212,6 +1246,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/modulo.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/modulo.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/multiplication.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1252,6 +1297,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/realPart.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/remainder.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/remainder.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

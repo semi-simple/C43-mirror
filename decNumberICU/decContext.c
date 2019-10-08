@@ -26,8 +26,8 @@
 #include "decNumberLocal.h"   // decNumber local types, etc.
 
 /* compile-time endian tester [assumes sizeof(Int)>1] */
-//static  const  Int mfcone=1;                       // constant 1
-//static  const  Flag *mfctop=(const Flag *)&mfcone; // -> top byte
+static  const  Int mfcone=1;                       // constant 1
+static  const  Flag *mfctop=(const Flag *)&mfcone; // -> top byte
 #define LITEND *mfctop        // named flag; 1=little-endian
 
 /* ------------------------------------------------------------------ */
@@ -133,10 +133,10 @@ decContext * decContextDefault(decContext *context, Int kind) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*enum rounding decContextGetRounding(decContext *context) {
+enum rounding decContextGetRounding(decContext *context) {
   return context->round;
   } // decContextGetRounding
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextGetStatus -- return current status                       */
 /*                                                                    */
@@ -161,13 +161,13 @@ uInt decContextGetStatus(decContext *context) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*decContext *decContextRestoreStatus(decContext *context,
+decContext *decContextRestoreStatus(decContext *context,
                                     uInt newstatus, uInt mask) {
   context->status&=~mask;               // clear the selected bits
   context->status|=(mask&newstatus);    // or in the new bits
   return context;
   } // decContextRestoreStatus
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextSaveStatus -- save bits in current status                */
 /*                                                                    */
@@ -178,10 +178,10 @@ uInt decContextGetStatus(decContext *context) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*uInt decContextSaveStatus(decContext *context, uInt mask) {
+uInt decContextSaveStatus(decContext *context, uInt mask) {
   return context->status&mask;
   } // decContextSaveStatus
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextSetRounding -- set current rounding mode                 */
 /*                                                                    */
@@ -191,12 +191,12 @@ uInt decContextGetStatus(decContext *context) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*decContext *decContextSetRounding(decContext *context,
+decContext *decContextSetRounding(decContext *context,
                                   enum rounding newround) {
   context->round=newround;
   return context;
   } // decContextSetRounding
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextSetStatus -- set status and raise trap if appropriate    */
 /*                                                                    */
@@ -226,7 +226,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*    DEC_Condition_MU or is not recognized.  In these cases NULL is  */
 /*    returned.                                                       */
 /* ------------------------------------------------------------------ */
-/*decContext * decContextSetStatusFromString(decContext *context,
+decContext * decContextSetStatusFromString(decContext *context,
                                            const char *string) {
   if (strcmp(string, DEC_Condition_CS)==0)
     return decContextSetStatus(context, DEC_Conversion_syntax);
@@ -262,7 +262,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
     return context;
   return NULL;  // Multiple status, or unknown
   } // decContextSetStatusFromString
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextSetStatusFromStringQuiet -- set status from a string     */
 /*                                                                    */
@@ -277,7 +277,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*    DEC_Condition_MU or is not recognized.  In these cases NULL is  */
 /*    returned.                                                       */
 /* ------------------------------------------------------------------ */
-/*decContext * decContextSetStatusFromStringQuiet(decContext *context,
+decContext * decContextSetStatusFromStringQuiet(decContext *context,
                                                 const char *string) {
   if (strcmp(string, DEC_Condition_CS)==0)
     return decContextSetStatusQuiet(context, DEC_Conversion_syntax);
@@ -313,7 +313,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
     return context;
   return NULL;  // Multiple status, or unknown
   } // decContextSetStatusFromStringQuiet
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextSetStatusQuiet -- set status without trap                */
 /*                                                                    */
@@ -323,10 +323,10 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*decContext * decContextSetStatusQuiet(decContext *context, uInt status) {
+decContext * decContextSetStatusQuiet(decContext *context, uInt status) {
   context->status|=status;
   return context;} // decContextSetStatusQuiet
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextStatusToString -- convert status flags to a string       */
 /*                                                                    */
@@ -335,7 +335,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*  returns a constant string describing the condition.  If multiple  */
 /*    (or no) flags are set, a generic constant message is returned.  */
 /* ------------------------------------------------------------------ */
-/*const char *decContextStatusToString(const decContext *context) {
+const char *decContextStatusToString(const decContext *context) {
   Int status=context->status;
 
   // test the five IEEE first, as some of the others are ambiguous when
@@ -360,7 +360,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
   if (status==0                        ) return DEC_Condition_ZE;
   return DEC_Condition_MU;  // Multiple errors
   } // decContextStatusToString
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextTestEndian -- test whether DECLITEND is set correctly    */
 /*                                                                    */
@@ -373,7 +373,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*Int decContextTestEndian(Flag quiet) {
+Int decContextTestEndian(Flag quiet) {
   Int res=0;                  // optimist
   uInt dle=(uInt)DECLITEND;   // unsign
   if (dle>1) dle=1;           // ensure 0 or 1
@@ -392,7 +392,7 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
     }
   return res;
   } // decContextTestEndian
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextTestSavedStatus -- test bits in saved status             */
 /*                                                                    */
@@ -403,10 +403,10 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*uInt decContextTestSavedStatus(uInt oldstatus, uInt mask) {
+uInt decContextTestSavedStatus(uInt oldstatus, uInt mask) {
   return (oldstatus&mask)!=0;
   } // decContextTestSavedStatus
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextTestStatus -- test bits in current status                */
 /*                                                                    */
@@ -417,10 +417,10 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*uInt decContextTestStatus(decContext *context, uInt mask) {
+uInt decContextTestStatus(decContext *context, uInt mask) {
   return (context->status&mask)!=0;
   } // decContextTestStatus
-*/
+
 /* ------------------------------------------------------------------ */
 /* decContextZeroStatus -- clear all status bits                      */
 /*                                                                    */
@@ -429,8 +429,8 @@ decContext * decContextSetStatus(decContext *context, uInt status) {
 /*                                                                    */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*decContext *decContextZeroStatus(decContext *context) {
+decContext *decContextZeroStatus(decContext *context) {
   context->status=0;
   return context;
   } // decContextZeroStatus
-*/
+

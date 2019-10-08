@@ -283,14 +283,14 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
 /*                                                                    */
 /*  No error is possible, and no status can be set.                   */
 /* ------------------------------------------------------------------ */
-/*char * decimal64ToEngString(const decimal64 *d64, char *string){
+char * decimal64ToEngString(const decimal64 *d64, char *string){
   decNumber dn;                         // work
   decimal64ToNumber(d64, &dn);
   decNumberToEngString(&dn, string);
   return string;
   } // decimal64ToEngString
-*/
-/*char * decimal64ToString(const decimal64 *d64, char *string){
+
+char * decimal64ToString(const decimal64 *d64, char *string){
   uInt msd;                        // coefficient MSD
   Int  exp;                        // exponent top two bits or full
   uInt comb;                       // combination field
@@ -421,7 +421,7 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
   //printf("res %s\n", string);
   return string;
   } // decimal64ToString
-*/
+
 /* ------------------------------------------------------------------ */
 /* to-number -- conversion from numeric string                        */
 /*                                                                    */
@@ -437,7 +437,7 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
 /* (setting of status and traps) and for the rounding mode, only.     */
 /* If an error occurs, the result will be a valid decimal64 NaN.      */
 /* ------------------------------------------------------------------ */
-/*decimal64 * decimal64FromString(decimal64 *result, const char *string,
+decimal64 * decimal64FromString(decimal64 *result, const char *string,
                                 decContext *set) {
   decContext dc;                             // work
   decNumber dn;                              // ..
@@ -453,14 +453,14 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
     }
   return result;
   } // decimal64FromString
-*/
+
 /* ------------------------------------------------------------------ */
 /* decimal64IsCanonical -- test whether encoding is canonical         */
 /*   d64 is the source decimal64                                      */
 /*   returns 1 if the encoding of d64 is canonical, 0 otherwise       */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*uInt decimal64IsCanonical(const decimal64 *d64) {
+uInt decimal64IsCanonical(const decimal64 *d64) {
   decNumber dn;                         // work
   decimal64 canon;                      // ..
   decContext dc;                        // ..
@@ -469,7 +469,7 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
   decimal64FromNumber(&canon, &dn, &dc);// canon will now be canonical
   return memcmp(d64, &canon, DECIMAL64_Bytes)==0;
   } // decimal64IsCanonical
-*/
+
 /* ------------------------------------------------------------------ */
 /* decimal64Canonical -- copy an encoding, ensuring it is canonical   */
 /*   d64 is the source decimal64                                      */
@@ -477,7 +477,7 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
 /*   returns result                                                   */
 /* No error is possible.                                              */
 /* ------------------------------------------------------------------ */
-/*decimal64 * decimal64Canonical(decimal64 *result, const decimal64 *d64) {
+decimal64 * decimal64Canonical(decimal64 *result, const decimal64 *d64) {
   decNumber dn;                         // work
   decContext dc;                        // ..
   decContextDefault(&dc, DEC_INIT_DECIMAL64);
@@ -485,7 +485,7 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
   decimal64FromNumber(result, &dn, &dc);// result will now be canonical
   return result;
   } // decimal64Canonical
-*/
+
 #if DECTRACE || DECCHECK
 /* Macros for accessing decimal64 fields.  These assume the
    argument is a reference (pointer) to the decimal64 structure,
@@ -516,7 +516,7 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
 /*   d64 -- the number to show                                        */
 /* ------------------------------------------------------------------ */
 // Also shows sign/cob/expconfields extracted
-/*void decimal64Show(const decimal64 *d64) {
+void decimal64Show(const decimal64 *d64) {
   char buf[DECIMAL64_Bytes*2+1];
   Int i, j=0;
 
@@ -536,7 +536,7 @@ decNumber * decimal64ToNumber(const decimal64 *d64, decNumber *dn) {
            decimal64Sign(d64), decimal64Comb(d64), decimal64ExpCon(d64));
     }
   } // decimal64Show
-*/
+
 #endif
 /* ================================================================== */
 /* Shared utility routines and tables                                 */

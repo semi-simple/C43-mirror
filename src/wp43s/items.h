@@ -546,7 +546,7 @@
 #define CST_43                         517
 #define ITM_RM                         518
 #define ITM_RMQ                        519
-#define ITM_RMDR                       520
+#define ITM_RMD                        520
 #define ITM_RNORM                      521
 #define ITM_ROUND                      522
 #define ITM_ROUNDI                     523
@@ -1610,106 +1610,203 @@
 #define ITM_SIGMAx3                   1574
 #define ITM_SIGMAx4                   1575
 #define ITM_HEX                       1576
-#define ITM_ERPN                      1577  //JM eRPN
-#define ITM_HOMEx3                    1578  //JM HOME.3
-#define ITM_SHTIM                     1579  //JM SHIFT CANCEL
+#define ITM_IDIVR                     1577
+#define Not_used1578                  1578
+#define Not_used1579                  1579
+#define Not_used1580                  1580
+#define Not_used1581                  1581
+#define Not_used1582                  1582
+#define Not_used1583                  1583
+#define Not_used1584                  1584
+#define Not_used1585                  1585
+#define Not_used1586                  1586
+#define Not_used1587                  1587
+#define Not_used1588                  1588
+#define Not_used1589                  1589
+#define Not_used1590                  1590
+#define Not_used1591                  1591
+#define Not_used1592                  1592
+#define Not_used1593                  1593
+#define Not_used1594                  1594
+#define Not_used1595                  1595
+#define Not_used1596                  1596
+#define Not_used1597                  1597
+#define Not_used1598                  1598
+#define Not_used1599                  1599
+#define Not_used1600                  1600
+#define Not_used1601                  1601
+#define Not_used1602                  1602
+#define Not_used1603                  1603
+#define Not_used1604                  1604
+#define Not_used1605                  1605
+#define Not_used1606                  1606
+#define Not_used1607                  1607
+#define Not_used1608                  1608
+#define Not_used1609                  1609
+#define Not_used1610                  1610
+#define Not_used1611                  1611
+#define Not_used1612                  1612
+#define Not_used1613                  1613
+#define Not_used1615                  1615
+#define Not_used1615                  1615
+#define Not_used1616                  1616
+#define Not_used1617                  1617
+#define Not_used1618                  1618
+#define Not_used1619                  1619
+#define Not_used1620                  1620
+#define Not_used1621                  1621
+#define Not_used1622                  1622
+#define Not_used1623                  1623
+#define Not_used1624                  1624
+#define Not_used1625                  1625
+#define Not_used1626                  1626
+#define Not_used1627                  1627
+#define Not_used1628                  1628
+#define Not_used1629                  1629
+#define Not_used1630                  1630
+#define Not_used1631                  1631
+#define Not_used1632                  1632
+#define Not_used1633                  1633
+#define Not_used1634                  1634
+#define Not_used1635                  1635
+#define Not_used1636                  1636
+#define Not_used1637                  1637
+#define Not_used1638                  1638
+#define Not_used1639                  1639
+#define Not_used1640                  1640
+#define Not_used1641                  1641
+#define Not_used1642                  1642
+#define Not_used1643                  1643
+#define Not_used1644                  1644
+#define Not_used1645                  1645
+#define Not_used1646                  1646
+#define Not_used1647                  1647
+#define Not_used1648                  1648
+#define Not_used1649                  1649
+#define Not_used1650                  1650
+#define Not_used1651                  1651
+#define Not_used1652                  1652
+#define Not_used1653                  1653
+#define Not_used1654                  1654
+#define Not_used1655                  1655
+#define Not_used1656                  1656
+#define Not_used1657                  1657
+#define Not_used1658                  1658
+#define Not_used1659                  1659
+#define Not_used1660                  1660
+#define Not_used1661                  1661
+#define Not_used1662                  1662
+#define Not_used1663                  1663
+#define Not_used1664                  1664
+#define Not_used1665                  1665
+#define Not_used1666                  1666
+#define Not_used1667                  1667
+#define Not_used1668                  1668
+#define Not_used1669                  1669
+#define Not_used1670                  1670
+#define Not_used1671                  1671
+#define Not_used1672                  1672
+#define Not_used1673                  1673
+#define Not_used1674                  1674
+#define Not_used1675                  1675
+#define Not_used1676                  1676
+#define Not_used1677                  1677
+#define ITM_ERPN                      1678  //JM eRPN
+#define ITM_HOMEx3                    1679  //JM HOME.3
+#define ITM_SHTIM                     1680  //JM SHIFT CANCEL
+#define MNU_HOME                      1681  //JM HOME
+#define ITM_SIGFIG                    1682  //JM SIGFIG
+#define MNU_ALPHA                     1683  //JM ALPHA
+#define MNU_BASE                      1684  //JM BASE
+#define ITM_2BIN                      1685  //JM BASE
+#define ITM_2OCT                      1686  //JM BASE
+#define ITM_2DEC                      1687  //JM BASE
+#define ITM_2HEX                      1688  //JM BASE
+#define ITM_WS8                       1689  //JM BASE
+#define ITM_WS16                      1690  //JM BASE
+#define ITM_WS32                      1691  //JM BASE
+#define ITM_WS64                      1692  //JM BASE
+#define ITM_UNIT                      1693  //JM UNIT
+#define ITM_SH_ERPN                   1694  //JM SHOW
+#define ITM_SH_HOMEx3                 1695  //JM SHOW
+#define ITM_SH_SHTIM                  1696  //JM SHOW
+#define CHR_QOPPA                     1697  //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
+#define CHR_DIGAMMA                   1698  //JM GREEK
+#define CHR_SAMPI                     1699  //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
+#define CHR_1599                      1700  //JM SPARE
+#define CHR_1600                      1701  //JM SPARE
+#define CHR_1601                      1702  //JM SPARE
+#define CHR_1602                      1703  //JM SPARE
+#define CHR_1603                      1704  //JM SPARE
+#define CHR_1604                      1705  //JM SPARE
+#define CHR_1605                      1706  //JM SPARE
+#define CHR_1606                      1707  //JM SPARE
+#define CHR_1607                      1708  //JM SPARE
+#define CHR_1608                      1709  //JM SPARE
+#define CHR_1609                      1710  //JM SPARE
+#define CHR_1610                      1711  //JM SPARE
+#define CHR_1611                      1712  //JM SPARE
+#define CHR_1612                      1713  //JM SPARE
+#define CHR_1613                      1714  //JM SPARE
+#define CHR_1614                      1715  //JM SPARE
+#define CHR_1615                      1716  //JM SPARE
+#define CHR_1616                      1717  //JM SPARE
+#define CHR_1617                      1718  //JM SPARE
+#define CHR_1618                      1719  //JM SPARE
+#define CHR_1619                      1720  //JM SPARE
+#define CHR_1620                      1721  //JM SPARE
+#define CHR_1621                      1722  //JM SPARE
+#define CHR_1622                      1723  //JM SPARE
+#define CHR_1623                      1724  //JM SPARE
+#define CHR_1624                      1725  //JM SPARE
+#define CHR_1625                      1726  //JM SPARE
+#define CHR_1626                      1727  //JM SPARE
+#define CHR_1627                      1728  //JM SPARE
+#define CHR_1628                      1729  //JM SPARE
+#define CHR_1629                      1730  //JM SPARE
+#define CHR_1630                      1731  //JM SPARE
+#define CHR_1631                      1732  //JM SPARE
+#define CHR_qoppa                     1733  //JM GREEK
+#define CHR_digamma                   1734  //JM GREEK
+#define CHR_sampi                     1735  //JM GREEK
+#define CHR_case                      1736  //JM CAPS
+#define KEY_HASH                      1737  //JM BASE ## test
+#define ITM_HASH                      1738  //JM BASE ### test
+#define ITM_op_a                      1739  //JM OPERATORS
+#define ITM_op_a2                     1740  //JM OPERATORS
+#define ITM_op_j                      1741  //JM OPERATORS
+#define ITM_BASE_HOME                 1742  //JM BASEMENU //fnSetSetJM
+#define ITM_BASE_MYMENU               1743  //JM BASEMENU
+#define ITM_BASE_AHOME                1744  //JM BASEMENU
+#define ITM_BASE_MYA                  1745  //JM BASEMENU
+#define ITM_SH_BASE_HOME              1746  //JM BASEMENU //fnShowJM
+#define ITM_SH_BASE_MYMENU            1747  //JM BASEMENU
+#define ITM_SH_BASE_AHOME             1748  //JM BASEMENU
+#define ITM_SH_BASE_MYA               1749  //JM BASEMENU
+#define ITM_EE_D2Y                    1750  //JM EE
+#define ITM_EE_Y2D                    1751  //JM EE
+#define ITM_EE_A2S                    1752  //JM EE
+#define ITM_EE_S2A                    1753  //JM EE
+#define MNU_EE                        1754  //JM EE
+#define ITM_EE_EXP_TH                 1755  //JM EE
+#define ITM_EE_STO_Z                  1756  //JM EE
+#define ITM_EE_RCL_Z                  1757  //JM EE
+#define ITM_EE_STO_V                  1758  //JM EE
+#define ITM_EE_RCL_V                  1759  //JM EE
+#define ITM_EE_STO_I                  1760  //JM EE
+#define ITM_EE_RCL_I                  1761  //JM EE
+#define ITM_EE_STO_V_I                1762  //JM EE
+#define ITM_EE_STO_IR                 1763  //JM EE
+#define ITM_EE_STO_V_Z                1764  //JM EE
+#define ITM_EE_X2BAL                  1765  //JM EE
+#define KEY_COMPLEX                   1766  //JM CPX
+#define KEY_CC1                       1767  //JM CPX
+#define KEY_TYPCON_UP                 1768  //JM CPX
+#define KEY_TYPCON_DN                 1769  //JM CPX
+#define ITM_HOMEx3T                   1770  //JM HOME.3T
+#define ITM_SH_HOMEx3T                1771  //JM HOME.3T
 
-#define MNU_HOME                      1580  //JM HOME
-#define ITM_SIGFIG                    1581  //JM SIGFIG
-#define MNU_ALPHA                     1582  //JM ALPHA
-#define MNU_BASE                      1583  //JM BASE
-
-#define ITM_2BIN                      1584  //JM BASE
-#define ITM_2OCT                      1585  //JM BASE
-#define ITM_2DEC                      1586  //JM BASE
-#define ITM_2HEX                      1587  //JM BASE
-#define ITM_WS8                       1588  //JM BASE
-#define ITM_WS16                      1589  //JM BASE
-#define ITM_WS32                      1590  //JM BASE
-#define ITM_WS64                      1591  //JM BASE
-#define ITM_UNIT                      1592  //JM UNIT
-#define ITM_SH_ERPN                   1593  //JM SHOW
-#define ITM_SH_HOMEx3                 1594  //JM SHOW
-#define ITM_SH_SHTIM                  1595  //JM SHOW
-
-#define CHR_QOPPA                     1596  //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
-#define CHR_DIGAMMA                   1597  //JM GREEK
-#define CHR_SAMPI                     1598  //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
-#define CHR_1599                      1599  //JM SPARE
-#define CHR_1600                      1600  //JM SPARE
-#define CHR_1601                      1601  //JM SPARE
-#define CHR_1602                      1602  //JM SPARE
-#define CHR_1603                      1603  //JM SPARE
-#define CHR_1604                      1604  //JM SPARE
-#define CHR_1605                      1605  //JM SPARE
-#define CHR_1606                      1606  //JM SPARE
-#define CHR_1607                      1607  //JM SPARE
-#define CHR_1608                      1608  //JM SPARE
-#define CHR_1609                      1609  //JM SPARE
-#define CHR_1610                      1610  //JM SPARE
-#define CHR_1611                      1611  //JM SPARE
-#define CHR_1612                      1612  //JM SPARE
-#define CHR_1613                      1613  //JM SPARE
-#define CHR_1614                      1614  //JM SPARE
-#define CHR_1615                      1615  //JM SPARE
-#define CHR_1616                      1616  //JM SPARE
-#define CHR_1617                      1617  //JM SPARE
-#define CHR_1618                      1618  //JM SPARE
-#define CHR_1619                      1619  //JM SPARE
-#define CHR_1620                      1620  //JM SPARE
-#define CHR_1621                      1621  //JM SPARE
-#define CHR_1622                      1622  //JM SPARE
-#define CHR_1623                      1623  //JM SPARE
-#define CHR_1624                      1624  //JM SPARE
-#define CHR_1625                      1625  //JM SPARE
-#define CHR_1626                      1626  //JM SPARE
-#define CHR_1627                      1627  //JM SPARE
-#define CHR_1628                      1628  //JM SPARE
-#define CHR_1629                      1629  //JM SPARE
-#define CHR_1630                      1630  //JM SPARE
-#define CHR_1631                      1631  //JM SPARE
-#define CHR_qoppa                     1632  //JM GREEK
-#define CHR_digamma                   1633  //JM GREEK
-#define CHR_sampi                     1634  //JM GREEK
-#define CHR_case                      1635  //JM CAPS
-#define KEY_HASH                      1636  //JM BASE ## test
-#define ITM_HASH                      1637  //JM BASE ### test
-#define ITM_op_a                      1638  //JM OPERATORS
-#define ITM_op_a2                     1639  //JM OPERATORS
-#define ITM_op_j                      1640  //JM OPERATORS
-#define ITM_BASE_HOME                 1641  //JM BASEMENU //fnSetSetJM
-#define ITM_BASE_MYMENU               1642  //JM BASEMENU
-#define ITM_BASE_AHOME                1643  //JM BASEMENU
-#define ITM_BASE_MYA                  1644  //JM BASEMENU
-#define ITM_SH_BASE_HOME              1645  //JM BASEMENU //fnShowJM
-#define ITM_SH_BASE_MYMENU            1646  //JM BASEMENU
-#define ITM_SH_BASE_AHOME             1647  //JM BASEMENU
-#define ITM_SH_BASE_MYA               1648  //JM BASEMENU
-#define ITM_EE_D2Y                    1649  //JM EE
-#define ITM_EE_Y2D                    1650  //JM EE
-#define ITM_EE_A2S                    1651  //JM EE
-#define ITM_EE_S2A                    1652  //JM EE
-#define MNU_EE                        1653  //JM EE
-#define ITM_EE_EXP_TH                 1654  //JM EE
-
-#define ITM_EE_STO_Z                  1655  //JM EE
-#define ITM_EE_RCL_Z                  1656  //JM EE
-#define ITM_EE_STO_V                  1657  //JM EE
-#define ITM_EE_RCL_V                  1658  //JM EE
-#define ITM_EE_STO_I                  1659  //JM EE
-#define ITM_EE_RCL_I                  1660  //JM EE
-#define ITM_EE_STO_V_I                1661  //JM EE
-#define ITM_EE_STO_IR                 1662  //JM EE
-#define ITM_EE_STO_V_Z                1663  //JM EE
-#define ITM_EE_X2BAL                  1664  //JM EE
-#define KEY_COMPLEX                   1665  //JM CPX
-#define KEY_CC1                       1666  //JM CPX
-#define KEY_TYPCON_UP                 1667  //JM CPX
-#define KEY_TYPCON_DN                 1668  //JM CPX
-#define ITM_HOMEx3T                   1669  //JM HOME.3T
-#define ITM_SH_HOMEx3T                1670  //JM HOME.3T
-
-#define LAST_ITEM                     1671  //JM
+#define LAST_ITEM                     1772  //JM
 
 #define CHR_PROD_SIGN                 9999
 

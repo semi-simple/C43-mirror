@@ -99,6 +99,7 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define real16Copy(source, destination)                        *(uint64_t *)(destination) = *(uint64_t *)(source);
 #define real16CopyAbs(source, destination)                     decDoubleCopyAbs         (destination, source)
 #define real16Divide(operand1, operand2, res)                  decDoubleDivide          ((real16_t *)(res), (real16_t *)(operand1), (real16_t *)(operand2), &ctxtReal16)
+#define real16DivideRemainder(operand1, operand2, res)         decDoubleRemainder       ((real16_t *)(res), (real16_t *)(operand1), (real16_t *)(operand2), &ctxtReal16)
 #define real16FMA(factor1, factor2, term, res)                 decDoubleFMA             ((real16_t *)(res), (real16_t *)(factor1),  (real16_t *)(factor2),  (real16_t *)(term), &ctxtReal16)
 #define real16GetCoefficient(source, destination)              decDoubleGetCoefficient  ((real16_t *)(source), (uint8_t *)(destination))
 #define real16GetExponent(source)                              decDoubleGetExponent     ((real16_t *)(source))
@@ -113,7 +114,6 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define real16Minus(operand, res)                              decDoubleMinus           ((real16_t *)(res), (real16_t *)(operand), &ctxtReal16)
 #define real16Multiply(operand1, operand2, res)                decDoubleMultiply        ((real16_t *)(res), (real16_t *)(operand1), (real16_t *)(operand2), &ctxtReal16)
 #define real16Plus(operand, res)                               decDoublePlus            ((real16_t *)(res), (real16_t *)(operand), &ctxtReal16)
-#define real16Remainder(operand1, operand2, res)               decDoubleRemainder       ((real16_t *)(res), (real16_t *)(operand1), (real16_t *)(operand2), &ctxtReal16)
 #define real16SetNegativeSign(operand)                         ((real16_t *)(operand))->bytes[7] |= 0x80
 #define real16SetPositiveSign(operand)                         ((real16_t *)(operand))->bytes[7] &= 0x7F
 #define real16Subtract(operand1, operand2, res)                decDoubleSubtract        ((real16_t *)(res), (real16_t *)(operand1), (real16_t *)(operand2), &ctxtReal16)
@@ -152,6 +152,7 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
                                                                }
 #define real34CopyAbs(source, destination)                     decQuadCopyAbs           (destination, source)
 #define real34Divide(operand1, operand2, res)                  decQuadDivide            ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
+#define real34DivideRemainder(operand1, operand2, res)         decQuadRemainder         ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
 #define real34FMA(factor1, factor2, term, res)                 decQuadFMA               ((real34_t *)(res), (real34_t *)(factor1),  (real34_t *)(factor2),  (real34_t *)(term), &ctxtReal34)
 #define real34GetCoefficient(source, destination)              decQuadGetCoefficient    ((real34_t *)(source), (uint8_t *)(destination))
 #define real34GetExponent(source)                              decQuadGetExponent       ((real34_t *)(source))
@@ -166,7 +167,6 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define real34Minus(operand, res)                              decQuadMinus             ((real34_t *)(res), (real34_t *)(operand), &ctxtReal34)
 #define real34Multiply(operand1, operand2, res)                decQuadMultiply          ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
 #define real34Plus(operand, res)                               decQuadPlus              ((real34_t *)(res), (real34_t *)(operand), &ctxtReal34)
-#define real34Remainder(operand1, operand2, res)               decQuadRemainder         ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
 #define real34SetNegativeSign(operand)                         ((real34_t *)(operand))->bytes[15] |= 0x80
 #define real34SetPositiveSign(operand)                         ((real34_t *)(operand))->bytes[15] &= 0x7F
 #define real34Subtract(operand1, operand2, res)                decQuadSubtract          ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
@@ -205,6 +205,7 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define realIcCopy(source, destination)                        decNumberCopy            ((realIc_t *)(destination), (realIc_t *)(source))
 #define realIcCopyAbs(source, destination)                     decNumberCopyAbs         ((realIc_t *)(destination), (realIc_t *)(source))
 #define realIcDivide(operand1, operand2, res)                  decNumberDivide          ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtRealIc)
+#define realIcDivideRemainder(operand1, operand2, res)         decNumberRemainder       ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtRealIc)
 #define realIcExp(operand, res)                                decNumberExp             ((realIc_t *)(res), (realIc_t *)(operand), &ctxtRealIc)
 #define realIcFMA(factor1, factor2, term, res)                 decNumberFMA             ((realIc_t *)(res), (realIc_t *)(factor1),  (realIc_t *)(factor2),  (realIc_t *)(term), &ctxtRealIc)
 #define realIcGetCoefficient(source, destination)              decNumberGetBCD          ((realIc_t *)(source), (uint8_t *)(destination))
@@ -222,9 +223,9 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define realIcMultiply(operand1, operand2, res)                decNumberMultiply        ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtRealIc)
 #define realIcPlus(operand, res)                               decNumberPlus            ((realIc_t *)(res), (realIc_t *)(operand), &ctxtRealIc)
 #define realIcPower(operand1, operand2, res)                   decNumberPower           ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtRealIc)
-#define realIcRemainder(operand1, operand2, res)               decNumberRemainder       ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtRealIc)
 #define realIcSetNegativeSign(operand)                         ((realIc_t *)(operand))->bits |= 0x80
 #define realIcSetPositiveSign(operand)                         ((realIc_t *)(operand))->bits &= 0x7F
+#define realIcSign(source)                                     ((((realIc_t *)(source))->bits) & 0x80) // 0x80=negative and 0x00=positive
 #define realIcSquareRoot(operand, res)                         decNumberSquareRoot      ((realIc_t *)(res), (realIc_t *)(operand), &ctxtRealIc)
 #define realIcSubtract(operand1, operand2, res)                decNumberSubtract        ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtRealIc)
 #define realIcToInt32(source, destination)                     {enum rounding savedRoundingMode; \
@@ -276,8 +277,8 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 
 
 
-#define real451Remainder(operand1, operand2, res)              decNumberRemainder       ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtReal451)
-#define real850Remainder(operand1, operand2, res)              decNumberRemainder       ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtReal850)
+#define real451DivideRemainder(operand1, operand2, res)        decNumberRemainder       ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtReal451)
+#define real850DivideRemainder(operand1, operand2, res)        decNumberRemainder       ((realIc_t *)(res), (realIc_t *)(operand1), (realIc_t *)(operand2), &ctxtReal850)
 
 
 

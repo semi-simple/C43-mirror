@@ -91,16 +91,19 @@ void factLonI(void) {
     return;
   }
 
-  uint32_t n = longIntegerToUInt(x);
 
-  // The more precise formula below is: (n*ln(n) - n + (ln(8n³ + 4n² + n + 1/30))/6 + ln(pi)/2) / ln(2)
-  longIntegerInitSizeInBits(fact, 1 + (uint32_t)((n * log(n) - n) / log(2)));
-
-  //longIntegerFactorial(longIntegerToUInt(x), fact); TODO why this line fails?
-  uIntToLongInteger(1, fact);
-  for(uint32_t i=2; i<=n; i++) {
-    longIntegerMultiplyUInt(fact, i, fact);
-  }
+  #if (__linux__ == 1)
+    uint32_t n = longIntegerToUInt(x);
+    //The more precise formula below is: (n*ln(n) - n + (ln(8n³ + 4n² + n + 1/30))/6 + ln(pi)/2) / ln(2)
+    longIntegerInitSizeInBits(fact, 1 + (uint32_t)((n * log(n) - n) / log(2)));
+    uIntToLongInteger(1, fact);
+    for(uint32_t i=2; i<=n; i++) {
+      longIntegerMultiplyUInt(fact, i, fact);
+    }
+  #else
+    longIntegerInit(fact);
+    longIntegerFactorial(longIntegerToUInt(x), fact); //TODO why this line fails?
+  #endif
 
   convertLongIntegerToLongIntegerRegister(fact, REGISTER_X);
   longIntegerFree(fact);

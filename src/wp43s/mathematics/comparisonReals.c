@@ -247,3 +247,60 @@ bool_t realIcCompareLessThan(const realIc_t *number1, const realIc_t *number2) {
   realIcToInt32(&compare, cmp);
   return cmp < 0;
 }
+
+
+
+bool_t real16IsAnInteger(const real16_t *x) {
+  real16_t r, y;
+
+  if(real16IsNaN(x)) {
+    return false;
+  }
+
+  if(real16IsInfinite(x)) {
+    return true;
+  }
+
+  real16ToIntegralValue(x, &y, DEC_ROUND_DOWN);
+  real16Subtract(x, &y, &r);
+
+  return real16CompareEqual(&r, const16_0);
+}
+
+
+
+bool_t real34IsAnInteger(const real34_t *x) {
+  real34_t r, y;
+
+  if(real34IsNaN(x)) {
+    return false;
+  }
+
+  if(real34IsInfinite(x)) {
+    return true;
+  }
+
+  real34ToIntegralValue(x, &y, DEC_ROUND_DOWN);
+  real34Subtract(x, &y, &r);
+
+  return real34CompareEqual(&r, const34_0);
+}
+
+
+
+bool_t realIcIsAnInteger(const realIc_t *x) {
+  realIc_t r, y;
+
+  if(realIcIsNaN(x)) {
+    return false;
+  }
+
+  if(realIcIsInfinite(x)) {
+    return true;
+  }
+
+  realIcToIntegralValue(x, &y, DEC_ROUND_DOWN);
+  realIcSubtract(x, &y, &r);
+
+  return realIcCompareEqual(&r, const_0);
+}

@@ -506,6 +506,7 @@ void convertAngleIcFromTo(realIc_t *angle, uint32_t fromAngularMode, uint32_t to
     sign = realIcIsNegative(angle) ? -1 : 1;
     realIcSetPositiveSign(angle);
 
+    decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
     realIcToIntegralValue(angle, &degrees, DEC_ROUND_DOWN);
 
     realIcSubtract(angle, &degrees, angle);

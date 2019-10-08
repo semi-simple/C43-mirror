@@ -20,10 +20,12 @@
 
 #include "wp43s.h"
 
+#if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+  bool_t             debugMemAllocation;
+#endif
 #ifdef PC_BUILD
   bool_t             calcLandscape;
   bool_t             calcAutoLandscapePortrait;
-  bool_t             debugMemAllocation;
   GtkWidget          *screen;
   GtkWidget          *frmCalc;
   int16_t            screenStride;
@@ -49,6 +51,7 @@ decContext           ctxtReal34;  // 34 digits
 decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
 decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
 decContext           ctxtReal451; // 451 digits: used in radian angle reduction
+decContext           ctxtReal850; // 850 digits: used for really big modulo
 uint16_t             flags[7];
 char                 tmpStr3000[TMP_STR_LENGTH];
 char                 errorMessage[ERROR_MESSAGE_LENGTH];
@@ -163,8 +166,8 @@ int16_t              exponentSignLocation;
 int16_t              denominatorLocation;
 int16_t              imaginaryExponentSignLocation;
 int16_t              imaginaryMantissaSignLocation;
-size_t               gmpMem;
-size_t               wp43sMem;
+size_t               gmpMemInBytes;
+size_t               wp43sMemInBytes;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 void                 (*confirmedFunction)(uint16_t);
@@ -188,15 +191,11 @@ realIc_t             const *angle45;
 void setupDefaults(void) {
   void *memPtr;
 
-  #ifdef PC_BUILD
-    debugMemAllocation = false;
-  #endif
-
   ram = malloc(RAM_SIZE);
   memset(ram, 0, RAM_SIZE);
   numberOfFreeBlocks = 1;
   freeBlocks[0].address = 0;
-  freeBlocks[0].size    = BYTES_TO_BLOCKS(RAM_SIZE);
+  freeBlocks[0].sizeInBlocks = BYTES_TO_BLOCKS(RAM_SIZE);
 
   glyphNotFound.data   = malloc(38);
   #ifndef __APPLE__
@@ -256,6 +255,10 @@ void setupDefaults(void) {
   decContextDefault(&ctxtReal451,  DEC_INIT_DECQUAD);
   ctxtReal451.digits  = 451;
   ctxtReal451.traps   = 0;
+
+  decContextDefault(&ctxtReal850,  DEC_INIT_DECQUAD);
+  ctxtReal850.digits  = 850;
+  ctxtReal850.traps   = 0;
 
   statisticalSumsPointer = NULL;
 
@@ -373,6 +376,10 @@ void setupDefaults(void) {
   #else
     calcModeNormal();
   #endif // TESTSUITE_BUILD
+
+  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    debugMemAllocation = false;
+  #endif
 }
 
 
@@ -395,8 +402,8 @@ int main(int argc, char* argv[]) {
     }
   #endif
 
-  wp43sMem = 0;
-  gmpMem = 0;
+  wp43sMemInBytes = 0;
+  gmpMemInBytes = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   calcLandscape             = false;
@@ -457,8 +464,8 @@ void program_main(void) {
   int key = 0;
   char charKey[3];
 
-  wp43sMem = 0;
-  gmpMem = 0;
+  wp43sMemInBytes = 0;
+  gmpMemInBytes = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   // Initialization
@@ -578,21 +585,22 @@ int main(int argc, char* argv[]) {
     }
   #endif
 
-  wp43sMem = 0;
-  gmpMem = 0;
+  wp43sMemInBytes = 0;
+  gmpMemInBytes = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   setupDefaults();
 
   fnReset(CONFIRMED);
 /*
-longInteger_t lgInt;
-longIntegerInit(lgInt);
-
-uIntToLongInteger(900, lgInt);
-convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-fnFactorial(NOPARAM);
+reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+stringToReal16("-2.1", REGISTER_REAL16_DATA(REGISTER_X));
+stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));
 printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
+fnSetFlag(FLAG_DANGER);
+fnSetFlag(FLAG_CPXRES);
+fnLnGamma(NOPARAM);
+printf("lngamma(X) = "); printRegisterToConsole(REGISTER_X); printf("\n");
 return 0;
 */
   processTests();

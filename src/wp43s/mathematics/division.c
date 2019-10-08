@@ -136,9 +136,8 @@ void divReIcCoIc(const realIc_t *numer, const complexIc_t *denom, complexIc_t *q
  * \return void
  ***********************************************/
 void divLonILonI(void) {
-  longInteger_t y, x;
+  longInteger_t x;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
   if(longIntegerIsZero(x)) {
@@ -148,34 +147,32 @@ void divLonILonI(void) {
     #endif
   }
   else {
-    longInteger_t quotient, remainder;
+    longInteger_t y, quotient, remainder;
 
+    convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
     longIntegerInit(quotient);
     longIntegerInit(remainder);
-    longIntegerDivideRemainder(y, x, quotient, remainder);
+    longIntegerDivideQuotientRemainder(y, x, quotient, remainder);
 
     if(longIntegerIsZero(remainder)) {
       convertLongIntegerToLongIntegerRegister(quotient, REGISTER_X);
     }
     else {
-      longIntegerToAllocatedString(y, tmpStr3000, TMP_STR_LENGTH);
-      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-      stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_Y));
-      longIntegerToAllocatedString(x, tmpStr3000, TMP_STR_LENGTH);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+      realIc_t xIc, yIc;
 
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      convertLongIntegerRegisterToRealIc(REGISTER_Y, &yIc);
+      convertLongIntegerRegisterToRealIc(REGISTER_X, &xIc);
+      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-      convertRegister34To16(REGISTER_X);
+      realIcDivide(&yIc, &xIc, &xIc);
+      realIcToReal16(&xIc, REGISTER_REAL16_DATA(REGISTER_X));
     }
 
     longIntegerFree(quotient);
     longIntegerFree(remainder);
+    longIntegerFree(y);
   }
 
-  longIntegerFree(y);
   longIntegerFree(x);
 }
 
@@ -380,7 +377,7 @@ void divLonIShoI(void) {
   longInteger_t a, c;
 
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_X, REGISTER_X);
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
 
   if(longIntegerIsZero(c)) {
@@ -390,7 +387,7 @@ void divLonIShoI(void) {
     #endif
   }
   else {
-    longIntegerDivideRemainder(a, c, a, c);
+    longIntegerDivideQuotientRemainder(a, c, a, c);
     convertLongIntegerToLongIntegerRegister(a, REGISTER_X);
   }
 
@@ -401,7 +398,7 @@ void divLonIShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(long integer) ==> X(long integer)
+ * \brief Y(short integer) ÷ X(long integer) ==> X(long integer)
  *
  * \param void
  * \return void
@@ -409,7 +406,7 @@ void divLonIShoI(void) {
 void divShoILonI(void) {
   longInteger_t a, c;
 
-  convertShortIntegerRegisterLongIntegerRegister(REGISTER_Y, REGISTER_Y);
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, a);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, c);
 
@@ -420,7 +417,7 @@ void divShoILonI(void) {
     #endif
   }
   else {
-    longIntegerDivideRemainder(a, c, a, c);
+    longIntegerDivideQuotientRemainder(a, c, a, c);
     convertLongIntegerToLongIntegerRegister(a, REGISTER_X);
   }
 
@@ -787,7 +784,7 @@ void divCo16Re16(void) {
 
 
 /********************************************//**
- * \brief Y(real16) ÷ X(64bits integer) ==> X(real16)
+ * \brief Y(real16) ÷ X(short integer) ==> X(real16)
  *
  * \param void
  * \return void
@@ -861,7 +858,7 @@ void divRe16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(real16) ==> X(real16)
+ * \brief Y(short integer) ÷ X(real16) ==> X(real16)
  *
  * \param void
  * \return void
@@ -1219,7 +1216,7 @@ void divCo16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16) ÷ X(64bits integer) ==> X(complex16)
+ * \brief Y(complex16) ÷ X(short integer) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1250,7 +1247,7 @@ void divCo16ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(complex16) ==> X(complex16)
+ * \brief Y(short integer) ÷ X(complex16) ==> X(complex16)
  *
  * \param void
  * \return void
@@ -1464,7 +1461,7 @@ void divTimeRe16(void) {
 
 
 /********************************************//**
- * \brief Y(time) ÷ X(64bits integer) ==> X(time)
+ * \brief Y(time) ÷ X(short integer) ==> X(time)
  *
  * \param void
  * \return void
@@ -1560,7 +1557,7 @@ void divRm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(64bits integer) ==> X(real16 matrix)
+ * \brief Y(real16 matrix) ÷ X(short integer) ==> X(real16 matrix)
  *
  * \param void
  * \return void
@@ -1668,7 +1665,7 @@ void divCm16Co16(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(64bits integer) ==> X(complex16 matrix)
+ * \brief Y(complex16 matrix) ÷ X(short integer) ==> X(complex16 matrix)
  *
  * \param void
  * \return void
@@ -1724,20 +1721,32 @@ void divCm16Co34(void) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(64bits integer) ==> X(64bits integer)
+ * \brief Y(short integer) ÷ X(short integer) ==> X(short integer)
  *
  * \param void
  * \return void
  ***********************************************/
 void divShoIShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intDivide(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)), *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
-  setRegisterShortIntegerBase(REGISTER_X, getRegisterShortIntegerBase(REGISTER_Y));
+  int16_t sign;
+  uint64_t value;
+
+  convertShortIntegerRegisterToUInt64(REGISTER_X, &sign, &value);
+  if(value == 0) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function divShoIShoI:", "cannot divide a short integer by 0", NULL, NULL);
+    #endif
+  }
+  else {
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intDivide(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)), *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+    setRegisterShortIntegerBase(REGISTER_X, getRegisterShortIntegerBase(REGISTER_Y));
+  }
 }
 
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(real34) ==> X(real34)
+ * \brief Y(short integer) ÷ X(real34) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1791,7 +1800,7 @@ void divShoIRe34(void) {
 
 
 /********************************************//**
- * \brief Y(real34) ÷ X(64bits integer) ==> X(real34)
+ * \brief Y(real34) ÷ X(short integer) ==> X(real34)
  *
  * \param void
  * \return void
@@ -1865,7 +1874,7 @@ void divRe34ShoI(void) {
 
 
 /********************************************//**
- * \brief Y(64bits integer) ÷ X(complex34) ==> X(complex34)
+ * \brief Y(short integer) ÷ X(complex34) ==> X(complex34)
  *
  * \param void
  * \return void
@@ -1895,7 +1904,7 @@ void divShoICo34(void) {
 
 
 /********************************************//**
- * \brief Y(complex34) ÷ X(64bits integer) ==> X(complex34)
+ * \brief Y(complex34) ÷ X(short integer) ==> X(complex34)
  *
  * \param void
  * \return void

@@ -42,3 +42,7 @@ bool_t realIcCompareGreaterEqual   (const realIc_t *number1, const realIc_t *num
 bool_t realIcCompareGreaterThan    (const realIc_t *number1, const realIc_t *number2);
 bool_t realIcCompareLessEqual      (const realIc_t *number1, const realIc_t *number2);
 bool_t realIcCompareLessThan       (const realIc_t *number1, const realIc_t *number2);
+
+bool_t real16IsAnInteger           (const real16_t *x);
+bool_t real34IsAnInteger           (const real34_t *x);
+bool_t realIcIsAnInteger           (const realIc_t *x);

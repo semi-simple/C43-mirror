@@ -108,8 +108,35 @@ void gammaLonI(void) {
   realIc_t x;
 
   convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  WP34S_Gamma(&x, &x);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+
+  if(realIcIsInfinite(&x)) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function gammaLonI:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal16((realIcIsPositive(&x) ? const_plusInfinity : const_NaN), REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  if(realIcCompareLessEqual(&x, const_0)) { // x <= 0 and is an integer
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function gammaLonI:", "cannot use a negative integer as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  WP34S_Gamma(&x, &x);
   realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
@@ -119,14 +146,43 @@ void lnGammaLonI(void) {
   realIc_t x;
 
   convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  WP34S_LnGamma(&x, &x);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+
+  if(realIcIsInfinite(&x)) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function lnGammaLonI:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal16((realIcIsPositive(&x) ? const_plusInfinity : const_NaN), REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  if(realIcCompareLessEqual(&x, const_0)) { // x <= 0 and is an integer
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function lnGammaLonI:", "cannot use a negative integer as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  WP34S_LnGamma(&x, &x);
   realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
 
 void gammaRe16(void) {
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
+
   if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -135,18 +191,48 @@ void gammaRe16(void) {
     return;
   }
 
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function gammaRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X)) ? const_plusInfinity : const_NaN), REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  if(real16CompareLessEqual(REGISTER_REAL16_DATA(REGISTER_X), const16_0) && real16IsAnInteger(REGISTER_REAL16_DATA(REGISTER_X))) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function gammaRe16:", "cannot use a negative integer as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t x;
 
   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
   WP34S_Gamma(&x, &x);
   realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
 
 void lnGammaRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+  complexIc_t x;
+
+  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
+
+  if(realIcIsNaN(&x.real)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaRe16:", "cannot use NaN as X input of lnGamma", NULL, NULL);
@@ -154,12 +240,61 @@ void lnGammaRe16(void) {
     return;
   }
 
-  realIc_t x;
+  if(realIcIsInfinite(&x.real)) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function lngammaRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of lngamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal16((real16IsPositive(&x.real) ? const_plusInfinity : const_NaN), REGISTER_REAL16_DATA(REGISTER_X));
+    }
+    return;
+  }
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  WP34S_LnGamma(&x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  if(realIcCompareLessEqual(&x.real, const_0)) { // x <= 0
+    if(realIcIsAnInteger(&x.real)) {
+      if(!getFlag(FLAG_DANGER)) {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function lngammaRe16:", "cannot use a negative integer as X input of lngamma when flag D is not set", NULL, NULL);
+        #endif
+      }
+      else {
+        realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      return;
+    }
+    else { // x is negative and not an integer
+      realIcMinus(&x.real, &x.imag); // x.imag is used as a temp variable here
+      realIcDivideRemainder(&x.imag, const_2, &x.imag);
+      if(realIcCompareGreaterThan(&x.imag, const_1)) { // the result is a real
+        WP34S_LnGamma(&x.real, &x.real);
+        realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else { // the result is a complex
+        if(getFlag(FLAG_CPXRES)) { // We can calculate a complex
+          reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+          realIcZero(&x.imag);
+          WP34S_ComplexLnGamma(&x, &x);
+          realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+          realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+        }
+        else { // Domain error
+          displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            showInfoDialog("In function lngammaRe16:", "cannot use a as X input of lngamma if gamma(X)<0 when flag I is not set", NULL, NULL);
+          #endif
+        }
+      }
+    }
+    return;
+  }
+
+
+  WP34S_LnGamma(&x.real, &x.real);
+  realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -209,6 +344,8 @@ void lnGammaCo16(void) {
 
 
 void gammaRe34(void) {
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
+
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -217,18 +354,48 @@ void gammaRe34(void) {
     return;
   }
 
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function gammaRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) ? const_plusInfinity : const_NaN), REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  if(real34CompareLessEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_0) && real34IsAnInteger(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function gammaRe34:", "cannot use a negative integer as X input of gamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
   realIc_t x;
 
   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
   WP34S_Gamma(&x, &x);
   realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
 
 void lnGammaRe34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+  complexIc_t x;
+
+  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
+
+  if(realIcIsNaN(&x.real)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaRe34:", "cannot use NaN as X input of lnGamma", NULL, NULL);
@@ -236,12 +403,61 @@ void lnGammaRe34(void) {
     return;
   }
 
-  realIc_t x;
+  if(realIcIsInfinite(&x.real)) {
+    if(!getFlag(FLAG_DANGER)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function lngammaRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of lngamma when flag D is not set", NULL, NULL);
+      #endif
+    }
+    else {
+      realIcToReal34((real34IsPositive(&x.real) ? const_plusInfinity : const_NaN), REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    return;
+  }
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  WP34S_LnGamma(&x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  if(realIcCompareLessEqual(&x.real, const_0)) { // x <= 0
+    if(realIcIsAnInteger(&x.real)) {
+      if(!getFlag(FLAG_DANGER)) {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          showInfoDialog("In function lngammaRe34:", "cannot use a negative integer as X input of lngamma when flag D is not set", NULL, NULL);
+        #endif
+      }
+      else {
+        realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      return;
+    }
+    else { // x is negative and not an integer
+      realIcMinus(&x.real, &x.imag); // x.imag is used as a temp variable here
+      realIcDivideRemainder(&x.imag, const_2, &x.imag);
+      if(realIcCompareGreaterThan(&x.imag, const_1)) { // the result is a real
+        WP34S_LnGamma(&x.real, &x.real);
+        realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else { // the result is a complex
+        if(getFlag(FLAG_CPXRES)) { // We can calculate a complex
+          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+          realIcZero(&x.imag);
+          WP34S_ComplexLnGamma(&x, &x);
+          realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+          realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+        }
+        else { // Domain error
+          displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            showInfoDialog("In function lngammaRe34:", "cannot use a as X input of lngamma if gamma(X)<0 when flag I is not set", NULL, NULL);
+          #endif
+        }
+      }
+    }
+    return;
+  }
+
+
+  WP34S_LnGamma(&x.real, &x.real);
+  realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 

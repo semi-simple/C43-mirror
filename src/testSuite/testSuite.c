@@ -87,6 +87,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnGetSignificantDigits", fnGetSignificantDigits},
   {"fnGetStackSize",         fnGetStackSize        },
   {"fnGetWordSize",          fnGetWordSize         },
+  {"fnIDiv",                 fnIDiv                },
+  {"fnIDivR",                fnIDivR               },
   {"fnImaginaryPart",        fnImaginaryPart       },
   {"fnInvert",               fnInvert              },
   {"fnIp",                   fnIp                  },
@@ -100,12 +102,14 @@ const funcTest_t funcTestNoParam[] = {
   {"fnM1Pow",                fnM1Pow               },
   {"fnMagnitude",            fnMagnitude           },
   {"fnMirror",               fnMirror              },
+  {"fnMod",                  fnMod                 },
   {"fnMultiply",             fnMultiply            },
   {"fnNop",                  fnNop                 },
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
   {"fnPower",                fnPower               },
   {"fnRealPart",             fnRealPart            },
+  {"fnRmd",                  fnRmd                 },
   {"fnRollDown",             fnRollDown            },
   {"fnRollUp",               fnRollUp              },
   {"fnSign",                 fnSign                },
@@ -1091,6 +1095,42 @@ void expectedAndShouldBeValue(calcRegister_t regist, char letter, char *expected
 
 
 
+bool_t real16AreEqual(real16_t *a, real16_t *b) {
+  if( real16IsNaN(a) &&  real16IsNaN(b)) return true;
+  if( real16IsNaN(a) && !real16IsNaN(b)) return false;
+  if(!real16IsNaN(a) &&  real16IsNaN(b)) return false;
+
+  if( real16IsInfinite(a) && !real16IsInfinite(b)) return false;
+  if(!real16IsInfinite(a) &&  real16IsInfinite(b)) return false;
+  if(real16IsInfinite(a) && real16IsInfinite(b)) {
+    if(real16IsPositive(a) && real16IsPositive(b)) return true;
+    if(real16IsNegative(a) && real16IsNegative(b)) return true;
+    return false;
+  }
+
+  return real16CompareEqual(a, b);
+}
+
+
+
+bool_t real34AreEqual(real34_t *a, real34_t *b) {
+  if( real34IsNaN(a) &&  real34IsNaN(b)) return true;
+  if( real34IsNaN(a) && !real34IsNaN(b)) return false;
+  if(!real34IsNaN(a) &&  real34IsNaN(b)) return false;
+
+  if( real34IsInfinite(a) && !real34IsInfinite(b)) return false;
+  if(!real34IsInfinite(a) &&  real34IsInfinite(b)) return false;
+  if(real34IsInfinite(a) && real34IsInfinite(b)) {
+    if(real34IsPositive(a) && real34IsPositive(b)) return true;
+    if(real34IsNegative(a) && real34IsNegative(b)) return true;
+    return false;
+  }
+
+  return real34CompareEqual(a, b);
+}
+
+
+
 void checkExpectedOutParameter(char *p) {
   char l[200], r[200], real[200], imag[200], angMod[200], letter;
   int32_t i, am;
@@ -1495,7 +1535,7 @@ void checkExpectedOutParameter(char *p) {
 
       stringToReal16(real, &expectedReal16);
       stringToReal16(imag, &expectedImag16);
-      if(!real16CompareEqual(&expectedReal16, REGISTER_REAL16_DATA(regist))) {
+      if(!real16AreEqual(REGISTER_REAL16_DATA(regist), &expectedReal16)) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
@@ -1503,7 +1543,7 @@ void checkExpectedOutParameter(char *p) {
           wrongRegisterValue(regist, letter, r);
         }
       }
-      else if(!real16CompareEqual(&expectedImag16, REGISTER_IMAG16_DATA(regist))) {
+      else if(!real16AreEqual(REGISTER_IMAG16_DATA(regist), &expectedImag16)) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
@@ -1549,7 +1589,7 @@ void checkExpectedOutParameter(char *p) {
       if(strcmp(l, "RE16") == 0) {
         checkRegisterType(regist, letter, dtReal16, am);
         stringToReal16(r, &expectedReal16);
-        if(!real16CompareEqual(&expectedReal16, REGISTER_REAL16_DATA(regist))) {
+        if(!real16AreEqual(REGISTER_REAL16_DATA(regist), &expectedReal16)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
           if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real") == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
@@ -1559,7 +1599,7 @@ void checkExpectedOutParameter(char *p) {
       else {
         checkRegisterType(regist, letter, dtReal34, am);
         stringToReal34(r, &expectedReal34);
-        if(!real34CompareEqual(&expectedReal34, REGISTER_REAL34_DATA(regist))) {
+        if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
           if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
@@ -1674,7 +1714,7 @@ void checkExpectedOutParameter(char *p) {
 
       stringToReal34(real, &expectedReal34);
       stringToReal34(imag, &expectedImag34);
-      if(!real34CompareEqual(&expectedReal34, REGISTER_REAL34_DATA(regist))) {
+      if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
@@ -1682,7 +1722,7 @@ void checkExpectedOutParameter(char *p) {
           wrongRegisterValue(regist, letter, r);
         }
       }
-      else if(!real34CompareEqual(&expectedImag34, REGISTER_IMAG34_DATA(regist))) {
+      else if(!real34AreEqual(REGISTER_IMAG34_DATA(regist), &expectedImag34)) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);

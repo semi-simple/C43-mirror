@@ -65,18 +65,24 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 void expCoIc(const complexIc_t *z, complexIc_t *res) {
- 	realIc_t expa, sin, cos;
+  realIc_t expa, sin, cos;
 
- 	if(realIcIsZero(&z->imag)) {
- 		realIcExp(&z->real, &res->real);
- 		realIcZero(&res->imag);
- 	}
- 	else {
- 		realIcExp(&z->real, &expa);
- 		WP34S_Cvt2RadSinCosTan(&z->imag, AM_RADIAN, &sin, &cos, NULL);
- 		realIcMultiply(&expa, &cos, &res->real);
- 		realIcMultiply(&expa, &sin, &res->imag);
- 	}
+  if(realIcIsZero(&z->imag)) {
+   realIcExp(&z->real, &res->real);
+   realIcZero(&res->imag);
+   return;
+  }
+
+  if(realIcIsSpecial(&z->real) || realIcIsSpecial(&z->imag)) {
+    realIcCopy(const_NaN, &res->real);
+    realIcCopy(const_NaN, &res->imag);
+    return;
+  }
+
+ realIcExp(&z->real, &expa);
+ WP34S_Cvt2RadSinCosTan(&z->imag, AM_RADIAN, &sin, &cos, NULL);
+ realIcMultiply(&expa, &cos, &res->real);
+ realIcMultiply(&expa, &sin, &res->imag);
 }
 
 
@@ -103,6 +109,14 @@ void expRe16(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function expRe16:", "cannot use NaN as X input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of exp when flag D is not set", NULL, NULL);
     #endif
     return;
   }
@@ -167,6 +181,14 @@ void expRe34(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function expRe34:", "cannot use NaN as X input of exp", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function expRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of exp when flag D is not set", NULL, NULL);
     #endif
     return;
   }

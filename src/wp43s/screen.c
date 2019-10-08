@@ -156,9 +156,9 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000);
       if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
         strcat(tmpStr3000, " - ix");
-        real16ChangeSign(REGISTER_IMAG16_DATA(regist));
+        real16SetPositiveSign(REGISTER_IMAG16_DATA(regist));
         real16ToString(REGISTER_IMAG16_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
-        real16ChangeSign(REGISTER_IMAG16_DATA(regist));
+        real16SetNegativeSign(REGISTER_IMAG16_DATA(regist));
       }
       else {
         strcat(tmpStr3000, " + ix");
@@ -224,9 +224,9 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000);
       if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
         strcat(tmpStr3000, " - ix");
-        real34ChangeSign(REGISTER_IMAG34_DATA(regist));
+        real34SetPositiveSign(REGISTER_IMAG34_DATA(regist));
         real34ToString(REGISTER_IMAG34_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
-        real34ChangeSign(REGISTER_IMAG34_DATA(regist));
+        real34SetNegativeSign(REGISTER_IMAG34_DATA(regist));
       }
       else {
         strcat(tmpStr3000, " + ix");
@@ -1041,7 +1041,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           #if (SHOW_MEMORY_STATUS == 1)
             char string[1000];
 
-            sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43C %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMem, (uint32_t)gmpMem);    //JM 43C
+            sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43C %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMemInBytes, (uint32_t)gmpMemInBytes); //JM WP43C
             stringToUtf8(string, (uint8_t *)tmpStr3000);
             gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr3000);
             gtk_widget_show(lblMemoryStatus);

@@ -152,7 +152,7 @@ void divLonILonI(void) {
     convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
     longIntegerInit(quotient);
     longIntegerInit(remainder);
-    longIntegerDivideRemainder(y, x, quotient, remainder);
+    longIntegerDivideQuotientRemainder(y, x, quotient, remainder);
 
     if(longIntegerIsZero(remainder)) {
       convertLongIntegerToLongIntegerRegister(quotient, REGISTER_X);
@@ -387,7 +387,7 @@ void divLonIShoI(void) {
     #endif
   }
   else {
-    longIntegerDivideRemainder(a, c, a, c);
+    longIntegerDivideQuotientRemainder(a, c, a, c);
     convertLongIntegerToLongIntegerRegister(a, REGISTER_X);
   }
 
@@ -417,7 +417,7 @@ void divShoILonI(void) {
     #endif
   }
   else {
-    longIntegerDivideRemainder(a, c, a, c);
+    longIntegerDivideQuotientRemainder(a, c, a, c);
     convertLongIntegerToLongIntegerRegister(a, REGISTER_X);
   }
 

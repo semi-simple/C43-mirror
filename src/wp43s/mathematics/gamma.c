@@ -268,7 +268,7 @@ void lnGammaRe16(void) {
     }
     else { // x is negative and not an integer
       realIcMinus(&x.real, &x.imag); // x.imag is used as a temp variable here
-      realIcRemainder(&x.imag, const_2, &x.imag);
+      realIcDivideRemainder(&x.imag, const_2, &x.imag);
       if(realIcCompareGreaterThan(&x.imag, const_1)) { // the result is a real
         WP34S_LnGamma(&x.real, &x.real);
         realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
@@ -431,7 +431,7 @@ void lnGammaRe34(void) {
     }
     else { // x is negative and not an integer
       realIcMinus(&x.real, &x.imag); // x.imag is used as a temp variable here
-      realIcRemainder(&x.imag, const_2, &x.imag);
+      realIcDivideRemainder(&x.imag, const_2, &x.imag);
       if(realIcCompareGreaterThan(&x.imag, const_1)) { // the result is a real
         WP34S_LnGamma(&x.real, &x.real);
         realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));

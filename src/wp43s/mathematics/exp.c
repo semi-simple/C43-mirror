@@ -65,13 +65,13 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 void expCoIc(const complexIc_t *z, complexIc_t *res) {
- 	realIc_t expa, sin, cos;
+  realIc_t expa, sin, cos;
 
- 	if(realIcIsZero(&z->imag)) {
- 		realIcExp(&z->real, &res->real);
- 		realIcZero(&res->imag);
- 		return;
- 	}
+  if(realIcIsZero(&z->imag)) {
+   realIcExp(&z->real, &res->real);
+   realIcZero(&res->imag);
+   return;
+  }
 
   if(realIcIsSpecial(&z->real) || realIcIsSpecial(&z->imag)) {
     realIcCopy(const_NaN, &res->real);
@@ -79,10 +79,10 @@ void expCoIc(const complexIc_t *z, complexIc_t *res) {
     return;
   }
 
-	realIcExp(&z->real, &expa);
-	WP34S_Cvt2RadSinCosTan(&z->imag, AM_RADIAN, &sin, &cos, NULL);
-	realIcMultiply(&expa, &cos, &res->real);
-	realIcMultiply(&expa, &sin, &res->imag);
+ realIcExp(&z->real, &expa);
+ WP34S_Cvt2RadSinCosTan(&z->imag, AM_RADIAN, &sin, &cos, NULL);
+ realIcMultiply(&expa, &cos, &res->real);
+ realIcMultiply(&expa, &sin, &res->imag);
 }
 
 

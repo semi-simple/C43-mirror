@@ -107,8 +107,6 @@ division_real34.txt
 division_complex34.txt
 
 invert.txt
-idiv.txt
-idivr.txt
 
 power_longInteger.txt
 power_real16.txt
@@ -142,6 +140,11 @@ polarToRectangular.txt
 
 ceil.txt
 floor.txt
+
+idiv.txt
+idivr.txt
+modulo.txt
+remainder.txt
 
 10pow.txt
 2pow.txt

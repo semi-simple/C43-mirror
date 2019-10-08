@@ -87,7 +87,7 @@ void fnPower(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void powLonILonI(void) {
-	 int32_t exponentSign, baseSign;
+  int32_t exponentSign, baseSign;
   longInteger_t base, exponent;
   bool_t exponentIsOdd;
 
@@ -101,43 +101,43 @@ void powLonILonI(void) {
   exponentSign = longIntegerSign(exponent);
   longIntegerSetPositiveSign(exponent);
 
- 	if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
-	   displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+  if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powLonILonI: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
 
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
 
- 	if(longIntegerIsZero(exponent)) {
-	  	uIntToLongInteger(1, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  if(longIntegerIsZero(exponent)) {
+    uIntToLongInteger(1, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
-	 else if(longIntegerIsZero(base)) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  else if(longIntegerIsZero(base)) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
-	 else if(exponentSign == -1) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    return;
+  }
+  else if(exponentSign == -1) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
+    return;
+  }
 
   longInteger_t power;
 
   longIntegerInit(power);
- 	uIntToLongInteger(1, power);
+  uIntToLongInteger(1, power);
 
   for(uint32_t i=0; !longIntegerIsZero(exponent); i++) {
     if(longIntegerIsOdd(exponent)) {
@@ -335,7 +335,7 @@ void powCo16LonI(void) {
  * \return void
  ***********************************************/
 void powLonIShoI(void) {
-	 int32_t exponentSign, baseSign;
+  int32_t exponentSign, baseSign;
   longInteger_t base, exponent;
   bool_t exponentIsOdd;
 
@@ -350,43 +350,43 @@ void powLonIShoI(void) {
   exponentSign = longIntegerSign(exponent);
   longIntegerSetPositiveSign(exponent);
 
- 	if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
-	   displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+  if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powLonIShoI: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
 
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
 
- 	if(longIntegerIsZero(exponent)) {
-	  	uIntToLongInteger(1, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  if(longIntegerIsZero(exponent)) {
+    uIntToLongInteger(1, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
-	 else if(longIntegerIsZero(base)) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  else if(longIntegerIsZero(base)) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
-	 else if(exponentSign == -1) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    return;
+  }
+  else if(exponentSign == -1) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
+    return;
+  }
 
   longInteger_t power;
 
   longIntegerInit(power);
- 	uIntToLongInteger(1, power);
+  uIntToLongInteger(1, power);
 
   for(uint32_t i=0; !longIntegerIsZero(exponent); i++) {
     if(longIntegerIsOdd(exponent)) {
@@ -420,7 +420,7 @@ void powLonIShoI(void) {
  * \return void
  ***********************************************/
 void powShoILonI(void) {
-	 int32_t exponentSign, baseSign;
+  int32_t exponentSign, baseSign;
   longInteger_t base, exponent;
   bool_t exponentIsOdd;
 
@@ -434,43 +434,43 @@ void powShoILonI(void) {
   exponentSign = longIntegerSign(exponent);
   longIntegerSetPositiveSign(exponent);
 
- 	if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
-	   displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+  if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function powShoILonI: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
 
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
 
- 	if(longIntegerIsZero(exponent)) {
-	  	uIntToLongInteger(1, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  if(longIntegerIsZero(exponent)) {
+    uIntToLongInteger(1, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
-	 else if(longIntegerIsZero(base)) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  else if(longIntegerIsZero(base)) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
-	 else if(exponentSign == -1) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    return;
+  }
+  else if(exponentSign == -1) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
+    return;
+  }
 
   longInteger_t power;
 
   longIntegerInit(power);
- 	uIntToLongInteger(1, power);
+  uIntToLongInteger(1, power);
 
   for(uint32_t i=0; !longIntegerIsZero(exponent); i++) {
     if(longIntegerIsOdd(exponent)) {

@@ -508,7 +508,7 @@ void btnPressed(void *notUsed, void *data) {
                 if(real16CompareLessThan(&magnitude16, const16_0)) {
                   real16SetPositiveSign(&magnitude16);
                   real16Add(&theta16, const_pi, &theta16);
-                  real16Remainder(&theta16, const_2pi, &theta16);
+                  real16DivideRemainder(&theta16, const_2pi, &theta16);
                 }
                 real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
               }
@@ -539,7 +539,7 @@ void btnPressed(void *notUsed, void *data) {
                 if(real34CompareLessThan(&magnitude34, const34_0)) {
                   real34SetPositiveSign(&magnitude34);
                   real34Add(&theta34, const_pi, &theta34);
-                  real34Remainder(&theta34, const34_2pi, &theta34);
+                  real34DivideRemainder(&theta34, const34_2pi, &theta34);
                 }
                 real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in radian
               }

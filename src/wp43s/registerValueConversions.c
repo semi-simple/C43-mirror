@@ -168,7 +168,7 @@ void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, cal
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
-  convertLongIntegerToShortIntegerRegister(lgInt, getRegisterShortIntegerBase(source), destination);
+  convertLongIntegerToShortIntegerRegister(lgInt, 10, destination);
   longIntegerFree(lgInt);
 }
 
@@ -177,17 +177,21 @@ void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, cal
 void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
   uint64_t value;
   int16_t sign;
-  real16_t lowWord;
+  realIc_t hiWord, lowWord;
 
   convertShortIntegerRegisterToUInt64(source, &sign, &value);
 
-  uInt32ToReal16(value >> 32, REGISTER_REAL16_DATA(destination));
-  uInt32ToReal16(value & 0x00000000ffffffff, &lowWord);
-  real16FMA(REGISTER_REAL16_DATA(destination), const_2p32, &lowWord, REGISTER_REAL16_DATA(destination));
+  uInt32ToRealIc(value >> 32, &hiWord);
+  uInt32ToRealIc(value & 0x00000000ffffffff, &lowWord);
+  realIcFMA(&hiWord, const_2p32, &lowWord, &lowWord);
+
+  reallocateRegister(destination, dtReal16, REAL16_SIZE, AM_NONE);
+  realIcToReal16(&lowWord, REGISTER_REAL16_DATA(destination));
 
   if(sign) {
     real16SetNegativeSign(REGISTER_REAL16_DATA(destination));
   }
+//printf("destination = "); printRegisterToConsole(destination); printf("\n");
 }
 
 

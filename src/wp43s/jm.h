@@ -108,7 +108,7 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void fnDisplayFormatSigFig(uint16_t displayFormatN);
 void fnDisplayFormatUnit(uint16_t displayFormatN);
 
-#ifndef TESTSUITE_BUILD
+#ifdef PC_BUILD
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);
 #endif

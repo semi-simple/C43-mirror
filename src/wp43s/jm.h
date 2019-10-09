@@ -46,7 +46,6 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
 #define JM_3_SHIFT_CUTOFF 6 //100ms
 
-//keyboard.c   
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 
@@ -109,8 +108,11 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void fnDisplayFormatSigFig(uint16_t displayFormatN);
 void fnDisplayFormatUnit(uint16_t displayFormatN);
 
+#ifdef PC_BUILD
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);
+#endif
+
 void Reset_Shift_Mem(void);
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 

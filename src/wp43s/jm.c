@@ -174,9 +174,25 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
   if(What == 8) {
     Home3TimerMode = !Home3TimerMode;                               //JM SHIFT HOME.3 TIM CCL
     fnInfo(Home3TimerMode);                                         //JM SHIFT HOME.3 TIM CCL
+  } else
+  if(What == 9) {
+    Norm_Key_00_USER = !Norm_Key_00_USER;                           //JM USER
+    Norm_Key_00_CC = false;
+    Norm_Key_00_MyMenu = false;
+    fnInfo(Norm_Key_00_USER);                                       //JM USER
+  } else
+  if(What == 10) {
+    Norm_Key_00_CC = !Norm_Key_00_CC;                               //JM USER
+    Norm_Key_00_USER = false;
+    Norm_Key_00_MyMenu = false;
+    fnInfo(Norm_Key_00_CC);                                         //JM USER
+  } else
+  if(What == 11) {
+    Norm_Key_00_MyMenu = !Norm_Key_00_MyMenu;                               //JM USER
+    Norm_Key_00_USER = false;
+    Norm_Key_00_CC = false;
+    fnInfo(Norm_Key_00_MyMenu);                                         //JM USER
   }
-
-
 }                                                                 //JM SHIFT TIM CCL
 
 
@@ -236,6 +252,18 @@ void fnShowJM(uint16_t What) {
   if(What == 8 && Home3TimerMode == true) { stringToLongInteger("1",10,mem); }
   else
   if(What == 8 && Home3TimerMode == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 9 && Norm_Key_00_USER == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 9 && Norm_Key_00_USER == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 10 && Norm_Key_00_CC == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 10 && Norm_Key_00_CC == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 11 && Norm_Key_00_MyMenu == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 11 && Norm_Key_00_MyMenu == false) { stringToLongInteger("0",10,mem); }
  
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
@@ -257,7 +285,8 @@ if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
   //printf("Xreg %d\n", X_REG);
     if (JM_KEY >= 256) { 
       kbd_usr[JM_KEY - 256].primary = X_REG; 
-      printf(".primary %d\n", kbd_usr[JM_KEY - 256].primary);
+      //printf(".primary %d\n", kbd_usr[JM_KEY - 256].primary);
+      Show_User_Keys();
     } 
   }
 }
@@ -274,7 +303,8 @@ if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
   //printf("Xreg %d\n", X_REG);
     if (JM_KEY >= 256) { 
       kbd_usr[JM_KEY - 256].fShifted = X_REG; 
-      printf(".fShifted %d\n", kbd_usr[JM_KEY - 256].fShifted);
+      //printf(".fShifted %d\n", kbd_usr[JM_KEY - 256].fShifted);
+      Show_User_Keys();
     } 
   }
 }
@@ -291,7 +321,8 @@ if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
   //printf("Xreg %d\n", X_REG);
     if (JM_KEY >= 256) { 
       kbd_usr[JM_KEY - 256].gShifted = X_REG; 
-      printf(".gShifted %d\n", kbd_usr[JM_KEY - 256].gShifted);
+      //printf(".gShifted %d\n", kbd_usr[JM_KEY - 256].gShifted);
+      Show_User_Keys();
     } 
   }
 }
@@ -830,11 +861,59 @@ if ComplexDP change to ComplexSP
        } 
 
   refreshStack();
-  }
+  } else
 
+  if(JM_OPCODE == USER_DEFAULTS) {                                        //USER_DEFAULTS 23                                          
+      //JM Default
+      kbd_usr[0].primary     = KEY_CC;       
+      kbd_usr[0].gShifted    = KEY_TYPCON_UP;
+      kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+      Show_User_Keys();
+  } else
 
+  if(JM_OPCODE == USER_COMPLEX) {                                        //USER_COMPLEX 24                                      
+      //JM COMPLEX
+      kbd_usr[12].gShifted   = KEY_CC;
+      kbd_usr[0].gShifted    = KEY_TYPCON_UP;
+      kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+      Show_User_Keys();
+  } else
+
+  if(JM_OPCODE == USER_SHIFTS) {                                        //USER_SHIFTS 25                                         
+      //JM Sectioon to be put on a menu
+      kbd_usr[0].primary     = KEY_USERMODE;
+      kbd_usr[9].primary     = -MNU_TRI;    
+      kbd_usr[9].fShifted    = KEY_USERMODE;
+      kbd_usr[9].gShifted    = ITM_RTN;     
+      kbd_usr[10].primary    = KEY_f;       
+      kbd_usr[10].fShifted   = ITM_NULL;        
+      kbd_usr[10].gShifted   = ITM_NULL;        
+      kbd_usr[11].primary    = KEY_g;       
+      kbd_usr[11].fShifted   = ITM_NULL;        
+      kbd_usr[11].gShifted   = ITM_NULL;        
+      Show_User_Keys();
+  } else
+
+  if(JM_OPCODE == USER_RESET) {                                        //USER_RESET 26                                         
+      //JM USER RESET
+      memcpy(kbd_usr, kbd_std, sizeof(kbd_std)); 
+      Show_User_Keys();
+  } 
 
 }
+
+
+void Show_User_Keys(void) {
+  userModeEnabled = false;
+  toggleUserMode();
+  #ifdef PC_BUILD
+    if(calcMode == CM_NORMAL) calcModeNormalGui();
+    else if(calcMode == CM_AIM) calcModeAimGui();
+    else if(calcMode == CM_TAM) calcModeTamGui();
+  #endif
+}
+
+
 
 void JM_convertReal16ToShortInteger(uint16_t confirmation) {
    if(!real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {

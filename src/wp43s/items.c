@@ -1902,7 +1902,7 @@ const item_t indexOfItems[] = {
 /* 1770 */  { fnSetSetJM,                  8,                           "SH.3T",                                        "SH.3T",                                                                     SLS_ENABLED},      //JM HOME.3T
 /* 1771 */  { fnShowJM,                    8,                           "SH.3T?",                                       "SH.3T?",                                                                     SLS_ENABLED  },     //JM SHOW HOME.3T
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                    "M_ASN",                                                                       SLS_UNCHANGED},   //JM USER
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                    "ASN",                                                                       SLS_UNCHANGED},   //JM USER
 
 /*1773*/  { fnJMUSERmode,   256+  0,         "KEY  00U",               "K_00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 /*1774*/  { fnJMUSERmode_f, 256+  0,         "KEY f00U",               "Kf00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
@@ -2017,7 +2017,17 @@ const item_t indexOfItems[] = {
 /*1883*/  { fnJMUSERmode_g, 256+ 36,         "KEY g36U",               "Kg36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 
 /* 1884 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
+/* 1885 */  { fnJM,                        USER_DEFAULTS,               "USER DEFAULTS",                               "U" STD_SIGMA "+CC",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1886 */  { fnJM,                        USER_COMPLEX ,               "USER COMPLEX",                                "U" STD_UP_ARROW " CC",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1887 */  { fnJM,                        USER_SHIFTS  ,               "USER SHIFTS",                                 "U f&g",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1888 */  { fnJM,                        USER_RESET   ,               "USER RESET",                                  "U RSET",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1889 */  { fnSetSetJM,                  9            ,               "NORM KEY E+ USER",                            STD_SIGMA "+USR",                                                              SLS_ENABLED  },  //JM USER
+/* 1890 */  { fnShowJM,                    9            ,               "NORM KEY E+ USER?",                           STD_SIGMA "+USR?",                                                             SLS_ENABLED  },  //JM USER
+/* 1891 */  { fnSetSetJM,                  10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC",                                                               SLS_ENABLED  },  //JM USER
+/* 1892 */  { fnShowJM,                    10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC?",                                                              SLS_ENABLED  },  //JM USER
+/* 1893 */  { fnSetSetJM,                  11           ,               "NORM KEY E+ CC",                              STD_SIGMA "+MyMu",                                                               SLS_ENABLED  },  //JM USER
+/* 1894 */  { fnShowJM,                    11           ,               "NORM KEY E+ MyMenu",                          STD_SIGMA "+MyM?",                                                              SLS_ENABLED  },  //JM USER
+  
 
-
-/* 1885 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
+/* 1895 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
 };

@@ -373,9 +373,19 @@ void btnPressed(void *notUsed, void *data) {
   else {
                     //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE   \ / 
     int16_t item;
-    if ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) ) {
+    if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
       printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
-      item = -MNU_TRI;
+      if(Norm_Key_00_USER) {
+        item = KEY_USERMODE;
+      } else
+      if(Norm_Key_00_CC) {
+        item = KEY_CC;
+      } else
+      if(Norm_Key_00_CC) {
+        item = -MNU_MYMENU;
+      } else {
+        item = determineItem(key);
+      }  
     } else {
       item = determineItem(key);
     }

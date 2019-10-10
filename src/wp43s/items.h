@@ -1921,8 +1921,19 @@
 
 
 #define KEY_fg                        1884
+#define ITM_USER_DEFAULTS             1885  //JM USER
+#define ITM_USER_COMPLEX              1886  //JM USER
+#define ITM_USER_SHIFTS               1887  //JM USER
+#define ITM_USER_RESET                1888  //JM USER
+#define ITM_U_KEY_USER                1889  //JM USER
+#define ITM_SH_KEY_USER               1890  //JM USER
+#define ITM_U_KEY_CC                  1891  //JM USER
+#define ITM_SH_KEY_CC                 1892  //JM USER
+#define ITM_U_KEY_MM                  1893  //JM USER
+#define ITM_SH_KEY_MM                 1894  //JM USER
 
-#define LAST_ITEM                     1885  //JM
+
+#define LAST_ITEM                     1895  //JM
 
 #define CHR_PROD_SIGN                 9999
 

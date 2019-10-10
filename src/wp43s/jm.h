@@ -77,7 +77,7 @@ gint64 now;                                       //JM usec  //JM TIMER EMULATOR
 #define ITEM_CONF_N ITM_CHS
 
 // Define the second tagline
-#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Sep.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
+#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Oct.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
 extern uint8_t SigFigMode;                                           //J SIGFIG 
@@ -90,7 +90,9 @@ extern bool_t SH_BASE_HOME;                                          //JM BASEHO
 extern bool_t SH_BASE_MYMENU;                                        //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_AHOME;                                         //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
-
+extern bool_t Norm_Key_00_USER;                                      //JM USER
+extern bool_t Norm_Key_00_CC;                                        //JM USER
+extern bool_t Norm_Key_00_MyMenu;                                    //JM USER
 
 
 // Additional routines needed in jm.c
@@ -100,7 +102,12 @@ void fnSetSetJM(uint16_t What);
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
+#define USER_DEFAULTS    23
+#define USER_COMPLEX     24
+#define USER_SHIFTS      25
+#define USER_RESET       26
 
+void Show_User_Keys(void);
 void fnJMUSERmode(uint16_t JM_KEY);
 void fnJMUSERmode_f(uint16_t JM_KEY);
 void fnJMUSERmode_g(uint16_t JM_KEY);

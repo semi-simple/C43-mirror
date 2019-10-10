@@ -245,6 +245,58 @@ void fnShowJM(uint16_t What) {
 
 
 
+void fnJMUSERmode(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].primary = X_REG; 
+      printf(".primary %d\n", kbd_usr[JM_KEY - 256].primary);
+    } 
+  }
+}
+
+void fnJMUSERmode_f(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].fShifted = X_REG; 
+      printf(".fShifted %d\n", kbd_usr[JM_KEY - 256].fShifted);
+    } 
+  }
+}
+
+void fnJMUSERmode_g(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].gShifted = X_REG; 
+      printf(".gShifted %d\n", kbd_usr[JM_KEY - 256].gShifted);
+    } 
+  }
+}
+
+
 
 /********************************************//**
  * RPN PROGRAM. 

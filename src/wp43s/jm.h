@@ -100,6 +100,10 @@ void fnSetSetJM(uint16_t What);
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
+
+void fnJMUSERmode(uint16_t JM_KEY);
+void fnJMUSERmode_f(uint16_t JM_KEY);
+void fnJMUSERmode_g(uint16_t JM_KEY);
 void JM_convertReal16ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
 

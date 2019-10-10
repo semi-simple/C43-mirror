@@ -81,7 +81,8 @@ const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,     
                                      ITM_CUBEROOT,                  ITM_XTHROOT,                ITM_NULL,                 ITM_2X,                ITM_EX1,                     ITM_NULL,                           //JM re-arranged menu. Added YˆX to follow DM42 keyboard. Swapped YˆX and Yˆ(1/X). Re-aligned with 42S keys.
                                      ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
 
-const int16_t menu_TRI[]         = { ITM_toREC,                     ITM_toPOL,                  ITM_pi,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
+const int16_t menu_TRI[]         = { ITM_sin,                        ITM_cos,                    ITM_tan,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
+//                                   ITM_toREC,                     ITM_toPOL,                  ITM_pi,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM re-arranged menu TRIG menu
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };    //JM re-arranged menu TRIG menu
 
@@ -459,6 +460,33 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
 
 
 
+const int16_t menu_ASN[]        = { 
+      K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER
+      Kf00U, Kf01U, Kf02U, Kf03U, Kf04U, Kf05U,  //JM USER
+      Kg00U, Kg01U, Kg02U, Kg03U, Kg04U, Kg05U,  //JM USER
+      K_06U, K_07U, K_08U, K_09U, K_10U, K_11U,  //JM USER
+      Kf06U, Kf07U, Kf08U, Kf09U, Kf10U, Kf11U,  //JM USER
+      Kg06U, Kg07U, Kg08U, Kg09U, Kg10U, Kg11U,  //JM USER
+      K_12U, K_13U, K_14U, K_15U, K_16U,   ITM_NULL,  //JM USER
+      Kf12U, Kf13U, Kf14U, Kf15U, Kf16U,   ITM_NULL,  //JM USER
+      Kg12U, Kg13U, Kg14U, Kg15U, Kg16U,   ITM_NULL,  //JM USER
+/*      K_17U, K_18U, K_19U, K_20U, K_21U,   ITM_NULL,  //JM USER
+      Kf17U, Kf18U, Kf19U, Kf20U, Kf21U,   ITM_NULL,  //JM USER
+      Kg17U, Kg18U, Kg19U, Kg20U, Kg21U,   ITM_NULL,  //JM USER
+      K_22U, K_23U, K_24U, K_25U, K_26U,   ITM_NULL,  //JM USER
+      Kf22U, Kf23U, Kf24U, Kf25U, Kf26U,   ITM_NULL,  //JM USER
+      Kg22U, Kg23U, Kg24U, Kg25U, Kg26U,   ITM_NULL,  //JM USER
+      K_27U, K_28U, K_29U, K_30U, K_31U,   ITM_NULL,  //JM USER
+      Kf27U, Kf28U, Kf29U, Kf30U, Kf31U,   ITM_NULL,  //JM USER
+      Kg27U, Kg28U, Kg29U, Kg30U, Kg31U,   ITM_NULL,  //JM USER
+      K_32U, K_33U, K_34U, K_35U, K_36U,   ITM_NULL,  //JM USER
+      Kf32U, Kf33U, Kf34U, Kf35U, Kf36U,   ITM_NULL,  //JM USER
+      Kg32U, Kg33U, Kg34U, Kg35U, Kg36U,   ITM_NULL  //JM USER
+ */
+      };
+     
+
+
 const int16_t menu_HOME[]        = {
 
           /*-2------*/                                                                                                                                                                                           //JM HOME
@@ -467,7 +495,7 @@ const int16_t menu_HOME[]        = {
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-1------*/                                                                                                                                                                                           //JM HOME
 /* 03 */                             ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                         //JM HOME
-                                     ITM_toDP,                      KEY_TYPCON_DN/*ITM_toSP*/,  KEY_TYPCON_UP /*ITM_IP*/,                   ITM_op_j,              CST_09,                     -MNU_EE,                            //JM HOME
+                                     -MNU_ASN/*ITM_toDP*/,                      KEY_TYPCON_DN/*ITM_toSP*/,  KEY_TYPCON_UP /*ITM_IP*/,                   ITM_op_j,              CST_09,                     -MNU_EE,                            //JM HOME
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                         //JM HOME
           /*-3------*/                                                                                                                                                                                           //JM HOME
                                      ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                         //JM HOME
@@ -600,6 +628,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_TAM,         .numRows = sizeof(menu_Tam        )/sizeof(int16_t)/6, .softkeyRow = menu_Tam         },
   {.menuId = -MNU_TAMCMP,      .numRows = sizeof(menu_TamCmp     )/sizeof(int16_t)/6, .softkeyRow = menu_TamCmp      },
   {.menuId = -MNU_TAMSTORCL,   .numRows = sizeof(menu_TamStoRcl  )/sizeof(int16_t)/6, .softkeyRow = menu_TamStoRcl   },
+  {.menuId = -MNU_ASN,         .numRows = sizeof(menu_ASN        )/sizeof(int16_t)/6, .softkeyRow = menu_ASN         },  //JM USER TEST
   {.menuId = -MNU_HOME,        .numRows = sizeof(menu_HOME       )/sizeof(int16_t)/6, .softkeyRow = menu_HOME        },  //JM HOME
   {.menuId = -MNU_ALPHA,       .numRows = sizeof(menu_ALPHA      )/sizeof(int16_t)/6, .softkeyRow = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numRows = sizeof(menu_BASE       )/sizeof(int16_t)/6, .softkeyRow = menu_BASE        },  //JM HOME

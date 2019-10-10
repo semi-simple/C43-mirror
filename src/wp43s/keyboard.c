@@ -266,7 +266,7 @@ void btnPressed(void *notUsed, void *data) {
 
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
-    if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {     //JM shifts
+    if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {     //JM shifts
       if(temporaryInformation != TI_NO_INFO) {                                                                                   //JM shifts
         temporaryInformation = TI_NO_INFO;                                                                                       //JM shifts
         refreshRegisterLine(REGISTER_X);                                                                                         //JM shifts
@@ -330,8 +330,8 @@ void btnPressed(void *notUsed, void *data) {
                                                                                                                                  //JM shifts
 #endif
 
-#ifndef JM_MULTISHIFT /* JM shifts. Whole section for shift f and shift g removed here in favour if the f/g shift method */
   // Shift f pressed
+  else
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
@@ -368,10 +368,18 @@ void btnPressed(void *notUsed, void *data) {
 
     showShiftState();
   }
-#endif //JM shifts. Replaced by MULTISHIFT  *********************************************************************************************************
+
 
   else {
-    int16_t item = determineItem(key);
+                    //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE   \ / 
+    int16_t item;
+    if ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) ) {
+      printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
+      item = -MNU_TRI;
+    } else {
+      item = determineItem(key);
+    }
+                    //JM                                                    ^^
 
     if(item == CHR_PROD_SIGN) {
       item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);

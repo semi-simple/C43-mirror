@@ -1641,7 +1641,7 @@ const item_t indexOfItems[] = {
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                                                  SLS_UNCHANGED},
 /* 1515 */  { fnUserMode,                  NOPARAM,                     "",                                            "USER",                                                                       SLS_UNCHANGED},
 /* 1516 */  { fnComplexCCCC_CC,               NOPARAM,                     "CC",                                            "CC",                                                                         SLS_UNCHANGED},   //JM Change CC to COMPLEX
-/* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
+/* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                                                          SLS_UNCHANGED},
 /* 1519 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UP_ARROW,                                                                 SLS_UNCHANGED},
 /* 1520 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_HAMBURGER STD_BST,                                                        SLS_UNCHANGED},
@@ -1902,7 +1902,122 @@ const item_t indexOfItems[] = {
 /* 1770 */  { fnSetSetJM,                  8,                           "SH.3T",                                        "SH.3T",                                                                     SLS_ENABLED},      //JM HOME.3T
 /* 1771 */  { fnShowJM,                    8,                           "SH.3T?",                                       "SH.3T?",                                                                     SLS_ENABLED  },     //JM SHOW HOME.3T
 
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                    "M_ASN",                                                                       SLS_UNCHANGED},   //JM USER
+
+/*1773*/  { fnJMUSERmode,   256+  0,         "KEY  00U",               "K_00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1774*/  { fnJMUSERmode_f, 256+  0,         "KEY f00U",               "Kf00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1775*/  { fnJMUSERmode_g, 256+  0,         "KEY g00U",               "Kg00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1776*/  { fnJMUSERmode,   256+  1,         "KEY  01U",               "K_01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1777*/  { fnJMUSERmode_f, 256+  1,         "KEY f01U",               "Kf01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1778*/  { fnJMUSERmode_g, 256+  1,         "KEY g01U",               "Kg01U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1779*/  { fnJMUSERmode,   256+  2,         "KEY  02U",               "K_02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1780*/  { fnJMUSERmode_f, 256+  2,         "KEY f02U",               "Kf02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1781*/  { fnJMUSERmode_g, 256+  2,         "KEY g02U",               "Kg02U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1782*/  { fnJMUSERmode,   256+  3,         "KEY  03U",               "K_03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1783*/  { fnJMUSERmode_f, 256+  3,         "KEY f03U",               "Kf03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1784*/  { fnJMUSERmode_g, 256+  3,         "KEY g03U",               "Kg03U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1785*/  { fnJMUSERmode,   256+  4,         "KEY  04U",               "K_04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1786*/  { fnJMUSERmode_f, 256+  4,         "KEY f04U",               "Kf04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1787*/  { fnJMUSERmode_g, 256+  4,         "KEY g04U",               "Kg04U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1788*/  { fnJMUSERmode,   256+  5,         "KEY  05U",               "K_05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1789*/  { fnJMUSERmode_f, 256+  5,         "KEY f05U",               "Kf05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1790*/  { fnJMUSERmode_g, 256+  5,         "KEY g05U",               "Kg05U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1791*/  { fnJMUSERmode,   256+  6,         "KEY  06U",               "K_06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1792*/  { fnJMUSERmode_f, 256+  6,         "KEY f06U",               "Kf06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1793*/  { fnJMUSERmode_g, 256+  6,         "KEY g06U",               "Kg06U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1794*/  { fnJMUSERmode,   256+  7,         "KEY  07U",               "K_07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1795*/  { fnJMUSERmode_f, 256+  7,         "KEY f07U",               "Kf07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1796*/  { fnJMUSERmode_g, 256+  7,         "KEY g07U",               "Kg07U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1797*/  { fnJMUSERmode,   256+  8,         "KEY  08U",               "K_08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1798*/  { fnJMUSERmode_f, 256+  8,         "KEY f08U",               "Kf08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1799*/  { fnJMUSERmode_g, 256+  8,         "KEY g08U",               "Kg08U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1800*/  { fnJMUSERmode,   256+  9,         "KEY  09U",               "K_09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1801*/  { fnJMUSERmode_f, 256+  9,         "KEY f09U",               "Kf09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1802*/  { fnJMUSERmode_g, 256+  9,         "KEY g09U",               "Kg09U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1803*/  { fnJMUSERmode,   256+ 10,         "KEY  10U",               "K_10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1804*/  { fnJMUSERmode_f, 256+ 10,         "KEY f10U",               "Kf10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1805*/  { fnJMUSERmode_g, 256+ 10,         "KEY g10U",               "Kg10U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1806*/  { fnJMUSERmode,   256+ 11,         "KEY  11U",               "K_11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1807*/  { fnJMUSERmode_f, 256+ 11,         "KEY f11U",               "Kf11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1808*/  { fnJMUSERmode_g, 256+ 11,         "KEY g11U",               "Kg11U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1809*/  { fnJMUSERmode,   256+ 12,         "KEY  12U",               "K_12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1810*/  { fnJMUSERmode_f, 256+ 12,         "KEY f12U",               "Kf12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1811*/  { fnJMUSERmode_g, 256+ 12,         "KEY g12U",               "Kg12U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1812*/  { fnJMUSERmode,   256+ 13,         "KEY  13U",               "K_13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1813*/  { fnJMUSERmode_f, 256+ 13,         "KEY f13U",               "Kf13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1814*/  { fnJMUSERmode_g, 256+ 13,         "KEY g13U",               "Kg13U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1815*/  { fnJMUSERmode,   256+ 14,         "KEY  14U",               "K_14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1816*/  { fnJMUSERmode_f, 256+ 14,         "KEY f14U",               "Kf14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1817*/  { fnJMUSERmode_g, 256+ 14,         "KEY g14U",               "Kg14U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1818*/  { fnJMUSERmode,   256+ 15,         "KEY  15U",               "K_15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1819*/  { fnJMUSERmode_f, 256+ 15,         "KEY f15U",               "Kf15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1820*/  { fnJMUSERmode_g, 256+ 15,         "KEY g15U",               "Kg15U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1821*/  { fnJMUSERmode,   256+ 16,         "KEY  16U",               "K_16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1822*/  { fnJMUSERmode_f, 256+ 16,         "KEY f16U",               "Kf16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1823*/  { fnJMUSERmode_g, 256+ 16,         "KEY g16U",               "Kg16U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1824*/  { fnJMUSERmode,   256+ 17,         "KEY  17U",               "K_17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1825*/  { fnJMUSERmode_f, 256+ 17,         "KEY f17U",               "Kf17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1826*/  { fnJMUSERmode_g, 256+ 17,         "KEY g17U",               "Kg17U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1827*/  { fnJMUSERmode,   256+ 18,         "KEY  18U",               "K_18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1828*/  { fnJMUSERmode_f, 256+ 18,         "KEY f18U",               "Kf18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1829*/  { fnJMUSERmode_g, 256+ 18,         "KEY g18U",               "Kg18U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1830*/  { fnJMUSERmode,   256+ 19,         "KEY  19U",               "K_19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1831*/  { fnJMUSERmode_f, 256+ 19,         "KEY f19U",               "Kf19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1832*/  { fnJMUSERmode_g, 256+ 19,         "KEY g19U",               "Kg19U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1833*/  { fnJMUSERmode,   256+ 20,         "KEY  20U",               "K_20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1834*/  { fnJMUSERmode_f, 256+ 20,         "KEY f20U",               "Kf20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1835*/  { fnJMUSERmode_g, 256+ 20,         "KEY g20U",               "Kg20U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1836*/  { fnJMUSERmode,   256+ 21,         "KEY  21U",               "K_21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1837*/  { fnJMUSERmode_f, 256+ 21,         "KEY f21U",               "Kf21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1838*/  { fnJMUSERmode_g, 256+ 21,         "KEY g21U",               "Kg21U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1839*/  { fnJMUSERmode,   256+ 22,         "KEY  22U",               "K_22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1840*/  { fnJMUSERmode_f, 256+ 22,         "KEY f22U",               "Kf22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1841*/  { fnJMUSERmode_g, 256+ 22,         "KEY g22U",               "Kg22U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1842*/  { fnJMUSERmode,   256+ 23,         "KEY  23U",               "K_23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1843*/  { fnJMUSERmode_f, 256+ 23,         "KEY f23U",               "Kf23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1844*/  { fnJMUSERmode_g, 256+ 23,         "KEY g23U",               "Kg23U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1845*/  { fnJMUSERmode,   256+ 24,         "KEY  24U",               "K_24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1846*/  { fnJMUSERmode_f, 256+ 24,         "KEY f24U",               "Kf24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1847*/  { fnJMUSERmode_g, 256+ 24,         "KEY g24U",               "Kg24U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1848*/  { fnJMUSERmode,   256+ 25,         "KEY  25U",               "K_25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1849*/  { fnJMUSERmode_f, 256+ 25,         "KEY f25U",               "Kf25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1850*/  { fnJMUSERmode_g, 256+ 25,         "KEY g25U",               "Kg25U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1851*/  { fnJMUSERmode,   256+ 26,         "KEY  26U",               "K_26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1852*/  { fnJMUSERmode_f, 256+ 26,         "KEY f26U",               "Kf26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1853*/  { fnJMUSERmode_g, 256+ 26,         "KEY g26U",               "Kg26U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1854*/  { fnJMUSERmode,   256+ 27,         "KEY  27U",               "K_27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1855*/  { fnJMUSERmode_f, 256+ 27,         "KEY f27U",               "Kf27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1856*/  { fnJMUSERmode_g, 256+ 27,         "KEY g27U",               "Kg27U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1857*/  { fnJMUSERmode,   256+ 28,         "KEY  28U",               "K_28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1858*/  { fnJMUSERmode_f, 256+ 28,         "KEY f28U",               "Kf28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1859*/  { fnJMUSERmode_g, 256+ 28,         "KEY g28U",               "Kg28U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1860*/  { fnJMUSERmode,   256+ 29,         "KEY  29U",               "K_29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1861*/  { fnJMUSERmode_f, 256+ 29,         "KEY f29U",               "Kf29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1862*/  { fnJMUSERmode_g, 256+ 29,         "KEY g29U",               "Kg29U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1863*/  { fnJMUSERmode,   256+ 30,         "KEY  30U",               "K_30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1864*/  { fnJMUSERmode_f, 256+ 30,         "KEY f30U",               "Kf30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1865*/  { fnJMUSERmode_g, 256+ 30,         "KEY g30U",               "Kg30U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1866*/  { fnJMUSERmode,   256+ 31,         "KEY  31U",               "K_31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1867*/  { fnJMUSERmode_f, 256+ 31,         "KEY f31U",               "Kf31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1868*/  { fnJMUSERmode_g, 256+ 31,         "KEY g31U",               "Kg31U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1869*/  { fnJMUSERmode,   256+ 32,         "KEY  32U",               "K_32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1870*/  { fnJMUSERmode_f, 256+ 32,         "KEY f32U",               "Kf32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1871*/  { fnJMUSERmode_g, 256+ 32,         "KEY g32U",               "Kg32U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1872*/  { fnJMUSERmode,   256+ 33,         "KEY  33U",               "K_33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1873*/  { fnJMUSERmode_f, 256+ 33,         "KEY f33U",               "Kf33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1874*/  { fnJMUSERmode_g, 256+ 33,         "KEY g33U",               "Kg33U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1875*/  { fnJMUSERmode,   256+ 34,         "KEY  34U",               "K_34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1876*/  { fnJMUSERmode_f, 256+ 34,         "KEY f34U",               "Kf34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1877*/  { fnJMUSERmode_g, 256+ 34,         "KEY g34U",               "Kg34U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1878*/  { fnJMUSERmode,   256+ 35,         "KEY  35U",               "K_35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1879*/  { fnJMUSERmode_f, 256+ 35,         "KEY f35U",               "Kf35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1880*/  { fnJMUSERmode_g, 256+ 35,         "KEY g35U",               "Kg35U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1881*/  { fnJMUSERmode,   256+ 36,         "KEY  36U",               "K_36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1882*/  { fnJMUSERmode_f, 256+ 36,         "KEY f36U",               "Kf36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+/*1883*/  { fnJMUSERmode_g, 256+ 36,         "KEY g36U",               "Kg36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
+
+/* 1884 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
 
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
+/* 1885 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
 };

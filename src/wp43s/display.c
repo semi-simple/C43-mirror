@@ -693,7 +693,7 @@ if(SigFigMode == 0) {                                                           
         SigFigTmp = 0;                                                                         //JM SIGFIG
         SigFigCnt = 0;                                                                         //JM SIGFIG
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) {
-          if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+          if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
             memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
@@ -780,7 +780,7 @@ if(SigFigMode == 0) {                                                           
 
     // Significant digits
     for(digitCount=-1, digitPointer=firstDigit+1; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
@@ -793,7 +793,7 @@ if(SigFigMode == 0) {                                                           
 
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
@@ -872,7 +872,7 @@ if(SigFigMode == 0) {                                                           
 
     // Digits after radix mark
     for(digitCount=-1, digitPointer=firstDigit; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
@@ -885,7 +885,7 @@ if(SigFigMode == 0) {                                                           
 
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
-      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap)==(uint16_t)groupingGap-1) {
+      if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }

@@ -485,7 +485,7 @@ const item_t indexOfItems[] = {
 /*  361 */  { fnConstant,                  26,                          "M" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "M" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,                                  SLS_ENABLED  },
 /*  362 */  { fnConstant,                  27,                          "m" STD_SUB_n,                                 "m" STD_SUB_n,                                                                SLS_ENABLED  },
 /*  363 */  { fnConstant,                  28,                          "m" STD_SUB_n "/m" STD_SUB_p,                  "m" STD_SUB_n "/m" STD_SUB_p,                                                 SLS_ENABLED  },
-/*  364 */  { itemToBeCoded,               NOPARAM,                     "MOD",                                         "MOD",                                                                        SLS_UNCHANGED},
+/*  364 */  { fnMod,                       NOPARAM,                     "MOD",                                         "MOD",                                                                        SLS_ENABLED  },
 /*  365 */  { itemToBeCoded,               NOPARAM,                     "MODE",                                        "MODE",                                                                       SLS_UNCHANGED},
 /*  366 */  { itemToBeCoded,               NOPARAM,                     "MONTH",                                       "MONTH",                                                                      SLS_UNCHANGED},
 /*  367 */  { fnConstant,                  29,                          "m" STD_SUB_p,                                 "m" STD_SUB_p,                                                                SLS_ENABLED  },
@@ -641,7 +641,7 @@ const item_t indexOfItems[] = {
 /*  517 */  { fnConstant,                  43,                          "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,                                  SLS_ENABLED  },
 /*  518 */  { itemToBeCoded,               NOPARAM,                     "RM",                                          "RM",                                                                         SLS_UNCHANGED},
 /*  519 */  { fnGetRoundingMode,           NOPARAM,                     "RM?",                                         "RM?",                                                                        SLS_ENABLED  },
-/*  520 */  { itemToBeCoded,               NOPARAM,                     "RMD",                                         "RMD",                                                                        SLS_UNCHANGED},
+/*  520 */  { fnRmd,                       NOPARAM,                     "RMD",                                         "RMD",                                                                        SLS_ENABLED  },
 /*  521 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                                                      SLS_UNCHANGED},
 /*  522 */  { itemToBeCoded,               NOPARAM,                     "ROUND",                                       "ROUND",                                                                      SLS_UNCHANGED},
 /*  523 */  { itemToBeCoded,               NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                                                     SLS_UNCHANGED},
@@ -1902,7 +1902,7 @@ const item_t indexOfItems[] = {
 /* 1770 */  { fnSetSetJM,                  8,                           "SH.3T",                                        "SH.3T",                                                                     SLS_ENABLED},      //JM HOME.3T
 /* 1771 */  { fnShowJM,                    8,                           "SH.3T?",                                       "SH.3T?",                                                                     SLS_ENABLED  },     //JM SHOW HOME.3T
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                    "M_ASN",                                                                       SLS_UNCHANGED},   //JM USER
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                    "ASN",                                                                       SLS_UNCHANGED},   //JM USER
 
 /*1773*/  { fnJMUSERmode,   256+  0,         "KEY  00U",               "K_00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 /*1774*/  { fnJMUSERmode_f, 256+  0,         "KEY f00U",               "Kf00U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
@@ -2016,28 +2016,18 @@ const item_t indexOfItems[] = {
 /*1882*/  { fnJMUSERmode_f, 256+ 36,         "KEY f36U",               "Kf36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 /*1883*/  { fnJMUSERmode_g, 256+ 36,         "KEY g36U",               "Kg36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 
+/* 1884 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
+/* 1885 */  { fnJM,                        USER_DEFAULTS,               "USER DEFAULTS",                               "U" STD_SIGMA "+CC",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1886 */  { fnJM,                        USER_COMPLEX ,               "USER COMPLEX",                                "U" STD_UP_ARROW " CC",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1887 */  { fnJM,                        USER_SHIFTS  ,               "USER SHIFTS",                                 "U f&g",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1888 */  { fnJM,                        USER_RESET   ,               "USER RESET",                                  "U RSET",                                                                      SLS_UNCHANGED},  //JM USER
+/* 1889 */  { fnSetSetJM,                  9            ,               "NORM KEY E+ USER",                            STD_SIGMA "+USR",                                                              SLS_ENABLED  },  //JM USER
+/* 1890 */  { fnShowJM,                    9            ,               "NORM KEY E+ USER?",                           STD_SIGMA "+USR?",                                                             SLS_ENABLED  },  //JM USER
+/* 1891 */  { fnSetSetJM,                  10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC",                                                               SLS_ENABLED  },  //JM USER
+/* 1892 */  { fnShowJM,                    10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC?",                                                              SLS_ENABLED  },  //JM USER
+/* 1893 */  { fnSetSetJM,                  11           ,               "NORM KEY E+ CC",                              STD_SIGMA "+MyMu",                                                               SLS_ENABLED  },  //JM USER
+/* 1894 */  { fnShowJM,                    11           ,               "NORM KEY E+ MyMenu",                          STD_SIGMA "+MyM?",                                                              SLS_ENABLED  },  //JM USER
+  
 
-/*1884*/  { fnJMUSERmode,     0,         "KEY  00N",               "K_00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1885*/  { fnJMUSERmode_f,   0,         "KEY f00N",               "Kf00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1886*/  { fnJMUSERmode_g,   0,         "KEY g00N",               "Kg00N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1887*/  { fnJMUSERmode,    12,         "KEY  12N",               "K_12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1888*/  { fnJMUSERmode_f,  12,         "KEY f12N",               "Kf12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1889*/  { fnJMUSERmode_g,  12,         "KEY g12N",               "Kg12N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1890*/  { fnJMUSERmode,    27,         "KEY  27N",               "K_27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1891*/  { fnJMUSERmode_f,  27,         "KEY f27N",               "Kf27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1892*/  { fnJMUSERmode_g,  27,         "KEY g27N",               "Kg27N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1893*/  { fnJMUSERmode,     9,         "KEY  09N",               "K_09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1894*/  { fnJMUSERmode_f,   9,         "KEY f09N",               "Kf09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1895*/  { fnJMUSERmode_g,   9,         "KEY g09N",               "Kg09N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1896*/  { fnJMUSERmode,    10,         "KEY  10N",               "K_10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1897*/  { fnJMUSERmode_f,  10,         "KEY f10N",               "Kf10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1898*/  { fnJMUSERmode_g,  10,         "KEY g10N",               "Kg10N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1899*/  { fnJMUSERmode,    11,         "KEY  11N",               "K_11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1900*/  { fnJMUSERmode_f,  11,         "KEY f11N",               "Kf11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
-/*1901*/  { fnJMUSERmode_g,  11,         "KEY g11N",               "Kg11N",                   SLS_UNCHANGED  },  //JM USER MODE TEST: NORMAL KEY
- 
-/* 1902 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
-
-
-/* 1903 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
+/* 1895 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
 };

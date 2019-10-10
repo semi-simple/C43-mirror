@@ -578,10 +578,6 @@ void fnReset(uint16_t confirmation) {
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
-    #ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
-       memcpy(kbd_std, kbd_std1, sizeof(kbd_std));   //JM USER
-    #endif
-
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {
         popSoftmenu();
@@ -592,13 +588,11 @@ void fnReset(uint16_t confirmation) {
 
     temporaryInformation = TI_RESET;
 
-    kbd_usr[0].primary     = KEY_CC;       //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
-//    kbd_usr[0].fShifted    = KEY_CC1;    //JM CPX TEMP DEFAULT           //JM bug. over-writing the content of setupdefaults
-//    kbd_usr[7].fShifted    = ITM_DELTAPC;  //JM USER TEMP DEFAULT        //JM bug. over-writing the content of setupdefaults
-    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
-    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
-
-
+    //JM Default USER
+    fnJM(USER_DEFAULTS);                         //JM USER
+//    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
+//    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
+//    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 
     // The following lines are test data
     //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;

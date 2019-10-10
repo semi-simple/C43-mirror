@@ -65,7 +65,7 @@ void fn10Pow(uint16_t unusedParamButMandatory) {
 
 
 void tenPowLonI(void) {
-	 int32_t exponentSign;
+  int32_t exponentSign;
   longInteger_t base, exponent;
 
   longIntegerInit(base);
@@ -77,43 +77,43 @@ void tenPowLonI(void) {
   exponentSign = longIntegerSign(exponent);
   longIntegerSetPositiveSign(exponent);
 
- 	if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
-	   displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+  if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tenPowLonI: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
 
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
 
- 	if(longIntegerIsZero(exponent)) {
-	  	uIntToLongInteger(1, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  if(longIntegerIsZero(exponent)) {
+    uIntToLongInteger(1, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
+    return;
   }
-	 else if(longIntegerIsZero(base)) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+  else if(longIntegerIsZero(base)) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
-	 else if(exponentSign == -1) {
-	  	uIntToLongInteger(0, base);
-	  	convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    return;
+  }
+  else if(exponentSign == -1) {
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
-	  	return;
-	 }
+    return;
+  }
 
   longInteger_t power;
 
   longIntegerInit(power);
- 	uIntToLongInteger(1, power);
+  uIntToLongInteger(1, power);
 
   for(uint32_t i=0; !longIntegerIsZero(exponent); i++) {
     if(longIntegerIsOdd(exponent)) {

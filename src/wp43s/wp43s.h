@@ -220,7 +220,10 @@ typedef int16_t calcRegister_t;
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))
-#define modulo(a, b)            (((a)%(b))<0 ? ((a)%(b))+(b) : ((a)%(b))) // the % operator is remainder rather than modulo!
+#define rmd(n, d)               ((n)%(d))                                                       // rmd(n,d) = n - d*idiv(n,d)   where idiv is the division with decimal part truncature
+#define mod(n, d)               (((n)%(d) + (d)) % (d))                                         // mod(n,d) = n - d*floor(n/d)  where floor(a) is the biggest integer <= a
+//#define modulo(n, d)            ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
+#define modulo(n, d)            ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
 
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50
@@ -482,14 +485,7 @@ extern bool_t               funcOK;
 // Variables stored in FLASH
 extern const item_t         indexOfItems[];
 extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
-
-#ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
-   extern const calcKey_t      kbd_std1[37]; //JM USER renamed the read-only version
-#endif
-#ifndef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
-   extern const calcKey_t      kbd_std[37]; //JM USER renamed the read-only version
-#endif
-
+extern const calcKey_t      kbd_std[37];
 extern const font_t         standardFont, numericFont;
 extern void                 (* const addition[12][12])(void);
 extern void                 (* const subtraction[12][12])(void);
@@ -600,11 +596,6 @@ extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
 extern calcKey_t            kbd_usr[37];
-
-#ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
-  extern calcKey_t            kbd_std[37];  //JM USER added ram version
-#endif
-
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
 extern uint16_t             row[100];

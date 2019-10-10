@@ -1920,28 +1920,20 @@
 #define Kg36U   1883  //JM USER MODE TEST
 
 
-#define K_00N   1884  //JM USER MODE TEST
-#define Kf00N   1885  //JM USER MODE TEST
-#define Kg00N   1886  //JM USER MODE TEST
-#define K_09N   1887  //JM USER MODE TEST
-#define Kf09N   1888  //JM USER MODE TEST
-#define Kg09N   1889  //JM USER MODE TEST
-#define K_10N   1890  //JM USER MODE TEST
-#define Kf10N   1891  //JM USER MODE TEST
-#define Kg10N   1892  //JM USER MODE TEST
-#define K_11N   1893  //JM USER MODE TEST
-#define Kf11N   1894  //JM USER MODE TEST
-#define Kg11N   1895  //JM USER MODE TEST
-#define K_12N   1896  //JM USER MODE TEST
-#define Kf12N   1897  //JM USER MODE TEST
-#define Kg12N   1898  //JM USER MODE TEST
-#define K_27N   1899  //JM USER MODE TEST
-#define Kf27N   1900  //JM USER MODE TEST
-#define Kg27N   1901  //JM USER MODE TEST
+#define KEY_fg                        1884
+#define ITM_USER_DEFAULTS             1885  //JM USER
+#define ITM_USER_COMPLEX              1886  //JM USER
+#define ITM_USER_SHIFTS               1887  //JM USER
+#define ITM_USER_RESET                1888  //JM USER
+#define ITM_U_KEY_USER                1889  //JM USER
+#define ITM_SH_KEY_USER               1890  //JM USER
+#define ITM_U_KEY_CC                  1891  //JM USER
+#define ITM_SH_KEY_CC                 1892  //JM USER
+#define ITM_U_KEY_MM                  1893  //JM USER
+#define ITM_SH_KEY_MM                 1894  //JM USER
 
-#define KEY_fg                        1902
 
-#define LAST_ITEM                     1903  //JM
+#define LAST_ITEM                     1895  //JM
 
 #define CHR_PROD_SIGN                 9999
 

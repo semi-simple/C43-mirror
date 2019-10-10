@@ -20,7 +20,6 @@
 
 #include "wp43s.h"
 
-
 #ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Displays the f or g shift state in the
@@ -35,25 +34,31 @@ void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftF) {
       showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
+#ifdef PC_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
-        JM_DOT( -1, 201 );                                                       //JM - Display dot in the f - line
-        JM_DOT( 392, 201 );                                                      //JM - Display dot in the f - line
+        JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
+        JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
       }                                                                         //JM - Display dot in the f - line
+#endif
     }
     else if(shiftG) {
       showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
+#ifdef PC_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
-        JM_DOT( -1, 175 );                                                        //JM - Display dot in the g - line
-        JM_DOT( 392, 175 );                                                       //JM - Display dot in the g - line
-        JM_DOT( -1, 182 );                                                       //JM - Display dot in the g - line
-        JM_DOT( 392, 182 );                                                      //JM - Display dot in the g - line
+        JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
+        JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
+        JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
+        JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
       }                                                                         //JM - Display dot in the g - line
+#endif
     }
     else {
       refreshRegisterLine(REGISTER_T);
+#ifdef PC_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
+#endif
     }
   }
 }
@@ -368,9 +373,19 @@ void btnPressed(void *notUsed, void *data) {
   else {
                     //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE   \ / 
     int16_t item;
-    if ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) ) {
+    if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
       printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
-      item = -MNU_TRI;
+      if(Norm_Key_00_USER) {
+        item = KEY_USERMODE;
+      } else
+      if(Norm_Key_00_CC) {
+        item = KEY_CC;
+      } else
+      if(Norm_Key_00_CC) {
+        item = -MNU_MYMENU;
+      } else {
+        item = determineItem(key);
+      }  
     } else {
       item = determineItem(key);
     }
@@ -628,7 +643,7 @@ void btnPressed(void *notUsed, void *data) {
                 if(real16CompareLessThan(&magnitude16, const16_0)) {
                   real16SetPositiveSign(&magnitude16);
                   real16Add(&theta16, const_pi, &theta16);
-                  real16Remainder(&theta16, const_2pi, &theta16);
+                  real16DivideRemainder(&theta16, const_2pi, &theta16);
                 }
                 real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
               }
@@ -659,7 +674,7 @@ void btnPressed(void *notUsed, void *data) {
                 if(real34CompareLessThan(&magnitude34, const34_0)) {
                   real34SetPositiveSign(&magnitude34);
                   real34Add(&theta34, const_pi, &theta34);
-                  real34Remainder(&theta34, const34_2pi, &theta34);
+                  real34DivideRemainder(&theta34, const34_2pi, &theta34);
                 }
                 real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in radian
               }

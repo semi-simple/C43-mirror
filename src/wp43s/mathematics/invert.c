@@ -89,7 +89,7 @@ void invertLonI(void) {
 
     longIntegerInit(quotient);
     longIntegerInit(remainder);
-    longIntegerDivideRemainder(one, a, quotient, remainder);
+    longIntegerDivideQuotientRemainder(one, a, quotient, remainder);
 
     if(longIntegerIsZero(remainder)) {
       convertLongIntegerToLongIntegerRegister(quotient, REGISTER_X);

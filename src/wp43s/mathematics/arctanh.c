@@ -211,14 +211,14 @@ void arctanhCo16(void) {
   realIcChangeSign(&denom.imag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
- 	divCoIcCoIc(&numer, &denom, &numer);
+  divCoIcCoIc(&numer, &denom, &numer);
 
- 	// numer = ln((1 + (a + ib)) / (1 - (a + ib))
+  // numer = ln((1 + (a + ib)) / (1 - (a + ib))
   lnCoIc(&numer, &numer);
 
- 	// 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
- 	realIcMultiply(&numer.real, const_1on2, &numer.real);
- 	realIcMultiply(&numer.imag, const_1on2, &numer.imag);
+  // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
+  realIcMultiply(&numer.real, const_1on2, &numer.real);
+  realIcMultiply(&numer.imag, const_1on2, &numer.imag);
 
   realIcToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
   realIcToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
@@ -330,14 +330,14 @@ void arctanhCo34(void) {
   realIcChangeSign(&denom.imag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
- 	divCoIcCoIc(&numer, &denom, &numer);
+  divCoIcCoIc(&numer, &denom, &numer);
 
- 	// numer = ln((1 + (a + ib)) / (1 - (a + ib))
+  // numer = ln((1 + (a + ib)) / (1 - (a + ib))
   lnCoIc(&numer, &numer);
 
- 	// 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
- 	realIcMultiply(&numer.real, const_1on2, &numer.real);
- 	realIcMultiply(&numer.imag, const_1on2, &numer.imag);
+  // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
+  realIcMultiply(&numer.real, const_1on2, &numer.real);
+  realIcMultiply(&numer.imag, const_1on2, &numer.imag);
 
   realIcToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
   realIcToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));

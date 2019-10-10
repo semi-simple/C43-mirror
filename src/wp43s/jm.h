@@ -46,10 +46,6 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
 #define JM_3_SHIFT_CUTOFF 6 //100ms
 
-
-//#define JM_KBD_RAM //JM ASN_USER - Copy to kbd_std array to RAM
-
-//keyboard.c   
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 
@@ -81,7 +77,7 @@ gint64 now;                                       //JM usec  //JM TIMER EMULATOR
 #define ITEM_CONF_N ITM_CHS
 
 // Define the second tagline
-#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Sep.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
+#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Oct.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
 extern uint8_t SigFigMode;                                           //J SIGFIG 
@@ -94,7 +90,9 @@ extern bool_t SH_BASE_HOME;                                          //JM BASEHO
 extern bool_t SH_BASE_MYMENU;                                        //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_AHOME;                                         //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
-
+extern bool_t Norm_Key_00_USER;                                      //JM USER
+extern bool_t Norm_Key_00_CC;                                        //JM USER
+extern bool_t Norm_Key_00_MyMenu;                                    //JM USER
 
 
 // Additional routines needed in jm.c
@@ -104,7 +102,12 @@ void fnSetSetJM(uint16_t What);
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
+#define USER_DEFAULTS    23
+#define USER_COMPLEX     24
+#define USER_SHIFTS      25
+#define USER_RESET       26
 
+void Show_User_Keys(void);
 void fnJMUSERmode(uint16_t JM_KEY);
 void fnJMUSERmode_f(uint16_t JM_KEY);
 void fnJMUSERmode_g(uint16_t JM_KEY);
@@ -116,8 +119,11 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void fnDisplayFormatSigFig(uint16_t displayFormatN);
 void fnDisplayFormatUnit(uint16_t displayFormatN);
 
+#ifdef PC_BUILD
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);
+#endif
+
 void Reset_Shift_Mem(void);
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 

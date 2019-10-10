@@ -461,12 +461,18 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
 
 
 const int16_t menu_ASN[]        = { 
+      ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_NULL, ITM_NULL,
+      ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL,
+      ITM_U_KEY_USER,    ITM_SH_KEY_USER,  ITM_U_KEY_CC,    ITM_SH_KEY_CC,  ITM_U_KEY_MM, ITM_SH_KEY_MM,
+
       K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER
       Kf00U, Kf01U, Kf02U, Kf03U, Kf04U, Kf05U,  //JM USER
       Kg00U, Kg01U, Kg02U, Kg03U, Kg04U, Kg05U,  //JM USER
+      
       K_06U, K_07U, K_08U, K_09U, K_10U, K_11U,  //JM USER
       Kf06U, Kf07U, Kf08U, Kf09U, Kf10U, Kf11U,  //JM USER
       Kg06U, Kg07U, Kg08U, Kg09U, Kg10U, Kg11U,  //JM USER
+      
       K_12U, K_13U, K_14U, K_15U, K_16U,   ITM_NULL,  //JM USER
       Kf12U, Kf13U, Kf14U, Kf15U, Kf16U,   ITM_NULL,  //JM USER
       Kg12U, Kg13U, Kg14U, Kg15U, Kg16U,   ITM_NULL,  //JM USER
@@ -483,12 +489,6 @@ const int16_t menu_ASN[]        = {
       Kf32U, Kf33U, Kf34U, Kf35U, Kf36U,   ITM_NULL,  //JM USER
       Kg32U, Kg33U, Kg34U, Kg35U, Kg36U,   ITM_NULL  //JM USER
  */
-      #ifdef JM_KBD_RAM
-      ,
-      K_00N, K_09N, K_10N, K_11N, K_12N, K_27N,  //JM USER
-      Kf00N, Kf09N, Kf10N, Kf11N, Kf12N, Kf27N,  //JM USER
-      Kg00N, Kg09N, Kg10N, Kg11N, Kg12N, Kg27N  //JM USER
-      #endif
       };
      
 

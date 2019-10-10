@@ -21,13 +21,7 @@
 #include "wp43s.h"
 // ITM_ASSIGN  KEY_USERMODE,   -MNU_MODE,  -MNU_CATALOG  -MNU_FLAGS    -MNU_ALPHAMATH    -MNU_ALPHAINTL   // JMTEMP
 //This variable is to store in flash memory
-
-#ifdef JM_KBD_RAM //JM ASN_USER - Change the name of the fixed array, to copy to kbd_std array which is in RAM
-const calcKey_t kbd_std1[37] = {  
-#endif
-#ifndef JM_KBD_RAM
 const calcKey_t kbd_std[37] = {
-#endif
 
 
  #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. OPTIMAL

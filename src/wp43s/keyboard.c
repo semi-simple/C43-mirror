@@ -370,12 +370,52 @@ void btnPressed(void *notUsed, void *data) {
     showShiftState();
   }
 
+  else                           //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
+    if(JM_ASN_MODE == 32766) {                       //JM USER SEEK FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.                                 //JM JSEEK FUNCTION
+      //printf("%d\n", determineItem(key));          //JM The result is the function number, item number, asnd is placed in 
+/*      char snum[7];                                //JM  -- PLACE RESULT ON THE STACK
+      itoa(determineItem(key), snum, 10);
+      longInteger_t mem;
+      longIntegerInit(mem);
+      liftStack();
+      stringToLongInteger(snum,10,mem);
+      convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
+      longIntegerFree(mem);
+      refreshStack();
+*/
+      JM_ASN_MODE = determineItem(key);               //Place in auto trigger register, ready for next keypress
+      key = (kbd_std + 32);                           //EXIT when done and cancel shifts
+      shiftG = false;
+      shiftF = false;
+    }
 
-  else {
+  else {                       //JM ASSIGN - ASSIGN MEMORY FUNCTION TO NEW KEY
+    if(JM_ASN_MODE != 0) {                            //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
+      if (shiftF) {
+        (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')->fShifted = JM_ASN_MODE;
+        JM_ASN_MODE = 0;
+        Show_User_Keys();
+      }
+      else if (shiftG) {
+        (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')->gShifted = JM_ASN_MODE;
+        JM_ASN_MODE = 0;
+        Show_User_Keys();
+      }
+      else {
+        (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')->primary = JM_ASN_MODE;
+        JM_ASN_MODE = 0;
+        Show_User_Keys();
+      }
+      key = (kbd_std + 32);        //EXIT when done
+      shiftG = false;
+      shiftF = false;
+    }
+
+
                     //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE   \ / 
     int16_t item;
     if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
-      printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
+      //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
       if(Norm_Key_00_USER) {
         item = KEY_USERMODE;
       } else

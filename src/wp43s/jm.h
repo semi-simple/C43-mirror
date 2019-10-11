@@ -51,12 +51,15 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 //keyboard.c  screen.c
 bool_t JM_auto_drop_activated;
-bool_t JM_auto_drop_enabled;      //JM TIMER CLRDROP
-uint8_t JM_SHIFT_RESET;                        //JM non-stored non-changeable mode
-uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;                 //Local to keyboard.c, but defined here
+bool_t JM_auto_drop_enabled;                         //JM TIMER CLRDROP
+uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changeable mode
+uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
+int16_t JM_ASN_MODE;                                //JM ASSIGN
+
+
 
 //keyboard.c
-#ifdef DMCP_BUILD                 //JM TIMER variable tmp mem, to check expired time
+#ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
 uint32_t now_MEM;
 #endif
 #ifdef PC_BUILD
@@ -106,6 +109,8 @@ void fnJM(uint16_t JM_OPCODE);
 #define USER_COMPLEX     24
 #define USER_SHIFTS      25
 #define USER_RESET       26
+#define JM_ASSIGN        27
+#define JM_SEEK_FN       28
 
 void Show_User_Keys(void);
 void fnJMUSERmode(uint16_t JM_KEY);
@@ -113,6 +118,7 @@ void fnJMUSERmode_f(uint16_t JM_KEY);
 void fnJMUSERmode_g(uint16_t JM_KEY);
 void JM_convertReal16ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
+char* itoa(int value, char* result, int base);
 
 
 //items.c

@@ -303,7 +303,7 @@ void setupDefaults(void) {
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
   HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
   ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
-  Home3TimerMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
+  Home3TimerMode = true;                                         //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
   SH_BASE_HOME   = true;      
   SH_BASE_MYMENU = false;    
@@ -315,7 +315,7 @@ void setupDefaults(void) {
 
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
-  #ifdef DMCP_BUILD                 //JM TIMER variable tmp mem, to check expired time
+  #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   #endif
   #ifdef PC_BUILD
@@ -325,6 +325,7 @@ void setupDefaults(void) {
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
   JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;                    //JM TIMER
+  JM_ASN_MODE = 0;                                               //JM ASSIGN
 
   
   #ifndef TESTSUITE_BUILD

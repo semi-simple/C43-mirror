@@ -863,24 +863,27 @@ if ComplexDP change to ComplexSP
   refreshStack();
   } else
 
-  if(JM_OPCODE == USER_DEFAULTS) {                                        //USER_DEFAULTS 23                                          
-      //JM Default
+  if(JM_OPCODE == USER_DEFAULTS) {                                       //USER_DEFAULTS 23                                          
       kbd_usr[0].primary     = KEY_CC;       
       kbd_usr[0].gShifted    = KEY_TYPCON_UP;
       kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+      Norm_Key_00_MyMenu     = false;                                    //JM USER
+      Norm_Key_00_USER       = false;
+      Norm_Key_00_CC         = false;
       Show_User_Keys();
   } else
 
   if(JM_OPCODE == USER_COMPLEX) {                                        //USER_COMPLEX 24                                      
-      //JM COMPLEX
       kbd_usr[12].gShifted   = KEY_CC;
       kbd_usr[0].gShifted    = KEY_TYPCON_UP;
       kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+      Norm_Key_00_MyMenu     = true;                                     //JM USER
+      Norm_Key_00_USER       = false;
+      Norm_Key_00_CC         = false;
       Show_User_Keys();
   } else
 
-  if(JM_OPCODE == USER_SHIFTS) {                                        //USER_SHIFTS 25                                         
-      //JM Sectioon to be put on a menu
+  if(JM_OPCODE == USER_SHIFTS) {                                         //USER_SHIFTS 25         //JM Sectioon to be put on a menu
       kbd_usr[0].primary     = KEY_USERMODE;
       kbd_usr[9].primary     = -MNU_TRI;    
       kbd_usr[9].fShifted    = KEY_USERMODE;
@@ -890,15 +893,29 @@ if ComplexDP change to ComplexSP
       kbd_usr[10].gShifted   = ITM_NULL;        
       kbd_usr[11].primary    = KEY_g;       
       kbd_usr[11].fShifted   = ITM_NULL;        
-      kbd_usr[11].gShifted   = ITM_NULL;        
+      kbd_usr[11].gShifted   = ITM_NULL;  
+      Norm_Key_00_MyMenu     = false;                                   //JM USER
+      Norm_Key_00_USER       = true;
+      Norm_Key_00_CC         = false;      
       Show_User_Keys();
   } else
 
-  if(JM_OPCODE == USER_RESET) {                                        //USER_RESET 26                                         
-      //JM USER RESET
+  if(JM_OPCODE == USER_RESET) {                                         //USER_RESET 26                                         
       memcpy(kbd_usr, kbd_std, sizeof(kbd_std)); 
+      Norm_Key_00_MyMenu     = false;                                   //JM USER
+      Norm_Key_00_USER       = false;
+      Norm_Key_00_CC         = false;
       Show_User_Keys();
-  } 
+  }  else
+
+  if(JM_OPCODE == JM_ASSIGN) {      //A non 0 and non 32766 value means the FN NUMBER is in JM_ASSIGN, AND KEYBOARD.C will wait for a key to be assigned to                                     //USER_RESET 27                                          
+      JM_ASN_MODE = KEY_CC;         //TEMPORARY TEST FUNCTION
+  }   else
+
+  if(JM_OPCODE == JM_SEEK_FN) {     //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,                                     //USER_RESET 27                                          
+      JM_ASN_MODE = 32766;
+
+  }
 
 }
 
@@ -906,13 +923,7 @@ if ComplexDP change to ComplexSP
 void Show_User_Keys(void) {
   userModeEnabled = false;
   toggleUserMode();
-  #ifdef PC_BUILD
-    if(calcMode == CM_NORMAL) calcModeNormalGui();
-    else if(calcMode == CM_AIM) calcModeAimGui();
-    else if(calcMode == CM_TAM) calcModeTamGui();
-  #endif
 }
-
 
 
 void JM_convertReal16ToShortInteger(uint16_t confirmation) {
@@ -954,6 +965,36 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
 }
 
 
+
+
+/** integer to string
+ * C++ version 0.4 char* style "itoa":
+ * Written by Lukás Chmela
+ * Released under GPLv3.
+ */
+char* itoa(int value, char* result, int base) {
+    // check that the base if valid
+    if (base < 2 || base > 36) { *result = '\0'; return result; }
+
+    char* ptr = result, *ptr1 = result, tmp_char;
+    int tmp_value;
+
+    do {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    } while ( value );
+
+    // Apply negative sign
+    if (tmp_value < 0) *ptr++ = '-';
+    *ptr-- = '\0';
+    while(ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
+}
 
 
 

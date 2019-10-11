@@ -144,7 +144,10 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
 
                                      ITM_ERPN,                      ITM_SH_ERPN,                ITM_BASE_HOME,            ITM_SH_BASE_HOME,      ITM_BASE_AHOME,              ITM_SH_BASE_AHOME,                           //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
                                      ITM_SHTIM,                     ITM_SH_SHTIM,               ITM_BASE_MYMENU,          ITM_SH_BASE_MYMENU,    ITM_BASE_MYA,                ITM_SH_BASE_MYA,                            //J Added
-                                     ITM_HOMEx3,                    ITM_SH_HOMEx3,              ITM_HOMEx3T,              ITM_SH_HOMEx3T,        ITM_NULL,                    ITM_NULL                      };
+                                     ITM_HOMEx3,                    ITM_SH_HOMEx3,              ITM_HOMEx3T,              ITM_SH_HOMEx3T,        ITM_NULL,                    ITM_NULL,
+
+                                     ITM_U_KEY_USER,                ITM_SH_KEY_USER,            ITM_U_KEY_CC,             ITM_SH_KEY_CC,         ITM_U_KEY_MM,                ITM_SH_KEY_MM                 };           //JM USER
+
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
                                      ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,
@@ -461,9 +464,9 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
 
 
 const int16_t menu_ASN[]        = { 
-      ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_NULL, ITM_NULL,
+      ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_JM_SEEK, /*ITM_JM_ASN*/ ITM_NULL,
       ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL,
-      ITM_U_KEY_USER,    ITM_SH_KEY_USER,  ITM_U_KEY_CC,    ITM_SH_KEY_CC,  ITM_U_KEY_MM, ITM_SH_KEY_MM,
+      ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL,
 
       K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER
       Kf00U, Kf01U, Kf02U, Kf03U, Kf04U, Kf05U,  //JM USER

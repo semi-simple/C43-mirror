@@ -2016,18 +2016,20 @@ const item_t indexOfItems[] = {
 /*1882*/  { fnJMUSERmode_f, 256+ 36,         "KEY f36U",               "Kf36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 /*1883*/  { fnJMUSERmode_g, 256+ 36,         "KEY g36U",               "Kg36U",                   SLS_UNCHANGED  },  //JM USER MODE TEST
 
-/* 1884 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                          SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
-/* 1885 */  { fnJM,                        USER_DEFAULTS,               "USER DEFAULTS",                               "U" STD_SIGMA "+CC",                                                                      SLS_UNCHANGED},  //JM USER
-/* 1886 */  { fnJM,                        USER_COMPLEX ,               "USER COMPLEX",                                "U" STD_UP_ARROW " CC",                                                                      SLS_UNCHANGED},  //JM USER
-/* 1887 */  { fnJM,                        USER_SHIFTS  ,               "USER SHIFTS",                                 "U f&g",                                                                      SLS_UNCHANGED},  //JM USER
-/* 1888 */  { fnJM,                        USER_RESET   ,               "USER RESET",                                  "U RSET",                                                                      SLS_UNCHANGED},  //JM USER
-/* 1889 */  { fnSetSetJM,                  9            ,               "NORM KEY E+ USER",                            STD_SIGMA "+USR",                                                              SLS_ENABLED  },  //JM USER
-/* 1890 */  { fnShowJM,                    9            ,               "NORM KEY E+ USER?",                           STD_SIGMA "+USR?",                                                             SLS_ENABLED  },  //JM USER
-/* 1891 */  { fnSetSetJM,                  10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC",                                                               SLS_ENABLED  },  //JM USER
-/* 1892 */  { fnShowJM,                    10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC?",                                                              SLS_ENABLED  },  //JM USER
-/* 1893 */  { fnSetSetJM,                  11           ,               "NORM KEY E+ CC",                              STD_SIGMA "+MyMu",                                                               SLS_ENABLED  },  //JM USER
-/* 1894 */  { fnShowJM,                    11           ,               "NORM KEY E+ MyMenu",                          STD_SIGMA "+MyM?",                                                              SLS_ENABLED  },  //JM USER
+/* 1884 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f/g",                                                                         SLS_UNCHANGED},  //JM3 Changed f to f/g for DM42 keyboard
+/* 1885 */  { fnJM,                        USER_DEFAULTS,               "USER DEFAULTS",                               "U" STD_SIGMA    " CC",                                                           SLS_UNCHANGED},  //JM USER
+/* 1886 */  { fnJM,                        USER_COMPLEX ,               "USER COMPLEX",                                "U" STD_UP_ARROW " CC",                                                        SLS_UNCHANGED},  //JM USER
+/* 1887 */  { fnJM,                        USER_SHIFTS  ,               "USER SHIFTS",                                 "U" " SHFT",                                                                    SLS_UNCHANGED},  //JM USER
+/* 1888 */  { fnJM,                        USER_RESET   ,               "USER RESET",                                  "U" " RSET",                                                                   SLS_UNCHANGED},  //JM USER
+/* 1889 */  { fnSetSetJM,                  9            ,               "NORM KEY E+ USER",                            STD_SIGMA " USR",                                                              SLS_ENABLED  },  //JM USER
+/* 1890 */  { fnShowJM,                    9            ,               "NORM KEY E+ USER?",                           STD_SIGMA " USR?",                                                             SLS_ENABLED  },  //JM USER
+/* 1891 */  { fnSetSetJM,                  10           ,               "NORM KEY E+ CC",                              STD_SIGMA " CC ",                                                               SLS_ENABLED  },  //JM USER
+/* 1892 */  { fnShowJM,                    10           ,               "NORM KEY E+ CC",                              STD_SIGMA " CC?",                                                              SLS_ENABLED  },  //JM USER
+/* 1893 */  { fnSetSetJM,                  11           ,               "NORM KEY E+ CC",                              STD_SIGMA " MyMU",                                                             SLS_ENABLED  },  //JM USER
+/* 1894 */  { fnShowJM,                    11           ,               "NORM KEY E+ MyMenu",                          STD_SIGMA " MyM?",                                                             SLS_ENABLED  },  //JM USER
+/* 1895 */  { fnJM,                        JM_ASSIGN    ,               "",                                            "ASSIGN",                                                                      SLS_UNCHANGED  },  //JM ASSIGN
+/* 1896 */  { fnJM,                        JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                                                                      SLS_UNCHANGED  },  //JM ASSIGN SEEK FUNCTION
   
 
-/* 1895 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}       //JM eRPN
+/* 1897 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                    SLS_UNCHANGED}       //JM eRPN
 };

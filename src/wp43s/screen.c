@@ -23,58 +23,6 @@
 #ifdef PC_BUILD
 
 
-/********************************************//**
- * \brief Draws the dots on the margins of the f and g lines on screen
- *
- * \param[in] Info uint16_t
- * \return void
- ***********************************************/
-void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
-
-setPixel (xx+4,yy+7);
-setPixel (xx+5,yy+6);
-setPixel (xx+6,yy+6);
-setPixel (xx+6,yy+5);
-setPixel (xx+7,yy+4);
-setPixel (xx+6,yy+3);
-setPixel (xx+6,yy+2);
-setPixel (xx+5,yy+2);
-setPixel (xx+4,yy+2);
-setPixel (xx+3,yy+2);
-setPixel (xx+2,yy+2);
-setPixel (xx+2,yy+3);
-setPixel (xx+2,yy+4);
-setPixel (xx+2,yy+5);
-setPixel (xx+2,yy+6);
-setPixel (xx+3,yy+6);
-setPixel (xx+4,yy+6);
-setPixel (xx+5,yy+5);
-setPixel (xx+6,yy+4);
-setPixel (xx+5,yy+3);
-setPixel (xx+3,yy+3);
-setPixel (xx+3,yy+5);
-clearPixel (xx+4,yy+7);
-clearPixel (xx+5,yy+7);
-clearPixel (xx+6,yy+7);
-clearPixel (xx+6,yy+6);
-clearPixel (xx+7,yy+6);
-clearPixel (xx+7,yy+5);
-clearPixel (xx+7,yy+4);
-clearPixel (xx+7,yy+3);
-clearPixel (xx+6,yy+2);
-clearPixel (xx+6,yy+1);
-clearPixel (xx+5,yy+1);
-clearPixel (xx+4,yy+1);
-clearPixel (xx+3,yy+1);
-clearPixel (xx+2,yy+2);
-clearPixel (xx+1,yy+3);
-clearPixel (xx+1,yy+4);
-clearPixel (xx+1,yy+5);
-clearPixel (xx+1,yy+6);
-clearPixel (xx+2,yy+6);
-clearPixel (xx+3,yy+7);
-}
-
 
 
 
@@ -548,6 +496,62 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 
 #ifndef TESTSUITE_BUILD
+
+
+/********************************************//**
+ * \brief Draws the dots on the margins of the f and g lines on screen
+ *
+ * \param[in] Info uint16_t
+ * \return void
+ ***********************************************/
+void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
+
+setPixel (xx+4,yy+7);
+setPixel (xx+5,yy+6);
+setPixel (xx+6,yy+6);
+setPixel (xx+6,yy+5);
+setPixel (xx+7,yy+4);
+setPixel (xx+6,yy+3);
+setPixel (xx+6,yy+2);
+setPixel (xx+5,yy+2);
+setPixel (xx+4,yy+2);
+setPixel (xx+3,yy+2);
+setPixel (xx+2,yy+2);
+setPixel (xx+2,yy+3);
+setPixel (xx+2,yy+4);
+setPixel (xx+2,yy+5);
+setPixel (xx+2,yy+6);
+setPixel (xx+3,yy+6);
+setPixel (xx+4,yy+6);
+setPixel (xx+5,yy+5);
+setPixel (xx+6,yy+4);
+setPixel (xx+5,yy+3);
+setPixel (xx+3,yy+3);
+setPixel (xx+3,yy+5);
+clearPixel (xx+4,yy+7);
+clearPixel (xx+5,yy+7);
+clearPixel (xx+6,yy+7);
+clearPixel (xx+6,yy+6);
+clearPixel (xx+7,yy+6);
+clearPixel (xx+7,yy+5);
+clearPixel (xx+7,yy+4);
+clearPixel (xx+7,yy+3);
+clearPixel (xx+6,yy+2);
+clearPixel (xx+6,yy+1);
+clearPixel (xx+5,yy+1);
+clearPixel (xx+4,yy+1);
+clearPixel (xx+3,yy+1);
+clearPixel (xx+2,yy+2);
+clearPixel (xx+1,yy+3);
+clearPixel (xx+1,yy+4);
+clearPixel (xx+1,yy+5);
+clearPixel (xx+1,yy+6);
+clearPixel (xx+2,yy+6);
+clearPixel (xx+3,yy+7);
+}
+
+
+
 /********************************************//**
  * \brief Sets a pixel on the screen (black).
  *

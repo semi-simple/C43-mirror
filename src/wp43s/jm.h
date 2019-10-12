@@ -51,12 +51,15 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 //keyboard.c  screen.c
 bool_t JM_auto_drop_activated;
-bool_t JM_auto_drop_enabled;      //JM TIMER CLRDROP
-uint8_t JM_SHIFT_RESET;                        //JM non-stored non-changeable mode
-uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;                 //Local to keyboard.c, but defined here
+bool_t JM_auto_drop_enabled;                         //JM TIMER CLRDROP
+uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changeable mode
+uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
+int16_t JM_ASN_MODE;                                //JM ASSIGN
+
+
 
 //keyboard.c
-#ifdef DMCP_BUILD                 //JM TIMER variable tmp mem, to check expired time
+#ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
 uint32_t now_MEM;
 #endif
 #ifdef PC_BUILD
@@ -77,7 +80,7 @@ gint64 now;                                       //JM usec  //JM TIMER EMULATOR
 #define ITEM_CONF_N ITM_CHS
 
 // Define the second tagline
-#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Sep.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
+#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Oct.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
 extern uint8_t SigFigMode;                                           //J SIGFIG 
@@ -90,7 +93,9 @@ extern bool_t SH_BASE_HOME;                                          //JM BASEHO
 extern bool_t SH_BASE_MYMENU;                                        //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_AHOME;                                         //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
-
+extern bool_t Norm_Key_00_USER;                                      //JM USER
+extern bool_t Norm_Key_00_CC;                                        //JM USER
+extern bool_t Norm_Key_00_MyMenu;                                    //JM USER
 
 
 // Additional routines needed in jm.c
@@ -100,8 +105,23 @@ void fnSetSetJM(uint16_t What);
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
+#define USER_DEFAULTS    23
+#define USER_COMPLEX     24
+#define USER_SHIFTS      25
+#define USER_RESET       26
+#define JM_ASSIGN        27
+#define JM_SEEK_FN       28
+
+void fnJMUSERmode(uint16_t JM_KEY);
+void fnJMUSERmode_f(uint16_t JM_KEY);
+void fnJMUSERmode_g(uint16_t JM_KEY);
+void Show_User_Keys(void);
+void fnKEYSELECT(void);
+void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey);
 void JM_convertReal16ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
+void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
+char* itoa(int value, char* result, int base);
 
 
 //items.c

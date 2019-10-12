@@ -34,7 +34,7 @@ void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftF) {
       showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
-#ifdef PC_BUILD
+#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
         JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
@@ -44,7 +44,7 @@ void showShiftState(void) {
     }
     else if(shiftG) {
       showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
-#ifdef PC_BUILD
+#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
         JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
@@ -56,7 +56,7 @@ void showShiftState(void) {
     }
     else {
       refreshRegisterLine(REGISTER_T);
-#ifdef PC_BUILD
+#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
 #endif
     }
@@ -233,7 +233,8 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   const calcKey_t *key;
 
-  key = userModeEnabled ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
+  key = userModeEnabled && (calcMode == CM_NORMAL) ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
+  //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   allowScreenUpdate = true;
 
@@ -266,7 +267,7 @@ void btnPressed(void *notUsed, void *data) {
 
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
-    if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {     //JM shifts
+    if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {     //JM shifts
       if(temporaryInformation != TI_NO_INFO) {                                                                                   //JM shifts
         temporaryInformation = TI_NO_INFO;                                                                                       //JM shifts
         refreshRegisterLine(REGISTER_X);                                                                                         //JM shifts
@@ -330,8 +331,8 @@ void btnPressed(void *notUsed, void *data) {
                                                                                                                                  //JM shifts
 #endif
 
-#ifndef JM_MULTISHIFT /* JM shifts. Whole section for shift f and shift g removed here in favour if the f/g shift method */
   // Shift f pressed
+  else
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
@@ -368,10 +369,48 @@ void btnPressed(void *notUsed, void *data) {
 
     showShiftState();
   }
-#endif //JM shifts. Replaced by MULTISHIFT  *********************************************************************************************************
 
-  else {
-    int16_t item = determineItem(key);
+  //JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
+  else if(JM_ASN_MODE == 32766) {              //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
+      //printf("%d\n", determineItem(key));    //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
+      JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in 
+      fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
+      key = (kbd_std + 999);                    //JM illegal key to exit when done and cancel shifts
+      shiftG = false;
+      shiftF = false;
+    }
+  
+  //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
+  else {                                       //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
+    int16_t tempkey;
+    if(JM_ASN_MODE != 0) {                     //JM GET KEY
+      tempkey = (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+      fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
+      JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
+      key = (kbd_std + 999);                    //JM illegal key to exit when done and cancel shifts
+      shiftG = false;
+      shiftF = false;
+    }
+
+  //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
+    int16_t item;
+    if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
+      //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
+      if(Norm_Key_00_USER) {
+        item = KEY_USERMODE;
+      } else
+      if(Norm_Key_00_CC) {
+        item = KEY_CC;
+      } else
+      if(Norm_Key_00_CC) {
+        item = -MNU_MYMENU;
+      } else {
+        item = determineItem(key);
+      }  
+    } else {
+      item = determineItem(key);
+    }
+  //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
     if(item == CHR_PROD_SIGN) {
       item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);

@@ -132,15 +132,6 @@ void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnSeteRPN(uint16_t unusedParamButMandatory) {                //JM eRPN     Set/Reset setting to allow eRPN
-   eRPN = !eRPN;                                                  //JM eRPN      
-   fnInfo(eRPN);                                                  //JM eRPN 
-}                                                                 //JM eRPN 
-
-void fnSetHOME3(uint16_t unusedParamButMandatory) {               //JM HOME.3    Set/Reset setting to allow triple click for HOME
-   HOME3 = !HOME3;                                                //JM HOME.3
-   fnInfo(HOME3);                                                 //JM HOME.3
-}                                                                 //JM HOME.3
 
 void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM CCL    Set/Reset setting to allow timer shift cancel
   if(What == 1) {
@@ -174,9 +165,25 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
   if(What == 8) {
     Home3TimerMode = !Home3TimerMode;                               //JM SHIFT HOME.3 TIM CCL
     fnInfo(Home3TimerMode);                                         //JM SHIFT HOME.3 TIM CCL
+  } else
+  if(What == 9) {
+    Norm_Key_00_USER = !Norm_Key_00_USER;                           //JM USER
+    Norm_Key_00_CC = false;
+    Norm_Key_00_MyMenu = false;
+    fnInfo(Norm_Key_00_USER);                                       //JM USER
+  } else
+  if(What == 10) {
+    Norm_Key_00_CC = !Norm_Key_00_CC;                               //JM USER
+    Norm_Key_00_USER = false;
+    Norm_Key_00_MyMenu = false;
+    fnInfo(Norm_Key_00_CC);                                         //JM USER
+  } else
+  if(What == 11) {
+    Norm_Key_00_MyMenu = !Norm_Key_00_MyMenu;                               //JM USER
+    Norm_Key_00_USER = false;
+    Norm_Key_00_CC = false;
+    fnInfo(Norm_Key_00_MyMenu);                                         //JM USER
   }
-
-
 }                                                                 //JM SHIFT TIM CCL
 
 
@@ -192,7 +199,6 @@ void fnInfo(bool_t f) {
   refreshRegisterLine(TAM_REGISTER_LINE);
   refreshRegisterLine(REGISTER_X);
 }
-
 
 
 /********************************************//**
@@ -236,6 +242,18 @@ void fnShowJM(uint16_t What) {
   if(What == 8 && Home3TimerMode == true) { stringToLongInteger("1",10,mem); }
   else
   if(What == 8 && Home3TimerMode == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 9 && Norm_Key_00_USER == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 9 && Norm_Key_00_USER == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 10 && Norm_Key_00_CC == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 10 && Norm_Key_00_CC == false) { stringToLongInteger("0",10,mem); }
+  else
+  if(What == 11 && Norm_Key_00_MyMenu == true) { stringToLongInteger("1",10,mem); }
+  else
+  if(What == 11 && Norm_Key_00_MyMenu == false) { stringToLongInteger("0",10,mem); }
  
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
@@ -243,6 +261,63 @@ void fnShowJM(uint16_t What) {
   refreshStack();
 }
 
+
+
+//JM CONFIGURE USER MODE - ASSIGN KEYS
+
+void fnJMUSERmode(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].primary = X_REG; 
+      //printf(".primary %d\n", kbd_usr[JM_KEY - 256].primary);
+      Show_User_Keys();
+    } 
+  }
+}
+
+void fnJMUSERmode_f(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].fShifted = X_REG; 
+      //printf(".fShifted %d\n", kbd_usr[JM_KEY - 256].fShifted);
+      Show_User_Keys();
+    } 
+  }
+}
+
+void fnJMUSERmode_g(uint16_t JM_KEY) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+    if (JM_KEY >= 256) { 
+      kbd_usr[JM_KEY - 256].gShifted = X_REG; 
+      //printf(".gShifted %d\n", kbd_usr[JM_KEY - 256].gShifted);
+      Show_User_Keys();
+    } 
+  }
+}
 
 
 
@@ -778,11 +853,141 @@ if ComplexDP change to ComplexSP
        } 
 
   refreshStack();
+  } else
+
+  if(JM_OPCODE == USER_DEFAULTS) {                                       //USER_DEFAULTS 23                                          
+      kbd_usr[0].primary     = KEY_CC;       
+      kbd_usr[0].gShifted    = KEY_TYPCON_UP;
+      kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+      Norm_Key_00_MyMenu     = false;                                    //JM USER
+      Norm_Key_00_USER       = false;
+      Norm_Key_00_CC         = false;
+      Show_User_Keys();
+  } else
+
+  if(JM_OPCODE == USER_COMPLEX) {                                        //USER_COMPLEX 24                                      
+      kbd_usr[12].gShifted   = KEY_CC;
+      kbd_usr[0].gShifted    = KEY_TYPCON_UP;
+      kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+      Norm_Key_00_MyMenu     = true;                                     //JM USER
+      Norm_Key_00_USER       = false;
+      Norm_Key_00_CC         = false;
+      Show_User_Keys();
+  } else
+
+  if(JM_OPCODE == USER_SHIFTS) {                                         //USER_SHIFTS 25         //JM Sectioon to be put on a menu
+      kbd_usr[0].primary     = KEY_USERMODE;
+      kbd_usr[9].primary     = -MNU_TRI;    
+      kbd_usr[9].fShifted    = KEY_USERMODE;
+      kbd_usr[9].gShifted    = ITM_RTN;     
+      kbd_usr[10].primary    = KEY_f;       
+      kbd_usr[10].fShifted   = ITM_NULL;        
+      kbd_usr[10].gShifted   = ITM_NULL;        
+      kbd_usr[11].primary    = KEY_g;       
+      kbd_usr[11].fShifted   = ITM_NULL;        
+      kbd_usr[11].gShifted   = ITM_NULL;  
+      Norm_Key_00_MyMenu     = false;                                   //JM USER
+      Norm_Key_00_USER       = true;
+      Norm_Key_00_CC         = false;      
+      Show_User_Keys();
+  } else
+
+  if(JM_OPCODE == USER_RESET) {                                         //USER_RESET 26                                         
+      memcpy(kbd_usr, kbd_std, sizeof(kbd_std)); 
+      Norm_Key_00_MyMenu     = false;                                   //JM USER
+      Norm_Key_00_USER       = false;
+      Norm_Key_00_CC         = false;
+      Show_User_Keys();
+  }  else
+
+/*
+  if(JM_OPCODE == JM_ASSIGN) {      //A non 0 and non 32766 value means the FN NUMBER is in JM_ASSIGN, AND KEYBOARD.C will wait for a key to be assigned to                                     //USER_RESET 27                                          
+      JM_ASN_MODE = KEY_CC;         //TEMPORARY TEST FUNCTION
+  }   else
+*/
+
+  if(JM_OPCODE == JM_SEEK_FN) {     //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,                                     //USER_RESET 27                                          
+      JM_ASN_MODE = 32766;
+      clearScreen(false,true,false);
+      showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
   }
-
-
-
 }
+
+
+
+void Show_User_Keys(void) {
+  userModeEnabled = false;
+  toggleUserMode();
+}
+
+
+
+
+void fnKEYSELECT(void) {                                //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
+      if (JM_ASN_MODE == KEY_EXIT || JM_ASN_MODE == KEY_BACKSPACE) {
+        JM_ASN_MODE = 0;
+        showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+      } else {
+        showString("Select key: top 4 lines excl. FN1-6 & [<-],", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+        showString("incl. [/] [*] [-] [+] [R/S].   EXIT aborts.", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
+        userModeEnabled = true;               //JM Get out ouf USER MODE to select key in next step
+        toggleUserMode();
+      }
+}
+
+
+
+
+//JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
+//gets here only after valid function and any key is selected
+void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {             //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
+  switch (tempkey) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 21:
+    case 26:
+    case 31:
+    case 35:
+    case 36:
+
+      //JM_convertIntegerToShortIntegerRegister(tempkey, 10, REGISTER_X);
+      //JM_convertIntegerToShortIntegerRegister(JM_ASN_MODE, 10, REGISTER_X);
+      if (shiftF) {
+        (kbd_usr + tempkey)->fShifted = JM_ASN_MODE;  //Assign function into keyboard array
+        Show_User_Keys();
+      }
+      else if (shiftG) {
+        (kbd_usr + tempkey)->gShifted = JM_ASN_MODE;  //Assign function into keyboard array
+        Show_User_Keys();
+      }
+      else {
+        (kbd_usr + tempkey)->primary = JM_ASN_MODE;  //Assign function into keyboard array
+        Show_User_Keys();
+      }
+      break;
+    default:
+      clearScreen(false,true,false);
+      showString("Invalid key", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      break;
+  }
+}
+
+
+
 
 void JM_convertReal16ToShortInteger(uint16_t confirmation) {
    if(!real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
@@ -823,6 +1028,61 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
 }
 
 
+
+void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination) {
+     char snum[10];
+     itoa(inp, snum, base);
+     longInteger_t mem;
+     longIntegerInit(mem);
+     liftStack();
+     stringToLongInteger(snum,base,mem);
+     convertLongIntegerToShortIntegerRegister(mem, base, destination);
+     setRegisterShortIntegerBase(destination, base);
+     longIntegerFree(mem);
+     refreshStack();
+}
+
+/*      char snum[7];                                //JM  -- PLACE RESULT ON THE STACK
+      itoa(determineItem(key), snum, 10);
+      longInteger_t mem;
+      longIntegerInit(mem);
+      liftStack();
+      stringToLongInteger(snum,10,mem);
+      convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
+      longIntegerFree(mem);
+      refreshStack();
+*/
+
+
+
+/** integer to string
+ * C++ version 0.4 char* style "itoa":
+ * Written by Lukás Chmela
+ * Released under GPLv3.
+ */
+char* itoa(int value, char* result, int base) {
+    // check that the base if valid
+    if (base < 2 || base > 16) { *result = '\0'; return result; }
+
+    char* ptr = result, *ptr1 = result, tmp_char;
+    int tmp_value;
+
+    do {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    } while ( value );
+
+    // Apply negative sign
+    if (tmp_value < 0) *ptr++ = '-';
+    *ptr-- = '\0';
+    while(ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
+}
 
 
 

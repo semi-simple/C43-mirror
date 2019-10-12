@@ -1642,6 +1642,9 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   else if(key->primary == KEY_g) {
     gtk_widget_set_name(button, "calcKeyG");
   }
+  else if(key->primary == KEY_fg) {
+    gtk_widget_set_name(button, "calcKeyF");
+  }
   else if((key->primary >= CHR_0 && key->primary <= CHR_9) || key->primary == CHR_PERIOD) {
     gtk_widget_set_name(button, "calcNumericKey");
   }
@@ -1793,6 +1796,9 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   else if(key->keyLblAim == KEY_g) {
     gtk_widget_set_name(button, "calcKeyG");
   }
+  else if(key->keyLblAim == KEY_fg) {
+    gtk_widget_set_name(button, "calcKeyF");
+  }
   else {
     /*  //vv dr - new AIM
     if((key->fShiftedAim == key->keyLblAim || key->fShiftedAim == CHR_PROD_SIGN) && key->keyLblAim != ITM_NULL) {
@@ -1927,6 +1933,9 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
   }
   else if(key->primaryTam == KEY_g) {
     gtk_widget_set_name(button, "calcKeyG");
+  }
+  else if(key->primaryTam == KEY_fg) {
+    gtk_widget_set_name(button, "calcKeyF");
   }
 
   else if (strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {     //JM increase the font size of the operators to the numeric key size

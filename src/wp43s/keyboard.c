@@ -233,7 +233,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   const calcKey_t *key;
 
-  key = userModeEnabled && (calcMode == CM_NORMAL) ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
+  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   allowScreenUpdate = true;

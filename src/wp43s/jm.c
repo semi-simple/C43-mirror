@@ -132,15 +132,6 @@ void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnSeteRPN(uint16_t unusedParamButMandatory) {                //JM eRPN     Set/Reset setting to allow eRPN
-   eRPN = !eRPN;                                                  //JM eRPN      
-   fnInfo(eRPN);                                                  //JM eRPN 
-}                                                                 //JM eRPN 
-
-void fnSetHOME3(uint16_t unusedParamButMandatory) {               //JM HOME.3    Set/Reset setting to allow triple click for HOME
-   HOME3 = !HOME3;                                                //JM HOME.3
-   fnInfo(HOME3);                                                 //JM HOME.3
-}                                                                 //JM HOME.3
 
 void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM CCL    Set/Reset setting to allow timer shift cancel
   if(What == 1) {
@@ -210,7 +201,6 @@ void fnInfo(bool_t f) {
 }
 
 
-
 /********************************************//**
  * \brief Sets X to the flag value
  * \param[in] What to display uint16_t
@@ -272,6 +262,8 @@ void fnShowJM(uint16_t What) {
 }
 
 
+
+//JM CONFIGURE USER MODE - ASSIGN KEYS
 
 void fnJMUSERmode(uint16_t JM_KEY) {
 int16_t X_REG;
@@ -908,22 +900,93 @@ if ComplexDP change to ComplexSP
       Show_User_Keys();
   }  else
 
+/*
   if(JM_OPCODE == JM_ASSIGN) {      //A non 0 and non 32766 value means the FN NUMBER is in JM_ASSIGN, AND KEYBOARD.C will wait for a key to be assigned to                                     //USER_RESET 27                                          
       JM_ASN_MODE = KEY_CC;         //TEMPORARY TEST FUNCTION
   }   else
+*/
 
   if(JM_OPCODE == JM_SEEK_FN) {     //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,                                     //USER_RESET 27                                          
       JM_ASN_MODE = 32766;
-
+      clearScreen(false,true,false);
+      showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
   }
-
 }
+
 
 
 void Show_User_Keys(void) {
   userModeEnabled = false;
   toggleUserMode();
 }
+
+
+
+
+void fnKEYSELECT(void) {                                //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
+      if (JM_ASN_MODE == KEY_EXIT || JM_ASN_MODE == KEY_BACKSPACE) {
+        JM_ASN_MODE = 0;
+        showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+      } else {
+        showString("Select key: top 4 lines excl. FN1-6 & [<-],", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+        showString("incl. [/] [*] [-] [+] [R/S].   EXIT aborts.", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
+        userModeEnabled = true;               //JM Get out ouf USER MODE to select key in next step
+        toggleUserMode();
+      }
+}
+
+
+
+
+//JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
+//gets here only after valid function and any key is selected
+void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {             //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
+  switch (tempkey) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 21:
+    case 26:
+    case 31:
+    case 35:
+    case 36:
+
+      //JM_convertIntegerToShortIntegerRegister(tempkey, 10, REGISTER_X);
+      //JM_convertIntegerToShortIntegerRegister(JM_ASN_MODE, 10, REGISTER_X);
+      if (shiftF) {
+        (kbd_usr + tempkey)->fShifted = JM_ASN_MODE;  //Assign function into keyboard array
+        Show_User_Keys();
+      }
+      else if (shiftG) {
+        (kbd_usr + tempkey)->gShifted = JM_ASN_MODE;  //Assign function into keyboard array
+        Show_User_Keys();
+      }
+      else {
+        (kbd_usr + tempkey)->primary = JM_ASN_MODE;  //Assign function into keyboard array
+        Show_User_Keys();
+      }
+      break;
+    default:
+      clearScreen(false,true,false);
+      showString("Invalid key", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      break;
+  }
+}
+
+
 
 
 void JM_convertReal16ToShortInteger(uint16_t confirmation) {
@@ -966,6 +1029,31 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
 
 
 
+void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination) {
+     char snum[10];
+     itoa(inp, snum, base);
+     longInteger_t mem;
+     longIntegerInit(mem);
+     liftStack();
+     stringToLongInteger(snum,base,mem);
+     convertLongIntegerToShortIntegerRegister(mem, base, destination);
+     setRegisterShortIntegerBase(destination, base);
+     longIntegerFree(mem);
+     refreshStack();
+}
+
+/*      char snum[7];                                //JM  -- PLACE RESULT ON THE STACK
+      itoa(determineItem(key), snum, 10);
+      longInteger_t mem;
+      longIntegerInit(mem);
+      liftStack();
+      stringToLongInteger(snum,10,mem);
+      convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
+      longIntegerFree(mem);
+      refreshStack();
+*/
+
+
 
 /** integer to string
  * C++ version 0.4 char* style "itoa":
@@ -974,7 +1062,7 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
  */
 char* itoa(int value, char* result, int base) {
     // check that the base if valid
-    if (base < 2 || base > 36) { *result = '\0'; return result; }
+    if (base < 2 || base > 16) { *result = '\0'; return result; }
 
     char* ptr = result, *ptr1 = result, tmp_char;
     int tmp_value;

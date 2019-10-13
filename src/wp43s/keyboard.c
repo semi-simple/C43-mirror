@@ -350,6 +350,10 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
+      if(ShiftTimoutMode) {
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+      }
+
     shiftF = !shiftF;
     shiftG = false;
 
@@ -368,6 +372,10 @@ void btnPressed(void *notUsed, void *data) {
       lastErrorCode = 0;
       refreshStack();
     }
+
+      if(ShiftTimoutMode) {
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+      }
 
     shiftG = !shiftG;
     shiftF = false;

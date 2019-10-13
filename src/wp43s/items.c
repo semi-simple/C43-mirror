@@ -2035,7 +2035,7 @@ const item_t indexOfItems[] = {
 /* 1900 */  { fnShowJM,                    14           ,               "NORM KEY E+ ALPHA?",                          STD_SIGMA "+A?  ",                                                            SLS_ENABLED  },  //JM USER
 /* 1901 */  { fnJM,                        JM_ASSIGN    ,               "",                                            "ASSIGN",                                                                     SLS_UNCHANGED},  //JM ASSIGN
 /* 1902 */  { fnJM,                        JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                                                           SLS_UNCHANGED},  //JM ASSIGN SEEK FUNCTION
-/* 1903 */  { itemToBeCoded,               NOPARAM      ,               "MENU ASSIGN NORMAL",                          STD_SIGMA "+NORM",                                                            SLS_UNCHANGED},  //JM USER NORMAL
+/* 1903 */  { itemToBeCoded,               NOPARAM      ,               "E+ ASSIGN NORMAL",                            STD_SIGMA "+ ASN",                                                            SLS_UNCHANGED},  //JM USER NORMAL
 /* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM      ,               "GET X to E" STD_SIGMA,                        "X to"STD_SIGMA "+",                                                          SLS_UNCHANGED},  //JM USER NORMAL
 
 /* 1905 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  SLS_UNCHANGED}   //JM eRPN

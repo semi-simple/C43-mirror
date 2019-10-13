@@ -950,8 +950,10 @@ if ComplexDP change to ComplexSP
 
   if(JM_OPCODE == JM_SEEK_FN) {     //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,                                     //USER_RESET 27                                          
       JM_ASN_MODE = 32766;
-      clearScreen(false,true,false);
-      showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      #ifndef TESTSUITE_BUILD
+        clearScreen(false,true,false);
+        showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      #endif
   }
 }
 
@@ -968,10 +970,14 @@ void Show_User_Keys(void) {
 void fnKEYSELECT(void) {                                //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
       if (JM_ASN_MODE == KEY_EXIT || JM_ASN_MODE == KEY_BACKSPACE) {
         JM_ASN_MODE = 0;
-        showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+        #ifndef TESTSUITE_BUILD
+          showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+        #endif
       } else {
-        showString("Select key: top 4 lines excl. FN1-6 & [<-],", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
-        showString("incl. [/] [*] [-] [+] [R/S].   EXIT aborts.", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
+        #ifndef TESTSUITE_BUILD
+          showString("Select key: top 4 lines excl. FN1-6 & [<-],", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+          showString("incl. [/] [*] [-] [+] [R/S].   EXIT aborts.", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
+        #endif
         userModeEnabled = true;               //JM Get out ouf USER MODE to select key in next step
         toggleUserMode();
       }
@@ -1022,8 +1028,10 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {             //JM ASSIGN - 
       refreshStack();
       break;
     default:
-      clearScreen(false,true,false);
-      showString("Invalid key", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      #ifndef TESTSUITE_BUILD
+        clearScreen(false,true,false);
+        showString("Invalid key", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      #endif
       break;
   }
 }

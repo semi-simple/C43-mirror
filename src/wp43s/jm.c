@@ -167,24 +167,39 @@ void fnSetSetJM(uint16_t What) {                                  //JM SHIFT TIM
     fnInfo(Home3TimerMode);                                         //JM SHIFT HOME.3 TIM CCL
   } else
   if(What == 9) {
-    Norm_Key_00_USER = !Norm_Key_00_USER;                           //JM USER
+  /*Norm_Key_00_USER = !Norm_Key_00_USER;                           //JM USER
     Norm_Key_00_CC = false;
-    Norm_Key_00_MyMenu = false;
-    fnInfo(Norm_Key_00_USER);                                       //JM USER
+    Norm_Key_00_MyMenu = false;*/
+    Norm_Key_00_VAR = KEY_USERMODE;
+    fnInfo(true/*Norm_Key_00_USER*/);                               //JM USER
   } else
   if(What == 10) {
-    Norm_Key_00_CC = !Norm_Key_00_CC;                               //JM USER
+  /*Norm_Key_00_CC = !Norm_Key_00_CC;                               //JM USER
     Norm_Key_00_USER = false;
-    Norm_Key_00_MyMenu = false;
-    fnInfo(Norm_Key_00_CC);                                         //JM USER
+    Norm_Key_00_MyMenu = false;*/
+    Norm_Key_00_VAR = KEY_CC;
+    fnInfo(true/*Norm_Key_00_CC*/);                                 //JM USER
   } else
   if(What == 11) {
-    Norm_Key_00_MyMenu = !Norm_Key_00_MyMenu;                               //JM USER
+  /*Norm_Key_00_MyMenu = !Norm_Key_00_MyMenu;                       //JM USER
     Norm_Key_00_USER = false;
-    Norm_Key_00_CC = false;
-    fnInfo(Norm_Key_00_MyMenu);                                         //JM USER
+    Norm_Key_00_CC = false;*/
+    Norm_Key_00_VAR = -MNU_MYMENU;
+    fnInfo(true/*Norm_Key_00_MyMenu*/);                             //JM USER
   }
-}                                                                 //JM SHIFT TIM CCL
+  else if(What == 12) {
+    Norm_Key_00_VAR = ITM_SIGMAPLUS;
+    fnInfo(true);
+  }
+  else if (What == 13) {
+    Norm_Key_00_VAR = ITM_PR;
+    fnInfo(true);
+  }
+  else if (What == 14) {
+    Norm_Key_00_VAR = ITM_AIM;
+    fnInfo(true);
+  }
+}                                                                   //JM SHIFT TIM CCL
 
 
 
@@ -243,17 +258,23 @@ void fnShowJM(uint16_t What) {
   else
   if(What == 8 && Home3TimerMode == false) { stringToLongInteger("0",10,mem); }
   else
-  if(What == 9 && Norm_Key_00_USER == true) { stringToLongInteger("1",10,mem); }
+  if(What == 9 && Norm_Key_00_VAR == KEY_USERMODE) { stringToLongInteger("1",10,mem); }
   else
-  if(What == 9 && Norm_Key_00_USER == false) { stringToLongInteger("0",10,mem); }
+  if(What == 9 && Norm_Key_00_VAR != KEY_USERMODE) { stringToLongInteger("0",10,mem); }
   else
-  if(What == 10 && Norm_Key_00_CC == true) { stringToLongInteger("1",10,mem); }
+  if(What == 10 && Norm_Key_00_VAR == KEY_CC) { stringToLongInteger("1",10,mem); }
   else
-  if(What == 10 && Norm_Key_00_CC == false) { stringToLongInteger("0",10,mem); }
+  if(What == 10 && Norm_Key_00_VAR != KEY_CC) { stringToLongInteger("0",10,mem); }
   else
-  if(What == 11 && Norm_Key_00_MyMenu == true) { stringToLongInteger("1",10,mem); }
+  if(What == 11 && Norm_Key_00_VAR == -MNU_MYMENU) { stringToLongInteger("1",10,mem); }
   else
-  if(What == 11 && Norm_Key_00_MyMenu == false) { stringToLongInteger("0",10,mem); }
+  if(What == 11 && Norm_Key_00_VAR != -MNU_MYMENU) { stringToLongInteger("0",10,mem); }
+  else if(What == 12 && Norm_Key_00_VAR == ITM_SIGMAPLUS) { stringToLongInteger("1",10,mem); }
+  else if(What == 12 && Norm_Key_00_VAR != ITM_SIGMAPLUS) { stringToLongInteger("0",10,mem); }
+  else if(What == 13 && Norm_Key_00_VAR == ITM_PR) { stringToLongInteger("1",10,mem); }
+  else if(What == 13 && Norm_Key_00_VAR != ITM_PR) { stringToLongInteger("0",10,mem); }
+  else if(What == 14 && Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
+  else if(What == 14 && Norm_Key_00_VAR != ITM_AIM) { stringToLongInteger("0",10,mem); }
  
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
@@ -264,6 +285,23 @@ void fnShowJM(uint16_t What) {
 
 
 //JM CONFIGURE USER MODE - ASSIGN KEYS
+
+
+void fnJM_GetXToNORMmode(uint16_t Rubbish) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+  Norm_Key_00_VAR = X_REG;
+  }
+}
+
+
 
 void fnJMUSERmode(uint16_t JM_KEY) {
 int16_t X_REG;
@@ -859,9 +897,10 @@ if ComplexDP change to ComplexSP
       kbd_usr[0].primary     = KEY_CC;       
       kbd_usr[0].gShifted    = KEY_TYPCON_UP;
       kbd_usr[0].fShifted    = KEY_TYPCON_DN;
-      Norm_Key_00_MyMenu     = false;                                    //JM USER
+    /*Norm_Key_00_MyMenu     = false;                                    //JM USER
       Norm_Key_00_USER       = false;
-      Norm_Key_00_CC         = false;
+      Norm_Key_00_CC         = false;*/
+      Norm_Key_00_VAR        = ITM_SIGMAPLUS;
       Show_User_Keys();
   } else
 
@@ -869,9 +908,10 @@ if ComplexDP change to ComplexSP
       kbd_usr[12].gShifted   = KEY_CC;
       kbd_usr[0].gShifted    = KEY_TYPCON_UP;
       kbd_usr[0].fShifted    = KEY_TYPCON_DN;
-      Norm_Key_00_MyMenu     = true;                                     //JM USER
+    /*Norm_Key_00_MyMenu     = true;                                     //JM USER
       Norm_Key_00_USER       = false;
-      Norm_Key_00_CC         = false;
+      Norm_Key_00_CC         = false;*/
+      Norm_Key_00_VAR        = -MNU_MYMENU;
       Show_User_Keys();
   } else
 
@@ -886,17 +926,19 @@ if ComplexDP change to ComplexSP
       kbd_usr[11].primary    = KEY_g;       
       kbd_usr[11].fShifted   = ITM_NULL;        
       kbd_usr[11].gShifted   = ITM_NULL;  
-      Norm_Key_00_MyMenu     = false;                                   //JM USER
+    /*Norm_Key_00_MyMenu     = false;                                   //JM USER
       Norm_Key_00_USER       = true;
-      Norm_Key_00_CC         = false;      
+      Norm_Key_00_CC         = false;*/
+      Norm_Key_00_VAR        = KEY_USERMODE;
       Show_User_Keys();
   } else
 
   if(JM_OPCODE == USER_RESET) {                                         //USER_RESET 26                                         
       memcpy(kbd_usr, kbd_std, sizeof(kbd_std)); 
-      Norm_Key_00_MyMenu     = false;                                   //JM USER
+    /*Norm_Key_00_MyMenu     = false;                                   //JM USER
       Norm_Key_00_USER       = false;
-      Norm_Key_00_CC         = false;
+      Norm_Key_00_CC         = false;*/
+      Norm_Key_00_VAR        = ITM_SIGMAPLUS;
       Show_User_Keys();
   }  else
 
@@ -968,16 +1010,16 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {             //JM ASSIGN - 
       //JM_convertIntegerToShortIntegerRegister(JM_ASN_MODE, 10, REGISTER_X);
       if (shiftF) {
         (kbd_usr + tempkey)->fShifted = JM_ASN_MODE;  //Assign function into keyboard array
-        Show_User_Keys();
       }
       else if (shiftG) {
         (kbd_usr + tempkey)->gShifted = JM_ASN_MODE;  //Assign function into keyboard array
-        Show_User_Keys();
       }
       else {
         (kbd_usr + tempkey)->primary = JM_ASN_MODE;  //Assign function into keyboard array
-        Show_User_Keys();
       }
+
+      Show_User_Keys();
+      refreshStack();
       break;
     default:
       clearScreen(false,true,false);
@@ -1197,4 +1239,45 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {  //FOR CC  HARDWIRED F
 
 
 
+/*
+void ItemBrowser(uint16_t unusedParamButMandatory) {
+  int16_t registerNameWidth;
+
+  if(currentRegisterBrowserScreen == 9999) { // Init
+    currentRegisterBrowserScreen = 0;
+    rbrMode = RBR_GLOBAL;
+    showContent = true;
+    rbr1stDigit = true;
+    calcMode = CM_REGISTER_BROWSER;
+  }
+
+  if(currentRegisterBrowserScreen < 9999) {
+     {
+
+     clearScreen(false, true, true);
+
+      int16_t regist;
+      for(int16_t row=0; row<10; row++) {
+        regist = (currentRegisterBrowserScreen + row); // % FIRST_LOCAL_REGISTER;
+        
+        itoa(regist, tmpStr3000, 10);
+        registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, false, true);
+        
+        strcpy(tmpStr3000, "'");
+        strcpy(tmpStr3000, indexOfItems[regist].itemPrinted);
+        strcat(tmpStr3000, "'");
+        if(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
+          tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
+          while(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
+            tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
+          }
+         strcat(tmpStr3000 + stringByteLength(tmpStr3000), STD_ELLIPSIS);
+        }
+        showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true) - 1, 219-22*row, vmNormal, false, true);
+      }
+    }    
+  }
+}
+
+*/
 

@@ -175,6 +175,8 @@ void saveCalc(void) {
   size += fwrite(&Norm_Key_00_USER,                   1, sizeof(Norm_Key_00_USER),                   backup); //JM SHIFT //printf("%8lu Norm_Key_00_USER\n",                           (unsigned long)size);
   size += fwrite(&Norm_Key_00_CC,                     1, sizeof(Norm_Key_00_CC),                     backup); //JM SHIFT //printf("%8lu Norm_Key_00_CC\n",                           (unsigned long)size);
   size += fwrite(&Norm_Key_00_MyMenu,                 1, sizeof(Norm_Key_00_MyMenu),                 backup); //JM SHIFT //printf("%8lu Norm_Key_00_MyMenu\n",                           (unsigned long)size);
+  size += fwrite(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",                           (unsigned long)size);
+
 
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
@@ -353,6 +355,7 @@ void restoreCalc(void) {
     size += fread(&Norm_Key_00_USER,                   1, sizeof(Norm_Key_00_USER),                   backup); //JM SHIFT //printf("%8lu Norm_Key_00_USER\n",                           (unsigned long)size);
     size += fread(&Norm_Key_00_CC,                     1, sizeof(Norm_Key_00_CC),                     backup); //JM SHIFT //printf("%8lu Norm_Key_00_CC\n",                           (unsigned long)size);
     size += fread(&Norm_Key_00_MyMenu,                 1, sizeof(Norm_Key_00_MyMenu),                 backup); //JM SHIFT //printf("%8lu Norm_Key_00_MyMenu\n",                           (unsigned long)size);
+    size += fread(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",                           (unsigned long)size);
 
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);

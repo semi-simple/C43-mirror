@@ -313,7 +313,7 @@ void setupDefaults(void) {
   Norm_Key_00_USER = false;
   Norm_Key_00_CC   = false;
   Norm_Key_00_MyMenu   = false;
-  Norm_Key_00_VAR  = 0;
+  Norm_Key_00_VAR  = ITM_SIGMAPLUS;
 
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state

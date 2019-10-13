@@ -403,7 +403,7 @@ void btnPressed(void *notUsed, void *data) {
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
       if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
         //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
-        if(Norm_Key_00_VAR !=0) {
+        /*if(Norm_Key_00_VAR !=0) {
           item = Norm_Key_00_VAR;
         } else
         if(Norm_Key_00_USER) {
@@ -414,7 +414,8 @@ void btnPressed(void *notUsed, void *data) {
         } else
         if(Norm_Key_00_CC) {
           item = -MNU_MYMENU;
-        }   
+        }*/
+        item = Norm_Key_00_VAR;
       }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 

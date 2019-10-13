@@ -1931,14 +1931,20 @@
 #define ITM_SH_KEY_CC                 1892  //JM USER
 #define ITM_U_KEY_MM                  1893  //JM USER
 #define ITM_SH_KEY_MM                 1894  //JM USER
-#define ITM_JM_ASN                    1895  //JM ASSIGN
-#define ITM_JM_SEEK                   1896  //JM ASSIGN
-#define MNU_ASN_N                     1897  //JM USER NORMAL
-#define ITM_GET_NORM_E                1898  //JM USER NORMAL
+#define ITM_U_KEY_SIGMA               1895  //JM USER
+#define ITM_SH_KEY_SIGMA              1896  //JM USER
+#define ITM_U_KEY_PRGM                1897  //JM USER
+#define ITM_SH_KEY_PRGM               1898  //JM USER
+#define ITM_U_KEY_ALPHA               1899  //JM USER
+#define ITM_SH_KEY_ALPHA              1900  //JM USER
+#define ITM_JM_ASN                    1901  //JM ASSIGN
+#define ITM_JM_SEEK                   1902  //JM ASSIGN
+#define MNU_ASN_N                     1903  //JM USER NORMAL
+#define ITM_GET_NORM_E                1904  //JM USER NORMAL
 
 
 
-#define LAST_ITEM                     1899  //JM
+#define LAST_ITEM                     1905  //JM
 
 #define CHR_PROD_SIGN                 9999
 

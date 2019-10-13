@@ -98,6 +98,11 @@ void executeFunction(int16_t fn, int16_t shift) {
       else if(func > 0) { // function
         if(calcMode == CM_NIM && func != KEY_CC) {
           closeNim();
+          if(calcMode != CM_NIM) {
+            if(indexOfItems[func % 10000].func == fnConstant) {
+              stackLiftEnable();
+            }
+          }
         }
 
         if(lastErrorCode == 0) {

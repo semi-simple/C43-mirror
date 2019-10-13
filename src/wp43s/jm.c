@@ -1239,4 +1239,45 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {  //FOR CC  HARDWIRED F
 
 
 
+/*
+void ItemBrowser(uint16_t unusedParamButMandatory) {
+  int16_t registerNameWidth;
+
+  if(currentRegisterBrowserScreen == 9999) { // Init
+    currentRegisterBrowserScreen = 0;
+    rbrMode = RBR_GLOBAL;
+    showContent = true;
+    rbr1stDigit = true;
+    calcMode = CM_REGISTER_BROWSER;
+  }
+
+  if(currentRegisterBrowserScreen < 9999) {
+     {
+
+     clearScreen(false, true, true);
+
+      int16_t regist;
+      for(int16_t row=0; row<10; row++) {
+        regist = (currentRegisterBrowserScreen + row); // % FIRST_LOCAL_REGISTER;
+        
+        itoa(regist, tmpStr3000, 10);
+        registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, false, true);
+        
+        strcpy(tmpStr3000, "'");
+        strcpy(tmpStr3000, indexOfItems[regist].itemPrinted);
+        strcat(tmpStr3000, "'");
+        if(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
+          tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
+          while(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
+            tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
+          }
+         strcat(tmpStr3000 + stringByteLength(tmpStr3000), STD_ELLIPSIS);
+        }
+        showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true) - 1, 219-22*row, vmNormal, false, true);
+      }
+    }    
+  }
+}
+
+*/
 

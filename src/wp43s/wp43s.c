@@ -143,6 +143,7 @@ bool_t               SH_BASE_MYA;                             //JM BASEHOME
 bool_t               Norm_Key_00_USER;                        //JM USER
 bool_t               Norm_Key_00_CC;                          //JM USER
 bool_t               Norm_Key_00_MyMenu;                      //JM USER
+int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -312,6 +313,7 @@ void setupDefaults(void) {
   Norm_Key_00_USER = false;
   Norm_Key_00_CC   = false;
   Norm_Key_00_MyMenu   = false;
+  Norm_Key_00_VAR  = 0;
 
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state

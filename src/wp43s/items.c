@@ -2021,15 +2021,17 @@ const item_t indexOfItems[] = {
 /* 1886 */  { fnJM,                        USER_COMPLEX ,               "USER COMPLEX",                                "U" STD_UP_ARROW " CC",                                                        SLS_UNCHANGED},  //JM USER
 /* 1887 */  { fnJM,                        USER_SHIFTS  ,               "USER SHIFTS",                                 "U" " SHFT",                                                                    SLS_UNCHANGED},  //JM USER
 /* 1888 */  { fnJM,                        USER_RESET   ,               "USER RESET",                                  "U" " RSET",                                                                   SLS_UNCHANGED},  //JM USER
-/* 1889 */  { fnSetSetJM,                  9            ,               "NORM KEY E+ USER",                            STD_SIGMA " USR",                                                              SLS_ENABLED  },  //JM USER
-/* 1890 */  { fnShowJM,                    9            ,               "NORM KEY E+ USER?",                           STD_SIGMA " USR?",                                                             SLS_ENABLED  },  //JM USER
-/* 1891 */  { fnSetSetJM,                  10           ,               "NORM KEY E+ CC",                              STD_SIGMA " CC ",                                                               SLS_ENABLED  },  //JM USER
-/* 1892 */  { fnShowJM,                    10           ,               "NORM KEY E+ CC",                              STD_SIGMA " CC?",                                                              SLS_ENABLED  },  //JM USER
-/* 1893 */  { fnSetSetJM,                  11           ,               "NORM KEY E+ CC",                              STD_SIGMA " MyMU",                                                             SLS_ENABLED  },  //JM USER
-/* 1894 */  { fnShowJM,                    11           ,               "NORM KEY E+ MyMenu",                          STD_SIGMA " MyM?",                                                             SLS_ENABLED  },  //JM USER
+/* 1889 */  { fnSetSetJM,                  9            ,               "NORM KEY E+ USER",                            STD_SIGMA "+USR",                                                              SLS_ENABLED  },  //JM USER
+/* 1890 */  { fnShowJM,                    9            ,               "NORM KEY E+ USER?",                           STD_SIGMA "+USR?",                                                             SLS_ENABLED  },  //JM USER
+/* 1891 */  { fnSetSetJM,                  10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC ",                                                               SLS_ENABLED  },  //JM USER
+/* 1892 */  { fnShowJM,                    10           ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC?",                                                              SLS_ENABLED  },  //JM USER
+/* 1893 */  { fnSetSetJM,                  11           ,               "NORM KEY E+ CC",                              STD_SIGMA "+MyMU",                                                             SLS_ENABLED  },  //JM USER
+/* 1894 */  { fnShowJM,                    11           ,               "NORM KEY E+ MyMenu",                          STD_SIGMA "+MyM?",                                                             SLS_ENABLED  },  //JM USER
 /* 1895 */  { fnJM,                        JM_ASSIGN    ,               "",                                            "ASSIGN",                                                                      SLS_UNCHANGED  },  //JM ASSIGN
 /* 1896 */  { fnJM,                        JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                                                                      SLS_UNCHANGED  },  //JM ASSIGN SEEK FUNCTION
-  
+/* 1897 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN NORMAL",                          STD_SIGMA "+NORM",                                                                       SLS_UNCHANGED},   //JM USER NORMAL
+/* 1898 */  { fnJM_GetXToNORMmode,         NOPARAM,                     "GET X to E" STD_SIGMA,                        "X to"STD_SIGMA "+",                                                                        SLS_UNCHANGED},   //JM USER NORMAL
 
-/* 1897 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                    SLS_UNCHANGED}       //JM eRPN
+
+/* 1899 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                    SLS_UNCHANGED}       //JM eRPN
 };

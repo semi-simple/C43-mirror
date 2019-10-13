@@ -265,6 +265,23 @@ void fnShowJM(uint16_t What) {
 
 //JM CONFIGURE USER MODE - ASSIGN KEYS
 
+
+void fnJM_GetXToNORMmode(uint16_t Rubbish) {
+int16_t X_REG;
+longInteger_t lgInt;
+
+if (getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  X_REG = longIntegerToInt(lgInt);
+  longIntegerFree(lgInt);
+  //printf("Xreg %d\n", X_REG);
+  Norm_Key_00_VAR = X_REG;
+  }
+}
+
+
+
 void fnJMUSERmode(uint16_t JM_KEY) {
 int16_t X_REG;
 longInteger_t lgInt;

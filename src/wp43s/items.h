@@ -1933,9 +1933,12 @@
 #define ITM_SH_KEY_MM                 1894  //JM USER
 #define ITM_JM_ASN                    1895  //JM ASSIGN
 #define ITM_JM_SEEK                   1896  //JM ASSIGN
+#define MNU_ASN_N                     1897  //JM USER NORMAL
+#define ITM_GET_NORM_E                1898  //JM USER NORMAL
 
 
-#define LAST_ITEM                     1897  //JM
+
+#define LAST_ITEM                     1899  //JM
 
 #define CHR_PROD_SIGN                 9999
 

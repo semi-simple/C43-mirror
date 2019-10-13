@@ -144,9 +144,9 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
 
                                      ITM_ERPN,                      ITM_SH_ERPN,                ITM_BASE_HOME,            ITM_SH_BASE_HOME,      ITM_BASE_AHOME,              ITM_SH_BASE_AHOME,                           //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
                                      ITM_SHTIM,                     ITM_SH_SHTIM,               ITM_BASE_MYMENU,          ITM_SH_BASE_MYMENU,    ITM_BASE_MYA,                ITM_SH_BASE_MYA,                            //J Added
-                                     ITM_HOMEx3,                    ITM_SH_HOMEx3,              ITM_HOMEx3T,              ITM_SH_HOMEx3T,        ITM_NULL,                    ITM_NULL,
+                                     ITM_HOMEx3,                    ITM_SH_HOMEx3,              ITM_HOMEx3T,              ITM_SH_HOMEx3T,        ITM_NULL,                    ITM_NULL                      };
 
-                                     ITM_U_KEY_USER,                ITM_SH_KEY_USER,            ITM_U_KEY_CC,             ITM_SH_KEY_CC,         ITM_U_KEY_MM,                ITM_SH_KEY_MM                 };           //JM USER
+
 
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
@@ -463,10 +463,15 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
 
 
 
+const int16_t menu_ASN_N[]        = { 
+                                     ITM_U_KEY_USER,                ITM_SH_KEY_USER,            ITM_U_KEY_CC,             ITM_SH_KEY_CC,         ITM_U_KEY_MM,                ITM_SH_KEY_MM,                 //JM USER NAORMAL MODE
+                                     ITM_GET_NORM_E,                ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                      //JM USER NAORMAL MODE
+                                    -MNU_ASN ,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL          };           //JM USER NAORMAL MODE
+
 const int16_t menu_ASN[]        = { 
       ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_JM_SEEK, /*ITM_JM_ASN*/ KEY_USERMODE,
-      ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL,
-      ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL, ITM_NULL,
+      ITM_NULL,          ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
+     -MNU_ASN_N,         ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
 
       K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER
       Kf00U, Kf01U, Kf02U, Kf03U, Kf04U, Kf05U,  //JM USER
@@ -637,7 +642,8 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_TAM,         .numRows = sizeof(menu_Tam        )/sizeof(int16_t)/6, .softkeyRow = menu_Tam         },
   {.menuId = -MNU_TAMCMP,      .numRows = sizeof(menu_TamCmp     )/sizeof(int16_t)/6, .softkeyRow = menu_TamCmp      },
   {.menuId = -MNU_TAMSTORCL,   .numRows = sizeof(menu_TamStoRcl  )/sizeof(int16_t)/6, .softkeyRow = menu_TamStoRcl   },
-  {.menuId = -MNU_ASN,         .numRows = sizeof(menu_ASN        )/sizeof(int16_t)/6, .softkeyRow = menu_ASN         },  //JM USER TEST
+  {.menuId = -MNU_ASN_N,       .numRows = sizeof(menu_ASN_N      )/sizeof(int16_t)/6, .softkeyRow = menu_ASN_N       },  //JM USER NORMAL
+  {.menuId = -MNU_ASN,         .numRows = sizeof(menu_ASN        )/sizeof(int16_t)/6, .softkeyRow = menu_ASN         },  //JM USER
   {.menuId = -MNU_HOME,        .numRows = sizeof(menu_HOME       )/sizeof(int16_t)/6, .softkeyRow = menu_HOME        },  //JM HOME
   {.menuId = -MNU_ALPHA,       .numRows = sizeof(menu_ALPHA      )/sizeof(int16_t)/6, .softkeyRow = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numRows = sizeof(menu_BASE       )/sizeof(int16_t)/6, .softkeyRow = menu_BASE        },  //JM HOME

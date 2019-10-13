@@ -96,6 +96,7 @@ extern bool_t SH_BASE_MYA;                                           //JM BASEHO
 extern bool_t Norm_Key_00_USER;                                      //JM USER
 extern bool_t Norm_Key_00_CC;                                        //JM USER
 extern bool_t Norm_Key_00_MyMenu;                                    //JM USER
+extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
 
 
 // Additional routines needed in jm.c
@@ -112,6 +113,7 @@ void fnJM(uint16_t JM_OPCODE);
 #define JM_ASSIGN        27
 #define JM_SEEK_FN       28
 
+void fnJM_GetXToNORMmode(uint16_t Rubbish);
 void fnJMUSERmode(uint16_t JM_KEY);
 void fnJMUSERmode_f(uint16_t JM_KEY);
 void fnJMUSERmode_g(uint16_t JM_KEY);

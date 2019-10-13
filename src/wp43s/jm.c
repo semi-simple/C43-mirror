@@ -968,16 +968,16 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {             //JM ASSIGN - 
       //JM_convertIntegerToShortIntegerRegister(JM_ASN_MODE, 10, REGISTER_X);
       if (shiftF) {
         (kbd_usr + tempkey)->fShifted = JM_ASN_MODE;  //Assign function into keyboard array
-        Show_User_Keys();
       }
       else if (shiftG) {
         (kbd_usr + tempkey)->gShifted = JM_ASN_MODE;  //Assign function into keyboard array
-        Show_User_Keys();
       }
       else {
         (kbd_usr + tempkey)->primary = JM_ASN_MODE;  //Assign function into keyboard array
-        Show_User_Keys();
       }
+
+      Show_User_Keys();
+      refreshStack();
       break;
     default:
       clearScreen(false,true,false);

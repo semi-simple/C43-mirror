@@ -372,44 +372,42 @@ void btnPressed(void *notUsed, void *data) {
 
   //JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
   else if(JM_ASN_MODE == 32766) {              //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
-      //printf("%d\n", determineItem(key));    //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
-      JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in 
-      fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
-      key = (kbd_std + 999);                    //JM illegal key to exit when done and cancel shifts
-      shiftG = false;
-      shiftF = false;
-    }
+    //printf("%d\n", determineItem(key));    //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
+    JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in 
+    fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
+    key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
+    shiftG = false;
+    shiftF = false;
+  }
   
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
-  else {                                       //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
-    int16_t tempkey;
-    if(JM_ASN_MODE != 0) {                     //JM GET KEY
-      tempkey = (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
-      fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
-      JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
-      key = (kbd_std + 999);                    //JM illegal key to exit when done and cancel shifts
-      shiftG = false;
-      shiftF = false;
-    }
+                                             //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
+  else if(JM_ASN_MODE != 0) {                     //JM GET KEY
+    int16_t tempkey = (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+    fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
+    JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
+    key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
+    shiftG = false;
+    shiftF = false;
+  }                                         
+  //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
+
+    else {
+      int16_t item = determineItem(key);
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-    int16_t item;
-    if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
-      //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
-      if(Norm_Key_00_USER) {
-        item = KEY_USERMODE;
-      } else
-      if(Norm_Key_00_CC) {
-        item = KEY_CC;
-      } else
-      if(Norm_Key_00_CC) {
-        item = -MNU_MYMENU;
-      } else {
-        item = determineItem(key);
-      }  
-    } else {
-      item = determineItem(key);
-    }
+      if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
+        //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
+        if(Norm_Key_00_USER) {
+          item = KEY_USERMODE;
+        } else
+        if(Norm_Key_00_CC) {
+          item = KEY_CC;
+        } else
+        if(Norm_Key_00_CC) {
+          item = -MNU_MYMENU;
+        }   
+      }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
     if(item == CHR_PROD_SIGN) {

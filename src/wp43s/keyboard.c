@@ -28,8 +28,6 @@
  * \param void
  * \return void
  ***********************************************/
-
-
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftF) {
@@ -116,13 +114,13 @@ void executeFunction(int16_t fn, int16_t shift) {
         addItemToBuffer(func);
       }
       else if(func > 0) { // function
-        if(calcMode == CM_NIM && func != KEY_CC && func != KEY_CC1 ) {     //JM CPX Added CC1 
+        if(calcMode == CM_NIM && func != KEY_CC && func != KEY_CC1 ) {     //JM CPX Added CC1
           closeNim();
-          if(calcMode != CM_NIM) {
+          if(calcMode != CM_NIM) {                                //vv JM
             if(indexOfItems[func % 10000].func == fnConstant) {
               stackLiftEnable();
             }
-          }
+          }                                                       //^^
         }
 
         if(lastErrorCode == 0) {
@@ -223,6 +221,7 @@ uint16_t determineItem(const calcKey_t *key) {
 }
 
 
+
 /********************************************//**
  * \brief A calc button was pressed
  *
@@ -252,18 +251,18 @@ void btnPressed(void *notUsed, void *data) {
     #ifdef DMCP_BUILD                                 //JM TIMER DMCP CLRDROP
     now = sys_current_ms();                           //JM TIMER DMCP SHIFTCANCEL
     if(now > now_MEM + JM_CLRDROP_TIMER) {            //JM TIMER DMCP CLRDROP Trying out timer shift allow double backspace to DROP
-      JM_auto_drop_enabled=false;                     //JM TIMER DMCP CLRDROP 
-    }                                                 //JM TIMER DMCP CLRDROP 
-    #endif                                            //JM TIMER DMCP CLRDROP 
+      JM_auto_drop_enabled=false;                     //JM TIMER DMCP CLRDROP
+    }                                                 //JM TIMER DMCP CLRDROP
+    #endif                                            //JM TIMER DMCP CLRDROP
     #ifdef PC_BUILD                                   //JM TIMER EMULATOR CLRDROP
     now = g_get_monotonic_time();                     //JM usec
     if(now > now_MEM + JM_CLRDROP_TIMER*1000) {       //JM TIMER EMULATOR CLRDROP Trying out timer shift allow double backspace to DROP
-      JM_auto_drop_enabled=false;                     //JM TIMER EMULATOR CLRDROP 
-    }                                                 //JM TIMER EMULATOR CLRDROP 
-    #endif                                            //JM TIMER EMULATOR CLRDROP 
+      JM_auto_drop_enabled=false;                     //JM TIMER EMULATOR CLRDROP
+    }                                                 //JM TIMER EMULATOR CLRDROP
+    #endif                                            //JM TIMER EMULATOR CLRDROP
 
     now_MEM = now;                                    //JM TIMER -- any last key pressed
-    
+
     if(JM_auto_drop_activated) {                      //JM TIMER CLRDROP ensure multiple drops don't not occur
       JM_auto_drop_enabled = false;                   //JM TIMER CLRDROP
       JM_auto_drop_activated = false;                 //JM TIMER CLRDROP
@@ -272,68 +271,67 @@ void btnPressed(void *notUsed, void *data) {
 
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
-    if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {     //JM shifts
-      if(temporaryInformation != TI_NO_INFO) {                                                                                   //JM shifts
-        temporaryInformation = TI_NO_INFO;                                                                                       //JM shifts
-        refreshRegisterLine(REGISTER_X);                                                                                         //JM shifts
-        refreshRegisterLine(REGISTER_Y);                                                                                         //JM shifts
-      }                                                                                                                          //JM shifts
-                                                                                                                                 //JM shifts
-      if(lastErrorCode != 0) {                                                                                                   //JM shifts
-        lastErrorCode = 0;                                                                                                       //JM shifts
-        refreshStack();                                                                                                          //JM shifts
-      }                                                                                                                          //JM shifts
-
-      if(ShiftTimoutMode || Home3TimerMode) {
-        if (Home3TimerMode) {       
-          JM_SHIFT_HOME_TIMER2 = JM_SHIFT_HOME_TIMER1;
-          JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP  - JM_SHIFT_RESET;
-          //printf("T2 %d T1 %d SR %d SUB %d \n", JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1, JM_SHIFT_RESET, JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2);
-          if (JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2 <= JM_3_SHIFT_CUTOFF) {  //increased limit from 500 to 600 ms
-            JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP; //max
-            shiftF = false;  // Set it up, for flags to be cleared below.
-            shiftG = true;
-            if (HOME3) {
-              if( (softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer) ) {                              //JM shifts
-                popSoftmenu();                                                                                                     //JM shifts
-              } else { 
-                if (calcMode == CM_AIM) {                                                                                          //JM shifts
-                  showSoftmenu(NULL, -MNU_ALPHA, true);                                                                            //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
-                } else {                                                                                                                //JM SHIFTS
-                  showSoftmenu(NULL, -MNU_HOME, true);                                                                             //JM shifts  //JM ALPHA-HOME 
-                }                                                                                                                //JM shifts                                                                                                                  //JM shifts
-                softmenuStackPointer_MEM = softmenuStackPointer;                                                                   //JM shifts
-              }
-            }                                                                                                                    //JM shifts
-          }
-        }
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
-      }
-
+  if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
+    if(temporaryInformation != TI_NO_INFO) {                                                                                  //JM shifts
+      temporaryInformation = TI_NO_INFO;                                                                                      //JM shifts
+      refreshRegisterLine(REGISTER_X);                                                                                        //JM shifts
+      refreshRegisterLine(REGISTER_Y);                                                                                        //JM shifts
+    }                                                                                                                         //JM shifts
                                                                                                                               //JM shifts
-      if (!shiftF && !shiftG) {                                                                                                  //JM shifts
-        shiftF = true;                                                                                                           //JM shifts
-        shiftG = false;      
-      } else                                                                                                                     //JM shifts
-                                                                                                                                 //JM shifts
-      if (shiftF && !shiftG) {                                                                                                   //JM shifts
-        shiftF = false;                                                                                                          //JM shifts
-        shiftG = true;                                                                                                           //JM shifts
-      } else                                                                                                                     //JM shifts
-                                                                                                                                 //JM shifts
-      if (!shiftF && shiftG) {                                                                                                   //JM shifts
-        shiftF = false;                                                                                                          //JM shifts
-        shiftG = false;                                                                                                          //JM shifts
-      } else                                                                                                                     //JM shifts
-                                                                                                                                 //JM shifts                                                                                                                                 //JM shifts
-      if (shiftF && shiftG) {                                                                                                    //JM shifts  should never be possible. included for completeness
-        shiftF = false;                                                                                                          //JM shifts
-        shiftG = false;                                                                                                          //JM shifts
-      }                                                                                                                          //JM shifts
-                                                                                                                                 //JM shifts
-      showShiftState();                                                                                                          //JM shifts
-    }                                                                                                                            //JM shifts
-                                                                                                                                 //JM shifts
+    if(lastErrorCode != 0) {                                                                                                  //JM shifts
+      lastErrorCode = 0;                                                                                                      //JM shifts
+      refreshStack();                                                                                                         //JM shifts
+    }                                                                                                                         //JM shifts
+
+    if(ShiftTimoutMode || Home3TimerMode) {
+      if(Home3TimerMode) {
+        JM_SHIFT_HOME_TIMER2 = JM_SHIFT_HOME_TIMER1;
+        JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP  - JM_SHIFT_RESET;
+        //printf("T2 %d T1 %d SR %d SUB %d \n", JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1, JM_SHIFT_RESET, JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2);
+        if(JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2 <= JM_3_SHIFT_CUTOFF) {  //increased limit from 500 to 600 ms
+          JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP; //max
+          shiftF = false;  // Set it up, for flags to be cleared below.
+          shiftG = true;
+          if(HOME3) {
+            if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
+              popSoftmenu();                                                                                                  //JM shifts
+            }
+            else {
+              if (calcMode == CM_AIM) {                                                                                       //JM shifts
+                showSoftmenu(NULL, -MNU_ALPHA, true);                                                                         //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
+              }
+              else {                                                                                                          //JM SHIFTS
+                showSoftmenu(NULL, -MNU_HOME, true);                                                                          //JM shifts  //JM ALPHA-HOME
+              }                                                                                                               //JM shifts
+                                                                                                                              //JM shifts
+              softmenuStackPointer_MEM = softmenuStackPointer;                                                                //JM shifts
+            }
+          }                                                                                                                   //JM shifts
+        }
+      }
+      JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+    }
+
+    if(!shiftF && !shiftG) {                                                                                                  //JM shifts
+      shiftF = true;                                                                                                          //JM shifts
+      shiftG = false;
+    }                                                                                                                         //JM shifts
+    else if(shiftF && !shiftG) {                                                                                              //JM shifts
+      shiftF = false;                                                                                                         //JM shifts
+      shiftG = true;                                                                                                          //JM shifts
+    }
+    else if(!shiftF && shiftG) {                                                                                              //JM shifts
+      shiftF = false;                                                                                                         //JM shifts
+      shiftG = false;                                                                                                         //JM shifts
+    }
+    else if(shiftF && shiftG) {                                                                                               //JM shifts  should never be possible. included for completeness
+      shiftF = false;                                                                                                         //JM shifts
+      shiftG = false;                                                                                                         //JM shifts
+    }                                                                                                                         //JM shifts
+                                                                                                                              //JM shifts
+    showShiftState();                                                                                                         //JM shifts
+  }                                                                                                                           //JM shifts
+                                                                                                                              //JM shifts
 #endif
 
   // Shift f pressed
@@ -350,9 +348,9 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-      if(ShiftTimoutMode) {
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
-      }
+    if(ShiftTimoutMode) {                       //vv JM
+      JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+    }                                           //^^
 
     shiftF = !shiftF;
     shiftG = false;
@@ -373,9 +371,9 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-      if(ShiftTimoutMode) {
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
-      }
+    if(ShiftTimoutMode) {                       //vv JM
+      JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+    }                                           //^^
 
     shiftG = !shiftG;
     shiftF = false;
@@ -384,47 +382,47 @@ void btnPressed(void *notUsed, void *data) {
   }
 
   //JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
-  else if(JM_ASN_MODE == 32766) {              //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
+  else if(JM_ASN_MODE == 32766) {            //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
     //printf("%d\n", determineItem(key));    //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
-    JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in 
+    JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in
     fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
     shiftG = false;
     shiftF = false;
   }
-  
+
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
                                              //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
-  else if(JM_ASN_MODE != 0) {                     //JM GET KEY
+  else if(JM_ASN_MODE != 0) {                //JM GET KEY
     int16_t tempkey = (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
     fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
     JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
     shiftG = false;
     shiftF = false;
-  }                                         
+  }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
-    else {
-      int16_t item = determineItem(key);
+  else {
+    int16_t item = determineItem(key);
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-      if ( (calcMode == CM_NORMAL) && ( !userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
-        //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
-        /*if(Norm_Key_00_VAR !=0) {
-          item = Norm_Key_00_VAR;
-        } else
-        if(Norm_Key_00_USER) {
-          item = KEY_USERMODE;
-        } else
-        if(Norm_Key_00_CC) {
-          item = KEY_CC;
-        } else
-        if(Norm_Key_00_CC) {
-          item = -MNU_MYMENU;
-        }*/
+    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
+      //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
+      /*if(Norm_Key_00_VAR !=0) {
         item = Norm_Key_00_VAR;
       }
+      else if(Norm_Key_00_USER) {
+        item = KEY_USERMODE;
+      }
+      else if(Norm_Key_00_CC) {
+        item = KEY_CC;
+      }
+      else if(Norm_Key_00_CC) {
+        item = -MNU_MYMENU;
+      }*/
+      item = Norm_Key_00_VAR;
+    }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
     if(item == CHR_PROD_SIGN) {
@@ -486,9 +484,9 @@ void btnPressed(void *notUsed, void *data) {
 
         refreshStack();
 
-        if( eRPN == false ) {                                         //JM eRPN modification. Ensure DUP always set SL
+        if(eRPN == false) {                                                     //JM eRPN modification. Ensure DUP always set SL
            STACK_LIFT_DISABLE;
-        }                                                             //JM eRPN modification
+        }                                                                       //JM eRPN modification
       }
 
       else if(calcMode == CM_FONT_BROWSER) {
@@ -523,7 +521,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_AIM) {
-        if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/  ) {             //JM ALPHA-HOME make sure we are at the bottom of the stack
+        if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/) {      //JM ALPHA-HOME make sure we are at the bottom of the stack
           calcModeNormal();
           showAlphaMode();
           popSoftmenu();
@@ -545,7 +543,7 @@ void btnPressed(void *notUsed, void *data) {
           refreshStack();
         }
         else {
-         popSoftmenu();
+          popSoftmenu();
         }
       }
 
@@ -589,10 +587,10 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if( (item == KEY_CC) || (item == KEY_COMPLEX) || (item == KEY_CC1) ) {                //JM CPX Add COMPLEX CPX*
-      if( (calcMode == CM_NORMAL) && ((item == KEY_CC1) ) ) {                                  //JM CPX empty function for CC1
-        } 
-      else if( (calcMode == CM_NORMAL) && ((item == KEY_CC) || (item == KEY_COMPLEX)) ) {      //JM CPX
+    else if((item == KEY_CC) || (item == KEY_COMPLEX) || (item == KEY_CC1)) {             //JM CPX Add COMPLEX CPX*
+      if((calcMode == CM_NORMAL) && ((item == KEY_CC1))) {                                //JM CPX empty function for CC1
+        }
+      else if((calcMode == CM_NORMAL) && ((item == KEY_CC) || (item == KEY_COMPLEX))) {   //JM CPX
         uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
         uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
         bool_t xIsAReal;
@@ -805,7 +803,7 @@ void btnPressed(void *notUsed, void *data) {
           STACK_LIFT_DISABLE;
 
           if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE 
+            fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
             JM_auto_drop_activated = true;   //JM TIMER CLRDROP ON DOUBLE BACKSPACE
             STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
@@ -866,13 +864,13 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {   //JM CASE JM CAPS
-      alphaCase = AC_UPPER;                                    //JM CASE JM CAPS
-      showAlphaMode();                                         //JM CASE JM CAPS
+    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
+      alphaCase = AC_UPPER;                                                     //JM CASE JM CAPS
+      showAlphaMode();                                                          //JM CASE JM CAPS
 #ifdef PC_BUILD     //dr - new AIM
-	  calcModeAimGui();
+      calcModeAimGui();
 #endif
-	 }                                                         //JM CASE JM CAPS
+      }                                                                         //JM CASE JM CAPS
 
     else if(item == KEY_UP) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
@@ -890,9 +888,9 @@ void btnPressed(void *notUsed, void *data) {
           alphaCase = AC_UPPER;
           showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
-		  calcModeAimGui();
+          calcModeAimGui();
 #endif
-		}
+        }
       }
 
       else if(calcMode == CM_TAM) {
@@ -936,13 +934,13 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if((calcMode == CM_AIM) && (item == CHR_case)  && (alphaCase == AC_UPPER)) {   //JM CASE JM CAPS
-      alphaCase = AC_LOWER;                                    //JM CASE JM CAPS
-      showAlphaMode();                                         //JM CASE JM CAPS
+    else if((calcMode == CM_AIM) && (item == CHR_case)  && (alphaCase == AC_UPPER)) {     //JM CASE JM CAPS
+      alphaCase = AC_LOWER;                                                     //JM CASE JM CAPS
+      showAlphaMode();                                                          //JM CASE JM CAPS
 #ifdef PC_BUILD     //dr - new AIM
-	  calcModeAimGui();
+       calcModeAimGui();
 #endif
-     }                                                         //JM CASE JM CAPS
+     }                                                                          //JM CASE JM CAPS
 
     else if(item == KEY_DOWN) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
@@ -960,9 +958,9 @@ void btnPressed(void *notUsed, void *data) {
           alphaCase = AC_LOWER;
           showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
-		  calcModeAimGui();
+          calcModeAimGui();
 #endif
-		}
+        }
       }
 
       else if(calcMode == CM_TAM) {
@@ -1212,16 +1210,16 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     else if(calcMode == CM_CONFIRMATION) {
-// JM YN      if(item == CHR_3 || item == ITM_XEQ) { // Yes or XEQ
-      if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ                                // JM YN For Layout DM42, changed "Y" on CHR_3 to ITM_SUB as the alpha character move due to operator swap
+    /*if(item == CHR_3 || item == ITM_XEQ) { // Yes or XEQ*/                    // JM YN
+      if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ                // JM YN For Layout DM42, changed "Y" on CHR_3 to ITM_SUB as the alpha character move due to operator swap
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
         confirmedFunction(CONFIRMED);
         refreshStack();
       }
 
-// JM YN     else if(item == CHR_7) { // No
-      else if(item == ITEM_CONF_N ) { // No                                                    //JM YN
+    /*else if(item == CHR_7) { // No*/                                          // JM YN
+      else if(item == ITEM_CONF_N ) { // No                                     // JM YN
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
         refreshStack();
@@ -1258,6 +1256,7 @@ void btnReleased(void *notUsed, void *data) {
 }
 
 
+
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   shiftF = true;
 
@@ -1269,6 +1268,4 @@ void fnComplexCCCC(uint16_t unusedParamButMandatory) {
     btnClicked(NULL, "02");
   #endif
 }
-
-
 #endif // TESTSUITE_BUILD

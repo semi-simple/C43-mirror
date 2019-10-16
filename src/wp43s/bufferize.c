@@ -697,7 +697,7 @@ void addItemToNimBuffer(int16_t item) {
 
     case ITM_pi :
       if(nimNumberPart == NP_COMPLEX_INT_PART && nimBuffer[strlen(nimBuffer) - 1] == 'i') {
-        done = true;
+        done = true;                            //JM moved, bugfix
         strcat(nimBuffer, "3.141592653589793");
       }
       break;
@@ -841,12 +841,12 @@ void addItemToNimBuffer(int16_t item) {
         }
 
         STACK_LIFT_ENABLE;
-        if( eRPN == false ) {                                         //JM eRPN modification
-        liftStack();
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-        refreshStack();
-        STACK_LIFT_DISABLE;                                           //JM eRPN experiment
-        }                                                             //JM eRPN modification
+        if(eRPN == false) {                                         //JM eRPN modification, experiment
+          liftStack();
+          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+          refreshStack();
+          STACK_LIFT_DISABLE;
+        }                                                           //JM eRPN modification
         return;
       }
       break;
@@ -1036,6 +1036,7 @@ void addItemToNimBuffer(int16_t item) {
         }
       }
     }
+
       nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34;
       if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
@@ -1043,6 +1044,7 @@ void addItemToNimBuffer(int16_t item) {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
             nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
+
           *(nimBufferDisplay + index)     = *(NUM_PERIOD34);
           *(nimBufferDisplay + index + 1) = *(NUM_PERIOD34 + 1);
         }
@@ -1050,25 +1052,24 @@ void addItemToNimBuffer(int16_t item) {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
             nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
+
           *(nimBufferDisplay + index)     = *(NUM_COMMA34);
           *(nimBufferDisplay + index + 1) = *(NUM_COMMA34 + 1);
         }
       }
     }
-
     refreshRegisterLine(NIM_REGISTER_LINE);
   }
 
   else {
     closeNim();
     if(calcMode != CM_NIM) {
-      if(item == ITM_pi || indexOfItems[item].func == fnConstant) {
+      if(item == ITM_pi || indexOfItems[item].func == fnConstant) {   //vvJM, bugfix
         stackLiftEnable();
       }
-
-      if(lastErrorCode == 0) {
+      if(lastErrorCode == 0) {                                        //^^
         showFunctionName(item, 10);
-      }
+      }                                                               //JM
     }
   }
 }

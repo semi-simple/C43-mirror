@@ -127,15 +127,15 @@ void btnClicked_LC(GtkWidget *w, gpointer data) {
 void btnClicked_UC(GtkWidget *w, gpointer data) {
   uint8_t alphaCase_MEM;
   alphaCase_MEM = alphaCase;
-  if(alphaCase == AC_UPPER) {alphaCase = AC_LOWER;} 
-  else if (alphaCase == AC_LOWER) {alphaCase = AC_UPPER;}
+  if(alphaCase == AC_UPPER) {alphaCase = AC_LOWER;}
+  else if(alphaCase == AC_LOWER) {alphaCase = AC_UPPER;}
   btnPressed(w, data);
   btnReleased(w, data);
   alphaCase = alphaCase_MEM;
 }
 
 
-//JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.  
+//JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   shiftF = true;       //JM
   shiftG = false;      //JM
@@ -157,7 +157,7 @@ void btnClicked_SNU(GtkWidget *w, gpointer data) {
 uint32_t CTRL_State, event_keyval;
 
 
-gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM 
+gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
   //printf("Released %d\n", event->keyval);
 
   switch (event->keyval) {
@@ -173,11 +173,11 @@ gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
 
   }
   return FALSE;
-}                                                                           //JM 
+}                                                                           //JM
 
 
 gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
-  //printf("Pressed %d\n", event->keyval);                                    //JM
+  //printf("Pressed %d\n", event->keyval);                                  //JM
   event_keyval = event->keyval + CTRL_State;
 
 //JM ALPHA SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
@@ -478,7 +478,7 @@ switch (event_keyval) {
 //JM  CHARACTERS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD -                //*****. USE MENUS TO GET DEEP DOWN CHARACTERS *******//
 //Only colon is working
 // The issue is that the international letters are not working as yet.
-//   Once working, all letters available on the PC keyboard must be mapped here 
+//   Once working, all letters available on the PC keyboard must be mapped here
     case 158:                   //JM changed from 58 to 158, to avoid duplicasting the Colon. Colon exists above.
       btnClicked_SNU(w, "2");   //Switch to ALphadot; press FN2
       break;
@@ -490,23 +490,23 @@ switch (event_keyval) {
       btnClicked(w, "31");
       break;
 
-    case 65307:              // Esc EXIT //JM                   //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
+    case 65307:              // Esc EXIT      //JM                   //JM     //**************-- OTHER DIRECT ALPHA MODE KEYBOARD KEYS  --***************//
       btnClicked(w, "32");
       break;
 
-    case 58:                 // COLON.   //JM
+    case 58:                 // COLON.        //JM
       btnClicked(w, "33");
       break;
 
-    case 44:                 // ,        //JM   
+    case 44:                 // ,             //JM
       btnClicked(w, "34");
       break;
 
-    case 63:                 // ?        //JM
+    case 63:                 // ?             //JM
       btnClicked(w, "35");
       break;
 
-    case 32:                //JM SPACE   //JM
+    case 32:                //JM SPACE        //JM
       btnClicked(w, "36");
       break;
 /*
@@ -850,12 +850,12 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
     needleLg = strlen(needle);
     needleLocation = strstr(haystack, needle);
     tmpString = malloc(strlen(needleLocation + needleLg) + 1);
-    #ifdef PC_BUILD
-      if(tmpString == NULL) {
-        showInfoDialog("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
-        exit(1);
-      }
-    #endif
+#ifdef PC_BUILD
+    if(tmpString == NULL) {
+      showInfoDialog("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
+      exit(1);
+    }
+#endif
 
     strcpy(tmpString, needleLocation + needleLg);
     *strstr(haystack, needle) = 0;
@@ -1597,7 +1597,7 @@ void moveLabels(void) {
 
   //gtk_widget_get_preferred_size(  lblOn,  NULL, &lblF); //JM
   gtk_widget_get_preferred_size(  lbl85G, NULL, &lblG);
- 
+
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
   gtk_fixed_move(GTK_FIXED(grid), lbl85F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP*1.4-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM align provision for CAT
   gtk_fixed_move(GTK_FIXED(grid), lbl85G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL); //JM align provision for CAT
@@ -1611,7 +1611,7 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl85Gr, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);        //JM ALPHA BLUE MENU LABELS //^^
   gtk_widget_get_preferred_size(  lbl85Fa, NULL, &lblF);                                                                        //vv dr - new AIM
   gtk_fixed_move(GTK_FIXED(grid), lbl85Fa, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //^^
- 
+
 }
 
 
@@ -1648,16 +1648,16 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   else if((key->primary >= CHR_0 && key->primary <= CHR_9) || key->primary == CHR_PERIOD) {
     gtk_widget_set_name(button, "calcNumericKey");
   }
-  else if (strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {     //JM increase the font size of the operators to the numeric key size
+  else if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {      //JM increase the font size of the operators to the numeric key size
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
-  else if (strcmp((char *)lbl, "×") == 0 && key->keyId == 65) {     //JM increase the font size of the operators
+  else if(strcmp((char *)lbl, "×") == 0 && key->keyId == 65) {      //JM increase the font size of the operators
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
-  else if (strcmp((char *)lbl, "-") == 0 && key->keyId == 75) {     //JM increase the font size of the operators
+  else if(strcmp((char *)lbl, "-") == 0 && key->keyId == 75) {      //JM increase the font size of the operators
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
-  else if (strcmp((char *)lbl, "+") == 0 && key->keyId == 85) {     //JM increase the font size of the operators
+  else if(strcmp((char *)lbl, "+") == 0 && key->keyId == 85) {      //JM increase the font size of the operators
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
   else {
@@ -1698,59 +1698,59 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
 
   if(lbl[0] == ' ') {     //JM SPACE |  OPEN BOX 9251,  0xE2 0x90 0xA3  |  0xE2 0x90 0xA0 for SP.
     lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
-    lbl[1]=0xB7;          //JM SPACE          
-    lbl[1]=0xB7;          //JM SPACE          
+    lbl[1]=0xB7;          //JM SPACE
+    lbl[1]=0xB7;          //JM SPACE
     lbl[2]=' ';           //JM SPACE
     lbl[3]=0xc2;          //JM SPACE
     lbl[4]=0xb7;          //JM SPACE
     lbl[5]=0;             //JM SPACE
   }                       //JM SPACE
 
-  if(lbl[0] == 'Y') {                                         //JM Brighten up Y and N
-    //lbl[0] = '#';                                             //JM Brighten up Y and N
-    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);//JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                      //JM Brighten up Y and N
-  } else                                                           //JM Brighten up Y and N
-  if(lbl[0] == 'N') {                                         //JM Brighten up Y and N
-    //lbl[0] = '#';                                             //JM Brighten up Y and N
-    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);//JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                      //JM Brighten up Y and N
-  } else                                                         //JM Brighten up Y and N
-  {                                                              //JM Brighten up Y and N
-  gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
-  gtk_widget_set_name(lblL, "letter");
-  }                                                            //JM Brighten up Y and N
+  if(lbl[0] == 'Y') {                                       //JM Brighten up Y and N
+    //lbl[0] = '#';                                         //JM Brighten up Y and N
+    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+  }
+  else if(lbl[0] == 'N') {                                  //JM Brighten up Y and N
+    //lbl[0] = '#';                                         //JM Brighten up Y and N
+    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+  }
+  else {                                                    //JM Brighten up Y and N
+    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
+    gtk_widget_set_name(lblL, "letter");
+  }                                                         //JM Brighten up Y and N
 
 }
 
 
-
+//dr
 void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
   uint8_t lbl[22];
 
   stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemPrinted, lbl);
 
-  if (key->primary == 0) {
+  if(key->primary == 0) {
     lbl[0] = 0;
   }
 
   gtk_label_set_label(GTK_LABEL(lblF), (gchar*)lbl);
-  if (key->primary < 0) gtk_widget_set_name(lblF, "fShiftedUnderline"); else  gtk_widget_set_name(lblF, "fShifted");
+  if(key->primary < 0) gtk_widget_set_name(lblF, "fShiftedUnderline"); else  gtk_widget_set_name(lblF, "fShifted");
 }
 
 
-
+//dr
 void labelCaptionAimFaChr(const calcKey_t* key, GtkWidget* lblF, int chrF) {
   uint8_t lbl[22];
 
   stringToUtf8(indexOfItems[chrF].itemPrinted, lbl);
 
-  if (key->primary == 0) {
+  if(key->primary == 0) {
     lbl[0] = 0;
   }
 
   gtk_label_set_label(GTK_LABEL(lblF), (gchar*)lbl);
-  if (key->primary < 0) gtk_widget_set_name(lblF, "fShiftedUnderline"); else  gtk_widget_set_name(lblF, "fShifted");
+  if(key->primary < 0) gtk_widget_set_name(lblF, "fShiftedUnderline"); else  gtk_widget_set_name(lblF, "fShifted");
 }
 
 
@@ -1796,13 +1796,13 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   else if(key->keyLblAim == KEY_g) {
     gtk_widget_set_name(button, "calcKeyG");
   }
-  else if(key->keyLblAim == KEY_fg) {
-    gtk_widget_set_name(button, "calcKeyF");
+  else if(key->keyLblAim == KEY_fg) {                                 //JM 
+    gtk_widget_set_name(button, "calcKeyF");                          //JM
   }
   else {
     /*  //vv dr - new AIM
     if((key->fShiftedAim == key->keyLblAim || key->fShiftedAim == CHR_PROD_SIGN) && key->keyLblAim != ITM_NULL) {
-      gtk_widget_set_name(button, "calcKeyGoldenBorder");           //JM note because of this golden box, the upsizing is not effective.
+      gtk_widget_set_name(button, "calcKeyGoldenBorder");             //JM note because of this golden box, the upsizing is not effective.
     }
     else if (strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {     //JM increase the font size of the operators to the numeric key size
       gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
@@ -1825,7 +1825,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
 
 //Convert Greek CAPITAL and LOWER case to UTF !
-  if( (CHR_ALPHA <= key->gShiftedAim && key->gShiftedAim <= CHR_OMEGA) || (CHR_QOPPA <= key->gShiftedAim && key->gShiftedAim <= CHR_SAMPI) ) {   //JM GREEK. Add extra 36 char greek range
+  if((CHR_ALPHA <= key->gShiftedAim && key->gShiftedAim <= CHR_OMEGA) || (CHR_QOPPA <= key->gShiftedAim && key->gShiftedAim <= CHR_SAMPI)) {   //JM GREEK. Add extra 36 char greek range
   /*stringToUtf8(indexOfItems[key->gShiftedAim].itemPrinted, lbl);  //vv dr - new AIM
     lbl[2] = ' ';
     lbl[3] = 0;
@@ -1847,12 +1847,12 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   }
 
 //JM Removed as CAT is not Aim keyboard anymore
-//  else if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85   //JM Changed CATALOG to CAT
-//    lbl[3] = 0;
-//  }
+//else if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85   //JM Changed CATALOG to CAT
+//  lbl[3] = 0;
+//}
 
 /* JM TEST PROCEDURE TO TEST DISPLAY
-else if(key->gShiftedAim == CHR_DIGAMMA ) {   
+  else if(key->gShiftedAim == CHR_DIGAMMA ) {
     lbl[0] = 0xCF;
     lbl[1] = 0x9C;
     lbl[2] = 32;
@@ -1880,34 +1880,34 @@ else if(key->gShiftedAim == CHR_DIGAMMA ) {
    stringToUtf8(indexOfItems[key->primaryAim].itemPrinted, lbl);  //Convert to UTF !
   }
 
-//  if(lbl[0] == ' ') {    //JM Space replace with lines below
-//    lbl[0] = '_';
-//  }
+//if(lbl[0] == ' ') {     //JM Space replace with lines below
+//  lbl[0] = '_';
+//}
 
   if(lbl[0] == ' ') {     //JM SPACE |  OPEN BOX 9251,  0xE2 0x90 0xA3  |  0xE2 0x90 0xA0 for SP.
     lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
-    lbl[1]=0xB7;          //JM SPACE          
-    lbl[1]=0xB7;          //JM SPACE          
+    lbl[1]=0xB7;          //JM SPACE
+    lbl[1]=0xB7;          //JM SPACE
     lbl[2]=' ';           //JM SPACE
     lbl[3]=0xc2;          //JM SPACE
     lbl[4]=0xb7;          //JM SPACE
     lbl[5]=0;             //JM SPACE
   }                       //JM SPACE
 
-  if(lbl[0] == 'Y') {                                         //JM Brighten up Y and N
-    //lbl[0] = '#';                                             //JM Brighten up Y and N
-    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);//JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                      //JM Brighten up Y and N
-  } else                                                           //JM Brighten up Y and N
-  if(lbl[0] == 'N') {                                         //JM Brighten up Y and N
-    //lbl[0] = '#';                                             //JM Brighten up Y and N
-    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);//JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                      //JM Brighten up Y and N
-  } else                                                          //JM Brighten up Y and N
-  {                                                              //JM Brighten up Y and N
-  gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
-  gtk_widget_set_name(lblL, "letter");
-  }                                                            //JM Brighten up Y and N
+  if(lbl[0] == 'Y') {                                       //JM Brighten up Y and N
+    //lbl[0] = '#';                                         //JM Brighten up Y and N
+    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+  }
+  else if(lbl[0] == 'N') {                                  //JM Brighten up Y and N
+    //lbl[0] = '#';                                         //JM Brighten up Y and N
+    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+  }
+  else {                                                    //JM Brighten up Y and N
+    gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
+    gtk_widget_set_name(lblL, "letter");
+  }                                                         //JM Brighten up Y and N
 }
 
 
@@ -1934,23 +1934,23 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
   else if(key->primaryTam == KEY_g) {
     gtk_widget_set_name(button, "calcKeyG");
   }
-  else if(key->primaryTam == KEY_fg) {
-    gtk_widget_set_name(button, "calcKeyF");
+  else if(key->primaryTam == KEY_fg) {                              //JM
+    gtk_widget_set_name(button, "calcKeyF");                        //JM
   }
 
-  else if (strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {     //JM increase the font size of the operators to the numeric key size
+  else if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {      //JM increase the font size of the operators to the numeric key size
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
-  else if (strcmp((char *)lbl, "×") == 0 && key->keyId == 65) {     //JM increase the font size of the operators
+  else if(strcmp((char *)lbl, "×") == 0 && key->keyId == 65) {      //JM increase the font size of the operators
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
-  else if (strcmp((char *)lbl, "-") == 0 && key->keyId == 75) {     //JM increase the font size of the operators
+  else if(strcmp((char *)lbl, "-") == 0 && key->keyId == 75) {      //JM increase the font size of the operators
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
-  else if (strcmp((char *)lbl, "+") == 0 && key->keyId == 85) {     //JM increase the font size of the operators
+  else if(strcmp((char *)lbl, "+") == 0 && key->keyId == 85) {      //JM increase the font size of the operators
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
-  
+
   else {
     gtk_widget_set_name(button, "calcKey");
   }
@@ -2165,7 +2165,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl75G);
   gtk_widget_show(lbl75L); //JM asdded
 
- 
+
   gtk_widget_show(btn81);
   gtk_widget_show(btn82);
   gtk_widget_show(btn83);
@@ -2447,12 +2447,12 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl85H);  //JM AIM MENU*/ //^^
   //gtk_widget_show(lbl85F); //JM
   //gtk_widget_show(lbl85G); //JM
-  
+
   gtk_widget_show(lbl82Gr);
   gtk_widget_show(lbl83Gr);
   gtk_widget_show(lbl84Gr); //JM TT
   gtk_widget_show(lbl85Gr); //JM
-  
+
   gtk_widget_show(lblOn);
   //JM7 gtk_widget_show(lblConfirmY);  //JM Y/N
   //JM7 gtk_widget_show(lblConfirmN);  //JM Y/N
@@ -2622,22 +2622,22 @@ void setupUI(void) {
   frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
   if(calcLandscape) {
-    #if (DEBUG_PANEL == 1)
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 540);
-      debugWidgetDx = 0;
-      debugWidgetDy = 545;
-    #else
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 540);
-    #endif
+#if (DEBUG_PANEL == 1)
+    gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 540);
+    debugWidgetDx = 0;
+    debugWidgetDy = 545;
+#else
+    gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 540);
+#endif
   }
   else {
-    #if (DEBUG_PANEL == 1)
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc),  1530, 980);
-      debugWidgetDx = 531;
-      debugWidgetDy = 0;
-    #else
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc),  526, 980);
-    #endif
+#if (DEBUG_PANEL == 1)
+    gtk_window_set_default_size(GTK_WINDOW(frmCalc),  1530, 980);
+    debugWidgetDx = 531;
+    debugWidgetDy = 0;
+#else
+    gtk_window_set_default_size(GTK_WINDOW(frmCalc),  526, 980);
+#endif
   }
 
   gtk_widget_set_name(frmCalc, "mainWindow");
@@ -2975,7 +2975,7 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "Copy to clipboard:\n CTRL+h: Sc
   lbl34H  = gtk_label_new("\u2102"); //JM CAPS LOCK                          // ("\u03b7"); // eta          //JM removed1
 //JM  lbl35H  = gtk_label_new("");                                               // ("\u03b7"); // eta          //JM removed1
 
-  lbl31L  = gtk_label_new(""); 
+  lbl31L  = gtk_label_new("");
   lbl32L  = gtk_label_new("");
   lbl33L  = gtk_label_new("");
   lbl34L  = gtk_label_new("");
@@ -3211,7 +3211,7 @@ gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "Copy to clipboard:\n CTRL+h: Sc
   btn52   = gtk_button_new();
   btn53   = gtk_button_new();
   btn54   = gtk_button_new();
-  btn55   = gtk_button_new(); 
+  btn55   = gtk_button_new();
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn51), "Up"); //JM
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn52), "7");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn53), "8");
@@ -3843,15 +3843,15 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
   saveStack();
   liftStack();
   refreshStack();
-  if (SH_BASE_MYA) {
-     showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
-     }
-  if (SH_BASE_AHOME) {
-     showSoftmenu(NULL, -MNU_ALPHA, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
-     }
-  
+  if(SH_BASE_MYA) {
+    showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+    softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+  }
+  if(SH_BASE_AHOME) {
+    showSoftmenu(NULL, -MNU_ALPHA, false);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+    softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+  }
+
   calcMode = CM_AIM;
   alphaCase = AC_UPPER;
   showAlphaMode();

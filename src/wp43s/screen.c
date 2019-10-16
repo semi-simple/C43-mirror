@@ -21,11 +21,6 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-
-
-
-
-
 /********************************************//**
  * \brief Draws the calc's screen on the PC window widget
  *
@@ -496,8 +491,6 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 
 #ifndef TESTSUITE_BUILD
-
-
 /********************************************//**
  * \brief Draws the dots on the margins of the f and g lines on screen
  *

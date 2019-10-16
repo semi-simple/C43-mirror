@@ -544,6 +544,7 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
+
     fnTimeFormat(TF_H24);                                //JM bug. over-writing the content of setupdefaults
     fnIntegerMode(SIM_2COMPL);                           //JM bug. over-writing the content of setupdefaults
     fnDisplayFormatAll(0);                               //JM bug. over-writing the content of setupdefaults
@@ -569,8 +570,8 @@ void fnReset(uint16_t confirmation) {
     fnComplexResult(true);           //JM CPXRES set     //JM bug. over-writing the content of setupdefaults
     showRealComplexResult();
     allocateLocalRegisters(0);
-    displayRealAsFraction = false;                       //JM bug. over-writing the content of setupdefaults
 
+    displayRealAsFraction = false;                       //JM bug. over-writing the content of setupdefaults
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();

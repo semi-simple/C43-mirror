@@ -162,20 +162,20 @@ void saveCalc(void) {
   size += fwrite(&wp43sMemInBytes,                    1, sizeof(wp43sMemInBytes),                    backup); //printf("%8lu wp43sMemInBytes\n",                    (unsigned long)size);
   size += fwrite(&gmpMemInBytes,                      1, sizeof(gmpMemInBytes),                      backup); //printf("%8lu gmpMemInBytes\n",                      (unsigned long)size);
 
-  size += fwrite(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                            (unsigned long)size);
-  size += fwrite(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                           (unsigned long)size);
-  size += fwrite(&ShiftTimoutMode,                    1, sizeof(ShiftTimoutMode),                    backup); //JM SHIFT //printf("%8lu ShiftTimoutMode\n",                           (unsigned long)size);
-  size += fwrite(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                           (unsigned long)size);
-  size += fwrite(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                        (unsigned long)size);
-  size += fwrite(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME      (unsigned long)size);
-  size += fwrite(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU     (unsigned long)size);
-  size += fwrite(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME     (unsigned long)size);
-  size += fwrite(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA       (unsigned long)size);
-  size += fwrite(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",                           (unsigned long)size);
-  size += fwrite(&Norm_Key_00_USER,                   1, sizeof(Norm_Key_00_USER),                   backup); //JM SHIFT //printf("%8lu Norm_Key_00_USER\n",                           (unsigned long)size);
-  size += fwrite(&Norm_Key_00_CC,                     1, sizeof(Norm_Key_00_CC),                     backup); //JM SHIFT //printf("%8lu Norm_Key_00_CC\n",                           (unsigned long)size);
-  size += fwrite(&Norm_Key_00_MyMenu,                 1, sizeof(Norm_Key_00_MyMenu),                 backup); //JM SHIFT //printf("%8lu Norm_Key_00_MyMenu\n",                           (unsigned long)size);
-  size += fwrite(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",                           (unsigned long)size);
+  size += fwrite(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                     (unsigned long)size);
+  size += fwrite(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                    (unsigned long)size);
+  size += fwrite(&ShiftTimoutMode,                    1, sizeof(ShiftTimoutMode),                    backup); //JM SHIFT //printf("%8lu ShiftTimoutMode\n",         (unsigned long)size);
+  size += fwrite(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                    (unsigned long)size);
+  size += fwrite(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                 (unsigned long)size);
+  size += fwrite(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME                                      (unsigned long)size);
+  size += fwrite(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU                                    (unsigned long)size);
+  size += fwrite(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME                                     (unsigned long)size);
+  size += fwrite(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA                                       (unsigned long)size);
+  size += fwrite(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
+  size += fwrite(&Norm_Key_00_USER,                   1, sizeof(Norm_Key_00_USER),                   backup); //JM SHIFT //printf("%8lu Norm_Key_00_USER\n",        (unsigned long)size);
+  size += fwrite(&Norm_Key_00_CC,                     1, sizeof(Norm_Key_00_CC),                     backup); //JM SHIFT //printf("%8lu Norm_Key_00_CC\n",          (unsigned long)size);
+  size += fwrite(&Norm_Key_00_MyMenu,                 1, sizeof(Norm_Key_00_MyMenu),                 backup); //JM SHIFT //printf("%8lu Norm_Key_00_MyMenu\n",      (unsigned long)size);
+  size += fwrite(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
 
 
 
@@ -342,20 +342,20 @@ void restoreCalc(void) {
     size += fread(&wp43sMemInBytes,                    1, sizeof(wp43sMemInBytes),                    backup); //printf("%8lu wp43sMemInBytes\n",                    (unsigned long)size);
     size += fread(&gmpMemInBytes,                      1, sizeof(gmpMemInBytes),                      backup); //printf("%8lu gmpMemInBytes\n",                      (unsigned long)size);
 
-    size += fread(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                             (unsigned long)size);
-    size += fread(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                             (unsigned long)size);
-    size += fread(&ShiftTimoutMode,                    1, sizeof(ShiftTimoutMode),                    backup); //JM SHIFT //printf("%8lu ShiftTimoutMode\n",                             (unsigned long)size);
-    size += fread(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                           (unsigned long)size);
-    size += fread(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                             (unsigned long)size);
-    size += fread(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME      (unsigned long)size);
-    size += fread(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU     (unsigned long)size);
-    size += fread(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME     (unsigned long)size);
-    size += fread(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA       (unsigned long)size);
-    size += fread(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",                             (unsigned long)size);
-    size += fread(&Norm_Key_00_USER,                   1, sizeof(Norm_Key_00_USER),                   backup); //JM SHIFT //printf("%8lu Norm_Key_00_USER\n",                           (unsigned long)size);
-    size += fread(&Norm_Key_00_CC,                     1, sizeof(Norm_Key_00_CC),                     backup); //JM SHIFT //printf("%8lu Norm_Key_00_CC\n",                           (unsigned long)size);
-    size += fread(&Norm_Key_00_MyMenu,                 1, sizeof(Norm_Key_00_MyMenu),                 backup); //JM SHIFT //printf("%8lu Norm_Key_00_MyMenu\n",                           (unsigned long)size);
-    size += fread(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",                           (unsigned long)size);
+    size += fread(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                     (unsigned long)size);
+    size += fread(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                    (unsigned long)size);
+    size += fread(&ShiftTimoutMode,                    1, sizeof(ShiftTimoutMode),                    backup); //JM SHIFT //printf("%8lu ShiftTimoutMode\n",         (unsigned long)size);
+    size += fread(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                    (unsigned long)size);
+    size += fread(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                 (unsigned long)size);
+    size += fread(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME                                      (unsigned long)size);
+    size += fread(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU                                    (unsigned long)size);
+    size += fread(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME                                     (unsigned long)size);
+    size += fread(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA                                       (unsigned long)size);
+    size += fread(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
+    size += fread(&Norm_Key_00_USER,                   1, sizeof(Norm_Key_00_USER),                   backup); //JM SHIFT //printf("%8lu Norm_Key_00_USER\n",        (unsigned long)size);
+    size += fread(&Norm_Key_00_CC,                     1, sizeof(Norm_Key_00_CC),                     backup); //JM SHIFT //printf("%8lu Norm_Key_00_CC\n",          (unsigned long)size);
+    size += fread(&Norm_Key_00_MyMenu,                 1, sizeof(Norm_Key_00_MyMenu),                 backup); //JM SHIFT //printf("%8lu Norm_Key_00_MyMenu\n",      (unsigned long)size);
+    size += fread(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
 
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);

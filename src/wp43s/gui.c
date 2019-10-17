@@ -1778,16 +1778,12 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   }                                     //^^
 
 //JM remove this because CAT is not on keyboard anymore, but in menu
-//JM  if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85  //JM Changed CATALOG to CAT. Actually not needed, as the WP43C already has a shortened CAT to start with
+//JM was 85  //JM Changed CATALOG to CAT. Actually not needed, as the WP43C already has a shortened CAT to start with
+//JM  if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {
 //JM    lbl[3] = 0;
 //JM  }
 
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
-
-//JM Removed this previously added part, as the items.c exchange in chr_divide made works here/.
-//  if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {    //JM if "/", re-do to "÷". Presumed easier than to fix the UTf8 conversion above.
-//  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
-//  }                                                          //JM
 
 //Specify the different categories of coloured zones
   if(key->keyLblAim == KEY_f) {
@@ -1800,27 +1796,13 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     gtk_widget_set_name(button, "calcKeyF");                          //JM
   }
   else {
-    /*  //vv dr - new AIM
+    /*        //vv dr - new AIM
     if((key->fShiftedAim == key->keyLblAim || key->fShiftedAim == CHR_PROD_SIGN) && key->keyLblAim != ITM_NULL) {
-      gtk_widget_set_name(button, "calcKeyGoldenBorder");             //JM note because of this golden box, the upsizing is not effective.
+      gtk_widget_set_name(button, "calcKeyGoldenBorder");
     }
-    else if (strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {     //JM increase the font size of the operators to the numeric key size
-      gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
-    }                                                                 //JM increase the font size of the operators
-    else if (strcmp((char *)lbl, "×") == 0 && key->keyId == 65) {     //JM increase the font size of the operators
-      gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
-    }                                                                 //JM increase the font size of the operators
-    else if (strcmp((char *)lbl, "-") == 0 && key->keyId == 75) {     //JM increase the font size of the operators
-      gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
-    }                                                                 //JM increase the font size of the operators
-    else if (strcmp((char *)lbl, "+") == 0 && key->keyId == 85) {     //JM increase the font size of the operators
-      gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
-    }                                                                 //JM increase the font size of the operators
-    else {
+    else {*/  //^^
       gtk_widget_set_name(button, "calcKey");
-    }
-    */  //^^
-    gtk_widget_set_name(button, "calcKey"); //dr - new AIM
+  /*}*/       //dr - new AIM
   }
 
 
@@ -1847,9 +1829,10 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   }
 
 //JM Removed as CAT is not Aim keyboard anymore
-//else if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM was 85   //JM Changed CATALOG to CAT
-//  lbl[3] = 0;
-//}
+//JM was 85   //JM Changed CATALOG to CAT
+//JM  else if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {
+//JM    lbl[3] = 0;
+//JM  }
 
 /* JM TEST PROCEDURE TO TEST DISPLAY
   else if(key->gShiftedAim == CHR_DIGAMMA ) {
@@ -1925,7 +1908,7 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
 
   if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {    //JM if "/", re-do to "÷". Presumed easier than to fix the UTf8 conversion above.
-  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
+    gtk_button_set_label(GTK_BUTTON(button), "÷");           //JM DIV
   }                                                          //JM
 
   if(key->primaryTam == KEY_f) {

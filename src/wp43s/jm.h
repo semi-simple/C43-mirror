@@ -93,9 +93,6 @@ extern bool_t SH_BASE_HOME;                                          //JM BASEHO
 extern bool_t SH_BASE_MYMENU;                                        //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_AHOME;                                         //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
-extern bool_t Norm_Key_00_USER;                                      //JM USER
-extern bool_t Norm_Key_00_CC;                                        //JM USER
-extern bool_t Norm_Key_00_MyMenu;                                    //JM USER
 extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
 
 

@@ -223,6 +223,25 @@ uint16_t determineItem(const calcKey_t *key) {
 
 
 /********************************************//**
+ * \brief convert a string containing the key number to int16_t
+ *
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return int16_t
+ ***********************************************/
+//#ifdef DMCP_BUILD
+//int16_t stringToKeyNumber(void *data) {
+//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+//}
+//#else
+//int16_t stringToKeyNumber(gpointer data) {
+//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+//}
+//#endif
+#define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
+
+
+
+/********************************************//**
  * \brief A calc button was pressed
  *
  * \param w GtkWidget*
@@ -237,7 +256,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   const calcKey_t *key;
 
-  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
+  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   allowScreenUpdate = true;
@@ -331,11 +350,11 @@ void btnPressed(void *notUsed, void *data) {
                                                                                                                               //JM shifts
     showShiftState();                                                                                                         //JM shifts
   }                                                                                                                           //JM shifts
+  else
                                                                                                                               //JM shifts
 #endif
 
   // Shift f pressed
-  else
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
@@ -394,7 +413,7 @@ void btnPressed(void *notUsed, void *data) {
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
                                              //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
   else if(JM_ASN_MODE != 0) {                //JM GET KEY
-    int16_t tempkey = (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+    int16_t tempkey = stringToKeyNumber(data);
     fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
     JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
@@ -407,20 +426,8 @@ void btnPressed(void *notUsed, void *data) {
     int16_t item = determineItem(key);
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( ((*((char *)data) - '0')*10  + *(((char *)data)+1) - '0')  == 0) )) {
-      //printf("%d", (   (*((char *)data) - '0')*10  + *(((char *)data)+1) - '0'));
-      /*if(Norm_Key_00_VAR !=0) {
-        item = Norm_Key_00_VAR;
-      }
-      else if(Norm_Key_00_USER) {
-        item = KEY_USERMODE;
-      }
-      else if(Norm_Key_00_CC) {
-        item = KEY_CC;
-      }
-      else if(Norm_Key_00_CC) {
-        item = -MNU_MYMENU;
-      }*/
+    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( stringToKeyNumber(data) == 0) )) {
+      //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------

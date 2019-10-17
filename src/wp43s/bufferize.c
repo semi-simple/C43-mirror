@@ -1037,8 +1037,8 @@ void addItemToNimBuffer(int16_t item) {
       }
     }
 
-      nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34;
-      if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
+    nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34;
+    if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
         if(nimBufferDisplay[index] == '.') {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {

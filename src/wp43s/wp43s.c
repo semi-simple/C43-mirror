@@ -140,9 +140,6 @@ bool_t               SH_BASE_HOME;                            //JM BASEHOME
 bool_t               SH_BASE_MYMENU;                          //JM BASEHOME
 bool_t               SH_BASE_AHOME;                           //JM BASEHOME
 bool_t               SH_BASE_MYA;                             //JM BASEHOME
-bool_t               Norm_Key_00_USER;                        //JM USER
-bool_t               Norm_Key_00_CC;                          //JM USER
-bool_t               Norm_Key_00_MyMenu;                      //JM USER
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
@@ -310,9 +307,6 @@ void setupDefaults(void) {
   SH_BASE_MYMENU = false;    
   SH_BASE_AHOME  = false;    
   SH_BASE_MYA    = true;       
-  Norm_Key_00_USER = false;
-  Norm_Key_00_CC   = false;
-  Norm_Key_00_MyMenu   = false;
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
 
   

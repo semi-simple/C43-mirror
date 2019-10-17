@@ -127,8 +127,8 @@ void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
  * \return void
  ***********************************************/
 
-void fnSetSetJM(uint16_t What) {                            //JM SHIFT TIM CCL    Set/Reset setting to allow timer shift cancel
-       if(What == 1) {
+void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setting
+/*   if(What == 1) {                                                                                //dr to be removed
     eRPN = !eRPN;                                           //JM eRPN
     fnInfo(eRPN);                                           //JM eRPN
   }
@@ -161,40 +161,6 @@ void fnSetSetJM(uint16_t What) {                            //JM SHIFT TIM CCL  
     fnInfo(Home3TimerMode);                                 //JM SHIFT HOME.3 TIM CCL
   }
   else if(What == 9) {
-  /*Norm_Key_00_USER = !Norm_Key_00_USER;                           //JM USER
-    Norm_Key_00_CC = false;
-    Norm_Key_00_MyMenu = false;*/
-    Norm_Key_00_VAR = KEY_USERMODE;
-    fnInfo(true/*Norm_Key_00_USER*/);                               //JM USER
-  }
-  else if(What == 10) {
-  /*Norm_Key_00_CC = !Norm_Key_00_CC;                               //JM USER
-    Norm_Key_00_USER = false;
-    Norm_Key_00_MyMenu = false;*/
-    Norm_Key_00_VAR = KEY_CC;
-    fnInfo(true/*Norm_Key_00_CC*/);                                 //JM USER
-  }
-  else if(What == 11) {
-  /*Norm_Key_00_MyMenu = !Norm_Key_00_MyMenu;                       //JM USER
-    Norm_Key_00_USER = false;
-    Norm_Key_00_CC = false;*/
-    Norm_Key_00_VAR = -MNU_MYMENU;
-    fnInfo(true/*Norm_Key_00_MyMenu*/);                             //JM USER
-  }
-  else if(What == 12) {
-    Norm_Key_00_VAR = ITM_SIGMAPLUS;
-    fnInfo(true);
-  }
-  else if (What == 13) {
-    Norm_Key_00_VAR = ITM_PR;
-    fnInfo(true);
-  }
-  else if (What == 14) {
-    Norm_Key_00_VAR = ITM_AIM;
-    fnInfo(true);
-  }
-  /*
-  else if(What == 9) {
     if(Norm_Key_00_VAR == KEY_USERMODE) { Norm_Key_00_VAR = ITM_SIGMAPLUS; } else { Norm_Key_00_VAR = KEY_USERMODE; }
     fnInfo(Norm_Key_00_VAR == KEY_USERMODE);                //JM USER
   }
@@ -218,7 +184,85 @@ void fnSetSetJM(uint16_t What) {                            //JM SHIFT TIM CCL  
     if(Norm_Key_00_VAR == ITM_AIM) { Norm_Key_00_VAR = ITM_SIGMAPLUS; } else { Norm_Key_00_VAR = ITM_AIM; }
     fnInfo(Norm_Key_00_VAR == ITM_AIM);                     //JM USER
   }*/
-}                                                           //JM SHIFT TIM CCL
+
+  switch (What)
+  {
+  case 1:                                                   //JM eRPN
+    eRPN = !eRPN;
+    fnInfo(eRPN);
+    break;
+
+  case 2:                                                   //JM HOME.3
+    HOME3 = !HOME3;
+    fnInfo(HOME3);
+    break;
+
+  case 3:                                                   //JM SH_4s
+    ShiftTimoutMode = !ShiftTimoutMode;
+    fnInfo(ShiftTimoutMode);
+    break;
+
+  case 4:                                                   //JM HOME
+    SH_BASE_HOME = !SH_BASE_HOME;
+    fnInfo(SH_BASE_HOME);
+    break;
+
+  case 5:                                                   //JM MYMNU
+    SH_BASE_MYMENU = !SH_BASE_MYMENU;
+    fnInfo(SH_BASE_MYMENU);
+    break;
+
+  case 6:                                                   //JM aHOME
+    SH_BASE_AHOME = !SH_BASE_AHOME;
+    fnInfo(SH_BASE_AHOME);
+    break;
+
+  case 7:                                                   //JM MYa
+    SH_BASE_MYA = !SH_BASE_MYA;
+    fnInfo(SH_BASE_MYA);
+    break;
+  case 8:                                                   //JM SH.3T
+    Home3TimerMode = !Home3TimerMode;
+    fnInfo(Home3TimerMode);
+    break;
+
+  case 9:                                                   //JM USER 
+    if(Norm_Key_00_VAR == KEY_USERMODE) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
+    else { Norm_Key_00_VAR = KEY_USERMODE; }
+    fnInfo(Norm_Key_00_VAR == KEY_USERMODE);
+    break;
+  case 10:                                                  //JM CC
+    if(Norm_Key_00_VAR == KEY_CC) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
+    else { Norm_Key_00_VAR = KEY_CC; }
+    fnInfo(Norm_Key_00_VAR == KEY_CC);
+    break;
+
+  case 11:                                                  //JM MyMU
+    if(Norm_Key_00_VAR == -MNU_MYMENU) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
+    else { Norm_Key_00_VAR = -MNU_MYMENU; }
+    fnInfo(Norm_Key_00_VAR == -MNU_MYMENU);
+    break;
+  case 12:                                                  //dr E+
+    Norm_Key_00_VAR = ITM_SIGMAPLUS;
+    fnInfo(true);
+    break;
+
+  case 13:                                                  //dr PRGM
+    if(Norm_Key_00_VAR == ITM_PR) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
+    else { Norm_Key_00_VAR = ITM_PR; }
+    fnInfo(Norm_Key_00_VAR == ITM_PR);
+    break;
+
+  case 14:                                                  //dr ALPHA
+    if(Norm_Key_00_VAR == ITM_AIM) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
+    else { Norm_Key_00_VAR = ITM_AIM; }
+    fnInfo(Norm_Key_00_VAR == ITM_AIM);
+    break;
+
+  default:
+    break;
+  }
+}
 
 
 
@@ -245,7 +289,7 @@ void fnShowJM(uint16_t What) {
   longIntegerInit(mem);
   liftStack();
 
-       if(What == 1 && eRPN == true) { stringToLongInteger("1",10,mem); }
+/*     if(What == 1 && eRPN == true) { stringToLongInteger("1",10,mem); }                           //dr to be removed
   else if(What == 1 && eRPN == false) { stringToLongInteger("0",10,mem); }
   else if(What == 2 && HOME3 == true) { stringToLongInteger("1",10,mem); }
   else if(What == 2 && HOME3 == false) { stringToLongInteger("0",10,mem); }
@@ -272,7 +316,83 @@ void fnShowJM(uint16_t What) {
   else if(What == 13 && Norm_Key_00_VAR == ITM_PR) { stringToLongInteger("1",10,mem); }
   else if(What == 13 && Norm_Key_00_VAR != ITM_PR) { stringToLongInteger("0",10,mem); }
   else if(What == 14 && Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
-  else if(What == 14 && Norm_Key_00_VAR != ITM_AIM) { stringToLongInteger("0",10,mem); }
+  else if(What == 14 && Norm_Key_00_VAR != ITM_AIM) { stringToLongInteger("0",10,mem); }*/
+
+  switch (What)
+  {
+  case 1:
+    if(eRPN) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 2:
+    if(HOME3) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 3:
+    if(ShiftTimoutMode) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 4:
+    if(SH_BASE_HOME) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 5:
+    if(SH_BASE_MYMENU) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 6:
+    if(SH_BASE_AHOME) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 7:
+    if(SH_BASE_MYA) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 8:
+    if(Home3TimerMode) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+  
+  case 9:
+    if(Norm_Key_00_VAR == KEY_USERMODE) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+
+  case 10:
+    if(Norm_Key_00_VAR == KEY_CC) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+
+  case 11:
+    if(Norm_Key_00_VAR == -MNU_MYMENU) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+
+  case 12:
+    if(Norm_Key_00_VAR == ITM_SIGMAPLUS) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+
+  case 13:
+    if(Norm_Key_00_VAR == ITM_PR) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+
+  case 14:
+    if(Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
+    else { stringToLongInteger("0",10,mem); }
+    break;
+
+  default:
+    break;
+  }
 
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);

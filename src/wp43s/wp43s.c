@@ -76,6 +76,10 @@ int16_t              currentRegisterBrowserScreen;
 int16_t              lineTWidth;
 int16_t              rbrRegister;
 int16_t              displayHasNDigits;
+int16_t              alphaSelectionMenu;
+int16_t              lastFcnsMenuPos;
+int16_t              lastMenuMenuPos;
+int16_t              lastCnstMenuPos;
 uint16_t             numberOfLocalRegisters;
 uint16_t             numberOfLocalFlags;
 uint16_t             numberOfNamedVariables;
@@ -334,6 +338,11 @@ void setupDefaults(void) {
   angle180 = const_180;
   angle90  = const_90;
   angle45  = const_45;
+
+  alphaSelectionMenu = ASM_NONE;
+  lastFcnsMenuPos = 0;
+  lastMenuMenuPos = 0;
+  lastCnstMenuPos = 3;
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;

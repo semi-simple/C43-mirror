@@ -1011,11 +1011,14 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   resultDataType = getRegisterDataType(res);
   if(getFlag(FLAG_DANGER) == false) {
-    // D is clear: test infinite values
+    // D is clear: test infinite values and -0 values
     switch(resultDataType) {
       case dtReal16:
         if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
           displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
+        }
+        else if(real16IsZero(REGISTER_REAL16_DATA(res))) {
+          real16SetPositiveSign(REGISTER_REAL16_DATA(res));
         }
         break;
 
@@ -1023,14 +1026,23 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
+        else if(real34IsZero(REGISTER_REAL34_DATA(res))) {
+          real34SetPositiveSign(REGISTER_REAL34_DATA(res));
+        }
         break;
 
       case dtComplex16:
         if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
           displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
+        else if(real16IsZero(REGISTER_REAL16_DATA(res))) {
+          real16SetPositiveSign(REGISTER_REAL16_DATA(res));
+        }
         else if(real16IsInfinite(REGISTER_IMAG16_DATA(res))) {
           displayCalcErrorMessage(real16IsPositive(REGISTER_IMAG16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
+        }
+        else if(real16IsZero(REGISTER_IMAG16_DATA(res))) {
+          real16SetPositiveSign(REGISTER_IMAG16_DATA(res));
         }
         break;
 
@@ -1038,8 +1050,14 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
+        else if(real34IsZero(REGISTER_REAL34_DATA(res))) {
+          real34SetPositiveSign(REGISTER_REAL34_DATA(res));
+        }
         else if(real34IsInfinite(REGISTER_IMAG34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
+        }
+        else if(real34IsZero(REGISTER_IMAG34_DATA(res))) {
+          real34SetPositiveSign(REGISTER_IMAG34_DATA(res));
         }
         break;
 
@@ -1063,10 +1081,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
     realIc_t tmp;
 
     case dtReal16:
-      if(real16IsZero(REGISTER_REAL16_DATA(res))) {
-        real16SetPositiveSign(REGISTER_REAL16_DATA(res));
-      }
-
       if(significantDigits == 0 || significantDigits >= 16) {
         break;
       }
@@ -1078,10 +1092,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       break;
 
     case dtReal34:
-      if(real34IsZero(REGISTER_REAL34_DATA(res))) {
-        real34SetPositiveSign(REGISTER_REAL34_DATA(res));
-      }
-
       if(significantDigits == 0 || significantDigits >= 34) {
         break;
       }
@@ -1093,14 +1103,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       break;
 
     case dtComplex16:
-      if(real16IsZero(REGISTER_REAL16_DATA(res))) {
-        real16SetPositiveSign(REGISTER_REAL16_DATA(res));
-      }
-
-      if(real16IsZero(REGISTER_IMAG16_DATA(res))) {
-        real16SetPositiveSign(REGISTER_IMAG16_DATA(res));
-      }
-
       if(significantDigits == 0 || significantDigits >= 16) {
         break;
       }
@@ -1114,14 +1116,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       break;
 
     case dtComplex34:
-      if(real34IsZero(REGISTER_REAL34_DATA(res))) {
-        real34SetPositiveSign(REGISTER_REAL34_DATA(res));
-      }
-
-      if(real34IsZero(REGISTER_IMAG34_DATA(res))) {
-        real34SetPositiveSign(REGISTER_IMAG34_DATA(res));
-      }
-
       if(significantDigits == 0 || significantDigits >= 34) {
         break;
       }

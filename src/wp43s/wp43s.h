@@ -23,9 +23,9 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.09"
+#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.10"
 #define COPYRIGHT "The WP43S team"
-#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.09" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.10" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -118,8 +118,10 @@
 #include <string.h>
 #include <time.h>
 #include <stdint.h>
-#include <math.h>
 #include <gmp.h>
+#if (__linux__ == 1)
+  #include <math.h>
+#endif
 
 #ifdef __APPLE__
     // needed by chdir
@@ -206,7 +208,6 @@ typedef int16_t calcRegister_t;
 #include "stack.h"
 #include "stats.h"
 #include "statusBar.h"
-#include "testFunctions.h"
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))
@@ -381,6 +382,11 @@ typedef int16_t calcRegister_t;
 #define DBG_NAMED_VARIABLES            5
 #define DBG_TMP_SAVED_STACK_REGISTERS  6
 
+// alpha selection menus
+#define ASM_NONE 0
+#define ASM_CNST 1
+#define ASM_FCNS 2
+
 #if (__linux__ == 1)
   #define FMT64U  "lu"
   #define FMT64S  "ld"
@@ -478,7 +484,6 @@ extern void                 (* const subtraction[12][12])(void);
 extern void                 (* const multiplication[12][12])(void);
 extern void                 (* const division[12][12])(void);
 extern const softmenu_t     softmenu[];
-extern const int16_t        softkeyRow[];
 
 // Variables stored in RAM
 extern decContext           ctxtReal16;  // 16 digits
@@ -513,6 +518,10 @@ extern int16_t              currentRegisterBrowserScreen;
 extern int16_t              lineTWidth;
 extern int16_t              rbrRegister;
 extern int16_t              displayHasNDigits;
+extern int16_t              alphaSelectionMenu;
+extern int16_t              lastFcnsMenuPos;
+extern int16_t              lastMenuMenuPos;
+extern int16_t              lastCnstMenuPos;
 extern uint16_t             numberOfLocalRegisters;
 extern uint16_t             numberOfLocalFlags;
 extern uint16_t             numberOfNamedVariables;

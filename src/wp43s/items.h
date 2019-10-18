@@ -32,7 +32,7 @@
 #define ITM_10x                          3
 #define ITM_1COMPL                       4
 #define CST_00                           5
-#define ITM_1X                           6
+#define ITM_1ONX                         6
 #define ITM_2COMPL                       7
 #define ITM_2X                           8
 #define ITM_CUBEROOT                     9
@@ -157,7 +157,7 @@
 #define ITM_DROPY                      128
 #define ITM_DSE                        129
 #define ITM_DSL                        130
-#define ITM_DSP                        131
+#define ITM_0131                       131
 #define ITM_DSTACK                     132
 #define ITM_DSZ                        133
 #define ITM_DMS                        134
@@ -1611,8 +1611,17 @@
 #define ITM_SIGMAx4                   1575
 #define ITM_HEX                       1576
 #define ITM_IDIVR                     1577
+#define ITM_ACOS                      1578
+#define ITM_ASIN                      1579
+#define ITM_ATAN                      1580
+#define ITM_DET                       1581
+#define ITM_INVRT                     1582
+#define ITM_TRANS                     1583
+#define ITM_XIN                       1584
+#define ITM_XOUT                      1585
+#define ITM_ALPHASR                   1586
 
-#define LAST_ITEM                     1578
+#define LAST_ITEM                     1587
 
 #define CHR_PROD_SIGN                 9999
 
@@ -1620,11 +1629,19 @@
  * \typedef item_t
  * \brief Structure keeping the information for one item
  ***********************************************/
+#define CAT_NO   0
+#define CAT_FNCT 1 // Function
+#define CAT_MENU 2 // Menu
+#define CAT_CNST 3 // Constant
+#define CAT_FREE 4 // To identify and find the free items
+#define CAT_RVAR 5 // Reserved variable
+#define CAT_DUPL 6 // Duplicate of another item e.g. acus->m^2
 typedef struct {
   void     (*func)(uint16_t); ///< Function called to execute the item
   uint16_t param;             ///< 1st parameter to the above function
   char     *itemName;         ///< Name of the item
   char     *itemPrinted;      ///< Representation of the item in the menus or on the keyboard
+  char     catalog;           ///< Menu of CATALOG in which the item is located: see #define CAT_*
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
 } item_t;
 

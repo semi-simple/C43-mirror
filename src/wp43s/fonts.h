@@ -234,7 +234,6 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
                                                      #define STD_RIGHT_CURLY_BRACKET       "\x7d"
 #define NUM_TILDE                     "\x7e"
                                                      #define STD_TILDE                     "\x7e"
-#define STD_INVERTED_EXCLAMATION_MARK "\x80\xa1"
                                                      #define STD_INVERTED_EXCLAMATION_MARK "\x80\xa1"
                                                      #define STD_CENT                      "\x80\xa2"
                                                      #define STD_POUND                     "\x80\xa3"

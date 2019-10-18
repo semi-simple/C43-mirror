@@ -80,7 +80,7 @@ void conjCo16(void) {
   }
 
   real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
-  if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+  if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real16SetPositiveSign(REGISTER_IMAG16_DATA(REGISTER_X));
   }
 }
@@ -103,7 +103,7 @@ void conjCo34(void) {
   }
 
   real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
-  if(real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+  if(real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real34SetPositiveSign(REGISTER_IMAG34_DATA(REGISTER_X));
   }
 }

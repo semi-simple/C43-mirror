@@ -107,7 +107,7 @@ extern const uint8_t constants[];
 extern const realIc_t * const const_1on2;
 extern const realIc_t * const const_a;
 extern const realIc_t * const const_a0;
-extern const realIc_t * const const_aM;
+extern const realIc_t * const const_aMoon;
 extern const realIc_t * const const_aEarth;
 extern const realIc_t * const const_c;
 extern const realIc_t * const const_c1;

@@ -133,12 +133,6 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
 #define complex16Copy(source, destination)                     {*(uint64_t *)(destination) = *(uint64_t *)(source); \
                                                                 *(((uint64_t *)(destination))+1) = *(((uint64_t *)(source))+1); \
                                                                }
-#define complex16SetPositiveSign(operand)                      {real16SetPositiveSign((real16_t *)(operand)); \
-                                                                real16SetPositiveSign((real16_t *)((char *)(operand) + REAL16_SIZE)); \
-                                                               }
-#define complex16SetNegativeSign(operand)                      {real16SetNegativeSign((real16_t *)(operand)); \
-                                                                real16SetNegativeSign((real16_t *)((char *)(operand) + REAL16_SIZE)); \
-                                                               }
 
 
 
@@ -189,12 +183,6 @@ typedef struct {realIc_t real, imag;}                     complexIc_t;
                                                                 *(((uint64_t *)(destination))+1) = *(((uint64_t *)(source))+1); \
                                                                 *(((uint64_t *)(destination))+2) = *(((uint64_t *)(source))+2); \
                                                                 *(((uint64_t *)(destination))+3) = *(((uint64_t *)(source))+3); \
-                                                               }
-#define complex34SetPositiveSign(operand)                      {real34SetPositiveSign((real34_t *)(operand)); \
-                                                                real34SetPositiveSign((real34_t *)((char *)(operand) + REAL34_SIZE)); \
-                                                               }
-#define complex34SetNegativeSign(operand)                      {real34SetNegativeSign((real34_t *)(operand)); \
-                                                                real34SetNegativeSign((real34_t *)((char *)(operand) + REAL34_SIZE)); \
                                                                }
 
 

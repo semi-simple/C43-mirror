@@ -23,7 +23,7 @@
 //This variable is to store in flash memory
 const calcKey_t kbd_std[37] = {
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_1X,           ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     },
+ {21,   ITM_1ONX,         ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     },
  {22,   ITM_YX,           ITM_toINT,      -MNU_EXP,      ITM_NULL,       CHR_B,             ITM_NULL,        CHR_BETA,      ITM_ST_B     },
  {23,  -MNU_TRI,          ITM_DMS,         ITM_pi,       ITM_NULL,       CHR_C,             ITM_NULL,        CHR_GAMMA,     ITM_ST_C     },
  {24,   ITM_LN,           KEY_dotD,        ITM_LOG10,    ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base
@@ -33,7 +33,7 @@ const calcKey_t kbd_std[37] = {
  {31,   ITM_STO,          ITM_ASSIGN,      ITM_SAVE,     ITM_NULL,       CHR_G,             ITM_ASSIGN,      CHR_GAMMA,     ITM_NULL     },
  {32,   ITM_RCL,          ITM_VIEW,       -MNU_CNST,     ITM_NULL,       CHR_H,             ITM_NULL,        CHR_CHI,       ITM_HEX      },
  {33,   ITM_Rdown,        ITM_Rup,        -MNU_CPX,      ITM_NULL,       CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
- {34,   KEY_CC,           ITM_MAGNITUDE,   ITM_ANGLE,    ITM_NULL,       CHR_J,             ITM_NULL,        CHR_ETA,       ITM_REGJ     },
+ {34,   KEY_CC,           ITM_MAGNITUDE,   ITM_VANGLE,   ITM_NULL,       CHR_J,             ITM_NULL,        CHR_ETA,       ITM_REGJ     },
  {35,   KEY_f,            ITM_NULL,        ITM_NULL,     KEY_f,          KEY_f,             ITM_NULL,        ITM_NULL,      KEY_f        },
  {36,   KEY_g,            ITM_NULL,        ITM_NULL,     KEY_g,          KEY_g,             ITM_NULL,        ITM_NULL,      KEY_g        },
 

@@ -26,9 +26,9 @@
  * \brief Structure keeping the informations for one softmenu
  ***********************************************/
 typedef struct {
-  int16_t menuId;      ///< ID of the menu. The ID is always negative and -ID must be in the indexOfItems area
-  int16_t numRows;     ///< Number of rows of 6 items in the softmenu
-  const int16_t *softkeyRow; ///< Pointer to the first item of the menu
+  int16_t menuId;             ///< ID of the menu. The ID is always negative and -ID must be in the indexOfItems area
+  int16_t numItems;           ///< Number of items in the softmenu (must be a multiple of 6 for now)
+  const int16_t *softkeyItem; ///< Pointer to the first item of the menu
 } softmenu_t;
 
 /********************************************//**
@@ -36,11 +36,11 @@ typedef struct {
  * \brief Stack of softmenus
  ***********************************************/
 typedef struct {
-  int16_t softmenu; ///< Softmenu ID
-  int16_t row;      ///< Current first row on the screen
+  int16_t softmenu;  ///< Softmenu ID
+  int16_t firstItem; ///< Current first item on the screen (unshifted F1 = bottom left)
 } softmenuStack_t;
 
-void showSoftkey            (const char *label, int16_t x, int16_t y, videoMode_t videoMode, bool_t topLineDotted, bool_t topLine, bool_t bottomLine);
+void showSoftkey            (const char *label, int16_t x, int16_t y, videoMode_t videoMode, bool_t topLine, bool_t bottomLine);
 void showSoftmenuCurrentPart(void);
 void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);
 void initSoftmenuStack      (int16_t softmenu);

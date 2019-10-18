@@ -24,8 +24,10 @@
 #include <stdio.h>
 #include <string.h>
 
-// needed for chdir:
-#include<unistd.h>
+#ifdef __APPLE__
+  // needed for chdir:
+  #include<unistd.h>
+#endif // __APPLE__
 
 #define DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS 39
 
@@ -200,7 +202,7 @@ void generateAllConstants(void) {
   generateConstantArray("1on2",          "+5.000000000000000000000000000000000000000000000000000000e-01"); c++; // math constant 1/2
   generateConstantArray("a",             "+3.652425000000000000000000000000000000000000000000000000e+02"); c++; // per definition
   generateConstantArray("a0",            "+5.291772109030000000000000000000000000000000000000000000e-11"); c++;
-  generateConstantArray("aM",            "+3.844000000000000000000000000000000000000000000000000000e+08"); c++;
+  generateConstantArray("aMoon",         "+3.844000000000000000000000000000000000000000000000000000e+08"); c++;
   generateConstantArray("aEarth",        "+1.495979000000000000000000000000000000000000000000000000e+11"); c++;
   generateConstantArray("c",             "+2.997924580000000000000000000000000000000000000000000000e+08"); c++; // per definition
 
@@ -209,7 +211,7 @@ void generateAllConstants(void) {
   generateConstantArray("e",             "+1.602176634000000000000000000000000000000000000000000000e-19"); c++;
   generateConstantArray("eE",            "+2.718281828459045235360287471352662497757247093699959575e+00"); c++; // math constant e
   generateConstantArray("eme",           "+1.758820024000000000000000000000000000000000000000000000e+11"); c++;
-  generateConstantArray("F",             "+9.6485332123310018400000000000000000000000000000000000000+04"); c++;
+  generateConstantArray("F",             "+9.648533212331001840000000000000000000000000000000000000e+04"); c++;
 
   generateConstantArray("Falpha",        "+2.502907875095892822283902873218215786381271376727149977e+00"); c++; // math constant Falpha
   generateConstantArray("Fdelta",        "+4.669201609102990671853203820466201617258185577475768633e+00"); c++; // math constant Fdelta

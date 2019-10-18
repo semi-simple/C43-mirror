@@ -120,7 +120,9 @@ void WP34S_Cvt2RadSinCosTan(const realIc_t *an, uint32_t angularMode, realIc_t *
       if(tan != NULL) realIcSetNegativeSign(tan);
     }
     if(realIcIsZero(sin)) {
-      realIcSetPositiveSign(sin);
+      if(!getFlag(FLAG_DANGER)) {
+        realIcSetPositiveSign(sin);
+      }
       if(tan != NULL) {
         realIcSetPositiveSign(tan);
       }
@@ -132,7 +134,7 @@ void WP34S_Cvt2RadSinCosTan(const realIc_t *an, uint32_t angularMode, realIc_t *
       realIcSetNegativeSign(cos);
       if(tan != NULL) realIcChangeSign(tan);
     }
-    if(realIcIsZero(cos)) {
+    if(realIcIsZero(cos) && !getFlag(FLAG_DANGER)) {
       realIcSetPositiveSign(cos);
     }
   }

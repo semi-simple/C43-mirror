@@ -99,7 +99,7 @@ void chsRe16(void) {
 
   real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
   }
 }
@@ -135,11 +135,11 @@ void chsCo16(void) {
 
   complex16ChangeSign(REGISTER_COMPLEX16_DATA(REGISTER_X));
 
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
+  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
   }
 
-  if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
+  if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real16SetPositiveSign(REGISTER_IMAG16_DATA(REGISTER_X));
   }
 }
@@ -183,7 +183,7 @@ void chsRe34(void) {
 
   real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
@@ -219,11 +219,11 @@ void chsCo34(void) {
 
   complex34ChangeSign(REGISTER_COMPLEX34_DATA(REGISTER_X));
 
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
   }
 
-  if(real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+  if(real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     real34SetPositiveSign(REGISTER_IMAG34_DATA(REGISTER_X));
   }
 }

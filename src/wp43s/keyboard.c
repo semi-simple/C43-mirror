@@ -83,22 +83,22 @@ void resetShiftState(void) {
  * \brief Executes one function from a softmenu
  *
  * \param[in] fn int16_t    Function key from 1 to 6
- * \param[in] shift int16_t Shift status
- *                          * 0 = not shifted
- *                          * 1 = f shifted
- *                          * 2 = g shifted
+ * \param[in] itemShift int16_t Shift status
+ *                          *  0 = not shifted
+ *                          *  6 = f shifted
+ *                          * 12 = g shifted
  * \return void
  ***********************************************/
-void executeFunction(int16_t fn, int16_t shift) {
-  int16_t    row, func;
+void executeFunction(int16_t fn, int16_t itemShift) {
+  int16_t row, func;
   const softmenu_t *sm;
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    row = min(3, sm->numRows - softmenuStack[softmenuStackPointer - 1].row) - 1;
+    row = min(3, sm->numItems/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
-    if(shift <= row) {
-      func = (sm->softkeyRow)[6*(softmenuStack[softmenuStackPointer - 1].row + shift) + (fn-1)];
+    if(itemShift/6 <= row) {
+      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
@@ -116,11 +116,11 @@ void executeFunction(int16_t fn, int16_t shift) {
       else if(func > 0) { // function
         if(calcMode == CM_NIM && func != KEY_CC && func != KEY_CC1 ) {     //JM CPX Added CC1
           closeNim();
-          if(calcMode != CM_NIM) {                                //vv JM
+          if(calcMode != CM_NIM) {
             if(indexOfItems[func % 10000].func == fnConstant) {
               stackLiftEnable();
             }
-          }                                                       //^^
+          }
         }
 
         if(lastErrorCode == 0) {
@@ -160,11 +160,11 @@ void btnFnClicked(void *w, void *data) {
     if(softmenuStackPointer > 0) {
       if(shiftF) {
         resetShiftState();
-        executeFunction(fn, 1);
+        executeFunction(fn, 6);
       }
       else if(shiftG) {
         resetShiftState();
-        executeFunction(fn, 2);
+        executeFunction(fn, 12);
       }
       else {
         executeFunction(fn, 0);
@@ -255,6 +255,7 @@ void btnPressed(GtkWidget *notUsed, gpointer data) {
 void btnPressed(void *notUsed, void *data) {
 #endif
   const calcKey_t *key;
+  int16_t itemShift;
 
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
@@ -882,14 +883,19 @@ void btnPressed(void *notUsed, void *data) {
     else if(item == KEY_UP) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
-          if((softmenuStack[softmenuStackPointer - 1].row + 3) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numRows) {
-            softmenuStack[softmenuStackPointer - 1].row += 3;
+          itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+
+          if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+            softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
             showSoftmenuCurrentPart();
           }
           else {
-            softmenuStack[softmenuStackPointer - 1].row = 0;
+            softmenuStack[softmenuStackPointer - 1].firstItem = 0;
             showSoftmenuCurrentPart();
           }
+
+               if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+          else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
         }
         else if(calcMode == CM_AIM) {
           alphaCase = AC_UPPER;
@@ -952,14 +958,19 @@ void btnPressed(void *notUsed, void *data) {
     else if(item == KEY_DOWN) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
         if(softmenuStackPointer > 0 && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
-          if((softmenuStack[softmenuStackPointer - 1].row - 3) >= 0) {
-            softmenuStack[softmenuStackPointer - 1].row -= 3;
+          itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+
+          if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
+            softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
             showSoftmenuCurrentPart();
           }
           else {
-            softmenuStack[softmenuStackPointer - 1].row = (softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numRows - 1) / 3 * 3;
+            softmenuStack[softmenuStackPointer - 1].firstItem = (softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems/6 - 1) / (itemShift/6) * itemShift; // doesn't work if numItems is not a multiple of 6
             showSoftmenuCurrentPart();
           }
+
+               if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+          else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
         }
         else if(calcMode == CM_AIM) {
           alphaCase = AC_LOWER;

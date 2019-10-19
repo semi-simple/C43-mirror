@@ -697,7 +697,7 @@ void addItemToNimBuffer(int16_t item) {
 
     case ITM_pi :
       if(nimNumberPart == NP_COMPLEX_INT_PART && nimBuffer[strlen(nimBuffer) - 1] == 'i') {
-        done = true;                            //JM moved, bugfix
+        done = true;
         strcat(nimBuffer, "3.141592653589793");
       }
       break;
@@ -1064,12 +1064,13 @@ void addItemToNimBuffer(int16_t item) {
   else {
     closeNim();
     if(calcMode != CM_NIM) {
-      if(item == ITM_pi || indexOfItems[item].func == fnConstant) {   //vvJM, bugfix
+      if(item == ITM_pi || indexOfItems[item].func == fnConstant) {
         stackLiftEnable();
       }
-      if(lastErrorCode == 0) {                                        //^^
+
+      if(lastErrorCode == 0) {
         showFunctionName(item, 10);
-      }                                                               //JM
+      }
     }
   }
 }

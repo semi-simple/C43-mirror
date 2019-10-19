@@ -76,6 +76,10 @@ int16_t              currentRegisterBrowserScreen;
 int16_t              lineTWidth;
 int16_t              rbrRegister;
 int16_t              displayHasNDigits;
+int16_t              alphaSelectionMenu;
+int16_t              lastFcnsMenuPos;
+int16_t              lastMenuMenuPos;
+int16_t              lastCnstMenuPos;
 uint16_t             numberOfLocalRegisters;
 uint16_t             numberOfLocalFlags;
 uint16_t             numberOfNamedVariables;
@@ -375,7 +379,12 @@ void setupDefaults(void) {
   angle90  = const_90;
   angle45  = const_45;
 
-  #ifdef TESTSUITE_BUILD
+  alphaSelectionMenu = ASM_NONE;
+  lastFcnsMenuPos = 0;
+  lastMenuMenuPos = 0;
+  lastCnstMenuPos = 3;
+
+#ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
   #else
     calcModeNormal();
@@ -467,6 +476,7 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
+  bool_t wp43sKbdLayout;
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
@@ -476,6 +486,20 @@ void program_main(void) {
   //program_init();
 
   lcd_clear_buf();
+/*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");
+  lcd_refresh();
+  while (key != 33 && key != 37) {                  //dr ??
+    key = key_pop();
+    while(key == -1) {
+      sys_sleep();
+      key = key_pop();
+    }
+  }
+
+  wp43sKbdLayout = (key == 37); // bottom left key  //dr ??
+  key = 0;
+
+  lcd_clear_buf();*/
   setupDefaults();
 
   endOfProgram = false;

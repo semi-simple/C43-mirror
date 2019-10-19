@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 21  // 21 = Fixed statisticalSumsPointer problem
+#define BACKUP_VERSION 22  // 22 = alpha selection mode
 
 void saveCalc(void) {
   size_t size;
@@ -161,6 +161,10 @@ void saveCalc(void) {
   size += fwrite(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
   size += fwrite(&wp43sMemInBytes,                    1, sizeof(wp43sMemInBytes),                    backup); //printf("%8lu wp43sMemInBytes\n",                    (unsigned long)size);
   size += fwrite(&gmpMemInBytes,                      1, sizeof(gmpMemInBytes),                      backup); //printf("%8lu gmpMemInBytes\n",                      (unsigned long)size);
+  size += fwrite(&alphaSelectionMenu,                 1, sizeof(alphaSelectionMenu),                 backup); //printf("%8lu alphaSelectionMenu\n",                 (unsigned long)size);
+  size += fwrite(&lastFcnsMenuPos,                    1, sizeof(lastFcnsMenuPos),                    backup); //printf("%8lu lastFcnsMenuPos\n",                    (unsigned long)size);
+  size += fwrite(&lastMenuMenuPos,                    1, sizeof(lastMenuMenuPos),                    backup); //printf("%8lu lastMenuMenuPos\n",                    (unsigned long)size);
+  size += fwrite(&lastCnstMenuPos,                    1, sizeof(lastCnstMenuPos),                    backup); //printf("%8lu lastCnstMenuPos\n",                    (unsigned long)size);
 
   size += fwrite(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                     (unsigned long)size);
   size += fwrite(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                    (unsigned long)size);
@@ -338,6 +342,10 @@ void restoreCalc(void) {
     size += fread(&lastIntegerBase,                    1, sizeof(lastIntegerBase),                    backup); //printf("%8lu lastIntegerBase\n",                    (unsigned long)size);
     size += fread(&wp43sMemInBytes,                    1, sizeof(wp43sMemInBytes),                    backup); //printf("%8lu wp43sMemInBytes\n",                    (unsigned long)size);
     size += fread(&gmpMemInBytes,                      1, sizeof(gmpMemInBytes),                      backup); //printf("%8lu gmpMemInBytes\n",                      (unsigned long)size);
+    size += fread(&alphaSelectionMenu,                 1, sizeof(alphaSelectionMenu),                 backup); //printf("%8lu alphaSelectionMenu\n",                 (unsigned long)size);
+    size += fread(&lastFcnsMenuPos,                    1, sizeof(lastFcnsMenuPos),                    backup); //printf("%8lu lastFcnsMenuPos\n",                    (unsigned long)size);
+    size += fread(&lastMenuMenuPos,                    1, sizeof(lastMenuMenuPos),                    backup); //printf("%8lu lastMenuMenuPos\n",                    (unsigned long)size);
+    size += fread(&lastCnstMenuPos,                    1, sizeof(lastCnstMenuPos),                    backup); //printf("%8lu lastCnstMenuPos\n",                    (unsigned long)size);
 
     size += fread(&eRPN,                               1, sizeof(eRPN),                               backup); //JM eRPN //printf("%8lu eRPN\n",                     (unsigned long)size);
     size += fread(&HOME3,                              1, sizeof(HOME3),                              backup); //JM HOME //printf("%8lu HOME3\n",                    (unsigned long)size);

@@ -72,7 +72,7 @@ void fnIDivR(uint16_t unusedParamButMandatory) {
   idivr[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, REGISTER_Y, -1);
-  refreshRegisterLine(REGISTER_Y);
+  adjustResult(REGISTER_Y, false, false, REGISTER_X, REGISTER_Y, -1);
 }
 
 

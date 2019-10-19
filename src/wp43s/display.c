@@ -148,7 +148,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
  * \param[in] displayFormatN uint16_t Display format
  * \return void
  ***********************************************/
-void fnDisplayFormatDsp(uint16_t displayFormatN) {
+/*void fnDisplayFormatDsp(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
 
@@ -162,7 +162,7 @@ void fnDisplayFormatDsp(uint16_t displayFormatN) {
   #endif
 
   refreshStack();
-}
+}*/
 
 
 

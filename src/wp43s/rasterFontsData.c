@@ -1340,7 +1340,7 @@ const font_t standardFont = {
 
     // two 
     {.charCode=0x0032, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
-     .data="\x78\xfc\xcc\x0c\x0c\x0c\x18\x30\x60\xe0\xfc\xfc"},
+     .data="\x78\xfc\xcc\x0c\x0c\x1c\x18\x30\x60\xe0\xfc\xfc"},
 
     // three 
     {.charCode=0x0033, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
@@ -1716,11 +1716,11 @@ const font_t standardFont = {
 
     // onequarter 
     {.charCode=0x80bc, .colsBeforeGlyph= 0, .colsGlyph=12, .colsAfterGlyph= 2, .rowsAboveGlyph= 0, .rowsGlyph=20, .rowsBelowGlyph= 0,
-     .data="\x30\x00\x70\x00\xf0\x00\x30\x10\x30\x30\x30\x60\x30\xc0\x31\x80\x33\x00\x06\x00\x0c\x00\x19\xe0\x33\x30\x60\x30\xc0\x30\x00\x60\x00\xc0\x01\x80\x03\x30\x03\xf0"},
+     .data="\x30\x00\x70\x00\xf0\x00\x30\x10\x30\x30\x30\x70\x30\xe0\x31\xc0\x33\x80\x07\x00\x0e\x00\x1d\xe0\x3b\x30\x70\x30\xe0\x30\x00\x60\x00\xc0\x01\x80\x03\x30\x03\xf0"},
 
     // onehalf 
     {.charCode=0x80bd, .colsBeforeGlyph= 0, .colsGlyph=12, .colsAfterGlyph= 2, .rowsAboveGlyph= 0, .rowsGlyph=20, .rowsBelowGlyph= 0,
-     .data="\x30\x00\x70\x00\xf0\x00\x30\x10\x30\x30\x30\x60\x30\xc0\x31\x80\x33\x00\x06\x00\x0c\x00\x1b\x00\x33\x00\x63\x30\xc3\x30\x03\x30\x03\xf0\x00\x30\x00\x30\x00\x30"},
+     .data="\x30\x00\x70\x00\xf0\x00\x30\x30\x30\x70\x30\xe0\x31\xc0\x33\x80\x37\x00\x0e\x00\x1c\x00\x3b\x00\x73\x00\xe3\x30\xc3\x30\x03\x30\x03\xf0\x00\x30\x00\x30\x00\x30"},
 
     // questiondown 
     {.charCode=0x80bf, .colsBeforeGlyph= 0, .colsGlyph= 7, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
@@ -2540,7 +2540,7 @@ const font_t standardFont = {
 
     // sigma 
     {.charCode=0x83c3, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4,
-     .data="\x3f\x00\x7f\x00\xe0\x00\xc3\x00\xc1\x80\xc1\x80\xe3\x80\x7f\x00\x3e\x00"},
+     .data="\x3f\x80\x7f\x80\xe0\x00\xc3\x00\xc1\x80\xc1\x80\xe3\x80\x7f\x00\x3e\x00"},
 
     // tau 
     {.charCode=0x83c4, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4,
@@ -3320,7 +3320,7 @@ const font_t standardFont = {
 
     // uni2465 
     {.charCode=0xa465, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph=11, .rowsGlyph= 9, .rowsBelowGlyph= 0,
-     .data="\x30\x60\xc0\xe0\xf0\xc8\xcc\xc8\x78"},
+     .data="\x30\x60\xc0\xe0\xf8\xc8\xcc\xc8\x78"},
 
     // uni2466 
     {.charCode=0xa466, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph=11, .rowsGlyph= 9, .rowsBelowGlyph= 0,
@@ -3360,7 +3360,7 @@ const font_t standardFont = {
 
     // uni246F 
     {.charCode=0xa46f, .colsBeforeGlyph= 0, .colsGlyph=11, .colsAfterGlyph= 2, .rowsAboveGlyph=11, .rowsGlyph= 9, .rowsBelowGlyph= 0,
-     .data="\x31\x80\x73\x00\xf6\x00\x37\x00\x37\x80\x36\x40\x36\x60\x36\x40\x33\xc0"},
+     .data="\x31\x80\x73\x00\xf6\x00\x37\x00\x37\xc0\x36\x40\x36\x60\x36\x40\x33\xc0"},
 
     // uni2491 
     {.charCode=0xa491, .colsBeforeGlyph= 0, .colsGlyph=11, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4,

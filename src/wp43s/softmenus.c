@@ -29,9 +29,9 @@
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_MYMENU[]     = {  ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                     };     //JM PLACEHOLDER - WAIT FOR OFFICIAL MYMENU
+const int16_t menu_MYMENU[]     = {  ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                     };    //JM PLACEHOLDER - WAIT FOR OFFICIAL MYMENU
 
-const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,/*-MNU_ALPHA*/ITM_MA15,                    ITM_MA16,                                //JM ALPHA
+const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,/*-MNU_ALPHA*/ITM_MA15,                    ITM_MA16,                           //JM ALPHA
                                      ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                    ITM_MA26,
                                      ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                    ITM_MA36                      };
 
@@ -62,13 +62,13 @@ const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,    
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,                     ITM_MAGNITUDE,            ITM_ANGLE,             ITM_CONJ,                    ITM_REexIM,                          //JM re-arranged menu. CPX menu
-                                     ITM_DOT,                       ITM_CROSS,                  ITM_SIGN,                 ITM_UNITV,             ITM_NULL,                    ITM_NULL,                            //JM re-arranged menu. CPX menu
+const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,                     ITM_MAGNITUDE,            ITM_ANGLE,             ITM_CONJ,                    ITM_REexIM,                         //JM re-arranged menu. CPX menu
+                                     ITM_DOT,                       ITM_CROSS,                  ITM_SIGN,                 ITM_UNITV,             ITM_NULL,                    ITM_NULL,                           //JM re-arranged menu. CPX menu
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                          //JM re-arranged menu
-                                     KEY_COMPLEX,                   KEY_CC,                     KEY_CC1,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                        }; //JM CPX
+                                     KEY_COMPLEX,                   KEY_CC,                     KEY_CC1,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM CPX
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
-                                     ITM_SDL,                       ITM_SDR,                    ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                             //JM added SIGFIG & UNIT
+                                     ITM_SDL,                       ITM_SDR,                    ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                            //JM added SIGFIG & UNIT
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,           ITM_RDXPER,                  ITM_RDXCOM,
                                      ITM_GAP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DSTACK,
@@ -81,7 +81,7 @@ const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,     
                                      ITM_CUBEROOT,                  ITM_XTHROOT,                ITM_NULL,                 ITM_2X,                ITM_EX1,                     ITM_NULL,                           //JM re-arranged menu. Added YˆX to follow DM42 keyboard. Swapped YˆX and Yˆ(1/X). Re-aligned with 42S keys.
                                      ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
 
-const int16_t menu_TRI[]         = { ITM_sin,                        ITM_cos,                    ITM_tan,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
+const int16_t menu_TRI[]         = { ITM_sin,                       ITM_cos,                    ITM_tan,                  ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
 //                                   ITM_toREC,                     ITM_toPOL,                  ITM_pi,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
                                      ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM re-arranged menu TRIG menu
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };    //JM re-arranged menu TRIG menu
@@ -102,8 +102,8 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
                                      ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,                 
 
-                                     ITM_NULL,                      ITM_SH_ERPN,                ITM_SH_SHTIM,             ITM_SH_HOMEx3,         ITM_NULL,                    ITM_NULL,                                         //JM INFO
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                     };                 //JM INFO
+                                     ITM_NULL,                      ITM_SH_ERPN,                ITM_SH_SHTIM,             ITM_SH_HOMEx3,         ITM_NULL,                    ITM_NULL,                           //JM INFO
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM INFO
 
 
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
@@ -142,8 +142,8 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
 #endif
 
-                                     ITM_ERPN,                      ITM_SH_ERPN,                ITM_BASE_HOME,            ITM_SH_BASE_HOME,      ITM_BASE_AHOME,              ITM_SH_BASE_AHOME,                           //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
-                                     ITM_SHTIM,                     ITM_SH_SHTIM,               ITM_BASE_MYMENU,          ITM_SH_BASE_MYMENU,    ITM_BASE_MYA,                ITM_SH_BASE_MYA,                            //J Added
+                                     ITM_ERPN,                      ITM_SH_ERPN,                ITM_BASE_HOME,            ITM_SH_BASE_HOME,      ITM_BASE_AHOME,              ITM_SH_BASE_AHOME,                  //JM eRPN Added LINE ITM_ERPN ITM_RPN HOME.3
+                                     ITM_SHTIM,                     ITM_SH_SHTIM,               ITM_BASE_MYMENU,          ITM_SH_BASE_MYMENU,    ITM_BASE_MYA,                ITM_SH_BASE_MYA,                    //J Added
                                      ITM_HOMEx3,                    ITM_SH_HOMEx3,              ITM_HOMEx3T,              ITM_SH_HOMEx3T,        ITM_NULL,                    ITM_NULL                      };
 
 
@@ -189,9 +189,9 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
 /*
-const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_SIGMAMINUS,             ITM_XBAR,                 ITM_S,                 ITM_sigma,                   ITM_SM,                              //JM RE-ARRANGED E-
-                                     ITM_SUM,                       ITM_SQUARE,                 ITM_XW,                   ITM_SW,                ITM_sigmaw,                  ITM_SMW,                             //JM RE-ARRANGED E-
-                                     ITM_PLOT,                      ITM_CLSIGMA,                ITM_XG,                   ITM_epsilon,           ITM_epsilonP,                ITM_epsilonM,                        //JM RE-ARRANGED E-  */
+const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_SIGMAMINUS,             ITM_XBAR,                 ITM_S,                 ITM_sigma,                   ITM_SM,                             //JM RE-ARRANGED E-
+                                     ITM_SUM,                       ITM_SQUARE,                 ITM_XW,                   ITM_SW,                ITM_sigmaw,                  ITM_SMW,                            //JM RE-ARRANGED E-
+                                     ITM_PLOT,                      ITM_CLSIGMA,                ITM_XG,                   ITM_epsilon,           ITM_epsilonP,                ITM_epsilonM,                       //JM RE-ARRANGED E-  */
 const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SQUARE,
                                      ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     ITM_SUM,
                                      ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
@@ -207,9 +207,9 @@ const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx, 
                                      ITM_SIGMAx2ony,                ITM_SIGMA1onx,              ITM_SIGMA1onx2,           ITM_SIGMAxony,         ITM_SIGMA1ony2,              ITM_SIGMA1ony,
                                      ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_STK[]         = { ITM_Xex,                       ITM_Yex,                    ITM_Zex,                  ITM_Tex,               ITM_ex,                      ITM_CLSTK,                         //JM Re-arranged
-                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DROPY,                         //JM Added CLRSTK
-                                     ITM_FILL,                      ITM_LASTX,                  ITM_NULL,                 ITM_Rdown,             ITM_Rup,                     ITM_DROP                 };         //JM Added missing STACK items
+const int16_t menu_STK[]         = { ITM_Xex,                       ITM_Yex,                    ITM_Zex,                  ITM_Tex,               ITM_ex,                      ITM_CLSTK,                          //JM Re-arranged
+                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DROPY,                          //JM Added CLRSTK
+                                     ITM_FILL,                      ITM_LASTX,                  ITM_NULL,                 ITM_Rdown,             ITM_Rup,                     ITM_DROP                      };    //JM Added missing STACK items
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
@@ -299,7 +299,7 @@ const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     CHR_BETA,   
                                      CHR_ETA,                       CHR_THETA,                  CHR_IOTA,                 CHR_KAPPA,             CHR_LAMBDA,                  CHR_MU,
                                      CHR_NU,                        CHR_XI,                     CHR_OMICRON,              CHR_PI,                CHR_RHO,                     CHR_SIGMA,
                                      ITM_NULL,                      CHR_TAU,                    CHR_UPSILON,              CHR_PHI,               CHR_CHI,                     CHR_PSI,
-                                     CHR_OMEGA,                     CHR_DIGAMMA,                CHR_QOPPA,                CHR_SAMPI,             ITM_NULL,                    ITM_NULL,                         //JM
+                                     CHR_OMEGA,                     CHR_DIGAMMA,                CHR_QOPPA,                CHR_SAMPI,             ITM_NULL,                    ITM_NULL,                           //JM
                                      CHR_IOTA_DIALYTIKA,            ITM_NULL,                   ITM_NULL,                 CHR_UPSILON_DIALYTIKA, ITM_NULL,                    ITM_NULL                      };
 */
 //JM Modified Greek sequence from DR
@@ -307,7 +307,7 @@ const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     CHR_BETA,   
                                      CHR_ZETA,                      CHR_ETA,                    CHR_THETA,                CHR_IOTA,              CHR_KAPPA,                   CHR_LAMBDA,
                                      CHR_MU,                        CHR_NU,                     CHR_XI,                   CHR_OMICRON,           CHR_PI,                      CHR_QOPPA,
                                      CHR_RHO,                       CHR_SIGMA,                  CHR_TAU,                  CHR_UPSILON,           CHR_PHI,                     CHR_CHI,
-                                     CHR_PSI,                       CHR_OMEGA,                  CHR_SAMPI,                ITM_NULL,              ITM_NULL,                    ITM_NULL,                         //JM
+                                     CHR_PSI,                       CHR_OMEGA,                  CHR_SAMPI,                ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
                                      CHR_IOTA_DIALYTIKA,            ITM_NULL,                   ITM_NULL,                 CHR_UPSILON_DIALYTIKA, ITM_NULL,                    ITM_NULL                      };
 
 /*
@@ -317,8 +317,8 @@ const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,   
                                      CHR_nu,                        CHR_xi,                     CHR_omicron,              CHR_pi,                CHR_rho,                     CHR_sigma,
                                      CHR_sigma_end,                 CHR_tau,                    CHR_upsilon,              CHR_phi,               CHR_chi,                     CHR_psi,
                                      CHR_omega,                     CHR_alpha_TONOS,            CHR_epsilon_TONOS,        CHR_eta_TONOS,         CHR_iotaTON,                 CHR_iota_DIALYTIKA_TONOS,
-                                     CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS,                  //JM
-                                     CHR_digamma,                   CHR_qoppa,                  CHR_sampi,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };  //JM
+                                     CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS,                    //JM
+                                     CHR_digamma,                   CHR_qoppa,                  CHR_sampi,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
 */
 //JM Modified Greek sequence from DR
 const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,                   CHR_gamma,                CHR_delta,             CHR_epsilon,                 CHR_digamma,
@@ -397,8 +397,8 @@ const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_FCNS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-const int16_t menu_MENUS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+//dr - const int16_t menu_FCNS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+//dr - const int16_t menu_MENUS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_MATRS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_STRING[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_CPXS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -449,24 +449,24 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_BASE[]       = {  
-                                     ITM_2HEX,                      ITM_2DEC,                   ITM_2OCT,                 ITM_2BIN,             -MNU_BITS,                   -MNU_INTS,             //JM BASE MENU ADDED
-                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               KEY_HASH,                    ITM_toINT,            //JM                      
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              /*ITM_HASH*/ITM_NULL,                    ITM_NULL          };  //JM BASE MENU ADDED
+                                     ITM_2HEX,                      ITM_2DEC,                   ITM_2OCT,                 ITM_2BIN,              -MNU_BITS,                   -MNU_INTS,                          //JM BASE MENU ADDED
+                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               KEY_HASH,                    ITM_toINT,                          //JM                      
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,  /*ITM_HASH*/ITM_NULL,                    ITM_NULL                      };    //JM BASE MENU ADDED
 
-const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                 //JM EE           
-                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,               -MNU_CPX,                   //JM EE
-                                     ITM_DEG,                       ITM_RAD,                    ITM_DtoR,                 ITM_RtoD,              ITM_RECT,                    ITM_POLAR,                 //JM EE
+const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE           
+                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
+                                     ITM_DEG,                       ITM_RAD,                    ITM_DtoR,                 ITM_RtoD,              ITM_RECT,                    ITM_POLAR,                          //JM EE
 
-                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_EE_EXP_TH,                ITM_CLSTK,                 //JM EE           
-                                     ITM_EE_STO_V_I,                ITM_EE_STO_IR,              ITM_EE_STO_V_Z,           ITM_EE_X2BAL,          ITM_PARALLEL,               -MNU_CPX,                  //JM EE
-                                     ITM_EE_STO_Z,                  ITM_EE_RCL_Z,               ITM_EE_STO_V,             ITM_EE_RCL_V,          ITM_EE_STO_I,                ITM_EE_RCL_I      };       //JM EE
+                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_EE_EXP_TH,                ITM_CLSTK,                         //JM EE           
+                                     ITM_EE_STO_V_I,                ITM_EE_STO_IR,              ITM_EE_STO_V_Z,           ITM_EE_X2BAL,          ITM_PARALLEL,                -MNU_CPX,                           //JM EE
+                                     ITM_EE_STO_Z,                  ITM_EE_RCL_Z,               ITM_EE_STO_V,             ITM_EE_RCL_V,          ITM_EE_STO_I,                ITM_EE_RCL_I                  };    //JM EE
 
 
 
 const int16_t menu_ASN_N[]        = { 
-                                     ITM_U_KEY_USER,                ITM_SH_KEY_USER,            ITM_U_KEY_CC,             ITM_SH_KEY_CC,         ITM_U_KEY_MM,                ITM_SH_KEY_MM,                 //JM USER NAORMAL MODE
-                                     ITM_U_KEY_SIGMA,               ITM_SH_KEY_SIGMA,           ITM_U_KEY_PRGM,           ITM_SH_KEY_PRGM,       ITM_U_KEY_ALPHA,             ITM_SH_KEY_ALPHA,              //JM USER NAORMAL MODE
-                                    -MNU_ASN ,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GET_NORM_E    };           //JM USER NAORMAL MODE
+                                     ITM_U_KEY_USER,                ITM_SH_KEY_USER,            ITM_U_KEY_CC,             ITM_SH_KEY_CC,         ITM_U_KEY_MM,                ITM_SH_KEY_MM,                      //JM USER NAORMAL MODE
+                                     ITM_U_KEY_SIGMA,               ITM_SH_KEY_SIGMA,           ITM_U_KEY_PRGM,           ITM_SH_KEY_PRGM,       ITM_U_KEY_ALPHA,             ITM_SH_KEY_ALPHA,                   //JM USER NAORMAL MODE
+                                    -MNU_ASN ,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GET_NORM_E                };    //JM USER NAORMAL MODE
 
 const int16_t menu_ASN[]        = { 
       ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_JM_SEEK, /*ITM_JM_ASN*/ KEY_USERMODE,
@@ -548,107 +548,113 @@ const int16_t menu_ALPHA[]        = {
                                      ITM_ASSIGN,                    KEY_USERMODE,                ITM_NULL,                -MNU_CATALOG,           -MNU_MODE,                    ITM_NULL,                               //JM                     
                                      ITM_NULL,                      ITM_NULL,                    ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_NULL      };                        //JM                     
 
+#include "softmenuFCNS.h"
+
+const int16_t menu_MENUS[] = {
+  -MNU_ADV,
+};
+
 const softmenu_t softmenu[] = {
-  {.menuId = -MNU_MyAlpha,     .numRows = sizeof(menu_MyAlpha    )/sizeof(int16_t)/6, .softkeyRow = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
-  {.menuId = -MNU_MYMENU,      .numRows = sizeof(menu_MYMENU     )/sizeof(int16_t)/6, .softkeyRow = menu_MYMENU      }, // JM PLACEHOLDER MYMENU
-  {.menuId = -MNU_ADV,         .numRows = sizeof(menu_ADV        )/sizeof(int16_t)/6, .softkeyRow = menu_ADV         },
-  {.menuId = -MNU_Sfdx,        .numRows = sizeof(menu_Sfdx       )/sizeof(int16_t)/6, .softkeyRow = menu_Sfdx        },
-  {.menuId = -MNU_BITS,        .numRows = sizeof(menu_BITS       )/sizeof(int16_t)/6, .softkeyRow = menu_BITS        },
-  {.menuId = -MNU_CLK,         .numRows = sizeof(menu_CLK        )/sizeof(int16_t)/6, .softkeyRow = menu_CLK         },
-  {.menuId = -MNU_CLR,         .numRows = sizeof(menu_CLR        )/sizeof(int16_t)/6, .softkeyRow = menu_CLR         },
-  {.menuId = -MNU_CPX,         .numRows = sizeof(menu_CPX        )/sizeof(int16_t)/6, .softkeyRow = menu_CPX         },
-  {.menuId = -MNU_DISP,        .numRows = sizeof(menu_DISP       )/sizeof(int16_t)/6, .softkeyRow = menu_DISP        },
-  {.menuId = -MNU_EQN,         .numRows = sizeof(menu_EQN        )/sizeof(int16_t)/6, .softkeyRow = menu_EQN         },
-  {.menuId = -MNU_1STDERIV,    .numRows = sizeof(menu_1stDeriv   )/sizeof(int16_t)/6, .softkeyRow = menu_1stDeriv    },
-  {.menuId = -MNU_2NDDERIV,    .numRows = sizeof(menu_2ndDeriv   )/sizeof(int16_t)/6, .softkeyRow = menu_2ndDeriv    },
-  {.menuId = -MNU_Sf,          .numRows = sizeof(menu_Sf         )/sizeof(int16_t)/6, .softkeyRow = menu_Sf          },
-  {.menuId = -MNU_Solver,      .numRows = sizeof(menu_Solver     )/sizeof(int16_t)/6, .softkeyRow = menu_Solver      },
-  {.menuId = -MNU_EXP,         .numRows = sizeof(menu_EXP        )/sizeof(int16_t)/6, .softkeyRow = menu_EXP         },
-  {.menuId = -MNU_TRI,         .numRows = sizeof(menu_TRI        )/sizeof(int16_t)/6, .softkeyRow = menu_TRI         },
-  {.menuId = -MNU_FIN,         .numRows = sizeof(menu_FIN        )/sizeof(int16_t)/6, .softkeyRow = menu_FIN         },
-  {.menuId = -MNU_TVM,         .numRows = sizeof(menu_TVM        )/sizeof(int16_t)/6, .softkeyRow = menu_TVM         },
-  {.menuId = -MNU_FLAGS,       .numRows = sizeof(menu_FLAGS      )/sizeof(int16_t)/6, .softkeyRow = menu_FLAGS       },
-  {.menuId = -MNU_INFO,        .numRows = sizeof(menu_INFO       )/sizeof(int16_t)/6, .softkeyRow = menu_INFO        },
-  {.menuId = -MNU_INTS,        .numRows = sizeof(menu_INTS       )/sizeof(int16_t)/6, .softkeyRow = menu_INTS        },
-  {.menuId = -MNU_LOOP,        .numRows = sizeof(menu_LOOP       )/sizeof(int16_t)/6, .softkeyRow = menu_LOOP        },
-  {.menuId = -MNU_MATX,        .numRows = sizeof(menu_MATX       )/sizeof(int16_t)/6, .softkeyRow = menu_MATX        },
-  {.menuId = -MNU_SIM_EQ,      .numRows = sizeof(menu_M_SIM_Q    )/sizeof(int16_t)/6, .softkeyRow = menu_M_SIM_Q     },
-  {.menuId = -MNU_M_EDIT,      .numRows = sizeof(menu_M_EDIT     )/sizeof(int16_t)/6, .softkeyRow = menu_M_EDIT      },
-  {.menuId = -MNU_M_EDITN,     .numRows = sizeof(menu_M_EDITN    )/sizeof(int16_t)/6, .softkeyRow = menu_M_EDITN     },
-  {.menuId = -MNU_MODE,        .numRows = sizeof(menu_MODE       )/sizeof(int16_t)/6, .softkeyRow = menu_MODE        },
-  {.menuId = -MNU_PARTS,       .numRows = sizeof(menu_PARTS      )/sizeof(int16_t)/6, .softkeyRow = menu_PARTS       },
-  {.menuId = -MNU_PROB,        .numRows = sizeof(menu_PROB       )/sizeof(int16_t)/6, .softkeyRow = menu_PROB        },
-  {.menuId = -MNU_T,           .numRows = sizeof(menu_t          )/sizeof(int16_t)/6, .softkeyRow = menu_t           },
-  {.menuId = -MNU_PHI,         .numRows = sizeof(menu_PHI        )/sizeof(int16_t)/6, .softkeyRow = menu_PHI         },
-  {.menuId = -MNU_F,           .numRows = sizeof(menu_F          )/sizeof(int16_t)/6, .softkeyRow = menu_F           },
-  {.menuId = -MNU_CHI2,        .numRows = sizeof(menu_chi2       )/sizeof(int16_t)/6, .softkeyRow = menu_chi2        },
-  {.menuId = -MNU_NORML,       .numRows = sizeof(menu_Norml      )/sizeof(int16_t)/6, .softkeyRow = menu_Norml       },
-  {.menuId = -MNU_LGNRM,       .numRows = sizeof(menu_LgNrm      )/sizeof(int16_t)/6, .softkeyRow = menu_LgNrm       },
-  {.menuId = -MNU_CAUCH,       .numRows = sizeof(menu_Cauch      )/sizeof(int16_t)/6, .softkeyRow = menu_Cauch       },
-  {.menuId = -MNU_EXPON,       .numRows = sizeof(menu_Expon      )/sizeof(int16_t)/6, .softkeyRow = menu_Expon       },
-  {.menuId = -MNU_LOGIS,       .numRows = sizeof(menu_Logis      )/sizeof(int16_t)/6, .softkeyRow = menu_Logis       },
-  {.menuId = -MNU_WEIBL,       .numRows = sizeof(menu_Weibl      )/sizeof(int16_t)/6, .softkeyRow = menu_Weibl       },
-  {.menuId = -MNU_BINOM,       .numRows = sizeof(menu_Binom      )/sizeof(int16_t)/6, .softkeyRow = menu_Binom       },
-  {.menuId = -MNU_GEOM,        .numRows = sizeof(menu_Geom       )/sizeof(int16_t)/6, .softkeyRow = menu_Geom        },
-  {.menuId = -MNU_HYPER,       .numRows = sizeof(menu_Hyper      )/sizeof(int16_t)/6, .softkeyRow = menu_Hyper       },
-  {.menuId = -MNU_NBIN,        .numRows = sizeof(menu_Nbin       )/sizeof(int16_t)/6, .softkeyRow = menu_Nbin        },
-  {.menuId = -MNU_POISS,       .numRows = sizeof(menu_Poiss      )/sizeof(int16_t)/6, .softkeyRow = menu_Poiss       },
-  {.menuId = -MNU_PFN,         .numRows = sizeof(menu_PFN        )/sizeof(int16_t)/6, .softkeyRow = menu_PFN         },
-  {.menuId = -MNU_PFN2,        .numRows = sizeof(menu_PFN2       )/sizeof(int16_t)/6, .softkeyRow = menu_PFN2        },
-  {.menuId = -MNU_STAT,        .numRows = sizeof(menu_STAT       )/sizeof(int16_t)/6, .softkeyRow = menu_STAT        },
-  {.menuId = -MNU_SUMS,        .numRows = sizeof(menu_SUMS       )/sizeof(int16_t)/6, .softkeyRow = menu_SUMS        },
-  {.menuId = -MNU_STK,         .numRows = sizeof(menu_STK        )/sizeof(int16_t)/6, .softkeyRow = menu_STK         },
-  {.menuId = -MNU_TEST,        .numRows = sizeof(menu_TEST       )/sizeof(int16_t)/6, .softkeyRow = menu_TEST        },
-  {.menuId = -MNU_XFN,         .numRows = sizeof(menu_XFN        )/sizeof(int16_t)/6, .softkeyRow = menu_XFN         },
-  {.menuId = -MNU_ORTHOG,      .numRows = sizeof(menu_Orthog     )/sizeof(int16_t)/6, .softkeyRow = menu_Orthog      },
-  {.menuId = -MNU_ALPHAINTL,   .numRows = sizeof(menu_alpha_INTL )/sizeof(int16_t)/6, .softkeyRow = menu_alpha_INTL  },
-  {.menuId = -MNU_ALPHAintl,   .numRows = sizeof(menu_alpha_intl )/sizeof(int16_t)/6, .softkeyRow = menu_alpha_intl  },
-  {.menuId = -MNU_CATALOG,     .numRows = sizeof(menu_CATALOG    )/sizeof(int16_t)/6, .softkeyRow = menu_CATALOG     },
-  {.menuId = -MNU_DIGITS,      .numRows = sizeof(menu_DIGITS     )/sizeof(int16_t)/6, .softkeyRow = menu_DIGITS      },
-  {.menuId = -MNU_CHARS,       .numRows = sizeof(menu_CHARS      )/sizeof(int16_t)/6, .softkeyRow = menu_CHARS       },
-  {.menuId = -MNU_PROGS,       .numRows = sizeof(menu_PROGS      )/sizeof(int16_t)/6, .softkeyRow = menu_PROGS       },
-  {.menuId = -MNU_VARS,        .numRows = sizeof(menu_VARS       )/sizeof(int16_t)/6, .softkeyRow = menu_VARS        },
-  {.menuId = -MNU_A_Z,         .numRows = sizeof(menu_A_Z        )/sizeof(int16_t)/6, .softkeyRow = menu_A_Z         },
-  {.menuId = -MNU_a_z,         .numRows = sizeof(menu_a_z        )/sizeof(int16_t)/6, .softkeyRow = menu_a_z         },
-  {.menuId = -MNU_ALPHA_OMEGA, .numRows = sizeof(menu_ALPHA_OMEGA)/sizeof(int16_t)/6, .softkeyRow = menu_ALPHA_OMEGA },
-  {.menuId = -MNU_alpha_omega, .numRows = sizeof(menu_alpha_omega)/sizeof(int16_t)/6, .softkeyRow = menu_alpha_omega },
-  {.menuId = -MNU_FCNS,        .numRows = sizeof(menu_FCNS       )/sizeof(int16_t)/6, .softkeyRow = menu_FCNS        },
-  {.menuId = -MNU_MENUS,       .numRows = sizeof(menu_MENUS      )/sizeof(int16_t)/6, .softkeyRow = menu_MENUS       },
-  {.menuId = -MNU_MATRS,       .numRows = sizeof(menu_MATRS      )/sizeof(int16_t)/6, .softkeyRow = menu_MATRS       },
-  {.menuId = -MNU_STRING,      .numRows = sizeof(menu_STRING     )/sizeof(int16_t)/6, .softkeyRow = menu_STRING      },
-  {.menuId = -MNU_RAM,         .numRows = sizeof(menu_RAM        )/sizeof(int16_t)/6, .softkeyRow = menu_RAM         },
-  {.menuId = -MNU_FLASH,       .numRows = sizeof(menu_FLASH      )/sizeof(int16_t)/6, .softkeyRow = menu_FLASH       },
-  {.menuId = -MNU_DATES,       .numRows = sizeof(menu_DATES      )/sizeof(int16_t)/6, .softkeyRow = menu_DATES       },
-  {.menuId = -MNU_TIMES,       .numRows = sizeof(menu_TIMES      )/sizeof(int16_t)/6, .softkeyRow = menu_TIMES       },
-  {.menuId = -MNU_ANGLES,      .numRows = sizeof(menu_ANGLES     )/sizeof(int16_t)/6, .softkeyRow = menu_ANGLES      },
-  {.menuId = -MNU_FINTS,       .numRows = sizeof(menu_FINTS      )/sizeof(int16_t)/6, .softkeyRow = menu_FINTS       },
-  {.menuId = -MNU_IINTS,       .numRows = sizeof(menu_IINTS      )/sizeof(int16_t)/6, .softkeyRow = menu_IINTS       },
-  {.menuId = -MNU_ALPHAMATH,   .numRows = sizeof(menu_alphaMATH  )/sizeof(int16_t)/6, .softkeyRow = menu_alphaMATH   },
-  {.menuId = -MNU_ALPHADOT,    .numRows = sizeof(menu_alphaDot   )/sizeof(int16_t)/6, .softkeyRow = menu_alphaDot    },
-  {.menuId = -MNU_REALS,       .numRows = sizeof(menu_REALS      )/sizeof(int16_t)/6, .softkeyRow = menu_REALS       },
-  {.menuId = -MNU_ALPHAFN,     .numRows = sizeof(menu_alphaFN    )/sizeof(int16_t)/6, .softkeyRow = menu_alphaFN     },
-  {.menuId = -MNU_CPXS,        .numRows = sizeof(menu_CPXS       )/sizeof(int16_t)/6, .softkeyRow = menu_CPXS        },
-  {.menuId = -MNU_ANGLECONV,   .numRows = sizeof(menu_AngleConv  )/sizeof(int16_t)/6, .softkeyRow = menu_AngleConv   },
-  {.menuId = -MNU_UNITCONV,    .numRows = sizeof(menu_UnitConv   )/sizeof(int16_t)/6, .softkeyRow = menu_UnitConv    },
-  {.menuId = -MNU_CONVE,       .numRows = sizeof(menu_ConvE      )/sizeof(int16_t)/6, .softkeyRow = menu_ConvE       },
-  {.menuId = -MNU_CONVP,       .numRows = sizeof(menu_ConvP      )/sizeof(int16_t)/6, .softkeyRow = menu_ConvP       },
-  {.menuId = -MNU_CONVFP,      .numRows = sizeof(menu_ConvFP     )/sizeof(int16_t)/6, .softkeyRow = menu_ConvFP      },
-  {.menuId = -MNU_CONVM,       .numRows = sizeof(menu_ConvM      )/sizeof(int16_t)/6, .softkeyRow = menu_ConvM       },
-  {.menuId = -MNU_CONVX,       .numRows = sizeof(menu_ConvX      )/sizeof(int16_t)/6, .softkeyRow = menu_ConvX       },
-  {.menuId = -MNU_CONVV,       .numRows = sizeof(menu_ConvV      )/sizeof(int16_t)/6, .softkeyRow = menu_ConvV       },
-  {.menuId = -MNU_CONVA,       .numRows = sizeof(menu_ConvA      )/sizeof(int16_t)/6, .softkeyRow = menu_ConvA       },
-  {.menuId = -MNU_CNST,        .numRows = sizeof(menu_CNST       )/sizeof(int16_t)/6, .softkeyRow = menu_CNST        },
-  {.menuId = -MNU_IO,          .numRows = sizeof(menu_IO         )/sizeof(int16_t)/6, .softkeyRow = menu_IO          },
-  {.menuId = -MNU_TAM,         .numRows = sizeof(menu_Tam        )/sizeof(int16_t)/6, .softkeyRow = menu_Tam         },
-  {.menuId = -MNU_TAMCMP,      .numRows = sizeof(menu_TamCmp     )/sizeof(int16_t)/6, .softkeyRow = menu_TamCmp      },
-  {.menuId = -MNU_TAMSTORCL,   .numRows = sizeof(menu_TamStoRcl  )/sizeof(int16_t)/6, .softkeyRow = menu_TamStoRcl   },
-  {.menuId = -MNU_ASN_N,       .numRows = sizeof(menu_ASN_N      )/sizeof(int16_t)/6, .softkeyRow = menu_ASN_N       },  //JM USER NORMAL
-  {.menuId = -MNU_ASN,         .numRows = sizeof(menu_ASN        )/sizeof(int16_t)/6, .softkeyRow = menu_ASN         },  //JM USER
-  {.menuId = -MNU_HOME,        .numRows = sizeof(menu_HOME       )/sizeof(int16_t)/6, .softkeyRow = menu_HOME        },  //JM HOME
-  {.menuId = -MNU_ALPHA,       .numRows = sizeof(menu_ALPHA      )/sizeof(int16_t)/6, .softkeyRow = menu_ALPHA       },  //JM ALPHA
-  {.menuId = -MNU_BASE,        .numRows = sizeof(menu_BASE       )/sizeof(int16_t)/6, .softkeyRow = menu_BASE        },  //JM HOME
-  {.menuId = -MNU_EE,          .numRows = sizeof(menu_EE         )/sizeof(int16_t)/6, .softkeyRow = menu_EE          },  //JM EE
-  {.menuId =  0,               .numRows = 0,                                          .softkeyRow = NULL             }
+  {.menuId = -MNU_MyAlpha,     .numItems = sizeof(menu_MyAlpha    )/sizeof(int16_t), .softkeyItem = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
+  {.menuId = -MNU_MYMENU,      .numItems = sizeof(menu_MYMENU     )/sizeof(int16_t), .softkeyItem = menu_MYMENU      }, // JM PLACEHOLDER MYMENU
+  {.menuId = -MNU_ADV,         .numItems = sizeof(menu_ADV        )/sizeof(int16_t), .softkeyItem = menu_ADV         },
+  {.menuId = -MNU_Sfdx,        .numItems = sizeof(menu_Sfdx       )/sizeof(int16_t), .softkeyItem = menu_Sfdx        },
+  {.menuId = -MNU_BITS,        .numItems = sizeof(menu_BITS       )/sizeof(int16_t), .softkeyItem = menu_BITS        },
+  {.menuId = -MNU_CLK,         .numItems = sizeof(menu_CLK        )/sizeof(int16_t), .softkeyItem = menu_CLK         },
+  {.menuId = -MNU_CLR,         .numItems = sizeof(menu_CLR        )/sizeof(int16_t), .softkeyItem = menu_CLR         },
+  {.menuId = -MNU_CPX,         .numItems = sizeof(menu_CPX        )/sizeof(int16_t), .softkeyItem = menu_CPX         },
+  {.menuId = -MNU_DISP,        .numItems = sizeof(menu_DISP       )/sizeof(int16_t), .softkeyItem = menu_DISP        },
+  {.menuId = -MNU_EQN,         .numItems = sizeof(menu_EQN        )/sizeof(int16_t), .softkeyItem = menu_EQN         },
+  {.menuId = -MNU_1STDERIV,    .numItems = sizeof(menu_1stDeriv   )/sizeof(int16_t), .softkeyItem = menu_1stDeriv    },
+  {.menuId = -MNU_2NDDERIV,    .numItems = sizeof(menu_2ndDeriv   )/sizeof(int16_t), .softkeyItem = menu_2ndDeriv    },
+  {.menuId = -MNU_Sf,          .numItems = sizeof(menu_Sf         )/sizeof(int16_t), .softkeyItem = menu_Sf          },
+  {.menuId = -MNU_Solver,      .numItems = sizeof(menu_Solver     )/sizeof(int16_t), .softkeyItem = menu_Solver      },
+  {.menuId = -MNU_EXP,         .numItems = sizeof(menu_EXP        )/sizeof(int16_t), .softkeyItem = menu_EXP         },
+  {.menuId = -MNU_TRI,         .numItems = sizeof(menu_TRI        )/sizeof(int16_t), .softkeyItem = menu_TRI         },
+  {.menuId = -MNU_FIN,         .numItems = sizeof(menu_FIN        )/sizeof(int16_t), .softkeyItem = menu_FIN         },
+  {.menuId = -MNU_TVM,         .numItems = sizeof(menu_TVM        )/sizeof(int16_t), .softkeyItem = menu_TVM         },
+  {.menuId = -MNU_FLAGS,       .numItems = sizeof(menu_FLAGS      )/sizeof(int16_t), .softkeyItem = menu_FLAGS       },
+  {.menuId = -MNU_INFO,        .numItems = sizeof(menu_INFO       )/sizeof(int16_t), .softkeyItem = menu_INFO        },
+  {.menuId = -MNU_INTS,        .numItems = sizeof(menu_INTS       )/sizeof(int16_t), .softkeyItem = menu_INTS        },
+  {.menuId = -MNU_LOOP,        .numItems = sizeof(menu_LOOP       )/sizeof(int16_t), .softkeyItem = menu_LOOP        },
+  {.menuId = -MNU_MATX,        .numItems = sizeof(menu_MATX       )/sizeof(int16_t), .softkeyItem = menu_MATX        },
+  {.menuId = -MNU_SIM_EQ,      .numItems = sizeof(menu_M_SIM_Q    )/sizeof(int16_t), .softkeyItem = menu_M_SIM_Q     },
+  {.menuId = -MNU_M_EDIT,      .numItems = sizeof(menu_M_EDIT     )/sizeof(int16_t), .softkeyItem = menu_M_EDIT      },
+  {.menuId = -MNU_M_EDITN,     .numItems = sizeof(menu_M_EDITN    )/sizeof(int16_t), .softkeyItem = menu_M_EDITN     },
+  {.menuId = -MNU_MODE,        .numItems = sizeof(menu_MODE       )/sizeof(int16_t), .softkeyItem = menu_MODE        },
+  {.menuId = -MNU_PARTS,       .numItems = sizeof(menu_PARTS      )/sizeof(int16_t), .softkeyItem = menu_PARTS       },
+  {.menuId = -MNU_PROB,        .numItems = sizeof(menu_PROB       )/sizeof(int16_t), .softkeyItem = menu_PROB        },
+  {.menuId = -MNU_T,           .numItems = sizeof(menu_t          )/sizeof(int16_t), .softkeyItem = menu_t           },
+  {.menuId = -MNU_PHI,         .numItems = sizeof(menu_PHI        )/sizeof(int16_t), .softkeyItem = menu_PHI         },
+  {.menuId = -MNU_F,           .numItems = sizeof(menu_F          )/sizeof(int16_t), .softkeyItem = menu_F           },
+  {.menuId = -MNU_CHI2,        .numItems = sizeof(menu_chi2       )/sizeof(int16_t), .softkeyItem = menu_chi2        },
+  {.menuId = -MNU_NORML,       .numItems = sizeof(menu_Norml      )/sizeof(int16_t), .softkeyItem = menu_Norml       },
+  {.menuId = -MNU_LGNRM,       .numItems = sizeof(menu_LgNrm      )/sizeof(int16_t), .softkeyItem = menu_LgNrm       },
+  {.menuId = -MNU_CAUCH,       .numItems = sizeof(menu_Cauch      )/sizeof(int16_t), .softkeyItem = menu_Cauch       },
+  {.menuId = -MNU_EXPON,       .numItems = sizeof(menu_Expon      )/sizeof(int16_t), .softkeyItem = menu_Expon       },
+  {.menuId = -MNU_LOGIS,       .numItems = sizeof(menu_Logis      )/sizeof(int16_t), .softkeyItem = menu_Logis       },
+  {.menuId = -MNU_WEIBL,       .numItems = sizeof(menu_Weibl      )/sizeof(int16_t), .softkeyItem = menu_Weibl       },
+  {.menuId = -MNU_BINOM,       .numItems = sizeof(menu_Binom      )/sizeof(int16_t), .softkeyItem = menu_Binom       },
+  {.menuId = -MNU_GEOM,        .numItems = sizeof(menu_Geom       )/sizeof(int16_t), .softkeyItem = menu_Geom        },
+  {.menuId = -MNU_HYPER,       .numItems = sizeof(menu_Hyper      )/sizeof(int16_t), .softkeyItem = menu_Hyper       },
+  {.menuId = -MNU_NBIN,        .numItems = sizeof(menu_Nbin       )/sizeof(int16_t), .softkeyItem = menu_Nbin        },
+  {.menuId = -MNU_POISS,       .numItems = sizeof(menu_Poiss      )/sizeof(int16_t), .softkeyItem = menu_Poiss       },
+  {.menuId = -MNU_PFN,         .numItems = sizeof(menu_PFN        )/sizeof(int16_t), .softkeyItem = menu_PFN         },
+  {.menuId = -MNU_PFN2,        .numItems = sizeof(menu_PFN2       )/sizeof(int16_t), .softkeyItem = menu_PFN2        },
+  {.menuId = -MNU_STAT,        .numItems = sizeof(menu_STAT       )/sizeof(int16_t), .softkeyItem = menu_STAT        },
+  {.menuId = -MNU_SUMS,        .numItems = sizeof(menu_SUMS       )/sizeof(int16_t), .softkeyItem = menu_SUMS        },
+  {.menuId = -MNU_STK,         .numItems = sizeof(menu_STK        )/sizeof(int16_t), .softkeyItem = menu_STK         },
+  {.menuId = -MNU_TEST,        .numItems = sizeof(menu_TEST       )/sizeof(int16_t), .softkeyItem = menu_TEST        },
+  {.menuId = -MNU_XFN,         .numItems = sizeof(menu_XFN        )/sizeof(int16_t), .softkeyItem = menu_XFN         },
+  {.menuId = -MNU_ORTHOG,      .numItems = sizeof(menu_Orthog     )/sizeof(int16_t), .softkeyItem = menu_Orthog      },
+  {.menuId = -MNU_ALPHAINTL,   .numItems = sizeof(menu_alpha_INTL )/sizeof(int16_t), .softkeyItem = menu_alpha_INTL  },
+  {.menuId = -MNU_ALPHAintl,   .numItems = sizeof(menu_alpha_intl )/sizeof(int16_t), .softkeyItem = menu_alpha_intl  },
+  {.menuId = -MNU_CATALOG,     .numItems = sizeof(menu_CATALOG    )/sizeof(int16_t), .softkeyItem = menu_CATALOG     },
+  {.menuId = -MNU_DIGITS,      .numItems = sizeof(menu_DIGITS     )/sizeof(int16_t), .softkeyItem = menu_DIGITS      },
+  {.menuId = -MNU_CHARS,       .numItems = sizeof(menu_CHARS      )/sizeof(int16_t), .softkeyItem = menu_CHARS       },
+  {.menuId = -MNU_PROGS,       .numItems = sizeof(menu_PROGS      )/sizeof(int16_t), .softkeyItem = menu_PROGS       },
+  {.menuId = -MNU_VARS,        .numItems = sizeof(menu_VARS       )/sizeof(int16_t), .softkeyItem = menu_VARS        },
+  {.menuId = -MNU_A_Z,         .numItems = sizeof(menu_A_Z        )/sizeof(int16_t), .softkeyItem = menu_A_Z         },
+  {.menuId = -MNU_a_z,         .numItems = sizeof(menu_a_z        )/sizeof(int16_t), .softkeyItem = menu_a_z         },
+  {.menuId = -MNU_ALPHA_OMEGA, .numItems = sizeof(menu_ALPHA_OMEGA)/sizeof(int16_t), .softkeyItem = menu_ALPHA_OMEGA },
+  {.menuId = -MNU_alpha_omega, .numItems = sizeof(menu_alpha_omega)/sizeof(int16_t), .softkeyItem = menu_alpha_omega },
+  {.menuId = -MNU_FCNS,        .numItems = sizeof(menu_FCNS       )/sizeof(int16_t), .softkeyItem = menu_FCNS        },
+  {.menuId = -MNU_MENUS,       .numItems = sizeof(menu_MENUS      )/sizeof(int16_t), .softkeyItem = menu_MENUS       },
+  {.menuId = -MNU_MATRS,       .numItems = sizeof(menu_MATRS      )/sizeof(int16_t), .softkeyItem = menu_MATRS       },
+  {.menuId = -MNU_STRING,      .numItems = sizeof(menu_STRING     )/sizeof(int16_t), .softkeyItem = menu_STRING      },
+  {.menuId = -MNU_RAM,         .numItems = sizeof(menu_RAM        )/sizeof(int16_t), .softkeyItem = menu_RAM         },
+  {.menuId = -MNU_FLASH,       .numItems = sizeof(menu_FLASH      )/sizeof(int16_t), .softkeyItem = menu_FLASH       },
+  {.menuId = -MNU_DATES,       .numItems = sizeof(menu_DATES      )/sizeof(int16_t), .softkeyItem = menu_DATES       },
+  {.menuId = -MNU_TIMES,       .numItems = sizeof(menu_TIMES      )/sizeof(int16_t), .softkeyItem = menu_TIMES       },
+  {.menuId = -MNU_ANGLES,      .numItems = sizeof(menu_ANGLES     )/sizeof(int16_t), .softkeyItem = menu_ANGLES      },
+  {.menuId = -MNU_FINTS,       .numItems = sizeof(menu_FINTS      )/sizeof(int16_t), .softkeyItem = menu_FINTS       },
+  {.menuId = -MNU_IINTS,       .numItems = sizeof(menu_IINTS      )/sizeof(int16_t), .softkeyItem = menu_IINTS       },
+  {.menuId = -MNU_ALPHAMATH,   .numItems = sizeof(menu_alphaMATH  )/sizeof(int16_t), .softkeyItem = menu_alphaMATH   },
+  {.menuId = -MNU_ALPHADOT,    .numItems = sizeof(menu_alphaDot   )/sizeof(int16_t), .softkeyItem = menu_alphaDot    },
+  {.menuId = -MNU_REALS,       .numItems = sizeof(menu_REALS      )/sizeof(int16_t), .softkeyItem = menu_REALS       },
+  {.menuId = -MNU_ALPHAFN,     .numItems = sizeof(menu_alphaFN    )/sizeof(int16_t), .softkeyItem = menu_alphaFN     },
+  {.menuId = -MNU_CPXS,        .numItems = sizeof(menu_CPXS       )/sizeof(int16_t), .softkeyItem = menu_CPXS        },
+  {.menuId = -MNU_ANGLECONV,   .numItems = sizeof(menu_AngleConv  )/sizeof(int16_t), .softkeyItem = menu_AngleConv   },
+  {.menuId = -MNU_UNITCONV,    .numItems = sizeof(menu_UnitConv   )/sizeof(int16_t), .softkeyItem = menu_UnitConv    },
+  {.menuId = -MNU_CONVE,       .numItems = sizeof(menu_ConvE      )/sizeof(int16_t), .softkeyItem = menu_ConvE       },
+  {.menuId = -MNU_CONVP,       .numItems = sizeof(menu_ConvP      )/sizeof(int16_t), .softkeyItem = menu_ConvP       },
+  {.menuId = -MNU_CONVFP,      .numItems = sizeof(menu_ConvFP     )/sizeof(int16_t), .softkeyItem = menu_ConvFP      },
+  {.menuId = -MNU_CONVM,       .numItems = sizeof(menu_ConvM      )/sizeof(int16_t), .softkeyItem = menu_ConvM       },
+  {.menuId = -MNU_CONVX,       .numItems = sizeof(menu_ConvX      )/sizeof(int16_t), .softkeyItem = menu_ConvX       },
+  {.menuId = -MNU_CONVV,       .numItems = sizeof(menu_ConvV      )/sizeof(int16_t), .softkeyItem = menu_ConvV       },
+  {.menuId = -MNU_CONVA,       .numItems = sizeof(menu_ConvA      )/sizeof(int16_t), .softkeyItem = menu_ConvA       },
+  {.menuId = -MNU_CNST,        .numItems = sizeof(menu_CNST       )/sizeof(int16_t), .softkeyItem = menu_CNST        },
+  {.menuId = -MNU_IO,          .numItems = sizeof(menu_IO         )/sizeof(int16_t), .softkeyItem = menu_IO          },
+  {.menuId = -MNU_TAM,         .numItems = sizeof(menu_Tam        )/sizeof(int16_t), .softkeyItem = menu_Tam         },
+  {.menuId = -MNU_TAMCMP,      .numItems = sizeof(menu_TamCmp     )/sizeof(int16_t), .softkeyItem = menu_TamCmp      },
+  {.menuId = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
+  {.menuId = -MNU_ASN_N,       .numItems = sizeof(menu_ASN_N      )/sizeof(int16_t), .softkeyItem = menu_ASN_N       },  //JM USER NORMAL
+  {.menuId = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
+  {.menuId = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME
+  {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
+  {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM HOME
+  {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
+  {.menuId =  0,               .numItems = 0,                                          .softkeyItem = NULL             }
 };
 
 
@@ -658,34 +664,34 @@ const softmenu_t softmenu[] = {
  * \brief Displays one softkey
  *
  * \param[in] label const char*     Text to display
- * \param[in] xsk int16_t           x location of softkey: from 0 (left) to 5 (right)
- * \param[in] ysk int16_t           y location of softkey: from 0 (bottom) to 2 (top)
+ * \param[in] xSoftkey int16_t      x location of softkey: from 0 (left) to 5 (right)
+ * \param[in] ySoftKey int16_t      y location of softkey: from 0 (bottom) to 2 (top)
  * \param[in] videoMode videoMode_t Video mode normal or reverse
  * \param[in] topLineDotted bool_t  Is the item's top line dotted
  * \param[in] topLine bool_t        Draw a top line
  * \param[in] bottomLine bool_t     Draw a bottom line
  * \return void
  ***********************************************/
-void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoMode, bool_t topLineDotted, bool_t topLine, bool_t bottomLine) {
+void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine) {
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
 
-  if(0 <= xsk && xsk <= 5) {
-    x1 = 67*xsk - 1;
+  if(0 <= xSoftkey && xSoftkey <= 5) {
+    x1 = 67 * xSoftkey - 1;
     x2 = x1 + 67;
   }
   else {
-    sprintf(errorMessage, "In function showSoftkey: xsk=%" FMT16S " must be from 0 to 5" , xsk);
+    sprintf(errorMessage, "In function showSoftkey: xSoftkey=%" FMT16S " must be from 0 to 5" , xSoftkey);
     displayBugScreen(errorMessage);
     return;
   }
 
-  if(0 <= ysk && ysk <= 2) {
-    y1 = 217 - SOFTMENU_HEIGHT*ysk;
+  if(0 <= ySoftKey && ySoftKey <= 2) {
+    y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
     y2 = y1 + SOFTMENU_HEIGHT;
   }
   else {
-    sprintf(errorMessage, "In function showSoftkey: ysk=%" FMT16S " but must be from 0 to 2!" , ysk);
+    sprintf(errorMessage, "In function showSoftkey: ySoftKey=%" FMT16S " but must be from 0 to 2!" , ySoftKey);
     displayBugScreen(errorMessage);
     return;
   }
@@ -693,29 +699,16 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
   // Draw the frame
   //   Top line
   for(x=max(0,x1); x<min(x2,SCREEN_WIDTH); x++) {
-    if(topLineDotted) {
-      if(x%8 < 4) {
+    if(videoMode == vmNormal) {
+      if(topLine) {
         setPixel(x, y1);
-      }
-      else {
-        clearPixel(x, y1);
       }
     }
     else {
-      if(videoMode == vmNormal) {
-        if(topLine) {
-          setPixel(x, y1);
-        }
-        //else {
-        //  clearPixel(x, y1);
-        //}
-      }
-      else {
-        clearPixel(x, y1);
-      }
+      clearPixel(x, y1);
     }
   }
-
+  
   //   Bottom line
   if(y1 + SOFTMENU_HEIGHT <= min(y2, 239)) {
     y = y1 + SOFTMENU_HEIGHT;
@@ -724,9 +717,6 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
         if(bottomLine) {
           setPixel(x, y);
         }
-        //else {
-        //  clearPixel(x, y);
-        //}
       }
       else {
         clearPixel(x, y);
@@ -783,44 +773,44 @@ void showSoftkey(const char *label, int16_t xsk, int16_t ysk, videoMode_t videoM
  * \return void
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
-  int16_t m, x, y, menu, yDotted=0, currentRow, item;
-  const int16_t *softkeyRow;
+  int16_t m, x, y, menu, yDotted=0, currentFirstItem, item;
   bool_t  dottedTopLine;
 
   if(softmenuStackPointer > 0) {
     clearScreen(false, false, true);
 
-    m          = softmenuStack[softmenuStackPointer-1].softmenu;
-    currentRow = softmenuStack[softmenuStackPointer-1].row;
+    m                = softmenuStack[softmenuStackPointer-1].softmenu;
+    currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 
-    if(softmenu[m].numRows <= 3) {
+    if(softmenu[m].numItems <= 18) {
       dottedTopLine = false;
     }
     else {
       dottedTopLine = true;
-      yDotted = min(3, softmenu[m].numRows - currentRow) - 1;
+      yDotted = min(3, softmenu[m].numItems/6 - currentFirstItem/6) - 1;
 
-      if(   softmenu[m].softkeyRow[6*(currentRow+yDotted)  ]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+1]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+2]==0
-         && softmenu[m].softkeyRow[6*(currentRow+yDotted)+3]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+4]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+5]==0) {
+      if(   softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)  ]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+1]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+2]==0
+         && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+3]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+4]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+5]==0) {
         yDotted--;
       }
 
       if(   yDotted >= 0
-         && softmenu[m].softkeyRow[6*(currentRow+yDotted)  ]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+1]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+2]==0
-         && softmenu[m].softkeyRow[6*(currentRow+yDotted)+3]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+4]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+5]==0) {
+         && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)  ]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+1]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+2]==0
+         && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+3]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+4]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+5]==0) {
         yDotted--;
       }
 
       if(   yDotted >= 0
-         && softmenu[m].softkeyRow[6*(currentRow+yDotted)  ]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+1]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+2]==0
-         && softmenu[m].softkeyRow[6*(currentRow+yDotted)+3]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+4]==0 && softmenu[m].softkeyRow[6*(currentRow+yDotted)+5]==0) {
+         && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)  ]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+1]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+2]==0
+         && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+3]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+4]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+5]==0) {
        yDotted--;
       }
     }
 
-    for(y=currentRow, softkeyRow=(softmenu[m].softkeyRow)+currentRow*6; y<min(currentRow+3, softmenu[m].numRows); y++, softkeyRow+=6) {
+    const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
+    for(y=currentFirstItem/6; y<min(currentFirstItem/6+3, softmenu[m].numItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
-        item = softkeyRow[x];
+        item = softkeyItem[x];
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {
@@ -835,30 +825,34 @@ void showSoftmenuCurrentPart(void) {
             displayBugScreen(errorMessage);
           }
           else {
-            if(softmenu[menu].softkeyRow == NULL) {
+            if(softmenu[menu].softkeyItem == NULL) {
               sprintf(errorMessage, "In function showSoftmenuCurrentPart: Softmenu ID %" FMT16S " must be generated!", item);
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemPrinted, x, y-currentRow, vmReverse, dottedTopLine && y-currentRow == yDotted, true, true);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemPrinted, x, y-currentFirstItem/6, vmReverse, true, true);
             }
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemPrinted, x, y-currentRow, vmNormal, dottedTopLine && y-currentRow == yDotted, true, true);
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemPrinted, x, y-currentFirstItem/6, vmNormal, true, true);
         }
         else if(item > 0 && indexOfItems[item%10000].itemPrinted[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
-          showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentRow, vmNormal, dottedTopLine && y-currentRow == yDotted, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+          if(softmenu[m].menuId == -MNU_FCNS) {
+            showSoftkey(indexOfItems[item%10000].itemName,    x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+          }
+          else {
+            showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+          }
         }
       }
     }
 
-    // TODO may be we can omit the 5th parameter of function showSoftkey if the dotted line remains going thru the full widh of the display
     if(0 <= yDotted && yDotted <= 2) {
-      yDotted = 217 - SOFTMENU_HEIGHT*yDotted;
+      yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
 
       if(dottedTopLine) {
         for(x=0; x<SCREEN_WIDTH; x++) {
@@ -885,7 +879,7 @@ void showSoftmenuCurrentPart(void) {
  ***********************************************/
 void initSoftmenuStack(int16_t softmenu) {
   softmenuStack[0].softmenu = softmenu;
-  softmenuStack[0].row      = 0;
+  softmenuStack[0].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : 0);
   softmenuStackPointer = 1;
   showSoftmenuCurrentPart();
 }
@@ -902,7 +896,7 @@ void initSoftmenuStack(int16_t softmenu) {
 void pushSoftmenu(int16_t softmenu) {
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
     softmenuStack[softmenuStackPointer].softmenu = softmenu;
-    softmenuStack[softmenuStackPointer].row      = 0;
+    softmenuStack[softmenuStackPointer].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : 0);
     softmenuStackPointer++;
     showSoftmenuCurrentPart();
   }
@@ -924,6 +918,7 @@ void pushSoftmenu(int16_t softmenu) {
  ***********************************************/
 void popSoftmenu(void) {
   if(softmenuStackPointer > 0) {
+    alphaSelectionMenu = ASM_NONE;
     softmenuStackPointer--;
     if(softmenuStackPointer > 0) {
       showSoftmenuCurrentPart();
@@ -951,6 +946,10 @@ void popSoftmenu(void) {
  ***********************************************/
 void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   int16_t m;
+
+       if(id == -MNU_FCNS) alphaSelectionMenu = ASM_FCNS;
+  else if(id == -MNU_CNST) alphaSelectionMenu = ASM_CNST;
+  else                     alphaSelectionMenu = ASM_NONE;
 
   if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
     clearScreen(false, false, true);

@@ -191,7 +191,6 @@ void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegi
   if(sign) {
     real16SetNegativeSign(REGISTER_REAL16_DATA(destination));
   }
-//printf("destination = "); printRegisterToConsole(destination); printf("\n");
 }
 
 

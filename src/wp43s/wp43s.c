@@ -476,7 +476,7 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
-  bool_t wp43sKbdLayout;
+  //bool_t wp43sKbdLayout;                                      //dr ??
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;

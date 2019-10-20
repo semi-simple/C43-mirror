@@ -63,6 +63,7 @@ void showShiftState(void) {
 
 
 
+
 /********************************************//**
  * \brief Resets shift keys status and clears the
  * corresponding area on the screen
@@ -160,7 +161,7 @@ void btnFnClicked(void *w, void *data) {
     if(softmenuStackPointer > 0) {
       if(shiftF) {
         resetShiftState();
-        executeFunction(fn, 6);
+        executeFunction(fn,  6);
       }
       else if(shiftG) {
         resetShiftState();
@@ -493,7 +494,7 @@ void btnPressed(void *notUsed, void *data) {
         refreshStack();
 
         if(eRPN == false) {                                                     //JM eRPN modification. Ensure DUP always set SL
-           STACK_LIFT_DISABLE;
+        STACK_LIFT_DISABLE;
         }                                                                       //JM eRPN modification
       }
 

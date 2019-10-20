@@ -684,14 +684,14 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         }
 
         if(SigFigMode == 0) {                                                                 //JM SIGFIG: Not required to pad more zerooes, as all sigfig zeroes are included above
-          // Zeros after last significant digit
-          for(i=1; i<=(int16_t)displayFormatDigits+exponent+1-numDigits; i++, digitCount--) {
-            if(groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-              memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
-              charIndex += 2;
-            }
-            displayString[charIndex++] = '0';
+        // Zeros after last significant digit
+        for(i=1; i<=(int16_t)displayFormatDigits+exponent+1-numDigits; i++, digitCount--) {
+          if(groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
+            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            charIndex += 2;
           }
+          displayString[charIndex++] = '0';
+        }
         }                                                                                     //JM SIGFIG ^
       }
       else { // zero or positive exponent
@@ -704,13 +704,13 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
           }
 
           if((SigFigMode == 0) || (SigFigTmp == 0) || (SigFigTmp == 1 && SigFigCnt+1 <= SigFig)) {  //JM SIGFIG: Put '0' unless number of sigfig digits already reached
-              // Significant digit or zero
-            if(digitPointer <= lastDigit) {
-              displayString[charIndex++] = '0' + bcd[digitPointer];
-            }
-            else {
-              displayString[charIndex++] = '0';
-            }
+          // Significant digit or zero
+          if(digitPointer <= lastDigit) {
+            displayString[charIndex++] = '0' + bcd[digitPointer];
+          }
+          else {
+            displayString[charIndex++] = '0';
+          }
             SigFigCnt++;                                                                       //JM SIGFIG
           }                                                                                    //JM SIGFIG
 
@@ -903,7 +903,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
 
     if(exponent != 0) {
       if(UNITDisplay == false) {                                                        //JM UNIT
-         exponentToDisplayString(exponent, displayString+charIndex, false); 
+      exponentToDisplayString(exponent, displayString+charIndex, false);
       }                                                                                 //JM UNIT
       else {                                                                            //JM UNIT
          exponentToUnitDisplayString(exponent, displayString+charIndex, false);         //JM UNIT
@@ -1136,7 +1136,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     u = numer % 10;
     numer /= 10;
     endingZero++;
-    memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt); 
+    memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 
     if(u <= 1) {
 
@@ -1189,7 +1189,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     displayString[insertAt + 1] += u;
   } while(denom != 0);
 
-    // Comparison sign
+  // Comparison sign
        if(lessEqualGreater == -1) strcat(displayString, NUM_SPACE_PUNCTUATION "<" NUM_SPACE_HAIR);
   else if(lessEqualGreater ==  0) strcat(displayString, NUM_SPACE_PUNCTUATION "=" NUM_SPACE_HAIR);
   else if(lessEqualGreater ==  1) strcat(displayString, NUM_SPACE_PUNCTUATION ">" NUM_SPACE_HAIR);

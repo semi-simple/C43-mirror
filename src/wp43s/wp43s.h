@@ -123,7 +123,7 @@
 #include <stdint.h>
 #include <gmp.h>
 #if (__linux__ == 1)
-#include <math.h>
+  #include <math.h>
 #endif
 
 #ifdef __APPLE__

@@ -384,7 +384,7 @@ void setupDefaults(void) {
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 3;
 
-#ifdef TESTSUITE_BUILD
+  #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
   #else
     calcModeNormal();
@@ -486,9 +486,9 @@ void program_main(void) {
   //program_init();
 
   lcd_clear_buf();
-/*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");
+/*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");  //dr ??
   lcd_refresh();
-  while (key != 33 && key != 37) {                  //dr ??
+  while (key != 33 && key != 37) {
     key = key_pop();
     while(key == -1) {
       sys_sleep();
@@ -496,7 +496,7 @@ void program_main(void) {
     }
   }
 
-  wp43sKbdLayout = (key == 37); // bottom left key  //dr ??
+  wp43sKbdLayout = (key == 37); // bottom left key
   key = 0;
 
   lcd_clear_buf();*/

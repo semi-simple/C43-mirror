@@ -850,12 +850,12 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
     needleLg = strlen(needle);
     needleLocation = strstr(haystack, needle);
     tmpString = malloc(strlen(needleLocation + needleLg) + 1);
-#ifdef PC_BUILD
-    if(tmpString == NULL) {
-      showInfoDialog("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
-      exit(1);
-    }
-#endif
+    #ifdef PC_BUILD
+      if(tmpString == NULL) {
+        showInfoDialog("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
+        exit(1);
+      }
+    #endif
 
     strcpy(tmpString, needleLocation + needleLg);
     *strstr(haystack, needle) = 0;

@@ -654,7 +654,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM HOME
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
-  {.menuId =  0,               .numItems = 0,                                          .softkeyItem = NULL             }
+  {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
 
 
@@ -708,7 +708,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
       clearPixel(x, y1);
     }
   }
-  
+
   //   Bottom line
   if(y1 + SOFTMENU_HEIGHT <= min(y2, 239)) {
     y = y1 + SOFTMENU_HEIGHT;

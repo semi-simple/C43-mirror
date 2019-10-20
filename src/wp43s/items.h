@@ -157,7 +157,7 @@
 #define ITM_DROPY                      128
 #define ITM_DSE                        129
 #define ITM_DSL                        130
-#define ITM_DSP                        131
+#define ITM_0131                       131
 #define ITM_DSTACK                     132
 #define ITM_DSZ                        133
 #define ITM_DMS                        134

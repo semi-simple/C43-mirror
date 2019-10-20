@@ -27,7 +27,7 @@ const calcKey_t kbd_std[37] = {
  #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. OPTIMAL
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
- {22,   ITM_10x,          ITM_YX,          ITM_toINT,    ITM_NULL,       CHR_B,             ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM
+ {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    ITM_NULL,       CHR_B,             ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM
  {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_DMS,      ITM_NULL,       CHR_C,             ITM_NULL,        CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
@@ -76,7 +76,7 @@ const calcKey_t kbd_std[37] = {
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,            ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
- {22,   ITM_10x,          ITM_YX,          ITM_toINT,    ITM_NULL,       CHR_B,            ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM
+ {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    ITM_NULL,       CHR_B,            ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM
  {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_DMS,      ITM_NULL,       CHR_C,            ITM_NULL,        CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,            ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,            ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
@@ -123,6 +123,7 @@ const calcKey_t kbd_std[37] = {
 
 
 };
+
 
 
 void fnUserMode(uint16_t unusedParamButMandatory) {

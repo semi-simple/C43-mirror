@@ -672,7 +672,7 @@ const softmenu_t softmenu[] = {
  * \param[in] bottomLine bool_t     Draw a bottom line
  * \return void
  ***********************************************/
-void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine) {
+void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb) {
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
 
@@ -760,6 +760,21 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
+  //vv dr - RadioButton, CheckBox
+  if(showCb >= 0) {
+    for(y=y2-16; y<min(y2-7,SCREEN_HEIGHT); y++) {
+      for(x=x2-12; x<min(x2-3,SCREEN_WIDTH); x++) {
+        if(videoMode == vmNormal && showCb == 1) {
+          setPixel(x, y);
+        }
+        else {
+          clearPixel(x, y);
+        }
+      }
+    }
+  }
+  //^^
+
   w = stringWidth(label, &standardFont, false, false);
   showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
 }
@@ -830,22 +845,23 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemPrinted, x, y-currentFirstItem/6, vmReverse, true, true);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemPrinted, x, y-currentFirstItem/6, vmReverse, true, true, -1);
             }
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemPrinted, x, y-currentFirstItem/6, vmNormal, true, true);
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemPrinted, x, y-currentFirstItem/6, vmNormal, true, true, -1);
         }
         else if(item > 0 && indexOfItems[item%10000].itemPrinted[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemName,    x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+            showSoftkey(indexOfItems[item%10000].itemName,    x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, -1);
           }
           else {
-            showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+            int8_t showCb = fnCbIsSet(item);               //dr
+            showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
           }
         }
       }

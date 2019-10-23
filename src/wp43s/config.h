@@ -48,3 +48,27 @@ void     fnClAll               (uint16_t confirmation);
 void     fnClPAll              (uint16_t confirmation);
 void     fnClSigma             (uint16_t unusedParamButMandatory);
 void     backToSystem          (uint16_t unusedParamButMandatory);
+int8_t   fnCbIsSet             (int16_t item);              //vv dr build cb-/radion-buttons
+void     fnRefreshIntegerMode  (uint16_t mode);
+void     fnRefreshLeadingZeros (uint16_t dlz);
+void     fnRefreshAngularMode  (uint16_t am);
+void     fnRefreshComplexUnit  (uint16_t cu);
+void     fnRefreshComplexMode  (uint16_t cm);
+void     fnRestore             (void);                      //^^
+
+/********************************************//**
+ * \typedef radiocb_t
+ * \brief Structure keeping the information for one item
+ ***********************************************/
+#define RB_NO    0
+#define RB_IM    1 // IntegerMode
+#define RB_LZ    2 // LeadingZeros
+#define RB_AM    3 // AngularMode
+#define RB_CU    4 // ComplexUnit
+#define RB_CM    5 // ComplexMode
+typedef struct {
+  uint16_t itemNr;            ///<
+  uint16_t param;             ///< 1st parameter to the above function
+  bool_t   state;             ///<
+  char     radioButton;       ///< Menu of RADIO in which the item is located: see #define RB_*
+} radiocb_t;

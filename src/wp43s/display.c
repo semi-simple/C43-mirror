@@ -28,6 +28,9 @@
  ***********************************************/
 void fnDisplayOvr(uint16_t displayOvr) {
   displayModeOverride = displayOvr;
+
+  fnRefreshRadioState(RB_DO, displayOvr);                                       //dr
+
   refreshStack();
 }
 
@@ -41,6 +44,9 @@ void fnDisplayOvr(uint16_t displayOvr) {
  ***********************************************/
 void fnProductSign(uint16_t ps) {
   productSign = ps;
+
+  fnRefreshRadioState(RB_PS, ps);                                               //dr
+
   showFracMode();
   refreshStack();
 }
@@ -56,6 +62,9 @@ void fnProductSign(uint16_t ps) {
  ***********************************************/
 void fnRadixMark(uint16_t rm) {
   radixMark = rm;
+
+  fnRefreshRadioState(RB_RM, rm);                                               //dr
+
   refreshStack();
 }
 

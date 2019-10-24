@@ -29,6 +29,7 @@
 void fnTimeFormat(uint16_t tf) {
   timeFormat = tf;
   oldTime[0] = 0;
+  fnRefreshRadioState(RB_TF, tf);                                               //dr
 }
 
 /********************************************//**
@@ -40,6 +41,7 @@ void fnTimeFormat(uint16_t tf) {
 void fnDateFormat(uint16_t df) {
   dateFormat = df;
   oldTime[0] = 0;
+  fnRefreshRadioState(RB_DF, df);                                               //dr
 }
 
 /********************************************//**

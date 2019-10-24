@@ -21,9 +21,9 @@
 #include "wp43s.h"
 
 
-#define MAX_RADIO_CB_ITEMS 32                               //vv dr
+#define MAX_RADIO_CB_ITEMS 80                                                   //vv dr build RadioButton, CheckBox
 radiocb_t indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];
-uint16_t  cntOfRadioCbItems = 0;                            //^^
+uint16_t  cntOfRadioCbItems = 0;                                                //^^
 
 
 
@@ -144,7 +144,7 @@ void fnConfigUsa(uint16_t unusedParamButMandatory) {
 void fnIntegerMode(uint16_t mode) {
   shortIntegerMode = mode;
   
-  fnRefreshIntegerMode(mode);                               //dr
+  fnRefreshRadioState(RB_SIM, mode);                                            //dr
 
   showIntegerMode();
   refreshStack();
@@ -159,7 +159,7 @@ void fnIntegerMode(uint16_t mode) {
 void fnLeadingZeros(uint16_t dlz) {
   displayLeadingZeros = dlz;
 
-  fnRefreshLeadingZeros(dlz);                               //dr
+  fnRefreshRadioState(RB_BLZ, dlz);                                             //dr
 
   refreshStack();
 }
@@ -439,7 +439,7 @@ void fnRoundingMode(uint16_t RM) {
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
 
-  fnRefreshAngularMode(am);                                 //dr
+  fnRefreshRadioState(RB_AM, am);                                               //dr
 
   showAngularMode();
   refreshStack();
@@ -466,7 +466,7 @@ void setConfirmationMode(void (*func)(uint16_t)) {
 void fnComplexUnit(uint16_t cu) {
   complexUnit = cu;
 
-  fnRefreshComplexUnit(cu);                                 //dr
+  fnRefreshRadioState(RB_CU, cu);                                               //dr
 
   refreshStack();
 }
@@ -479,6 +479,8 @@ void fnComplexUnit(uint16_t cu) {
  ***********************************************/
 void fnComplexResult(uint16_t complexResult) {
   complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
+
+  fnRefreshRadioState(RB_BCR, complexResult);                                   //dr
 }
 
 /********************************************//**
@@ -490,7 +492,7 @@ void fnComplexResult(uint16_t complexResult) {
 void fnComplexMode(uint16_t cm) {
   complexMode = cm;
 
-  fnRefreshComplexMode(cm);                                 //dr
+  fnRefreshRadioState(RB_CM, cm);                                               //dr
 
   showComplexMode();
   refreshStack();
@@ -676,15 +678,15 @@ void backToSystem(uint16_t unusedParamButMandatory) {
 
 
 
-//vv dr
+//vv dr build RadioButton, CheckBox
 int8_t fnCbIsSet(int16_t item)
 {
   int8_t result = -1;
   uint16_t itemNr = max(item, -item);
 
-  for(uint16_t j=0; j < cntOfRadioCbItems; j++) {
-    if(indexOfRadioCbItems[j].itemNr == itemNr) {
-      if (indexOfRadioCbItems[j].state) {
+  for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
+    if(indexOfRadioCbItems[i].itemNr == itemNr) {
+      if (indexOfRadioCbItems[i].state) {
         result = 1;
       }
       else {
@@ -698,63 +700,18 @@ int8_t fnCbIsSet(int16_t item)
 
 
 
-void fnRefreshIntegerMode(uint16_t mode) {
-  for(uint16_t j=0; j < cntOfRadioCbItems; j++) {
-    if(indexOfRadioCbItems[j].radioButton == RB_IM) {
-      if(indexOfRadioCbItems[j].param == mode) {
-        indexOfRadioCbItems[j].state = true;
+void fnRefreshRadioState(char rb, uint16_t mode)
+{
+  for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
+    if(indexOfRadioCbItems[i].radioButton == rb) {
+      bool_t cb =indexOfRadioCbItems[i].param == mode;
+      if(indexOfRadioCbItems[i].state != cb) {
+        indexOfRadioCbItems[i].state = cb;
+#ifndef TESTSUITE_BUILD
+        showSoftmenuCurrentPart();
+#endif
       }
-      else {
-        indexOfRadioCbItems[j].state = false;
-      }
-    }
-  }
-}
-void fnRefreshLeadingZeros(uint16_t dlz) {
-  for(uint16_t j=0; j < cntOfRadioCbItems; j++) {
-    if(indexOfRadioCbItems[j].radioButton == RB_LZ) {
-      if(indexOfRadioCbItems[j].param == dlz) {
-        indexOfRadioCbItems[j].state = true;
-      }
-      else {
-        indexOfRadioCbItems[j].state = false;
-      }
-    }
-  }
-}
-void fnRefreshAngularMode(uint16_t am) {
-  for(uint16_t j=0; j < cntOfRadioCbItems; j++) {
-    if(indexOfRadioCbItems[j].radioButton == RB_AM) {
-      if(indexOfRadioCbItems[j].param == am) {
-        indexOfRadioCbItems[j].state = true;
-      }
-      else {
-        indexOfRadioCbItems[j].state = false;
-      }
-    }
-  }
-}
-void fnRefreshComplexUnit(uint16_t cu) {
-  for(uint16_t j=0; j < cntOfRadioCbItems; j++) {
-    if(indexOfRadioCbItems[j].radioButton == RB_CU) {
-      if(indexOfRadioCbItems[j].param == cu) {
-        indexOfRadioCbItems[j].state = true;
-      }
-      else {
-        indexOfRadioCbItems[j].state = false;
-      }
-    }
-  }
-}
-void fnRefreshComplexMode(uint16_t cm) {
-  for(uint16_t j=0; j < cntOfRadioCbItems; j++) {
-    if(indexOfRadioCbItems[j].radioButton == RB_CM) {
-      if(indexOfRadioCbItems[j].param == cm) {
-        indexOfRadioCbItems[j].state = true;
-      }
-      else {
-        indexOfRadioCbItems[j].state = false;
-      }
+      //indexOfRadioCbItems[i].state = indexOfRadioCbItems[i].param == mode;
     }
   }
 }
@@ -762,64 +719,174 @@ void fnRefreshComplexMode(uint16_t cm) {
 
 
 void fnRestore() {
-  uint16_t j=0;
-  for(uint16_t i=0; i < LAST_ITEM; i++) {
-    if(indexOfItems[i].func == fnIntegerMode) {
+  uint8_t i=0;
+  for(uint16_t k=0; k<LAST_ITEM; k++) {
+    if(indexOfItems[k].func == fnAngularMode) {
       radiocb_t rb;
-      rb.itemNr = i;
-      rb.param = indexOfItems[i].param;
-      rb.state = shortIntegerMode == rb.param;
-      rb.radioButton = RB_IM;
-      indexOfRadioCbItems[j] = rb;
-      if(j<MAX_RADIO_CB_ITEMS) {
-        j++;
-      }
-    }
-    else if(indexOfItems[i].func == fnLeadingZeros) {
-      radiocb_t rb;
-      rb.itemNr = i;
-      rb.param = indexOfItems[i].param;
-      rb.state = displayLeadingZeros == rb.param;
-      rb.radioButton = RB_LZ;
-      indexOfRadioCbItems[j] = rb;
-      if(j<MAX_RADIO_CB_ITEMS) {
-        j++;
-      }
-    }
-    else if(indexOfItems[i].func == fnAngularMode) {
-      radiocb_t rb;
-      rb.itemNr = i;
-      rb.param = indexOfItems[i].param;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
       rb.state = currentAngularMode == rb.param;
       rb.radioButton = RB_AM;
-      indexOfRadioCbItems[j] = rb;
-      if(j<MAX_RADIO_CB_ITEMS) {
-        j++;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
       }
     }
-    else if(indexOfItems[i].func == fnComplexUnit) {
+    else if(indexOfItems[k].func == fnComplexMode) {
       radiocb_t rb;
-      rb.itemNr = i;
-      rb.param = indexOfItems[i].param;
-      rb.state = complexUnit == rb.param;
-      rb.radioButton = RB_CU;
-      indexOfRadioCbItems[j] = rb;
-      if(j<MAX_RADIO_CB_ITEMS) {
-        j++;
-      }
-    }
-    else if(indexOfItems[i].func == fnComplexMode) {
-      radiocb_t rb;
-      rb.itemNr = i;
-      rb.param = indexOfItems[i].param;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
       rb.state = complexMode == rb.param;
       rb.radioButton = RB_CM;
-      indexOfRadioCbItems[j] = rb;
-      if(j<MAX_RADIO_CB_ITEMS) {
-        j++;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnComplexUnit) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = complexUnit == rb.param;
+      rb.radioButton = RB_CU;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnCurveFitting) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = displayLeadingZeros == rb.param;
+      rb.radioButton = RB_CF;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDateFormat) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = currentAngularMode == rb.param;
+      rb.radioButton = RB_DF;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDenMode) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = currentAngularMode == rb.param;
+      rb.radioButton = RB_DM;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDisplayOvr) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = currentAngularMode == rb.param;
+      rb.radioButton = RB_DO;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnFractionType) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = currentAngularMode == rb.param;
+      rb.radioButton = RB_FT;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnIntegerMode) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = shortIntegerMode == rb.param;
+      rb.radioButton = RB_SIM;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnProductSign) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = shortIntegerMode == rb.param;
+      rb.radioButton = RB_PS;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnRadixMark) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = currentAngularMode == rb.param;
+      rb.radioButton = RB_RM;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnStackSize) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = currentAngularMode == rb.param;
+      rb.radioButton = RB_SS;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnTimeFormat) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = displayLeadingZeros == rb.param;
+      rb.radioButton = RB_TF;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnComplexResult) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = displayLeadingZeros == rb.param;
+      rb.radioButton = RB_BCR;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnLeadingZeros) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = displayLeadingZeros == rb.param;
+      rb.radioButton = RB_BLZ;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
       }
     }
   }
-  cntOfRadioCbItems = j;
+  cntOfRadioCbItems = i;
 }
 //^^

@@ -197,7 +197,7 @@ void restoreCalc(void) {
   if (backup == NULL) {
     printf("Cannot restore calc's memory from file backup.bin! Performing RESET\n");
     fnReset(CONFIRMED);
-    fnRestore();                        //dr build cb-/radion-buttons
+    fnRestore();                                                                //dr build RadioButton, CheckBox
     return;
   }
 
@@ -212,7 +212,7 @@ void restoreCalc(void) {
     printf("ramSize        %6u           %6u\n", ramSize, RAM_SIZE);
 
     fnReset(CONFIRMED);
-    fnRestore();                        //dr build cb-/radion-buttons
+    fnRestore();                                                                //dr build RadioButton, CheckBox
     return;
   }
   else {
@@ -366,7 +366,7 @@ void restoreCalc(void) {
 
     fclose(backup);
     printf("End of calc's restoration\n");
-    fnRestore();                        //dr build cb-/radion-buttons
+    fnRestore();                                                                //dr build RadioButton, CheckBox
 
     #if (DEBUG_REGISTER_L == 1)
       //if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {

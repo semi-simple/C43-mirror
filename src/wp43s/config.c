@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 
-#define MAX_RADIO_CB_ITEMS 80                                                   //vv dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS 60                                                   //vv dr build RadioButton, CheckBox
 radiocb_t indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];
 uint16_t  cntOfRadioCbItems = 0;                                                //^^
 
@@ -704,7 +704,7 @@ void fnRefreshRadioState(char rb, uint16_t mode)
 {
   for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
     if(indexOfRadioCbItems[i].radioButton == rb) {
-      bool_t cb =indexOfRadioCbItems[i].param == mode;
+      bool_t cb = indexOfRadioCbItems[i].param == mode;
       if(indexOfRadioCbItems[i].state != cb) {
         indexOfRadioCbItems[i].state = cb;
 #ifndef TESTSUITE_BUILD
@@ -758,7 +758,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = displayLeadingZeros == rb.param;
+      rb.state = curveFitting == rb.param;
       rb.radioButton = RB_CF;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -769,7 +769,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = currentAngularMode == rb.param;
+      rb.state = dateFormat == rb.param;
       rb.radioButton = RB_DF;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -780,7 +780,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = currentAngularMode == rb.param;
+      rb.state = denominatorMode == rb.param;
       rb.radioButton = RB_DM;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -791,7 +791,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = currentAngularMode == rb.param;
+      rb.state = displayModeOverride == rb.param;
       rb.radioButton = RB_DO;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -802,7 +802,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = currentAngularMode == rb.param;
+      rb.state = fractionType == rb.param;
       rb.radioButton = RB_FT;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -824,7 +824,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = shortIntegerMode == rb.param;
+      rb.state = productSign == rb.param;
       rb.radioButton = RB_PS;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -835,7 +835,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = currentAngularMode == rb.param;
+      rb.state = radixMark == rb.param;
       rb.radioButton = RB_RM;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -846,7 +846,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = currentAngularMode == rb.param;
+      rb.state = stackSize == rb.param;
       rb.radioButton = RB_SS;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -857,7 +857,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = displayLeadingZeros == rb.param;
+      rb.state = timeFormat == rb.param;
       rb.radioButton = RB_TF;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -868,7 +868,7 @@ void fnRestore() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = displayLeadingZeros == rb.param;
+      rb.state = getFlag(FLAG_CPXRES) == rb.param;
       rb.radioButton = RB_BCR;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {

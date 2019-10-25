@@ -861,7 +861,7 @@ void showSoftmenuCurrentPart(void) {
           }
           else {
             int8_t showCb = fnCbIsSet(item%10000);                              //dr
-            showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
+            showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, 1 /*showCb*/ );  //JM TEST
           }
         }
       }

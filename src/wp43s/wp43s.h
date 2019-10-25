@@ -600,6 +600,9 @@ extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
 extern calcKey_t            kbd_usr[37];
+#define MAX_RADIO_CB_ITEMS 60                                                   //vv dr build RadioButton, CheckBox
+extern radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];
+extern uint16_t             cntOfRadioCbItems;                                  //^^
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
 extern uint16_t             row[100];

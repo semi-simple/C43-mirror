@@ -21,11 +21,6 @@
 #include "wp43s.h"
 
 
-#define MAX_RADIO_CB_ITEMS 60                                                   //vv dr build RadioButton, CheckBox
-radiocb_t indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];
-uint16_t  cntOfRadioCbItems = 0;                                                //^^
-
-
 
 /********************************************//**
  * \brief Sets the calc to meet Chinese standards
@@ -600,6 +595,8 @@ void fnReset(uint16_t confirmation) {
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
+    fnRebuildRadioState();                                                      //dr build RadioButton, CheckBox
+
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {
         popSoftmenu();
@@ -690,7 +687,7 @@ int8_t fnCbIsSet(int16_t item)
         result = 1;
       }
       else {
-        result =  0;
+        result = 0;
       }
     }
   }
@@ -718,7 +715,8 @@ void fnRefreshRadioState(char rb, uint16_t mode)
 
 
 
-void fnRestore() {
+void fnRebuildRadioState() {
+  cntOfRadioCbItems = 0;
   uint8_t i=0;
   for(uint16_t k=0; k<LAST_ITEM; k++) {
     if(indexOfItems[k].func == fnAngularMode) {

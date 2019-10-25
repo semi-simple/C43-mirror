@@ -128,63 +128,6 @@ void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
  ***********************************************/
 
 void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setting
-/*   if(What == 1) {                                                                                //dr to be removed
-    eRPN = !eRPN;                                           //JM eRPN
-    fnInfo(eRPN);                                           //JM eRPN
-  }
-  else if(What == 2) {
-    HOME3 = !HOME3;                                         //JM HOME.3
-    fnInfo(HOME3);                                          //JM HOME.3
-  }
-  else if(What == 3) {
-    ShiftTimoutMode = !ShiftTimoutMode;                     //JM SHIFT TIM CCL
-    fnInfo(ShiftTimoutMode);                                //JM SHIFT TIM CCL
-  }
-  else if(What == 4) {
-    SH_BASE_HOME = !SH_BASE_HOME;                           //JM SHIFT TIM CCL
-    fnInfo(SH_BASE_HOME);                                   //JM SHIFT TIM CCL
-  }
-  else if(What == 5) {
-    SH_BASE_MYMENU = !SH_BASE_MYMENU;                       //JM SHIFT TIM CCL
-    fnInfo(SH_BASE_MYMENU);                                 //JM SHIFT TIM CCL
-  }
-  else if(What == 6) {
-    SH_BASE_AHOME = !SH_BASE_AHOME;                         //JM SHIFT TIM CCL
-    fnInfo(SH_BASE_AHOME);                                  //JM SHIFT TIM CCL
-  }
-  else if(What == 7) {
-    SH_BASE_MYA = !SH_BASE_MYA;                             //JM SHIFT TIM CCL
-    fnInfo(SH_BASE_MYA);                                    //JM SHIFT TIM CCL
-  }
-  else if(What == 8) {
-    Home3TimerMode = !Home3TimerMode;                       //JM SHIFT HOME.3 TIM CCL
-    fnInfo(Home3TimerMode);                                 //JM SHIFT HOME.3 TIM CCL
-  }
-  else if(What == 9) {
-    if(Norm_Key_00_VAR == KEY_USERMODE) { Norm_Key_00_VAR = ITM_SIGMAPLUS; } else { Norm_Key_00_VAR = KEY_USERMODE; }
-    fnInfo(Norm_Key_00_VAR == KEY_USERMODE);                //JM USER
-  }
-  else if(What == 10) {
-    if(Norm_Key_00_VAR == KEY_CC) { Norm_Key_00_VAR = ITM_SIGMAPLUS; } else { Norm_Key_00_VAR = KEY_CC; }
-    fnInfo(Norm_Key_00_VAR == KEY_CC);                      //JM USER
-  }
-  else if(What == 11) {
-    if(Norm_Key_00_VAR == -MNU_MYMENU) { Norm_Key_00_VAR = ITM_SIGMAPLUS; } else { Norm_Key_00_VAR = -MNU_MYMENU; }
-    fnInfo(Norm_Key_00_VAR == -MNU_MYMENU);                 //JM USER
-  }
-  else if(What == 12) {
-    Norm_Key_00_VAR = ITM_SIGMAPLUS;
-    fnInfo(true);
-  }
-  else if (What == 13) {
-    if(Norm_Key_00_VAR == ITM_PR) { Norm_Key_00_VAR = ITM_SIGMAPLUS; } else { Norm_Key_00_VAR = ITM_PR; }
-    fnInfo(Norm_Key_00_VAR == ITM_PR);                      //JM USER
-  }
-  else if (What == 14) {
-    if(Norm_Key_00_VAR == ITM_AIM) { Norm_Key_00_VAR = ITM_SIGMAPLUS; } else { Norm_Key_00_VAR = ITM_AIM; }
-    fnInfo(Norm_Key_00_VAR == ITM_AIM);                     //JM USER
-  }*/
-
   switch (What)
   {
   case 1:                                                   //JM eRPN
@@ -288,35 +231,6 @@ void fnShowJM(uint16_t What) {
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
-
-/*     if(What == 1 && eRPN == true) { stringToLongInteger("1",10,mem); }                           //dr to be removed
-  else if(What == 1 && eRPN == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 2 && HOME3 == true) { stringToLongInteger("1",10,mem); }
-  else if(What == 2 && HOME3 == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 3 && ShiftTimoutMode == true) { stringToLongInteger("1",10,mem); }
-  else if(What == 3 && ShiftTimoutMode == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 4 && SH_BASE_HOME == true) { stringToLongInteger("1",10,mem); }
-  else if(What == 4 && SH_BASE_HOME == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 5 && SH_BASE_MYMENU == true) { stringToLongInteger("1",10,mem); }
-  else if(What == 5 && SH_BASE_MYMENU == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 6 && SH_BASE_AHOME == true) { stringToLongInteger("1",10,mem); }
-  else if(What == 6 && SH_BASE_AHOME == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 7 && SH_BASE_MYA == true) { stringToLongInteger("1",10,mem); }
-  else if(What == 7 && SH_BASE_MYA == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 8 && Home3TimerMode == true) { stringToLongInteger("1",10,mem); }
-  else if(What == 8 && Home3TimerMode == false) { stringToLongInteger("0",10,mem); }
-  else if(What == 9 && Norm_Key_00_VAR == KEY_USERMODE) { stringToLongInteger("1",10,mem); }
-  else if(What == 9 && Norm_Key_00_VAR != KEY_USERMODE) { stringToLongInteger("0",10,mem); }
-  else if(What == 10 && Norm_Key_00_VAR == KEY_CC) { stringToLongInteger("1",10,mem); }
-  else if(What == 10 && Norm_Key_00_VAR != KEY_CC) { stringToLongInteger("0",10,mem); }
-  else if(What == 11 && Norm_Key_00_VAR == -MNU_MYMENU) { stringToLongInteger("1",10,mem); }
-  else if(What == 11 && Norm_Key_00_VAR != -MNU_MYMENU) { stringToLongInteger("0",10,mem); }
-  else if(What == 12 && Norm_Key_00_VAR == ITM_SIGMAPLUS) { stringToLongInteger("1",10,mem); }
-  else if(What == 12 && Norm_Key_00_VAR != ITM_SIGMAPLUS) { stringToLongInteger("0",10,mem); }
-  else if(What == 13 && Norm_Key_00_VAR == ITM_PR) { stringToLongInteger("1",10,mem); }
-  else if(What == 13 && Norm_Key_00_VAR != ITM_PR) { stringToLongInteger("0",10,mem); }
-  else if(What == 14 && Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
-  else if(What == 14 && Norm_Key_00_VAR != ITM_AIM) { stringToLongInteger("0",10,mem); }*/
 
   switch (What)
   {
@@ -1038,20 +952,21 @@ if ComplexDP change to ComplexSP
   }
   else
 
-  if(JM_OPCODE == USER_DEFAULTS) {                              //USER_DEFAULTS 23
+  if(JM_OPCODE == USER_DEFAULTS) {                              //USER_DEFAULTS FOR USER: E+ CC
     kbd_usr[0].primary     = KEY_CC;
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
-    Norm_Key_00_VAR        = ITM_SIGMAPLUS;                     //JM USER
+    Norm_Key_00_VAR        = KEY_CC;
     Show_User_Keys();
   }
   else
 
-  if(JM_OPCODE == USER_COMPLEX) {                               //USER_COMPLEX 24
+  if(JM_OPCODE == USER_COMPLEX) {                               //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].gShifted   = KEY_CC;
+    kbd_usr[0].primary     = -MNU_MYMENU;
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
-    Norm_Key_00_VAR        = -MNU_MYMENU;                       //JM USER
+    Norm_Key_00_VAR        = -MNU_MYMENU;
     Show_User_Keys();
   }
   else
@@ -1067,14 +982,14 @@ if ComplexDP change to ComplexSP
     kbd_usr[11].primary    = KEY_g;
     kbd_usr[11].fShifted   = ITM_NULL;
     kbd_usr[11].gShifted   = ITM_NULL;
-    Norm_Key_00_VAR        = KEY_USERMODE;                      //JM USER
+    Norm_Key_00_VAR        = KEY_USERMODE;
     Show_User_Keys();
   }
   else
 
   if(JM_OPCODE == USER_RESET) {                                 //USER_RESET 26
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
-    Norm_Key_00_VAR        = ITM_SIGMAPLUS;                     //JM USER
+    Norm_Key_00_VAR        = ITM_SIGMAPLUS;
     Show_User_Keys();
   }
   else

@@ -50,28 +50,28 @@ void     fnClSigma             (uint16_t unusedParamButMandatory);
 void     backToSystem          (uint16_t unusedParamButMandatory);
 int8_t   fnCbIsSet             (int16_t item);                                  //dr build RadioButton, CheckBox
 void     fnRefreshRadioState   (char rb, uint16_t mode);
-void     fnRestore             (void);                                          //^^
+void     fnRebuildRadioState   (void);                                          //^^
 
 /********************************************//**
  * \typedef radiocb_t
  * \brief Structure keeping the information for one item
  ***********************************************/
-#define RB_NO    0
-#define RB_AM    1 // AngularMode
-#define RB_CM    2 // ComplexMode
-#define RB_CU    3 // ComplexUnit
-#define RB_CF    4 // CurveFitting
-#define RB_DF    5 // DateFormat
-#define RB_DM    6 // DenominatorMode
-#define RB_DO    7 // DisplayModeOverride
-#define RB_FT    8 // FractionType
-#define RB_SIM   9 // IntegerMode
-#define RB_PS   ':'// ProductSign
-#define RB_RM   ';'// RadixMark
-#define RB_SS   '<'// StackSize
-#define RB_TF   '='// TimeFormat
-#define RB_BCR  '>'// ComplexResult
-#define RB_BLZ  '?'// LeadingZeros
+#define RB_NO   ' '
+#define RB_AM   '!' // AngularMode
+#define RB_CM   '"' // ComplexMode
+#define RB_CU   '#' // ComplexUnit
+#define RB_CF   '$' // CurveFitting
+#define RB_DF   '%' // DateFormat
+#define RB_DM   '&' // DenominatorMode
+#define RB_DO   '\''// DisplayModeOverride
+#define RB_FT   '(' // FractionType
+#define RB_SIM  ')' // IntegerMode
+#define RB_PS   '*' // ProductSign
+#define RB_RM   '+' // RadixMark
+#define RB_SS   ',' // StackSize
+#define RB_TF   '-' // TimeFormat
+#define RB_BCR  '.' // ComplexResult
+#define RB_BLZ  '/' // LeadingZeros
 typedef struct {
   uint16_t itemNr;            ///<
   uint16_t param;             ///< 1st parameter to the above function

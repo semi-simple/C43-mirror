@@ -464,8 +464,8 @@ const int16_t menu_EE[]       = {    ITM_pi,                        ITM_op_j,   
 
 
 const int16_t menu_ASN_N[]        = { 
-                                     ITM_U_KEY_USER,                ITM_SH_KEY_USER,            ITM_U_KEY_CC,             ITM_SH_KEY_CC,         ITM_U_KEY_MM,                ITM_SH_KEY_MM,                      //JM USER NAORMAL MODE
-                                     ITM_U_KEY_SIGMA,               ITM_SH_KEY_SIGMA,           ITM_U_KEY_PRGM,           ITM_SH_KEY_PRGM,       ITM_U_KEY_ALPHA,             ITM_SH_KEY_ALPHA,                   //JM USER NAORMAL MODE
+                                     ITM_U_KEY_USER,                ITM_U_KEY_SIGMA,            ITM_U_KEY_CC,             ITM_U_KEY_PRGM,        ITM_U_KEY_MM,                ITM_U_KEY_ALPHA,                      //JM USER NAORMAL MODE
+                                     ITM_SH_KEY_USER,               ITM_SH_KEY_SIGMA,           ITM_SH_KEY_CC,            ITM_SH_KEY_PRGM,       ITM_SH_KEY_MM,               ITM_SH_KEY_ALPHA,                   //JM USER NAORMAL MODE
                                     -MNU_ASN ,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GET_NORM_E                };    //JM USER NAORMAL MODE
 
 const int16_t menu_ASN[]        = { 

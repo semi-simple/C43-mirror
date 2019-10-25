@@ -370,7 +370,7 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     if(ShiftTimoutMode) {                       //vv JM
-      JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+      JM_SHIFT_RESET =  JM_SHIFT_TIMER_OFF;     //      JM_SHIFT_TIMER_LOOP
     }                                           //^^
 
     shiftF = !shiftF;
@@ -393,7 +393,7 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     if(ShiftTimoutMode) {                       //vv JM
-      JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+      JM_SHIFT_RESET =  JM_SHIFT_TIMER_OFF;     //      JM_SHIFT_TIMER_LOOP
     }                                           //^^
 
     shiftG = !shiftG;

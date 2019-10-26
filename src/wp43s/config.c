@@ -595,6 +595,7 @@ void fnReset(uint16_t confirmation) {
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
+    // initialize the RadaioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, CheckBox
 
     #ifndef TESTSUITE_BUILD
@@ -683,12 +684,7 @@ int8_t fnCbIsSet(int16_t item)
 
   for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
     if(indexOfRadioCbItems[i].itemNr == itemNr) {
-      if (indexOfRadioCbItems[i].state) {
-        result = 1;
-      }
-      else {
-        result = 0;
-      }
+      result = indexOfRadioCbItems[i].state;
     }
   }
 
@@ -701,7 +697,7 @@ void fnRefreshRadioState(char rb, uint16_t mode)
 {
   for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
     if(indexOfRadioCbItems[i].radioButton == rb) {
-      bool_t cb = indexOfRadioCbItems[i].param == mode;
+      uint8_t cb = (indexOfRadioCbItems[i].param == mode) ? 1 : 0;
       if(indexOfRadioCbItems[i].state != cb) {
         indexOfRadioCbItems[i].state = cb;
 #ifndef TESTSUITE_BUILD
@@ -715,15 +711,31 @@ void fnRefreshRadioState(char rb, uint16_t mode)
 
 
 
+void fnRefreshComboxState(char rb, uint16_t mode)
+{
+  for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
+    if(indexOfRadioCbItems[i].radioButton == rb) {
+      uint8_t cb = mode + 2;
+      if(indexOfRadioCbItems[i].state != cb) {
+        indexOfRadioCbItems[i].state = cb;
+#ifndef TESTSUITE_BUILD
+        showSoftmenuCurrentPart();
+#endif
+      }
+    }
+  }
+}
+
+
+
 void fnRebuildRadioState() {
-  cntOfRadioCbItems = 0;
   uint8_t i=0;
   for(uint16_t k=0; k<LAST_ITEM; k++) {
     if(indexOfItems[k].func == fnAngularMode) {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = currentAngularMode == rb.param;
+      rb.state = (currentAngularMode == rb.param) ? 1 : 0;
       rb.radioButton = RB_AM;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -734,7 +746,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = complexMode == rb.param;
+      rb.state = (complexMode == rb.param) ? 1 : 0;
       rb.radioButton = RB_CM;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -745,7 +757,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = complexUnit == rb.param;
+      rb.state = (complexUnit == rb.param) ? 1 : 0;
       rb.radioButton = RB_CU;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -756,7 +768,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = curveFitting == rb.param;
+      rb.state = (curveFitting == rb.param) ? 1 : 0;
       rb.radioButton = RB_CF;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -767,7 +779,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = dateFormat == rb.param;
+      rb.state = (dateFormat == rb.param) ? 1 : 0;
       rb.radioButton = RB_DF;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -778,8 +790,52 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = denominatorMode == rb.param;
+      rb.state = (denominatorMode == rb.param) ? 1 : 0;
       rb.radioButton = RB_DM;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDisplayFormatAll) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = DF_ALL;
+      rb.state = (displayFormat == rb.param) ? 1 : 0;
+      rb.radioButton = RB_DI;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDisplayFormatEng) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = DF_ENG;
+      rb.state = (displayFormat == rb.param) ? 1 : 0;
+      rb.radioButton = RB_DI;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDisplayFormatFix) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = DF_FIX;
+      rb.state = (displayFormat == rb.param) ? 1 : 0;
+      rb.radioButton = RB_DI;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDisplayFormatSci) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = DF_SCI;
+      rb.state = (displayFormat == rb.param) ? 1 : 0;
+      rb.radioButton = RB_DI;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
         i++;
@@ -789,7 +845,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = displayModeOverride == rb.param;
+      rb.state = (displayModeOverride == rb.param) ? 1 : 0;
       rb.radioButton = RB_DO;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -800,7 +856,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = fractionType == rb.param;
+      rb.state = (fractionType == rb.param) ? 1 : 0;
       rb.radioButton = RB_FT;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -811,7 +867,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = shortIntegerMode == rb.param;
+      rb.state = (shortIntegerMode == rb.param) ? 1 : 0;
       rb.radioButton = RB_SIM;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -822,7 +878,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = productSign == rb.param;
+      rb.state = (productSign == rb.param) ? 1 : 0;
       rb.radioButton = RB_PS;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -833,7 +889,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = radixMark == rb.param;
+      rb.state = (radixMark == rb.param) ? 1 : 0;
       rb.radioButton = RB_RM;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -844,7 +900,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = stackSize == rb.param;
+      rb.state = (stackSize == rb.param) ? 1 : 0;
       rb.radioButton = RB_SS;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -855,7 +911,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = timeFormat == rb.param;
+      rb.state = (timeFormat == rb.param) ? 1 : 0;
       rb.radioButton = RB_TF;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -866,7 +922,7 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = getFlag(FLAG_CPXRES) == rb.param;
+      rb.state = (getFlag(FLAG_CPXRES) == rb.param) ? 1 : 0;
       rb.radioButton = RB_BCR;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
@@ -877,8 +933,30 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
-      rb.state = displayLeadingZeros == rb.param;
+      rb.state = (displayLeadingZeros == rb.param) ? 1 : 0;
       rb.radioButton = RB_BLZ;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDisplayFormatSigFig) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = 1;
+      rb.state = (SigFigMode > 0) ? 3 : 2;
+      rb.radioButton = CB_SM;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnDisplayFormatUnit) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = 1;
+      rb.state = UNITDisplay ? 3 : 2;
+      rb.radioButton = CB_UD;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
         i++;
@@ -886,5 +964,7 @@ void fnRebuildRadioState() {
     }
   }
   cntOfRadioCbItems = i;
+
+  printf("Nbr of RadioButton/Checkbox  %6u\n", cntOfRadioCbItems);
 }
 //^^

@@ -83,6 +83,10 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
+  fnRefreshRadioState(RB_DI, DF_FIX);                                           //vv dr
+  fnRefreshComboxState(CB_SM, 0);
+  fnRefreshComboxState(CB_UD, 0);                                               //^^
+
   refreshStack();
 }
 
@@ -100,6 +104,10 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayRealAsFraction = false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
+
+  fnRefreshRadioState(RB_DI, DF_SCI);                                           //vv dr
+  fnRefreshComboxState(CB_SM, 0);
+  fnRefreshComboxState(CB_UD, 0);                                               //^^
 
   refreshStack();
 }
@@ -119,6 +127,10 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
+  fnRefreshRadioState(RB_DI, DF_ENG);                                           //dr
+  fnRefreshComboxState(CB_SM, 0);
+  fnRefreshComboxState(CB_UD, 0);                                               //^^
+
   refreshStack();
 }
 
@@ -137,6 +149,10 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     displayRealAsFraction = false;
     SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
     UNITDisplay = false;                                           //JM UNIT display Reset
+
+    fnRefreshRadioState(RB_DI, DF_ALL);                                         //vv dr
+    fnRefreshComboxState(CB_SM, 0);
+    fnRefreshComboxState(CB_UD, 0);                                             //^^
 
     refreshStack();
   //}

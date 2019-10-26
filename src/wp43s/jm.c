@@ -75,6 +75,8 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory) {
 void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
   UNITDisplay = false;                                            //JM SIGFIG display Reset
   SigFigMode = displayFormatN;                                    //JM SIGFIG
+  fnRefreshComboxState(CB_SM, 1);                                               //dr
+  fnRefreshComboxState(CB_UD, 0);                                               //^^
 //fnInfo(SigFigMode);                                             //JM SIGFIG
   if (displayFormatN != 0) {                                      //JM SIGFIG
     fnDisplayFormatFix(displayFormatN);                           //JM SIGFIG
@@ -89,6 +91,8 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
 void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
   SigFigMode = 0;                                                 //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true;                                             //JM UNIT display
+  fnRefreshComboxState(CB_SM, 0);                                               //dr
+  fnRefreshComboxState(CB_UD, 1);                                               //^^
   //fnInfo(UNITDisplay);                                          //JM UNIT
   if (displayFormatN != 0) {                                      //JM UNIT
     //original:      fnDisplayFormatEng(displayFormatN);                          //JM UNIT

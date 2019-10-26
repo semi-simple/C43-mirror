@@ -226,6 +226,9 @@ void setupDefaults(void) {
   kbd_usr[19].gShifted    = ITM_SXY;                 //JM bug: Overwritten by fnReset
   kbd_usr[20].gShifted    = ITM_LYtoM;               //JM bug: Overwritten by fnReset
 
+  // initialize the RadaioButton/Checkbox items
+  fnRebuildRadioState();                                                        //dr build RadioButton, CheckBox
+
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     setRegisterDataType(regist, dtReal16, AM_NONE);
@@ -478,7 +481,7 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
-  //bool_t wp43sKbdLayout;                                      //dr ??
+//bool_t wp43sKbdLayout;                                                        //dr - no keymap is used
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
@@ -488,7 +491,7 @@ void program_main(void) {
   //program_init();
 
   lcd_clear_buf();
-/*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");  //dr ??
+/*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");                  //dr - no keymap is used
   lcd_refresh();
   while (key != 33 && key != 37) {
     key = key_pop();

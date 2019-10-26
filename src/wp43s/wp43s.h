@@ -373,10 +373,6 @@ typedef int16_t calcRegister_t;
 #define TI_FALSE                9
 #define TI_TRUE                10
 
-#define TI_ABC                 30    //JM EE
-#define TI_ABBCCA              31    //JM EE
-#define TI_012                 32    //JM EE
-
 // Register browser mode
 #define RBR_GLOBAL              0
 #define RBR_LOCAL               1

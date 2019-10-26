@@ -177,7 +177,7 @@ void saveCalc(void) {
   size += fwrite(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA                                       (unsigned long)size);
   size += fwrite(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
   size += fwrite(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
-
+  size += fwrite(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);
 
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
@@ -358,6 +358,7 @@ void restoreCalc(void) {
     size += fread(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA                                       (unsigned long)size);
     size += fread(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
     size += fread(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
+    size += fread(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);
 
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);

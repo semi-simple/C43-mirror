@@ -202,6 +202,15 @@ void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setti
     fnInfo(Norm_Key_00_VAR == ITM_AIM);
     break;
 
+  case 15:                                                  //JM INPUT DEFAULT
+    if(Input_Default == Input_Default_43S) { Input_Default = Input_Default_SP; }
+    else
+    if(Input_Default == Input_Default_SP) { Input_Default = Input_Default_DP; }
+    else
+    if(Input_Default == Input_Default_DP) { Input_Default = Input_Default_43S; }
+    //fnInfo(true);
+    break;
+
   default:
     break;
   }
@@ -302,6 +311,14 @@ void fnShowJM(uint16_t What) {
   case 14:
     if(Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
+    break;
+
+  case 15:
+    if(Input_Default == Input_Default_43S) { stringToLongInteger("0",10,mem); }
+    else
+    if(Input_Default == Input_Default_SP)  { stringToLongInteger("1",10,mem); }
+    else
+    if(Input_Default == Input_Default_DP)  { stringToLongInteger("2",10,mem); }
     break;
 
   default:

@@ -95,6 +95,7 @@ extern bool_t SH_BASE_MYMENU;                                        //JM BASEHO
 extern bool_t SH_BASE_AHOME;                                         //JM BASEHOME Create a flag to enable or disable triple shift
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
 extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
+extern uint8_t Input_Default;                                        //JM Input Default
 
 
 // Additional routines needed in jm.c
@@ -122,6 +123,13 @@ void JM_convertReal16ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
 char* itoa(int value, char* result, int base);
+
+#define TI_ABC                 30    //JM EE
+#define TI_ABBCCA              31    //JM EE
+#define TI_012                 32    //JM EE
+#define Input_Default_43S       0    //JM Input Default
+#define Input_Default_SP        1    //JM Input Default
+#define Input_Default_DP        2    //JM Input Default
 
 
 //items.c

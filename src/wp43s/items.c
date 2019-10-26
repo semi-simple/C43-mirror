@@ -269,7 +269,7 @@ const item_t indexOfItems[] = {
 /*x 145 */  { fnDisplayFormatEng,          TM_VALUE,                    "ENG",                                         "ENG",                                                                        CAT_FNCT, SLS_UNCHANGED},
 /*x 146 */  { fnDisplayOvr,                DO_ENG,                      "ENGOVR",                                      "ENGOVR",                                                                     CAT_FNCT, SLS_UNCHANGED},
 /*x 147 */  { itemToBeCoded,               NOPARAM,                     "ENORM",                                       "ENORM",                                                                      CAT_FNCT, SLS_UNCHANGED},
-/*x 148 */  { addItemToBuffer,             NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                                                         CAT_FNCT, SLS_DISABLED },
+/*x 148 */  { fnEnter,                     NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                                                         CAT_FNCT, SLS_DISABLED },
 /*x 149 */  { itemToBeCoded,               NOPARAM,                     "ENTRY?",                                      "ENTRY?",                                                                     CAT_FNCT, SLS_UNCHANGED},
 /*x 150 */  { itemToBeCoded,               NOPARAM,                     "EQN",                                         "EQN",                                                                        CAT_MENU, SLS_UNCHANGED},
 /*x 151 */  { itemToBeCoded,               NOPARAM,                     "EQ.DEL",                                      "DELETE",                                                                     CAT_FNCT, SLS_UNCHANGED},
@@ -959,7 +959,6 @@ const item_t indexOfItems[] = {
 /*x 835 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "#",                               STD_PRINTER "#",                                                              CAT_FNCT, SLS_UNCHANGED},
 /*x 836 */  { itemToBeCoded,               79,                          "#",                                           "#",                                                                          CAT_CNST, SLS_UNCHANGED},
 /*x 837 */  { itemToBeCoded,               NOPARAM,                     "#B",                                          "#B",                                                                         CAT_FNCT, SLS_UNCHANGED},
-
 /*x 838 */  { fnCvtAcreM2,                 multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            STD_RIGHT_ARROW " m" STD_SUP_2,                                               CAT_DUPL, SLS_ENABLED  },
 /*x 839 */  { fnCvtAcreusM2,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     STD_RIGHT_ARROW " m" STD_SUP_2,                                               CAT_DUPL, SLS_ENABLED  },
 /*x 840 */  { fnCvtCaratKg,                multiply,                    "ct" STD_RIGHT_ARROW "kg",                     "carat",                                                                      CAT_FNCT, SLS_ENABLED  },

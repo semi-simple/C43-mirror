@@ -283,7 +283,8 @@ void btnPressed(void *notUsed, void *data) {
       refreshRegisterLine(REGISTER_Y);
     }
 
-    if(item == ITM_ENTER) {
+    // ===== Special key: Enter ===================================================================
+    if(item == ITM_ENTER && calcMode != CM_NORMAL) {
       if(calcMode == CM_NIM) {
         addItemToNimBuffer(ITM_ENTER);
       }
@@ -315,17 +316,6 @@ void btnPressed(void *notUsed, void *data) {
 
       else if(calcMode == CM_TAM) {
         addItemToBuffer(ITM_ENTER);
-      }
-
-      else if(calcMode == CM_NORMAL) {
-        STACK_LIFT_ENABLE;
-
-        liftStack();
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-
-        refreshStack();
-
-        STACK_LIFT_DISABLE;
       }
 
       else if(calcMode == CM_FONT_BROWSER) {

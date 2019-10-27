@@ -83,9 +83,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_FIX);                                           //vv dr
-  fnRefreshComboxState(CB_SM, 0);
-  fnRefreshComboxState(CB_UD, 0);                                               //^^
+  fnRefreshRadioState(RB_DI, DF_FIX);                                           // dr.  //JM
 
   refreshStack();
 }
@@ -105,9 +103,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_SCI);                                           //vv dr
-  fnRefreshComboxState(CB_SM, 0);
-  fnRefreshComboxState(CB_UD, 0);                                               //^^
+  fnRefreshRadioState(RB_DI, DF_SCI);                                           // dr
 
   refreshStack();
 }
@@ -128,8 +124,6 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   fnRefreshRadioState(RB_DI, DF_ENG);                                           //dr
-  fnRefreshComboxState(CB_SM, 0);
-  fnRefreshComboxState(CB_UD, 0);                                               //^^
 
   refreshStack();
 }
@@ -150,9 +144,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
     UNITDisplay = false;                                           //JM UNIT display Reset
 
-    fnRefreshRadioState(RB_DI, DF_ALL);                                         //vv dr
-    fnRefreshComboxState(CB_SM, 0);
-    fnRefreshComboxState(CB_UD, 0);                                             //^^
+    fnRefreshRadioState(RB_DI, DF_ALL);                                         // dr
 
     refreshStack();
   //}

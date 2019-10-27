@@ -75,12 +75,12 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory) {
 void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
   UNITDisplay = false;                                            //JM SIGFIG display Reset
   SigFigMode = displayFormatN;                                    //JM SIGFIG
-  fnRefreshComboxState(CB_SM, 1);                                               //dr
-  fnRefreshComboxState(CB_UD, 0);                                               //^^
-//fnInfo(SigFigMode);                                             //JM SIGFIG
-  if (displayFormatN != 0) {                                      //JM SIGFIG
-    fnDisplayFormatFix(displayFormatN);                           //JM SIGFIG
-  }                                                               //JM SIGFIG
+  fnRefreshRadioState(RB_DI, DF_SF);
+
+  displayFormat = DF_FIX;
+  displayFormatDigits = displayFormatN;
+  displayRealAsFraction = false;
+  refreshStack();
 }                                                                 //JM SIGFIG
 
 /********************************************//**
@@ -91,24 +91,15 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
 void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
   SigFigMode = 0;                                                 //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true;                                             //JM UNIT display
-  fnRefreshComboxState(CB_SM, 0);                                               //dr
-  fnRefreshComboxState(CB_UD, 1);                                               //^^
-  //fnInfo(UNITDisplay);                                          //JM UNIT
-  if (displayFormatN != 0) {                                      //JM UNIT
-    //original:      fnDisplayFormatEng(displayFormatN);                          //JM UNIT
-    displayFormat = DF_ENG;
-    displayFormatDigits = displayFormatN;
-    displayRealAsFraction = false;
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-    }
-#ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-      showInfoDialog("In function fnDisplayFormatEng:", "converting an integer to a real16", "is to be coded", NULL);
-    }
-#endif
-    refreshStack();
-  }                                                               //JM UNIT
+  fnRefreshRadioState(RB_DI, DF_UN);
+
+  displayFormat = DF_ENG;
+  displayFormatDigits = displayFormatN;
+  displayRealAsFraction = false;
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  }
+  refreshStack();
 }                                                                 //JM UNIT
 
 

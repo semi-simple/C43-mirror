@@ -823,13 +823,36 @@ void fnRebuildRadioState() {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = DF_FIX;
-      rb.state = (displayFormat == rb.param) ? 1 : 0;
+      rb.state = (displayFormat == rb.param) && !(UNITDisplay || (SigFigMode != 0)) ? 1 : 0;  //JM
       rb.radioButton = RB_DI;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
         i++;
       }
     }
+    else if(indexOfItems[k].func == fnDisplayFormatSigFig) {    //JM vv
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = DF_SF;
+      rb.state = (SigFigMode != 0) ? 1 : 0;
+      rb.radioButton = RB_DI;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+
+    else if(indexOfItems[k].func == fnDisplayFormatUnit) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = DF_UN;
+      rb.state = UNITDisplay ? 1 : 0;
+      rb.radioButton = RB_DI;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }                                                         //JM ^^
     else if(indexOfItems[k].func == fnDisplayFormatSci) {
       radiocb_t rb;
       rb.itemNr = k;
@@ -940,28 +963,7 @@ void fnRebuildRadioState() {
         i++;
       }
     }
-    else if(indexOfItems[k].func == fnDisplayFormatSigFig) {
-      radiocb_t rb;
-      rb.itemNr = k;
-      rb.param = 1;
-      rb.state = (SigFigMode > 0) ? 3 : 2;
-      rb.radioButton = CB_SM;
-      indexOfRadioCbItems[i] = rb;
-      if(i<MAX_RADIO_CB_ITEMS) {
-        i++;
-      }
-    }
-    else if(indexOfItems[k].func == fnDisplayFormatUnit) {
-      radiocb_t rb;
-      rb.itemNr = k;
-      rb.param = 1;
-      rb.state = UNITDisplay ? 3 : 2;
-      rb.radioButton = CB_UD;
-      indexOfRadioCbItems[i] = rb;
-      if(i<MAX_RADIO_CB_ITEMS) {
-        i++;
-      }
-    }
+    
   }
   cntOfRadioCbItems = i;
 

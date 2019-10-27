@@ -247,6 +247,8 @@ typedef int16_t calcRegister_t;
 #define DF_FIX                  1
 #define DF_SCI                  2
 #define DF_ENG                  3
+#define DF_SF                   4   //JM
+#define DF_UN                   5   //JM
 
 // Display override 1 bit
 #define DO_SCI                  0

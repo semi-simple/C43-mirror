@@ -161,6 +161,8 @@ bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
 calcKey_t            kbd_usr[37];
+radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
+uint16_t             cntOfRadioCbItems;                                         //^^
 calcRegister_t       errorMessageRegisterLine;
 calcRegister_t       errorRegisterLine;
 uint16_t             row[100];
@@ -224,6 +226,9 @@ void setupDefaults(void) {
   kbd_usr[19].fShifted    = ITM_SW;                  //JM bug: Overwritten by fnReset
   kbd_usr[19].gShifted    = ITM_SXY;                 //JM bug: Overwritten by fnReset
   kbd_usr[20].gShifted    = ITM_LYtoM;               //JM bug: Overwritten by fnReset
+
+  // initialize the RadaioButton/Checkbox items
+  fnRebuildRadioState();                                                        //dr build RadioButton, CheckBox
 
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
@@ -313,7 +318,8 @@ void setupDefaults(void) {
   SH_BASE_AHOME  = false;    
   SH_BASE_MYA    = true;       
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
-  Input_Default =  Input_Default_43S;                             //JM Input Default
+  Input_Default =  ID_43S;                                       //JM Input Default
+
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
   #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time
@@ -477,7 +483,7 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
-  //bool_t wp43sKbdLayout;                                      //dr ??
+//bool_t wp43sKbdLayout;                                                        //dr - no keymap is used
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
@@ -487,7 +493,7 @@ void program_main(void) {
   //program_init();
 
   lcd_clear_buf();
-/*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");  //dr ??
+/*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");                  //dr - no keymap is used
   lcd_refresh();
   while (key != 33 && key != 37) {
     key = key_pop();

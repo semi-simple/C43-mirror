@@ -29,5 +29,7 @@
  ***********************************************/
 void fnCurveFitting(uint16_t cf) {
   curveFitting = cf;
+
+  fnRefreshRadioState(RB_CF, cf);                                               //dr
 }
 

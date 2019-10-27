@@ -102,6 +102,8 @@ extern uint8_t Input_Default;                                        //JM Input 
 void fnSeteRPN(uint16_t unusedParamButMandatory);
 void fnSetHOME3(uint16_t unusedParamButMandatory);
 void fnSetSetJM(uint16_t What);
+void fnInDefault(uint16_t inputDefault);                    //dr
+void fnSigmaAssign(uint16_t sigmaAssign);                   //dr
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
@@ -127,9 +129,9 @@ char* itoa(int value, char* result, int base);
 #define TI_ABC                 30    //JM EE
 #define TI_ABBCCA              31    //JM EE
 #define TI_012                 32    //JM EE
-#define Input_Default_43S       0    //JM Input Default
-#define Input_Default_SP        1    //JM Input Default
-#define Input_Default_DP        2    //JM Input Default
+#define ID_43S                  0    //JM Input Default
+#define ID_SP                   1    //JM Input Default
+#define ID_DP                   2    //JM Input Default
 
 
 //items.c

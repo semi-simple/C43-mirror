@@ -28,6 +28,9 @@
  ***********************************************/
 void fnDisplayOvr(uint16_t displayOvr) {
   displayModeOverride = displayOvr;
+
+  fnRefreshRadioState(RB_DO, displayOvr);                                       //dr
+
   refreshStack();
 }
 
@@ -41,6 +44,9 @@ void fnDisplayOvr(uint16_t displayOvr) {
  ***********************************************/
 void fnProductSign(uint16_t ps) {
   productSign = ps;
+
+  fnRefreshRadioState(RB_PS, ps);                                               //dr
+
   showFracMode();
   refreshStack();
 }
@@ -56,6 +62,9 @@ void fnProductSign(uint16_t ps) {
  ***********************************************/
 void fnRadixMark(uint16_t rm) {
   radixMark = rm;
+
+  fnRefreshRadioState(RB_RM, rm);                                               //dr
+
   refreshStack();
 }
 
@@ -73,6 +82,8 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayRealAsFraction = false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
+
+  fnRefreshRadioState(RB_DI, DF_FIX);                                           // dr
 
   refreshStack();
 }
@@ -92,6 +103,8 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
+  fnRefreshRadioState(RB_DI, DF_SCI);                                           // dr
+
   refreshStack();
 }
 
@@ -109,6 +122,8 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayRealAsFraction = false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
+
+  fnRefreshRadioState(RB_DI, DF_ENG);                                           //dr
 
   refreshStack();
 }
@@ -128,6 +143,8 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     displayRealAsFraction = false;
     SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
     UNITDisplay = false;                                           //JM UNIT display Reset
+
+    fnRefreshRadioState(RB_DI, DF_ALL);                                         // dr
 
     refreshStack();
   //}

@@ -284,12 +284,8 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     // ===== Special key: Enter ===================================================================
-    if(item == ITM_ENTER && calcMode != CM_NORMAL) {
-      if(calcMode == CM_NIM) {
-        addItemToNimBuffer(ITM_ENTER);
-      }
-
-      else if(calcMode == CM_AIM) {
+    if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
+      if(calcMode == CM_AIM) {
         calcModeNormal();
         showAlphaMode();
         popSoftmenu();
@@ -313,7 +309,7 @@ void btnPressed(void *notUsed, void *data) {
 
         refreshStack();
       }
-
+      
       else if(calcMode == CM_TAM) {
         addItemToBuffer(ITM_ENTER);
       }
@@ -923,6 +919,10 @@ void btnPressed(void *notUsed, void *data) {
     else if(calcMode == CM_NIM) {
       if(item < 0) {
         showSoftmenu(NULL, item, false);
+      }
+      else if(item == ITM_ENTER) {
+        closeNim();
+        showFunctionName(item, 10);
       }
       else {
         addItemToNimBuffer(item);

@@ -203,12 +203,15 @@ void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setti
     break;
 
   case 15:                                                  //JM INPUT DEFAULT
-    if(Input_Default == Input_Default_43S) { Input_Default = Input_Default_SP; }
-    else
-    if(Input_Default == Input_Default_SP) { Input_Default = Input_Default_DP; }
-    else
-    if(Input_Default == Input_Default_DP) { Input_Default = Input_Default_43S; }
-    //fnInfo(true);
+    Input_Default = Input_Default_43S;
+    break;
+
+  case 16:                                                  //JM INPUT DEFAULT
+     Input_Default = Input_Default_SP;
+    break;
+
+  case 17:                                                  //JM INPUT DEFAULT
+    Input_Default = Input_Default_DP;
     break;
 
   default:

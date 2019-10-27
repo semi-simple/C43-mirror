@@ -2046,8 +2046,10 @@ const item_t indexOfItems[] = {
 /* 1902 */  { fnJM,                        JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                                                           CAT_NO  , SLS_UNCHANGED},      //JM ASSIGN SEEK FUNCTION
 /* 1903 */  { itemToBeCoded,               NOPARAM      ,               "E+ ASSIGN NORMAL",                            STD_SIGMA "+ ASN",                                                            CAT_NO  , SLS_UNCHANGED},      //JM USER NORMAL
 /* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM      ,               "GET X to E" STD_SIGMA,                        "X to"STD_SIGMA "+",                                                          CAT_NO  , SLS_UNCHANGED},      //JM USER NORMAL
-/* 1905 */  { fnSetSetJM,                  15           ,               "SET_INP_DEFLT",                               "iDFLT",                                                                      CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
-/* 1906 */  { fnShowJM,                    15           ,               "SET_INP_DEFLT?",                              "iDFLT?",                                                                     CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
+/* 1905 */  { fnSetSetJM,                  15           ,               "SET_INP_DEFLT_43S",                           "In Dft",                                                                      CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
+/* 1906 */  { fnSetSetJM,                  16           ,               "SET_INP_DEFLT_SP",                            "In SP",                                                                      CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
+/* 1907 */  { fnSetSetJM,                  17           ,               "SET_INP_DEFLT_DP",                            "In DP",                                                                      CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
+/* 1908 */  { fnShowJM,                    15           ,               "SET_INP_DEFLT?",                              "InDfl?",                                                                     CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
 
-/* 1907 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  CAT_NO  , SLS_UNCHANGED}       //JM
+/* 1909 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  CAT_NO  , SLS_UNCHANGED}       //JM
 };

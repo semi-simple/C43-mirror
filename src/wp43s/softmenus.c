@@ -660,6 +660,89 @@ const softmenu_t softmenu[] = {
 
 
 #ifndef TESTSUITE_BUILD
+
+void JM_DOT2(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
+
+      setPixel (xx+5,yy+9);
+      setPixel (xx+6,yy+9);
+      setPixel (xx+7,yy+9);
+      setPixel (xx+8,yy+8);
+      setPixel (xx+9,yy+7);
+      setPixel (xx+9,yy+6);
+      setPixel (xx+9,yy+5);
+      setPixel (xx+9,yy+4);
+      setPixel (xx+9,yy+3);
+      setPixel (xx+8,yy+2);
+      setPixel (xx+7,yy+1);
+      setPixel (xx+6,yy+1);
+      setPixel (xx+5,yy+1);
+      setPixel (xx+4,yy+1);
+      setPixel (xx+3,yy+1);
+      setPixel (xx+2,yy+2);
+      setPixel (xx+1,yy+3);
+      setPixel (xx+1,yy+4);
+      setPixel (xx+1,yy+5);
+      setPixel (xx+1,yy+6);
+      setPixel (xx+1,yy+7);
+      setPixel (xx+2,yy+8);
+      setPixel (xx+3,yy+9);
+      setPixel (xx+4,yy+9);
+      setPixel (xx+5,yy+8);
+      setPixel (xx+6,yy+8);
+      setPixel (xx+7,yy+8);
+      setPixel (xx+7,yy+7);
+      setPixel (xx+8,yy+7);
+      setPixel (xx+8,yy+6);
+      setPixel (xx+8,yy+5);
+      setPixel (xx+8,yy+4);
+      setPixel (xx+8,yy+3);
+      setPixel (xx+7,yy+3);
+      setPixel (xx+7,yy+2);
+      setPixel (xx+6,yy+2);
+      setPixel (xx+5,yy+2);
+      setPixel (xx+4,yy+2);
+      setPixel (xx+3,yy+2);
+      setPixel (xx+3,yy+3);
+      setPixel (xx+2,yy+3);
+      setPixel (xx+2,yy+4);
+      setPixel (xx+2,yy+5);
+      setPixel (xx+2,yy+6);
+      setPixel (xx+2,yy+7);
+      setPixel (xx+3,yy+7);
+      setPixel (xx+3,yy+8);
+      setPixel (xx+4,yy+8);
+      clearPixel (xx+5,yy+7);
+      clearPixel (xx+6,yy+7);
+      clearPixel (xx+6,yy+6);
+      clearPixel (xx+7,yy+6);
+      clearPixel (xx+7,yy+5);
+      clearPixel (xx+7,yy+4);
+      clearPixel (xx+6,yy+4);
+      clearPixel (xx+6,yy+3);
+      clearPixel (xx+5,yy+3);
+      clearPixel (xx+4,yy+3);
+      clearPixel (xx+4,yy+4);
+      clearPixel (xx+3,yy+4);
+      clearPixel (xx+3,yy+5);
+      clearPixel (xx+3,yy+6);
+      clearPixel (xx+4,yy+6);
+      clearPixel (xx+4,yy+7);
+      clearPixel (xx+5,yy+6);
+      clearPixel (xx+6,yy+5);
+      clearPixel (xx+5,yy+4);
+      clearPixel (xx+4,yy+5);
+      setPixel (xx+5,yy+5);
+      setPixel (xx+5,yy+6);
+      setPixel (xx+6,yy+6);
+      setPixel (xx+6,yy+5);
+      setPixel (xx+6,yy+4);
+      setPixel (xx+5,yy+4);
+      setPixel (xx+4,yy+4);
+      setPixel (xx+4,yy+5);
+      setPixel (xx+4,yy+6);
+}
+
+
 /********************************************//**
  * \brief Displays one softkey
  *
@@ -760,6 +843,8 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
+
+/*
   //vv dr - RadioButton, CheckBox
   if(showCb >= 0) {
     for(y=y2-16; y<min(y2-7,SCREEN_HEIGHT); y++) {
@@ -774,9 +859,18 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
   //^^
+*/
 
   w = stringWidth(label, &standardFont, false, false);
   showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+
+  //JM - RadioButton
+  if(showCb >= 0) {
+    if(videoMode == vmNormal && (showCb == 1 || showCb == 3)) {
+      JM_DOT2(x2-10, y2-16);
+    }
+  }
+
 }
 
 

@@ -3320,7 +3320,7 @@ const font_t standardFont = {
 
     // uni2465 
     {.charCode=0xa465, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph=11, .rowsGlyph= 9, .rowsBelowGlyph= 0,
-     .data="\x30\x60\xc0\xe0\xf0\xc8\xcc\xc8\x78"},
+     .data="\x38\x70\xe0\xc0\xf8\xcc\xcc\xcc\x78"},
 
     // uni2466 
     {.charCode=0xa466, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph=11, .rowsGlyph= 9, .rowsBelowGlyph= 0,
@@ -3360,7 +3360,7 @@ const font_t standardFont = {
 
     // uni246F 
     {.charCode=0xa46f, .colsBeforeGlyph= 0, .colsGlyph=11, .colsAfterGlyph= 2, .rowsAboveGlyph=11, .rowsGlyph= 9, .rowsBelowGlyph= 0,
-     .data="\x31\x80\x73\x00\xf6\x00\x37\x00\x37\x80\x36\x40\x36\x60\x36\x40\x33\xc0"},
+     .data="\x31\xc0\x73\x80\xf7\x00\x36\x00\x37\xc0\x36\x60\x36\x60\x36\x60\x33\xc0"},
 
     // uni2491 
     {.charCode=0xa491, .colsBeforeGlyph= 0, .colsGlyph=11, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4,

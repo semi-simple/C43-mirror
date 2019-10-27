@@ -30,6 +30,9 @@
  ***********************************************/
 void fnDenMode(uint16_t denMode) {
   denominatorMode = denMode;
+
+  fnRefreshRadioState(RB_DM, denMode);                                          //dr
+
   showFracMode();
   refreshStack();
 }
@@ -109,6 +112,9 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnFractionType(uint16_t ft) {
   fractionType = ft;
+
+  fnRefreshRadioState(RB_FT, ft);                                               //dr
+
   displayRealAsFraction = true;
   refreshStack();
 }

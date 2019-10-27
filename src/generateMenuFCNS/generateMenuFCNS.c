@@ -145,6 +145,9 @@ bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
 calcKey_t            kbd_usr[37];
+#define MAX_RADIO_CB_ITEMS 60                                                   //vv dr build RadioButton, CheckBox
+radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];
+uint16_t             cntOfRadioCbItems;                                         //^^
 calcRegister_t       errorMessageRegisterLine;
 calcRegister_t       errorRegisterLine;
 uint16_t             row[100];

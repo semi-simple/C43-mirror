@@ -75,10 +75,12 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory) {
 void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
   UNITDisplay = false;                                            //JM SIGFIG display Reset
   SigFigMode = displayFormatN;                                    //JM SIGFIG
-//fnInfo(SigFigMode);                                             //JM SIGFIG
-  if (displayFormatN != 0) {                                      //JM SIGFIG
-    fnDisplayFormatFix(displayFormatN);                           //JM SIGFIG
-  }                                                               //JM SIGFIG
+  fnRefreshRadioState(RB_DI, DF_SF);
+
+  displayFormat = DF_FIX;
+  displayFormatDigits = displayFormatN;
+  displayRealAsFraction = false;
+  refreshStack();
 }                                                                 //JM SIGFIG
 
 /********************************************//**
@@ -89,22 +91,15 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
 void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
   SigFigMode = 0;                                                 //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true;                                             //JM UNIT display
-  //fnInfo(UNITDisplay);                                          //JM UNIT
-  if (displayFormatN != 0) {                                      //JM UNIT
-    //original:      fnDisplayFormatEng(displayFormatN);                          //JM UNIT
-    displayFormat = DF_ENG;
-    displayFormatDigits = displayFormatN;
-    displayRealAsFraction = false;
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-    }
-#ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-      showInfoDialog("In function fnDisplayFormatEng:", "converting an integer to a real16", "is to be coded", NULL);
-    }
-#endif
-    refreshStack();
-  }                                                               //JM UNIT
+  fnRefreshRadioState(RB_DI, DF_UN);
+
+  displayFormat = DF_ENG;
+  displayFormatDigits = displayFormatN;
+  displayRealAsFraction = false;
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  }
+  refreshStack();
 }                                                                 //JM UNIT
 
 
@@ -202,21 +197,49 @@ void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setti
     fnInfo(Norm_Key_00_VAR == ITM_AIM);
     break;
 
-  case 15:                                                  //JM INPUT DEFAULT
-    Input_Default = Input_Default_43S;
+/*  case 15:                                                  //JM INPUT DEFAULT
+    Input_Default = ID_43S;
     break;
 
   case 16:                                                  //JM INPUT DEFAULT
-     Input_Default = Input_Default_SP;
+     Input_Default = ID_SP;
     break;
 
   case 17:                                                  //JM INPUT DEFAULT
-    Input_Default = Input_Default_DP;
+    Input_Default = ID_DP;
     break;
-
+*/
   default:
     break;
   }
+}
+
+
+
+/********************************************//**
+ * \brief Set Input_Default
+ *
+ * \param[in] inputDefault uint16_t
+ * \return void
+ ***********************************************/
+void fnInDefault(uint16_t inputDefault) {
+  Input_Default = inputDefault;
+
+  fnRefreshRadioState(RB_ID, inputDefault);
+}
+
+
+
+/********************************************//**
+ * \brief Set Norm_Key_00_VAR
+ *
+ * \param[in] inputDefault uint16_t
+ * \return void
+ ***********************************************/
+void fnSigmaAssign(uint16_t sigmaAssign) {
+  Norm_Key_00_VAR = sigmaAssign;
+
+  fnRefreshRadioState(RB_SA, sigmaAssign);
 }
 
 
@@ -240,6 +263,7 @@ void fnInfo(bool_t f) {
  * \return void
  ***********************************************/
 void fnShowJM(uint16_t What) {
+  char snum[10];
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
@@ -287,42 +311,35 @@ void fnShowJM(uint16_t What) {
     break;
   
   case 9:
-    if(Norm_Key_00_VAR == KEY_USERMODE) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
     break;
 
   case 10:
-    if(Norm_Key_00_VAR == KEY_CC) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
     break;
 
   case 11:
-    if(Norm_Key_00_VAR == -MNU_MYMENU) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
     break;
 
   case 12:
-    if(Norm_Key_00_VAR == ITM_SIGMAPLUS) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
     break;
 
   case 13:
-    if(Norm_Key_00_VAR == ITM_PR) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
     break;
 
   case 14:
-    if(Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
     break;
 
   case 15:
-    if(Input_Default == Input_Default_43S) { stringToLongInteger("0",10,mem); }
-    else
-    if(Input_Default == Input_Default_SP)  { stringToLongInteger("1",10,mem); }
-    else
-    if(Input_Default == Input_Default_DP)  { stringToLongInteger("2",10,mem); }
+    if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
+    else if(Input_Default == ID_SP) { stringToLongInteger("1",10,mem); }
+    else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
     break;
+
+  case 16:
+    itoa(Norm_Key_00_VAR, snum, 10);
+    stringToLongInteger(snum,10,mem);
+    break;
+
+
 
   default:
     break;

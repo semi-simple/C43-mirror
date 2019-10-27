@@ -224,6 +224,8 @@ typedef int16_t calcRegister_t;
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50
 
+#define MAX_RADIO_CB_ITEMS 60                                                   //dr build RadioButton, CheckBox
+
 // On/Off 1 bit
 #define OFF                     0
 #define ON                      1
@@ -247,6 +249,8 @@ typedef int16_t calcRegister_t;
 #define DF_FIX                  1
 #define DF_SCI                  2
 #define DF_ENG                  3
+#define DF_SF                   4   //JM
+#define DF_UN                   5   //JM
 
 // Display override 1 bit
 #define DO_SCI                  0
@@ -596,6 +600,8 @@ extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
 extern calcKey_t            kbd_usr[37];
+extern radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];            //vv dr build RadioButton, CheckBox
+extern uint16_t             cntOfRadioCbItems;                                  //^^
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
 extern uint16_t             row[100];

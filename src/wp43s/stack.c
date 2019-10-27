@@ -157,6 +157,8 @@ void fnRollDown(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnStackSize(uint16_t ss) {
   stackSize = ss;
+
+  fnRefreshRadioState(RB_SS, ss);                                               //dr
 }
 
 

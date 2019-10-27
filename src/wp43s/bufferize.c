@@ -1037,7 +1037,7 @@ void addItemToNimBuffer(int16_t item) {
       }
     }
 
-    nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34;
+    nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34 || (Input_Default == ID_DP);           //JM Input default type
     if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
         if(nimBufferDisplay[index] == '.') {
@@ -1786,6 +1786,16 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
 
 void closeNim(void) {
+if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
+  switch (Input_Default) {
+    case ID_43S:
+      break;
+    case ID_SP:
+    case ID_DP:
+      nimNumberPart = NP_REAL_FLOAT_PART;
+      break;
+  }
+}                                                 //JM ^^
   if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
     strcat(nimBuffer, "#0");
     int16_t basePos = strlen(nimBuffer) - 1;

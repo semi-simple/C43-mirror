@@ -83,7 +83,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_FIX);                                           // dr.  //JM
+  fnRefreshRadioState(RB_DI, DF_FIX);                                           // dr
 
   refreshStack();
 }

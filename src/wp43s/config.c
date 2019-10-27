@@ -830,7 +830,7 @@ void fnRebuildRadioState() {
         i++;
       }
     }
-    else if(indexOfItems[k].func == fnDisplayFormatSigFig) {    //JM vv
+    else if(indexOfItems[k].func == fnDisplayFormatSigFig) {          //JM vv
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = DF_SF;
@@ -852,7 +852,7 @@ void fnRebuildRadioState() {
       if(i<MAX_RADIO_CB_ITEMS) {
         i++;
       }
-    }                                                         //JM ^^
+    }                                                                 //JM ^^
     else if(indexOfItems[k].func == fnDisplayFormatSci) {
       radiocb_t rb;
       rb.itemNr = k;
@@ -936,6 +936,28 @@ void fnRebuildRadioState() {
       rb.param = indexOfItems[k].param;
       rb.state = (timeFormat == rb.param) ? 1 : 0;
       rb.radioButton = RB_TF;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnInDefault) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = (Input_Default == rb.param) ? 1 : 0;
+      rb.radioButton = RB_ID;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnSigmaAssign) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = (Norm_Key_00_VAR == rb.param) ? 1 : 0;
+      rb.radioButton = RB_SA;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
         i++;

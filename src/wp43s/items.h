@@ -1941,10 +1941,14 @@
 #define ITM_JM_SEEK                   1902  //JM ASSIGN
 #define MNU_ASN_N                     1903  //JM USER NORMAL
 #define ITM_GET_NORM_E                1904  //JM USER NORMAL
+#define ITM_INP_DEF_43S               1905  //JM INPUT DEFAULT
+#define ITM_INP_DEF_SP                1906  //JM INPUT DEFAULT
+#define ITM_INP_DEF_DP                1907  //JM INPUT DEFAULT
+#define ITM_SH_INP_DEF                1908  //JM INPUT DEFAULT
 
 
 
-#define LAST_ITEM                     1905  //JM
+#define LAST_ITEM                     1909  //JM
 
 #define CHR_PROD_SIGN                 9999
 

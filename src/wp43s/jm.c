@@ -197,9 +197,49 @@ void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setti
     fnInfo(Norm_Key_00_VAR == ITM_AIM);
     break;
 
+  case 15:                                                  //JM INPUT DEFAULT
+    Input_Default = ID_43S;
+    break;
+
+  case 16:                                                  //JM INPUT DEFAULT
+     Input_Default = ID_SP;
+    break;
+
+  case 17:                                                  //JM INPUT DEFAULT
+    Input_Default = ID_DP;
+    break;
+
   default:
     break;
   }
+}
+
+
+
+/********************************************//**
+ * \brief Set Input_Default
+ *
+ * \param[in] inputDefault uint16_t
+ * \return void
+ ***********************************************/
+void fnInDefault(uint16_t inputDefault) {
+  Input_Default = inputDefault;
+
+  fnRefreshRadioState(RB_ID, inputDefault);
+}
+
+
+
+/********************************************//**
+ * \brief Set Norm_Key_00_VAR
+ *
+ * \param[in] inputDefault uint16_t
+ * \return void
+ ***********************************************/
+void fnSigmaAssign(uint16_t sigmaAssign) {
+  Norm_Key_00_VAR = sigmaAssign;
+
+  fnRefreshRadioState(RB_SA, sigmaAssign);
 }
 
 
@@ -297,6 +337,12 @@ void fnShowJM(uint16_t What) {
   case 14:
     if(Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
+    break;
+
+  case 15:
+    if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
+    else if(Input_Default == ID_SP) { stringToLongInteger("1",10,mem); }
+    else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
     break;
 
   default:

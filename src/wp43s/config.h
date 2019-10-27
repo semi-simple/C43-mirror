@@ -74,6 +74,8 @@ void     fnRebuildRadioState   (void);                                          
 #define RB_TF   '.' // TimeFormat
 #define RB_BCR  '/' // ComplexResult
 #define RB_BLZ  '0' // LeadingZeros
+#define RB_SA   '>' // SigmaAssign
+#define RB_ID   '?' // InputDefault
 #define CB_NO   '@'
 #define CB_SM   'A' // SigFigMode 
 #define CB_UD   'B' // UNITDisplay 

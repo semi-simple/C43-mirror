@@ -145,6 +145,7 @@ bool_t               SH_BASE_MYMENU;                          //JM BASEHOME
 bool_t               SH_BASE_AHOME;                           //JM BASEHOME
 bool_t               SH_BASE_MYA;                             //JM BASEHOME
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
+uint8_t              Input_Default;                           //JM Input Default
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -317,6 +318,7 @@ void setupDefaults(void) {
   SH_BASE_AHOME  = false;    
   SH_BASE_MYA    = true;       
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
+  Input_Default =  ID_43S;                                       //JM Input Default
 
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state

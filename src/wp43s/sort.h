@@ -18,7 +18,7 @@
  * \file sort.h
  ***********************************************/
 
-#define SORT_STRING_LEN_GLYPHS 571
+#define SORT_STRING_LEN_GLYPHS 565
 
 extern const char *sortingOrder;
 

@@ -113,3 +113,13 @@
            
 2019-10-26 Problem in standard font with U+2465 and U+246F
            New WP43S_StandardFont.ttf generated.
+
+2019-10-29 Removed duplicate glyphs in Standard font:
+           U+2064 duplicate of U+2027 narrow 1
+           U+2211 duplicate of U+03A3 SIGMA
+           U+2212 duplicate of U+002D -
+           U+2215 duplicate of U+002F /
+           U+2216 duplicate of U+005C \
+           U+2217 duplicate of U+002A *
+           U+223C duplicate of U+007E ~
+           New WP43S_StandardFont.ttf generated.

@@ -677,8 +677,7 @@ void backToSystem(uint16_t unusedParamButMandatory) {
 
 
 //vv dr build RadioButton, CheckBox
-int8_t fnCbIsSet(int16_t item)
-{
+int8_t fnCbIsSet(int16_t item) {
   int8_t result = -1;
   uint16_t itemNr = max(item, -item);
 
@@ -693,8 +692,7 @@ int8_t fnCbIsSet(int16_t item)
 
 
 
-void fnRefreshRadioState(char rb, uint16_t mode)
-{
+void fnRefreshRadioState(char rb, uint16_t mode) {
   for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
     if(indexOfRadioCbItems[i].radioButton == rb) {
       uint8_t cb = (indexOfRadioCbItems[i].param == mode) ? 1 : 0;
@@ -711,11 +709,10 @@ void fnRefreshRadioState(char rb, uint16_t mode)
 
 
 
-void fnRefreshComboxState(char rb, uint16_t mode)
-{
+void fnRefreshComboxState(char rb, uint16_t param, bool_t state) {
   for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
-    if(indexOfRadioCbItems[i].radioButton == rb) {
-      uint8_t cb = mode + 2;
+    if((indexOfRadioCbItems[i].radioButton == rb) && (indexOfRadioCbItems[i].param == param)) {
+      uint8_t cb = state ? 3 : 2;
       if(indexOfRadioCbItems[i].state != cb) {
         indexOfRadioCbItems[i].state = cb;
 #ifndef TESTSUITE_BUILD
@@ -980,6 +977,53 @@ void fnRebuildRadioState() {
       rb.param = indexOfItems[k].param;
       rb.state = (displayLeadingZeros == rb.param) ? 1 : 0;
       rb.radioButton = RB_BLZ;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+    else if(indexOfItems[k].func == fnSetSetJM) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      switch (rb.param)
+      {
+      case JC_ERPN:
+        rb.state = eRPN? 3 : 2;
+        break;
+      
+      case JC_HOME_TRIPLE:
+        rb.state = HOME3? 3 : 2;
+        break;
+      
+      case JC_SHFT_4s:
+        rb.state = ShiftTimoutMode? 3 : 2;
+        break;
+      
+      case JC_BASE_HOME:
+        rb.state = SH_BASE_HOME? 3 : 2;
+        break;
+      
+      case JC_BASE_MYMENU:
+        rb.state = SH_BASE_MYMENU? 3 : 2;
+        break;
+      
+      case JC_BASE_AHOME:
+        rb.state = SH_BASE_AHOME? 3 : 2;
+        break;
+      
+      case JC_BASE_MYA:
+        rb.state = SH_BASE_MYA? 3 : 2;
+        break;
+      
+      case JC_SH_3T:
+        rb.state = Home3TimerMode? 3 : 2;
+        break;
+      
+      default:
+        break;
+      }
+      rb.radioButton = CB_JC;
       indexOfRadioCbItems[i] = rb;
       if(i<MAX_RADIO_CB_ITEMS) {
         i++;

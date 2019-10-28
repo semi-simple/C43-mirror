@@ -84,7 +84,7 @@ gint64 now;                                       //JM usec  //JM TIMER EMULATOR
 #define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Oct.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
-extern uint8_t SigFigMode;                                           //J SIGFIG 
+extern uint8_t SigFigMode;                                           //JM SIGFIG 
 extern bool_t eRPN;                                                  //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 extern bool_t HOME3;                                                 //JM HOME Create a flag to enable or disable triple shift HOME3.
 extern bool_t ShiftTimoutMode;                                       //JM HOME Create a flag to enable or disable SHIFT TIMER CANCEL.
@@ -99,8 +99,8 @@ extern uint8_t Input_Default;                                        //JM Input 
 
 
 // Additional routines needed in jm.c
-void fnSeteRPN(uint16_t unusedParamButMandatory);
-void fnSetHOME3(uint16_t unusedParamButMandatory);
+//void fnSeteRPN(uint16_t unusedParamButMandatory);         //dr - unused
+//void fnSetHOME3(uint16_t unusedParamButMandatory);        //dr - unused
 void fnSetSetJM(uint16_t What);
 void fnInDefault(uint16_t inputDefault);                    //dr
 void fnSigmaAssign(uint16_t sigmaAssign);                   //dr
@@ -133,6 +133,15 @@ char* itoa(int value, char* result, int base);
 #define ID_SP                   1    //JM Input Default
 #define ID_DP                   2    //JM Input Default
 
+#define JC_ERPN                 1    // eRPN
+#define JC_HOME_TRIPLE          2    // HOME.3
+#define JC_SHFT_4s              3    // SH_4s
+#define JC_BASE_HOME            4    // HOME
+#define JC_BASE_MYMENU          5    // MYMNU
+#define JC_BASE_AHOME           6    // aHOME
+#define JC_BASE_MYA             7    // MYa
+#define JC_SH_3T                8    // SH.3T
+
 
 //items.c
 void fnDisplayFormatSigFig(uint16_t displayFormatN);
@@ -159,6 +168,3 @@ void fnLastX   (uint16_t unusedParamButMandatory);            //JM LastX
 
 
 void fnShowJM  (uint16_t What);
-
-
-

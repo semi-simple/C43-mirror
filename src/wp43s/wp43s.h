@@ -224,7 +224,7 @@ typedef int16_t calcRegister_t;
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50
 
-#define MAX_RADIO_CB_ITEMS 60                                                   //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS 80                                                   //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0

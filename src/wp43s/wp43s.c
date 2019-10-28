@@ -138,8 +138,8 @@ uint8_t              SigFigMode;                              //JM SIGFIG
 bool_t               eRPN;                                    //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 bool_t               HOME3;                                   //JM HOME Create a flag to enable or disable triple shift HOME3.
 bool_t               ShiftTimoutMode;                         //JM SHIFT Create a flag to enable or disable SHIFT TIMER CANCEL.
-bool_t               Home3TimerMode;                          //JM SHIFT Create a flag to enable or disable SHIFT TIMER CANCEL.
-bool_t               UNITDisplay;                             //JM HOME Create a flag to enable or disable UNIT display in ENG mode
+bool_t               Home3TimerMode;                          //JM HOME Create a flag to enable or disable HOME TIMER CANCEL.
+bool_t               UNITDisplay;                             //JM UNITDisplay
 bool_t               SH_BASE_HOME;                            //JM BASEHOME
 bool_t               SH_BASE_MYMENU;                          //JM BASEHOME
 bool_t               SH_BASE_AHOME;                           //JM BASEHOME

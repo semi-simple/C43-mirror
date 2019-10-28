@@ -50,7 +50,7 @@ void     fnClSigma             (uint16_t unusedParamButMandatory);
 void     backToSystem          (uint16_t unusedParamButMandatory);
 int8_t   fnCbIsSet             (int16_t item);                                  //dr build RadioButton, CheckBox
 void     fnRefreshRadioState   (char rb, uint16_t mode);
-void     fnRefreshComboxState  (char rb, uint16_t mode);
+void     fnRefreshComboxState  (char rb, uint16_t param, bool_t state);
 void     fnRebuildRadioState   (void);                                          //^^
 
 /********************************************//**
@@ -77,8 +77,7 @@ void     fnRebuildRadioState   (void);                                          
 #define RB_SA   '>' // SigmaAssign
 #define RB_ID   '?' // InputDefault
 #define CB_NO   '@'
-#define CB_SM   'A' // SigFigMode 
-#define CB_UD   'B' // UNITDisplay 
+#define CB_JC   'A' // CheckBox 
 typedef struct {
   uint16_t itemNr;            ///<
   uint16_t param;             ///< 1st parameter to the above function

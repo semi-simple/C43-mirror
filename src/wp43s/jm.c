@@ -118,95 +118,59 @@ void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
 /********************************************//**
  * \brief Sets/resets flag
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] What uint16_t
  * \return void
  ***********************************************/
 
 void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setting
   switch (What)
   {
-  case 1:                                                   //JM eRPN
+  case JC_ERPN:                                             //JM eRPN
     eRPN = !eRPN;
     fnInfo(eRPN);
+    fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);                                 //dr
     break;
 
-  case 2:                                                   //JM HOME.3
+  case JC_HOME_TRIPLE:                                      //JM HOME.3
     HOME3 = !HOME3;
     fnInfo(HOME3);
+    fnRefreshComboxState(CB_JC, JC_HOME_TRIPLE, HOME3);                         //dr
     break;
 
-  case 3:                                                   //JM SH_4s
+  case JC_SHFT_4s:                                          //JM SH_4s
     ShiftTimoutMode = !ShiftTimoutMode;
     fnInfo(ShiftTimoutMode);
+    fnRefreshComboxState(CB_JC, JC_SHFT_4s, ShiftTimoutMode);                   //dr
     break;
 
-  case 4:                                                   //JM HOME
+  case JC_BASE_HOME:                                        //JM HOME
     SH_BASE_HOME = !SH_BASE_HOME;
     fnInfo(SH_BASE_HOME);
+    fnRefreshComboxState(CB_JC, JC_BASE_HOME, SH_BASE_HOME);                    //dr
     break;
 
-  case 5:                                                   //JM MYMNU
+  case JC_BASE_MYMENU:                                      //JM MYMNU
     SH_BASE_MYMENU = !SH_BASE_MYMENU;
     fnInfo(SH_BASE_MYMENU);
+    fnRefreshComboxState(CB_JC, JC_BASE_MYMENU, SH_BASE_MYMENU);                //dr
     break;
 
-  case 6:                                                   //JM aHOME
+  case JC_BASE_AHOME:                                       //JM aHOME
     SH_BASE_AHOME = !SH_BASE_AHOME;
     fnInfo(SH_BASE_AHOME);
+    fnRefreshComboxState(CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);                  //dr
     break;
 
-  case 7:                                                   //JM MYa
+  case JC_BASE_MYA:                                         //JM MYa
     SH_BASE_MYA = !SH_BASE_MYA;
     fnInfo(SH_BASE_MYA);
+    fnRefreshComboxState(CB_JC, JC_BASE_MYA, SH_BASE_MYA);                      //dr
     break;
-  case 8:                                                   //JM SH.3T
+  
+  case JC_SH_3T:                                            //JM SH.3T
     Home3TimerMode = !Home3TimerMode;
     fnInfo(Home3TimerMode);
-    break;
-
-  case 9:                                                   //JM USER 
-    if(Norm_Key_00_VAR == KEY_USERMODE) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
-    else { Norm_Key_00_VAR = KEY_USERMODE; }
-    fnInfo(Norm_Key_00_VAR == KEY_USERMODE);
-    break;
-  case 10:                                                  //JM CC
-    if(Norm_Key_00_VAR == KEY_CC) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
-    else { Norm_Key_00_VAR = KEY_CC; }
-    fnInfo(Norm_Key_00_VAR == KEY_CC);
-    break;
-
-  case 11:                                                  //JM MyMU
-    if(Norm_Key_00_VAR == -MNU_MYMENU) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
-    else { Norm_Key_00_VAR = -MNU_MYMENU; }
-    fnInfo(Norm_Key_00_VAR == -MNU_MYMENU);
-    break;
-  case 12:                                                  //dr E+
-    Norm_Key_00_VAR = ITM_SIGMAPLUS;
-    fnInfo(true);
-    break;
-
-  case 13:                                                  //dr PRGM
-    if(Norm_Key_00_VAR == ITM_PR) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
-    else { Norm_Key_00_VAR = ITM_PR; }
-    fnInfo(Norm_Key_00_VAR == ITM_PR);
-    break;
-
-  case 14:                                                  //dr ALPHA
-    if(Norm_Key_00_VAR == ITM_AIM) { Norm_Key_00_VAR = ITM_SIGMAPLUS; }
-    else { Norm_Key_00_VAR = ITM_AIM; }
-    fnInfo(Norm_Key_00_VAR == ITM_AIM);
-    break;
-
-  case 15:                                                  //JM INPUT DEFAULT
-    Input_Default = ID_43S;
-    break;
-
-  case 16:                                                  //JM INPUT DEFAULT
-     Input_Default = ID_SP;
-    break;
-
-  case 17:                                                  //JM INPUT DEFAULT
-    Input_Default = ID_DP;
+    fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
   default:
@@ -233,7 +197,7 @@ void fnInDefault(uint16_t inputDefault) {
 /********************************************//**
  * \brief Set Norm_Key_00_VAR
  *
- * \param[in] inputDefault uint16_t
+ * \param[in] sigmaAssign uint16_t
  * \return void
  ***********************************************/
 void fnSigmaAssign(uint16_t sigmaAssign) {
@@ -263,86 +227,62 @@ void fnInfo(bool_t f) {
  * \return void
  ***********************************************/
 void fnShowJM(uint16_t What) {
+  char snum[10];
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
 
   switch (What)
   {
-  case 1:
+  case JC_ERPN:
     if(eRPN) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 2:
+  case JC_HOME_TRIPLE:
     if(HOME3) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 3:
+  case JC_SHFT_4s:
     if(ShiftTimoutMode) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 4:
+  case JC_BASE_HOME:
     if(SH_BASE_HOME) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 5:
+  case JC_BASE_MYMENU:
     if(SH_BASE_MYMENU) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 6:
+  case JC_BASE_AHOME:
     if(SH_BASE_AHOME) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 7:
+  case JC_BASE_MYA:
     if(SH_BASE_MYA) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 8:
+  case JC_SH_3T:
     if(Home3TimerMode) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case 9:
-    if(Norm_Key_00_VAR == KEY_USERMODE) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
-  case 10:
-    if(Norm_Key_00_VAR == KEY_CC) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
-  case 11:
-    if(Norm_Key_00_VAR == -MNU_MYMENU) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
-  case 12:
-    if(Norm_Key_00_VAR == ITM_SIGMAPLUS) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
-  case 13:
-    if(Norm_Key_00_VAR == ITM_PR) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
-  case 14:
-    if(Norm_Key_00_VAR == ITM_AIM) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
   case 15:
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
     else if(Input_Default == ID_SP) { stringToLongInteger("1",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
+    break;
+
+  case 16:
+    itoa(Norm_Key_00_VAR, snum, 10);
+    stringToLongInteger(snum,10,mem);
     break;
 
   default:

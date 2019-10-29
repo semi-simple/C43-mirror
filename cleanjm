@@ -79,6 +79,10 @@ rm "statusBar 2.d" "statusBar 3.d" "statusBar 4.d" "statusBar 5.d" "statusBar 6.
 rm "timer 2.d" "timer 3.d" "timer 4.d" "timer 5.d" "timer 6.d" "timer 7.d" "timer 8.d" "timer 9.d" "timer 10.d" "timer 11.d"
 rm "wp43s 2.d" "wp43s 3.d" "wp43s 4.d" "wp43s 5.d" "wp43s 6.d" "wp43s 7.d" "wp43s 8.d" "wp43s 9.d" "wp43s 10.d" "wp43s 11.d"
 
+cd ..
+cd ..
 
-cd ..
-cd ..
+rm "generateConstants" "generateConstants 2" "generateConstants 3" "generateConstants 4" "generateConstants 5" "generateConstants 6" "generateConstants 7" "generateConstants 8" "generateConstants 9" "generateConstants 10" "generateConstants 11"
+rm "ttf2RasterFonts" "ttf2RasterFonts 2" "ttf2RasterFonts 3" "ttf2RasterFonts 4" "ttf2RasterFonts 5" "ttf2RasterFonts 6" "ttf2RasterFonts 7" "ttf2RasterFonts 8" "ttf2RasterFonts 9" "ttf2RasterFonts 10" "ttf2RasterFonts 11"
+rm "wp43c" "wp43c 2" "wp43c 3" "wp43c 4" "wp43c 5" "wp43c 6" "wp43c 7" "wp43c 8" "wp43c 9" "wp43c 10" "wp43c 11"
+

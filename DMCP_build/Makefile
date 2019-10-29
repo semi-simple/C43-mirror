@@ -168,7 +168,7 @@ $(BUILD_DIR):
 # clean up
 #######################################
 clean:
-	-rm -fR .dep $(BUILD_DIR)/*.o $(BUILD_DIR)/*.lst
+	-rm -fR .dep $(BUILD_DIR)/*.o $(BUILD_DIR)/*.lst $(BUILD_DIR)/*.pgm
 
 
 #######################################

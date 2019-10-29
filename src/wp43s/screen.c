@@ -511,48 +511,48 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 
-setPixel (xx+4,yy+7);
-setPixel (xx+5,yy+6);
-setPixel (xx+6,yy+6);
-setPixel (xx+6,yy+5);
-setPixel (xx+7,yy+4);
-setPixel (xx+6,yy+3);
-setPixel (xx+6,yy+2);
-setPixel (xx+5,yy+2);
-setPixel (xx+4,yy+2);
-setPixel (xx+3,yy+2);
-setPixel (xx+2,yy+2);
-setPixel (xx+2,yy+3);
-setPixel (xx+2,yy+4);
-setPixel (xx+2,yy+5);
-setPixel (xx+2,yy+6);
-setPixel (xx+3,yy+6);
-setPixel (xx+4,yy+6);
-setPixel (xx+5,yy+5);
-setPixel (xx+6,yy+4);
-setPixel (xx+5,yy+3);
-setPixel (xx+3,yy+3);
-setPixel (xx+3,yy+5);
-clearPixel (xx+4,yy+7);
-clearPixel (xx+5,yy+7);
-clearPixel (xx+6,yy+7);
-clearPixel (xx+6,yy+6);
-clearPixel (xx+7,yy+6);
-clearPixel (xx+7,yy+5);
-clearPixel (xx+7,yy+4);
-clearPixel (xx+7,yy+3);
-clearPixel (xx+6,yy+2);
-clearPixel (xx+6,yy+1);
-clearPixel (xx+5,yy+1);
-clearPixel (xx+4,yy+1);
-clearPixel (xx+3,yy+1);
-clearPixel (xx+2,yy+2);
-clearPixel (xx+1,yy+3);
-clearPixel (xx+1,yy+4);
-clearPixel (xx+1,yy+5);
-clearPixel (xx+1,yy+6);
-clearPixel (xx+2,yy+6);
-clearPixel (xx+3,yy+7);
+  setPixel (xx+4,yy+7);
+  setPixel (xx+5,yy+6);
+  setPixel (xx+6,yy+6);
+  setPixel (xx+6,yy+5);
+  setPixel (xx+7,yy+4);
+  setPixel (xx+6,yy+3);
+  setPixel (xx+6,yy+2);
+  setPixel (xx+5,yy+2);
+  setPixel (xx+4,yy+2);
+  setPixel (xx+3,yy+2);
+  setPixel (xx+2,yy+2);
+  setPixel (xx+2,yy+3);
+  setPixel (xx+2,yy+4);
+  setPixel (xx+2,yy+5);
+  setPixel (xx+2,yy+6);
+  setPixel (xx+3,yy+6);
+  setPixel (xx+4,yy+6);
+  setPixel (xx+5,yy+5);
+  setPixel (xx+6,yy+4);
+  setPixel (xx+5,yy+3);
+  setPixel (xx+3,yy+3);
+  setPixel (xx+3,yy+5);
+  clearPixel (xx+4,yy+7);
+  clearPixel (xx+5,yy+7);
+  clearPixel (xx+6,yy+7);
+  clearPixel (xx+6,yy+6);
+  clearPixel (xx+7,yy+6);
+  clearPixel (xx+7,yy+5);
+  clearPixel (xx+7,yy+4);
+  clearPixel (xx+7,yy+3);
+  clearPixel (xx+6,yy+2);
+  clearPixel (xx+6,yy+1);
+  clearPixel (xx+5,yy+1);
+  clearPixel (xx+4,yy+1);
+  clearPixel (xx+3,yy+1);
+  clearPixel (xx+2,yy+2);
+  clearPixel (xx+1,yy+3);
+  clearPixel (xx+1,yy+4);
+  clearPixel (xx+1,yy+5);
+  clearPixel (xx+1,yy+6);
+  clearPixel (xx+2,yy+6);
+  clearPixel (xx+3,yy+7);
 }
 
 
@@ -760,6 +760,7 @@ int16_t showGlyph(const char *ch, const font_t *font, int16_t x, int16_t y, vide
 
 
 
+uint8_t  compressString = 0;                                                              //JM compressString
 /********************************************//**
  * \brief Displays a 0 terminated string
  *
@@ -802,7 +803,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
       charCode = (charCode<<8) | (uint8_t)string[ch++];
     }
 
-    x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec);
+    x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
   }
   return x;
 }

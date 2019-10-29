@@ -660,93 +660,114 @@ const softmenu_t softmenu[] = {
 
 
 #ifndef TESTSUITE_BUILD
+//vv EXTRA DRAWINGS FOR RADIO_BUTTON AND CHECK_BOX
+#define JM_LINE2_DRAW
+#undef JM_LINE2_DRAW
+#ifdef JM_LINE2_DRAW
+void JM_LINE2(int16_t xx, int16_t yy) {                          // To draw the lines for radiobutton on screen
+  int16_t x, y;
+  y = yy-3-1;
+  for(x=xx-66+1; x<min(xx-1,SCREEN_WIDTH); x++) {
+    if(mod(x, 2) == 0) {
+      setPixel(x, y);
+      setPixel(x, y+2);
+    }
+    else {
+      setPixel(x, y+1);
+    }
+  }
+}
+#endif
+
+
 /*
-void JM_DOT2(int16_t xx, int16_t yy) {                          // To draw the dots for radioButton
-      setPixel (xx+5,yy+9);
-      setPixel (xx+6,yy+9);
-      setPixel (xx+7,yy+9);
-      setPixel (xx+8,yy+8);
-      setPixel (xx+9,yy+7);
-      setPixel (xx+9,yy+6);
-      setPixel (xx+9,yy+5);
-      setPixel (xx+9,yy+4);
-      setPixel (xx+9,yy+3);
-      setPixel (xx+8,yy+2);
-      setPixel (xx+7,yy+1);
-      setPixel (xx+6,yy+1);
-      setPixel (xx+5,yy+1);
-      setPixel (xx+4,yy+1);
-      setPixel (xx+3,yy+1);
-      setPixel (xx+2,yy+2);
-      setPixel (xx+1,yy+3);
-      setPixel (xx+1,yy+4);
-      setPixel (xx+1,yy+5);
-      setPixel (xx+1,yy+6);
-      setPixel (xx+1,yy+7);
-      setPixel (xx+2,yy+8);
-      setPixel (xx+3,yy+9);
-      setPixel (xx+4,yy+9);
-      setPixel (xx+5,yy+8);
-      setPixel (xx+6,yy+8);
-      setPixel (xx+7,yy+8);
-      setPixel (xx+7,yy+7);
-      setPixel (xx+8,yy+7);
-      setPixel (xx+8,yy+6);
-      setPixel (xx+8,yy+5);
-      setPixel (xx+8,yy+4);
-      setPixel (xx+8,yy+3);
-      setPixel (xx+7,yy+3);
-      setPixel (xx+7,yy+2);
-      setPixel (xx+6,yy+2);
-      setPixel (xx+5,yy+2);
-      setPixel (xx+4,yy+2);
-      setPixel (xx+3,yy+2);
-      setPixel (xx+3,yy+3);
-      setPixel (xx+2,yy+3);
-      setPixel (xx+2,yy+4);
-      setPixel (xx+2,yy+5);
-      setPixel (xx+2,yy+6);
-      setPixel (xx+2,yy+7);
-      setPixel (xx+3,yy+7);
-      setPixel (xx+3,yy+8);
-      setPixel (xx+4,yy+8);
-      clearPixel (xx+5,yy+7);
-      clearPixel (xx+6,yy+7);
-      //clearPixel (xx+6,yy+6);
-      clearPixel (xx+7,yy+6);
-      clearPixel (xx+7,yy+5);
-      clearPixel (xx+7,yy+4);
-      //clearPixel (xx+6,yy+4);
-      clearPixel (xx+6,yy+3);
-      clearPixel (xx+5,yy+3);
-      clearPixel (xx+4,yy+3);
-      //clearPixel (xx+4,yy+4);
-      clearPixel (xx+3,yy+4);
-      clearPixel (xx+3,yy+5);
-      clearPixel (xx+3,yy+6);
-      //clearPixel (xx+4,yy+6);
-      clearPixel (xx+4,yy+7);
-      //clearPixel (xx+5,yy+6);
-      //clearPixel (xx+6,yy+5);
-      //clearPixel (xx+5,yy+4);
-      //clearPixel (xx+4,yy+5);
-      setPixel (xx+5,yy+5);
-      setPixel (xx+5,yy+6);
-      setPixel (xx+6,yy+6);
-      setPixel (xx+6,yy+5);
-      setPixel (xx+6,yy+4);
-      setPixel (xx+5,yy+4);
-      setPixel (xx+4,yy+4);
-      setPixel (xx+4,yy+5);
-      setPixel (xx+4,yy+6);
+void JM_DOT2(int16_t xx, int16_t yy) {                          // To draw the dots for radiobutton on screen
+
+  setPixel (xx+5,yy+9);
+  setPixel (xx+6,yy+9);
+  setPixel (xx+7,yy+9);
+  setPixel (xx+8,yy+8);
+  setPixel (xx+9,yy+7);
+  setPixel (xx+9,yy+6);
+  setPixel (xx+9,yy+5);
+  setPixel (xx+9,yy+4);
+  setPixel (xx+9,yy+3);
+  setPixel (xx+8,yy+2);
+  setPixel (xx+7,yy+1);
+  setPixel (xx+6,yy+1);
+  setPixel (xx+5,yy+1);
+  setPixel (xx+4,yy+1);
+  setPixel (xx+3,yy+1);
+  setPixel (xx+2,yy+2);
+  setPixel (xx+1,yy+3);
+  setPixel (xx+1,yy+4);
+  setPixel (xx+1,yy+5);
+  setPixel (xx+1,yy+6);
+  setPixel (xx+1,yy+7);
+  setPixel (xx+2,yy+8);
+  setPixel (xx+3,yy+9);
+  setPixel (xx+4,yy+9);
+  setPixel (xx+5,yy+8);
+  setPixel (xx+6,yy+8);
+  setPixel (xx+7,yy+8);
+  setPixel (xx+7,yy+7);
+  setPixel (xx+8,yy+7);
+  setPixel (xx+8,yy+6);
+  setPixel (xx+8,yy+5);
+  setPixel (xx+8,yy+4);
+  setPixel (xx+8,yy+3);
+  setPixel (xx+7,yy+3);
+  setPixel (xx+7,yy+2);
+  setPixel (xx+6,yy+2);
+  setPixel (xx+5,yy+2);
+  setPixel (xx+4,yy+2);
+  setPixel (xx+3,yy+2);
+  setPixel (xx+3,yy+3);
+  setPixel (xx+2,yy+3);
+  setPixel (xx+2,yy+4);
+  setPixel (xx+2,yy+5);
+  setPixel (xx+2,yy+6);
+  setPixel (xx+2,yy+7);
+  setPixel (xx+3,yy+7);
+  setPixel (xx+3,yy+8);
+  setPixel (xx+4,yy+8);
+  clearPixel (xx+5,yy+7);
+  clearPixel (xx+6,yy+7);
+//clearPixel (xx+6,yy+6);
+  clearPixel (xx+7,yy+6);
+  clearPixel (xx+7,yy+5);
+  clearPixel (xx+7,yy+4);
+//clearPixel (xx+6,yy+4);
+  clearPixel (xx+6,yy+3);
+  clearPixel (xx+5,yy+3);
+  clearPixel (xx+4,yy+3);
+//clearPixel (xx+4,yy+4);
+  clearPixel (xx+3,yy+4);
+  clearPixel (xx+3,yy+5);
+  clearPixel (xx+3,yy+6);
+//clearPixel (xx+4,yy+6);
+  clearPixel (xx+4,yy+7);
+//clearPixel (xx+5,yy+6);
+//clearPixel (xx+6,yy+5);
+//clearPixel (xx+5,yy+4);
+//clearPixel (xx+4,yy+5);
+  setPixel (xx+5,yy+5);
+  setPixel (xx+5,yy+6);
+  setPixel (xx+6,yy+6);
+  setPixel (xx+6,yy+5);
+  setPixel (xx+6,yy+4);
+  setPixel (xx+5,yy+4);
+  setPixel (xx+4,yy+4);
+  setPixel (xx+4,yy+5);
+  setPixel (xx+4,yy+6);
 }
 */
 
 
 #define RB_EXTRA_BORDER
-#undef RB_EXTRA_BORDER
+//#undef RB_EXTRA_BORDER
 #define RB_CLEAR_CENTER
-//#undef RB_CLEAR_CENTER
+#undef RB_CLEAR_CENTER
 #ifdef RB_EXTRA_BORDER
 void rbColumnCcccccc(int16_t xx, int16_t yy) {
   clearPixel (xx,yy+8);
@@ -997,9 +1018,9 @@ void RB_CHECKED(int16_t xx, int16_t yy) {
   rbColumnCSssCccSssC(xx+7, yy);
   rbColumnCcSssssssCc(xx+8, yy);
   rbColumnCcSssssCc(xx+9, yy);
-#ifdef RB_EXTRA_BORDER
-  rbColumnCcccccc(xx+10, yy);
-#endif
+//#ifdef RB_EXTRA_BORDER
+//  rbColumnCcccccc(xx+10, yy);
+//#endif
 }
 
 
@@ -1017,9 +1038,9 @@ void RB_UNCHECKED(int16_t xx, int16_t yy) {
   rbColumnCSsNnnnnSsC(xx+7, yy);
   rbColumnCcSsNnnSsCc(xx+8, yy);
   rbColumnCcSssssCc(xx+9, yy);
-#ifdef RB_EXTRA_BORDER
-  rbColumnCcccccc(xx+10, yy);
-#endif
+//#ifdef RB_EXTRA_BORDER
+//  rbColumnCcccccc(xx+10, yy);
+//#endif
 }
 
 
@@ -1037,9 +1058,9 @@ void CB_CHECKED(int16_t xx, int16_t yy) {
   cbColumnCSsCccccSsC(xx+7, yy);
   cbColumnCSssssssssC(xx+8, yy);
   cbColumnCSssssssssC(xx+9, yy);
-#ifdef RB_EXTRA_BORDER
-  cbColumnCcccccccccc(xx+10, yy);
-#endif
+//#ifdef RB_EXTRA_BORDER
+//  cbColumnCcccccccccc(xx+10, yy);
+//#endif
 }
 
 
@@ -1057,11 +1078,11 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
   cbColumnCSNnnnnnnSC(xx+7, yy);
   cbColumnCSNnnnnnnSC(xx+8, yy);
   cbColumnCSssssssssC(xx+9, yy);
-#ifdef RB_EXTRA_BORDER
-  cbColumnCcccccccccc(xx+10, yy);
-#endif
+//#ifdef RB_EXTRA_BORDER
+//  cbColumnCcccccccccc(xx+10, yy);
+//#endif
 }
-
+//^^
 
 
 /********************************************//**
@@ -1165,25 +1186,36 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
   }
 
   w = stringWidth(label, &standardFont, false, false);
+  if(showCb >= 0) { compressString = 1; w = w +2; }         //JM compressString
   showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+  if(showCb >= 0) { compressString = 0; }                   //JM unCompressString
 
-  //JM - RadioButton
+#ifdef JM_LINE2_DRAW
+  if(showCb >= 0) {
+    if(videoMode == vmNormal) {
+      JM_LINE2(x2, y2);
+    }
+  }
+#endif
+
+  //vv EXTRA DRAWINGS FOR RADIO_BUTTON AND CHECK_BOX
   if(showCb >= 0) {
     if(videoMode == vmNormal) {
       if(showCb == 0) {
-        RB_UNCHECKED(x2-12, y2-16);
+        RB_UNCHECKED(x2-11, y2-16);
       }
       else if(showCb == 1) {
-        RB_CHECKED(x2-12, y2-16);
+        RB_CHECKED(x2-11, y2-16);
       }
       else if(showCb == 3) {
-        CB_CHECKED(x2-12, y2-16);
+        CB_CHECKED(x2-11, y2-16);
       }
       else {
-        CB_UNCHECKED(x2-12, y2-16);
+        CB_UNCHECKED(x2-11, y2-16);
       }
     }
   }
+  //^^
 }
 
 

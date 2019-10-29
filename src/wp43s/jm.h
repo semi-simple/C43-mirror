@@ -101,12 +101,16 @@ extern uint8_t Input_Default;                                        //JM Input 
 // Additional routines needed in jm.c
 //void fnSeteRPN(uint16_t unusedParamButMandatory);         //dr - unused
 //void fnSetHOME3(uint16_t unusedParamButMandatory);        //dr - unused
-void fnSetSetJM(uint16_t What);
-void fnInDefault(uint16_t inputDefault);                    //dr
-void fnSigmaAssign(uint16_t sigmaAssign);                   //dr
+void fnSetSetJM(uint16_t jmConfig);
+void fnInDefault(uint16_t inputDefault);
+void fnSigmaAssign(uint16_t sigmaAssign);
+void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory);
+void fnJMup(uint16_t unusedParamButMandatory);
+void fnJMdown(uint16_t unusedParamButMandatory);
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
+void fnUserJM(uint16_t jmUser);
 #define USER_DEFAULTS    23
 #define USER_COMPLEX     24
 #define USER_SHIFTS      25
@@ -167,4 +171,4 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
 void fnLastX   (uint16_t unusedParamButMandatory);            //JM LastX
 
 
-void fnShowJM  (uint16_t What);
+void fnShowJM  (uint16_t jmConfig);

@@ -24,13 +24,13 @@
 #include "wp43s.h"
 
 
+
 /********************************************//**
  * RESET TIME FOR SHIFT CANCELLING
  * THIS IS STANDALONE RESET FOR SHIFT TO BE SET BY EMU KEYS. IT ALSO GETS RESET IN KEYBOARD.C
  *
  * FROM keyboard.c
  ***********************************************/
-
 void Reset_Shift_Mem(void) {                            //JM
 #ifdef DMCP_BUILD                                       //JM TIMER DMCP SHIFTCANCEL
   now = sys_current_ms();                               //JM TIMER DMCP SHIFTCANCEL
@@ -83,6 +83,8 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
   refreshStack();
 }                                                                 //JM SIGFIG
 
+
+
 /********************************************//**
  * \Set UNIT mode
  *
@@ -103,6 +105,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
 }                                                                 //JM UNIT
 
 
+
 /********************************************//**   //JM LastX
  * \brief Restores Last X and refreshes the stack   //JM LastX
  *                                                  //JM LastX
@@ -118,13 +121,11 @@ void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
 /********************************************//**
  * \brief Sets/resets flag
  *
- * \param[in] What uint16_t
+ * \param[in] jmConfig uint16_t
  * \return void
  ***********************************************/
-
-void fnSetSetJM(uint16_t What) {                            //JM Set/Reset setting
-  switch (What)
-  {
+void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setting
+  switch(jmConfig) {
   case JC_ERPN:                                             //JM eRPN
     eRPN = !eRPN;
     fnInfo(eRPN);
@@ -211,7 +212,7 @@ void fnSigmaAssign(uint16_t sigmaAssign) {
 /********************************************//**
  * \brief Displays TRUE/FALSE information
  *
- * \param[in] Info uint16_t
+ * \param[in] f bool_t
  * \return void
  ***********************************************/
 void fnInfo(bool_t f) {
@@ -221,19 +222,18 @@ void fnInfo(bool_t f) {
 }
 
 
+
 /********************************************//**
- * \brief Sets X to the flag value
- * \param[in] What to display uint16_t
+ * \brief Show flag value
+ * \param[in] jmConfig to display uint16_t
  * \return void
  ***********************************************/
-void fnShowJM(uint16_t What) {
-  char snum[10];
+void fnShowJM(uint16_t jmConfig) {
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
 
-  switch (What)
-  {
+  switch(jmConfig) {
   case JC_ERPN:
     if(eRPN) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
@@ -280,11 +280,6 @@ void fnShowJM(uint16_t What) {
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
     break;
 
-  case 16:
-    itoa(Norm_Key_00_VAR, snum, 10);
-    stringToLongInteger(snum,10,mem);
-    break;
-
   default:
     break;
   }
@@ -297,10 +292,38 @@ void fnShowJM(uint16_t What) {
 
 
 
+/********************************************//**
+ * \brief Get item-value of assigned key to X
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {
+  char snum[10];
+  longInteger_t mem;
+  longIntegerInit(mem);
+  liftStack();
+  
+  itoa(Norm_Key_00_VAR, snum, 10);
+  stringToLongInteger(snum,10,mem);
+
+  convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
+  longIntegerFree(mem);
+
+  refreshStack();
+}
+
+
+
 //JM CONFIGURE USER MODE - ASSIGN KEYS
 
-
-void fnJM_GetXToNORMmode(uint16_t Rubbish) {
+/********************************************//**
+ * \brief 
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
   int16_t X_REG;
   longInteger_t lgInt;
 
@@ -316,6 +339,12 @@ void fnJM_GetXToNORMmode(uint16_t Rubbish) {
 
 
 
+/********************************************//**
+ * \brief 
+ *
+ * \param[in] JM_KEY uint16_t
+ * \return void
+ ***********************************************/
 void fnJMUSERmode(uint16_t JM_KEY) {
   int16_t X_REG;
   longInteger_t lgInt;
@@ -334,6 +363,14 @@ void fnJMUSERmode(uint16_t JM_KEY) {
   }
 }
 
+
+
+/********************************************//**
+ * \brief 
+ *
+ * \param[in] JM_KEY uint16_t
+ * \return void
+ ***********************************************/
 void fnJMUSERmode_f(uint16_t JM_KEY) {
   int16_t X_REG;
   longInteger_t lgInt;
@@ -352,6 +389,14 @@ void fnJMUSERmode_f(uint16_t JM_KEY) {
   }
 }
 
+
+
+/********************************************//**
+ * \brief 
+ *
+ * \param[in] JM_KEY uint16_t
+ * \return void
+ ***********************************************/
 void fnJMUSERmode_g(uint16_t JM_KEY) {
   int16_t X_REG;
   longInteger_t lgInt;
@@ -375,7 +420,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
 /********************************************//**
  * RPN PROGRAM.
  *
- * \param[in] JM_OPCODE
+ * \param[in] JM_OPCODE uint16_t
  * \return void
  ***********************************************/
 void fnJM(uint16_t JM_OPCODE) {
@@ -842,117 +887,140 @@ void fnJM(uint16_t JM_OPCODE) {
 
     refreshStack();
   }
-  else
+  else {
 
-  if(JM_OPCODE == 21) {           // >>                         //CONVERT DATA TYPES UP
-/*
-if Angle mode: change to SP or DP as applicable using .d.
-If SHORTINT: change to SP
-if SP: change to DP
-if DP: change to LONGINT
-if ComplexSP change to ComplexDP
-*/
-    saveStack();
-    int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-
-    if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-      shiftF = false;             //JM. Execur .d
-      shiftG = true;              //JM
-      Reset_Shift_Mem();          //JM
-#ifdef PC_BUILD
-      btnClicked(NULL, "03");     //JM changed from 02
-#endif
-#ifdef DMCP_BUILD
-      btnClicked(NULL, "03");     //JM changed from 02
-#endif
-    }
-    else
-
-    if(dataTypeX == dtShortInteger) {
-      convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-    }
-    else
-
-    if(dataTypeX == dtReal16 || dataTypeX == dtComplex16) {
-      fnConvertXToReal34(0);
-    }
-    else
-
-    if(dataTypeX == dtReal34) {
-      JM_convertReal34ToLongInteger(NOT_CONFIRMED);
-    }
-
-
-    refreshStack();
   }
+}
 
 
 
-  if(JM_OPCODE == 22) {           // <<                         //CONVERT DATA TYPES DOWN
-/*
-if Angle mode: change to SP or DP, as applicable using .d
-If LONGINT: change to DP
-if DP: change to SP
-if SP: change to ShortInt
-if ComplexDP change to ComplexSP
+/********************************************//**
+ * \brief CONVERT DATA TYPES UP
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnJMup(uint16_t unusedParamButMandatory) {
+  // >>
+  /*
+  if Angle mode: change to SP or DP as applicable using .d.
+  If SHORTINT: change to SP
+  if SP: change to DP
+  if DP: change to LONGINT
+  if ComplexSP change to ComplexDP
+  */
+  saveStack();
+  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
-*/
-    saveStack();
-    int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-
-
-    if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-      shiftF = false;             //JM. Execur .d
-      shiftG = true;              //JM
-      Reset_Shift_Mem();          //JM
+  if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+    shiftF = false;             //JM. Execur .d
+    shiftG = true;              //JM
+    Reset_Shift_Mem();          //JM
 #ifdef PC_BUILD
-      btnClicked(NULL, "03");     //JM changed from 02
+    btnClicked(NULL, "03");     //JM changed from 02
 #endif
 #ifdef DMCP_BUILD
-      btnClicked(NULL, "03");     //JM changed from 02
+    btnClicked(NULL, "03");     //JM changed from 02
 #endif
-    }
-    else
-
-    if(dataTypeX == dtLongInteger) {
-//    fnConvertXToReal34(0);
-      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    }
-    else
-
-    if(dataTypeX == dtReal34 || dataTypeX == dtComplex34) {
-      fnConvertXToReal16(0);
-    }
-    else
-
-    if(dataTypeX == dtReal16) {
-      JM_convertReal16ToShortInteger(NOT_CONFIRMED);
-    }
-
-    refreshStack();
   }
   else
 
-  if(JM_OPCODE == USER_DEFAULTS) {                              //USER_DEFAULTS FOR USER: E+ CC
+  if(dataTypeX == dtShortInteger) {
+    convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+  }
+  else
+
+  if(dataTypeX == dtReal16 || dataTypeX == dtComplex16) {
+    fnConvertXToReal34(0);
+  }
+  else
+
+  if(dataTypeX == dtReal34) {
+    JM_convertReal34ToLongInteger(NOT_CONFIRMED);
+  }
+
+  refreshStack();
+}
+
+
+
+/********************************************//**
+ * \brief CONVERT DATA TYPES DOWN
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnJMdown(uint16_t unusedParamButMandatory) {
+  // <<
+  /*
+  if Angle mode: change to SP or DP, as applicable using .d
+  If LONGINT: change to DP
+  if DP: change to SP
+  if SP: change to ShortInt
+  if ComplexDP change to ComplexSP
+  */
+  saveStack();
+  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
+
+  if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+    shiftF = false;             //JM. Execur .d
+    shiftG = true;              //JM
+    Reset_Shift_Mem();          //JM
+#ifdef PC_BUILD
+    btnClicked(NULL, "03");     //JM changed from 02
+#endif
+#ifdef DMCP_BUILD
+    btnClicked(NULL, "03");     //JM changed from 02
+#endif
+  }
+  else
+
+  if(dataTypeX == dtLongInteger) {
+//  fnConvertXToReal34(0);
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  }
+  else
+
+  if(dataTypeX == dtReal34 || dataTypeX == dtComplex34) {
+    fnConvertXToReal16(0);
+  }
+  else
+
+  if(dataTypeX == dtReal16) {
+    JM_convertReal16ToShortInteger(NOT_CONFIRMED);
+  }
+
+  refreshStack();
+}
+
+
+
+/********************************************//**
+ * \brief Sets/resets USER
+ *
+ * \param[in] jmConfig uint16_t
+ * \return void
+ ***********************************************/
+void fnUserJM(uint16_t jmUser) {
+  switch (jmUser) {
+  case USER_DEFAULTS:                                           //USER_DEFAULTS FOR USER: E+ CC
     kbd_usr[0].primary     = KEY_CC;
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = KEY_CC;
     Show_User_Keys();
-  }
-  else
+    break;
 
-  if(JM_OPCODE == USER_COMPLEX) {                               //USER_COMPLEX FOR USER: U^ ENTER^ CC
+  case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].gShifted   = KEY_CC;
     kbd_usr[0].primary     = -MNU_MYMENU;
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = -MNU_MYMENU;
     Show_User_Keys();
-  }
-  else
+    break;
 
-  if(JM_OPCODE == USER_SHIFTS) {                                //USER_SHIFTS 25          //JM Sectioon to be put on a menu
+  case USER_SHIFTS:                                             //USER_SHIFTS 25          //JM Sectioon to be put on a menu
     kbd_usr[0].primary     = KEY_USERMODE;
     kbd_usr[9].primary     = -MNU_TRI;
     kbd_usr[9].fShifted    = KEY_USERMODE;
@@ -965,29 +1033,30 @@ if ComplexDP change to ComplexSP
     kbd_usr[11].gShifted   = ITM_NULL;
     Norm_Key_00_VAR        = KEY_USERMODE;
     Show_User_Keys();
-  }
-  else
+    break;
 
-  if(JM_OPCODE == USER_RESET) {                                 //USER_RESET 26
+  case USER_RESET:                                              //USER_RESET 26
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
     Show_User_Keys();
-  }
-  else
+    break;
 
 /*
-  if(JM_OPCODE == JM_ASSIGN) {    //A non 0 and non 32766 value means the FN NUMBER is in JM_ASSIGN, AND KEYBOARD.C will wait for a key to be assigned to                                     //USER_RESET 27
+  case JM_ASSIGN:                 //A non 0 and non 32766 value means the FN NUMBER is in JM_ASSIGN, AND KEYBOARD.C will wait for a key to be assigned to                                     //USER_RESET 27
     JM_ASN_MODE = KEY_CC;         //TEMPORARY TEST FUNCTION
-  }
-  else
+    break;
 */
 
-  if(JM_OPCODE == JM_SEEK_FN) {   //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,         //USER_RESET 27
+  case JM_SEEK_FN:      //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,         //USER_RESET 27
     JM_ASN_MODE = 32766;
 #ifndef TESTSUITE_BUILD
     clearScreen(false,true,false);
     showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
 #endif
+    break;
+  
+  default:
+    break;
   }
 }
 
@@ -997,7 +1066,6 @@ void Show_User_Keys(void) {
   userModeEnabled = false;
   toggleUserMode();
 }
-
 
 
 
@@ -1017,7 +1085,6 @@ void fnKEYSELECT(void) {                                        //JM ASSIGN - RE
     toggleUserMode();
   }
 }
-
 
 
 
@@ -1073,7 +1140,6 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {           //JM ASSIGN - RE
 
 
 
-
 void JM_convertReal16ToShortInteger(uint16_t confirmation) {
   if(!real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
     real16_t x;
@@ -1096,6 +1162,8 @@ void JM_convertReal16ToShortInteger(uint16_t confirmation) {
     }
   }
 }
+
+
 
 void JM_convertReal34ToLongInteger(uint16_t confirmation) {
   if(!real34IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
@@ -1171,9 +1239,6 @@ char* itoa(int value, char* result, int base) {
 
 
 
-
-
-
 /* JM UNIT********************************************//**                                                JM UNIT
  * \brief Adds the power of 10 using numeric font to displayString                                        JM UNIT
  *        Converts to units like m, M, k, etc.                                                            JM UNIT
@@ -1210,7 +1275,6 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
 
 
 
-
 //*********************
 
 //JM\/\/\/\/
@@ -1218,6 +1282,13 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
 bool_t userModeEnabledMEM;
 
 
+
+/********************************************//**
+ * \brief 
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
 void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED FOR f[COMPLEX]
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = false;
@@ -1249,6 +1320,14 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
   userModeEnabled = userModeEnabledMEM;
 }
 
+
+
+/********************************************//**
+ * \brief 
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
 void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = true;
@@ -1263,6 +1342,15 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
 #endif
   userModeEnabled = userModeEnabledMEM;
 }
+
+
+
+/********************************************//**
+ * \brief 
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
 void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = true;
@@ -1281,7 +1369,6 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
 
 
 
-
 /*
 void ItemBrowser(uint16_t unusedParamButMandatory) {
   int16_t registerNameWidth;
@@ -1295,32 +1382,28 @@ void ItemBrowser(uint16_t unusedParamButMandatory) {
   }
 
   if(currentRegisterBrowserScreen < 9999) {
-    {
+    clearScreen(false, true, true);
 
-      clearScreen(false, true, true);
+    int16_t regist;
+    for(int16_t row=0; row<10; row++) {
+      regist = (currentRegisterBrowserScreen + row); // % FIRST_LOCAL_REGISTER;
 
-      int16_t regist;
-      for(int16_t row=0; row<10; row++) {
-        regist = (currentRegisterBrowserScreen + row); // % FIRST_LOCAL_REGISTER;
+      itoa(regist, tmpStr3000, 10);
+      registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, false, true);
 
-        itoa(regist, tmpStr3000, 10);
-        registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, false, true);
-
-        strcpy(tmpStr3000, "'");
-        strcpy(tmpStr3000, indexOfItems[regist].itemPrinted);
-        strcat(tmpStr3000, "'");
-        if(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
+      strcpy(tmpStr3000, "'");
+      strcpy(tmpStr3000, indexOfItems[regist].itemPrinted);
+      strcat(tmpStr3000, "'");
+      if(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
+        tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
+        while(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
           tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
-          while(stringWidth(tmpStr3000, &standardFont, false, true) >= SCREEN_WIDTH - 12 - registerNameWidth) { // 12 is the width of STD_ELLIPSIS
-            tmpStr3000[stringLastGlyph(tmpStr3000)] = 0;
-          }
-          strcat(tmpStr3000 + stringByteLength(tmpStr3000), STD_ELLIPSIS);
         }
-        showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true) - 1, 219-22*row, vmNormal, false, true);
+        strcat(tmpStr3000 + stringByteLength(tmpStr3000), STD_ELLIPSIS);
       }
+      showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true) - 1, 219-22*row, vmNormal, false, true);
     }
   }
 }
-
 */
 

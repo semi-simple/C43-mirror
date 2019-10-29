@@ -1779,7 +1779,7 @@
 #define ITM_BASE_MYMENU               1743  //JM BASEMENU
 #define ITM_BASE_AHOME                1744  //JM BASEMENU
 #define ITM_BASE_MYA                  1745  //JM BASEMENU
-#define ITM_SH_BASE_HOME              1746  //JM BASEMENU //fnShowJM
+#define ITM_SH_BASE_HOME              1746  //JM BASEMENU
 #define ITM_SH_BASE_MYMENU            1747  //JM BASEMENU
 #define ITM_SH_BASE_AHOME             1748  //JM BASEMENU
 #define ITM_SH_BASE_MYA               1749  //JM BASEMENU

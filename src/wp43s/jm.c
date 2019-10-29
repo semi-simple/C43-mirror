@@ -128,49 +128,49 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
   switch(jmConfig) {
   case JC_ERPN:                                             //JM eRPN
     eRPN = !eRPN;
-    fnInfo(eRPN);
+    //fnInfo(eRPN);
     fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);                                 //dr
     break;
 
   case JC_HOME_TRIPLE:                                      //JM HOME.3
     HOME3 = !HOME3;
-    fnInfo(HOME3);
+    //fnInfo(HOME3);
     fnRefreshComboxState(CB_JC, JC_HOME_TRIPLE, HOME3);                         //dr
     break;
 
   case JC_SHFT_4s:                                          //JM SH_4s
     ShiftTimoutMode = !ShiftTimoutMode;
-    fnInfo(ShiftTimoutMode);
+    //fnInfo(ShiftTimoutMode);
     fnRefreshComboxState(CB_JC, JC_SHFT_4s, ShiftTimoutMode);                   //dr
     break;
 
   case JC_BASE_HOME:                                        //JM HOME
     SH_BASE_HOME = !SH_BASE_HOME;
-    fnInfo(SH_BASE_HOME);
+    //fnInfo(SH_BASE_HOME);
     fnRefreshComboxState(CB_JC, JC_BASE_HOME, SH_BASE_HOME);                    //dr
     break;
 
   case JC_BASE_MYMENU:                                      //JM MYMNU
     SH_BASE_MYMENU = !SH_BASE_MYMENU;
-    fnInfo(SH_BASE_MYMENU);
+    //fnInfo(SH_BASE_MYMENU);
     fnRefreshComboxState(CB_JC, JC_BASE_MYMENU, SH_BASE_MYMENU);                //dr
     break;
 
   case JC_BASE_AHOME:                                       //JM aHOME
     SH_BASE_AHOME = !SH_BASE_AHOME;
-    fnInfo(SH_BASE_AHOME);
+    //fnInfo(SH_BASE_AHOME);
     fnRefreshComboxState(CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);                  //dr
     break;
 
   case JC_BASE_MYA:                                         //JM MYa
     SH_BASE_MYA = !SH_BASE_MYA;
-    fnInfo(SH_BASE_MYA);
+    //fnInfo(SH_BASE_MYA);
     fnRefreshComboxState(CB_JC, JC_BASE_MYA, SH_BASE_MYA);                      //dr
     break;
   
   case JC_SH_3T:                                            //JM SH.3T
     Home3TimerMode = !Home3TimerMode;
-    fnInfo(Home3TimerMode);
+    //fnInfo(Home3TimerMode);
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
@@ -239,16 +239,6 @@ void fnShowJM(uint16_t jmConfig) {
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case JC_HOME_TRIPLE:
-    if(HOME3) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-  
-  case JC_SHFT_4s:
-    if(ShiftTimoutMode) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-  
   case JC_BASE_HOME:
     if(SH_BASE_HOME) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
@@ -269,12 +259,7 @@ void fnShowJM(uint16_t jmConfig) {
     else { stringToLongInteger("0",10,mem); }
     break;
   
-  case JC_SH_3T:
-    if(Home3TimerMode) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-  
-  case 15:
+  case JM_INP_DFLT:
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
     else if(Input_Default == ID_SP) { stringToLongInteger("1",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }

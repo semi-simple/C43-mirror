@@ -1828,8 +1828,8 @@ const item_t indexOfItems[] = {
 /* 1692 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                                                     CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                                                      CAT_FNCT, SLS_UNCHANGED},      //JM UNIT
 /* 1694 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                                                      CAT_FNCT, SLS_ENABLED  },      //JM SHOW
-/* 1695 */  { fnShowJM,                    JC_HOME_TRIPLE,              "HOME.3?",                                     "HOME.3?",                                                                    CAT_FNCT, SLS_ENABLED  },      //JM SHOW
-/* 1696 */  { fnShowJM,                    JC_SHFT_4s,                  "SH_TIM_4s?",                                  "SH_4s?",                                                                     CAT_FNCT, SLS_ENABLED  },      //JM SHOW
+/* 1695 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                                                           CAT_NO  , SLS_UNCHANGED},
+/* 1696 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                                                           CAT_NO  , SLS_UNCHANGED},
 /* 1697 */  { addItemToBuffer,             CHR_QOPPA,                   "",                                            STD_QOPPA,                                                                    CAT_NO  , SLS_UNCHANGED},      //JM GREEK
 /* 1698 */  { addItemToBuffer,             CHR_DIGAMMA,                 "",                                            STD_DIGAMMA,                                                                  CAT_NO  , SLS_UNCHANGED},      //JM GREEK
 /* 1699 */  { addItemToBuffer,             CHR_SAMPI,                   "",                                            STD_SAMPI,                                                                    CAT_NO  , SLS_UNCHANGED},      //JM GREEK
@@ -1906,7 +1906,7 @@ const item_t indexOfItems[] = {
 /* 1768 */  { fnJMup,                      NOPARAM,                     "convert Data Types up",                       ">>",                                                                         CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
 /* 1769 */  { fnJMdown,                    NOPARAM,                     "convert Data Types down",                     "<<",                                                                         CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                                                      CAT_FNCT, SLS_ENABLED  },      //JM HOME.3T
-/* 1771 */  { fnShowJM,                    JC_SH_3T,                    "SH.3T?",                                      "SH.3T?",                                                                     CAT_FNCT, SLS_ENABLED  },      //JM SHOW HOME.3T
+/* 1771 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                                                           CAT_NO  , SLS_UNCHANGED},
 
 /* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                 "ASN",                                                                        CAT_MENU, SLS_UNCHANGED},      //JM USER
 
@@ -2031,11 +2031,11 @@ const item_t indexOfItems[] = {
 /* 1890 */  { itemToBeCoded,               NOPARAM      ,               "1890",                                        "1890",                                                                       CAT_NO  , SLS_UNCHANGED},
 /* 1891 */  { fnSigmaAssign,               KEY_CC       ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC",                                                              CAT_NO  , SLS_ENABLED  },      //JM USER
 /* 1892 */  { itemToBeCoded,               NOPARAM      ,               "1892",                                        "1892",                                                                       CAT_NO  , SLS_UNCHANGED},
-/* 1893 */  { fnSigmaAssign,               -MNU_MYMENU  ,               "NORM KEY E+ MyMenu",                          STD_SIGMA "+MyMU",                                                            CAT_NO  , SLS_ENABLED  },      //JM USER
+/* 1893 */  { fnSigmaAssign,               -MNU_MYMENU  ,               "NORM KEY E+ MyMenu",                          STD_SIGMA "+MyM",                                                            CAT_NO  , SLS_ENABLED  },      //JM USER
 /* 1894 */  { itemToBeCoded,               NOPARAM      ,               "1894",                                        "1894",                                                                       CAT_NO  , SLS_UNCHANGED},
 /* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               "NORM KEY E+ Default",                         STD_SIGMA "+",                                                                CAT_NO  , SLS_ENABLED  },      //JM USER
 /* 1896 */  { itemToBeCoded,               NOPARAM      ,               "1896",                                        "1896",                                                                       CAT_NO  , SLS_UNCHANGED},
-/* 1897 */  { fnSigmaAssign,               ITM_PR       ,               "NORM KEY E+ PRGM",                            STD_SIGMA "+PRGM",                                                            CAT_NO  , SLS_ENABLED  },      //JM USER
+/* 1897 */  { fnSigmaAssign,               ITM_PR       ,               "NORM KEY E+ PRGM",                            STD_SIGMA "+PGM",                                                            CAT_NO  , SLS_ENABLED  },      //JM USER
 /* 1898 */  { itemToBeCoded,               NOPARAM      ,               "1898",                                        "1898",                                                                       CAT_NO  , SLS_UNCHANGED},
 /* 1899 */  { fnSigmaAssign,               ITM_AIM      ,               "NORM KEY E+ ALPHA",                           STD_SIGMA "+" STD_alpha,                                                      CAT_NO  , SLS_ENABLED  },      //JM USER
 /* 1900 */  { fnGetSigmaAssignToX,         NOPARAM      ,               "SHOW E" STD_SIGMA "TO X",                     STD_SIGMA "+ toX",                                                            CAT_NO  , SLS_UNCHANGED},      //JM USER NORMAL
@@ -2046,7 +2046,7 @@ const item_t indexOfItems[] = {
 /* 1905 */  { fnInDefault,                 ID_43S       ,               "SET_INP_DEFLT_43S",                           "In Dft",                                                                     CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
 /* 1906 */  { fnInDefault,                 ID_SP        ,               "SET_INP_DEFLT_SP",                            "In SP",                                                                      CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
 /* 1907 */  { fnInDefault,                 ID_DP        ,               "SET_INP_DEFLT_DP",                            "In DP",                                                                      CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
-/* 1908 */  { fnShowJM,                    15           ,               "SET_INP_DEFLT?",                              "InDft?",                                                                     CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
+/* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "SET_INP_DEFLT?",                              "InDft?",                                                                     CAT_NO  , SLS_ENABLED  },      //JM INPUT DEFAULT
 
 /* 1909 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                                                  CAT_NO  , SLS_UNCHANGED}       //JM
 };

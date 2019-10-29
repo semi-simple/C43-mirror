@@ -145,6 +145,7 @@ char* itoa(int value, char* result, int base);
 #define JC_BASE_AHOME           6    // aHOME
 #define JC_BASE_MYA             7    // MYa
 #define JC_SH_3T                8    // SH.3T
+#define JM_INP_DFLT            15    // Input_Default
 
 
 //items.c

@@ -1728,8 +1728,8 @@
 #define ITM_WS64                      1692  //JM BASE
 #define ITM_UNIT                      1693  //JM UNIT
 #define ITM_SH_ERPN                   1694  //JM SHOW
-#define ITM_SH_HOMEx3                 1695  //JM SHOW
-#define ITM_SH_SHTIM                  1696  //JM SHOW
+#define Not_Used1995                  1995
+#define Not_Used1996                  1996
 #define CHR_QOPPA                     1697  //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
 #define CHR_DIGAMMA                   1698  //JM GREEK
 #define CHR_SAMPI                     1699  //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
@@ -1804,7 +1804,7 @@
 #define KEY_TYPCON_UP                 1768  //JM CPX
 #define KEY_TYPCON_DN                 1769  //JM CPX
 #define ITM_HOMEx3T                   1770  //JM HOME.3T
-#define ITM_SH_HOMEx3T                1771  //JM HOME.3T
+#define Not_Used1771                  1771
 
 #define MNU_ASN 1772  //JM USER
 #define K_00U   1773  //JM USER MODE TEST

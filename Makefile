@@ -258,7 +258,7 @@ $(WP43S_APP): GTK_LIBS   = `pkg-config --libs   gtk+-3.0`
 $(WP43S_APP): GTK_CFLAGS = `pkg-config --cflags gtk+-3.0`
 $(WP43S_APP): $(OBJ_WP43S)
 	@echo -e "\n====> wp43s $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) $(GTK_LIBS) -lgmp
+	$(CC) $(CFLAGS) -m64 $(OBJ_WP43S) -o $(WP43S_APP) $(GTK_LIBS) -lgmp -lm
 
 src/wp43s/%.o: src/wp43s/%.c .stamp-constantPointers
 	@echo -e "\n====> wp43s $@ <===="

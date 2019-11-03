@@ -815,7 +815,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
 
-  if(JM_OPCODE == 18) {                                         // IR
+  if(JM_OPCODE == 18) {                                         // IZ
     saveStack();
     STACK_LIFT_ENABLE;
     fnRecall(98);

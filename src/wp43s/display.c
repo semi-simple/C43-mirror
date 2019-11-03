@@ -904,7 +904,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     }
 
     // The ending zeros
-    for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
+    for(digitPointer=0; digitPointer<=digitsToDisplay-max(0, numDigits); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
         memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
         charIndex += 2;

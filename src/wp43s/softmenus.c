@@ -1182,10 +1182,24 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
+
   w = stringWidth(label, &standardFont, false, false);
-  if(showCb >= 0) { compressString = 1; w = w +2; }         //JM compressString
-  showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
-  if(showCb >= 0) { compressString = 0; }                   //JM unCompressString
+  if((showCb >= 0) || (w >= 50)) {
+    compressString = 1;      //JM compressString 
+    w = stringWidth(label, &standardFont, false, false);
+    if(showCb >= 0) { w = w + 10; }     
+    showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+    compressString = 0;      //JM compressString 
+  } 
+  else {
+    w = stringWidth(label, &standardFont, false, false);
+    showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+  }
+
+//  w = stringWidth(label, &standardFont, false, false);
+//  if(showCb >= 0) { compressString = 1; w = w +2; }         //JM compressString
+//  showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+//  if(showCb >= 0) { compressString = 0; }                   //JM unCompressString
 
 #ifdef JM_LINE2_DRAW
   if(showCb >= 0) {

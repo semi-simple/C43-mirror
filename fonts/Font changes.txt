@@ -111,6 +111,15 @@
 2019-07-13 New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
            
+2019-09-07 JM Added 6 Greek glyphs to WP43S_NumericFont.ttf.
+           JM Added 6 Greek glyphs to WP43S_StandardFont.ttf.
+           - "\x83\xd8" 03D8   Ϙ  GREEK LETTER ARCHAIC KOPPA
+           - "\x83\xd9" 03D9   ϙ  GREEK SMALL LETTER ARCHAIC KOPPA   
+           - "\x83\xdc" 03DC   Ϝ  GREEK LETTER DIGAMMA
+           - "\x83\xdd" 03DD   ϝ  GREEK SMALL LETTER DIGAMMA
+           - "\x83\xe0" 03E0   Ϡ  GREEK LETTER SAMPI
+           - "\x83\xe1" 03E1   ϡ  GREEK SMALL LETTER SAMPI
+
 2019-10-26 Problem in standard font with U+2465 and U+246F
            New WP43S_StandardFont.ttf generated.
 

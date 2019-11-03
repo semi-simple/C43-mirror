@@ -1259,7 +1259,7 @@ const font_t numericFont = {
 };
 const font_t standardFont = {
   .id             = 1,
-  .numberOfGlyphs = 578,
+  .numberOfGlyphs = 571,
   .glyphs = {
 
     // uni001D 
@@ -2686,10 +2686,6 @@ const font_t standardFont = {
     {.charCode=0xa027, .colsBeforeGlyph= 0, .colsGlyph= 3, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
      .data="\x60\xe0\x60\x60\x60\x60\x60\x60\x60\x60\x60\x60"},
 
-    // uni2064 
-    {.charCode=0xa064, .colsBeforeGlyph= 0, .colsGlyph= 3, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
-     .data="\x60\xe0\x60\x60\x60\x60\x60\x60\x60\x60\x60\x60"},
-
     // uni2065 
     {.charCode=0xa065, .colsBeforeGlyph= 0, .colsGlyph= 7, .colsAfterGlyph= 2, .rowsAboveGlyph=13, .rowsGlyph= 7, .rowsBelowGlyph= 0,
      .data="\x76\xfe\xdc\xcc\xdc\xfe\x76"},
@@ -3014,29 +3010,9 @@ const font_t standardFont = {
     {.charCode=0xa20f, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
      .data="\xff\x80\xff\x80\x63\x00\x63\x00\x63\x00\x63\x00\x63\x00\x63\x00\x63\x00\x63\x00\x63\x00\x63\x00"},
 
-    // summation 
-    {.charCode=0xa211, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
-     .data="\xff\x80\xff\x80\x70\x00\x38\x00\x1c\x00\x0e\x00\x0e\x00\x1c\x00\x38\x00\x70\x00\xff\x80\xff\x80"},
-
-    // minus 
-    {.charCode=0xa212, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph= 9, .rowsGlyph= 2, .rowsBelowGlyph= 9,
-     .data="\xfc\xfc"},
-
     // uni2213 
     {.charCode=0xa213, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=11, .rowsBelowGlyph= 5,
      .data="\xff\xff\x00\x18\x18\x18\xff\xff\x18\x18\x18"},
-
-    // uni2215 
-    {.charCode=0xa215, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
-     .data="\x0c\x0c\x0c\x18\x18\x30\x30\x60\x60\xc0\xc0\xc0"},
-
-    // uni2216 
-    {.charCode=0xa216, .colsBeforeGlyph= 0, .colsGlyph= 6, .colsAfterGlyph= 2, .rowsAboveGlyph= 4, .rowsGlyph=12, .rowsBelowGlyph= 4,
-     .data="\xc0\xc0\xc0\x60\x60\x30\x30\x18\x18\x0c\x0c\x0c"},
-
-    // asteriskmath 
-    {.charCode=0xa217, .colsBeforeGlyph= 0, .colsGlyph= 7, .colsAfterGlyph= 1, .rowsAboveGlyph= 6, .rowsGlyph= 7, .rowsBelowGlyph= 7,
-     .data="\x10\x54\x38\xfe\x38\x54\x10"},
 
     // uni2218 
     {.charCode=0xa218, .colsBeforeGlyph= 0, .colsGlyph= 5, .colsAfterGlyph= 3, .rowsAboveGlyph= 8, .rowsGlyph= 5, .rowsBelowGlyph= 7,
@@ -3129,10 +3105,6 @@ const font_t standardFont = {
     // uni2236 
     {.charCode=0xa236, .colsBeforeGlyph= 0, .colsGlyph= 2, .colsAfterGlyph= 2, .rowsAboveGlyph= 8, .rowsGlyph= 8, .rowsBelowGlyph= 4,
      .data="\xc0\xc0\xc0\x00\x00\xc0\xc0\xc0"},
-
-    // similar 
-    {.charCode=0xa23c, .colsBeforeGlyph= 0, .colsGlyph=10, .colsAfterGlyph= 2, .rowsAboveGlyph= 8, .rowsGlyph= 4, .rowsBelowGlyph= 8,
-     .data="\x78\x00\xfc\xc0\xcf\xc0\x07\x80"},
 
     // uni2243 
     {.charCode=0xa243, .colsBeforeGlyph= 0, .colsGlyph=10, .colsAfterGlyph= 2, .rowsAboveGlyph= 6, .rowsGlyph= 7, .rowsBelowGlyph= 7,

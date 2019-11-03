@@ -420,11 +420,11 @@ void btnPressed(void *notUsed, void *data) {
 
         if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
            && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
-          fnReToCx(0);
-        } else if(dataTypeX == dtComplex16 || dataTypeX == dtComplex34) {
-          fnCxToRe(0);
+          showFunctionName(ITM_REtoCX, 10);
         }
-
+        else if(dataTypeX == dtComplex16 || dataTypeX == dtComplex34) {
+          showFunctionName(ITM_CXtoRE, 10);
+        }
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)

@@ -24,6 +24,7 @@ src/qspi_crc.h
 /ttf2RasterFonts
 /testTtf2RasterFonts
 /wp43s
+/.vscode
 /wp43c
 
 # User-specific files

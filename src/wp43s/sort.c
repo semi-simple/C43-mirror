@@ -519,7 +519,6 @@ const char *sortingOrder =
  STD_rho
 
  STD_SIGMA
- STD_SUM                       //"\xa2\x11"
 
  STD_sigma_end
 
@@ -568,12 +567,10 @@ const char *sortingOrder =
  "-"
  STD_SUP_MINUS                 //"\xa0\x7b"
  STD_SUB_MINUS                 //"\xa0\x8b"
- STD_MINUS_SIGN                //"\xa2\x12"
 
  STD_CROSS
 
  "/"
- STD_DIVISION                  //"\xa2\x15"
  STD_DIVIDE                    //"\x80\xf7"
 
  STD_PLUS_MINUS
@@ -614,14 +611,12 @@ const char *sortingOrder =
 
  "*"
  STD_SUP_ASTERISK              //"\xa0\x8f"
- STD_ASTERISK_b                //"\xa2\x17"
 
  "@"
 
  "_"
 
  "~"
- STD_TILDE_b                   //"\xa2\x3c"
 
  STD_RIGHT_ARROW
  STD_RIGHT_SHORT_ARROW         //"\xa1\xc0"
@@ -691,7 +686,6 @@ const char *sortingOrder =
  "&"
 
  "\\"
- STD_SET_MINUS                 //"\xa2\x16"
 
  "^"
 
@@ -888,13 +882,11 @@ static void stringCleanup(uint8_t *str, int32_t *lg) {
     }
     else if(   (*(str + pos) == 0xa0 && *(str + pos + 1) == 0x8b) // STD_SUB_MINUS
             || (*(str + pos) == 0xa0 && *(str + pos + 1) == 0x7b) // STD_SUP_MINUS
-            || (*(str + pos) == 0xa2 && *(str + pos + 1) == 0x12) // STD_MINUS_SIGN
            ) {
       *(str + pos) = '-';
       memmove(str + pos + 1, str + pos + 2, stringByteLength((char *)str + pos + 2) + 1);
     }
     else if(   (*(str + pos) == 0xa0 && *(str + pos + 1) == 0x8f) // STD_SUP_ASTERISK
-            || (*(str + pos) == 0xa2 && *(str + pos + 1) == 0x17) // STD_ASTERISK_b
            ) {
       *(str + pos) = '*';
       memmove(str + pos + 1, str + pos + 2, stringByteLength((char *)str + pos + 2) + 1);
@@ -1356,11 +1348,6 @@ static void stringCleanup(uint8_t *str, int32_t *lg) {
       *(str + pos) = 'z';
       memmove(str + pos + 1, str + pos + 2, stringByteLength((char *)str + pos + 2) + 1);
     }
-    else if(   (*(str + pos) == 0xa2 && *(str + pos + 1) == 0x3c) // STD_TILDE_b
-           ) {
-      *(str + pos) = '~';
-      memmove(str + pos + 1, str + pos + 2, stringByteLength((char *)str + pos + 2) + 1);
-    }
     else if(   (*(str + pos) == 0x80 && *(str + pos + 1) == 0xc6) // STD_AE
            ) {
       *(str + pos) = 'A';
@@ -1473,11 +1460,6 @@ static void stringCleanup(uint8_t *str, int32_t *lg) {
            ) {
       *(str + pos) = 0x83;
       *(str + pos + 1) = 0xc0;
-    }
-    else if(   (*(str + pos) == 0xa2 && *(str + pos + 1) == 0x11) // STD_SUM -> STD_SIGMA
-           ) {
-      *(str + pos) = 0x83;
-      *(str + pos + 1) = 0xc3;
     }
     else if(   (*(str + pos) == 0x83 && *(str + pos + 1) == 0xab) // STD_UPSILON_DIALYTIKA
            ) {

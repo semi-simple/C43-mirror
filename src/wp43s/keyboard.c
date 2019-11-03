@@ -454,9 +454,7 @@ void btnPressed(void *notUsed, void *data) {
           refreshStack();
         }
         else {
-          fnClX(NOPARAM);
-
-          STACK_LIFT_DISABLE;
+          showFunctionName(ITM_CLX, 10);
         }
       }
 

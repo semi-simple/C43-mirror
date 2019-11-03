@@ -1653,6 +1653,22 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
 }
 
 
+/********************************************//**
+ * \brief Lifts the stack and copies X to Y
+ *
+ * \return void
+ ***********************************************/
+void fnEnter() {
+  STACK_LIFT_ENABLE;
+
+  liftStack();
+  copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+
+  refreshStack();
+
+  STACK_LIFT_DISABLE;
+}
+
 
 /********************************************//**
  * \brief returns the integer part of the value of a register

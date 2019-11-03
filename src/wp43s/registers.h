@@ -147,6 +147,7 @@ void              fnRecallStack                   (uint16_t r);
 void              fnRecallElement                 (uint16_t r);
 void              fnRecallIJ                      (uint16_t r);
 void              fnXLessThan                     (uint16_t unusedParamButMandatory);
+void              fnEnter                         ();
 int16_t           indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
 void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);

@@ -162,6 +162,10 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
   else {
-    displayBugScreen("fnReToCx was called with unexpected data types in regX and/or regY; correct error handling is not implemented yet.");
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "You cannot use Re->Cx with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
+      showInfoDialog("In function fnReToCx:", errorMessage, NULL, NULL);
+    #endif
   }
 }

@@ -22,6 +22,7 @@
 
 
 
+uint8_t  compressWith = 0;                                  //JM compressWith
 /********************************************//**
  * \brief Calculates a string width in pixel using a certain font
  *
@@ -69,7 +70,7 @@ int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmpty
     }
 
     numPixels += glyph->colsGlyph + glyph->colsAfterGlyph;
-    if (compressString == 1) { numPixels--; }                 //JM
+    if(compressWith > 0) { numPixels--; }                   //JM
     if(firstChar) {
       firstChar = false;
       if(withLeadingEmptyRows) {

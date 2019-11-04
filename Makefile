@@ -49,7 +49,7 @@ else
 	CFLAGS += -O2
 endif
 
-CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -fomit-frame-pointer -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64 -MMD
+CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64 -MMD
 
 LDFLAGS += -m64
 

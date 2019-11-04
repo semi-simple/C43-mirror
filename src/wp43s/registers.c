@@ -1656,6 +1656,7 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Lifts the stack and copies X to Y
  *
+ * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fnEnter(uint16_t unusedParamButMandatory) {

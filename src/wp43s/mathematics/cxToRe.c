@@ -30,8 +30,8 @@
  ***********************************************/
 void fnCxToRe(uint16_t unusedParamButMandatory) {
   uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
-  uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
-  bool_t xIsAReal;
+  //uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
+  //bool_t xIsAReal;
 
   if(dataTypeX == dtComplex16) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);

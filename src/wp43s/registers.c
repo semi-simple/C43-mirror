@@ -1658,15 +1658,17 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
  *
  * \return void
  ***********************************************/
-void fnEnter() {
+void fnEnter(uint16_t unusedParamButMandatory) {
   STACK_LIFT_ENABLE;
+  if(eRPN == false) {                                         //JM eRPNNEW JM CHECK modification, experiment
 
-  liftStack();
-  copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+    liftStack();
+    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
 
-  refreshStack();
+    refreshStack();
 
-  STACK_LIFT_DISABLE;
+    STACK_LIFT_DISABLE;
+  }                                                           //JM eRPNNEW modificatin
 }
 
 

@@ -482,6 +482,7 @@ void btnPressed(void *notUsed, void *data) {
         addItemToBuffer(ITM_ENTER);
       }
 
+/*JM                                                 //REMOVED IN 43S 
       else if(calcMode == CM_NORMAL) {
         STACK_LIFT_ENABLE;
 
@@ -494,7 +495,7 @@ void btnPressed(void *notUsed, void *data) {
         STACK_LIFT_DISABLE;
         }                                                                       //JM eRPN modification
       }
-
+*///JM
       else if(calcMode == CM_FONT_BROWSER) {
       }
 
@@ -963,7 +964,7 @@ void btnPressed(void *notUsed, void *data) {
       if(item < 0) {
         showSoftmenu(NULL, item, false);
       }
-      else if(item == ITM_ENTER) {
+      else if(item == ITM_ENTER) {                //JM ERPNNEW NOTE NIM ENTER
         closeNim();
         showFunctionName(item, 10);
       }

@@ -106,6 +106,8 @@ void runFunction(int16_t func) {
     STACK_LIFT_ENABLE;
   }
 
+  if((func == ITM_ENTER) && (eRPN == true)) { STACK_LIFT_ENABLE; }  //JM ERPNNEW OVERRIDE SLS AS ERPN ENTER ALWAYS HAS SLS SET
+
   if(!funcOK) {
     displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD

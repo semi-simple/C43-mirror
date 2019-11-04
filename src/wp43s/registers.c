@@ -1660,16 +1660,28 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnEnter(uint16_t unusedParamButMandatory) {
-  STACK_LIFT_ENABLE;
-  if(eRPN == false) {                                         //JM eRPNNEW JM CHECK modification, experiment
 
+//In all cases: DUP: LIFT STACK, COPY Y->X,  
+//  CLASSICRPN: LIFT if set, ENTERED VALUE ->X, LIFT STACK, COPY Y->X, DISABLE  
+//      eRPN: LIFT if set, ENTERED VALUE ->X,                         ENABLE  
+
+  if( eRPN == false ) {                                         //JM eRPNNEW JM CHECK modification, experiment
+    STACK_LIFT_ENABLE;
     liftStack();
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-
     refreshStack();
 
-    STACK_LIFT_DISABLE;
+    STACK_LIFT_DISABLE;       //JM ERPN COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN
   }                                                           //JM eRPNNEW modificatin
+/*
+else if( ( nimBuffer[0] == 0 ) && (calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_TAM) ) {
+        STACK_LIFT_ENABLE;
+        liftStack();
+        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+        refreshStack();      
+        STACK_LIFT_DISABLE;       //JM ERPN COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN
+        }
+*/
 }
 
 

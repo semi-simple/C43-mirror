@@ -113,7 +113,10 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
  * \return void                                     //JM LastX
  ***********************************************/   //JM LastX
 void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
-  fnRecall(REGISTER_L);                             //JM LastX
+  //  fnRecall(REGISTER_L);                         //JM LastX
+  liftStack();                                      //JM LastX improved verison
+  copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X); //JM LastX improved verison
+  refreshStack();                                   //JM LastX improved verison
 }                                                   //JM LastX
 
 

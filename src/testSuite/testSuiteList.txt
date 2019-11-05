@@ -14,6 +14,7 @@
 ;   RM   Rounding mode: 0 to 6
 ;   SD   Significant digits: 0 to 34
 ;   EC   Error Code: 0=no error or form 1 to 28
+;   CM   Complex Mode: RECT or POLAR
 ;   Rn   Register n from 0 to 211
 ;   Rx   Register x in A,B,C,D,I,J,K,L,T,X,Y,Z
 ;   GAP  gap setting
@@ -45,11 +46,7 @@
 ;
 ; This file is only a list of files containing the tests to perform
 
-;keisan:
-;y=12545543120284569505847489630102030405;
-;x=123.456;
-;IP(y/x);
-;remainder(y,x)
+initialSettings.txt
 
 ;debug.txt
 
@@ -174,6 +171,8 @@ tanh.txt
 trig.txt
 
 conjugate.txt
+reToCx.txt
+cxToRe.txt
 
 square.txt
 squareRoot.txt

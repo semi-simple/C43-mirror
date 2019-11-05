@@ -305,6 +305,9 @@
 		<Unit filename="src/testSuite/cubeRoot.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/cxToRe.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -366,6 +369,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/imaginaryPart.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/initialSettings.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/integerPart.txt">
@@ -498,6 +504,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/power_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/reToCx.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/realPart.txt">
@@ -1144,6 +1153,19 @@
 			<Option target="testSuite" />
 			<Option target="generateMenuFCNS" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/cxToRe.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateMenuFCNS" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/cxToRe.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateMenuFCNS" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/division.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1435,6 +1457,19 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 			<Option target="generateMenuFCNS" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/reToCx.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateMenuFCNS" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/reToCx.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateMenuFCNS" />
+			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/realPart.c">
 			<Option compilerVar="CC" />

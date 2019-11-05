@@ -1665,12 +1665,13 @@ void fnEnter(uint16_t unusedParamButMandatory) {
 //  CLASSICRPN: LIFT if set, ENTERED VALUE ->X, LIFT STACK, COPY Y->X, DISABLE  
 //      eRPN: LIFT if set, ENTERED VALUE ->X,                         ENABLE  
 
+  printf("Stack lift from fnEnter calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
+
   if( eRPN == false ) {                                         //JM eRPNNEW JM CHECK modification, experiment
     STACK_LIFT_ENABLE;
     liftStack();
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
     refreshStack();
-
     STACK_LIFT_DISABLE;       //JM ERPN COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN
   }                                                           //JM eRPNNEW modificatin
 /*

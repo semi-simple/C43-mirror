@@ -1187,7 +1187,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
   if((showCb >= 0) || (w >= 50)) {
     compressString = 1;      //JM compressString 
     w = stringWidth(label, &standardFont, false, false);
-    if(showCb >= 0) { w = w + 10; }     
+    if(showCb >= 0) { w = w + 8; }     
     showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
     compressString = 0;      //JM compressString 
   } 

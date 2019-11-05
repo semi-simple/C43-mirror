@@ -188,7 +188,6 @@ realIc_t             const *angle45;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
-uint8_t              compressString;                                            //JM compressString
 
 
 /********************************************//**
@@ -320,8 +319,6 @@ void setupDefaults(void) {
   SH_BASE_MYA    = true;       
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
-  compressString = 0;                                            //JM compressString
-
 
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state

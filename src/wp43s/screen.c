@@ -759,6 +759,8 @@ int16_t showGlyph(const char *ch, const font_t *font, int16_t x, int16_t y, vide
 }
 
 
+
+uint8_t  compressString = 0;                                                              //JM compressString
 /********************************************//**
  * \brief Displays a 0 terminated string
  *

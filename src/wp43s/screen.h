@@ -76,6 +76,7 @@ int8_t   showFunctionNameCounter;
 #endif
 
 #ifndef TESTSUITE_BUILD
+uint8_t  compressString;                                    //JM compressString
 void     JM_DOT               (int16_t xx, int16_t yy);
 void     setPixel             (int16_t x, int16_t y);
 void     clearPixel           (int16_t x, int16_t y);

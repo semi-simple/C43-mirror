@@ -625,7 +625,6 @@ extern realIc_t             const *angle45;
 #ifdef DMCP_BUILD
   extern bool_t               endOfProgram;
 #endif // DMCP_BUILD
-extern uint8_t              compressString;                                     //JM compressString
 
 #include "constantPointers.h"
 

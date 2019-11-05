@@ -62,6 +62,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnCosh",                 fnCosh                },
   {"fnCube",                 fnCube                },
   {"fnCubeRoot",             fnCubeRoot            },
+  {"fnCxToRe",               fnCxToRe              },
   {"fnCvtCToF",              fnCvtCToF             },
   {"fnCvtDegToDms",          fnCvtDegToDms         },
   {"fnCvtDegToRad",          fnCvtDegToRad         },
@@ -109,6 +110,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnPi",                   fnPi                  },
   {"fnPower",                fnPower               },
   {"fnRealPart",             fnRealPart            },
+  {"fnReToCx",               fnReToCx              },
   {"fnRmd",                  fnRmd                 },
   {"fnRollDown",             fnRollDown            },
   {"fnRollUp",               fnRollUp              },
@@ -503,6 +505,22 @@ void setParameter(char *p) {
     }
     else {
       printf("\nMissformed integer mode setting. The rvalue must be 1COMPL, 2COMPL, UNSIGN or SIGNMT.\n");
+      abortTest();
+    }
+  }
+
+  //Setting Complex mode
+  else if(strcmp(l, "CM") == 0) {
+    if(strcmp(r, "RECT") == 0) {
+      complexMode = CM_RECTANGULAR;
+      //printf("  Set complex mode to RECT\n");
+    }
+    else if(strcmp(r, "POLAR") == 0) {
+      complexMode = CM_POLAR;
+      //printf("  Set complex mode to POLAR\n");
+    }
+    else {
+      printf("\nMissformed complex mode setting. The rvalue must be RECT or POLAR.\n");
       abortTest();
     }
   }
@@ -1268,6 +1286,26 @@ void checkExpectedOutParameter(char *p) {
     }
     else {
       printf("\nMissformed integer mode checking. The rvalue must be 1COMPL, 2COMPL, UNSIGN or SIGNMT.\n");
+      abortTest();
+    }
+  }
+
+  //Checking complex mode
+  else if(strcmp(l, "CM") == 0) {
+    if(strcmp(r, "RECT") == 0) {
+      if(complexMode != CM_RECTANGULAR) {
+        printf("\ncomplex mode should be RECT but it is not!\n");
+        abortTest();
+      }
+    }
+    else if(strcmp(r, "POLAR") == 0) {
+      if(complexMode != CM_POLAR) {
+        printf("\ncomplex mode should be POLAR but it is not!\n");
+        abortTest();
+      }
+    }
+    else {
+      printf("\nMissformed complex mode checking. The rvalue must be RECT or POLAR.\n");
       abortTest();
     }
   }

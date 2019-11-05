@@ -1182,17 +1182,18 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
-
   w = stringWidth(label, &standardFont, false, false);
   if((showCb >= 0) || (w >= 50)) {
-    compressString = 1;      //JM compressString 
+    compressWidth = 1;         //JM compressWidth
     w = stringWidth(label, &standardFont, false, false);
-    if(showCb >= 0) { w = w + 10; }     
+    compressWidth = 0;         //JM compressWidth
+    if(showCb >= 0) { w = w + 8; }
+    compressString = 1;       //JM compressString
     showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
-    compressString = 0;      //JM compressString 
-  } 
+    compressString = 0;       //JM compressString
+  }
   else {
-    w = stringWidth(label, &standardFont, false, false);
+//  w = stringWidth(label, &standardFont, false, false);
     showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
   }
 

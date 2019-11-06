@@ -146,6 +146,8 @@ bool_t               SH_BASE_AHOME;                           //JM BASEHOME
 bool_t               SH_BASE_MYA;                             //JM BASEHOME
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 uint8_t              Input_Default;                           //JM Input Default
+bool_t               RefreshLcd;                              //dr
+uint16_t             LcdTimeout;                              //dr
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -313,6 +315,8 @@ void setupDefaults(void) {
   ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
   Home3TimerMode = true;                                         //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
+  RefreshLcd = true;                                             //dr
+  LcdTimeout = DR_ITM_100;                                       //dr
   SH_BASE_HOME   = true;      
   SH_BASE_MYMENU = false;    
   SH_BASE_AHOME  = false;    
@@ -519,13 +523,14 @@ void program_main(void) {
   //   ST(STAT_SUSPENDED) - Program signals it is ready for off and doesn't need to be woken-up again
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
-  for(;!endOfProgram;) {
-    if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
+  while(!endOfProgram) {
+    if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) {            // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
-    } else if ((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
+    }
+    else if((!ST(STAT_PGM_END) && key_empty())) {           // Just wait if no keys available.
       CLR_ST(STAT_RUNNING);
-      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));  // wake up for screen refresh
+      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));        // wake up for screen refresh
       sys_sleep();
       sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
@@ -582,19 +587,23 @@ void program_main(void) {
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);
-      lcd_refresh();
-    } else if(key == 0) {
+      if(RefreshLcd) {        //dr
+        lcd_refresh();
+      }
+    }
+    else if(key == 0) {
       btnReleased(NULL,NULL);
       lcd_refresh();
     }
 
     uint32_t now = sys_current_ms();
     if(nextScreenRefresh <= now) {
-        nextScreenRefresh += 100;
-        if(nextScreenRefresh < now)
-          nextScreenRefresh = now + 100; // we were out longer than expected; just skip ahead.
-        refreshScreen();
-        lcd_refresh();
+      nextScreenRefresh += LcdTimeout;  //dr
+      if(nextScreenRefresh < now) {
+        nextScreenRefresh = now + LcdTimeout;               // we were out longer than expected; just skip ahead.
+      }
+      refreshScreen();
+      lcd_refresh();
     }
   }
 }

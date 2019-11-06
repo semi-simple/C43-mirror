@@ -96,6 +96,8 @@ extern bool_t SH_BASE_AHOME;                                         //JM BASEHO
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
 extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
 extern uint8_t Input_Default;                                        //JM Input Default
+extern bool_t RefreshLcd;                                            //dr
+extern uint16_t LcdTimeout;                                          //dr
 
 
 // Additional routines needed in jm.c
@@ -103,6 +105,7 @@ extern uint8_t Input_Default;                                        //JM Input 
 //void fnSetHOME3(uint16_t unusedParamButMandatory);        //dr - unused
 void fnSetSetJM(uint16_t jmConfig);
 void fnInDefault(uint16_t inputDefault);
+void fnRefreshLcd(uint16_t refreshLcd);                     //dr
 void fnSigmaAssign(uint16_t sigmaAssign);
 void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory);
 void fnJMup(uint16_t unusedParamButMandatory);
@@ -145,7 +148,12 @@ char* itoa(int value, char* result, int base);
 #define JC_BASE_AHOME           6    // aHOME
 #define JC_BASE_MYA             7    // MYa
 #define JC_SH_3T                8    // SH.3T
+#define DR_ITM_LCD              9
 #define JM_INP_DFLT            15    // Input_Default
+#define DR_ITM_050             50
+#define DR_ITM_100            100
+#define DR_ITM_150            150
+#define DR_ITM_200            200
 
 
 //items.c

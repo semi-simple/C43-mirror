@@ -242,6 +242,12 @@ uint16_t determineItem(const calcKey_t *key) {
 
 
 
+
+uint32_t dr_now;    //DR_TIME
+uint32_t dr_now2;   //DR_TIME
+uint32_t dr__;      //DR_TIME
+
+
 /********************************************//**
  * \brief A calc button was pressed
  *
@@ -257,6 +263,18 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   const calcKey_t *key;
   int16_t itemShift;
+
+//DR_TIME vv
+    #ifdef DMCP_BUILD                                
+    dr_now = sys_current_ms();                       
+    #endif                                           
+    #ifdef PC_BUILD                                  
+    dr_now = g_get_monotonic_time();                 
+    #endif                                           
+//DR_TIME ^^
+
+
+
 
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
@@ -1250,6 +1268,25 @@ void btnPressed(void *notUsed, void *data) {
       displayBugScreen(errorMessage);
     }
   }
+//DR_TIME vv
+    #ifdef DMCP_BUILD                                
+    dr_now2 = sys_current_ms();                      
+    #endif                                           
+    #ifdef PC_BUILD                                  
+    dr_now2 = g_get_monotonic_time();                
+    #endif                                           
+    dr__ = dr_now2 - dr_now;
+    char snum[50];
+    #ifdef DMCP_BUILD                                
+    showString("ms:", &standardFont, 30, 60, vmNormal, false, false);
+    #endif                                           
+    #ifdef PC_BUILD                                  
+    showString("us:", &standardFont, 30, 60, vmNormal, false, false);
+    #endif                                           
+    itoa(dr__, snum, 10);
+    strcat(snum, "         ");
+    showString(snum, &standardFont, 60, 60, vmNormal, false, false);
+//DR_TIME ^^
 }
 
 

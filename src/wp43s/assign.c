@@ -19,7 +19,7 @@
  ***********************************************/
 
 #include "wp43s.h"
-// ITM_ASSIGN  KEY_USERMODE,   -MNU_MODE,  -MNU_CATALOG  -MNU_FLAGS    -MNU_ALPHAMATH    -MNU_ALPHAINTL   // JMTEMP
+
 //This variable is to store in flash memory
 const calcKey_t kbd_std[37] = {
 
@@ -28,7 +28,7 @@ const calcKey_t kbd_std[37] = {
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    ITM_NULL,       CHR_B,             ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_DMS,      ITM_NULL,       CHR_C,             ITM_NULL,        CHR_CHI,       ITM_ST_C     }, //JM
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_DMS,      CHR_SQUARE_ROOT,CHR_C,             ITM_NULL,        CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_LBL,      ITM_NULL,       CHR_F,             ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
@@ -67,7 +67,7 @@ const calcKey_t kbd_std[37] = {
  {81,   KEY_EXIT,         ITM_OFF,         KEY_PRTX,     KEY_EXIT,       KEY_EXIT,          ITM_OFF,         ITM_NULL,      KEY_EXIT     }, //JM
  {82,   CHR_0,            ITM_TIMER,       ITM_VIEW,     CHR_0,          CHR_COLON,         CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,       -MNU_INFO,     CHR_PERIOD,     CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
- {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, ITM_NULL,       -MNU_ALPHAMATH, ITM_NULL     }, //JM
+ {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, CHR_PRINTER,    -MNU_ALPHAMATH, ITM_NULL     }, //JM
  {85,   ITM_ADD,         -MNU_CATALOG,    -MNU_IO,       CHR_PLUS,       CHR_SPACE,         CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      }  //JM
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
 #endif //JM END OF LAYOUT 1a.

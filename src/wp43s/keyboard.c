@@ -32,17 +32,17 @@ void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftF) {
       showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
-#ifndef TESTSUITE_BUILD
+//#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
         JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
         JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
       }                                                                         //JM - Display dot in the f - line
-#endif
+//#endif
     }
     else if(shiftG) {
       showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
-#ifndef TESTSUITE_BUILD
+//#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
         JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
@@ -50,13 +50,13 @@ void showShiftState(void) {
         JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
         JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
       }                                                                         //JM - Display dot in the g - line
-#endif
+//#endif
     }
     else {
       refreshRegisterLine(REGISTER_T);
-#ifndef TESTSUITE_BUILD
+//#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
-#endif
+//#endif
     }
   }
 }

@@ -502,6 +502,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 
 
+#ifndef TESTSUITE_BUILD
 //vv dr StopWatch
 /********************************************//**
  * \brief Start StopWatch
@@ -549,7 +550,6 @@ void fnSwStop(void) {
 
 
 
-#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Draws the dots on the margins of the f and g lines on screen
  *

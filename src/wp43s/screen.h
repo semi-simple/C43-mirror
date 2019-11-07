@@ -48,10 +48,6 @@ typedef enum {
 
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
-uint32_t swStart;                       //vv dr StopWatch
-uint32_t swStop;
-void fnSwStart                (void);
-void fnSwStop                 (void);   //^^
 
 #ifdef PC_BUILD
   #if (__linux__ == 1)
@@ -81,6 +77,10 @@ void fnSwStop                 (void);   //^^
 
 #ifndef TESTSUITE_BUILD
 uint8_t  compressString;                                    //JM compressString
+uint32_t swStart;                       //vv dr StopWatch
+uint32_t swStop;
+void fnSwStart                (void);
+void fnSwStop                 (void);   //^^
 void     JM_DOT               (int16_t xx, int16_t yy);
 void     setPixel             (int16_t x, int16_t y);
 void     clearPixel           (int16_t x, int16_t y);

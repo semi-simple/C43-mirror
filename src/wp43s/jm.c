@@ -177,9 +177,9 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
-  case DR_ITM_LCD:            //dr
-    RefreshLcd = !RefreshLcd;
-    fnRefreshComboxState(CB_JC, DR_ITM_LCD, RefreshLcd);
+  case DR_ITM_TST:            //dr
+    testEnabled = !testEnabled;
+    fnRefreshComboxState(CB_JC, DR_ITM_TST, testEnabled);
     break;
 
   default:
@@ -210,7 +210,7 @@ void fnInDefault(uint16_t inputDefault) {
  * \return void
  ***********************************************/
 void fnRefreshLcd(uint16_t refreshLcd) {
-  LcdTimeout = refreshLcd;
+  refreshScreenTimeout = refreshLcd;
 
   fnRefreshRadioState(RB_RL, refreshLcd);
 }

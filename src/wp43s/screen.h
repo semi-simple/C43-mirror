@@ -48,6 +48,10 @@ typedef enum {
 
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
+uint32_t swStart;                       //vv dr StopWatch
+uint32_t swStop;
+void fnSwStart                (void);
+void fnSwStop                 (void);   //^^
 
 #ifdef PC_BUILD
   #if (__linux__ == 1)

@@ -146,8 +146,8 @@ bool_t               SH_BASE_AHOME;                           //JM BASEHOME
 bool_t               SH_BASE_MYA;                             //JM BASEHOME
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 uint8_t              Input_Default;                           //JM Input Default
-bool_t               RefreshLcd;                              //dr
-uint16_t             LcdTimeout;                              //dr
+bool_t               testEnabled;                             //dr
+uint16_t             refreshScreenTimeout;                    //dr
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -315,8 +315,8 @@ void setupDefaults(void) {
   ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
   Home3TimerMode = true;                                         //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
-  RefreshLcd = true;                                             //dr
-  LcdTimeout = DR_ITM_100;                                       //dr
+  testEnabled = false;                                           //dr
+  refreshScreenTimeout = TO_SCREEN_T1;                           //dr
   SH_BASE_HOME   = true;      
   SH_BASE_MYMENU = false;    
   SH_BASE_AHOME  = false;    
@@ -579,28 +579,28 @@ void program_main(void) {
     // == 0 -> Key released
     key = key_pop();
 
-    if(38 <= key && key <=43) {
-      sprintf(charKey, "%c", key+11);
+    if(38 <= key && key <= 43) {
+      sprintf(charKey, "%c", key +11);
       btnFnClicked(NULL, charKey);
       lcd_refresh();
     }
     else if(1 <= key && key <= 37) {
-      sprintf(charKey, "%02d", key - 1);
+      sprintf(charKey, "%02d", key -1);
+    //if(testEnabled) { fnSwStart(); }
       btnPressed(NULL, charKey);
-      if(RefreshLcd) {        //dr
-        lcd_refresh();
-      }
+      lcd_refresh();
+    //if(testEnabled) { fnSwStop(); }
     }
     else if(key == 0) {
-      btnReleased(NULL,NULL);
+      btnReleased(NULL, NULL);
       lcd_refresh();
     }
 
     uint32_t now = sys_current_ms();
     if(nextScreenRefresh <= now) {
-      nextScreenRefresh += LcdTimeout;  //dr
+      nextScreenRefresh += refreshScreenTimeout;  //dr
       if(nextScreenRefresh < now) {
-        nextScreenRefresh = now + LcdTimeout;               // we were out longer than expected; just skip ahead.
+        nextScreenRefresh = now + refreshScreenTimeout;               // we were out longer than expected; just skip ahead.
       }
       refreshScreen();
       lcd_refresh();

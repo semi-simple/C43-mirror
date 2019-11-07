@@ -2568,6 +2568,7 @@ void setupUI(void) {
   lbl82Gr = gtk_label_new("");
   lbl83Gr = gtk_label_new("");
   lbl84Gr = gtk_label_new("");
+  lbl84H  = gtk_label_new("\u2399"); // Printer
   lbl85Gr = gtk_label_new("");
   lblOn   = gtk_label_new("ON");
 

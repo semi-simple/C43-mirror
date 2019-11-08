@@ -283,7 +283,7 @@ void btnPressed(void *notUsed, void *data) {
       refreshRegisterLine(REGISTER_Y);
     }
 
-    if(item == ITM_ENTER) {
+    if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
       if(calcMode == CM_AIM) {
         calcModeNormal();
         showAlphaMode();

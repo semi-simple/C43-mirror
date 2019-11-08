@@ -233,7 +233,6 @@ const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,     
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 // Following menu is UPPER CASE for lower case: +80
-
 const int16_t menu_alpha_INTL[]  = { CHR_A_MACRON,                  CHR_A_ACUTE,                CHR_A_BREVE,              CHR_A_GRAVE,           CHR_A_DIARESIS,              CHR_A_TILDE,
                                      CHR_A_CIRC,                    CHR_A_RING,                 CHR_AE,                   CHR_A_OGONEK,          CHR_C_ACUTE,                 CHR_C_CARON,
                                      CHR_C_CEDILLA,                 CHR_D_STROKE,               CHR_D_CARON,              CHR_E_MACRON,          CHR_E_ACUTE,                 CHR_E_BREVE,

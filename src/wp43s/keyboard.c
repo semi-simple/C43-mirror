@@ -451,8 +451,7 @@ void btnPressed(void *notUsed, void *data) {
       refreshRegisterLine(REGISTER_Y);
     }
 
-    // ===== Special key: Enter ===================================================================
-    if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
+    if(item == ITM_ENTER) {
       if(calcMode == CM_AIM) {
         calcModeNormal();
         showAlphaMode();
@@ -477,7 +476,7 @@ void btnPressed(void *notUsed, void *data) {
 
         refreshStack();
       }
-      
+
       else if(calcMode == CM_TAM) {
         addItemToBuffer(ITM_ENTER);
       }
@@ -718,6 +717,39 @@ void btnPressed(void *notUsed, void *data) {
     else if(item == KEY_UP) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+          int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+          if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+            alphaCase = AC_UPPER;
+            showAlphaMode();
+            softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
+            showSoftmenuCurrentPart();
+          }
+          else {
+            itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+
+            if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+              softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
+              showSoftmenuCurrentPart();
+            }
+            else {
+              softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+              showSoftmenuCurrentPart();
+            }
+
+                 if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+            else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+          }
+        }
+        else {
+          if(alphaCase != AC_UPPER) {
+            alphaCase = AC_UPPER;
+            showAlphaMode();
+          }
+#ifdef PC_BUILD     //dr - new AIM //JM MOVED HERE FROM JUST BELOW AFTER MARTINS ARROW MOD
+calcModeAimGui();
+#endif
+}
+/*        if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
           if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
@@ -738,7 +770,7 @@ void btnPressed(void *notUsed, void *data) {
 #ifdef PC_BUILD     //dr - new AIM
           calcModeAimGui();
 #endif
-        }
+        }*/
       }
 
       else if(calcMode == CM_TAM) {
@@ -792,6 +824,40 @@ void btnPressed(void *notUsed, void *data) {
 
     else if(item == KEY_DOWN) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
+        if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+          int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+          if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
+            alphaCase = AC_LOWER;
+            showAlphaMode();
+            softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
+            showSoftmenuCurrentPart();
+          }
+          else {
+            itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+
+            if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
+              softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
+              showSoftmenuCurrentPart();
+            }
+            else {
+              softmenuStack[softmenuStackPointer - 1].firstItem = (softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems/6 - 1) / (itemShift/6) * itemShift; // doesn't work if numItems is not a multiple of 6
+              showSoftmenuCurrentPart();
+            }
+
+                 if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+            else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+          }
+        }
+        else {
+          if(alphaCase != AC_LOWER) {
+            alphaCase = AC_LOWER;
+            showAlphaMode();
+          }
+#ifdef PC_BUILD     //dr - new AIM
+calcModeAimGui();
+#endif
+}
+/*      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
         if(softmenuStackPointer > 0 && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
@@ -813,7 +879,7 @@ void btnPressed(void *notUsed, void *data) {
 #ifdef PC_BUILD     //dr - new AIM
           calcModeAimGui();
 #endif
-        }
+        }*/
       }
 
       else if(calcMode == CM_TAM) {

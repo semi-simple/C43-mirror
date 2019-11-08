@@ -481,10 +481,10 @@ void btnPressed(void *notUsed, void *data) {
         addItemToBuffer(ITM_ENTER);
       }
 
-
+/*JM                                                 //REMOVED IN 43S. Execution does not get here at all.
+                                                     //  Remove once eRPN is working again.
       else if(calcMode == CM_NORMAL) {
         printf("Stack lift from btnPressed calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
-/*JM                                                 //REMOVED IN 43S 
 
         STACK_LIFT_ENABLE;
 
@@ -496,8 +496,8 @@ void btnPressed(void *notUsed, void *data) {
         if(eRPN == false) {                                                     //JM eRPN modification. Ensure DUP always set SL
         STACK_LIFT_DISABLE;
         }                                                                       //JM eRPN modification
-*///JM
       }
+*///JM
 
       else if(calcMode == CM_FONT_BROWSER) {
       }

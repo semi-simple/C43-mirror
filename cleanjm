@@ -79,6 +79,40 @@ rm "statusBar 2.d" "statusBar 3.d" "statusBar 4.d" "statusBar 5.d" "statusBar 6.
 rm "timer 2.d" "timer 3.d" "timer 4.d" "timer 5.d" "timer 6.d" "timer 7.d" "timer 8.d" "timer 9.d" "timer 10.d" "timer 11.d"
 rm "wp43s 2.d" "wp43s 3.d" "wp43s 4.d" "wp43s 5.d" "wp43s 6.d" "wp43s 7.d" "wp43s 8.d" "wp43s 9.d" "wp43s 10.d" "wp43s 11.d"
 
+rm "fractions.ts 2.d" "fractions.ts 3.d" "fractions.ts 4.d" "fractions.ts 5.d" "fractions.ts 6.d" "fractions.ts 7.d" "fractions.ts 8.d" "fractions.ts 9.d" "fractions.ts 10.d" "fractions.ts.d"
+rm "gui.ts 2.d" "gui.ts 3.d" "gui.ts 4.d" "gui.ts 5.d" "gui.ts 6.d" "gui.ts 7.d" "gui.ts 8.d" "gui.ts 9.d" "gui.ts 10.d" "gui.ts.d"
+rm "integers.ts 2.d" "integers.ts 3.d" "integers.ts 4.d" "integers.ts 5.d" "integers.ts 6.d" "integers.ts 7.d" "integers.ts 8.d" "integers.ts 9.d" "integers.ts 10.d" "integers.ts.d"
+rm "items.ts 2.d" "items.ts 3.d" "items.ts 4.d" "items.ts 5.d" "items.ts 6.d" "items.ts 7.d" "items.ts 8.d" "items.ts 9.d" "items.ts 10.d" "items.ts.d"
+rm "keyboard.ts 2.d" "keyboard.ts 3.d" "keyboard.ts 4.d" "keyboard.ts 5.d" "keyboard.ts 6.d" "keyboard.ts 7.d" "keyboard.ts 8.d" "keyboard.ts 9.d" "keyboard.ts 10.d" "keyboard.ts.d"
+rm "memory.ts 2.d" "memory.ts 3.d" "memory.ts 4.d" "memory.ts 5.d" "memory.ts 6.d" "memory.ts 7.d" "memory.ts 8.d" "memory.ts 9.d" "memory.ts 10.d" "memory.ts.d"
+rm "rasterFontsData.ts 2.d" "rasterFontsData.ts 3.d" "rasterFontsData.ts 4.d" "rasterFontsData.ts 5.d" "rasterFontsData.ts 6.d" "rasterFontsData.ts 7.d" "rasterFontsData.ts 8.d" "rasterFontsData.ts 9.d" "rasterFontsData.ts 10.d" "rasterFontsData.ts.d"
+rm "registers.ts 2.d" "registers.ts 3.d" "registers.ts 4.d" "registers.ts 5.d" "registers.ts 6.d" "registers.ts 7.d" "registers.ts 8.d" "registers.ts 9.d" "registers.ts 10.d" "registers.ts.d"
+rm "registerValueConversions.ts 2.d" "registerValueConversions.ts 3.d" "registerValueConversions.ts 4.d" "registerValueConversions.ts 5.d" "registerValueConversions.ts 6.d" "registerValueConversions.ts 7.d" "registerValueConversions.ts 8.d" "registerValueConversions.ts 9.d" "registerValueConversions.ts 10.d" "registerValueConversions.ts.d"
+rm "saveRestoreCalcState.ts 2.d" "saveRestoreCalcState.ts 3.d" "saveRestoreCalcState.ts 4.d" "saveRestoreCalcState.ts 5.d" "saveRestoreCalcState.ts 6.d" "saveRestoreCalcState.ts 7.d" "saveRestoreCalcState.ts 8.d" "saveRestoreCalcState.ts 9.d" "saveRestoreCalcState.ts 10.d" "saveRestoreCalcState.ts.d"
+rm "screen.ts 2.d" "screen.ts 3.d" "screen.ts 4.d" "screen.ts 5.d" "screen.ts 6.d" "screen.ts 7.d" "screen.ts 8.d" "screen.ts 9.d" "screen.ts 10.d" "screen.ts.d"
+rm "softmenus.ts 2.d" "softmenus.ts 3.d" "softmenus.ts 4.d" "softmenus.ts 5.d" "softmenus.ts 6.d" "softmenus.ts 7.d" "softmenus.ts 8.d" "softmenus.ts 9.d" "softmenus.ts 10.d" "softmenus.ts.d"
+rm "sort.ts 2.d" "sort.ts 3.d" "sort.ts 4.d" "sort.ts 5.d" "sort.ts 6.d" "sort.ts 7.d" "sort.ts 8.d" "sort.ts 9.d" "sort.ts 10.d" "sort.ts.d"
+rm "stack.ts 2.d" "stack.ts 3.d" "stack.ts 4.d" "stack.ts 5.d" "stack.ts 6.d" "stack.ts 7.d" "stack.ts 8.d" "stack.ts 9.d" "stack.ts 10.d" "stack.ts.d"
+rm "stats.ts 2.d" "stats.ts 3.d" "stats.ts 4.d" "stats.ts 5.d" "stats.ts 6.d" "stats.ts 7.d" "stats.ts 8.d" "stats.ts 9.d" "stats.ts 10.d" "stats.ts.d"
+rm "statusBar.ts 2.d" "statusBar.ts 3.d" "statusBar.ts 4.d" "statusBar.ts 5.d" "statusBar.ts 6.d" "statusBar.ts 7.d" "statusBar.ts 8.d" "statusBar.ts 9.d" "statusBar.ts 10.d" "statusBar.ts.d"
+rm "timer.ts 2.d" "timer.ts 3.d" "timer.ts 4.d" "timer.ts 5.d" "timer.ts 6.d" "timer.ts 7.d" "timer.ts 8.d" "timer.ts 9.d" "timer.ts 10.d" "timer.ts.d"
+rm "wp43s 2.d" "wp43s 3.d" "wp43s 4.d" "wp43s 5.d" "wp43s 6.d" "wp43s 7.d" "wp43s 8.d" "wp43s 9.d" "wp43s 10.d" "wp43s.d"
+rm *.d
+rm *.o
+
+cd ./mathematics
+rm *.d
+rm *.o
+cd ../logicalOps
+rm *.d
+rm *.o
+cd ../browsers
+rm *.d
+rm *.o
+cd ..
+
+
+
 cd ..
 cd ..
 

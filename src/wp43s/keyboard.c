@@ -641,15 +641,14 @@ void btnPressed(void *notUsed, void *data) {
         }
         else {
           showFunctionName(ITM_CLX, 10);
-
-          STACK_LIFT_DISABLE;
-
-          if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            JM_auto_drop_activated = true;   //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-          }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
         }
+
+        if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          JM_auto_drop_activated = true;   //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+        }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
       }
 
       else if(calcMode == CM_AIM) {

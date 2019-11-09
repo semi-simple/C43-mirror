@@ -106,7 +106,7 @@ void WP34S_Cvt2RadSinCosTan(const realIc_t *an, uint32_t angularMode, realIc_t *
   }
   else { // angle < 90
     if(realIcCompareGreaterThan(&angle, angle45 + angularMode)) { // angle > 45°
-      realIcSubtract(angle90 + angularMode, &angle, &angle);        // 90° - angle  --> angle
+      realIcSubtract(angle90 + angularMode, &angle, &angle);      // 90° - angle  --> angle
       swap = !swap;
     }
 
@@ -120,9 +120,7 @@ void WP34S_Cvt2RadSinCosTan(const realIc_t *an, uint32_t angularMode, realIc_t *
       if(tan != NULL) realIcSetNegativeSign(tan);
     }
     if(realIcIsZero(sin)) {
-      if(!getFlag(FLAG_DANGER)) {
-        realIcSetPositiveSign(sin);
-      }
+      realIcSetPositiveSign(sin);
       if(tan != NULL) {
         realIcSetPositiveSign(tan);
       }
@@ -134,9 +132,13 @@ void WP34S_Cvt2RadSinCosTan(const realIc_t *an, uint32_t angularMode, realIc_t *
       realIcSetNegativeSign(cos);
       if(tan != NULL) realIcChangeSign(tan);
     }
-    if(realIcIsZero(cos) && !getFlag(FLAG_DANGER)) {
+    if(realIcIsZero(cos)) {
       realIcSetPositiveSign(cos);
     }
+  }
+
+  if(tan != NULL && realIcIsZero(cos)) {
+      realIcSetPositiveSign(tan);
   }
 }
 
@@ -197,14 +199,20 @@ void WP34S_SinCosTanTaylor(const realIc_t *a, bool_t swap, realIc_t *sinOut, rea
     }
   }
 
+  if(realIcIsZero(&cos)) {
+    realIcSetPositiveSign(&cos);
+  }
+
+  if(realIcIsZero(&sin)) {
+    realIcSetPositiveSign(&sin);
+  }
+
   if(sinOut != NULL) {
     real51Multiply(&sin, &angle, &sin);
-    //realIcCopy(&sin, sinOut);
     realIcAdd(&sin, const_0, sinOut);
   }
 
   if(cosOut != NULL) {
-    //realIcCopy(&cos, cosOut);
     realIcAdd(&cos, const_0, cosOut);
   }
 

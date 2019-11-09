@@ -47,7 +47,7 @@ void fnCxToRe(uint16_t unusedParamButMandatory) {
       real16RectangularToPolar(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X)); // X in radians
       convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      temporaryInformation = TI_RADIUS_THETA;
+      temporaryInformation = TI_THETA_RADIUS;
     }
 
     refreshStack();
@@ -71,7 +71,7 @@ void fnCxToRe(uint16_t unusedParamButMandatory) {
       real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X)); // X in radians
       convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      temporaryInformation = TI_RADIUS_THETA;
+      temporaryInformation = TI_THETA_RADIUS;
     }
 
     refreshStack();

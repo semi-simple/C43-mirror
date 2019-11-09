@@ -586,6 +586,7 @@ void fnReset(uint16_t confirmation) {
     fnComplexResult(true);           //JM CPXRES set     //JM bug. over-writing the content of setupdefaults
     showRealComplexResult();
     allocateLocalRegisters(0);
+    fnSetFlag(FLAG_DANGER);          //JM infinity etc.
 
     displayRealAsFraction = false;                       //JM bug. over-writing the content of setupdefaults
     STACK_LIFT_DISABLE;

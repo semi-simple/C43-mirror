@@ -3866,7 +3866,10 @@ void calcModeNIM(uint16_t unusedParamButMandatory) {
 
   liftStack();
   real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-  refreshStack();
+//refreshStack();                       //vv dr
+  refreshRegisterLine(REGISTER_Y);
+  refreshRegisterLine(REGISTER_Z);
+  refreshRegisterLine(REGISTER_T);      //^^
 
   nimBuffer[0] = 0;
   hexDigits = 0;

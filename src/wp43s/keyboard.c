@@ -261,7 +261,7 @@ void btnPressed(void *notUsed, void *data) {
   const calcKey_t *key;
   int16_t itemShift;
 
-  if(testEnabled) { fnSwStart(); }      //dr
+  if(testEnabled) { fnSwStart(1); }     //dr
 
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
@@ -443,9 +443,7 @@ void btnPressed(void *notUsed, void *data) {
       item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);
     }
 
-  //if(testEnabled) { fnSwStart(); }    //dr
     resetShiftState();
-  //if(testEnabled) { fnSwStop(); }     //dr
 
     if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
       lastErrorCode = 0;
@@ -1258,7 +1256,7 @@ void btnPressed(void *notUsed, void *data) {
     }
   }
 
-  if(testEnabled) { fnSwStop(); }       //dr
+  if(testEnabled) { fnSwStop(1); }      //dr
 }
 
 

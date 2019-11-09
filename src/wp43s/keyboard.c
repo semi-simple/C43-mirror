@@ -73,9 +73,12 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
+  if(shiftF || shiftG)        //vv dr //JM added DR time-waster elimination 1
+  {
   shiftF = false;
   shiftG = false;
   showShiftState();
+  }                           //^^
 }
 
 

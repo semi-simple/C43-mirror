@@ -1661,28 +1661,22 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnEnter(uint16_t unusedParamButMandatory) {
 
-//In all cases: DUP: LIFT STACK, COPY Y->X,  
-//  CLASSICRPN: LIFT if set, ENTERED VALUE ->X, LIFT STACK, COPY Y->X, DISABLE  
-//      eRPN: LIFT if set, ENTERED VALUE ->X,                         ENABLE  
-
-  printf("Stack lift from fnEnter calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
-
-  if( eRPN == false ) {                                         //JM eRPNNEW JM CHECK modification, experiment
+  //printf("fnEnter calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification
+  if( !eRPN ) {                                    //JM NEWERPN
     STACK_LIFT_ENABLE;
     liftStack();
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
     refreshStack();
-    STACK_LIFT_DISABLE;       //JM ERPN COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN
-  }                                                           //JM eRPNNEW modificatin
-/*
-else if( ( nimBuffer[0] == 0 ) && (calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_TAM) ) {
-        STACK_LIFT_ENABLE;
-        liftStack();
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-        refreshStack();      
-        STACK_LIFT_DISABLE;       //JM ERPN COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN
-        }
-*/
+    STACK_LIFT_DISABLE;                           //JM NEWERPN (COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN)
+  }                                               //JM NEWERPN vv
+  else {
+    if(stackLiftEnabled) {
+      liftStack();
+      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+      refreshStack();
+    }   
+    STACK_LIFT_DISABLE;                           //JM NEWERPN (COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN)
+  }                                               //JM NEWERPN ^^
 }
 
 

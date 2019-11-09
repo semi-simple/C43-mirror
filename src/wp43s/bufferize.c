@@ -298,7 +298,13 @@ void addItemToNimBuffer(int16_t item) {
   if(calcMode == CM_NORMAL) {
     switch(item) {
       case ITM_EXPONENT :
-        calcModeNIM(NOPARAM);
+        if( eRPN ) {                 //JM NEWERPN vv  NOTE: Rather force a stack lift before NIM (than after ENTER) so that normal ENTER SLS can be used for cancelling ENTER using NOP
+            calcModeNIM(NOPARAM);
+            STACK_LIFT_DISABLE;      
+        } 
+        else {                       //JM NEWERPN ^^
+          calcModeNIM(NOPARAM);
+        }                            //JM NEWERPN
         nimBuffer[0] = '+';
         nimBuffer[1] = '1';
         nimBuffer[2] = radixMark == RM_PERIOD ? '.' : ',';
@@ -308,7 +314,13 @@ void addItemToNimBuffer(int16_t item) {
         break;
 
       case CHR_PERIOD :
-        calcModeNIM(NOPARAM);
+        if( eRPN ) {                 //JM NEWERPN vv
+            calcModeNIM(NOPARAM);
+            STACK_LIFT_DISABLE;      
+        } 
+        else {                       //JM NEWERPN ^^
+          calcModeNIM(NOPARAM);
+        }                            //JM NEWERPN
         nimBuffer[0] = '+';
         nimBuffer[1] = '0';
         nimBuffer[2] = 0;
@@ -331,7 +343,13 @@ void addItemToNimBuffer(int16_t item) {
       case CHR_D :
       case CHR_E :
       case CHR_F :
-        calcModeNIM(NOPARAM);
+        if( eRPN ) {                 //JM ERPNNEW vv
+            calcModeNIM(NOPARAM);
+            STACK_LIFT_DISABLE;      
+        } 
+        else {                       //JM ERPNNEW ^^
+          calcModeNIM(NOPARAM);
+        }                            //JM ERPNNEW
         nimBuffer[0] = '+';
         nimBuffer[1] = 0;
         nimNumberPart = NP_EMPTY;
@@ -833,7 +851,9 @@ void addItemToNimBuffer(int16_t item) {
       break;
 
     case ITM_ENTER :
-      printf("ITM_ENTER from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
+//JM NEWERPN This section is not running at the moment and must be fixed
+//once the FLAG_CPXRES is working again.
+printf("ITM_ENTER from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
       done = true;
       closeNim();
       if(calcMode != CM_NIM && lastErrorCode == 0) {
@@ -841,7 +861,9 @@ void addItemToNimBuffer(int16_t item) {
           fnSetFlag(FLAG_CPXRES);
         }
 
-        printf("Stack lift from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
+//JM NEWERPN This section is not running at the moment and must be fixed
+//once the FLAG_CPXRES is working again.
+printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
         STACK_LIFT_ENABLE;
         if(eRPN == false) {                                         //JM eRPN modification, experiment
         liftStack();

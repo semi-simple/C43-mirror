@@ -121,5 +121,6 @@ rm "ttf2RasterFonts" "ttf2RasterFonts 2" "ttf2RasterFonts 3" "ttf2RasterFonts 4"
 rm "wp43c" "wp43c 2" "wp43c 3" "wp43c 4" "wp43c 5" "wp43c 6" "wp43c 7" "wp43c 8" "wp43c 9" "wp43c 10" "wp43c 11"
 rm "testSuite" "testSuite 2" "testSuite 3" "testSuite 4" "testSuite 5" "testSuite 6" "testSuite 7" "testSuite 8" "testSuite 9" "testSuite 10"
 rm "backup 2.bin" "backup 3.bin" "backup 4.bin" "backup 5.bin" "backup 6.bin" "backup 7.bin" "backup 8.bin" "backup 9.bin" "backup 10.bin"
+rm "wp43s" "wp43s 2" "wp43s 3" "wp43s 4" "wp43s 5" "wp43s 6" "wp43s 7" "wp43s 8" "wp43s 9" "wp43s 10" "wp43s 11"
 
 

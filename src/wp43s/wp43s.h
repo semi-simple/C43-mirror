@@ -368,14 +368,15 @@ typedef int16_t calcRegister_t;
 #define TI_NO_INFO              0
 #define TI_RESET                1
 #define TI_RADIUS_THETA         2
-#define TI_X_Y                  3
-#define TI_RE_IM                4
-#define TI_STATISTIC_SUMS       5
-#define TI_ARE_YOU_SURE         6
-#define TI_VERSION              7
-#define TI_WHO                  8
-#define TI_FALSE                9
-#define TI_TRUE                10
+#define TI_THETA_RADIUS         3
+#define TI_X_Y                  4
+#define TI_RE_IM                5
+#define TI_STATISTIC_SUMS       6
+#define TI_ARE_YOU_SURE         7
+#define TI_VERSION              8
+#define TI_WHO                  9
+#define TI_FALSE               10
+#define TI_TRUE                11
 
 // Register browser mode
 #define RBR_GLOBAL              0

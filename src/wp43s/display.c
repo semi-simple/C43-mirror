@@ -903,23 +903,28 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
 
 void complex16ToDisplayString2(const complex16_t *complex16, char *displayString) {
   int16_t i=100;
-  real34_t real, imag;
+  real16_t real16, imag16;
+  realIc_t realIc, imagIc;
 
   if(complexMode == CM_RECTANGULAR) {
-    real16Copy(VARIABLE_REAL16_DATA(complex16), &real);
-    real16Copy(VARIABLE_IMAG16_DATA(complex16), &imag);
+    real16Copy(VARIABLE_REAL16_DATA(complex16), &real16);
+    real16Copy(VARIABLE_IMAG16_DATA(complex16), &imag16);
   }
   else if(complexMode == CM_POLAR) {
-    real16RectangularToPolar(VARIABLE_REAL16_DATA(complex16), VARIABLE_IMAG16_DATA(complex16), (real16_t *)&real, (real16_t *)&imag); // imag16 in radian
-    convertAngle16FromTo((real16_t *)&imag, AM_RADIAN, currentAngularMode);
+    real16ToRealIc(VARIABLE_REAL16_DATA(complex16), &realIc);
+    real16ToRealIc(VARIABLE_IMAG16_DATA(complex16), &imagIc);
+    realIcRectangularToPolar(&realIc, &imagIc, &realIc, &imagIc); // imagIc in radian
+    convertAngleIcFromTo(&imagIc, AM_RADIAN, currentAngularMode);
+    realIcToReal16(&realIc, &real16);
+    realIcToReal16(&imagIc, &imag16);
   }
   else {
     sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
     displayBugScreen(errorMessage);
   }
 
-  realToDisplayString2(&real, false, displayString);
-  realToDisplayString2(&imag, false, displayString + i);
+  realToDisplayString2(&real16, false, displayString);
+  realToDisplayString2(&imag16, false, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
     if(strncmp(displayString + stringByteLength(displayString) - 2, NUM_SPACE_HAIR, 2) != 0) {
@@ -940,7 +945,7 @@ void complex16ToDisplayString2(const complex16_t *complex16, char *displayString
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle16ToDisplayString2((real16_t *)&imag, currentAngularMode, displayString + stringByteLength(displayString));
+    angle16ToDisplayString2(&imag16, currentAngularMode, displayString + stringByteLength(displayString));
   }
 }
 
@@ -948,23 +953,28 @@ void complex16ToDisplayString2(const complex16_t *complex16, char *displayString
 
 void complex34ToDisplayString2(const complex34_t *complex34, char *displayString) {
   int16_t i=100;
-  real34_t real, imag;
+  real34_t real34, imag34;
+  realIc_t realIc, imagIc;
 
   if(complexMode == CM_RECTANGULAR) {
-    real34Copy(VARIABLE_REAL34_DATA(complex34), &real);
-    real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag);
+    real34Copy(VARIABLE_REAL34_DATA(complex34), &real34);
+    real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
   }
   else if(complexMode == CM_POLAR) {
-    real34RectangularToPolar(VARIABLE_REAL34_DATA(complex34), VARIABLE_IMAG34_DATA(complex34), &real, &imag); // imag in radian
-    convertAngle34FromTo(&imag, AM_RADIAN, currentAngularMode);
+    real34ToRealIc(VARIABLE_REAL34_DATA(complex34), &realIc);
+    real34ToRealIc(VARIABLE_IMAG34_DATA(complex34), &imagIc);
+    realIcRectangularToPolar(&realIc, &imagIc, &realIc, &imagIc); // imagIc in radian
+    convertAngleIcFromTo(&imagIc, AM_RADIAN, currentAngularMode);
+    realIcToReal34(&realIc, &real34);
+    realIcToReal34(&imagIc, &imag34);
   }
   else {
     sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
     displayBugScreen(errorMessage);
   }
 
-  realToDisplayString2(&real, true, displayString);
-  realToDisplayString2(&imag, true, displayString + i);
+  realToDisplayString2(&real34, true, displayString);
+  realToDisplayString2(&imag34, true, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
     if(strncmp(displayString + stringByteLength(displayString) - 2, NUM_SPACE_HAIR, 2) != 0) {
@@ -985,7 +995,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle34ToDisplayString2(&imag, currentAngularMode, displayString + stringByteLength(displayString));
+    angle34ToDisplayString2(&imag34, currentAngularMode, displayString + stringByteLength(displayString));
   }
 }
 

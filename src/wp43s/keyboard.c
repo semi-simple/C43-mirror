@@ -32,17 +32,17 @@ void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftF) {
       showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
-#ifndef TESTSUITE_BUILD
+//#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
         JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
         JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
       }                                                                         //JM - Display dot in the f - line
-#endif
+//#endif
     }
     else if(shiftG) {
       showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
-#ifndef TESTSUITE_BUILD
+//#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
         JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
@@ -50,13 +50,13 @@ void showShiftState(void) {
         JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
         JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
       }                                                                         //JM - Display dot in the g - line
-#endif
+//#endif
     }
     else {
       refreshRegisterLine(REGISTER_T);
-#ifndef TESTSUITE_BUILD
+//#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
-#endif
+//#endif
     }
   }
 }
@@ -73,7 +73,7 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
-  if(shiftF || shiftG)        //vv dr //JM added DR time-waster elimination 1
+  if(shiftF || shiftG)        //vv dr
   {
   shiftF = false;
   shiftG = false;
@@ -261,6 +261,8 @@ void btnPressed(void *notUsed, void *data) {
   const calcKey_t *key;
   int16_t itemShift;
 
+  if(testEnabled) { fnSwStart(); }      //dr
+
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
@@ -441,7 +443,9 @@ void btnPressed(void *notUsed, void *data) {
       item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);
     }
 
+  //if(testEnabled) { fnSwStart(); }    //dr
     resetShiftState();
+  //if(testEnabled) { fnSwStop(); }     //dr
 
     if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
       lastErrorCode = 0;
@@ -1138,6 +1142,8 @@ calcModeAimGui();
       displayBugScreen(errorMessage);
     }
   }
+
+  if(testEnabled) { fnSwStop(); }       //dr
 }
 
 

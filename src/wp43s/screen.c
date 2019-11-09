@@ -503,6 +503,53 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 
 #ifndef TESTSUITE_BUILD
+//vv dr StopWatch
+/********************************************//**
+ * \brief Start StopWatch
+ *
+ * \param[in] void
+ * \return void
+ ***********************************************/
+void fnSwStart(void) {
+#ifdef DMCP_BUILD
+  swStart = sys_current_ms();
+#endif
+#ifdef PC_BUILD
+  swStart = g_get_monotonic_time();
+#endif
+}
+
+
+
+/********************************************//**
+ * \brief Stop StopWatch
+ *
+ * \param[in] void
+ * \return void
+ ***********************************************/
+void fnSwStop(void) {
+#ifdef DMCP_BUILD
+  swStop = sys_current_ms();
+#endif
+#ifdef PC_BUILD
+  swStop = g_get_monotonic_time();
+#endif
+  uint32_t swTime = swStop - swStart;
+  char snum[50];
+#ifdef DMCP_BUILD
+  showString("ms:", &standardFont, 30, 60, vmNormal, false, false);
+#endif
+#ifdef PC_BUILD
+  showString(STD_mu "s:", &standardFont, 30, 60, vmNormal, false, false);
+#endif
+  itoa(swTime, snum, 10);
+  strcat(snum, "         ");
+  showString(snum, &standardFont, 60, 60, vmNormal, false, false);
+}
+//^^
+
+
+
 /********************************************//**
  * \brief Draws the dots on the margins of the f and g lines on screen
  *

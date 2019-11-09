@@ -960,6 +960,17 @@ void fnRebuildRadioState() {
         i++;
       }
     }
+    else if(indexOfItems[k].func == fnRefreshLcd) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      rb.state = (refreshScreenTimeout == rb.param) ? 1 : 0;
+      rb.radioButton = RB_RL;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
     else if(indexOfItems[k].func == fnComplexResult) {
       radiocb_t rb;
       rb.itemNr = k;
@@ -1018,6 +1029,10 @@ void fnRebuildRadioState() {
       
       case JC_SH_3T:
         rb.state = Home3TimerMode? 3 : 2;
+        break;
+      
+      case DR_ITM_TST:
+        rb.state = testEnabled? 3 : 2;
         break;
       
       default:

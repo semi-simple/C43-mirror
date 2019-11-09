@@ -1926,15 +1926,15 @@
 #define ITM_USER_SHIFTS               1887  //JM USER
 #define ITM_USER_RESET                1888  //JM USER
 #define ITM_U_KEY_USER                1889  //JM USER
-#define Not_Used1890                  1890
+#define ITM_LCD                       1890
 #define ITM_U_KEY_CC                  1891  //JM USER
-#define Not_Used1892                  1892
+#define ITM_050                       1892
 #define ITM_U_KEY_MM                  1893  //JM USER
-#define Not_Used1894                  1894
+#define ITM_100                       1894
 #define ITM_U_KEY_SIGMA               1895  //JM USER
-#define Not_Used1896                  1896
+#define ITM_150                       1896
 #define ITM_U_KEY_PRGM                1897  //JM USER
-#define Not_Used1898                  1898
+#define ITM_200                       1898
 #define ITM_U_KEY_ALPHA               1899  //JM USER
 #define ITM_SH_NORM_E                 1900  //JM USER NORMAL
 #define ITM_JM_ASN                    1901  //JM ASSIGN

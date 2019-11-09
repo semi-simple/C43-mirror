@@ -1261,6 +1261,26 @@ void refreshRegisterLine(calcRegister_t regist) {
               showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
             }
 
+            else if(temporaryInformation == TI_THETA_RADIUS) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              if(regist == REGISTER_Y) {
+                strcpy(prefix, "r" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+
+              real16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+
+              w = stringWidth(tmpStr3000, &numericFont, false, true);
+              lineWidth = w;
+              if(prefixWidth > 0) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+              }
+              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            }
+
             else if(temporaryInformation == TI_X_Y) {
               if(regist == REGISTER_X) {
                 strcpy(prefix, "x" STD_SPACE_FIGURE "=");
@@ -1311,6 +1331,26 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
               if(regist == REGISTER_Y) {
                 strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+
+              real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+
+              w = stringWidth(tmpStr3000, &numericFont, false, true);
+              lineWidth = w;
+              if(prefixWidth > 0) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+              }
+              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            }
+
+            else if(temporaryInformation == TI_RADIUS_THETA) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              if(regist == REGISTER_Y) {
+                strcpy(prefix, "r" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
 

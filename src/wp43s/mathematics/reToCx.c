@@ -33,7 +33,7 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
   uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
   bool_t xIsAReal;
 
-  if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+  if(    (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
       && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);

@@ -707,6 +707,9 @@ void btnPressed(void *notUsed, void *data) {
             showAlphaMode();
             softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
             showSoftmenuCurrentPart();
+#ifdef PC_BUILD     //dr - new AIM
+            calcModeAimGui();
+#endif
           }
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -728,11 +731,11 @@ void btnPressed(void *notUsed, void *data) {
           if(alphaCase != AC_UPPER) {
             alphaCase = AC_UPPER;
             showAlphaMode();
-          }
-#ifdef PC_BUILD     //dr - new AIM //JM MOVED HERE FROM JUST BELOW AFTER MARTINS ARROW MOD
-calcModeAimGui();
+#ifdef PC_BUILD     //dr - new AIM     //JM MOVED HERE FROM JUST BELOW AFTER MARTINS ARROW MOD
+            calcModeAimGui();
 #endif
-}
+          }
+        }
 /*        if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
@@ -802,9 +805,9 @@ calcModeAimGui();
       alphaCase = AC_LOWER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
 #ifdef PC_BUILD     //dr - new AIM
-       calcModeAimGui();
+      calcModeAimGui();
 #endif
-     }                                                                          //JM CASE JM CAPS
+    }                                                                          //JM CASE JM CAPS
 
     else if(item == KEY_DOWN) {
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
@@ -815,6 +818,9 @@ calcModeAimGui();
             showAlphaMode();
             softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
             showSoftmenuCurrentPart();
+#ifdef PC_BUILD     //dr - new AIM
+            calcModeAimGui();
+#endif
           }
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -836,11 +842,11 @@ calcModeAimGui();
           if(alphaCase != AC_LOWER) {
             alphaCase = AC_LOWER;
             showAlphaMode();
-          }
 #ifdef PC_BUILD     //dr - new AIM
-calcModeAimGui();
+            calcModeAimGui();
 #endif
-}
+          }
+        }
 /*      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
         if(softmenuStackPointer > 0 && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;

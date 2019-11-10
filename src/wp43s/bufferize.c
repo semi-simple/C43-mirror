@@ -2139,6 +2139,7 @@ void closeNim(void) {
               }
             }
           }
+          fnSetFlag(FLAG_CPXRES);
         }
         else {
           sprintf(errorMessage, "In function closeNIM: %d is an unexpected nimNumberPart value!", nimNumberPart);

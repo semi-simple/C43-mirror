@@ -151,4 +151,3 @@ void realIcPolarToRectangular(const realIc_t *mag, const realIc_t *theta, realIc
   realIcMultiply(&magnitude, &cos, real);
   realIcMultiply(&magnitude, &sin, imag);
 }
-

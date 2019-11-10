@@ -709,9 +709,6 @@ void btnPressed(void *notUsed, void *data) {
             showAlphaMode();
             softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
             showSoftmenuCurrentPart();
-#ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
-#endif
           }
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -732,10 +729,13 @@ void btnPressed(void *notUsed, void *data) {
         else {
           if(alphaCase != AC_UPPER) {
             alphaCase = AC_UPPER;
-            showAlphaMode();
-#ifdef PC_BUILD     //dr - new AIM     //JM MOVED HERE FROM JUST BELOW AFTER MARTINS ARROW MOD
-            calcModeAimGui();
+            if(calcMode == CM_AIM)      //vv dr
+            {
+              showAlphaMode();
+#ifdef PC_BUILD     //dr - new AIM
+              calcModeAimGui();
 #endif
+            }                           //^^
           }
         }
 /*        if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -820,9 +820,6 @@ void btnPressed(void *notUsed, void *data) {
             showAlphaMode();
             softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
             showSoftmenuCurrentPart();
-#ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
-#endif
           }
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -843,10 +840,13 @@ void btnPressed(void *notUsed, void *data) {
         else {
           if(alphaCase != AC_LOWER) {
             alphaCase = AC_LOWER;
-            showAlphaMode();
+            if(calcMode == CM_AIM)      //vv dr
+            {
+              showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
+              calcModeAimGui();
 #endif
+            }                           //^^
           }
         }
 /*      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {

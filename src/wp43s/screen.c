@@ -504,18 +504,20 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 #ifndef TESTSUITE_BUILD
 //vv dr StopWatch
+uint32_t swStart[4];
+uint32_t swStop[4];
 /********************************************//**
  * \brief Start StopWatch
  *
  * \param[in] void
  * \return void
  ***********************************************/
-void fnSwStart(void) {
+void fnSwStart(uint8_t nr) {
 #ifdef DMCP_BUILD
-  swStart = sys_current_ms();
+  swStart[nr] = sys_current_ms();
 #endif
 #ifdef PC_BUILD
-  swStart = g_get_monotonic_time();
+  swStart[nr] = g_get_monotonic_time();
 #endif
 }
 
@@ -527,24 +529,24 @@ void fnSwStart(void) {
  * \param[in] void
  * \return void
  ***********************************************/
-void fnSwStop(void) {
+void fnSwStop(uint8_t nr) {
 #ifdef DMCP_BUILD
-  swStop = sys_current_ms();
+  swStop[nr] = sys_current_ms();
 #endif
 #ifdef PC_BUILD
-  swStop = g_get_monotonic_time();
+  swStop[nr] = g_get_monotonic_time();
 #endif
-  uint32_t swTime = swStop - swStart;
+  uint32_t swTime = swStop[nr] - swStart[nr];
   char snum[50];
 #ifdef DMCP_BUILD
-  showString("ms:", &standardFont, 30, 60, vmNormal, false, false);
+  showString("ms:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
 #endif
 #ifdef PC_BUILD
-  showString(STD_mu "s:", &standardFont, 30, 60, vmNormal, false, false);
+  showString(STD_mu "s:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
 #endif
   itoa(swTime, snum, 10);
   strcat(snum, "         ");
-  showString(snum, &standardFont, 60, 60, vmNormal, false, false);
+  showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);
 }
 //^^
 

@@ -2109,7 +2109,7 @@ void closeNim(void) {
               }
             }
           }
-          else {
+          else { // nimInputIs not Real34
             reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
             stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
 

@@ -106,19 +106,21 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
           real16Zero(VARIABLE_IMAG16_DATA(&temp));
         }
         else {
-          real16_t magnitude16, theta16;
+          realIc_t magnitude, theta;
 
-          real16Copy(VARIABLE_REAL16_DATA(&temp), &magnitude16);
-          real16Copy(VARIABLE_IMAG16_DATA(&temp), &theta16);
+          real16ToRealIc(VARIABLE_REAL16_DATA(&temp), &magnitude);
+          real16ToRealIc(VARIABLE_IMAG16_DATA(&temp), &theta);
           if(xIsAReal) {
-            convertAngle16FromTo(&theta16, currentAngularMode, AM_RADIAN);
+            convertAngleIcFromTo(&theta, currentAngularMode, AM_RADIAN);
           }
-          if(real16CompareLessThan(&magnitude16, const16_0)) {
-            real16SetPositiveSign(&magnitude16);
-            real16Add(&theta16, const_pi, &theta16);
-            real16DivideRemainder(&theta16, const_2pi, &theta16);
+          if(realIcCompareLessThan(&magnitude, const_0)) {
+            realIcSetPositiveSign(&magnitude);
+            realIcAdd(&theta, const_pi, &theta);
+            realIcDivideRemainder(&theta, const_2pi, &theta);
           }
-          real16PolarToRectangular(&magnitude16, &theta16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X)); // theta16 in radian
+          realIcPolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
+          realIcToReal16(&magnitude, REGISTER_REAL16_DATA(REGISTER_X));
+          realIcToReal16(&theta,     REGISTER_IMAG16_DATA(REGISTER_X));
         }
       }
       else {
@@ -137,19 +139,21 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
           real34Zero(VARIABLE_IMAG34_DATA(&temp));
         }
         else {
-          real34_t magnitude34, theta34;
+          realIc_t magnitude, theta;
 
-          real34Copy(VARIABLE_REAL34_DATA(&temp), &magnitude34);
-          real34Copy(VARIABLE_IMAG34_DATA(&temp), &theta34);
+          real34ToRealIc(VARIABLE_REAL34_DATA(&temp), &magnitude);
+          real34ToRealIc(VARIABLE_IMAG34_DATA(&temp), &theta);
           if(xIsAReal) {
-            convertAngle34FromTo(&theta34, currentAngularMode, AM_RADIAN);
+            convertAngleIcFromTo(&theta, currentAngularMode, AM_RADIAN);
           }
-          if(real34CompareLessThan(&magnitude34, const34_0)) {
-            real34SetPositiveSign(&magnitude34);
-            real34Add(&theta34, const_pi, &theta34);
-            real34DivideRemainder(&theta34, const34_2pi, &theta34);
+          if(realIcCompareLessThan(&magnitude, const_0)) {
+            realIcSetPositiveSign(&magnitude);
+            realIcAdd(&theta, const_pi, &theta);
+            realIcDivideRemainder(&theta, const_2pi, &theta);
           }
-          real34PolarToRectangular(&magnitude34, &theta34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // theta34 in radian
+          realIcPolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
+          realIcToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
+          realIcToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
         }
       }
       else {

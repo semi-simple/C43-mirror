@@ -38,6 +38,8 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     fnSetFlag(FLAG_CPXRES);
+    
+    fnRefreshRadioState(RB_BCR, true);                                    //dr
 
     xIsAReal = true;
     if(complexMode == CM_POLAR) {

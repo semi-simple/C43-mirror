@@ -343,13 +343,13 @@ void addItemToNimBuffer(int16_t item) {
       case CHR_D :
       case CHR_E :
       case CHR_F :
-        if( eRPN ) {                 //JM ERPNNEW vv
+        if( eRPN ) {                 //JM NEWERPN vv
             calcModeNIM(NOPARAM);
             STACK_LIFT_DISABLE;      
         } 
-        else {                       //JM ERPNNEW ^^
+        else {                       //JM NEWERPN ^^
           calcModeNIM(NOPARAM);
-        }                            //JM ERPNNEW
+        }                            //JM NEWERPN
         nimBuffer[0] = '+';
         nimBuffer[1] = 0;
         nimNumberPart = NP_EMPTY;
@@ -851,6 +851,9 @@ void addItemToNimBuffer(int16_t item) {
       break;
 
     case ITM_ENTER :
+      sprintf(errorMessage, "In bufferize.c, look at NEWERPN case ITM_ENTER");
+      displayBugScreen(errorMessage);
+/*
 //JM NEWERPN This section is not running at the moment and must be fixed
 //once the FLAG_CPXRES is working again.
 printf("ITM_ENTER from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
@@ -859,6 +862,8 @@ printf("ITM_ENTER from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer
       if(calcMode != CM_NIM && lastErrorCode == 0) {
         if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
           fnSetFlag(FLAG_CPXRES);
+    
+          fnRefreshRadioState(RB_BCR, true);                                    //dr
         }
 
 //JM NEWERPN This section is not running at the moment and must be fixed
@@ -872,7 +877,7 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
         STACK_LIFT_DISABLE;
         }                                                           //JM eRPN modification
         return;
-      }
+      } */
       break;
 
     case ITM_LN :
@@ -2176,6 +2181,9 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
               }
             }
           }
+          fnSetFlag(FLAG_CPXRES);
+    
+          fnRefreshRadioState(RB_BCR, true);                                    //dr
         }
         else {
           sprintf(errorMessage, "In function closeNIM: %d is an unexpected nimNumberPart value!", nimNumberPart);

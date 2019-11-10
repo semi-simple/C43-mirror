@@ -859,6 +859,8 @@ printf("ITM_ENTER from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer
       if(calcMode != CM_NIM && lastErrorCode == 0) {
         if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
           fnSetFlag(FLAG_CPXRES);
+    
+          fnRefreshRadioState(RB_BCR, true);                                    //dr
         }
 
 //JM NEWERPN This section is not running at the moment and must be fixed
@@ -2146,7 +2148,7 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
               }
             }
           }
-          else {
+          else { // nimInputIs not Real34
             reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
             stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
 
@@ -2176,6 +2178,9 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
               }
             }
           }
+          fnSetFlag(FLAG_CPXRES);
+    
+          fnRefreshRadioState(RB_BCR, true);                                    //dr
         }
         else {
           sprintf(errorMessage, "In function closeNIM: %d is an unexpected nimNumberPart value!", nimNumberPart);

@@ -123,3 +123,7 @@
            U+2217 duplicate of U+002A *
            U+223C duplicate of U+007E ~
            New WP43S_StandardFont.ttf generated.
+
+2019-11-11 Added 5 characters in standard font:
+           U+2306...9 for CEIL and FLOOR
+           U+2713 Checkmark

@@ -586,14 +586,16 @@ void program_main(void) {
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key -1);
-    //if(testEnabled) { fnSwStart(); }
+      if(testEnabled) { fnSwStart(0); }                     //dr
       btnPressed(NULL, charKey);
       lcd_refresh();
-    //if(testEnabled) { fnSwStop(); }
+      if(testEnabled) { fnSwStop(0); }                      //dr
     }
     else if(key == 0) {
+      if(testEnabled) { fnSwStart(1); }                     //dr
       btnReleased(NULL, NULL);
       lcd_refresh();
+      if(testEnabled) { fnSwStop(1); }                      //dr
     }
 
     uint32_t now = sys_current_ms();

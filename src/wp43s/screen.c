@@ -826,6 +826,15 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
   uint16_t ch, charCode, lg;
   bool_t   slc, sec;
 
+  if(Y_POSITION_OF_REGISTER_X_LINE == y) {                  //vv dr
+    if(font == &standardFont) {
+      clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
+    }
+    else if(x > 0) {
+      clearRegisterLineToX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
+    }
+  }                                                         //^^
+  
   lg = stringByteLength(string);
 
   ch = 0;
@@ -854,6 +863,11 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
     x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
   }
+
+  if(Y_POSITION_OF_REGISTER_X_LINE == y && font != &standardFont) {             //vv dr
+    clearRegisterLineFromX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
+  }                                                                             //^^
+
   return x;
 }
 
@@ -1015,6 +1029,44 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
 
 
 /********************************************//**
+ * \brief Clears one register line
+ *
+ * \param[in] xStart int16_t x coordinate to where ending to clear
+ * \param[in] yStart int16_t y coordinate from where starting to clear
+ * \return void
+ ***********************************************/
+void clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height) {
+  int16_t x, y;
+
+  for(x=xStart; x<SCREEN_WIDTH; x++) {
+    for(y=yStart; y<yStart+height; y++) {
+      clearPixel(x, y);
+    }
+  }
+}
+
+
+
+/********************************************//**
+ * \brief Clears one register line
+ *
+ * \param[in] xStart int16_t x coordinate from where starting to clear
+ * \param[in] yStart int16_t y coordinate from where starting to clear
+ * \return void
+ ***********************************************/
+void clearRegisterLineToX(int16_t xStop, int16_t yStart, int16_t height) {
+  int16_t x, y;
+
+  for(x=0; x<xStop; x++) {
+    for(y=yStart; y<yStart+height; y++) {
+      clearPixel(x, y);
+    }
+  }
+}
+
+
+
+/********************************************//**
  * \brief Displays one register line
  *
  * \param[in] regist int16_t Register line to display
@@ -1031,6 +1083,7 @@ void refreshRegisterLine(calcRegister_t regist) {
   if(calcMode != CM_BUG_ON_SCREEN) {
     if(REGISTER_X <= regist && regist <= REGISTER_T) {
       if(lastErrorCode == 0 || regist != errorRegisterLine) {
+        if(regist != REGISTER_X)                            //dr
         clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), REGISTER_LINE_HEIGHT);
 
         #ifdef PC_BUILD

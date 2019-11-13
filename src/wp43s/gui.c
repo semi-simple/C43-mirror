@@ -2694,7 +2694,7 @@ void setupUI(void) {
   // LCD screen 400x240
   screen = gtk_drawing_area_new();
   gtk_widget_set_size_request(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
-gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "Copy to clipboard:\n CTRL+h: Screen image\n CTRL+c: X Register\n CTRL+d: Lettered Registers\n CTRL+a: All Registers\n");  //JM
+  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "Copy to clipboard:\n CTRL+h: Screen image\n CTRL+c: X Register\n CTRL+d: Lettered Registers\n CTRL+a: All Registers\n");  //JM
   gtk_fixed_put(GTK_FIXED(grid), screen, 63, 72);
   screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
   numBytes = screenStride * SCREEN_HEIGHT * 4;

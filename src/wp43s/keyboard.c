@@ -261,7 +261,9 @@ void btnPressed(void *notUsed, void *data) {
   const calcKey_t *key;
   int16_t itemShift;
 
-  if(testEnabled) { fnSwStart(1); }     //dr
+#ifdef PC_BUILD
+  if(testEnabled) { fnSwStart(0); }     //dr
+#endif
 
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
@@ -1134,7 +1136,9 @@ void btnPressed(void *notUsed, void *data) {
     }
   }
 
-  if(testEnabled) { fnSwStop(1); }      //dr
+#ifdef PC_BUILD
+  if(testEnabled) { fnSwStop(0); }      //dr
+#endif
 }
 
 
@@ -1152,11 +1156,20 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 #ifdef DMCP_BUILD
 void btnReleased(void *notUsed, void *data) {
 #endif
+
+#ifdef PC_BUILD
+  if(testEnabled) { fnSwStart(1); }     //dr
+#endif
+
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();
     runFunction(item);
   }
+
+#ifdef PC_BUILD
+  if(testEnabled) { fnSwStop(1); }      //dr
+#endif
 }
 
 
@@ -1172,4 +1185,4 @@ void fnComplexCCCC(uint16_t unusedParamButMandatory) {
     btnClicked(NULL, "02");
   #endif
 }
-#endif // TESTSUITE_BUILD
+#endif // END IF NOT TESTSUITE_BUILD

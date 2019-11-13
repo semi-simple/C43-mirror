@@ -93,5 +93,7 @@ void     hideCursor           (void);
 void     showFunctionName     (int16_t item, int8_t counter);
 void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
+void     clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height);
+void     clearRegisterLineToX(int16_t xStop, int16_t yStart, int16_t height);
 void     refreshRegisterLine  (calcRegister_t regist);
 #endif

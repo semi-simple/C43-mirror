@@ -703,6 +703,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
 
   // Clearing the rows above the glyph
   for(row=0; row<glyph->rowsAboveGlyph; row++, y++) {
+#ifdef PC_BUILD                                                                 //dr
     for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
       if(videoMode == vmNormal) {
         clearPixel(x+col, y);
@@ -711,6 +712,15 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
         setPixel(x+col, y);
       }
     }
+#endif                                                                          //vv dr
+#if DMCP_BUILD
+    if(videoMode == vmNormal) {
+      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
+    }
+    else {
+      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
+    }
+#endif                                                                          //^^
   }
 
   // Drawing the glyph
@@ -771,15 +781,26 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
 
   // Clearing the rows below the glyph
   for(row=0; row<glyph->rowsBelowGlyph; row++, y++) {
+#ifdef PC_BUILD                                                                 //dr
     for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
       if(videoMode == vmNormal) {
         clearPixel(x+col, y);
       }
       else {
-       setPixel(x+col, y);
+        setPixel(x+col, y);
       }
     }
+#endif                                                                          //vv dr
+#if DMCP_BUILD
+    if(videoMode == vmNormal) {
+      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
+    }
+    else {
+      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
+    }
+#endif                                                                          //^^
   }
+
   return x + xGlyph + glyph->colsGlyph + endingCols;
 }
 
@@ -826,14 +847,14 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
   uint16_t ch, charCode, lg;
   bool_t   slc, sec;
 
-  if(Y_POSITION_OF_REGISTER_X_LINE == y) {                  //vv dr
-    if(font == &standardFont) {
+  if(Y_POSITION_OF_REGISTER_X_LINE == y) {                                      //vv dr
+    if(font != &numericFont) {
       clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
     }
     else if(x > 0) {
       clearRegisterLineToX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
     }
-  }                                                         //^^
+  }                                                                             //^^
   
   lg = stringByteLength(string);
 
@@ -864,7 +885,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
     x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
   }
 
-  if(Y_POSITION_OF_REGISTER_X_LINE == y && font != &standardFont) {             //vv dr
+  if(Y_POSITION_OF_REGISTER_X_LINE == y && font == &numericFont) {              //vv dr
     clearRegisterLineFromX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
   }                                                                             //^^
 
@@ -952,6 +973,7 @@ void showCursor(void) {
  * \return void
  ***********************************************/
 void hideCursor(void) {
+#ifdef PC_BUILD                                                                 //dr
   uint16_t x, y;
 
   if(cursorEnabled) {
@@ -970,6 +992,17 @@ void hideCursor(void) {
       }
     }
   }
+#endif                                                                          //vv dr
+#if DMCP_BUILD
+  if(cursorEnabled) {
+    if(cursorFont == CF_STANDARD) {
+      lcd_fill_rect(xCursor, yCursor+10, 6, 6, 0);
+    }
+    else {
+      lcd_fill_rect(xCursor, yCursor+15, 13, 13, 0);
+    }
+  }
+#endif                                                                          //^^
 }
 
 
@@ -1017,6 +1050,7 @@ void hideFunctionName() {
  * \return void
  ***********************************************/
 void clearRegisterLine(int16_t yStart, int16_t height) {
+#ifdef PC_BUILD                                                                 //dr
   int16_t x, y;
 
   for(x=0; x<SCREEN_WIDTH; x++) {
@@ -1024,6 +1058,10 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
       clearPixel(x, y);
     }
   }
+#endif                                                                          //vv dr
+#ifdef DMCP_BUILD
+  lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, 0);
+#endif                                                                          //^^
 }
 
 
@@ -1035,7 +1073,8 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
  * \param[in] yStart int16_t y coordinate from where starting to clear
  * \return void
  ***********************************************/
-void clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height) {
+void clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height) {   //dr
+#ifdef PC_BUILD
   int16_t x, y;
 
   for(x=xStart; x<SCREEN_WIDTH; x++) {
@@ -1043,6 +1082,10 @@ void clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height) {
       clearPixel(x, y);
     }
   }
+#endif
+#ifdef DMCP_BUILD
+  lcd_fill_rect(xStart, yStart, SCREEN_WIDTH, height, 0);
+#endif
 }
 
 
@@ -1054,7 +1097,8 @@ void clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height) {
  * \param[in] yStart int16_t y coordinate from where starting to clear
  * \return void
  ***********************************************/
-void clearRegisterLineToX(int16_t xStop, int16_t yStart, int16_t height) {
+void clearRegisterLineToX(int16_t xStop, int16_t yStart, int16_t height) {      //dr
+#ifdef PC_BUILD
   int16_t x, y;
 
   for(x=0; x<xStop; x++) {
@@ -1062,6 +1106,10 @@ void clearRegisterLineToX(int16_t xStop, int16_t yStart, int16_t height) {
       clearPixel(x, y);
     }
   }
+#endif
+#ifdef DMCP_BUILD
+  lcd_fill_rect(0, yStart, xStop, height, 0);
+#endif
 }
 
 
@@ -1083,7 +1131,7 @@ void refreshRegisterLine(calcRegister_t regist) {
   if(calcMode != CM_BUG_ON_SCREEN) {
     if(REGISTER_X <= regist && regist <= REGISTER_T) {
       if(lastErrorCode == 0 || regist != errorRegisterLine) {
-        if(regist != REGISTER_X)                            //dr
+        if(regist != REGISTER_X)                                                //dr
         clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), REGISTER_LINE_HEIGHT);
 
         #ifdef PC_BUILD

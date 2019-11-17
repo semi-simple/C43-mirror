@@ -654,14 +654,25 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
 
   // Clearing the rows above the glyph
   for(row=0; row<glyph->rowsAboveGlyph; row++, y++) {
-    for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
+    #ifdef PC_BUILD                                                                 // Dani Rau
+      for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
+        if(videoMode == vmNormal) {
+          clearPixel(x+col, y);
+        }
+        else {
+          setPixel(x+col, y);
+        }
+      }
+    #endif                                                                          // vv Dani Rau
+
+    #if DMCP_BUILD
       if(videoMode == vmNormal) {
-        clearPixel(x+col, y);
+        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
       }
       else {
-        setPixel(x+col, y);
+        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
       }
-    }
+    #endif                                                                          // ^^ Dani Rau
   }
 
   // Drawing the glyph
@@ -722,15 +733,27 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
 
   // Clearing the rows below the glyph
   for(row=0; row<glyph->rowsBelowGlyph; row++, y++) {
-    for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
+    #ifdef PC_BUILD                                                                 // Dani Rau
+      for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
+        if(videoMode == vmNormal) {
+          clearPixel(x+col, y);
+        }
+        else {
+          setPixel(x+col, y);
+        }
+      }
+    #endif                                                                          // vv Dani Rau
+
+    #if DMCP_BUILD
       if(videoMode == vmNormal) {
-        clearPixel(x+col, y);
+        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
       }
       else {
-       setPixel(x+col, y);
+        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
       }
-    }
+      #endif                                                                        // ^^ Dani Rau
   }
+
   return x + xGlyph + glyph->colsGlyph + endingCols;
 }
 
@@ -889,25 +912,39 @@ void showCursor(void) {
  * \return void
  ***********************************************/
 void hideCursor(void) {
-  uint16_t x, y;
+  #ifdef PC_BUILD                                         // Dani Rau
+    uint16_t x, y;
 
-  if(cursorEnabled) {
-    if(cursorFont == CF_STANDARD) {
-      for(x=xCursor; x<xCursor+6; x++) {
-        for(y=yCursor+10; y<yCursor+16; y++) {
-          clearPixel(x, y);
+    if(cursorEnabled) {
+      if(cursorFont == CF_STANDARD) {
+        for(x=xCursor; x<xCursor+6; x++) {
+          for(y=yCursor+10; y<yCursor+16; y++) {
+            clearPixel(x, y);
+          }
+        }
+      }
+      else {
+        for(x=xCursor; x<xCursor+13; x++) {
+          for(y=yCursor+15; y<yCursor+28; y++) {
+            clearPixel(x, y);
+          }
         }
       }
     }
-    else {
-      for(x=xCursor; x<xCursor+13; x++) {
-        for(y=yCursor+15; y<yCursor+28; y++) {
-          clearPixel(x, y);
-        }
+  #endif                                                  // vv Dani Rau
+
+  #if DMCP_BUILD
+    if(cursorEnabled) {
+      if(cursorFont == CF_STANDARD) {
+        lcd_fill_rect(xCursor, yCursor+10, 6, 6, 0);
+      }
+      else {
+        lcd_fill_rect(xCursor, yCursor+15, 13, 13, 0);
       }
     }
-  }
+  #endif                                                  // ^^ Dani Rau
 }
+
 
 
 
@@ -954,14 +991,21 @@ void hideFunctionName() {
  * \return void
  ***********************************************/
 void clearRegisterLine(int16_t yStart, int16_t height) {
-  int16_t x, y;
+  #ifdef PC_BUILD                                         // Dani Rau
+    int16_t x, y;
 
-  for(x=0; x<SCREEN_WIDTH; x++) {
-    for(y=yStart; y<yStart+height; y++) {
-      clearPixel(x, y);
+    for(x=0; x<SCREEN_WIDTH; x++) {
+      for(y=yStart; y<yStart+height; y++) {
+        clearPixel(x, y);
+      }
     }
-  }
+  #endif                                                  // vv Dani Rau
+
+  #ifdef DMCP_BUILD
+    lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, 0);
+  #endif                                                  // ^^ Dani Rau
 }
+
 
 
 

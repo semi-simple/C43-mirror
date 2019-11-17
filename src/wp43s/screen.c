@@ -544,6 +544,8 @@ void fnSwStop(uint8_t nr) {
 #ifdef PC_BUILD
   showString(STD_mu "s:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
 #endif
+  itoa(nr, snum, 10);
+  showString(snum, &standardFont, 20, 40 +nr*20, vmNormal, false, false);
   itoa(swTime, snum, 10);
   strcat(snum, "         ");
   showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);

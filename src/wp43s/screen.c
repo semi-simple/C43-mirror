@@ -560,21 +560,22 @@ void fnSwStop(uint8_t nr) {
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 
-  setPixel (xx+4,yy+7);
+#ifdef PC_BUILD
+//setPixel (xx+4,yy+7);
   setPixel (xx+5,yy+6);
-  setPixel (xx+6,yy+6);
+//setPixel (xx+6,yy+6);
   setPixel (xx+6,yy+5);
-  setPixel (xx+7,yy+4);
+//setPixel (xx+7,yy+4);
   setPixel (xx+6,yy+3);
-  setPixel (xx+6,yy+2);
+//setPixel (xx+6,yy+2);
   setPixel (xx+5,yy+2);
   setPixel (xx+4,yy+2);
   setPixel (xx+3,yy+2);
-  setPixel (xx+2,yy+2);
+//setPixel (xx+2,yy+2);
   setPixel (xx+2,yy+3);
   setPixel (xx+2,yy+4);
   setPixel (xx+2,yy+5);
-  setPixel (xx+2,yy+6);
+//setPixel (xx+2,yy+6);
   setPixel (xx+3,yy+6);
   setPixel (xx+4,yy+6);
   setPixel (xx+5,yy+5);
@@ -602,6 +603,20 @@ void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the do
   clearPixel (xx+1,yy+6);
   clearPixel (xx+2,yy+6);
   clearPixel (xx+3,yy+7);
+#endif
+#ifdef DMCP_BUILD
+  lcd_fill_rect(xx+2, yy+1, 5, 1, 0);
+  lcd_fill_rect(xx+1, yy+2, 7, 5, 0);
+  lcd_fill_rect(xx+2, yy+7, 5, 1, 0);
+  lcd_fill_rect(xx+3, yy+6, 3, 1, 0xFF);
+  lcd_fill_rect(xx+2, yy+5, 2, 1, 0xFF);
+  lcd_fill_rect(xx+5, yy+5, 2, 1, 0xFF);
+  lcd_fill_rect(xx+2, yy+4, 2, 1, 0xFF);
+  lcd_fill_rect(xx+6, yy+4, 2, 1, 0xFF);
+  lcd_fill_rect(xx+2, yy+3, 2, 1, 0xFF);
+  lcd_fill_rect(xx+5, yy+3, 2, 1, 0xFF);
+  lcd_fill_rect(xx+3, yy+2, 3, 1, 0xFF);
+#endif
 }
 
 
@@ -718,7 +733,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
       lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
     }
     else {
-      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
+      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
     }
 #endif                                                                          //^^
   }
@@ -796,7 +811,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
       lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
     }
     else {
-      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
+      lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
     }
 #endif                                                                          //^^
   }
@@ -852,7 +867,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
       clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
     }
     else if(x > 0) {
-      clearRegisterLineToX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
+      clearRegLineToX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
     }
   }                                                                             //^^
   
@@ -886,7 +901,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
   }
 
   if(Y_POSITION_OF_REGISTER_X_LINE == y && font == &numericFont) {              //vv dr
-    clearRegisterLineFromX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
+    clearRegLineFromX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
   }                                                                             //^^
 
   return x;
@@ -902,7 +917,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
  * \param[in] clearSoftkeys bool_t  Clear the softkey area
  * \return void
  ***********************************************/
-void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys) {
+void clearScreen(bool_t clearStatusBar, bool_t clearRegLines, bool_t clearSoftkeys) {
   #ifdef PC_BUILD
     int16_t x, y;
 
@@ -914,7 +929,7 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearS
       }
     }
 
-    if(clearRegisterLines) {
+    if(clearRegLines) {
       for(y=20; y<167; y++) {
         for(x=0; x<SCREEN_WIDTH; x++) {
           clearPixel(x, y);
@@ -936,7 +951,7 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearS
       lcd_fill_rect(0, 0, SCREEN_WIDTH, 20, 0);
     }
 
-    if(clearRegisterLines) {
+    if(clearRegLines) {
       lcd_fill_rect(0, 20, SCREEN_WIDTH, 147, 0);
     }
 
@@ -1073,7 +1088,7 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
  * \param[in] yStart int16_t y coordinate from where starting to clear
  * \return void
  ***********************************************/
-void clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height) {   //dr
+void clearRegLineFromX(int16_t xStart, int16_t yStart, int16_t height) {        //dr
 #ifdef PC_BUILD
   int16_t x, y;
 
@@ -1097,7 +1112,7 @@ void clearRegisterLineFromX(int16_t xStart, int16_t yStart, int16_t height) {   
  * \param[in] yStart int16_t y coordinate from where starting to clear
  * \return void
  ***********************************************/
-void clearRegisterLineToX(int16_t xStop, int16_t yStart, int16_t height) {      //dr
+void clearRegLineToX(int16_t xStop, int16_t yStart, int16_t height) {           //dr
 #ifdef PC_BUILD
   int16_t x, y;
 

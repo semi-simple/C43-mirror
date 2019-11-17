@@ -153,6 +153,10 @@ void btnFnClicked(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
 
+#ifdef PC_BUILD
+  if(testEnabled) { fnSwStart(0); }                         //dr
+#endif
+
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
 
@@ -178,6 +182,10 @@ void btnFnClicked(void *w, void *data) {
       resetShiftState();
     }
   }
+
+#ifdef PC_BUILD
+  if(testEnabled) { fnSwStop(0); }                          //dr
+#endif
 }
 
 
@@ -262,7 +270,7 @@ void btnPressed(void *notUsed, void *data) {
   int16_t itemShift;
 
 #ifdef PC_BUILD
-  if(testEnabled) { fnSwStart(0); }     //dr
+  if(testEnabled) { fnSwStart(1); }     //dr
 #endif
 
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
@@ -1137,7 +1145,7 @@ void btnPressed(void *notUsed, void *data) {
   }
 
 #ifdef PC_BUILD
-  if(testEnabled) { fnSwStop(0); }      //dr
+  if(testEnabled) { fnSwStop(1); }      //dr
 #endif
 }
 
@@ -1158,7 +1166,7 @@ void btnReleased(void *notUsed, void *data) {
 #endif
 
 #ifdef PC_BUILD
-  if(testEnabled) { fnSwStart(1); }     //dr
+  if(testEnabled) { fnSwStart(2); }     //dr
 #endif
 
   if(showFunctionNameItem != 0) {
@@ -1168,7 +1176,7 @@ void btnReleased(void *notUsed, void *data) {
   }
 
 #ifdef PC_BUILD
-  if(testEnabled) { fnSwStop(1); }      //dr
+  if(testEnabled) { fnSwStop(2); }      //dr
 #endif
 }
 

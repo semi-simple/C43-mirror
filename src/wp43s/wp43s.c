@@ -581,21 +581,23 @@ void program_main(void) {
 
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);
-      btnFnClicked(NULL, charKey);
-      lcd_refresh();
-    }
-    else if(1 <= key && key <= 37) {
-      sprintf(charKey, "%02d", key -1);
       if(testEnabled) { fnSwStart(0); }                     //dr
-      btnPressed(NULL, charKey);
+      btnFnClicked(NULL, charKey);
       lcd_refresh();
       if(testEnabled) { fnSwStop(0); }                      //dr
     }
-    else if(key == 0) {
+    else if(1 <= key && key <= 37) {
+      sprintf(charKey, "%02d", key -1);
       if(testEnabled) { fnSwStart(1); }                     //dr
-      btnReleased(NULL, NULL);
+      btnPressed(NULL, charKey);
       lcd_refresh();
       if(testEnabled) { fnSwStop(1); }                      //dr
+    }
+    else if(key == 0) {
+      if(testEnabled) { fnSwStart(2); }                     //dr
+      btnReleased(NULL, NULL);
+      lcd_refresh();
+      if(testEnabled) { fnSwStop(2); }                      //dr
     }
 
     uint32_t now = sys_current_ms();

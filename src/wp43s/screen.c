@@ -581,7 +581,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
         lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
       }
       else {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
+        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
       }
     #endif                                                                          // ^^ Dani Rau
   }
@@ -660,7 +660,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
         lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
       }
       else {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xF);
+        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
       }
       #endif                                                                        // ^^ Dani Rau
   }

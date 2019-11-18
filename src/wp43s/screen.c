@@ -461,6 +461,13 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     allowScreenUpdate = true;
     strcpy(oldTime, dateTimeString);
     showDateTime();
+
+    if(usb_powered() == 0 && get_lowbat_state() == 1) {
+      showBattery();
+    }
+    else {
+      hideBattery();
+    }
   }
 }
 #endif

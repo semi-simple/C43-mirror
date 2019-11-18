@@ -100,7 +100,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
           closeNim();
           if(calcMode != CM_NIM) {
             if(indexOfItems[func % 10000].func == fnConstant) {
-              stackLiftEnable();
+              STACK_LIFT_ENABLE;
             }
           }
         }

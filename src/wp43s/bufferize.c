@@ -1062,7 +1062,7 @@ void addItemToNimBuffer(int16_t item) {
     closeNim();
     if(calcMode != CM_NIM) {
       if(item == ITM_pi || indexOfItems[item].func == fnConstant) {
-        stackLiftEnable();
+        STACK_LIFT_ENABLE;
       }
 
       if(lastErrorCode == 0) {

@@ -16,14 +16,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 FT_Library library;
 FT_Error   error;
-FILE       *cFile, *hFile;
-int        byte, numBits;
+FILE       *cFile, *hFile, *sortingOrder;
+int        byte, numBits, pos, nbGlyphRanks;
+char       line[500];
+
+struct {
+  uint16_t codePoint;
+  int16_t  rank1;
+  int16_t  rank2;
+} glyphRank[1000];
 
 const char* getErrorMessage(FT_Error err) {
   #undef __FTERRORS_H__
@@ -32,6 +40,62 @@ const char* getErrorMessage(FT_Error err) {
   #define FT_ERROR_END_LIST       }
   #include FT_ERRORS_H
   return "(Unknown error)";
+}
+
+uint16_t hexToUint(const char *hexa) {
+    // the itialisation to zero prevents a 'variable used is not initialized' warning on Mac:
+    uint16_t uint=0;
+
+  if(   (('0' <= hexa[0] && hexa[0] <= '9') || ('A' <= hexa[0] && hexa[0] <= 'F') || ('a' <= hexa[0] && hexa[0] <= 'f'))
+     && (('0' <= hexa[1] && hexa[1] <= '9') || ('A' <= hexa[1] && hexa[1] <= 'F') || ('a' <= hexa[1] && hexa[1] <= 'f'))
+     && (('0' <= hexa[2] && hexa[2] <= '9') || ('A' <= hexa[2] && hexa[2] <= 'F') || ('a' <= hexa[2] && hexa[1] <= 'f'))
+     && (('0' <= hexa[3] && hexa[3] <= '9') || ('A' <= hexa[3] && hexa[3] <= 'F') || ('a' <= hexa[3] && hexa[1] <= 'f'))) {
+    if('0' <= hexa[0] && hexa[0] <= '9') {
+      uint = hexa[0] - '0';
+    }
+    else if('a' <= hexa[0] && hexa[0] <= 'f') {
+      uint = hexa[0] - 'a' + 10;
+    }
+    else {
+      uint = hexa[0] - 'A' + 10;
+    }
+
+    if('0' <= hexa[1] && hexa[1] <= '9') {
+      uint = uint*16 + hexa[1] - '0';
+    }
+    else if('a' <= hexa[1] && hexa[1] <= 'f') {
+      uint = uint*16 + hexa[1] - 'a' + 10;
+    }
+    else {
+      uint = uint*16 + hexa[1] - 'A' + 10;
+    }
+
+    if('0' <= hexa[2] && hexa[2] <= '9') {
+      uint = uint*16 + hexa[2] - '0';
+    }
+    else if('a' <= hexa[2] && hexa[2] <= 'f') {
+      uint = uint*16 + hexa[2] - 'a' + 10;
+    }
+    else {
+      uint = uint*16 + hexa[2] - 'A' + 10;
+    }
+
+    if('0' <= hexa[3] && hexa[3] <= '9') {
+      uint = uint*16 + hexa[3] - '0';
+    }
+    else if('a' <= hexa[3] && hexa[3] <= 'f') {
+      uint = uint*16 + hexa[3] - 'a' + 10;
+    }
+    else {
+      uint = uint*16 + hexa[3] - 'A' + 10;
+    }
+  }
+  else {
+    fprintf(stderr, "\nMissformed hexadecimal code point. The code %c%c%c%c is erroneous.\n", hexa[0], hexa[1], hexa[2], hexa[3]);
+    exit(0);
+  }
+
+  return uint;
 }
 
 int sortCharCodes(const void *a, const void *b) {
@@ -50,17 +114,18 @@ void addBit(int bit) {
 }
 
 void exportCStructure(char const *ttfName) {
-  FT_Face      face;
-  FT_UInt      glyphIndex;
-  FT_ULong     charCode;
-  FT_ULong     charCodes[1000];
-  FT_Vector    pen;
-  char         glyphName[100];
-  char         ttfName2[100], path[200], *fontName;
-  int          x, y, cc, bytesPerRow, bit; // ,dataLength
-  int          fontHeightPixels, unitsPerEm, onePixelSize, numberOfGlyphs;
-  int          colsBeforeGlyph, colsGlyph, colsAfterGlyph;
-  int          rowsAboveGlyph, rowsGlyph, rowsBelowGlyph;
+  FT_Face   face;
+  FT_UInt   glyphIndex;
+  FT_ULong  charCode;
+  FT_ULong  charCodes[1000];
+  FT_Vector pen;
+  char      glyphName[100];
+  char      ttfName2[100], path[200], *fontName;
+  int       x, y, cc, bytesPerRow, bit; // ,dataLength
+  int       fontHeightPixels, unitsPerEm, onePixelSize, numberOfGlyphs;
+  int       colsBeforeGlyph, colsGlyph, colsAfterGlyph;
+  int       rowsAboveGlyph, rowsGlyph, rowsBelowGlyph;
+  int       i, rank1, rank2;
 
   /////////////////////
   // Open the face 0 //
@@ -158,6 +223,30 @@ void exportCStructure(char const *ttfName) {
         fprintf(stderr, "Error %d : %s\n", error, getErrorMessage(error));
       }
 
+      ///////////////////////////////////////////////
+      // rank1 and rank2 for standard font sorting //
+      ///////////////////////////////////////////////
+      if(fontName[0] == 's') { // Standard font
+        for(i=0; i<nbGlyphRanks; i++) {
+          if(charCodes[cc] == glyphRank[i].codePoint) {
+            break;
+          }
+        }
+
+        if(i >= nbGlyphRanks) {
+          fprintf(stderr, "Code point U+%04x is not in file fonts/sortingOrder.csv\n", (unsigned int)charCodes[cc]);
+          exit(1);
+        }
+
+        rank1 = glyphRank[i].rank1;
+        rank2 = glyphRank[i].rank2;
+      }
+      else {
+        rank1 = 0;
+        rank2 = 0;
+      }
+      printf("rank1: %3d    rank2: %3d\n", rank1, rank2);
+
       //////////////////////////
       // Columns in the glyph //
       //////////////////////////
@@ -196,8 +285,8 @@ void exportCStructure(char const *ttfName) {
         bytesPerRow = bytesPerRow/8 + 1;
       }
 
-      fprintf(cFile, "    {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d,\n",
-                      (unsigned int)(charCodes[cc]>=0x0080 ? charCodes[cc]|0x8000 : charCodes[cc]), colsBeforeGlyph, colsGlyph, colsAfterGlyph, rowsAboveGlyph, rowsGlyph, rowsBelowGlyph);
+      fprintf(cFile, "    {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d, .rank1=%3d, .rank2=%3d,\n",
+                      (unsigned int)(charCodes[cc]>=0x0080 ? charCodes[cc]|0x8000 : charCodes[cc]), colsBeforeGlyph, colsGlyph, colsAfterGlyph, rowsAboveGlyph, rowsGlyph, rowsBelowGlyph, rank1, rank2);
       fprintf(cFile, "     .data=\"");
 
       for(y=0; y<rowsGlyph; y++) {
@@ -228,6 +317,57 @@ void exportCStructure(char const *ttfName) {
 }
 
 int main(void) {
+  ////////////////
+  // Open files //
+  ////////////////
+  #if (__linux__ == 1)
+    sortingOrder = fopen("fonts/sortingOrder.csv", "rb");
+    cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
+  #elif defined(__MINGW64__)
+    sortingOrder = fopen("fonts\\sortingOrder.csv", "rb");
+    cFile        = fopen("src\\wp43s\\rasterFontsData.c", "wb");
+  #elif defined(__APPLE__)
+    sortingOrder = fopen("fonts/sortingOrder.csv", "rb");
+    cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
+  #else
+    #error Only Linux, MacOS and Windows MINGW64 are supported for now
+  #endif
+
+  if(sortingOrder == NULL) {
+    fprintf(stderr, "Cannot open file fonts/sortingOrder.csv\n");
+    exit(1);
+  }
+
+  ////////////////////////////
+  // Read the sorting order //
+  ////////////////////////////
+  nbGlyphRanks = 0;
+  fgets(line, 500, sortingOrder); // Header
+  fgets(line, 500, sortingOrder);
+  while(!feof(sortingOrder)) {
+    pos = strlen(line) - 1;
+
+    if(line[pos] == '\n' || line[pos] == '\r') {
+      line[pos--] = 0;
+    }
+
+    if(line[pos] == '\n' || line[pos] == '\r') {
+      line[pos--] = 0;
+    }
+
+    glyphRank[nbGlyphRanks].codePoint = hexToUint(line + 3);
+
+    pos = 9;
+    glyphRank[nbGlyphRanks].rank1 = atoi(line + pos);
+
+    while(line[pos++] != ',');
+    glyphRank[nbGlyphRanks].rank2 = atoi(line + pos);
+
+    nbGlyphRanks++;
+
+    fgets(line, 500, sortingOrder);
+  }
+
   /////////////////////////////////////
   // Initialize the freetype library //
   /////////////////////////////////////
@@ -237,15 +377,6 @@ int main(void) {
     exit(1);
   }
 
-  #if (__linux__ == 1)
-   cFile = fopen("src/wp43s/rasterFontsData.c", "wb");
-  #elif defined(__MINGW64__)
-   cFile = fopen("src\\wp43s\\rasterFontsData.c", "wb");
-  #elif defined(__APPLE__) 
-   cFile = fopen("src/wp43s/rasterFontsData.c", "wb");
-  #else
-   #error Only Linux, MacOS and Windows MINGW64 are supported for now
-  #endif
   fprintf(cFile, "/* This file is part of 43S.\n");
   fprintf(cFile, " *\n");
   fprintf(cFile, " * 43S is free software: you can redistribute it and/or modify\n");

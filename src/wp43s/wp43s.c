@@ -93,6 +93,7 @@ uint16_t             tamMode;
 uint32_t             firstGregorianDay;
 uint32_t             denMax;
 uint32_t             lastIntegerBase;
+uint32_t             alphaSelectionTimer;
 uint8_t              softmenuStackPointer;
 uint8_t              transitionSystemState;
 uint8_t              cursorBlinkCounter;
@@ -141,6 +142,7 @@ bool_t               printerIconEnabled;
 bool_t               batteryIconEnabled;
 bool_t               shiftF;
 bool_t               shiftG;
+bool_t               shiftStateChanged;
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
@@ -148,7 +150,6 @@ bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
-bool_t               batteryLow;
 calcKey_t            kbd_usr[37];
 calcRegister_t       errorMessageRegisterLine;
 calcRegister_t       errorRegisterLine;
@@ -165,6 +166,7 @@ size_t               gmpMemInBytes;
 size_t               wp43sMemInBytes;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
+int32_t              lgCatalogSelection;
 void                 (*confirmedFunction)(uint16_t);
 realIc_t             const *gammaConstants;
 realIc_t             const *angle180;
@@ -289,6 +291,7 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
+  shiftStateChanged = false;
   #ifndef TESTSUITE_BUILD
     showShiftState();
   #endif // TESTSUITE_BUILD
@@ -341,11 +344,14 @@ void setupDefaults(void) {
   angle45  = const_45;
 
   alphaSelectionMenu = ASM_NONE;
+
+  #ifndef TESTSUITE_BUILD
+    resetAlphaSelectionBuffer();
+  #endif
+
   lastFcnsMenuPos = 0;
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
-
-  batteryLow = false;
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
@@ -402,7 +408,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  if(strcmp(indexOfItems[LAST_ITEM].itemPrinted, "Last item") != 0) {
+  if(strcmp(indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item") != 0) {
     printf("The last item of indexOfItems[] is not \"Last item\"\n");
     exit(1);
   }
@@ -466,7 +472,6 @@ void program_main(void) {
   setupDefaults();
 
   endOfProgram = false;
-  batteryLow = false;
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms()+100;
@@ -607,7 +612,7 @@ void program_main(void) {
       btnPressed(NULL, charKey);
       lcd_refresh();
     } else if(key == 0) {
-      btnReleased(NULL,NULL);
+      btnReleased(NULL, NULL);
       lcd_refresh();
     }
 

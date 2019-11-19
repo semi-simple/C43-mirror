@@ -22,7 +22,10 @@
 #include "testSuite.h"
 
 
-
+extern const int16_t menu_FCNS[];
+extern const int16_t menu_CNST[];
+extern const int16_t menu_MENUS[];
+extern const softmenu_t softmenu[];
 char line[10000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal;
 int32_t functionIndex, funcType, correctSignificantDigits, numberOfCorrectSignificantDigitsExpected;
@@ -2048,8 +2051,45 @@ void processOneFile(void) {
 
 
 
+void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const char *catalogName) {
+  int32_t i, nbElements, cmp;
+
+  for(nbElements=0, i=0; softmenu[i].menuId; i++) {
+    if(softmenu[i].menuId == -catalogId) {
+      nbElements = softmenu[i].numItems;
+      break;
+    }
+  }
+  if(nbElements == 0) {
+    printf("MNU_%s (-%d) not found in structure softmenu!\n", catalogName, catalogId);
+    exit(1);
+  }
+
+  printf("Checking sort order of catalog %s (%d elements)\n", catalogName, nbElements);
+
+  for(i=1; i<nbElements; i++) {
+    if((cmp = compareString(indexOfItems[abs(catalog[i - 1])].itemCatalogName, indexOfItems[abs(catalog[i])].itemCatalogName, CMP_EXTENSIVE)) >= 0) {
+      printf("In catalog %s, element %d (item %d) should be after element %d (item %d). cmp = %d\n", catalogName, i - 1, catalog[i - 1], i, catalog[i], cmp);
+      exit(1);
+    }
+  }
+}
+
+
+
+void checkCatalogsSorting(void) {
+  //compareString(indexOfItems[234].itemCatalogName, indexOfItems[245].itemCatalogName, CMP_EXTENSIVE);
+  checkOneCatalogSorting(menu_FCNS,  MNU_FCNS,  "FCNS");
+  checkOneCatalogSorting(menu_CNST,  MNU_CNST,  "CNST");
+  checkOneCatalogSorting(menu_MENUS, MNU_MENUS, "MENUS");
+}
+
+
+
 void processTests(void) {
   FILE *fileList;
+
+  checkCatalogsSorting();
 
   numTestsTotal = 0;
 

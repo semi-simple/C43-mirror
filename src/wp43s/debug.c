@@ -364,6 +364,7 @@ void debugNIM(void) {
     if(cm == CM_NORMAL) return "normal";
     if(cm == CM_TAM)    return "TAM   ";
     if(cm == CM_NIM)    return "NIM   ";
+    if(cm == CM_ASM)    return "ASM   ";
 
     return "???   ";
   }

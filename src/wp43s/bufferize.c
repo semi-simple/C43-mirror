@@ -25,8 +25,154 @@
 #ifndef TESTSUITE_BUILD
 void fnAim(uint16_t unusedParamButMandatory) {
   resetShiftState();
-  calcModeAIM(NOPARAM); // Alpha Input Mode
+  calcModeAim(NOPARAM); // Alpha Input Mode
 }
+
+
+
+uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
+  nextChar = NC_NORMAL;
+
+  if(subOrSup == NC_SUBSCRIPT) {
+    switch(item) {
+      case CHR_alpha    : return CHR_SUB_alpha;
+      case CHR_delta    : return CHR_SUB_delta;
+      case CHR_mu       : return CHR_SUB_mu;
+      case CHR_SUN      : return CHR_SUB_SUN;
+      case CHR_h        : return CHR_SUB_h;
+      case CHR_t        : return CHR_SUB_t;
+      case CHR_INFINITY : return CHR_SUB_INFINITY;
+      case CHR_s        : return CHR_SUB_s;
+      case CHR_PLUS     : return CHR_SUB_PLUS;
+      case CHR_MINUS    : return CHR_SUB_MINUS;
+      case CHR_0        : return CHR_SUB_0;
+      case CHR_1        : return CHR_SUB_1;
+      case CHR_2        : return CHR_SUB_2;
+      case CHR_3        : return CHR_SUB_3;
+      case CHR_4        : return CHR_SUB_4;
+      case CHR_5        : return CHR_SUB_5;
+      case CHR_6        : return CHR_SUB_6;
+      case CHR_7        : return CHR_SUB_7;
+      case CHR_8        : return CHR_SUB_8;
+      case CHR_9        : return CHR_SUB_9;
+      case CHR_a        : return CHR_SUB_a;
+      case CHR_b        : return CHR_SUB_b;
+      case CHR_c        : return CHR_SUB_c;
+      case CHR_d        : return CHR_SUB_d;
+      case CHR_e        : return CHR_SUB_e;
+      case CHR_i        : return CHR_SUB_i;
+      case CHR_j        : return CHR_SUB_j;
+      case CHR_k        : return CHR_SUB_k;
+      case CHR_l        : return CHR_SUB_l;
+      case CHR_m        : return CHR_SUB_m;
+      case CHR_n        : return CHR_SUB_n;
+      case CHR_o        : return CHR_SUB_o;
+      case CHR_p        : return CHR_SUB_p;
+      case CHR_q        : return CHR_SUB_q;
+      case CHR_u        : return CHR_SUB_u;
+      case CHR_v        : return CHR_SUB_v;
+      case CHR_w        : return CHR_SUB_w;
+      case CHR_x        : return CHR_SUB_x;
+      case CHR_y        : return CHR_SUB_y;
+      case CHR_z        : return CHR_SUB_z;
+      case CHR_A        : return CHR_SUB_A;
+      case CHR_B        : return CHR_SUB_B;
+      case CHR_C        : return CHR_SUB_C;
+      case CHR_D        : return CHR_SUB_D;
+      case CHR_E        : return CHR_SUB_E;
+      case CHR_F        : return CHR_SUB_F;
+      case CHR_G        : return CHR_SUB_G;
+      case CHR_H        : return CHR_SUB_H;
+      case CHR_I        : return CHR_SUB_I;
+      case CHR_J        : return CHR_SUB_J;
+      case CHR_K        : return CHR_SUB_K;
+      case CHR_L        : return CHR_SUB_L;
+      case CHR_M        : return CHR_SUB_M;
+      case CHR_N        : return CHR_SUB_N;
+      case CHR_O        : return CHR_SUB_O;
+      case CHR_P        : return CHR_SUB_P;
+      case CHR_Q        : return CHR_SUB_Q;
+      case CHR_R        : return CHR_SUB_R;
+      case CHR_S        : return CHR_SUB_S;
+      case CHR_T        : return CHR_SUB_T;
+      case CHR_U        : return CHR_SUB_U;
+      case CHR_V        : return CHR_SUB_V;
+      case CHR_W        : return CHR_SUB_W;
+      case CHR_X        : return CHR_SUB_X;
+      case CHR_Y        : return CHR_SUB_Y;
+      case CHR_Z        : return CHR_SUB_Z;
+      default           : return item;
+    }
+  }
+  else if(subOrSup == NC_SUPERSCRIPT) {
+    switch(item) {
+      case CHR_a        : return CHR_SUP_a;
+      case CHR_x        : return CHR_SUP_x;
+      case CHR_INFINITY : return CHR_SUP_INFINITY;
+      case CHR_PLUS     : return CHR_SUP_PLUS;
+      case CHR_MINUS    : return CHR_SUP_MINUS;
+      case CHR_0        : return CHR_SUP_0;
+      case CHR_1        : return CHR_SUP_1;
+      case CHR_2        : return CHR_SUP_2;
+      case CHR_3        : return CHR_SUP_3;
+      case CHR_4        : return CHR_SUP_4;
+      case CHR_5        : return CHR_SUP_5;
+      case CHR_6        : return CHR_SUP_6;
+      case CHR_7        : return CHR_SUP_7;
+      case CHR_8        : return CHR_SUP_8;
+      case CHR_9        : return CHR_SUP_9;
+      case CHR_f        : return CHR_SUP_f;
+      case CHR_g        : return CHR_SUP_g;
+      case CHR_h        : return CHR_SUP_h;
+      case CHR_r        : return CHR_SUP_r;
+      case CHR_T        : return CHR_SUP_T;
+      default           : return item;
+    }
+  }
+
+  return item;
+}
+
+
+
+int32_t findFirstItem(const char *twoLetters) {
+  const int16_t *first, *middle, *last;
+
+  first = softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+  last = first + softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1;
+  while(*last == ITM_NULL) {
+    last--;
+  }
+
+  middle = first + (last - first) / 2;
+  while(first + 1 < last) {
+    if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) < 0) { // *middle is negative for a menu
+      last = middle;
+    }
+    else {
+      first = middle;
+    }
+
+    middle = first + (last - first) / 2;
+  }
+
+
+  if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
+    return first - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+  }
+  else {
+    return last - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+  }
+}
+
+
+
+void resetAlphaSelectionBuffer(void) {
+  lgCatalogSelection = 0;
+  alphaSelectionTimer = 0;
+  tamBuffer[0] = 0;
+}
+
 
 
 /********************************************//**
@@ -41,114 +187,14 @@ void addItemToBuffer(uint16_t item) {
   }
   else {
     if(calcMode == CM_AIM) {
-      switch(nextChar) {
-        case NC_SUBSCRIPT :
-          switch(item) {
-            case CHR_alpha    : item = CHR_SUB_alpha;    break;
-            case CHR_delta    : item = CHR_SUB_delta;    break;
-            case CHR_mu       : item = CHR_SUB_mu;       break;
-            case CHR_SUN      : item = CHR_SUB_SUN;      break;
-            case CHR_h        : item = CHR_SUB_h;        break;
-            case CHR_t        : item = CHR_SUB_t;        break;
-            case CHR_INFINITY : item = CHR_SUB_INFINITY; break;
-            case CHR_s        : item = CHR_SUB_s;        break;
-            case CHR_PLUS     : item = CHR_SUB_PLUS;     break;
-            case CHR_MINUS    : item = CHR_SUB_MINUS;    break;
-            case CHR_0        : item = CHR_SUB_0;        break;
-            case CHR_1        : item = CHR_SUB_1;        break;
-            case CHR_2        : item = CHR_SUB_2;        break;
-            case CHR_3        : item = CHR_SUB_3;        break;
-            case CHR_4        : item = CHR_SUB_4;        break;
-            case CHR_5        : item = CHR_SUB_5;        break;
-            case CHR_6        : item = CHR_SUB_6;        break;
-            case CHR_7        : item = CHR_SUB_7;        break;
-            case CHR_8        : item = CHR_SUB_8;        break;
-            case CHR_9        : item = CHR_SUB_9;        break;
-            case CHR_a        : item = CHR_SUB_a;        break;
-            case CHR_b        : item = CHR_SUB_b;        break;
-            case CHR_c        : item = CHR_SUB_c;        break;
-            case CHR_d        : item = CHR_SUB_d;        break;
-            case CHR_e        : item = CHR_SUB_e;        break;
-            case CHR_i        : item = CHR_SUB_i;        break;
-            case CHR_j        : item = CHR_SUB_j;        break;
-            case CHR_k        : item = CHR_SUB_k;        break;
-            case CHR_l        : item = CHR_SUB_l;        break;
-            case CHR_m        : item = CHR_SUB_m;        break;
-            case CHR_n        : item = CHR_SUB_n;        break;
-            case CHR_o        : item = CHR_SUB_o;        break;
-            case CHR_p        : item = CHR_SUB_p;        break;
-            case CHR_q        : item = CHR_SUB_q;        break;
-            case CHR_u        : item = CHR_SUB_u;        break;
-            case CHR_v        : item = CHR_SUB_v;        break;
-            case CHR_w        : item = CHR_SUB_w;        break;
-            case CHR_x        : item = CHR_SUB_x;        break;
-            case CHR_y        : item = CHR_SUB_y;        break;
-            case CHR_z        : item = CHR_SUB_z;        break;
-            case CHR_A        : item = CHR_SUB_A;        break;
-            case CHR_B        : item = CHR_SUB_B;        break;
-            case CHR_C        : item = CHR_SUB_C;        break;
-            case CHR_D        : item = CHR_SUB_D;        break;
-            case CHR_E        : item = CHR_SUB_E;        break;
-            case CHR_F        : item = CHR_SUB_F;        break;
-            case CHR_G        : item = CHR_SUB_G;        break;
-            case CHR_H        : item = CHR_SUB_H;        break;
-            case CHR_I        : item = CHR_SUB_I;        break;
-            case CHR_J        : item = CHR_SUB_J;        break;
-            case CHR_K        : item = CHR_SUB_K;        break;
-            case CHR_L        : item = CHR_SUB_L;        break;
-            case CHR_M        : item = CHR_SUB_M;        break;
-            case CHR_N        : item = CHR_SUB_N;        break;
-            case CHR_O        : item = CHR_SUB_O;        break;
-            case CHR_P        : item = CHR_SUB_P;        break;
-            case CHR_Q        : item = CHR_SUB_Q;        break;
-            case CHR_R        : item = CHR_SUB_R;        break;
-            case CHR_S        : item = CHR_SUB_S;        break;
-            case CHR_T        : item = CHR_SUB_T;        break;
-            case CHR_U        : item = CHR_SUB_U;        break;
-            case CHR_V        : item = CHR_SUB_V;        break;
-            case CHR_W        : item = CHR_SUB_W;        break;
-            case CHR_X        : item = CHR_SUB_X;        break;
-            case CHR_Y        : item = CHR_SUB_Y;        break;
-            case CHR_Z        : item = CHR_SUB_Z;        break;
-            default : {}
-          }
-          break;
+      item = convertItemToSubOrSup(item, nextChar);
 
-        case NC_SUPERSCRIPT :
-          switch(item) {
-            case CHR_a        : item = CHR_SUP_a;        break;
-            case CHR_x        : item = CHR_SUP_x;        break;
-            case CHR_INFINITY : item = CHR_SUP_INFINITY; break;
-            case CHR_PLUS     : item = CHR_SUP_PLUS;     break;
-            case CHR_MINUS    : item = CHR_SUP_MINUS;    break;
-            case CHR_0        : item = CHR_SUP_0;        break;
-            case CHR_1        : item = CHR_SUP_1;        break;
-            case CHR_2        : item = CHR_SUP_2;        break;
-            case CHR_3        : item = CHR_SUP_3;        break;
-            case CHR_4        : item = CHR_SUP_4;        break;
-            case CHR_5        : item = CHR_SUP_5;        break;
-            case CHR_6        : item = CHR_SUP_6;        break;
-            case CHR_7        : item = CHR_SUP_7;        break;
-            case CHR_8        : item = CHR_SUP_8;        break;
-            case CHR_9        : item = CHR_SUP_9;        break;
-            case CHR_f        : item = CHR_SUP_f;        break;
-            case CHR_g        : item = CHR_SUP_g;        break;
-            case CHR_h        : item = CHR_SUP_h;        break;
-            case CHR_r        : item = CHR_SUP_r;        break;
-            case CHR_T        : item = CHR_SUP_T;        break;
-            default : {}
-          }
-        break;
-
-        default : {}
-      }
-
-      if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemPrinted) >= AIM_BUFFER_LENGTH) {
+      if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) {
         sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
         displayBugScreen(errorMessage);
       }
       else {
-        strncpy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemPrinted, stringByteLength(indexOfItems[item].itemPrinted) + 1);
+        strncpy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
         if(stringWidth(aimBuffer, &standardFont, true, true) >= SCREEN_WIDTH-9) {
           btnClicked(NULL, "16"); // back space
           #ifdef PC_BUILD
@@ -159,8 +205,6 @@ void addItemToBuffer(uint16_t item) {
           xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
         }
       }
-
-      nextChar = NC_NORMAL;
     }
 
     else if(calcMode == CM_TAM) {
@@ -178,9 +222,9 @@ void addItemToBuffer(uint16_t item) {
         tamLetteredRegister = indexOfItems[item].param;
         tamTransitionSystem(TT_LETTER);
       }
-      //else if(namedVariable) {
-      //  tamTransitionSystem(TT_VARIABLE);
-      //}
+      /*else if(namedVariable) {
+        tamTransitionSystem(TT_VARIABLE);
+      }*/
       else if(CHR_0 <= item && item <= CHR_9) { // Digits from 0 to 9
         tamDigit = item - CHR_0;
         tamTransitionSystem(TT_DIGIT);
@@ -206,6 +250,37 @@ void addItemToBuffer(uint16_t item) {
       else {
         tamTransitionSystem(TT_NOTHING);
       }
+    }
+
+    else if(calcMode == CM_ASM) {
+      int32_t firstItem = 0, pos;
+
+      if(item == KEY_BACKSPACE) {
+        calcModeNormal();
+        return;
+      }
+
+      else {
+        if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1) {
+          pos = lgCatalogSelection++;
+          if(tamBuffer[pos] != 0) {
+            pos++;
+          }
+
+          tamBuffer[pos++] = indexOfItems[item].itemSoftmenuName[0];
+          if(indexOfItems[item].itemSoftmenuName[0] & 0x80) { // 2 bytes
+            tamBuffer[pos++] = indexOfItems[item].itemSoftmenuName[1];
+          }
+          tamBuffer[pos] = 0;
+
+          firstItem = findFirstItem(tamBuffer);
+        }
+      }
+
+      softmenuStack[softmenuStackPointer-1].firstItem = firstItem;
+      showSoftmenuCurrentPart();
+      setCatalogLastPos();
+      alphaSelectionTimer = getUptimeMs();
     }
 
     else if(calcMode == CM_NIM) {
@@ -298,7 +373,7 @@ void addItemToNimBuffer(int16_t item) {
   if(calcMode == CM_NORMAL) {
     switch(item) {
       case ITM_EXPONENT :
-        calcModeNIM(NOPARAM);
+        calcModeNim(NOPARAM);
         nimBuffer[0] = '+';
         nimBuffer[1] = '1';
         nimBuffer[2] = radixMark == RM_PERIOD ? '.' : ',';
@@ -308,7 +383,7 @@ void addItemToNimBuffer(int16_t item) {
         break;
 
       case CHR_PERIOD :
-        calcModeNIM(NOPARAM);
+        calcModeNim(NOPARAM);
         nimBuffer[0] = '+';
         nimBuffer[1] = '0';
         nimBuffer[2] = 0;
@@ -331,7 +406,7 @@ void addItemToNimBuffer(int16_t item) {
       case CHR_D :
       case CHR_E :
       case CHR_F :
-        calcModeNIM(NOPARAM);
+        calcModeNim(NOPARAM);
         nimBuffer[0] = '+';
         nimBuffer[1] = 0;
         nimNumberPart = NP_EMPTY;
@@ -373,7 +448,7 @@ void addItemToNimBuffer(int16_t item) {
               nimBuffer[1] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemPrinted);
+            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
           }
           break;
 
@@ -396,7 +471,7 @@ void addItemToNimBuffer(int16_t item) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemPrinted);
+            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
 
             if(atoi(nimBuffer + exponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + exponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
@@ -417,7 +492,7 @@ void addItemToNimBuffer(int16_t item) {
             }
           }
           else {
-            strcat(nimBuffer, indexOfItems[item].itemPrinted);
+            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
 
             if(atoi(nimBuffer + denominatorLocation) > 9999) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
@@ -436,7 +511,7 @@ void addItemToNimBuffer(int16_t item) {
               nimBuffer[imaginaryMantissaSignLocation + 2] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemPrinted);
+            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
           }
           break;
 
@@ -459,7 +534,7 @@ void addItemToNimBuffer(int16_t item) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemPrinted);
+            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
 
             if(atoi(nimBuffer + imaginaryExponentSignLocation) > NIM_EXPONENT_LIMIT || atoi(nimBuffer + imaginaryExponentSignLocation) < -NIM_EXPONENT_LIMIT) {
               nimBuffer[strlen(nimBuffer) - 1] = 0;
@@ -473,7 +548,7 @@ void addItemToNimBuffer(int16_t item) {
             //debugNIM();
           }
 
-          strcat(nimBuffer, indexOfItems[item].itemPrinted);
+          strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
       }
       break;
 
@@ -490,7 +565,7 @@ void addItemToNimBuffer(int16_t item) {
           nimBuffer[1] = 0;
         }
 
-        strcat(nimBuffer, indexOfItems[item].itemPrinted);
+        strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
         hexDigits++;
 
         nimNumberPart = NP_INT_16;
@@ -1201,7 +1276,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
         case TT_OPERATION :
           if(tamMode == TM_STORCL) {
             strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : (tamOperation==ITM_Stack ? "S" : (tamOperation==ITM_dddEL ? "EL" : "IJ")))))))));
-            sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+            sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
             tamCurrentOperation = tamOperation;
             transitionSystemState = 1;
           }
@@ -1223,7 +1298,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
         case TT_DIGIT :
           tamNumber = tamDigit;
           if(tamNumber < tamNumberMin) {
-            sprintf(tamBuffer, "%s %d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+            sprintf(tamBuffer, "%s %d_", indexOfItems[tamFunction].itemSoftmenuName, tamNumber);
             transitionSystemState = 2;
           }
           else if(tamNumber > tamNumberMax) {
@@ -1234,7 +1309,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
             return;
           }
           else {
-            sprintf(tamBuffer, "%s %d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+            sprintf(tamBuffer, "%s %d_", indexOfItems[tamFunction].itemSoftmenuName, tamNumber);
             transitionSystemState = 2;
           }
           break;
@@ -1242,14 +1317,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
         case TT_DOT :
           if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
             if((tamMode == TM_FLAG && numberOfLocalFlags > 0) || (tamMode != TM_FLAG && numberOfLocalRegisters > 0)) {
-              sprintf(tamBuffer, "%s .__", indexOfItems[tamFunction].itemPrinted);
+              sprintf(tamBuffer, "%s .__", indexOfItems[tamFunction].itemSoftmenuName);
               transitionSystemState = 3;
             }
           }
           break;
 
         case TT_INDIRECT :
-          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 5;
           break;
 
@@ -1281,19 +1356,19 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
       switch(tamTransition) {
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s __   ", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s __   ", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 0;
           break;
 
         case TT_OPERATION :
           if(tamOperation==tamCurrentOperation) {
-            sprintf(tamBuffer, "%s __   ", indexOfItems[tamFunction].itemPrinted);
+            sprintf(tamBuffer, "%s __   ", indexOfItems[tamFunction].itemSoftmenuName);
             transitionSystemState = 0;
           }
           else {
             tamCurrentOperation = tamOperation;
             strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : (tamOperation==ITM_Stack ? "S" : (tamOperation==ITM_dddEL ? "EL" : "IJ")))))))));
-            sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+            sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           }
           break;
 
@@ -1307,19 +1382,19 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_DIGIT :
           tamNumber = tamDigit;
-          sprintf(tamBuffer, "%s%s %d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+          sprintf(tamBuffer, "%s%s %d_", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation, tamNumber);
           transitionSystemState = 9;
           break;
 
         case TT_DOT :
           if(numberOfLocalRegisters > 0) {
-            sprintf(tamBuffer, "%s%s .__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+            sprintf(tamBuffer, "%s%s .__", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
             transitionSystemState = 10;
           }
           break;
 
         case TT_INDIRECT :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 12;
           break;
 
@@ -1348,7 +1423,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s __", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s __", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 0;
           break;
 
@@ -1372,14 +1447,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
               return;
             }
             else {
-              sprintf(tamBuffer, "%s .%d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+              sprintf(tamBuffer, "%s .%d_", indexOfItems[tamFunction].itemSoftmenuName, tamNumber);
               transitionSystemState = 4;
             }
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s __ ", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s __ ", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 0;
           break;
 
@@ -1408,7 +1483,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s .__", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s .__", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 3;
           break;
 
@@ -1435,19 +1510,19 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_DIGIT :
           tamNumber = tamDigit;
-          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[tamFunction].itemSoftmenuName, tamNumber);
           transitionSystemState = 6;
           break;
 
         case TT_DOT :
           if(numberOfLocalRegisters > 0) {
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted);
+            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemSoftmenuName);
             transitionSystemState = 7;
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s __ ", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s __ ", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 0;
           break;
 
@@ -1478,7 +1553,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 5;
           break;
 
@@ -1505,14 +1580,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
               return;
             }
             else {
-              sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[tamFunction].itemPrinted, tamNumber);
+              sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[tamFunction].itemSoftmenuName, tamNumber);
               transitionSystemState = 8;
             }
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__ ", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__ ", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 5;
           break;
 
@@ -1548,7 +1623,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemSoftmenuName);
           transitionSystemState = 7;
           break;
 
@@ -1571,7 +1646,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s __", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 1;
           break;
 
@@ -1596,14 +1671,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
               return;
             }
             else {
-              sprintf(tamBuffer, "%s%s .%d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+              sprintf(tamBuffer, "%s%s .%d_", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation, tamNumber);
               transitionSystemState = 11;
             }
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s __ ", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s __ ", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 1;
           break;
 
@@ -1632,7 +1707,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s .__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s .__", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 10;
           break;
 
@@ -1658,19 +1733,19 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_DIGIT :
           tamNumber = tamDigit;
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "%d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "%d_", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation, tamNumber);
           transitionSystemState = 13;
           break;
 
         case TT_DOT :
           if(numberOfLocalRegisters > 0) {
-            sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+            sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
             transitionSystemState = 14;
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s __ ", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s __ ", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 1;
           break;
 
@@ -1701,7 +1776,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 12;
           break;
 
@@ -1718,13 +1793,13 @@ void tamTransitionSystem(uint16_t tamTransition) {
         case TT_DIGIT :
           if(tamDigit < numberOfLocalRegisters) {
             tamNumber = tamDigit;
-            sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".%d_", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation, tamNumber);
+            sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".%d_", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation, tamNumber);
             transitionSystemState = 15;
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__ ", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__ ", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 12;
           break;
 
@@ -1758,7 +1833,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemPrinted, transitionSystemOperation);
+          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[tamFunction].itemSoftmenuName, transitionSystemOperation);
           transitionSystemState = 14;
           break;
 
@@ -1777,7 +1852,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
   if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_TAM_LINE, 32);
   }
-  showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+  showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 }
 
 

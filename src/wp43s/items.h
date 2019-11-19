@@ -1620,8 +1620,10 @@
 #define ITM_XIN                       1584
 #define ITM_XOUT                      1585
 #define ITM_ALPHASR                   1586
+#define ITM_HECTAREtoM2               1587
+#define ITM_M2toHECTARE               1588
 
-#define LAST_ITEM                     1587
+#define LAST_ITEM                     1589
 
 #define CHR_PROD_SIGN                 9999
 

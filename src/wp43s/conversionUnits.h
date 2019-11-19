@@ -86,6 +86,7 @@ void fnCvtBarrelM3  (uint16_t multiplyDivide);
 // Area
 void fnCvtAcreM2    (uint16_t multiplyDivide);
 void fnCvtAcreusM2  (uint16_t multiplyDivide);
+void fnCvtHectareM2 (uint16_t multiplyDivide);
 
 // ...
 void fnCvtRatioDb   (uint16_t multiplyDivide);

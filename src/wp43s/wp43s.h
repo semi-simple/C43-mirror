@@ -282,13 +282,14 @@ typedef int16_t calcRegister_t;
 #define CM_AIM                  1 // Alpha input mode
 #define CM_TAM                  2 // Temporary input mode
 #define CM_NIM                  3 // Numeric input mode
-#define CM_ASSIGN               4 // Assign mode
-#define CM_REGISTER_BROWSER     5 // Register browser
-#define CM_FLAG_BROWSER         6 // Flag browser
-#define CM_FONT_BROWSER         7 // Font browser
-#define CM_ERROR_MESSAGE        8 // Error message in one of the register lines
-#define CM_BUG_ON_SCREEN        9 // Bug message on screen
-#define CM_CONFIRMATION        10 // Waiting for confirmation or canceling
+#define CM_ASM                  4 // Alpha selection in FCNS, MENU, and CNST menu
+#define CM_ASSIGN               5 // Assign mode
+#define CM_REGISTER_BROWSER     6 // Register browser
+#define CM_FLAG_BROWSER         7 // Flag browser
+#define CM_FONT_BROWSER         8 // Font browser
+#define CM_ERROR_MESSAGE        9 // Error message in one of the register lines
+#define CM_BUG_ON_SCREEN       10 // Bug message on screen
+#define CM_CONFIRMATION        11 // Waiting for confirmation or canceling
 
 // Next character 2 bits
 #define NC_NORMAL               0
@@ -384,6 +385,11 @@ typedef int16_t calcRegister_t;
 #define ASM_NONE 0
 #define ASM_CNST 1
 #define ASM_FCNS 2
+#define ASM_MENU 3
+
+// String comparison type
+#define CMP_CLEANED_STRING_ONLY 1
+#define CMP_EXTENSIVE           2
 
 #if (__linux__ == 1)
   #define FMT64U  "lu"
@@ -533,6 +539,7 @@ extern uint16_t             tamMode;
 extern uint32_t             firstGregorianDay;
 extern uint32_t             denMax;
 extern uint32_t             lastIntegerBase;
+extern uint32_t             alphaSelectionTimer;
 extern uint8_t              softmenuStackPointer;
 extern uint8_t              transitionSystemState;
 extern uint8_t              cursorBlinkCounter;
@@ -581,6 +588,7 @@ extern bool_t               printerIconEnabled;
 extern bool_t               batteryIconEnabled;
 extern bool_t               shiftF;
 extern bool_t               shiftG;
+extern bool_t               shiftStateChanged;
 extern bool_t               showContent;
 extern bool_t               stackLiftEnabled;
 extern bool_t               displayLeadingZeros;
@@ -588,7 +596,6 @@ extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
-extern bool_t               batteryLow;
 extern calcKey_t            kbd_usr[37];
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
@@ -605,6 +612,7 @@ extern size_t               gmpMemInBytes;
 extern size_t               wp43sMemInBytes;
 extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 extern int32_t              numberOfFreeBlocks;
+extern int32_t              lgCatalogSelection;
 extern void                 (*confirmedFunction)(uint16_t);
 extern realIc_t             const *gammaConstants;
 extern realIc_t             const *angle180;

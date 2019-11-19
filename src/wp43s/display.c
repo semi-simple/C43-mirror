@@ -218,19 +218,16 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
       if(digit <= 1) {
-        //strncpy(displayString, NUM_SUP_0, 2);
         *(displayString)     = *(NUM_SUP_0);
         *(displayString + 1) = *(NUM_SUP_0 + 1);
         displayString[1] += digit;
       }
       else if(digit <= 3) {
-        //strncpy(displayString, NUM_SUP_2, 2);
         *(displayString)     = *(NUM_SUP_2);
         *(displayString + 1) = *(NUM_SUP_2 + 1);
         displayString[1] += digit-2;
       }
       else {
-        //strncpy(displayString, NUM_SUP_4, 2);
         *(displayString)     = *(NUM_SUP_4);
         *(displayString + 1) = *(NUM_SUP_4 + 1);
         displayString[1] += digit-4;
@@ -238,7 +235,6 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
 
       if(greaterThan9999 && supNumber > 0 && groupingGap != 0 && ((++digitCount) % groupingGap) == 0) {
         memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
-        //strncpy(displayString, NUM_SPACE_PUNCTUATION, 2);
         *(displayString)     = *(NUM_SPACE_PUNCTUATION);
         *(displayString + 1) = *(NUM_SPACE_PUNCTUATION + 1);
       }
@@ -269,7 +265,6 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
 
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
-      //strncpy(displayString, NUM_SUB_0, 2);
       *(displayString)     = *(NUM_SUB_0);
       *(displayString + 1) = *(NUM_SUB_0 + 1);
       displayString[1] += digit;
@@ -1644,8 +1639,8 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
 
 
 
-void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLg) {
-  int32_t digits, stringLg, counter;
+void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLen) {
+  int32_t digits, stringLen, counter;
   longInteger_t x;
 
   str[0] = '0';
@@ -1656,34 +1651,34 @@ void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLg)
 
   digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
   if(longIntegerIsNegative(lgInt)) {
-    stringLg = digits + 2; // 1 for the trailing 0 and 1 for the minus sign
+    stringLen = digits + 2; // 1 for the trailing 0 and 1 for the minus sign
     str[0] = '-';
   }
   else {
-    stringLg = digits + 1; // 1 for the trailing 0
+    stringLen = digits + 1; // 1 for the trailing 0
   }
 
-  if(strLg < stringLg) {
-    printf("In function longIntegerToAllocatedString: the string str (%" FMT32S " bytes) is too small to hold the base 10 representation of lgInt, %" FMT32S " are needed!\n", strLg, stringLg);
+  if(strLen < stringLen) {
+    printf("In function longIntegerToAllocatedString: the string str (%" FMT32S " bytes) is too small to hold the base 10 representation of lgInt, %" FMT32S " are needed!\n", strLen, stringLen);
     return;
   }
 
-  str[stringLg - 1] = 0;
+  str[stringLen - 1] = 0;
 
   longIntegerInitSizeInBits(x, longIntegerBits(lgInt));
   longIntegerAddUInt(lgInt, 0, x);
   longIntegerSetPositiveSign(x);
 
-  stringLg -= 2; // set stringLg to the last digit of the base 10 representation
+  stringLen -= 2; // set stringLen to the last digit of the base 10 representation
   counter = digits;
   while(!longIntegerIsZero(x)) {
-    str[stringLg--] = '0' + mpz_tdiv_ui(x, 10);
+    str[stringLen--] = '0' + mpz_tdiv_ui(x, 10);
     longIntegerDivideUInt(x, 10, x);
     counter--;
   }
 
   if(counter == 1) { // digit was 1 too big
-    memmove(str + stringLg, str + stringLg + 1, digits);
+    memmove(str + stringLen, str + stringLen + 1, digits);
   }
 
   longIntegerFree(x);

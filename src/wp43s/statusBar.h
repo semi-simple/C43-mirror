@@ -55,7 +55,7 @@ void togglePrinter        (void);
 void showUserMode         (void);
 void hideUserMode         (void);
 void toggleUserMode       (void);
-void showBattery          (void);
-void hideBattery          (void);
-void toggleBattery        (void);
+void showLowBattery       (void);
+void hideLowBattery       (void);
+void toggleLowBattery     (void);
 #endif

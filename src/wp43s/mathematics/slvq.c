@@ -21,7 +21,8 @@
 #include "wp43s.h"
 
 
-
+// see https://en.wikipedia.org/wiki/Quadratic_formula#Method_2
+// r1+r2 = -b/a  &  r1r2 = c/a
 /********************************************//**
  * \brief (c, b, a) ==> (x1, x2, r) c ==> regL
  * enables stack lift and refreshes the stack

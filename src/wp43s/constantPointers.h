@@ -259,6 +259,7 @@ extern const realIc_t * const const_HpmToW;
 extern const realIc_t * const const_HpukToW;
 extern const realIc_t * const const_HpeToW;
 extern const realIc_t * const const_YearToS;
+extern const realIc_t * const const__4;
 extern const realIc_t * const const__1;
 extern const realIc_t * const const_1e_37;
 extern const realIc_t * const const_1e_24;

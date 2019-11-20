@@ -1,0 +1,7 @@
+#!/bin/bash
+
+PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
+
+make -j8 V=1
+./wp43s
+

@@ -133,7 +133,7 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 #endif
-                                                                                                                                                                                                         };
+                                                                                                                                                                                                            };
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
                                      ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,
@@ -332,21 +332,6 @@ const int16_t menu_ConvV[]       = { ITM_GLUKtoM3,                  ITM_M3toGLUK
                                      10000+ITM_FZUKtoM3b,           10000+ITM_M3toFZUKb,        10000+ITM_BARRELtoM3b,    10000+ITM_M3toBARRELb, 10000+ITM_FZUStoM3b,         10000+ITM_M3toFZUSb,
                                      20000+ITM_FZUKtoM3,            20000+ITM_M3toFZUK,         20000+ITM_BARRELtoM3,     20000+ITM_M3toBARREL,  20000+ITM_FZUStoM3,          20000+ITM_M3toFZUS            };
 
-const int16_t menu_CNST[]        = { CST_00,                        CST_01,                     CST_02,                   CST_03,                CST_04,                      CST_05,
-                                     CST_06,                        CST_07,                     CST_08,                   CST_09,                CST_10,                      CST_11,
-                                     CST_12,                        CST_13,                     CST_14,                   CST_15,                CST_16,                      CST_17,
-                                     CST_18,                        CST_19,                     CST_20,                   CST_21,                CST_22,                      CST_23,
-                                     CST_24,                        CST_25,                     CST_26,                   CST_27,                CST_28,                      CST_29,
-                                     CST_30,                        CST_31,                     CST_32,                   CST_33,                CST_34,                      CST_35,
-                                     CST_36,                        CST_37,                     CST_38,                   CST_39,                CST_40,                      CST_41,
-                                     CST_42,                        CST_43,                     CST_44,                   CST_45,                CST_46,                      CST_47,
-                                     CST_48,                        CST_49,                     CST_50,                   CST_51,                CST_52,                      CST_53,
-                                     CST_54,                        CST_55,                     CST_56,                   CST_57,                CST_58,                      CST_59,
-                                     CST_60,                        CST_61,                     CST_62,                   CST_63,                CST_64,                      CST_65,
-                                     CST_66,                        CST_67,                     CST_68,                   CST_69,                CST_70,                      CST_71,
-                                     CST_72,                        CST_73,                     CST_74,                   CST_75,                CST_76,                      CST_77,
-                                     CST_78,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-
 const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,                ITM_ALPHARR,              ITM_ALPHASL,           ITM_ALPHAPOS,                ITM_ALPHAtoX,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_ALPHALENG,               ITM_NULL,
                                      ITM_FBR,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -402,15 +387,13 @@ const int16_t menu_TamCmp[]      = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T,
                                      ITM_Config,                    ITM_Stack,                  ITM_NULL,                 ITM_NULL,              ITM_Max,                     ITM_Min,
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
-#include "softmenuFCNS.h"
-
-const int16_t menu_MENUS[] = {
-  -MNU_ADV,
-};
+#include "softmenuCatalogs.h"
 
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numItems = sizeof(menu_MyAlpha    )/sizeof(int16_t), .softkeyItem = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
+  {.menuId = -MNU_MyMenu,      .numItems = sizeof(menu_MyMenu     )/sizeof(int16_t), .softkeyItem = menu_MyMenu      },
   {.menuId = -MNU_ADV,         .numItems = sizeof(menu_ADV        )/sizeof(int16_t), .softkeyItem = menu_ADV         },
   {.menuId = -MNU_Sfdx,        .numItems = sizeof(menu_Sfdx       )/sizeof(int16_t), .softkeyItem = menu_Sfdx        },
   {.menuId = -MNU_BITS,        .numItems = sizeof(menu_BITS       )/sizeof(int16_t), .softkeyItem = menu_BITS        },
@@ -622,7 +605,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
   int16_t m, x, y, menu, yDotted=0, currentFirstItem, item;
-  bool_t  dottedTopLine;
+  bool_t dottedTopLine;
 
   if(softmenuStackPointer > 0) {
     clearScreen(false, false, true);
@@ -656,9 +639,14 @@ void showSoftmenuCurrentPart(void) {
     }
 
     const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
-    for(y=currentFirstItem/6; y<min(currentFirstItem/6+3, softmenu[m].numItems/6); y++, softkeyItem+=6) {
+    for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, softmenu[m].numItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
-        item = softkeyItem[x];
+        if(softkeyItem + x >= softmenu[m].softkeyItem + softmenu[m].numItems) {
+          item = ITM_NULL;
+        }
+        else {
+          item = softkeyItem[x];
+        }
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {
@@ -678,22 +666,22 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemPrinted, x, y-currentFirstItem/6, vmReverse, true, true);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
             }
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemPrinted, x, y-currentFirstItem/6, vmNormal, true, true);
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
         }
-        else if(item > 0 && indexOfItems[item%10000].itemPrinted[0] != 0) { // softkey
+        else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemName,    x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
           }
           else {
-            showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
           }
         }
       }
@@ -727,7 +715,7 @@ void showSoftmenuCurrentPart(void) {
  ***********************************************/
 void initSoftmenuStack(int16_t softmenu) {
   softmenuStack[0].softmenu = softmenu;
-  softmenuStack[0].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : 0);
+  softmenuStack[0].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos : 0));
   softmenuStackPointer = 1;
   showSoftmenuCurrentPart();
 }
@@ -744,7 +732,7 @@ void initSoftmenuStack(int16_t softmenu) {
 void pushSoftmenu(int16_t softmenu) {
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
     softmenuStack[softmenuStackPointer].softmenu = softmenu;
-    softmenuStack[softmenuStackPointer].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : 0);
+    softmenuStack[softmenuStackPointer].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos : 0));
     softmenuStackPointer++;
     showSoftmenuCurrentPart();
   }
@@ -766,7 +754,10 @@ void pushSoftmenu(int16_t softmenu) {
  ***********************************************/
 void popSoftmenu(void) {
   if(softmenuStackPointer > 0) {
-    alphaSelectionMenu = ASM_NONE;
+    if(alphaSelectionMenu != ASM_NONE) {
+      alphaSelectionMenu = ASM_NONE;
+      calcModeNormal();
+    }
     softmenuStackPointer--;
     if(softmenuStackPointer > 0) {
       showSoftmenuCurrentPart();
@@ -784,7 +775,7 @@ void popSoftmenu(void) {
 
 /********************************************//**
  * \brief Displays a softmenu. One of the 2 first
- * parameter must be null and one must be not null
+ * parameter must be null and one must not be null
  *
  * \param[in] menu const char* Name of softmenu
  * \param[in] id int16_t       ID of softmenu
@@ -795,9 +786,21 @@ void popSoftmenu(void) {
 void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   int16_t m;
 
-       if(id == -MNU_FCNS) alphaSelectionMenu = ASM_FCNS;
-  else if(id == -MNU_CNST) alphaSelectionMenu = ASM_CNST;
-  else                     alphaSelectionMenu = ASM_NONE;
+  if(id == -MNU_FCNS) {
+    alphaSelectionMenu = ASM_FCNS;
+    calcModeAsm();
+  }
+  else if(id == -MNU_CNST) {
+    alphaSelectionMenu = ASM_CNST;
+    calcModeAsm();
+  }
+  else if(id == -MNU_MENUS) {
+    alphaSelectionMenu = ASM_MENU;
+    calcModeAsm();
+  }
+  else {
+    alphaSelectionMenu = ASM_NONE;
+  }
 
   if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
     clearScreen(false, false, true);
@@ -837,7 +840,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   }
   else { // Search by name
     while(softmenu[m].menuId != 0) {
-      if(strcmp(indexOfItems[-softmenu[m].menuId].itemPrinted, menu) == 0) {
+      if(strcmp(indexOfItems[-softmenu[m].menuId].itemSoftmenuName, menu) == 0) {
         break;
       }
       m++;
@@ -854,7 +857,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     }
   }
   else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM) {
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM) {
       if(push) {
         pushSoftmenu(m);
       }
@@ -880,5 +883,13 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
       displayBugScreen(errorMessage);
     }
   }
+}
+
+
+
+void setCatalogLastPos(void) {
+       if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
 }
 #endif

@@ -30,6 +30,8 @@ typedef struct {
   int8_t   rowsAboveGlyph;  ///< Number of empty rows above the glyph
   int8_t   rowsGlyph;       ///< Number of rows of the glyph
   int8_t   rowsBelowGlyph;  ///< Number of empty rows below the glypg
+  int16_t  rank1;           ///< Rank of the replacement glyph
+  int16_t  rank2;           ///< Rank of the glyph
   char     *data;           ///< Hexadecimal data representing the glyph.
                             ///< There are rowsGlyph x (colsGlyph rounded up to 8 bit boundary) bytes
 } glyph_t;

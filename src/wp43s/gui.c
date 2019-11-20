@@ -1023,7 +1023,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     lbl[0] = 0;
   }
   else {
-    stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemPrinted, lbl);
+    stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemSoftmenuName, lbl);
   }
 
   if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
@@ -1045,7 +1045,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     gtk_widget_set_name(button, "calcKey");
   }
 
-  stringToUtf8(indexOfItems[max(key->fShifted, -key->fShifted)].itemPrinted, lbl);
+  stringToUtf8(indexOfItems[max(key->fShifted, -key->fShifted)].itemSoftmenuName, lbl);
 
   if(key->fShifted == 0) {
     lbl[0] = 0;
@@ -1057,7 +1057,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   gtk_label_set_label(GTK_LABEL(lblF), (gchar *)lbl);
   if(key->fShifted < 0) gtk_widget_set_name(lblF, "fShiftedUnderline"); else  gtk_widget_set_name(lblF, "fShifted");
 
-  stringToUtf8(indexOfItems[max(key->gShifted, -key->gShifted)].itemPrinted, lbl);
+  stringToUtf8(indexOfItems[max(key->gShifted, -key->gShifted)].itemSoftmenuName, lbl);
   if(key->gShifted == 0) {
     lbl[0] = 0;
   }
@@ -1068,7 +1068,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   gtk_label_set_label(GTK_LABEL(lblG), (gchar *)lbl);
   if(key->gShifted < 0) gtk_widget_set_name(lblG, "gShiftedUnderline"); else  gtk_widget_set_name(lblG, "gShifted");
 
-  stringToUtf8(indexOfItems[key->primaryAim].itemPrinted, lbl);
+  stringToUtf8(indexOfItems[key->primaryAim].itemSoftmenuName, lbl);
   if(key->primaryAim == 0) {
     lbl[0] = 0;
   }
@@ -1090,7 +1090,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     lbl[0] = 0;
   }
   else {
-    stringToUtf8(indexOfItems[max(key->keyLblAim, -key->keyLblAim)].itemPrinted, lbl);
+    stringToUtf8(indexOfItems[max(key->keyLblAim, -key->keyLblAim)].itemSoftmenuName, lbl);
   }
 
   if(strcmp((char *)lbl, "CATALOG") == 0 && key->keyId != 85) {
@@ -1115,13 +1115,13 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
 
   if(CHR_ALPHA <= key->gShiftedAim && key->gShiftedAim <= CHR_OMEGA) {
-    stringToUtf8(indexOfItems[key->gShiftedAim].itemPrinted, lbl);
+    stringToUtf8(indexOfItems[key->gShiftedAim].itemSoftmenuName, lbl);
     lbl[2] = ' ';
     lbl[3] = 0;
-    stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemPrinted, lbl + 3);
+    stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemSoftmenuName, lbl + 3);
   }
   else {
-    stringToUtf8(indexOfItems[max(key->gShiftedAim, -key->gShiftedAim)].itemPrinted, lbl);
+    stringToUtf8(indexOfItems[max(key->gShiftedAim, -key->gShiftedAim)].itemSoftmenuName, lbl);
   }
 
   if(key->gShiftedAim == 0) {
@@ -1145,7 +1145,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     lbl[0] = 0;
   }
   else {
-   stringToUtf8(indexOfItems[key->primaryAim].itemPrinted, lbl);
+   stringToUtf8(indexOfItems[key->primaryAim].itemSoftmenuName, lbl);
   }
 
   if(lbl[0] == ' ') {
@@ -1165,7 +1165,7 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
     lbl[0] = 0;
   }
   else {
-    stringToUtf8(indexOfItems[key->primaryTam].itemPrinted, lbl);
+    stringToUtf8(indexOfItems[key->primaryTam].itemSoftmenuName, lbl);
   }
 
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
@@ -1411,6 +1411,204 @@ void calcModeNormalGui(void) {
 
 
 void calcModeAimGui(void) {
+  const calcKey_t *keys;
+
+  keys = userModeEnabled ? kbd_usr : kbd_std;
+
+  hideAllWidgets();
+
+  labelCaptionAim(keys++, btn21, lbl21Gr, lbl21L);
+  labelCaptionAim(keys++, btn22, lbl22Gr, lbl22L);
+  labelCaptionAim(keys++, btn23, lbl23Gr, lbl23L);
+  labelCaptionAim(keys++, btn24, lbl24Gr, lbl24L);
+  labelCaptionAim(keys++, btn25, lbl25Gr, lbl25L);
+  labelCaptionAim(keys++, btn26, lbl26Gr, lbl26L);
+
+  labelCaptionAim(keys++, btn31, lbl31Gr, lbl31L);
+  labelCaptionAim(keys++, btn32, lbl32Gr, lbl32L);
+  labelCaptionAim(keys++, btn33, lbl33Gr, lbl33L);
+  labelCaptionAim(keys++, btn34, lbl34Gr, lbl34L);
+  labelCaptionAim(keys++, btn35, lbl35Gr, lbl35L);
+  labelCaptionAim(keys++, btn36, lbl36Gr, lbl36L);
+
+  labelCaptionAim(keys++, btn41, lbl41Gr, lbl41L);
+  labelCaptionAim(keys++, btn42, lbl42Gr, lbl42L);
+  labelCaptionAim(keys++, btn43, lbl43Gr, lbl43L);
+  labelCaptionAim(keys++, btn44, lbl44Gr, lbl44L);
+  labelCaptionAim(keys++, btn45, lbl45Gr, lbl45L);
+
+  labelCaptionAim(keys++, btn51, lbl51Gr, lbl51L);
+  labelCaptionAim(keys++, btn52, lbl52Gr, lbl52L);
+  labelCaptionAim(keys++, btn53, lbl53Gr, lbl53L);
+  labelCaptionAim(keys++, btn54, lbl54Gr, lbl54L);
+  labelCaptionAim(keys++, btn55, lbl55Gr, lbl55L);
+
+  labelCaptionAim(keys++, btn61, lbl61Gr, lbl61L);
+  labelCaptionAim(keys++, btn62, lbl62Gr, lbl62L);
+  labelCaptionAim(keys++, btn63, lbl63Gr, lbl63L);
+  labelCaptionAim(keys++, btn64, lbl64Gr, lbl64L);
+  labelCaptionAim(keys++, btn65, lbl65Gr, lbl65L);
+
+  labelCaptionAim(keys++, btn71, lbl71Gr, lbl71L);
+  labelCaptionAim(keys++, btn72, lbl72Gr, lbl72L);
+  labelCaptionAim(keys++, btn73, lbl73Gr, lbl73L);
+  labelCaptionAim(keys++, btn74, lbl74Gr, lbl74L);
+  labelCaptionAim(keys++, btn75, lbl75Gr, lbl75L);
+
+  labelCaptionAim(keys++, btn81, lbl81Gr, lbl81L);
+  labelCaptionAim(keys++, btn82, lbl82Gr, lbl82L);
+  labelCaptionAim(keys++, btn83, lbl83Gr, lbl83L);
+  labelCaptionAim(keys++, btn84, lbl84Gr, lbl84L);
+  labelCaptionAim(keys++, btn85, lbl85Gr, lbl85L);
+
+  gtk_widget_show(lblOn);
+
+  gtk_widget_show(btn11);
+  gtk_widget_show(btn12);
+  gtk_widget_show(btn13);
+  gtk_widget_show(btn14);
+  gtk_widget_show(btn15);
+  gtk_widget_show(btn16);
+
+  gtk_widget_show(btn21);
+  gtk_widget_show(btn22);
+  gtk_widget_show(btn23);
+  gtk_widget_show(btn24);
+  gtk_widget_show(btn25);
+  gtk_widget_show(btn26);
+
+  gtk_widget_show(lbl21L);
+  gtk_widget_show(lbl22L);
+  gtk_widget_show(lbl23L);
+  gtk_widget_show(lbl24L);
+  gtk_widget_show(lbl25L);
+  gtk_widget_show(lbl26L);
+  //gtk_widget_show(lbl26F);
+  //gtk_widget_show(lbl26G);
+  gtk_widget_show(lbl21Gr);
+  gtk_widget_show(lbl22Gr);
+  gtk_widget_show(lbl23Gr);
+  gtk_widget_show(lbl24Gr);
+  gtk_widget_show(lbl25Gr);
+  gtk_widget_show(lbl26Gr);
+
+  gtk_widget_show(btn31);
+  gtk_widget_show(btn32);
+  gtk_widget_show(btn33);
+  gtk_widget_show(btn34);
+  gtk_widget_show(btn35);
+  gtk_widget_show(btn36);
+
+  gtk_widget_show(lbl31F);
+  gtk_widget_show(lbl31L);
+  gtk_widget_show(lbl32L);
+  gtk_widget_show(lbl33H);
+  gtk_widget_show(lbl33L);
+  gtk_widget_show(lbl34L);
+  //gtk_widget_show(lbl34H);
+  gtk_widget_show(lbl31Gr);
+  gtk_widget_show(lbl32Gr);
+  gtk_widget_show(lbl33Gr);
+  gtk_widget_show(lbl34Gr);
+
+  gtk_widget_show(btn41);
+  gtk_widget_show(btn42);
+  gtk_widget_show(btn43);
+  gtk_widget_show(btn44);
+  gtk_widget_show(btn45);
+
+  //gtk_widget_show(lbl41F);
+  //gtk_widget_show(lbl41G);
+  gtk_widget_show(lbl42L);
+  gtk_widget_show(lbl43L);
+  gtk_widget_show(lbl43P);
+  gtk_widget_show(lbl44L);
+  gtk_widget_show(lbl44P);
+  gtk_widget_show(lbl45F);
+  gtk_widget_show(lbl45G);
+  gtk_widget_show(lbl42Gr);
+  gtk_widget_show(lbl43Gr);
+  gtk_widget_show(lbl44Gr);
+
+  gtk_widget_show(btn51);
+  gtk_widget_show(btn52);
+  gtk_widget_show(btn53);
+  gtk_widget_show(btn54);
+  gtk_widget_show(btn55);
+
+  gtk_widget_show(lbl51L);
+  gtk_widget_show(lbl51F);
+  gtk_widget_show(lbl51G);
+  gtk_widget_show(lbl52L);
+  gtk_widget_show(lbl53L);
+  gtk_widget_show(lbl54L);
+  gtk_widget_show(lbl55L);
+  //gtk_widget_show(lbl51Gr);
+  gtk_widget_show(lbl52Gr);
+  gtk_widget_show(lbl53Gr);
+  gtk_widget_show(lbl54Gr);
+
+  gtk_widget_show(btn61);
+  gtk_widget_show(btn62);
+  gtk_widget_show(btn63);
+  gtk_widget_show(btn64);
+  gtk_widget_show(btn65);
+
+  gtk_widget_show(lbl61L);
+  gtk_widget_show(lbl62L);
+  gtk_widget_show(lbl63L);
+  gtk_widget_show(lbl64L);
+  gtk_widget_show(lbl65F);
+  //gtk_widget_show(lbl65G);
+  gtk_widget_show(lbl61Gr);
+  gtk_widget_show(lbl62Gr);
+  gtk_widget_show(lbl63Gr);
+  gtk_widget_show(lbl64Gr);
+
+  gtk_widget_show(btn71);
+  gtk_widget_show(btn72);
+  gtk_widget_show(btn73);
+  gtk_widget_show(btn74);
+  gtk_widget_show(btn75);
+
+  gtk_widget_show(lbl71L);
+  gtk_widget_show(lbl72L);
+  gtk_widget_show(lbl73L);
+  gtk_widget_show(lbl74L);
+  gtk_widget_show(lbl75F);
+  gtk_widget_show(lbl75G);
+  gtk_widget_show(lbl71Gr);
+  gtk_widget_show(lbl72Gr);
+  gtk_widget_show(lbl73Gr);
+  gtk_widget_show(lbl74Gr);
+
+  gtk_widget_show(btn81);
+  gtk_widget_show(btn82);
+  gtk_widget_show(btn83);
+  gtk_widget_show(btn84);
+  gtk_widget_show(btn85);
+
+  gtk_widget_show(lbl81L);
+  gtk_widget_show(lbl82L);
+  gtk_widget_show(lbl83L);
+  gtk_widget_show(lbl84L);
+  gtk_widget_show(lbl84H);
+  gtk_widget_show(lbl85F);
+  gtk_widget_show(lbl85G);
+  gtk_widget_show(lbl81Gr);
+  gtk_widget_show(lbl82Gr);
+  gtk_widget_show(lbl83Gr);
+
+  gtk_widget_show(lblOn);
+
+  gtk_widget_show(lbl31G);
+  moveLabels();
+  gtk_widget_hide(lbl31G);
+}
+
+
+
+void calcModeAsmGui(void) {
   const calcKey_t *keys;
 
   keys = userModeEnabled ? kbd_usr : kbd_std;
@@ -2748,7 +2946,7 @@ void calcModeNormal(void) {
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void calcModeAIM(uint16_t unusedParamButMandatory) {
+void calcModeAim(uint16_t unusedParamButMandatory) {
   saveStack();
   liftStack();
   refreshStack();
@@ -2772,12 +2970,35 @@ void calcModeAIM(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
+ * \brief Sets the calc mode to alpha selection menu
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void calcModeAsm(void) {
+  if(calcMode == CM_NIM) {
+    closeNim();
+  }
+  calcMode = CM_ASM;
+  alphaCase = AC_UPPER;
+  showAlphaMode();
+  nextChar = NC_NORMAL;
+  resetAlphaSelectionBuffer();
+
+  #ifdef PC_BUILD
+    calcModeAsmGui();
+  #endif
+}
+
+
+
+/********************************************//**
  * \brief Sets the calc mode to number input mode
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void calcModeNIM(uint16_t unusedParamButMandatory) {
+void calcModeNim(uint16_t unusedParamButMandatory) {
   saveStack();
 
   calcMode = CM_NIM;
@@ -2810,7 +3031,7 @@ void calcModeNIM(uint16_t unusedParamButMandatory) {
  * \param[in] maxN int16_t       Max value in TAM mode
  * \return void
  ***********************************************/
-void calcModeTAM(void) {
+void calcModeTam(void) {
   if(calcMode == CM_NIM) {
     closeNim();
   }
@@ -2825,7 +3046,7 @@ void calcModeTAM(void) {
     showSoftmenu(NULL, -MNU_TAMSTORCL, true);
   }
   else {
-    sprintf(errorMessage, "In function calcModeTAM: %" FMT8U " is an unexpected value for tamMode!", tamMode);
+    sprintf(errorMessage, "In function calcModeTam: %" FMT8U " is an unexpected value for tamMode!", tamMode);
     displayBugScreen(errorMessage);
     return;
   }
@@ -2836,7 +3057,7 @@ void calcModeTAM(void) {
   if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(tamBuffer, &standardFont, 1, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+  showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 
   transitionSystemState = 0;
 

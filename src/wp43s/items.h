@@ -403,7 +403,7 @@
 #define ITM_MULTDOT                    374
 #define ITM_MULPI                      375
 #define ITM_MVAR                       376
-#define MNU_MYMENU                     377
+#define MNU_MyMenu                     377
 #define MNU_MyAlpha                    378
 #define CST_34                         379
 #define ITM_M_DELR                     380
@@ -1631,7 +1631,7 @@
  * \typedef item_t
  * \brief Structure keeping the information for one item
  ***********************************************/
-#define CAT_NO   0
+#define CAT_NONE 0
 #define CAT_FNCT 1 // Function
 #define CAT_MENU 2 // Menu
 #define CAT_CNST 3 // Constant
@@ -1641,8 +1641,8 @@
 typedef struct {
   void     (*func)(uint16_t); ///< Function called to execute the item
   uint16_t param;             ///< 1st parameter to the above function
-  char     *itemName;         ///< Name of the item
-  char     *itemPrinted;      ///< Representation of the item in the menus or on the keyboard
+  char     *itemCatalogName;  ///< Name of the item in the catalogs
+  char     *itemSoftmenuName; ///< Representation of the item in the menus or on the keyboard
   char     catalog;           ///< Menu of CATALOG in which the item is located: see #define CAT_*
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
 } item_t;

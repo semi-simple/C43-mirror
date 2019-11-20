@@ -1631,7 +1631,7 @@
  * \typedef item_t
  * \brief Structure keeping the information for one item
  ***********************************************/
-#define CAT_NO   0
+#define CAT_NONE 0
 #define CAT_FNCT 1 // Function
 #define CAT_MENU 2 // Menu
 #define CAT_CNST 3 // Constant

@@ -640,12 +640,14 @@ void btnPressed(void *notUsed, void *data) {
 
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
               softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
-              showSoftmenuCurrentPart();
+            }
+            else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
+              softmenuStack[softmenuStackPointer - 1].firstItem = 0;
             }
             else {
-              softmenuStack[softmenuStackPointer - 1].firstItem = (softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems/6 - 1) / (itemShift/6) * itemShift; // doesn't work if numItems is not a multiple of 6
-              showSoftmenuCurrentPart();
+              softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
             }
+            showSoftmenuCurrentPart();
 
             setCatalogLastPos();
           }

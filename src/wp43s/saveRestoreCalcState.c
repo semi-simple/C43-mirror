@@ -352,6 +352,7 @@ void restoreCalc(void) {
     else if(calcMode == CM_AIM)              calcModeAimGui();
     else if(calcMode == CM_TAM)              calcModeTamGui();
     else if(calcMode == CM_NIM)              calcModeNormalGui();
+    else if(calcMode == CM_ASM)              calcModeAsm();
     else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
     else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
     else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();

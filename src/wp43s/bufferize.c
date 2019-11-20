@@ -146,7 +146,7 @@ int32_t findFirstItem(const char *twoLetters) {
 
   middle = first + (last - first) / 2;
   while(first + 1 < last) {
-    if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) < 0) { // *middle is negative for a menu
+    if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) < 0) {
       last = middle;
     }
     else {

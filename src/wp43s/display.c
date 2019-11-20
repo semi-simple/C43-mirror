@@ -83,7 +83,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_FIX);                                           // dr
+  fnRefreshRadioState(RB_DI, DF_FIX);                                           //dr
 
   refreshStack();
 }
@@ -103,7 +103,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_SCI);                                           // dr
+  fnRefreshRadioState(RB_DI, DF_SCI);                                           //dr
 
   refreshStack();
 }
@@ -144,7 +144,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
     UNITDisplay = false;                                           //JM UNIT display Reset
 
-    fnRefreshRadioState(RB_DI, DF_ALL);                                         // dr
+    fnRefreshRadioState(RB_DI, DF_ALL);                                         //dr
 
     refreshStack();
   //}

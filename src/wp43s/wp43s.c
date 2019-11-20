@@ -162,6 +162,7 @@ bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
+bool_t               batteryLow;
 calcKey_t            kbd_usr[37];
 radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
 uint16_t             cntOfRadioCbItems;                                         //^^
@@ -393,7 +394,9 @@ void setupDefaults(void) {
   alphaSelectionMenu = ASM_NONE;
   lastFcnsMenuPos = 0;
   lastMenuMenuPos = 0;
-  lastCnstMenuPos = 3;
+  lastCnstMenuPos = 0;
+
+  batteryLow = false;
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
@@ -514,6 +517,7 @@ void program_main(void) {
   setupDefaults();
 
   endOfProgram = false;
+  batteryLow = false;
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms()+100;

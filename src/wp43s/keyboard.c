@@ -73,7 +73,7 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
-  if(shiftF || shiftG)        //vv dr //JM added DR time-waster elimination 1
+  if(shiftF || shiftG)        //vv dr
   {
   shiftF = false;
   shiftG = false;
@@ -122,7 +122,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
           closeNim();
           if(calcMode != CM_NIM) {
             if(indexOfItems[func % 10000].func == fnConstant) {
-              stackLiftEnable();
+              STACK_LIFT_ENABLE;
             }
           }
         }

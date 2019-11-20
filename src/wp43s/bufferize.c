@@ -1094,7 +1094,7 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
     closeNim();
     if(calcMode != CM_NIM) {
       if(item == ITM_pi || indexOfItems[item].func == fnConstant) {
-        stackLiftEnable();
+        STACK_LIFT_ENABLE;
       }
 
       if(lastErrorCode == 0) {

@@ -34,7 +34,6 @@
 #define DEBUG_PANEL                 1
 #define DEBUG_REGISTER_L            1
 #define SHOW_MEMORY_STATUS          1
-#define STACK_LIFT_DEBUG            1
 #define IBM_DECIMAL                 1
 #define LIBGMP                      1
 #define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
@@ -88,8 +87,6 @@
   #define DEBUG_REGISTER_L 0
   #undef  SHOW_MEMORY_STATUS
   #define SHOW_MEMORY_STATUS 0
-  #undef  STACK_LIFT_DEBUG
-  #define STACK_LIFT_DEBUG 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
   #define addItemToBuffer fnNop
@@ -224,7 +221,7 @@ typedef int16_t calcRegister_t;
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50
 
-#define MAX_RADIO_CB_ITEMS 80                                                   //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS 98                                                   //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0
@@ -448,7 +445,7 @@ typedef int16_t calcRegister_t;
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode
 //#define setTamMode(x)              *bits5 = (*bits5 & ~(((1 << LENGTH_TAMMODE        ) - 1) << OFFSET_TAMMODE        )) | ((x) << OFFSET_TAMMODE        )
 
-#if (STACK_LIFT_DEBUG == 1)
+#ifdef PC_BUILD
   #define STACK_LIFT_ENABLE  stackLiftEnable();
   #define STACK_LIFT_DISABLE stackLiftDisable();
 #else
@@ -600,6 +597,7 @@ extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
+extern bool_t               batteryLow;
 extern calcKey_t            kbd_usr[37];
 extern radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];            //vv dr build RadioButton, CheckBox
 extern uint16_t             cntOfRadioCbItems;                                  //^^

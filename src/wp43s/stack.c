@@ -282,7 +282,7 @@ void restoreStack(void) {
 
 
 
-#if (STACK_LIFT_DEBUG == 1)
+#ifdef PC_BUILD
 void stackLiftEnable(void) {
   //printf("Stack lift enabled\n");
   stackLiftEnabled = true;

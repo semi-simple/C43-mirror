@@ -408,6 +408,11 @@ void fnCvtAcreusM2(uint16_t multiplyDivide) {
 }
 
 
+void fnCvtHectareM2(uint16_t multiplyDivide) {
+  unitConversion(const_10000, multiplyDivide);
+}
+
+
 
 /********************************************//**
  * \brief Converts power or field ratio to dB

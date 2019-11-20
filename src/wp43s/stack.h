@@ -29,7 +29,7 @@ void fnClearStack    (uint16_t unusedParamButMandatory);
 void saveStack       (void);
 void restoreStack    (void);
 void refreshStack    (void);
-#if (STACK_LIFT_DEBUG == 1)
-void stackLiftEnable (void);
-void stackLiftDisable(void);
+#ifdef PC_BUILD
+  void stackLiftEnable (void);
+  void stackLiftDisable(void);
 #endif

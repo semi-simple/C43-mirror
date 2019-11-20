@@ -1620,8 +1620,8 @@
 #define ITM_XIN                       1584
 #define ITM_XOUT                      1585
 #define ITM_ALPHASR                   1586
-#define Not_used1587                  1587
-#define Not_used1588                  1588
+#define ITM_HECTAREtoM2               1587
+#define ITM_M2toHECTARE               1588
 #define Not_used1589                  1589
 #define Not_used1590                  1590
 #define Not_used1591                  1591

@@ -605,7 +605,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
   int16_t m, x, y, menu, yDotted=0, currentFirstItem, item;
-  bool_t  dottedTopLine;
+  bool_t dottedTopLine;
 
   if(softmenuStackPointer > 0) {
     clearScreen(false, false, true);
@@ -639,7 +639,7 @@ void showSoftmenuCurrentPart(void) {
     }
 
     const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
-    for(y=currentFirstItem/6; y<min(currentFirstItem/6+3, softmenu[m].numItems/6); y++, softkeyItem+=6) {
+    for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, softmenu[m].numItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
         if(softkeyItem + x >= softmenu[m].softkeyItem + softmenu[m].numItems) {
           item = ITM_NULL;
@@ -678,7 +678,7 @@ void showSoftmenuCurrentPart(void) {
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemCatalogName,    x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
           }
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);

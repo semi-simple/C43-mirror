@@ -271,11 +271,6 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  //for(item=1; item<=5; item++) {
-  //  fprintf(catalog, "%5d,", 0);
-  //  numberOfItems++;
-  //}
-
   //while(numberOfItems++ % 6 != 0) {
   //  fprintf(catalog, "%5d,", 0);
   //}
@@ -308,11 +303,6 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  //for(item=1; item<=5; item++) {
-  //  fprintf(catalog, "%5d,", 0);
-  //  numberOfItems++;
-  //}
-
   //while(numberOfItems++ % 6 != 0) {
   //  fprintf(catalog, "%5d,", 0);
   //}
@@ -344,11 +334,6 @@ int main(int argc, char* argv[]) {
       fprintf(catalog, "\n");
     }
   }
-
-  //for(item=1; item<=5; item++) {
-  //  fprintf(catalog, "%5d,", 0);
-  //  numberOfItems++;
-  //}
 
   //while(numberOfItems++ % 6 != 0) {
   //  fprintf(catalog, "%5d,", 0);

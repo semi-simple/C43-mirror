@@ -696,7 +696,7 @@ const item_t indexOfItems[] = {
 /*  572 */  { itemToBeCoded,               NOPARAM,                     "SKIP",                                        "SKIP",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  573 */  { itemToBeCoded,               NOPARAM,                     "SL",                                          "SL",                                          CAT_FNCT, SLS_UNCHANGED},
 /*  574 */  { itemToBeCoded,               NOPARAM,                     "SLOW",                                        "SLOW",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  575 */  { itemToBeCoded,               NOPARAM,                     "SLVQ",                                        "SLVQ",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  575 */  { fnSlvq,                      NOPARAM,                     "SLVQ",                                        "SLVQ",                                        CAT_FNCT, SLS_ENABLED  },
 /*  576 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_m,                                 "s" STD_SUB_m,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  577 */  { fnGetIntegerSignMode,        NOPARAM,                     "SMODE?",                                      "SMODE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  578 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_m STD_SUB_w,                       "s" STD_SUB_m STD_SUB_w,                       CAT_FNCT, SLS_UNCHANGED},

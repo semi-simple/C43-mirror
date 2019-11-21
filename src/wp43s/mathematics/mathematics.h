@@ -66,6 +66,7 @@
 #include "sign.h"
 #include "sin.h"
 #include "sinh.h"
+#include "slvq.h"
 #include "square.h"
 #include "squareRoot.h"
 #include "subtraction.h"

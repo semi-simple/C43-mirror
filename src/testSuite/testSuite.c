@@ -120,6 +120,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
   {"fnSinh",                 fnSinh                },
+  {"fnSlvq",                 fnSlvq                },
   {"fnSquare",               fnSquare              },
   {"fnSquareRoot",           fnSquareRoot          },
   {"fnSubtract",             fnSubtract            },
@@ -1022,10 +1023,17 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
     realIcDivide(&relativeError, &expectedValue, &relativeError);
     realIcDivide(const_1, &relativeError, &numSignificantDigits);
   }
+  else {
+    realIcCopy(const_1, &numSignificantDigits);
+  }
 
   realIcSetPositiveSign(&numSignificantDigits);
-  //realIcLog10(&numSignificantDigits, &numSignificantDigits);
+  if(!realIcIsZero(&numSignificantDigits)) {
   WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
+  }
+  else {
+    realIcZero(&numSignificantDigits);
+  }
 
   realIcToReal16(&numSignificantDigits, &integer);
   correctSignificantDigits = real16ToInt32(&integer);
@@ -1059,10 +1067,17 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
     realIcDivide(&relativeError, &expectedValue, &relativeError);
     realIcDivide(const_1, &relativeError, &numSignificantDigits);
   }
+  else {
+    realIcCopy(const_1, &numSignificantDigits);
+  }
 
   realIcSetPositiveSign(&numSignificantDigits);
-  //realIcLog10(&numSignificantDigits, &numSignificantDigits);
-  WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
+  if(!realIcIsZero(&numSignificantDigits)) {
+    WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
+  }
+  else {
+    realIcZero(&numSignificantDigits);
+  }
 
   realIcToReal16(&numSignificantDigits, &integer);
   correctSignificantDigits = real16ToInt32(&integer);
@@ -1640,11 +1655,15 @@ void checkExpectedOutParameter(char *p) {
       else {
         checkRegisterType(regist, letter, dtReal34, am);
         stringToReal34(r, &expectedReal34);
+//printf("\nexpectedReal34 = "); printReal34ToConsole(&expectedReal34); printf("\n");
+//printf("\nR%d = ", regist); printRegisterToConsole(regist); printf("\n");
+//printf("\n1<%s|%s|%s>\n", p, l, r);
         if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
           if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
           }
+//printf("\n2<%s|%s|%s>\n", p, l, r);
         }
       }
     }

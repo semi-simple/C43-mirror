@@ -170,8 +170,22 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       realIcChangeSign(&x1.real);
       realIcCopy(&x1.real, &x2.real);
     }
+    else if(realIcIsZero(&c.real)) {
+      // ax² + bx = x(ax + b) = 0   (a is not 0 here)
+
+      // r = b²
+      realIcMultiply(&b.real, &b.real, &r.real);
+      realIcZero(&r.imag);
+
+      // x1 = 0
+      realIcZero(&x1.real);
+
+      // x2 = -b/a
+      realIcDivide(&b.real, &a.real, &x2.real);
+      realIcChangeSign(&x2.real);
+    }
     else {
-      // ax² + bx + c = 0   (a is not 0 here)
+      // ax² + bx + c = 0   (a and c are not 0 here)
 
       // r = b² - 4ac
       realIcMultiply(const__4, &a.real, &r.real);
@@ -189,7 +203,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
         realIcMultiply(&x1.real, const_1on2, &x1.real);
         realIcDivide(&x1.real, &a.real, &x1.real);
 
-        // x2 = c / ax1
+        // x2 = c / ax1  (x1 connot be 0 here)
         realIcDivide(&c.real, &a.real, &x2.real);
         realIcDivide(&x2.real, &x1.real, &x2.real);
       }
@@ -229,8 +243,23 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       realIcChangeSign(&x1.imag);
       complexIcCopy(&x1, &x2);
     }
+    else if(realIcIsZero(&c.real) && realIcIsZero(&c.imag)) {
+      // ax² + bx = x(ax + b) = 0   (a is not 0 here)
+
+      // r = b²
+      mulCoIcCoIc(&b, &b, &r);
+
+      // x1 = 0
+      realIcZero(&x1.real);
+      realIcZero(&x1.imag);
+
+      // x2 = -b/a
+      divCoIcCoIc(&b, &a, &x2);
+      realIcChangeSign(&x2.real);
+      realIcChangeSign(&x2.imag);
+    }
     else {
-      // ax² + bx + c = 0   (a is not 0 here)
+      // ax² + bx + c = 0   (a and c are not 0 here)
 
       // r = b² - 4ac
       realIcMultiply(const__4, &a.real, &r.real);
@@ -253,7 +282,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       realIcMultiply(&x1.imag, const_1on2, &x1.imag);
       divCoIcCoIc(&x1, &a, &x1);
 
-      // x2 = c / ax1
+      // x2 = c / ax1  (x1 connot be 0 here)
       divCoIcCoIc(&c, &a, &x2);
       divCoIcCoIc(&x2, &x1, &x2);
     }
@@ -279,13 +308,26 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
   else { // !realRoots
     if(result16) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Y, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(&x1.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-      realIcToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
-      realIcToReal16(&x2.imag, REGISTER_IMAG16_DATA(REGISTER_Y));
-      realIcToReal16(&r.real,  REGISTER_REAL16_DATA(REGISTER_Z));
+      if(realIcIsZero(&x1.imag)) { // x1 is real
+        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+        realIcToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
+      }
+      else {
+        reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+        realIcToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
+        realIcToReal16(&x1.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+      }
+
+      if(realIcIsZero(&x2.imag)) { // x2 is real
+        reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, AM_NONE);
+        realIcToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
+      }
+      else {
+        reallocateRegister(REGISTER_Y, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+        realIcToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
+        realIcToReal16(&x2.imag, REGISTER_IMAG16_DATA(REGISTER_Y));
+      }
+
       if(realIcIsZero(&r.imag)) { // r is real
         reallocateRegister(REGISTER_Z, dtReal16, REAL16_SIZE, AM_NONE);
         realIcToReal16(&r.real, REGISTER_REAL16_DATA(REGISTER_Z));
@@ -297,13 +339,26 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       }
     }
     else { // !realRoots && !result16
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(&x1.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-      realIcToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
-      realIcToReal34(&x2.imag, REGISTER_IMAG34_DATA(REGISTER_Y));
-      realIcToReal34(&r.real,  REGISTER_REAL34_DATA(REGISTER_Z));
+      if(realIcIsZero(&x1.imag)) { // x1 is real
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        realIcToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realIcToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
+        realIcToReal34(&x1.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+      }
+
+      if(realIcIsZero(&x2.imag)) { // x2 is real
+        reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+        realIcToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
+      }
+      else {
+        reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realIcToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
+        realIcToReal34(&x2.imag, REGISTER_IMAG34_DATA(REGISTER_Y));
+      }
+
       if(realIcIsZero(&r.imag)) { // r is real
         reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
         realIcToReal34(&r.real, REGISTER_REAL34_DATA(REGISTER_Z));

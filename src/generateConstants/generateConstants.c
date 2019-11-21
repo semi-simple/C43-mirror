@@ -18,7 +18,9 @@
  * \file generateConstants.c
  ***********************************************/
 
-#define IBM_DECIMAL    1
+#define IBM_DECIMAL                                     1
+#define DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS 39
+#define NUMBER_OF_CONSTANTS_IN_CNST_CATALOG            78
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,8 +30,6 @@
   // needed for chdir:
   #include<unistd.h>
 #endif // __APPLE__
-
-#define DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS 39
 
 #if (IBM_DECIMAL == 1)
  #define DECNUMDIGITS DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS
@@ -62,7 +62,7 @@ void generateConstantArray(char *name, char *value) {
   strcat(externalDeclarations, name);
   strcat(externalDeclarations, ";\n");
 
-  if(c <= 79) {
+  if(c <= NUMBER_OF_CONSTANTS_IN_CNST_CATALOG) {
     sprintf(temp, "#define CONST_%02d %4d\n", c, idx);
     strcat(defines, temp);
   }
@@ -210,91 +210,90 @@ void generateAllConstants(void) {
   generateConstantArray("c2",            "+1.438776877503933802146671601543911595199069423148099191e-02"); c++;
   generateConstantArray("e",             "+1.602176634000000000000000000000000000000000000000000000e-19"); c++;
   generateConstantArray("eE",            "+2.718281828459045235360287471352662497757247093699959575e+00"); c++; // math constant e
-  generateConstantArray("eme",           "+1.758820024000000000000000000000000000000000000000000000e+11"); c++;
   generateConstantArray("F",             "+9.648533212331001840000000000000000000000000000000000000e+04"); c++;
-
   generateConstantArray("Falpha",        "+2.502907875095892822283902873218215786381271376727149977e+00"); c++; // math constant Falpha
+
   generateConstantArray("Fdelta",        "+4.669201609102990671853203820466201617258185577475768633e+00"); c++; // math constant Fdelta
   generateConstantArray("G",             "+6.674300000000000000000000000000000000000000000000000000e-11"); c++;
   generateConstantArray("G0",            "+7.748091729863650646680823323308763943587286047673370920e-05"); c++;
   generateConstantArray("GC",            "+9.159655941772190150546035149323841107741493742816721343e-01"); c++; // math constant Catalan
   generateConstantArray("ge",            "-2.002319304362560000000000000000000000000000000000000000e+00"); c++;
-
-
   generateConstantArray("GM",            "+3.986004418000000000000000000000000000000000000000000000e+14"); c++;
+
+
   generateConstantArray("gEarth",        "+9.806650000000000000000000000000000000000000000000000000e+00"); c++; // per definition
   generateConstantArray("Planck",        "+6.626070150000000000000000000000000000000000000000000000e-34"); c++;
   generateConstantArray("PlanckOn2pi",   "+1.054571817646156391262428003302280744722826330020413122e-34"); c++;
   generateConstantArray("k",             "+1.380649000000000000000000000000000000000000000000000000e-23"); c++;
   generateConstantArray("KJ",            "+4.835978484169836324476582850545281353533511866004014461e+14"); c++;
-
   generateConstantArray("lp",            "+1.616255000000000000000000000000000000000000000000000000e-35"); c++;
+
   generateConstantArray("me",            "+9.109383701500000000000000000000000000000000000000000000e-31"); c++;
   generateConstantArray("MM",            "+7.349000000000000000000000000000000000000000000000000000e+22"); c++;
   generateConstantArray("mn",            "+1.674927498040000000000000000000000000000000000000000000e-27"); c++;
   generateConstantArray("mnOnmp",        "+1.001378418980000000000000000000000000000000000000000000e+00"); c++;
+  generateConstantArray("mp",            "+1.672621923690000000000000000000000000000000000000000000e-27"); c++;
   generateConstantArray("mPL",           "+2.176435000000000000000000000000000000000000000000000000e-08"); c++;
 
-  generateConstantArray("mp",            "+1.672621923690000000000000000000000000000000000000000000e-27"); c++;
   generateConstantArray("mpOnme",        "+1.836152673430000000000000000000000000000000000000000000e+03"); c++;
   generateConstantArray("mu",            "+1.660539066600000000000000000000000000000000000000000000e-27"); c++;
   generateConstantArray("muc2",          "+1.492418085600000000000000000000000000000000000000000000e-10"); c++;
   generateConstantArray("mmu",           "+1.883531627000000000000000000000000000000000000000000000e-28"); c++;
   generateConstantArray("mSun",          "+1.989100000000000000000000000000000000000000000000000000e+30"); c++;
-
-
   generateConstantArray("mEarth",        "+5.973600000000000000000000000000000000000000000000000000e+24"); c++;
+
+
   generateConstantArray("NA",            "+6.022140760000000000000000000000000000000000000000000000e+23"); c++;
   generateConstantArray("NaN",           "Not a number"                                                 ); c++;
   generateConstantArray("p0",            "+1.013250000000000000000000000000000000000000000000000000e+05"); c++; // per definition
   generateConstantArray("R",             "+8.314462618153240000000000000000000000000000000000000000e+00"); c++;
   generateConstantArray("re",            "+2.817940326200000000000000000000000000000000000000000000e-15"); c++;
-
   generateConstantArray("RK",            "+2.581280745930450666004551670608744304245727322140342177e+04"); c++;
+
   generateConstantArray("RM",            "+1.737530000000000000000000000000000000000000000000000000e+06"); c++;
   generateConstantArray("RInfinity",     "+1.097373156816000000000000000000000000000000000000000000e+07"); c++;
   generateConstantArray("RSun",          "+6.960000000000000000000000000000000000000000000000000000e+08"); c++;
   generateConstantArray("REarth",        "+6.371010000000000000000000000000000000000000000000000000e+06"); c++;
   generateConstantArray("Sa",            "+6.378137000000000000000000000000000000000000000000000000e+06"); c++; // per definition
-
   generateConstantArray("Sb",            "+6.356752314200000000000000000000000000000000000000000000e+06"); c++;
+
   generateConstantArray("Se2",           "+6.694379990140000000000000000000000000000000000000000000e-03"); c++;
   generateConstantArray("Sep2",          "+6.739496742280000000000000000000000000000000000000000000e-03"); c++;
   generateConstantArray("Sfm1",          "+2.982572235630000000000000000000000000000000000000000000e+02"); c++; // per definition
   generateConstantArray("T0",            "+2.731500000000000000000000000000000000000000000000000000e+02"); c++; // per definition
   generateConstantArray("TP",            "+1.416785000000000000000000000000000000000000000000000000e+32"); c++;
-
-
   generateConstantArray("tp",            "+5.391245000000000000000000000000000000000000000000000000e-44"); c++;
+
+
   generateConstantArray("Vm",            "+2.241396954501413773501110288675055514433752775721687639e-02"); c++;
   generateConstantArray("Z0",            "+3.767303134617706554681984004203193082686235083524186552e+02"); c++; // mu0 * c
   generateConstantArray("alpha",         "+7.297352569300000000000000000000000000000000000000000000e-03"); c++;
   generateConstantArray("gamma",         "+9.806650000000000000000000000000000000000000000000000000e+00"); c++; // gamma = gEarth --> is this duplicate constant needed?
   generateConstantArray("gammaEM",       "+5.772156649015328606065120900824024310421593359399235988e-01"); c++; // math constant Euler-Mascheroni
-
   generateConstantArray("gammap",        "+2.675221874400000000000000000000000000000000000000000000e+08"); c++;
+
   generateConstantArray("epsilon0",      "+8.854187812800000000000000000000000000000000000000000000e-12"); c++;
   generateConstantArray("lambdaC",       "+2.426310238670000000000000000000000000000000000000000000e-12"); c++;
   generateConstantArray("lambdaCn",      "+1.319590905810000000000000000000000000000000000000000000e-15"); c++;
   generateConstantArray("lambdaCp",      "+1.321409855390000000000000000000000000000000000000000000e-15"); c++;
   generateConstantArray("mu0",           "+1.256637062120000000000000000000000000000000000000000000e-06"); c++;
-
   generateConstantArray("muB",           "+9.274010078000000000000000000000000000000000000000000000e-24"); c++;
+
   generateConstantArray("mue",           "-9.284764704300000000000000000000000000000000000000000000e-24"); c++;
   generateConstantArray("mueOnmuB",      "-1.001159652181280000000000000000000000000000000000000000e+00"); c++;
   generateConstantArray("mun",           "-9.662365000000000000000000000000000000000000000000000000e-27"); c++;
   generateConstantArray("mup",           "+1.410606797360000000000000000000000000000000000000000000e-26"); c++;
   generateConstantArray("muu",           "+5.050783746100000000000000000000000000000000000000000000e-27"); c++;
-
-
   generateConstantArray("mumu",          "-4.490448300000000000000000000000000000000000000000000000e-26"); c++;
+
+
   generateConstantArray("sigmaB",        "+5.670374419184429453970996731889230875840122970291303682e-08"); c++;
   generateConstantArray("PHI",           "+1.618033988749894848204586834365638117720309179805762862e+00"); c++; // math constant phi = (1 + sqrt(5)) / 2
   generateConstantArray("PHI0",          "+2.067833848461929323081115412147497340171545654934323552e-15"); c++;
   generateConstantArray("omega",         "+7.292115000000000000000000000000000000000000000000000000e-05"); c++;
   generateConstantArray("minusInfinity", "-9.999999999999999999999999999999999999999999999999999999e+9999"); c++; // math "constant"
-
   generateConstantArray("plusInfinity",  "+9.999999999999999999999999999999999999999999999999999999e+9999"); c++; // math "constant"
+
   generateConstantArray("0",             "0"); c++;
 
   // constants from the WP34S project for gamma the function evaluation

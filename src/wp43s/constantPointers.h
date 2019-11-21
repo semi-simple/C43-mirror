@@ -101,7 +101,6 @@
 #define CONST_76 2736
 #define CONST_77 2772
 #define CONST_78 2808
-#define CONST_79 2844
 
 extern const uint8_t constants[];
 extern const realIc_t * const const_1on2;
@@ -114,7 +113,6 @@ extern const realIc_t * const const_c1;
 extern const realIc_t * const const_c2;
 extern const realIc_t * const const_e;
 extern const realIc_t * const const_eE;
-extern const realIc_t * const const_eme;
 extern const realIc_t * const const_F;
 extern const realIc_t * const const_Falpha;
 extern const realIc_t * const const_Fdelta;
@@ -133,8 +131,8 @@ extern const realIc_t * const const_me;
 extern const realIc_t * const const_MM;
 extern const realIc_t * const const_mn;
 extern const realIc_t * const const_mnOnmp;
-extern const realIc_t * const const_mPL;
 extern const realIc_t * const const_mp;
+extern const realIc_t * const const_mPL;
 extern const realIc_t * const const_mpOnme;
 extern const realIc_t * const const_mu;
 extern const realIc_t * const const_muc2;

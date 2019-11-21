@@ -562,7 +562,7 @@ const item_t indexOfItems[] = {
 /*  438 */  { itemToBeCoded,               NOPARAM,                     "OrthoF",                                      "OrthoF",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  439 */  { itemToBeCoded,               NOPARAM,                     "ORTHOG",                                      "Orthog",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  440 */  { fnCvtOzKg,                   multiply,                    "oz" STD_RIGHT_ARROW "kg",                     "oz" STD_RIGHT_ARROW "kg",                     CAT_FNCT, SLS_ENABLED  },
-/*  441 */  { fnConstant,                  38,                          "P" STD_SUB_0,                                 "P" STD_SUB_0,                                 CAT_CNST, SLS_ENABLED  },
+/*  441 */  { fnConstant,                  38,                          "p" STD_SUB_0,                                 "p" STD_SUB_0,                                 CAT_CNST, SLS_ENABLED  },
 /*  442 */  { itemToBeCoded,               NOPARAM,                     "PAUSE",                                       "PAUSE",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  443 */  { fnCvtAtmPa,                  divide,                      "Pa" STD_RIGHT_ARROW "atm",                    "Pa" STD_RIGHT_ARROW "atm",                    CAT_FNCT, SLS_ENABLED  },
 /*  444 */  { fnCvtBarPa,                  divide,                      "Pa" STD_RIGHT_ARROW "bar",                    "Pa" STD_RIGHT_ARROW "bar",                    CAT_FNCT, SLS_ENABLED  },

@@ -350,7 +350,9 @@ const int16_t menu_ConvP[]       = { ITM_HPEtoW,                    ITM_WtoHPE, 
 
 const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_BARtoPA,              ITM_PAtoBAR,           ITM_PSItoPA,                 ITM_PAtoPSI,
                                      10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    10000+ITM_ATMtoPA,           10000+ITM_PAtoATM,
-                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,          20000+ITM_PAtoATMb            };
+                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,          20000+ITM_PAtoATMb,           
+                                     10000+ITM_mmHGtoPAb,           10000+ITM_PAtommHGb,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                            //JM
+                                     30000+ITM_mmHGtoPA,            30000+ITM_PAtommHG,         ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                       };    //JM
 
 const int16_t menu_ConvM[]       = { ITM_LBStoKG,                   ITM_KGtoLBS,                ITM_CWTtoKG,              ITM_KGtoCWT,           ITM_OZtoKG,                  ITM_KGtoOZ,
                                      10000+ITM_STOtoKGb,            10000+ITM_KGtoSTOb,         10000+ITM_SCWtoKGb,       10000+ITM_KGtoSCWb,    10000+ITM_TRZtoKGb,          10000+ITM_KGtoTRZb,
@@ -543,7 +545,7 @@ const int16_t menu_HOME[]        = {
 
 const int16_t menu_ALPHA[]        = { 
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-/* 03 */                            -MNU_MyAlpha,                   -MNU_ALPHA_OMEGA,           -MNU_alpha_omega,         -MNU_ALPHAINTL,        -MNU_ALPHAMATH,              -MNU_ALPHADOT,                      //JM
+/* 03 */                            -MNU_MyAlpha,                   -MNU_ALPHA_OMEGA,           -MNU_alpha_omega,         -MNU_ALPHADOT,        -MNU_ALPHAMATH,              -MNU_ALPHAINTL,                      //JM
                                      ITM_ASSIGN,                    KEY_USERMODE,               ITM_NULL,                 -MNU_CATALOG,          -MNU_MODE,                   ITM_NULL,                           //JM                     
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM                     
 

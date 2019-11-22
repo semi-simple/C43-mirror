@@ -1000,6 +1000,9 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl24Gr);
   gtk_widget_hide(lbl25Gr);
   gtk_widget_hide(lbl26Gr);
+  gtk_widget_hide(lbl22Fa); //vv dr - new AIM //JM
+  gtk_widget_hide(lbl23Fa); //vv dr - new AIM //JM
+
 
   gtk_widget_hide(btn31);
   gtk_widget_hide(btn32);
@@ -3626,7 +3629,7 @@ void setupUI(void) {
   lbl82Gr = gtk_label_new("");
   lbl83Gr = gtk_label_new("");
   lbl84Gr = gtk_label_new("");
-  lbl84H  = gtk_label_new("\u2399"); // Printer
+  //lbl84H  = gtk_label_new("\u2399"); // Printer  //JM: WHY DID THIS LINE COME BACK ??
   lbl85Gr = gtk_label_new("");
   lblOn   = gtk_label_new("ON");
 

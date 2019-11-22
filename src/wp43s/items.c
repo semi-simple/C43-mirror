@@ -252,7 +252,7 @@ const item_t indexOfItems[] = {
 /*  128 */  { fnDropY,                     NOPARAM,                     "DROPy",                                       "DROPy",                                       CAT_FNCT, SLS_ENABLED  },
 /*  129 */  { itemToBeCoded,               NOPARAM,                     "DSE",                                         "DSE",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  130 */  { itemToBeCoded,               NOPARAM,                     "DSL",                                         "DSL",                                         CAT_FNCT, SLS_UNCHANGED},
-/*  131 */  { fnConstant,                  60,                          STD_DELTA "v" STD_SUB_C STD_SUB_s,             STD_DELTA "v" STD_SUB_C STD_SUB_s,             CAT_CNST, SLS_ENABLED  },
+/*  131 */  { fnConstant,                  60,                          STD_DELTA STD_nu STD_SUB_C STD_SUB_s,          STD_DELTA STD_nu STD_SUB_C STD_SUB_s,          CAT_CNST, SLS_ENABLED  },
 /*  132 */  { fnDisplayStack,              TM_VALUE,                    "DSTACK",                                      "DSTACK",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  133 */  { itemToBeCoded,               NOPARAM,                     "DSZ",                                         "DSZ",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  134 */  { fnAngularMode,               AM_DMS,                      "D.MS",                                        "d.ms",                                        CAT_FNCT, SLS_UNCHANGED},

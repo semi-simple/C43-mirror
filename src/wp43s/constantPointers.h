@@ -101,6 +101,7 @@
 #define CONST_76 2736
 #define CONST_77 2772
 #define CONST_78 2808
+#define CONST_79 2844
 
 extern const uint8_t constants[];
 extern const realIc_t * const const_1on2;
@@ -126,9 +127,9 @@ extern const realIc_t * const const_Planck;
 extern const realIc_t * const const_PlanckOn2pi;
 extern const realIc_t * const const_k;
 extern const realIc_t * const const_KJ;
-extern const realIc_t * const const_lp;
+extern const realIc_t * const const_lPL;
 extern const realIc_t * const const_me;
-extern const realIc_t * const const_MM;
+extern const realIc_t * const const_MMoon;
 extern const realIc_t * const const_mn;
 extern const realIc_t * const const_mnOnmp;
 extern const realIc_t * const const_mp;
@@ -145,7 +146,7 @@ extern const realIc_t * const const_p0;
 extern const realIc_t * const const_R;
 extern const realIc_t * const const_re;
 extern const realIc_t * const const_RK;
-extern const realIc_t * const const_RM;
+extern const realIc_t * const const_RMoon;
 extern const realIc_t * const const_RInfinity;
 extern const realIc_t * const const_RSun;
 extern const realIc_t * const const_REarth;
@@ -156,13 +157,14 @@ extern const realIc_t * const const_Sep2;
 extern const realIc_t * const const_Sfm1;
 extern const realIc_t * const const_T0;
 extern const realIc_t * const const_TP;
-extern const realIc_t * const const_tp;
+extern const realIc_t * const const_tPL;
 extern const realIc_t * const const_Vm;
 extern const realIc_t * const const_Z0;
 extern const realIc_t * const const_alpha;
 extern const realIc_t * const const_gamma;
 extern const realIc_t * const const_gammaEM;
 extern const realIc_t * const const_gammap;
+extern const realIc_t * const const_DELTAvcs;
 extern const realIc_t * const const_epsilon0;
 extern const realIc_t * const const_lambdaC;
 extern const realIc_t * const const_lambdaCn;

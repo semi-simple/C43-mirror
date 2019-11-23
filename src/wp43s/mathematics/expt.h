@@ -15,17 +15,11 @@
  */
 
 /********************************************//**
- * \file tan.h
+ * \file expt.h
  ***********************************************/
 
-void fnTan                    (uint16_t unusedParamButMandatory);
-void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, realIc_t *reducedAngle);
-void tanError                 (void);
-void tanCoIc                  (const complexIc_t *zin, complexIc_t *zout);
-void tanLonI                  (void);
-void tanRe16                  (void);
-void tanCo16                  (void);
-void tanRm16                  (void);
-void tanCm16                  (void);
-void tanRe34                  (void);
-void tanCo34                  (void);
+void fnExpt   (uint16_t unusedParamButMandatory);
+void exptError(void);
+void exptLonI (void);
+void exptRe16 (void);
+void exptRe34 (void);

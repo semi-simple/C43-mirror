@@ -23,7 +23,6 @@ void tanhError(void);
 void tanhLonI (void);
 void tanhRe16 (void);
 void tanhCo16 (void);
-void tanhAngl (void);
 void tanhRm16 (void);
 void tanhCm16 (void);
 void tanhRe34 (void);

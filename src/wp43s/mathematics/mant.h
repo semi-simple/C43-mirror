@@ -15,17 +15,11 @@
  */
 
 /********************************************//**
- * \file tan.h
+ * \file mant.h
  ***********************************************/
 
-void fnTan                    (uint16_t unusedParamButMandatory);
-void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, realIc_t *reducedAngle);
-void tanError                 (void);
-void tanCoIc                  (const complexIc_t *zin, complexIc_t *zout);
-void tanLonI                  (void);
-void tanRe16                  (void);
-void tanCo16                  (void);
-void tanRm16                  (void);
-void tanCm16                  (void);
-void tanRe34                  (void);
-void tanCo34                  (void);
+void fnMant   (uint16_t unusedParamButMandatory);
+void mantError(void);
+void mantLonI (void);
+void mantRe16 (void);
+void mantRe34 (void);

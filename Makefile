@@ -232,7 +232,7 @@ clean_testSuite:
 $(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
 $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 	@echo -e "\n====> testSuite $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -L/opt/local/lib -lgmp
+	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -L/opt/local/lib -lgmp -lm
 
 src/testSuite/%.o: src/testSuite/%.c .stamp-constantPointers
 	@echo -e "\n====> testSuite $@ <===="

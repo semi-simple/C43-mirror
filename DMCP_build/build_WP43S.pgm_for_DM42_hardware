@@ -1,0 +1,10 @@
+#!/bin/bash
+PATH=$PATH:./bin:/arm-eabi/bin
+
+rm -rf decNumberICU
+rm -rf src
+ln -s ../decNumberICU
+ln -s ../src
+
+make clean
+make

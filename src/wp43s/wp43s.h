@@ -299,12 +299,12 @@ typedef int16_t calcRegister_t;
 // Complex unit 1 bit
 #define CU_I                    0
 #define CU_J                    1
-#define COMPLEX_UNIT            (complexUnit == CU_I ? NUM_i : NUM_j)
+#define COMPLEX_UNIT            (complexUnit == CU_I ? STD_i : STD_j)
 
 // Product sign 1 bit
 #define PS_DOT                  0
 #define PS_CROSS                1
-#define PRODUCT_SIGN            (productSign == PS_CROSS ? NUM_CROSS : NUM_DOT)
+#define PRODUCT_SIGN            (productSign == PS_CROSS ? STD_CROSS : STD_DOT)
 
 // Fraction type 1 bit
 #define FT_PROPER               0 // a b/c
@@ -315,7 +315,7 @@ typedef int16_t calcRegister_t;
 #define RM_COMMA                1
 #define RADIX16_MARK_CHAR       (radixMark == RM_PERIOD ? '.' : ',')
 #define RADIX16_MARK_STRING     (radixMark == RM_PERIOD ? "." : ",")
-#define RADIX34_MARK_STRING     (radixMark == RM_PERIOD ? NUM_PERIOD34 : NUM_COMMA34)
+#define RADIX34_MARK_STRING     (radixMark == RM_PERIOD ? STD_PERIOD34 : STD_COMMA34)
 
 // Stack size 1 bit
 #define SS_4                    0

@@ -181,7 +181,7 @@ void fnDisplayFormatGap(uint16_t gap) {
 void exponentToDisplayString(int32_t exponent, char *displayString, bool_t nimMode) {
   strcpy(displayString, PRODUCT_SIGN);
   displayString += 2;
-  strcpy(displayString, NUM_SUB_10);
+  strcpy(displayString, STD_SUB_10);
   displayString += 2;
   displayString[0] = 0;
   if(nimMode) {
@@ -199,12 +199,12 @@ void exponentToDisplayString(int32_t exponent, char *displayString, bool_t nimMo
 void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t insertGap) {
   if(supNumber < 0) {
     supNumber = -supNumber;
-    strcat(displayString, NUM_SUP_MINUS);
+    strcat(displayString, STD_SUP_MINUS);
     displayString += 2;
   }
 
   if(supNumber == 0) {
-    strcat(displayString, NUM_SUP_0);
+    strcat(displayString, STD_SUP_0);
   }
   else {
     int16_t digit, digitCount=0;
@@ -218,30 +218,30 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
       if(digit <= 1) {
-        *(displayString)     = *(NUM_SUP_0);
-        *(displayString + 1) = *(NUM_SUP_0 + 1);
+        *(displayString)     = *(STD_SUP_0);
+        *(displayString + 1) = *(STD_SUP_0 + 1);
         displayString[1] += digit;
       }
       else if(digit <= 3) {
-        *(displayString)     = *(NUM_SUP_2);
-        *(displayString + 1) = *(NUM_SUP_2 + 1);
+        *(displayString)     = *(STD_SUP_2);
+        *(displayString + 1) = *(STD_SUP_2 + 1);
         displayString[1] += digit-2;
       }
       else {
-        *(displayString)     = *(NUM_SUP_4);
-        *(displayString + 1) = *(NUM_SUP_4 + 1);
+        *(displayString)     = *(STD_SUP_4);
+        *(displayString + 1) = *(STD_SUP_4 + 1);
         displayString[1] += digit-4;
       }
 
       if(greaterThan9999 && supNumber > 0 && groupingGap != 0 && ((++digitCount) % groupingGap) == 0) {
         memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
-        *(displayString)     = *(NUM_SPACE_PUNCTUATION);
-        *(displayString + 1) = *(NUM_SPACE_PUNCTUATION + 1);
+        *(displayString)     = *(STD_SPACE_PUNCTUATION);
+        *(displayString + 1) = *(STD_SPACE_PUNCTUATION + 1);
       }
     }
   }
 
-  strcat(displayString, NUM_SPACE_HAIR);
+  strcat(displayString, STD_SPACE_HAIR);
 }
 
 
@@ -249,12 +249,12 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
 void subNumberToDisplayString(int32_t subNumber, char *displayString) {
   if(subNumber < 0) {
     subNumber = -subNumber;
-    strcat(displayString, NUM_SUB_MINUS);
+    strcat(displayString, STD_SUB_MINUS);
     displayString += 2;
   }
 
   if(subNumber == 0) {
-    strcat(displayString, NUM_SUB_0);
+    strcat(displayString, STD_SUB_0);
   }
   else {
     int16_t digit;
@@ -265,8 +265,8 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString) {
 
       memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
-      *(displayString)     = *(NUM_SUB_0);
-      *(displayString + 1) = *(NUM_SUB_0 + 1);
+      *(displayString)     = *(STD_SUB_0);
+      *(displayString + 1) = *(STD_SUB_0 + 1);
       displayString[1] += digit;
     }
   }
@@ -368,10 +368,10 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
 
     if(real34IsInfinite(value)) {
       if(real34IsNegative(value)) {
-        strcpy(displayString, "-" NUM_INFINITY);
+        strcpy(displayString, "-" STD_INFINITY);
       }
       else {
-        strcpy(displayString, NUM_INFINITY);
+        strcpy(displayString, STD_INFINITY);
       }
       return;
     }
@@ -392,10 +392,10 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
 
     if(real16IsInfinite(value)) {
       if(real16IsNegative(value)) {
-        strcpy(displayString, "-" NUM_INFINITY);
+        strcpy(displayString, "-" STD_INFINITY);
       }
       else {
-        strcpy(displayString, NUM_INFINITY);
+        strcpy(displayString, STD_INFINITY);
       }
       return;
     }
@@ -506,7 +506,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         // Zeros before first significant digit
         for(digitCount=0, i=exponent+1; i<0; i++, digitCount--) {
           if(digitCount != 0 && groupingGap != 0 && digitCount%(uint16_t)groupingGap == 0) {
-            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -515,7 +515,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         // Significant digits
         for(digitPointer=firstDigit; digitPointer<firstDigit+min(displayHasNDigits - 1 - exponent, numDigits); digitPointer++, digitCount--) {
           if(digitCount != 0 && groupingGap != 0 && digitCount%(uint16_t)groupingGap == 0) {
-            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
@@ -524,7 +524,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       else { // zero or positive exponent
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=lastDigit + max(exponent - numDigits + 1, 0); digitPointer++, digitCount--) {
           if(digitCount != -1 && digitCount != exponent && groupingGap != 0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
 
@@ -611,7 +611,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         // Zeros before first significant digit
         for(digitCount=0, i=exponent+1; i<0; i++, digitCount--) {
           if(digitCount!=0 && groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -620,7 +620,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         // Significant digits
         for(digitPointer=firstDigit; digitPointer<=lastDigit; digitPointer++, digitCount--) {
           if(digitCount!=0 && groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
@@ -629,7 +629,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         // Zeros after last significant digit
         for(i=1; i<=(int16_t)displayFormatDigits+exponent+1-numDigits; i++, digitCount--) {
           if(groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -638,7 +638,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       else { // zero or positive exponent
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) {
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-            memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+            memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
             charIndex += 2;
           }
 
@@ -719,7 +719,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     // Significant digits
     for(digitCount=-1, digitPointer=firstDigit+1; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+        memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
       else {
@@ -732,7 +732,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+        memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
       else {
@@ -811,7 +811,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     // Digits after radix mark
     for(digitCount=-1, digitPointer=firstDigit; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+        memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
       else {
@@ -824,7 +824,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-max(0, numDigits); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, NUM_SPACE_PUNCTUATION, 2);
+        memcpy(displayString + charIndex, STD_SPACE_PUNCTUATION, 2);
         charIndex += 2;
       }
       else {
@@ -922,8 +922,8 @@ void complex16ToDisplayString2(const complex16_t *complex16, char *displayString
   realToDisplayString2(&imag16, false, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
-    if(strncmp(displayString + stringByteLength(displayString) - 2, NUM_SPACE_HAIR, 2) != 0) {
-      strcat(displayString, NUM_SPACE_HAIR);
+    if(strncmp(displayString + stringByteLength(displayString) - 2, STD_SPACE_HAIR, 2) != 0) {
+      strcat(displayString, STD_SPACE_HAIR);
     }
 
     if(displayString[i] == '-') {
@@ -972,8 +972,8 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   realToDisplayString2(&imag34, true, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
-    if(strncmp(displayString + stringByteLength(displayString) - 2, NUM_SPACE_HAIR, 2) != 0) {
-      strcat(displayString, NUM_SPACE_HAIR);
+    if(strncmp(displayString + stringByteLength(displayString) - 2, STD_SPACE_HAIR, 2) != 0) {
+      strcat(displayString, STD_SPACE_HAIR);
     }
 
     if(displayString[i] == '-') {
@@ -1032,9 +1032,8 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
         gap = 0;
         endingZero++;
         memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-        //strncpy(displayString + insertAt, NUM_SPACE_PUNCTUATION, 2);
-        *(displayString + insertAt)     = *(NUM_SPACE_PUNCTUATION);
-        *(displayString + insertAt + 1) = *(NUM_SPACE_PUNCTUATION + 1);
+        *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
+        *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
       }
 
       u = intPart % 10;
@@ -1044,13 +1043,13 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       displayString[insertAt] = '0' + u;
     } while(intPart != 0);
 
-    strcat(displayString, NUM_SPACE_PUNCTUATION);
+    strcat(displayString, STD_SPACE_PUNCTUATION);
     endingZero += 2;
   }
 
   else { // FT_IMPROPER d/c
     if(sign == -1) {
-      strcpy(displayString, NUM_SUP_MINUS);
+      strcpy(displayString, STD_SUP_MINUS);
       endingZero = 2;
     }
     else {
@@ -1068,9 +1067,8 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       gap = 0;
       endingZero++;
       memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-      //strncpy(displayString + insertAt, NUM_SPACE_PUNCTUATION, 2);
-      *(displayString + insertAt)     = *(NUM_SPACE_PUNCTUATION);
-      *(displayString + insertAt + 1) = *(NUM_SPACE_PUNCTUATION + 1);
+      *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
+      *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
     }
 
     u = numer % 10;
@@ -1079,21 +1077,18 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 
     if(u <= 1) {
-      //strncpy(displayString + insertAt, NUM_SUP_0, 2);
-      *(displayString + insertAt)     = *(NUM_SUP_0);
-      *(displayString + insertAt + 1) = *(NUM_SUP_0 + 1);
+      *(displayString + insertAt)     = *(STD_SUP_0);
+      *(displayString + insertAt + 1) = *(STD_SUP_0 + 1);
       displayString[insertAt + 1] += u;
     }
     else if(u <= 3) {
-      //strncpy(displayString + insertAt, NUM_SUP_2, 2);
-      *(displayString + insertAt)     = *(NUM_SUP_2);
-      *(displayString + insertAt + 1) = *(NUM_SUP_2 + 1);
+      *(displayString + insertAt)     = *(STD_SUP_2);
+      *(displayString + insertAt + 1) = *(STD_SUP_2 + 1);
       displayString[insertAt + 1] += u - 2;
     }
     else {
-      //strncpy(displayString + insertAt, NUM_SUP_4, 2);
-      *(displayString + insertAt)     = *(NUM_SUP_4);
-      *(displayString + insertAt + 1) = *(NUM_SUP_4 + 1);
+      *(displayString + insertAt)     = *(STD_SUP_4);
+      *(displayString + insertAt + 1) = *(STD_SUP_4 + 1);
       displayString[insertAt + 1] += u - 4;
     }
 
@@ -1114,27 +1109,25 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       gap = 0;
       endingZero++;
       memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-      //strncpy(displayString + insertAt, NUM_SPACE_PUNCTUATION, 2);
-      *(displayString + insertAt)     = *(NUM_SPACE_PUNCTUATION);
-      *(displayString + insertAt + 1) = *(NUM_SPACE_PUNCTUATION + 1);
+      *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
+      *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
     }
 
     u = denom % 10;
     denom /= 10;
     endingZero++;
     memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-    //strncpy(displayString + insertAt, NUM_SUB_0, 2);
-    *(displayString + insertAt)     = *(NUM_SUB_0);
-    *(displayString + insertAt + 1) = *(NUM_SUB_0 + 1);
+    *(displayString + insertAt)     = *(STD_SUB_0);
+    *(displayString + insertAt + 1) = *(STD_SUB_0 + 1);
     displayString[insertAt + 1] += u;
   } while(denom != 0);
 
   // Comparison sign
-       if(lessEqualGreater == -1) strcat(displayString, NUM_SPACE_PUNCTUATION "<" NUM_SPACE_HAIR);
-  else if(lessEqualGreater ==  0) strcat(displayString, NUM_SPACE_PUNCTUATION "=" NUM_SPACE_HAIR);
-  else if(lessEqualGreater ==  1) strcat(displayString, NUM_SPACE_PUNCTUATION ">" NUM_SPACE_HAIR);
+       if(lessEqualGreater == -1) strcat(displayString, STD_SPACE_PUNCTUATION "<" STD_SPACE_HAIR);
+  else if(lessEqualGreater ==  0) strcat(displayString, STD_SPACE_PUNCTUATION "=" STD_SPACE_HAIR);
+  else if(lessEqualGreater ==  1) strcat(displayString, STD_SPACE_PUNCTUATION ">" STD_SPACE_HAIR);
   else {
-    strcat(displayString, NUM_SPACE_PUNCTUATION "?");
+    strcat(displayString, STD_SPACE_PUNCTUATION "?");
     sprintf(errorMessage, "In function fractionToDisplayString: %d is an unexpected value for lessEqualGreater!", lessEqualGreater);
     displayBugScreen(errorMessage);
   }
@@ -1427,7 +1420,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
     displayString[j] = 0;
 
-    strcat(displayString, NUM_BASE_2);
+    strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
@@ -1450,7 +1443,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
     displayString[j] = 0;
 
-    strcat(displayString, NUM_BASE_2);
+    strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
@@ -1471,7 +1464,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
     displayString[j] = 0;
 
-    strcat(displayString, NUM_BASE_2);
+    strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
@@ -1498,7 +1491,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
     displayString[j] = 0;
 
-    strcat(displayString, NUM_BASE_2);
+    strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, &standardFont, false, false) < SCREEN_WIDTH) {
@@ -1527,7 +1520,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
     displayString[j] = 0;
 
-    strcat(displayString, NUM_BASE_2);
+    strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
@@ -1554,7 +1547,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
     displayString[j] = 0;
 
-    strcat(displayString, NUM_BASE_2);
+    strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
     if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {

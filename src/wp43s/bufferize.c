@@ -376,7 +376,7 @@ void addItemToNimBuffer(int16_t item) {
         calcModeNim(NOPARAM);
         nimBuffer[0] = '+';
         nimBuffer[1] = '1';
-        nimBuffer[2] = radixMark == RM_PERIOD ? '.' : ',';
+        nimBuffer[2] = '.';
         nimBuffer[3] = 0;
         nimNumberPart = NP_REAL_FLOAT_PART;
         lastIntegerBase = 0;
@@ -965,7 +965,7 @@ void addItemToNimBuffer(int16_t item) {
   if(done) {
     //Convert nimBuffer to display string
 
-    strcpy(nimBufferDisplay, NUM_SPACE_HAIR);
+    strcpy(nimBufferDisplay, STD_SPACE_HAIR);
 
     nimInputRealPartIsReal34      = false;
     nimInputImaginaryPartIsReal34 = false;
@@ -987,10 +987,10 @@ void addItemToNimBuffer(int16_t item) {
 
         exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
         if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
-          strcat(nimBufferDisplay, NUM_SUP_MINUS);
+          strcat(nimBufferDisplay, STD_SUP_MINUS);
         }
         else if(nimBuffer[exponentSignLocation + 1] == '0' && nimBuffer[exponentSignLocation] == '+') {
-          strcat(nimBufferDisplay, NUM_SUP_0);
+          strcat(nimBufferDisplay, STD_SUP_0);
         }
 
         nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
@@ -998,7 +998,7 @@ void addItemToNimBuffer(int16_t item) {
 
       case NP_FRACTION_DENOMINATOR : // +123 12/7
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
-        strcat(nimBufferDisplay, NUM_SPACE_4_PER_EM);
+        strcat(nimBufferDisplay, STD_SPACE_4_PER_EM);
 
         for(index=2; nimBuffer[index]!=' '; index++); // The ending semi colon is OK here
         supNumberToDisplayString(atoi(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
@@ -1033,10 +1033,10 @@ void addItemToNimBuffer(int16_t item) {
         if(nimNumberPart == NP_REAL_EXPONENT) {
           exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
           if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
-            strcat(nimBufferDisplay, NUM_SUP_MINUS);
+            strcat(nimBufferDisplay, STD_SUP_MINUS);
           }
           else if(nimBuffer[exponentSignLocation + 1] == '0' && nimBuffer[exponentSignLocation] == '+') {
-            strcat(nimBufferDisplay, NUM_SUP_0);
+            strcat(nimBufferDisplay, STD_SUP_0);
           }
         }
 
@@ -1044,8 +1044,8 @@ void addItemToNimBuffer(int16_t item) {
 
         // Complex "separator"
         if(complexMode == CM_RECTANGULAR) {
-          if(strncmp(nimBufferDisplay + stringByteLength(nimBufferDisplay) - 2, NUM_SPACE_HAIR, 2) != 0) {
-            strcat(nimBufferDisplay, NUM_SPACE_HAIR);
+          if(strncmp(nimBufferDisplay + stringByteLength(nimBufferDisplay) - 2, STD_SPACE_HAIR, 2) != 0) {
+            strcat(nimBufferDisplay, STD_SPACE_HAIR);
           }
 
           if(nimBuffer[imaginaryMantissaSignLocation] == '-') {
@@ -1058,7 +1058,7 @@ void addItemToNimBuffer(int16_t item) {
           strcat(nimBufferDisplay, PRODUCT_SIGN);
         }
         else {
-          strcat(nimBufferDisplay, NUM_SPACE_4_PER_EM NUM_MEASURED_ANGLE NUM_SPACE_4_PER_EM);
+          strcat(nimBufferDisplay, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
           if(nimBuffer[imaginaryMantissaSignLocation] == '-') {
             strcat(nimBufferDisplay, "-");
           }
@@ -1085,10 +1085,10 @@ void addItemToNimBuffer(int16_t item) {
           if(nimNumberPart == NP_REAL_EXPONENT) {
             exponentToDisplayString(atoi(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
             if(nimBuffer[imaginaryExponentSignLocation + 1] == 0 && nimBuffer[imaginaryExponentSignLocation] == '-') {
-              strcat(nimBufferDisplay, NUM_SUP_MINUS);
+              strcat(nimBufferDisplay, STD_SUP_MINUS);
             }
             else if(nimBuffer[imaginaryExponentSignLocation + 1] == '0' && nimBuffer[imaginaryExponentSignLocation] == '+') {
-              strcat(nimBufferDisplay, NUM_SUP_0);
+              strcat(nimBufferDisplay, STD_SUP_0);
             }
           }
 
@@ -1116,17 +1116,15 @@ void addItemToNimBuffer(int16_t item) {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
             nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          //strncpy(nimBufferDisplay + index, NUM_PERIOD34, 2);
-          *(nimBufferDisplay + index)     = *(NUM_PERIOD34);
-          *(nimBufferDisplay + index + 1) = *(NUM_PERIOD34 + 1);
+          *(nimBufferDisplay + index)     = *(STD_PERIOD34);
+          *(nimBufferDisplay + index + 1) = *(STD_PERIOD34 + 1);
         }
         else if(nimBufferDisplay[index] == ',') {
           for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
             nimBufferDisplay[i + 1] = nimBufferDisplay[i];
           }
-          //strncpy(nimBufferDisplay + index, NUM_COMMA34, 2);
-          *(nimBufferDisplay + index)     = *(NUM_COMMA34);
-          *(nimBufferDisplay + index + 1) = *(NUM_COMMA34 + 1);
+          *(nimBufferDisplay + index)     = *(STD_COMMA34);
+          *(nimBufferDisplay + index + 1) = *(STD_COMMA34 + 1);
         }
       }
     }
@@ -1155,7 +1153,7 @@ static int16_t insertGapIP(char *displayBuffer, int16_t numDigits, int16_t nth) 
   if(nth + 1 == numDigits)     return 0; // no gap after the last digit
 
   if((numDigits - nth) % groupingGap == 1 || groupingGap == 1) {
-    strcpy(displayBuffer, NUM_SPACE_PUNCTUATION);
+    strcpy(displayBuffer, STD_SPACE_PUNCTUATION);
     return 2;
   }
 
@@ -1168,7 +1166,7 @@ static int16_t insertGapFP(char *displayBuffer, int16_t numDigits, int16_t nth) 
   if(nth + 1 == numDigits)     return 0; // no gap after the last digit
 
   if(nth % groupingGap == groupingGap - 1) {
-    strcpy(displayBuffer, NUM_SPACE_PUNCTUATION);
+    strcpy(displayBuffer, STD_SPACE_PUNCTUATION);
     return 2;
   }
 

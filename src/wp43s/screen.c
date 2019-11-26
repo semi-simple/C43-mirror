@@ -826,7 +826,7 @@ void showCursor(void) {
     showGlyph(STD_CURSOR, &standardFont, xCursor, yCursor, vmNormal, true, false);
   }
   else {
-    showGlyph(NUM_CURSOR, &numericFont,  xCursor, yCursor, vmNormal, true, false);
+    showGlyph(STD_CURSOR, &numericFont,  xCursor, yCursor, vmNormal, true, false);
   }
 }
 

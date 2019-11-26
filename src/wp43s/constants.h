@@ -15,18 +15,8 @@
  */
 
 /********************************************//**
- * \file constants.h type defs and functions for constant management
+ * \file constants.h functions for constant management
  ***********************************************/
-
-/********************************************//**
- * \typedef constant_t
- * \brief Structure keeping the informations for
- * one constant
- ***********************************************/
-typedef struct {
-  const char     *label;     ///< Label used for calc's softkeys.
-  const uint16_t value;      ///< Offset in the constants array
-} constant_t;
 
 
 

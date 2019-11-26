@@ -348,6 +348,9 @@
 		<Unit filename="src/testSuite/exp.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/expt.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/factorial.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -397,6 +400,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/magnitude.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/mant.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/minusOnePow.txt">
@@ -528,6 +534,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/sinh.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/slvq.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/square.txt">
@@ -1195,6 +1204,19 @@
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/expt.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/expt.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/factorial.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1390,6 +1412,19 @@
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/mant.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/mant.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/mathematics.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
@@ -1540,6 +1575,19 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/slvq.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/slvq.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/square.c">
 			<Option compilerVar="CC" />

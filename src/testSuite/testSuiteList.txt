@@ -143,6 +143,9 @@ idivr.txt
 modulo.txt
 remainder.txt
 
+mant.txt
+expt.txt
+
 10pow.txt
 2pow.txt
 minusOnePow.txt
@@ -194,3 +197,5 @@ lcm.txt
 
 magnitude.txt
 unitVector.txt
+
+slvq.txt

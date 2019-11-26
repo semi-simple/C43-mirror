@@ -127,3 +127,5 @@
 2019-11-11 Added 5 characters in standard font:
            U+2306...9 for CEIL and FLOOR
            U+2713 Checkmark
+
+2019-11-23 New WP43S_StandardFont.ttf generated.

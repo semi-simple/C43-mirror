@@ -1064,3 +1064,109 @@ void WP34S_BigMod(const realIc_t *x, const realIc_t *y, realIc_t *res) {
  real850DivideRemainder(x, y, &out);
  realIcPlus(&out, res);
 }
+
+
+void WP34S_realIcMantissa(const realIc_t *x, realIc_t *res) {
+	if(decNumberIsSpecial(x)) {
+		 realIcCopy(const_NaN, res);
+		 return;
+	}
+
+	if(realIcIsZero(x)) {
+ 		realIcZero(res);
+ 		return;
+	}
+
+	realIcCopy(x, res);
+	res->exponent = 1 - res->digits;
+}
+
+
+int32_t WP34S_realIcExponent(const realIc_t *x) {
+ 	if(realIcIsSpecial(x)) {
+ 		 return -99999;
+ 	}
+
+ 	if(realIcIsZero(x)) {
+ 	 	return 0;
+ 	}
+
+ 	return x->exponent + x->digits - 1;
+}
+
+
+/*int WP34S_realULP(const realIc_t *x, realIc_t *r) {
+ 	int dblmode;
+ 	int subnormal = 0;
+ 	int expshift;
+ 	int minexp;
+
+ 	if(decNumberIsSpecial(x)) {
+	  	if(decNumberIsInfinite(x))
+		   	set_inf(r);
+	  	else
+		   	set_NaN(r);
+		  return 0;
+	 }
+
+	 dblmode = is_dblmode();
+
+	 if(dblmode) {
+	  	expshift = DECIMAL128_Pmax;
+	  	minexp = DECIMAL128_Emin - DECIMAL128_Pmax + 1;
+	  	if(x->exponent < DECIMAL128_Emin)
+		  	subnormal = 1;
+	 }
+	 else {
+	  	expshift = DECIMAL64_Pmax;
+  		minexp = DECIMAL64_Emin - DECIMAL64_Pmax + 1;
+		  if(x->exponent < DECIMAL64_Emin)
+		    subnormal = 1;
+	 }
+
+	 dn_1(r);
+	 if(dn_eq0(x) || subnormal)
+	  	r->exponent = minexp;
+	 else
+		  r->exponent = x->exponent + x->digits - expshift;
+	 return subnormal;
+}
+
+
+void WP34S_realIcULP(const realIc_t *x, realIc_t *res) {
+	WP34S_realULP(x, res);
+}
+
+
+void WP34S_realIcNeighbour(const realIc_t *y, const realIc_t *x, realIc_t *res) {
+ 	realIc_t ulp;
+ 	int down, subnormal;
+
+ 	if(decNumberIsNaN(y)) {
+ 		 return set_NaN(res);
+ 	}
+
+ 	if(decNumberIsSpecial(x)) {
+ 		 return decNumberCopy(res, x);
+ 	}
+
+ 	dn_compare(&ulp, y, x);
+ 	if(dn_eq0(&ulp)) {
+ 		 return decNumberCopy(y, res);
+ 	}
+
+ 	down = decNumberIsNegative(&ulp) ? 1 : 0;
+ 	subnormal = realULP(&ulp, x);
+
+ 	if(!subnormal && x->digits == 1 && x->lsu[0] == 1) {
+ 		 ulp.exponent -= (!decNumberIsNegative(x)) == down;
+ 	}
+
+ 	if(down) {
+ 		 realIcSubtract(x, &ulp, res);
+ 	}
+ 	else {
+ 		 realIcAdd(x, &ulp, res);
+ 	}
+}
+*/

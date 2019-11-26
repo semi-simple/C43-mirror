@@ -56,14 +56,15 @@ int16_t findGlyph(const font_t *font, uint16_t charCode) {
   first = 0;
   last = font->numberOfGlyphs - 1;
 
+  middle = (first + last) / 2;
   while(last > first + 1) {
-    middle = (first + last) / 2;
     if(charCode < font->glyphs[middle].charCode) {
       last = middle;
     }
     else {
       first = middle;
     }
+    middle = (first + last) / 2;
   }
 
   if(font->glyphs[first].charCode == charCode) {

@@ -286,7 +286,7 @@ void restoreStack(void) {
 void stackLiftEnable(void) {
   //printf("Stack lift enabled\n");
   stackLiftEnabled = true;
-  hideBattery();
+  hideLowBattery();
 
   // Draw S
   setPixel(392,  1);

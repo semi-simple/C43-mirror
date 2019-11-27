@@ -25,7 +25,6 @@ void tanCoIc                  (const complexIc_t *zin, complexIc_t *zout);
 void tanLonI                  (void);
 void tanRe16                  (void);
 void tanCo16                  (void);
-void tanAngl                  (void);
 void tanRm16                  (void);
 void tanCm16                  (void);
 void tanRe34                  (void);

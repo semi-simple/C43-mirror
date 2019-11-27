@@ -93,6 +93,7 @@ uint16_t             tamMode;
 uint32_t             firstGregorianDay;
 uint32_t             denMax;
 uint32_t             lastIntegerBase;
+uint32_t             alphaSelectionTimer;
 uint8_t              softmenuStackPointer;
 uint8_t              transitionSystemState;
 uint8_t              cursorBlinkCounter;
@@ -153,6 +154,7 @@ bool_t               printerIconEnabled;
 bool_t               batteryIconEnabled;
 bool_t               shiftF;
 bool_t               shiftG;
+bool_t               shiftStateChanged;
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
@@ -160,7 +162,6 @@ bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
-bool_t               batteryLow;
 calcKey_t            kbd_usr[37];
 radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
 uint16_t             cntOfRadioCbItems;                                         //^^
@@ -179,6 +180,7 @@ size_t               gmpMemInBytes;
 size_t               wp43sMemInBytes;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
+int32_t              lgCatalogSelection;
 void                 (*confirmedFunction)(uint16_t);
 realIc_t             const *gammaConstants;
 realIc_t             const *angle180;
@@ -216,17 +218,19 @@ void setupDefaults(void) {
     #pragma GCC diagnostic pop
   #endif
 
-  // Initialization of user key assignments          //JM bug: Overwritten by fnReset
-  memcpy(kbd_usr, kbd_std, sizeof(kbd_std));         //JM bug: Overwritten by fnReset
-  kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;             //JM bug: Overwritten by fnReset
-  kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;             //JM bug: Overwritten by fnReset
-  kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;             //JM bug: Overwritten by fnReset
-  kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;             //JM bug: Overwritten by fnReset
-  kbd_usr[18].fShifted    = -MNU_VARS;               //JM bug: Overwritten by fnReset
-  kbd_usr[18].gShifted    = CST_54;                  //JM bug: Overwritten by fnReset
-  kbd_usr[19].fShifted    = ITM_SW;                  //JM bug: Overwritten by fnReset
-  kbd_usr[19].gShifted    = ITM_SXY;                 //JM bug: Overwritten by fnReset
-  kbd_usr[20].gShifted    = ITM_LYtoM;               //JM bug: Overwritten by fnReset
+         //JM vv bug: Overwritten by fnReset
+  // Initialization of user key assignments
+  memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
+  kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
+  kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
+  kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
+  kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
+  kbd_usr[18].fShifted    = -MNU_VARS;
+  kbd_usr[18].gShifted    = CST_54;
+  kbd_usr[19].fShifted    = ITM_SW;
+  kbd_usr[19].gShifted    = ITM_SXY;
+  kbd_usr[20].gShifted    = ITM_LYtoM;
+         //JM ^^ bug: Overwritten by fnReset
 
   // initialize the RadaioButton/Checkbox items
   fnRebuildRadioState();                                                        //dr build RadioButton, CheckBox
@@ -307,6 +311,8 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
+  shiftStateChanged = false;
+
 
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
@@ -388,11 +394,14 @@ void setupDefaults(void) {
   angle45  = const_45;
 
   alphaSelectionMenu = ASM_NONE;
+
+  #ifndef TESTSUITE_BUILD
+    resetAlphaSelectionBuffer();
+  #endif
+
   lastFcnsMenuPos = 0;
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
-
-  batteryLow = false;
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
@@ -449,7 +458,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  if(strcmp(indexOfItems[LAST_ITEM].itemPrinted, "Last item") != 0) {
+  if(strcmp(indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item") != 0) {
     printf("The last item of indexOfItems[] is not \"Last item\"\n");
     exit(1);
   }
@@ -509,11 +518,10 @@ void program_main(void) {
   wp43sKbdLayout = (key == 37); // bottom left key
   key = 0;
 
-  lcd_clear_buf();*/
+  lcd_clear_buf();
   setupDefaults();
 
   endOfProgram = false;
-  batteryLow = false;
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms()+100;
@@ -523,7 +531,7 @@ void program_main(void) {
   //   ST(STAT_SUSPENDED) - Program signals it is ready for off and doesn't need to be woken-up again
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
-  for(;!endOfProgram;) {
+  while(!endOfProgram) {
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();

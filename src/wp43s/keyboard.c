@@ -30,8 +30,9 @@
  ***********************************************/
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-    if(shiftF) {
-      showGlyph(NUM_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f 4+8+3 is pixel wide
+    if(shiftStateChanged) {
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
 #ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
@@ -39,9 +40,9 @@ void showShiftState(void) {
         JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
       }                                                                         //JM - Display dot in the f - line
 #endif
-    }
-    else if(shiftG) {
-      showGlyph(NUM_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g 4+10+1 is pixel wide
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
 #ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
@@ -51,12 +52,16 @@ void showShiftState(void) {
         JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
       }                                                                         //JM - Display dot in the g - line
 #endif
-    }
-    else {
-      refreshRegisterLine(REGISTER_T);
-#ifndef TESTSUITE_BUILD
-      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
-#endif
+      }
+      else {
+        refreshRegisterLine(REGISTER_T);
+
+        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
+          showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+        }
+      }
+
+      shiftStateChanged = false;
     }
   }
 }
@@ -76,6 +81,7 @@ void resetShiftState(void) {
   if(shiftF || shiftG)        //vv dr
   {
   shiftF = false;
+  shiftStateChanged = true;
   shiftG = false;
   showShiftState();
   }                           //^^
@@ -162,6 +168,10 @@ void btnFnClicked(void *w, void *data) {
     }
 
     if(softmenuStackPointer > 0) {
+      if(calcMode == CM_ASM) {
+        calcModeNormal();
+      }
+
       if(shiftF) {
         resetShiftState();
         executeFunction(fn,  6);
@@ -208,7 +218,7 @@ uint16_t determineItem(const calcKey_t *key) {
              shiftG ? key->gShifted :
                       key->primary;
   }
-  else if(calcMode == CM_AIM) {
+  else if(calcMode == CM_AIM || calcMode == CM_ASM) {
     result = shiftF ? key->fShiftedAim :
              shiftG ? key->gShiftedAim :
                       key->primaryAim;
@@ -223,25 +233,6 @@ uint16_t determineItem(const calcKey_t *key) {
   }
   return result;
 }
-
-
-
-/********************************************//**
- * \brief convert a string containing the key number to int16_t
- *
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return int16_t
- ***********************************************/
-//#ifdef DMCP_BUILD
-//int16_t stringToKeyNumber(void *data) {
-//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
-//}
-//#else
-//int16_t stringToKeyNumber(gpointer data) {
-//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
-//}
-//#endif
-#define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
 
 
 
@@ -261,8 +252,9 @@ void btnPressed(void *notUsed, void *data) {
   const calcKey_t *key;
   int16_t itemShift;
 
-  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
+  //key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
 
   allowScreenUpdate = true;
 
@@ -314,8 +306,8 @@ void btnPressed(void *notUsed, void *data) {
         //printf("T2 %d T1 %d SR %d SUB %d \n", JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1, JM_SHIFT_RESET, JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2);
         if(JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2 <= JM_3_SHIFT_CUTOFF) {  //increased limit from 500 to 600 ms
           JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP; //max
-          shiftF = false;  // Set it up, for flags to be cleared below.
-          shiftG = true;
+          R_shF(); //shiftF = false;  // Set it up, for flags to be cleared below.
+          S_shG(); //shiftG = true;
           if(HOME3) {
             if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
               popSoftmenu();                                                                                                  //JM shifts
@@ -337,20 +329,20 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     if(!shiftF && !shiftG) {                                                                                                  //JM shifts
-      shiftF = true;                                                                                                          //JM shifts
-      shiftG = false;
+      S_shF(); //shiftF = true;                                                                                                          //JM shifts
+      R_shG(); //shiftG = false;
     }                                                                                                                         //JM shifts
     else if(shiftF && !shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = true;                                                                                                          //JM shifts
+      R_shF(); //shiftF = false;                                                                                                         //JM shifts
+      S_shG(); //shiftG = true;                                                                                                          //JM shifts
     }
     else if(!shiftF && shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
+      R_shF(); //shiftF = false;                                                                                                         //JM shifts
+      R_shG(); //shiftG = false;                                                                                                         //JM shifts
     }
     else if(shiftF && shiftG) {                                                                                               //JM shifts  should never be possible. included for completeness
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
+      R_shF(); //shiftF = false;                                                                                                         //JM shifts
+      R_shG(); //shiftG = false;                                                                                                         //JM shifts
     }                                                                                                                         //JM shifts
                                                                                                                               //JM shifts
     showShiftState();                                                                                                         //JM shifts
@@ -360,7 +352,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
 
   // Shift f pressed
-  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
+  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -378,12 +370,13 @@ void btnPressed(void *notUsed, void *data) {
 
     shiftF = !shiftF;
     shiftG = false;
+    shiftStateChanged = true;
 
     showShiftState();
   }
 
   // Shift g pressed
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {
+  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -401,6 +394,7 @@ void btnPressed(void *notUsed, void *data) {
 
     shiftG = !shiftG;
     shiftF = false;
+    shiftStateChanged = true;
 
     showShiftState();
   }
@@ -411,8 +405,9 @@ void btnPressed(void *notUsed, void *data) {
     JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in
     fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
-    shiftG = false;
-    shiftF = false;
+    R_shG(); //shiftG = false;
+    R_shF(); //shiftF = false;
+    //shiftStateChanged = true;
   }
 
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
@@ -422,8 +417,9 @@ void btnPressed(void *notUsed, void *data) {
     fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
     JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
-    shiftG = false;
-    shiftF = false;
+    R_shG(); //shiftG = false;
+    R_shF(); //shiftF = false;
+    //shiftStateChanged = true;
   }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
@@ -480,7 +476,7 @@ void btnPressed(void *notUsed, void *data) {
         refreshStack();
       }
 
-      else if(calcMode == CM_TAM) {
+      else if(calcMode == CM_TAM || calcMode == CM_ASM) {
         addItemToBuffer(ITM_ENTER);
       }
 
@@ -505,7 +501,15 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     else if(item == KEY_EXIT) {
-      if(calcMode == CM_NORMAL) {
+
+      if(calcMode == CM_BUG_ON_SCREEN) {
+        calcMode = previousCalcMode;
+        clearScreen(false, true, true);
+        refreshStack();
+        showSoftmenuCurrentPart();
+      }
+
+      else if(calcMode == CM_NORMAL) {
         if(lastErrorCode != 0) {
           lastErrorCode = 0;
           refreshStack();
@@ -547,6 +551,10 @@ void btnPressed(void *notUsed, void *data) {
         refreshStack();
       }
 
+      else if(calcMode == CM_ASM) {
+        calcModeNormal();
+      }
+
       else if(calcMode == CM_NIM) {
         addItemToNimBuffer(KEY_EXIT);
       }
@@ -562,13 +570,6 @@ void btnPressed(void *notUsed, void *data) {
         currentRegisterBrowserScreen = 9999;
         oldTime[0] = 0;
         showDateTime();
-      }
-
-      else if(calcMode == CM_BUG_ON_SCREEN) {
-        calcMode = previousCalcMode;
-        clearScreen(false, true, true);
-        refreshStack();
-        showSoftmenuCurrentPart();
       }
 
       else if(calcMode == CM_CONFIRMATION) {
@@ -599,7 +600,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
+            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -613,7 +614,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
         displayBugScreen(errorMessage);
       }
     }
@@ -660,6 +661,10 @@ void btnPressed(void *notUsed, void *data) {
         tamTransitionSystem(TT_BACKSPACE);
       }
 
+      else if(calcMode == CM_ASM) {
+        addItemToBuffer(KEY_BACKSPACE);
+      }
+
       else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER) {
         calcMode = previousCalcMode;
         clearScreen(false, true, true);
@@ -699,7 +704,8 @@ void btnPressed(void *notUsed, void *data) {
       }                                                                         //JM CASE JM CAPS
 
     else if(item == KEY_UP) {
-      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
+      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
+        resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
           if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
@@ -736,8 +742,7 @@ void btnPressed(void *notUsed, void *data) {
               showSoftmenuCurrentPart();
             }
 
-                 if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-            else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+            setCatalogLastPos();
           }
         }
         else {
@@ -804,7 +809,8 @@ void btnPressed(void *notUsed, void *data) {
     }                                                                          //JM CASE JM CAPS
 
     else if(item == KEY_DOWN) {
-      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM) {
+      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
+        resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
           if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
@@ -834,15 +840,16 @@ void btnPressed(void *notUsed, void *data) {
 
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
               softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
-              showSoftmenuCurrentPart();
+            }
+            else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
+              softmenuStack[softmenuStackPointer - 1].firstItem = 0;
             }
             else {
-              softmenuStack[softmenuStackPointer - 1].firstItem = (softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems/6 - 1) / (itemShift/6) * itemShift; // doesn't work if numItems is not a multiple of 6
-              showSoftmenuCurrentPart();
+              softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
             }
+            showSoftmenuCurrentPart();
 
-                 if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-            else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+            setCatalogLastPos();
           }
         }
         else {
@@ -1007,6 +1014,28 @@ void btnPressed(void *notUsed, void *data) {
       addItemToBuffer(item);
     }
 
+    else if(calcMode == CM_ASM) {
+      if(item < 0) {
+        //showSoftmenu(NULL, item, false);
+      }
+
+      else if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+        addItemToBuffer(item + 26);
+      }
+
+      else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+        addItemToBuffer(item + 36);
+      }
+
+      else if(item == CHR_DOWN_ARROW || item == CHR_UP_ARROW) {
+        addItemToBuffer(item );
+      }
+
+      else {
+        showFunctionName(item, 10);
+      }
+    }
+
     else if(calcMode == CM_NIM) {
       if(item < 0) {
         showSoftmenu(NULL, item, false);
@@ -1158,7 +1187,10 @@ void btnReleased(void *notUsed, void *data) {
 
 
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
-  shiftF = true;
+  if(!shiftF) {
+    shiftF = true;
+    shiftStateChanged = true;
+  }
 
   #ifdef PC_BUILD
     btnClicked(NULL, "02");

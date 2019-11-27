@@ -28,6 +28,8 @@ void convertRegister34To16                           (calcRegister_t regist);
 void convertLongIntegerRegisterToReal16Register      (calcRegister_t source, calcRegister_t destination);
 void convertLongIntegerRegisterToReal34Register      (calcRegister_t source, calcRegister_t destination);
 void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, calcRegister_t destination);
+void convertLongIntegerRegisterToReal16              (calcRegister_t source, real16_t *destination);
+void convertLongIntegerRegisterToReal34              (calcRegister_t source, real34_t *destination);
 void convertLongIntegerRegisterToRealIc              (calcRegister_t source, realIc_t *destination);
 void convertLongIntegerRegisterToLongInteger         (calcRegister_t regist, longInteger_t longInteger);
 

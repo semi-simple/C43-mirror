@@ -18,8 +18,4 @@
  * \file sort.h
  ***********************************************/
 
-#define SORT_STRING_LEN_GLYPHS 565
-
-extern const char *sortingOrder;
-
-int32_t compareString(const char *stra, const char *strb);
+int32_t compareString(const char *stra, const char *strb, int32_t comparisonType);

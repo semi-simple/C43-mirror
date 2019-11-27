@@ -432,6 +432,11 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
+  // Alpha selection timer
+  if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+    resetAlphaSelectionBuffer();
+  }
+
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
   if((ShiftTimoutMode || Home3TimerMode)) {      //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
     if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
@@ -479,13 +484,19 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     strcpy(oldTime, dateTimeString);
     showDateTime();
 
-    if(usb_powered() == 0 && get_lowbat_state() == 1) {
-      showBattery();
+    if(get_lowbat_state() == 1) {
+      showLowBattery();
     }
     else {
-      hideBattery();
+      hideLowBattery();
     }
   }
+
+  // Alpha selection timer
+  if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+    resetAlphaSelectionBuffer();
+  }
+}
 
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
   if((ShiftTimoutMode || Home3TimerMode)) {      //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
@@ -906,7 +917,7 @@ void showCursor(void) {
     showGlyph(STD_CURSOR, &standardFont, xCursor, yCursor, vmNormal, true, false);
   }
   else {
-    showGlyph(NUM_CURSOR, &numericFont,  xCursor, yCursor, vmNormal, true, false);
+    showGlyph(STD_CURSOR, &numericFont,  xCursor, yCursor, vmNormal, true, false);
   }
 }
 
@@ -967,10 +978,10 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  if(stringWidth(indexOfItems[item].itemName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+  showString(indexOfItems[item].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
 }
 
 

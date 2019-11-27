@@ -1277,7 +1277,7 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
   else {                                                                                                //JM UNIT
     strcpy(displayString, PRODUCT_SIGN);                                                                //JM UNIT Below, copy of
     displayString += 2;                                                                                 //JM UNIT exponentToDisplayString in display.c
-    strcpy(displayString, NUM_SUB_10);                                                                  //JM UNIT
+    strcpy(displayString, STD_SUB_10);                                                                  //JM UNIT
     displayString += 2;                                                                                 //JM UNIT
     displayString[0] = 0;                                                                               //JM UNIT
     if(nimMode) {                                                                                       //JM UNIT

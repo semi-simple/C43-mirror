@@ -1736,7 +1736,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
 void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
   uint8_t lbl[22];
 
-  stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemPrinted, lbl);
+  stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemSoftmenuName, lbl);
 
   if(key->primary == 0) {
     lbl[0] = 0;
@@ -1751,7 +1751,7 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
 void labelCaptionAimFaChr(const calcKey_t* key, GtkWidget* lblF, int chrF) {
   uint8_t lbl[22];
 
-  stringToUtf8(indexOfItems[chrF].itemPrinted, lbl);
+  stringToUtf8(indexOfItems[chrF].itemSoftmenuName, lbl);
 
   if(key->primary == 0) {
     lbl[0] = 0;
@@ -1778,10 +1778,10 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   }
   else {
     if(alphaCase == AC_LOWER && (CHR_A <= key->primaryAim && key->primaryAim <= CHR_Z)) {
-        stringToUtf8(indexOfItems[key->primaryAim + 26].itemPrinted, lbl);
+        stringToUtf8(indexOfItems[key->primaryAim + 26].itemSoftmenuName, lbl);
     }
     else {
-        stringToUtf8(indexOfItems[max(key->primaryAim, -key->primaryAim)].itemPrinted, lbl);
+        stringToUtf8(indexOfItems[max(key->primaryAim, -key->primaryAim)].itemSoftmenuName, lbl);
     }
   }                                     //^^
 

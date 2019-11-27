@@ -423,7 +423,7 @@ void addItemToNimBuffer(int16_t item) {
             STACK_LIFT_DISABLE;      
         } 
         else {                       //JM NEWERPN ^^
-          calcModeNIM(NOPARAM);
+          calcModeNim(NOPARAM);
         }                            //JM NEWERPN
         nimBuffer[0] = '+';
         nimBuffer[1] = 0;

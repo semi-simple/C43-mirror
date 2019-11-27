@@ -413,7 +413,8 @@ void btnPressed(void *notUsed, void *data) {
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
                                              //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
   else if(JM_ASN_MODE != 0) {                //JM GET KEY
-    int16_t tempkey = stringToKeyNumber(data);
+    //int16_t tempkey = stringToKeyNumber(data);
+    int16_t tempkey = (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
     fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
     JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
@@ -427,7 +428,8 @@ void btnPressed(void *notUsed, void *data) {
     int16_t item = determineItem(key);
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( stringToKeyNumber(data) == 0) )) {
+    //if((calcMode == CM_NORMAL) && (!userModeEnabled && ( stringToKeyNumber(data) == 0) )) {
+    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0' == 0) )) {
       //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }

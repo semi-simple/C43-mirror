@@ -210,7 +210,7 @@ void showOverflowCarry(void) {
  * \return void
  ***********************************************/
 void showAlphaMode(void) {
-  if(calcMode == CM_AIM) {
+  if(calcMode == CM_AIM || calcMode == CM_ASM) {
     if(alphaCase == AC_UPPER) {
       showString(STD_ALPHA, &standardFont, X_ALPHA_MODE, 0, vmNormal, true, false); // STD_ALPHA is 0+9+2 pixel wide
     }
@@ -424,7 +424,7 @@ void togglePrinter(void) {
  * \param void
  * \return void
  ***********************************************/
-void showBattery(void) {
+void showLowBattery(void) {
   batteryIconEnabled = true;
   showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
 }
@@ -437,7 +437,7 @@ void showBattery(void) {
  * \param void
  * \return void
  ***********************************************/
-void hideBattery(void) {
+void hideLowBattery(void) {
   batteryIconEnabled = false;
   showGlyphCode(' ', &standardFont, X_BATTERY, 0, vmNormal, true, true); // is 10 pixel wide
 }
@@ -450,7 +450,7 @@ void hideBattery(void) {
  * \param void
  * \return void
  ***********************************************/
-void toggleBattery(void) {
+void toggleLowBattery(void) {
   if(batteryIconEnabled) {
     showGlyphCode(' ',     &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
   }

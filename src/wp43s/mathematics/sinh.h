@@ -23,7 +23,6 @@ void sinhError(void);
 void sinhLonI (void);
 void sinhRe16 (void);
 void sinhCo16 (void);
-void sinhAngl (void);
 void sinhRm16 (void);
 void sinhCm16 (void);
 void sinhRe34 (void);

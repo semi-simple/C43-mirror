@@ -29,7 +29,7 @@
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_MYMENU[]     = {  ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                     };    //JM PLACEHOLDER - WAIT FOR OFFICIAL MYMENU
+const int16_t menu_MyMenu[]      = { ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                     };    //JM PLACEHOLDER - WAIT FOR OFFICIAL MYMENU
 
 const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,              ITM_MA15,                    ITM_MA16,
                                      ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                    ITM_MA26,
@@ -141,14 +141,16 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 #else
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
+#ifdef INLINE_TEST
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_INL_TST,                       //JM added the dummy line under #else, to keep the sequence correct for following lines                
+#else
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
+#endif
 #endif
 
                                      ITM_NULL,                      ITM_NULL,                   ITM_ERPN,                 ITM_INP_DEF_43S,       ITM_INP_DEF_SP,              ITM_INP_DEF_DP,                     //JM
-                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
-                                     ITM_BASE_HOME,                 ITM_BASE_MYMENU,            ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM,
-
-                                     ITM_LCD,                       ITM_NULL,                   ITM_050,                  ITM_100,               ITM_150,                     ITM_200,                       };    //JM
+                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM eRPN
+                                     ITM_BASE_HOME,                 ITM_BASE_MYMENU,            ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
 
 
 
@@ -224,12 +226,12 @@ const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,    
                                      ITM_XEQUP0,                    ITM_XEQUM0,                 ITM_XAEQU,                ITM_MATR,              ITM_CPX,                     ITM_REAL,
                                      ITM_SPEC,                      ITM_NAN,                    ITM_NULL,                 ITM_M_SQR,             ITM_NULL,                    ITM_DBL                       };
 
-const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                   -MNU_ORTHOG,
+const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                    -MNU_ORTHOG,
                                      ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
                                      ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_toDP,              ITM_toSP,                    ITM_PARALLEL,                 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_EE                        };    //JM Added 
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_EE                       };    //JM Added 
 
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -378,6 +380,7 @@ const int16_t menu_ConvV[]       = { ITM_GLUKtoM3,                  ITM_M3toGLUK
                                      10000+ITM_FZUKtoM3b,           10000+ITM_M3toFZUKb,        10000+ITM_BARRELtoM3b,    10000+ITM_M3toBARRELb, 10000+ITM_FZUStoM3b,         10000+ITM_M3toFZUSb,
                                      20000+ITM_FZUKtoM3,            20000+ITM_M3toFZUK,         20000+ITM_BARRELtoM3,     20000+ITM_M3toBARREL,  20000+ITM_FZUStoM3,          20000+ITM_M3toFZUS            };
 
+/*
 const int16_t menu_CNST[]        = { CST_00,                        CST_01,                     CST_02,                   CST_03,                CST_04,                      CST_05,
                                      CST_06,                        CST_07,                     CST_08,                   CST_09,                CST_10,                      CST_11,
                                      CST_12,                        CST_13,                     CST_14,                   CST_15,                CST_16,                      CST_17,
@@ -392,7 +395,8 @@ const int16_t menu_CNST[]        = { CST_00,                        CST_01,     
                                      CST_66,                        CST_67,                     CST_68,                   CST_69,                CST_70,                      CST_71,
                                      CST_72,                        CST_73,                     CST_74,                   CST_75,                CST_76,                      CST_77,
                                      CST_78,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-
+*/
+									 
 const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,                ITM_ALPHARR,              ITM_ALPHASL,           ITM_ALPHAPOS,                ITM_ALPHAtoX,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_ALPHALENG,               ITM_NULL,
                                      ITM_FBR,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -462,6 +466,9 @@ const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,   
                                      ITM_EE_STO_V_I,                ITM_EE_STO_IR,              ITM_EE_STO_V_Z,           ITM_EE_X2BAL,          ITM_PARALLEL,                -MNU_CPX,                           //JM EE
                                      ITM_EE_STO_Z,                  ITM_EE_RCL_Z,               ITM_EE_STO_V,             ITM_EE_RCL_V,          ITM_EE_STO_I,                ITM_EE_RCL_I                  };    //JM EE
 
+#ifdef INLINE_TEST
+const int16_t menu_Inl_Tst[]     = { ITM_TEST,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_GET_TEST_BS,             ITM_SET_TEST_BS               };    //dr
+#endif
 
 
 const int16_t menu_ASN_N[]       = { 
@@ -517,7 +524,7 @@ const int16_t menu_HOME[]        = {
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-5------*/                                                                                                                                                                                            //JM HOME
-                                     -MNU_MENUS,                    -MNU_MYMENU,                -MNU_INFO,                -MNU_MODE,             -MNU_DISP,                   ITM_CLSTK,                          //JM HOME  MyAlpha is a placeholder for MyMenu which does not yet work.
+                                     -MNU_MENUS,                    -MNU_MyMenu,                -MNU_INFO,                -MNU_MODE,             -MNU_DISP,                   ITM_CLSTK,                          //JM HOME  MyAlpha is a placeholder for MyMenu which does not yet work.
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-4------*/                                                                                                                                                                                            //JM HOME
@@ -533,7 +540,11 @@ const int16_t menu_HOME[]        = {
                                                                                                                                                                                                                   //JM HOME
 /* Bottom Prim */  /* 6 */           ITM_STATUS,                    -MNU_CLK,                   -MNU_UNITCONV,            -MNU_BITS,             -MNU_INTS,                   ITM_CLSTK,                          //JM HOME
 /* Middle f    */  /* 5 */           ITM_RBR,                       -MNU_INFO,                  -MNU_CNST,                -MNU_XFN,              -MNU_SUMS,                   ITM_NULL,                           //JM HOME
+#ifdef INLINE_TEST
+/* Top    g    */  /* 4 */           ITM_DROP,                      -MNU_CPX,                   -MNU_EXP,                 -MNU_FIN,              KEY_UNDO,                    -MNU_INL_TST,                       //JM HOME
+#else
 /* Top    g    */  /* 4 */           ITM_DROP,                      -MNU_CPX,                   -MNU_EXP,                 -MNU_FIN,              KEY_UNDO,                    ITM_NULL,                           //JM HOME
+#endif
                                                                                                                                                                                                                   //JM HOME
 /* Bottom Prim */  /* sample */      ITM_PROFRC,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLSTK,                          //JM HOME
 /* Middle f    */  /* 3 */           ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
@@ -549,15 +560,17 @@ const int16_t menu_ALPHA[]        = {
                                      ITM_ASSIGN,                    KEY_USERMODE,               ITM_NULL,                 -MNU_CATALOG,          -MNU_MODE,                   ITM_NULL,                           //JM                     
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM                     
 
-#include "softmenuFCNS.h"
+#include "softmenuCatalogs.h"
 
+/*
 const int16_t menu_MENUS[] = {
   -MNU_ADV,
 };
+*/
 
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numItems = sizeof(menu_MyAlpha    )/sizeof(int16_t), .softkeyItem = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
-  {.menuId = -MNU_MYMENU,      .numItems = sizeof(menu_MYMENU     )/sizeof(int16_t), .softkeyItem = menu_MYMENU      }, // JM PLACEHOLDER MYMENU
+  {.menuId = -MNU_MyMenu,      .numItems = sizeof(menu_MyMenu     )/sizeof(int16_t), .softkeyItem = menu_MyMenu      }, // JM PLACEHOLDER MYMENU
   {.menuId = -MNU_ADV,         .numItems = sizeof(menu_ADV        )/sizeof(int16_t), .softkeyItem = menu_ADV         },
   {.menuId = -MNU_Sfdx,        .numItems = sizeof(menu_Sfdx       )/sizeof(int16_t), .softkeyItem = menu_Sfdx        },
   {.menuId = -MNU_BITS,        .numItems = sizeof(menu_BITS       )/sizeof(int16_t), .softkeyItem = menu_BITS        },
@@ -655,6 +668,9 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM HOME
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
+#ifdef INLINE_TEST
+  {.menuId = -MNU_INL_TST,     .numItems = sizeof(menu_Inl_Tst    )/sizeof(int16_t), .softkeyItem = menu_Inl_Tst     },
+#endif
   {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
 
@@ -1244,7 +1260,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
   int16_t m, x, y, menu, yDotted=0, currentFirstItem, item;
-  bool_t  dottedTopLine;
+  bool_t dottedTopLine;
 
   if(softmenuStackPointer > 0) {
     clearScreen(false, false, true);
@@ -1278,9 +1294,14 @@ void showSoftmenuCurrentPart(void) {
     }
 
     const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
-    for(y=currentFirstItem/6; y<min(currentFirstItem/6+3, softmenu[m].numItems/6); y++, softkeyItem+=6) {
+    for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, softmenu[m].numItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
-        item = softkeyItem[x];
+        if(softkeyItem + x >= softmenu[m].softkeyItem + softmenu[m].numItems) {
+          item = ITM_NULL;
+        }
+        else {
+          item = softkeyItem[x];
+        }
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {
@@ -1300,23 +1321,23 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemPrinted, x, y-currentFirstItem/6, vmReverse, true, true, -1);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1);
             }
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemPrinted, x, y-currentFirstItem/6, vmNormal, true, true, -1);
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, -1);
         }
-        else if(item > 0 && indexOfItems[item%10000].itemPrinted[0] != 0) { // softkey
+        else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemName,    x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, -1);
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, -1);
           }
           else {
             int8_t showCb = fnCbIsSet(item%10000);                              //dr
-            showSoftkey(indexOfItems[item%10000].itemPrinted, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
+            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
           }
         }
       }
@@ -1350,7 +1371,7 @@ void showSoftmenuCurrentPart(void) {
  ***********************************************/
 void initSoftmenuStack(int16_t softmenu) {
   softmenuStack[0].softmenu = softmenu;
-  softmenuStack[0].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : 0);
+  softmenuStack[0].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos : 0));
   softmenuStackPointer = 1;
   showSoftmenuCurrentPart();
 }
@@ -1367,7 +1388,7 @@ void initSoftmenuStack(int16_t softmenu) {
 void pushSoftmenu(int16_t softmenu) {
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
     softmenuStack[softmenuStackPointer].softmenu = softmenu;
-    softmenuStack[softmenuStackPointer].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : 0);
+    softmenuStack[softmenuStackPointer].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos : 0));
     softmenuStackPointer++;
     showSoftmenuCurrentPart();
   }
@@ -1389,7 +1410,10 @@ void pushSoftmenu(int16_t softmenu) {
  ***********************************************/
 void popSoftmenu(void) {
   if(softmenuStackPointer > 0) {
-    alphaSelectionMenu = ASM_NONE;
+    if(alphaSelectionMenu != ASM_NONE) {
+      alphaSelectionMenu = ASM_NONE;
+      calcModeNormal();
+    }
     softmenuStackPointer--;
     if(softmenuStackPointer > 0) {
       showSoftmenuCurrentPart();
@@ -1407,7 +1431,7 @@ void popSoftmenu(void) {
 
 /********************************************//**
  * \brief Displays a softmenu. One of the 2 first
- * parameter must be null and one must be not null
+ * parameter must be null and one must not be null
  *
  * \param[in] menu const char* Name of softmenu
  * \param[in] id int16_t       ID of softmenu
@@ -1418,9 +1442,21 @@ void popSoftmenu(void) {
 void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   int16_t m;
 
-       if(id == -MNU_FCNS) alphaSelectionMenu = ASM_FCNS;
-  else if(id == -MNU_CNST) alphaSelectionMenu = ASM_CNST;
-  else                     alphaSelectionMenu = ASM_NONE;
+  if(id == -MNU_FCNS) {
+    alphaSelectionMenu = ASM_FCNS;
+    calcModeAsm();
+  }
+  else if(id == -MNU_CNST) {
+    alphaSelectionMenu = ASM_CNST;
+    calcModeAsm();
+  }
+  else if(id == -MNU_MENUS) {
+    alphaSelectionMenu = ASM_MENU;
+    calcModeAsm();
+  }
+  else {
+    alphaSelectionMenu = ASM_NONE;
+  }
 
   if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
     clearScreen(false, false, true);
@@ -1460,7 +1496,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   }
   else { // Search by name
     while(softmenu[m].menuId != 0) {
-      if(strcmp(indexOfItems[-softmenu[m].menuId].itemPrinted, menu) == 0) {
+      if(strcmp(indexOfItems[-softmenu[m].menuId].itemSoftmenuName, menu) == 0) {
         break;
       }
       m++;
@@ -1477,7 +1513,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     }
   }
   else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM) {
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM) {
       if(push) {
         pushSoftmenu(m);
       }
@@ -1503,5 +1539,13 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
       displayBugScreen(errorMessage);
     }
   }
+}
+
+
+
+void setCatalogLastPos(void) {
+       if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
 }
 #endif

@@ -101,8 +101,8 @@ void showOneChar(const font_t *font, uint16_t charCode) {
 }
 
 int main(void) {
-  printf("sizeof(int8_t  ) =%3ld bits\n", 8L * sizeof(int8_t));
-  printf("sizeof(uint16_t) =%3ld bits\n", 8L * sizeof(uint16_t));
+  printf("sizeof(int8_t  ) =%3ld bits\n", 8L * (long)sizeof(int8_t));
+  printf("sizeof(uint16_t) =%3ld bits\n", 8L * (long)sizeof(uint16_t));
 
   if(sizeof(int8_t) != 1 || sizeof(uint16_t) != 2) {
     fprintf(stderr, "Type int8_t must be 8 bit, type uint_16 must be 16 bit and pointer must be 32 bit!\n");

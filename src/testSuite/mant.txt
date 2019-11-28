@@ -1,0 +1,186 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                         mant                            **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnMant
+
+
+
+;=======================================
+; mant(Long Integer) --> Real16
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"12345678901234567"
+Out: EC=0 FI=0 SL=1 RL=LonI:"12345678901234567" RX=Re16:"1.234567890123457"
+
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"-52"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-52" RX=Re16:"-5.2"
+
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Re16:"0"
+
+
+
+;=======================================
+; mant(Real16) --> Real16
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001" RX=Re16:"1"
+
+In:  AM=GRAD SL=0 FI=0 RX=Re16:"50"
+Out: EC=0 FI=0 SL=1 RL=Re16:"50" RX=Re16:"5"
+
+In:  AM=MULTPI SL=0 FI=0 RX=Re16:"5.678910111213e234"
+Out: EC=0 FI=0 SL=1 RL=Re16:"5.678910111213e234" RX=Re16:"5.678910111213"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"89.999999999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"89.999999999" RX=Re16:"8.9999999999"
+
+;In:  SL=0 FI=0 NCSD=16 RX=Re16:"5.32564":DMS
+;Out: EC=0 FI=0 SL=1 RL=Re16:"5.32564":DMS RX=Re16:"5.32564"
+
+In:  SL=0 FI=0 RX=Re16:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re16:"-5.32564":GRAD RX=Re16:"-5.32564"
+
+In:  SL=0 FI=0 RX=Re16:"45":DEG
+Out: EC=0 FI=0 SL=1 RL=Re16:"45":DEG RX=Re16:"4.5"
+
+; NaN
+In:  SL=0 FI=0 RX=Re16:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Re16:"inf":DEG RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=Re16:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":RAD
+Out: EC=5 FI=0 SL=0 RX=Re16:"-inf":RAD
+
+; NaN
+In:  SL=0 FI=0 RX=Re16:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
+Out: EC=0 FI=0 SL=1 RL=Re16:"inf" RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
+Out: EC=4 FI=0 SL=0 RX=Re16:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
+Out: EC=5 FI=0 SL=0 RX=Re16:"-inf"
+
+
+
+;=======================================
+; mant(Complex16) --> Error24
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
+Out: EC=24 FI=0 SL=0 RX=Co16:"6.2 i -7.6"
+
+
+;=======================================
+; mant(Time) --> Error24
+;=======================================
+
+
+
+;=======================================
+; mant(Date) --> Error24
+;=======================================
+
+
+
+;=======================================
+; mant(String) --> Error24
+;=======================================
+In:  SL=0 RX=Stri:"String test"
+Out: EC=24 SL=0 RX=Stri:"String test"
+
+
+
+;=======================================
+; mant(Real16 Matrix) --> Error24
+;=======================================
+
+
+
+;=======================================
+; mant(Complex16 Matrix) --> Error24
+;=======================================
+
+
+
+;=======================================
+; mant(Short Integer) --> Error24
+;=======================================
+In:  SL=0 FI=0 RX=ShoI:"5#7"
+Out: EC=24 FI=0 SL=0 RX=ShoI:"5#7"
+
+
+
+;=======================================
+; mant(Real34) --> Real34
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001" RX=Re34:"1"
+
+In:  AM=GRAD SL=0 FI=0 RX=Re34:"50"
+Out: EC=0 FI=0 SL=1 RL=Re34:"50" RX=Re34:"5"
+
+In:  AM=MULTPI SL=0 FI=0 RX=Re34:"5.6789101112131415161718e234"
+Out: EC=0 FI=0 SL=1 RL=Re34:"5.6789101112131415161718e234" RX=Re34:"5.6789101112131415161718"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"89.999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"89.999999999" RX=Re34:"8.9999999999"
+
+;In:  SL=0 FI=0 NCSD=34 RX=Re34:"5.32564":DMS
+;Out: EC=0 FI=0 SL=1 RL=Re34:"5.32564":DMS RX=Re34:"5.32564"
+
+In:  SL=0 FI=0 RX=Re34:"-5.32564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re34:"-5.32564":GRAD RX=Re34:"-5.32564"
+
+In:  SL=0 FI=0 RX=Re34:"45":DEG
+Out: EC=0 FI=0 SL=1 RL=Re34:"45":DEG RX=Re34:"4.5"
+
+; NaN
+In:  SL=0 FI=0 RX=Re34:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":RAD
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Re34:"inf":DEG RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf":MULTPI
+Out: EC=4 FI=0 SL=0 RX=Re34:"inf":MULTPI
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":RAD
+Out: EC=5 FI=0 SL=0 RX=Re34:"-inf":RAD
+
+; NaN
+In:  SL=0 FI=0 RX=Re34:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
+
+; Infinity
+In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
+Out: EC=0 FI=0 SL=1 RL=Re34:"inf" RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"inf"
+Out: EC=4 FI=0 SL=0 RX=Re34:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
+Out: EC=5 FI=0 SL=0 RX=Re34:"-inf"
+
+
+
+;=======================================
+; mant(Complex34) --> Error24
+;=======================================
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
+Out: EC=24 FI=0 SL=0 RX=Co34:"6.2 i -7.6"

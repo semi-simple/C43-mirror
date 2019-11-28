@@ -77,8 +77,6 @@ int8_t   showFunctionNameCounter;
 
 #ifndef TESTSUITE_BUILD
 uint8_t  compressString;                                    //JM compressString
-void     fnSwStart            (uint8_t nr);       //vv dr StopWatch
-void     fnSwStop             (uint8_t nr);       //^^
 void     JM_DOT               (int16_t xx, int16_t yy);
 void     setPixel             (int16_t x, int16_t y);
 void     clearPixel           (int16_t x, int16_t y);
@@ -93,7 +91,5 @@ void     hideCursor           (void);
 void     showFunctionName     (int16_t item, int8_t counter);
 void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
-void     clearRegLineFromX    (int16_t xStart, int16_t yStart, int16_t height); //vv dr
-void     clearRegLineToX      (int16_t xStop, int16_t yStart, int16_t height);  //^^
 void     refreshRegisterLine  (calcRegister_t regist);
 #endif

@@ -93,6 +93,7 @@ uint16_t             tamMode;
 uint32_t             firstGregorianDay;
 uint32_t             denMax;
 uint32_t             lastIntegerBase;
+uint32_t             alphaSelectionTimer;
 uint8_t              softmenuStackPointer;
 uint8_t              transitionSystemState;
 uint8_t              cursorBlinkCounter;
@@ -146,8 +147,10 @@ bool_t               SH_BASE_AHOME;                           //JM BASEHOME
 bool_t               SH_BASE_MYA;                             //JM BASEHOME
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 uint8_t              Input_Default;                           //JM Input Default
-bool_t               testEnabled;                             //dr
-uint16_t             refreshScreenTimeout;                    //dr
+#ifdef INLINE_TEST                      //vv dr
+bool_t               testEnabled;
+uint16_t             testBitset;
+#endif                                  //^^
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -155,6 +158,7 @@ bool_t               printerIconEnabled;
 bool_t               batteryIconEnabled;
 bool_t               shiftF;
 bool_t               shiftG;
+//bool_t             shiftStateChanged; //dr
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
@@ -162,7 +166,6 @@ bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
-bool_t               batteryLow;
 calcKey_t            kbd_usr[37];
 radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
 uint16_t             cntOfRadioCbItems;                                         //^^
@@ -181,6 +184,7 @@ size_t               gmpMemInBytes;
 size_t               wp43sMemInBytes;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
+int32_t              lgCatalogSelection;
 void                 (*confirmedFunction)(uint16_t);
 realIc_t             const *gammaConstants;
 realIc_t             const *angle180;
@@ -309,6 +313,7 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
+  //shiftStateChanged = false;          //dr
 
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
@@ -316,8 +321,10 @@ void setupDefaults(void) {
   ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
   Home3TimerMode = true;                                         //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
-  testEnabled = false;                                           //dr
-  refreshScreenTimeout = TO_SCREEN_T1;                           //dr
+#ifdef INLINE_TEST                      //vv dr
+  testEnabled = false;
+  testBitset = 0x0000;
+#endif                                  //^^
   SH_BASE_HOME   = true;      
   SH_BASE_MYMENU = false;    
   SH_BASE_AHOME  = false;    
@@ -392,11 +399,14 @@ void setupDefaults(void) {
   angle45  = const_45;
 
   alphaSelectionMenu = ASM_NONE;
+
+  #ifndef TESTSUITE_BUILD
+    resetAlphaSelectionBuffer();
+  #endif
+
   lastFcnsMenuPos = 0;
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
-
-  batteryLow = false;
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
@@ -453,7 +463,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  if(strcmp(indexOfItems[LAST_ITEM].itemPrinted, "Last item") != 0) {
+  if(strcmp(indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item") != 0) {
     printf("The last item of indexOfItems[] is not \"Last item\"\n");
     exit(1);
   }
@@ -478,7 +488,7 @@ int main(int argc, char* argv[]) {
 
   restoreCalc();
 
-  gdk_threads_add_timeout(100, refreshScreen, NULL); // refreshScreen is called every 100 ms
+  gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
 
   gtk_main();
 
@@ -502,7 +512,7 @@ void program_main(void) {
   lcd_clear_buf();
 /*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");                  //dr - no keymap is used
   lcd_refresh();
-  while (key != 33 && key != 37) {
+  while(key != 33 && key != 37) {
     key = key_pop();
     while(key == -1) {
       sys_sleep();
@@ -517,10 +527,9 @@ void program_main(void) {
   setupDefaults();
 
   endOfProgram = false;
-  batteryLow = false;
 
   lcd_refresh();
-  nextScreenRefresh = sys_current_ms()+100;
+  nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -532,9 +541,9 @@ void program_main(void) {
       CLR_ST(STAT_RUNNING);
       sys_sleep();
     }
-    else if((!ST(STAT_PGM_END) && key_empty())) {           // Just wait if no keys available.
+    else if ((!ST(STAT_PGM_END) && key_empty())) {          // Just wait if no keys available.
       CLR_ST(STAT_RUNNING);
-      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));        // wake up for screen refresh
+      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));  // wake up for screen refresh
       sys_sleep();
       sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
@@ -585,30 +594,42 @@ void program_main(void) {
 
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);
-      if(testEnabled) { fnSwStart(0); }                     //dr
+#ifdef INLINE_TEST                      //vv dr
+      if(testEnabled) { fnSwStart(0); }
+#endif                                  //^^
       btnFnClicked(NULL, charKey);
       lcd_refresh();
-      if(testEnabled) { fnSwStop(0); }                      //dr
+#ifdef INLINE_TEST                      //vv dr
+      if(testEnabled) { fnSwStop(0); }
+#endif                                  //^^
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key -1);
-      if(testEnabled) { fnSwStart(1); }                     //dr
+#ifdef INLINE_TEST                      //vv dr
+      if(testEnabled) { fnSwStart(1); }
+#endif                                  //^^
       btnPressed(NULL, charKey);
       lcd_refresh();
-      if(testEnabled) { fnSwStop(1); }                      //dr
+#ifdef INLINE_TEST                      //vv dr
+      if(testEnabled) { fnSwStop(1); }
+#endif                                  //^^
     }
     else if(key == 0) {
-      if(testEnabled) { fnSwStart(2); }                     //dr
+#ifdef INLINE_TEST                      //vv dr
+      if(testEnabled) { fnSwStart(2); }
+#endif                                  //^^
       btnReleased(NULL, NULL);
       lcd_refresh();
-      if(testEnabled) { fnSwStop(2); }                      //dr
+#ifdef INLINE_TEST                      //vv dr
+      if(testEnabled) { fnSwStop(2); }
+#endif                                  //^^
     }
 
     uint32_t now = sys_current_ms();
     if(nextScreenRefresh <= now) {
-      nextScreenRefresh += refreshScreenTimeout;  //dr
+      nextScreenRefresh += LCD_REFRESH_TIMEOUT;
       if(nextScreenRefresh < now) {
-        nextScreenRefresh = now + refreshScreenTimeout;               // we were out longer than expected; just skip ahead.
+        nextScreenRefresh = now + LCD_REFRESH_TIMEOUT;                // we were out longer than expected; just skip ahead.
       }
       refreshScreen();
       lcd_refresh();

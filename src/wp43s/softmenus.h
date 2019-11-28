@@ -46,3 +46,4 @@ void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);
 void initSoftmenuStack      (int16_t softmenu);
 void pushSoftmenu           (int16_t softmenu);
 void popSoftmenu            (void);
+void setCatalogLastPos      (void);

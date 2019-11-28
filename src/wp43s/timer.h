@@ -14,3 +14,10 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/********************************************//**
+ * \file timer.h
+ ***********************************************/
+
+#ifndef TESTSUITE_BUILD
+  uint32_t getUptimeMs(void);
+#endif

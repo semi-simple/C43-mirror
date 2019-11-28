@@ -65,7 +65,7 @@ SRC_WP43S                = \
 		jm.c assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
-		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
+		fonts.c fractions.c gui.c inlineTest.c integers.c items.c keyboard.c \
 		rasterFontsData.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c timer.c \
@@ -74,10 +74,10 @@ SRC_WP43S                = \
 		10pow.c 2pow.c addition.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \
 		ceil.c changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cube.c cubeRoot.c \
 		cxToRe.c idiv.c idivr.c \
-		division.c exp.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
+		division.c exp.c expt.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \
-		log2.c magnitude.c minusOnePow.c modulo.c multiplication.c parallel.c power.c \
-		realPart.c remainder.c reToCx.c sign.c sin.c sinh.c square.c squareRoot.c \
+		log2.c magnitude.c mant.c minusOnePow.c modulo.c multiplication.c parallel.c power.c \
+		realPart.c remainder.c reToCx.c sign.c sin.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c unitVector.c \
 		wp34s.c) \
 	$(addprefix src/wp43s/logicalOps/, \
@@ -232,7 +232,7 @@ clean_testSuite:
 $(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
 $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 	@echo -e "\n====> testSuite $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -L/opt/local/lib -lgmp
+	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -L/opt/local/lib -lgmp -lm
 
 src/testSuite/%.o: src/testSuite/%.c .stamp-constantPointers
 	@echo -e "\n====> testSuite $@ <===="

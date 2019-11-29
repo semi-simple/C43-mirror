@@ -19,7 +19,7 @@
  ***********************************************/
 
  
-#ifndef TESTSUITE_BUILD
+#ifdef INLINE_TEST
 extern bool_t   testEnabled;
 extern uint16_t testBitset;
 

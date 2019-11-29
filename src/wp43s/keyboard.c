@@ -30,27 +30,27 @@
  ***********************************************/
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-//  if(shiftStateChanged) {
+//  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
 //#ifndef TESTSUITE_BUILD
-        showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
-          JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
-          JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
-        }                                                                         //JM - Display dot in the f - line
+      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
+        JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
+        JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
+      }                                                                         //JM - Display dot in the f - line
 //#endif
       }
       else if(shiftG) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
 //#ifndef TESTSUITE_BUILD
-        showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
-          JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
-          JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
-          JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
-          JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
-        }                                                                         //JM - Display dot in the g - line
+      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
+        JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
+        JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
+        JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
+        JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
+      }                                                                         //JM - Display dot in the g - line
 //#endif
       }
       else {
@@ -60,12 +60,12 @@ void showShiftState(void) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
 //#ifndef TESTSUITE_BUILD
-        showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
+      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
 //#endif
-      }
+    }
 
-//    shiftStateChanged = false;
-//  }
+//    shiftStateChanged = false;                                                //vv dr
+//  }                                                                           //^^
   }
 }
 
@@ -81,11 +81,11 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
-  if(shiftF || shiftG) {
+  if(shiftF || shiftG) {                                                        //vv dr
     shiftF = false;
     shiftG = false;
     showShiftState();
-  }
+  }                                                                             //^^
 }
 
 

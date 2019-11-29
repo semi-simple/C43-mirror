@@ -791,7 +791,12 @@ void addItemToNimBuffer(int16_t item) {
     case ITM_pi :
       if(nimNumberPart == NP_COMPLEX_INT_PART && nimBuffer[strlen(nimBuffer) - 1] == 'i') {
         done = true;
-        strcat(nimBuffer, "3.141592653589793");
+        if(Input_Default == ID_DP) {                                     //JM PIDP
+          strcat(nimBuffer, "3.141592653589793238462643383279503");      //JM PIDP
+        }                                                                //JM PIDP
+        else {
+          strcat(nimBuffer, "3.141592653589793");
+        }
       }
       break;
 

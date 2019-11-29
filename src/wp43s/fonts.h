@@ -396,16 +396,14 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
 #define STD_omicron_TONOS             "\x83\xcc"
 #define STD_upsilon_TONOS             "\x83\xcd"
 #define STD_omega_TONOS               "\x83\xce"
-
+                                                
 #define STD_QOPPA                     "\x83\xd8"  //JM GREEK
 #define STD_qoppa                     "\x83\xd9"  //JM GREEK
 #define STD_DIGAMMA                   "\x83\xdc"  //JM GREEK
 #define STD_digamma                   "\x83\xdd"  //JM GREEK
 #define STD_SAMPI                     "\x83\xe0"  //JM GREEK
 #define STD_sampi                     "\x83\xe1"  //JM GREEK
-
 #define STD_case                      "\xa1\x02"  //JM CAPS
-
 #define STD_SUP_x                     "\x9d\x61"
 #define STD_SUB_u_b                   "\x9d\x64"
 #define STD_SPACE_EM                  "\xa0\x03"

@@ -1000,6 +1000,8 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl24Gr);
   gtk_widget_hide(lbl25Gr);
   gtk_widget_hide(lbl26Gr);
+  gtk_widget_hide(lbl22Fa); //JM
+  gtk_widget_hide(lbl23Fa); //JM
 
   gtk_widget_hide(btn31);
   gtk_widget_hide(btn32);
@@ -2879,6 +2881,17 @@ void setupUI(void) {
   gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
   gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
 #endif //JM
+  // Area for the softkeys
+  //lblSoftkeyArea1 = gtk_label_new("");
+  //gtk_widget_set_name(lblSoftkeyArea1, "softkeyArea");
+  //gtk_widget_set_size_request(lblSoftkeyArea1, 460, 40);
+  //gtk_fixed_put(GTK_FIXED(grid), lblSoftkeyArea1, 33, 72+168+50);
+
+  //lblSoftkeyArea2 = gtk_label_new("");
+  //gtk_widget_set_name(lblSoftkeyArea2, "softkeyArea");
+  //gtk_widget_set_size_request(lblSoftkeyArea2, 460, 44);
+  //gtk_fixed_put(GTK_FIXED(grid), lblSoftkeyArea2, 33, 72+168+50+66);
+
 
 
   // Behind screen
@@ -3824,7 +3837,7 @@ void setupUI(void) {
   lbl82Gr = gtk_label_new("");
   lbl83Gr = gtk_label_new("");
   lbl84Gr = gtk_label_new("");
-  lbl84H  = gtk_label_new("\u2399"); // Printer
+  //lbl84H  = gtk_label_new("\u2399"); // Printer  //JM: WHY DID THIS LINE COME BACK ??
   lbl85Gr = gtk_label_new("");
   lblOn   = gtk_label_new("ON");
 

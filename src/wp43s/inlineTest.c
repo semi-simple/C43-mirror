@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 
-#ifndef TESTSUITE_BUILD
+#ifdef INLINE_TEST
 uint32_t swStart[4];
 uint32_t swStop[4];
 /********************************************//**

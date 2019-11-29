@@ -4,6 +4,7 @@
 # $? recent dependency list
 # $* target without extension
 
+GENERATECATALOGS_APP = generateCatalogs$(EXE)
 GENERATECONSTANTS_APP = generateConstants$(EXE)
 TTF2RASTERFONTS_APP = ttf2RasterFonts$(EXE)
 TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
@@ -93,6 +94,12 @@ SRC_TESTSUITE            = \
 OBJ_TESTSUITE            = $(SRC_TESTSUITE:.c=.o) $(OBJ_WP43S:.o=.ts.o)
 DEPS_TESTSUITE           = $(OBJ_TESTSUITE:.o=.d)
 
+SRC_GENERATECATALOGS    = \
+	$(addprefix src/generateCatalogs/, \
+		generateCatalogs.c)
+OBJ_GENERATECATALOGS    = $(SRC_GENERATECATALOGS:.c=.o) $(OBJ_DECIMAL)
+DEPS_GENERATECATALOGS   = $(SRC_GENERATECATALOGS:.c=.d)
+
 SRC_GENERATECONSTANTS    = \
 	$(addprefix src/generateConstants/, \
 		generateConstants.c)
@@ -130,22 +137,24 @@ rebuild:
 .PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild
 
 ifneq ($(EXE),)
+generateCatalogs: $(GENERATECATALOGS_APP)
 generateConstants: $(GENERATECONSTANTS_APP)
 ttf2RasterFonts: $(TTF2RASTERFONTS_APP)
 testTtf2RasterFonts: $(TESTTTF2RASTERFONTS_APP)
 testSuite: $(TESTSUITE_APP)
 wp43c: $(WP43S_APP)
 
-.PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts testSuite wp43c
+.PHONY: generateCatalogs generateConstants ttf2RasterFonts testTtf2RasterFonts testSuite wp43c
 endif
 
 sources: $(STAMP_FILES)
 
-clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
+clean_all: clean_decNumberICU clean_wp43s clean_generateCatalogs clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
 
 mrproper: clean_all
 	rm -f $(GENERATED_SOURCES)
 	rm -f $(STAMP_FILES)
+	rm -f $(GENERATECATALOGS_APP)
 	rm -f $(GENERATECONSTANTS_APP)
 	rm -f $(TTF2RASTERFONTS_APP)
 	rm -f $(TESTTTF2RASTERFONTS_APP)
@@ -165,6 +174,30 @@ decNumberICU: $(OBJ_DECIMAL)
 decNumberICU/%.o: decNumberICU/%.c
 	@echo -e "\n====> decNumberICU $@ <===="
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+
+clean_generateCatalogs: 
+	rm -f $(OBJ_GENERATECATALOGS)
+	rm -f $(DEPS_GENERATECATALOGS)
+
+-include $(DEPS_GENERATECATALOGS)
+
+$(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
+	@echo -e "\n====> generateCatalogs $@ <===="
+	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECATALOGS) -o $@
+
+src/generateCatalogs/%.o: src/generateCatalogs/%.c
+	@echo -e "\n====> generateCatalogs $@ <===="
+	$(CC) $(CFLAGS) $(INC) `pkg-config --cflags gtk+-3.0` -c -o $@ $<
+
+.stamp-catalogPointers: $(GENERATECATALOGS_APP)
+	@echo -e "\n====> running generateCatalogs <===="
+	./$(GENERATECATALOGS_APP)
+	touch $@
+
+$(GEN_SRC_CATALOGPOINTERS): .stamp-catalogPointers
+
+
 
 
 

@@ -29,8 +29,6 @@
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_MyMenu[]      = { ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                     };    //JM PLACEHOLDER - WAIT FOR OFFICIAL MYMENU
-
 const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,              ITM_MA15,                    ITM_MA16,
                                      ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                    ITM_MA26,
                                      ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                    ITM_MA36                      };
@@ -141,11 +139,11 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 #else
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
-#ifdef INLINE_TEST
+#ifdef INLINE_TEST                                                              //vv dr
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_INL_TST,                       //JM added the dummy line under #else, to keep the sequence correct for following lines                
-#else
+#else                                                                           //^^
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
-#endif
+#endif                                                                          //dr
 #endif
 
                                      ITM_NULL,                      ITM_NULL,                   ITM_ERPN,                 ITM_INP_DEF_43S,       ITM_INP_DEF_SP,              ITM_INP_DEF_DP,                     //JM
@@ -194,10 +192,6 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
-/*
-const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_SIGMAMINUS,             ITM_XBAR,                 ITM_S,                 ITM_sigma,                   ITM_SM,                             //JM RE-ARRANGED E-
-                                     ITM_SUM,                       ITM_SQUARE,                 ITM_XW,                   ITM_SW,                ITM_sigmaw,                  ITM_SMW,                            //JM RE-ARRANGED E-
-                                     ITM_PLOT,                      ITM_CLSIGMA,                ITM_XG,                   ITM_epsilon,           ITM_epsilonP,                ITM_epsilonM,                       //JM RE-ARRANGED E-  */
 const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SQUARE,
                                      ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     ITM_SUM,
                                      ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
@@ -226,12 +220,12 @@ const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,    
                                      ITM_XEQUP0,                    ITM_XEQUM0,                 ITM_XAEQU,                ITM_MATR,              ITM_CPX,                     ITM_REAL,
                                      ITM_SPEC,                      ITM_NAN,                    ITM_NULL,                 ITM_M_SQR,             ITM_NULL,                    ITM_DBL                       };
 
-const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                    -MNU_ORTHOG,
+const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                   -MNU_ORTHOG,
                                      ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
                                      ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_toDP,              ITM_toSP,                    ITM_PARALLEL,                 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_EE                       };    //JM Added 
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_EE                        };    //JM Added 
 
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -298,40 +292,19 @@ const int16_t menu_a_z[]         = { CHR_a,                         CHR_b,      
                                      CHR_y,                         CHR_z,                      ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 // Following menu is UPPER CASE for lower case: +36
-/*
-//JM Original Greek sequence - removed by JM
-const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     CHR_BETA,                   CHR_GAMMA,                CHR_DELTA,             CHR_EPSILON,                 CHR_ZETA,
-                                     CHR_ETA,                       CHR_THETA,                  CHR_IOTA,                 CHR_KAPPA,             CHR_LAMBDA,                  CHR_MU,
-                                     CHR_NU,                        CHR_XI,                     CHR_OMICRON,              CHR_PI,                CHR_RHO,                     CHR_SIGMA,
-                                     ITM_NULL,                      CHR_TAU,                    CHR_UPSILON,              CHR_PHI,               CHR_CHI,                     CHR_PSI,
-                                     CHR_OMEGA,                     CHR_DIGAMMA,                CHR_QOPPA,                CHR_SAMPI,             ITM_NULL,                    ITM_NULL,                           //JM
-                                     CHR_IOTA_DIALYTIKA,            ITM_NULL,                   ITM_NULL,                 CHR_UPSILON_DIALYTIKA, ITM_NULL,                    ITM_NULL                      };
-*/
-//JM Modified Greek sequence from DR
 const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     CHR_BETA,                   CHR_GAMMA,                CHR_DELTA,             CHR_EPSILON,                 CHR_DIGAMMA,
                                      CHR_ZETA,                      CHR_ETA,                    CHR_THETA,                CHR_IOTA,              CHR_KAPPA,                   CHR_LAMBDA,
                                      CHR_MU,                        CHR_NU,                     CHR_XI,                   CHR_OMICRON,           CHR_PI,                      CHR_QOPPA,
                                      CHR_RHO,                       CHR_SIGMA,                  CHR_TAU,                  CHR_UPSILON,           CHR_PHI,                     CHR_CHI,
-                                     CHR_PSI,                       CHR_OMEGA,                  CHR_SAMPI,                ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
+                                     CHR_PSI,                       CHR_OMEGA,                  CHR_SAMPI,                ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM modified greek sequence
                                      CHR_IOTA_DIALYTIKA,            ITM_NULL,                   ITM_NULL,                 CHR_UPSILON_DIALYTIKA, ITM_NULL,                    ITM_NULL                      };
 
-/*
-//JM Original Greek sequence - removed by JM
-const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,                   CHR_gamma,                CHR_delta,             CHR_epsilon,                 CHR_zeta,
-                                     CHR_eta,                       CHR_theta,                  CHR_iota,                 CHR_kappa,             CHR_lambda,                  CHR_mu,
-                                     CHR_nu,                        CHR_xi,                     CHR_omicron,              CHR_pi,                CHR_rho,                     CHR_sigma,
-                                     CHR_sigma_end,                 CHR_tau,                    CHR_upsilon,              CHR_phi,               CHR_chi,                     CHR_psi,
-                                     CHR_omega,                     CHR_alpha_TONOS,            CHR_epsilon_TONOS,        CHR_eta_TONOS,         CHR_iotaTON,                 CHR_iota_DIALYTIKA_TONOS,
-                                     CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS,                    //JM
-                                     CHR_digamma,                   CHR_qoppa,                  CHR_sampi,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
-*/
-//JM Modified Greek sequence from DR
 const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,                   CHR_gamma,                CHR_delta,             CHR_epsilon,                 CHR_digamma,
                                      CHR_zeta,                      CHR_eta,                    CHR_theta,                CHR_iota,              CHR_kappa,                   CHR_lambda,
                                      CHR_mu,                        CHR_nu,                     CHR_xi,                   CHR_omicron,           CHR_pi,                      CHR_qoppa,
                                      CHR_rho,                       CHR_sigma,                  CHR_tau,                  CHR_upsilon,           CHR_phi,                     CHR_chi,
                                      CHR_psi,                       CHR_omega,                  CHR_sampi,                ITM_NULL,              ITM_NULL,                    ITM_NULL,                        
-                                     CHR_alpha_TONOS,               CHR_epsilon_TONOS,          CHR_eta_TONOS,            CHR_iotaTON,           CHR_iota_DIALYTIKA_TONOS,    ITM_NULL,  
+                                     CHR_alpha_TONOS,               CHR_epsilon_TONOS,          CHR_eta_TONOS,            CHR_iotaTON,           CHR_iota_DIALYTIKA_TONOS,    ITM_NULL,                            //JM modified greek sequence
                                      CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS               };
 
 const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_NULL,              ITM_toDMS,                   ITM_toMULpi,
@@ -354,7 +327,9 @@ const int16_t menu_ConvP[]       = { ITM_HPEtoW,                    ITM_WtoHPE, 
 
 const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_BARtoPA,              ITM_PAtoBAR,           ITM_PSItoPA,                 ITM_PAtoPSI,
                                      10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    10000+ITM_ATMtoPA,           10000+ITM_PAtoATM,
-                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,          20000+ITM_PAtoATMb            };
+                                     20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,          20000+ITM_PAtoATMb,           
+                                     10000+ITM_mmHGtoPAb,           10000+ITM_PAtommHGb,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                            //JM
+                                     30000+ITM_mmHGtoPA,            30000+ITM_PAtommHG,         ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                       };    //JM
 
 const int16_t menu_ConvM[]       = { ITM_LBStoKG,                   ITM_KGtoLBS,                ITM_CWTtoKG,              ITM_KGtoCWT,           ITM_OZtoKG,                  ITM_KGtoOZ,
                                      10000+ITM_STOtoKGb,            10000+ITM_KGtoSTOb,         10000+ITM_SCWtoKGb,       10000+ITM_KGtoSCWb,    10000+ITM_TRZtoKGb,          10000+ITM_KGtoTRZb,
@@ -380,23 +355,6 @@ const int16_t menu_ConvV[]       = { ITM_GLUKtoM3,                  ITM_M3toGLUK
                                      10000+ITM_FZUKtoM3b,           10000+ITM_M3toFZUKb,        10000+ITM_BARRELtoM3b,    10000+ITM_M3toBARRELb, 10000+ITM_FZUStoM3b,         10000+ITM_M3toFZUSb,
                                      20000+ITM_FZUKtoM3,            20000+ITM_M3toFZUK,         20000+ITM_BARRELtoM3,     20000+ITM_M3toBARREL,  20000+ITM_FZUStoM3,          20000+ITM_M3toFZUS            };
 
-/*
-const int16_t menu_CNST[]        = { CST_00,                        CST_01,                     CST_02,                   CST_03,                CST_04,                      CST_05,
-                                     CST_06,                        CST_07,                     CST_08,                   CST_09,                CST_10,                      CST_11,
-                                     CST_12,                        CST_13,                     CST_14,                   CST_15,                CST_16,                      CST_17,
-                                     CST_18,                        CST_19,                     CST_20,                   CST_21,                CST_22,                      CST_23,
-                                     CST_24,                        CST_25,                     CST_26,                   CST_27,                CST_28,                      CST_29,
-                                     CST_30,                        CST_31,                     CST_32,                   CST_33,                CST_34,                      CST_35,
-                                     CST_36,                        CST_37,                     CST_38,                   CST_39,                CST_40,                      CST_41,
-                                     CST_42,                        CST_43,                     CST_44,                   CST_45,                CST_46,                      CST_47,
-                                     CST_48,                        CST_49,                     CST_50,                   CST_51,                CST_52,                      CST_53,
-                                     CST_54,                        CST_55,                     CST_56,                   CST_57,                CST_58,                      CST_59,
-                                     CST_60,                        CST_61,                     CST_62,                   CST_63,                CST_64,                      CST_65,
-                                     CST_66,                        CST_67,                     CST_68,                   CST_69,                CST_70,                      CST_71,
-                                     CST_72,                        CST_73,                     CST_74,                   CST_75,                CST_76,                      CST_77,
-                                     CST_78,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-*/
-									 
 const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,                ITM_ALPHARR,              ITM_ALPHASL,           ITM_ALPHAPOS,                ITM_ALPHAtoX,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_ALPHALENG,               ITM_NULL,
                                      ITM_FBR,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -452,6 +410,7 @@ const int16_t menu_TamCmp[]      = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T,
                                      ITM_Config,                    ITM_Stack,                  ITM_NULL,                 ITM_NULL,              ITM_Max,                     ITM_Min,
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 const int16_t menu_BASE[]        = {  
                                      ITM_2HEX,                      ITM_2DEC,                   ITM_2OCT,                 ITM_2BIN,              -MNU_BITS,                   -MNU_INTS,                          //JM BASE MENU ADDED
@@ -524,7 +483,7 @@ const int16_t menu_HOME[]        = {
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-5------*/                                                                                                                                                                                            //JM HOME
-                                     -MNU_MENUS,                    -MNU_MyMenu,                -MNU_INFO,                -MNU_MODE,             -MNU_DISP,                   ITM_CLSTK,                          //JM HOME  MyAlpha is a placeholder for MyMenu which does not yet work.
+                                     -MNU_MENUS,                    -MNU_MyMenu,                -MNU_INFO,                -MNU_MODE,             -MNU_DISP,                   ITM_CLSTK,                          //JM HOME
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-4------*/                                                                                                                                                                                            //JM HOME
@@ -540,11 +499,11 @@ const int16_t menu_HOME[]        = {
                                                                                                                                                                                                                   //JM HOME
 /* Bottom Prim */  /* 6 */           ITM_STATUS,                    -MNU_CLK,                   -MNU_UNITCONV,            -MNU_BITS,             -MNU_INTS,                   ITM_CLSTK,                          //JM HOME
 /* Middle f    */  /* 5 */           ITM_RBR,                       -MNU_INFO,                  -MNU_CNST,                -MNU_XFN,              -MNU_SUMS,                   ITM_NULL,                           //JM HOME
-#ifdef INLINE_TEST
+#ifdef INLINE_TEST                                                              //vv dr
 /* Top    g    */  /* 4 */           ITM_DROP,                      -MNU_CPX,                   -MNU_EXP,                 -MNU_FIN,              KEY_UNDO,                    -MNU_INL_TST,                       //JM HOME
-#else
+#else                                                                           //^^
 /* Top    g    */  /* 4 */           ITM_DROP,                      -MNU_CPX,                   -MNU_EXP,                 -MNU_FIN,              KEY_UNDO,                    ITM_NULL,                           //JM HOME
-#endif
+#endif                                                                          //dr
                                                                                                                                                                                                                   //JM HOME
 /* Bottom Prim */  /* sample */      ITM_PROFRC,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLSTK,                          //JM HOME
 /* Middle f    */  /* 3 */           ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
@@ -556,21 +515,15 @@ const int16_t menu_HOME[]        = {
 
 const int16_t menu_ALPHA[]        = { 
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-/* 03 */                            -MNU_MyAlpha,                   -MNU_ALPHA_OMEGA,           -MNU_alpha_omega,         -MNU_ALPHAINTL,        -MNU_ALPHAMATH,              -MNU_ALPHADOT,                      //JM
+/* 03 */                            -MNU_MyAlpha,                   -MNU_ALPHA_OMEGA,           -MNU_alpha_omega,         -MNU_ALPHADOT,        -MNU_ALPHAMATH,              -MNU_ALPHAINTL,                      //JM
                                      ITM_ASSIGN,                    KEY_USERMODE,               ITM_NULL,                 -MNU_CATALOG,          -MNU_MODE,                   ITM_NULL,                           //JM                     
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM                     
 
 #include "softmenuCatalogs.h"
 
-/*
-const int16_t menu_MENUS[] = {
-  -MNU_ADV,
-};
-*/
-
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numItems = sizeof(menu_MyAlpha    )/sizeof(int16_t), .softkeyItem = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
-  {.menuId = -MNU_MyMenu,      .numItems = sizeof(menu_MyMenu     )/sizeof(int16_t), .softkeyItem = menu_MyMenu      }, // JM PLACEHOLDER MYMENU
+  {.menuId = -MNU_MyMenu,      .numItems = sizeof(menu_MyMenu     )/sizeof(int16_t), .softkeyItem = menu_MyMenu      },
   {.menuId = -MNU_ADV,         .numItems = sizeof(menu_ADV        )/sizeof(int16_t), .softkeyItem = menu_ADV         },
   {.menuId = -MNU_Sfdx,        .numItems = sizeof(menu_Sfdx       )/sizeof(int16_t), .softkeyItem = menu_Sfdx        },
   {.menuId = -MNU_BITS,        .numItems = sizeof(menu_BITS       )/sizeof(int16_t), .softkeyItem = menu_BITS        },
@@ -668,9 +621,9 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM HOME
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
-#ifdef INLINE_TEST
+#ifdef INLINE_TEST                                                              //vv dr
   {.menuId = -MNU_INL_TST,     .numItems = sizeof(menu_Inl_Tst    )/sizeof(int16_t), .softkeyItem = menu_Inl_Tst     },
-#endif
+#endif                                                                          //^^
   {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
 
@@ -1302,6 +1255,7 @@ void showSoftmenuCurrentPart(void) {
         else {
           item = softkeyItem[x];
         }
+        int8_t showCb = fnCbIsSet(item%10000);                                  //dr
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {
@@ -1321,22 +1275,21 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, showCb);
             }
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, -1);
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb);
         }
         else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, -1);
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
           }
           else {
-            int8_t showCb = fnCbIsSet(item%10000);                              //dr
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
           }
         }

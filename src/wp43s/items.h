@@ -1707,10 +1707,13 @@
 #define Not_used1671                  1671
 #define Not_used1672                  1672
 #define Not_used1673                  1673
-#define Not_used1674                  1674
-#define Not_used1675                  1675
-#define Not_used1676                  1676
-#define Not_used1677                  1677
+
+
+#define ITM_mmHGtoPA                   1674 // 248 //JM
+#define ITM_PAtommHG                   1675 // 445
+#define ITM_mmHGtoPAb                  1676 // 850
+#define ITM_PAtommHGb                  1677 // 863
+
 #define ITM_ERPN                      1678  //JM eRPN
 #define ITM_HOMEx3                    1679  //JM HOME.3
 #define ITM_SHTIM                     1680  //JM SHIFT CANCEL

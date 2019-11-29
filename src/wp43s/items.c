@@ -613,7 +613,7 @@ const item_t indexOfItems[] = {
 /*  484 */  { fnCvtToCurrentAngularMode,   AM_RADIAN,                   "RAD" STD_RIGHT_ARROW,                         "RAD" STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  485 */  { itemToBeCoded,               NOPARAM,                     "RAM",                                         "RAM",                                         CAT_MENU, SLS_UNCHANGED},
 /*  486 */  { itemToBeCoded,               NOPARAM,                     "RAN#",                                        "RAN#",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  487 */  { registerBrowser,             NOPARAM,                     "RBR",                                         "REGS.V",                                      CAT_FNCT, SLS_UNCHANGED},      //JM Changed RBR to REGS
+/*  487 */  { registerBrowser,             NOPARAM,                     "REGS.V",                                      "REGS.V",                                      CAT_FNCT, SLS_UNCHANGED},      //JM Changed RBR to REGS
 /*  488 */  { fnRecall,                    TM_STORCL,                   "RCL",                                         "RCL",                                         CAT_FNCT, SLS_ENABLED  },
 /*  489 */  { fnRecallConfig,              NOPARAM,                     "RCLCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  490 */  { fnRecallElement,             NOPARAM,                     "RCLEL",                                       "RCLEL",                                       CAT_FNCT, SLS_ENABLED  },
@@ -713,7 +713,7 @@ const item_t indexOfItems[] = {
 /*  584 */  { fnStackSize,                 SS_8,                        "SSIZE8",                                      "SSIZE8",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  585 */  { fnGetStackSize,              NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  586 */  { itemToBeCoded,               NOPARAM,                     "STAT",                                        "STAT",                                        CAT_MENU, SLS_UNCHANGED},
-/*  587 */  { flagBrowser,                 NOPARAM,                     "STATUS",                                      "FLAGS.V",                                     CAT_FNCT, SLS_UNCHANGED},      //JM Changed STATUS
+/*  587 */  { flagBrowser,                 NOPARAM,                     "FLAGS.V",                                     "FLAGS.V",                                     CAT_FNCT, SLS_UNCHANGED},      //JM Changed STATUS
 /*  588 */  { itemToBeCoded,               NOPARAM,                     "STK",                                         "STK",                                         CAT_MENU, SLS_UNCHANGED},
 /*  589 */  { fnStore,                     TM_STORCL,                   "STO",                                         "STO",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  590 */  { fnStoreConfig,               NOPARAM,                     "STOCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
@@ -1810,10 +1810,10 @@ const item_t indexOfItems[] = {
 /* 1671 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                            CAT_FREE, SLS_UNCHANGED},
 /* 1672 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                            CAT_FREE, SLS_UNCHANGED},
 /* 1673 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                            CAT_FREE, SLS_UNCHANGED},
-/* 1674 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                            CAT_FREE, SLS_UNCHANGED},
-/* 1675 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                            CAT_FREE, SLS_UNCHANGED},
-/* 1676 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                            CAT_FREE, SLS_UNCHANGED},
-/* 1677 */  { itemToBeCoded,               NOPARAM,                     "",                                            "",                                            CAT_FREE, SLS_UNCHANGED},
+/* 1674 */  { fnCvtmmhgPa,                 multiply,                    "mmHg" STD_RIGHT_ARROW "Pa",                   "mm.Hg",                                       CAT_FNCT, SLS_ENABLED  },
+/* 1675 */  { fnCvtmmhgPa,                 divide,                      "Pa" STD_RIGHT_ARROW "mmHg",                   "Pa" STD_RIGHT_ARROW,                          CAT_FNCT, SLS_ENABLED  },
+/* 1676 */  { fnCvtmmhgPa,                 multiply,                    "mmHg" STD_RIGHT_ARROW "Pa",                   STD_RIGHT_ARROW " Pa",                         CAT_DUPL, SLS_ENABLED  },
+/* 1677 */  { fnCvtmmhgPa,                 divide,                      "Pa" STD_RIGHT_ARROW "mmHg",                   "mm.Hg",                                       CAT_DUPL, SLS_ENABLED  },
 
 /* 1678 */  { fnSetSetJM,                  JC_ERPN,                     "SET_ERPN",                                    "eRPN",                                        CAT_FNCT, SLS_ENABLED  },      //JM eRPN
 /* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "SET_HOME_TRIPLE",                             "HOME.3",                                      CAT_FNCT, SLS_ENABLED  },      //JM HOME.3

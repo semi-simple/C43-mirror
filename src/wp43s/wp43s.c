@@ -518,7 +518,7 @@ void program_main(void) {
   wp43sKbdLayout = (key == 37); // bottom left key
   key = 0;
 
-  lcd_clear_buf();
+  lcd_clear_buf();*/
   setupDefaults();
 
   endOfProgram = false;

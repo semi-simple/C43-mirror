@@ -324,6 +324,6 @@ void stackLiftEnable(void) {
 void stackLiftDisable(void) {
   //printf("Stack lift disabled\n");
   stackLiftEnabled = false;
-  hideBattery();
+  hideLowBattery();
 }
 #endif

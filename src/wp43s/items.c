@@ -187,7 +187,7 @@ const item_t indexOfItems[] = {
 /*   58 */  { fnConstant,                  7,                           "c" STD_SUB_2,                                 "c" STD_SUB_2,                                 CAT_CNST, SLS_ENABLED  },
 /*   59 */  { fnCvtCalJ,                   multiply,                    "cal" STD_RIGHT_ARROW "J",                     "cal" STD_RIGHT_ARROW "J",                     CAT_FNCT, SLS_ENABLED  },
 /*   60 */  { itemToBeCoded,               NOPARAM,                     "CASE",                                        "CASE",                                        CAT_FNCT, SLS_UNCHANGED},
-/*   61 */  { itemToBeCoded,               NOPARAM,                     "CATALOG",                                     "CATALOG",                                     CAT_MENU, SLS_UNCHANGED},
+/*   61 */  { itemToBeCoded,               NOPARAM,                     "CATALOG",                                     "CAT",                                         CAT_MENU, SLS_UNCHANGED},
 /*   62 */  { itemToBeCoded,               NOPARAM,                     "Cauch",                                       "Cauch",                                       CAT_FNCT, SLS_UNCHANGED},
 /*   63 */  { itemToBeCoded,               NOPARAM,                     "Cauch" STD_SUB_p,                             "Cauch" STD_SUB_p,                             CAT_FNCT, SLS_UNCHANGED},
 /*   64 */  { itemToBeCoded,               NOPARAM,                     "Cauch" STD_SUB_e,                             "Cauch" STD_SUB_e,                             CAT_FNCT, SLS_UNCHANGED},

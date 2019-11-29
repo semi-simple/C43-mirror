@@ -351,21 +351,6 @@ const int16_t menu_ConvV[]       = { ITM_GLUKtoM3,                  ITM_M3toGLUK
                                      10000+ITM_FZUKtoM3b,           10000+ITM_M3toFZUKb,        10000+ITM_BARRELtoM3b,    10000+ITM_M3toBARRELb, 10000+ITM_FZUStoM3b,         10000+ITM_M3toFZUSb,
                                      20000+ITM_FZUKtoM3,            20000+ITM_M3toFZUK,         20000+ITM_BARRELtoM3,     20000+ITM_M3toBARREL,  20000+ITM_FZUStoM3,          20000+ITM_M3toFZUS            };
 
-const int16_t menu_CNST[]        = { CST_00,                        CST_01,                     CST_02,                   CST_03,                CST_04,                      CST_05,
-                                     CST_06,                        CST_07,                     CST_08,                   CST_09,                CST_10,                      CST_11,
-                                     CST_12,                        CST_13,                     CST_14,                   CST_15,                CST_16,                      CST_17,
-                                     CST_18,                        CST_19,                     CST_20,                   CST_21,                CST_22,                      CST_23,
-                                     CST_24,                        CST_25,                     CST_26,                   CST_27,                CST_28,                      CST_29,
-                                     CST_30,                        CST_31,                     CST_32,                   CST_33,                CST_34,                      CST_35,
-                                     CST_36,                        CST_37,                     CST_38,                   CST_39,                CST_40,                      CST_41,
-                                     CST_42,                        CST_43,                     CST_44,                   CST_45,                CST_46,                      CST_47,
-                                     CST_48,                        CST_49,                     CST_50,                   CST_51,                CST_52,                      CST_53,
-                                     CST_54,                        CST_55,                     CST_56,                   CST_57,                CST_58,                      CST_59,
-                                     CST_60,                        CST_61,                     CST_62,                   CST_63,                CST_64,                      CST_65,
-                                     CST_66,                        CST_67,                     CST_68,                   CST_69,                CST_70,                      CST_71,
-                                     CST_72,                        CST_73,                     CST_74,                   CST_75,                CST_76,                      CST_77,
-                                     CST_78,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-
 const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,                ITM_ALPHARR,              ITM_ALPHASL,           ITM_ALPHAPOS,                ITM_ALPHAtoX,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_ALPHALENG,               ITM_NULL,
                                      ITM_FBR,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -522,12 +507,6 @@ const int16_t menu_ALPHA[]        = {
 /* 03 */                            -MNU_MyAlpha,                   -MNU_ALPHA_OMEGA,           -MNU_alpha_omega,         -MNU_ALPHADOT,        -MNU_ALPHAMATH,              -MNU_ALPHAINTL,                      //JM
                                      ITM_ASSIGN,                    KEY_USERMODE,               ITM_NULL,                 -MNU_CATALOG,          -MNU_MODE,                   ITM_NULL,                           //JM                     
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM                     
-
-#include "softmenuFCNS.h"
-
-const int16_t menu_MENUS[] = {
-  -MNU_ADV,
-};
 
 #include "softmenuCatalogs.h"
 
@@ -1254,7 +1233,7 @@ void showSoftmenuCurrentPart(void) {
     }
 
     const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
-    for(y=currentFirstItem/6; y<min(currentFirstItem/6+3, softmenu[m].numItems/6); y++, softkeyItem+=6) {
+    for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, softmenu[m].numItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
         if(softkeyItem + x >= softmenu[m].softkeyItem + softmenu[m].numItems) {
           item = ITM_NULL;
@@ -1281,19 +1260,22 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
+            int8_t showCb = fnCbIsSet(item%10000);                              //dr  /*DRCHECK*/
+            showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, showCb);
             }
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
+          int8_t showCb = fnCbIsSet(item%10000);                              //dr  /*DRCHECK*/
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb);
         }
         else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+            int8_t showCb = fnCbIsSet(item%10000);                              //dr  /*DRCHECK*/
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
           }
           else {
             int8_t showCb = fnCbIsSet(item%10000);                              //dr

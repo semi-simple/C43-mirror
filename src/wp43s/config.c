@@ -560,35 +560,40 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
-
-    fnTimeFormat(TF_H24);                                //JM bug. over-writing the content of setupdefaults
-    fnIntegerMode(SIM_2COMPL);                           //JM bug. over-writing the content of setupdefaults
-    fnDisplayFormatAll(0);                               //JM bug. over-writing the content of setupdefaults
-    fnDisplayFormatGap(3);                               //JM bug. over-writing the content of setupdefaults
-    fnComplexUnit(CU_I);                                 //JM bug. over-writing the content of setupdefaults
-    fnAngularMode(AM_DEGREE);                            //JM bug. over-writing the content of setupdefaults
-    fnDenMode(DM_ANY);                                   //JM bug. over-writing the content of setupdefaults
+                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
+    fnTimeFormat(TF_H24);
+    fnIntegerMode(SIM_2COMPL);
+    fnDisplayFormatAll(0);
+    fnDisplayFormatGap(3);
+    fnComplexUnit(CU_I);
+    fnAngularMode(AM_DEGREE);
+    fnDenMode(DM_ANY);
+                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
     fnDenMax(0);
-    fnDisplayStack(4);                                   //JM bug. over-writing the content of setupdefaults
+    fnDisplayStack(4);                 //JM ..
     firstGregorianDay = 1752;
-    fnCurveFitting(CF_LINEAR_FITTING);                   //JM bug. over-writing the content of setupdefaults
-    fnLeadingZeros(false);                               //JM bug. over-writing the content of setupdefaults
-    fnProductSign(PS_CROSS);                             //JM bug. over-writing the content of setupdefaults
-    fnFractionType(FT_PROPER); // a b/c                  //JM bug. over-writing the content of setupdefaults
-    fnRadixMark(RM_PERIOD);                              //JM bug. over-writing the content of setupdefaults
-    fnRoundingMode(RM_HALF_EVEN);                        //JM bug. over-writing the content of setupdefaults
-    fnDisplayOvr(DO_SCI);                                //JM bug. over-writing the content of setupdefaults
-    fnStackSize(SS_8);               //JM Changed 4 to 8 //JM bug. over-writing the content of setupdefaults
+                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
+    fnCurveFitting(CF_LINEAR_FITTING);
+    fnLeadingZeros(false);
+    fnProductSign(PS_CROSS);
+    fnFractionType(FT_PROPER); // a b/c
+    fnRadixMark(RM_PERIOD);
+    fnRoundingMode(RM_HALF_EVEN);
+    fnDisplayOvr(DO_SCI);
+    fnStackSize(SS_8);               //JM DEFAULT
     //tDisp = -1;
-    fnSetWordSize(64);                                   //JM bug. over-writing the content of setupdefaults
-    fnDateFormat(DF_YMD);                                //JM bug. over-writing the content of setupdefaults
-    fnComplexMode(CM_RECTANGULAR);                       //JM bug. over-writing the content of setupdefaults
-    fnComplexResult(true);           //JM CPXRES set     //JM bug. over-writing the content of setupdefaults
+    fnSetWordSize(64);
+    fnDateFormat(DF_YMD);
+    fnComplexMode(CM_RECTANGULAR);
+                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
     showRealComplexResult();
     allocateLocalRegisters(0);
+    fnComplexResult(true);           //JM CPXRES set     //JM bug. over-writing the content of setupdefaults
     fnSetFlag(FLAG_DANGER);          //JM infinity etc.
 
-    displayRealAsFraction = false;                       //JM bug. over-writing the content of setupdefaults
+                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
+    displayRealAsFraction = false;
+                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();
@@ -961,17 +966,6 @@ void fnRebuildRadioState() {
         i++;
       }
     }
-    else if(indexOfItems[k].func == fnRefreshLcd) {
-      radiocb_t rb;
-      rb.itemNr = k;
-      rb.param = indexOfItems[k].param;
-      rb.state = (refreshScreenTimeout == rb.param) ? 1 : 0;
-      rb.radioButton = RB_RL;
-      indexOfRadioCbItems[i] = rb;
-      if(i<MAX_RADIO_CB_ITEMS) {
-        i++;
-      }
-    }
     else if(indexOfItems[k].func == fnComplexResult) {
       radiocb_t rb;
       rb.itemNr = k;
@@ -1003,39 +997,35 @@ void fnRebuildRadioState() {
       case JC_ERPN:
         rb.state = eRPN? 3 : 2;
         break;
-      
+
       case JC_HOME_TRIPLE:
         rb.state = HOME3? 3 : 2;
         break;
-      
+
       case JC_SHFT_4s:
         rb.state = ShiftTimoutMode? 3 : 2;
         break;
-      
+
       case JC_BASE_HOME:
         rb.state = SH_BASE_HOME? 3 : 2;
         break;
-      
+
       case JC_BASE_MYMENU:
         rb.state = SH_BASE_MYMENU? 3 : 2;
         break;
-      
+
       case JC_BASE_AHOME:
         rb.state = SH_BASE_AHOME? 3 : 2;
         break;
-      
+
       case JC_BASE_MYA:
         rb.state = SH_BASE_MYA? 3 : 2;
         break;
-      
+
       case JC_SH_3T:
         rb.state = Home3TimerMode? 3 : 2;
         break;
-      
-      case DR_ITM_TST:
-        rb.state = testEnabled? 3 : 2;
-        break;
-      
+
       default:
         break;
       }
@@ -1045,7 +1035,28 @@ void fnRebuildRadioState() {
         i++;
       }
     }
-    
+#ifdef INLINE_TEST
+    else if(indexOfItems[k].func == fnSetInlineTest) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      switch (rb.param)
+      {
+      case DR_ITM_TST:
+        rb.state = testEnabled? 3 : 2;
+        break;
+
+      default:
+        break;
+      }
+      rb.radioButton = CB_JC;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+#endif
+
   }
   cntOfRadioCbItems = i;
 

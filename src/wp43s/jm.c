@@ -177,11 +177,6 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
-  case DR_ITM_TST:            //dr
-    testEnabled = !testEnabled;
-    fnRefreshComboxState(CB_JC, DR_ITM_TST, testEnabled);
-    break;
-
   default:
     break;
   }
@@ -199,20 +194,6 @@ void fnInDefault(uint16_t inputDefault) {
   Input_Default = inputDefault;
 
   fnRefreshRadioState(RB_ID, inputDefault);
-}
-
-
-
-/********************************************//**
- * \brief Set Input_Default
- *
- * \param[in] refreshLcd uint16_t
- * \return void
- ***********************************************/
-void fnRefreshLcd(uint16_t refreshLcd) {
-  refreshScreenTimeout = refreshLcd;
-
-  fnRefreshRadioState(RB_RL, refreshLcd);
 }
 
 
@@ -1020,10 +1001,10 @@ void fnUserJM(uint16_t jmUser) {
 
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].gShifted   = KEY_CC;
-    kbd_usr[0].primary     = -MNU_MYMENU;
+    kbd_usr[0].primary     = -MNU_MyMenu;
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
-    Norm_Key_00_VAR        = -MNU_MYMENU;
+    Norm_Key_00_VAR        = -MNU_MyMenu;
     Show_User_Keys();
     break;
 
@@ -1266,7 +1247,7 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
   else {                                                                                                //JM UNIT
     strcpy(displayString, PRODUCT_SIGN);                                                                //JM UNIT Below, copy of
     displayString += 2;                                                                                 //JM UNIT exponentToDisplayString in display.c
-    strcpy(displayString, NUM_SUB_10);                                                                  //JM UNIT
+    strcpy(displayString, STD_SUB_10);                                                                  //JM UNIT
     displayString += 2;                                                                                 //JM UNIT
     displayString[0] = 0;                                                                               //JM UNIT
     if(nimMode) {                                                                                       //JM UNIT

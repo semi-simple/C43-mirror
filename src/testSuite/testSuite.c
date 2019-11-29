@@ -22,7 +22,10 @@
 #include "testSuite.h"
 
 
-
+extern const int16_t menu_FCNS[];
+extern const int16_t menu_CNST[];
+extern const int16_t menu_MENUS[];
+extern const softmenu_t softmenu[];
 char line[10000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal;
 int32_t functionIndex, funcType, correctSignificantDigits, numberOfCorrectSignificantDigitsExpected;
@@ -74,6 +77,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnDrop",                 fnDrop                },
   {"fnDropY",                fnDropY               },
   {"fnExp",                  fnExp                 },
+  {"fnExpt",                 fnExpt                },
   {"fnFactorial",            fnFactorial           },
   {"fnFillStack",            fnFillStack           },
   {"fnFloor",                fnFloor               },
@@ -102,6 +106,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLogicalNot",           fnLogicalNot          },
   {"fnM1Pow",                fnM1Pow               },
   {"fnMagnitude",            fnMagnitude           },
+  {"fnMant",                 fnMant                },
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },
   {"fnMultiply",             fnMultiply            },
@@ -117,6 +122,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
   {"fnSinh",                 fnSinh                },
+  {"fnSlvq",                 fnSlvq                },
   {"fnSquare",               fnSquare              },
   {"fnSquareRoot",           fnSquareRoot          },
   {"fnSubtract",             fnSubtract            },
@@ -1019,10 +1025,17 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
     realIcDivide(&relativeError, &expectedValue, &relativeError);
     realIcDivide(const_1, &relativeError, &numSignificantDigits);
   }
+  else {
+    realIcCopy(const_1, &numSignificantDigits);
+  }
 
   realIcSetPositiveSign(&numSignificantDigits);
-  //realIcLog10(&numSignificantDigits, &numSignificantDigits);
+  if(!realIcIsZero(&numSignificantDigits)) {
   WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
+  }
+  else {
+    realIcZero(&numSignificantDigits);
+  }
 
   realIcToReal16(&numSignificantDigits, &integer);
   correctSignificantDigits = real16ToInt32(&integer);
@@ -1056,10 +1069,17 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
     realIcDivide(&relativeError, &expectedValue, &relativeError);
     realIcDivide(const_1, &relativeError, &numSignificantDigits);
   }
+  else {
+    realIcCopy(const_1, &numSignificantDigits);
+  }
 
   realIcSetPositiveSign(&numSignificantDigits);
-  //realIcLog10(&numSignificantDigits, &numSignificantDigits);
-  WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
+  if(!realIcIsZero(&numSignificantDigits)) {
+    WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
+  }
+  else {
+    realIcZero(&numSignificantDigits);
+  }
 
   realIcToReal16(&numSignificantDigits, &integer);
   correctSignificantDigits = real16ToInt32(&integer);
@@ -1637,11 +1657,15 @@ void checkExpectedOutParameter(char *p) {
       else {
         checkRegisterType(regist, letter, dtReal34, am);
         stringToReal34(r, &expectedReal34);
+//printf("\nexpectedReal34 = "); printReal34ToConsole(&expectedReal34); printf("\n");
+//printf("\nR%d = ", regist); printRegisterToConsole(regist); printf("\n");
+//printf("\n1<%s|%s|%s>\n", p, l, r);
         if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
           if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
           }
+//printf("\n2<%s|%s|%s>\n", p, l, r);
         }
       }
     }
@@ -2048,8 +2072,45 @@ void processOneFile(void) {
 
 
 
+void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const char *catalogName) {
+  int32_t i, nbElements, cmp;
+
+  for(nbElements=0, i=0; softmenu[i].menuId; i++) {
+    if(softmenu[i].menuId == -catalogId) {
+      nbElements = softmenu[i].numItems;
+      break;
+    }
+  }
+  if(nbElements == 0) {
+    printf("MNU_%s (-%d) not found in structure softmenu!\n", catalogName, catalogId);
+    exit(1);
+  }
+
+  printf("Checking sort order of catalog %s (%d elements)\n", catalogName, nbElements);
+
+  for(i=1; i<nbElements; i++) {
+    if((cmp = compareString(indexOfItems[abs(catalog[i - 1])].itemCatalogName, indexOfItems[abs(catalog[i])].itemCatalogName, CMP_EXTENSIVE)) >= 0) {
+      printf("In catalog %s, element %d (item %d) should be after element %d (item %d). cmp = %d\n", catalogName, i - 1, catalog[i - 1], i, catalog[i], cmp);
+      exit(1);
+    }
+  }
+}
+
+
+
+void checkCatalogsSorting(void) {
+  //compareString(indexOfItems[234].itemCatalogName, indexOfItems[245].itemCatalogName, CMP_EXTENSIVE);
+  checkOneCatalogSorting(menu_FCNS,  MNU_FCNS,  "FCNS");
+  checkOneCatalogSorting(menu_CNST,  MNU_CNST,  "CNST");
+  checkOneCatalogSorting(menu_MENUS, MNU_MENUS, "MENUS");
+}
+
+
+
 void processTests(void) {
   FILE *fileList;
+
+  checkCatalogsSorting();
 
   numTestsTotal = 0;
 

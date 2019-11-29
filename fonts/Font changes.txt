@@ -111,15 +111,6 @@
 2019-07-13 New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
            
-2019-09-07 JM Added 6 Greek glyphs to WP43S_NumericFont.ttf.
-           JM Added 6 Greek glyphs to WP43S_StandardFont.ttf.
-           - "\x83\xd8" 03D8   Ϙ  GREEK LETTER ARCHAIC KOPPA
-           - "\x83\xd9" 03D9   ϙ  GREEK SMALL LETTER ARCHAIC KOPPA   
-           - "\x83\xdc" 03DC   Ϝ  GREEK LETTER DIGAMMA
-           - "\x83\xdd" 03DD   ϝ  GREEK SMALL LETTER DIGAMMA
-           - "\x83\xe0" 03E0   Ϡ  GREEK LETTER SAMPI
-           - "\x83\xe1" 03E1   ϡ  GREEK SMALL LETTER SAMPI
-
 2019-10-26 Problem in standard font with U+2465 and U+246F
            New WP43S_StandardFont.ttf generated.
 
@@ -132,3 +123,19 @@
            U+2217 duplicate of U+002A *
            U+223C duplicate of U+007E ~
            New WP43S_StandardFont.ttf generated.
+
+2019-11-11 Added 5 characters in standard font:
+           U+2306...9 for CEIL and FLOOR
+           U+2713 Checkmark
+
+2019-11-23 New WP43S_StandardFont.ttf generated.
+
+2019-11-27 Added 6 last glyohs in font. Copied from 2019-07-07 previous font, into the new WP43S font.
+           JM Added 6 Greek glyphs to WP43S_StandardFont.ttf.
+           - "\x83\xd8" 03D8   Ϙ  GREEK LETTER ARCHAIC KOPPA
+           - "\x83\xd9" 03D9   ϙ  GREEK SMALL LETTER ARCHAIC KOPPA   
+           - "\x83\xdc" 03DC   Ϝ  GREEK LETTER DIGAMMA
+           - "\x83\xdd" 03DD   ϝ  GREEK SMALL LETTER DIGAMMA
+           - "\x83\xe0" 03E0   Ϡ  GREEK LETTER SAMPI
+           - "\x83\xe1" 03E1   ϡ  GREEK SMALL LETTER SAMPI
+

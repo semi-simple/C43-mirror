@@ -4,6 +4,7 @@
 # $? recent dependency list
 # $* target without extension
 
+GENERATECATALOGS_APP = generateCatalogs$(EXE)
 GENERATECONSTANTS_APP = generateConstants$(EXE)
 TTF2RASTERFONTS_APP = ttf2RasterFonts$(EXE)
 TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
@@ -65,7 +66,7 @@ SRC_WP43S                = \
 		jm.c assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
-		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
+		fonts.c fractions.c gui.c inlineTest.c integers.c items.c keyboard.c \
 		rasterFontsData.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c timer.c \
@@ -74,10 +75,10 @@ SRC_WP43S                = \
 		10pow.c 2pow.c addition.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \
 		ceil.c changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cube.c cubeRoot.c \
 		cxToRe.c idiv.c idivr.c \
-		division.c exp.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
+		division.c exp.c expt.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \
-		log2.c magnitude.c minusOnePow.c modulo.c multiplication.c parallel.c power.c \
-		realPart.c remainder.c reToCx.c sign.c sin.c sinh.c square.c squareRoot.c \
+		log2.c magnitude.c mant.c minusOnePow.c modulo.c multiplication.c parallel.c power.c \
+		realPart.c remainder.c reToCx.c sign.c sin.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c unitVector.c \
 		wp34s.c) \
 	$(addprefix src/wp43s/logicalOps/, \
@@ -92,6 +93,12 @@ SRC_TESTSUITE            = \
 		testSuite.c)
 OBJ_TESTSUITE            = $(SRC_TESTSUITE:.c=.o) $(OBJ_WP43S:.o=.ts.o)
 DEPS_TESTSUITE           = $(OBJ_TESTSUITE:.o=.d)
+
+SRC_GENERATECATALOGS    = \
+	$(addprefix src/generateCatalogs/, \
+		generateCatalogs.c)
+OBJ_GENERATECATALOGS    = $(SRC_GENERATECATALOGS:.c=.o) $(OBJ_DECIMAL)
+DEPS_GENERATECATALOGS   = $(SRC_GENERATECATALOGS:.c=.d)
 
 SRC_GENERATECONSTANTS    = \
 	$(addprefix src/generateConstants/, \
@@ -130,22 +137,24 @@ rebuild:
 .PHONY: clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild
 
 ifneq ($(EXE),)
+generateCatalogs: $(GENERATECATALOGS_APP)
 generateConstants: $(GENERATECONSTANTS_APP)
 ttf2RasterFonts: $(TTF2RASTERFONTS_APP)
 testTtf2RasterFonts: $(TESTTTF2RASTERFONTS_APP)
 testSuite: $(TESTSUITE_APP)
 wp43c: $(WP43S_APP)
 
-.PHONY: generateConstants ttf2RasterFonts testTtf2RasterFonts testSuite wp43c
+.PHONY: generateCatalogs generateConstants ttf2RasterFonts testTtf2RasterFonts testSuite wp43c
 endif
 
 sources: $(STAMP_FILES)
 
-clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
+clean_all: clean_decNumberICU clean_wp43s clean_generateCatalogs clean_generateConstants clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
 
 mrproper: clean_all
 	rm -f $(GENERATED_SOURCES)
 	rm -f $(STAMP_FILES)
+	rm -f $(GENERATECATALOGS_APP)
 	rm -f $(GENERATECONSTANTS_APP)
 	rm -f $(TTF2RASTERFONTS_APP)
 	rm -f $(TESTTTF2RASTERFONTS_APP)
@@ -165,6 +174,30 @@ decNumberICU: $(OBJ_DECIMAL)
 decNumberICU/%.o: decNumberICU/%.c
 	@echo -e "\n====> decNumberICU $@ <===="
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+
+clean_generateCatalogs: 
+	rm -f $(OBJ_GENERATECATALOGS)
+	rm -f $(DEPS_GENERATECATALOGS)
+
+-include $(DEPS_GENERATECATALOGS)
+
+$(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
+	@echo -e "\n====> generateCatalogs $@ <===="
+	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECATALOGS) -o $@
+
+src/generateCatalogs/%.o: src/generateCatalogs/%.c
+	@echo -e "\n====> generateCatalogs $@ <===="
+	$(CC) $(CFLAGS) $(INC) `pkg-config --cflags gtk+-3.0` -c -o $@ $<
+
+.stamp-catalogPointers: $(GENERATECATALOGS_APP)
+	@echo -e "\n====> running generateCatalogs <===="
+	./$(GENERATECATALOGS_APP)
+	touch $@
+
+$(GEN_SRC_CATALOGPOINTERS): .stamp-catalogPointers
+
+
 
 
 
@@ -232,7 +265,7 @@ clean_testSuite:
 $(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
 $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 	@echo -e "\n====> testSuite $@ <===="
-	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -L/opt/local/lib -lgmp
+	$(CC) $(CFLAGS) -m64 $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) -L/opt/local/lib -lgmp -lm
 
 src/testSuite/%.o: src/testSuite/%.c .stamp-constantPointers
 	@echo -e "\n====> testSuite $@ <===="

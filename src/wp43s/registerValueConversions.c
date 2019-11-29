@@ -143,6 +143,28 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
 
 
 
+void convertLongIntegerRegisterToReal16(calcRegister_t source, real16_t *destination) {
+  longInteger_t lgInt;
+
+  convertLongIntegerRegisterToLongInteger(source, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  longIntegerFree(lgInt);
+  stringToReal16(tmpStr3000, destination);
+}
+
+
+
+void convertLongIntegerRegisterToReal34(calcRegister_t source, real34_t *destination) {
+  longInteger_t lgInt;
+
+  convertLongIntegerRegisterToLongInteger(source, lgInt);
+  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  longIntegerFree(lgInt);
+  stringToReal34(tmpStr3000, destination);
+}
+
+
+
 void convertLongIntegerRegisterToRealIc(calcRegister_t source, realIc_t *destination) {
   longInteger_t lgInt;
 

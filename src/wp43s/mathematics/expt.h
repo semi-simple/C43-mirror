@@ -15,10 +15,11 @@
  */
 
 /********************************************//**
- * \file constants.h functions for constant management
+ * \file expt.h
  ***********************************************/
 
-
-
-void fnConstant(const uint16_t constant);
-void fnPi      (uint16_t unusedParamButMandatory);
+void fnExpt   (uint16_t unusedParamButMandatory);
+void exptError(void);
+void exptLonI (void);
+void exptRe16 (void);
+void exptRe34 (void);

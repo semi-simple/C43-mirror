@@ -15,10 +15,9 @@
  */
 
 /********************************************//**
- * \file constants.h functions for constant management
+ * \file slvq.h
  ***********************************************/
 
-
-
-void fnConstant(const uint16_t constant);
-void fnPi      (uint16_t unusedParamButMandatory);
+void fnSlvq  (uint16_t unusedButMandatoryParameter);
+void slvqCo51(void);
+void slvqRe51(void);

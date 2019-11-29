@@ -403,7 +403,7 @@
 #define ITM_MULTDOT                    374
 #define ITM_MULPI                      375
 #define ITM_MVAR                       376
-#define MNU_MYMENU                     377
+#define MNU_MyMenu                     377
 #define MNU_MyAlpha                    378
 #define CST_34                         379
 #define ITM_M_DELR                     380
@@ -1707,10 +1707,13 @@
 #define Not_used1671                  1671
 #define Not_used1672                  1672
 #define Not_used1673                  1673
-#define Not_used1674                  1674
-#define Not_used1675                  1675
-#define Not_used1676                  1676
-#define Not_used1677                  1677
+
+
+#define ITM_mmHGtoPA                   1674 // 248 //JM
+#define ITM_PAtommHG                   1675 // 445
+#define ITM_mmHGtoPAb                  1676 // 850
+#define ITM_PAtommHGb                  1677 // 863
+
 #define ITM_ERPN                      1678  //JM eRPN
 #define ITM_HOMEx3                    1679  //JM HOME.3
 #define ITM_SHTIM                     1680  //JM SHIFT CANCEL
@@ -1926,15 +1929,27 @@
 #define ITM_USER_SHIFTS               1887  //JM USER
 #define ITM_USER_RESET                1888  //JM USER
 #define ITM_U_KEY_USER                1889  //JM USER
-#define ITM_LCD                       1890
+#define MNU_INL_TST                   1890
 #define ITM_U_KEY_CC                  1891  //JM USER
-#define ITM_050                       1892
+#ifdef INLINE_TEST
+#define ITM_TEST                      1892
+#else
+#define Not_Used1892                  1892
+#endif
 #define ITM_U_KEY_MM                  1893  //JM USER
-#define ITM_100                       1894
+#ifdef INLINE_TEST
+#define ITM_GET_TEST_BS               1894
+#else
+#define Not_Used1894                  1894
+#endif
 #define ITM_U_KEY_SIGMA               1895  //JM USER
-#define ITM_150                       1896
+#ifdef INLINE_TEST
+#define ITM_SET_TEST_BS               1896
+#else
+#define Not_Used1896                  1896
+#endif
 #define ITM_U_KEY_PRGM                1897  //JM USER
-#define ITM_200                       1898
+#define Not_Used1898                  1898
 #define ITM_U_KEY_ALPHA               1899  //JM USER
 #define ITM_SH_NORM_E                 1900  //JM USER NORMAL
 #define ITM_JM_ASN                    1901  //JM ASSIGN
@@ -1956,7 +1971,7 @@
  * \typedef item_t
  * \brief Structure keeping the information for one item
  ***********************************************/
-#define CAT_NO   0
+#define CAT_NONE 0
 #define CAT_FNCT 1 // Function
 #define CAT_MENU 2 // Menu
 #define CAT_CNST 3 // Constant
@@ -1966,8 +1981,8 @@
 typedef struct {
   void     (*func)(uint16_t); ///< Function called to execute the item
   uint16_t param;             ///< 1st parameter to the above function
-  char     *itemName;         ///< Name of the item
-  char     *itemPrinted;      ///< Representation of the item in the menus or on the keyboard
+  char     *itemCatalogName;  ///< Name of the item in the catalogs
+  char     *itemSoftmenuName; ///< Representation of the item in the menus or on the keyboard
   char     catalog;           ///< Menu of CATALOG in which the item is located: see #define CAT_*
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
 } item_t;

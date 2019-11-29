@@ -15,10 +15,11 @@
  */
 
 /********************************************//**
- * \file constants.h functions for constant management
+ * \file mant.h
  ***********************************************/
 
-
-
-void fnConstant(const uint16_t constant);
-void fnPi      (uint16_t unusedParamButMandatory);
+void fnMant   (uint16_t unusedParamButMandatory);
+void mantError(void);
+void mantLonI (void);
+void mantRe16 (void);
+void mantRe34 (void);

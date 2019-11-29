@@ -37,11 +37,10 @@
 #ifndef TESTSUITE_BUILD
   void fnOff            (uint16_t unsuedParamButMandatory);
   void calcModeNormal   (void);
-  void calcModeAim      (void);
+  void calcModeAsm      (void);
   void calcModeTam      (void);
-  void calcModeTAM      (void);
-  void calcModeAIM      (uint16_t unusedParamButMandatory);
-  void calcModeNIM      (uint16_t unusedParamButMandatory);
+  void calcModeAim      (uint16_t unusedParamButMandatory);
+  void calcModeNim      (uint16_t unusedParamButMandatory);
 #endif // TESTSUITE_BUILD
 
 #ifdef PC_BUILD
@@ -50,6 +49,7 @@
   void calcModeNormalGui(void);
   void calcModeAimGui   (void);
   void calcModeTamGui   (void);
+  void calcModeAsmGui   (void);
 #endif
 
 #ifndef DMCP_BUILD

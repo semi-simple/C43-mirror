@@ -432,6 +432,11 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
+  // Alpha selection timer
+  if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+    resetAlphaSelectionBuffer();
+  }
+
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
   if((ShiftTimoutMode || Home3TimerMode)) {      //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
     if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
@@ -479,12 +484,17 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     strcpy(oldTime, dateTimeString);
     showDateTime();
 
-    if(usb_powered() == 0 && get_lowbat_state() == 1) {
-      showBattery();
+    if(get_lowbat_state() == 1) {
+      showLowBattery();
     }
     else {
-      hideBattery();
+      hideLowBattery();
     }
+  }
+
+  // Alpha selection timer
+  if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+    resetAlphaSelectionBuffer();
   }
 
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
@@ -510,57 +520,6 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 
 #ifndef TESTSUITE_BUILD
-//vv dr StopWatch
-uint32_t swStart[4];
-uint32_t swStop[4];
-/********************************************//**
- * \brief Start StopWatch
- *
- * \param[in] void
- * \return void
- ***********************************************/
-void fnSwStart(uint8_t nr) {
-#ifdef DMCP_BUILD
-  swStart[nr] = sys_current_ms();
-#endif
-#ifdef PC_BUILD
-  swStart[nr] = g_get_monotonic_time();
-#endif
-}
-
-
-
-/********************************************//**
- * \brief Stop StopWatch
- *
- * \param[in] void
- * \return void
- ***********************************************/
-void fnSwStop(uint8_t nr) {
-#ifdef DMCP_BUILD
-  swStop[nr] = sys_current_ms();
-#endif
-#ifdef PC_BUILD
-  swStop[nr] = g_get_monotonic_time();
-#endif
-  uint32_t swTime = swStop[nr] - swStart[nr];
-  char snum[50];
-#ifdef DMCP_BUILD
-  showString("ms:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
-#endif
-#ifdef PC_BUILD
-  showString(STD_mu "s:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
-#endif
-  itoa(nr, snum, 10);
-  showString(snum, &standardFont, 20, 40 +nr*20, vmNormal, false, false);
-  itoa(swTime, snum, 10);
-  strcat(snum, "         ");
-  showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);
-}
-//^^
-
-
-
 /********************************************//**
  * \brief Draws the dots on the margins of the f and g lines on screen
  *
@@ -569,7 +528,6 @@ void fnSwStop(uint8_t nr) {
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 
-#ifdef PC_BUILD
 //setPixel (xx+4,yy+7);
   setPixel (xx+5,yy+6);
 //setPixel (xx+6,yy+6);
@@ -612,20 +570,6 @@ void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the do
   clearPixel (xx+1,yy+6);
   clearPixel (xx+2,yy+6);
   clearPixel (xx+3,yy+7);
-#endif
-#ifdef DMCP_BUILD
-  lcd_fill_rect(xx+2, yy+1, 5, 1, 0);
-  lcd_fill_rect(xx+1, yy+2, 7, 5, 0);
-  lcd_fill_rect(xx+2, yy+7, 5, 1, 0);
-  lcd_fill_rect(xx+3, yy+6, 3, 1, 0xFF);
-  lcd_fill_rect(xx+2, yy+5, 2, 1, 0xFF);
-  lcd_fill_rect(xx+5, yy+5, 2, 1, 0xFF);
-  lcd_fill_rect(xx+2, yy+4, 2, 1, 0xFF);
-  lcd_fill_rect(xx+6, yy+4, 2, 1, 0xFF);
-  lcd_fill_rect(xx+2, yy+3, 2, 1, 0xFF);
-  lcd_fill_rect(xx+5, yy+3, 2, 1, 0xFF);
-  lcd_fill_rect(xx+3, yy+2, 3, 1, 0xFF);
-#endif
 }
 
 
@@ -873,15 +817,6 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
   uint16_t ch, charCode, lg;
   bool_t   slc, sec;
 
-  if(Y_POSITION_OF_REGISTER_X_LINE == y) {                                      //vv dr
-    if(font != &numericFont) {
-      clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
-    }
-    else if(x > 0) {
-      clearRegLineToX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
-    }
-  }                                                                             //^^
-  
   lg = stringByteLength(string);
 
   ch = 0;
@@ -910,11 +845,6 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
     x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
   }
-
-  if(Y_POSITION_OF_REGISTER_X_LINE == y && font == &numericFont) {              //vv dr
-    clearRegLineFromX(x, Y_POSITION_OF_REGISTER_X_LINE -4, REGISTER_LINE_HEIGHT);
-  }                                                                             //^^
-
   return x;
 }
 
@@ -928,7 +858,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
  * \param[in] clearSoftkeys bool_t  Clear the softkey area
  * \return void
  ***********************************************/
-void clearScreen(bool_t clearStatusBar, bool_t clearRegLines, bool_t clearSoftkeys) {
+void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys) {
   #ifdef PC_BUILD
     int16_t x, y;
 
@@ -940,7 +870,7 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegLines, bool_t clearSoftke
       }
     }
 
-    if(clearRegLines) {
+    if(clearRegisterLines) {
       for(y=20; y<167; y++) {
         for(x=0; x<SCREEN_WIDTH; x++) {
           clearPixel(x, y);
@@ -962,7 +892,7 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegLines, bool_t clearSoftke
       lcd_fill_rect(0, 0, SCREEN_WIDTH, 20, 0);
     }
 
-    if(clearRegLines) {
+    if(clearRegisterLines) {
       lcd_fill_rect(0, 20, SCREEN_WIDTH, 147, 0);
     }
 
@@ -986,7 +916,7 @@ void showCursor(void) {
     showGlyph(STD_CURSOR, &standardFont, xCursor, yCursor, vmNormal, true, false);
   }
   else {
-    showGlyph(NUM_CURSOR, &numericFont,  xCursor, yCursor, vmNormal, true, false);
+    showGlyph(STD_CURSOR, &numericFont,  xCursor, yCursor, vmNormal, true, false);
   }
 }
 
@@ -1047,10 +977,10 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  if(stringWidth(indexOfItems[item].itemName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+  showString(indexOfItems[item].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
 }
 
 
@@ -1095,53 +1025,6 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
 
 
 
-/********************************************//**
- * \brief Clears one register line
- *
- * \param[in] xStart int16_t x coordinate to where ending to clear
- * \param[in] yStart int16_t y coordinate from where starting to clear
- * \return void
- ***********************************************/
-void clearRegLineFromX(int16_t xStart, int16_t yStart, int16_t height) {        //dr
-#ifdef PC_BUILD
-  int16_t x, y;
-
-  for(x=xStart; x<SCREEN_WIDTH; x++) {
-    for(y=yStart; y<yStart+height; y++) {
-      clearPixel(x, y);
-    }
-  }
-#endif
-#ifdef DMCP_BUILD
-  lcd_fill_rect(xStart, yStart, SCREEN_WIDTH, height, 0);
-#endif
-}
-
-
-
-/********************************************//**
- * \brief Clears one register line
- *
- * \param[in] xStart int16_t x coordinate from where starting to clear
- * \param[in] yStart int16_t y coordinate from where starting to clear
- * \return void
- ***********************************************/
-void clearRegLineToX(int16_t xStop, int16_t yStart, int16_t height) {           //dr
-#ifdef PC_BUILD
-  int16_t x, y;
-
-  for(x=0; x<xStop; x++) {
-    for(y=yStart; y<yStart+height; y++) {
-      clearPixel(x, y);
-    }
-  }
-#endif
-#ifdef DMCP_BUILD
-  lcd_fill_rect(0, yStart, xStop, height, 0);
-#endif
-}
-
-
 
 /********************************************//**
  * \brief Displays one register line
@@ -1160,7 +1043,6 @@ void refreshRegisterLine(calcRegister_t regist) {
   if(calcMode != CM_BUG_ON_SCREEN) {
     if(REGISTER_X <= regist && regist <= REGISTER_T) {
       if(lastErrorCode == 0 || regist != errorRegisterLine) {
-        if(regist != REGISTER_X)                                                //dr
         clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), REGISTER_LINE_HEIGHT);
 
         #ifdef PC_BUILD

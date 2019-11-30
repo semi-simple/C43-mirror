@@ -55,6 +55,7 @@ void showShiftState(void) {
       }
       else {
         refreshRegisterLine(REGISTER_T);
+        showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
 
         if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);

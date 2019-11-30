@@ -1929,13 +1929,25 @@
 #define ITM_USER_SHIFTS               1887  //JM USER
 #define ITM_USER_RESET                1888  //JM USER
 #define ITM_U_KEY_USER                1889  //JM USER
-#define Not_Used1890                  1890
+#define MNU_INL_TST                   1890
 #define ITM_U_KEY_CC                  1891  //JM USER
+#ifdef INLINE_TEST
+#define ITM_TEST                      1892
+#else
 #define Not_Used1892                  1892
+#endif
 #define ITM_U_KEY_MM                  1893  //JM USER
+#ifdef INLINE_TEST
+#define ITM_GET_TEST_BS               1894
+#else
 #define Not_Used1894                  1894
+#endif
 #define ITM_U_KEY_SIGMA               1895  //JM USER
+#ifdef INLINE_TEST
+#define ITM_SET_TEST_BS               1896
+#else
 #define Not_Used1896                  1896
+#endif
 #define ITM_U_KEY_PRGM                1897  //JM USER
 #define Not_Used1898                  1898
 #define ITM_U_KEY_ALPHA               1899  //JM USER

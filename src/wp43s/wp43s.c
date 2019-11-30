@@ -483,7 +483,7 @@ int main(int argc, char* argv[]) {
 
   restoreCalc();
 
-  gdk_threads_add_timeout(100, refreshScreen, NULL); // refreshScreen is called every 100 ms
+  gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
 
   gtk_main();
 
@@ -524,7 +524,7 @@ void program_main(void) {
   endOfProgram = false;
 
   lcd_refresh();
-  nextScreenRefresh = sys_current_ms()+100;
+  nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -602,11 +602,12 @@ void program_main(void) {
 
     uint32_t now = sys_current_ms();
     if(nextScreenRefresh <= now) {
-        nextScreenRefresh += 100;
-        if(nextScreenRefresh < now)
-          nextScreenRefresh = now + 100; // we were out longer than expected; just skip ahead.
-        refreshScreen();
-        lcd_refresh();
+      nextScreenRefresh += LCD_REFRESH_TIMEOUT;
+      if(nextScreenRefresh < now) {
+        nextScreenRefresh = now + LCD_REFRESH_TIMEOUT;                // we were out longer than expected; just skip ahead.
+      }
+      refreshScreen();
+      lcd_refresh();
     }
   }
 }

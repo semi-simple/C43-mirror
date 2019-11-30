@@ -1241,6 +1241,7 @@ void showSoftmenuCurrentPart(void) {
         else {
           item = softkeyItem[x];
         }
+        int8_t showCb = fnCbIsSet(item%10000);                                  //dr
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {
@@ -1260,13 +1261,11 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-            int8_t showCb = fnCbIsSet(item%10000);                              //dr  /*DRCHECK*/
-            showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, showCb);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, showCb);
             }
           }
         }
         else if(item == 9999) {
-          int8_t showCb = fnCbIsSet(item%10000);                              //dr  /*DRCHECK*/
           showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb);
         }
         else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
@@ -1274,11 +1273,9 @@ void showSoftmenuCurrentPart(void) {
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            int8_t showCb = fnCbIsSet(item%10000);                              //dr  /*DRCHECK*/
             showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
           }
           else {
-            int8_t showCb = fnCbIsSet(item%10000);                              //dr
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
           }
         }

@@ -496,7 +496,6 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
   if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
     resetAlphaSelectionBuffer();
   }
-//}
 
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
   if((ShiftTimoutMode || Home3TimerMode)) {      //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending

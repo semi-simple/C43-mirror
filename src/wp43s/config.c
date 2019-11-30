@@ -997,35 +997,35 @@ void fnRebuildRadioState() {
       case JC_ERPN:
         rb.state = eRPN? 3 : 2;
         break;
-      
+
       case JC_HOME_TRIPLE:
         rb.state = HOME3? 3 : 2;
         break;
-      
+
       case JC_SHFT_4s:
         rb.state = ShiftTimoutMode? 3 : 2;
         break;
-      
+
       case JC_BASE_HOME:
         rb.state = SH_BASE_HOME? 3 : 2;
         break;
-      
+
       case JC_BASE_MYMENU:
         rb.state = SH_BASE_MYMENU? 3 : 2;
         break;
-      
+
       case JC_BASE_AHOME:
         rb.state = SH_BASE_AHOME? 3 : 2;
         break;
-      
+
       case JC_BASE_MYA:
         rb.state = SH_BASE_MYA? 3 : 2;
         break;
-      
+
       case JC_SH_3T:
         rb.state = Home3TimerMode? 3 : 2;
         break;
-      
+
       default:
         break;
       }
@@ -1035,7 +1035,28 @@ void fnRebuildRadioState() {
         i++;
       }
     }
-    
+#ifdef INLINE_TEST
+    else if(indexOfItems[k].func == fnSetInlineTest) {
+      radiocb_t rb;
+      rb.itemNr = k;
+      rb.param = indexOfItems[k].param;
+      switch (rb.param)
+      {
+      case DR_ITM_TST:
+        rb.state = testEnabled? 3 : 2;
+        break;
+
+      default:
+        break;
+      }
+      rb.radioButton = CB_JC;
+      indexOfRadioCbItems[i] = rb;
+      if(i<MAX_RADIO_CB_ITEMS) {
+        i++;
+      }
+    }
+#endif
+
   }
   cntOfRadioCbItems = i;
 

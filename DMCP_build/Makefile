@@ -19,7 +19,7 @@ BUILD_DIR = build
 
 # Path to aux build scripts (including trailing /)
 # Leave empty for scripts in PATH
-BIN_DIR = checksum/
+BIN_DIR =
 
 ######################################
 # System sources

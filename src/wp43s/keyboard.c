@@ -146,6 +146,28 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
 
 
+
+#ifdef DMCP_BUILD
+
+void btnFnPressed(void *w, void *data) {
+  fn_key_pressed = *((char *)data) - '0'+37; //to render 38-43, as per original keypress
+}
+
+
+void btnFnReleased(void *w, void *data) {
+  char charKey[3];
+  sprintf(charKey, "%c", fn_key_pressed +11);
+  btnFnClicked(w, charKey);
+  fn_key_pressed = 0;
+}
+#endif
+
+
+void pre_executeFunction(int16_t fn, int16_t itemShift) {
+   executeFunction(fn, itemShift);
+
+}
+
 /********************************************//**
  * \brief One of the function keys was clicked
  *
@@ -176,14 +198,14 @@ void btnFnClicked(void *w, void *data) {
 
       if(shiftF) {
         resetShiftState();
-        executeFunction(fn,  6);
+        pre_executeFunction(fn,  6);
       }
       else if(shiftG) {
         resetShiftState();
-        executeFunction(fn, 12);
+        pre_executeFunction(fn, 12);
       }
       else {
-        executeFunction(fn, 0);
+        pre_executeFunction(fn, 0);
       }
     }
     else {

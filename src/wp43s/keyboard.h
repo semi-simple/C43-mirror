@@ -30,7 +30,10 @@ void fnComplexCCCC  (uint16_t unusedParamButMandatory);
 #endif
 
 #ifdef DMCP_BUILD
+  int16_t fn_key_pressed;
   void btnFnClicked   (void *w, void *data);
+  void btnFnPressed   (void *w, void *data);   //JM LONGPRESS FN
+  void btnFnReleased   (void *w, void *data);  //JM LONGPRESS FN
   void btnClicked     (void *w, void *data);
   void btnPressed     (void *w, void *data);
   void btnReleased    (void *w, void *data);

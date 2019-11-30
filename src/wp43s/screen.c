@@ -407,6 +407,9 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   // Function name display
   if(showFunctionNameCounter>0) {
     if(--showFunctionNameCounter == 0) {
+      if(showFunctionNameItem == ITM_XEQ) { //JM INLINE TEST MENU ACTIVATE
+        showSoftmenu(NULL, -1890, true);    //JM INLINE TEST MENU ACTIVATE
+      }                                     //JM INLINE TEST MENU ACTIVATE
       hideFunctionName();
       showFunctionName(ITM_NOP, 0);
     }

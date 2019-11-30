@@ -97,7 +97,7 @@ DEPS_TESTSUITE           = $(OBJ_TESTSUITE:.o=.d)
 SRC_GENERATECATALOGS    = \
 	$(addprefix src/generateCatalogs/, \
 		generateCatalogs.c)
-OBJ_GENERATECATALOGS    = $(SRC_GENERATECATALOGS:.c=.o) $(OBJ_DECIMAL)
+OBJ_GENERATECATALOGS    = $(SRC_GENERATECATALOGS:.c=.o) 
 DEPS_GENERATECATALOGS   = $(SRC_GENERATECATALOGS:.c=.d)
 
 SRC_GENERATECONSTANTS    = \
@@ -118,15 +118,18 @@ SRC_TESTTTF2RASTERFONTS  = \
 OBJ_TESTTTF2RASTERFONTS  = $(SRC_TESTTTF2RASTERFONTS:.c=.o) src/wp43s/rasterFontsData.o
 DEPS_TESTTTF2RASTERFONTS = $(SRC_TESTTTF2RASTERFONTS:.c=.d)
 
+GEN_SRC_CATALOGPOINTERS = \
+	$(addprefix src/wp43s/, softmenuCatalogs.h)
+
 GEN_SRC_CONSTANTPOINTERS = \
 	$(addprefix src/wp43s/, constantPointers.c constantPointers.h)
 
 GEN_SRC_RASTERFONTSDATA   = \
 	$(addprefix src/wp43s/, rasterFontsData.c)
 
-GENERATED_SOURCES        = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA)
+GENERATED_SOURCES        = $(GEN_SRC_CATALOGS) $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA)
 
-STAMP_FILES              = .stamp-constantPointers .stamp-rasterFontsData
+STAMP_FILES              = .stamp-softmenuCatalogs .stamp-constantPointers .stamp-rasterFontsData
 
 all: wp43c
 
@@ -183,19 +186,19 @@ clean_generateCatalogs:
 -include $(DEPS_GENERATECATALOGS)
 
 $(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
-	@echo -e "\n====> generateCatalogs $@ <===="
+	@echo -e "\n====> 1 generateCatalogs $@ <===="
 	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECATALOGS) -o $@
 
 src/generateCatalogs/%.o: src/generateCatalogs/%.c
-	@echo -e "\n====> generateCatalogs $@ <===="
+	@echo -e "\n====> 2 generateCatalogs $@ <===="
 	$(CC) $(CFLAGS) $(INC) `pkg-config --cflags gtk+-3.0` -c -o $@ $<
 
-.stamp-catalogPointers: $(GENERATECATALOGS_APP)
+.stamp-softmenuCatalogs: $(GENERATECATALOGS_APP)
 	@echo -e "\n====> running generateCatalogs <===="
 	./$(GENERATECATALOGS_APP)
 	touch $@
 
-$(GEN_SRC_CATALOGPOINTERS): .stamp-catalogPointers
+$(GEN_SRC_CATALOGS): .stamp-softmenuCatalogs
 
 
 
@@ -208,11 +211,11 @@ clean_generateConstants:
 -include $(DEPS_GENERATECONSTANTS)
 
 $(GENERATECONSTANTS_APP): $(OBJ_GENERATECONSTANTS)
-	@echo -e "\n====> generateConstants $@ <===="
+	@echo -e "\n====> 1 generateConstants $@ <===="
 	$(CC) $(CFLAGS) -m64 $(OBJ_GENERATECONSTANTS) -o $@
 
 src/generateConstants/%.o: src/generateConstants/%.c
-	@echo -e "\n====> generateConstants $@ <===="
+	@echo -e "\n====> 2 generateConstants $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 .stamp-constantPointers: $(GENERATECONSTANTS_APP)

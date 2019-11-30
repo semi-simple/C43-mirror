@@ -496,7 +496,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
   if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
     resetAlphaSelectionBuffer();
   }
-}
+//}
 
 #ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
   if((ShiftTimoutMode || Home3TimerMode)) {      //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
@@ -529,21 +529,21 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 
-  setPixel (xx+4,yy+7);
+//setPixel (xx+4,yy+7);
   setPixel (xx+5,yy+6);
-  setPixel (xx+6,yy+6);
+//setPixel (xx+6,yy+6);
   setPixel (xx+6,yy+5);
-  setPixel (xx+7,yy+4);
+//setPixel (xx+7,yy+4);
   setPixel (xx+6,yy+3);
-  setPixel (xx+6,yy+2);
+//setPixel (xx+6,yy+2);
   setPixel (xx+5,yy+2);
   setPixel (xx+4,yy+2);
   setPixel (xx+3,yy+2);
-  setPixel (xx+2,yy+2);
+//setPixel (xx+2,yy+2);
   setPixel (xx+2,yy+3);
   setPixel (xx+2,yy+4);
   setPixel (xx+2,yy+5);
-  setPixel (xx+2,yy+6);
+//setPixel (xx+2,yy+6);
   setPixel (xx+3,yy+6);
   setPixel (xx+4,yy+6);
   setPixel (xx+5,yy+5);

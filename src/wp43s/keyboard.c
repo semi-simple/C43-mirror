@@ -1190,8 +1190,8 @@ void btnReleased(void *notUsed, void *data) {
 
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   if(!shiftF) {
-    shiftF = true;
-    shiftStateChanged = true;
+    S_shF(); //shiftF shiftF = true;
+    //shiftStateChanged = true;
   }
 
   #ifdef PC_BUILD

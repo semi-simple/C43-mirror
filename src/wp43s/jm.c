@@ -43,6 +43,32 @@ void Reset_Shift_Mem(void) {                            //JM
 }
 
 
+void R_shF(void) {
+  if(shiftF) {
+    shiftF = false;
+  }
+}
+
+void R_shG(void) {
+  if(shiftG) {
+    shiftG = false;
+  }
+}
+
+void S_shF(void) {
+  if(!shiftF) {
+    shiftF = true;
+  }
+}
+
+void S_shG(void) {
+  if(!shiftG) {
+    shiftG = true;
+  }
+}
+
+
+
 
 /********************************************//**
  * NOT TESTED YET. NOT WORKING. CALLED FROM ## in BASE
@@ -50,8 +76,8 @@ void Reset_Shift_Mem(void) {                            //JM
  * FROM keyboard.c
  ***********************************************/
 void fnBASE_Hash(uint16_t unusedParamButMandatory) {
-  shiftF = false;                   //JM
-  shiftG = true;                    //JM
+  R_shF(); //shiftF = false;                   //JM
+  S_shG(); //shiftG = true;                    //JM
   Reset_Shift_Mem();                //JM
 //calcMode = CM_NIM;                //JM Trying to put the calculator into Number Input Mode
 
@@ -901,8 +927,8 @@ void fnJMup(uint16_t unusedParamButMandatory) {
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    shiftF = false;             //JM. Execur .d
-    shiftG = true;              //JM
+    R_shF(); //shiftF = false;             //JM. Execur .d
+    S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
 #ifdef PC_BUILD
     btnClicked(NULL, "03");     //JM changed from 02
@@ -951,8 +977,8 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    shiftF = false;             //JM. Execur .d
-    shiftG = true;              //JM
+    R_shF(); //shiftF = false;             //JM. Execur .d
+    S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
 #ifdef PC_BUILD
     btnClicked(NULL, "03");     //JM changed from 02
@@ -1282,8 +1308,8 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
   userModeEnabled = false;
 
 #ifdef JM_LAYOUT_1A               //JM LAYOUT 1A. CHALLENGE.
-  shiftF = true;                  //JM
-  shiftG = false;                 //JM
+  S_shF(); //shiftF = true;                  //JM
+  R_shG(); //shiftG = false;                 //JM
   Reset_Shift_Mem();              //JM
   #ifdef PC_BUILD
   btnClicked(NULL, "12");         //JM changed from 02
@@ -1294,8 +1320,8 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
 #endif
 
 #ifdef JM_LAYOUT_2_DM42_STRICT    //JM LAYOUT 2. DM42 STRICT.
-  shiftF = true;                  //JM
-  shiftG = false;                 //JM
+  S_shF(); //shiftF = true;                  //JM
+  R_shG(); //shiftG = false;                 //JM
   Reset_Shift_Mem();              //JM
   #ifdef PC_BUILD
   btnClicked(NULL, "06");         //JM changed from 02
@@ -1319,8 +1345,8 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
 void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = true;
-  shiftF = true;                  //JM
-  shiftG = false;                 //JM
+  S_shF(); //shiftF = true;                  //JM
+  R_shG(); //shiftG = false;                 //JM
   Reset_Shift_Mem();              //JM
 #ifdef PC_BUILD
   btnClicked(NULL, "00");         //JM changed from 02
@@ -1342,8 +1368,8 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
 void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = true;
-  shiftF = false;                 //JM
-  shiftG = false;                 //JM
+  R_shF(); //shiftF = false;                  //JM
+  R_shG(); //shiftG = false;                 //JM
   Reset_Shift_Mem();              //JM
   #ifdef PC_BUILD
     btnClicked(NULL, "00");       //JM changed from 02

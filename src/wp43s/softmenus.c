@@ -1275,7 +1275,12 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, showCb);
+              if(softmenu[menu].menuId == -MNU_INL_TST) {                       //vv dr
+                showSoftkey(STD_omicron, x, y-currentFirstItem/6, vmNormal, false, false, -1);
+              }
+              else {                                                            //^^
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1);
+              }                                                                 //dr
             }
           }
         }

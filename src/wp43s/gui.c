@@ -138,8 +138,8 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 
 //JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
-  shiftF = true;       //JM
-  shiftG = false;      //JM
+  S_shF(); //  shiftF = true;       //JM
+  R_shG(); //  shiftG = false;      //JM
   Reset_Shift_Mem();   //JM
   btnPressed(w, data);
   btnReleased(w, data);
@@ -147,8 +147,8 @@ void btnClicked_NU(GtkWidget *w, gpointer data) {
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
-  shiftF = false;       //JM
-  shiftG = true;        //JM
+  R_shF(); //  shiftF = false;       //JM
+  S_shG(); //  shiftG = true;        //JM
   Reset_Shift_Mem();    //JM
   btnClicked(NULL, "34");     //Alphadot
   //Only : is working at this point
@@ -610,8 +610,8 @@ return FALSE;
 
     case 112: // p         //dr                //JM Special case: p = pi
       //printf("key pressed: p pi\n"); //dr
-      shiftF = true;       //dr
-      shiftG = false;      //JM
+      S_shF(); //  shiftF = true;       //dr
+      R_shG(); //  shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "08"); //dr
       break;               //dr
@@ -1000,8 +1000,9 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl24Gr);
   gtk_widget_hide(lbl25Gr);
   gtk_widget_hide(lbl26Gr);
-  gtk_widget_hide(lbl22Fa); //JM
-  gtk_widget_hide(lbl23Fa); //JM
+  gtk_widget_hide(lbl22Fa); //vv dr - new AIM //JM
+  gtk_widget_hide(lbl23Fa); //vv dr - new AIM //JM
+
 
   gtk_widget_hide(btn31);
   gtk_widget_hide(btn32);

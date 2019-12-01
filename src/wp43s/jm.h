@@ -158,6 +158,11 @@ void JM_DOT(int16_t xx, int16_t yy);
 #endif
 
 void Reset_Shift_Mem(void);
+void R_shF(void);
+void S_shF(void);
+void R_shG(void);
+void S_shG(void);
+
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX

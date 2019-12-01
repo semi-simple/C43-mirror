@@ -343,8 +343,8 @@ void btnPressed(void *notUsed, void *data) {
         //printf("T2 %d T1 %d SR %d SUB %d \n", JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1, JM_SHIFT_RESET, JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2);
         if(JM_SHIFT_HOME_TIMER1 + JM_SHIFT_HOME_TIMER2 <= JM_3_SHIFT_CUTOFF) {  //increased limit from 500 to 600 ms
           JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP; //max
-          shiftF = false;  // Set it up, for flags to be cleared below.
-          shiftG = true;
+          R_shF(); //shiftF = false;  // Set it up, for flags to be cleared below.
+          S_shG(); //shiftG = true;
           if(HOME3) {
             if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
               popSoftmenu();                                                                                                  //JM shifts
@@ -366,20 +366,20 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     if(!shiftF && !shiftG) {                                                                                                  //JM shifts
-      shiftF = true;                                                                                                          //JM shifts
-      shiftG = false;
+      S_shF(); //shiftF = true;                                                                                                          //JM shifts
+      R_shG(); //shiftG = false;
     }                                                                                                                         //JM shifts
     else if(shiftF && !shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = true;                                                                                                          //JM shifts
+      R_shF(); //shiftF = false;                                                                                                         //JM shifts
+      S_shG(); //shiftG = true;                                                                                                          //JM shifts
     }
     else if(!shiftF && shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
+      R_shF(); //shiftF = false;                                                                                                         //JM shifts
+      R_shG(); //shiftG = false;                                                                                                         //JM shifts
     }
     else if(shiftF && shiftG) {                                                                                               //JM shifts  should never be possible. included for completeness
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
+      R_shF(); //shiftF = false;                                                                                                         //JM shifts
+      R_shG(); //shiftG = false;                                                                                                         //JM shifts
     }                                                                                                                         //JM shifts
                                                                                                                               //JM shifts
     showShiftState();                                                                                                         //JM shifts
@@ -442,8 +442,8 @@ void btnPressed(void *notUsed, void *data) {
     JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in
     fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
-    shiftG = false;
-    shiftF = false;
+    R_shG(); //shiftG = false;
+    R_shF(); //shiftF = false;
   }
 
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
@@ -453,8 +453,8 @@ void btnPressed(void *notUsed, void *data) {
     fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
     JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
-    shiftG = false;
-    shiftF = false;
+    R_shG(); //shiftG = false;
+    R_shF(); //shiftF = false;
   }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 

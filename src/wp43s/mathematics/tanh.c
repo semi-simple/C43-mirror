@@ -65,13 +65,13 @@ void fnTanh(uint16_t unusedParamButMandatory) {
 
 
 void tanhLonI(void) {
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   WP34S_Tanh(&x, &x);
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -93,11 +93,11 @@ void tanhRe16(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   WP34S_Tanh(&x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -113,28 +113,28 @@ void tanhCo16(void) {
   }
 
   // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
-  realIc_t a, b, sina, cosa;
-  complexIc_t numer, denom;
+  real39_t a, b, sina, cosa;
+  complex39_t numer, denom;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
-  if(realIcIsZero(&b)) {
+  if(realIsZero(&b)) {
     WP34S_Tanh(&a, &numer.real);
-    realIcZero(&numer.imag);
+    realZero(&numer.imag);
   }
   else {
     WP34S_Tanh(&a, &numer.real);
     WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numer.imag);
 
-    realIcCopy(const_1, &denom.real);
-    realIcMultiply(&numer.real, &numer.imag, &denom.imag);
+    realCopy(const_1, &denom.real);
+    realMultiply(&numer.real, &numer.imag, &denom.imag, &ctxtReal39);
 
-    divCoIcCoIc(&numer, &denom, &numer);
+    divCo39Co39(&numer, &denom, &numer);
   }
 
-  realIcToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -168,11 +168,11 @@ void tanhRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   WP34S_Tanh(&x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -188,26 +188,26 @@ void tanhCo34(void) {
   }
 
   // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
-  realIc_t a, b, sina, cosa;
-  complexIc_t numer, denom;
+  real39_t a, b, sina, cosa;
+  complex39_t numer, denom;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  if(realIcIsZero(&b)) {
+  if(realIsZero(&b)) {
     WP34S_Tanh(&a, &numer.real);
-    realIcZero(&numer.imag);
+    realZero(&numer.imag);
   }
   else {
     WP34S_Tanh(&a, &numer.real);
     WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numer.imag);
 
-    realIcCopy(const_1, &denom.real);
-    realIcMultiply(&numer.real, &numer.imag, &denom.imag);
+    realCopy(const_1, &denom.real);
+    realMultiply(&numer.real, &numer.imag, &denom.imag, &ctxtReal39);
 
-    divCoIcCoIc(&numer, &denom, &numer);
+    divCo39Co39(&numer, &denom, &numer);
   }
 
-  realIcToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

@@ -65,12 +65,12 @@ void fnExpt(uint16_t unusedParamButMandatory) {
 
 
 void exptLonI(void) {
-  realIc_t x;
+  real39_t x;
   longInteger_t lgInt;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   longIntegerInit(lgInt);
-  intToLongInteger((realIcIsZero(&x) ? 0 : x.exponent + x.digits - 1), lgInt);
+  intToLongInteger((realIsZero(&x) ? 0 : x.exponent + x.digits - 1), lgInt);
   convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }
@@ -78,7 +78,7 @@ void exptLonI(void) {
 
 
 void exptRe16(void) {
-  realIc_t x;
+  real39_t x;
   longInteger_t lgInt;
 
   if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
@@ -97,9 +97,9 @@ void exptRe16(void) {
     return;
   }
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   longIntegerInit(lgInt);
-  intToLongInteger((realIcIsZero(&x) ? 0 : x.exponent + x.digits - 1), lgInt);
+  intToLongInteger((realIsZero(&x) ? 0 : x.exponent + x.digits - 1), lgInt);
   convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }
@@ -107,7 +107,7 @@ void exptRe16(void) {
 
 
 void exptRe34(void) {
-  realIc_t x;
+  real39_t x;
   longInteger_t lgInt;
 
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
@@ -126,9 +126,9 @@ void exptRe34(void) {
     return;
   }
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   longIntegerInit(lgInt);
-  intToLongInteger((realIcIsZero(&x) ? 0 : x.exponent + x.digits - 1), lgInt);
+  intToLongInteger((realIsZero(&x) ? 0 : x.exponent + x.digits - 1), lgInt);
   convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }

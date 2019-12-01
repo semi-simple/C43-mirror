@@ -75,23 +75,23 @@ void sqrtLonI(void) {
       convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
     }
     else {
-      realIc_t a;
+      real39_t a;
 
-      convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-      realIcSquareRoot(&a, &a);
+      convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
+      realSquareRoot(&a, &a, &ctxtReal39);
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
     }
   }
   else if(getFlag(FLAG_CPXRES)) { // Negative value
-    realIc_t a;
+    real39_t a;
 
-    convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
+    convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    realIcSetPositiveSign(&a);
-    realIcSquareRoot(&a, &a);
+    realSetPositiveSign(&a);
+    realSquareRoot(&a, &a, &ctxtReal39);
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-    realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
+    realToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -123,21 +123,21 @@ void sqrtRe16(void) {
     return;
   }
 
-  realIc_t a;
+  real39_t a;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
 
   if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-    realIcSquareRoot(&a, &a);
-    realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+    realSquareRoot(&a, &a, &ctxtReal39);
+    realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
   else if(getFlag(FLAG_CPXRES)) {
     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    realIcSetPositiveSign(&a);
-    realIcSquareRoot(&a, &a);
+    realSetPositiveSign(&a);
+    realSquareRoot(&a, &a, &ctxtReal39);
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-    realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
+    realToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -159,18 +159,18 @@ void sqrtCo16(void) {
     return;
   }
 
-  realIc_t a, b;
+  real39_t a, b;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  realIcSquareRoot(&a, &a);
-  realIcMultiply(&b, const_0_5, &b);
-  realIcPolarToRectangular(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
+  realSquareRoot(&a, &a, &ctxtReal39);
+  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  real39PolarToRectangular(&a, &b, &a, &b);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -210,21 +210,21 @@ void sqrtRe34(void) {
     return;
   }
 
-  realIc_t a;
+  real39_t a;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
 
   if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-    realIcSquareRoot(&a, &a);
-    realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+    realSquareRoot(&a, &a, &ctxtReal39);
+    realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
   else if(getFlag(FLAG_CPXRES)) {
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    realIcSetPositiveSign(&a);
-    realIcSquareRoot(&a, &a);
+    realSetPositiveSign(&a);
+    realSquareRoot(&a, &a, &ctxtReal39);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-    realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
+    realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -246,16 +246,16 @@ void sqrtCo34(void) {
     return;
   }
 
-  realIc_t a, b;
+  real39_t a, b;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  realIcSquareRoot(&a, &a);
-  realIcMultiply(&b, const_0_5, &b);
-  realIcPolarToRectangular(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
+  realSquareRoot(&a, &a, &ctxtReal39);
+  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  real39PolarToRectangular(&a, &b, &a, &b);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

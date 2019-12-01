@@ -23,9 +23,9 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.11"
+#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.12"
 #define COPYRIGHT "The WP43S team"
-#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.11" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.12" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -148,11 +148,8 @@ typedef enum {
 
 typedef int16_t calcRegister_t;
 
-// If the definition below is changed, this change MUST be carried forward in generateConstants.c and the constants MUST be regenerated before recompiling the program.
-#define DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS 39
-
 #if (IBM_DECIMAL == 1)
-  #define DECNUMDIGITS DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS
+  #define DECNUMDIGITS 39
   #include "decimal128.h"
   #include "decimal64.h"
   #include "decDouble.h"
@@ -490,12 +487,13 @@ extern void                 (* const division[12][12])(void);
 extern const softmenu_t     softmenu[];
 
 // Variables stored in RAM
-extern decContext           ctxtReal16;  // 16 digits
-extern decContext           ctxtReal34;  // 34 digits
-extern decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
-extern decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
-extern decContext           ctxtReal451; // 451 digits: used in radian angle reduction
-extern decContext           ctxtReal850; // 850 digits: used for really big modulo
+extern realContext_t        ctxtReal16;  // 16 digits
+extern realContext_t        ctxtReal34;  // 34 digits
+extern realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
+extern realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
+extern realContext_t        ctxtReal75;  // 75 digits: used in SLVQ
+extern realContext_t        ctxtReal459; // 459 digits: used in radian angle reduction
+extern realContext_t        ctxtReal855; // 855 digits: used for really big modulo
 extern uint16_t             flags[7];
 #define TMP_STR_LENGTH  3000
 #define ERROR_MESSAGE_LENGTH 512
@@ -614,10 +612,10 @@ extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 extern int32_t              numberOfFreeBlocks;
 extern int32_t              lgCatalogSelection;
 extern void                 (*confirmedFunction)(uint16_t);
-extern realIc_t             const *gammaConstants;
-extern realIc_t             const *angle180;
-extern realIc_t             const *angle90;
-extern realIc_t             const *angle45;
+extern real39_t             const *gammaConstants;
+extern real39_t             const *angle180;
+extern real39_t             const *angle90;
+extern real39_t             const *angle45;
 #ifdef DMCP_BUILD
   extern bool_t               endOfProgram;
 #endif // DMCP_BUILD

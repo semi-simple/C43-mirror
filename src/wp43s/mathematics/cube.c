@@ -95,14 +95,14 @@ void cubeRe16(void) {
     return;
   }
 
-  realIc_t x, xSquared;
+  real39_t x, xSquared;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcMultiply(&x, &x, &xSquared);
-  realIcMultiply(&xSquared, &x, &x);
+  realMultiply(&x, &x, &xSquared, &ctxtReal39);
+  realMultiply(&xSquared, &x, &x, &ctxtReal39);
 
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -117,32 +117,32 @@ void cubeCo16(void) {
     return;
   }
 
-  realIc_t a, b, aSquared, bSquared, aCubed, bCubed;
+  real39_t a, b, aSquared, bSquared, aCubed, bCubed;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   // (a + bi)³ = a³ - 3ab²  +  (3ba² - b³)i
   // a² and a³
-  realIcMultiply(&a,        &a, &aSquared);
-  realIcMultiply(&aSquared, &a, &aCubed);
+  realMultiply(&a,        &a, &aSquared, &ctxtReal39);
+  realMultiply(&aSquared, &a, &aCubed, &ctxtReal39);
 
   // b² and b³
-  realIcMultiply(&b,        &b, &bSquared);
-  realIcMultiply(&bSquared, &b, &bCubed);
+  realMultiply(&b,        &b, &bSquared, &ctxtReal39);
+  realMultiply(&bSquared, &b, &bCubed, &ctxtReal39);
 
   // real part
-  realIcMultiply(&a,      const_3,   &a);
-  realIcMultiply(&a,      &bSquared, &a);
-  realIcSubtract(&aCubed, &a,        &a);
+  realMultiply(&a,      const_3,   &a, &ctxtReal39);
+  realMultiply(&a,      &bSquared, &a, &ctxtReal39);
+  realSubtract(&aCubed, &a,        &a, &ctxtReal39);
 
   // imag part
-  realIcMultiply(&b, const_3,   &b);
-  realIcMultiply(&b, &aSquared, &b);
-  realIcSubtract(&b, &bCubed,   &b);
+  realMultiply(&b, const_3,   &b, &ctxtReal39);
+  realMultiply(&b, &aSquared, &b, &ctxtReal39);
+  realSubtract(&b, &bCubed,   &b, &ctxtReal39);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -184,14 +184,14 @@ void cubeRe34(void) {
     return;
   }
 
-  realIc_t x, xSquared;
+  real39_t x, xSquared;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcMultiply(&x, &x, &xSquared);
-  realIcMultiply(&xSquared, &x, &x);
+  realMultiply(&x, &x, &xSquared, &ctxtReal39);
+  realMultiply(&xSquared, &x, &x, &ctxtReal39);
 
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -206,30 +206,30 @@ void cubeCo34(void) {
     return;
   }
 
-  realIc_t a, b, aSquared, bSquared, aCubed, bCubed;
+  real39_t a, b, aSquared, bSquared, aCubed, bCubed;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   // (a + bi)³ = a³ - 3ab²  +  (3ba² - b³)i
   // a² and a³
-  realIcMultiply(&a,        &a, &aSquared);
-  realIcMultiply(&aSquared, &a, &aCubed);
+  realMultiply(&a,        &a, &aSquared, &ctxtReal39);
+  realMultiply(&aSquared, &a, &aCubed, &ctxtReal39);
 
   // b² annd b³
-  realIcMultiply(&b,        &b, &bSquared);
-  realIcMultiply(&bSquared, &b, &bCubed);
+  realMultiply(&b,        &b, &bSquared, &ctxtReal39);
+  realMultiply(&bSquared, &b, &bCubed, &ctxtReal39);
 
   // real part
-  realIcMultiply(&a,      const_3,   &a);
-  realIcMultiply(&a,      &bSquared, &a);
-  realIcSubtract(&aCubed, &a,        &a);
+  realMultiply(&a,      const_3,   &a, &ctxtReal39);
+  realMultiply(&a,      &bSquared, &a, &ctxtReal39);
+  realSubtract(&aCubed, &a,        &a, &ctxtReal39);
 
   // imag part
-  realIcMultiply(&b, const_3,   &b);
-  realIcMultiply(&b, &aSquared, &b);
-  realIcSubtract(&b, &bCubed,   &b);
+  realMultiply(&b, const_3,   &b, &ctxtReal39);
+  realMultiply(&b, &aSquared, &b, &ctxtReal39);
+  realSubtract(&b, &bCubed,   &b, &ctxtReal39);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

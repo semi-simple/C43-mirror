@@ -2508,7 +2508,7 @@ const font_t standardFont = {
 
     // GREEK SMALL LETTER SIGMA 
     {.charCode=0x83c3, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4, .rank1=393, .rank2=395,
-     .data="\x3f\x00\x7f\x00\xe0\x00\xc3\x00\xc1\x80\xc1\x80\xe3\x80\x7f\x00\x3e\x00"},
+     .data="\x3f\x80\x7f\x00\xe0\x00\xc3\x00\xc1\x80\xc1\x80\xe3\x80\x7f\x00\x3e\x00"},
 
     // GREEK SMALL LETTER TAU 
     {.charCode=0x83c4, .colsBeforeGlyph= 0, .colsGlyph= 8, .colsAfterGlyph= 2, .rowsAboveGlyph= 7, .rowsGlyph= 9, .rowsBelowGlyph= 4, .rank1=397, .rank2=398,

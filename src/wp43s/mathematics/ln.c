@@ -64,46 +64,46 @@ void fnLn(uint16_t unusedParamButMandatory) {
 
 
 
-void lnCoIc(const complexIc_t *z, complexIc_t *ln) {
-  if(realIcIsSpecial(&z->real) || realIcIsSpecial(&z->imag)) {
-    if(realIcIsNaN(&z->real) || realIcIsNaN(&z->imag)) {
-      realIcCopy(const_NaN, &ln->real);
-      realIcCopy(const_NaN, &ln->imag);
+void lnCo39(const complex39_t *z, complex39_t *ln) {
+  if(realIsSpecial(&z->real) || realIsSpecial(&z->imag)) {
+    if(realIsNaN(&z->real) || realIsNaN(&z->imag)) {
+      realCopy(const_NaN, &ln->real);
+      realCopy(const_NaN, &ln->imag);
     }
     else {
-      realIcCopy(const_plusInfinity, &ln->real);
+      realCopy(const_plusInfinity, &ln->real);
 
-      if(realIcIsNegative(&z->imag)) {
-        realIcCopy(const_minusInfinity, &ln->imag);
+      if(realIsNegative(&z->imag)) {
+        realCopy(const_minusInfinity, &ln->imag);
       }
       else {
-        realIcCopy(const_plusInfinity, &ln->imag);
+        realCopy(const_plusInfinity, &ln->imag);
       }
     }
     return;
   }
 
-  if(realIcIsZero(&z->imag)) {
-    if(realIcIsZero(&z->real)) {
-      realIcCopy(const_NaN, &ln->real);
-      realIcCopy(const_NaN, &ln->imag);
+  if(realIsZero(&z->imag)) {
+    if(realIsZero(&z->real)) {
+      realCopy(const_NaN, &ln->real);
+      realCopy(const_NaN, &ln->imag);
     }
     else {
-      if(realIcIsNegative(&z->real)) {
-        realIcCopy(&z->real, &ln->real);
-        realIcSetPositiveSign(&ln->real);
+      if(realIsNegative(&z->real)) {
+        realCopy(&z->real, &ln->real);
+        realSetPositiveSign(&ln->real);
         WP34S_Ln(&ln->real, &ln->real);
-        realIcCopy(const_pi, &ln->imag);
+        realCopy(const_pi, &ln->imag);
       }
       else {
         WP34S_Ln(&z->real, &ln->real);
-        realIcZero(&ln->imag);
+        realZero(&ln->imag);
       }
     }
    return;
   }
 
-  realIcRectangularToPolar(&z->real, &z->imag, &ln->real, &ln->imag);
+  real39RectangularToPolar(&z->real, &z->imag, &ln->real, &ln->imag);
   WP34S_Ln(&ln->real, &ln->real);
 }
 
@@ -123,7 +123,7 @@ void lnLonI(void) {
   if(longIntegerIsZero(lgInt)) {
     if(getFlag(FLAG_DANGER)) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -133,25 +133,25 @@ void lnLonI(void) {
     }
   }
   else {
-    realIc_t x;
+    real39_t x;
 
-    convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+    convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
     if(longIntegerIsPositive(lgInt)) {
       WP34S_Ln(&x, &x);
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&x);
+      realSetPositiveSign(&x);
       WP34S_Ln(&x, &x);
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_pi, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_pi, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -177,7 +177,7 @@ void lnRe16(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -197,31 +197,31 @@ void lnRe16(void) {
     }
     else {
       if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-        realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
-        realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
       }
     }
   }
 
   else {
-    realIc_t x;
+    real39_t x;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
     if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
       WP34S_Ln(&x, &x);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&x);
+      realSetPositiveSign(&x);
       WP34S_Ln(&x, &x);
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_pi, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_pi, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -246,8 +246,8 @@ void lnCo16(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -257,15 +257,15 @@ void lnCo16(void) {
     }
   }
   else {
-    complexIc_t x;
+    complex39_t x;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-    real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+    real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
 
-    lnCoIc(&x, &x);
+    lnCo39(&x, &x);
 
-    realIcToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-    realIcToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+    realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
   }
 }
 
@@ -284,14 +284,14 @@ void lnCm16(void) {
 
 
 void lnShoI(void) {
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  if(realIcIsZero(&x)) {
+  if(realIsZero(&x)) {
     if(getFlag(FLAG_DANGER)) {
-      realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -301,19 +301,19 @@ void lnShoI(void) {
     }
   }
   else {
-    if(realIcIsPositive(&x)) {
+    if(realIsPositive(&x)) {
       WP34S_Ln(&x, &x);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&x);
+      realSetPositiveSign(&x);
       WP34S_Ln(&x, &x);
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_pi, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_pi, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -337,7 +337,7 @@ void lnRe34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realIcToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -357,31 +357,31 @@ void lnRe34(void) {
     }
     else {
       if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-        realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
-        realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }
   }
 
   else {
-    realIc_t x;
+    real39_t x;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
       WP34S_Ln(&x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
-      realIcSetPositiveSign(&x);
+      realSetPositiveSign(&x);
       WP34S_Ln(&x, &x);
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_pi, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_pi, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -406,8 +406,8 @@ void lnCo34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -417,14 +417,14 @@ void lnCo34(void) {
     }
   }
   else {
-    complexIc_t x;
+    complex39_t x;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-    real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
 
-    lnCoIc(&x, &x);
+    lnCo39(&x, &x);
 
-    realIcToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-    realIcToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+    realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
   }
 }

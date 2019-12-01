@@ -65,19 +65,19 @@ void fnArcsinh(uint16_t unusedParamButMandatory) {
 
 
 void arcsinhLonI(void) {
-  realIc_t x, xSquared;
+  real39_t x, xSquared;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
   // arcsinh(x) = ln(x + sqrt(x² + 1))
-  realIcMultiply(&x, &x, &xSquared);
-  realIcAdd(&xSquared, const_1, &xSquared);
-  realIcSquareRoot(&xSquared, &xSquared);
-  realIcAdd(&xSquared, &x, &x);
+  realMultiply(&x, &x, &xSquared, &ctxtReal39);
+  realAdd(&xSquared, const_1, &xSquared, &ctxtReal39);
+  realSquareRoot(&xSquared, &xSquared, &ctxtReal39);
+  realAdd(&xSquared, &x, &x, &ctxtReal39);
   WP34S_Ln(&x, &x);
 
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -91,18 +91,18 @@ void arcsinhRe16(void) {
     return;
   }
 
-  realIc_t x, xSquared;
+  real39_t x, xSquared;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
   // arcsinh(x) = ln(x + sqrt(x² + 1))
-  realIcMultiply(&x, &x, &xSquared);
-  realIcAdd(&xSquared, const_1, &xSquared);
-  realIcSquareRoot(&xSquared, &xSquared);
-  realIcAdd(&xSquared, &x, &x);
+  realMultiply(&x, &x, &xSquared, &ctxtReal39);
+  realAdd(&xSquared, const_1, &xSquared, &ctxtReal39);
+  realSquareRoot(&xSquared, &xSquared, &ctxtReal39);
+  realAdd(&xSquared, &x, &x, &ctxtReal39);
   WP34S_Ln(&x, &x);
 
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -117,40 +117,40 @@ void arcsinhCo16(void) {
     return;
   }
 
-  realIc_t a, b, real, imag;
+  real39_t a, b, real, imag;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   // arcsinh(z) = ln(z + sqrt(z² + 1))
   // calculate z²   real part
-  realIcMultiply(&b, &b, &real);
-  realIcChangeSign(&real);
-  realIcFMA(&a, &a, &real, &real);
+  realMultiply(&b, &b, &real, &ctxtReal39);
+  realChangeSign(&real);
+  realFMA(&a, &a, &real, &real, &ctxtReal39);
 
   // calculate z²   imaginary part
-  realIcMultiply(&a, &b, &imag);
-  realIcMultiply(&imag, const_2, &imag);
+  realMultiply(&a, &b, &imag, &ctxtReal39);
+  realMultiply(&imag, const_2, &imag, &ctxtReal39);
 
   // calculate z² + 1
-  realIcAdd(&real, const_1, &real);
+  realAdd(&real, const_1, &real, &ctxtReal39);
 
   // calculate sqrt(z² + 1)
-  realIcRectangularToPolar(&real, &imag, &real, &imag);
-  realIcSquareRoot(&real, &real);
-  realIcMultiply(&imag, const_0_5, &imag);
-  realIcPolarToRectangular(&real, &imag, &real, &imag);
+  real39RectangularToPolar(&real, &imag, &real, &imag);
+  realSquareRoot(&real, &real, &ctxtReal39);
+  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² + 1)
-  realIcAdd(&a, &real, &real);
-  realIcAdd(&b, &imag, &imag);
+  realAdd(&a, &real, &real, &ctxtReal39);
+  realAdd(&b, &imag, &imag, &ctxtReal39);
 
   // calculate ln(z + sqtr(z² + 1))
-  realIcRectangularToPolar(&real, &imag, &a, &b);
+  real39RectangularToPolar(&real, &imag, &a, &b);
   WP34S_Ln(&a, &a);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -176,18 +176,18 @@ void arcsinhRe34(void) {
     return;
   }
 
-  realIc_t x, xSquared;
+  real39_t x, xSquared;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
   // arcsinh(x) = ln(x + sqrt(x² + 1))
-  realIcMultiply(&x, &x, &xSquared);
-  realIcAdd(&xSquared, const_1, &xSquared);
-  realIcSquareRoot(&xSquared, &xSquared);
-  realIcAdd(&xSquared, &x, &x);
+  realMultiply(&x, &x, &xSquared, &ctxtReal39);
+  realAdd(&xSquared, const_1, &xSquared, &ctxtReal39);
+  realSquareRoot(&xSquared, &xSquared, &ctxtReal39);
+  realAdd(&xSquared, &x, &x, &ctxtReal39);
   WP34S_Ln(&x, &x);
 
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -202,38 +202,38 @@ void arcsinhCo34(void) {
     return;
   }
 
-  realIc_t a, b, real, imag;
+  real39_t a, b, real, imag;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   // arcsinh(z) = ln(z + sqrt(z² + 1))
   // calculate z²   real part
-  realIcMultiply(&b, &b, &real);
-  realIcChangeSign(&real);
-  realIcFMA(&a, &a, &real, &real);
+  realMultiply(&b, &b, &real, &ctxtReal39);
+  realChangeSign(&real);
+  realFMA(&a, &a, &real, &real, &ctxtReal39);
 
   // calculate z²   imaginary part
-  realIcMultiply(&a, &b, &imag);
-  realIcMultiply(&imag, const_2, &imag);
+  realMultiply(&a, &b, &imag, &ctxtReal39);
+  realMultiply(&imag, const_2, &imag, &ctxtReal39);
 
   // calculate z² + 1
-  realIcAdd(&real, const_1, &real);
+  realAdd(&real, const_1, &real, &ctxtReal39);
 
   // calculate sqrt(z² + 1)
-  realIcRectangularToPolar(&real, &imag, &real, &imag);
-  realIcSquareRoot(&real, &real);
-  realIcMultiply(&imag, const_0_5, &imag);
-  realIcPolarToRectangular(&real, &imag, &real, &imag);
+  real39RectangularToPolar(&real, &imag, &real, &imag);
+  realSquareRoot(&real, &real, &ctxtReal39);
+  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² + 1)
-  realIcAdd(&a, &real, &real);
-  realIcAdd(&b, &imag, &imag);
+  realAdd(&a, &real, &real, &ctxtReal39);
+  realAdd(&b, &imag, &imag, &ctxtReal39);
 
   // calculate ln(z + sqtr(z² + 1))
-  realIcRectangularToPolar(&real, &imag, &a, &b);
+  real39RectangularToPolar(&real, &imag, &a, &b);
   WP34S_Ln(&a, &a);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

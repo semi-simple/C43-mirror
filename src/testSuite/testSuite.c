@@ -1013,31 +1013,31 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
 
 
 int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numberPart) {
-  realIc_t expectedValue, value, relativeError, numSignificantDigits;
+  real39_t expectedValue, value, relativeError, numSignificantDigits;
   real16_t integer;
 
-  real16ToRealIc(expectedValue16, &expectedValue);
-  real16ToRealIc(value16, &value);
+  real16ToReal(expectedValue16, &expectedValue);
+  real16ToReal(value16, &value);
 
-  realIcSubtract(&expectedValue, &value, &relativeError);
+  realSubtract(&expectedValue, &value, &relativeError, &ctxtReal39);
 
-  if(!realIcIsZero(&expectedValue)) {
-    realIcDivide(&relativeError, &expectedValue, &relativeError);
-    realIcDivide(const_1, &relativeError, &numSignificantDigits);
+  if(!realIsZero(&expectedValue)) {
+    realDivide(&relativeError, &expectedValue, &relativeError, &ctxtReal39);
+    realDivide(const_1, &relativeError, &numSignificantDigits, &ctxtReal39);
   }
   else {
-    realIcCopy(const_1, &numSignificantDigits);
+    realCopy(const_1, &numSignificantDigits);
   }
 
-  realIcSetPositiveSign(&numSignificantDigits);
-  if(!realIcIsZero(&numSignificantDigits)) {
+  realSetPositiveSign(&numSignificantDigits);
+  if(!realIsZero(&numSignificantDigits)) {
   WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
   }
   else {
-    realIcZero(&numSignificantDigits);
+    realZero(&numSignificantDigits);
   }
 
-  realIcToReal16(&numSignificantDigits, &integer);
+  realToReal16(&numSignificantDigits, &integer);
   correctSignificantDigits = real16ToInt32(&integer);
   if(correctSignificantDigits <= 16) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
@@ -1057,31 +1057,31 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
 
 
 int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart) {
-  realIc_t expectedValue, value, relativeError, numSignificantDigits;
+  real39_t expectedValue, value, relativeError, numSignificantDigits;
   real16_t integer;
 
-  real34ToRealIc(expectedValue34, &expectedValue);
-  real34ToRealIc(value34, &value);
+  real34ToReal(expectedValue34, &expectedValue);
+  real34ToReal(value34, &value);
 
-  realIcSubtract(&expectedValue, &value, &relativeError);
+  realSubtract(&expectedValue, &value, &relativeError, &ctxtReal39);
 
-  if(!realIcIsZero(&expectedValue)) {
-    realIcDivide(&relativeError, &expectedValue, &relativeError);
-    realIcDivide(const_1, &relativeError, &numSignificantDigits);
+  if(!realIsZero(&expectedValue)) {
+    realDivide(&relativeError, &expectedValue, &relativeError, &ctxtReal39);
+    realDivide(const_1, &relativeError, &numSignificantDigits, &ctxtReal39);
   }
   else {
-    realIcCopy(const_1, &numSignificantDigits);
+    realCopy(const_1, &numSignificantDigits);
   }
 
-  realIcSetPositiveSign(&numSignificantDigits);
-  if(!realIcIsZero(&numSignificantDigits)) {
+  realSetPositiveSign(&numSignificantDigits);
+  if(!realIsZero(&numSignificantDigits)) {
     WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
   }
   else {
-    realIcZero(&numSignificantDigits);
+    realZero(&numSignificantDigits);
   }
 
-  realIcToReal16(&numSignificantDigits, &integer);
+  realToReal16(&numSignificantDigits, &integer);
   correctSignificantDigits = real16ToInt32(&integer);
   if(correctSignificantDigits <= 34) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);

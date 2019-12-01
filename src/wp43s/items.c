@@ -1561,7 +1561,7 @@ const item_t indexOfItems[] = {
 /* 1435 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_CONTOUR_INTEGRAL,                          CAT_NONE, SLS_UNCHANGED},
 /* 1436 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_SURFACE_INTEGRAL,                          CAT_NONE, SLS_UNCHANGED},
 /* 1437 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_RATIO,                                     CAT_NONE, SLS_UNCHANGED},
-/* 1438 */  { itemToBeCoded,               NOPARAM,                     "1438",                                        "1438",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1438 */  { addItemToBuffer,             CHR_CHECK_MARK,              "",                                            STD_CHECK_MARK,                                CAT_NONE, SLS_UNCHANGED},
 /* 1439 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_ASYMPOTICALLY_EQUAL,                       CAT_NONE, SLS_UNCHANGED},
 /* 1440 */  { addItemToBuffer,             CHR_ALMOST_EQUAL,            "",                                            STD_ALMOST_EQUAL,                              CAT_NONE, SLS_UNCHANGED},
 /* 1441 */  { addItemToBuffer,             CHR_COLON_EQUALS,            "",                                            STD_COLON_EQUALS,                              CAT_NONE, SLS_UNCHANGED},

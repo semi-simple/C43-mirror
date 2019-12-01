@@ -1990,7 +1990,7 @@ void printRealToConsole(const real_t *value) {
   }
 
   while(value->lsu[i] == 0) i--;
-  printf("%u", value->lsu[i--]);
+  printf("%" FMT16U, value->lsu[i--]);
 
   exponent = value->exponent;
   last = 0;
@@ -2000,11 +2000,11 @@ void printRealToConsole(const real_t *value) {
   }
 
   for(; i>=last; i--) {
-    printf(" %03u", value->lsu[i]);
+    printf(" %03" FMT16U, value->lsu[i]);
   }
 
   if(exponent != 0) {
-    printf(" e %d", exponent);
+    printf(" e %" FMT32S, exponent);
   }
 }
 

@@ -46,12 +46,13 @@ bool_t               allowScreenUpdate;
 bool_t               funcOK;
 
 // Variables stored in RAM
-decContext           ctxtReal16;  // 16 digits
-decContext           ctxtReal34;  // 34 digits
-decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
-decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
-decContext           ctxtReal451; // 451 digits: used in radian angle reduction
-decContext           ctxtReal850; // 850 digits: used for really big modulo
+realContext_t        ctxtReal16;  // 16 digits
+realContext_t        ctxtReal34;  // 34 digits
+realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
+realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
+realContext_t        ctxtReal75;  // 75 digits: used in SLVQ
+realContext_t        ctxtReal459; // 459 digits: used in radian angle reduction
+realContext_t        ctxtReal855; // 855 digits: used for really big modulo
 uint16_t             flags[7];
 char                 tmpStr3000[TMP_STR_LENGTH];
 char                 errorMessage[ERROR_MESSAGE_LENGTH];
@@ -182,10 +183,10 @@ freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 int32_t              lgCatalogSelection;
 void                 (*confirmedFunction)(uint16_t);
-realIc_t             const *gammaConstants;
-realIc_t             const *angle180;
-realIc_t             const *angle90;
-realIc_t             const *angle45;
+real39_t             const *gammaConstants;
+real39_t             const *angle180;
+real39_t             const *angle90;
+real39_t             const *angle45;
 #ifdef DMCP_BUILD
   bool_t               endOfProgram;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
@@ -260,21 +261,25 @@ void setupDefaults(void) {
 
   decContextDefault(&ctxtReal16, DEC_INIT_DECDOUBLE);
   decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
-  decContextDefault(&ctxtRealIc, DEC_INIT_DECQUAD);
-  ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
-  ctxtRealIc.traps  = 0;
+  decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
+  ctxtReal39.digits = 39;
+  ctxtReal39.traps  = 0;
 
   decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
   ctxtReal51.digits = 51;
   ctxtReal51.traps  = 0;
 
-  decContextDefault(&ctxtReal451,  DEC_INIT_DECQUAD);
-  ctxtReal451.digits  = 451;
-  ctxtReal451.traps   = 0;
+  decContextDefault(&ctxtReal75, DEC_INIT_DECQUAD);
+  ctxtReal75.digits = 75;
+  ctxtReal75.traps  = 0;
 
-  decContextDefault(&ctxtReal850,  DEC_INIT_DECQUAD);
-  ctxtReal850.digits  = 850;
-  ctxtReal850.traps   = 0;
+  decContextDefault(&ctxtReal459,  DEC_INIT_DECQUAD);
+  ctxtReal459.digits  = 459;
+  ctxtReal459.traps   = 0;
+
+  decContextDefault(&ctxtReal855,  DEC_INIT_DECQUAD);
+  ctxtReal855.digits  = 855;
+  ctxtReal855.traps   = 0;
 
   statisticalSumsPointer = NULL;
 
@@ -412,6 +417,13 @@ void setupDefaults(void) {
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
     debugMemAllocation = false;
   #endif
+
+  real39_t real39;
+  printf("digits   %p\n", &real39.digits);
+  printf("exponent %p\n", &real39.exponent);
+  printf("bits     %p\n", &real39.bits);
+  printf("lsu[0]   %p\n", &real39.lsu[0]);
+  printf("lsu[1]   %p\n", &real39.lsu[1]);
 }
 
 

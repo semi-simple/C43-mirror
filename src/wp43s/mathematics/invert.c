@@ -95,15 +95,15 @@ void invertLonI(void) {
       convertLongIntegerToLongIntegerRegister(quotient, REGISTER_X);
     }
     else {
-      realIc_t reX;
+      real39_t reX;
 
       longIntegerToAllocatedString(a, tmpStr3000, TMP_STR_LENGTH);
-      stringToRealIc(tmpStr3000, &reX);
+      stringToReal(tmpStr3000, &reX, &ctxtReal39);
 
-      realIcDivide(const_1, &reX, &reX);
+      realDivide(const_1, &reX, &reX, &ctxtReal39);
 
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
     }
 
     longIntegerFree(quotient);
@@ -133,7 +133,7 @@ void invertRe16(void) {
 
   if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realIcToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -173,20 +173,20 @@ void invertCo16(void) {
     return;
   }
 
-  realIc_t a, b, denom;
+  real39_t a, b, denom;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
-  realIcMultiply(&a, &a, &denom);    // c²
-  realIcFMA(&b, &b, &denom, &denom); // c² + d²
+  realMultiply(&a, &a, &denom, &ctxtReal39);    // c²
+  realFMA(&b, &b, &denom, &denom, &ctxtReal39); // c² + d²
 
-  realIcDivide(&a, &denom, &a);
-  realIcChangeSign(&denom);
-  realIcDivide(&b, &denom, &b);
+  realDivide(&a, &denom, &a, &ctxtReal39);
+  realChangeSign(&denom);
+  realDivide(&b, &denom, &b, &ctxtReal39);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -220,7 +220,7 @@ void invertRe34(void) {
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -260,18 +260,18 @@ void invertCo34(void) {
     return;
   }
 
-  realIc_t a, b, denom;
+  real39_t a, b, denom;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  realIcMultiply(&a, &a, &denom);    // c²
-  realIcFMA(&b, &b, &denom, &denom); // c² + d²
+  realMultiply(&a, &a, &denom, &ctxtReal39);    // c²
+  realFMA(&b, &b, &denom, &denom, &ctxtReal39); // c² + d²
 
-  realIcDivide(&a, &denom, &a);
-  realIcChangeSign(&denom);
-  realIcDivide(&b, &denom, &b);
+  realDivide(&a, &denom, &a, &ctxtReal39);
+  realChangeSign(&denom);
+  realDivide(&b, &denom, &b, &ctxtReal39);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

@@ -145,11 +145,11 @@ void tenPowRe16(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realIcPower(const_10, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realPower(const_10, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -164,23 +164,23 @@ void tenPowCo16(void) {
     return;
   }
 
-  realIc_t a, b, factor;
+  real39_t a, b, factor;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   // ln(10) * (a + bi) --> (a + bi)
-  realIcMultiply(const_ln10, &a, &a);
-  realIcMultiply(const_ln10, &b, &b);
+  realMultiply(const_ln10, &a, &a, &ctxtReal39);
+  realMultiply(const_ln10, &b, &b, &ctxtReal39);
 
   // exp(ln(10) * (a + bi)) --> (a + bi)
-  realIcExp(&a, &factor);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&factor, &a, &a);
-  realIcMultiply(&factor, &b, &b);
+  realExp(&a, &factor, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &a, &b);
+  realMultiply(&factor, &a, &a, &ctxtReal39);
+  realMultiply(&factor, &b, &b, &ctxtReal39);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -212,11 +212,11 @@ void tenPowRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  realIcPower(const_10, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realPower(const_10, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -231,21 +231,21 @@ void tenPowCo34(void) {
     return;
   }
 
-  realIc_t a, b, factor;
+  real39_t a, b, factor;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   // ln(10) * (a + bi) --> (a + bi)
-  realIcMultiply(const_ln10, &a, &a);
-  realIcMultiply(const_ln10, &b, &b);
+  realMultiply(const_ln10, &a, &a, &ctxtReal39);
+  realMultiply(const_ln10, &b, &b, &ctxtReal39);
 
   // exp(ln(10) * (a + bi)) --> (a + bi)
-  realIcExp(&a, &factor);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&factor, &a, &a);
-  realIcMultiply(&factor, &b, &b);
+  realExp(&a, &factor, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &a, &b);
+  realMultiply(&factor, &a, &a, &ctxtReal39);
+  realMultiply(&factor, &b, &b, &ctxtReal39);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

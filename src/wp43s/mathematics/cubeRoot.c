@@ -73,19 +73,19 @@ void curtLonI(void) {
     convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
   }
   else {
-    realIc_t x;
+    real39_t x;
 
-    convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+    convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
     reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    if(realIcIsPositive(&x)) {
-      realIcPower(&x, const_1on3, &x);
+    if(realIsPositive(&x)) {
+      realPower(&x, const_1on3, &x, &ctxtReal39);
     }
     else {
-      realIcSetPositiveSign(&x);
-      realIcPower(&x, const_1on3, &x);
-      realIcSetNegativeSign(&x);
+      realSetPositiveSign(&x);
+      realPower(&x, const_1on3, &x, &ctxtReal39);
+      realSetNegativeSign(&x);
     }
-    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
   longIntegerFree(value);
@@ -110,19 +110,19 @@ void curtRe16(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  if(realIcIsPositive(&x)) {
-    realIcPower(&x, const_1on3, &x);
+  if(realIsPositive(&x)) {
+    realPower(&x, const_1on3, &x, &ctxtReal39);
   }
   else {
-    realIcSetPositiveSign(&x);
-    realIcPower(&x, const_1on3, &x);
-    realIcSetNegativeSign(&x);
+    realSetPositiveSign(&x);
+    realPower(&x, const_1on3, &x, &ctxtReal39);
+    realSetNegativeSign(&x);
   }
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -137,18 +137,18 @@ void curtCo16(void) {
     return;
   }
 
-  realIc_t a, b;
+  real39_t a, b;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  realIcPower(&a, const_1on3, &a);
-  realIcMultiply(&b, const_1on3, &b);
-  realIcPolarToRectangular(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
+  realPower(&a, const_1on3, &a, &ctxtReal39);
+  realMultiply(&b, const_1on3, &b, &ctxtReal39);
+  real39PolarToRectangular(&a, &b, &a, &b);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -166,21 +166,21 @@ void curtCm16(void) {
 
 
 void curtShoI(void) {
-  realIc_t x;
+  real39_t x;
   int32_t cubeRoot;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-  if(realIcIsPositive(&x)) {
-    realIcPower(&x, const_1on3, &x);
+  if(realIsPositive(&x)) {
+    realPower(&x, const_1on3, &x, &ctxtReal39);
   }
   else {
-    realIcSetPositiveSign(&x);
-    realIcPower(&x, const_1on3, &x);
-    realIcSetNegativeSign(&x);
+    realSetPositiveSign(&x);
+    realPower(&x, const_1on3, &x, &ctxtReal39);
+    realSetNegativeSign(&x);
   }
 
-  realIcToInt32(&x, cubeRoot);
+  realToInt32(&x, cubeRoot);
 
   if(cubeRoot >= 0) {
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_build_value((int64_t)cubeRoot, 0);
@@ -209,19 +209,19 @@ void curtRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  if(realIcIsPositive(&x)) {
-    realIcPower(&x, const_1on3, &x);
+  if(realIsPositive(&x)) {
+    realPower(&x, const_1on3, &x, &ctxtReal39);
   }
   else {
-    realIcSetPositiveSign(&x);
-    realIcPower(&x, const_1on3, &x);
-    realIcSetNegativeSign(&x);
+    realSetPositiveSign(&x);
+    realPower(&x, const_1on3, &x, &ctxtReal39);
+    realSetNegativeSign(&x);
   }
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -236,16 +236,16 @@ void curtCo34(void) {
     return;
   }
 
-  realIc_t a, b;
+  real39_t a, b;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  realIcRectangularToPolar(&a, &b, &a, &b);
-  realIcPower(&a, const_1on3, &a);
-  realIcMultiply(&b, const_1on3, &b);
-  realIcPolarToRectangular(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
+  realPower(&a, const_1on3, &a, &ctxtReal39);
+  realMultiply(&b, const_1on3, &b, &ctxtReal39);
+  real39PolarToRectangular(&a, &b, &a, &b);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

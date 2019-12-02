@@ -19,7 +19,6 @@
  ***********************************************/
 
 #define IBM_DECIMAL                                     1
-#define DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS 39
 #define NUMBER_OF_CONSTANTS_IN_CNST_CATALOG            79
 
 #include <stdlib.h>
@@ -32,7 +31,7 @@
 #endif // __APPLE__
 
 #if (IBM_DECIMAL == 1)
- #define DECNUMDIGITS DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS
+ #define DECNUMDIGITS 39
  #include "decimal128.h"
  #include "decimal64.h"
  #include "decDouble.h"
@@ -40,25 +39,74 @@
  #include "decNumberWrappers.h"
 #endif
 
-decContext ctxtRealIc; // Intermediate calculations for 34 digits
-decContext ctxtReal16, ctxtReal34, ctxtReal451;
+realContext_t ctxtReal16, ctxtReal34, ctxtReal39, ctxtReal459;
 
-char       whiteSpace[50], temp[1000];
+char       whiteSpace[50], temp[10000];
 char       defines[1000000], externalDeclarations[1000000]; // .h file
-char       realArray[1000000], realPointerDeclarations[1000000], real16PointerDeclarations[1000000], real34PointerDeclarations[1000000], real451PointerDeclarations[1000000]; // .c file
+char       realArray[1000000], realPointerDeclarations[1000000], real16PointerDeclarations[1000000], real34PointerDeclarations[1000000], real459PointerDeclarations[1000000]; // .c file
 FILE       *constantsC, *constantsH;
 int        idx, c;
 
-void generateConstantArray(char *name, char *value) {
-  realIc_t realIc;
+void printRealToConsole(const real_t *value) {
+  int32_t i, exponent, last;
 
-  memset(&realIc, 0, sizeof(realIc));
-  stringToRealIc(value, &realIc);
+  if(realIsNaN(value)) {
+    printf("NaN");
+    return;
+  }
+
+  if(realIsNegative(value)) {
+    printf("-");
+  }
+
+  if(realIsInfinite(value)) {
+    printf("infinite");
+    return;
+  }
+
+  if(realIsZero(value)) {
+    printf("0");
+    return;
+  }
+
+  if(value->digits % DECDPUN) {
+    i = value->digits/DECDPUN;
+  }
+  else {
+    i = value->digits/DECDPUN - 1;
+  }
+
+  while(value->lsu[i] == 0) i--;
+  printf("%u", value->lsu[i--]);
+
+  exponent = value->exponent;
+  last = 0;
+  while(exponent <= -DECDPUN && value->lsu[last] == 0) {
+    last++;
+    exponent += DECDPUN;
+  }
+
+  for(; i>=last; i--) {
+    printf(" %03u", value->lsu[i]);
+  }
+
+  if(exponent != 0) {
+    printf(" e %d", exponent);
+  }
+}
+
+void generateConstantArray(char *name, char *value) {
+  real39_t real39;
+
+  printf("generateConstantArray: %-10.10s = %s\n", name, value);
+
+  memset(&real39, 0, REAL39_SIZE);
+  stringToReal(value, &real39, &ctxtReal39);
 
   strcpy(whiteSpace, "                                        ");
   whiteSpace[13 - strlen(name)] = 0;
 
-  strcat(externalDeclarations, "extern const realIc_t * const const_");
+  strcat(externalDeclarations, "extern const real_t * const const_");
   strcat(externalDeclarations, name);
   strcat(externalDeclarations, ";\n");
 
@@ -67,18 +115,18 @@ void generateConstantArray(char *name, char *value) {
     strcat(defines, temp);
   }
 
-  strcat(realPointerDeclarations, "const realIc_t * const const_");
+  strcat(realPointerDeclarations, "const real_t * const const_");
   strcat(realPointerDeclarations, name);
   strcat(realPointerDeclarations, whiteSpace);
-  strcat(realPointerDeclarations, " = (realIc_t *)(constants + ");
+  strcat(realPointerDeclarations, " = (real_t *)(constants + ");
   sprintf(temp, "%5d)", idx);
-  idx += sizeof(realIc_t);
+  idx += REAL39_SIZE;
   strcat(realPointerDeclarations, temp);
   strcat(realPointerDeclarations, ";\n");
 
   strcat(realArray, "  ");
-  for(uint32_t i=0; i<sizeof(realIc_t); i++) {
-    sprintf(temp, "0x%02x,", *(((uint8_t *)(&realIc)) + i));
+  for(uint32_t i=0; i<REAL39_SIZE; i++) {
+    sprintf(temp, "0x%02x,", *(((uint8_t *)(&real39)) + i));
     strcat(realArray, temp);
   }
 
@@ -91,7 +139,9 @@ void generateConstantArray(char *name, char *value) {
 void generateConstantArray16(char *name, char *value) {
   real16_t real16;
 
-  memset(&real16, 0, sizeof(real16_t));
+  printf("generateConstantArray16: %-10.10s = %s\n", name, value);
+
+  memset(&real16, 0, REAL16_SIZE);
   stringToReal16(value, &real16);
 
   strcpy(whiteSpace, "                                        ");
@@ -125,7 +175,9 @@ void generateConstantArray16(char *name, char *value) {
 void generateConstantArray34(char *name, char *value) {
   real34_t real34;
 
-  memset(&real34, 0, sizeof(real34_t));
+  printf("generateConstantArray34: %-10.10s = %s\n", name, value);
+
+  memset(&real34, 0, REAL34_SIZE);
   stringToReal34(value, &real34);
 
   strcpy(whiteSpace, "                                        ");
@@ -156,31 +208,33 @@ void generateConstantArray34(char *name, char *value) {
 }
 
 
-void generateConstantArray451(char *name, char *value) {
-  real451_t real451;
+void generateConstantArray459(char *name, char *value) {
+  real459_t real459;
 
-  memset(&real451, 0, sizeof(real451_t));
-  stringToRealIc(value, &real451);
+  printf("generateConstantArray459: %-10.10s = %s\n", name, value);
+
+  memset(&real459, 0, REAL459_SIZE);
+  stringToReal(value, &real459, &ctxtReal459);
 
   strcpy(whiteSpace, "                                        ");
   whiteSpace[10 - strlen(name)] = 0;
 
-  strcat(externalDeclarations, "extern const realIc_t * const const451_");
+  strcat(externalDeclarations, "extern const real_t * const const459_");
   strcat(externalDeclarations, name);
   strcat(externalDeclarations, ";\n");
 
-  strcat(real451PointerDeclarations, "const realIc_t * const const451_");
-  strcat(real451PointerDeclarations, name);
-  strcat(real451PointerDeclarations, whiteSpace);
-  strcat(real451PointerDeclarations, " = (realIc_t *)(constants + ");
+  strcat(real459PointerDeclarations, "const real_t * const const459_");
+  strcat(real459PointerDeclarations, name);
+  strcat(real459PointerDeclarations, whiteSpace);
+  strcat(real459PointerDeclarations, " = (real_t *)(constants + ");
   sprintf(temp, "%5d)", idx);
-  idx += sizeof(real451_t);
-  strcat(real451PointerDeclarations, temp);
-  strcat(real451PointerDeclarations, ";\n");
+  idx += REAL459_SIZE;
+  strcat(real459PointerDeclarations, temp);
+  strcat(real459PointerDeclarations, ";\n");
 
   strcat(realArray, "  ");
-  for(uint32_t i=0; i<sizeof(real451_t); i++) {
-    sprintf(temp, "0x%02x,", *(((uint8_t *)(&real451)) + i));
+  for(uint32_t i=0; i<REAL459_SIZE; i++) {
+    sprintf(temp, "0x%02x,", *(((uint8_t *)(&real459)) + i));
     strcat(realArray, temp);
   }
 
@@ -511,11 +565,11 @@ void generateAllConstants(void) {
   generateConstantArray("1e6",           "+1.000000000000000000000000000000000000000000000000000000e+06");
   generateConstantArray("2p32",          "+4.294967296000000000000000000000000000000000000000000000e+09");
 
-  generateConstantArray451("2pi",        "+6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359"
+  generateConstantArray459("2pi",        "+6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359"
                                             "6429617302656461329418768921910116446345071881625696223490056820540387704221111928924589790986076392"
                                             "8857621951331866892256951296467573566330542403818291297133846920697220908653296426787214520498282547"
                                             "4491740132126311763497630418419256585081834307287357851807200226610610976409330427682939038830232188"
-                                            "66114540731519183906184372234763865223586210237096148924759925499134703771505449782455876366e+00");
+                                            "66114540731519183906184372234763865223586210237096148924759925499134703771505449782455876366e+00");   // 493 digits
 
   generateConstantArray16("0",           "+0.000000000000000000000000000000000000000000000000000000e+00");
   generateConstantArray16("1e_4",        "+1.000000000000000000000000000000000000000000000000000000e-04");
@@ -556,14 +610,14 @@ int main(int argc, char* argv[]) {
 int main(void) {
 #endif
 
-  decContextDefault(&ctxtRealIc,   DEC_INIT_DECQUAD);
   decContextDefault(&ctxtReal16,   DEC_INIT_DECDOUBLE);
   decContextDefault(&ctxtReal34,   DEC_INIT_DECQUAD);
-  decContextDefault(&ctxtReal451,  DEC_INIT_DECQUAD);
-  ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
-  ctxtRealIc.traps  = 0;
-  ctxtReal451.digits  = 451;
-  ctxtReal451.traps   = 0;
+  decContextDefault(&ctxtReal39,   DEC_INIT_DECQUAD);
+  decContextDefault(&ctxtReal459,  DEC_INIT_DECQUAD);
+  ctxtReal39.digits = 39;
+  ctxtReal39.traps  = 0;
+  ctxtReal459.digits  = 450;
+  ctxtReal459.traps   = 0;
 
   defines[0] = 0;
   externalDeclarations[0] = 0;
@@ -572,7 +626,7 @@ int main(void) {
   realPointerDeclarations[0]    = 0;
   real16PointerDeclarations[0]  = 0;
   real34PointerDeclarations[0]  = 0;
-  real451PointerDeclarations[0] = 0;
+  real459PointerDeclarations[0] = 0;
 
   generateAllConstants();
 
@@ -651,7 +705,7 @@ int main(void) {
   fprintf(constantsC, "\n");
   fprintf(constantsC, "%s", realPointerDeclarations);
   fprintf(constantsC, "\n");
-  fprintf(constantsC, "%s", real451PointerDeclarations);
+  fprintf(constantsC, "%s", real459PointerDeclarations);
   fprintf(constantsC, "\n");
   fprintf(constantsC, "%s", real16PointerDeclarations);
   fprintf(constantsC, "\n");

@@ -32,7 +32,7 @@
  ***********************************************/
 void fnConstant(const uint16_t cst) {
   liftStack();
-  realIcToReal16((realIc_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16((real_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 }
 

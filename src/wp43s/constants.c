@@ -53,7 +53,7 @@ void fnPi(uint16_t unusedParamButMandatory) {
     stringToReal34("3.141592653589793238462643383279502884", REGISTER_REAL34_DATA(REGISTER_X));   //JM PIDP
   }
   else {
-  	realIcToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
+  	realToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
   refreshStack();

@@ -142,17 +142,17 @@ void modLonIRe16(void) {
     return;
   }
 
-  realIc_t y, x, r;
+  real39_t y, x, r;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  realIcToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -173,10 +173,10 @@ void modRe16LonI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function modRe16LonI:", "cannot IDIVR a real16 by 0", NULL, NULL);
@@ -184,17 +184,17 @@ void modRe16LonI(void) {
     return;
   }
 
-  realIc_t y, r;
+  real39_t y, r;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -300,17 +300,17 @@ void modLonIRe34(void) {
     return;
   }
 
-  realIc_t y, x, r;
+  real39_t y, x, r;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  realIcToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -331,10 +331,10 @@ void modRe34LonI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function modRe34LonI:", "cannot IDIVR a real34 by 0", NULL, NULL);
@@ -342,16 +342,16 @@ void modRe34LonI(void) {
     return;
   }
 
-  realIc_t y, r;
+  real39_t y, r;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realIcToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -383,17 +383,17 @@ void modRe16Re16(void) {
     return;
   }
 
-  realIc_t x, y, r;
+  real39_t x, y, r;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  realIcToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -414,10 +414,10 @@ void modRe16ShoI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function modRe16ShoI:", "cannot IDIVR a real16 by 0", NULL, NULL);
@@ -425,17 +425,17 @@ void modRe16ShoI(void) {
     return;
   }
 
-  realIc_t y, r;
+  real39_t y, r;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -463,17 +463,17 @@ void modShoIRe16(void) {
     return;
   }
 
-  realIc_t y, x, r;
+  real39_t y, x, r;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  realIcToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&r, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -502,17 +502,17 @@ void modRe16Re34(void) {
     return;
   }
 
-  realIc_t x, y, r;
+  real39_t x, y, r;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  realIcToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -541,18 +541,18 @@ void modRe34Re16(void) {
     return;
   }
 
-  realIc_t x, y, r;
+  real39_t x, y, r;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realIcToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -625,17 +625,17 @@ void modShoIRe34(void) {
     return;
   }
 
-  realIc_t y, x, r;
+  real39_t y, x, r;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  realIcToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -656,10 +656,10 @@ void modRe34ShoI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function modRe34ShoI:", "cannot IDIVR a real34 by 0", NULL, NULL);
@@ -667,17 +667,17 @@ void modRe34ShoI(void) {
     return;
   }
 
-  realIc_t y, r;
+  real39_t y, r;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realIcToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -709,16 +709,16 @@ void modRe34Re34(void) {
     return;
   }
 
-  realIc_t x, y, r;
+  real39_t x, y, r;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &r);
-  if(!realIcIsZero(&r) && realIcSign(&y) != realIcSign(&x)) {
-    realIcAdd(&r, &x, &r);
+  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
+    realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  realIcToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }

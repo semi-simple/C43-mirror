@@ -21,8 +21,12 @@
 void fnDivide(uint16_t unusedParamButMandatory);
 void divError(void);
 
-void divCoIcCoIc(const complexIc_t *numer, const complexIc_t *denom, complexIc_t *quotient);
-void divReIcCoIc(const realIc_t *numer, const complexIc_t *denom, complexIc_t *quotient);
+void divCo39Co39(const complex39_t *numer, const complex39_t *denom, complex39_t *quotient);
+void divCo51Co51(const complex51_t *numer, const complex51_t *denom, complex51_t *quotient);
+void divCo75Co75(const complex75_t *numer, const complex75_t *denom, complex75_t *quotient);
+void divRe39Co39(const real_t *numer, const complex39_t *denom, complex39_t *quotient);
+void divRe51Co51(const real_t *numer, const complex51_t *denom, complex51_t *quotient);
+void divRe75Co75(const real_t *numer, const complex75_t *denom, complex75_t *quotient);
 
 //      RegYRegX
 void divLonILonI(void);

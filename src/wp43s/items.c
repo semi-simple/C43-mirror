@@ -870,7 +870,7 @@ const item_t indexOfItems[] = {
 /*  741 */  { fnConstant,                  71,                          STD_mu STD_SUB_u,                              STD_mu STD_SUB_u,                              CAT_CNST, SLS_ENABLED  },
 /*  742 */  { fnConstant,                  72,                          STD_mu STD_SUB_mu,                             STD_mu STD_SUB_mu,                             CAT_CNST, SLS_ENABLED  },
 /*  743 */  { itemToBeCoded,               NOPARAM,                     STD_PI STD_SUB_n,                              STD_PI STD_SUB_n,                              CAT_FNCT, SLS_UNCHANGED},
-/*  744 */  { fnPi,                        NOPARAM,                     STD_pi,                                        STD_pi,                                        CAT_NONE, SLS_ENABLED  },
+/*  744 */  { fnPi,                        NOPARAM,                     "",                                            STD_pi,                                        CAT_NONE, SLS_ENABLED  },
 /*  745 */  { itemToBeCoded,               NOPARAM,                     STD_SIGMA STD_SUB_n,                           STD_SIGMA STD_SUB_n,                           CAT_FNCT, SLS_UNCHANGED},
 /*  746 */  { itemToBeCoded,               NOPARAM,                     STD_sigma,                                     STD_sigma,                                     CAT_FNCT, SLS_UNCHANGED},
 /*  747 */  { fnConstant,                  73,                          STD_sigma STD_SUB_B,                           STD_sigma STD_SUB_B,                           CAT_CNST, SLS_ENABLED  },
@@ -912,7 +912,7 @@ const item_t indexOfItems[] = {
 /*  783 */  { itemToBeCoded,               NOPARAM,                     STD_CROSS "MOD",                               STD_CROSS "MOD",                               CAT_FNCT, SLS_UNCHANGED},
 /*  784 */  { fnDivide,                    ITM_DIV,                     "/",                                           "/",                                           CAT_FNCT, SLS_ENABLED  },
 /*  785 */  { itemToBeCoded,               NOPARAM,                     STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               CAT_FNCT, SLS_UNCHANGED},
-/*  786 */  { addItemToBuffer,             ITM_INDIRECTION,             STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               CAT_NONE, SLS_UNCHANGED},
+/*  786 */  { addItemToBuffer,             ITM_INDIRECTION,             "",                                            STD_RIGHT_ARROW,                               CAT_NONE, SLS_UNCHANGED},
 /*  787 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "DATE",                        STD_RIGHT_ARROW "DATE",                        CAT_FNCT, SLS_UNCHANGED},
 /*  788 */  { fnCvtFromCurrentAngularMode, AM_DEGREE,                   STD_RIGHT_ARROW "DEG",                         STD_RIGHT_ARROW "DEG",                         CAT_FNCT, SLS_ENABLED  },
 /*  789 */  { fnCvtFromCurrentAngularMode, AM_DMS,                      STD_RIGHT_ARROW "D.MS",                        STD_RIGHT_ARROW "D.MS",                        CAT_FNCT, SLS_ENABLED  },
@@ -1089,7 +1089,7 @@ const item_t indexOfItems[] = {
 /*  958 */  { itemToBeCoded,               NOPARAM,                     "0958",                                        "0958",                                        CAT_FREE, SLS_UNCHANGED},
 /*  959 */  { addItemToBuffer,             CHR_ZETA,                    "",                                            STD_ZETA,                                      CAT_NONE, SLS_UNCHANGED},
 /*  960 */  { addItemToBuffer,             CHR_ETA,                     "",                                            STD_ETA,                                       CAT_NONE, SLS_UNCHANGED},
-/*  961 */  { itemToBeCoded,               NOPARAM,                     "0961",                                        "0961",                                        CAT_NONE, SLS_UNCHANGED},
+/*  961 */  { itemToBeCoded,               NOPARAM,                     "0961",                                        "0961",                                        CAT_FREE, SLS_UNCHANGED},
 /*  962 */  { addItemToBuffer,             CHR_THETA,                   "",                                            STD_THETA,                                     CAT_NONE, SLS_UNCHANGED},
 /*  963 */  { addItemToBuffer,             CHR_IOTA,                    "",                                            STD_IOTA,                                      CAT_NONE, SLS_UNCHANGED},
 /*  964 */  { itemToBeCoded,               NOPARAM,                     "0964",                                        "0964",                                        CAT_FREE, SLS_UNCHANGED},
@@ -1566,7 +1566,7 @@ const item_t indexOfItems[] = {
 /* 1435 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_CONTOUR_INTEGRAL,                          CAT_NONE, SLS_UNCHANGED},
 /* 1436 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_SURFACE_INTEGRAL,                          CAT_NONE, SLS_UNCHANGED},
 /* 1437 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_RATIO,                                     CAT_NONE, SLS_UNCHANGED},
-/* 1438 */  { itemToBeCoded,               NOPARAM,                     "1438",                                        "1438",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1438 */  { addItemToBuffer,             CHR_CHECK_MARK,              "",                                            STD_CHECK_MARK,                                CAT_NONE, SLS_UNCHANGED},
 /* 1439 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_ASYMPOTICALLY_EQUAL,                       CAT_NONE, SLS_UNCHANGED},
 /* 1440 */  { addItemToBuffer,             CHR_ALMOST_EQUAL,            "",                                            STD_ALMOST_EQUAL,                              CAT_NONE, SLS_UNCHANGED},
 /* 1441 */  { addItemToBuffer,             CHR_COLON_EQUALS,            "",                                            STD_COLON_EQUALS,                              CAT_NONE, SLS_UNCHANGED},
@@ -1644,7 +1644,7 @@ const item_t indexOfItems[] = {
 /* 1513 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                   CAT_NONE, SLS_UNCHANGED},
 /* 1515 */  { fnUserMode,                  NOPARAM,                     "",                                            "USER",                                        CAT_NONE, SLS_UNCHANGED},
-/* 1516 */  { fnComplexCCCC_CC,            NOPARAM,                     "CC",                                          "CC",                                          CAT_NONE, SLS_UNCHANGED},      //JM Change CC to COMPLEX
+/* 1516 */  { fnComplexCCCC_CC,            NOPARAM,                     "CC",                                          "CC",                                          CAT_FNCT, SLS_UNCHANGED},      //JM Change CC to COMPLEX
 /* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1519 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UP_ARROW,                                  CAT_NONE, SLS_UNCHANGED},
@@ -1871,12 +1871,12 @@ const item_t indexOfItems[] = {
 /* 1730 */  { itemToBeCoded,               NOPARAM,                     "1629",                                        "1629",                                        CAT_FREE, SLS_UNCHANGED},      //JM GREEK
 /* 1731 */  { itemToBeCoded,               NOPARAM,                     "1630",                                        "1630",                                        CAT_FREE, SLS_UNCHANGED},      //JM GREEK
 /* 1732 */  { itemToBeCoded,               NOPARAM,                     "1631",                                        "1631",                                        CAT_FREE, SLS_UNCHANGED},      //JM GREEK
-/* 1733 */  { addItemToBuffer,             CHR_qoppa,                   "",                                            STD_qoppa,                                     CAT_FREE, SLS_UNCHANGED},      //JM GREEK
+/* 1733 */  { addItemToBuffer,             CHR_qoppa,                   "",                                            STD_qoppa,                                     CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1734 */  { addItemToBuffer,             CHR_digamma,                 "",                                            STD_digamma,                                   CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                     CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1736 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                      CAT_NONE, SLS_UNCHANGED},      //JM CASE
-/* 1737 */  { fnBASE_Hash,      /*TEST!*/  NOPARAM,                     "##",                                          "##",                                          CAT_NONE, SLS_UNCHANGED},      //JM ##
-/* 1738 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "###",                                         "###",                                         CAT_NONE, SLS_UNCHANGED},      //JM ##
+/* 1737 */  { fnBASE_Hash,      /*TEST!*/  NOPARAM,                     "",                                            "##",                                          CAT_NONE, SLS_UNCHANGED},      //JM ##
+/* 1738 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "",                                            "###",                                         CAT_NONE, SLS_UNCHANGED},      //JM ##
 
 /* 1739 */  { fnJM,                        3,                           "op_a",                                        "a",                                           CAT_FNCT, SLS_ENABLED  },      //JM Operator a
 /* 1740 */  { fnJM,                        4,                           "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 CAT_FNCT, SLS_ENABLED  },      //JM Operator a
@@ -2027,42 +2027,42 @@ const item_t indexOfItems[] = {
 /* 1883 */  { fnJMUSERmode_g,              256+ 36,                     "KEY g36U",                                    "Kg36U",                                       CAT_NONE, SLS_UNCHANGED},  //JM USER MODE TEST
 
 /* 1884 */  { itemToBeCoded,               NOPARAM      ,               "",                                            "f/g",                                         CAT_NONE, SLS_UNCHANGED},      //JM3 Changed f to f/g for DM42 keyboard
-/* 1885 */  { fnUserJM,                    USER_DEFAULTS,               "USER DEFAULTS",                               "U" STD_SIGMA    " CC",                        CAT_NONE, SLS_UNCHANGED},      //JM USER
-/* 1886 */  { fnUserJM,                    USER_COMPLEX ,               "USER COMPLEX",                                "U" STD_UP_ARROW " CC",                        CAT_NONE, SLS_UNCHANGED},      //JM USER
-/* 1887 */  { fnUserJM,                    USER_SHIFTS  ,               "USER SHIFTS",                                 "U" " SHFT",                                   CAT_NONE, SLS_UNCHANGED},      //JM USER
-/* 1888 */  { fnUserJM,                    USER_RESET   ,               "USER RESET",                                  "U" " RSET",                                   CAT_NONE, SLS_UNCHANGED},      //JM USER
-/* 1889 */  { fnSigmaAssign,               KEY_USERMODE ,               "NORM KEY E+ USER",                            STD_SIGMA "+USR",                              CAT_NONE, SLS_UNCHANGED},      //JM USER
-/* 1890 */  { itemToBeCoded,               NOPARAM,                     "Inline Test",                                 "Inl. Tst",                                    CAT_MENU, SLS_UNCHANGED},
-/* 1891 */  { fnSigmaAssign,               KEY_CC       ,               "NORM KEY E+ CC",                              STD_SIGMA "+CC",                               CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1885 */  { fnUserJM,                    USER_DEFAULTS,               "",                                            "U" STD_SIGMA    " CC",                        CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1886 */  { fnUserJM,                    USER_COMPLEX ,               "",                                            "U" STD_UP_ARROW " CC",                        CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1887 */  { fnUserJM,                    USER_SHIFTS  ,               "",                                            "U" " SHFT",                                   CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1888 */  { fnUserJM,                    USER_RESET   ,               "",                                            "U" " RSET",                                   CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1889 */  { fnSigmaAssign,               KEY_USERMODE ,               "",                                            STD_SIGMA "+USR",                              CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1890 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Inl. Tst",                                    CAT_NONE, SLS_UNCHANGED},
+/* 1891 */  { fnSigmaAssign,               KEY_CC       ,               "",                                            STD_SIGMA "+CC",                               CAT_NONE, SLS_UNCHANGED},      //JM USER
 #ifdef INLINE_TEST
-/* 1892 */  { fnSetInlineTest,             DR_ITM_TST   ,               "ITM Test",                                    "Test",                                        CAT_NONE, SLS_UNCHANGED},
+/* 1892 */  { fnSetInlineTest,             DR_ITM_TST   ,               "",                                            "Test",                                        CAT_NONE, SLS_UNCHANGED},
 #else
 /* 1892 */  { itemToBeCoded,               NOPARAM      ,               "1892",                                        "1892",                                        CAT_FREE, SLS_UNCHANGED},
 #endif
-/* 1893 */  { fnSigmaAssign,               -MNU_MyMenu  ,               "NORM KEY E+ MyMenu",                          STD_SIGMA "+MyM",                              CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1893 */  { fnSigmaAssign,               -MNU_MyMenu  ,               "",                                            STD_SIGMA "+MyM",                              CAT_NONE, SLS_UNCHANGED},      //JM USER
 #ifdef INLINE_TEST
-/* 1894 */  { fnGetInlineTestBsToX,        NOPARAM      ,               "Get Test Bitset",                             "Get BS",                                      CAT_FNCT, SLS_ENABLED  },
+/* 1894 */  { fnGetInlineTestBsToX,        NOPARAM      ,               "",                                            "Get BS",                                      CAT_NONE, SLS_ENABLED  },
 #else
 /* 1894 */  { itemToBeCoded,               NOPARAM      ,               "1894",                                        "1894",                                        CAT_FREE, SLS_UNCHANGED},
 #endif
-/* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               "NORM KEY E+ Default",                         STD_SIGMA "+",                                 CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               "",                                            STD_SIGMA "+",                                 CAT_NONE, SLS_UNCHANGED},      //JM USER
 #ifdef INLINE_TEST
-/* 1896 */  { fnSetInlineTestXToBs,        NOPARAM      ,               "Set Test Bitset",                             "Set BS",                                      CAT_FNCT, SLS_ENABLED  },
+/* 1896 */  { fnSetInlineTestXToBs,        NOPARAM      ,               "",                                            "Set BS",                                      CAT_NONE, SLS_ENABLED  },
 #else
 /* 1896 */  { itemToBeCoded,               NOPARAM      ,               "1896",                                        "1896",                                        CAT_FREE, SLS_UNCHANGED},
 #endif
-/* 1897 */  { fnSigmaAssign,               ITM_PR       ,               "NORM KEY E+ PRGM",                            STD_SIGMA "+PGM",                              CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1897 */  { fnSigmaAssign,               ITM_PR       ,               "",                                            STD_SIGMA "+PGM",                              CAT_NONE, SLS_UNCHANGED},      //JM USER
 /* 1898 */  { itemToBeCoded,               NOPARAM      ,               "1898",                                        "1898",                                        CAT_FREE, SLS_UNCHANGED},
-/* 1899 */  { fnSigmaAssign,               ITM_AIM      ,               "NORM KEY E+ ALPHA",                           STD_SIGMA "+" STD_alpha,                       CAT_NONE, SLS_UNCHANGED},      //JM USER
-/* 1900 */  { fnGetSigmaAssignToX,         NOPARAM      ,               "SHOW E" STD_SIGMA "TO X",                     STD_SIGMA "+ toX",                             CAT_FNCT, SLS_ENABLED  },      //JM USER NORMAL
+/* 1899 */  { fnSigmaAssign,               ITM_AIM      ,               "",                                            STD_SIGMA "+" STD_alpha,                       CAT_NONE, SLS_UNCHANGED},      //JM USER
+/* 1900 */  { fnGetSigmaAssignToX,         NOPARAM      ,               "",                                            STD_SIGMA "+ toX",                             CAT_NONE, SLS_ENABLED  },      //JM USER NORMAL
 /* 1901 */  { fnUserJM,                    JM_ASSIGN    ,               "",                                            "ASSIGN",                                      CAT_NONE, SLS_UNCHANGED},      //JM ASSIGN
 /* 1902 */  { fnUserJM,                    JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                            CAT_NONE, SLS_UNCHANGED},      //JM ASSIGN SEEK FUNCTION
-/* 1903 */  { itemToBeCoded,               NOPARAM      ,               "E+ ASSIGN NORMAL",                            STD_SIGMA "+ ASN",                             CAT_MENU, SLS_UNCHANGED},      //JM USER NORMAL
-/* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM      ,               "GET X to E" STD_SIGMA,                        "X to"STD_SIGMA "+",                           CAT_FNCT, SLS_ENABLED  },      //JM USER NORMAL
-/* 1905 */  { fnInDefault,                 ID_43S       ,               "SET_INP_DEFLT_43S",                           "In Dft",                                      CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1906 */  { fnInDefault,                 ID_SP        ,               "SET_INP_DEFLT_SP",                            "In SP",                                       CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1907 */  { fnInDefault,                 ID_DP        ,               "SET_INP_DEFLT_DP",                            "In DP",                                       CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "SET_INP_DEFLT?",                              "InDft?",                                      CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1903 */  { itemToBeCoded,               NOPARAM      ,               "",                                            STD_SIGMA "+ ASN",                             CAT_NONE, SLS_UNCHANGED},      //JM USER NORMAL
+/* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM      ,               "",                                            "X to"STD_SIGMA "+",                           CAT_NONE, SLS_ENABLED  },      //JM USER NORMAL
+/* 1905 */  { fnInDefault,                 ID_43S       ,               "",                                            "In Dft",                                      CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1906 */  { fnInDefault,                 ID_SP        ,               "",                                            "In SP",                                       CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1907 */  { fnInDefault,                 ID_DP        ,               "",                                            "In DP",                                       CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "",                                            "InDft?",                                      CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 
 /* 1909 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

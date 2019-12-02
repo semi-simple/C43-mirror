@@ -151,12 +151,10 @@ void              fnEnter                         (uint16_t unusedParamButMandat
 int16_t           indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
 void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);
-void              printRealIcToConsole            (const realIc_t *value);
-void              printReal51ToConsole            (const real51_t *value);
-void              printReal451ToConsole           (const real451_t *value);
+void              printRealToConsole              (const real_t *value);
 void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
-void              printComplexIcToConsole         (const complexIc_t *value);
+void              printComplex39ToConsole         (const complex39_t *value);
 void              printLongIntegerToConsole       (longInteger_t value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
 void              printRegisterToConsole          (calcRegister_t regist);

@@ -65,13 +65,13 @@ void fnCosh(uint16_t unusedParamButMandatory) {
 
 
 void coshLonI(void) {
-  realIc_t cosh;
+  real39_t cosh;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &cosh);
+  convertLongIntegerRegisterToReal(REGISTER_X, &cosh, &ctxtReal39);
   WP34S_SinhCosh(&cosh, NULL, &cosh);
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&cosh, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&cosh, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -93,11 +93,11 @@ void coshRe16(void) {
     return;
   }
 
-  realIc_t a;
+  real39_t a;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
   WP34S_SinhCosh(&a, NULL, &a);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -113,19 +113,19 @@ void coshCo16(void) {
   }
 
   // cosh(a + i b) = cosh(a) cos(b) + i sinh(a) sin(b)
-  realIc_t a, b, sinha, cosha, sinb, cosb;
+  real39_t a, b, sinha, cosha, sinb, cosb;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   WP34S_SinhCosh(&a, &sinha, &cosha);
   WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sinb, &cosb, NULL);
 
-  realIcMultiply(&cosha, &cosb, &a);
-  realIcMultiply(&sinha, &sinb, &b);
+  realMultiply(&cosha, &cosb, &a, &ctxtReal39);
+  realMultiply(&sinha, &sinb, &b, &ctxtReal39);
 
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -159,11 +159,11 @@ void coshRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   WP34S_SinhCosh(&x, NULL, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -179,17 +179,17 @@ void coshCo34(void) {
   }
 
   // cosh(a + i b) = cosh(a) cos(b) + i sinh(a) sin(b)
-  realIc_t a, b, sinha, cosha, sinb, cosb;
+  real39_t a, b, sinha, cosha, sinb, cosb;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   WP34S_SinhCosh(&a, &sinha, &cosha);
   WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sinb, &cosb, NULL);
 
-  realIcMultiply(&cosha, &cosb, &a);
-  realIcMultiply(&sinha, &sinb, &b);
+  realMultiply(&cosha, &cosb, &a, &ctxtReal39);
+  realMultiply(&sinha, &sinb, &b, &ctxtReal39);
 
-  realIcToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }

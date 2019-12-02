@@ -34,7 +34,7 @@ GtkWidget *lbl21G,  *lbl22G,  *lbl23G,  *lbl24G,  *lbl25G,  *lbl26G;
 GtkWidget *lbl21L,  *lbl22L,  *lbl23L,  *lbl24L,  *lbl25L,  *lbl26L;
 GtkWidget *lbl21Gr, *lbl22Gr, *lbl23Gr, *lbl24Gr, *lbl25Gr, *lbl26Gr;
 GtkWidget *btn21A,  *btn22A,  *btn23A,  *btn24A,  *btn25A,  *btn26A;    //dr - new AIM
-GtkWidget           *lbl22Fa, *lbl23Fa;                                 //^^            //JM
+GtkWidget           *lbl22Fa, *lbl23Fa;                                 //JM
 
 GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
 GtkWidget *lbl31F,  *lbl32F,  *lbl33F,  *lbl34F,  *lbl35F,  *lbl36F;
@@ -138,8 +138,8 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 
 //JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
-  S_shF(); //  shiftF = true;       //JM
-  R_shG(); //  shiftG = false;      //JM
+  shiftF = true;       //JM
+  shiftG = false;      //JM
   Reset_Shift_Mem();   //JM
   btnPressed(w, data);
   btnReleased(w, data);
@@ -147,8 +147,8 @@ void btnClicked_NU(GtkWidget *w, gpointer data) {
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
-  R_shF(); //  shiftF = false;       //JM
-  S_shG(); //  shiftG = true;        //JM
+  shiftF = false;       //JM
+  shiftG = true;        //JM
   Reset_Shift_Mem();    //JM
   btnClicked(NULL, "34");     //Alphadot
   //Only : is working at this point
@@ -610,8 +610,8 @@ return FALSE;
 
     case 112: // p         //dr                //JM Special case: p = pi
       //printf("key pressed: p pi\n"); //dr
-      S_shF(); //  shiftF = true;       //dr
-      R_shG(); //  shiftG = false;      //JM
+      shiftF = true;       //dr
+      shiftG = false;      //JM
       Reset_Shift_Mem();   //JM
       btnClicked(w, "08"); //dr
       break;               //dr
@@ -1000,8 +1000,8 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl24Gr);
   gtk_widget_hide(lbl25Gr);
   gtk_widget_hide(lbl26Gr);
-  gtk_widget_hide(lbl22Fa); //vv dr - new AIM //JM
-  gtk_widget_hide(lbl23Fa); //vv dr - new AIM //JM
+  gtk_widget_hide(lbl22Fa); //JM
+  gtk_widget_hide(lbl23Fa); //JM
 
 
   gtk_widget_hide(btn31);
@@ -1266,8 +1266,8 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl22G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl22Gr, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl22Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
-  gtk_widget_get_preferred_size(  lbl22Fa, NULL, &lblF);                                                                        //vv dr - new AIM  //JM
-  gtk_fixed_move(GTK_FIXED(grid), lbl22Fa, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //^^ //JM
+  gtk_widget_get_preferred_size(  lbl22Fa, NULL, &lblF);                                                                          //vv JM
+  gtk_fixed_move(GTK_FIXED(grid), lbl22Fa, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);    //^^
 
   xPos += DELTA_KEYS_X;
   gtk_widget_get_preferred_size(  lbl23F, NULL, &lblF);
@@ -1276,8 +1276,8 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl23G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl23Gr, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl23Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
-  gtk_widget_get_preferred_size(  lbl23Fa, NULL, &lblF);                                                                        //vv dr - new AIM  //JM
-  gtk_fixed_move(GTK_FIXED(grid), lbl23Fa, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);  //^^ //JM
+  gtk_widget_get_preferred_size(  lbl23Fa, NULL, &lblF);                                                                          //vv JM
+  gtk_fixed_move(GTK_FIXED(grid), lbl23Fa, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);    //^^
  
   xPos += DELTA_KEYS_X;
   gtk_widget_get_preferred_size(  lbl24F, NULL, &lblF);
@@ -2202,9 +2202,8 @@ void calcModeAimGui(void) {
 
   labelCaptionAim(keys++, btn21A, lbl21Gr, lbl21L);     //vv dr - new AIM
   labelCaptionAim(keys++, btn22A, lbl22Gr, lbl22L);
-  //labelCaptionAimFaChr(   keys,   lbl22Fa, CHR_NUMBER_SIGN);          //vv dr - new AIM //JM
   labelCaptionAim(keys++, btn23A, lbl23Gr, lbl23L);
-  labelCaptionAimFaChr(   keys,   lbl23Fa, CHR_SQUARE_ROOT);          //vv dr - new AIM //JM
+  labelCaptionAimFaChr(   keys,   lbl23Fa, CHR_SQUARE_ROOT);          //JM
   labelCaptionAim(keys++, btn24A, lbl24Gr, lbl24L);
   labelCaptionAim(keys++, btn25A, lbl25Gr, lbl25L);
   labelCaptionAim(keys++, btn26A, lbl26Gr, lbl26L);
@@ -2217,7 +2216,7 @@ void calcModeAimGui(void) {
   labelCaptionAim(keys++, btn36A, lbl36Gr, lbl36L);     //^^
 
   labelCaptionAim(keys++, btn41,  lbl41Gr, lbl41L);
-  labelCaptionAimFaChr(   keys,   lbl42Fa, CHR_ex);          //vv dr - new AIM
+  labelCaptionAimFaChr(   keys,   lbl42Fa, CHR_ex);     //vv dr - new AIM
   labelCaptionAim(keys++, btn42A, lbl42Gr, lbl42L);
   labelCaptionAimFaChr(   keys,   lbl43Fa, CHR_PLUS_MINUS);
   labelCaptionAim(keys++, btn43A, lbl43Gr, lbl43L);
@@ -3023,8 +3022,8 @@ void setupUI(void) {
   lbl24F  = gtk_label_new("");
   lbl25F  = gtk_label_new("");
   lbl26F  = gtk_label_new("");
-  lbl22Fa = gtk_label_new("");  //vv dr - new AIM //JM
-  lbl23Fa = gtk_label_new("");  //vv dr - new AIM //JM
+  lbl22Fa = gtk_label_new("");          //JM
+  lbl23Fa = gtk_label_new("");          //JM
   lbl21G  = gtk_label_new("");
   lbl22G  = gtk_label_new("");
   lbl23G  = gtk_label_new("");
@@ -3084,9 +3083,9 @@ void setupUI(void) {
 
   gtk_fixed_put(GTK_FIXED(grid), lbl21F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl22F,  0, 0);
-  gtk_fixed_put(GTK_FIXED(grid), lbl22Fa, 0, 0);    //vv dr - new AIM //JM
+  gtk_fixed_put(GTK_FIXED(grid), lbl22Fa, 0, 0);            //JM
   gtk_fixed_put(GTK_FIXED(grid), lbl23F,  0, 0);
-  gtk_fixed_put(GTK_FIXED(grid), lbl23Fa, 0, 0);    //vv dr - new AIM //JM
+  gtk_fixed_put(GTK_FIXED(grid), lbl23Fa, 0, 0);            //JM
   gtk_fixed_put(GTK_FIXED(grid), lbl24F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl25F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl26F,  0, 0);
@@ -3838,7 +3837,7 @@ void setupUI(void) {
   lbl82Gr = gtk_label_new("");
   lbl83Gr = gtk_label_new("");
   lbl84Gr = gtk_label_new("");
-  //lbl84H  = gtk_label_new("\u2399"); // Printer  //JM: WHY DID THIS LINE COME BACK ??
+//lbl84H  = gtk_label_new("\u2399"); // Printer   //JM: WHY DID THIS LINE COME BACK ??
   lbl85Gr = gtk_label_new("");
   lblOn   = gtk_label_new("ON");
 

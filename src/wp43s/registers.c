@@ -1080,17 +1080,17 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   // Round the register value
   switch(resultDataType) {
-    realIc_t tmp;
+    real39_t tmp;
 
     case dtReal16:
       if(significantDigits == 0 || significantDigits >= 16) {
         break;
       }
 
-      ctxtRealIc.digits = significantDigits;
-      real16ToRealIc(REGISTER_REAL16_DATA(res), &tmp);
-      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
-      realIcToReal16(&tmp, REGISTER_REAL16_DATA(res));
+      ctxtReal39.digits = significantDigits;
+      real16ToReal(REGISTER_REAL16_DATA(res), &tmp);
+      ctxtReal39.digits = 39;
+      realToReal16(&tmp, REGISTER_REAL16_DATA(res));
       break;
 
     case dtReal34:
@@ -1098,10 +1098,10 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      ctxtRealIc.digits = significantDigits;
-      real34ToRealIc(REGISTER_REAL34_DATA(res), &tmp);
-      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
-      realIcToReal34(&tmp, REGISTER_REAL34_DATA(res));
+      ctxtReal39.digits = significantDigits;
+      real34ToReal(REGISTER_REAL34_DATA(res), &tmp);
+      ctxtReal39.digits = 39;
+      realToReal34(&tmp, REGISTER_REAL34_DATA(res));
       break;
 
     case dtComplex16:
@@ -1109,12 +1109,12 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      ctxtRealIc.digits = significantDigits;
-      real16ToRealIc(REGISTER_REAL16_DATA(res), &tmp);
-      realIcToReal16(&tmp, REGISTER_REAL16_DATA(res));
-      real16ToRealIc(REGISTER_IMAG16_DATA(res), &tmp);
-      realIcToReal16(&tmp, REGISTER_IMAG16_DATA(res));
-      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
+      ctxtReal39.digits = significantDigits;
+      real16ToReal(REGISTER_REAL16_DATA(res), &tmp);
+      realToReal16(&tmp, REGISTER_REAL16_DATA(res));
+      real16ToReal(REGISTER_IMAG16_DATA(res), &tmp);
+      realToReal16(&tmp, REGISTER_IMAG16_DATA(res));
+      ctxtReal39.digits = 39;
       break;
 
     case dtComplex34:
@@ -1122,12 +1122,12 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      ctxtRealIc.digits = significantDigits;
-      real34ToRealIc(REGISTER_REAL34_DATA(res), &tmp);
-      realIcToReal34(&tmp, REGISTER_REAL34_DATA(res));
-      real34ToRealIc(REGISTER_IMAG34_DATA(res), &tmp);
-      realIcToReal34(&tmp, REGISTER_IMAG34_DATA(res));
-      ctxtRealIc.digits = DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS;
+      ctxtReal39.digits = significantDigits;
+      real34ToReal(REGISTER_REAL34_DATA(res), &tmp);
+      realToReal34(&tmp, REGISTER_REAL34_DATA(res));
+      real34ToReal(REGISTER_IMAG34_DATA(res), &tmp);
+      realToReal34(&tmp, REGISTER_IMAG34_DATA(res));
+      ctxtReal39.digits = 39;
       break;
 
     default:
@@ -1971,22 +1971,62 @@ void printReal34ToConsole(const real34_t *value) {
 
 
 
-void printRealIcToConsole(const realIc_t *value) {
-  char str[1000];
+void printRealToConsole(const real_t *value) {
+  int32_t i, exponent, last;
 
-  realIcToString(value, str);
-  printf("realIc %s", str);
+  if(realIsNaN(value)) {
+    printf("NaN");
+    return;
+  }
+
+  if(realIsNegative(value)) {
+    printf("-");
+  }
+
+  if(realIsInfinite(value)) {
+    printf("infinite");
+    return;
+  }
+
+  if(realIsZero(value)) {
+    printf("0");
+    return;
+  }
+
+  if(value->digits % DECDPUN) {
+    i = value->digits/DECDPUN;
+  }
+  else {
+    i = value->digits/DECDPUN - 1;
+  }
+
+  while(value->lsu[i] == 0) i--;
+  printf("%" FMT16U, value->lsu[i--]);
+
+  exponent = value->exponent;
+  last = 0;
+  while(exponent <= -DECDPUN && value->lsu[last] == 0) {
+    last++;
+    exponent += DECDPUN;
+  }
+
+  for(; i>=last; i--) {
+    printf(" %03" FMT16U, value->lsu[i]);
+  }
+
+  if(exponent != 0) {
+    printf(" e %" FMT32S, exponent);
+  }
 }
 
 
 
-void printComplexIcToConsole(const complexIc_t *value) {
-  char str[100];
-
-  realIcToString(&value->real, str);
-  printf("complexIc %s + ", str);
-  realIcToString(&value->imag, str);
-  printf("%si", str);
+void printComplex39ToConsole(const complex39_t *value) {
+  printf("complex39 ");
+  printRealToConsole(&value->real);
+  printf(" + ");
+  printRealToConsole(&value->imag);
+  printf(" i");
 }
 
 
@@ -1998,24 +2038,6 @@ void printComplex34ToConsole(const complex34_t *value) {
   printf("complex34 %s + ", str);
   real34ToString((real34_t *)value + 1, str);
   printf("%si", str);
-}
-
-
-
-void printReal51ToConsole(const real51_t *value) {
-  char str[1000];
-
-  realIcToString(value, str);
-  printf("real51 %s", str);
-}
-
-
-
-void printReal451ToConsole(const real451_t *value) {
-  char str[1000];
-
-  realIcToString(value, str);
-  printf("real451 %s", str);
 }
 
 

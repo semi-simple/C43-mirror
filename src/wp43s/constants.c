@@ -32,7 +32,7 @@
  ***********************************************/
 void fnConstant(const uint16_t cst) {
   liftStack();
-  realIcToReal16((realIc_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16((real_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 }
 
@@ -50,10 +50,11 @@ void fnPi(uint16_t unusedParamButMandatory) {
   liftStack();
   if(Input_Default == ID_DP) {                                                                    //JM PIDP
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);                               //JM PIDP
-    stringToReal34("3.141592653589793238462643383279502884", REGISTER_REAL34_DATA(REGISTER_X));   //JM PIDP
+//  stringToReal34("3.141592653589793238462643383279502884197169399375105821", REGISTER_REAL34_DATA(REGISTER_X));   //JM PIDP
+    realToReal34(const_pi, REGISTER_REAL34_DATA(REGISTER_X));                                     //JM PIDP
   }
   else {
-  	realIcToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
   refreshStack();

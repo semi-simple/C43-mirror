@@ -64,25 +64,25 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 
-void expCoIc(const complexIc_t *z, complexIc_t *res) {
-  realIc_t expa, sin, cos;
+void expCo39(const complex39_t *z, complex39_t *res) {
+  real39_t expa, sin, cos;
 
-  if(realIcIsZero(&z->imag)) {
-   realIcExp(&z->real, &res->real);
-   realIcZero(&res->imag);
+  if(realIsZero(&z->imag)) {
+   realExp(&z->real, &res->real, &ctxtReal39);
+   realZero(&res->imag);
    return;
   }
 
-  if(realIcIsSpecial(&z->real) || realIcIsSpecial(&z->imag)) {
-    realIcCopy(const_NaN, &res->real);
-    realIcCopy(const_NaN, &res->imag);
+  if(realIsSpecial(&z->real) || realIsSpecial(&z->imag)) {
+    realCopy(const_NaN, &res->real);
+    realCopy(const_NaN, &res->imag);
     return;
   }
 
- realIcExp(&z->real, &expa);
+ realExp(&z->real, &expa, &ctxtReal39);
  WP34S_Cvt2RadSinCosTan(&z->imag, AM_RADIAN, &sin, &cos, NULL);
- realIcMultiply(&expa, &cos, &res->real);
- realIcMultiply(&expa, &sin, &res->imag);
+ realMultiply(&expa, &cos, &res->real, &ctxtReal39);
+ realMultiply(&expa, &sin, &res->imag, &ctxtReal39);
 }
 
 
@@ -94,12 +94,12 @@ void expCoIc(const complexIc_t *z, complexIc_t *res) {
  ***********************************************************************/
 
 void expLonI(void) {
-  realIc_t a;
+  real39_t a;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &a);
-  realIcExp(&a, &a);
+  convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
+  realExp(&a, &a, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -121,11 +121,11 @@ void expRe16(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realIcExp(&x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realExp(&x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -140,15 +140,15 @@ void expCo16(void) {
     return;
   }
 
-  complexIc_t z;
+  complex39_t z;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
 
-  expCoIc(&z, &z);
+  expCo39(&z, &z);
 
-  realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -166,12 +166,12 @@ void expCm16(void) {
 
 
 void expShoI(void) {
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
-  realIcExp(&x, &x);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  realExp(&x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -193,11 +193,11 @@ void expRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  realIcExp(&x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realExp(&x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -212,13 +212,13 @@ void expCo34(void) {
     return;
   }
 
-  complexIc_t z;
+  complex39_t z;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
 
-  expCoIc(&z, &z);
+  expCo39(&z, &z);
 
-  realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

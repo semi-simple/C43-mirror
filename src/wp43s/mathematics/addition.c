@@ -117,29 +117,29 @@ void addLonIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t xAngularMode;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
   if(xAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
     }
    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -162,30 +162,30 @@ void addRe16LonI(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t yAngularMode;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
   if(yAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -208,14 +208,14 @@ void addLonICo16(void) {
     return;
   }
 
-  realIc_t a, c;
+  real39_t a, c;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
 
-  realIcAdd(&a, &c, &c);
+  realAdd(&a, &c, &c, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -235,17 +235,17 @@ void addCo16LonI(void) {
     return;
   }
 
-  realIc_t a, c;
+  real39_t a, c;
   real16_t b;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
   real16Copy(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
 
-  realIcAdd(&a, &c, &c);
+  realAdd(&a, &c, &c, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   real16Copy(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
@@ -358,29 +358,29 @@ void addLonIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t xAngularMode;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
   if(xAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -403,30 +403,30 @@ void addRe34LonI(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t yAngularMode;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
   if(yAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -449,14 +449,14 @@ void addLonICo34(void) {
     return;
   }
 
-  realIc_t a, c;
+  real39_t a, c;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
 
-  realIcAdd(&a, &c, &c);
+  realAdd(&a, &c, &c, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -476,17 +476,17 @@ void addCo34LonI(void) {
     return;
   }
 
-  realIc_t a, c;
+  real39_t a, c;
   real34_t b;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34Copy(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
 
-  realIcAdd(&a, &c, &c);
+  realAdd(&a, &c, &c, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   real34Copy(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
@@ -528,7 +528,7 @@ void addRe16Re16(void) {
     real16Add(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    realIc_t y, x;
+    real39_t y, x;
 
     if(yAngularMode == AM_NONE) {
       yAngularMode = currentAngularMode;
@@ -537,25 +537,25 @@ void addRe16Re16(void) {
       xAngularMode = currentAngularMode;
     }
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+    real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
 
-      realIcAdd(&y, &x, &x);
+      realAdd(&y, &x, &x, &ctxtReal39);
 
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else { //current angular mode is not DMS
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
 
-      realIcAdd(&y, &x, &x);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -716,30 +716,30 @@ void addRe16ShoI(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t yAngularMode;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
   if(yAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -762,29 +762,29 @@ void addShoIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t xAngularMode;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
   if(xAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
     }
    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -826,7 +826,7 @@ void addRe16Re34(void) {
     real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realIc_t y, x;
+    real39_t y, x;
 
     if(yAngularMode == AM_NONE) {
       yAngularMode = currentAngularMode;
@@ -835,25 +835,25 @@ void addRe16Re34(void) {
       xAngularMode = currentAngularMode;
     }
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
 
-      realIcAdd(&y, &x, &x);
+      realAdd(&y, &x, &x, &ctxtReal39);
 
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else { //current angular mode is not DMS
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
 
-      realIcAdd(&y, &x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -895,7 +895,7 @@ void addRe34Re16(void) {
     real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realIc_t y, x;
+    real39_t y, x;
 
     if(yAngularMode == AM_NONE) {
       yAngularMode = currentAngularMode;
@@ -904,25 +904,25 @@ void addRe34Re16(void) {
       xAngularMode = currentAngularMode;
     }
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
 
-      realIcAdd(&y, &x, &x);
+      realAdd(&y, &x, &x, &ctxtReal39);
 
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else { //current angular mode is not DMS
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
 
-      realIcAdd(&y, &x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -1038,17 +1038,17 @@ void addCo16ShoI(void) {
     return;
   }
 
-  realIc_t a, c;
+  real39_t a, c;
   real16_t b;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
   real16Copy(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+  convertShortIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
 
-  realIcAdd(&a, &c, &c);
+  realAdd(&a, &c, &c, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
   real16Copy(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
@@ -1069,14 +1069,14 @@ void addShoICo16(void) {
     return;
   }
 
-  realIc_t a, c;
+  real39_t a, c;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
 
-  realIcAdd(&a, &c, &c);
+  realAdd(&a, &c, &c, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -1608,29 +1608,29 @@ void addShoIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t xAngularMode;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
   if(xAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -1653,30 +1653,30 @@ void addRe34ShoI(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
   uint32_t yAngularMode;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
   if(yAngularMode == AM_NONE) {
-    realIcAdd(&y, &x, &x);
-    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      realIcAdd(&y, &x, &x);
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      realIcAdd(&y, &x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
@@ -1764,7 +1764,7 @@ void addRe34Re34(void) {
     real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realIc_t y, x;
+    real39_t y, x;
 
     if(yAngularMode == AM_NONE) {
       yAngularMode = currentAngularMode;
@@ -1773,25 +1773,25 @@ void addRe34Re34(void) {
       xAngularMode = currentAngularMode;
     }
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngleIcFromTo(&y, yAngularMode, AM_DEGREE);
-      convertAngleIcFromTo(&x, xAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
 
-      realIcAdd(&y, &x, &x);
+      realAdd(&y, &x, &x, &ctxtReal39);
 
-      convertAngleIcFromTo(&x, AM_DEGREE, AM_DMS);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else { //current angular mode is not DMS
-      convertAngleIcFromTo(&y, yAngularMode, currentAngularMode);
-      convertAngleIcFromTo(&x, xAngularMode, currentAngularMode);
+      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
 
-      realIcAdd(&y, &x, &x);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realAdd(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }

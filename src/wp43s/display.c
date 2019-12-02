@@ -981,19 +981,19 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
 void complex16ToDisplayString2(const complex16_t *complex16, char *displayString) {
   int16_t i=100;
   real16_t real16, imag16;
-  realIc_t realIc, imagIc;
+  real39_t real39, imagIc;
 
   if(complexMode == CM_RECTANGULAR) {
     real16Copy(VARIABLE_REAL16_DATA(complex16), &real16);
     real16Copy(VARIABLE_IMAG16_DATA(complex16), &imag16);
   }
   else if(complexMode == CM_POLAR) {
-    real16ToRealIc(VARIABLE_REAL16_DATA(complex16), &realIc);
-    real16ToRealIc(VARIABLE_IMAG16_DATA(complex16), &imagIc);
-    realIcRectangularToPolar(&realIc, &imagIc, &realIc, &imagIc); // imagIc in radian
-    convertAngleIcFromTo(&imagIc, AM_RADIAN, currentAngularMode);
-    realIcToReal16(&realIc, &real16);
-    realIcToReal16(&imagIc, &imag16);
+    real16ToReal(VARIABLE_REAL16_DATA(complex16), &real39);
+    real16ToReal(VARIABLE_IMAG16_DATA(complex16), &imagIc);
+    real39RectangularToPolar(&real39, &imagIc, &real39, &imagIc); // imagIc in radian
+    convertAngle39FromTo(&imagIc, AM_RADIAN, currentAngularMode);
+    realToReal16(&real39, &real16);
+    realToReal16(&imagIc, &imag16);
   }
   else {
     sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
@@ -1031,19 +1031,19 @@ void complex16ToDisplayString2(const complex16_t *complex16, char *displayString
 void complex34ToDisplayString2(const complex34_t *complex34, char *displayString) {
   int16_t i=100;
   real34_t real34, imag34;
-  realIc_t realIc, imagIc;
+  real39_t real39, imagIc;
 
   if(complexMode == CM_RECTANGULAR) {
     real34Copy(VARIABLE_REAL34_DATA(complex34), &real34);
     real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
   }
   else if(complexMode == CM_POLAR) {
-    real34ToRealIc(VARIABLE_REAL34_DATA(complex34), &realIc);
-    real34ToRealIc(VARIABLE_IMAG34_DATA(complex34), &imagIc);
-    realIcRectangularToPolar(&realIc, &imagIc, &realIc, &imagIc); // imagIc in radian
-    convertAngleIcFromTo(&imagIc, AM_RADIAN, currentAngularMode);
-    realIcToReal34(&realIc, &real34);
-    realIcToReal34(&imagIc, &imag34);
+    real34ToReal(VARIABLE_REAL34_DATA(complex34), &real39);
+    real34ToReal(VARIABLE_IMAG34_DATA(complex34), &imagIc);
+    real39RectangularToPolar(&real39, &imagIc, &real39, &imagIc); // imagIc in radian
+    convertAngle39FromTo(&imagIc, AM_RADIAN, currentAngularMode);
+    realToReal34(&real39, &real34);
+    realToReal34(&imagIc, &imag34);
   }
   else {
     sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
@@ -1222,34 +1222,34 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     char degStr[27];
     uint32_t m, s, fs;
     int16_t sign;
-    realIc_t temp, degrees, minutes, seconds;
+    real39_t temp, degrees, minutes, seconds;
 
-    real16ToRealIc(angle16, &temp);
+    real16ToReal(angle16, &temp);
 
-    sign = realIcIsNegative(&temp) ? -1 : 1;
-    realIcSetPositiveSign(&temp);
+    sign = realIsNegative(&temp) ? -1 : 1;
+    realSetPositiveSign(&temp);
 
     // Get the degrees
-    realIcToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN);
+    realToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the minutes
-    realIcSubtract(&temp, &degrees, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN);
+    realSubtract(&temp, &degrees, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the seconds
-    realIcSubtract(&temp, &minutes, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN);
+    realSubtract(&temp, &minutes, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the fractional seconds
-    realIcSubtract(&temp, &seconds, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
+    realSubtract(&temp, &seconds, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &temp, DEC_ROUND_DOWN, &ctxtReal39);
 
-    realIcToUInt32(&temp, fs);
-    realIcToUInt32(&seconds, s);
-    realIcToUInt32(&minutes, m);
+    realToUInt32(&temp, fs);
+    realToUInt32(&seconds, s);
+    realToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1263,10 +1263,10 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
 
     if(m >= 60) {
       m -= 60;
-      realIcAdd(&degrees, const_1, &degrees);
+      realAdd(&degrees, const_1, &degrees, &ctxtReal39);
     }
 
-    realIcToString(&degrees, degStr);
+    realToString(&degrees, degStr);
     for(int32_t i=0; degStr[i]!=0; i++) {
       if(degStr[i] == '.') {
         degStr[i] = 0;
@@ -1304,34 +1304,34 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     uint32_t m, s, fs;
     int16_t sign;
 
-    realIc_t temp, degrees, minutes, seconds;
+    real39_t temp, degrees, minutes, seconds;
 
-    real34ToRealIc(angle34, &temp);
+    real34ToReal(angle34, &temp);
 
-    sign = realIcIsNegative(&temp) ? -1 : 1;
-    realIcSetPositiveSign(&temp);
+    sign = realIsNegative(&temp) ? -1 : 1;
+    realSetPositiveSign(&temp);
 
     // Get the degrees
-    realIcToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN);
+    realToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the minutes
-    realIcSubtract(&temp, &degrees, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN);
+    realSubtract(&temp, &degrees, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the seconds
-    realIcSubtract(&temp, &minutes, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN);
+    realSubtract(&temp, &minutes, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the fractional seconds
-    realIcSubtract(&temp, &seconds, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
+    realSubtract(&temp, &seconds, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &temp, DEC_ROUND_DOWN, &ctxtReal39);
 
-    realIcToUInt32(&temp, fs);
-    realIcToUInt32(&seconds, s);
-    realIcToUInt32(&minutes, m);
+    realToUInt32(&temp, fs);
+    realToUInt32(&seconds, s);
+    realToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1345,10 +1345,10 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
 
     if(m >= 60) {
       m -= 60;
-      realIcAdd(&degrees, const_1, &degrees);
+      realAdd(&degrees, const_1, &degrees, &ctxtReal39);
     }
 
-    realIcToString(&degrees, degStr);
+    realToString(&degrees, degStr);
     for(int32_t i=0; degStr[i]!=0; i++) {
       if(degStr[i] == '.') {
         degStr[i] = 0;

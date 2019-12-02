@@ -65,19 +65,19 @@ void fnArctanh(uint16_t unusedParamButMandatory) {
 
 
 void arctanhLonI(void) {
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-  if(realIcIsZero(&x)) {
+  if(realIsZero(&x)) {
     reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    if(realIcCompareEqual(&x, const_1)) {
+    if(real39CompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
         reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-        realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -86,10 +86,10 @@ void arctanhLonI(void) {
         #endif
        }
     }
-    else if(realIcCompareEqual(&x, const__1)) {
+    else if(real39CompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
         reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-        realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -101,7 +101,7 @@ void arctanhLonI(void) {
     else {
       if(getFlag(FLAG_CPXRES)) {
         reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
         real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
         arctanhCo34();
         convertRegister34To16(REGISTER_X);
@@ -127,17 +127,17 @@ void arctanhRe16(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  if(realIcIsZero(&x)) {
+  if(realIsZero(&x)) {
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    if(realIcCompareEqual(&x, const_1)) {
+    if(real39CompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
-        realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -146,9 +146,9 @@ void arctanhRe16(void) {
         #endif
        }
     }
-    else if(realIcCompareEqual(&x, const__1)) {
+    else if(real39CompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
-        realIcToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -158,10 +158,10 @@ void arctanhRe16(void) {
        }
     }
     else {
-      if(realIcCompareAbsGreaterThan(&x, const_1)) {
+      if(real39CompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-          realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+          realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
           real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
           arctanhCo34();
           convertRegister34To16(REGISTER_X);
@@ -175,7 +175,7 @@ void arctanhRe16(void) {
       }
       else {
         WP34S_ArcTanh(&x, &x);
-        realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
       }
     }
   }
@@ -197,31 +197,31 @@ void arctanhCo16(void) {
   // arctanh(a + i b) = - * ln( ------------ )
   //                    2       1 - (a + ib)
 
-  complexIc_t numer, denom;
+  complex39_t numer, denom;
 
   // numer = 1 + (a + ib)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &numer.real);
-  realIcAdd(&numer.real, const_1, &numer.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &numer.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &numer.real);
+  realAdd(&numer.real, const_1, &numer.real, &ctxtReal39);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &numer.imag);
 
   // denom = 1 - (a + ib)
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &denom.real);
-  realIcSubtract(const_1, &denom.real, &denom.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &denom.imag);
-  realIcChangeSign(&denom.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &denom.real);
+  realSubtract(const_1, &denom.real, &denom.real, &ctxtReal39);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &denom.imag);
+  realChangeSign(&denom.imag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
-  divCoIcCoIc(&numer, &denom, &numer);
+  divCo39Co39(&numer, &denom, &numer);
 
   // numer = ln((1 + (a + ib)) / (1 - (a + ib))
-  lnCoIc(&numer, &numer);
+  lnCo39(&numer, &numer);
 
   // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
-  realIcMultiply(&numer.real, const_1on2, &numer.real);
-  realIcMultiply(&numer.imag, const_1on2, &numer.imag);
+  realMultiply(&numer.real, const_1on2, &numer.real, &ctxtReal39);
+  realMultiply(&numer.imag, const_1on2, &numer.imag, &ctxtReal39);
 
-  realIcToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -247,17 +247,17 @@ void arctanhRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  if(realIcIsZero(&x)) {
+  if(realIsZero(&x)) {
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(realIcCompareEqual(&x, const_1)) {
+    if(real39CompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
-        realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -266,9 +266,9 @@ void arctanhRe34(void) {
         #endif
        }
     }
-    else if(realIcCompareEqual(&x, const__1)) {
+    else if(real39CompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
-        realIcToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -278,10 +278,10 @@ void arctanhRe34(void) {
        }
     }
     else {
-      if(realIcCompareAbsGreaterThan(&x, const_1)) {
+      if(real39CompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-          realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+          realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
           real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
           arctanhCo34();
         }
@@ -294,7 +294,7 @@ void arctanhRe34(void) {
       }
       else {
         WP34S_ArcTanh(&x, &x);
-        realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }
   }
@@ -316,29 +316,29 @@ void arctanhCo34(void) {
   // arctanh(a + i b) = - * ln( ------------ )
   //                    2       1 - (a + ib)
 
-  complexIc_t numer, denom;
+  complex39_t numer, denom;
 
   // numer = 1 + (a + ib)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &numer.real);
-  realIcAdd(&numer.real, const_1, &numer.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &numer.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &numer.real);
+  realAdd(&numer.real, const_1, &numer.real, &ctxtReal39);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &numer.imag);
 
   // denom = 1 - (a + ib)
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &denom.real);
-  realIcSubtract(const_1, &denom.real, &denom.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &denom.imag);
-  realIcChangeSign(&denom.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &denom.real);
+  realSubtract(const_1, &denom.real, &denom.real, &ctxtReal39);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &denom.imag);
+  realChangeSign(&denom.imag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
-  divCoIcCoIc(&numer, &denom, &numer);
+  divCo39Co39(&numer, &denom, &numer);
 
   // numer = ln((1 + (a + ib)) / (1 - (a + ib))
-  lnCoIc(&numer, &numer);
+  lnCo39(&numer, &numer);
 
   // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
-  realIcMultiply(&numer.real, const_1on2, &numer.real);
-  realIcMultiply(&numer.imag, const_1on2, &numer.imag);
+  realMultiply(&numer.real, const_1on2, &numer.real, &ctxtReal39);
+  realMultiply(&numer.imag, const_1on2, &numer.imag, &ctxtReal39);
 
-  realIcToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

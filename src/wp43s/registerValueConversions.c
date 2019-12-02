@@ -165,13 +165,13 @@ void convertLongIntegerRegisterToReal34(calcRegister_t source, real34_t *destina
 
 
 
-void convertLongIntegerRegisterToRealIc(calcRegister_t source, realIc_t *destination) {
+void convertLongIntegerRegisterToReal(calcRegister_t source, real_t *destination, realContext_t *ctxt) {
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
   longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
-  stringToRealIc(tmpStr3000, destination);
+  stringToReal(tmpStr3000, destination, ctxt);
 }
 
 
@@ -199,37 +199,19 @@ void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, cal
 void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
   uint64_t value;
   int16_t sign;
-  realIc_t hiWord, lowWord;
+  real39_t hiWord, lowWord;
 
   convertShortIntegerRegisterToUInt64(source, &sign, &value);
 
-  uInt32ToRealIc(value >> 32, &hiWord);
-  uInt32ToRealIc(value & 0x00000000ffffffff, &lowWord);
-  realIcFMA(&hiWord, const_2p32, &lowWord, &lowWord);
+  uInt32ToReal(value >> 32, &hiWord);
+  uInt32ToReal(value & 0x00000000ffffffff, &lowWord);
+  realFMA(&hiWord, const_2p32, &lowWord, &lowWord, &ctxtReal39);
 
   reallocateRegister(destination, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&lowWord, REGISTER_REAL16_DATA(destination));
+  realToReal16(&lowWord, REGISTER_REAL16_DATA(destination));
 
   if(sign) {
     real16SetNegativeSign(REGISTER_REAL16_DATA(destination));
-  }
-}
-
-
-
-void convertShortIntegerRegisterToRealIc(calcRegister_t source, realIc_t *destination) {
-  uint64_t value;
-  int16_t sign;
-  realIc_t lowWord;
-
-  convertShortIntegerRegisterToUInt64(source, &sign, &value);
-
-  uInt32ToRealIc(value >> 32, destination);
-  uInt32ToRealIc(value & 0x00000000ffffffff, &lowWord);
-  realIcFMA(destination, const_2p32, &lowWord, destination);
-
-  if(sign) {
-    realIcSetNegativeSign(destination);
   }
 }
 
@@ -248,6 +230,24 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
 
   if(sign) {
     real34SetNegativeSign(REGISTER_REAL34_DATA(destination));
+  }
+}
+
+
+
+void convertShortIntegerRegisterToReal(calcRegister_t source, real_t *destination, realContext_t *ctxt) {
+  uint64_t value;
+  int16_t sign;
+  real39_t lowWord;
+
+  convertShortIntegerRegisterToUInt64(source, &sign, &value);
+
+  uInt32ToReal(value >> 32, destination);
+  uInt32ToReal(value & 0x00000000ffffffff, &lowWord);
+  realFMA(destination, const_2p32, &lowWord, destination, ctxt);
+
+  if(sign) {
+    realSetNegativeSign(destination);
   }
 }
 
@@ -434,20 +434,20 @@ void convertReal34ToLongIntegerRegister(real34_t *real34, calcRegister_t dest, e
 
 
 
-void convertRealIcToLongInteger(realIc_t *realIc, longInteger_t lgInt, enum rounding roundingMode) {
-  uint8_t bcd[DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS];
+void convertReal39ToLongInteger(real_t *real39, longInteger_t lgInt, enum rounding roundingMode) {
+  uint8_t bcd[39];
   int32_t sign, exponent;
   //longInteger_t coef;
 
-  realIcToIntegralValue(realIc, realIc, roundingMode);
-  realIcGetCoefficient(realIc, bcd);
-  sign = (realIcIsNegative(realIc) ? 1 : 0);
-  exponent = realIcGetExponent(realIc) - realIc->digits;
+  realToIntegralValue(real39, real39, roundingMode, &ctxtReal39);
+  realGetCoefficient(real39, bcd);
+  sign = (realIsNegative(real39) ? 1 : 0);
+  exponent = realGetExponent(real39) - real39->digits;
 
   //longIntegerInit(coef);
   uIntToLongInteger(bcd[0], lgInt);
 
-  for(int i=1; i<realIc->digits; i++) {
+  for(int i=1; i<real39->digits; i++) {
     longIntegerMultiplyUInt(lgInt, 10, lgInt);
     longIntegerAddUInt(lgInt, bcd[i], lgInt);
   }
@@ -469,12 +469,12 @@ void convertRealIcToLongInteger(realIc_t *realIc, longInteger_t lgInt, enum roun
 
 
 
-void convertRealIcToLongIntegerRegister(realIc_t *realIc, calcRegister_t dest, enum rounding roundingMode) {
+void convertRealToLongIntegerRegister(real_t *real39, calcRegister_t dest, enum rounding roundingMode) {
   longInteger_t lgInt;
 
   longIntegerInit(lgInt);
 
-  convertRealIcToLongInteger(realIc, lgInt, roundingMode);
+  convertReal39ToLongInteger(real39, lgInt, roundingMode);
   convertLongIntegerToLongIntegerRegister(lgInt, dest);
 
   longIntegerFree(lgInt);

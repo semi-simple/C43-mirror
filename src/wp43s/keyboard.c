@@ -149,24 +149,57 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
 #ifdef DMCP_BUILD
 
-void btnFnPressed(void *w, void *data) {
-  fn_key_pressed = *((char *)data) - '0'+37; //to render 38-43, as per original keypress
+int16_t nameFunction(int16_t fn, int16_t itemShift) {
+  int16_t row, func;
+  func = 0;
+  const softmenu_t *sm;
+  if(softmenuStackPointer > 0) {
+    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
+    row = min(3, sm->numItems/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+    if(itemShift/6 <= row) {
+      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+      if(func == CHR_PROD_SIGN) {
+        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+      }      
+    }
+  }
+return func;
 }
 
+
+void showFNFunctionName() {
+  if(shiftF) { showFunctionName(nameFunction(FN_key_pressed-37,6),0);  } else 
+  if(shiftG) { showFunctionName(nameFunction(FN_key_pressed-37,12),0); } else 
+             { showFunctionName(nameFunction(FN_key_pressed-37,0),0);  }
+  showFunctionNameItem = 0;
+}
+
+
+void btnFnPressed(void *w, void *data) {
+  FN_key_pressed = *((char *)data) - '0' + 37; //to render 38-43, as per original keypress
+  FN_counter = 10; //start new cycle
+  FN_timeouts = true;
+  showFNFunctionName(FN_key_pressed-37);
+}
 
 void btnFnReleased(void *w, void *data) {
   char charKey[3];
-  sprintf(charKey, "%c", fn_key_pressed +11);
+  sprintf(charKey, "%c", FN_key_pressed + 11);
+  FN_key_pressed = 0;
+  FN_timeouts = false;
+  FN_counter = 10; //reset 0?
   btnFnClicked(w, charKey);
-  fn_key_pressed = 0;
+  resetShiftState();  
+  refreshRegisterLine(REGISTER_T);
 }
+
 #endif
 
 
-void pre_executeFunction(int16_t fn, int16_t itemShift) {
-   executeFunction(fn, itemShift);
+//JM btnFnClicked is called by gui.c keyPressed
+//JM btnFnClicked is called by wp43s.c program_main
 
-}
+
 
 /********************************************//**
  * \brief One of the function keys was clicked
@@ -198,14 +231,14 @@ void btnFnClicked(void *w, void *data) {
 
       if(shiftF) {
         resetShiftState();
-        pre_executeFunction(fn,  6);
+        executeFunction(fn,  6);
       }
       else if(shiftG) {
         resetShiftState();
-        pre_executeFunction(fn, 12);
+        executeFunction(fn, 12);
       }
       else {
-        pre_executeFunction(fn, 0);
+        executeFunction(fn, 0);
       }
     }
     else {

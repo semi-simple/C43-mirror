@@ -318,7 +318,9 @@ void setupDefaults(void) {
   shiftG = false;
   shiftStateChanged = false;
 
-  fn_key_pressed = 0;  //JM LONGPRESS FN
+  FN_key_pressed = 0;  //JM LONGPRESS FN
+  FN_timeouts = 0;     //JM LONGPRESS FN
+  FN_counter = 0;      //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
   HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
@@ -608,7 +610,7 @@ void program_main(void) {
       sprintf(charKey, "%c", key +11);
       btnFnPressed(NULL, charKey);
       lcd_refresh();
-    } else if(key == 0 && fn_key_pressed != 0) {
+    } else if(key == 0 && FN_key_pressed != 0) {
       btnFnReleased(NULL,NULL);
       lcd_refresh();
     }

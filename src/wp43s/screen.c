@@ -469,6 +469,35 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     }
   }
 
+
+  if(FN_timeouts) {               //JM vv  handlerFN Key shift longpress handler
+    if (FN_counter == 1) {    
+      if(!shiftF && !shiftG) {
+        S_shF();
+        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
+        showFNFunctionName();
+        FN_counter  = 10; //restart count
+      }
+      else if(shiftF && !shiftG) {
+        S_shG();
+        R_shF();
+        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
+        showFNFunctionName();
+        FN_counter  = 10; //restart count
+      }
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
+        resetShiftState();
+        FN_key_pressed = 0;          //Cancel pending FN key pressed
+        FN_timeouts = false;
+        FN_counter = 10; //reset 0?
+        showFunctionName(ITM_NOP, 0);
+      }
+    } 
+    else { 
+      FN_counter--;
+    }
+  }                               //JM ^^
+
   // Function name display
   if(showFunctionNameCounter>0) {
     if(--showFunctionNameCounter == 0) {

@@ -139,15 +139,15 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 #else
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
-#ifdef INLINE_TEST                                                              //vv dr
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_INL_TST,                       //JM added the dummy line under #else, to keep the sequence correct for following lines                
-#else                                                                           //^^
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
-#endif                                                                          //dr
 #endif
 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_ERPN,                 ITM_INP_DEF_43S,       ITM_INP_DEF_SP,              ITM_INP_DEF_DP,                     //JM
-                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM eRPN
+#ifdef INLINE_TEST                                                              //vv dr JM
+                                     ITM_NULL,                      ITM_NULL,                   ITM_INP_DEF_43S,          ITM_INP_DEF_SP,        ITM_INP_DEF_DP,              -MNU_INL_TST,                           //JM
+#else                                                                           //^^
+                                     ITM_NULL,                      ITM_NULL,                   ITM_INP_DEF_43S,          ITM_INP_DEF_SP,        ITM_INP_DEF_DP,              -ITM_NULL,                           //JM
+#endif                                                                          //dr JM
+                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_ERPN,                           //JM eRPN
                                      ITM_BASE_HOME,                 ITM_BASE_MYMENU,            ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
 
 
@@ -1276,7 +1276,7 @@ void showSoftmenuCurrentPart(void) {
             }
             else {
               if(softmenu[menu].menuId == -MNU_INL_TST) {                       //vv dr
-                showSoftkey(STD_omicron, x, y-currentFirstItem/6, vmNormal, false, false, -1);
+                showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, -1);
               }
               else {                                                            //^^
               showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1);

@@ -407,7 +407,7 @@ void btnPressed(void *notUsed, void *data) {
 
     shiftF = !shiftF;
     shiftG = false;
-//  shiftStateChanged = true;
+//  shiftStateChanged = true; //dr
 
     showShiftState();
   }
@@ -431,7 +431,7 @@ void btnPressed(void *notUsed, void *data) {
 
     shiftG = !shiftG;
     shiftF = false;
-//  shiftStateChanged = true;
+//  shiftStateChanged = true; //dr
 
     showShiftState();
   }

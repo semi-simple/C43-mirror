@@ -165,6 +165,13 @@
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
 		</Unit>
+		<Unit filename="decNumberICU/decNumberLocal.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateConstants" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="decNumberICU/decQuad.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

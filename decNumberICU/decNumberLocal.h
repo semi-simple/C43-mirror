@@ -59,7 +59,7 @@
 
   /* Tuning parameter for decNumber (arbitrary precision) module      */
   #if !defined(DECBUFFER)
-  #define DECBUFFER 36        /* Size basis for local buffers.  This  */
+  #define DECBUFFER 75        /* Size basis for local buffers.  This  */
                               /* should be a common maximum precision */
                               /* rounded up to a multiple of 4; must  */
                               /* be zero or positive.                 */

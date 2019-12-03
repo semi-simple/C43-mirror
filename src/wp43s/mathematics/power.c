@@ -179,13 +179,13 @@ void powLonIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -209,24 +209,24 @@ void powRe16LonI(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -247,27 +247,27 @@ void powLonICo16(void) {
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -290,40 +290,40 @@ void powCo16LonI(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -512,13 +512,13 @@ void powLonIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -542,24 +542,24 @@ void powRe34LonI(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -580,27 +580,27 @@ void powLonICo34(void) {
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -623,40 +623,40 @@ void powCo34LonI(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &c);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -691,23 +691,23 @@ void powRe16Re16(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -739,38 +739,38 @@ void powRe16Co16(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -801,40 +801,40 @@ void powCo16Re16(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -857,24 +857,24 @@ void powRe16ShoI(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -895,13 +895,13 @@ void powShoIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -933,23 +933,23 @@ void powRe16Re34(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -981,24 +981,24 @@ void powRe34Re16(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -1030,38 +1030,38 @@ void powRe16Co34(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1092,40 +1092,40 @@ void powCo34Re16(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1160,40 +1160,40 @@ void powCo16Co16(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d, theta;
+  real39_t a, b, c, d, theta;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &d);
 
-  realIcRectangularToPolar(&a, &b, &a, &theta);
+  real39RectangularToPolar(&a, &b, &a, &theta);
   WP34S_Ln(&a, &a);
 
-  realIcMultiply(&a, &d, &b);
-  realIcFMA(&theta, &c, &b, &b);
-  realIcChangeSign(&theta);
-  realIcMultiply(&a, &c, &a);
-  realIcFMA(&theta, &d, &a, &a);
+  realMultiply(&a, &d, &b, &ctxtReal39);
+  realFMA(&theta, &c, &b, &b, &ctxtReal39);
+  realChangeSign(&theta);
+  realMultiply(&a, &c, &a, &ctxtReal39);
+  realFMA(&theta, &d, &a, &a, &ctxtReal39);
 
-  realIcExp(&a, &c);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&c, &b, &d);
-  realIcMultiply(&c, &a, &c);
+  realExp(&a, &c, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &a, &b);
+  realMultiply(&c, &b, &d, &ctxtReal39);
+  realMultiply(&c, &a, &c, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1216,40 +1216,40 @@ void powCo16ShoI(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realIcToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(const_plusInfinity, REGISTER_IMAG16_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  convertShortIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1269,27 +1269,27 @@ void powShoICo16(void) {
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&c, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&d, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1320,40 +1320,40 @@ void powCo16Re34(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1384,39 +1384,39 @@ void powRe34Co16(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &d);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1447,40 +1447,40 @@ void powCo16Co34(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d, theta;
+  real39_t a, b, c, d, theta;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
-  realIcRectangularToPolar(&a, &b, &a, &theta);
+  real39RectangularToPolar(&a, &b, &a, &theta);
   WP34S_Ln(&a, &a);
 
-  realIcMultiply(&a, &d, &b);
-  realIcFMA(&theta, &c, &b, &b);
-  realIcChangeSign(&theta);
-  realIcMultiply(&a, &c, &a);
-  realIcFMA(&theta, &d, &a, &a);
+  realMultiply(&a, &d, &b, &ctxtReal39);
+  realFMA(&theta, &c, &b, &b, &ctxtReal39);
+  realChangeSign(&theta);
+  realMultiply(&a, &c, &a, &ctxtReal39);
+  realFMA(&theta, &d, &a, &a, &ctxtReal39);
 
-  realIcExp(&a, &c);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&c, &b, &d);
-  realIcMultiply(&c, &a, &c);
+  realExp(&a, &c, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &a, &b);
+  realMultiply(&c, &b, &d, &ctxtReal39);
+  realMultiply(&c, &a, &c, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1511,41 +1511,41 @@ void powCo34Co16(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d, theta;
+  real39_t a, b, c, d, theta;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &d);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &d);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  realIcRectangularToPolar(&a, &b, &a, &theta);
+  real39RectangularToPolar(&a, &b, &a, &theta);
   WP34S_Ln(&a, &a);
 
-  realIcMultiply(&a, &d, &b);
-  realIcFMA(&theta, &c, &b, &b);
-  realIcChangeSign(&theta);
-  realIcMultiply(&a, &c, &a);
-  realIcFMA(&theta, &d, &a, &a);
+  realMultiply(&a, &d, &b, &ctxtReal39);
+  realFMA(&theta, &c, &b, &b, &ctxtReal39);
+  realChangeSign(&theta);
+  realMultiply(&a, &c, &a, &ctxtReal39);
+  realFMA(&theta, &d, &a, &a, &ctxtReal39);
 
-  realIcExp(&a, &c);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&c, &b, &d);
-  realIcMultiply(&c, &a, &c);
+  realExp(&a, &c, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &a, &b);
+  realMultiply(&c, &b, &d, &ctxtReal39);
+  realMultiply(&c, &a, &c, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1810,13 +1810,13 @@ void powShoIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -1840,24 +1840,24 @@ void powRe34ShoI(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     return;
     setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -1878,27 +1878,27 @@ void powShoICo34(void) {
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1921,40 +1921,40 @@ void powCo34ShoI(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &c);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  convertShortIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1989,23 +1989,23 @@ void powRe34Re34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcPower(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realPower(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -2037,38 +2037,38 @@ void powRe34Co34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, c, d;
+  real39_t a, c, d;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
   WP34S_Ln(&a, &a);
 
   // (c + di) * ln(a) --> c +di
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
   // exp((c + di) * ln(a)) --> c +di
-  realIcExp(&c, &a);
-  realIcPolarToRectangular(const_1, &d, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&c, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &d, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2099,40 +2099,40 @@ void powCo34Re34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d;
+  real39_t a, b, c, d;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // c * ln(a + bi) -- > a + bi
-  realIcMultiply(&c, &a, &a);
-  realIcMultiply(&c, &b, &b);
+  realMultiply(&c, &a, &a, &ctxtReal39);
+  realMultiply(&c, &b, &b, &ctxtReal39);
 
   // exp(c * ln(a + bi)) -- > c + di
-  realIcExp(&a, &a);
-  realIcPolarToRectangular(const_1, &b, &c, &d);
-  realIcMultiply(&a, &c, &c);
-  realIcMultiply(&a, &d, &d);
+  realExp(&a, &a, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &c, &d);
+  realMultiply(&a, &c, &c, &ctxtReal39);
+  realMultiply(&a, &d, &d, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2167,38 +2167,38 @@ void powCo34Co34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
   }
 
-  realIc_t a, b, c, d, theta;
+  real39_t a, b, c, d, theta;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
-  realIcRectangularToPolar(&a, &b, &a, &theta);
+  real39RectangularToPolar(&a, &b, &a, &theta);
   WP34S_Ln(&a, &a);
 
-  realIcMultiply(&a, &d, &b);
-  realIcFMA(&theta, &c, &b, &b);
-  realIcChangeSign(&theta);
-  realIcMultiply(&a, &c, &a);
-  realIcFMA(&theta, &d, &a, &a);
+  realMultiply(&a, &d, &b, &ctxtReal39);
+  realFMA(&theta, &c, &b, &b, &ctxtReal39);
+  realChangeSign(&theta);
+  realMultiply(&a, &c, &a, &ctxtReal39);
+  realFMA(&theta, &d, &a, &a, &ctxtReal39);
 
-  realIcExp(&a, &c);
-  realIcPolarToRectangular(const_1, &b, &a, &b);
-  realIcMultiply(&c, &b, &d);
-  realIcMultiply(&c, &a, &c);
+  realExp(&a, &c, &ctxtReal39);
+  real39PolarToRectangular(const_1, &b, &a, &b);
+  realMultiply(&c, &b, &d, &ctxtReal39);
+  realMultiply(&c, &a, &c, &ctxtReal39);
 
-  realIcToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }

@@ -20,7 +20,7 @@
 
 void fnLn   (uint16_t unusedParamButMandatory);
 void lnError(void);
-void lnCoIc (const complexIc_t *x, complexIc_t *ln);
+void lnCo39 (const complex39_t *x, complex39_t *ln);
 void lnLonI (void);
 void lnRe16 (void);
 void lnCo16 (void);

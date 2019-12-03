@@ -41,16 +41,16 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
       return;
     }
 
-    realIc_t x, y;
+    real39_t x, y;
     bool_t real16 = true;
 
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     switch(dataTypeX) {
-      case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_X, &x);   break;
-      case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x); break;
-      case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x); real16 = false; break;
+      case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);      break;
+      case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);                 break;
+      case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x); real16 = false; break;
       default: {
         sprintf(errorMessage, "In function fnToPolar: %" FMT32U " is an unexpected dataTypeX value!", dataTypeX);
         displayBugScreen(errorMessage);
@@ -58,29 +58,29 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
     }
 
     switch(dataTypeY) {
-      case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);   break;
-      case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y); break;
-      case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y); real16 = false; break;
+      case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);      break;
+      case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);                 break;
+      case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y); real16 = false; break;
       default: {
         sprintf(errorMessage, "In function fnToPolar: %" FMT32U " is an unexpected dataTypeY value!", dataTypeY);
         displayBugScreen(errorMessage);
       }
     }
 
-    realIcRectangularToPolar(&x, &y, &x, &y);
-    convertAngleIcFromTo(&y, AM_RADIAN, currentAngularMode);
+    real39RectangularToPolar(&x, &y, &x, &y);
+    convertAngle39FromTo(&y, AM_RADIAN, currentAngularMode);
 
     if(real16) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, currentAngularMode);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(&y, REGISTER_REAL16_DATA(REGISTER_Y));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&y, REGISTER_REAL16_DATA(REGISTER_Y));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, currentAngularMode);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
     }
 
     temporaryInformation = TI_RADIUS_THETA;
@@ -100,61 +100,127 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
 
 // The theta16 output angle is in radian
 void real16RectangularToPolar(const real16_t *real16, const real16_t *imag16, real16_t *magnitude16, real16_t *theta16) {
-  realIc_t real, imag, magnitude, theta;
+  real39_t real, imag, magnitude, theta;
 
-  real16ToRealIc(real16, &real);
-  real16ToRealIc(imag16, &imag);
+  real16ToReal(real16, &real);
+  real16ToReal(imag16, &imag);
 
-  realIcRectangularToPolar(&real, &imag, &magnitude, &theta); // theta in radian
+  real39RectangularToPolar(&real, &imag, &magnitude, &theta); // theta in radian
 
-  realIcToReal16(&magnitude, magnitude16);
-  realIcToReal16(&theta, theta16);
+  realToReal16(&magnitude, magnitude16);
+  realToReal16(&theta, theta16);
 }
 
 
 
 // The theta34 output angle is in radian
 void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, real34_t *magnitude34, real34_t *theta34) {
-  realIc_t real, imag, magnitude, theta;
+  real39_t real, imag, magnitude, theta;
 
-  real34ToRealIc(real34, &real);
-  real34ToRealIc(imag34, &imag);
+  real34ToReal(real34, &real);
+  real34ToReal(imag34, &imag);
 
-  realIcRectangularToPolar(&real, &imag, &magnitude, &theta); // theta in radian
+  real39RectangularToPolar(&real, &imag, &magnitude, &theta); // theta in radian
 
-  realIcToReal34(&magnitude, magnitude34);
-  realIcToReal34(&theta, theta34);
+  realToReal34(&magnitude, magnitude34);
+  realToReal34(&theta, theta34);
 }
 
 
 
-void realIcRectangularToPolar(const realIc_t *re, const realIc_t *im, realIc_t *magnitude, realIc_t *theta) { // theta is in ]-pi, pi]
-  if(realIcIsZero(re)) {
-    if(realIcIsZero(im)) {
-      realIcZero(magnitude);
-      realIcZero(theta);
+void real39RectangularToPolar(const real_t *re, const real_t *im, real_t *magnitude, real_t *theta) { // theta is in ]-pi, pi]
+  if(realIsZero(re)) {
+    if(realIsZero(im)) {
+      realZero(magnitude);
+      realZero(theta);
     }
-    else if(realIcIsNegative(im)) {
-      realIcCopyAbs(im, magnitude);
-      realIcMinus(const_piOn2, theta); //  -90°
+    else if(realIsNegative(im)) {
+      realCopyAbs(im, magnitude);
+      realMinus(const_piOn2, theta, &ctxtReal39); //  -90°
     }
     else {
-      realIcCopy(im, magnitude);
-      realIcCopy(const_piOn2, theta); // 90°
+      realCopy(im, magnitude);
+      realCopy(const_piOn2, theta); // 90°
     }
   }
   else { // real != 0
-    realIc_t real, imag;
+    real39_t real, imag;
 
-    realIcCopy(re, &real);
-    realIcCopy(im, &imag);
+    realCopy(re, &real);
+    realCopy(im, &imag);
 
     // Magnitude
-    realIcMultiply(&real, &real, magnitude);
-    realIcFMA(&imag, &imag, magnitude, magnitude);
-    realIcSquareRoot(magnitude, magnitude);
+    realMultiply(&real, &real, magnitude, &ctxtReal39);
+    realFMA(&imag, &imag, magnitude, magnitude, &ctxtReal39);
+    realSquareRoot(magnitude, magnitude, &ctxtReal39);
 
     // Angle
     WP34S_Atan2(&imag, &real, theta);
+  }
+}
+
+
+
+void real51RectangularToPolar(const real_t *re, const real_t *im, real_t *magnitude, real_t *theta) { // theta is in ]-pi, pi]
+  if(realIsZero(re)) {
+    if(realIsZero(im)) {
+      realZero(magnitude);
+      realZero(theta);
+    }
+    else if(realIsNegative(im)) {
+      realCopyAbs(im, magnitude);
+      realMinus(const_piOn2, theta, &ctxtReal51); //  -90°
+    }
+    else {
+      realCopy(im, magnitude);
+      realCopy(const_piOn2, theta); // 90°
+    }
+  }
+  else { // real != 0
+    real51_t real, imag;
+
+    realCopy(re, &real);
+    realCopy(im, &imag);
+
+    // Magnitude
+    realMultiply(&real, &real, magnitude, &ctxtReal51);
+    realFMA(&imag, &imag, magnitude, magnitude, &ctxtReal51);
+    realSquareRoot(magnitude, magnitude, &ctxtReal51);
+
+    // Angle
+    WP34S_Atan2((real_t *)&imag, (real_t *)&real, theta);
+  }
+}
+
+
+
+void real75RectangularToPolar(const real_t *re, const real_t *im, real_t *magnitude, real_t *theta) { // theta is in ]-pi, pi]
+  if(realIsZero(re)) {
+    if(realIsZero(im)) {
+      realZero(magnitude);
+      realZero(theta);
+    }
+    else if(realIsNegative(im)) {
+      realCopyAbs(im, magnitude);
+      realMinus(const_piOn2, theta, &ctxtReal75); //  -90°
+    }
+    else {
+      realCopy(im, magnitude);
+      realCopy(const_piOn2, theta); // 90°
+    }
+  }
+  else { // real != 0
+    real75_t real, imag;
+
+    realCopy(re, &real);
+    realCopy(im, &imag);
+
+    // Magnitude
+    realMultiply(&real, &real, magnitude, &ctxtReal75);
+    realFMA(&imag, &imag, magnitude, magnitude, &ctxtReal75);
+    realSquareRoot(magnitude, magnitude, &ctxtReal75);
+
+    // Angle
+    WP34S_Atan2((real_t *)&imag, (real_t *)&real, theta);
   }
 }

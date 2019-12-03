@@ -53,27 +53,27 @@ void fnChangeBase(uint16_t base) {
   else if(getRegisterDataType(REGISTER_X) == dtReal16) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;
-      realIc_t x, value;
+      real39_t x, value;
       bool_t isNegative;
       uint32_t tmp32;
 
-      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-      isNegative = realIcIsNegative(&x);
-      realIcSetPositiveSign(&x);
-      realIcToIntegralValue(&x, &x, DEC_ROUND_DOWN);
+      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
+      isNegative = realIsNegative(&x);
+      realSetPositiveSign(&x);
+      realToIntegralValue(&x, &x, DEC_ROUND_DOWN, &ctxtReal39);
 
       // Calculate 32 bit high word
-      realIcDivide(&x, const_2p32, &value);
+      realDivide(&x, const_2p32, &value, &ctxtReal39);
 
       longIntegerInit(lgInt);
-      realIcToUInt32(&value, tmp32);
+      realToUInt32(&value, tmp32);
       uIntToLongInteger(tmp32, lgInt);
       longIntegerLeftShift(lgInt, 32, lgInt);
 
       // Calculate 32 bit low word
-      realIcDivideRemainder(&x, const_2p32, &value);
+      realDivideRemainder(&x, const_2p32, &value, &ctxtReal39);
 
-      realIcToUInt32(&value, tmp32);
+      realToUInt32(&value, tmp32);
       longIntegerAddUInt(lgInt, tmp32, lgInt);
       if(isNegative) {
         longIntegerSetNegativeSign(lgInt);
@@ -95,28 +95,28 @@ void fnChangeBase(uint16_t base) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;
-      realIc_t x, value;
+      real39_t x, value;
       bool_t isNegative;
       uint32_t tmp32;
 
-      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-      isNegative = realIcIsNegative(&x);
-      realIcSetPositiveSign(&x);
-      realIcToIntegralValue(&x, &x, DEC_ROUND_DOWN);
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+      isNegative = realIsNegative(&x);
+      realSetPositiveSign(&x);
+      realToIntegralValue(&x, &x, DEC_ROUND_DOWN, &ctxtReal39);
 
       // Calculate 32 bit high word
-      realIcDivide(&x, const_2p32, &value);
-      realIcToIntegralValue(&value, &value, DEC_ROUND_DOWN);
+      realDivide(&x, const_2p32, &value, &ctxtReal39);
+      realToIntegralValue(&value, &value, DEC_ROUND_DOWN, &ctxtReal39);
 
       longIntegerInit(lgInt);
-      realIcToUInt32(&value, tmp32);
+      realToUInt32(&value, tmp32);
       uIntToLongInteger(tmp32, lgInt);
       longIntegerLeftShift(lgInt, 32, lgInt);
 
       // Calculate 32 bit low word
-      realIcDivideRemainder(&x, const_2p32, &value);
+      realDivideRemainder(&x, const_2p32, &value, &ctxtReal39);
 
-      realIcToUInt32(&value, tmp32);
+      realToUInt32(&value, tmp32);
       longIntegerAddUInt(lgInt, tmp32, lgInt);
       if(isNegative) {
         longIntegerSetNegativeSign(lgInt);

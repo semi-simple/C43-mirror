@@ -107,23 +107,23 @@ void squareCo16(void) {
     return;
   }
 
-  realIc_t a, b, imagPart;
+  real39_t a, b, imagPart;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   // (a + bi)² = a² - b² + 2abi
   // Imaginary part
-  realIcMultiply(&a, const_2, &imagPart);
-  realIcMultiply(&b, &imagPart, &imagPart);
+  realMultiply(&a, const_2, &imagPart, &ctxtReal39);
+  realMultiply(&b, &imagPart, &imagPart, &ctxtReal39);
 
   // real part
-  realIcMultiply(&a, &a, &a);
-  realIcMultiply(&b, &b, &b);
-  realIcSubtract(&a, &b, &a);
+  realMultiply(&a, &a, &a, &ctxtReal39);
+  realMultiply(&b, &b, &b, &ctxtReal39);
+  realSubtract(&a, &b, &a, &ctxtReal39);
 
-  realIcToReal16(&a,        REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&imagPart, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&a,        REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&imagPart, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -178,21 +178,21 @@ void squareCo34(void) {
     return;
   }
 
-  realIc_t a, b, imagPart;
+  real39_t a, b, imagPart;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   // (a + bi)² = a² - b² + 2abi
   // Imaginary part
-  realIcMultiply(&a, const_2, &imagPart);
-  realIcMultiply(&b, &imagPart, &imagPart);
+  realMultiply(&a, const_2, &imagPart, &ctxtReal39);
+  realMultiply(&b, &imagPart, &imagPart, &ctxtReal39);
 
   // real part
-  realIcMultiply(&a, &a, &a);
-  realIcMultiply(&b, &b, &b);
-  realIcSubtract(&a, &b, &a);
+  realMultiply(&a, &a, &a, &ctxtReal39);
+  realMultiply(&b, &b, &b, &ctxtReal39);
+  realSubtract(&a, &b, &a, &ctxtReal39);
 
-  realIcToReal34(&a,        REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&imagPart, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&a,        REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&imagPart, REGISTER_IMAG34_DATA(REGISTER_X));
 }

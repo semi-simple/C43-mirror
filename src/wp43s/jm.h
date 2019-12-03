@@ -136,6 +136,8 @@ char* itoa(int value, char* result, int base);
 #define ID_43S                  0    //JM Input Default
 #define ID_SP                   1    //JM Input Default
 #define ID_DP                   2    //JM Input Default
+#define ID_CPXSP                3    //JM Input Default
+#define ID_CPXDP                4    //JM Input Default
 
 #define JC_ERPN                 1    // eRPN
 #define JC_HOME_TRIPLE          2    // HOME.3

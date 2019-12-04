@@ -32,8 +32,13 @@
  ***********************************************/
 void fnConstant(const uint16_t cst) {
   liftStack();
+
   realToReal16((real_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
-  refreshStack();
+  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+
+  refreshRegisterLine(REGISTER_Y);
+  refreshRegisterLine(REGISTER_Z);
+  refreshRegisterLine(REGISTER_T);
 }
 
 
@@ -48,6 +53,11 @@ void fnConstant(const uint16_t cst) {
  ***********************************************/
 void fnPi(uint16_t unusedParamButMandatory) {
   liftStack();
+
   realToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
-  refreshStack();
+  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+
+  refreshRegisterLine(REGISTER_Y);
+  refreshRegisterLine(REGISTER_Z);
+  refreshRegisterLine(REGISTER_T);
 }

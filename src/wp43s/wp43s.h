@@ -202,6 +202,7 @@ typedef int16_t calcRegister_t;
 #include "stack.h"
 #include "stats.h"
 #include "statusBar.h"
+#include "timer.h"
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))
@@ -594,6 +595,7 @@ extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
+extern bool_t               updateDisplayValueX;
 extern calcKey_t            kbd_usr[37];
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
@@ -602,6 +604,7 @@ extern uint64_t             shortIntegerMask;
 extern uint64_t             shortIntegerSignBit;
 extern glyph_t              glyphNotFound;
 extern char                 transitionSystemOperation[4];
+extern char                 displayValueX[80];
 extern int16_t              exponentSignLocation;
 extern int16_t              denominatorLocation;
 extern int16_t              imaginaryExponentSignLocation;
@@ -616,6 +619,7 @@ extern real39_t             const *gammaConstants;
 extern real39_t             const *angle180;
 extern real39_t             const *angle90;
 extern real39_t             const *angle45;
+extern pcg32_random_t       pcg32_global;
 #ifdef DMCP_BUILD
   extern bool_t               endOfProgram;
 #endif // DMCP_BUILD

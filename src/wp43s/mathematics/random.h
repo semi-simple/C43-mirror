@@ -15,7 +15,10 @@
  */
 
 /********************************************//**
- * \file slvq.h
+ * \file random.h
  ***********************************************/
 
-void fnSlvq  (uint16_t unusedButMandatoryParameter);
+#include "pcg_basic.h"
+
+void fnRandom(uint16_t unusedParamButMandatory);
+void fnSeed  (uint16_t unusedParamButMandatory);

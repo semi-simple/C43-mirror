@@ -304,3 +304,24 @@ bool_t real39IsAnInteger(const real_t *x) {
 
   return real39CompareEqual(&r, const_0);
 }
+
+
+
+int16_t realIdenticalDigits(real_t *a, real_t *b) {
+  int16_t counter, smallest;
+
+  if(realGetExponent(a) != realGetExponent(b)) {
+    return 0;
+  }
+
+  realGetCoefficient(a, tmpStr3000);
+  realGetCoefficient(b, tmpStr3000 + TMP_STR_LENGTH/2);
+  smallest = min(a->digits, b->digits);
+  counter = 0;
+
+  while(counter < smallest && tmpStr3000[counter] == tmpStr3000[TMP_STR_LENGTH/2 + counter]) {
+    counter++;
+  }
+
+  return counter;
+}

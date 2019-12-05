@@ -167,6 +167,7 @@ bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
+bool_t               updateDisplayValueX;
 calcKey_t            kbd_usr[37];
 radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
 uint16_t             cntOfRadioCbItems;                                         //^^
@@ -177,6 +178,7 @@ uint64_t             shortIntegerMask;
 uint64_t             shortIntegerSignBit;
 glyph_t              glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
 char                 transitionSystemOperation[4];
+char                 displayValueX[80];
 int16_t              exponentSignLocation;
 int16_t              denominatorLocation;
 int16_t              imaginaryExponentSignLocation;
@@ -191,6 +193,7 @@ real39_t             const *gammaConstants;
 real39_t             const *angle180;
 real39_t             const *angle90;
 real39_t             const *angle45;
+pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
   bool_t               endOfProgram;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
@@ -425,13 +428,6 @@ void setupDefaults(void) {
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
     debugMemAllocation = false;
   #endif
-
-  real39_t real39;
-  printf("digits   %p\n", &real39.digits);
-  printf("exponent %p\n", &real39.exponent);
-  printf("bits     %p\n", &real39.bits);
-  printf("lsu[0]   %p\n", &real39.lsu[0]);
-  printf("lsu[1]   %p\n", &real39.lsu[1]);
 }
 
 

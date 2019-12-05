@@ -26,7 +26,7 @@ extern const int16_t menu_FCNS[];
 extern const int16_t menu_CNST[];
 extern const int16_t menu_MENUS[];
 extern const softmenu_t softmenu[];
-char line[10000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000];
+char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal;
 int32_t functionIndex, funcType, correctSignificantDigits, numberOfCorrectSignificantDigitsExpected;
 void (*funcNoParam)(uint16_t);
@@ -37,6 +37,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fn2Pow",                 fn2Pow                },
   {"fnAdd",                  fnAdd                 },
   {"fnAim",                  fnAim                 },
+  {"fnAgm",                  fnAgm                 },
   {"fnArccos",               fnArccos              },
   {"fnArccosh",              fnArccosh             },
   {"fnArcsin",               fnArcsin              },
@@ -119,6 +120,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnRmd",                  fnRmd                 },
   {"fnRollDown",             fnRollDown            },
   {"fnRollUp",               fnRollUp              },
+  {"fnRound",                fnRound               },
+  {"fnRoundi",               fnRoundi              },
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
   {"fnSinh",                 fnSinh                },
@@ -1012,7 +1015,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
 
 
 
-int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numberPart) {
+int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numberPart, calcRegister_t regist, char letter) {
   real39_t expectedValue, value, relativeError, numSignificantDigits;
   real16_t integer;
 
@@ -1041,7 +1044,12 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
   correctSignificantDigits = real16ToInt32(&integer);
   if(correctSignificantDigits <= 16) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
-    printf("\nThere are only %d correct significant digits in the %s part of the value!\n", correctSignificantDigits, numberPart);
+    if(letter == 0) {
+      printf("\nThere are only %d correct significant digits in the %s part of register %d!\n", correctSignificantDigits, numberPart, regist);
+    }
+    else {
+      printf("\nThere are only %d correct significant digits in the %s part of register %c!\n", correctSignificantDigits, numberPart, letter);
+    }
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
@@ -1056,7 +1064,7 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
 
 
 
-int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart) {
+int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart, calcRegister_t regist, char letter) {
   real39_t expectedValue, value, relativeError, numSignificantDigits;
   real16_t integer;
 
@@ -1085,7 +1093,12 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
   correctSignificantDigits = real16ToInt32(&integer);
   if(correctSignificantDigits <= 34) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
-    printf("\nThere are only %d correct significant digits in the %s part of the value!\n", correctSignificantDigits, numberPart);
+    if(letter == 0) {
+      printf("\nThere are only %d correct significant digits in the %s part of register %d!\n", correctSignificantDigits, numberPart, regist);
+    }
+    else {
+      printf("\nThere are only %d correct significant digits in the %s part of register %c!\n", correctSignificantDigits, numberPart, letter);
+    }
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
@@ -1597,7 +1610,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real") == RE_INACCURATE) {
+        if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1605,7 +1618,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal16(&expectedImag16, REGISTER_IMAG16_DATA(regist), "imaginary") == RE_INACCURATE) {
+        if(relativeErrorReal16(&expectedImag16, REGISTER_IMAG16_DATA(regist), "imaginary", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1649,7 +1662,7 @@ void checkExpectedOutParameter(char *p) {
         stringToReal16(r, &expectedReal16);
         if(!real16AreEqual(REGISTER_REAL16_DATA(regist), &expectedReal16)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-          if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real") == RE_INACCURATE) {
+          if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
           }
         }
@@ -1662,7 +1675,7 @@ void checkExpectedOutParameter(char *p) {
 //printf("\n1<%s|%s|%s>\n", p, l, r);
         if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-          if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
+          if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
           }
 //printf("\n2<%s|%s|%s>\n", p, l, r);
@@ -1780,7 +1793,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
+        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1788,7 +1801,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal34(&expectedImag34, REGISTER_IMAG34_DATA(regist), "imaginary") == RE_INACCURATE) {
+        if(relativeErrorReal34(&expectedImag34, REGISTER_IMAG34_DATA(regist), "imaginary", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1983,6 +1996,18 @@ void standardizeLine(void) {
   while(line[0] == ' ') {
     memmove(line, line + 1, strlen(line));
   }
+
+  // 2 spaces ==> 1 space
+  for(uint32_t i=0; i<strlen(line); i++) {
+    if(line[i] == '"') {
+      i = endOfString(line + i) - line;
+    }
+    if(line[i] == ' ' && line[i + 1] == ' ') {
+      memmove(line + i, line + i + 1, strlen(line + i) - 1);
+      line[strlen(line) - 1] = 0;
+      i--;
+    }
+  }
 }
 
 
@@ -2059,6 +2084,14 @@ void processOneFile(void) {
   lineNumber = 1;
   while(!feof(testSuite)) {
     standardizeLine();
+    while(strlen(line) >= 4 && strncmp(line + strlen(line) - 4, " ...", 4) == 0) {
+      line[strlen(line) - 3] = 0;
+      if(!feof(testSuite)) {
+        fgets(line + strlen(line), 9999, testSuite);
+        lineNumber++;
+        standardizeLine();
+      }
+    }
     processLine();
     fgets(line, 9999, testSuite);
     lineNumber++;

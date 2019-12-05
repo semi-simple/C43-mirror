@@ -1022,7 +1022,7 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
       case NP_REAL_EXPONENT : // +12345.678e+3
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
 
-        exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
+        exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
         if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
           strcat(nimBufferDisplay, STD_SUP_MINUS);
         }
@@ -1038,13 +1038,13 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
         strcat(nimBufferDisplay, STD_SPACE_4_PER_EM);
 
         for(index=2; nimBuffer[index]!=' '; index++); // The ending semi colon is OK here
-        supNumberToDisplayString(atoi(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
+        supNumberToDisplayString(atoi(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
 
         strcat(nimBufferDisplay, "/");
 
         for(; nimBuffer[index]!='/'; index++); // The ending semi colon is OK here
         if(nimBuffer[++index] != 0) {
-          subNumberToDisplayString(atoi(nimBuffer + index), nimBufferDisplay + stringByteLength(nimBufferDisplay));
+          subNumberToDisplayString(atoi(nimBuffer + index), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL);
         }
         break;
 
@@ -1068,7 +1068,7 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
 
         if(nimNumberPart == NP_REAL_EXPONENT) {
-          exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
+          exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
           if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
             strcat(nimBufferDisplay, STD_SUP_MINUS);
           }
@@ -1120,7 +1120,7 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
           nimBufferToDisplayBuffer(nimBuffer + imaginaryMantissaSignLocation + 1, nimBufferDisplay + stringByteLength(nimBufferDisplay));
 
           if(nimNumberPart == NP_REAL_EXPONENT) {
-            exponentToDisplayString(atoi(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), true);
+            exponentToDisplayString(atoi(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
             if(nimBuffer[imaginaryExponentSignLocation + 1] == 0 && nimBuffer[imaginaryExponentSignLocation] == '-') {
               strcat(nimBufferDisplay, STD_SUP_MINUS);
             }

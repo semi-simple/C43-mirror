@@ -15,7 +15,11 @@
  */
 
 /********************************************//**
- * \file slvq.h
+ * \file roundi.h
  ***********************************************/
 
-void fnSlvq  (uint16_t unusedButMandatoryParameter);
+void fnRoundi   (uint16_t unusedParamButMandatory);
+void roundiError(void);
+void roundiRe16 (void);
+void roundiRm16 (void);
+void roundiRe34 (void);

@@ -36,6 +36,8 @@
 ;      to put a \ or a " in a string use: \\ or \" example: "double quote=\" backslash=\\"
 ;      \x followed by 2 hexadecimal digits inserts the hexadecimal char in the string
 ;
+; ... at the end of a line means the line continues on the following line
+;
 ; All letters can be written upper or lower case but the function names are case sensitive
 ;
 ; No space around the equal sign is allowed
@@ -137,6 +139,8 @@ polarToRectangular.txt
 
 ceil.txt
 floor.txt
+;round.txt
+roundi.txt
 
 idiv.txt
 idivr.txt
@@ -199,3 +203,4 @@ magnitude.txt
 unitVector.txt
 
 slvq.txt
+agm.txt

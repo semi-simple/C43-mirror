@@ -23,6 +23,7 @@
 #include "2pow.h"
 #include "10pow.h"
 #include "addition.h"
+#include "agm.h"
 #include "arccos.h"
 #include "arccosh.h"
 #include "arcsin.h"

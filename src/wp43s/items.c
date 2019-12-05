@@ -139,7 +139,7 @@ const item_t indexOfItems[] = {
 /*   15 */  { fnCvtAcreM2,                 multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            "acre",                                        CAT_FNCT, SLS_ENABLED  },
 /*   16 */  { fnCvtAcreusM2,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     "acre" STD_US,                                 CAT_FNCT, SLS_ENABLED  },
 /*   17 */  { itemToBeCoded,               NOPARAM,                     "ADV",                                         "ADV",                                         CAT_MENU, SLS_UNCHANGED},
-/*   18 */  { itemToBeCoded,               NOPARAM,                     "AGM",                                         "AGM",                                         CAT_FNCT, SLS_UNCHANGED},
+/*   18 */  { fnAgm,                       NOPARAM,                     "AGM",                                         "AGM",                                         CAT_FNCT, SLS_ENABLED  },
 /*   19 */  { itemToBeCoded,               NOPARAM,                     "AGRAPH",                                      "AGRAPH",                                      CAT_FNCT, SLS_UNCHANGED},
 /*   20 */  { fnDisplayFormatAll,          TM_VALUE,                    "ALL" ,                                        "ALL",                                         CAT_FNCT, SLS_UNCHANGED},
 /*   21 */  { fnConstant,                  3,                           "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   CAT_CNST, SLS_ENABLED  },

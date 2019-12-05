@@ -15,7 +15,7 @@
  */
 
 /********************************************//**
- * \file slvq.h
+ * \file agm.h
  ***********************************************/
 
-void fnSlvq  (uint16_t unusedButMandatoryParameter);
+void fnAgm  (uint16_t unusedButMandatoryParameter);

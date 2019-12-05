@@ -37,6 +37,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fn2Pow",                 fn2Pow                },
   {"fnAdd",                  fnAdd                 },
   {"fnAim",                  fnAim                 },
+  {"fnAgm",                  fnAgm                 },
   {"fnArccos",               fnArccos              },
   {"fnArccosh",              fnArccosh             },
   {"fnArcsin",               fnArcsin              },

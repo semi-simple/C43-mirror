@@ -18,31 +18,32 @@
  * \file comparisonReals.h
  ***********************************************/
 
-bool_t real16CompareAbsGreaterThan (const real16_t *number1, const real16_t *number2);
-bool_t real16CompareAbsLessThan    (const real16_t *number1, const real16_t *number2);
-bool_t real16CompareEqual          (const real16_t *number1, const real16_t *number2);
-bool_t real16CompareGreaterEqual   (const real16_t *number1, const real16_t *number2);
-bool_t real16CompareGreaterThan    (const real16_t *number1, const real16_t *number2);
-bool_t real16CompareLessEqual      (const real16_t *number1, const real16_t *number2);
-bool_t real16CompareLessThan       (const real16_t *number1, const real16_t *number2);
+bool_t  real16CompareAbsGreaterThan (const real16_t *number1, const real16_t *number2);
+bool_t  real16CompareAbsLessThan    (const real16_t *number1, const real16_t *number2);
+bool_t  real16CompareEqual          (const real16_t *number1, const real16_t *number2);
+bool_t  real16CompareGreaterEqual   (const real16_t *number1, const real16_t *number2);
+bool_t  real16CompareGreaterThan    (const real16_t *number1, const real16_t *number2);
+bool_t  real16CompareLessEqual      (const real16_t *number1, const real16_t *number2);
+bool_t  real16CompareLessThan       (const real16_t *number1, const real16_t *number2);
 
-bool_t real34CompareAbsGreaterThan (const real34_t *number1, const real34_t *number2);
-bool_t real34CompareAbsGreaterEqual(const real34_t *number1, const real34_t *number2);
-bool_t real34CompareAbsLessThan    (const real34_t *number1, const real34_t *number2);
-bool_t real34CompareEqual          (const real34_t *number1, const real34_t *number2);
-bool_t real34CompareGreaterEqual   (const real34_t *number1, const real34_t *number2);
-bool_t real34CompareGreaterThan    (const real34_t *number1, const real34_t *number2);
-bool_t real34CompareLessEqual      (const real34_t *number1, const real34_t *number2);
-bool_t real34CompareLessThan       (const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareAbsGreaterThan (const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareAbsGreaterEqual(const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareAbsLessThan    (const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareEqual          (const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareGreaterEqual   (const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareGreaterThan    (const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareLessEqual      (const real34_t *number1, const real34_t *number2);
+bool_t  real34CompareLessThan       (const real34_t *number1, const real34_t *number2);
 
-bool_t real39CompareAbsGreaterThan (const real_t *number1, const real_t *number2);
-bool_t real39CompareAbsLessThan    (const real_t *number1, const real_t *number2);
-bool_t real39CompareEqual          (const real_t *number1, const real_t *number2);
-bool_t real39CompareGreaterEqual   (const real_t *number1, const real_t *number2);
-bool_t real39CompareGreaterThan    (const real_t *number1, const real_t *number2);
-bool_t real39CompareLessEqual      (const real_t *number1, const real_t *number2);
-bool_t real39CompareLessThan       (const real_t *number1, const real_t *number2);
+bool_t  real39CompareAbsGreaterThan (const real_t *number1, const real_t *number2);
+bool_t  real39CompareAbsLessThan    (const real_t *number1, const real_t *number2);
+bool_t  real39CompareEqual          (const real_t *number1, const real_t *number2);
+bool_t  real39CompareGreaterEqual   (const real_t *number1, const real_t *number2);
+bool_t  real39CompareGreaterThan    (const real_t *number1, const real_t *number2);
+bool_t  real39CompareLessEqual      (const real_t *number1, const real_t *number2);
+bool_t  real39CompareLessThan       (const real_t *number1, const real_t *number2);
 
-bool_t real16IsAnInteger           (const real16_t *x);
-bool_t real34IsAnInteger           (const real34_t *x);
-bool_t real39IsAnInteger           (const real_t *x);
+bool_t  real16IsAnInteger           (const real16_t *x);
+bool_t  real34IsAnInteger           (const real34_t *x);
+bool_t  real39IsAnInteger           (const real_t *x);
+int16_t realIdenticalDigits         (real_t *a, real_t *b);

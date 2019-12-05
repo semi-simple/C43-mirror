@@ -160,7 +160,7 @@ uint64_t             shortIntegerMask;
 uint64_t             shortIntegerSignBit;
 glyph_t              glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
 char                 transitionSystemOperation[4];
-char                 displayValueX[80];
+char                 displayValueX[DISPLAY_VALUE_LEN];
 int16_t              exponentSignLocation;
 int16_t              denominatorLocation;
 int16_t              imaginaryExponentSignLocation;

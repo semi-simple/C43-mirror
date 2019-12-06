@@ -2059,10 +2059,12 @@ const item_t indexOfItems[] = {
 /* 1902 */  { fnUserJM,                    JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                            CAT_NONE, SLS_UNCHANGED},      //JM ASSIGN SEEK FUNCTION
 /* 1903 */  { itemToBeCoded,               NOPARAM      ,               "",                                            STD_SIGMA "+ ASN",                             CAT_NONE, SLS_UNCHANGED},      //JM USER NORMAL
 /* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM      ,               "",                                            "X to"STD_SIGMA "+",                           CAT_NONE, SLS_ENABLED  },      //JM USER NORMAL
-/* 1905 */  { fnInDefault,                 ID_43S       ,               "",                                            "In Dft",                                      CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1906 */  { fnInDefault,                 ID_SP        ,               "",                                            "In SP",                                       CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1907 */  { fnInDefault,                 ID_DP        ,               "",                                            "In DP",                                       CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "",                                            "InDft?",                                      CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1905 */  { fnInDefault,                 ID_43S       ,               "",                                      "i" STD_SPACE_3_PER_EM "LI" STD_SPACE_3_PER_EM "SP", CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1906 */  { fnInDefault,                 ID_SP        ,               "",                                            "i" STD_SPACE_3_PER_EM "SP",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1907 */  { fnInDefault,                 ID_DP        ,               "",                                            "i" STD_SPACE_3_PER_EM "DP",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "",                                            "i" STD_SPACE_3_PER_EM "Dflt?",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1909 */  { fnInDefault,                 ID_CPXSP     ,               "",                                            "i" STD_SPACE_3_PER_EM "CPXSP",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1910 */  { fnInDefault,                 ID_CPXDP     ,               "",                                            "i" STD_SPACE_3_PER_EM "CPXDP",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 
-/* 1909 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1911 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

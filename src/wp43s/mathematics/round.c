@@ -161,7 +161,7 @@ void roundCo16(void) {
   refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
-  posI = -1;
+  posI = DISPLAY_VALUE_LEN - 1;
   pos = 0;
   while(displayValueX[pos] != 0) {
     if(displayValueX[pos] == 'i') {
@@ -171,7 +171,7 @@ void roundCo16(void) {
     pos++;
   }
 
-  if(posI == -1) {
+  if(posI == DISPLAY_VALUE_LEN - 1) {
     pos = 0;
     while(displayValueX[pos] != 0) {
       if(displayValueX[pos] == 'j') {
@@ -188,7 +188,7 @@ void roundCo16(void) {
     real39_t magnitude, theta;
 
     stringToReal(displayValueX,        &magnitude, &ctxtReal39);
-    stringToReal(displayValueX + posI, &theta, &ctxtReal39);
+    stringToReal(displayValueX + posI, &theta,     &ctxtReal39);
     real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta);
     realToReal16(&magnitude, REGISTER_REAL16_DATA(REGISTER_X));
     realToReal16(&theta,     REGISTER_IMAG16_DATA(REGISTER_X));
@@ -274,7 +274,7 @@ void roundCo34(void) {
   refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
-  posI = -1;
+  posI = DISPLAY_VALUE_LEN - 1;
   pos = 0;
   while(displayValueX[pos] != 0) {
     if(displayValueX[pos] == 'i') {
@@ -284,7 +284,7 @@ void roundCo34(void) {
     pos++;
   }
 
-  if(posI == -1) {
+  if(posI == DISPLAY_VALUE_LEN - 1) {
     pos = 0;
     while(displayValueX[pos] != 0) {
       if(displayValueX[pos] == 'j') {
@@ -296,13 +296,12 @@ void roundCo34(void) {
     }
   }
 
-
   displayValueX[posI++] = 0;
   if(polar) {
     real39_t magnitude, theta;
 
     stringToReal(displayValueX,        &magnitude, &ctxtReal39);
-    stringToReal(displayValueX + posI, &theta, &ctxtReal39);
+    stringToReal(displayValueX + posI, &theta,     &ctxtReal39);
     real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta);
     realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));

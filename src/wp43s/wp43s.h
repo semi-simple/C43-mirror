@@ -231,7 +231,7 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     92                                               //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     77                                               //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0
@@ -517,8 +517,9 @@ extern realContext_t        ctxtReal75;  // 75 digits: used in SLVQ
 extern realContext_t        ctxtReal459; // 459 digits: used in radian angle reduction
 extern realContext_t        ctxtReal855; // 855 digits: used for really big modulo
 extern uint16_t             flags[7];
-#define TMP_STR_LENGTH  3000
+#define TMP_STR_LENGTH      3000
 #define ERROR_MESSAGE_LENGTH 512
+#define DISPLAY_VALUE_LEN     80
 extern char                 tmpStr3000[TMP_STR_LENGTH];
 extern char                 errorMessage[ERROR_MESSAGE_LENGTH];
 extern char                 aimBuffer[AIM_BUFFER_LENGTH];

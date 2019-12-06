@@ -1146,7 +1146,7 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
       }
     }
 
-    nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34 || (Input_Default == ID_DP);           //JM Input default type
+    nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34 || (Input_Default == ID_DP) || (Input_Default == ID_CPXDP);           //JM Input default type
     if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
       for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
         if(nimBufferDisplay[index] == '.') {
@@ -1899,6 +1899,8 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
       break;
     case ID_SP:
     case ID_DP:
+    case ID_CPXSP:
+    case ID_CPXDP:
       nimNumberPart = NP_REAL_FLOAT_PART;
       break;
   }
@@ -2098,12 +2100,26 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
         }
         else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           if(nimInputIsReal34) {
+            if(Input_Default == ID_CPXDP) {                                         //JM Input default type
+              reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE); //JM Input default type
+              stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));          //JM Input default type
+              stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));                //JM Input default type
+            }                                                                       //JM Input default type
+            else {                                                                  //JM Input default type
             reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
             stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+            }                                                                       //JM Input default type
           }
           else {
+            if(Input_Default == ID_CPXSP) {                                         //JM Input default type
+              reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE); //JM Input default type
+              stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));          //JM Input default type
+              stringToReal34("0", REGISTER_IMAG16_DATA(REGISTER_X));                //JM Input default type
+            }                                                                       //JM Input default type
+            else {                                                                  //JM Input default type
             reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
             stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
+            }                                                                       //JM Input default type
           }
         }
         else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {

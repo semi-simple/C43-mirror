@@ -266,6 +266,8 @@ void fnShowJM(uint16_t jmConfig) {
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
     else if(Input_Default == ID_SP) { stringToLongInteger("1",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
+    else if(Input_Default == ID_CPXSP) { stringToLongInteger("3",10,mem); }
+    else if(Input_Default == ID_CPXDP) { stringToLongInteger("4",10,mem); }
     break;
 
   default:

@@ -156,95 +156,95 @@ bool_t real34CompareLessThan(const real34_t *number1, const real34_t *number2) {
 
 
 
-bool_t realIcCompareAbsGreaterThan(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare, num1, num2;
+bool_t real39CompareAbsGreaterThan(const real_t *number1, const real_t *number2) {
+  real39_t compare, num1, num2;
   int32_t cmp;
 
-  realIcCopyAbs(number1, &num1);
-  realIcCopyAbs(number2, &num2);
-  realIcCompare(&num1, &num2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCopyAbs(number1, &num1);
+  realCopyAbs(number2, &num2);
+  realCompare(&num1, &num2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp > 0;
 }
 
 
 
-bool_t realIcCompareAbsGreaterEqual(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare, num1, num2;
+bool_t real39CompareAbsGreaterEqual(const real_t *number1, const real_t *number2) {
+  real39_t compare, num1, num2;
   int32_t cmp;
 
-  realIcCopyAbs(number1, &num1);
-  realIcCopyAbs(number2, &num2);
-  realIcCompare(&num1, &num2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCopyAbs(number1, &num1);
+  realCopyAbs(number2, &num2);
+  realCompare(&num1, &num2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp >= 0;
 }
 
 
 
-bool_t realIcCompareAbsLessThan(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare, num1, num2;
+bool_t real39CompareAbsLessThan(const real_t *number1, const real_t *number2) {
+  real39_t compare, num1, num2;
   int32_t cmp;
 
-  realIcCopyAbs(number1, &num1);
-  realIcCopyAbs(number2, &num2);
-  realIcCompare(&num1, &num2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCopyAbs(number1, &num1);
+  realCopyAbs(number2, &num2);
+  realCompare(&num1, &num2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp < 0;
 }
 
 
 
-bool_t realIcCompareEqual(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare;
+bool_t real39CompareEqual(const real_t *number1, const real_t *number2) {
+  real39_t compare;
   int32_t cmp;
 
-  realIcCompare(number1, number2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCompare(number1, number2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp == 0;
 }
 
 
 
-bool_t realIcCompareGreaterEqual(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare;
+bool_t real39CompareGreaterEqual(const real_t *number1, const real_t *number2) {
+  real39_t compare;
   int32_t cmp;
 
-  realIcCompare(number1, number2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCompare(number1, number2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp >= 0;
 }
 
 
 
-bool_t realIcCompareGreaterThan(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare;
+bool_t real39CompareGreaterThan(const real_t *number1, const real_t *number2) {
+  real39_t compare;
   int32_t cmp;
 
-  realIcCompare(number1, number2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCompare(number1, number2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp > 0;
 }
 
 
 
-bool_t realIcCompareLessEqual(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare;
+bool_t real39CompareLessEqual(const real_t *number1, const real_t *number2) {
+  real39_t compare;
   int32_t cmp;
 
-  realIcCompare(number1, number2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCompare(number1, number2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp <= 0;
 }
 
 
 
-bool_t realIcCompareLessThan(const realIc_t *number1, const realIc_t *number2) {
-  realIc_t compare;
+bool_t real39CompareLessThan(const real_t *number1, const real_t *number2) {
+  real39_t compare;
   int32_t cmp;
 
-  realIcCompare(number1, number2, &compare);
-  realIcToInt32(&compare, cmp);
+  realCompare(number1, number2, &compare, &ctxtReal39);
+  realToInt32(&compare, cmp);
   return cmp < 0;
 }
 
@@ -288,19 +288,40 @@ bool_t real34IsAnInteger(const real34_t *x) {
 
 
 
-bool_t realIcIsAnInteger(const realIc_t *x) {
-  realIc_t r, y;
+bool_t real39IsAnInteger(const real_t *x) {
+  real39_t r, y;
 
-  if(realIcIsNaN(x)) {
+  if(realIsNaN(x)) {
     return false;
   }
 
-  if(realIcIsInfinite(x)) {
+  if(realIsInfinite(x)) {
     return true;
   }
 
-  realIcToIntegralValue(x, &y, DEC_ROUND_DOWN);
-  realIcSubtract(x, &y, &r);
+  realToIntegralValue(x, &y, DEC_ROUND_DOWN, &ctxtReal39);
+  realSubtract(x, &y, &r, &ctxtReal39);
 
-  return realIcCompareEqual(&r, const_0);
+  return real39CompareEqual(&r, const_0);
+}
+
+
+
+int16_t realIdenticalDigits(real_t *a, real_t *b) {
+  int16_t counter, smallest;
+
+  if(realGetExponent(a) != realGetExponent(b)) {
+    return 0;
+  }
+
+  realGetCoefficient(a, tmpStr3000);
+  realGetCoefficient(b, tmpStr3000 + TMP_STR_LENGTH/2);
+  smallest = min(a->digits, b->digits);
+  counter = 0;
+
+  while(counter < smallest && tmpStr3000[counter] == tmpStr3000[TMP_STR_LENGTH/2 + counter]) {
+    counter++;
+  }
+
+  return counter;
 }

@@ -32,8 +32,13 @@
  ***********************************************/
 void fnConstant(const uint16_t cst) {
   liftStack();
-  realIcToReal16((realIc_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
-  refreshStack();
+
+  realToReal16((real_t *)constants + cst, REGISTER_REAL16_DATA(REGISTER_X));
+  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+
+  refreshRegisterLine(REGISTER_Y);
+  refreshRegisterLine(REGISTER_Z);
+  refreshRegisterLine(REGISTER_T);
 }
 
 
@@ -53,8 +58,11 @@ void fnPi(uint16_t unusedParamButMandatory) {
     stringToReal34("3.141592653589793238462643383279502884", REGISTER_REAL34_DATA(REGISTER_X));   //JM PIDP
   }
   else {
-  	realIcToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
   }
 
-  refreshStack();
+refreshRegisterLine(REGISTER_Y);
+refreshRegisterLine(REGISTER_Z);
+refreshRegisterLine(REGISTER_T);
 }

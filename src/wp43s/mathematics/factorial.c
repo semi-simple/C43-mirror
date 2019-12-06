@@ -121,11 +121,11 @@ void factRe16(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   WP34S_Factorial(&x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -140,16 +140,16 @@ void factCo16(void) {
     return;
   }
 
-  complexIc_t z;
+  complex39_t z;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
 
-  realIcAdd(&z.real, const_1, &z.real);
+  realAdd(&z.real, const_1, &z.real, &ctxtReal39);
   WP34S_ComplexGamma(&z, &z);
 
-  realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -213,11 +213,11 @@ void factRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   WP34S_Factorial(&x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -232,14 +232,14 @@ void factCo34(void) {
     return;
   }
 
-  complexIc_t z;
+  complex39_t z;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
 
-  realIcAdd(&z.real, const_1, &z.real);
+  realAdd(&z.real, const_1, &z.real, &ctxtReal39);
   WP34S_ComplexGamma(&z, &z);
 
-  realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

@@ -30,7 +30,7 @@ void (* const Tan[12])(void) = {
 
 
 
-void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, realIc_t *reducedAngle) {
+void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, real_t *reducedAngle) {
   uint32_t oneTurn;
 
   switch(angularMode) {
@@ -42,13 +42,13 @@ void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, realI
   }
 
   if(oneTurn == 0) {
-    convertLongIntegerRegisterToRealIc(regist, reducedAngle);
+    convertLongIntegerRegisterToReal(regist, reducedAngle, &ctxtReal39);
   }
   else {
     longInteger_t angle;
 
     convertLongIntegerRegisterToLongInteger(regist, angle);
-    uInt32ToRealIc(longIntegerModuloUInt(angle, oneTurn), reducedAngle);
+    uInt32ToReal(longIntegerModuloUInt(angle, oneTurn), reducedAngle);
     longIntegerFree(angle);
   }
 }
@@ -89,35 +89,35 @@ void fnTan(uint16_t unusedParamButMandatory) {
 
 
 
-void tanCoIc(const complexIc_t *zin, complexIc_t *zout) {
+void tanCo39(const complex39_t *zin, complex39_t *zout) {
   //                sin(a)*cosh(b) + i*cos(a)*sinh(b)
   // tan(a + ib) = -----------------------------------
   //                cos(a)*cosh(b) - i*sin(a)*sinh(b)
-  realIc_t sina, cosa, sinhb, coshb;
-  complexIc_t numer, denom;
+  real39_t sina, cosa, sinhb, coshb;
+  complex39_t numer, denom;
 
   WP34S_Cvt2RadSinCosTan(&zin->real, AM_RADIAN, &sina, &cosa, NULL);
   WP34S_SinhCosh(&zin->imag, &sinhb, &coshb);
 
-  realIcMultiply(&sina, &coshb, &numer.real);
-  realIcMultiply(&cosa, &sinhb, &numer.imag);
+  realMultiply(&sina, &coshb, &numer.real, &ctxtReal39);
+  realMultiply(&cosa, &sinhb, &numer.imag, &ctxtReal39);
 
-  realIcMultiply(&cosa, &coshb, &denom.real);
-  realIcMultiply(&sina, &sinhb, &denom.imag);
-  realIcChangeSign(&denom.imag);
+  realMultiply(&cosa, &coshb, &denom.real, &ctxtReal39);
+  realMultiply(&sina, &sinhb, &denom.imag, &ctxtReal39);
+  realChangeSign(&denom.imag);
 
-  divCoIcCoIc(&numer, &denom, zout);
+  divCo39Co39(&numer, &denom, zout);
 }
 
 
 
 void tanLonI(void) {
-  realIc_t sin, cos, tan;
+  real39_t sin, cos, tan;
 
   longIntegerAngleReduction(REGISTER_X, currentAngularMode, &tan);
   WP34S_Cvt2RadSinCosTan(&tan, currentAngularMode, &sin, &cos, &tan);
 
-  if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
+  if(realIsZero(&cos) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function tanLonI:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
@@ -126,7 +126,7 @@ void tanLonI(void) {
   }
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -141,17 +141,17 @@ void tanRe16(void) {
   }
 
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    realIcToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    realIc_t sin, cos, tan;
+    real39_t sin, cos, tan;
     uint32_t xAngularMode;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &tan);
+    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &tan);
     xAngularMode = getRegisterAngularMode(REGISTER_X);
     WP34S_Cvt2RadSinCosTan(&tan, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &sin, &cos, &tan);
 
-    if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
+    if(realIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function tanRe16:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
@@ -159,7 +159,7 @@ void tanRe16(void) {
       return;
     }
     else {
-      realIcToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
     }
   }
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -176,15 +176,15 @@ void tanCo16(void) {
     return;
   }
 
-  complexIc_t z;
+  complex39_t z;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
 
-  tanCoIc(&z, &z);
+  tanCo39(&z, &z);
 
-  realIcToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -211,17 +211,17 @@ void tanRe34(void) {
   }
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
-    realIcToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realIc_t sin, cos, tan;
+    real39_t sin, cos, tan;
     uint32_t xAngularMode;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &tan);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tan);
     xAngularMode = getRegisterAngularMode(REGISTER_X);
     WP34S_Cvt2RadSinCosTan(&tan, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &sin, &cos, &tan);
 
-    if(realIcIsZero(&cos) && !getFlag(FLAG_DANGER)) {
+    if(realIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function tanRe34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
@@ -229,7 +229,7 @@ void tanRe34(void) {
       return;
     }
     else {
-      realIcToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -246,13 +246,13 @@ void tanCo34(void) {
     return;
   }
 
-  complexIc_t z;
+  complex39_t z;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
 
-  tanCoIc(&z, &z);
+  tanCo39(&z, &z);
 
-  realIcToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

@@ -140,13 +140,13 @@ void rmdLonIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -167,10 +167,10 @@ void rmdRe16LonI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function rmdRe16LonI:", "cannot IDIVR a real16 by 0", NULL, NULL);
@@ -178,13 +178,13 @@ void rmdRe16LonI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
 
-  realIcDivideRemainder(&y, &x, &x);
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -286,13 +286,13 @@ void rmdLonIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -313,10 +313,10 @@ void rmdRe34LonI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function rmdRe34LonI:", "cannot IDIVR a real34 by 0", NULL, NULL);
@@ -324,12 +324,12 @@ void rmdRe34LonI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  realIcDivideRemainder(&y, &x, &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -361,13 +361,13 @@ void rmdRe16Re16(void) {
     return;
   }
 
-  realIc_t x, y;
+  real39_t x, y;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -388,10 +388,10 @@ void rmdRe16ShoI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function rmdRe16ShoI:", "cannot IDIVR a real16 by 0", NULL, NULL);
@@ -399,12 +399,12 @@ void rmdRe16ShoI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  realIcDivideRemainder(&y, &x, &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -432,13 +432,13 @@ void rmdShoIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -467,13 +467,13 @@ void rmdRe16Re34(void) {
     return;
   }
 
-  realIc_t x, y;
+  real39_t x, y;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -502,14 +502,14 @@ void rmdRe34Re16(void) {
     return;
   }
 
-  realIc_t x, y;
+  real39_t x, y;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -580,13 +580,13 @@ void rmdShoIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
@@ -607,10 +607,10 @@ void rmdRe34ShoI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function rmdRe34ShoI:", "cannot IDIVR a real34 by 0", NULL, NULL);
@@ -618,13 +618,13 @@ void rmdRe34ShoI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  realIcDivideRemainder(&y, &x, &x);
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -656,12 +656,12 @@ void rmdRe34Re34(void) {
     return;
   }
 
-  realIc_t x, y;
+  real39_t x, y;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realIcDivideRemainder(&y, &x, &x);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }

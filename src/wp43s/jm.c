@@ -1284,11 +1284,11 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
     displayString[0] = 0;                                                                               //JM UNIT
     if(nimMode) {                                                                                       //JM UNIT
       if(exponent != 0) {                                                                               //JM UNIT
-        supNumberToDisplayString(exponent, displayString, false);                                       //JM UNIT
+        supNumberToDisplayString(exponent, displayString, NULL, false);                                       //JM UNIT
       }                                                                                                 //JM UNIT
     }                                                                                                   //JM UNIT
     else {                                                                                              //JM UNIT
-      supNumberToDisplayString(exponent, displayString, false);                                         //JM UNIT
+      supNumberToDisplayString(exponent, displayString, NULL, false);                                         //JM UNIT
     }                                                                                                   //JM UNIT
   }                                                                                                     //JM UNIT
 }                                                                                                       //JM UNIT

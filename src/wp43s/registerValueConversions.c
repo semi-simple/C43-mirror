@@ -223,6 +223,7 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
   real34_t lowWord;
 
   convertShortIntegerRegisterToUInt64(source, &sign, &value);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
 
   uInt32ToReal34(value >> 32, REGISTER_REAL34_DATA(destination));
   uInt32ToReal34(value & 0x00000000ffffffff, &lowWord);

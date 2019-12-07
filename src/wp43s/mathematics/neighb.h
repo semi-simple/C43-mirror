@@ -15,7 +15,7 @@
  */
 
 /********************************************//**
- * \file agm.h
+ * \file neighb.h
  ***********************************************/
 
-void fnAgm(uint16_t unusedButMandatoryParameter);
+void fnNeighb(uint16_t unusedButMandatoryParameter);

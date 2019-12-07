@@ -628,7 +628,7 @@ extern uint64_t             shortIntegerMask;
 extern uint64_t             shortIntegerSignBit;
 extern glyph_t              glyphNotFound;
 extern char                 transitionSystemOperation[4];
-extern char                 displayValueX[80];
+extern char                 displayValueX[DISPLAY_VALUE_LEN];
 extern int16_t              exponentSignLocation;
 extern int16_t              denominatorLocation;
 extern int16_t              imaginaryExponentSignLocation;

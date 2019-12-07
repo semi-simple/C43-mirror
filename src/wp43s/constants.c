@@ -54,13 +54,13 @@ void fnConstant(const uint16_t cst) {
 void fnPi(uint16_t unusedParamButMandatory) {
   liftStack();
 
-  if(Input_Default == ID_DP) {                                                                    //JM PIDP
+  if((Input_Default == ID_DP) || (getRegisterDataType(REGISTER_X) == dtReal34) || (getRegisterDataType(REGISTER_X) == dtComplex34)) {       //JM PIDP
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);                               //JM PIDP
 //  stringToReal34("3.141592653589793238462643383279502884197169399375105821", REGISTER_REAL34_DATA(REGISTER_X));   //JM PIDP
     realToReal34(const_pi, REGISTER_REAL34_DATA(REGISTER_X));                                     //JM PIDP
   }
   else {
-  realToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
   }
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 

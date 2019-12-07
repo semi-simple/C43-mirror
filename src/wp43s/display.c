@@ -210,7 +210,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
   displayString += 2;
   displayString[0] = 0;
 
-  if(displayValueString != NULL) {
+  if(displayValueString != NULL) {  //JM_TOCHECK
     *displayValueString++ = 'e';
     *displayValueString = 0;
   }
@@ -227,7 +227,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
 
 
 
-void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {
+void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {  //JM_TOCHECK
   if(displayValueString != NULL) {
     sprintf(displayValueString, "%" FMT32S, supNumber);
   }
@@ -281,7 +281,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
 
 
 
-void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {
+void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {  //JM_TOCHECK
   if(displayValueString != NULL) {
     sprintf(displayValueString, "%" FMT32S, subNumber);
   }
@@ -1070,7 +1070,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       exponentToDisplayString(exponent, displayString + charIndex, displayValueX + valueIndex, false);
       }                                                                                 //JM UNIT
       else {                                                                            //JM UNIT
-         exponentToUnitDisplayString(exponent, displayString+charIndex, displayValueX + valueIndex, false);         //JM UNIT
+         exponentToUnitDisplayString(exponent, displayString+charIndex, false);         //JM UNIT   //JM_TOCHANGE!!
       }                                                                                 //JM UNIT
     }
   }

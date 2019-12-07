@@ -52,17 +52,19 @@ void fnConstant(const uint16_t cst) {
  * \return void
  ***********************************************/
 void fnPi(uint16_t unusedParamButMandatory) {
-  liftStack();
 
   if((Input_Default == ID_DP) || (getRegisterDataType(REGISTER_X) == dtReal34) || (getRegisterDataType(REGISTER_X) == dtComplex34)) {       //JM PIDP
+    liftStack();
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);                               //JM PIDP
 //  stringToReal34("3.141592653589793238462643383279502884197169399375105821", REGISTER_REAL34_DATA(REGISTER_X));   //JM PIDP
     realToReal34(const_pi, REGISTER_REAL34_DATA(REGISTER_X));                                     //JM PIDP
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
   }
   else {
+    liftStack();
     realToReal16(const_pi, REGISTER_REAL16_DATA(REGISTER_X));
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
   }
-  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 
   refreshRegisterLine(REGISTER_Y);
   refreshRegisterLine(REGISTER_Z);

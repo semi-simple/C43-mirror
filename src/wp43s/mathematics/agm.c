@@ -21,13 +21,6 @@
 #include "wp43s.h"
 
 
-/********************************************//**
- * \brief (c, b, a) ==> (x1, x2, r) c ==> regL
- * enables stack lift and refreshes the stack
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnAgm(uint16_t unusedParamButMandatory) {
   bool_t result16=true, realInput=true;
   complex39_t a, b, c;

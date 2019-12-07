@@ -61,6 +61,7 @@
 #include "minusOnePow.h"
 #include "modulo.h"
 #include "multiplication.h"
+#include "neighb.h"
 #include "parallel.h"
 #include "pcg_basic.h"
 #include "power.h"
@@ -82,6 +83,7 @@
 #include "tanh.h"
 #include "toPolar.h"
 #include "toRect.h"
+#include "ulp.h"
 #include "unitVector.h"
 #include "wp34s.h"
 

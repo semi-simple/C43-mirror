@@ -136,6 +136,8 @@ typedef struct {real75_t real, imag;}                     complex75_t;
 #define real16IsZero(source)                                   decDoubleIsZero          ((real16_t *)(source))
 #define real16Minus(operand, res)                              decDoubleMinus           ((real16_t *)(res), (real16_t *)(operand), &ctxtReal16)
 #define real16Multiply(operand1, operand2, res)                decDoubleMultiply        ((real16_t *)(res), (real16_t *)(operand1), (real16_t *)(operand2), &ctxtReal16)
+#define real16NextMinus(operand, res)                          decDoubleNextPlus        ((real16_t *)(res), (real16_t *)(operand), &ctxtReal16)
+#define real16NextPlus(operand, res)                           decDoubleNextPlus        ((real16_t *)(res), (real16_t *)(operand), &ctxtReal16)
 #define real16Plus(operand, res)                               decDoublePlus            ((real16_t *)(res), (real16_t *)(operand), &ctxtReal16)
 #define real16SetNegativeSign(operand)                         ((real16_t *)(operand))->bytes[7] |= 0x80
 #define real16SetPositiveSign(operand)                         ((real16_t *)(operand))->bytes[7] &= 0x7F
@@ -191,6 +193,8 @@ typedef struct {real75_t real, imag;}                     complex75_t;
 #define real34IsZero(source)                                   decQuadIsZero            ((real34_t *)(source))
 #define real34Minus(operand, res)                              decQuadMinus             ((real34_t *)(res), (real34_t *)(operand), &ctxtReal34)
 #define real34Multiply(operand1, operand2, res)                decQuadMultiply          ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
+#define real34NextMinus(operand, res)                          decQuadNextPlus          ((real34_t *)(res), (real34_t *)(operand), &ctxtReal34)
+#define real34NextPlus(operand, res)                           decQuadNextPlus          ((real34_t *)(res), (real34_t *)(operand), &ctxtReal34)
 #define real34Plus(operand, res)                               decQuadPlus              ((real34_t *)(res), (real34_t *)(operand), &ctxtReal34)
 #define real34SetNegativeSign(operand)                         ((real34_t *)(operand))->bytes[15] |= 0x80
 #define real34SetPositiveSign(operand)                         ((real34_t *)(operand))->bytes[15] &= 0x7F
@@ -237,6 +241,7 @@ typedef struct {real75_t real, imag;}                     complex75_t;
 #define realIsZero(source)                                     decNumberIsZero          ((real_t *)(source))
 #define realMinus(operand, res, ctxt)                          decNumberMinus           ((real_t *)(res), (real_t *)(operand), ctxt)
 #define realMultiply(operand1, operand2, res, ctxt)            decNumberMultiply        ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
+#define realNextToward(from, toward, res, ctxt)                decNumberNextToward      ((real_t *)(res), (real_t *)(from),     (real_t *)(toward),   ctxt)
 #define realPlus(operand, res, ctxt)                           decNumberPlus            ((real_t *)(res), (real_t *)(operand), ctxt)
 #define realPower(operand1, operand2, res, ctxt)               decNumberPower           ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
 #define realSetNegativeSign(operand)                           ((real_t *)(operand))->bits |= 0x80

@@ -205,6 +205,7 @@ typedef int16_t calcRegister_t;
 #include "stack.h"
 #include "stats.h"
 #include "statusBar.h"
+#include "timer.h"
 #include "jm.h"                                          //JM include
 
 
@@ -223,7 +224,7 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     96                                               //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     72                                               //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0

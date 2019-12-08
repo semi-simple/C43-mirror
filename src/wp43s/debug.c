@@ -146,7 +146,7 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
         case AM_RADIAN:             return "radian  ";
         case AM_GRAD:               return "grad    ";
         case AM_MULTPI:             return "multPi  ";
-        case AM_NONE:               return "        ";
+        case AM_NONE:               return "none    ";
         default:                    return "???     ";
       }
 
@@ -183,7 +183,7 @@ char * getAngularModeName(uint16_t angularMode) {
   if(angularMode == AM_GRAD  ) return "grad  ";
   if(angularMode == AM_MULTPI) return "multPi";
   if(angularMode == AM_RADIAN) return "radian";
-  if(angularMode == AM_NONE)   return "      ";
+  if(angularMode == AM_NONE)   return "none  ";
 
   return "???   ";
 }

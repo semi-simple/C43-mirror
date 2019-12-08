@@ -15,7 +15,7 @@
  */
 
 /********************************************//**
- * \file agm.h
+ * \file ulp.h
  ***********************************************/
 
-void fnAgm(uint16_t unusedButMandatoryParameter);
+void fnUlp(uint16_t unusedButMandatoryParameter);

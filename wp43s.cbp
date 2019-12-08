@@ -409,6 +409,12 @@
 		<Unit filename="src/testSuite/mant.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/max.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/min.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/minusOnePow.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -446,6 +452,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/neighb.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/parallel_complex16.txt">
@@ -606,6 +615,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/trig.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/ulp.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/ultimateQuestionOfLife.txt">
@@ -1448,6 +1460,32 @@
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/max.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/max.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/min.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/min.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/minusOnePow.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1486,6 +1524,19 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/neighb.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/neighb.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/parallel.c">
 			<Option compilerVar="CC" />
@@ -1761,6 +1812,19 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ulp.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ulp.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/unitVector.c">
 			<Option compilerVar="CC" />

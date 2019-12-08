@@ -1,21 +1,21 @@
 ;*************************************************************
 ;*************************************************************
 ;**                                                         **
-;**                        neighb                           **
+;**                          min                            **
 ;**                                                         **
 ;*************************************************************
 ;*************************************************************
 In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
-Func: fnNeighb
+Func: fnMin
 
 ;=================================================
-; neighb(Long Integer, Long Integer) --> Long Integer
+; min(Long Integer, Long Integer) --> Long Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=LonI:"2"
 Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"2"
 
 In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=LonI:"4"
-Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"4"
+Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"3"
 
 In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=LonI:"3"
 Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"3"
@@ -23,22 +23,37 @@ Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"3"
 
 
 ;=================================================
-; neighb(Long Integer, Real16) --> Long Integer
+; min(Long Integer, Real16) --> Long Integer or Real16
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"2" RY=Re16:"3"
-Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"5" RY=Re16:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=Re16:"3"
 
 In:  AM=DEG SL=0 FI=0 RX=LonI:"2" RY=Re16:"3":DEG
-Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"7" RY=Re16:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=LonI:"7" RX=Re16:"3":DEG
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=Re16:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"3"
 
 ;=================================================
-; neighb(Real16, Long Integer) --> Real16
+; min(Real16, Long Integer) --> Real16 or Long Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"3" RY=LonI:"2"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2.999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=LonI:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"1" RY=LonI:"2"
+Out: EC=0 FI=0 SL=1 RL=Re16:"1" RX=Re16:"1"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3" RY=LonI:"4"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"3.000000000000001"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"3"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"5" RY=LonI:"4"
+Out: EC=0 FI=0 SL=1 RL=Re16:"5" RX=LonI:"4"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3" RY=LonI:"3"
 Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"3"
@@ -46,46 +61,46 @@ Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"3"
 
 
 ;=================================================
-; neighb(Long Integer, Complex16) --> Error24
+; min(Long Integer, Complex16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=LonI:"2" RY=Co16:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=LonI:"2" RY=Co16:"3 i 2"
 
 ;=================================================
-; neighb(Complex16, Long Integer) --> Error24
+; min(Complex16, Long Integer) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co16:"3 i 2" RY=LonI:"2"
 Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=LonI:"2"
 
 
 ;=================================================
-; neighb(Long Integer, Time) --> Error24
+; min(Long Integer, Time) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Time, Long Integer) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Long Integer, Date) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Date, Long Integer) --> Error24
+; min(Time, Long Integer) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Long Integer, String) --> Error24
+; min(Long Integer, Date) --> Error24
+;=================================================
+
+;=================================================
+; min(Date, Long Integer) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Long Integer, String) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=LonI:"2" RY=Stri:"gdfhgfdh"
 Out: EC=24 FI=0 SL=0 RX=LonI:"2" RY=Stri:"gdfhgfdh"
 
 ;=================================================
-; neighb(String, Long Integer) --> Error24
+; min(String, Long Integer) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Stri:"gdfhgfdh" RY=LonI:"2"
 Out: EC=24 FI=0 SL=0 RX=Stri:"gdfhgfdh" RY=LonI:"2"
@@ -93,45 +108,57 @@ Out: EC=24 FI=0 SL=0 RX=Stri:"gdfhgfdh" RY=LonI:"2"
 
 
 ;=================================================
-; neighb(Long Integer, Real16 Matrix) --> Error24
+; min(Long Integer, Real16 Matrix) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Real16 Matrix, Long Integer) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Long Integer, Complex16 Matrix) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex16 Matrix, Long Integer) --> Error24
+; min(Real16 Matrix, Long Integer) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Long Integer, Short Integer) --> Long Integer
+; min(Long Integer, Complex16 Matrix) --> Error24
+;=================================================
+
+;=================================================
+; min(Complex16 Matrix, Long Integer) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Long Integer, Short Integer) --> Long Integer or Short Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=ShoI:"2#10"
-Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"2"
+Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=ShoI:"2#10"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"-5" RY=ShoI:"2#10"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-5" RX=LonI:"-5"
 
 In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=ShoI:"4#8"
-Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"4"
+Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"3"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"8" RY=ShoI:"4#8"
+Out: EC=0 FI=0 SL=1 RL=LonI:"8" RX=ShoI:"4#8"
 
 In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=ShoI:"3#7"
 Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"3"
 
 ;=================================================
-; neighb(Short Integer, Long Integer) --> Short Integer
+; min(Short Integer, Long Integer) --> Short Integer or Long Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#10" RY=LonI:"3"
-Out: EC=0 FI=0 SL=1 RL=ShoI:"2#10" RX=ShoI:"3#10"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"2#10" RX=ShoI:"2#10"
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"5#10" RY=LonI:"3"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"5#10" RX=LonI:"3"
 
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"4#8" RY=LonI:"3"
-Out: EC=0 FI=0 SL=1 RL=ShoI:"4#8" RX=ShoI:"3#8"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"4#8" RX=LonI:"3"
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#8" RY=LonI:"3"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"2#8" RX=ShoI:"2#8"
 
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"3#7" RY=LonI:"3"
 Out: EC=0 FI=0 SL=1 RL=ShoI:"3#7" RX=ShoI:"3#7"
@@ -139,22 +166,37 @@ Out: EC=0 FI=0 SL=1 RL=ShoI:"3#7" RX=ShoI:"3#7"
 
 
 ;=================================================
-; neighb(Long Integer, Real34) --> Long Integer
+; min(Long Integer, Real34) --> Long Integer or Real34
 ;=================================================
-In:  AM=DEG SL=0 FI=0 RX=LonI:"2" RY=Re34:"3"
-Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"3"
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=LonI:"2" RY=Re34:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"4" RY=Re34:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"4" RX=Re34:"3"
 
 In:  AM=DEG SL=0 FI=0 RX=LonI:"2" RY=Re34:"3":DEG
-Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"3"
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=LonI:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"5" RY=Re34:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=Re34:"3":DEG
+
+In:  AM=DEG SL=0 FI=0 RX=LonI:"3" RY=Re34:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=LonI:"3"
 
 ;=================================================
-; neighb(Real34, Long Integer) --> Real34
+; min(Real34, Long Integer) --> Real34 or Long Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"3" RY=LonI:"2"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2.999999999999999999999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=LonI:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"0" RY=LonI:"2"
+Out: EC=0 FI=0 SL=1 RL=Re34:"0" RX=Re34:"0"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3" RY=LonI:"4"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3.000000000000000000000000000000001"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"5" RY=LonI:"4"
+Out: EC=0 FI=0 SL=1 RL=Re34:"5" RX=LonI:"4"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3" RY=LonI:"3"
 Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3"
@@ -162,13 +204,13 @@ Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3"
 
 
 ;=================================================
-; neighb(Long Integer, Complex34) --> Error24
+; min(Long Integer, Complex34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=LonI:"2" RY=Co34:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=LonI:"2" RY=Co34:"3 i 2"
 
 ;=================================================
-; neighb(Complex34, Long Integer) --> Error24
+; min(Complex34, Long Integer) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co34:"3 i 2" RY=LonI:"2"
 Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=LonI:"2"
@@ -176,30 +218,33 @@ Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=LonI:"2"
 
 
 ;=================================================
-; neighb(Real16, Real16) --> Real16
+; min(Real16, Real16) --> Real16
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"3" RY=Re16:"2"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2.999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3":DEG RY=Re16:"2"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"2.999999999999999":DEG
+Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"2"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3" RY=Re16:"2":DEG
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2.999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2":DEG
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3":DEG RY=Re16:"2":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"2.999999999999999":DEG
+Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"2":GRAD
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"3":DEG RY=Re16:"3":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"3":DEG
 
 
 
 ;=================================================
-; neighb(Real16, Complex16) --> Error24
+; min(Real16, Complex16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Re16:"2" RY=Co16:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Re16:"2" RY=Co16:"3 i 2"
 
 ;=================================================
-; neighb(Complex16, Real16) --> Error24
+; min(Complex16, Real16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co16:"3 i 2" RY=Re16:"2"
 Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=Re16:"2"
@@ -207,33 +252,33 @@ Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=Re16:"2"
 
 
 ;=================================================
-; neighb(Real16, Time) --> Error24
+; min(Real16, Time) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Time, Real16) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Real16, Date) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Date, Real16) --> Error24
+; min(Time, Real16) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Real16, String) --> Error24
+; min(Real16, Date) --> Error24
+;=================================================
+
+;=================================================
+; min(Date, Real16) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Real16, String) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Re16:"2" RY=Stri:"gdfhgfdh"
 Out: EC=24 FI=0 SL=0 RX=Re16:"2" RY=Stri:"gdfhgfdh"
 
 ;=================================================
-; neighb(String, Real16) --> Error24
+; min(String, Real16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Stri:"gdfhgfdh" RY=Re16:"2"
 Out: EC=24 FI=0 SL=0 RX=Stri:"gdfhgfdh" RY=Re16:"2"
@@ -241,90 +286,117 @@ Out: EC=24 FI=0 SL=0 RX=Stri:"gdfhgfdh" RY=Re16:"2"
 
 
 ;=================================================
-; neighb(Real16, Real16 Matrix) --> Error24
+; min(Real16, Real16 Matrix) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Real16 Matrix, Real16) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Real16, Complex16 Matrix) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex16 Matrix, Real16) --> Error24
+; min(Real16 Matrix, Real16) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Real16, Short Integer) --> Real16
+; min(Real16, Complex16 Matrix) --> Error24
+;=================================================
+
+;=================================================
+; min(Complex16 Matrix, Real16) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Real16, Short Integer) --> Real16 or Short Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"3" RY=ShoI:"2#10"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2.999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=ShoI:"2#10"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"-7" RY=ShoI:"2#10"
+Out: EC=0 FI=0 SL=1 RL=Re16:"-7" RX=Re16:"-7"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3" RY=ShoI:"4#8"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"3.000000000000001"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"3"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"10" RY=ShoI:"4#8"
+Out: EC=0 FI=0 SL=1 RL=Re16:"10" RX=ShoI:"4#8"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3" RY=ShoI:"3#16"
 Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"3"
 
 ;=================================================
-; neighb(Short Integer, Real16) --> Short Integer
+; min(Short Integer, Real16) --> Short Integer or Real16
 ;=================================================
-In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#10" RY=Re16:"3"
-Out: EC=0 FI=0 SL=1 RL=ShoI:"2#10" RX=ShoI:"3#10"
+In:  AM=DEG SL=0 FI=0 NCSD=16 RX=ShoI:"2#10" RY=Re16:"3"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"2#10" RX=ShoI:"2#10"
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"7#10" RY=Re16:"3"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"7#10" RX=Re16:"3"
 
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#7" RY=Re16:"3":DEG
-Out: EC=0 FI=0 SL=1 RL=ShoI:"2#7" RX=ShoI:"3#7"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"2#7" RX=ShoI:"2#7"
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"14#7" RY=Re16:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=ShoI:"14#7" RX=Re16:"3":DEG
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"3#7" RY=Re16:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=ShoI:"3#7" RX=ShoI:"3#7"
 
 
 
 ;=================================================
-; neighb(Real16, Real34) --> Real16
+; min(Real16, Real34) --> Real16 or Real34
 ;=================================================
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"3" RY=Re34:"2"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2.999999999999999"
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re16:"3" RY=Re34:"2"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re34:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"-4" RY=Re34:"2"
+Out: EC=0 FI=0 SL=1 RL=Re16:"-4" RX=Re16:"-4"
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3":DEG RY=Re34:"2"
-Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"2.999999999999999":DEG
+Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re34:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=Re16:"-5":DEG RY=Re34:"2"
+Out: EC=0 FI=0 SL=1 RL=Re16:"-5":DEG RX=Re16:"-5":DEG
 
 In:  AM=DEG SL=0 FI=0 RX=Re16:"3" RY=Re34:"2":DEG
-Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re16:"2.999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re16:"3" RX=Re34:"2":DEG
 
-In:  AM=DEG SL=0 FI=0 RX=Re16:"3":DEG RY=Re34:"2":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"2.999999999999999":DEG
+In:  AM=DEG SL=0 FI=0 RX=Re16:"3":DEG RY=Re34:"3":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re16:"3":DEG RX=Re16:"3":DEG
 
 
 ;=================================================
-; neighb(Real34, Real16) --> Real34
+; min(Real34, Real16) --> Real34 or Real16
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"3" RY=Re16:"2"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2.999999999999999999999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re16:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"-4" RY=Re16:"2"
+Out: EC=0 FI=0 SL=1 RL=Re34:"-4" RX=Re34:"-4"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3":DEG RY=Re16:"2"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re34:"2.999999999999999999999999999999999":DEG
+Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re16:"2"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"-5":DEG RY=Re16:"2"
+Out: EC=0 FI=0 SL=1 RL=Re34:"-5":DEG RX=Re34:"-5":DEG
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3" RY=Re16:"2":DEG
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2.999999999999999999999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re16:"2":DEG
 
-In:  AM=DEG SL=0 FI=0 RX=Re34:"3":DEG RY=Re16:"2":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re34:"2.999999999999999999999999999999999":DEG
+In:  AM=DEG SL=0 FI=0 RX=Re34:"3":DEG RY=Re16:"3":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re34:"3":DEG
 
 
 
 
 ;=================================================
-; neighb(Real16, Complex34) --> Error24
+; min(Real16, Complex34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Re16:"2" RY=Co34:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Re16:"2" RY=Co34:"3 i 2"
 
 ;=================================================
-; neighb(Complex34, Real16) --> Error24
+; min(Complex34, Real16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co34:"3 i 2" RY=Re16:"2"
 Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Re16:"2"
@@ -332,7 +404,7 @@ Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Re16:"2"
 
 
 ;=================================================
-; neighb(Complex16, Complex16) --> Error24
+; min(Complex16, Complex16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co16:"3 i 2" RY=Co16:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=Co16:"3 i 2"
@@ -340,33 +412,33 @@ Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=Co16:"3 i 2"
 
 
 ;=================================================
-; neighb(Complex16, Time) --> Error24
+; min(Complex16, Time) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Time, Complex16) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Complex16, Date) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Date, Complex16) --> Error24
+; min(Time, Complex16) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Complex16, String) --> Error24
+; min(Complex16, Date) --> Error24
+;=================================================
+
+;=================================================
+; min(Date, Complex16) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Complex16, String) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co16:"3 i 2" RY=Stri:"gfhjjy i 2juytjuy"
 Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=Stri:"gfhjjy i 2juytjuy"
 
 ;=================================================
-; neighb(String, Complex16) --> Error24
+; min(String, Complex16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Stri:"3g jiku 2" RY=Co16:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Stri:"3g jiku 2" RY=Co16:"3 i 2"
@@ -374,33 +446,33 @@ Out: EC=24 FI=0 SL=0 RX=Stri:"3g jiku 2" RY=Co16:"3 i 2"
 
 
 ;=================================================
-; neighb(Complex16, Real16 Matrix) --> Error24
+; Complex16, Real16 Matrix) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Real16 Matrix, Complex16) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Complex16, Complex16 Matrix) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex16 Matrix, Complex16) --> Error24
+; min(Real16 Matrix, Complex16) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Complex16, Short Integer) --> Error24
+; min(Complex16, Complex16 Matrix) --> Error24
+;=================================================
+
+;=================================================
+; min(Complex16 Matrix, Complex16) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Complex16, Short Integer) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co16:"3 i 2" RY=ShoI:"2#5"
 Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=ShoI:"2#5"
 
 ;=================================================
-; neighb(Short Integer, Complex16) --> Error24
+; min(Short Integer, Complex16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#3" RY=Co16:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=ShoI:"2#3" RY=Co16:"3 i 2"
@@ -408,13 +480,13 @@ Out: EC=24 FI=0 SL=0 RX=ShoI:"2#3" RY=Co16:"3 i 2"
 
 
 ;=================================================
-; neighb(Complex16, Real34) --> Error24
+; min(Complex16, Real34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co16:"3 i 2" RY=Re34:"2"
 Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=Re34:"2"
 
 ;=================================================
-; neighb(Real34, Complex16) --> Error24
+; min(Real34, Complex16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Re34:"2" RY=Co16:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Re34:"2" RY=Co16:"3 i 2"
@@ -423,13 +495,13 @@ Out: EC=24 FI=0 SL=0 RX=Re34:"2" RY=Co16:"3 i 2"
 
 
 ;=================================================
-; neighb(Complex16, Complex34) --> Error24
+; min(Complex16, Complex34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co16:"3 i 2" RY=Co34:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Co16:"3 i 2" RY=Co34:"3 i 2"
 
 ;=================================================
-; neighb(Complex34, Complex16) --> Error24
+; min(Complex34, Complex16) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co34:"3 i 2" RY=Co16:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Co16:"3 i 2"
@@ -437,183 +509,186 @@ Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Co16:"3 i 2"
 
 
 ;=================================================
-; neighb(Time, Time) --> Error24
+; min(Time, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Time, Date) --> Error24
+; min(Time, Date) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Date, Time) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Time, String) --> Error24
-;=================================================
-
-;=================================================
-; neighb(String, Time) --> Error24
+; min(Date, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Time, Real16 Matrix) --> Error24
+; min(Time, String) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Real16 Matrix, Time) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Time, Complex16 Matrix) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex16 Matrix, Time) --> Error24
+; min(String, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Time, Short Integer) --> Error24
+; min(Time, Real16 Matrix) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Short Integer, Time) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Time, Real34) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Real34, Time) --> Error24
+; min(Real16 Matrix, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Time, Complex34) --> Error24
+; min(Time, Complex16 Matrix) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Complex34, Time) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Date, Date) --> Error24
+; min(Complex16 Matrix, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Date, String) --> Error24
+; min(Time, Short Integer) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(String, Date) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Date, Real16 Matrix) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Real16 Matrix, Date) --> Error24
+; min(Short Integer, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Date, Complex16 Matrix) --> Error24
+; min(Time, Real34) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Complex16 Matrix, Date) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Date, Short Integer) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Short Integer, Date) --> Error24
+; min(Real34, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Date, Real34) --> Error24
+; min(Time, Complex34) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Real34, Date) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Date, Complex34) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex34, Date) --> Error24
+; min(Complex34, Time) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(String, String) --> Error24
+; min(Date, Date) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Date, String) --> Error24
+;=================================================
+
+;=================================================
+; min(String, Date) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Date, Real16 Matrix) --> Error24
+;=================================================
+
+;=================================================
+; min(Real16 Matrix, Date) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Date, Complex16 Matrix) --> Error24
+;=================================================
+
+;=================================================
+; min(Complex16 Matrix, Date) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Date, Short Integer) --> Error24
+;=================================================
+
+;=================================================
+; min(Short Integer, Date) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Date, Real34) --> Error24
+;=================================================
+
+;=================================================
+; min(Real34, Date) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Date, Complex34) --> Error24
+;=================================================
+
+;=================================================
+; min(Complex34, Date) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(String, String) --> string
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Stri:"3 +*/i 2" RY=Stri:"gfhjjy i 2juytjuy"
-Out: EC=24 FI=0 SL=0 RX=Stri:"3 +*/i 2" RY=Stri:"gfhjjy i 2juytjuy"
+Out: EC=0 FI=0 SL=1 RL=Stri:"3 +*/i 2" RX=Stri:"3 +*/i 2"
+
+In:  AM=DEG SL=0 FI=0 RX=Stri:"gfhjjy i 2juytjuy" RY=Stri:"3 +*/i 2"
+Out: EC=0 FI=0 SL=1 RL=Stri:"gfhjjy i 2juytjuy" RX=Stri:"3 +*/i 2"
 
 
 
 ;=================================================
-; neighb(String, Real16 Matrix) --> Error24
+; min(String, Real16 Matrix) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Real16 Matrix, String) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(String, Complex16 Matrix) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex16 Matrix, String) --> Error24
+; min(Real16 Matrix, String) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(String, Short Integer) --> Error24
+; min(String, Complex16 Matrix) --> Error24
+;=================================================
+
+;=================================================
+; min(Complex16 Matrix, String) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(String, Short Integer) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Stri:"gdfhgfdh" RY=ShoI:"2#5"
 Out: EC=24 FI=0 SL=0 RX=Stri:"gdfhgfdh" RY=ShoI:"2#5"
 
 ;=================================================
-; neighb(Short Integer, String) --> Error24
+; min(Short Integer, String) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#13" RY=Stri:"gdfhgfdh"
 Out: EC=24 FI=0 SL=0 RX=ShoI:"2#13" RY=Stri:"gdfhgfdh"
@@ -621,13 +696,13 @@ Out: EC=24 FI=0 SL=0 RX=ShoI:"2#13" RY=Stri:"gdfhgfdh"
 
 
 ;=================================================
-; neighb(String, Real34) --> Error24
+; min(String, Real34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Stri:"gdfhgfdh" RY=Re34:"2"
 Out: EC=24 FI=0 SL=0 RX=Stri:"gdfhgfdh" RY=Re34:"2"
 
 ;=================================================
-; neighb(Real34, String) --> Error24
+; min(Real34, String) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Re34:"2" RY=Stri:"gdfhgfdh"
 Out: EC=24 FI=0 SL=0 RX=Re34:"2" RY=Stri:"gdfhgfdh"
@@ -635,13 +710,13 @@ Out: EC=24 FI=0 SL=0 RX=Re34:"2" RY=Stri:"gdfhgfdh"
 
 
 ;=================================================
-; neighb(String, Complex34) --> Error24
+; min(String, Complex34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Stri:"3g jiku 2" RY=Co34:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Stri:"3g jiku 2" RY=Co34:"3 i 2"
 
 ;=================================================
-; neighb(Complex34, String) --> Error24
+; min(Complex34, String) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co34:"3 i 2" RY=Stri:"gfhjjy i 2juytjuy"
 Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Stri:"gfhjjy i 2juytjuy"
@@ -649,95 +724,95 @@ Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Stri:"gfhjjy i 2juytjuy"
 
 
 ;=================================================
-; neighb(Real16 Matrix, Real16 Matrix) --> Error24
+; min(Real16 Matrix, Real16 Matrix) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Real16 Matrix, Complex6 Matrix) --> Error24
+; min(Real16 Matrix, Complex6 Matrix) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Complex16 Matrix, Real6 Matrix) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Real16 Matrix, Short Integer) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Short Integer, Real16 Matrix) --> Error24
+; min(Complex16 Matrix, Real6 Matrix) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Real16 Matrix, Real34) --> Error24
+; min(Real16 Matrix, Short Integer) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Real34, Real16 Matrix) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Real16 Matrix, Complex34) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex34, Real16 Matrix) --> Error24
+; min(Short Integer, Real16 Matrix) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Complex16 Matrix, Complex16 Matrix) --> Error24
+; min(Real16 Matrix, Real34) --> Error24
+;=================================================
+
+;=================================================
+; min(Real34, Real16 Matrix) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Complex16 Matrix, Short Integer) --> Error24
+; min(Real16 Matrix, Complex34) --> Error24
 ;=================================================
 
 ;=================================================
-; neighb(Short Integer, Complex16 Matrix) --> Error24
-;=================================================
-
-
-
-;=================================================
-; neighb(Complex16 Matrix, Real34) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Real34, Complex16 Matrix) --> Error24
+; min(Complex34, Real16 Matrix) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Complex16 Matrix, Complex34) --> Error24
-;=================================================
-
-;=================================================
-; neighb(Complex34, Complex16 Matrix) --> Error24
+; min(Complex16 Matrix, Complex16 Matrix) --> Error24
 ;=================================================
 
 
 
 ;=================================================
-; neighb(Short Integer, Short Integer) --> Short Integer
+; min(Complex16 Matrix, Short Integer) --> Error24
+;=================================================
+
+;=================================================
+; min(Short Integer, Complex16 Matrix) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Complex16 Matrix, Real34) --> Error24
+;=================================================
+
+;=================================================
+; min(Real34, Complex16 Matrix) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Complex16 Matrix, Complex34) --> Error24
+;=================================================
+
+;=================================================
+; min(Complex34, Complex16 Matrix) --> Error24
+;=================================================
+
+
+
+;=================================================
+; min(Short Integer, Short Integer) --> Short Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"3#5" RY=ShoI:"2#11"
-Out: EC=0 FI=0 SL=1 RL=ShoI:"3#5" RX=ShoI:"2#5"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"3#5" RX=ShoI:"2#11"
 
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"3#6" RY=ShoI:"4#12"
-Out: EC=0 FI=0 SL=1 RL=ShoI:"3#6" RX=ShoI:"4#6"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"3#6" RX=ShoI:"3#6"
 
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"3#7" RY=ShoI:"3#13"
 Out: EC=0 FI=0 SL=1 RL=ShoI:"3#7" RX=ShoI:"3#7"
@@ -745,22 +820,37 @@ Out: EC=0 FI=0 SL=1 RL=ShoI:"3#7" RX=ShoI:"3#7"
 
 
 ;=================================================
-; neighb(Short Integer, Real34) --> Short Integer
+; min(Short Integer, Real34) --> Short Integer or Real34
 ;=================================================
-In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#7" RY=Re34:"3"
-Out: EC=0 FI=0 SL=1 RL=ShoI:"2#7" RX=ShoI:"3#7"
+In:  AM=DEG SL=0 FI=0 NCSD=34 RX=ShoI:"2#7" RY=Re34:"3"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"2#7" RX=ShoI:"2#7"
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"5#7" RY=Re34:"3"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"5#7" RX=Re34:"3"
 
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#11" RY=Re34:"3":DEG
-Out: EC=0 FI=0 SL=1 RL=ShoI:"2#11" RX=ShoI:"3#11"
+Out: EC=0 FI=0 SL=1 RL=ShoI:"2#11" RX=ShoI:"2#11"
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"A#11" RY=Re34:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=ShoI:"A#11" RX=Re34:"3":DEG
+
+In:  AM=DEG SL=0 FI=0 RX=ShoI:"3#11" RY=Re34:"3":DEG
+Out: EC=0 FI=0 SL=1 RL=ShoI:"3#11" RX=ShoI:"3#11"
 
 ;=================================================
-; neighb(Real34, Short Integer) --> Real34
+; min(Real34, Short Integer) --> Real34 or Short Integer
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"3" RY=ShoI:"2#3"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2.999999999999999999999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=ShoI:"2#3"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"-3" RY=ShoI:"2#3"
+Out: EC=0 FI=0 SL=1 RL=Re34:"-3" RX=Re34:"-3"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3" RY=ShoI:"4#5"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3.000000000000000000000000000000001"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3"
+
+In:  AM=DEG SL=0 FI=0 RX=Re34:"7" RY=ShoI:"4#5"
+Out: EC=0 FI=0 SL=1 RL=Re34:"7" RX=ShoI:"4#5"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3" RY=ShoI:"3#6"
 Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3"
@@ -768,13 +858,13 @@ Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"3"
 
 
 ;=================================================
-; neighb(Short Integer, Complex34) --> Error24
+; min(Short Integer, Complex34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=ShoI:"2#5" RY=Co34:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=ShoI:"2#5" RY=Co34:"3 i 2"
 
 ;=================================================
-; neighb(Complex34, Short Integer) --> Error24
+; min(Complex34, Short Integer) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co34:"3 i 2" RY=ShoI:"2#13"
 Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=ShoI:"2#13"
@@ -782,30 +872,30 @@ Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=ShoI:"2#13"
 
 
 ;=================================================
-; neighb(Real34, Real34) --> Real34
+; min(Real34, Real34) --> Real34
 ;=================================================
 In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"3" RY=Re34:"2"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2.999999999999999999999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3":DEG RY=Re34:"2"
-Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re34:"2.999999999999999999999999999999999":DEG
+Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re34:"2"
 
 In:  AM=DEG SL=0 FI=0 RX=Re34:"3" RY=Re34:"2":DEG
-Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2.999999999999999999999999999999999"
+Out: EC=0 FI=0 SL=1 RL=Re34:"3" RX=Re34:"2":DEG
 
-In:  AM=DEG SL=0 FI=0 RX=Re34:"3":DEG RY=Re34:"2":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re34:"2.999999999999999999999999999999999":DEG
+In:  AM=DEG SL=0 FI=0 RX=Re34:"3":DEG RY=Re34:"3":GRAD
+Out: EC=0 FI=0 SL=1 RL=Re34:"3":DEG RX=Re34:"3":DEG
 
 
 
 ;=================================================
-; neighb(Real34, Complex34) --> Error24
+; min(Real34, Complex34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Re34:"2" RY=Co34:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Re34:"2" RY=Co34:"3 i 2"
 
 ;=================================================
-; neighb(Complex34, Real34) --> Error24
+; min(Complex34, Real34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co34:"3 i 2" RY=Re34:"2"
 Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Re34:"2"
@@ -813,7 +903,7 @@ Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Re34:"2"
 
 
 ;=================================================
-; neighb(Complex34, Complex34) --> Error24
+; min(Complex34, Complex34) --> Error24
 ;=================================================
 In:  AM=DEG SL=0 FI=0 RX=Co34:"3 i 2" RY=Co34:"3 i 2"
 Out: EC=24 FI=0 SL=0 RX=Co34:"3 i 2" RY=Co34:"3 i 2"

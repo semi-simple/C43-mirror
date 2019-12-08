@@ -54,6 +54,8 @@ initialSettings
 
 ulp
 neighb
+min
+max
 
 changeSign
 sign

@@ -93,5 +93,5 @@ void fnUlp(uint16_t unusedParamButMandatory) {
       return;
   }
 
-  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }

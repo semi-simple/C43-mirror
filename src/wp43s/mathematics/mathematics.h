@@ -58,6 +58,8 @@
 #include "log2.h"
 #include "magnitude.h"
 #include "mant.h"
+#include "max.h"
+#include "min.h"
 #include "minusOnePow.h"
 #include "modulo.h"
 #include "multiplication.h"

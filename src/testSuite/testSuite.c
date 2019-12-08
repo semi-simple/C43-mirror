@@ -107,6 +107,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLogicalNot",           fnLogicalNot          },
   {"fnM1Pow",                fnM1Pow               },
   {"fnMagnitude",            fnMagnitude           },
+  {"fnMin",                  fnMin                 },
+  {"fnMax",                  fnMax                 },
   {"fnMant",                 fnMant                },
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },

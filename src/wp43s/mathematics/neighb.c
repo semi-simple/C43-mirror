@@ -169,5 +169,5 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
     default: {}
   }
 
-  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, true, false, REGISTER_X, -1, -1);
 }

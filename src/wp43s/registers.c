@@ -612,9 +612,41 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        setRegisterDataType(r, dtReal16, AM_NONE);
-        setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
-        real16Zero(REGISTER_REAL16_DATA(r));
+        if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
+          setRegisterDataType(r, dtReal16, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
+          real16Zero(REGISTER_REAL16_DATA(r));
+        }                                                      //JM defaults
+        else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+          setRegisterDataType(r, dtReal34, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
+          real34Zero(REGISTER_REAL34_DATA(r));
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_CPXSP) {                  //JM defaults vv
+          setRegisterDataType(r, dtComplex16, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(COMPLEX16_SIZE));
+          real16Zero(REGISTER_REAL16_DATA(r));
+          real16Zero(REGISTER_IMAG16_DATA(r));
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
+          setRegisterDataType(r, dtComplex34, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(COMPLEX34_SIZE));
+          real34Zero(REGISTER_REAL34_DATA(r));
+          real34Zero(REGISTER_IMAG34_DATA(r));
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_SI) {                     //JM defaults vv
+          longInteger_t lgInt;
+          longIntegerInit(lgInt);
+          convertLongIntegerToShortIntegerRegister(lgInt, 10, r);
+          setRegisterShortIntegerBase(r, 10);  
+          longIntegerFree(lgInt);
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_LI) {                     //JM defaults vv
+          longInteger_t lgInt;
+          longIntegerInit(lgInt);
+          convertLongIntegerToLongIntegerRegister(lgInt, r);
+          longIntegerFree(lgInt);
+        }                                                      //JM defaults ^^
       }
     }
 
@@ -626,9 +658,41 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumRegs; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        setRegisterDataType(r, dtReal16, AM_NONE);
-        setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
-        real16Zero(REGISTER_REAL16_DATA(r));
+        if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
+          setRegisterDataType(r, dtReal16, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
+          real16Zero(REGISTER_REAL16_DATA(r));
+        }                                                      //JM defaults
+        else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+          setRegisterDataType(r, dtReal34, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
+          real34Zero(REGISTER_REAL34_DATA(r));
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_CPXSP) {                  //JM defaults vv
+          setRegisterDataType(r, dtComplex16, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(COMPLEX16_SIZE));
+          real16Zero(REGISTER_REAL16_DATA(r));
+          real16Zero(REGISTER_IMAG16_DATA(r));
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
+          setRegisterDataType(r, dtComplex34, AM_NONE);
+          setRegisterDataPointer(r, allocWp43s(COMPLEX34_SIZE));
+          real34Zero(REGISTER_REAL34_DATA(r));
+          real34Zero(REGISTER_IMAG34_DATA(r));
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_SI) {                     //JM defaults vv
+          longInteger_t lgInt;
+          longIntegerInit(lgInt);
+          convertLongIntegerToShortIntegerRegister(lgInt, 10, r);
+          setRegisterShortIntegerBase(r, 10);  
+          longIntegerFree(lgInt);
+        }                                                      //JM defaults ^^
+        else if (Input_Default == ID_LI) {                     //JM defaults vv
+          longInteger_t lgInt;
+          longIntegerInit(lgInt);
+          convertLongIntegerToLongIntegerRegister(lgInt, r);
+          longIntegerFree(lgInt);
+        }                                                      //JM defaults ^^
       }
     }
 
@@ -687,18 +751,81 @@ void allocateNamedVariable(const char *variableName) {
   }
 
   // The new named variable is a real16 initialized to 0.0
-  setRegisterDataType(regist, dtReal16, AM_NONE);
+  //JM setRegisterDataType(regist, dtReal16, AM_NONE);
 
-  len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+  //JM   len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
 
-  setRegisterNamePointer(regist, allocWp43s(len));
-  setRegisterNameLength(regist, len>>1);
-  memcpy(getRegisterNamePointer(regist), variableName, len);
+  //JM   setRegisterNamePointer(regist, allocWp43s(len));
+  //JM   setRegisterNameLength(regist, len>>1);
+  //JM   memcpy(getRegisterNamePointer(regist), variableName, len);
 
-  setRegisterDataPointer(regist, allocWp43s(REAL16_SIZE));
-  real16Zero(REGISTER_REAL16_DATA(regist));
+  //JM setRegisterDataPointer(regist, allocWp43s(REAL16_SIZE));
+  //JM real16Zero(REGISTER_REAL16_DATA(regist));
+
+  if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
+    setRegisterDataType(regist, dtReal16, AM_NONE);
+    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+    setRegisterNamePointer(regist, allocWp43s(len));
+    setRegisterNameLength(regist, len>>1);
+    memcpy(getRegisterNamePointer(regist), variableName, len);
+    setRegisterDataPointer(regist, allocWp43s(REAL16_SIZE));
+    real16Zero(REGISTER_REAL16_DATA(regist));
+  }                                                      //JM defaults
+  else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+    setRegisterDataType(regist, dtReal34, AM_NONE);
+    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+    setRegisterNamePointer(regist, allocWp43s(len));
+    setRegisterNameLength(regist, len>>1);
+    memcpy(getRegisterNamePointer(regist), variableName, len);
+    setRegisterDataPointer(regist, allocWp43s(REAL34_SIZE));
+    real34Zero(REGISTER_REAL34_DATA(regist));
+  }                                                      //JM defaults ^^
+  else if (Input_Default == ID_CPXSP) {                  //JM defaults vv
+    setRegisterDataType(regist, dtComplex16, AM_NONE);
+    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+    setRegisterNamePointer(regist, allocWp43s(len));
+    setRegisterNameLength(regist, len>>1);
+    memcpy(getRegisterNamePointer(regist), variableName, len);
+    setRegisterDataPointer(regist, allocWp43s(COMPLEX16_SIZE));
+    real16Zero(REGISTER_REAL16_DATA(regist));
+    real16Zero(REGISTER_IMAG16_DATA(regist));
+  }                                                      //JM defaults ^^
+  else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
+    setRegisterDataType(regist, dtComplex34, AM_NONE);
+    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+    setRegisterNamePointer(regist, allocWp43s(len));
+    setRegisterNameLength(regist, len>>1);
+    memcpy(getRegisterNamePointer(regist), variableName, len);
+    setRegisterDataPointer(regist, allocWp43s(COMPLEX34_SIZE));
+    real34Zero(REGISTER_REAL34_DATA(regist));
+    real34Zero(REGISTER_IMAG34_DATA(regist));
+  }                                                      //JM defaults ^^
+  else if (Input_Default == ID_SI) {                     //JM defaults vv
+    setRegisterDataType(regist, dtShortInteger, AM_NONE);
+    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+    setRegisterNamePointer(regist, allocWp43s(len));
+    setRegisterNameLength(regist, len>>1);
+    memcpy(getRegisterNamePointer(regist), variableName, len);
+    setRegisterDataPointer(regist, allocWp43s(SHORT_INTEGER_SIZE));
+    longInteger_t lgInt;
+    longIntegerInit(lgInt);
+    convertLongIntegerToShortIntegerRegister(lgInt, 10, regist);
+    setRegisterShortIntegerBase(regist, 10);  
+    longIntegerFree(lgInt);
+  }                                                      //JM defaults ^^
+  else if (Input_Default == ID_LI) {                     //JM defaults vv
+    setRegisterDataType(regist, dtShortInteger, AM_NONE);
+    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+    setRegisterNamePointer(regist, allocWp43s(len));
+    setRegisterNameLength(regist, len>>1);
+    memcpy(getRegisterNamePointer(regist), variableName, len);
+    setRegisterDataPointer(regist, allocWp43s(SHORT_INTEGER_SIZE));
+    longInteger_t lgInt;
+    longIntegerInit(lgInt);
+    convertLongIntegerToLongIntegerRegister(lgInt, regist);
+    longIntegerFree(lgInt);
+  }                                                      //JM defaults ^^
 }
-
 
 
 /********************************************//**
@@ -861,16 +988,66 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
-  if(getRegisterDataType(regist) == dtReal16) {
-    real16Zero(REGISTER_REAL16_DATA(regist));
-    setRegisterTag(regist, AM_NONE);
+  if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
+    if(getRegisterDataType(regist) == dtReal16) {
+      real16Zero(REGISTER_REAL16_DATA(regist));
+      setRegisterTag(regist, AM_NONE);
+    }
+    else{
+      reallocateRegister(regist, dtReal16, REAL16_SIZE, AM_NONE);
+      real16Zero(REGISTER_REAL16_DATA(regist));
+    }
   }
-  else{
-    reallocateRegister(regist, dtReal16, REAL16_SIZE, AM_NONE);
-    real16Zero(REGISTER_REAL16_DATA(regist));
+  else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+    if(getRegisterDataType(regist) == dtReal34) {
+      real34Zero(REGISTER_REAL34_DATA(regist));
+      setRegisterTag(regist, AM_NONE);
+    }
+    else{
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Zero(REGISTER_REAL34_DATA(regist));
+    }
+  }                                                                               //JM defaults ^^
+  else if (Input_Default == ID_CPXSP) {                                           //JM defaults vv
+    if(getRegisterDataType(regist) == dtComplex16) {
+      real16Zero(REGISTER_REAL16_DATA(regist));
+      real16Zero(REGISTER_IMAG16_DATA(regist));
+      setRegisterTag(regist, AM_NONE);
+    }
+    else{
+      reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+      real16Zero(REGISTER_REAL16_DATA(regist));
+      real16Zero(REGISTER_IMAG16_DATA(regist));
+    }
   }
+  else if (Input_Default == ID_CPXDP) {                                           //JM defaults vv
+    if(getRegisterDataType(regist) == dtComplex34) {
+      real34Zero(REGISTER_REAL34_DATA(regist));
+      real34Zero(REGISTER_IMAG34_DATA(regist));
+      setRegisterTag(regist, AM_NONE);
+    }
+    else{
+      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      real34Zero(REGISTER_REAL34_DATA(regist));
+      real34Zero(REGISTER_IMAG34_DATA(regist));
+    }
+  }                                                                               //JM defaults ^^
+  else if (Input_Default == ID_SI) {                                              //JM defaults vv
+    //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
+    longInteger_t lgInt;
+    longIntegerInit(lgInt);
+    convertLongIntegerToShortIntegerRegister(lgInt, 10, regist);
+    setRegisterShortIntegerBase(regist, 10);  
+    longIntegerFree(lgInt);
+  }                                                                               //JM defaults ^^
+  else if (Input_Default == ID_LI) {                                              //JM defaults vv
+    //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
+    longInteger_t lgInt;
+    longIntegerInit(lgInt);
+    convertLongIntegerToLongIntegerRegister(lgInt, regist);
+    longIntegerFree(lgInt);
+  }                                                                               //JM defaults ^^
 }
-
 
 
 /********************************************//**

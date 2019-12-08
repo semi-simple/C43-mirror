@@ -1962,10 +1962,13 @@
 #define ITM_SH_INP_DEF                1908  //JM INPUT DEFAULT
 #define ITM_INP_DEF_CPXSP             1909  //JM INPUT DEFAULT
 #define ITM_INP_DEF_CPXDP             1910  //JM INPUT DEFAULT
+#define ITM_INP_DEF_43D               1911  //JM INPUT DEFAULT
+#define ITM_INP_DEF_SI                1912  //JM INPUT DEFAULT
+#define ITM_INP_DEF_LI                1913  //JM INPUT DEFAULT
 
 
 
-#define LAST_ITEM                     1911  //JM
+#define LAST_ITEM                     1914  //JM
 
 #define CHR_PROD_SIGN                 9999
 

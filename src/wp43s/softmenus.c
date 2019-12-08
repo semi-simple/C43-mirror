@@ -142,8 +142,8 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
 #endif
 
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_SP,             ITM_INP_DEF_DP,           ITM_INP_DEF_CPXSP,     ITM_INP_DEF_CPXDP,           ITM_NULL,                           //JM
-                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_ERPN,                           //JM eRPN
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_43D,            ITM_INP_DEF_SP,           ITM_INP_DEF_DP,        ITM_INP_DEF_CPXSP,           ITM_INP_DEF_CPXDP,                  //JM
+                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_INP_DEF_SI,           ITM_INP_DEF_LI,        ITM_NULL,                    ITM_ERPN,                           //JM eRPN
                                      ITM_BASE_HOME,                 ITM_BASE_MYMENU,            ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
 
 

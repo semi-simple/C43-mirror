@@ -2053,6 +2053,9 @@ const item_t indexOfItems[] = {
 /* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "",                                            "i" STD_SPACE_3_PER_EM "Dflt?",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1909 */  { fnInDefault,                 ID_CPXSP     ,               "",                                            "i" STD_SPACE_3_PER_EM "CPXSP",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1910 */  { fnInDefault,                 ID_CPXDP     ,               "",                                            "i" STD_SPACE_3_PER_EM "CPXDP",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1911 */  { fnInDefault,                 ID_43D       ,               "",                                            "i" STD_SPACE_3_PER_EM "LI" STD_SPACE_3_PER_EM "DP", CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1912 */  { fnInDefault,                 ID_SI        ,               "",                                            "i" STD_SPACE_3_PER_EM "SI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1913 */  { fnInDefault,                 ID_LI        ,               "",                                            "i" STD_SPACE_3_PER_EM "LI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 
-/* 1911 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1914 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

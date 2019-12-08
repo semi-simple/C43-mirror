@@ -2104,9 +2104,10 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
               reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE); //JM Input default type
               stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));          //JM Input default type
               stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));                //JM Input default type
-            } else {                                                                //JM Input default type
-              reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-              stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+            }                                                                       //JM Input default type
+            else {                                                                  //JM Input default type
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+            stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
             }                                                                       //JM Input default type
           }
           else {
@@ -2114,9 +2115,10 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
               reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE); //JM Input default type
               stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));          //JM Input default type
               stringToReal34("0", REGISTER_IMAG16_DATA(REGISTER_X));                //JM Input default type
-            } else {                                                                //JM Input default type
-              reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-              stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
+            }                                                                       //JM Input default type
+            else {                                                                  //JM Input default type
+            reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+            stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
             }                                                                       //JM Input default type
           }
         }
@@ -2284,6 +2286,7 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
       }
     }
   }
+
   refreshRegisterLine(NIM_REGISTER_LINE);
 }
 #endif

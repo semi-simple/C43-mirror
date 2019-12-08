@@ -15,7 +15,7 @@
  */
 
 /********************************************//**
- * \file agm.h
+ * \file max.h
  ***********************************************/
 
-void fnAgm(uint16_t unusedButMandatoryParameter);
+void fnMax(uint16_t unusedButMandatoryParameter);

@@ -48,159 +48,164 @@
 ;
 ; This file is only a list of files containing the tests to perform
 
-initialSettings.txt
+initialSettings
 
-;debug.txt
+;debug
 
-changeSign.txt
-sign.txt
+ulp
+neighb
+min
+max
 
-conversionAngles.txt
+changeSign
+sign
 
-addition_longInteger.txt
-addition_real16.txt
-addition_complex16.txt
-addition_time.txt
-addition_date.txt
-addition_string.txt
-addition_real16Matrix.txt
-addition_complex16Matrix.txt
-addition_shortInteger.txt
-addition_real34.txt
-addition_complex34.txt
+conversionAngles
 
-subtraction_longInteger.txt
-subtraction_real16.txt
-subtraction_complex16.txt
-subtraction_time.txt
-subtraction_date.txt
-subtraction_string.txt
-subtraction_real16Matrix.txt
-subtraction_complex16Matrix.txt
-subtraction_shortInteger.txt
-subtraction_real34.txt
-subtraction_complex34.txt
+addition_longInteger
+addition_real16
+addition_complex16
+addition_time
+addition_date
+addition_string
+addition_real16Matrix
+addition_complex16Matrix
+addition_shortInteger
+addition_real34
+addition_complex34
 
-multiplication_longInteger.txt
-multiplication_real16.txt
-multiplication_complex16.txt
-multiplication_time.txt
-multiplication_date.txt
-multiplication_string.txt
-multiplication_real16Matrix.txt
-multiplication_complex16Matrix.txt
-multiplication_shortInteger.txt
-multiplication_real34.txt
-multiplication_complex34.txt
+subtraction_longInteger
+subtraction_real16
+subtraction_complex16
+subtraction_time
+subtraction_date
+subtraction_string
+subtraction_real16Matrix
+subtraction_complex16Matrix
+subtraction_shortInteger
+subtraction_real34
+subtraction_complex34
 
-division_longInteger.txt
-division_real16.txt
-division_complex16.txt
-division_time.txt
-division_date.txt
-division_string.txt
-division_real16Matrix.txt
-division_complex16Matrix.txt
-division_shortInteger.txt
-division_real34.txt
-division_complex34.txt
+multiplication_longInteger
+multiplication_real16
+multiplication_complex16
+multiplication_time
+multiplication_date
+multiplication_string
+multiplication_real16Matrix
+multiplication_complex16Matrix
+multiplication_shortInteger
+multiplication_real34
+multiplication_complex34
 
-invert.txt
+division_longInteger
+division_real16
+division_complex16
+division_time
+division_date
+division_string
+division_real16Matrix
+division_complex16Matrix
+division_shortInteger
+division_real34
+division_complex34
 
-power_longInteger.txt
-power_real16.txt
-power_complex16.txt
-power_time.txt
-power_date.txt
-power_string.txt
-power_real16Matrix.txt
-power_complex16Matrix.txt
-power_shortInteger.txt
-power_real34.txt
-power_complex34.txt
+invert
 
-parallel_longInteger.txt
-parallel_real16.txt
-parallel_complex16.txt
-parallel_time.txt
-parallel_date.txt
-parallel_string.txt
-parallel_real16Matrix.txt
-parallel_complex16Matrix.txt
-parallel_shortInteger.txt
-parallel_real34.txt
-parallel_complex34.txt
+power_longInteger
+power_real16
+power_complex16
+power_time
+power_date
+power_string
+power_real16Matrix
+power_complex16Matrix
+power_shortInteger
+power_real34
+power_complex34
+
+parallel_longInteger
+parallel_real16
+parallel_complex16
+parallel_time
+parallel_date
+parallel_string
+parallel_real16Matrix
+parallel_complex16Matrix
+parallel_shortInteger
+parallel_real34
+parallel_complex34
 
 ;Answer to the Ultimate Question of Life
-ultimateQuestionOfLife.txt
+ultimateQuestionOfLife
 
-rectangularToPolar.txt
-polarToRectangular.txt
+rectangularToPolar
+polarToRectangular
 
-ceil.txt
-floor.txt
-;round.txt
-roundi.txt
+ceil
+floor
+;round
+roundi
 
-idiv.txt
-idivr.txt
-modulo.txt
-remainder.txt
+idiv
+idivr
+modulo
+remainder
 
-mant.txt
-expt.txt
+mant
+expt
 
-10pow.txt
-2pow.txt
-minusOnePow.txt
-exp.txt
-log10.txt
-log2.txt
-ln.txt
+10pow
+2pow
+minusOnePow
+exp
+log10
+log2
+ln
 
-arccos.txt
-arcsin.txt
-arctan.txt
+arccos
+arcsin
+arctan
 
-cos.txt
-sin.txt
-tan.txt
+cos
+sin
+tan
 
-arccosh.txt
-arcsinh.txt
-arctanh.txt
+arccosh
+arcsinh
+arctanh
 
-cosh.txt
-sinh.txt
-tanh.txt
+cosh
+sinh
+tanh
 
 ;The standard calculator performance test arcsin(arccos(arctan(tan(cos(sin(9°))))))-9
-trig.txt
+trig
 
-conjugate.txt
-reToCx.txt
-cxToRe.txt
+conjugate
+reToCx
+cxToRe
 
-square.txt
-squareRoot.txt
-cube.txt
-cubeRoot.txt
+square
+squareRoot
+cube
+cubeRoot
 
-lnGamma.txt
-gamma.txt
-factorial.txt
+lnGamma
+gamma
+factorial
 
-fractionalPart.txt
-integerPart.txt
-realPart.txt
-imaginaryPart.txt
-swapRealImaginary.txt
+fractionalPart
+integerPart
+realPart
+imaginaryPart
+swapRealImaginary
 
-gcd.txt
-lcm.txt
+gcd
+lcm
 
-magnitude.txt
-unitVector.txt
+magnitude
+unitVector
 
-slvq.txt
-agm.txt
+slvq
+agm

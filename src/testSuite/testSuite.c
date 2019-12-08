@@ -107,10 +107,13 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLogicalNot",           fnLogicalNot          },
   {"fnM1Pow",                fnM1Pow               },
   {"fnMagnitude",            fnMagnitude           },
+  {"fnMin",                  fnMin                 },
+  {"fnMax",                  fnMax                 },
   {"fnMant",                 fnMant                },
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },
   {"fnMultiply",             fnMultiply            },
+  {"fnNeighb",               fnNeighb              },
   {"fnNop",                  fnNop                 },
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
@@ -135,6 +138,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnTanh",                 fnTanh                },
   {"fnToPolar",              fnToPolar             },
   {"fnToRect",               fnToRect              },
+  {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
   {"",                       NULL                  }
 };
@@ -2065,6 +2069,7 @@ void processOneFile(void) {
   numTestsFile = 0;
 
   strcpy(fileName, line);
+  strcat(fileName, ".txt");
   sprintf(filePathName, "%s/%s", filePath, fileName);
 
   printf("Performing tests from file %s ", filePathName);
@@ -2152,7 +2157,7 @@ void processTests(void) {
   sprintf(filePathName, "%s/testSuiteList.txt", filePath);
   fileList = fopen(filePathName, "rb");
   if(fileList == NULL) {
-    printf("Cannot open file fileList.txt!\n");
+    printf("Cannot open file testSuiteList.txt!\n");
     exit(-1);
   }
 

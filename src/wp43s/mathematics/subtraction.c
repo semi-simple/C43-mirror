@@ -23,8 +23,8 @@
 
 
 void (* const subtraction[12][12])(void) = {
-// regX |    regY ==>   1            2            3            4            5            6            7            8            9            10            11           12
-//      V               Long integer Real16       Complex16    Angle16      Time         Date         String       Real16 mat   Complex16 m  Short integer Real34       Complex34
+// regX |    regY ==>   1            2            3            4         5            6            7            8            9            10            11           12
+//      V               Long integer Real16       Complex16    Angle16   Time         Date         String       Real16 mat   Complex16 m  Short integer Real34       Complex34
 /*  1 Long integer  */ {subLonILonI, subRe16LonI, subCo16LonI, subError, subTimeLonI, subDateLonI, subError,    subError,    subError,    subShoILonI,  subRe34LonI, subCo34LonI},
 /*  2 Real16        */ {subLonIRe16, subRe16Re16, subCo16Re16, subError, subTimeRe16, subDateRe16, subError,    subError,    subError,    subShoIRe16,  subRe34Re16, subCo34Re16},
 /*  3 Complex16     */ {subLonICo16, subRe16Co16, subCo16Co16, subError, subError,    subError,    subError,    subError,    subError,    subShoICo16,  subRe34Co16, subCo34Co16},

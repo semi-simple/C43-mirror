@@ -74,7 +74,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  if(realIsSpecial(&reX) || real39CompareLessThan(&reX, const_1) || real39CompareGreaterEqual(&reX, const_9999)) {
+  if(realIsSpecial(&reX) || realCompareLessThan(&reX, const_1) || realCompareGreaterEqual(&reX, const_9999)) {
     denMax = DM_DENMAX;
   }
   else {

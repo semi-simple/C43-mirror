@@ -113,7 +113,7 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
           if(xIsAReal) {
             convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
           }
-          if(real39CompareLessThan(&magnitude, const_0)) {
+          if(realCompareLessThan(&magnitude, const_0)) {
             realSetPositiveSign(&magnitude);
             realAdd(&theta, const_pi, &theta, &ctxtReal39);
             realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
@@ -146,7 +146,7 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
           if(xIsAReal) {
             convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
           }
-          if(real39CompareLessThan(&magnitude, const_0)) {
+          if(realCompareLessThan(&magnitude, const_0)) {
             realSetPositiveSign(&magnitude);
             realAdd(&theta, const_pi, &theta, &ctxtReal39);
             realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);

@@ -123,7 +123,7 @@ void gammaLonI(void) {
     return;
   }
 
-  if(real39CompareLessEqual(&x, const_0)) { // x <= 0 and is an integer
+  if(realCompareLessEqual(&x, const_0)) { // x <= 0 and is an integer
     if(!getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -161,7 +161,7 @@ void lnGammaLonI(void) {
     return;
   }
 
-  if(real39CompareLessEqual(&x, const_0)) { // x <= 0 and is an integer
+  if(realCompareLessEqual(&x, const_0)) { // x <= 0 and is an integer
     if(!getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -253,8 +253,8 @@ void lnGammaRe16(void) {
     return;
   }
 
-  if(real39CompareLessEqual(&x.real, const_0)) { // x <= 0
-    if(real39IsAnInteger(&x.real)) {
+  if(realCompareLessEqual(&x.real, const_0)) { // x <= 0
+    if(realIsAnInteger(&x.real)) {
       if(!getFlag(FLAG_DANGER)) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -269,7 +269,7 @@ void lnGammaRe16(void) {
     else { // x is negative and not an integer
       realMinus(&x.real, &x.imag, &ctxtReal39); // x.imag is used as a temp variable here
       realDivideRemainder(&x.imag, const_2, &x.imag, &ctxtReal39);
-      if(real39CompareGreaterThan(&x.imag, const_1)) { // the result is a real
+      if(realCompareGreaterThan(&x.imag, const_1)) { // the result is a real
         WP34S_LnGamma(&x.real, &x.real);
         realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
       }
@@ -416,8 +416,8 @@ void lnGammaRe34(void) {
     return;
   }
 
-  if(real39CompareLessEqual(&x.real, const_0)) { // x <= 0
-    if(real39IsAnInteger(&x.real)) {
+  if(realCompareLessEqual(&x.real, const_0)) { // x <= 0
+    if(realIsAnInteger(&x.real)) {
       if(!getFlag(FLAG_DANGER)) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -432,7 +432,7 @@ void lnGammaRe34(void) {
     else { // x is negative and not an integer
       realMinus(&x.real, &x.imag, &ctxtReal39); // x.imag is used as a temp variable here
       realDivideRemainder(&x.imag, const_2, &x.imag, &ctxtReal39);
-      if(real39CompareGreaterThan(&x.imag, const_1)) { // the result is a real
+      if(realCompareGreaterThan(&x.imag, const_1)) { // the result is a real
         WP34S_LnGamma(&x.real, &x.real);
         realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
       }

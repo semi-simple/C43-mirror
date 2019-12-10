@@ -2171,7 +2171,7 @@ void closeNim(void) {
                 real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &magnitude);
                 real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &theta);
                 convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
-                if(real39CompareLessThan(&magnitude, const_0)) {
+                if(realCompareLessThan(&magnitude, const_0)) {
                   realSetPositiveSign(&magnitude);
                   realAdd(&theta, const_pi, &theta, &ctxtReal39);
                   realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
@@ -2201,7 +2201,7 @@ void closeNim(void) {
                 real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &magnitude);
                 real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &theta);
                 convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
-                if(real39CompareLessThan(&magnitude, const_0)) {
+                if(realCompareLessThan(&magnitude, const_0)) {
                   realSetPositiveSign(&magnitude);
                   realAdd(&theta, const_pi, &theta, &ctxtReal39);
                   realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);

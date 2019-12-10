@@ -517,12 +517,12 @@ void convertAngle39FromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAn
     realSubtract(angle, &minutes, angle, &ctxtReal39);
     realMultiply(angle, const_100, &seconds, &ctxtReal39);
 
-    if(real39CompareGreaterEqual(&seconds, const_60)) {
+    if(realCompareGreaterEqual(&seconds, const_60)) {
       realSubtract(&seconds, const_60, &seconds, &ctxtReal39);
       realAdd(&minutes, const_1, &minutes, &ctxtReal39);
     }
 
-    if(real39CompareGreaterEqual(&minutes, const_60)) {
+    if(realCompareGreaterEqual(&minutes, const_60)) {
       realSubtract(&minutes, const_60, &minutes, &ctxtReal39);
       realAdd(&degrees, const_1, &degrees, &ctxtReal39);
     }
@@ -635,12 +635,12 @@ void checkDms16(real16_t *angle16Dms) {
 
   realMultiply(&angleDms, const_100, &seconds, &ctxtReal39);
 
-  if(real39CompareGreaterEqual(&seconds, const_60)) {
+  if(realCompareGreaterEqual(&seconds, const_60)) {
     realSubtract(&seconds, const_60, &seconds, &ctxtReal39);
     realAdd(&minutes, const_1, &minutes, &ctxtReal39);
   }
 
-  if(real39CompareGreaterEqual(&minutes, const_60)) {
+  if(realCompareGreaterEqual(&minutes, const_60)) {
     realSubtract(&minutes, const_60, &minutes, &ctxtReal39);
     realAdd(&degrees, const_1, &degrees, &ctxtReal39);
   }
@@ -677,12 +677,12 @@ void checkDms34(real34_t *angle34Dms) {
 
   realMultiply(&angleDms, const_100, &seconds, &ctxtReal39);
 
-  if(real39CompareGreaterEqual(&seconds, const_60)) {
+  if(realCompareGreaterEqual(&seconds, const_60)) {
     realSubtract(&seconds, const_60, &seconds, &ctxtReal39);
     realAdd(&minutes, const_1, &minutes, &ctxtReal39);
   }
 
-  if(real39CompareGreaterEqual(&minutes, const_60)) {
+  if(realCompareGreaterEqual(&minutes, const_60)) {
     realSubtract(&minutes, const_60, &minutes, &ctxtReal39);
     realAdd(&degrees, const_1, &degrees, &ctxtReal39);
   }

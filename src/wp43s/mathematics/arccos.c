@@ -68,7 +68,7 @@ void arccosLonI(void) {
   real39_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  if(real39CompareAbsGreaterThan(&x, const_1)) {
+  if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -119,7 +119,7 @@ void arccosRe16(void) {
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
-  if(real39CompareAbsGreaterThan(&x, const_1)) {
+  if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -223,7 +223,7 @@ void arccosRe34(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
-  if(real39CompareAbsGreaterThan(&x, const_1)) {
+  if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));

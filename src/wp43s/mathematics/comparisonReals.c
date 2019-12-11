@@ -156,94 +156,94 @@ bool_t real34CompareLessThan(const real34_t *number1, const real34_t *number2) {
 
 
 
-bool_t real39CompareAbsGreaterThan(const real_t *number1, const real_t *number2) {
-  real39_t compare, num1, num2;
+bool_t realCompareAbsGreaterThan(const real_t *number1, const real_t *number2) {
+  real75_t compare, num1, num2;
   int32_t cmp;
 
   realCopyAbs(number1, &num1);
   realCopyAbs(number2, &num2);
-  realCompare(&num1, &num2, &compare, &ctxtReal39);
+  realCompare(&num1, &num2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp > 0;
 }
 
 
 
-bool_t real39CompareAbsGreaterEqual(const real_t *number1, const real_t *number2) {
-  real39_t compare, num1, num2;
+bool_t realCompareAbsGreaterEqual(const real_t *number1, const real_t *number2) {
+  real75_t compare, num1, num2;
   int32_t cmp;
 
   realCopyAbs(number1, &num1);
   realCopyAbs(number2, &num2);
-  realCompare(&num1, &num2, &compare, &ctxtReal39);
+  realCompare(&num1, &num2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp >= 0;
 }
 
 
 
-bool_t real39CompareAbsLessThan(const real_t *number1, const real_t *number2) {
-  real39_t compare, num1, num2;
+bool_t realCompareAbsLessThan(const real_t *number1, const real_t *number2) {
+  real75_t compare, num1, num2;
   int32_t cmp;
 
   realCopyAbs(number1, &num1);
   realCopyAbs(number2, &num2);
-  realCompare(&num1, &num2, &compare, &ctxtReal39);
+  realCompare(&num1, &num2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp < 0;
 }
 
 
 
-bool_t real39CompareEqual(const real_t *number1, const real_t *number2) {
-  real39_t compare;
+bool_t realCompareEqual(const real_t *number1, const real_t *number2) {
+  real75_t compare;
   int32_t cmp;
 
-  realCompare(number1, number2, &compare, &ctxtReal39);
+  realCompare(number1, number2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp == 0;
 }
 
 
 
-bool_t real39CompareGreaterEqual(const real_t *number1, const real_t *number2) {
-  real39_t compare;
+bool_t realCompareGreaterEqual(const real_t *number1, const real_t *number2) {
+  real75_t compare;
   int32_t cmp;
 
-  realCompare(number1, number2, &compare, &ctxtReal39);
+  realCompare(number1, number2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp >= 0;
 }
 
 
 
-bool_t real39CompareGreaterThan(const real_t *number1, const real_t *number2) {
-  real39_t compare;
+bool_t realCompareGreaterThan(const real_t *number1, const real_t *number2) {
+  real75_t compare;
   int32_t cmp;
 
-  realCompare(number1, number2, &compare, &ctxtReal39);
+  realCompare(number1, number2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp > 0;
 }
 
 
 
-bool_t real39CompareLessEqual(const real_t *number1, const real_t *number2) {
-  real39_t compare;
+bool_t realCompareLessEqual(const real_t *number1, const real_t *number2) {
+  real75_t compare;
   int32_t cmp;
 
-  realCompare(number1, number2, &compare, &ctxtReal39);
+  realCompare(number1, number2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp <= 0;
 }
 
 
 
-bool_t real39CompareLessThan(const real_t *number1, const real_t *number2) {
-  real39_t compare;
+bool_t realCompareLessThan(const real_t *number1, const real_t *number2) {
+  real75_t compare;
   int32_t cmp;
 
-  realCompare(number1, number2, &compare, &ctxtReal39);
+  realCompare(number1, number2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp < 0;
 }
@@ -288,8 +288,8 @@ bool_t real34IsAnInteger(const real34_t *x) {
 
 
 
-bool_t real39IsAnInteger(const real_t *x) {
-  real39_t r, y;
+bool_t realIsAnInteger(const real_t *x) {
+  real75_t r, y;
 
   if(realIsNaN(x)) {
     return false;
@@ -299,10 +299,10 @@ bool_t real39IsAnInteger(const real_t *x) {
     return true;
   }
 
-  realToIntegralValue(x, &y, DEC_ROUND_DOWN, &ctxtReal39);
-  realSubtract(x, &y, &r, &ctxtReal39);
+  realToIntegralValue(x, &y, DEC_ROUND_DOWN, &ctxtReal75);
+  realSubtract(x, &y, &r, &ctxtReal75);
 
-  return real39CompareEqual(&r, const_0);
+  return realCompareEqual((real_t *)&r, const_0);
 }
 
 

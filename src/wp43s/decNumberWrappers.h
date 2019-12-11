@@ -239,6 +239,7 @@ typedef struct {real75_t real, imag;}                     complex75_t;
 #define realIsPositive(source)                                 (((((real_t *)(source))->bits) & 0x80) == 0x00)
 #define realIsSpecial(source)                                  decNumberIsSpecial       ((real_t *)(source))
 #define realIsZero(source)                                     decNumberIsZero          ((real_t *)(source))
+#define realLn(operand, res, ctxt)                             decNumberLn              ((real_t *)(res), (real_t *)(operand), ctxt)
 #define realMinus(operand, res, ctxt)                          decNumberMinus           ((real_t *)(res), (real_t *)(operand), ctxt)
 #define realMultiply(operand1, operand2, res, ctxt)            decNumberMultiply        ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
 #define realNextToward(from, toward, res, ctxt)                decNumberNextToward      ((real_t *)(res), (real_t *)(from),     (real_t *)(toward),   ctxt)

@@ -68,7 +68,7 @@ void arccoshLonI(void) {
   real39_t x, xSquared;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  if(real39CompareLessThan(&x, const_1)) {
+  if(realCompareLessThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -113,7 +113,7 @@ void arccoshRe16(void) {
 
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
 
-  if(real39CompareLessThan(&x, const_1)) {
+  if(realCompareLessThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -213,11 +213,11 @@ void arccoshRe34(void) {
     return;
   }
 
-  real39_t x, xSquared;
+  real75_t x, xSquared;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  if(real39CompareLessThan(&x, const_1)) {
+  if(realCompareLessThan((real_t *)&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -236,11 +236,12 @@ void arccoshRe34(void) {
   }
 
   // arccosh(x) = ln(x + sqrt(x² - 1))
-  realMultiply(&x, &x, &xSquared, &ctxtReal39);
-  realSubtract(&xSquared, const_1, &xSquared, &ctxtReal39);
-  realSquareRoot(&xSquared, &xSquared, &ctxtReal39);
-  realAdd(&xSquared, &x, &x, &ctxtReal39);
-  WP34S_Ln(&x, &x);
+  realMultiply(&x, &x, &xSquared, &ctxtReal75);
+  realSubtract(&xSquared, const_1, &xSquared, &ctxtReal75);
+  realSquareRoot(&xSquared, &xSquared, &ctxtReal75);
+  realAdd(&xSquared, &x, &x, &ctxtReal75);
+  realLn(&x, &x, &ctxtReal75);
+  //WP34S_Ln(&x, &x);
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);

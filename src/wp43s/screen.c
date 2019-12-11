@@ -20,6 +20,39 @@
 
 #include "wp43s.h"
 
+
+void FN_handler() {                  //JM LONGPRESS vv
+  if(FN_timeouts) {                  //JM LONGPRESS handlerFN Key shift longpress handler
+    if (FN_counter == 1) {    
+      if(!shiftF && !shiftG) {
+        S_shF();
+        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
+                                                                                   showFNFunctionName();
+        FN_counter  = 10;            //restart count
+      }
+      else if(shiftF && !shiftG) {
+        S_shG();
+        R_shF();
+        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
+        showFNFunctionName();
+        FN_counter  = 10;            //restart count
+      }
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
+        resetShiftState();
+        FN_key_pressed = 0;          //Cancel pending FN key pressed
+        FN_timeouts = false;
+        FN_counter = 10;             //reset 0?
+        showFunctionName(ITM_NOP, 0);
+      }
+    } 
+    else { 
+      FN_counter--;
+    }
+  }                                  //JM ^^
+}
+
+
+
 #ifdef PC_BUILD
 /********************************************//**
  * \brief Draws the calc's screen on the PC window widget
@@ -377,7 +410,6 @@ void waitAndSee(void) {
 }
 
 
-
 /********************************************//**
  * \brief Refreshes calc's screen. This function is
  * called every 100 ms by a GTK timer.
@@ -403,6 +435,8 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
       hideCursor();
     }
   }
+
+  FN_handler();
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -457,7 +491,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   return TRUE;
 }
 #elif defined DMCP_BUILD
-void refreshScreen(void) {// This function is called roughly every 100 ms from the main loop
+void refreshScreen() {// This function is called roughly every 100 ms from the main loop
   // Cursor blinking
   if(cursorEnabled) {
     cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
@@ -469,34 +503,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     }
   }
 
-
-  if(FN_timeouts) {               //JM vv  handlerFN Key shift longpress handler
-    if (FN_counter == 1) {    
-      if(!shiftF && !shiftG) {
-        S_shF();
-        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
-        showFNFunctionName();
-        FN_counter  = 10; //restart count
-      }
-      else if(shiftF && !shiftG) {
-        S_shG();
-        R_shF();
-        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
-        showFNFunctionName();
-        FN_counter  = 10; //restart count
-      }
-      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
-        resetShiftState();
-        FN_key_pressed = 0;          //Cancel pending FN key pressed
-        FN_timeouts = false;
-        FN_counter = 10; //reset 0?
-        showFunctionName(ITM_NOP, 0);
-      }
-    } 
-    else { 
-      FN_counter--;
-    }
-  }                               //JM ^^
+  FN_handler();
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -1009,10 +1016,22 @@ void showFunctionName(int16_t item, int8_t counter) {
   if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 15, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
 }
 
 
+void showFNFunctionName() {
+  clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM clear the previous shift function name
+  if(shiftF) { 
+    showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+  } else 
+  if(shiftG) { 
+    showFunctionName(nameFunction(FN_key_pressed-37,12),0); 
+  } else { 
+    showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
+  }
+  showFunctionNameItem = 0;
+}
 
 /********************************************//**
  * \brief Hides the function name in the

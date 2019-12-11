@@ -146,9 +146,8 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
 
 
-#ifdef DMCP_BUILD
 
-int16_t nameFunction(int16_t fn, int16_t itemShift) {
+int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM LONGPRESS vv
   int16_t row, func;
   func = 0;
   const softmenu_t *sm;
@@ -166,22 +165,25 @@ return func;
 }
 
 
-void showFNFunctionName() {
-  if(shiftF) { showFunctionName(nameFunction(FN_key_pressed-37,6),0);  } else 
-  if(shiftG) { showFunctionName(nameFunction(FN_key_pressed-37,12),0); } else 
-             { showFunctionName(nameFunction(FN_key_pressed-37,0),0);  }
-  showFunctionNameItem = 0;
-}
-
-
+#ifdef PC_BUILD                                                           //JM LONGPRESS FN
+void btnFnPressed(GtkWidget *w, gpointer data) { 
+#endif
+#ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
-  FN_key_pressed = *((char *)data) - '0' + 37; //to render 38-43, as per original keypress
+#endif
+  FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
   FN_counter = 10; //start new cycle
   FN_timeouts = true;
   showFNFunctionName(FN_key_pressed-37);
-}
+}                                                                         //JM LONGPRESS ^^
 
+
+#ifdef PC_BUILD                                                           //JM LONGPRESS FN
+void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM LONGPRESS FN
+#endif
+#ifdef DMCP_BUILD
 void btnFnReleased(void *w, void *data) {
+#endif
   char charKey[3];
   sprintf(charKey, "%c", FN_key_pressed + 11);
   FN_key_pressed = 0;
@@ -192,7 +194,6 @@ void btnFnReleased(void *w, void *data) {
   refreshRegisterLine(REGISTER_T);
 }
 
-#endif
 
 
 //JM btnFnClicked is called by gui.c keyPressed

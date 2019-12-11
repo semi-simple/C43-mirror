@@ -22,19 +22,21 @@ void resetShiftState(void);
 void showShiftState (void);
 void fnComplexCCCC  (uint16_t unusedParamButMandatory);
 
-int16_t FN_key_pressed;   //JM LONGPRESS FN
-bool_t FN_timeouts;       //JM LONGPRESS FN
-int8_t FN_counter;        //JM LONGPRESS FN
+int16_t FN_key_pressed;                                //JM LONGPRESS FN
+bool_t FN_timeouts;                                    //JM LONGPRESS FN
+int8_t FN_counter;                                     //JM LONGPRESS FN
+int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS vv
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);
+  void btnFnPressed   (GtkWidget *w, gpointer data);   //JM LONGPRESS FN
+  void btnFnReleased  (GtkWidget *w, gpointer data);   //JM LONGPRESS FN
   void btnClicked     (GtkWidget *w, gpointer data);
   void btnPressed     (GtkWidget *w, gpointer data);
   void btnReleased    (GtkWidget *w, gpointer data);
 #endif
 
 #ifdef DMCP_BUILD
-  void showFNFunctionName();   //JM LONGPRESS FN
   void btnFnClicked   (void *w, void *data);
   void btnFnPressed   (void *w, void *data);   //JM LONGPRESS FN
   void btnFnReleased   (void *w, void *data);  //JM LONGPRESS FN

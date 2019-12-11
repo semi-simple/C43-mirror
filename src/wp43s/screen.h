@@ -48,6 +48,7 @@ typedef enum {
 
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
+void     FN_handler();                       //JM LONGPRESS vv
 
 #ifdef PC_BUILD
   #if (__linux__ == 1)
@@ -59,6 +60,8 @@ int8_t   showFunctionNameCounter;
   #else
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
   #endif
+
+
 
   gboolean drawScreen                         (GtkWidget *widget, cairo_t *cr, gpointer data);
   void     copyScreenToClipboard              (void);
@@ -89,6 +92,7 @@ void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines,
 void     showCursor           (void);
 void     hideCursor           (void);
 void     showFunctionName     (int16_t item, int8_t counter);
+void     showFNFunctionName   ();                           //JM LONGPRESS FN 
 void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
 void     refreshRegisterLine  (calcRegister_t regist);

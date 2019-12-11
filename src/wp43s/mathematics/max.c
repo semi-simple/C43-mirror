@@ -56,7 +56,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -84,7 +84,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -113,7 +113,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
           // X = real16    Y = long integer
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
           convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -137,7 +137,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
           // X = real16    Y = short integer
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
           convertShortIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -154,7 +154,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -238,7 +238,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
           convertShortIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -266,7 +266,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
           convertShortIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -295,7 +295,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
           // X = real34    Y = long integer
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
           convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -312,7 +312,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;
@@ -321,7 +321,7 @@ void fnMax(uint16_t unusedParamButMandatory) {
           // X = real34    Y = short integer
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
           convertShortIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);
-          if(real39CompareGreaterThan(&y, &x)) {
+          if(realCompareGreaterThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
           break;

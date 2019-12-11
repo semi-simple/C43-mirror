@@ -71,7 +71,7 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
           longIntegerInit(lgIntY);
-          intToLongInteger(real39CompareEqual(&y, &x) ? 0 : (real39CompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
+          intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
           break;
 
         case dtShortInteger:
@@ -83,7 +83,7 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real34ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
           longIntegerInit(lgIntY);
-          intToLongInteger(real39CompareEqual(&y, &x) ? 0 : (real39CompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
+          intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
           break;
 
         default: {}
@@ -124,7 +124,7 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
           longIntegerInit(lgIntY);
-          intToLongInteger(real39CompareEqual(&y, &x) ? 0 : (real39CompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
+          intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
           longIntegerAdd(lgIntX, lgIntY, lgIntX);
           convertLongIntegerToShortIntegerRegister(lgIntX, getRegisterShortIntegerBase(REGISTER_X), REGISTER_X);
           break;
@@ -140,7 +140,7 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real34ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
           longIntegerInit(lgIntY);
-          intToLongInteger(real39CompareEqual(&y, &x) ? 0 : (real39CompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
+          intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
           longIntegerAdd(lgIntX, lgIntY, lgIntX);
           convertLongIntegerToShortIntegerRegister(lgIntX, getRegisterShortIntegerBase(REGISTER_X), REGISTER_X);
           break;

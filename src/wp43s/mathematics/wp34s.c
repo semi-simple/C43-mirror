@@ -79,21 +79,21 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sin3
   }
 
   // sin(180+x) = -sin(x), cos(180+x) = -cos(x)
-  if(real39CompareGreaterEqual(&angle, angle180 + angularMode)) {      // angle >= 180°
+  if(realCompareGreaterEqual(&angle, angle180 + angularMode)) {      // angle >= 180°
     realSubtract(&angle, angle180 + angularMode, &angle, &ctxtReal39); // angle - 180° --> angle
     sinNeg = !sinNeg;
     cosNeg = !cosNeg;
   }
 
   // sin(90+x) = cos(x), cos(90+x) = -sin(x)
-  if(real39CompareGreaterEqual(&angle, angle90 + angularMode)) {      // angle >= 90°
+  if(realCompareGreaterEqual(&angle, angle90 + angularMode)) {      // angle >= 90°
     realSubtract(&angle, angle90 + angularMode, &angle, &ctxtReal39); // angle - 90° --> angle
     swap = true;
     cosNeg = !cosNeg;
   }
 
   // sin(90-x) = cos(x), cos(90-x) = sin(x)
-  if(real39CompareEqual(&angle, angle45 + angularMode)) { // angle == 45°
+  if(realCompareEqual(&angle, angle45 + angularMode)) { // angle == 45°
     if(sin39 != NULL) {
      realCopy(const_root2on2, sin39);
     }
@@ -105,7 +105,7 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sin3
     }
   }
   else { // angle < 90
-    if(real39CompareGreaterThan(&angle, angle45 + angularMode)) {       // angle > 45°
+    if(realCompareGreaterThan(&angle, angle45 + angularMode)) {       // angle > 45°
       realSubtract(angle90 + angularMode, &angle, &angle, &ctxtReal39); // 90° - angle  --> angle
       swap = !swap;
     }
@@ -248,7 +248,7 @@ void WP34S_Atan(const real_t *x, real_t *angle) {
   }
 
   // reduce range to 0 <= a < 1, using atan(x) = pi/2 - atan(1/x)
-  invert = real39CompareGreaterThan(&a, const_1);
+  invert = realCompareGreaterThan(&a, const_1);
   if(invert) {
     realDivide(const_1, &a, &a, &ctxtReal39);
   }
@@ -256,7 +256,7 @@ void WP34S_Atan(const real_t *x, real_t *angle) {
   // Range reduce to small enough limit to use taylor series using:
   //  tan(x/2) = tan(x)/(1+sqrt(1+tan(x)²))
   for(n=0; n<1000; n++) {
-    if(real39CompareLessEqual(&a, const_1on10)) {
+    if(realCompareLessEqual(&a, const_1on10)) {
       break;
     }
     doubles++;
@@ -293,7 +293,7 @@ void WP34S_Atan(const real_t *x, real_t *angle) {
 
     realAdd(&j, const_2, &j, &ctxtReal39);
 
-  } while(!real39CompareEqual(angle, &last));
+  } while(!realCompareEqual(angle, &last));
 
   realMultiply(angle, &a, angle, &ctxtReal39);
 
@@ -323,9 +323,9 @@ void WP34S_Atan2(const real_t *y, const real_t *x, real_t *atan) {
     return;
   }
 
-  if(real39CompareEqual(y, const_0)) {
+  if(realCompareEqual(y, const_0)) {
     if(yNeg) {
-      if(real39CompareEqual(x, const_0)) {
+      if(realCompareEqual(x, const_0)) {
         if(xNeg) {
           realMinus(const_pi, atan, &ctxtReal39);
         }
@@ -341,7 +341,7 @@ void WP34S_Atan2(const real_t *y, const real_t *x, real_t *atan) {
       }
     }
     else {
-      if(real39CompareEqual(x, const_0)) {
+      if(realCompareEqual(x, const_0)) {
         if(xNeg) {
           realCopy(const_pi, atan);
         }
@@ -359,7 +359,7 @@ void WP34S_Atan2(const real_t *y, const real_t *x, real_t *atan) {
     return;
   }
 
-  if(real39CompareEqual(x, const_0)) {
+  if(realCompareEqual(x, const_0)) {
     realCopy(const_piOn2, atan);
     if(yNeg) {
       realSetNegativeSign(atan);
@@ -420,7 +420,7 @@ void WP34S_Atan2(const real_t *y, const real_t *x, real_t *atan) {
   }
 
   realAdd(&r, &t, atan, &ctxtReal39);
-  if(real39CompareEqual(atan, const_0) && yNeg) {
+  if(realCompareEqual(atan, const_0) && yNeg) {
     realSetNegativeSign(atan);
   }
 }
@@ -436,7 +436,7 @@ void WP34S_Asin(const real_t *x, real_t *angle) {
   }
 
   realCopyAbs(x, &abx);
-  if(real39CompareGreaterThan(&abx, const_1)) {
+  if(realCompareGreaterThan(&abx, const_1)) {
     realCopy(const_NaN, angle);
     return;
   }
@@ -462,13 +462,13 @@ void WP34S_Acos(const real_t *x, real_t *angle) {
   }
 
   realCopyAbs(x, &abx);
-  if(real39CompareGreaterThan(&abx, const_1)) {
+  if(realCompareGreaterThan(&abx, const_1)) {
     realCopy(const_NaN, angle);
     return;
   }
 
   // angle = 2*atan((1-x)/sqrt(1-x*x))
-  if(real39CompareEqual(x, const_1)) {
+  if(realCompareEqual(x, const_1)) {
     realZero(angle);
   }
   else {
@@ -540,7 +540,7 @@ static void WP34S_Gamma_LnGamma(const real_t *xin, const bool_t calculateLnGamma
   }
 
   // Handle x approximately zero case
-  if(real39CompareAbsLessThan(xin, const_1e_24)) {
+  if(realCompareAbsLessThan(xin, const_1e_24)) {
     if(realIsZero(xin)) {
       realCopy(const_NaN, res);
       return;
@@ -554,10 +554,10 @@ static void WP34S_Gamma_LnGamma(const real_t *xin, const bool_t calculateLnGamma
   }
 
   // Correct our argument and begin the inversion if it is negative
-  if(real39CompareLessEqual(xin, const_0)) {
+  if(realCompareLessEqual(xin, const_0)) {
     reflect = true;
     realSubtract(const_1, xin, &t, &ctxtReal39); // t = 1 - xin
-    if(real39IsAnInteger(&t)) {
+    if(realIsAnInteger(&t)) {
       realCopy(const_NaN, res);
       return;
     }
@@ -568,9 +568,9 @@ static void WP34S_Gamma_LnGamma(const real_t *xin, const bool_t calculateLnGamma
 
     // Provide a fast path evaluation for positive integer arguments that aren't too large
     // The threshold for overflow is 205! (i.e. 204! is within range and 205! isn't).
-    if(real39IsAnInteger(&x) && !realIsZero(xin) && real39CompareLessEqual(&x, const_204)) {
+    if(realIsAnInteger(&x) && !realIsZero(xin) && realCompareLessEqual(&x, const_204)) {
       realCopy(const_1, res);
-      while(real39CompareGreaterEqual(&x, const_2)) {
+      while(realCompareGreaterEqual(&x, const_2)) {
         realMultiply(res, &x, res, &ctxtReal39);
         realSubtract(&x, const_1, &x, &ctxtReal39);
       }
@@ -662,7 +662,7 @@ void WP34S_Ln(const real_t *xin, real_t *res) {
     return;
   }
 
-  if(real39CompareLessEqual(xin, const_0)) {
+  if(realCompareLessEqual(xin, const_0)) {
     if(realIsNegative(xin)) {
       realCopy(const_NaN, res);
       return;
@@ -677,7 +677,7 @@ void WP34S_Ln(const real_t *xin, real_t *res) {
   realSubtract(xin, const_1, &t, &ctxtReal39);
   realCopy(&t, &v);
   realSetPositiveSign(&v);
-  if(real39CompareGreaterThan(&v, const_0_5)) {
+  if(realCompareGreaterThan(&v, const_0_5)) {
     expon = z.exponent + z.digits;
     z.exponent = -z.digits;
   }
@@ -694,7 +694,7 @@ void WP34S_Ln(const real_t *xin, real_t *res) {
   // Range reduce the value by repeated square roots.
   // Making the constant here larger will reduce the number of later
   // iterations at the expense of more square root operations.
-  while(real39CompareLessEqual(&z, const_root2on2)) {
+  while(realCompareLessEqual(&z, const_root2on2)) {
     realMultiply(&f, const_2, &f, &ctxtReal39);
     realSquareRoot(&z, &z, &ctxtReal39);
   }
@@ -773,15 +773,15 @@ void WP34S_Logxy(const real_t *yin, const real_t *xin, real_t *res) {
 bool_t WP34S_RelativeError(const real_t *x, const real_t *y, const real_t *tol) {
   real39_t a;
 
-  if(real39CompareEqual(x, const_0)) {
+  if(realCompareEqual(x, const_0)) {
     realCopyAbs(y, &a);
-    return real39CompareLessThan(&a, tol);
+    return realCompareLessThan(&a, tol);
   }
 
   realSubtract(x, y, &a, &ctxtReal39);
   realDivide(&a, x, &a, &ctxtReal39);
   realSetPositiveSign(&a);
-  return real39CompareLessThan(&a, tol);
+  return realCompareLessThan(&a, tol);
 }
 
 
@@ -794,7 +794,7 @@ void WP34S_SinhCosh(const real_t *x, real_t *sinhOut, real_t *coshOut) {
   real39_t t, u, v;
 
   if(sinhOut != NULL) {
-    if(real39CompareAbsLessThan(x, const_1on2)) {
+    if(realCompareAbsLessThan(x, const_1on2)) {
       WP34S_ExpM1(x, &u);                           // u = e^x - 1
       realMultiply(&u, const_1on2, &t, &ctxtReal39);           // t = (e^x - 1) / 2
 
@@ -822,7 +822,7 @@ void WP34S_SinhCosh(const real_t *x, real_t *sinhOut, real_t *coshOut) {
 
 
 void WP34S_Tanh(const real_t *x, real_t *res) {
-  if(real39CompareAbsGreaterThan(x, const_47)) { // equals 1 to 39 digits
+  if(realCompareAbsGreaterThan(x, const_47)) { // equals 1 to 39 digits
     realCopy((realIsPositive(x) ? const_1 : const__1), res);
   }
   else {
@@ -911,7 +911,7 @@ void WP34S_ExpM1(const real_t *x, real_t *res) {
     realCopy(x, res);
   }
   else {
-    if(real39CompareEqual(&v, const__1)) {
+    if(realCompareEqual(&v, const__1)) {
       realCopy(const__1, res);
     }
     else {
@@ -990,7 +990,7 @@ static void WP34S_ComplexGammaLnGamma(const complex39_t *z, const bool_t calcula
   if(realIsNegative(&z->real)) {
     reflect = true;
     realSubtract(const_1, &z->real, &t.real, &ctxtReal39);
-    if(realIsZero(&z->imag) && real39IsAnInteger(&t.real)) {
+    if(realIsZero(&z->imag) && realIsAnInteger(&t.real)) {
       realCopy(const_NaN, &res->real);
       realCopy(const_NaN, &res->imag);
       return;

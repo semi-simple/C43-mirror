@@ -20,28 +20,35 @@
 
 #include "wp43s.h"
 
-
 void FN_handler() {                  //JM LONGPRESS vv
-  if(FN_timeouts) {                  //JM LONGPRESS handlerFN Key shift longpress handler
+  if(FN_timeouts || FN_counter != JM_FN_TIMER) {                  //JM LONGPRESS handlerFN Key shift longpress handler
+ 
+    if(FN_counter > JM_FN_TIMER) {
+      FN_counter = JM_FN_TIMER;
+    } else
+    if(FN_counter < 1) {
+      FN_counter = 1;
+    } 
+
     if (FN_counter == 1) {    
       if(!shiftF && !shiftG) {
         S_shF();
         showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
-                                                                                   showFNFunctionName();
-        FN_counter  = 10;            //restart count
+        showFNFunctionName();
+        FN_counter = JM_FN_TIMER;    //restart count
       }
       else if(shiftF && !shiftG) {
         S_shG();
         R_shF();
         showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
         showFNFunctionName();
-        FN_counter  = 10;            //restart count
+        FN_counter = JM_FN_TIMER;    //restart count
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
         resetShiftState();
         FN_key_pressed = 0;          //Cancel pending FN key pressed
         FN_timeouts = false;
-        FN_counter = 10;             //reset 0?
+        FN_counter = JM_FN_TIMER;    //reset for future
         showFunctionName(ITM_NOP, 0);
       }
     } 

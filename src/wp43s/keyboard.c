@@ -172,7 +172,7 @@ void btnFnPressed(GtkWidget *w, gpointer data) {
 void btnFnPressed(void *w, void *data) {
 #endif
   FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
-  FN_counter = 10; //start new cycle
+  FN_counter = JM_FN_TIMER;                                               //start new cycle
   FN_timeouts = true;
   showFNFunctionName(FN_key_pressed-37);
 }                                                                         //JM LONGPRESS ^^
@@ -188,7 +188,7 @@ void btnFnReleased(void *w, void *data) {
   sprintf(charKey, "%c", FN_key_pressed + 11);
   FN_key_pressed = 0;
   FN_timeouts = false;
-  FN_counter = 10; //reset 0?
+  FN_counter = JM_FN_TIMER;                                               //reset for future
   btnFnClicked(w, charKey);
   resetShiftState();  
   refreshRegisterLine(REGISTER_T);

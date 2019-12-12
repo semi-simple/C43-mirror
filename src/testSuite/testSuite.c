@@ -26,7 +26,7 @@ extern const int16_t menu_FCNS[];
 extern const int16_t menu_CNST[];
 extern const int16_t menu_MENUS[];
 extern const softmenu_t softmenu[];
-char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000];
+char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000], realString[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal;
 int32_t functionIndex, funcType, correctSignificantDigits, numberOfCorrectSignificantDigitsExpected;
 void (*funcNoParam)(uint16_t);
@@ -107,10 +107,13 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLogicalNot",           fnLogicalNot          },
   {"fnM1Pow",                fnM1Pow               },
   {"fnMagnitude",            fnMagnitude           },
+  {"fnMin",                  fnMin                 },
+  {"fnMax",                  fnMax                 },
   {"fnMant",                 fnMant                },
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },
   {"fnMultiply",             fnMultiply            },
+  {"fnNeighb",               fnNeighb              },
   {"fnNop",                  fnNop                 },
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
@@ -135,6 +138,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnTanh",                 fnTanh                },
   {"fnToPolar",              fnToPolar             },
   {"fnToRect",               fnToRect              },
+  {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
   {"",                       NULL                  }
 };
@@ -1016,8 +1020,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
 
 
 int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numberPart, calcRegister_t regist, char letter) {
-  real39_t expectedValue, value, relativeError, numSignificantDigits;
-  real16_t integer;
+  real39_t expectedValue, value, relativeError;
 
   real16ToReal(expectedValue16, &expectedValue);
   real16ToReal(value16, &value);
@@ -1026,29 +1029,30 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
 
   if(!realIsZero(&expectedValue)) {
     realDivide(&relativeError, &expectedValue, &relativeError, &ctxtReal39);
-    realDivide(const_1, &relativeError, &numSignificantDigits, &ctxtReal39);
   }
   else {
-    realCopy(const_1, &numSignificantDigits);
+    realCopy(&value, &relativeError);
   }
+  realSetPositiveSign(&relativeError);
 
-  realSetPositiveSign(&numSignificantDigits);
-  if(!realIsZero(&numSignificantDigits)) {
-  WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
-  }
-  else {
-    realZero(&numSignificantDigits);
-  }
-
-  realToReal16(&numSignificantDigits, &integer);
-  correctSignificantDigits = real16ToInt32(&integer);
+  correctSignificantDigits = -relativeError.exponent - relativeError.digits;
+  ctxtReal39.digits = 2;
+  realPlus(&relativeError, &relativeError, &ctxtReal39);
+  ctxtReal39.digits = 39;
   if(correctSignificantDigits <= 16) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
+    realToString(&relativeError, realString);
     if(letter == 0) {
-      printf("\nThere are only %d correct significant digits in the %s part of register %d!\n", correctSignificantDigits, numberPart, regist);
+      printf("\nThere are only %d correct significant digits in the %s part of register %d! Relative error is %s\n", correctSignificantDigits, numberPart, regist, realString);
+      printf("R%d = ", regist);
+      printReal16ToConsole(value16);
+      printf("\n");
     }
     else {
-      printf("\nThere are only %d correct significant digits in the %s part of register %c!\n", correctSignificantDigits, numberPart, letter);
+      printf("\nThere are only %d correct significant digits in the %s part of register %c! Relative error is %s\n", correctSignificantDigits, numberPart, letter, realString);
+      printf("%c = ", letter);
+      printReal16ToConsole(value16);
+      printf("\n");
     }
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
@@ -1065,8 +1069,7 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
 
 
 int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart, calcRegister_t regist, char letter) {
-  real39_t expectedValue, value, relativeError, numSignificantDigits;
-  real16_t integer;
+  real39_t expectedValue, value, relativeError;
 
   real34ToReal(expectedValue34, &expectedValue);
   real34ToReal(value34, &value);
@@ -1075,29 +1078,30 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
 
   if(!realIsZero(&expectedValue)) {
     realDivide(&relativeError, &expectedValue, &relativeError, &ctxtReal39);
-    realDivide(const_1, &relativeError, &numSignificantDigits, &ctxtReal39);
   }
   else {
-    realCopy(const_1, &numSignificantDigits);
+    realCopy(&value, &relativeError);
   }
+  realSetPositiveSign(&relativeError);
 
-  realSetPositiveSign(&numSignificantDigits);
-  if(!realIsZero(&numSignificantDigits)) {
-    WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
-  }
-  else {
-    realZero(&numSignificantDigits);
-  }
-
-  realToReal16(&numSignificantDigits, &integer);
-  correctSignificantDigits = real16ToInt32(&integer);
+  correctSignificantDigits = -relativeError.exponent - relativeError.digits;
+  ctxtReal39.digits = 2;
+  realPlus(&relativeError, &relativeError, &ctxtReal39);
+  ctxtReal39.digits = 39;
   if(correctSignificantDigits <= 34) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
+    realToString(&relativeError, realString);
     if(letter == 0) {
-      printf("\nThere are only %d correct significant digits in the %s part of register %d!\n", correctSignificantDigits, numberPart, regist);
+      printf("\nThere are only %d correct significant digits in the %s part of register %d! Relative error is %s\n", correctSignificantDigits, numberPart, regist, realString);
+      printf("R%d = ", regist);
+      printReal34ToConsole(value34);
+      printf("\n");
     }
     else {
-      printf("\nThere are only %d correct significant digits in the %s part of register %c!\n", correctSignificantDigits, numberPart, letter);
+      printf("\nThere are only %d correct significant digits in the %s part of register %c! Relative error is %s\n", correctSignificantDigits, numberPart, letter, realString);
+      printf("%c = ", letter);
+      printReal34ToConsole(value34);
+      printf("\n");
     }
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
@@ -2065,6 +2069,7 @@ void processOneFile(void) {
   numTestsFile = 0;
 
   strcpy(fileName, line);
+  strcat(fileName, ".txt");
   sprintf(filePathName, "%s/%s", filePath, fileName);
 
   printf("Performing tests from file %s ", filePathName);
@@ -2152,7 +2157,7 @@ void processTests(void) {
   sprintf(filePathName, "%s/testSuiteList.txt", filePath);
   fileList = fopen(filePathName, "rb");
   if(fileList == NULL) {
-    printf("Cannot open file fileList.txt!\n");
+    printf("Cannot open file testSuiteList.txt!\n");
     exit(-1);
   }
 

@@ -15,7 +15,7 @@
  */
 
 /********************************************//**
- * \file agm.h
+ * \file min.h
  ***********************************************/
 
-void fnAgm(uint16_t unusedButMandatoryParameter);
+void fnMin(uint16_t unusedButMandatoryParameter);

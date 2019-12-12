@@ -494,7 +494,7 @@ const int16_t menu_HOME[]        = {
 /* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR   /*LAST ONE NO COMMA*/   //JM HOME
 
 
-#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
+#ifdef DMCP_BUILD              //JM LAYOUT 2. DM42 STRICT.
 /* Bottom Prim */  /* 8 */        ,  KEY_PRTX,                      ITM_TIMER,                  ITM_VIEW,                 -MNU_STK,              -MNU_PARTS,                  ITM_CLSTK,                          //JM HOME
 /* Middle f    */  /* 7 */           ITM_NULL,                      ITM_SAVE,                   -MNU_LOOP,                -MNU_TEST,             -MNU_ALPHAFN,                ITM_NULL,                           //JM HOME
 /* Top    g    */  /*   */           ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME

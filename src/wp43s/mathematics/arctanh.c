@@ -74,7 +74,7 @@ void arctanhLonI(void) {
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    if(real39CompareEqual(&x, const_1)) {
+    if(realCompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
         reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
         realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
@@ -86,7 +86,7 @@ void arctanhLonI(void) {
         #endif
        }
     }
-    else if(real39CompareEqual(&x, const__1)) {
+    else if(realCompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
         reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
         realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
@@ -135,7 +135,7 @@ void arctanhRe16(void) {
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    if(real39CompareEqual(&x, const_1)) {
+    if(realCompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
         realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
@@ -146,7 +146,7 @@ void arctanhRe16(void) {
         #endif
        }
     }
-    else if(real39CompareEqual(&x, const__1)) {
+    else if(realCompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
         realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
       }
@@ -158,7 +158,7 @@ void arctanhRe16(void) {
        }
     }
     else {
-      if(real39CompareAbsGreaterThan(&x, const_1)) {
+      if(realCompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
           realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -255,7 +255,7 @@ void arctanhRe34(void) {
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(real39CompareEqual(&x, const_1)) {
+    if(realCompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
@@ -266,7 +266,7 @@ void arctanhRe34(void) {
         #endif
        }
     }
-    else if(real39CompareEqual(&x, const__1)) {
+    else if(realCompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
         realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
@@ -278,7 +278,7 @@ void arctanhRe34(void) {
        }
     }
     else {
-      if(real39CompareAbsGreaterThan(&x, const_1)) {
+      if(realCompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
           realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));

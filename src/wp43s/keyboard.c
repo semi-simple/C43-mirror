@@ -171,12 +171,13 @@ void btnFnPressed(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
 #endif
-  FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
-  FN_counter = JM_FN_TIMER;                                               //start new cycle
-  FN_timeouts = true;
-  showFNFunctionName(FN_key_pressed-37);
-}                                                                         //JM LONGPRESS ^^
-
+  if(!FN_timeouts) {
+    FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
+    FN_counter = JM_FN_TIMER;                                               //start new cycle
+    FN_timeouts = true;
+    showFNFunctionName(FN_key_pressed-37);
+  }                                                                         //JM LONGPRESS ^^
+}
 
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN
 void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM LONGPRESS FN
@@ -184,16 +185,17 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 #ifdef DMCP_BUILD
 void btnFnReleased(void *w, void *data) {
 #endif
-  char charKey[3];
-  sprintf(charKey, "%c", FN_key_pressed + 11);
-  FN_key_pressed = 0;
-  FN_timeouts = false;
-  FN_counter = JM_FN_TIMER;                                               //reset for future
-  btnFnClicked(w, charKey);
-  resetShiftState();  
-  refreshRegisterLine(REGISTER_T);
+  if(FN_timeouts) {
+    char charKey[3];
+    sprintf(charKey, "%c", FN_key_pressed + 11);
+    FN_key_pressed = 0;
+    FN_timeouts = false;
+    FN_counter = JM_FN_TIMER;                                               //reset for future
+    btnFnClicked(w, charKey);
+    resetShiftState();  
+    refreshRegisterLine(REGISTER_T);
+  }
 }
-
 
 
 //JM btnFnClicked is called by gui.c keyPressed

@@ -323,7 +323,7 @@ void setupDefaults(void) {
 
   FN_key_pressed = 0;  //JM LONGPRESS FN
   FN_timeouts = 0;     //JM LONGPRESS FN
-  FN_counter = 0;      //JM LONGPRESS FN
+  FN_counter = JM_FN_TIMER;      //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
   HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.

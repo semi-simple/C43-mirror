@@ -20,8 +20,41 @@
 
 #include "wp43s.h"
 
+
+void underline_softkey(int16_t xSoftkey, int16_t ySoftKey) {
+  int16_t x, y, x1, y1, x2, y2;
+
+  if(0 <= xSoftkey && xSoftkey <= 5) {
+    x1 = 67 * xSoftkey - 1;
+    x2 = x1 + 67;
+  } else {
+    x1 = 0;
+    x2 = 0;
+  }
+
+  if(0 <= ySoftKey && ySoftKey <= 2) {
+    y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
+    y2 = y1 + SOFTMENU_HEIGHT;
+  } else {
+    y1 = 0;
+    y2 = 0;
+  }
+
+  y = y2-3-1;
+  for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
+    if(mod(x, 2) == 0) {
+      setPixel(x, y);
+      setPixel(x, y+2);
+    }
+    else {
+      setPixel(x, y+1);
+    }
+  }
+}
+
+
 void FN_handler() {                  //JM LONGPRESS vv
-  if(FN_timeouts || FN_counter != JM_FN_TIMER) {                  //JM LONGPRESS handlerFN Key shift longpress handler
+  if(FN_timeouts || (FN_counter != JM_FN_TIMER)) {                  //JM LONGPRESS handlerFN Key shift longpress handler
  
     if(FN_counter > JM_FN_TIMER) {
       FN_counter = JM_FN_TIMER;
@@ -1027,18 +1060,21 @@ void showFunctionName(int16_t item, int8_t counter) {
 }
 
 
-void showFNFunctionName() {
-  clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM clear the previous shift function name
+void showFNFunctionName() {                                                   //JM FN vv
+  clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
   if(shiftF) { 
     showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+    underline_softkey(FN_key_pressed-38,1);
   } else 
   if(shiftG) { 
     showFunctionName(nameFunction(FN_key_pressed-37,12),0); 
+    underline_softkey(FN_key_pressed-38,2);
   } else { 
     showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
+    underline_softkey(FN_key_pressed-38,0);
   }
   showFunctionNameItem = 0;
-}
+}                                                                             //JM FN ^^
 
 /********************************************//**
  * \brief Hides the function name in the

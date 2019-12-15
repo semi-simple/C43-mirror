@@ -210,7 +210,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
   displayString += 2;
   displayString[0] = 0;
 
-  if(displayValueString != NULL) {  //JM_TOCHECK
+  if(updateDisplayValueX) {
     *displayValueString++ = 'e';
     *displayValueString = 0;
   }
@@ -227,8 +227,8 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
 
 
 
-void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {  //JM_TOCHECK
-  if(displayValueString != NULL) {
+void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {
+  if(updateDisplayValueX) {
     sprintf(displayValueString, "%" FMT32S, supNumber);
   }
 
@@ -281,8 +281,8 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
 
 
 
-void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {  //JM_TOCHECK
-  if(displayValueString != NULL) {
+void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {
+  if(updateDisplayValueX) {
     sprintf(displayValueString, "%" FMT32S, subNumber);
   }
 

@@ -45,9 +45,12 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey) {
     if(mod(x, 2) == 0) {
       setPixel(x, y);
       setPixel(x, y+2);
+      clearPixel(x, y+1);
     }
     else {
       setPixel(x, y+1);
+      clearPixel(x, y);
+      clearPixel(x, y+2);
     }
   }
 }

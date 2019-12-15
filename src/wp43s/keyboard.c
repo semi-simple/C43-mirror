@@ -159,6 +159,9 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
       }      
+      if(func < 0) {
+        func = - func;
+      }      
     }
   }
 return func;

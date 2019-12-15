@@ -647,6 +647,6 @@ void backToSystem(uint16_t unusedParamButMandatory) {
   #endif
 
   #ifdef DMCP_BUILD
-    endOfProgram = true;
+    backToDMCP = true;
   #endif
 }

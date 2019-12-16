@@ -21,7 +21,6 @@
 #include "wp43s.h"
 
 int16_t ul_x, ul_y;                           //JM vv LONGPRESS
-
 void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
 
@@ -104,8 +103,8 @@ void FN_handler() {                          //JM LONGPRESS vv
     else { 
       FN_counter--;
     }
-  }                                  //JM ^^
-}
+  } 
+}                                        //JM ^^
 
 
 
@@ -619,8 +618,8 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
  * \return void
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
-
-//invertPixel (xx+4,yy+7);
+                                                               // Changed to INVERTPIXEL
+//invertPixel (xx+4,yy+7);   //Used to be SetPixel vv
   invertPixel (xx+5,yy+6);
 //invertPixel (xx+6,yy+6);
   invertPixel (xx+6,yy+5);
@@ -642,7 +641,7 @@ void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the do
   invertPixel (xx+5,yy+3);
   invertPixel (xx+3,yy+3);
   invertPixel (xx+3,yy+5);
-  invertPixel (xx+4,yy+7);
+  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
   invertPixel (xx+5,yy+7);
   invertPixel (xx+6,yy+7);
   invertPixel (xx+6,yy+6);

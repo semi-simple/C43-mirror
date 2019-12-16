@@ -29,7 +29,7 @@
  * \return void
  ***********************************************/
 
-bool_t DOT_G_painted, DOT_F_painted;
+bool_t DOT_G_painted, DOT_F_painted;                                      //JM OPTIMISE the dot placement by removing the same pixels placed. No need for the full redraw of the softmenu.
 
 void DOT_F() {
   JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
@@ -78,7 +78,7 @@ void showShiftState(void) {
       else {
         //DOT_G_clear(); //cancel dots
         refreshRegisterLine(REGISTER_T);
-        showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+        showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!             //JM - Redraw boxes etc after shift is shown
         DOT_G_painted = false;
         DOT_F_painted = false;
 

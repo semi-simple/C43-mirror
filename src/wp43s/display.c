@@ -203,25 +203,35 @@ void fnDisplayFormatGap(uint16_t gap) {
  * \param[in]  exponent int32_t Power of 10 to format
  * \return void
  ***********************************************/
-void exponentToDisplayString(int32_t exponent, char *displayString, bool_t nimMode) {
+void exponentToDisplayString(int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode) {
   strcpy(displayString, PRODUCT_SIGN);
   displayString += 2;
   strcpy(displayString, STD_SUB_10);
   displayString += 2;
   displayString[0] = 0;
+
+  if(updateDisplayValueX) {
+    *displayValueString++ = 'e';
+    *displayValueString = 0;
+  }
+
   if(nimMode) {
     if(exponent != 0) {
-      supNumberToDisplayString(exponent, displayString, false);
+      supNumberToDisplayString(exponent, displayString, displayValueString, false);
     }
   }
   else {
-    supNumberToDisplayString(exponent, displayString, false);
+    supNumberToDisplayString(exponent, displayString, displayValueString, false);
   }
 }
 
 
 
-void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t insertGap) {
+void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {
+  if(updateDisplayValueX) {
+    sprintf(displayValueString, "%" FMT32S, supNumber);
+  }
+
   if(supNumber < 0) {
     supNumber = -supNumber;
     strcat(displayString, STD_SUP_MINUS);
@@ -271,7 +281,11 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, bool_t ins
 
 
 
-void subNumberToDisplayString(int32_t subNumber, char *displayString) {
+void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {
+  if(updateDisplayValueX) {
+    sprintf(displayValueString, "%" FMT32S, subNumber);
+  }
+
   if(subNumber < 0) {
     subNumber = -subNumber;
     strcat(displayString, STD_SUB_MINUS);
@@ -304,6 +318,10 @@ void real16ToDisplayString(const real16_t *real16, uint32_t angulaMode, char *di
 
   displayHasNDigits = 16;
 
+  if(updateDisplayValueX) {
+    displayValueX[0] = 0;
+  }
+
   if(angulaMode == AM_NONE) {
     realToDisplayString2(real16, false, displayString);
   }
@@ -325,6 +343,10 @@ void real16ToDisplayString(const real16_t *real16, uint32_t angulaMode, char *di
       displayFormatDigits--;
     }
 
+    if(updateDisplayValueX) {
+      displayValueX[0] = 0;
+    }
+
     if(angulaMode == AM_NONE) {
       realToDisplayString2(real16, false, displayString);
     }
@@ -341,6 +363,10 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
   displayHasNDigits = 16;
+
+  if(updateDisplayValueX) {
+    displayValueX[0] = 0;
+  }
 
   if(angulaMode == AM_NONE) {
     realToDisplayString2(real34, true, displayString);
@@ -363,7 +389,16 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
       displayFormatDigits--;
     }
 
-    realToDisplayString2(real34, true, displayString);
+    if(updateDisplayValueX) {
+      displayValueX[0] = 0;
+    }
+
+    if(angulaMode == AM_NONE) {
+      realToDisplayString2(real34, true, displayString);
+    }
+    else {
+      angle34ToDisplayString2(real34, angulaMode, displayString);
+    }
   }
   displayFormatDigits = savedDisplayFormatDigits;
 }
@@ -382,7 +417,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
-  uint8_t charIndex, digitToRound;
+  uint8_t charIndex, valueIndex, digitToRound;
   uint8_t *bcd;
   int16_t digitsToDisplay, numDigits, digitPointer, firstDigit, lastDigit, i, digitCount, digitsToTruncate, exponent;
   int32_t sign;
@@ -394,15 +429,24 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     if(real34IsInfinite(value)) {
       if(real34IsNegative(value)) {
         strcpy(displayString, "-" STD_INFINITY);
+        if(updateDisplayValueX) {
+          strcpy(displayValueX + strlen(displayValueX), "-9e9999");
+        }
       }
       else {
         strcpy(displayString, STD_INFINITY);
+        if(updateDisplayValueX) {
+          strcpy(displayValueX + strlen(displayValueX), "9e9999");
+        }
       }
       return;
     }
 
     if(real34IsNaN(value)) {
       real34ToString(value, displayString);
+      if(updateDisplayValueX) {
+        real34ToString(value, displayValueX + strlen(displayValueX));
+      }
       return;
     }
 
@@ -418,15 +462,24 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     if(real16IsInfinite(value)) {
       if(real16IsNegative(value)) {
         strcpy(displayString, "-" STD_INFINITY);
+        if(updateDisplayValueX) {
+          strcpy(displayValueX + strlen(displayValueX), "-9e9999");
+        }
       }
       else {
         strcpy(displayString, STD_INFINITY);
+        if(updateDisplayValueX) {
+          strcpy(displayValueX + strlen(displayValueX), "-9e9999");
+        }
       }
       return;
     }
 
     if(real16IsNaN(value)) {
       real16ToString(value, displayString);
+      if(updateDisplayValueX) {
+        real34ToString(value, displayValueX + strlen(displayValueX));
+      }
       return;
     }
 
@@ -516,6 +569,7 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
   }
 
   charIndex = 0;
+  valueIndex = strlen(displayValueX);
 
   //////////////
   // ALL mode //
@@ -556,11 +610,17 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       // The sign
       if(sign) {
         displayString[charIndex++] = '-';
+        if(updateDisplayValueX) {
+          displayValueX[valueIndex++] = '-';
+        }
       }
 
       if(exponent < 0) { // negative exponent
         // first 0 and radix mark
         displayString[charIndex++] = '0';
+        if(updateDisplayValueX) {
+          displayValueX[valueIndex++] = '0';
+        }
         if(real34) {
           displayString[charIndex] = 0;
           strcat(displayString, RADIX34_MARK_STRING);
@@ -568,6 +628,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         }
         else {
           displayString[charIndex++] = RADIX16_MARK_CHAR;
+        }
+        if(updateDisplayValueX) {
+          displayValueX[valueIndex++] = '.';
         }
 
         // Zeros before first significant digit
@@ -577,6 +640,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
+          if(updateDisplayValueX) {
+            displayValueX[valueIndex++] = '0';
+          }
         }
 
         // Significant digits
@@ -586,6 +652,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
+          if(updateDisplayValueX) {
+            displayValueX[valueIndex++] = '0' + bcd[digitPointer];
+          }
         }
       }
       else { // zero or positive exponent
@@ -598,9 +667,15 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
           // Significant digit or zero
           if(digitPointer <= lastDigit) {
             displayString[charIndex++] = '0' + bcd[digitPointer];
+            if(updateDisplayValueX) {
+              displayValueX[valueIndex++] = '0' + bcd[digitPointer];
+            }
           }
           else {
             displayString[charIndex++] = '0';
+            if(updateDisplayValueX) {
+              displayValueX[valueIndex++] = '0';
+            }
           }
 
           // Radix mark
@@ -613,11 +688,17 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
             else {
               displayString[charIndex++] = RADIX16_MARK_CHAR;
             }
+            if(updateDisplayValueX) {
+              displayValueX[valueIndex++] = '.';
+            }
           }
         }
       }
 
       displayString[charIndex] = 0;
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex] = 0;
+      }
       return;
     }
   }
@@ -661,11 +742,17 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       // The sign
       if(sign) {
         displayString[charIndex++] = '-';
+        if(updateDisplayValueX) {
+          displayValueX[valueIndex++] = '-';
+        }
       }
 
       if(exponent < 0) { // negative exponent
         // first 0 and radix mark
         displayString[charIndex++] = '0';
+        if(updateDisplayValueX) {
+          displayValueX[valueIndex++] = '0';
+        }
         if(real34) {
           displayString[charIndex] = 0;
           strcat(displayString, RADIX34_MARK_STRING);
@@ -673,6 +760,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         }
         else {
           displayString[charIndex++] = RADIX16_MARK_CHAR;
+        }
+        if(updateDisplayValueX) {
+          displayValueX[valueIndex++] = '.';
         }
 
         // Zeros before first significant digit
@@ -682,6 +772,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
+          if(updateDisplayValueX) {
+            displayValueX[valueIndex++] = '0';
+          }
         }
 
         if(SigFigMode != 0) { lastDigit = firstDigit + SigFigMode; }                          //JM SIGFIG: Neg exponent
@@ -693,6 +786,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
+          if(updateDisplayValueX) {
+            displayValueX[valueIndex++] = '0' + bcd[digitPointer];
+          }
         }
 
         if(SigFigMode == 0) {                                                                 //JM SIGFIG: Not required to pad more zerooes, as all sigfig zeroes are included above
@@ -703,6 +799,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
+          if(updateDisplayValueX) {
+            displayValueX[valueIndex++] = '0';
+          }
         }
         }                                                                                     //JM SIGFIG ^
       }
@@ -719,9 +818,15 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
           // Significant digit or zero
           if(digitPointer <= lastDigit) {
             displayString[charIndex++] = '0' + bcd[digitPointer];
+            if(updateDisplayValueX) {
+              displayValueX[valueIndex++] = '0' + bcd[digitPointer];
+            }
           }
           else {
             displayString[charIndex++] = '0';
+            if(updateDisplayValueX) {
+              displayValueX[valueIndex++] = '0';
+            }
           }
             SigFigCnt++;                                                                       //JM SIGFIG
           }                                                                                    //JM SIGFIG
@@ -737,11 +842,17 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
             else {
               displayString[charIndex++] = RADIX16_MARK_CHAR;
             }
+            if(updateDisplayValueX) {
+              displayValueX[valueIndex++] = '.';
+            }
           }
         }
       }
 
       displayString[charIndex] = 0;
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex] = 0;
+      }
       return;
     }
   }
@@ -778,10 +889,16 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     // Sign
     if(sign) {
       displayString[charIndex++] = '-';
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex++] = '-';
+      }
     }
 
     // First digit
     displayString[charIndex++] = '0' + bcd[firstDigit];
+    if(updateDisplayValueX) {
+      displayValueX[valueIndex++] = '0' + bcd[firstDigit];
+    }
 
     // Radix mark
     if(real34) {
@@ -791,6 +908,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     }
     else {
       displayString[charIndex++] = RADIX16_MARK_CHAR;
+    }
+    if(updateDisplayValueX) {
+      displayValueX[valueIndex++] = '.';
     }
 
     // Significant digits
@@ -804,6 +924,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       }
 
       displayString[charIndex++] = '0' + bcd[digitPointer];
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex++] = '0' + bcd[digitPointer];
+      }
     }
 
     // The ending zeros
@@ -817,12 +940,18 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       }
 
       displayString[charIndex++] = '0';
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex++] = '0';
+      }
     }
 
     displayString[charIndex] = 0;
+    if(updateDisplayValueX) {
+      displayValueX[valueIndex] = 0;
+    }
 
     if(exponent != 0) {
-      exponentToDisplayString(exponent, displayString+charIndex, false);
+      exponentToDisplayString(exponent, displayString + charIndex, displayValueX + valueIndex, false);
     }
     return;
   }
@@ -862,15 +991,26 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     // The sign
     if(sign) {
       displayString[charIndex++] = '-';
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex++] = '-';
+      }
     }
 
     // Digits before radix mark
-    displayString[charIndex++] = '0' + bcd[firstDigit++];
+    displayString[charIndex++] = '0' + bcd[firstDigit];
+    if(updateDisplayValueX) {
+      displayValueX[valueIndex++] = '0' + bcd[firstDigit];
+    }
+    firstDigit++;
     numDigits--;
     digitsToDisplay--;
     while(modulo(exponent, 3) != 0) {
       exponent--;
-      displayString[charIndex++] = '0' + bcd[firstDigit++];
+      displayString[charIndex++] = '0' + bcd[firstDigit];
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex++] = '0' + bcd[firstDigit];
+      }
+      firstDigit++;
       numDigits--;
       digitsToDisplay--;
     }
@@ -884,6 +1024,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     else {
       displayString[charIndex++] = RADIX16_MARK_CHAR;
     }
+    if(updateDisplayValueX) {
+      displayValueX[valueIndex++] = '.';
+    }
 
     // Digits after radix mark
     for(digitCount=-1, digitPointer=firstDigit; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
@@ -896,6 +1039,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       }
 
       displayString[charIndex++] = '0' + bcd[digitPointer];
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex++] = '0' + bcd[digitPointer];
+      }
     }
 
     // The ending zeros
@@ -909,16 +1055,22 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
       }
 
       displayString[charIndex++] = '0';
+      if(updateDisplayValueX) {
+        displayValueX[valueIndex++] = '0';
+      }
     }
 
     displayString[charIndex] = 0;
+    if(updateDisplayValueX) {
+      displayValueX[valueIndex] = 0;
+    }
 
     if(exponent != 0) {
       if(UNITDisplay == false) {                                                        //JM UNIT
-      exponentToDisplayString(exponent, displayString+charIndex, false);
+      exponentToDisplayString(exponent, displayString + charIndex, displayValueX + valueIndex, false);
       }                                                                                 //JM UNIT
       else {                                                                            //JM UNIT
-         exponentToUnitDisplayString(exponent, displayString+charIndex, false);         //JM UNIT
+         exponentToUnitDisplayString(exponent, displayString+charIndex, false);         //JM UNIT   //JM_TOCHANGE!!
       }                                                                                 //JM UNIT
     }
   }
@@ -930,6 +1082,10 @@ void complex16ToDisplayString(const complex16_t *complex16, char *displayString,
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
   displayHasNDigits = 16;
+
+  if(updateDisplayValueX) {
+    displayValueX[0] = 0;
+  }
 
   complex16ToDisplayString2(complex16, displayString);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
@@ -945,6 +1101,11 @@ void complex16ToDisplayString(const complex16_t *complex16, char *displayString,
       }
       displayFormatDigits--;
     }
+
+    if(updateDisplayValueX) {
+      displayValueX[0] = 0;
+    }
+
     complex16ToDisplayString2(complex16, displayString);
   }
   displayFormatDigits = savedDisplayFormatDigits;
@@ -956,6 +1117,10 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
   displayHasNDigits = 16;
+
+  if(updateDisplayValueX) {
+    displayValueX[0] = 0;
+  }
 
   complex34ToDisplayString2(complex34, displayString);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
@@ -971,6 +1136,11 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
       }
       displayFormatDigits--;
     }
+
+    if(updateDisplayValueX) {
+      displayValueX[0] = 0;
+    }
+
     complex34ToDisplayString2(complex34, displayString);
   }
   displayFormatDigits = savedDisplayFormatDigits;
@@ -981,19 +1151,19 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
 void complex16ToDisplayString2(const complex16_t *complex16, char *displayString) {
   int16_t i=100;
   real16_t real16, imag16;
-  realIc_t realIc, imagIc;
+  real39_t real39, imagIc;
 
   if(complexMode == CM_RECTANGULAR) {
     real16Copy(VARIABLE_REAL16_DATA(complex16), &real16);
     real16Copy(VARIABLE_IMAG16_DATA(complex16), &imag16);
   }
   else if(complexMode == CM_POLAR) {
-    real16ToRealIc(VARIABLE_REAL16_DATA(complex16), &realIc);
-    real16ToRealIc(VARIABLE_IMAG16_DATA(complex16), &imagIc);
-    realIcRectangularToPolar(&realIc, &imagIc, &realIc, &imagIc); // imagIc in radian
-    convertAngleIcFromTo(&imagIc, AM_RADIAN, currentAngularMode);
-    realIcToReal16(&realIc, &real16);
-    realIcToReal16(&imagIc, &imag16);
+    real16ToReal(VARIABLE_REAL16_DATA(complex16), &real39);
+    real16ToReal(VARIABLE_IMAG16_DATA(complex16), &imagIc);
+    real39RectangularToPolar(&real39, &imagIc, &real39, &imagIc); // imagIc in radian
+    convertAngle39FromTo(&imagIc, AM_RADIAN, currentAngularMode);
+    realToReal16(&real39, &real16);
+    realToReal16(&imagIc, &imag16);
   }
   else {
     sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
@@ -1001,6 +1171,16 @@ void complex16ToDisplayString2(const complex16_t *complex16, char *displayString
   }
 
   realToDisplayString2(&real16, false, displayString);
+
+  if(updateDisplayValueX) {
+    if(complexMode == CM_RECTANGULAR) {
+      strcat(displayValueX, "i");
+    }
+    else {
+      strcat(displayValueX, "j");
+    }
+  }
+
   realToDisplayString2(&imag16, false, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
@@ -1031,19 +1211,19 @@ void complex16ToDisplayString2(const complex16_t *complex16, char *displayString
 void complex34ToDisplayString2(const complex34_t *complex34, char *displayString) {
   int16_t i=100;
   real34_t real34, imag34;
-  realIc_t realIc, imagIc;
+  real39_t real39, imagIc;
 
   if(complexMode == CM_RECTANGULAR) {
     real34Copy(VARIABLE_REAL34_DATA(complex34), &real34);
     real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
   }
   else if(complexMode == CM_POLAR) {
-    real34ToRealIc(VARIABLE_REAL34_DATA(complex34), &realIc);
-    real34ToRealIc(VARIABLE_IMAG34_DATA(complex34), &imagIc);
-    realIcRectangularToPolar(&realIc, &imagIc, &realIc, &imagIc); // imagIc in radian
-    convertAngleIcFromTo(&imagIc, AM_RADIAN, currentAngularMode);
-    realIcToReal34(&realIc, &real34);
-    realIcToReal34(&imagIc, &imag34);
+    real34ToReal(VARIABLE_REAL34_DATA(complex34), &real39);
+    real34ToReal(VARIABLE_IMAG34_DATA(complex34), &imagIc);
+    real39RectangularToPolar(&real39, &imagIc, &real39, &imagIc); // imagIc in radian
+    convertAngle39FromTo(&imagIc, AM_RADIAN, currentAngularMode);
+    realToReal34(&real39, &real34);
+    realToReal34(&imagIc, &imag34);
   }
   else {
     sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
@@ -1051,6 +1231,16 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   }
 
   realToDisplayString2(&real34, true, displayString);
+
+  if(updateDisplayValueX) {
+    if(complexMode == CM_RECTANGULAR) {
+      strcat(displayValueX, "i");
+    }
+    else {
+      strcat(displayValueX, "j");
+    }
+  }
+
   realToDisplayString2(&imag34, true, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
@@ -1095,6 +1285,10 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
   //printf("result of fraction(...) = %c%" FMT64U " %" FMT64U "/%" FMT64U "\n", sign==-1 ? '-' : ' ', intPart, numer, denom);
 
   if(fractionType == FT_PROPER) { // a b/c
+    if(updateDisplayValueX) {
+      sprintf(displayValueX, "%s%" FMT64U " %" FMT64U "/%" FMT64U, (sign == -1 ? "-" : ""), intPart, numer, denom);
+    }
+
     if(sign == -1) {
       displayString[0] = '-';
       displayString[1] = 0;
@@ -1103,6 +1297,9 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     else {
       displayString[0] = 0;
       endingZero = 0;
+
+      if(updateDisplayValueX) {
+      }
     }
 
     // Integer part
@@ -1130,6 +1327,10 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
   }
 
   else { // FT_IMPROPER d/c
+    if(updateDisplayValueX) {
+      sprintf(displayValueX, "%s%" FMT64U "/%" FMT64U, (sign == -1 ? "-" : ""), numer, denom);
+    }
+
     if(sign == -1) {
       strcpy(displayString, STD_SUP_MINUS);
       endingZero = 2;
@@ -1222,34 +1423,34 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
     char degStr[27];
     uint32_t m, s, fs;
     int16_t sign;
-    realIc_t temp, degrees, minutes, seconds;
+    real39_t temp, degrees, minutes, seconds;
 
-    real16ToRealIc(angle16, &temp);
+    real16ToReal(angle16, &temp);
 
-    sign = realIcIsNegative(&temp) ? -1 : 1;
-    realIcSetPositiveSign(&temp);
+    sign = realIsNegative(&temp) ? -1 : 1;
+    realSetPositiveSign(&temp);
 
     // Get the degrees
-    realIcToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN);
+    realToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the minutes
-    realIcSubtract(&temp, &degrees, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN);
+    realSubtract(&temp, &degrees, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the seconds
-    realIcSubtract(&temp, &minutes, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN);
+    realSubtract(&temp, &minutes, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the fractional seconds
-    realIcSubtract(&temp, &seconds, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
+    realSubtract(&temp, &seconds, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &temp, DEC_ROUND_DOWN, &ctxtReal39);
 
-    realIcToUInt32(&temp, fs);
-    realIcToUInt32(&seconds, s);
-    realIcToUInt32(&minutes, m);
+    realToUInt32(&temp, fs);
+    realToUInt32(&seconds, s);
+    realToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1263,10 +1464,10 @@ void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displa
 
     if(m >= 60) {
       m -= 60;
-      realIcAdd(&degrees, const_1, &degrees);
+      realAdd(&degrees, const_1, &degrees, &ctxtReal39);
     }
 
-    realIcToString(&degrees, degStr);
+    realToString(&degrees, degStr);
     for(int32_t i=0; degStr[i]!=0; i++) {
       if(degStr[i] == '.') {
         degStr[i] = 0;
@@ -1304,34 +1505,34 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     uint32_t m, s, fs;
     int16_t sign;
 
-    realIc_t temp, degrees, minutes, seconds;
+    real39_t temp, degrees, minutes, seconds;
 
-    real34ToRealIc(angle34, &temp);
+    real34ToReal(angle34, &temp);
 
-    sign = realIcIsNegative(&temp) ? -1 : 1;
-    realIcSetPositiveSign(&temp);
+    sign = realIsNegative(&temp) ? -1 : 1;
+    realSetPositiveSign(&temp);
 
     // Get the degrees
-    realIcToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN);
+    realToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the minutes
-    realIcSubtract(&temp, &degrees, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN);
+    realSubtract(&temp, &degrees, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the seconds
-    realIcSubtract(&temp, &minutes, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN);
+    realSubtract(&temp, &minutes, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the fractional seconds
-    realIcSubtract(&temp, &seconds, &temp);
-    realIcMultiply(&temp, const_100, &temp);
-    realIcToIntegralValue(&temp, &temp, DEC_ROUND_DOWN);
+    realSubtract(&temp, &seconds, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &temp, DEC_ROUND_DOWN, &ctxtReal39);
 
-    realIcToUInt32(&temp, fs);
-    realIcToUInt32(&seconds, s);
-    realIcToUInt32(&minutes, m);
+    realToUInt32(&temp, fs);
+    realToUInt32(&seconds, s);
+    realToUInt32(&minutes, m);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1345,10 +1546,10 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
 
     if(m >= 60) {
       m -= 60;
-      realIcAdd(&degrees, const_1, &degrees);
+      realAdd(&degrees, const_1, &degrees, &ctxtReal39);
     }
 
-    realIcToString(&degrees, degStr);
+    realToString(&degrees, degStr);
     for(int32_t i=0; degStr[i]!=0; i++) {
       if(degStr[i] == '.') {
         degStr[i] = 0;
@@ -1667,7 +1868,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
     //longIntegerFree(divisor);
     for(int32_t i=(int32_t)exponentShift; i>=1; i--) {
       if(i >= 9)      {longIntegerDivideUInt(lgInt, 1000000000, lgInt); i -= 8;}
-      else if(i >= 3) {longIntegerDivideUInt(lgInt,       1000, lgInt); i -= 2;}
+      else if(i >= 4) {longIntegerDivideUInt(lgInt,      10000, lgInt); i -= 3;}
       else            {longIntegerDivideUInt(lgInt,         10, lgInt);}
     }
   }
@@ -1676,6 +1877,10 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
   }
 
   longIntegerToAllocatedString(lgInt, displayString, strLg);
+  if(updateDisplayValueX) {
+    strcpy(displayValueX, displayString);
+  }
+
   longIntegerFree(lgInt);
 
   if(groupingGap > 0) {
@@ -1684,31 +1889,92 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
       if(i != 1 || displayString[0] != '-') {
         memmove(displayString + i + 2, displayString + i, len - i + 1);
         displayString[i] = 0xa0;
-        displayString[i+1] = 0x08;
+        displayString[i + 1] = 0x08;
         len += 2;
       }
     }
   }
 
   if(stringWidth(displayString, &standardFont, false, false) > maxWidth) {
-    char exponentString[14];
+    char exponentString[14], lastRemovedDigit;
     int16_t lastChar, stringStep, tenExponent;
 
     stringStep = (groupingGap == 0 ? 1 : groupingGap + 2);
     tenExponent = exponentStep + exponentShift;
     lastChar = strlen(displayString) - stringStep;
+    lastRemovedDigit = displayString[lastChar + 2];
     displayString[lastChar] = 0;
+    if(updateDisplayValueX) {
+      displayValueX[strlen(displayValueX) - max(groupingGap, 1)] = 0;
+    }
     exponentString[0] = 0;
-    exponentToDisplayString(tenExponent, exponentString, false);
+    exponentToDisplayString(tenExponent, exponentString, NULL, false);
     while(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > maxWidth) {
       lastChar -= stringStep;
       tenExponent += exponentStep;
+      lastRemovedDigit = displayString[lastChar + 2];
       displayString[lastChar] = 0;
+      if(updateDisplayValueX) {
+        displayValueX[strlen(displayValueX) - max(groupingGap, 1)] = 0;
+      }
       exponentString[0] = 0;
-      exponentToDisplayString(tenExponent, exponentString, false);
+      exponentToDisplayString(tenExponent, exponentString, NULL, false);
+    }
+
+    if(lastRemovedDigit >= '5') { // Round up
+      lastChar = strlen(displayString) - 1;
+      displayString[lastChar]++;
+      while(displayString[lastChar] > '9') {
+        displayString[lastChar--] = '0';
+        while(lastChar >= 0 && (displayString[lastChar] < '0' || displayString[lastChar] > '9')) lastChar--;
+        if(lastChar >= 0) {
+          displayString[lastChar]++;
+        }
+        else { // We are rounding up from 9999... to 10000...
+          lastChar = (displayString[0] == '-' ? 1 : 0);
+          memmove(displayString + lastChar + 1, displayString + lastChar, strlen(displayString) + 1);
+          displayString[lastChar] = '1';
+          if(groupingGap != 0 && displayString[lastChar + groupingGap + 2] == 0x08) { // We need to insert a new goup separator
+            memmove(displayString + lastChar + 3, displayString + lastChar + 1, strlen(displayString));
+            displayString[lastChar + 1] = 0xa0;
+            displayString[lastChar + 2] = 0x08;
+          }
+
+          // Has the string become too long?
+          if(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > maxWidth) {
+            lastChar = strlen(displayString) - stringStep;
+            tenExponent += exponentStep;
+            displayString[lastChar] = 0;
+            if(updateDisplayValueX) {
+              displayValueX[strlen(displayValueX) - max(groupingGap, 1)] = 0;
+            }
+            exponentString[0] = 0;
+            exponentToDisplayString(tenExponent, exponentString, NULL, false);
+          }
+        }
+      }
+
+      if(updateDisplayValueX) {
+        lastChar = strlen(displayValueX) - 1;
+        displayValueX[lastChar]++;
+        while(lastChar>0 && '0' <= displayValueX[lastChar - 1] && displayValueX[lastChar - 1] <= '9' && displayValueX[lastChar] > '9') {
+          displayValueX[lastChar--] = '0';
+          displayValueX[lastChar]++;
+        }
+
+        if(displayValueX[lastChar] > '9') { // We are rounding 9999... to 10000...
+          memmove(displayValueX + 1, displayValueX, strlen(displayValueX) + 1);
+          displayValueX[lastChar++] = '1';
+          displayValueX[lastChar] = '0';
+        }
+      }
     }
 
     strcat(displayString, exponentString);
+
+    if(updateDisplayValueX) {
+      sprintf(displayValueX + strlen(displayValueX), "e%d", tenExponent);
+    }
   }
 }
 

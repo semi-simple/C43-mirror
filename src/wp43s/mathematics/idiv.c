@@ -135,12 +135,12 @@ void idivLonIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -160,10 +160,10 @@ void idivRe16LonI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function idivRe16LonI:", "cannot IDIV a real16 by 0", NULL, NULL);
@@ -171,11 +171,11 @@ void idivRe16LonI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -267,12 +267,12 @@ void idivLonIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -292,10 +292,10 @@ void idivRe34LonI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function idivRe34LonI:", "cannot IDIV a real34 by 0", NULL, NULL);
@@ -303,11 +303,11 @@ void idivRe34LonI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -339,12 +339,12 @@ void idivRe16Re16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -364,10 +364,10 @@ void idivRe16ShoI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function idivRe16ShoI:", "cannot IDIV a real16 by 0", NULL, NULL);
@@ -375,11 +375,11 @@ void idivRe16ShoI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -407,12 +407,12 @@ void idivShoIRe16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -440,12 +440,12 @@ void idivRe16Re34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -473,12 +473,12 @@ void idivRe34Re16(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -535,12 +535,12 @@ void idivShoIRe34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_Y, &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -560,10 +560,10 @@ void idivRe34ShoI(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  convertShortIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcIsZero(&x)) {
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function idivRe34ShoI:", "cannot IDIV a real34 by 0", NULL, NULL);
@@ -571,11 +571,11 @@ void idivRe34ShoI(void) {
     return;
   }
 
-  realIc_t y;
+  real39_t y;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -607,10 +607,10 @@ void idivRe34Re34(void) {
     return;
   }
 
-  realIc_t y, x;
+  real39_t y, x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  realIcDivide(&y, &x, &x);
-  convertRealIcToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  realDivide(&y, &x, &x, &ctxtReal39);
+  convertRealToLongIntegerRegister(&x, REGISTER_X, DEC_ROUND_DOWN);
 }

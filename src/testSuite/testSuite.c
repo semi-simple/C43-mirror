@@ -26,7 +26,7 @@ extern const int16_t menu_FCNS[];
 extern const int16_t menu_CNST[];
 extern const int16_t menu_MENUS[];
 extern const softmenu_t softmenu[];
-char line[10000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000];
+char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000], realString[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal;
 int32_t functionIndex, funcType, correctSignificantDigits, numberOfCorrectSignificantDigitsExpected;
 void (*funcNoParam)(uint16_t);
@@ -37,6 +37,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fn2Pow",                 fn2Pow                },
   {"fnAdd",                  fnAdd                 },
   {"fnAim",                  fnAim                 },
+  {"fnAgm",                  fnAgm                 },
   {"fnArccos",               fnArccos              },
   {"fnArccosh",              fnArccosh             },
   {"fnArcsin",               fnArcsin              },
@@ -106,10 +107,13 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLogicalNot",           fnLogicalNot          },
   {"fnM1Pow",                fnM1Pow               },
   {"fnMagnitude",            fnMagnitude           },
+  {"fnMin",                  fnMin                 },
+  {"fnMax",                  fnMax                 },
   {"fnMant",                 fnMant                },
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },
   {"fnMultiply",             fnMultiply            },
+  {"fnNeighb",               fnNeighb              },
   {"fnNop",                  fnNop                 },
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
@@ -119,6 +123,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnRmd",                  fnRmd                 },
   {"fnRollDown",             fnRollDown            },
   {"fnRollUp",               fnRollUp              },
+  {"fnRound",                fnRound               },
+  {"fnRoundi",               fnRoundi              },
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
   {"fnSinh",                 fnSinh                },
@@ -132,6 +138,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnTanh",                 fnTanh                },
   {"fnToPolar",              fnToPolar             },
   {"fnToRect",               fnToRect              },
+  {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
   {"",                       NULL                  }
 };
@@ -1012,36 +1019,41 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
 
 
 
-int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numberPart) {
-  realIc_t expectedValue, value, relativeError, numSignificantDigits;
-  real16_t integer;
+int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numberPart, calcRegister_t regist, char letter) {
+  real39_t expectedValue, value, relativeError;
 
-  real16ToRealIc(expectedValue16, &expectedValue);
-  real16ToRealIc(value16, &value);
+  real16ToReal(expectedValue16, &expectedValue);
+  real16ToReal(value16, &value);
 
-  realIcSubtract(&expectedValue, &value, &relativeError);
+  realSubtract(&expectedValue, &value, &relativeError, &ctxtReal39);
 
-  if(!realIcIsZero(&expectedValue)) {
-    realIcDivide(&relativeError, &expectedValue, &relativeError);
-    realIcDivide(const_1, &relativeError, &numSignificantDigits);
+  if(!realIsZero(&expectedValue)) {
+    realDivide(&relativeError, &expectedValue, &relativeError, &ctxtReal39);
   }
   else {
-    realIcCopy(const_1, &numSignificantDigits);
+    realCopy(&value, &relativeError);
   }
+  realSetPositiveSign(&relativeError);
 
-  realIcSetPositiveSign(&numSignificantDigits);
-  if(!realIcIsZero(&numSignificantDigits)) {
-  WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
-  }
-  else {
-    realIcZero(&numSignificantDigits);
-  }
-
-  realIcToReal16(&numSignificantDigits, &integer);
-  correctSignificantDigits = real16ToInt32(&integer);
+  correctSignificantDigits = -relativeError.exponent - relativeError.digits;
+  ctxtReal39.digits = 2;
+  realPlus(&relativeError, &relativeError, &ctxtReal39);
+  ctxtReal39.digits = 39;
   if(correctSignificantDigits <= 16) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
-    printf("\nThere are only %d correct significant digits in the %s part of the value!\n", correctSignificantDigits, numberPart);
+    realToString(&relativeError, realString);
+    if(letter == 0) {
+      printf("\nThere are only %d correct significant digits in the %s part of register %d! Relative error is %s\n", correctSignificantDigits, numberPart, regist, realString);
+      printf("R%d = ", regist);
+      printReal16ToConsole(value16);
+      printf("\n");
+    }
+    else {
+      printf("\nThere are only %d correct significant digits in the %s part of register %c! Relative error is %s\n", correctSignificantDigits, numberPart, letter, realString);
+      printf("%c = ", letter);
+      printReal16ToConsole(value16);
+      printf("\n");
+    }
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
@@ -1056,36 +1068,41 @@ int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numb
 
 
 
-int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart) {
-  realIc_t expectedValue, value, relativeError, numSignificantDigits;
-  real16_t integer;
+int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart, calcRegister_t regist, char letter) {
+  real39_t expectedValue, value, relativeError;
 
-  real34ToRealIc(expectedValue34, &expectedValue);
-  real34ToRealIc(value34, &value);
+  real34ToReal(expectedValue34, &expectedValue);
+  real34ToReal(value34, &value);
 
-  realIcSubtract(&expectedValue, &value, &relativeError);
+  realSubtract(&expectedValue, &value, &relativeError, &ctxtReal39);
 
-  if(!realIcIsZero(&expectedValue)) {
-    realIcDivide(&relativeError, &expectedValue, &relativeError);
-    realIcDivide(const_1, &relativeError, &numSignificantDigits);
+  if(!realIsZero(&expectedValue)) {
+    realDivide(&relativeError, &expectedValue, &relativeError, &ctxtReal39);
   }
   else {
-    realIcCopy(const_1, &numSignificantDigits);
+    realCopy(&value, &relativeError);
   }
+  realSetPositiveSign(&relativeError);
 
-  realIcSetPositiveSign(&numSignificantDigits);
-  if(!realIcIsZero(&numSignificantDigits)) {
-    WP34S_Log10(&numSignificantDigits, &numSignificantDigits);
-  }
-  else {
-    realIcZero(&numSignificantDigits);
-  }
-
-  realIcToReal16(&numSignificantDigits, &integer);
-  correctSignificantDigits = real16ToInt32(&integer);
+  correctSignificantDigits = -relativeError.exponent - relativeError.digits;
+  ctxtReal39.digits = 2;
+  realPlus(&relativeError, &relativeError, &ctxtReal39);
+  ctxtReal39.digits = 39;
   if(correctSignificantDigits <= 34) {
     //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
-    printf("\nThere are only %d correct significant digits in the %s part of the value!\n", correctSignificantDigits, numberPart);
+    realToString(&relativeError, realString);
+    if(letter == 0) {
+      printf("\nThere are only %d correct significant digits in the %s part of register %d! Relative error is %s\n", correctSignificantDigits, numberPart, regist, realString);
+      printf("R%d = ", regist);
+      printReal34ToConsole(value34);
+      printf("\n");
+    }
+    else {
+      printf("\nThere are only %d correct significant digits in the %s part of register %c! Relative error is %s\n", correctSignificantDigits, numberPart, letter, realString);
+      printf("%c = ", letter);
+      printReal34ToConsole(value34);
+      printf("\n");
+    }
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
@@ -1597,7 +1614,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real") == RE_INACCURATE) {
+        if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1605,7 +1622,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal16(&expectedImag16, REGISTER_IMAG16_DATA(regist), "imaginary") == RE_INACCURATE) {
+        if(relativeErrorReal16(&expectedImag16, REGISTER_IMAG16_DATA(regist), "imaginary", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1649,7 +1666,7 @@ void checkExpectedOutParameter(char *p) {
         stringToReal16(r, &expectedReal16);
         if(!real16AreEqual(REGISTER_REAL16_DATA(regist), &expectedReal16)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-          if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real") == RE_INACCURATE) {
+          if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
           }
         }
@@ -1662,7 +1679,7 @@ void checkExpectedOutParameter(char *p) {
 //printf("\n1<%s|%s|%s>\n", p, l, r);
         if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
           expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-          if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
+          if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
             wrongRegisterValue(regist, letter, r);
           }
 //printf("\n2<%s|%s|%s>\n", p, l, r);
@@ -1780,7 +1797,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real") == RE_INACCURATE) {
+        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1788,7 +1805,7 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, " +ix ");
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal34(&expectedImag34, REGISTER_IMAG34_DATA(regist), "imaginary") == RE_INACCURATE) {
+        if(relativeErrorReal34(&expectedImag34, REGISTER_IMAG34_DATA(regist), "imaginary", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }
@@ -1983,6 +2000,18 @@ void standardizeLine(void) {
   while(line[0] == ' ') {
     memmove(line, line + 1, strlen(line));
   }
+
+  // 2 spaces ==> 1 space
+  for(uint32_t i=0; i<strlen(line); i++) {
+    if(line[i] == '"') {
+      i = endOfString(line + i) - line;
+    }
+    if(line[i] == ' ' && line[i + 1] == ' ') {
+      memmove(line + i, line + i + 1, strlen(line + i) - 1);
+      line[strlen(line) - 1] = 0;
+      i--;
+    }
+  }
 }
 
 
@@ -2040,6 +2069,7 @@ void processOneFile(void) {
   numTestsFile = 0;
 
   strcpy(fileName, line);
+  strcat(fileName, ".txt");
   sprintf(filePathName, "%s/%s", filePath, fileName);
 
   printf("Performing tests from file %s ", filePathName);
@@ -2059,6 +2089,14 @@ void processOneFile(void) {
   lineNumber = 1;
   while(!feof(testSuite)) {
     standardizeLine();
+    while(strlen(line) >= 4 && strncmp(line + strlen(line) - 4, " ...", 4) == 0) {
+      line[strlen(line) - 3] = 0;
+      if(!feof(testSuite)) {
+        fgets(line + strlen(line), 9999, testSuite);
+        lineNumber++;
+        standardizeLine();
+      }
+    }
     processLine();
     fgets(line, 9999, testSuite);
     lineNumber++;
@@ -2119,7 +2157,7 @@ void processTests(void) {
   sprintf(filePathName, "%s/testSuiteList.txt", filePath);
   fileList = fopen(filePathName, "rb");
   if(fileList == NULL) {
-    printf("Cannot open file fileList.txt!\n");
+    printf("Cannot open file testSuiteList.txt!\n");
     exit(-1);
   }
 

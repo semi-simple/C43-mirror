@@ -40,22 +40,22 @@ void fnDenMode(uint16_t denMode) {
 
 
 void fnDenMax(uint16_t unusedParamButMandatory) {
-  realIc_t reX;
+  real39_t reX;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &reX);
+    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &reX);
   }
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &reX);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToRealIc(REGISTER_X, &reX);
+    convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
   }
   else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    convertShortIntegerRegisterToRealIc(REGISTER_X, &reX);
+    convertShortIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -67,7 +67,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  if(realIcIsNaN(&reX)) {
+  if(realIsNaN(&reX)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
@@ -77,13 +77,13 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  if(realIcIsSpecial(&reX) || realIcCompareLessThan(&reX, const_1) || realIcCompareGreaterEqual(&reX, const_9999)) {
+  if(realIsSpecial(&reX) || realCompareLessThan(&reX, const_1) || realCompareGreaterEqual(&reX, const_9999)) {
     denMax = DM_DENMAX;
   }
   else {
     int32_t den;
 
-    realIcToInt32(&reX, den);
+    realToInt32(&reX, den);
 
     if(den == 1) {
       longInteger_t lgInt;
@@ -348,33 +348,33 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   }
 
   // The register value
-  realIc_t r;
+  real39_t r;
   if(getRegisterDataType(regist) == dtReal16) {
-    real16ToRealIc(REGISTER_REAL16_DATA(regist), &r);
+    real16ToReal(REGISTER_REAL16_DATA(regist), &r);
   }
   else if(getRegisterDataType(regist) == dtReal34) {
-    real34ToRealIc(REGISTER_REAL34_DATA(regist), &r);
+    real34ToReal(REGISTER_REAL34_DATA(regist), &r);
   }
 
   // The fraction value
-  realIc_t f, d;
-  uInt32ToRealIc(*intPart, &f);
-  uInt32ToRealIc(*denom, &d);
-  realIcMultiply(&f, &d, &f);
-  uInt32ToRealIc(*numer, &d);
-  realIcAdd(&f, &d, &f);
-  uInt32ToRealIc(*denom, &d);
-  realIcDivide(&f, &d, &f);
+  real39_t f, d;
+  uInt32ToReal(*intPart, &f);
+  uInt32ToReal(*denom, &d);
+  realMultiply(&f, &d, &f, &ctxtReal39);
+  uInt32ToReal(*numer, &d);
+  realAdd(&f, &d, &f, &ctxtReal39);
+  uInt32ToReal(*denom, &d);
+  realDivide(&f, &d, &f, &ctxtReal39);
   if(*sign == -1) {
-    realIcChangeSign(&f);
+    realChangeSign(&f);
   }
 
-  realIcSubtract(&f, &r, &f);
+  realSubtract(&f, &r, &f, &ctxtReal39);
 
-  if(realIcIsZero(&f)) {
+  if(realIsZero(&f)) {
     *lessEqualGreater = 0;
   }
-  else if(realIcIsNegative(&f)) {
+  else if(realIsNegative(&f)) {
     *lessEqualGreater = -1;
   }
   else {

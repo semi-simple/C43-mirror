@@ -346,20 +346,20 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
-  realIc_t value;
+  real39_t value;
 
   liftStack();
 
   #ifdef PC_BUILD
-    int32ToRealIc(3100, &value);
+    int32ToReal(3100, &value);
   #endif
 
   #ifdef DMCP_BUILD
-    int32ToRealIc(read_power_voltage(), &value);
+    int32ToReal(read_power_voltage(), &value);
   #endif
 
-  realIcDivide(&value, const_1000, &value);
-  realIcToReal16(&value, REGISTER_REAL16_DATA(REGISTER_X));
+  realDivide(&value, const_1000, &value, &ctxtReal39);
+  realToReal16(&value, REGISTER_REAL16_DATA(REGISTER_X));
   refreshStack();
 }
 
@@ -601,6 +601,9 @@ void fnReset(uint16_t confirmation) {
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
+    // RNG initialisation
+    pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
+
     // initialize the RadaioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, CheckBox
 
@@ -676,7 +679,7 @@ void backToSystem(uint16_t unusedParamButMandatory) {
   #endif
 
   #ifdef DMCP_BUILD
-    endOfProgram = true;
+    backToDMCP = true;
   #endif
 }
 

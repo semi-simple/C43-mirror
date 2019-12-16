@@ -46,12 +46,13 @@ bool_t               allowScreenUpdate;
 bool_t               funcOK;
 
 // Variables stored in RAM
-decContext           ctxtReal16;  // 16 digits
-decContext           ctxtReal34;  // 34 digits
-decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
-decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
-decContext           ctxtReal451; // 451 digits: used in radian angle reduction
-decContext           ctxtReal850; // 850 digits: used for really big modulo
+realContext_t        ctxtReal16;  // 16 digits
+realContext_t        ctxtReal34;  // 34 digits
+realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
+realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
+realContext_t        ctxtReal75;  // 75 digits: used in SLVQ
+realContext_t        ctxtReal459; // 459 digits: used in radian angle reduction
+realContext_t        ctxtReal855; // 855 digits: used for really big modulo
 uint16_t             flags[7];
 char                 tmpStr3000[TMP_STR_LENGTH];
 char                 errorMessage[ERROR_MESSAGE_LENGTH];
@@ -145,6 +146,7 @@ bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               nimInputIsReal34;
+bool_t               updateDisplayValueX;
 calcKey_t            kbd_usr[37];
 calcRegister_t       errorMessageRegisterLine;
 calcRegister_t       errorRegisterLine;
@@ -153,6 +155,7 @@ uint64_t             shortIntegerMask;
 uint64_t             shortIntegerSignBit;
 glyph_t              glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
 char                 transitionSystemOperation[4];
+char                 displayValueX[DISPLAY_VALUE_LEN];
 int16_t              exponentSignLocation;
 int16_t              denominatorLocation;
 int16_t              imaginaryExponentSignLocation;
@@ -162,12 +165,13 @@ size_t               wp43sMemInBytes;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 void                 (*confirmedFunction)(uint16_t);
-realIc_t             const *gammaConstants;
-realIc_t             const *angle180;
-realIc_t             const *angle90;
-realIc_t             const *angle45;
+real39_t             const *gammaConstants;
+real39_t             const *angle180;
+real39_t             const *angle90;
+real39_t             const *angle45;
+pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
-  bool_t               endOfProgram;
+  bool_t               backToDMCP;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
@@ -249,6 +253,7 @@ int main(int argc, char* argv[]) {
 /****************/
 /* Catalog FCNS */
 /****************/
+  printf("Generating catalog FCNS\n");
   fprintf(catalog, "const int16_t menu_FCNS[] = {\n");
 
   numberOfItems = 0;
@@ -281,6 +286,7 @@ int main(int argc, char* argv[]) {
 /****************/
 /* Catalog CNST */
 /****************/
+  printf("Generating catalog CNST\n");
   fprintf(catalog, "\n\nconst int16_t menu_CNST[] = {\n");
 
   numberOfItems = 0;
@@ -313,6 +319,7 @@ int main(int argc, char* argv[]) {
 /*****************/
 /* Catalog MENUS */
 /*****************/
+  printf("Generating catalog MENUS\n");
   fprintf(catalog, "\n\nconst int16_t menu_MENUS[] = {\n");
 
   numberOfItems = 0;

@@ -65,13 +65,13 @@ void fnArccos(uint16_t unusedParamButMandatory) {
 
 
 void arccosLonI(void) {
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
-  if(realIcCompareAbsGreaterThan(&x, const_1)) {
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccosCo34();
       convertRegister34To16(REGISTER_X);
@@ -88,13 +88,13 @@ void arccosLonI(void) {
 
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
 
-  if(realIcIsZero(&x)) {
-    realIcToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
+  if(realIsZero(&x)) {
+    realToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
     convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
   }
   else {
-    if(realIcIsNegative(&x)) {
-      realIcToReal16(const_1, REGISTER_REAL16_DATA(REGISTER_X));
+    if(realIsNegative(&x)) {
+      realToReal16(const_1, REGISTER_REAL16_DATA(REGISTER_X));
       convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
     }
     else{
@@ -114,15 +114,15 @@ void arccosRe16(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
-  if(realIcCompareAbsGreaterThan(&x, const_1)) {
+  if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccosCo34();
       convertRegister34To16(REGISTER_X);
@@ -137,8 +137,8 @@ void arccosRe16(void) {
     }
   }
   WP34S_Acos(&x, &x);
-  convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 
   if(currentAngularMode == AM_DMS) {
     checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
@@ -156,43 +156,43 @@ void arccosCo16(void) {
     return;
   }
 
-  realIc_t a, b, real, imag;
+  real39_t a, b, real, imag;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   // arccos(z) = -i.ln(z + sqrt(z² - 1))
   // calculate z²   real part
-  realIcMultiply(&b, &b, &real);
-  realIcChangeSign(&real);
-  realIcFMA(&a, &a, &real, &real);
+  realMultiply(&b, &b, &real, &ctxtReal39);
+  realChangeSign(&real);
+  realFMA(&a, &a, &real, &real, &ctxtReal39);
 
   // calculate z²   imaginary part
-  realIcMultiply(&a, &b, &imag);
-  realIcMultiply(&imag, const_2, &imag);
+  realMultiply(&a, &b, &imag, &ctxtReal39);
+  realMultiply(&imag, const_2, &imag, &ctxtReal39);
 
   // calculate z² - 1
-  realIcSubtract(&real, const_1, &real);
+  realSubtract(&real, const_1, &real, &ctxtReal39);
 
   // calculate sqrt(z² - 1)
-  realIcRectangularToPolar(&real, &imag, &real, &imag);
-  realIcSquareRoot(&real, &real);
-  realIcMultiply(&imag, const_0_5, &imag);
-  realIcPolarToRectangular(&real, &imag, &real, &imag);
+  real39RectangularToPolar(&real, &imag, &real, &imag);
+  realSquareRoot(&real, &real, &ctxtReal39);
+  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² - 1)
-  realIcAdd(&a, &real, &real);
-  realIcAdd(&b, &imag, &imag);
+  realAdd(&a, &real, &real, &ctxtReal39);
+  realAdd(&b, &imag, &imag, &ctxtReal39);
 
   // calculate ln(z + sqtr(z² - 1))
-  realIcRectangularToPolar(&real, &imag, &a, &b);
+  real39RectangularToPolar(&real, &imag, &a, &b);
   WP34S_Ln(&a, &a);
 
   // calculate = -i.ln(z + sqtr(z² - 1))
-  realIcChangeSign(&a);
+  realChangeSign(&a);
 
-  realIcToReal16(&b, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -218,15 +218,15 @@ void arccosRe34(void) {
     return;
   }
 
-  realIc_t x;
+  real39_t x;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
 
-  if(realIcCompareAbsGreaterThan(&x, const_1)) {
+  if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arccosCo34();
       return;
@@ -240,8 +240,8 @@ void arccosRe34(void) {
     }
   }
   WP34S_Acos(&x, &x);
-  convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
-  realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 
   if(currentAngularMode == AM_DMS) {
     checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
@@ -259,41 +259,41 @@ void arccosCo34(void) {
     return;
   }
 
-  realIc_t a, b, real, imag;
+  real39_t a, b, real, imag;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   // arccos(z) = -i.ln(z + sqrt(z² - 1))
   // calculate z²   real part
-  realIcMultiply(&b, &b, &real);
-  realIcChangeSign(&real);
-  realIcFMA(&a, &a, &real, &real);
+  realMultiply(&b, &b, &real, &ctxtReal39);
+  realChangeSign(&real);
+  realFMA(&a, &a, &real, &real, &ctxtReal39);
 
   // calculate z²   imaginary part
-  realIcMultiply(&a, &b, &imag);
-  realIcMultiply(&imag, const_2, &imag);
+  realMultiply(&a, &b, &imag, &ctxtReal39);
+  realMultiply(&imag, const_2, &imag, &ctxtReal39);
 
   // calculate z² - 1
-  realIcSubtract(&real, const_1, &real);
+  realSubtract(&real, const_1, &real, &ctxtReal39);
 
   // calculate sqrt(z² - 1)
-  realIcRectangularToPolar(&real, &imag, &real, &imag);
-  realIcSquareRoot(&real, &real);
-  realIcMultiply(&imag, const_0_5, &imag);
-  realIcPolarToRectangular(&real, &imag, &real, &imag);
+  real39RectangularToPolar(&real, &imag, &real, &imag);
+  realSquareRoot(&real, &real, &ctxtReal39);
+  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² - 1)
-  realIcAdd(&a, &real, &real);
-  realIcAdd(&b, &imag, &imag);
+  realAdd(&a, &real, &real, &ctxtReal39);
+  realAdd(&b, &imag, &imag, &ctxtReal39);
 
   // calculate ln(z + sqtr(z² - 1))
-  realIcRectangularToPolar(&real, &imag, &a, &b);
+  real39RectangularToPolar(&real, &imag, &a, &b);
   WP34S_Ln(&a, &a);
 
   // calculate = -i.ln(z + sqtr(z² - 1))
-  realIcChangeSign(&a);
+  realChangeSign(&a);
 
-  realIcToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
 }

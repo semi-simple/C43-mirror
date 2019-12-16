@@ -65,13 +65,13 @@ void fnArctan(uint16_t unusedParamButMandatory) {
 
 
 void arctanLonI(void) {
-  realIc_t x;
+  real39_t x;
 
-  convertLongIntegerRegisterToRealIc(REGISTER_X, &x);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   WP34S_Atan(&x, &x);
-  convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
+  convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
-  realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -88,10 +88,10 @@ void arctanRe16(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-        realIcToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
-        realIcToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
         real16SetNegativeSign(REGISTER_REAL16_DATA(REGISTER_X));
       }
       convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
@@ -105,12 +105,12 @@ void arctanRe16(void) {
     }
   }
   else {
-    realIc_t x;
+    real39_t x;
 
-    real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x);
+    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
     WP34S_Atan(&x, &x);
-    convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
-    realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+    convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
+    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
   }
 
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
@@ -131,10 +131,10 @@ void arctanCo16(void) {
     return;
   }
 
-  realIc_t a, b, numer, denom;
+  real39_t a, b, numer, denom;
 
-  real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &b);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
 
@@ -144,28 +144,28 @@ void arctanCo16(void) {
   // -------------  =  ----------------  +  ---------------- i
   // 1 + (a + bi)i     a² + b² - 2b + 1     a² + b² - 2b + 1
 
-  realIcMultiply(&a, &a, &denom);          // denom = a²
-  realIcFMA(&b, &b, &denom, &denom);       // denom = a² + b²
-  realIcSubtract(const_1, &denom, &numer); // numer = 1 - (a² + b²)
-  realIcChangeSign(&b);                    // b = -b
-  realIcFMA(&b, const_2, &denom, &denom);  // denom = a² + b² - 2b
-  realIcAdd(&denom, const_1, &denom);      // denom = a² + b² - 2b + 1
-  realIcMultiply(&a, const_2, &b);         // imag part = 2a
-  realIcChangeSign(&b);                    // imag part = -2a
-  realIcDivide(&numer, &denom, &a);        // real part = numer / denom
-  realIcDivide(&b, &denom, &b);            // imag part = -2a / denom
+  realMultiply(&a, &a, &denom, &ctxtReal39);          // denom = a²
+  realFMA(&b, &b, &denom, &denom, &ctxtReal39);       // denom = a² + b²
+  realSubtract(const_1, &denom, &numer, &ctxtReal39); // numer = 1 - (a² + b²)
+  realChangeSign(&b);                                 // b = -b
+  realFMA(&b, const_2, &denom, &denom, &ctxtReal39);  // denom = a² + b² - 2b
+  realAdd(&denom, const_1, &denom, &ctxtReal39);      // denom = a² + b² - 2b + 1
+  realMultiply(&a, const_2, &b, &ctxtReal39);         // imag part = 2a
+  realChangeSign(&b);                                 // imag part = -2a
+  realDivide(&numer, &denom, &a, &ctxtReal39);        // real part = numer / denom
+  realDivide(&b, &denom, &b, &ctxtReal39);            // imag part = -2a / denom
 
   // calculate ln((1 - iz) / (1 + iz))
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  realIcMultiply(&a, const_0_5, &a);
-  realIcMultiply(&b, const_0_5, &b);
-  realIcChangeSign(&b);
+  realMultiply(&a, const_0_5, &a, &ctxtReal39);
+  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  realChangeSign(&b);
 
-  realIcToReal16(&b, REGISTER_REAL16_DATA(REGISTER_X));
-  realIcToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&b, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -194,10 +194,10 @@ void arctanRe34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-        realIcToReal34(const_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_0_5, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
-        realIcToReal34(const_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_0_5, REGISTER_REAL34_DATA(REGISTER_X));
         real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
       }
       convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
@@ -211,12 +211,12 @@ void arctanRe34(void) {
     }
   }
   else {
-    realIc_t x;
+    real39_t x;
 
-    real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     WP34S_Atan(&x, &x);
-    convertAngleIcFromTo(&x, AM_RADIAN, currentAngularMode);
-    realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
@@ -237,10 +237,10 @@ void arctanCo34(void) {
     return;
   }
 
-  realIc_t a, b, numer, denom;
+  real39_t a, b, numer, denom;
 
-  real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
 
@@ -250,26 +250,26 @@ void arctanCo34(void) {
   // -------------  =  ----------------  +  ---------------- i
   // 1 + (a + bi)i     a² + b² - 2b + 1     a² + b² - 2b + 1
 
-  realIcMultiply(&a, &a, &denom);          // denom = a²
-  realIcFMA(&b, &b, &denom, &denom);       // denom = a² + b²
-  realIcSubtract(const_1, &denom, &numer); // numer = 1 - (a² + b²)
-  realIcChangeSign(&b);                    // b = -b
-  realIcFMA(&b, const_2, &denom, &denom);  // denom = a² + b² - 2b
-  realIcAdd(&denom, const_1, &denom);      // denom = a² + b² - 2b + 1
-  realIcMultiply(&a, const_2, &b);         // imag part = 2a
-  realIcChangeSign(&b);                    // imag part = -2a
-  realIcDivide(&numer, &denom, &a);        // real part = numer / denom
-  realIcDivide(&b, &denom, &b);            // imag part = -2a / denom
+  realMultiply(&a, &a, &denom, &ctxtReal39);          // denom = a²
+  realFMA(&b, &b, &denom, &denom, &ctxtReal39);       // denom = a² + b²
+  realSubtract(const_1, &denom, &numer, &ctxtReal39); // numer = 1 - (a² + b²)
+  realChangeSign(&b);                                 // b = -b
+  realFMA(&b, const_2, &denom, &denom, &ctxtReal39);  // denom = a² + b² - 2b
+  realAdd(&denom, const_1, &denom, &ctxtReal39);      // denom = a² + b² - 2b + 1
+  realMultiply(&a, const_2, &b, &ctxtReal39);         // imag part = 2a
+  realChangeSign(&b);                                 // imag part = -2a
+  realDivide(&numer, &denom, &a, &ctxtReal39);        // real part = numer / denom
+  realDivide(&b, &denom, &b, &ctxtReal39);            // imag part = -2a / denom
 
   // calculate ln((1 - iz) / (1 + iz))
-  realIcRectangularToPolar(&a, &b, &a, &b);
+  real39RectangularToPolar(&a, &b, &a, &b);
   WP34S_Ln(&a, &a);
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  realIcMultiply(&a, const_0_5, &a);
-  realIcMultiply(&b, const_0_5, &b);
-  realIcChangeSign(&b);
+  realMultiply(&a, const_0_5, &a, &ctxtReal39);
+  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  realChangeSign(&b);
 
-  realIcToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));
-  realIcToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
 }

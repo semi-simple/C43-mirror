@@ -1470,7 +1470,7 @@
 #define CHR_CONTOUR_INTEGRAL          1435
 #define CHR_SURFACE_INTEGRAL          1436
 #define CHR_RATIO                     1437
-#define CHR_TILDE_b                   1438
+#define CHR_CHECK_MARK                1438
 #define CHR_ASYMPOTICALLY_EQUAL       1439
 #define CHR_ALMOST_EQUAL              1440
 #define CHR_COLON_EQUALS              1441

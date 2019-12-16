@@ -146,7 +146,7 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
         case AM_RADIAN:             return "radian  ";
         case AM_GRAD:               return "grad    ";
         case AM_MULTPI:             return "multPi  ";
-        case AM_NONE:               return "        ";
+        case AM_NONE:               return "none    ";
         default:                    return "???     ";
       }
 
@@ -183,7 +183,7 @@ char * getAngularModeName(uint16_t angularMode) {
   if(angularMode == AM_GRAD  ) return "grad  ";
   if(angularMode == AM_MULTPI) return "multPi";
   if(angularMode == AM_RADIAN) return "radian";
-  if(angularMode == AM_NONE)   return "      ";
+  if(angularMode == AM_NONE)   return "none  ";
 
   return "???   ";
 }
@@ -1760,5 +1760,54 @@ void memoryDump2(const char *text) {
     printRegisterToConsole(regist);
     printf("\n");
 //  }
+}
+
+///////////////////////////////
+// Stack smashing detection
+void stackCheck(const unsigned char *begin, const unsigned char *end, int size, const char *where) {
+   int i, corrupted = 0;
+
+   for(i=0; i<size; i++) {
+     if(*(begin + i) != 0xaa) {
+       printf("Stack begin corrupted: begin[%d]=0x%02x at %s\n", i, begin[i], where);
+       corrupted = 1;
+     }
+   }
+
+   for(i=0; i<size; i++) {
+     if(*(end + i) != 0xaa) {
+       printf("Stack end corrupted: end[%d]=0x%02x at %s\n", i, end[i], where);
+       corrupted = 1;
+     }
+   }
+
+   if(corrupted) {
+     exit(0xBAD);
+   }
+}
+
+
+void initStackCheck(unsigned char *begin, unsigned char *end, int size) {
+  memset(begin, 0xaa, size);
+  memset(end,   0xaa, size);
+}
+
+//////////////////////////////////////////////////
+// Example of stack smashing tests in a function
+void stackSmashingTest(void) {
+                                              unsigned char stackEnd[10000]; // First declaration
+  int v1, v2, v3;
+                                              unsigned char stackBegin[10000]; // Last declaration
+
+                                              initStackCheck(stackBegin, stackEnd, 10000);
+
+  v1 = 1;
+                                              stackCheck(stackBegin, stackEnd, 10000, "after v1 = ...");
+  v2 = v1 + 1;
+                                              stackCheck(stackBegin, stackEnd, 10000, "after v2 = ...");
+  v3 = v2 + 2;
+                                              stackCheck(stackBegin, stackEnd, 10000, "after v3 = ...");
+  printf("v1=%d v2=%d v3=%d\n", v1, v2, v3);
+                                              stackCheck(stackBegin, stackEnd, 10000, "after printf(...");
 }
 #endif

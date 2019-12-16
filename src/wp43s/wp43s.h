@@ -23,9 +23,9 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.11"
+#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.12"
 #define COPYRIGHT "The WP43S team"
-#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.11" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.12" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -151,11 +151,8 @@ typedef enum {
 
 typedef int16_t calcRegister_t;
 
-// If the definition below is changed, this change MUST be carried forward in generateConstants.c and the constants MUST be regenerated before recompiling the program.
-#define DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS 39
-
 #if (IBM_DECIMAL == 1)
-  #define DECNUMDIGITS DIGITS_FOR_34_DIGITS_INTERMEDIATE_CALCULATIONS
+  #define DECNUMDIGITS 39
   #include "decimal128.h"
   #include "decimal64.h"
   #include "decDouble.h"
@@ -208,6 +205,7 @@ typedef int16_t calcRegister_t;
 #include "stack.h"
 #include "stats.h"
 #include "statusBar.h"
+#include "timer.h"
 #include "jm.h"                                          //JM include
 
 
@@ -226,7 +224,7 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     96                                               //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     72                                               //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0
@@ -504,15 +502,17 @@ extern void                 (* const division[12][12])(void);
 extern const softmenu_t     softmenu[];
 
 // Variables stored in RAM
-extern decContext           ctxtReal16;  // 16 digits
-extern decContext           ctxtReal34;  // 34 digits
-extern decContext           ctxtRealIc;  // 39 digits: used for 34 digits intermediate calculations
-extern decContext           ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
-extern decContext           ctxtReal451; // 451 digits: used in radian angle reduction
-extern decContext           ctxtReal850; // 850 digits: used for really big modulo
+extern realContext_t        ctxtReal16;  // 16 digits
+extern realContext_t        ctxtReal34;  // 34 digits
+extern realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
+extern realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
+extern realContext_t        ctxtReal75;  // 75 digits: used in SLVQ
+extern realContext_t        ctxtReal459; // 459 digits: used in radian angle reduction
+extern realContext_t        ctxtReal855; // 855 digits: used for really big modulo
 extern uint16_t             flags[7];
-#define TMP_STR_LENGTH  3000
+#define TMP_STR_LENGTH      3000
 #define ERROR_MESSAGE_LENGTH 512
+#define DISPLAY_VALUE_LEN     80
 extern char                 tmpStr3000[TMP_STR_LENGTH];
 extern char                 errorMessage[ERROR_MESSAGE_LENGTH];
 extern char                 aimBuffer[AIM_BUFFER_LENGTH];
@@ -610,6 +610,7 @@ extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               nimInputIsReal34;
+extern bool_t               updateDisplayValueX;
 extern calcKey_t            kbd_usr[37];
 extern radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];            //vv dr build RadioButton, CheckBox
 extern uint16_t             cntOfRadioCbItems;                                  //^^
@@ -620,6 +621,7 @@ extern uint64_t             shortIntegerMask;
 extern uint64_t             shortIntegerSignBit;
 extern glyph_t              glyphNotFound;
 extern char                 transitionSystemOperation[4];
+extern char                 displayValueX[DISPLAY_VALUE_LEN];
 extern int16_t              exponentSignLocation;
 extern int16_t              denominatorLocation;
 extern int16_t              imaginaryExponentSignLocation;
@@ -630,25 +632,28 @@ extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 extern int32_t              numberOfFreeBlocks;
 extern int32_t              lgCatalogSelection;
 extern void                 (*confirmedFunction)(uint16_t);
-extern realIc_t             const *gammaConstants;
-extern realIc_t             const *angle180;
-extern realIc_t             const *angle90;
-extern realIc_t             const *angle45;
+extern real39_t             const *gammaConstants;
+extern real39_t             const *angle180;
+extern real39_t             const *angle90;
+extern real39_t             const *angle45;
+extern pcg32_random_t       pcg32_global;
 #ifdef DMCP_BUILD
-  extern bool_t               endOfProgram;
+  extern bool_t               backToDMCP;
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"
 
-#define TEST_REGX(s) if(reg[100].dataPointer >= 500+0*(RAM_SIZE/MEMORY_ALLOCATION_ALIGNMENT)) { \
-                       uint32_t a, b; \
-                       a = 1; \
-                       b = 0; \
-                       printf("\n=====> BAD  REGISTER X DATA POINTER: %u <===== %s\n", reg[100].dataPointer, s); \
-                       reg[100].dataType = a/b; \
-                     } \
-                     else { \
-                       printf("\n=====> good register X data pointer: %u <===== %s\n", reg[100].dataPointer, s); \
-                     }
+#define TEST_REG(r, comment) { \
+                               if(reg[r].dataPointer >= 500+0*(RAM_SIZE/MEMORY_ALLOCATION_ALIGNMENT)) { \
+                                 uint32_t a, b; \
+                                 a = 1; \
+                                 b = 0; \
+                                 printf("\n=====> BAD  REGISTER %d DATA POINTER: %u <===== %s\n", r, reg[r].dataPointer, comment); \
+                                 reg[r].dataType = a/b; \
+                               } \
+                               else { \
+                                 printf("\n=====> good register %d data pointer: %u <===== %s\n", r, reg[r].dataPointer, comment); \
+                               } \
+                             }
 
 #endif // wp43s_H_INCLUDED

@@ -33,17 +33,14 @@ void showShiftState(void) {
     if(shiftStateChanged) {
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
         JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
         JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
       }                                                                         //JM - Display dot in the f - line
-#endif
       }
       else if(shiftG) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-#ifndef TESTSUITE_BUILD
       showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
       if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
         JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
@@ -51,13 +48,11 @@ void showShiftState(void) {
         JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
         JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
       }                                                                         //JM - Display dot in the g - line
-#endif
       }
       else {
         refreshRegisterLine(REGISTER_T);
-#ifndef TESTSUITE_BUILD
         showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-#endif
+
         if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
@@ -80,13 +75,17 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
-  if(shiftF || shiftG)        //vv dr
-  {
-  shiftF = false;
-  shiftStateChanged = true;
-  shiftG = false;
+  if(shiftF) {
+    shiftF = false;
+    shiftStateChanged = true;
+  }
+
+  if(shiftG) {
+    shiftG = false;
+    shiftStateChanged = true;
+  }
+
   showShiftState();
-  }                           //^^
 }
 
 
@@ -238,6 +237,10 @@ uint16_t determineItem(const calcKey_t *key) {
 
 
 
+#define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
+
+
+
 /********************************************//**
  * \brief A calc button was pressed
  *
@@ -254,9 +257,8 @@ void btnPressed(void *notUsed, void *data) {
   const calcKey_t *key;
   int16_t itemShift;
 
-  //key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
+  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
-  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0') : (kbd_std + (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0');
 
   allowScreenUpdate = true;
 
@@ -409,20 +411,17 @@ void btnPressed(void *notUsed, void *data) {
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
     R_shG(); //shiftG = false;
     R_shF(); //shiftF = false;
-    //shiftStateChanged = true;
   }
 
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
                                              //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
   else if(JM_ASN_MODE != 0) {                //JM GET KEY
-    //int16_t tempkey = stringToKeyNumber(data);
-    int16_t tempkey = (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+    int16_t tempkey = stringToKeyNumber(data);
     fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
     JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
     R_shG(); //shiftG = false;
     R_shF(); //shiftF = false;
-    //shiftStateChanged = true;
   }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
@@ -430,8 +429,7 @@ void btnPressed(void *notUsed, void *data) {
     int16_t item = determineItem(key);
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-    //if((calcMode == CM_NORMAL) && (!userModeEnabled && ( stringToKeyNumber(data) == 0) )) {
-    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0' == 0) )) {
+    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( stringToKeyNumber(data) == 0) )) {
       //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }
@@ -604,7 +602,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
+            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -618,7 +616,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
         displayBugScreen(errorMessage);
       }
     }
@@ -1192,8 +1190,8 @@ void btnReleased(void *notUsed, void *data) {
 
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   if(!shiftF) {
-    S_shF(); //shiftF shiftF = true;
-    //shiftStateChanged = true;
+    shiftF = true;
+    shiftStateChanged = true;
   }
 
   #ifdef PC_BUILD
@@ -1204,4 +1202,4 @@ void fnComplexCCCC(uint16_t unusedParamButMandatory) {
     btnClicked(NULL, "02");
   #endif
 }
-#endif // TESTSUITE_BUILD
+#endif // END IF NOT TESTSUITE_BUILD

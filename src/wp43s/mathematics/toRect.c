@@ -41,7 +41,7 @@ void fnToRect(uint16_t unusedParamButMandatory) {
       return;
     }
 
-    realIc_t x, y;
+    real39_t x, y;
     bool_t real16 = true;
     uint32_t yAngularMode;
 
@@ -49,9 +49,9 @@ void fnToRect(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     switch(dataTypeX) {
-      case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_X, &x);   break;
-      case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &x); break;
-      case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &x); real16 = false; break;
+      case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);      break;
+      case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);                 break;
+      case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x); real16 = false; break;
       default: {
         sprintf(errorMessage, "In function fnToRect: %" FMT32U " is an unexpected dataTypeX value!", dataTypeX);
         displayBugScreen(errorMessage);
@@ -64,16 +64,16 @@ void fnToRect(uint16_t unusedParamButMandatory) {
     }
 
     switch(dataTypeY) {
-      case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_Y, &y);
-                          convertAngleIcFromTo(&y, currentAngularMode, AM_RADIAN);
+      case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+                          convertAngle39FromTo(&y, currentAngularMode, AM_RADIAN);
                           break;
 
-      case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-                          convertAngleIcFromTo(&y, yAngularMode, AM_RADIAN);
+      case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+                          convertAngle39FromTo(&y, yAngularMode, AM_RADIAN);
                           break;
 
-      case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-                          convertAngleIcFromTo(&y, yAngularMode, AM_RADIAN);
+      case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+                          convertAngle39FromTo(&y, yAngularMode, AM_RADIAN);
                           real16 = false;
                           break;
 
@@ -83,19 +83,19 @@ void fnToRect(uint16_t unusedParamButMandatory) {
       }
     }
 
-    realIcPolarToRectangular(&x, &y, &x, &y);
+    real39PolarToRectangular(&x, &y, &x, &y);
 
     if(real16) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(&y, REGISTER_REAL16_DATA(REGISTER_Y));
+      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&y, REGISTER_REAL16_DATA(REGISTER_Y));
     }
     else {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
     }
 
     temporaryInformation = TI_X_Y;
@@ -115,39 +115,63 @@ void fnToRect(uint16_t unusedParamButMandatory) {
 
 
 void real16PolarToRectangular(const real16_t *magnitude16, const real16_t *theta16, real16_t *real16, real16_t *imag16) {  // theta16 in radian
-  realIc_t real, imag, magnitude, theta;
+  real39_t real, imag, magnitude, theta;
 
-  real16ToRealIc(magnitude16, &magnitude);
-  real16ToRealIc(theta16, &theta);
+  real16ToReal(magnitude16, &magnitude);
+  real16ToReal(theta16, &theta);
 
-  realIcPolarToRectangular(&magnitude, &theta, &real, &imag);  // theta in radian
+  real39PolarToRectangular(&magnitude, &theta, &real, &imag);  // theta in radian
 
-  realIcToReal16(&real, real16);
-  realIcToReal16(&imag, imag16);
+  realToReal16(&real, real16);
+  realToReal16(&imag, imag16);
 }
 
 
 
 void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta34, real34_t *real34, real34_t *imag34) {
-  realIc_t real, imag, magnitude, theta;
+  real39_t real, imag, magnitude, theta;
 
-  real34ToRealIc(magnitude34, &magnitude);
-  real34ToRealIc(theta34, &theta);
+  real34ToReal(magnitude34, &magnitude);
+  real34ToReal(theta34, &theta);
 
-  realIcPolarToRectangular(&magnitude, &theta, &real, &imag);  // theta in radian
+  real39PolarToRectangular(&magnitude, &theta, &real, &imag);  // theta in radian
 
-  realIcToReal34(&real, real34);
-  realIcToReal34(&imag, imag34);
+  realToReal34(&real, real34);
+  realToReal34(&imag, imag34);
 }
 
 
 
-void realIcPolarToRectangular(const realIc_t *mag, const realIc_t *theta, realIc_t *real, realIc_t *imag) {
-  realIc_t sin, cos, magnitude;
+void real39PolarToRectangular(const real_t *mag, const real_t *theta, real_t *real, real_t *imag) {
+  real39_t sin, cos, magnitude;
 
-  realIcCopy(mag, &magnitude);
+  realCopy(mag, &magnitude);
 
   WP34S_Cvt2RadSinCosTan(theta, AM_RADIAN, &sin, &cos, NULL);
-  realIcMultiply(&magnitude, &cos, real);
-  realIcMultiply(&magnitude, &sin, imag);
+  realMultiply(&magnitude, &cos, real, &ctxtReal39);
+  realMultiply(&magnitude, &sin, imag, &ctxtReal39);
+}
+
+
+
+void real51PolarToRectangular(const real_t *mag, const real_t *theta, real_t *real, real_t *imag) {
+  real51_t sin, cos, magnitude;
+
+  realCopy(mag, &magnitude);
+
+  WP34S_Cvt2RadSinCosTan(theta, AM_RADIAN, (real_t *)&sin, (real_t *)&cos, NULL);
+  realMultiply(&magnitude, &cos, real, &ctxtReal51);
+  realMultiply(&magnitude, &sin, imag, &ctxtReal51);
+}
+
+
+
+void real75PolarToRectangular(const real_t *mag, const real_t *theta, real_t *real, real_t *imag) {
+  real75_t sin, cos, magnitude;
+
+  realCopy(mag, &magnitude);
+
+  WP34S_Cvt2RadSinCosTan(theta, AM_RADIAN, (real_t *)&sin, (real_t *)&cos, NULL);
+  realMultiply(&magnitude, &cos, real, &ctxtReal75);
+  realMultiply(&magnitude, &sin, imag, &ctxtReal75);
 }

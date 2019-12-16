@@ -30,29 +30,29 @@
  ***********************************************/
 void fnSlvq(uint16_t unusedParamButMandatory) {
   bool_t result16=true, realCoefs=true, realRoots=true;
-  complexIc_t a, b, c, r, x1, x2;
+  complex75_t a, b, c, r, x1, x2;
 
   switch(getRegisterDataType(REGISTER_X)) {
-    case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_X, &c.real);
-                        realIcZero(&c.imag);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&c.real, &ctxtReal75);
+                        realZero(&c.imag);
                         break;
 
-    case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c.real);
-                        realIcZero(&c.imag);
+    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c.real);
+                        realZero(&c.imag);
                         break;
 
-    case dtComplex16:   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_X), &c.real);
-                        real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_X), &c.imag);
+    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &c.real);
+                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &c.imag);
                         realCoefs = false;
                         break;
 
-    case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c.real);
-                        realIcZero(&c.imag);
+    case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c.real);
+                        realZero(&c.imag);
                         result16 = false;
                         break;
 
-    case dtComplex34:   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_X), &c.real);
-                        real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_X), &c.imag);
+    case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c.real);
+                        real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &c.imag);
                         realCoefs = false;
                         result16 = false;
                         break;
@@ -66,26 +66,26 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
 
   switch(getRegisterDataType(REGISTER_Y)) {
-    case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_Y, &b.real);
-                        realIcZero(&b.imag);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&b.real, &ctxtReal75);
+                        realZero(&b.imag);
                         break;
 
-    case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &b.real);
-                        realIcZero(&b.imag);
+    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &b.real);
+                        realZero(&b.imag);
                         break;
 
-    case dtComplex16:   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Y), &b.real);
-                        real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Y), &b.imag);
+    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &b.real);
+                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b.imag);
                         realCoefs = false;
                         break;
 
-    case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &b.real);
-                        realIcZero(&b.imag);
+    case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &b.real);
+                        realZero(&b.imag);
                         result16 = false;
                         break;
 
-    case dtComplex34:   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Y), &b.real);
-                        real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Y), &b.imag);
+    case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &b.real);
+                        real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b.imag);
                         realCoefs = false;
                         result16 = false;
                         break;
@@ -99,26 +99,26 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
 
   switch(getRegisterDataType(REGISTER_Z)) {
-    case dtLongInteger: convertLongIntegerRegisterToRealIc(REGISTER_Z, &a.real);
-                        realIcZero(&a.imag);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Z, (real_t *)&a.real, &ctxtReal75);
+                        realZero(&a.imag);
                         break;
 
-    case dtReal16:      real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Z), &a.real);
-                        realIcZero(&a.imag);
+    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Z), &a.real);
+                        realZero(&a.imag);
                         break;
 
-    case dtComplex16:   real16ToRealIc(REGISTER_REAL16_DATA(REGISTER_Z), &a.real);
-                        real16ToRealIc(REGISTER_IMAG16_DATA(REGISTER_Z), &a.imag);
+    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Z), &a.real);
+                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Z), &a.imag);
                         realCoefs = false;
                         break;
 
-    case dtReal34:      real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Z), &a.real);
-                        realIcZero(&a.imag);
+    case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Z), &a.real);
+                        realZero(&a.imag);
                         result16 = false;
                         break;
 
-    case dtComplex34:   real34ToRealIc(REGISTER_REAL34_DATA(REGISTER_Z), &a.real);
-                        real34ToRealIc(REGISTER_IMAG34_DATA(REGISTER_Z), &a.imag);
+    case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Z), &a.real);
+                        real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Z), &a.imag);
                         realCoefs = false;
                         result16 = false;
                         break;
@@ -131,9 +131,9 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         return;
   }
 
-  if(    realIcIsNaN(&a.real) || realIcIsNaN(&a.imag)
-      || realIcIsNaN(&b.real) || realIcIsNaN(&b.imag)
-      || realIcIsNaN(&c.real) || realIcIsNaN(&c.imag)) {
+  if(    realIsNaN(&a.real) || realIsNaN(&a.imag)
+      || realIsNaN(&b.real) || realIsNaN(&b.imag)
+      || realIsNaN(&c.real) || realIsNaN(&c.imag)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnSlqv:", "cannot use NaN as X, Y, or Z input of SLVQ", NULL, NULL);
@@ -141,8 +141,8 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  if(   realIcIsZero(&a.real) && realIcIsZero(&a.imag)
-     && realIcIsZero(&b.real) && realIcIsZero(&b.imag)) {
+  if(   realIsZero(&a.real) && realIsZero(&a.imag)
+     && realIsZero(&b.real) && realIsZero(&b.imag)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnSlqv:", "cannot use 0 for Y and Z as input of SLVQ", NULL, NULL);
@@ -158,133 +158,133 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
 
   if(realCoefs) {
-    if(realIcIsZero(&a.real)) {
+    if(realIsZero(&a.real)) {
       // bx + c = 0   (b is not 0 here)
 
       // r = b²
-      realIcMultiply(&b.real, &b.real, &r.real);
-      realIcZero(&r.imag);
+      realMultiply(&b.real, &b.real, &r.real, &ctxtReal75);
+      realZero(&r.imag);
 
       // x1 = x2 = -c/b
-      realIcDivide(&c.real, &b.real, &x1.real);
-      realIcChangeSign(&x1.real);
-      realIcCopy(&x1.real, &x2.real);
+      realDivide(&c.real, &b.real, &x1.real, &ctxtReal75);
+      realChangeSign(&x1.real);
+      realCopy(&x1.real, &x2.real);
     }
-    else if(realIcIsZero(&c.real)) {
+    else if(realIsZero(&c.real)) {
       // ax² + bx = x(ax + b) = 0   (a is not 0 here)
 
       // r = b²
-      realIcMultiply(&b.real, &b.real, &r.real);
-      realIcZero(&r.imag);
+      realMultiply(&b.real, &b.real, &r.real, &ctxtReal75);
+      realZero(&r.imag);
 
       // x1 = 0
-      realIcZero(&x1.real);
+      realZero(&x1.real);
 
       // x2 = -b/a
-      realIcDivide(&b.real, &a.real, &x2.real);
-      realIcChangeSign(&x2.real);
+      realDivide(&b.real, &a.real, &x2.real, &ctxtReal75);
+      realChangeSign(&x2.real);
     }
     else {
       // ax² + bx + c = 0   (a and c are not 0 here)
 
       // r = b² - 4ac
-      realIcMultiply(const__4, &a.real, &r.real);
-      realIcMultiply(&c.real, &r.real, &r.real);
-      realIcFMA(&b.real, &b.real, &r.real, &r.real);
-      realIcZero(&r.imag);
+      realMultiply(const__4, &a.real, &r.real, &ctxtReal75);
+      realMultiply(&c.real, &r.real, &r.real, &ctxtReal75);
+      realFMA(&b.real, &b.real, &r.real, &r.real, &ctxtReal75);
+      realZero(&r.imag);
 
-      if(realIcIsPositive(&r.real)) { // real roots
+      if(realIsPositive(&r.real)) { // real roots
         // x1 = (-b - sign(b)*sqrt(r)) / 2a
-        realIcSquareRoot(&r.real, &x1.real);
-        if(realIcIsPositive(&b.real)) {
-          realIcChangeSign(&x1.real);
+        realSquareRoot(&r.real, &x1.real, &ctxtReal75);
+        if(realIsPositive(&b.real)) {
+          realChangeSign(&x1.real);
         }
-        realIcSubtract(&x1.real, &b.real, &x1.real);
-        realIcMultiply(&x1.real, const_1on2, &x1.real);
-        realIcDivide(&x1.real, &a.real, &x1.real);
+        realSubtract(&x1.real, &b.real, &x1.real, &ctxtReal75);
+        realMultiply(&x1.real, const_1on2, &x1.real, &ctxtReal75);
+        realDivide(&x1.real, &a.real, &x1.real, &ctxtReal75);
 
         // x2 = c / ax1  (x1 connot be 0 here)
-        realIcDivide(&c.real, &a.real, &x2.real);
-        realIcDivide(&x2.real, &x1.real, &x2.real);
+        realDivide(&c.real, &a.real, &x2.real, &ctxtReal75);
+        realDivide(&x2.real, &x1.real, &x2.real, &ctxtReal75);
       }
       else { // complex roots
         realRoots = false;
 
         // x1 = (-b - sign(b)*sqrt(r)) / 2a
-        realIcMinus(&r.real, &x1.real);
-        realIcSquareRoot(&x1.real, &x1.imag);
-        realIcZero(&x1.real);
-        if(realIcIsPositive(&b.real)) {
-          realIcChangeSign(&x1.imag);
+        realMinus(&r.real, &x1.real, &ctxtReal75);
+        realSquareRoot(&x1.real, &x1.imag, &ctxtReal75);
+        realZero(&x1.real);
+        if(realIsPositive(&b.real)) {
+          realChangeSign(&x1.imag);
         }
-        realIcSubtract(&x1.real, &b.real, &x1.real);
-        realIcSubtract(&x1.imag, &b.imag, &x1.imag);
-        realIcMultiply(&x1.real, const_1on2, &x1.real);
-        realIcMultiply(&x1.imag, const_1on2, &x1.imag);
-        realIcDivide(&x1.real, &a.real, &x1.real);
-        realIcDivide(&x1.imag, &a.real, &x1.imag);
+        realSubtract(&x1.real, &b.real, &x1.real, &ctxtReal75);
+        realSubtract(&x1.imag, &b.imag, &x1.imag, &ctxtReal75);
+        realMultiply(&x1.real, const_1on2, &x1.real, &ctxtReal75);
+        realMultiply(&x1.imag, const_1on2, &x1.imag, &ctxtReal75);
+        realDivide(&x1.real, &a.real, &x1.real, &ctxtReal75);
+        realDivide(&x1.imag, &a.real, &x1.imag, &ctxtReal75);
 
         // x2 = conj(x1)
-        complexIcCopy(&x1, &x2);
-        realIcChangeSign(&x2.imag);
+        complexCopy(&x1, &x2, COMPLEX75_SIZE);
+        realChangeSign(&x2.imag);
       }
     }
   }
   else { // Complex coefficients
-    if(realIcIsZero(&a.real) && realIcIsZero(&a.imag)) {
+    if(realIsZero(&a.real) && realIsZero(&a.imag)) {
       // bx + c = 0   (b is not 0 here)
 
       // r = b²
-      mulCoIcCoIc(&b, &b, &r);
+      mulCo75Co75(&b, &b, &r);
 
       // x1 = x2 = -c/b
-      divCoIcCoIc(&c, &b, &x1);
-      realIcChangeSign(&x1.real);
-      realIcChangeSign(&x1.imag);
-      complexIcCopy(&x1, &x2);
+      divCo75Co75(&c, &b, &x1);
+      realChangeSign(&x1.real);
+      realChangeSign(&x1.imag);
+      complexCopy(&x1, &x2, COMPLEX75_SIZE);
     }
-    else if(realIcIsZero(&c.real) && realIcIsZero(&c.imag)) {
+    else if(realIsZero(&c.real) && realIsZero(&c.imag)) {
       // ax² + bx = x(ax + b) = 0   (a is not 0 here)
 
       // r = b²
-      mulCoIcCoIc(&b, &b, &r);
+      mulCo75Co75(&b, &b, &r);
 
       // x1 = 0
-      realIcZero(&x1.real);
-      realIcZero(&x1.imag);
+      realZero(&x1.real);
+      realZero(&x1.imag);
 
       // x2 = -b/a
-      divCoIcCoIc(&b, &a, &x2);
-      realIcChangeSign(&x2.real);
-      realIcChangeSign(&x2.imag);
+      divCo75Co75(&b, &a, &x2);
+      realChangeSign(&x2.real);
+      realChangeSign(&x2.imag);
     }
     else {
       // ax² + bx + c = 0   (a and c are not 0 here)
 
       // r = b² - 4ac
-      realIcMultiply(const__4, &a.real, &r.real);
-      realIcMultiply(const__4, &a.imag, &r.imag);
-      mulCoIcCoIc(&c, &r, &r);
-      mulCoIcCoIc(&b, &b, &x1);
-      realIcAdd(&x1.real, &r.real, &r.real);
-      realIcAdd(&x1.imag, &r.imag, &r.imag);
+      realMultiply(const__4, &a.real, &r.real, &ctxtReal75);
+      realMultiply(const__4, &a.imag, &r.imag, &ctxtReal75);
+      mulCo75Co75(&c, &r, &r);
+      mulCo75Co75(&b, &b, &x1);
+      realAdd(&x1.real, &r.real, &r.real, &ctxtReal75);
+      realAdd(&x1.imag, &r.imag, &r.imag, &ctxtReal75);
 
       // x1 = (-b + sqrt(r)) / 2a
-      complexIcCopy(&r, &x1);
-      realIcRectangularToPolar(&x1.real, &x1.imag, &x1.real, &x1.imag);
-      realIcSquareRoot(&x1.real, &x1.real);
-      realIcMultiply(&x1.imag, const_0_5, &x1.imag);
-      realIcPolarToRectangular(&x1.real, &x1.imag, &x1.real, &x1.imag);
+      complexCopy(&r, &x1, COMPLEX75_SIZE);
+      real75RectangularToPolar((real_t *)&x1.real, (real_t *)&x1.imag, (real_t *)&x1.real, (real_t *)&x1.imag);
+      realSquareRoot(&x1.real, &x1.real, &ctxtReal75);
+      realMultiply(&x1.imag, const_0_5, &x1.imag, &ctxtReal75);
+      real75PolarToRectangular((real_t *)&x1.real, (real_t *)&x1.imag, (real_t *)&x1.real, (real_t *)&x1.imag);
 
-      realIcSubtract(&x1.real, &b.real, &x1.real);
-      realIcSubtract(&x1.imag, &b.imag, &x1.imag);
-      realIcMultiply(&x1.real, const_1on2, &x1.real);
-      realIcMultiply(&x1.imag, const_1on2, &x1.imag);
-      divCoIcCoIc(&x1, &a, &x1);
+      realSubtract(&x1.real, &b.real, &x1.real, &ctxtReal75);
+      realSubtract(&x1.imag, &b.imag, &x1.imag, &ctxtReal75);
+      realMultiply(&x1.real, const_1on2, &x1.real, &ctxtReal75);
+      realMultiply(&x1.imag, const_1on2, &x1.imag, &ctxtReal75);
+      divCo75Co75(&x1, &a, &x1);
 
       // x2 = c / ax1  (x1 connot be 0 here)
-      divCoIcCoIc(&c, &a, &x2);
-      divCoIcCoIc(&x2, &x1, &x2);
+      divCo75Co75(&c, &a, &x2);
+      divCo75Co75(&x2, &x1, &x2);
     }
   }
 
@@ -293,80 +293,80 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Z, dtReal16, REAL16_SIZE, AM_NONE);
-      realIcToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
-      realIcToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
-      realIcToReal16(&r.real,  REGISTER_REAL16_DATA(REGISTER_Z));
+      realToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
+      realToReal16(&r.real,  REGISTER_REAL16_DATA(REGISTER_Z));
     }
     else { // realRoots && !result16
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
       reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
-      realIcToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
-      realIcToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
-      realIcToReal34(&r.real,  REGISTER_REAL34_DATA(REGISTER_Z));
+      realToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
+      realToReal34(&r.real,  REGISTER_REAL34_DATA(REGISTER_Z));
     }
   }
   else { // !realRoots
     if(result16) {
-      if(realIcIsZero(&x1.imag)) { // x1 is real
+      if(realIsZero(&x1.imag)) { // x1 is real
         reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-        realIcToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
         reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-        realIcToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
-        realIcToReal16(&x1.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+        realToReal16(&x1.real, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(&x1.imag, REGISTER_IMAG16_DATA(REGISTER_X));
       }
 
-      if(realIcIsZero(&x2.imag)) { // x2 is real
+      if(realIsZero(&x2.imag)) { // x2 is real
         reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, AM_NONE);
-        realIcToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
+        realToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
       }
       else {
         reallocateRegister(REGISTER_Y, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-        realIcToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
-        realIcToReal16(&x2.imag, REGISTER_IMAG16_DATA(REGISTER_Y));
+        realToReal16(&x2.real, REGISTER_REAL16_DATA(REGISTER_Y));
+        realToReal16(&x2.imag, REGISTER_IMAG16_DATA(REGISTER_Y));
       }
 
-      if(realIcIsZero(&r.imag)) { // r is real
+      if(realIsZero(&r.imag)) { // r is real
         reallocateRegister(REGISTER_Z, dtReal16, REAL16_SIZE, AM_NONE);
-        realIcToReal16(&r.real, REGISTER_REAL16_DATA(REGISTER_Z));
+        realToReal16(&r.real, REGISTER_REAL16_DATA(REGISTER_Z));
       }
       else {
         reallocateRegister(REGISTER_Z, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-        realIcToReal16(&r.real, REGISTER_REAL16_DATA(REGISTER_Z));
-        realIcToReal16(&r.imag, REGISTER_IMAG16_DATA(REGISTER_Z));
+        realToReal16(&r.real, REGISTER_REAL16_DATA(REGISTER_Z));
+        realToReal16(&r.imag, REGISTER_IMAG16_DATA(REGISTER_Z));
       }
     }
     else { // !realRoots && !result16
-      if(realIcIsZero(&x1.imag)) { // x1 is real
+      if(realIsZero(&x1.imag)) { // x1 is real
         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realIcToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realIcToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
-        realIcToReal34(&x1.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+        realToReal34(&x1.real, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&x1.imag, REGISTER_IMAG34_DATA(REGISTER_X));
       }
 
-      if(realIcIsZero(&x2.imag)) { // x2 is real
+      if(realIsZero(&x2.imag)) { // x2 is real
         reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-        realIcToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
+        realToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
       }
       else {
         reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realIcToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
-        realIcToReal34(&x2.imag, REGISTER_IMAG34_DATA(REGISTER_Y));
+        realToReal34(&x2.real, REGISTER_REAL34_DATA(REGISTER_Y));
+        realToReal34(&x2.imag, REGISTER_IMAG34_DATA(REGISTER_Y));
       }
 
-      if(realIcIsZero(&r.imag)) { // r is real
+      if(realIsZero(&r.imag)) { // r is real
         reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
-        realIcToReal34(&r.real, REGISTER_REAL34_DATA(REGISTER_Z));
+        realToReal34(&r.real, REGISTER_REAL34_DATA(REGISTER_Z));
       }
       else {
         reallocateRegister(REGISTER_Z, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realIcToReal34(&r.real, REGISTER_REAL34_DATA(REGISTER_Z));
-        realIcToReal34(&r.imag, REGISTER_IMAG34_DATA(REGISTER_Z));
+        realToReal34(&r.real, REGISTER_REAL34_DATA(REGISTER_Z));
+        realToReal34(&r.imag, REGISTER_IMAG34_DATA(REGISTER_Z));
       }
     }
   }

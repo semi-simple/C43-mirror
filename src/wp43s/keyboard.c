@@ -178,7 +178,7 @@ void btnFnPressed(void *w, void *data) {
     FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
     FN_counter = JM_FN_TIMER;                                               //start new cycle
     FN_timeouts = true;
-    showFNFunctionName(FN_key_pressed-37);
+    showFNFunctionName(true /*first call*/);
   }                                                                         //JM LONGPRESS ^^
 }
 
@@ -189,6 +189,8 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 void btnFnReleased(void *w, void *data) {
 #endif
   if(FN_timeouts) {
+    //showSoftmenuCurrentPart();
+    showFNFunctionName(true /*last call*/);
     char charKey[3];
     sprintf(charKey, "%c", FN_key_pressed + 11);
     FN_key_pressed = 0;

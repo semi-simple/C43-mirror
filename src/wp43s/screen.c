@@ -20,9 +20,18 @@
 
 #include "wp43s.h"
 
+int16_t ul_x, ul_y;
 
-void underline_softkey(int16_t xSoftkey, int16_t ySoftKey) {
+
+void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t first) {
   int16_t x, y, x1, y1, x2, y2;
+
+  if(!first) {                            //Recursively call the same routine to clear the previous line
+    underline_softkey(ul_x, ul_y, true);
+  }
+  ul_x = xSoftkey;
+  ul_y = ySoftKey;
+
 
   if(0 <= xSoftkey && xSoftkey <= 5) {
     x1 = 67 * xSoftkey - 1;
@@ -43,17 +52,15 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey) {
   y = y2-3-1;
   for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
     if(mod(x, 2) == 0) {
-      setPixel(x, y);
-      setPixel(x, y+2);
-      clearPixel(x, y+1);
+        invertPixel  (x, y);
+        invertPixel  (x, y+2);
     }
     else {
-      setPixel(x, y+1);
-      clearPixel(x, y);
-      clearPixel(x, y+2);
+        invertPixel  (x, y+1);
     }
   }
 }
+
 
 
 void FN_handler() {                  //JM LONGPRESS vv
@@ -70,22 +77,22 @@ void FN_handler() {                  //JM LONGPRESS vv
       if(!shiftF && !shiftG) {
         S_shF();
         showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
-        showFNFunctionName();
+        showFNFunctionName(false);
         FN_counter = JM_FN_TIMER;    //restart count
       }
       else if(shiftF && !shiftG) {
         S_shG();
         R_shF();
         showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
-        showFNFunctionName();
+        showFNFunctionName(false);
         FN_counter = JM_FN_TIMER;    //restart count
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
-        resetShiftState();
-        FN_key_pressed = 0;          //Cancel pending FN key pressed
         FN_timeouts = false;
         FN_counter = JM_FN_TIMER;    //reset for future
-        showFunctionName(ITM_NOP, 0);
+        showFNFunctionName(false);
+        resetShiftState();
+        FN_key_pressed = 0;          //Cancel pending FN key pressed
       }
     } 
     else { 
@@ -702,6 +709,30 @@ void clearPixel(int16_t x, int16_t y) {
 }
 
 
+/********************************************//**  //JM 
+ * \brief Clears a pixel on the screen (white).
+ *
+ * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
+ * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)
+ * \return void
+ ***********************************************/
+void invertPixel(int16_t x, int16_t y) {           //JM
+  #ifdef PC_BUILD
+    if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
+      //printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+      return;
+    }
+
+    *(screenData + y*screenStride + x) = *(screenData + y*screenStride + x) ^ 0xffffff;
+    screenChange = true;
+  #endif
+
+  #ifdef DMCP_BUILD
+    bitblt24(x, 1, y, 1, BLT_XOR, BLT_NONE);
+  #endif
+}
+
+
 
 /********************************************//**
  * \brief Displays a glyph using it's Unicode code point
@@ -1059,24 +1090,43 @@ void showFunctionName(int16_t item, int8_t counter) {
   if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 15, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 15, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);  //JM
 }
 
 
-void showFNFunctionName() {                                                   //JM FN vv
-  clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-  if(shiftF) { 
-    showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
-    underline_softkey(FN_key_pressed-38,1);
-  } else 
-  if(shiftG) { 
-    showFunctionName(nameFunction(FN_key_pressed-37,12),0); 
-    underline_softkey(FN_key_pressed-38,2);
-  } else { 
-    showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
-    underline_softkey(FN_key_pressed-38,0);
+bool_t second_;
+void showFNFunctionName(bool_t first_) {                                                   //JM FN vv
+  if (first_) {
+    second_ = true;
   }
-  showFunctionNameItem = 0;
+  clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+  
+  if(FN_timeouts) {
+    if(shiftF) { 
+      showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+      underline_softkey(FN_key_pressed-38,1, second_);
+    } else 
+    if(shiftG) { 
+      showFunctionName(nameFunction(FN_key_pressed-37,12),0);
+      underline_softkey(FN_key_pressed-38,2, second_);
+    } else { 
+      showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
+      underline_softkey(FN_key_pressed-38,0, second_);
+    }
+  } else {
+    //hideFunctionName();
+    showFunctionName(ITM_NOP, 0);
+    if(shiftF) { 
+      underline_softkey(FN_key_pressed-38,1, second_);
+    } else 
+    if(shiftG) { 
+      underline_softkey(FN_key_pressed-38,2, second_);
+    } else { 
+      underline_softkey(FN_key_pressed-38,0, second_);
+    }
+   
+  }
+  second_ = false;
 }                                                                             //JM FN ^^
 
 /********************************************//**

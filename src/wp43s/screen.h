@@ -92,7 +92,7 @@ void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines,
 void     showCursor           (void);
 void     hideCursor           (void);
 void     showFunctionName     (int16_t item, int8_t counter);
-void     showFNFunctionName   ();                           //JM LONGPRESS FN 
+void     showFNFunctionName   (bool_t first_);                           //JM LONGPRESS FN 
 void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
 void     refreshRegisterLine  (calcRegister_t regist);

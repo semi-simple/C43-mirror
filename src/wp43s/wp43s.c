@@ -191,7 +191,7 @@ real39_t             const *angle90;
 real39_t             const *angle45;
 pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
-  bool_t               endOfProgram;
+  bool_t               backToDMCP;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
@@ -529,7 +529,7 @@ void program_main(void) {
   lcd_clear_buf();*/                                                            //^^
   setupDefaults();
 
-  endOfProgram = false;
+  backToDMCP = false;
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
@@ -539,7 +539,7 @@ void program_main(void) {
   //   ST(STAT_SUSPENDED) - Program signals it is ready for off and doesn't need to be woken-up again
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
-  while(!endOfProgram) {
+  while(!backToDMCP) {
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();

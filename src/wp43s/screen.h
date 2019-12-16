@@ -80,6 +80,7 @@ void     FN_handler();                       //JM LONGPRESS vv
 
 #ifndef TESTSUITE_BUILD
 uint8_t  compressString;                                    //JM compressString
+void     underline_softkey    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);
 void     JM_DOT               (int16_t xx, int16_t yy);
 void     setPixel             (int16_t x, int16_t y);
 void     clearPixel           (int16_t x, int16_t y);
@@ -92,7 +93,6 @@ void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines,
 void     showCursor           (void);
 void     hideCursor           (void);
 void     showFunctionName     (int16_t item, int8_t counter);
-void     showFNFunctionName   (bool_t first_);                           //JM LONGPRESS FN 
 void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
 void     refreshRegisterLine  (calcRegister_t regist);

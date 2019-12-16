@@ -28,30 +28,59 @@
  * \param void
  * \return void
  ***********************************************/
+
+bool_t DOT_G_painted, DOT_F_painted;
+
+void DOT_F() {
+  JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
+  JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
+  DOT_F_painted = !DOT_F_painted;
+}
+
+void DOT_G() {
+  JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
+  JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
+  JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
+  JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
+  DOT_G_painted = !DOT_G_painted;
+}
+
+void DOT_F_clear() {
+  if(DOT_F_painted) {
+    DOT_F(); 
+  }
+} 
+
+void DOT_G_clear() {
+  if(DOT_G_painted) {
+    DOT_G(); 
+  }
+} 
+
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftStateChanged) {
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
-        JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
-        JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
-      }                                                                         //JM - Display dot in the f - line
+        //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
+          DOT_F();
+        }                                                                         //JM - Display dot in the f - line
       }
       else if(shiftG) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
-        JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
-        JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
-        JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
-        JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
-      }                                                                         //JM - Display dot in the g - line
+      //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
+          DOT_F_clear(); //cancel dots
+          DOT_G();
+        }                                                                         //JM - Display dot in the g - line
       }
       else {
+        //DOT_G_clear(); //cancel dots
         refreshRegisterLine(REGISTER_T);
         showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+        DOT_G_painted = false;
+        DOT_F_painted = false;
 
         if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
@@ -178,7 +207,9 @@ void btnFnPressed(void *w, void *data) {
     FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
     FN_counter = JM_FN_TIMER;                                               //start new cycle
     FN_timeouts = true;
-    showFNFunctionName(true /*first call*/);
+    FN_timed_out_to_NOP = false;
+    showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
+    underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
   }                                                                         //JM LONGPRESS ^^
 }
 
@@ -189,16 +220,18 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 void btnFnReleased(void *w, void *data) {
 #endif
   if(FN_timeouts) {
-    //showSoftmenuCurrentPart();
-    showFNFunctionName(true /*last call*/);
+    underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     char charKey[3];
     sprintf(charKey, "%c", FN_key_pressed + 11);
     FN_key_pressed = 0;
     FN_timeouts = false;
     FN_counter = JM_FN_TIMER;                                               //reset for future
-    btnFnClicked(w, charKey);
+    hideFunctionName();
+    if (!FN_timed_out_to_NOP) {
+      btnFnClicked(w, charKey);
+    }
     resetShiftState();  
-    refreshRegisterLine(REGISTER_T);
+    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
   }
 }
 

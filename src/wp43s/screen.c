@@ -20,13 +20,12 @@
 
 #include "wp43s.h"
 
-int16_t ul_x, ul_y;
+int16_t ul_x, ul_y;                           //JM vv LONGPRESS
 
-
-void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t first) {
+void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
 
-  if(!first) {                            //Recursively call the same routine to clear the previous line
+  if(!dontclear) {                            //Recursively call the same routine to clear the previous line
     underline_softkey(ul_x, ul_y, true);
   }
   ul_x = xSoftkey;
@@ -50,21 +49,22 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t first) {
   }
 
   y = y2-3-1;
-  for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
-    if(mod(x, 2) == 0) {
-        invertPixel  (x, y);
-        invertPixel  (x, y+2);
-    }
-    else {
-        invertPixel  (x, y+1);
+  if(y>=0) {                                  //JM Make provision for out of range parameter, used to not plot the line and only for the recursive line removal
+    for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
+      if(mod(x, 2) == 0) {
+          invertPixel  (x, y);
+          invertPixel  (x, y+2);
+      }
+      else {
+          invertPixel  (x, y+1);
+      }
     }
   }
-}
+}                                            //JM ^^
 
 
-
-void FN_handler() {                  //JM LONGPRESS vv
-  if(FN_timeouts || (FN_counter != JM_FN_TIMER)) {                  //JM LONGPRESS handlerFN Key shift longpress handler
+void FN_handler() {                          //JM LONGPRESS vv
+  if(FN_timeouts) {                          //JM LONGPRESS handlerFN Key shift longpress handler
  
     if(FN_counter > JM_FN_TIMER) {
       FN_counter = JM_FN_TIMER;
@@ -76,23 +76,29 @@ void FN_handler() {                  //JM LONGPRESS vv
     if (FN_counter == 1) {    
       if(!shiftF && !shiftG) {
         S_shF();
-        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
-        showFNFunctionName(false);
-        FN_counter = JM_FN_TIMER;    //restart count
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+        underline_softkey(FN_key_pressed-38,1, false);
+        FN_counter = JM_FN_TIMER;                        //restart count
       }
       else if(shiftF && !shiftG) {
         S_shG();
         R_shF();
-        showShiftState();            //Possibly state the name of the shifted command. Difficult to determine the command though
-        showFNFunctionName(false);
-        FN_counter = JM_FN_TIMER;    //restart count
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(nameFunction(FN_key_pressed-37,12),0);
+        underline_softkey(FN_key_pressed-38,2, false);    
+        FN_counter = JM_FN_TIMER;                        //restart count
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
-        FN_timeouts = false;
-        FN_counter = JM_FN_TIMER;    //reset for future
-        showFNFunctionName(false);
-        resetShiftState();
-        FN_key_pressed = 0;          //Cancel pending FN key pressed
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //JM keep shift state, so it will stay here every cycle until key released
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(ITM_NOP, 0);
+        FN_timed_out_to_NOP = true;
+        underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
       }
     } 
     else { 
@@ -614,6 +620,54 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 
+//invertPixel (xx+4,yy+7);
+  invertPixel (xx+5,yy+6);
+//invertPixel (xx+6,yy+6);
+  invertPixel (xx+6,yy+5);
+//invertPixel (xx+7,yy+4);
+  invertPixel (xx+6,yy+3);
+//invertPixel (xx+6,yy+2);
+  invertPixel (xx+5,yy+2);
+  invertPixel (xx+4,yy+2);
+  invertPixel (xx+3,yy+2);
+//invertPixel (xx+2,yy+2);
+  invertPixel (xx+2,yy+3);
+  invertPixel (xx+2,yy+4);
+  invertPixel (xx+2,yy+5);
+//invertPixel (xx+2,yy+6);
+  invertPixel (xx+3,yy+6);
+  invertPixel (xx+4,yy+6);
+  invertPixel (xx+5,yy+5);
+  invertPixel (xx+6,yy+4);
+  invertPixel (xx+5,yy+3);
+  invertPixel (xx+3,yy+3);
+  invertPixel (xx+3,yy+5);
+  invertPixel (xx+4,yy+7);
+  invertPixel (xx+5,yy+7);
+  invertPixel (xx+6,yy+7);
+  invertPixel (xx+6,yy+6);
+  invertPixel (xx+7,yy+6);
+  invertPixel (xx+7,yy+5);
+  invertPixel (xx+7,yy+4);
+  invertPixel (xx+7,yy+3);
+  invertPixel (xx+6,yy+2);
+  invertPixel (xx+6,yy+1);
+  invertPixel (xx+5,yy+1);
+  invertPixel (xx+4,yy+1);
+  invertPixel (xx+3,yy+1);
+  invertPixel (xx+2,yy+2);
+  invertPixel (xx+1,yy+3);
+  invertPixel (xx+1,yy+4);
+  invertPixel (xx+1,yy+5);
+  invertPixel (xx+1,yy+6);
+  invertPixel (xx+2,yy+6);
+  invertPixel (xx+3,yy+7);
+}
+
+
+/*
+void JM_DOT_old(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
+
 //setPixel (xx+4,yy+7);
   setPixel (xx+5,yy+6);
 //setPixel (xx+6,yy+6);
@@ -657,8 +711,7 @@ void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the do
   clearPixel (xx+2,yy+6);
   clearPixel (xx+3,yy+7);
 }
-
-
+*/
 
 /********************************************//**
  * \brief Sets a pixel on the screen (black).
@@ -1093,41 +1146,6 @@ void showFunctionName(int16_t item, int8_t counter) {
   showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 15, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);  //JM
 }
 
-
-bool_t second_;
-void showFNFunctionName(bool_t first_) {                                                   //JM FN vv
-  if (first_) {
-    second_ = true;
-  }
-  clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-  
-  if(FN_timeouts) {
-    if(shiftF) { 
-      showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
-      underline_softkey(FN_key_pressed-38,1, second_);
-    } else 
-    if(shiftG) { 
-      showFunctionName(nameFunction(FN_key_pressed-37,12),0);
-      underline_softkey(FN_key_pressed-38,2, second_);
-    } else { 
-      showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
-      underline_softkey(FN_key_pressed-38,0, second_);
-    }
-  } else {
-    //hideFunctionName();
-    showFunctionName(ITM_NOP, 0);
-    if(shiftF) { 
-      underline_softkey(FN_key_pressed-38,1, second_);
-    } else 
-    if(shiftG) { 
-      underline_softkey(FN_key_pressed-38,2, second_);
-    } else { 
-      underline_softkey(FN_key_pressed-38,0, second_);
-    }
-   
-  }
-  second_ = false;
-}                                                                             //JM FN ^^
 
 /********************************************//**
  * \brief Hides the function name in the

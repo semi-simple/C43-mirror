@@ -231,7 +231,7 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     77                                               //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     74                                               //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0
@@ -645,20 +645,22 @@ extern real39_t             const *angle90;
 extern real39_t             const *angle45;
 extern pcg32_random_t       pcg32_global;
 #ifdef DMCP_BUILD
-  extern bool_t               endOfProgram;
+  extern bool_t               backToDMCP;
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"
 
-#define TEST_REGX(s) if(reg[100].dataPointer >= 500+0*(RAM_SIZE/MEMORY_ALLOCATION_ALIGNMENT)) { \
-                       uint32_t a, b; \
-                       a = 1; \
-                       b = 0; \
-                       printf("\n=====> BAD  REGISTER X DATA POINTER: %u <===== %s\n", reg[100].dataPointer, s); \
-                       reg[100].dataType = a/b; \
-                     } \
-                     else { \
-                       printf("\n=====> good register X data pointer: %u <===== %s\n", reg[100].dataPointer, s); \
-                     }
+#define TEST_REG(r, comment) { \
+                               if(reg[r].dataPointer >= 500+0*(RAM_SIZE/MEMORY_ALLOCATION_ALIGNMENT)) { \
+                                 uint32_t a, b; \
+                                 a = 1; \
+                                 b = 0; \
+                                 printf("\n=====> BAD  REGISTER %d DATA POINTER: %u <===== %s\n", r, reg[r].dataPointer, comment); \
+                                 reg[r].dataType = a/b; \
+                               } \
+                               else { \
+                                 printf("\n=====> good register %d data pointer: %u <===== %s\n", r, reg[r].dataPointer, comment); \
+                               } \
+                             }
 
 #endif // wp43s_H_INCLUDED

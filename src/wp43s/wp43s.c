@@ -195,7 +195,7 @@ real39_t             const *angle90;
 real39_t             const *angle45;
 pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
-  bool_t               endOfProgram;
+  bool_t               backToDMCP;
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
@@ -325,7 +325,9 @@ void setupDefaults(void) {
   shiftG = false;
   //shiftStateChanged = false;          //dr
 
-
+  FN_key_pressed = 0;                   //JM LONGPRESS FN
+  FN_timeouts = false;                  //JM LONGPRESS FN
+  FN_counter = JM_FN_TIMER;             //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
   HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
@@ -537,7 +539,7 @@ void program_main(void) {
   lcd_clear_buf();*/                                                            //^^
   setupDefaults();
 
-  endOfProgram = false;
+  backToDMCP = false;
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
@@ -547,7 +549,7 @@ void program_main(void) {
   //   ST(STAT_SUSPENDED) - Program signals it is ready for off and doesn't need to be woken-up again
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
-  while(!endOfProgram) {
+  while(!backToDMCP) {
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) {            // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
@@ -606,34 +608,33 @@ void program_main(void) {
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);
 #ifdef INLINE_TEST                      //vv dr
-      if(testEnabled) { fnSwStart(0); }
-#endif                                  //^^
-      btnFnClicked(NULL, charKey);
-      lcd_refresh();
-#ifdef INLINE_TEST                      //vv dr
-      if(testEnabled) { fnSwStop(0); }
-#endif                                  //^^
-    }
-    else if(1 <= key && key <= 37) {
-      sprintf(charKey, "%02d", key -1);
-#ifdef INLINE_TEST                      //vv dr
       if(testEnabled) { fnSwStart(1); }
 #endif                                  //^^
-      btnPressed(NULL, charKey);
+//    btnFnClicked(NULL, charKey);
+      btnFnPressed(NULL, charKey);                //JM
       lcd_refresh();
 #ifdef INLINE_TEST                      //vv dr
       if(testEnabled) { fnSwStop(1); }
 #endif                                  //^^
     }
-    else if(key == 0) {
+    else if(key == 0 && FN_timeouts) {            //JM
 #ifdef INLINE_TEST                      //vv dr
       if(testEnabled) { fnSwStart(2); }
 #endif                                  //^^
-      btnReleased(NULL, NULL);
+      btnFnReleased(NULL,NULL);
       lcd_refresh();
 #ifdef INLINE_TEST                      //vv dr
       if(testEnabled) { fnSwStop(2); }
 #endif                                  //^^
+    }
+    else if(1 <= key && key <= 37) {
+      sprintf(charKey, "%02d", key - 1);
+      btnPressed(NULL, charKey);
+      lcd_refresh();
+    }
+    else if(key == 0) {
+      btnReleased(NULL,NULL);
+      lcd_refresh();
     }
 
     uint32_t now = sys_current_ms();

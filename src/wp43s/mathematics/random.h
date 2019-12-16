@@ -20,5 +20,6 @@
 
 #include "pcg_basic.h"
 
-void fnRandom(uint16_t unusedParamButMandatory);
-void fnSeed  (uint16_t unusedParamButMandatory);
+uint32_t boundedRand(uint32_t s);
+void     fnRandom   (uint16_t unusedParamButMandatory);
+void     fnSeed     (uint16_t unusedParamButMandatory);

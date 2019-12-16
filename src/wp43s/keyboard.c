@@ -28,41 +28,64 @@
  * \param void
  * \return void
  ***********************************************/
+
+bool_t DOT_G_painted, DOT_F_painted;                                      //JM OPTIMISE the dot placement by removing the same pixels placed. No need for the full redraw of the softmenu.
+
+void DOT_F() {
+  JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
+  JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
+  DOT_F_painted = !DOT_F_painted;
+}
+
+void DOT_G() {
+  JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
+  JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
+  JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
+  JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
+  DOT_G_painted = !DOT_G_painted;
+}
+
+void DOT_F_clear() {
+  if(DOT_F_painted) {
+    DOT_F(); 
+  }
+} 
+
+void DOT_G_clear() {
+  if(DOT_G_painted) {
+    DOT_G(); 
+  }
+} 
+
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
 //  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-//#ifndef TESTSUITE_BUILD
-      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
-        JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
-        JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
-      }                                                                         //JM - Display dot in the f - line
-//#endif
+        //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
+          DOT_F();
+        }                                                                         //JM - Display dot in the f - line
       }
       else if(shiftG) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-//#ifndef TESTSUITE_BUILD
-      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-      if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
-        JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
-        JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
-        JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
-        JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
-      }                                                                         //JM - Display dot in the g - line
-//#endif
+      //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
+        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
+          DOT_F_clear(); //cancel dots
+          DOT_G();
+        }                                                                         //JM - Display dot in the g - line
       }
       else {
+        //DOT_G_clear(); //cancel dots
         refreshRegisterLine(REGISTER_T);
+        showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!             //JM - Redraw boxes etc after shift is shown
+        DOT_G_painted = false;
+        DOT_F_painted = false;
 
         if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
-//#ifndef TESTSUITE_BUILD
-      showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift was shown
-//#endif
-    }
+      }
 
 //    shiftStateChanged = false;                                                //vv dr
 //  }                                                                           //^^
@@ -145,6 +168,93 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
 
 
+int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM LONGPRESS vv
+  int16_t row, func;
+  func = 0;
+  const softmenu_t *sm;
+  if(softmenuStackPointer > 0) {
+    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
+    row = min(3, sm->numItems/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+    if(itemShift/6 <= row) {
+      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+      if(func == CHR_PROD_SIGN) {
+        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+      }      
+      if(func < 0) {
+        func = - func;
+      }      
+    }
+  }
+  
+  return func;
+}
+
+
+
+#ifdef PC_BUILD                                                           //JM LONGPRESS FN
+void btnFnPressed(GtkWidget *w, gpointer data) { 
+#endif
+#ifdef DMCP_BUILD
+void btnFnPressed(void *w, void *data) {
+#endif
+#ifdef PC_BUILD
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(1); }     //dr
+#endif
+#endif
+  if(!FN_timeouts) {
+    FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
+    FN_counter = JM_FN_TIMER;                                               //start new cycle
+    FN_timeouts = true;
+    FN_timed_out_to_NOP = false;
+    showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
+    underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
+  }                                                                         //JM LONGPRESS ^^
+#ifdef PC_BUILD
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(1); }      //dr
+#endif
+#endif
+}
+
+
+
+#ifdef PC_BUILD                                                           //JM LONGPRESS FN
+void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM LONGPRESS FN
+#endif
+#ifdef DMCP_BUILD
+void btnFnReleased(void *w, void *data) {
+#endif
+#ifdef PC_BUILD
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(2); }     //dr
+#endif
+#endif
+  if(FN_timeouts) {
+    underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
+    char charKey[3];
+    sprintf(charKey, "%c", FN_key_pressed + 11);
+    FN_key_pressed = 0;
+    FN_timeouts = false;
+    FN_counter = JM_FN_TIMER;                                               //reset for future
+    hideFunctionName();
+    if (!FN_timed_out_to_NOP) {
+      btnFnClicked(w, charKey);
+    }
+    resetShiftState();  
+    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+  }
+#ifdef PC_BUILD
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(2); }      //dr
+#endif
+#endif
+}
+//JM btnFnClicked is called by gui.c keyPressed
+//JM btnFnClicked is called by wp43s.c program_main
+
+
+
 /********************************************//**
  * \brief One of the function keys was clicked
  *
@@ -160,11 +270,11 @@ void btnFnClicked(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
 
-#ifdef PC_BUILD
+/*#ifdef PC_BUILD
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }                         //dr
 #endif
-#endif
+#endif*/
 
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
@@ -196,11 +306,11 @@ void btnFnClicked(void *w, void *data) {
     }
   }
 
-#ifdef PC_BUILD
+/*#ifdef PC_BUILD
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(0); }                          //dr
 #endif
-#endif
+#endif*/
 }
 
 
@@ -284,11 +394,11 @@ void btnPressed(void *notUsed, void *data) {
   const calcKey_t *key;
   int16_t itemShift;
 
-#ifdef PC_BUILD
+/*#ifdef PC_BUILD
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
-#endif
+#endif*/
 
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));
   //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
@@ -1196,11 +1306,11 @@ void btnPressed(void *notUsed, void *data) {
     }
   }
 
-#ifdef PC_BUILD
+/*#ifdef PC_BUILD
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(1); }      //dr
 #endif
-#endif
+#endif*/
 }
 
 
@@ -1219,11 +1329,11 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 void btnReleased(void *notUsed, void *data) {
 #endif
 
-#ifdef PC_BUILD
+/*#ifdef PC_BUILD
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(2); }     //dr
 #endif
-#endif
+#endif*/
 
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
@@ -1231,11 +1341,11 @@ void btnReleased(void *notUsed, void *data) {
     runFunction(item);
   }
 
-#ifdef PC_BUILD
+/*#ifdef PC_BUILD
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(2); }      //dr
 #endif
-#endif
+#endif*/
 }
 
 

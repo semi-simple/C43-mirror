@@ -46,6 +46,7 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
 #define JM_SHIFT_TIMER_OFF 255
 #define JM_3_SHIFT_CUTOFF 6 //100ms
+#define JM_FN_TIMER 10         
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
@@ -58,6 +59,9 @@ uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but 
 int16_t JM_ASN_MODE;                                //JM ASSIGN
 
 
+int16_t FN_key_pressed;                           //JM LONGPRESS FN
+bool_t FN_timeouts;                               //JM LONGPRESS FN
+int8_t FN_counter;                                //JM LONGPRESS FN
 
 //keyboard.c
 #ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time

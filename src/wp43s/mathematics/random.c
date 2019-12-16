@@ -24,15 +24,15 @@
 // Fast Random Integer Generation in an Interval
 // DANIEL LEMIRE, Université du Québec (TELUQ), Canada
 // https://arxiv.org/abs/1805.10941
-uint32_t randomFrom0ToS(uint32_t s) { // random integer in [0 , s)
-  uint32_t x = pcg32_random() ;
+uint32_t boundedRand(uint32_t s) { // random integer in [0 , s)
+  uint32_t x = pcg32_random_r(&pcg32_global);
   uint64_t m = (uint64_t)x * (uint64_t)s;
   uint32_t l = (uint32_t) m;
 
   if(l < s) {
     uint32_t t = -s % s;
     while(l < t) {
-      x = pcg32_random();
+      x = pcg32_random_r(&pcg32_global);
       m = (uint64_t) x *(uint64_t)s;
       l = (uint32_t)m;
     }
@@ -52,8 +52,8 @@ void fnRandom(uint16_t unusedParamButMandatory) {
 
   //uInt32ToReal(pcg32_boundedrand(100000000), &x1);
   //uInt32ToReal(pcg32_boundedrand(100000000), &x2);
-  uInt32ToReal(randomFrom0ToS(100000000), &x1);
-  uInt32ToReal(randomFrom0ToS(100000000), &x2);
+  uInt32ToReal(boundedRand(100000000), &x1);
+  uInt32ToReal(boundedRand(100000000), &x2);
   realFMA(const_1e8, &x1, &x2, &x1, &ctxtReal39);
   x1.exponent -= 16;
 

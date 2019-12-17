@@ -63,7 +63,9 @@ int16_t JM_ASN_MODE;                                //JM ASSIGN
 
 int16_t FN_key_pressed;                           //JM LONGPRESS FN
 bool_t FN_timeouts;                               //JM LONGPRESS FN
+bool_t Shft_timeouts;                             //JM SHIFT NEW FN
 int8_t FN_counter;                                //JM LONGPRESS FN
+bool_t FN_timed_out_to_NOP;                       //JM LONGPRESS FN
 
 //keyboard.c
 #ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time

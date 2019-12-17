@@ -323,6 +323,7 @@ void setupDefaults(void) {
 
   FN_key_pressed = 0;  //JM LONGPRESS FN
   FN_timeouts = 0;     //JM LONGPRESS FN
+  Shft_timeouts = 0;   //JM SHIFT NEW
   FN_counter = JM_FN_TIMER;      //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c

@@ -65,6 +65,9 @@ void showShiftState(void) {
         //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
         if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
           DOT_F();
+          if(!FN_timeouts) {
+            underline(1);
+          }
         }                                                                         //JM - Display dot in the f - line
       }
       else if(shiftG) {
@@ -73,6 +76,10 @@ void showShiftState(void) {
         if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
           DOT_F_clear(); //cancel dots
           DOT_G();
+          if(!FN_timeouts) {
+            underline(1);
+            underline(2);
+          }
         }                                                                         //JM - Display dot in the g - line
       }
       else {
@@ -298,7 +305,7 @@ void btnFnReleased(void *w, void *data) {
 */
 
   // **************JM LONGPRESS **************************************************** 
-  if(FN_timeouts && !FN_double_click)   {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms) 
+  if(FN_timed_out_to_NOP || (FN_timeouts && !FN_double_click))   {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms) 
 //  if(FN_timeouts) {
     underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     char charKey[3];
@@ -469,6 +476,8 @@ void btnPressed(void *notUsed, void *data) {
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
   if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
+    Shft_timeouts = true;                         //JM SHIFT NEW
+    FN_counter = JM_FN_TIMER;
     if(temporaryInformation != TI_NO_INFO) {                                                                                  //JM shifts
       temporaryInformation = TI_NO_INFO;                                                                                      //JM shifts
       refreshRegisterLine(REGISTER_X);                                                                                        //JM shifts
@@ -479,6 +488,7 @@ void btnPressed(void *notUsed, void *data) {
       lastErrorCode = 0;                                                                                                      //JM shifts
       refreshStack();                                                                                                         //JM shifts
     }                                                                                                                         //JM shifts
+
 
     if(ShiftTimoutMode || Home3TimerMode) {
       if(Home3TimerMode) {
@@ -1356,6 +1366,7 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 #ifdef DMCP_BUILD
 void btnReleased(void *notUsed, void *data) {
 #endif
+  Shft_timeouts = false;                         //JM SHIFT NEW
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();

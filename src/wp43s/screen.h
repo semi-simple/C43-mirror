@@ -49,6 +49,8 @@ typedef enum {
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
 void     FN_handler();                       //JM LONGPRESS vv
+void     Shft_handler();                     //JM SHIFT NEW vv
+void     underline(int16_t y);               //JM SHIFT LINE
 
 #ifdef PC_BUILD
   #if (__linux__ == 1)

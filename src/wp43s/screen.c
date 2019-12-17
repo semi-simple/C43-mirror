@@ -405,6 +405,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   }
 
   FN_handler();
+  Shft_handler();
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -472,6 +473,7 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
   }
 
   FN_handler();
+  Shft_handler();
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -524,6 +526,15 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
 
 
 #ifndef TESTSUITE_BUILD
+
+
+void underline(int16_t y) {
+  int16_t i;
+   for( i = 0; i < 6; i = i + 1 ){
+     underline_softkey(i, y, true);
+   }
+}
+
 
 int16_t ul_x, ul_y;                           //JM vv LONGPRESS
 void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
@@ -597,12 +608,67 @@ void FN_handler() {                          //JM LONGPRESS vv
         underline_softkey(FN_key_pressed-38,2, false);    
         FN_counter = JM_FN_TIMER;                        //restart count
       }
-      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {        
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //JM keep shift state, so it will stay here every cycle until key released
         clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(ITM_NOP, 0);
         FN_timed_out_to_NOP = true;
         underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
+        FN_timeouts = false;   
+      }
+    } 
+    else { 
+      FN_counter--;
+    }
+  } 
+}                                        //JM ^^
+
+
+void Shft_handler() {                        //JM SHIFT NEW vv
+  if(Shft_timeouts) {
+ 
+    if(FN_counter > JM_FN_TIMER) {
+      FN_counter = JM_FN_TIMER;
+    } else
+    if(FN_counter < 1) {
+      FN_counter = 1;
+    } 
+
+    if (FN_counter == 1) {    
+      if(!shiftF && !shiftG) {
+        S_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        FN_counter = JM_FN_TIMER;                        //restart count
+      }
+      else if(shiftF && !shiftG) {
+        S_shG();
+        R_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        FN_counter = JM_FN_TIMER;                        //restart count
+      }
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
+        Shft_timeouts = false;
+        R_shG();                                         //force into no shift state, i.e. to wait
+        R_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        if(HOME3) {
+          if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
+            popSoftmenu();                                                                                                  //JM shifts
+          }
+          else {
+            if (calcMode == CM_AIM) {                                                                                       //JM shifts
+              showSoftmenu(NULL, -MNU_ALPHA, true);                                                                         //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
+            }
+            else {                                                                                                          //JM SHIFTS
+              showSoftmenu(NULL, -MNU_HOME, true);                                                                          //JM shifts  //JM ALPHA-HOME
+            }                                                                                                               //JM shifts                                                                                                                            //JM shifts
+            softmenuStackPointer_MEM = softmenuStackPointer;                                                                //JM shifts
+          }
+        }   
+
       }
     } 
     else { 

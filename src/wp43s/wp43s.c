@@ -341,10 +341,13 @@ void setupDefaults(void) {
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
   #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  now_MEM1 = 0;                                                  //JM FN_DOUBLE
   #endif
   #ifdef PC_BUILD
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  now_MEM1 = 0;                                                  //JM FN_DOUBLE
   #endif
+  FN_double_click = false;                                       //JM FN_DOUBLE
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER

@@ -38,10 +38,10 @@ void DOT_F() {
 }
 
 void DOT_G() {
-  JM_DOT( -1, 175 );                                                      //JM - Display dot in the g - line
-  JM_DOT( 392, 175 );                                                     //JM - Display dot in the g - line
-  JM_DOT( -1, 182 );                                                      //JM - Display dot in the g - line
-  JM_DOT( 392, 182 );                                                     //JM - Display dot in the g - line
+  JM_DOT( -1, 175-2 );                                                      //JM - Display dot in the g - line
+  JM_DOT( 392, 175-2 );                                                     //JM - Display dot in the g - line
+  JM_DOT( -1, 182+3 );                                                      //JM - Display dot in the g - line
+  JM_DOT( 392, 182+3 );                                                     //JM - Display dot in the g - line
   DOT_G_painted = !DOT_G_painted;
 }
 
@@ -197,19 +197,82 @@ return func;
 }
 
 
+//**************JM DOUBLE vv ****************************************************
+int8_t btnFNdouble_time(uint32_t timecheck ) {    //JM DOUBLE vv input in ms
+    int8_t tmp;
+    #ifdef DMCP_BUILD                                 //JM TIMER 
+      now = sys_current_ms();              //JM TIMER 
+      tmpval = now_MEM1 + timecheck;
+      if (now > tmpval)   {tmp = 1;}
+      if (now < tmpval)   {tmp = -1;}
+      if (now ==  tmpval) {tmp = 0;}
+      if (now_MEM1 == 0)  {tmp = -127;}
+      now_MEM1 =now;
+    
+    #endif                                            //JM TIMER 
+    #ifdef PC_BUILD                                   //JM TIMER 
+      now = g_get_monotonic_time();      //JM usec
+      tmpval = now_MEM1 + timecheck *1000;
+      if (now > tmpval)   {tmp = 1;}
+      if (now < tmpval)   {tmp = -1;}
+      if (now ==  tmpval) {tmp = 0;}
+      if (now_MEM1 == 0)  {tmp = -127;}
+      printf("result %ld - %ld = %ld (><%ld)(%d) : %d\n", now, now_MEM1, now - now_MEM1, tmpval, timecheck, tmp);
+      now_MEM1 =now;
+    #endif                                            //JM
+return tmp;
+}
+
+/* Switching profile, to jump to g[FN]:
+    <166  <333  set g                       
+____-----_______--------->
+    P    R      P
+
+   |>              btnFnPressed:  mark time and ignore if FN_double_click is not set
+        |>         btnFnReleased: if t<166 then set FN_double_click AND prevent normal MAIN keypress
+               |>  btnFnPressed:  if t<333 AND if FN_double_click then jump start to g[FN]
+*/
+
+//**************JM DOUBLE ^^ ****************************************************
+
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN
 void btnFnPressed(GtkWidget *w, gpointer data) { 
 #endif
 #ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
 #endif
+
+  //**************JM DOUBLE ****************************************************
+/*
+  if(btnFNdouble_time(JM_FN_DOUBLE_TIMER*2/3) == -1) {         //JM DOUBLE. button OFF->ON time < 333ms         
+    if(FN_double_click) {
+      R_shF(); //shiftF = false;                      //JM
+      S_shG(); //shiftG = true;                       //JM
+      Reset_Shift_Mem();                              //JM
+      printf("g[FN]\n");
+    }
+  }
+*/
+  FN_double_click = false;
+
+  //**************JM LONGPRESS ****************************************************
   if(!FN_timeouts) {
     FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
     FN_counter = JM_FN_TIMER;                                               //start new cycle
     FN_timeouts = true;
     FN_timed_out_to_NOP = false;
-    showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
-    underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
+    if(!shiftF && !shiftG) {
+      showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
+      underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
+    } else
+    if(shiftF && !shiftG) {
+      showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+      underline_softkey(FN_key_pressed-38,1, true /*dontclear at first call*/);
+    } else
+    if(!shiftF && shiftG) {
+      showFunctionName(nameFunction(FN_key_pressed-37,12),0);  
+      underline_softkey(FN_key_pressed-38,2, true /*dontclear at first call*/);
+    }
   }                                                                         //JM LONGPRESS ^^
 }
 
@@ -219,7 +282,24 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 #ifdef DMCP_BUILD
 void btnFnReleased(void *w, void *data) {
 #endif
-  if(FN_timeouts) {
+/*  // **************JM DOUBLE ****************************************************
+  if((btnFNdouble_time(JM_FN_DOUBLE_TIMER/3 ) == -1)) {   //JM DOUBLE. button ON->OFF time < 166ms          
+    if(!FN_double_click) {
+      FN_double_click = true;                             //JM DOUBLE. eligible for double click
+      printf("TRUE\n");
+    } 
+    else {
+      FN_double_click = false;
+    }
+  } 
+  else {
+    FN_double_click = false;
+  }
+*/
+
+  // **************JM LONGPRESS **************************************************** 
+  if(FN_timeouts && !FN_double_click)   {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms) 
+//  if(FN_timeouts) {
     underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     char charKey[3];
     sprintf(charKey, "%c", FN_key_pressed + 11);
@@ -232,6 +312,7 @@ void btnFnReleased(void *w, void *data) {
     }
     resetShiftState();  
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+    refreshRegisterLine(REGISTER_T);
   }
 }
 

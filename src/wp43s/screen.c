@@ -20,93 +20,6 @@
 
 #include "wp43s.h"
 
-int16_t ul_x, ul_y;                           //JM vv LONGPRESS
-void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
-  int16_t x, y, x1, y1, x2, y2;
-
-  if(!dontclear) {                            //Recursively call the same routine to clear the previous line
-    underline_softkey(ul_x, ul_y, true);
-  }
-  ul_x = xSoftkey;
-  ul_y = ySoftKey;
-
-
-  if(0 <= xSoftkey && xSoftkey <= 5) {
-    x1 = 67 * xSoftkey - 1;
-    x2 = x1 + 67;
-  } else {
-    x1 = 0;
-    x2 = 0;
-  }
-
-  if(0 <= ySoftKey && ySoftKey <= 2) {
-    y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
-    y2 = y1 + SOFTMENU_HEIGHT;
-  } else {
-    y1 = 0;
-    y2 = 0;
-  }
-
-  y = y2-3-1;
-  if(y>=0) {                                  //JM Make provision for out of range parameter, used to not plot the line and only for the recursive line removal
-    for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
-      if(mod(x, 2) == 0) {
-          invertPixel  (x, y);
-          invertPixel  (x, y+2);
-      }
-      else {
-          invertPixel  (x, y+1);
-      }
-    }
-  }
-}                                            //JM ^^
-
-
-void FN_handler() {                          //JM LONGPRESS vv
-  if(FN_timeouts) {                          //JM LONGPRESS handlerFN Key shift longpress handler
- 
-    if(FN_counter > JM_FN_TIMER) {
-      FN_counter = JM_FN_TIMER;
-    } else
-    if(FN_counter < 1) {
-      FN_counter = 1;
-    } 
-
-    if (FN_counter == 1) {    
-      if(!shiftF && !shiftG) {
-        S_shF();
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
-        showShiftState();
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-        showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
-        underline_softkey(FN_key_pressed-38,1, false);
-        FN_counter = JM_FN_TIMER;                        //restart count
-      }
-      else if(shiftF && !shiftG) {
-        S_shG();
-        R_shF();
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
-        showShiftState();
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-        showFunctionName(nameFunction(FN_key_pressed-37,12),0);
-        underline_softkey(FN_key_pressed-38,2, false);    
-        FN_counter = JM_FN_TIMER;                        //restart count
-      }
-      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //JM keep shift state, so it will stay here every cycle until key released
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-        showFunctionName(ITM_NOP, 0);
-        FN_timed_out_to_NOP = true;
-        underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
-      }
-    } 
-    else { 
-      FN_counter--;
-    }
-  } 
-}                                        //JM ^^
-
-
 
 #ifdef PC_BUILD
 /********************************************//**
@@ -611,6 +524,94 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
 
 
 #ifndef TESTSUITE_BUILD
+
+int16_t ul_x, ul_y;                           //JM vv LONGPRESS
+void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
+  int16_t x, y, x1, y1, x2, y2;
+
+  if(!dontclear) {                            //Recursively call the same routine to clear the previous line
+    underline_softkey(ul_x, ul_y, true);
+  }
+  ul_x = xSoftkey;
+  ul_y = ySoftKey;
+
+
+  if(0 <= xSoftkey && xSoftkey <= 5) {
+    x1 = 67 * xSoftkey - 1;
+    x2 = x1 + 67;
+  } else {
+    x1 = 0;
+    x2 = 0;
+  }
+
+  if(0 <= ySoftKey && ySoftKey <= 2) {
+    y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
+    y2 = y1 + SOFTMENU_HEIGHT;
+  } else {
+    y1 = 0;
+    y2 = 0;
+  }
+
+  y = y2-3-1;
+  if(y>=0) {                                  //JM Make provision for out of range parameter, used to not plot the line and only for the recursive line removal
+    for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
+      if(mod(x, 2) == 0) {
+          invertPixel  (x, y);
+          invertPixel  (x, y+2);
+      }
+      else {
+          invertPixel  (x, y+1);
+      }
+    }
+  }
+}                                            //JM ^^
+
+
+void FN_handler() {                          //JM LONGPRESS vv
+  if(FN_timeouts) {                          //JM LONGPRESS handlerFN Key shift longpress handler
+ 
+    if(FN_counter > JM_FN_TIMER) {
+      FN_counter = JM_FN_TIMER;
+    } else
+    if(FN_counter < 1) {
+      FN_counter = 1;
+    } 
+
+    if (FN_counter == 1) {    
+      if(!shiftF && !shiftG) {
+        S_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+        underline_softkey(FN_key_pressed-38,1, false);
+        FN_counter = JM_FN_TIMER;                        //restart count
+      }
+      else if(shiftF && !shiftG) {
+        S_shG();
+        R_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(nameFunction(FN_key_pressed-37,12),0);
+        underline_softkey(FN_key_pressed-38,2, false);    
+        FN_counter = JM_FN_TIMER;                        //restart count
+      }
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //JM keep shift state, so it will stay here every cycle until key released
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(ITM_NOP, 0);
+        FN_timed_out_to_NOP = true;
+        underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
+      }
+    } 
+    else { 
+      FN_counter--;
+    }
+  } 
+}                                        //JM ^^
+
+
 /********************************************//**
  * \brief Draws the dots on the margins of the f and g lines on screen
  *
@@ -641,7 +642,7 @@ void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the do
   invertPixel (xx+5,yy+3);
   invertPixel (xx+3,yy+3);
   invertPixel (xx+3,yy+5);
-  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
+/*  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
   invertPixel (xx+5,yy+7);
   invertPixel (xx+6,yy+7);
   invertPixel (xx+6,yy+6);
@@ -660,7 +661,7 @@ void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the do
   invertPixel (xx+1,yy+5);
   invertPixel (xx+1,yy+6);
   invertPixel (xx+2,yy+6);
-  invertPixel (xx+3,yy+7);
+  invertPixel (xx+3,yy+7);*/
 }
 
 
@@ -762,7 +763,7 @@ void clearPixel(int16_t x, int16_t y) {
 
 
 /********************************************//**  //JM 
- * \brief Clears a pixel on the screen (white).
+ * \brief Inverts a pixel on the screen (white/black).
  *
  * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
  * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)

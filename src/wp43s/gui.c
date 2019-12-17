@@ -169,6 +169,39 @@ gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
       CTRL_State = 0;
       break;
 
+
+    case 65470: // F1                      //JM Added this portion to be able to go to NOP on emulator
+      //printf("key pressed: F1\n");
+      btnFnReleased(w, "1");
+      break;
+      
+    case 65471: // F2
+      //printf("key pressed: F2\n");
+      btnFnReleased(w, "2");
+      break;
+
+    case 65472: // F3
+      //printf("key pressed: F3\n");
+      btnFnReleased(w, "3");
+      break;
+
+    case 65473: // F4
+      //printf("key pressed: F4\n");
+      btnFnReleased(w, "4");
+      break;
+
+    case 65474: // F5
+      //printf("key pressed: F5\n");
+      btnFnReleased(w, "5");
+      break;
+
+    case 65475: // F6
+      //printf("key pressed: F6\n");
+      btnFnReleased(w, "6");
+      break;
+
+
+
     default:
       break;
 
@@ -531,34 +564,34 @@ return FALSE;
 
   switch (event_keyval) {
 //ROW 1
-    case 65470: // F1
+    case 65470: // F1                       //JM Changed these to btnFNPressed from btnClicked
       //printf("key pressed: F1\n");
-      btnFnClicked(w, "1");
+      btnFnPressed(w, "1");
       break;
 
     case 65471: // F2
       //printf("key pressed: F2\n");
-      btnFnClicked(w, "2");
+      btnFnPressed(w, "2");
       break;
 
     case 65472: // F3
       //printf("key pressed: F3\n");
-      btnFnClicked(w, "3");
+      btnFnPressed(w, "3");
       break;
 
     case 65473: // F4
       //printf("key pressed: F4\n");
-      btnFnClicked(w, "4");
+      btnFnPressed(w, "4");
       break;
 
     case 65474: // F5
       //printf("key pressed: F5\n");
-      btnFnClicked(w, "5");
+      btnFnPressed(w, "5");
       break;
 
     case 65475: // F6
       //printf("key pressed: F6\n");
-      btnFnClicked(w, "6");
+      btnFnPressed(w, "6");
       break;
 //ROW 2
     case 97:  // a  //dr

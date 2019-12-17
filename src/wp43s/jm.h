@@ -46,7 +46,8 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
 #define JM_SHIFT_TIMER_OFF 255
 #define JM_3_SHIFT_CUTOFF 6 //100ms
-#define JM_FN_TIMER 10         
+#define JM_FN_TIMER 6      //10 = 1000ms   
+#define JM_FN_DOUBLE_TIMER 500  //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
@@ -54,6 +55,7 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 //keyboard.c  screen.c
 bool_t JM_auto_drop_activated;
 bool_t JM_auto_drop_enabled;                         //JM TIMER CLRDROP
+bool_t FN_double_click;
 uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changeable mode
 uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
 int16_t JM_ASN_MODE;                                //JM ASSIGN
@@ -65,17 +67,17 @@ int8_t FN_counter;                                //JM LONGPRESS FN
 
 //keyboard.c
 #ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
-uint32_t now_MEM;
+uint32_t now_MEM, now_MEM1;                       //JM FN DOUBLE
 #endif
 #ifdef PC_BUILD
-gint64 now_MEM;
+gint64 now_MEM, now_MEM1;                         //JM FN DOUBLE
 #endif
 
 #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
-uint32_t now;                                     //JM TIMER DMCP SHIFTCANCEL
+uint32_t now, tmpval;                             //JM TIMER DMCP SHIFTCANCEL & //JM FN DOUBLE
 #endif                                            //JM TIMER DMCP SHIFTCANCEL
 #ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
-gint64 now;                                       //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
+gint64 now, tmpval;                               //JM usec  //JM TIMER EMULATOR SHIFTCANCEL  & //JM FN DOUBLE
 #endif                                            //JM TIMER DMCP SHIFTCANCEL
 
 

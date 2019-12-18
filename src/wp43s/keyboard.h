@@ -22,11 +22,8 @@ void resetShiftState(void);
 void showShiftState (void);
 void fnComplexCCCC  (uint16_t unusedParamButMandatory);
 
-//int16_t FN_key_pressed;                                //JM LONGPRESS FN
-//bool_t FN_timeouts;                                    //JM LONGPRESS FN
-//bool_t FN_timed_out_to_NOP;                            //JM LONGPRESS FN
-//int8_t FN_counter;                                     //JM LONGPRESS FN
-int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS vv
+int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
+int8_t TC_compare(uint32_t timecheck);                 //JM FN-DOUBLE 
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);

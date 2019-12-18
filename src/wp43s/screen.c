@@ -404,6 +404,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
+  FN_no_double_click_handler();
   FN_handler();
   Shft_handler();
 
@@ -472,6 +473,7 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
     }
   }
 
+  FN_no_double_click_handler();
   FN_handler();
   Shft_handler();
 
@@ -578,8 +580,23 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 }                                            //JM ^^
 
 
+
+void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
+  if (!FN_double_click_detected && FN_delay_exec) {
+    //printf("TIMER check \n");
+    FN_delay_exec = false;
+    if (TC_compare(JM_FN_DOUBLE_TIMER) == 1) {
+      //printf("Delayed Exec \n");
+      R_shF();                                  //TEMPORARY
+      R_shG();
+      btnFnClicked(NULL, FN_no_double_click_charKey);
+    }
+  }
+}                                            //JM FN-DOUBLE vv
+
+
 void FN_handler() {                          //JM LONGPRESS vv
-  if(FN_timeouts) {                          //JM LONGPRESS handlerFN Key shift longpress handler
+  if(FN_timeouts_in_progress) {              //JM LONGPRESS handlerFN Key shift longpress handler
  
     if(FN_counter > JM_FN_TIMER) {
       FN_counter = JM_FN_TIMER;
@@ -614,7 +631,7 @@ void FN_handler() {                          //JM LONGPRESS vv
         showFunctionName(ITM_NOP, 0);
         FN_timed_out_to_NOP = true;
         underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
-        FN_timeouts = false;   
+        FN_timeouts_in_progress = false;   
       }
     } 
     else { 

@@ -197,31 +197,32 @@ void arctanhCo16(void) {
   // arctanh(a + i b) = - * ln( ------------ )
   //                    2       1 - (a + ib)
 
-  complex39_t numer, denom;
+  real39_t numerReal, denomReal;
+  real39_t numerImag, denomImag;
 
   // numer = 1 + (a + ib)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &numer.real);
-  realAdd(&numer.real, const_1, &numer.real, &ctxtReal39);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &numer.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &numerReal);
+  realAdd(&numerReal, const_1, &numerReal, &ctxtReal39);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &numerImag);
 
   // denom = 1 - (a + ib)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &denom.real);
-  realSubtract(const_1, &denom.real, &denom.real, &ctxtReal39);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &denom.imag);
-  realChangeSign(&denom.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &denomReal);
+  realSubtract(const_1, &denomReal, &denomReal, &ctxtReal39);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &denomImag);
+  realChangeSign(&denomImag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
-  divCo39Co39(&numer, &denom, &numer);
+  divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag);
 
   // numer = ln((1 + (a + ib)) / (1 - (a + ib))
-  lnCo39(&numer, &numer);
+  lnCo39(&numerReal, &numerImag, &numerReal, &numerImag);
 
   // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
-  realMultiply(&numer.real, const_1on2, &numer.real, &ctxtReal39);
-  realMultiply(&numer.imag, const_1on2, &numer.imag, &ctxtReal39);
+  realMultiply(&numerReal, const_1on2, &numerReal, &ctxtReal39);
+  realMultiply(&numerImag, const_1on2, &numerImag, &ctxtReal39);
 
-  realToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&numerReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&numerImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -316,29 +317,30 @@ void arctanhCo34(void) {
   // arctanh(a + i b) = - * ln( ------------ )
   //                    2       1 - (a + ib)
 
-  complex39_t numer, denom;
+  real39_t numerReal, denomReal;
+  real39_t numerImag, denomImag;
 
   // numer = 1 + (a + ib)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &numer.real);
-  realAdd(&numer.real, const_1, &numer.real, &ctxtReal39);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &numer.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &numerReal);
+  realAdd(&numerReal, const_1, &numerReal, &ctxtReal39);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &numerImag);
 
   // denom = 1 - (a + ib)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &denom.real);
-  realSubtract(const_1, &denom.real, &denom.real, &ctxtReal39);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &denom.imag);
-  realChangeSign(&denom.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &denomReal);
+  realSubtract(const_1, &denomReal, &denomReal, &ctxtReal39);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &denomImag);
+  realChangeSign(&denomImag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
-  divCo39Co39(&numer, &denom, &numer);
+  divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag);
 
   // numer = ln((1 + (a + ib)) / (1 - (a + ib))
-  lnCo39(&numer, &numer);
+  lnCo39(&numerReal, &numerImag, &numerReal, &numerImag);
 
   // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
-  realMultiply(&numer.real, const_1on2, &numer.real, &ctxtReal39);
-  realMultiply(&numer.imag, const_1on2, &numer.imag, &ctxtReal39);
+  realMultiply(&numerReal, const_1on2, &numerReal, &ctxtReal39);
+  realMultiply(&numerImag, const_1on2, &numerImag, &ctxtReal39);
 
-  realToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&numerReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&numerImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

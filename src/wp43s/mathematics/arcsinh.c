@@ -138,7 +138,7 @@ void arcsinhCo16(void) {
   // calculate sqrt(z² + 1)
   real39RectangularToPolar(&real, &imag, &real, &imag);
   realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
   real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² + 1)
@@ -223,7 +223,7 @@ void arcsinhCo34(void) {
   // calculate sqrt(z² + 1)
   real39RectangularToPolar(&real, &imag, &real, &imag);
   realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
   real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² + 1)

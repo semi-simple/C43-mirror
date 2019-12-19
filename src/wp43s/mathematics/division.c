@@ -76,149 +76,149 @@ void fnDivide(uint16_t unusedParamButMandatory) {
 
 
 
-void divCo39Co39(const complex39_t *numer, const complex39_t *denom, complex39_t *quotient) {
+void divCo39Co39(const real39_t *numerReal, const real39_t *numerImag, const real39_t *denomReal, const real39_t *denomImag, real39_t *quotientReal, real39_t *quotientImag) {
   real39_t realNumer, realDenom, a, b, c, d;
 
-  realCopy(&numer->real, &a);
-  realCopy(&numer->imag, &b);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(numerReal, &a);
+  realCopy(numerImag, &b);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal39);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal39);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal39);                    // realNumer = a*c
-  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal39);             // realNumer = a*c + b*d
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal39); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal39);                  // realNumer = a*c
+  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal39);           // realNumer = a*c + b*d
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal39); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realMultiply(&b, &c, &realNumer, &ctxtReal39);                    // realNumer = b*c
-  realChangeSign(&a);                                               // a = -a
-  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal39);             // realNumer = b*c - a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal39); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&b, &c, &realNumer, &ctxtReal39);                  // realNumer = b*c
+  realChangeSign(&a);                                             // a = -a
+  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal39);           // realNumer = b*c - a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal39); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divCo51Co51(const complex51_t *numer, const complex51_t *denom, complex51_t *quotient) {
+void divCo51Co51(const real51_t *numerReal, const real51_t *numerImag, const real51_t *denomReal, const real51_t *denomImag, real51_t *quotientReal, real51_t *quotientImag) {
   real51_t realNumer, realDenom, a, b, c, d;
 
-  realCopy(&numer->real, &a);
-  realCopy(&numer->imag, &b);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(numerReal, &a);
+  realCopy(numerImag, &b);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal51);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal51);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal51);                    // realNumer = a*c
-  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal51);             // realNumer = a*c + b*d
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal51); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal51);                  // realNumer = a*c
+  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal51);           // realNumer = a*c + b*d
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal51); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realMultiply(&b, &c, &realNumer, &ctxtReal51);                    // realNumer = b*c
-  realChangeSign(&a);                                               // a = -a
-  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal51);             // realNumer = b*c - a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal51); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&b, &c, &realNumer, &ctxtReal51);                  // realNumer = b*c
+  realChangeSign(&a);                                             // a = -a
+  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal51);           // realNumer = b*c - a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal51); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divCo75Co75(const complex75_t *numer, const complex75_t *denom, complex75_t *quotient) {
+void divCo75Co75(const real75_t *numerReal, const real75_t *numerImag, const real75_t *denomReal, const real75_t *denomImag, real75_t *quotientReal, real75_t *quotientImag) {
   real75_t realNumer, realDenom, a, b, c, d;
 
-  realCopy(&numer->real, &a);
-  realCopy(&numer->imag, &b);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(numerReal, &a);
+  realCopy(numerImag, &b);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal75);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal75);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal75);                    // realNumer = a*c
-  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal75);             // realNumer = a*c + b*d
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal75); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal75);                  // realNumer = a*c
+  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal75);           // realNumer = a*c + b*d
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal75); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realMultiply(&b, &c, &realNumer, &ctxtReal75);                    // realNumer = b*c
-  realChangeSign(&a);                                               // a = -a
-  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal75);             // realNumer = b*c - a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal75); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&b, &c, &realNumer, &ctxtReal75);                  // realNumer = b*c
+  realChangeSign(&a);                                             // a = -a
+  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal75);           // realNumer = b*c - a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal75); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divRe39Co39(const real_t *numer, const complex39_t *denom, complex39_t *quotient) {
+void divRe39Co39(const real_t *numer, const real39_t *denomReal, const real39_t *denomImag, real39_t *quotientReal, real39_t *quotientImag) {
   real39_t realNumer, realDenom, a, c, d;
 
   realCopy(numer, &a);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal39);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal39);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal39);                    // realNumer = a*c
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal39); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal39);                  // realNumer = a*c
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal39); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realChangeSign(&a);                                               // a = -a
-  realMultiply(&a, &d, &realNumer, &ctxtReal39);                    // realNumer = -a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal39); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+  realChangeSign(&a);                                             // a = -a
+  realMultiply(&a, &d, &realNumer, &ctxtReal39);                  // realNumer = -a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal39); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divRe51Co51(const real_t *numer, const complex51_t *denom, complex51_t *quotient) {
+void divRe51Co51(const real_t *numer, const real51_t *denomReal, const real51_t *denomImag, real51_t *quotientReal, real51_t *quotientImag) {
   real51_t realNumer, realDenom, a, c, d;
 
   realCopy(numer, &a);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal51);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal51);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal51);                    // realNumer = a*c
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal51); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal51);                  // realNumer = a*c
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal51); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realChangeSign(&a);                                               // a = -a
-  realMultiply(&a, &d, &realNumer, &ctxtReal51);                    // realNumer = -a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal51); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+  realChangeSign(&a);                                             // a = -a
+  realMultiply(&a, &d, &realNumer, &ctxtReal51);                  // realNumer = -a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal51); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divRe75Co75(const real_t *numer, const complex75_t *denom, complex75_t *quotient) {
+void divRe75Co75(const real_t *numer, const real75_t *denomReal, const real75_t *denomImag, real75_t *quotientReal, real75_t *quotientImag) {
   real75_t realNumer, realDenom, a, c, d;
 
   realCopy(numer, &a);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal75);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal75);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal75);                    // realNumer = a*c
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal75); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal75);                  // realNumer = a*c
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal75); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realChangeSign(&a);                                               // a = -a
-  realMultiply(&a, &d, &realNumer, &ctxtReal75);                    // realNumer = -a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal75); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+  realChangeSign(&a);                                             // a = -a
+  realMultiply(&a, &d, &realNumer, &ctxtReal75);                  // realNumer = -a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal75); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
@@ -419,17 +419,16 @@ void divLonICo16(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -668,17 +667,16 @@ void divLonICo34(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -835,17 +833,16 @@ void divRe16Co16(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1224,17 +1221,16 @@ void divRe16Co34(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1298,17 +1294,17 @@ void divCo16Co16(void) {
     return;
   }
 
-  complex39_t y, x;
+  real39_t yReal, yImag, xReal, xImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &yReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &yImag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
 
-  divCo39Co39(&y, &x, &x);
+  divCo39Co39(&yReal, &yImag, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1359,17 +1355,16 @@ void divShoICo16(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -1429,18 +1424,17 @@ void divRe34Co16(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1468,17 +1462,17 @@ void divCo16Co34(void) {
     return;
   }
 
-  complex39_t y, x;
+  real39_t yReal, yImag, xReal, xImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &yReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divCo39Co39(&y, &x, &x);
+  divCo39Co39(&yReal, &yImag, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1506,18 +1500,18 @@ void divCo34Co16(void) {
     return;
   }
 
-  complex39_t y, x;
+  real39_t yReal, yImag, xReal, xImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  divCo39Co39(&y, &x, &x);
+  divCo39Co39(&yReal, &yImag, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1986,17 +1980,16 @@ void divShoICo34(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2146,17 +2139,16 @@ void divRe34Co34(void) {
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2219,15 +2211,15 @@ void divCo34Co34(void) {
     return;
   }
 
-  complex39_t y, x;
+  real39_t yReal, yImag, xReal, xImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divCo39Co39(&y, &x, &x);
+  divCo39Co39(&yReal, &yImag, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

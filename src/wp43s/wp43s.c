@@ -171,7 +171,7 @@ freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 int32_t              lgCatalogSelection;
 void                 (*confirmedFunction)(uint16_t);
-real39_t             const *gammaConstants;
+real51_t             const *gammaLanczosCoefficients;
 real39_t             const *angle180;
 real39_t             const *angle90;
 real39_t             const *angle45;
@@ -346,7 +346,8 @@ void setupDefaults(void) {
 
   hideUserMode();
 
-  gammaConstants = const_gammaC01;
+  gammaLanczosCoefficients = (real51_t *)const_gammaC01;
+
   angle180 = const_180;
   angle90  = const_90;
   angle45  = const_45;

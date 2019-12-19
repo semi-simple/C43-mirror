@@ -166,7 +166,7 @@ void sqrtCo16(void) {
 
   real39RectangularToPolar(&a, &b, &a, &b);
   realSquareRoot(&a, &a, &ctxtReal39);
-  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  realMultiply(&b, const_1on2, &b, &ctxtReal39);
   real39PolarToRectangular(&a, &b, &a, &b);
 
   realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
@@ -253,7 +253,7 @@ void sqrtCo34(void) {
 
   real39RectangularToPolar(&a, &b, &a, &b);
   realSquareRoot(&a, &a, &ctxtReal39);
-  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  realMultiply(&b, const_1on2, &b, &ctxtReal39);
   real39PolarToRectangular(&a, &b, &a, &b);
 
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));

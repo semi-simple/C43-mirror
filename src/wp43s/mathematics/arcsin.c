@@ -92,7 +92,7 @@ void arcsinLonI(void) {
     real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
   }
   else {
-    realToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal16(const_1on2, REGISTER_REAL16_DATA(REGISTER_X));
     if(realIsNegative(&x)) {
       real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
     }
@@ -176,7 +176,7 @@ void arcsinCo16(void) {
   // calculate sqrt(1 - z²)
   real39RectangularToPolar(&real, &imag, &magnitude, &theta);
   realSquareRoot(&magnitude, &magnitude, &ctxtReal39);
-  realMultiply(&theta, const_0_5, &theta, &ctxtReal39);
+  realMultiply(&theta, const_1on2, &theta, &ctxtReal39);
   real39PolarToRectangular(&magnitude, &theta, &real, &imag);
 
   // calculate iz + sqrt(1 - z²)
@@ -282,7 +282,7 @@ void arcsinCo34(void) {
   // calculate sqrt(1 - z²)
   real39RectangularToPolar(&real, &imag, &real, &imag);
   realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
   real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate iz + sqrt(1 - z²)

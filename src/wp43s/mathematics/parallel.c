@@ -188,23 +188,24 @@ void parallelLonICo16(void) {
   }
 
   real39_t y;
-  complex39_t x, product, sum;
+  real39_t xReal, productReal, sumReal;
+  real39_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    realMultiply(&y, &x.real, &product.real, &ctxtReal39);
-    realMultiply(&y, &x.imag, &product.imag, &ctxtReal39);
-    realAdd(&y, &x.real, &sum.real, &ctxtReal39);
-    realCopy(&x.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    realMultiply(&y, &xReal, &productReal, &ctxtReal39);
+    realMultiply(&y, &xImag, &productImag, &ctxtReal39);
+    realAdd(&y, &xReal, &sumReal, &ctxtReal39);
+    realCopy(&xImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -225,24 +226,25 @@ void parallelCo16LonI(void) {
   }
 
   real39_t x;
-  complex39_t y, product, sum;
+  real39_t yReal, productReal, sumReal;
+  real39_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &yReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &yImag);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
-  if(!realIsZero(&y.real) || !realIsZero(&y.imag)) {
-    realMultiply(&x, &y.real, &product.real, &ctxtReal39);
-    realMultiply(&x, &y.imag, &product.imag, &ctxtReal39);
-    realAdd(&x, &y.real, &sum.real, &ctxtReal39);
-    realCopy(&y.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &y);
+  if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
+    realMultiply(&x, &yReal, &productReal, &ctxtReal39);
+    realMultiply(&x, &yImag, &productImag, &ctxtReal39);
+    realAdd(&x, &yReal, &sumReal, &ctxtReal39);
+    realCopy(&yImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
   }
 
-  realToReal16(&y.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&y.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&yReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&yImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -330,23 +332,24 @@ void parallelLonICo34(void) {
   }
 
   real39_t y;
-  complex39_t x, product, sum;
+  real39_t xReal, productReal, sumReal;
+  real39_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    realMultiply(&y, &x.real, &product.real, &ctxtReal39);
-    realMultiply(&y, &x.imag, &product.imag, &ctxtReal39);
-    realAdd(&y, &x.real, &sum.real, &ctxtReal39);
-    realCopy(&x.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    realMultiply(&y, &xReal, &productReal, &ctxtReal39);
+    realMultiply(&y, &xImag, &productImag, &ctxtReal39);
+    realAdd(&y, &xReal, &sumReal, &ctxtReal39);
+    realCopy(&xImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -367,24 +370,25 @@ void parallelCo34LonI(void) {
   }
 
   real39_t x;
-  complex39_t y, product, sum;
+  real39_t yReal, productReal, sumReal;
+  real39_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  if(!realIsZero(&y.real) || !realIsZero(&y.imag)) {
-    realMultiply(&x, &y.real, &product.real, &ctxtReal39);
-    realMultiply(&x, &y.imag, &product.imag, &ctxtReal39);
-    realAdd(&x, &y.real, &sum.real, &ctxtReal39);
-    realCopy(&y.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &y);
+  if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
+    realMultiply(&x, &yReal, &productReal, &ctxtReal39);
+    realMultiply(&x, &yImag, &productImag, &ctxtReal39);
+    realAdd(&x, &yReal, &sumReal, &ctxtReal39);
+    realCopy(&yImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
   }
 
-  realToReal34(&y.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&y.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&yReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&yImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -458,23 +462,24 @@ void parallelRe16Co16(void) {
   }
 
   real39_t y;
-  complex39_t x, product, sum;
+  real39_t xReal, productReal, sumReal;
+  real39_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    realMultiply(&y, &x.real, &product.real, &ctxtReal39);
-    realMultiply(&y, &x.imag, &product.imag, &ctxtReal39);
-    realAdd(&y, &x.real, &sum.real, &ctxtReal39);
-    realCopy(&x.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    realMultiply(&y, &xReal, &productReal, &ctxtReal39);
+    realMultiply(&y, &xImag, &productImag, &ctxtReal39);
+    realAdd(&y, &xReal, &sumReal, &ctxtReal39);
+    realCopy(&xImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -503,24 +508,25 @@ void parallelCo16Re16(void) {
   }
 
   real39_t x;
-  complex39_t y, product, sum;
+  real39_t yReal, productReal, sumReal;
+  real39_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &yReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &yImag);
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
 
-  if(!realIsZero(&y.real) || !realIsZero(&y.imag)) {
-    realMultiply(&x, &y.real, &product.real, &ctxtReal39);
-    realMultiply(&x, &y.imag, &product.imag, &ctxtReal39);
-    realAdd(&x, &y.real, &sum.real, &ctxtReal39);
-    realCopy(&y.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &y);
+  if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
+    realMultiply(&x, &yReal, &productReal, &ctxtReal39);
+    realMultiply(&x, &yImag, &productImag, &ctxtReal39);
+    realAdd(&x, &yReal, &sumReal, &ctxtReal39);
+    realCopy(&yImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
   }
 
-  realToReal16(&y.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&y.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&yReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&yImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -632,23 +638,24 @@ void parallelRe16Co34(void) {
   }
 
   real39_t y;
-  complex39_t x, product, sum;
+  real39_t xReal, productReal, sumReal;
+  real39_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    realMultiply(&y, &x.real, &product.real, &ctxtReal39);
-    realMultiply(&y, &x.imag, &product.imag, &ctxtReal39);
-    realAdd(&y, &x.real, &sum.real, &ctxtReal39);
-    realCopy(&x.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    realMultiply(&y, &xReal, &productReal, &ctxtReal39);
+    realMultiply(&y, &xImag, &productImag, &ctxtReal39);
+    realAdd(&y, &xReal, &sumReal, &ctxtReal39);
+    realCopy(&xImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -677,24 +684,25 @@ void parallelCo34Re16(void) {
   }
 
   real39_t x;
-  complex39_t y, product, sum;
+  real39_t yReal, productReal, sumReal;
+  real39_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  if(!realIsZero(&y.real) || !realIsZero(&y.imag)) {
-    realMultiply(&x, &y.real, &product.real, &ctxtReal39);
-    realMultiply(&x, &y.imag, &product.imag, &ctxtReal39);
-    realAdd(&x, &y.real, &sum.real, &ctxtReal39);
-    realCopy(&y.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &y);
+  if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
+    realMultiply(&x, &yReal, &productReal, &ctxtReal39);
+    realMultiply(&x, &yImag, &productImag, &ctxtReal39);
+    realAdd(&x, &yReal, &sumReal, &ctxtReal39);
+    realCopy(&yImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
   }
 
-  realToReal34(&y.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&y.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&yReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&yImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -726,23 +734,24 @@ void parallelCo16Co16(void) {
     return;
   }
 
-  complex39_t y, x, product, sum;
+  real39_t yReal, xReal, productReal, sumReal;
+  real39_t yImag, xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &yReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &yImag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    mulCo39Co39(&y, &x, &product);
-    realAdd(&y.real, &x.real, &sum.real, &ctxtReal39);
-    realAdd(&y.imag, &x.imag, &sum.imag, &ctxtReal39);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    mulCo39Co39(&yReal, &yImag, &xReal, &xImag, &productReal, &productImag);
+    realAdd(&yReal, &xReal, &sumReal, &ctxtReal39);
+    realAdd(&yImag, &xImag, &sumImag, &ctxtReal39);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -771,24 +780,25 @@ void parallelCo16Re34(void) {
   }
 
   real39_t x;
-  complex39_t y, product, sum;
+  real39_t yReal, productReal, sumReal;
+  real39_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &yReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &yImag);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  if(!realIsZero(&y.real) || !realIsZero(&y.imag)) {
-    realMultiply(&x, &y.real, &product.real, &ctxtReal39);
-    realMultiply(&x, &y.imag, &product.imag, &ctxtReal39);
-    realAdd(&x, &y.real, &sum.real, &ctxtReal39);
-    realCopy(&y.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &y);
+  if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
+    realMultiply(&x, &yReal, &productReal, &ctxtReal39);
+    realMultiply(&x, &yImag, &productImag, &ctxtReal39);
+    realAdd(&x, &yReal, &sumReal, &ctxtReal39);
+    realCopy(&yImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
   }
 
-  realToReal34(&y.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&y.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&yReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&yImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -817,24 +827,25 @@ void parallelRe34Co16(void) {
   }
 
   real39_t y;
-  complex39_t x, product, sum;
+  real39_t xReal, productReal, sumReal;
+  real39_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    realMultiply(&y, &x.real, &product.real, &ctxtReal39);
-    realMultiply(&y, &x.imag, &product.imag, &ctxtReal39);
-    realAdd(&y, &x.real, &sum.real, &ctxtReal39);
-    realCopy(&x.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    realMultiply(&y, &xReal, &productReal, &ctxtReal39);
+    realMultiply(&y, &xImag, &productImag, &ctxtReal39);
+    realAdd(&y, &xReal, &sumReal, &ctxtReal39);
+    realCopy(&xImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -862,23 +873,24 @@ void parallelCo16Co34(void) {
     return;
   }
 
-  complex39_t y, x, product, sum;
+  real39_t yReal, xReal, productReal, sumReal;
+  real39_t yImag, xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &yReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.real)) {
-    mulCo39Co39(&y, &x, &product);
-    realAdd(&y.real, &x.real, &sum.real, &ctxtReal39);
-    realAdd(&y.imag, &x.imag, &sum.imag, &ctxtReal39);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xReal)) {
+    mulCo39Co39(&yReal, &yImag, &xReal, &xImag, &productReal, &productImag);
+    realAdd(&yReal, &xReal, &sumReal, &ctxtReal39);
+    realAdd(&yImag, &xImag, &sumImag, &ctxtReal39);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -906,24 +918,25 @@ void parallelCo34Co16(void) {
     return;
   }
 
-  complex39_t y, x, product, sum;
+  real39_t yReal, xReal, productReal, sumReal;
+  real39_t yImag, xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &xImag);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.real)) {
-    mulCo39Co39(&y, &x, &product);
-    realAdd(&y.real, &x.real, &sum.real, &ctxtReal39);
-    realAdd(&y.imag, &x.imag, &sum.imag, &ctxtReal39);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xReal)) {
+    mulCo39Co39(&yReal, &yImag, &xReal, &xImag, &productReal, &productImag);
+    realAdd(&yReal, &xReal, &sumReal, &ctxtReal39);
+    realAdd(&yImag, &xImag, &sumImag, &ctxtReal39);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -997,23 +1010,24 @@ void parallelRe34Co34(void) {
   }
 
   real39_t y;
-  complex39_t x, product, sum;
+  real39_t xReal, productReal, sumReal;
+  real39_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    realMultiply(&y, &x.real, &product.real, &ctxtReal39);
-    realMultiply(&y, &x.imag, &product.imag, &ctxtReal39);
-    realAdd(&y, &x.real, &sum.real, &ctxtReal39);
-    realCopy(&x.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    realMultiply(&y, &xReal, &productReal, &ctxtReal39);
+    realMultiply(&y, &xImag, &productImag, &ctxtReal39);
+    realAdd(&y, &xReal, &sumReal, &ctxtReal39);
+    realCopy(&xImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1042,24 +1056,25 @@ void parallelCo34Re34(void) {
   }
 
   real39_t x;
-  complex39_t y, product, sum;
+  real39_t yReal, productReal, sumReal;
+  real39_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-  if(!realIsZero(&y.real) || !realIsZero(&y.imag)) {
-    realMultiply(&x, &y.real, &product.real, &ctxtReal39);
-    realMultiply(&x, &y.imag, &product.imag, &ctxtReal39);
-    realAdd(&x, &y.real, &sum.real, &ctxtReal39);
-    realCopy(&y.imag, &sum.imag);
-    divCo39Co39(&product, &sum, &y);
+  if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
+    realMultiply(&x, &yReal, &productReal, &ctxtReal39);
+    realMultiply(&x, &yImag, &productImag, &ctxtReal39);
+    realAdd(&x, &yReal, &sumReal, &ctxtReal39);
+    realCopy(&yImag, &sumImag);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
   }
 
-  realToReal34(&y.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&y.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&yReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&yImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -1091,21 +1106,22 @@ void parallelCo34Co34(void) {
     return;
   }
 
-  complex39_t y, x, product, sum;
+  real39_t yReal, xReal, productReal, sumReal;
+  real39_t yImag, xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  if(!realIsZero(&x.real) || !realIsZero(&x.imag)) {
-    mulCo39Co39(&y, &x, &product);
-    realAdd(&y.real, &x.real, &sum.real, &ctxtReal39);
-    realAdd(&y.imag, &x.imag, &sum.imag, &ctxtReal39);
-    divCo39Co39(&product, &sum, &x);
+  if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
+    mulCo39Co39(&yReal, &yImag, &xReal, &xImag, &productReal, &productImag);
+    realAdd(&yReal, &xReal, &sumReal, &ctxtReal39);
+    realAdd(&yImag, &xImag, &sumImag, &ctxtReal39);
+    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
   }
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

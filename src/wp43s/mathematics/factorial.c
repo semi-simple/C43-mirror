@@ -140,16 +140,16 @@ void factCo16(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &zReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &zImag);
 
-  realAdd(&z.real, const_1, &z.real, &ctxtReal39);
-  WP34S_ComplexGamma(&z, &z);
+  realAdd(&zReal, const_1, &zReal, &ctxtReal39);
+  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&zReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&zImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -232,14 +232,14 @@ void factCo34(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  realAdd(&z.real, const_1, &z.real, &ctxtReal39);
-  WP34S_ComplexGamma(&z, &z);
+  realAdd(&zReal, const_1, &zReal, &ctxtReal39);
+  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

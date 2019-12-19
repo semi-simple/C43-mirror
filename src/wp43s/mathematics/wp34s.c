@@ -79,14 +79,14 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sin3
   }
 
   // sin(180+x) = -sin(x), cos(180+x) = -cos(x)
-  if(realCompareGreaterEqual(&angle, angle180 + angularMode)) {      // angle >= 180°
+  if(realCompareGreaterEqual(&angle, angle180 + angularMode)) {        // angle >= 180°
     realSubtract(&angle, angle180 + angularMode, &angle, &ctxtReal39); // angle - 180° --> angle
     sinNeg = !sinNeg;
     cosNeg = !cosNeg;
   }
 
   // sin(90+x) = cos(x), cos(90+x) = -sin(x)
-  if(realCompareGreaterEqual(&angle, angle90 + angularMode)) {      // angle >= 90°
+  if(realCompareGreaterEqual(&angle, angle90 + angularMode)) {        // angle >= 90°
     realSubtract(&angle, angle90 + angularMode, &angle, &ctxtReal39); // angle - 90° --> angle
     swap = true;
     cosNeg = !cosNeg;
@@ -105,7 +105,7 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sin3
     }
   }
   else { // angle < 90
-    if(realCompareGreaterThan(&angle, angle45 + angularMode)) {       // angle > 45°
+    if(realCompareGreaterThan(&angle, angle45 + angularMode)) {         // angle > 45°
       realSubtract(angle90 + angularMode, &angle, &angle, &ctxtReal39); // 90° - angle  --> angle
       swap = !swap;
     }
@@ -484,43 +484,129 @@ void WP34S_Acos(const real_t *x, real_t *angle) {
 
 
 
-// A more precise program using Taylor series coefficients: https://rosettacode.org/wiki/Gamma_function#Taylor_series.2C_80-digit_coefficients
-// A more precise set of Lanczos coefficients? https://www.boost.org/doc/libs/1_60_0/boost/math/special_functions/lanczos.hpp
-// search for N=24 G=20.3209821879863739013671875
-//
-// https://mrob.com/pub/ries/lanczos-gamma.html
-// https://www.boost.org/doc/libs/master/boost/math/bindings/detail/big_lanczos.hpp
-// Compute the coeficients: http://www.vttoth.com/CMS/projects/41-the-lanczos-approximation
-// https://www.rskey.org/CMS/index.php/the-library/11
-// C'est ça qu'il faut voir: https://www.boost.org/doc/libs/1_64_0/libs/math/doc/html/math_toolkit/lanczos.html
-// C'est ça qu'il faut voir: https://www.boost.org/doc/libs/1_60_0/boost/math/special_functions/lanczos.hpp
-static void WP34S_CalcLnGamma(const real_t *xin, real_t *res) {
-  real39_t r, s, t, u, v;
-  int32_t k;
+bool_t WP34S_RelativeError51(const real_t *x, const real_t *y, const real_t *tol) {
+  real51_t a;
 
-  realZero(&s);
-  realAdd(xin, const_21, &t, &ctxtReal39);
-  for(k=20; k>=0; k--) {
-    realDivide(gammaConstants + k, &t, &u, &ctxtReal39);
-    realSubtract(&t, const_1, &t, &ctxtReal39);
-    realAdd(&s, &u, &s, &ctxtReal39);
+  if(realCompareEqual(x, const_0)) {
+    realCopyAbs(y, &a);
+    return realCompareLessThan((real_t *)&a, tol);
   }
 
-  realAdd(&s, const_gammaC00, &t, &ctxtReal39);
-  WP34S_Ln(&t, &s);
-
-  //  r = z + g + .5;
-  realAdd(xin, const_gammaR, &r, &ctxtReal39);
-
-  //  r = log(R[0][0]) + (z+.5) * log(r) - r;
-  WP34S_Ln(&r, &u);
-  realAdd(xin, const_0_5, &t, &ctxtReal39);
-  realMultiply(&u, &t, &v, &ctxtReal39);
-
-  realSubtract(&v, &r, &u, &ctxtReal39);
-  realAdd(&u, &s, res, &ctxtReal39);
+  realSubtract(x, y, &a, &ctxtReal51);
+  realDivide(&a, x, &a, &ctxtReal51);
+  realSetPositiveSign(&a);
+  return realCompareLessThan((real_t *)&a, tol);
 }
 
+
+void WP34S_Ln51(const real_t *xin, real_t *res) {
+  real51_t z, t, f, n, m, i, v, w, e;
+  int32_t expon;
+
+  if(realIsSpecial(xin)) {
+    if(realIsNaN(xin) || realIsNegative(xin)) {
+      realCopy(const_NaN, res);
+      return;
+    }
+
+    realCopy(const_plusInfinity, res);
+    return;
+  }
+
+  if(realCompareLessEqual(xin, const_0)) {
+    if(realIsNegative(xin)) {
+      realCopy(const_NaN, res);
+      return;
+    }
+
+    realCopy(const_minusInfinity, res);
+    return;
+  }
+
+  realPlus(xin, &z, &ctxtReal51);
+  realPlus(const_2, &f, &ctxtReal51);
+  realSubtract(xin, const_1, &t, &ctxtReal51);
+  realCopy(&t, &v);
+  realSetPositiveSign(&v);
+  if(realCompareGreaterThan((real_t *)&v, const_1on2)) {
+    expon = z.exponent + z.digits;
+    z.exponent = -z.digits;
+  }
+  else {
+    expon = 0;
+  }
+
+  // Range reduce the value by repeated square roots.
+  // Making the constant here larger will reduce the number of later
+  // iterations at the expense of more square root operations.
+  while(realCompareLessEqual((real_t *)&z, const_root2on2)) {
+    realMultiply(&f, const_2, &f, &ctxtReal51);
+    realSquareRoot(&z, &z, &ctxtReal51);
+  }
+
+  realAdd(&z, const_1, &t, &ctxtReal51);
+  realSubtract(&z, const_1, &v, &ctxtReal51);
+  realDivide(&v, &t, &n, &ctxtReal51);
+  realCopy(&n, &v);
+  realMultiply(&v, &v, &m, &ctxtReal51);
+  realCopy(const_3, &i);
+
+  for(;;) {
+    realMultiply(&m, &n, &n, &ctxtReal51);
+    realDivide(&n, &i, &e, &ctxtReal51);
+    realAdd(&v, &e, &w, &ctxtReal51);
+    if(WP34S_RelativeError((real_t *)&w, (real_t *)&v, const_1e_49)) {
+      break;
+    }
+    realCopy(&w, &v);
+    realAdd(&i, const_2, &i, &ctxtReal51);
+  }
+
+  realMultiply(&f, &w, res, &ctxtReal51);
+  if(expon == 0) {
+    return;
+  }
+
+  int32ToReal(expon, &e);
+  realMultiply(&e, const_ln10, &w, &ctxtReal51);
+  realAdd(res, &w, res, &ctxtReal39);
+}
+
+
+static void WP34S_Calc_Gamma_LnGamma_Lanczos(const real_t *xin, real_t *res, bool_t calculateLnGamma) {
+  real51_t r, s, t, u, v, x;
+  int32_t k;
+
+  realSubtract(xin, const_1, &x, &ctxtReal51);
+  realZero(&s);
+  realAdd(&x, const_29, &t, &ctxtReal51);
+  for(k=28; k>=0; k--) {
+    realDivide((real_t *)(((real51_t *)gammaLanczosCoefficients) + k), &t, &u, &ctxtReal51);
+    realSubtract(&t, const_1, &t, &ctxtReal51);
+    realAdd(&s, &u, &s, &ctxtReal51);
+  }
+
+  realAdd(&s, const_gammaC00, &t, &ctxtReal51);
+  realLn(&t, &s, &ctxtReal51);
+
+  //  r = z + g + 0.5;
+  realAdd(&x, const_gammaR, &r, &ctxtReal51); // const_gammaR is g + 0.5
+
+  //  r = log(R[0][0]) + (z+0.5) * log(r) - r;
+  realLn(&r, &u, &ctxtReal51);
+  realAdd(&x, const_1on2, &t, &ctxtReal51);
+  realMultiply(&u, &t, &v, &ctxtReal51);
+
+  realSubtract(&v, &r, &u, &ctxtReal51);
+
+  if(calculateLnGamma) {
+    realAdd(&u, &s, res, &ctxtReal39);
+  }
+  else {
+    realAdd(&u, &s, &x, &ctxtReal51);
+    realExp(&x, res, &ctxtReal39);
+  }
+}
 
 
 // common code for the [GAMMA] and LN[GAMMA]
@@ -530,7 +616,7 @@ static void WP34S_Gamma_LnGamma(const real_t *xin, const bool_t calculateLnGamma
 
   // Check for special cases
   if(realIsSpecial(xin)) {
-    if(realIsInfinite(xin) && !realIsNegative(xin)) {
+    if(realIsInfinite(xin) && realIsPositive(xin)) {
       realCopy(const_plusInfinity, res);
       return;
     }
@@ -561,15 +647,13 @@ static void WP34S_Gamma_LnGamma(const real_t *xin, const bool_t calculateLnGamma
       realCopy(const_NaN, res);
       return;
     }
-    realSubtract(&t, const_1, &x, &ctxtReal39);  // x = 1 - xin - 1 = -xin
   }
   else {
-    realSubtract(xin, const_1, &x, &ctxtReal39); // x = xin - 1
-
     // Provide a fast path evaluation for positive integer arguments that aren't too large
     // The threshold for overflow is 205! (i.e. 204! is within range and 205! isn't).
-    if(realIsAnInteger(&x) && !realIsZero(xin) && realCompareLessEqual(&x, const_204)) {
-      realCopy(const_1, res);
+    if(realIsAnInteger(xin) && realCompareLessEqual(xin, const_205)) {
+      realSubtract(xin, const_1, &x, &ctxtReal39); // x = xin - 1
+      realPlus(const_1, res, &ctxtReal39);
       while(realCompareGreaterEqual(&x, const_2)) {
         realMultiply(res, &x, res, &ctxtReal39);
         realSubtract(&x, const_1, &x, &ctxtReal39);
@@ -579,28 +663,25 @@ static void WP34S_Gamma_LnGamma(const real_t *xin, const bool_t calculateLnGamma
       }
       return;
     }
+    realPlus(xin, &t, &ctxtReal39); // t = xin
   }
 
-  WP34S_CalcLnGamma(&x, res);
+  WP34S_Calc_Gamma_LnGamma_Lanczos(&t, res, calculateLnGamma); // t=1-xin or t=xin and res=gamma(xin) or res=lngamma(xin) or res=gamma(1-xin) or res=lngamma(1-xin)
 
-  if(!calculateLnGamma) {
-    realExp(res, res, &ctxtReal39);
-  }
-
-  // Finally invert if we started with a negative argument
   if(reflect) {
     // figure out xin * PI mod 2PI
     realDivideRemainder(xin, const_2, &t, &ctxtReal39);
-    realMultiply(&t, const_pi, &t, &ctxtReal39);
-    WP34S_SinCosTanTaylor(&t, false, &x, NULL, NULL);
+    realMultiply(&t, const_pi, &t, &ctxtReal39);      // t = xin·pi
+    WP34S_SinCosTanTaylor(&t, false, &x, NULL, NULL); // x = sin(xin·pi)
+
     if(calculateLnGamma) {
-      realDivide(const_pi, &x, &t, &ctxtReal39);
-      WP34S_Ln(&t, &t);
-      realSubtract(&t, res, res, &ctxtReal39);
+      realDivide(const_pi, &x, &t, &ctxtReal39);      // t = pi / sin(pi·xin)
+      realLn(&t, &t, &ctxtReal39);                    // t = ln(pi / sin(pi·xin))
+      realSubtract(&t, res, res, &ctxtReal39);        // res = ln(pi / sin(pi·xin)) - lngamma(1-xin)
     }
     else {
-      realMultiply(&x, res, &t, &ctxtReal39);
-      realDivide(const_pi, &t, res, &ctxtReal39);
+      realMultiply(&x, res, &t, &ctxtReal39);         // t = sin(pi·xin) × gamma(1-xin)
+      realDivide(const_pi, &t, res, &ctxtReal39);     // res = pi / (sin(pi·xin)·gamma(1-xin))
     }
   }
 }
@@ -677,7 +758,7 @@ void WP34S_Ln(const real_t *xin, real_t *res) {
   realSubtract(xin, const_1, &t, &ctxtReal39);
   realCopy(&t, &v);
   realSetPositiveSign(&v);
-  if(realCompareGreaterThan(&v, const_0_5)) {
+  if(realCompareGreaterThan(&v, const_1on2)) {
     expon = z.exponent + z.digits;
     z.exponent = -z.digits;
   }
@@ -924,43 +1005,44 @@ void WP34S_ExpM1(const real_t *x, real_t *res) {
 
 
 
-static void WP34S_CalcComplexLnGamma(const complex39_t *z, complex39_t *res) {
-  complex39_t r, s, t, u, v;
+void WP34S_CalcComplexLnGamma_Lanczos(const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag) {
+  real51_t rReal, sReal, tReal, uReal, vReal;
+  real51_t rImag, sImag, tImag, uImag, vImag;
   int k;
 
-  realZero(&u.real);
-  realZero(&u.imag);
-  realAdd(&z->real, const_21, &t.real, &ctxtReal39);
-  realCopy(&z->imag, &t.imag);
-  for (k=20; k>=0; k--) {
-    divRe39Co39(gammaConstants + k, &t, &s);
-    realSubtract(&t.real, const_1, &t.real, &ctxtReal39);
-    realAdd(&u.real, &s.real, &u.real, &ctxtReal39);
-    realAdd(&u.imag, &s.imag, &u.imag, &ctxtReal39);
+  realZero(&uReal);
+  realZero(&uImag);
+  realAdd(zReal, const_29, &tReal, &ctxtReal51);
+  realPlus(zImag, &tImag, &ctxtReal51);
+  for (k=28; k>=0; k--) {
+    divRe51Co51((real_t *)((real51_t *)gammaLanczosCoefficients + k), &tReal, &tImag, &sReal, &sImag);
+    realSubtract(&tReal, const_1, &tReal, &ctxtReal51);
+    realAdd(&uReal, &sReal, &uReal, &ctxtReal51);
+    realAdd(&uImag, &sImag, &uImag, &ctxtReal51);
   }
-  realAdd(&u.real, const_gammaC00, &t.real, &ctxtReal39);
-  realCopy(&u.imag, &t.imag);
-  lnCo39(&t, &s);  // (s1, s2)
+  realAdd(&uReal, const_gammaC00, &tReal, &ctxtReal51);
+  realCopy(&uImag, &tImag);
+  lnCo51(&tReal, &tImag, &sReal, &sImag);  // (s1, s2)
 
-  realAdd(&z->real, const_gammaR, &r.real, &ctxtReal39);
-  realCopy(&z->imag, &r.imag);
-  lnCo39(&r, &u);
+  realAdd(zReal, const_gammaR, &rReal, &ctxtReal51);
+  realCopy(zImag, &rImag);
+  lnCo51(&rReal, &rImag, &uReal, &uImag);
 
-  realAdd(&z->real, const_1on2, &t.real, &ctxtReal39);
-  realCopy(&z->imag, &t.imag);
-  mulCo39Co39(&t, &u, &v);
+  realAdd(zReal, const_1on2, &tReal, &ctxtReal51);
+  realCopy(zImag, &tImag);
+  mulCo51Co51(&tReal, &tImag, &uReal, &uImag, &vReal, &vImag);
 
-  realSubtract(&v.real, &r.real, &u.real, &ctxtReal39);
-  realSubtract(&v.imag, &z->imag, &u.imag, &ctxtReal39);
+  realSubtract(&vReal, &rReal, &uReal, &ctxtReal51);
+  realSubtract(&vImag, zImag, &uImag, &ctxtReal51);
 
-  realAdd(&u.real, &s.real, &res->real, &ctxtReal39);
-  realAdd(&u.imag, &s.imag, &res->imag, &ctxtReal39);
+  realAdd(&uReal, &sReal, resReal, &ctxtReal39);
+  realAdd(&uImag, &sImag, resImag, &ctxtReal39);
 }
 
 
-
-static void WP34S_ComplexGammaLnGamma(const complex39_t *z, const bool_t calculateLnGamma, complex39_t *res) {
-  complex39_t sinPiZ, t, u, x;
+static void WP34S_ComplexGammaLnGamma(const real39_t *zReal, const real39_t *zImag, const bool_t calculateLnGamma, real39_t *resReal, real39_t *resImag) {
+  real39_t sinPiZReal, tReal, uReal, xReal;
+  real39_t sinPiZImag, tImag, uImag, xImag;
   bool_t reflect = false;
 
   // Check for special cases
@@ -987,59 +1069,61 @@ static void WP34S_ComplexGammaLnGamma(const complex39_t *z, const bool_t calcula
   }
 */
   // Correct our argument and begin the inversion if it is negative
-  if(realIsNegative(&z->real)) {
+  if(realIsNegative(zReal)) {
     reflect = true;
-    realSubtract(const_1, &z->real, &t.real, &ctxtReal39);
-    if(realIsZero(&z->imag) && realIsAnInteger(&t.real)) {
-      realCopy(const_NaN, &res->real);
-      realCopy(const_NaN, &res->imag);
+    realSubtract(const_1, zReal, &tReal, &ctxtReal39);
+    if(realIsZero(zImag) && realIsAnInteger(&tReal)) {
+      realCopy(const_NaN, resReal);
+      realCopy(const_NaN, resImag);
       return;
     }
-    realSubtract(&t.real, const_1, &x.real, &ctxtReal39);
-    realMinus(&z->imag, &x.imag, &ctxtReal39);
+    realSubtract(&tReal, const_1, &xReal, &ctxtReal39);
+    realMinus(zImag, &xImag, &ctxtReal39);
   }
   else {
-    realSubtract(&z->real, const_1, &x.real, &ctxtReal39);
-    realCopy(&z->imag, &x.imag);
+    realSubtract(zReal, const_1, &xReal, &ctxtReal39);
+    realCopy(zImag, &xImag);
   }
 
   // Sum the series
-  WP34S_CalcComplexLnGamma(&x, res);
+  WP34S_CalcComplexLnGamma_Lanczos(&xReal, &xImag, resReal, resImag);
   if(!calculateLnGamma) {
-    expCo39(res, res);
+    expCo39(resReal, resImag, resReal, resImag);
   }
 
   // Finally invert if we started with a negative argument
   if(reflect) {
-    realMultiply(&z->real, const_pi, &t.real, &ctxtReal39);
-    realMultiply(&z->imag, const_pi, &t.imag, &ctxtReal39);
-    sinCo39(&t, &sinPiZ);
+    realMultiply(zReal, const_pi, &tReal, &ctxtReal39);
+    realMultiply(zImag, const_pi, &tImag, &ctxtReal39);
+    sinCo39(&tReal, &tImag, &sinPiZReal, &sinPiZImag);
     if(!calculateLnGamma) {
-      mulCo39Co39(&sinPiZ, res, &u);
-      divRe39Co39(const_pi, &u, res);
+      mulCo39Co39(&sinPiZReal, &sinPiZImag, resReal, resImag, &uReal, &uImag);
+      divRe39Co39(const_pi, &uReal, &uImag, resReal, resImag);
     }
     else {
-      divRe39Co39(const_pi, &sinPiZ, &u);
-      lnCo39(&u, &t);
-      realSubtract(&t.real, &res->real, &res->real, &ctxtReal39);
-      realSubtract(&t.imag, &res->imag, &res->imag, &ctxtReal39);
+      divRe39Co39(const_pi, &sinPiZReal, &sinPiZImag, &uReal, &uImag);
+      lnCo39(&uReal, &uImag, &tReal, &tImag);
+      realSubtract(&tReal, resReal, resReal, &ctxtReal39);
+      realSubtract(&tImag, resImag, resImag, &ctxtReal39);
     }
   }
 }
 
 
-void WP34S_ComplexGamma(const complex39_t *zin, complex39_t *res) {
-  complex39_t z;
+void WP34S_ComplexGamma(const real39_t *zinReal, const real39_t *zinImag, real39_t *resReal, real39_t *resImag) {
+  real39_t zReal, zImag;
 
-  complexCopy(zin, &z, COMPLEX39_SIZE);
-  WP34S_ComplexGammaLnGamma(&z, false, res);
+  realCopy(zinReal, &zReal);
+  realCopy(zinImag, &zImag);
+  WP34S_ComplexGammaLnGamma(&zReal, &zImag, false, resReal, resImag);
 }
 
-void WP34S_ComplexLnGamma(const complex39_t *zin, complex39_t *res) {
-  complex39_t z;
+void WP34S_ComplexLnGamma(const real39_t *zinReal, const real39_t *zinImag, real39_t *resReal, real39_t *resImag) {
+  real39_t zReal, zImag;
 
-  complexCopy(zin, &z, COMPLEX39_SIZE);
-  WP34S_ComplexGammaLnGamma(&z, true, res);
+  realCopy(zinReal, &zReal);
+  realCopy(zinImag, &zImag);
+  WP34S_ComplexGammaLnGamma(&zReal, &zImag, true, resReal, resImag);
 }
 
 

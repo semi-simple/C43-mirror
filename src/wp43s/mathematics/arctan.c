@@ -88,10 +88,10 @@ void arctanRe16(void) {
   if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-        realToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_1on2, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else {
-        realToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
+        realToReal16(const_1on2, REGISTER_REAL16_DATA(REGISTER_X));
         real16SetNegativeSign(REGISTER_REAL16_DATA(REGISTER_X));
       }
       convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
@@ -160,8 +160,8 @@ void arctanCo16(void) {
   WP34S_Ln(&a, &a);
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  realMultiply(&a, const_0_5, &a, &ctxtReal39);
-  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  realMultiply(&a, const_1on2, &a, &ctxtReal39);
+  realMultiply(&b, const_1on2, &b, &ctxtReal39);
   realChangeSign(&b);
 
   realToReal16(&b, REGISTER_REAL16_DATA(REGISTER_X));
@@ -194,10 +194,10 @@ void arctanRe34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-        realToReal34(const_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
-        realToReal34(const_0_5, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));
         real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
       }
       convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
@@ -266,8 +266,8 @@ void arctanCo34(void) {
   WP34S_Ln(&a, &a);
 
   // arctan(z) = i/2 . ln((1 - iz) / (1 + iz))
-  realMultiply(&a, const_0_5, &a, &ctxtReal39);
-  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  realMultiply(&a, const_1on2, &a, &ctxtReal39);
+  realMultiply(&b, const_1on2, &b, &ctxtReal39);
   realChangeSign(&b);
 
   realToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));

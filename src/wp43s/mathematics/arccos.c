@@ -89,7 +89,7 @@ void arccosLonI(void) {
   reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
 
   if(realIsZero(&x)) {
-    realToReal16(const_0_5, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal16(const_1on2, REGISTER_REAL16_DATA(REGISTER_X));
     convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
   }
   else {
@@ -177,7 +177,7 @@ void arccosCo16(void) {
   // calculate sqrt(z² - 1)
   real39RectangularToPolar(&real, &imag, &real, &imag);
   realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
   real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² - 1)
@@ -280,7 +280,7 @@ void arccosCo34(void) {
   // calculate sqrt(z² - 1)
   real39RectangularToPolar(&real, &imag, &real, &imag);
   realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_0_5, &imag, &ctxtReal39);
+  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
   real39PolarToRectangular(&real, &imag, &real, &imag);
 
   // calculate z + sqrt(z² - 1)

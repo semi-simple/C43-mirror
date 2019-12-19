@@ -1106,13 +1106,13 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
-    if(correctSignificantDigits < 22 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
+    if(correctSignificantDigits < 32 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
       puts(registerExpectedAndValue);
       exit(-1);
     }
   }
 
-  return (correctSignificantDigits < 22 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) ? RE_INACCURATE : RE_ACCURATE;
+  return (correctSignificantDigits < 32 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) ? RE_INACCURATE : RE_ACCURATE;
 }
 
 

@@ -20,7 +20,7 @@
 
 void fnExp   (uint16_t unusedParamButMandatory);
 void expError(void);
-void expCo39 (const complex39_t *z, complex39_t *res);
+void expCo39 (const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag);
 void expLonI (void);
 void expRe16 (void);
 void expCo16 (void);

@@ -321,7 +321,6 @@ void setupDefaults(void) {
   shiftG = false;
   shiftStateChanged = false;
 
-  FN_no_double_click_charKey[0]=0;                               //JM FN-DOUBLE
   FN_delay_exec = false;                                         //JM FN-DOUBLE
   FN_double_click_detected = false;                              //JM FN-DOUBLE
   FN_key_pressed = 0;                                            //JM LONGPRESS FN

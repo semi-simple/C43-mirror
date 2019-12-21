@@ -581,15 +581,41 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 
 
+void Wait_loop() {
+#ifdef PC_BUILD                                                           //JM LONGPRESS FN
+    now = g_get_monotonic_time();                   //JM usec
+  while (now + (JM_FN_DOUBLE_TIMER + 6) * 1000 > g_get_monotonic_time());
+#endif
+#ifdef DMCP_BUILD
+#define TIMER_IDX 1
+  sys_timer_start(TIMER_IDX, JM_FN_DOUBLE_TIMER + 6);  // wake up for key
+  sys_sleep();
+  sys_timer_disable(TIMER_IDX);
+#endif
+}
+
+
+void Wait_loop1() {
+  while (TC_compare( JM_FN_DOUBLE_TIMER + 6 ) == 1);  //1: verloopte tyd LANGER as (t).
+}
+
+
 void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
-  if (!FN_double_click_detected && FN_delay_exec) {
-    //printf("TIMER check \n");
+  char charKey[3];
+  if (FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) {
+    printf("TIMER check passed \n");
+    printf("  %ld, KEY=%d \n",g_get_monotonic_time() / 1000,FN_key_pressed);
     FN_delay_exec = false;
+    Wait_loop();
+    printf("  %ld, KEY=%d \n",g_get_monotonic_time() / 1000,FN_key_pressed);
     if (TC_compare(JM_FN_DOUBLE_TIMER) == 1) {
-      //printf("Delayed Exec \n");
-      R_shF();                                  //TEMPORARY
+      printf("Delayed Exec \n");
+  /**/FN_timeouts_in_progress = false;
+  /**/FN_counter = JM_FN_TIMER;         
+      R_shF();
       R_shG();
-      btnFnClicked(NULL, FN_no_double_click_charKey);
+      sprintf(charKey, "%c", FN_key_pressed + 11);
+      btnFnClicked(NULL, charKey);
     }
   }
 }                                            //JM FN-DOUBLE vv
@@ -614,6 +640,7 @@ void FN_handler() {                          //JM LONGPRESS vv
         showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
         underline_softkey(FN_key_pressed-38,1, false);
         FN_counter = JM_FN_TIMER;                        //restart count
+        printf("Handler 1, KEY=%d \n",FN_key_pressed);
       }
       else if(shiftF && !shiftG) {
         S_shG();
@@ -624,6 +651,7 @@ void FN_handler() {                          //JM LONGPRESS vv
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         underline_softkey(FN_key_pressed-38,2, false);    
         FN_counter = JM_FN_TIMER;                        //restart count
+        printf("Handler 2, KEY=%d \n",FN_key_pressed);
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {        
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //JM keep shift state, so it will stay here every cycle until key released
@@ -632,6 +660,7 @@ void FN_handler() {                          //JM LONGPRESS vv
         FN_timed_out_to_NOP = true;
         underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
         FN_timeouts_in_progress = false;   
+        printf("Handler 3, KEY=%d \n",FN_key_pressed);
       }
     } 
     else { 

@@ -204,77 +204,6 @@ return func;
 }
 
 
-//**************JM DOUBLE vv ****************************************************
-int32_t TC_now() {                                   //JM TIMER 
-    #ifdef DMCP_BUILD                                 //JM TIMER 
-      now_tmp = sys_current_ms();                         //JM TIMER 
-    #endif                                            //JM TIMER 
-    #ifdef PC_BUILD                                   //JM TIMER 
-      now_tmp = g_get_monotonic_time() / 1000;            //JM usec
-    #endif                                            //JM TIMER
-  return now_tmp;
-
-}
-
-
-void TC_zero_time() {                                 //JM TIMER 
-    #ifdef DMCP_BUILD                                 //JM TIMER 
-      now = sys_current_ms();                         //JM TIMER 
-      now_MEM1 =now;
-    #endif                                            //JM TIMER 
-    #ifdef PC_BUILD                                   //JM TIMER 
-      now = g_get_monotonic_time();                   //JM usec
-      now_MEM1 =now;
-    #endif                                            //JM TIMER
-}
-
-
-int8_t TC_compare_and_zero_time(uint32_t timecheck) {    //JM DOUBLE vv input in ms
-    int8_t tmp = 0;
-    #ifdef DMCP_BUILD                                 //JM TIMER 
-      now = sys_current_ms();                         //JM TIMER 
-      tmpval = now_MEM1 + timecheck;
-      if (now > tmpval)   {tmp = 1;} else
-      if (now < tmpval)   {tmp = -1;} else
-      if (now ==  tmpval) {tmp = 0;}
-      if (now_MEM1 == 0)  {tmp = 127;}
-      now_MEM1 =now;
-    #endif                                            //JM TIMER 
-    #ifdef PC_BUILD                                   //JM TIMER 
-      now = g_get_monotonic_time();                   //JM usec
-      tmpval = now_MEM1 + timecheck *1000;
-      if (now > tmpval)   {tmp = 1;} else
-      if (now < tmpval)   {tmp = -1;} else
-      if (now ==  tmpval) {tmp = 0;}
-      if (now_MEM1 == 0)  {tmp = 127;}
-      //printf("result %ld - %ld = %ld (><%ld)(%d) : %d\n", now, now_MEM1, now - now_MEM1, tmpval, timecheck, tmp);
-      now_MEM1 =now;
-    #endif                                            //JM TIMER
-return tmp;
-}
-
-
-int8_t TC_compare(uint32_t timecheck) {    //JM-DOUBLE vv input in ms
-    int8_t tmp = 0;
-    #ifdef DMCP_BUILD                                 //JM TIMER 
-      now = sys_current_ms();                         //JM TIMER 
-      tmpval = now_MEM1 + timecheck;
-      if (now > tmpval)   {tmp = 1;} else
-      if (now < tmpval)   {tmp = -1;} else
-      if (now ==  tmpval) {tmp = 0;}
-      if (now_MEM1 == 0)  {tmp = 127;}
-    #endif                                            //JM TIMER 
-    #ifdef PC_BUILD                                   //JM TIMER 
-      now = g_get_monotonic_time();                   //JM usec
-      tmpval = now_MEM1 + timecheck *1000;
-      if (now > tmpval)   {tmp = 1;} else
-      if (now < tmpval)   {tmp = -1;} else
-      if (now ==  tmpval) {tmp = 0;}
-      if (now_MEM1 == 0)  {tmp = 127;}
-    #endif                                            //JM TIMER
-return tmp;
-}
-
 
 /* Switching profile, to jump to g[FN]:
     <166  <333  set g                       
@@ -299,8 +228,15 @@ At x, at time 0, wait 75 ms to see if a press happens, i.e. double click.
 - After 75 ms, execute function.
 - If before 75 ms, key is pressed, jump to the beginning of g(Fx) state.
 
+     STATE #1 #2 #3 #4
+___________---___---_____       STASTES indicated
+
+----------x1 x2 x3 x4           X's indicate transitions X
+
+
 Detail for x:
 
+STATE1  | STATE2  | STATE3
         |t=0      |t=75 ms
 --------E______   |             Showing release and immediate execution at "E" (previous system, no LONGPRESS no DOUBLE click)
 --------x_________E_____        Showing release at x and delayed execution "E" (if double click is to be detected)
@@ -317,12 +253,124 @@ Double click release:
 Timing is reset to start 800 ms from G again
 --------x_______G---E__        Starting with key already pressed, release at x, re-press shown at 60 ms, double click registered, g-shift activated, COMMAND displayed, timing started, key released
 
-
-
-
 */
 
-uint8_t FN_state = 0;
+
+
+//************* TIMING LIBRARY ****************
+//**************JM DOUBLE vv ****************************************************
+
+
+int32_t TIME_now() {                                   //JM TIMER 
+    #ifdef DMCP_BUILD                                 //JM TIMER 
+      now_tmp = sys_current_ms();                         //JM TIMER 
+    #endif                                            //JM TIMER 
+    #ifdef PC_BUILD                                   //JM TIMER 
+      now_tmp = g_get_monotonic_time() / 1000;            //JM usec
+    #endif                                            //JM TIMER
+  return now_tmp;
+}
+
+
+int32_t TC_mem;
+int16_t TIME_from_last_read() {
+int32_t TC_tmp;
+   TC_tmp = TIME_now();
+   TC_mem = TC_tmp;
+   return TC_tmp - TC_mem;
+}
+
+
+
+void TC_zero_time() {                                 //JM TIMER 
+    #ifdef DMCP_BUILD                                 //JM TIMER 
+      now = sys_current_ms();                         //JM TIMER 
+      now_MEM1 = now;
+    #endif                                            //JM TIMER 
+    #ifdef PC_BUILD                                   //JM TIMER 
+      now = g_get_monotonic_time();                   //JM usec
+      now_MEM1 = now;
+    #endif                                            //JM TIMER
+}
+
+#ifdef TRYWITHOUT
+int8_t TC_compare_and_zero_time(uint32_t timecheck) {    //JM DOUBLE vv input in ms
+    int8_t tmp = 0;
+    #ifdef DMCP_BUILD                                 //JM TIMER 
+      now = sys_current_ms();                         //JM TIMER 
+      tmpval = now_MEM1 + timecheck;
+      if (now > tmpval)   {tmp = 1;} else
+      if (now < tmpval)   {tmp = -1;} else
+      if (now ==  tmpval) {tmp = 0;}
+      if (now_MEM1 == 0)  {tmp = 127;}
+      now_MEM1 = now;
+    #endif                                            //JM TIMER 
+    #ifdef PC_BUILD                                   //JM TIMER 
+      now = g_get_monotonic_time();                   //JM usec
+      tmpval = now_MEM1 + timecheck *1000;
+      if (now > tmpval)   {tmp = 1;} else
+      if (now < tmpval)   {tmp = -1;} else
+      if (now ==  tmpval) {tmp = 0;}
+      if (now_MEM1 == 0)  {tmp = 127;}
+      //printf("result %ld - %ld = %ld (><%ld)(%d) : %d\n", now, now_MEM1, now - now_MEM1, tmpval, timecheck, tmp);
+      now_MEM1 = now;
+    #endif                                            //JM TIMER
+return tmp;
+}
+#endif
+
+int16_t TC_delta() {    //JM-DOUBLE vv input in ms
+int16_t tmp;
+    #ifdef DMCP_BUILD                                 //JM TIMER 
+      now = sys_current_ms();                         //JM TIMER 
+      tmp = now - now_MEM1;
+    #endif                                            //JM TIMER 
+    #ifdef PC_BUILD                                   //JM TIMER 
+      now = g_get_monotonic_time();                   //JM usec
+      tmp = (now - now_MEM1)/1000;
+    #endif                                            //JM TIMER
+return tmp;
+}
+
+int8_t TC_compare(uint32_t timecheck) {    //JM-DOUBLE vv input in ms
+    int8_t tmp = 0;
+    #ifdef DMCP_BUILD                                 //JM TIMER 
+      now = sys_current_ms();                         //JM TIMER 
+      tmpval = now_MEM1 + timecheck;
+      //equivalent to: now - now_MEM1 > timecheck
+      if (now > tmpval)   {tmp = 1;} else
+      if (now < tmpval)   {tmp = -1;} else
+      if (now ==  tmpval) {tmp = 0;}
+      if (now_MEM1 == 0)  {tmp = 127;}
+    #endif                                            //JM TIMER 
+    #ifdef PC_BUILD                                   //JM TIMER 
+      now = g_get_monotonic_time();                   //JM usec
+      tmpval = now_MEM1 + timecheck *1000;
+      if (now > tmpval)   {tmp = 1;} else
+      if (now < tmpval)   {tmp = -1;} else
+      if (now ==  tmpval) {tmp = 0;}
+      if (now_MEM1 == 0)  {tmp = 127;}
+    #endif                                            //JM TIMER
+return tmp;
+}
+
+//************************************************
+
+
+
+//*************** DEBUG
+#define FN_TIME_DEBUG
+#define FN_TIME_DEBUG_MINIMAL
+#define FN_TIME_DM_MINIMAL
+
+
+  #define ST_0_INIT   0 //STATE 0 INIT
+  #define ST_1_PRESS1 1 //STATE 1 FIRST PRESS
+  #define ST_2_REL1   2 //STATE 2 FIRST RELEASE
+  #define ST_3_PRESS2 3 //STATE 3 SECOND PRESS    //Double click determination 2 to 3 < 75 ms.
+  #define ST_4_REL2   4 //STATE 4 SECOND RELEASE
+
+uint8_t FN_state = ST_0_INIT;
 
 void FN_cancel() {
     FN_double_click_detected = false;
@@ -336,9 +384,23 @@ void FN_cancel() {
 
 }
 
+void disp_(uint8_t nr, int32_t swTime) {
+  char snum[50];
+#ifdef DMCP_BUILD
+  showString("ms:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
+#endif
+#ifdef PC_BUILD
+  showString(STD_mu "s:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
+#endif
+  itoa(swTime, snum, 10);
+  strcat(snum, "         ");
+  showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);
+}
 
 
 //**************JM DOUBLE ^^ ****************************************************
+int16_t temp;
+
 
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN
 void btnFnPressed(GtkWidget *w, gpointer data) { 
@@ -346,56 +408,108 @@ void btnFnPressed(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
 #endif
-  //STATE 0 INIT
-  //STATE 1 FIRST PRESS
-  //STATE 2 FIRST RELEASE
-  //STATE 3 SECOND PRESS
-  //STATE 4 SECOND RELEASE
-
-  if (FN_state == 0 || FN_state >= 4) { FN_state = 1;} else
-  if (FN_state == 2) { FN_state = 3;}
+  FN_timed_out_to_RELEASE_EXEC = false;
+  temp = TIME_from_last_read();
+  #ifdef FN_TIME_DEBUG
+  printf("--------------\n PRESS LastX %d : ",temp); 
+  #endif
+ 
+  //Change states according to PRESS/RELEASE incoming sequence
+  if (FN_state == ST_0_INIT || FN_state >= ST_4_REL2 ) { 
+      FN_state =  ST_1_PRESS1;
+  } else
+  if (FN_state == ST_2_REL1) { 
+      FN_state =  ST_3_PRESS2;
+  } else {
+    #ifdef FN_TIME_DEBUG
+    printf("########### ERROR IN STATE COUNT #############");
+    #endif
+  }
   
   FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
 
-  printf("\n\nPRESS, %d, STATE=%d, KEY=%d \n",TC_now(), FN_state,FN_key_pressed);
-
+  #ifdef FN_TIME_DEBUG
+  printf("\n\n------ PRESS, %d, STATE=%d, KEY=%d \n",TIME_now(), FN_state,FN_key_pressed);
+  #endif
   
-    //ANY RELEASE TOO LONG AFTER LAST RELEASE WILL RESET
-  if(FN_state == 3 && TC_compare( JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100) == 1) {  //Double click time-out
-    printf(" %d cancel, ", JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100);
+  //IF 2-->3 is longer than double click time, then move to sate 1
+  if(FN_state == ST_3_PRESS2 && temp > JM_FN_DOUBLE_TIMER + 5 /*JM_FN_TIMER * 2 *100*/) {
+    #ifdef FN_TIME_DEBUG
+    printf(" %d cancel1, %d ",  JM_FN_TIMER * 2 *100, temp);
+    #endif
     FN_timeouts_in_progress = false;
     FN_double_click_detected = false;
     FN_delay_exec = false;
-    FN_state = 1;
+    FN_state = ST_1_PRESS1; 
   }
 
-  if(FN_state == 1) {
+#ifdef TRYITWITHOUT
+  //ANY RELEASE TOO LONG AFTER LAST RELEASE WILL RESET
+  if(FN_state == ST_3_PRESS2 && TC_compare( JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100) == 1) {  //Double click time-out
+    #ifdef FN_TIME_DEBUG
+    printf(" %d cancel2, ", JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100);
+    #endif
+    FN_timeouts_in_progress = false;
+    FN_double_click_detected = false;
+    FN_delay_exec = false;
+    FN_state = ST_1_PRESS1;
+  }
+#endif
+
+  if(FN_state == ST_1_PRESS1) {
     FN_key_pressed_last = FN_key_pressed;
   } 
 
-  printf("\n\nPRESS, %d, STATE=%d, KEY=%d \n",TC_now(), FN_state,FN_key_pressed);
+  #ifdef FN_TIME_DEBUG
+  printf("\n\nPRESS, %d, STATE=%d, KEY=%d \n",TIME_now(), FN_state,FN_key_pressed);
+  #endif
 
-  //**************JM DOUBLE ********************************************* // JM FN-DOUBLE
+
+
+  //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
   FN_double_click_detected = false;                                         //JM FN-DOUBLE - Dip detection flag
-  if(!shiftF && !shiftG && FN_state == 3) {
+  if(FN_state == ST_3_PRESS2 && !shiftF && !shiftG) {
+
+    #ifdef FN_TIME_DEBUG_MINIMAL
+    printf("now %ld now_MEM1 %ld  Debounce delta=%d against limit=%d \n",now, now_MEM1, TC_delta(),JM_FN_DOUBLE_DEBOUNCE_TIMER);
+    #endif
+
     if(TC_compare(JM_FN_DOUBLE_DEBOUNCE_TIMER) == 1) {                      //Time since last zero (FN release) > 5 ms
-      printf("  (>5 ms), ");
+      #ifdef FN_TIME_DEBUG
+      printf("  (>5 ms), Delta=%d ",TC_delta());
+      #endif
+
+      #ifdef FN_TIME_DEBUG_MINIMAL
+      printf("now %ld now_MEM1 %ld  Double click delta=%d against limit=%d \n",now, now_MEM1, TC_delta(),JM_FN_DOUBLE_TIMER);
+      #endif
+
+      #ifdef FN_TIME_DM_MINIMAL
+      disp_(0, TC_delta());
+      #endif
+
       if(TC_compare(JM_FN_DOUBLE_TIMER) == -1) {                            //Time since last zero (FN release) < 75 ms
+        #ifdef FN_TIME_DEBUG
         printf(" (<75 ms), key: %d == %d?, ",FN_key_pressed,FN_key_pressed_last);
-  //TOO LONG SECOND PRESS FAILS AND DOES NOT PASS HERE
+        #endif
+        //TOO LONG SECOND PRESS FAILS AND DOES NOT PASS HERE
         if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {   //Identified valid double press dip, the same key in rapid succession
-  //SECOND PRESS GOES HERE, AND JUMPS TO STAGE 3
+        //SECOND PRESS GOES HERE, AND JUMPS TO STAGE 3
           R_shF(); //shiftF = false;                                        //JM
           S_shG(); //shiftG = true;                                         //JM
           Reset_Shift_Mem();                                                //JM
           //When here, FN_timeouts_in_progress is already set, and in progress
+          #ifdef FN_TIME_DEBUG
           printf("  Dbl Click --> g[FN], (FN_timeouts_in_progress= %d) ,", FN_timeouts_in_progress);                                      //JM jump
+          #endif
           FN_double_click_detected = true;                                  //JM --> FORCE INTO LONGPRESS
           FN_delay_exec = false;                                            //JM cancels delayed execution upon second press
         }
-      } else {   //when still no shifts, and it missed the double click window, put it back into longpress mode
-  //TOO LONG SECOND PRESS forced to restart the LONGPRESS MODE
+      } else {   
+        //when still no shifts, and it missed the double click window, put it back into longpress mode
+        //TOO LONG SECOND PRESS forced to restart the LONGPRESS MODE
+        #ifdef FN_TIME_DEBUG  
         printf("  No DC --> [FN], ");
+        #endif
         //75 ms timer exceeded after second keypress, do not execute, wait for timer to execute
         //let it go top last stage NOP time-out
       FN_timeouts_in_progress = false; 
@@ -406,10 +520,13 @@ void btnFnPressed(void *w, void *data) {
   }
 //FIRST PRESS GOES HERE AND STARTS LONGPRESS
 
-  printf("  A kp %d, kplast %d, dc detectd %d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
+  #ifdef FN_TIME_DEBUG
+  printf("  A KEY=%d, KEYlast=%d, DoubleClick=%d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
+  #endif
   //Note: set up g shift, display NAME below in LONGPRESS, with FN_double_click_detected
 
 
+//STAGE 1 or 3
   //**************JM LONGPRESS ****************************************************
   //FIRST PRESS WILL ENTER HERE
   //DOUBLE CLICK PRESS WILL ENTER HERE due to FN_double_click_detected in stage 3 and time out to NOP
@@ -432,8 +549,10 @@ void btnFnPressed(void *w, void *data) {
       underline_softkey(FN_key_pressed-38,2, true /*dontclear at first call*/);
     }                                                                      //further shifts are done within FN_handler
   }     
-  printf("B kp %d, kplast %d, dc detectd %d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
-printf("5 end \n");                                                                    //JM LONGPRESS ^^
+  #ifdef FN_TIME_DEBUG
+  printf("  B KEY=%d, KEYlast=%d, DoubleClick=%d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
+  printf("  5 end \n");                                                                    //JM LONGPRESS ^^
+  #endif
 }
 
 
@@ -444,77 +563,77 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 #ifdef DMCP_BUILD
 void btnFnReleased(void *w, void *data) {
 #endif
-  //printf("RELEASE 0 start, ");
+  temp = TIME_from_last_read();
+  #ifdef FN_TIME_DEBUG
+  printf("--------------\n RELEASE LastX %d : ",temp); 
+  #endif
 
-  //STATE 0 INIT
-  //STATE 1 FIRST PRESS
-  //STATE 2 FIRST RELEASE
-  //STATE 3 SECOND PRESS
-  //STATE 4 SECOND RELEASE
-  
-  if (FN_state == 1) { FN_state = 2;} else
-  if (FN_state == 3) { FN_state = 4;}
+  if (FN_state == ST_1_PRESS1 ) { 
+      FN_state =  ST_2_REL1;
+  } else
+  if (FN_state == ST_3_PRESS2) { 
+      FN_state =  ST_4_REL2;
+  } else {
+    #ifdef FN_TIME_DEBUG
+    printf("########### ERROR IN STATE COUNT #############");
+    #endif
+  }
 
-  printf("RELEASE, %d, STATE=%d, KEY=%d \n",TC_now(), FN_state,FN_key_pressed);
+ 
 
+  #ifdef FN_TIME_DEBUG
+  printf("RELEASE, %d, STATE=%d, KEY=%d \n",TIME_now(), FN_state,FN_key_pressed);
+  printf("  C KEY=%d, KEYlast=%d, DoubleClick=%d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
+  #endif
 
-  
-  printf("  C kp %d, kplast %d, dc detectd %d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
-
-  if(FN_state == 2) {
+  if(FN_state == ST_2_REL1) {
       TC_zero_time();                                                         //store the current time
-      printf("  Zero time");
-//SET DELAYED OPERATION FOR FIRST RELEASE
+      #ifdef FN_TIME_DEBUG
+      printf("  Zero time\n");
+      #endif
+      //SET DELAYED OPERATION FOR FIRST RELEASE
       FN_delay_exec = true; //TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
       FN_timeouts_in_progress = false;
       } 
 
-
-//######## AFTER STATE TWO IT RUNS 1 2 3
-
-
-  else if(FN_state == 4) {
+  else if(FN_state == ST_4_REL2) {
     //ANY RELEASE TOO LONG AFTER LAST RELEASE WILL RESET
     if(TC_compare( JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100) == 1) {  //Double click time-out
+      #ifdef FN_TIME_DEBUG
       printf(" %d 4 cancel, ", JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100);
-      FN_cancel();
+      #endif
+      if (!FN_timed_out_to_RELEASE_EXEC) {
+        FN_cancel();
+      }
     }
+
      // **************JM LONGPRESS EXECUTE**************************************************** 
     char charKey[3];
-    if( (FN_timed_out_to_NOP || FN_timeouts_in_progress) && !(FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) )   {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms) 
-      //printf("RELEASE 1 LONGPRESS start, ");
+    if( (FN_timed_out_to_NOP || FN_timeouts_in_progress || FN_timed_out_to_RELEASE_EXEC) && !(FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) )   {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms) 
+      #ifdef FN_TIME_DEBUG
+      printf("LONGPRESS start, ");
+      #endif
       underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
       sprintf(charKey, "%c", FN_key_pressed + 11);
-      //FN_key_pressed = 0;                 //DO NOT MAKE 0 - IT WILL DISPLAY INCORRECT KEY !!
       FN_counter = JM_FN_TIMER;                                               //reset for future
+      #ifdef TRYWITHOUT
       hideFunctionName();
+      #endif
+      clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+      refreshRegisterLine(REGISTER_T);
       if (!FN_timed_out_to_NOP) {
         btnFnClicked(w, charKey);                                             //Execute
       }
       resetShiftState();  
-      clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-      refreshRegisterLine(REGISTER_T);
       FN_cancel();
     }
   }
 
-  printf("  D kp %d, kplast %d, dc detectd %d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
+  #ifdef FN_TIME_DEBUG
+  printf("  D KEY=%d, KEYlast=%d, DoubleClick=%d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
+  printf("RELEASE end \n");
+  #endif
 
-
-  //***********************************************************   
-
-/*
-  if(TC_compare(3000) > 0) {                                             //Reset is <1s after last timecheck
-    //printf("RELEASE 2 reset, ");
-    FN_key_pressed = 0;
-    FN_timeouts_in_progress = false;
-    FN_counter = JM_FN_TIMER;                                               //reset for future
-    resetShiftState(); 
-    FN_double_click_detected = false;
-    FN_key_pressed_last = 0;
-    FN_delay_exec = false;
-  }
-*/
 
 //**************JM DOUBLE *********************************************   // JM FN-DOUBLE
 
@@ -524,7 +643,6 @@ void btnFnReleased(void *w, void *data) {
   //Set a flag here, to let the refresh cyclic check for 75 ms and, if exceeded, execute the function
 
 
-printf("RELEASE end \n");
 }
 
 

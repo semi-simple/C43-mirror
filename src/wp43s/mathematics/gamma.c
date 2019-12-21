@@ -227,12 +227,12 @@ void gammaRe16(void) {
 
 
 void lnGammaRe16(void) {
-  complex39_t x;
+  real39_t xReal, xImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xReal);
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 
-  if(realIsNaN(&x.real)) {
+  if(realIsNaN(&xReal)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaRe16:", "cannot use NaN as X input of lnGamma", NULL, NULL);
@@ -240,7 +240,7 @@ void lnGammaRe16(void) {
     return;
   }
 
-  if(realIsInfinite(&x.real)) {
+  if(realIsInfinite(&xReal)) {
     if(!getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -248,13 +248,13 @@ void lnGammaRe16(void) {
       #endif
     }
     else {
-      realToReal16((real16IsPositive(&x.real) ? const_plusInfinity : const_NaN), REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal16((real16IsPositive(&xReal) ? const_plusInfinity : const_NaN), REGISTER_REAL16_DATA(REGISTER_X));
     }
     return;
   }
 
-  if(realCompareLessEqual(&x.real, const_0)) { // x <= 0
-    if(realIsAnInteger(&x.real)) {
+  if(realCompareLessEqual(&xReal, const_0)) { // x <= 0
+    if(realIsAnInteger(&xReal)) {
       if(!getFlag(FLAG_DANGER)) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -267,19 +267,23 @@ void lnGammaRe16(void) {
       return;
     }
     else { // x is negative and not an integer
-      realMinus(&x.real, &x.imag, &ctxtReal39); // x.imag is used as a temp variable here
-      realDivideRemainder(&x.imag, const_2, &x.imag, &ctxtReal39);
-      if(realCompareGreaterThan(&x.imag, const_1)) { // the result is a real
-        WP34S_LnGamma(&x.real, &x.real);
-        realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+      realMinus(&xReal, &xImag, &ctxtReal39); // x.imag is used as a temp variable here
+      realDivideRemainder(&xImag, const_2, &xImag, &ctxtReal39);
+      if(realCompareGreaterThan(&xImag, const_1)) { // the result is a real
+        WP34S_LnGamma(&xReal, &xReal);
+        realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
       }
       else { // the result is a complex
         if(getFlag(FLAG_CPXRES)) { // We can calculate a complex
+          real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &xImag);
           reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-          realZero(&x.imag);
-          WP34S_ComplexLnGamma(&x, &x);
-          realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-          realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+          WP34S_Gamma(&xReal, &xReal);
+          realSetPositiveSign(&xReal);
+          realLn(&xReal, &xReal, &ctxtReal39);
+          realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
+          realToIntegralValue(&xImag, &xImag, DEC_ROUND_FLOOR, &ctxtReal39);
+          realMultiply(&xImag, const_pi, &xImag, &ctxtReal39);
+          realToReal16(&xImag, REGISTER_IMAG16_DATA(REGISTER_X));
         }
         else { // Domain error
           displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -293,8 +297,8 @@ void lnGammaRe16(void) {
   }
 
 
-  WP34S_LnGamma(&x.real, &x.real);
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
+  WP34S_LnGamma(&xReal, &xReal);
+  realToReal16(&xReal, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -308,15 +312,15 @@ void gammaCo16(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &zReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &zImag);
 
-  WP34S_ComplexGamma(&z, &z);
+  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&zReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&zImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -330,15 +334,15 @@ void lnGammaCo16(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &zReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &zImag);
 
-  WP34S_ComplexLnGamma(&z, &z);
+  WP34S_ComplexLnGamma(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&zReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&zImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -390,12 +394,12 @@ void gammaRe34(void) {
 
 
 void lnGammaRe34(void) {
-  complex39_t x;
+  real39_t xReal, xImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 
-  if(realIsNaN(&x.real)) {
+  if(realIsNaN(&xReal)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function lnGammaRe34:", "cannot use NaN as X input of lnGamma", NULL, NULL);
@@ -403,7 +407,7 @@ void lnGammaRe34(void) {
     return;
   }
 
-  if(realIsInfinite(&x.real)) {
+  if(realIsInfinite(&xReal)) {
     if(!getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -411,13 +415,13 @@ void lnGammaRe34(void) {
       #endif
     }
     else {
-      realToReal34((real34IsPositive(&x.real) ? const_plusInfinity : const_NaN), REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34((real34IsPositive(&xReal) ? const_plusInfinity : const_NaN), REGISTER_REAL34_DATA(REGISTER_X));
     }
     return;
   }
 
-  if(realCompareLessEqual(&x.real, const_0)) { // x <= 0
-    if(realIsAnInteger(&x.real)) {
+  if(realCompareLessEqual(&xReal, const_0)) { // x <= 0
+    if(realIsAnInteger(&xReal)) {
       if(!getFlag(FLAG_DANGER)) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -430,19 +434,23 @@ void lnGammaRe34(void) {
       return;
     }
     else { // x is negative and not an integer
-      realMinus(&x.real, &x.imag, &ctxtReal39); // x.imag is used as a temp variable here
-      realDivideRemainder(&x.imag, const_2, &x.imag, &ctxtReal39);
-      if(realCompareGreaterThan(&x.imag, const_1)) { // the result is a real
-        WP34S_LnGamma(&x.real, &x.real);
-        realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+      realMinus(&xReal, &xImag, &ctxtReal39); // x.imag is used as a temp variable here
+      realDivideRemainder(&xImag, const_2, &xImag, &ctxtReal39);
+      if(realCompareGreaterThan(&xImag, const_1)) { // the result is a real
+        WP34S_LnGamma(&xReal, &xReal);
+        realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else { // the result is a complex
         if(getFlag(FLAG_CPXRES)) { // We can calculate a complex
+          real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xImag);
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-          realZero(&x.imag);
-          WP34S_ComplexLnGamma(&x, &x);
-          realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-          realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+          WP34S_Gamma(&xReal, &xReal);
+          realSetPositiveSign(&xReal);
+          realLn(&xReal, &xReal, &ctxtReal39);
+          realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+          realToIntegralValue(&xImag, &xImag, DEC_ROUND_FLOOR, &ctxtReal39);
+          realMultiply(&xImag, const_pi, &xImag, &ctxtReal39);
+          realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
         }
         else { // Domain error
           displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -456,8 +464,8 @@ void lnGammaRe34(void) {
   }
 
 
-  WP34S_LnGamma(&x.real, &x.real);
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
+  WP34S_LnGamma(&xReal, &xReal);
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -471,15 +479,15 @@ void gammaCo34(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  WP34S_ComplexGamma(&z, &z);
+  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -493,13 +501,13 @@ void lnGammaCo34(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  WP34S_ComplexLnGamma(&z, &z);
+  WP34S_ComplexLnGamma(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

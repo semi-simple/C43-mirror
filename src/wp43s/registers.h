@@ -154,7 +154,6 @@ void              printReal34ToConsole            (const real34_t *value);
 void              printRealToConsole              (const real_t *value);
 void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
-void              printComplex39ToConsole         (const complex39_t *value);
 void              printLongIntegerToConsole       (longInteger_t value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
 void              printRegisterToConsole          (calcRegister_t regist);

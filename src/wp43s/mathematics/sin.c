@@ -64,15 +64,15 @@ void fnSin(uint16_t unusedParamButMandatory) {
 
 
 
-void sinCo39(const complex39_t *z, complex39_t *res) {
+void sinCo39(const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag) {
   // sin(a + ib) = sin(a)*cosh(b) + i*cos(a)*sinh(b)
   real39_t sina, cosa, sinhb, coshb;
 
-  WP34S_Cvt2RadSinCosTan(&z->real, AM_RADIAN, &sina, &cosa, NULL);
-  WP34S_SinhCosh(&z->imag, &sinhb, &coshb);
+  WP34S_Cvt2RadSinCosTan(zReal, AM_RADIAN, &sina, &cosa, NULL);
+  WP34S_SinhCosh(zImag, &sinhb, &coshb);
 
-  realMultiply(&sina, &coshb, &res->real, &ctxtReal39);
-  realMultiply(&cosa, &sinhb, &res->imag, &ctxtReal39);
+  realMultiply(&sina, &coshb, resReal, &ctxtReal39);
+  realMultiply(&cosa, &sinhb, resImag, &ctxtReal39);
 }
 
 
@@ -124,15 +124,15 @@ void sinCo16(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &zReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &zImag);
 
-  sinCo39(&z, &z);
+  sinCo39(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&zReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&zImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -184,13 +184,13 @@ void sinCo34(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  sinCo39(&z, &z);
+  sinCo39(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

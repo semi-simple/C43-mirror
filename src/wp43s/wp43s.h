@@ -632,7 +632,7 @@ extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 extern int32_t              numberOfFreeBlocks;
 extern int32_t              lgCatalogSelection;
 extern void                 (*confirmedFunction)(uint16_t);
-extern real39_t             const *gammaConstants;
+extern real51_t             const *gammaLanczosCoefficients;
 extern real39_t             const *angle180;
 extern real39_t             const *angle90;
 extern real39_t             const *angle45;

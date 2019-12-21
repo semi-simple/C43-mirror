@@ -89,24 +89,25 @@ void fnTan(uint16_t unusedParamButMandatory) {
 
 
 
-void tanCo39(const complex39_t *zin, complex39_t *zout) {
+void tanCo39(const real39_t *zinReal, const real39_t *zinImag, real39_t *zoutReal, real39_t *zoutImag) {
   //                sin(a)*cosh(b) + i*cos(a)*sinh(b)
   // tan(a + ib) = -----------------------------------
   //                cos(a)*cosh(b) - i*sin(a)*sinh(b)
   real39_t sina, cosa, sinhb, coshb;
-  complex39_t numer, denom;
+  real39_t numerReal, denomReal;
+  real39_t numerImag, denomImag;
 
-  WP34S_Cvt2RadSinCosTan(&zin->real, AM_RADIAN, &sina, &cosa, NULL);
-  WP34S_SinhCosh(&zin->imag, &sinhb, &coshb);
+  WP34S_Cvt2RadSinCosTan(zinReal, AM_RADIAN, &sina, &cosa, NULL);
+  WP34S_SinhCosh(zinImag, &sinhb, &coshb);
 
-  realMultiply(&sina, &coshb, &numer.real, &ctxtReal39);
-  realMultiply(&cosa, &sinhb, &numer.imag, &ctxtReal39);
+  realMultiply(&sina, &coshb, &numerReal, &ctxtReal39);
+  realMultiply(&cosa, &sinhb, &numerImag, &ctxtReal39);
 
-  realMultiply(&cosa, &coshb, &denom.real, &ctxtReal39);
-  realMultiply(&sina, &sinhb, &denom.imag, &ctxtReal39);
-  realChangeSign(&denom.imag);
+  realMultiply(&cosa, &coshb, &denomReal, &ctxtReal39);
+  realMultiply(&sina, &sinhb, &denomImag, &ctxtReal39);
+  realChangeSign(&denomImag);
 
-  divCo39Co39(&numer, &denom, zout);
+  divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, zoutReal, zoutImag);
 }
 
 
@@ -176,15 +177,15 @@ void tanCo16(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &zReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &zImag);
 
-  tanCo39(&z, &z);
+  tanCo39(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&zReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&zImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -246,13 +247,13 @@ void tanCo34(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  tanCo39(&z, &z);
+  tanCo39(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

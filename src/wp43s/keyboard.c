@@ -57,6 +57,8 @@ void DOT_G_clear() {
   }
 } 
 
+
+
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftStateChanged) {
@@ -66,7 +68,14 @@ void showShiftState(void) {
         if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
           DOT_F();
           if(!FN_timeouts_in_progress) {
-            underline(1);
+            if(!ULFL) {
+              underline(1);
+              ULFL = !ULFL;
+            }
+            if(ULGL) {
+              underline(2);
+              ULGL = !ULGL;
+            }
           }
         }                                                                         //JM - Display dot in the f - line
       }
@@ -77,8 +86,14 @@ void showShiftState(void) {
           DOT_F_clear(); //cancel dots
           DOT_G();
           if(!FN_timeouts_in_progress) {
-            underline(1);
-            underline(2);
+            if(ULFL) {
+              underline(1);
+              ULFL = !ULFL;
+            }
+            if(!ULGL) {
+              underline(2);
+              ULGL = !ULGL;
+            }
           }
         }                                                                         //JM - Display dot in the g - line
       }
@@ -342,6 +357,19 @@ void FN_cancel() {
 void disp_(uint8_t nr, int32_t swTime) {                                    //DISPLAY time on DM42 screen
   char snum[50];
 #ifdef DMCP_BUILD
+  showString("ms:", &standardFont, 30+nr*30, 40, vmNormal, false, false);
+#endif
+#ifdef PC_BUILD
+  showString(STD_mu "s:", &standardFont, 30+nr*30, 40, vmNormal, false, false);
+#endif
+  itoa(swTime, snum, 10);
+  strcat(snum, "         ");
+  showString(snum, &standardFont, 60+nr*30, 40, vmNormal, false, false);
+}
+
+void disp_old(uint8_t nr, int32_t swTime) {                                    //DISPLAY time on DM42 screen
+  char snum[50];
+#ifdef DMCP_BUILD
   showString("ms:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
 #endif
 #ifdef PC_BUILD
@@ -352,6 +380,9 @@ void disp_(uint8_t nr, int32_t swTime) {                                    //DI
   showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);
 }
 //**************JM DOUBLE CLICK SUPPORT vv **********************************
+
+
+int16_t T_S1, T_S2, T_S3, T_S4;
 
 
 
@@ -371,6 +402,7 @@ void btnFnPressed(void *w, void *data) {
 #endif
   FN_timed_out_to_RELEASE_EXEC = false;
   temp = TIME_from_last_read();
+
   #ifdef FN_TIME_DEBUG
   printf("--------------\n PRESS LastX %d : ",temp); 
   #endif
@@ -378,9 +410,11 @@ void btnFnPressed(void *w, void *data) {
   //Change states according to PRESS/RELEASE incoming sequence
   if (FN_state == ST_0_INIT || FN_state == ST_4_REL2 || FN_state >= ST_5_EXEC ) { 
       FN_state =  ST_1_PRESS1;
+      T_S1 = temp;
   } else
   if (FN_state == ST_2_REL1) { 
       FN_state =  ST_3_PRESS2;
+      T_S3 = temp;
   } else {
     #ifdef FN_TIME_DEBUG
     printf("########### ERROR IN STATE COUNT #############");
@@ -456,7 +490,11 @@ void btnFnPressed(void *w, void *data) {
       #endif
 
       #ifdef FN_TIME_DM_MINIMAL
-      disp_(0, TC_delta());
+        disp_(0, TC_delta());
+        disp_(1, T_S1);
+        disp_(2, T_S2);
+        disp_(3, T_S3);
+        disp_(4, T_S4);
       #endif
 
       if(TC_compare(JM_FN_DOUBLE_TIMER) == -1) {                            //Time since last zero (FN release) < 75 ms
@@ -544,9 +582,11 @@ void btnFnReleased(void *w, void *data) {
 
   if (FN_state == ST_1_PRESS1 ) { 
       FN_state =  ST_2_REL1;
+      T_S2 = temp;
   } else
   if (FN_state == ST_3_PRESS2) { 
       FN_state =  ST_4_REL2;
+      T_S4 = temp;
   } else {
     #ifdef FN_TIME_DEBUG
     printf("########### ERROR IN STATE COUNT #############");

@@ -49,7 +49,7 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_OFF 255
 #define JM_3_SHIFT_CUTOFF  6   //100ms
 #define JM_FN_TIMER        8   //8 = approx 800ms   
-#define JM_FN_DOUBLE_TIMER 100 //75  //ms
+#define JM_FN_DOUBLE_TIMER 150 //75  //ms
 #define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
@@ -65,6 +65,7 @@ uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changea
 uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
 int16_t JM_ASN_MODE;                                //JM ASSIGN
 
+bool_t ULFL,ULGL;                                 //JM Underline
 
 int16_t FN_key_pressed, FN_key_pressed_last;      //JM LONGPRESS FN
 bool_t FN_timeouts_in_progress;                   //JM LONGPRESS FN

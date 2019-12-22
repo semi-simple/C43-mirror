@@ -298,77 +298,10 @@ void addItemToBuffer(uint16_t item) {
 
 
 
-static bool_t isRealDp(char *buffer) {
-  int16_t firstDigit, lastDigit, numDigits, decimalSeparator, exponent, exponentLocation, signLocation;
-  char sign;
-
-  signLocation = -1;
-  for(int32_t i=strlen(buffer)-1; i>0; i--) {
-    if(buffer[i] == 'i') {
-      signLocation = i - 1;
-      sign = buffer[signLocation];
-      buffer[signLocation] = 0;
-      break;
-    }
-  }
-
-  firstDigit = 0;
-  while(buffer[firstDigit] != 0 && (buffer[firstDigit] == '0' || buffer[firstDigit] == '.')) {
-    firstDigit++;
-  }
-  if(buffer[firstDigit] == 0) {
-    lastDigit = firstDigit;
-  }
-  else {
-    // The last digit is the last character that is neither a . nor a 0
-    lastDigit = firstDigit;
-    while(buffer[lastDigit] != 0 && buffer[lastDigit] != 'e' && buffer[lastDigit] != '+' && buffer[lastDigit] != '-') {
-      lastDigit++;
-    }
-    lastDigit--;
-
-    while(buffer[lastDigit] == '0' || buffer[lastDigit] == '.') {
-      lastDigit--;
-    }
-  }
-
-  for(decimalSeparator=0; buffer[decimalSeparator]!=0 && buffer[decimalSeparator]!='.'; decimalSeparator++);
-
-  numDigits = lastDigit - firstDigit + (firstDigit<=decimalSeparator && decimalSeparator<=lastDigit ? 0 : 1);
-
-  if(numDigits > 16) {
-    if(signLocation >= 0) {
-      buffer[signLocation] = sign;
-    }
-    return true;
-  }
-  else {
-    exponentLocation = 0;
-    while(buffer[exponentLocation] != 0 && buffer[exponentLocation] != 'e') {
-      exponentLocation++;
-    }
-    if(buffer[exponentLocation] == 'e') {
-      exponent = atoi(buffer + exponentLocation + 1);
-      exponent += decimalSeparator - firstDigit - (decimalSeparator > firstDigit ? 1 : 0);
-      if(signLocation >= 0) {
-        buffer[signLocation] = sign;
-      }
-      return (exponent < -383 || exponent > 384);
-    }
-  }
-
-  if(signLocation >= 0) {
-    buffer[signLocation] = sign;
-  }
-  return false;
-}
-
-
-
 void addItemToNimBuffer(int16_t item) {
   int16_t lastChar, index;
   uint8_t savedNimNumberPart;
-  bool_t done, nimInputRealPartIsReal34, nimInputImaginaryPartIsReal34;
+  bool_t done;
 
   if(calcMode == CM_NORMAL) {
     switch(item) {
@@ -791,12 +724,7 @@ void addItemToNimBuffer(int16_t item) {
     case ITM_pi :
       if(nimNumberPart == NP_COMPLEX_INT_PART && nimBuffer[strlen(nimBuffer) - 1] == 'i') {
         done = true;
-        if(Input_Default == ID_DP) {                                     //JM PIDP
-          strcat(nimBuffer, "3.141592653589793238462643383279503");      //JM PIDP
-        }                                                                //JM PIDP
-        else {
-          strcat(nimBuffer, "3.141592653589793");
-        }
+        strcat(nimBuffer, "3.141592653589793238462643383279503");      //JM PIDP
       }
       break;
 
@@ -983,10 +911,10 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
         closeNim();
         if(calcMode != CM_NIM && lastErrorCode == 0) {
           if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-            convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+            convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
           }
 
-          checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
+          checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
           setRegisterAngularMode(REGISTER_X, AM_DMS);
 
           refreshRegisterLine(REGISTER_X);
@@ -1004,8 +932,6 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
 
     strcpy(nimBufferDisplay, STD_SPACE_HAIR);
 
-    nimInputRealPartIsReal34      = false;
-    nimInputImaginaryPartIsReal34 = false;
     switch(nimNumberPart) {
       case NP_INT_10 :          // +12345
       case NP_INT_16 :          // +123AB
@@ -1015,8 +941,6 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
 
       case NP_REAL_FLOAT_PART : // +12345.6789
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
-
-        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         break;
 
       case NP_REAL_EXPONENT : // +12345.678e+3
@@ -1029,8 +953,6 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
         else if(nimBuffer[exponentSignLocation + 1] == '0' && nimBuffer[exponentSignLocation] == '+') {
           strcat(nimBufferDisplay, STD_SUP_0);
         }
-
-        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         break;
 
       case NP_FRACTION_DENOMINATOR : // +123 12/7
@@ -1052,7 +974,6 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
       case NP_COMPLEX_FLOAT_PART : // +1.2+i15.69
       case NP_COMPLEX_EXPONENT :   // +1.2+i15.69e2
         // Real part
-        nimInputRealPartIsReal34 = isRealDp(nimBuffer + 1);
         savedNimNumberPart = nimNumberPart;
 
         for(index=2; index<imaginaryMantissaSignLocation && nimBuffer[index] != '.'; index++); // The ending semi colon is OK here
@@ -1103,8 +1024,6 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
 
         // Imaginary part
         if(nimBuffer[imaginaryMantissaSignLocation+2] != 0) {
-          nimInputImaginaryPartIsReal34 = isRealDp(nimBuffer + imaginaryMantissaSignLocation + 2);
-
           savedNimNumberPart = nimNumberPart;
 
           for(index=imaginaryMantissaSignLocation+1; index<(int16_t)strlen(nimBuffer) && nimBuffer[index] != '.'; index++); // The ending semi colon is OK here
@@ -1146,25 +1065,6 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
       }
     }
 
-    nimInputIsReal34 = nimInputRealPartIsReal34 || nimInputImaginaryPartIsReal34 || (Input_Default == ID_DP) || (Input_Default == ID_CPXDP);           //JM Input default type
-    if(nimInputIsReal34) { // replace . or , by the corresponding double precision . or ,
-      for(index=stringByteLength(nimBufferDisplay) - 1; index>0; index--) {
-        if(nimBufferDisplay[index] == '.') {
-          for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
-            nimBufferDisplay[i + 1] = nimBufferDisplay[i];
-          }
-          *(nimBufferDisplay + index)     = *(STD_PERIOD34);
-          *(nimBufferDisplay + index + 1) = *(STD_PERIOD34 + 1);
-        }
-        else if(nimBufferDisplay[index] == ',') {
-          for(int i=stringByteLength(nimBufferDisplay); i>=index; i--) {
-            nimBufferDisplay[i + 1] = nimBufferDisplay[i];
-          }
-          *(nimBufferDisplay + index)     = *(STD_COMMA34);
-          *(nimBufferDisplay + index + 1) = *(STD_COMMA34 + 1);
-        }
-      }
-    }
     refreshRegisterLine(NIM_REGISTER_LINE);
   }
 
@@ -1897,9 +1797,7 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
   switch (Input_Default) {
     case ID_43S:
       break;
-    case ID_SP:
     case ID_DP:
-    case ID_CPXSP:
     case ID_CPXDP:
       nimNumberPart = NP_REAL_FLOAT_PART;
       break;
@@ -2110,22 +2008,12 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
             stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
             }                                                                       //JM Input default type
           }
-          else {
-            if(Input_Default == ID_CPXSP) {                                         //JM Input default type
-              reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE); //JM Input default type
-              stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));          //JM Input default type
-              stringToReal34("0", REGISTER_IMAG16_DATA(REGISTER_X));                //JM Input default type
-            }                                                                       //JM Input default type
-            else {                                                                  //JM Input default type
-            reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-            stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
-            }                                                                       //JM Input default type
-          }
+
         }
         else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
           int16_t i, posSpace, posSlash, lg;
           int32_t integer, numer, denom;
-          real16_t temp;
+          real34_t temp;
 
           lg = strlen(nimBuffer);
 
@@ -2189,14 +2077,14 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
             return;
           }
 
-          reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-          int32ToReal16(numer, REGISTER_REAL16_DATA(REGISTER_X));
-          int32ToReal16(denom, &temp);
-          real16Divide(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
-          int32ToReal16(integer, &temp);
-          real16Add(REGISTER_REAL16_DATA(REGISTER_X), &temp, REGISTER_REAL16_DATA(REGISTER_X));
+          reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+          int32ToReal34(numer, REGISTER_REAL34_DATA(REGISTER_X));
+          int32ToReal34(denom, &temp);
+          real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
+          int32ToReal34(integer, &temp);
+          real34Add(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
           if(nimBuffer[0] == '-') {
-            real16SetNegativeSign(REGISTER_REAL16_DATA(REGISTER_X));
+            real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
           }
 
           if(!displayRealAsFraction) {
@@ -2215,64 +2103,32 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
           }
           nimBuffer[imaginaryMantissaSignLocation] = 0;
 
-          if(nimInputIsReal34) {
-            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-            stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+          stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
 
-            stringToReal34(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
-            if(imaginarySign == -1) {
-              real34SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
-            }
-
-            if(complexMode == CM_POLAR) {
-              if(real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_0)) {
-                real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-              }
-              else {
-                real39_t magnitude, theta;
-
-                real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &magnitude);
-                real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &theta);
-                convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
-                if(realCompareLessThan(&magnitude, const_0)) {
-                  realSetPositiveSign(&magnitude);
-                  realAdd(&theta, const_pi, &theta, &ctxtReal39);
-                  realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
-                }
-                real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
-                realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
-                realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
-              }
-            }
+          stringToReal34(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
+          if(imaginarySign == -1) {
+            real34SetNegativeSign(REGISTER_IMAG34_DATA(REGISTER_X));
           }
-          else { // nimInputIs not Real34
-            reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-            stringToReal16(nimBuffer, REGISTER_REAL16_DATA(REGISTER_X));
 
-            stringToReal16(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG16_DATA(REGISTER_X));
-            if(imaginarySign == -1) {
-              real16SetNegativeSign(REGISTER_IMAG16_DATA(REGISTER_X));
+          if(complexMode == CM_POLAR) {
+            if(real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_0)) {
+              real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
             }
+            else {
+              real39_t magnitude, theta;
 
-            if(complexMode == CM_POLAR) {
-              if(real16CompareEqual(REGISTER_REAL16_DATA(REGISTER_X), const16_0)) {
-                real16Zero(REGISTER_IMAG16_DATA(REGISTER_X));
+              real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &magnitude);
+              real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &theta);
+              convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
+              if(realCompareLessThan(&magnitude, const_0)) {
+                realSetPositiveSign(&magnitude);
+                realAdd(&theta, const_pi, &theta, &ctxtReal39);
+                realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
               }
-              else {
-                real39_t magnitude, theta;
-
-                real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &magnitude);
-                real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &theta);
-                convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
-                if(realCompareLessThan(&magnitude, const_0)) {
-                  realSetPositiveSign(&magnitude);
-                  realAdd(&theta, const_pi, &theta, &ctxtReal39);
-                  realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
-                }
-                real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
-                realToReal16(&magnitude, REGISTER_REAL16_DATA(REGISTER_X));
-                realToReal16(&theta,     REGISTER_IMAG16_DATA(REGISTER_X));
-              }
+              real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
+              realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
+              realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
             }
           }
           fnSetFlag(FLAG_CPXRES);

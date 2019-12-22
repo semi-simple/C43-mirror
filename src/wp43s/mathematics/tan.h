@@ -23,9 +23,7 @@ void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, real_
 void tanError                 (void);
 void tanCo39                  (const real39_t *zinReal, const real39_t *zinImag, real39_t *zoutReal, real39_t *zoutImag);
 void tanLonI                  (void);
-void tanRe16                  (void);
-void tanCo16                  (void);
-void tanRm16                  (void);
-void tanCm16                  (void);
-void tanRe34                  (void);
-void tanCo34                  (void);
+void tanRema                  (void);
+void tanCxma                  (void);
+void tanReal                  (void);
+void tanCplx                  (void);

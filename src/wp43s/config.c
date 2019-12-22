@@ -359,7 +359,7 @@ void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
   #endif
 
   realDivide(&value, const_1000, &value, &ctxtReal39);
-  realToReal16(&value, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal34(&value, REGISTER_REAL34_DATA(REGISTER_X));
   refreshStack();
 }
 
@@ -408,19 +408,17 @@ void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
 void fnRoundingMode(uint16_t RM) {
   roundingMode = RM;
 
-  if(RM == 0) ctxtReal16.round = DEC_ROUND_HALF_EVEN;
-  else if(RM == 1) ctxtReal16.round = DEC_ROUND_HALF_UP;
-  else if(RM == 2) ctxtReal16.round = DEC_ROUND_HALF_DOWN;
-  else if(RM == 3) ctxtReal16.round = DEC_ROUND_UP;
-  else if(RM == 4) ctxtReal16.round = DEC_ROUND_DOWN;
-  else if(RM == 5) ctxtReal16.round = DEC_ROUND_CEILING;
-  else if(RM == 6) ctxtReal16.round = DEC_ROUND_FLOOR;
+  if(RM == 0) ctxtReal34.round = DEC_ROUND_HALF_EVEN;
+  else if(RM == 1) ctxtReal34.round = DEC_ROUND_HALF_UP;
+  else if(RM == 2) ctxtReal34.round = DEC_ROUND_HALF_DOWN;
+  else if(RM == 3) ctxtReal34.round = DEC_ROUND_UP;
+  else if(RM == 4) ctxtReal34.round = DEC_ROUND_DOWN;
+  else if(RM == 5) ctxtReal34.round = DEC_ROUND_CEILING;
+  else if(RM == 6) ctxtReal34.round = DEC_ROUND_FLOOR;
   else {
     sprintf(errorMessage, "In function fnRoundingMode: %d is an unexpected value for RM! Must be from 0 to 6", RM);
     displayBugScreen(errorMessage);
   }
-
-  ctxtReal34.round = ctxtReal16.round;
 }
 
 
@@ -650,7 +648,7 @@ void fnReset(uint16_t confirmation) {
     //fnSetFlag(FIRST_LOCAL_REGISTER+0);
     //fnSetFlag(NUMBER_OF_LOCAL_FLAGS+2);
     //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, RT_REAL);
-    //stringToReal16("5.555", REGISTER_REAL16_DATA(FIRST_LOCAL_REGISTER));
+    //stringToReal16("5.555", REGISTER_REAL34_DATA(FIRST_LOCAL_REGISTER));
 
     //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
     //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), AM_NONE);

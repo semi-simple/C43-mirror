@@ -18,18 +18,15 @@
 ;   Rn   Register n from 0 to 211
 ;   Rx   Register x in A,B,C,D,I,J,K,L,T,X,Y,Z
 ;   GAP  gap setting
-;   NCSD number of correct significant digits expected
 ;      type after equal sign: LonI is a  Long Integer
-;                             Re16 is a  Real16 (SP)
-;                             Co16 is a  Complex16 (SP)
 ;                             Stri is a  String
 ;                             ShoI is a  Short Integer
-;                             Re34 is a  Real34 (DP)
-;                             Co34 is a  Complex34 (DP)
+;                             Real is a  DP Real
+;                             Cmpx is a  DP Complex
 ;      after the colon there is the value of the register between double quotes
-;      after the Re16 and Re34 value there must be a colon followed by the angular mode
-;      special value infinity for Re16 and Re34 is "inf" (lower case inf is mandatory)
-;      special value NaN for Re16 and Re34 is "NaN"
+;      after the Real value there must be a colon followed by the angular mode
+;      special value infinity for Real is "inf" (lower case inf is mandatory)
+;      special value NaN for Real is "NaN"
 ;      The decimal separator is a . or a ,
 ;      A complex is always in rectangular mode: 2 reals separated by an i example "1.2i-3.4"
 ;      A short integer is represented as on the calculator: "12345#7"
@@ -63,78 +60,66 @@ sign
 conversionAngles
 
 addition_longInteger
-addition_real16
-addition_complex16
 addition_time
 addition_date
 addition_string
-addition_real16Matrix
-addition_complex16Matrix
+addition_realMatrix
+addition_complexMatrix
 addition_shortInteger
-addition_real34
-addition_complex34
+addition_real
+addition_complex
 
 subtraction_longInteger
-subtraction_real16
-subtraction_complex16
 subtraction_time
 subtraction_date
 subtraction_string
-subtraction_real16Matrix
-subtraction_complex16Matrix
+subtraction_realMatrix
+subtraction_complexMatrix
 subtraction_shortInteger
-subtraction_real34
-subtraction_complex34
+subtraction_real
+subtraction_complex
 
 multiplication_longInteger
-multiplication_real16
-multiplication_complex16
 multiplication_time
 multiplication_date
 multiplication_string
-multiplication_real16Matrix
-multiplication_complex16Matrix
+multiplication_realMatrix
+multiplication_complexMatrix
 multiplication_shortInteger
-multiplication_real34
-multiplication_complex34
+multiplication_real
+multiplication_complex
 
 division_longInteger
-division_real16
-division_complex16
 division_time
 division_date
 division_string
-division_real16Matrix
-division_complex16Matrix
+division_realMatrix
+division_complexMatrix
 division_shortInteger
-division_real34
-division_complex34
+division_real
+division_complex
 
 invert
 
 power_longInteger
-power_real16
-power_complex16
 power_time
 power_date
 power_string
-power_real16Matrix
-power_complex16Matrix
+power_realMatrix
+power_complexMatrix
 power_shortInteger
-power_real34
-power_complex34
+power_real
+power_complex
 
 parallel_longInteger
-parallel_real16
-parallel_complex16
 parallel_time
 parallel_date
 parallel_string
-parallel_real16Matrix
-parallel_complex16Matrix
+parallel_realMatrix
+parallel_complexMatrix
 parallel_shortInteger
-parallel_real34
-parallel_complex34
+parallel_real
+parallel_complex
 
 ;Answer to the Ultimate Question of Life
 ultimateQuestionOfLife

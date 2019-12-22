@@ -21,9 +21,7 @@
 void fnArctanh   (uint16_t unusedParamButMandatory);
 void arctanhError(void);
 void arctanhLonI (void);
-void arctanhRe16 (void);
-void arctanhCo16 (void);
-void arctanhRm16 (void);
-void arctanhCm16 (void);
-void arctanhRe34 (void);
-void arctanhCo34 (void);
+void arctanhRema (void);
+void arctanhCxma (void);
+void arctanhReal (void);
+void arctanhCplx (void);

@@ -21,10 +21,8 @@
 void fnMagnitude   (uint16_t unusedParamButMandatory);
 void magnitudeError(void);
 void magnitudeLonI (void);
-void magnitudeRe16 (void);
-void magnitudeCo16 (void);
-void magnitudeRm16 (void);
-void magnitudeCm16 (void);
+void magnitudeRema (void);
+void magnitudeCxma (void);
 void magnitudeShoI (void);
-void magnitudeRe34 (void);
-void magnitudeCo34 (void);
+void magnitudeReal (void);
+void magnitudeCplx (void);

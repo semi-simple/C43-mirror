@@ -46,7 +46,6 @@ void standardizeLine          (void);
 void processLine              (void);
 void processOneFile           (void);
 void processTests             (void);
-int  relativeErrorReal16      (real16_t *expectedValue, real16_t *value, char *numberPart, calcRegister_t regist, char letter);
 int  relativeErrorReal34      (real34_t *expectedValue, real34_t *value, char *numberPart, calcRegister_t regist, char letter);
 void wrongRegisterValue       (calcRegister_t regist, char letter, char *expectedValue);
 void expectedAndShouldBeValue (calcRegister_t regist, char letter, char *expectedValue, char *expectedAndValue);

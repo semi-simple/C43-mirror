@@ -71,17 +71,17 @@
  ***********************************************/
 typedef enum {
   dtLongInteger     =  0,  ///< Z arbitrary precision integer
-  dtReal16          =  1,  ///< R single precision real (64 bits)
-  dtComplex16       =  2,  ///< C single precision complex (2x 64 bits), RegDataInfo contains rectangular or polar mode
-  dtAngle           =  3,  ///< Single precision angle. No longer in use
-  dtTime            =  4,  ///< Time
-  dtDate            =  5,  ///< Date in various formats
-  dtString          =  6,  ///< Alphanumeric string
-  dtReal16Matrix    =  7,  ///< Single precision vector or matrix
-  dtComplex16Matrix =  8,  ///< Double precision vector or matrix
-  dtShortInteger    =  9,  ///< Short integer (64 bit)
-  dtReal34          = 10,  ///< R double precision real (128 bits)
-  dtComplex34       = 11,  ///< C double precision complex (2x 128 bits)
+  dtReal34          =  1,  ///< R double precision real (128 bits)
+  dtComplex34       =  2,  ///< C double precision complex (2x 128 bits)
+  dtTime            =  3,  ///< Time
+  dtDate            =  4,  ///< Date in various formats
+  dtString          =  5,  ///< Alphanumeric string
+  dtReal34Matrix    =  6,  ///< Double precision vector or matrix
+  dtComplex34Matrix =  7,  ///< Double precision complex vector or matrix
+  dtShortInteger    =  8,  ///< Short integer (64 bit)
+  //dtReal16          =  1,  ///< R single precision real (64 bits)
+  //dtComplex16       =  2,  ///< C single precision complex (2x 64 bits), RegDataInfo contains rectangular or polar mode
+  //dtAngle           =  3,  ///< Single precision angle. No longer in use
   //dtLabel           = 12,  ///< Label
   //dtSystemInteger   = 13,  ///< System integer (64 bits)
   //dtFlags           = 14,  ///< Flags
@@ -120,8 +120,6 @@ uint32_t          getRegisterFullSize             (calcRegister_t regist);
 void              clearRegister                   (calcRegister_t regist);
 void              fnClearRegisters                (uint16_t unusedParamButMandatory);
 void              fnGetLocR                       (uint16_t unusedParamButMandatory);
-void              fnConvertXToReal34              (uint16_t unusedParamButMandatory);
-void              fnConvertXToReal16              (uint16_t unusedParamButMandatory);
 void              adjustResult                    (calcRegister_t result, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3);
 void              copySourceRegisterToDestRegister(calcRegister_t rSource, calcRegister_t rDest);
 void              fnStore                         (uint16_t r);
@@ -149,10 +147,8 @@ void              fnRecallIJ                      (uint16_t r);
 void              fnXLessThan                     (uint16_t unusedParamButMandatory);
 void              fnEnter                         (uint16_t unusedParamButMandatory);
 int16_t           indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
-void              printReal16ToConsole            (const real16_t *value);
 void              printReal34ToConsole            (const real34_t *value);
 void              printRealToConsole              (const real_t *value);
-void              printComplex16ToConsole         (const complex16_t *value);
 void              printComplex34ToConsole         (const complex34_t *value);
 void              printLongIntegerToConsole       (longInteger_t value);
 void              reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);

@@ -46,7 +46,6 @@ bool_t               allowScreenUpdate;
 bool_t               funcOK;
 
 // Variables stored in RAM
-realContext_t        ctxtReal16;  // 16 digits
 realContext_t        ctxtReal34;  // 34 digits
 realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
 realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
@@ -162,7 +161,6 @@ bool_t               displayLeadingZeros;
 bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
-bool_t               nimInputIsReal34;
 bool_t               updateDisplayValueX;
 calcKey_t            kbd_usr[37];
 radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
@@ -241,18 +239,18 @@ void setupDefaults(void) {
 
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal16, AM_NONE);
-    memPtr = allocWp43s(REAL16_SIZE);
+    setRegisterDataType(regist, dtReal34, AM_NONE);
+    memPtr = allocWp43s(REAL34_SIZE);
     setRegisterDataPointer(regist, memPtr);
-    real16Zero(memPtr);
+    real34Zero(memPtr);
   }
 
   // initialize the 9+1 saved stack registers
   for(calcRegister_t regist=SAVED_REGISTER_X; regist<=LAST_SAVED_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal16, AM_NONE);
-    memPtr = allocWp43s(REAL16_SIZE);
+    setRegisterDataType(regist, dtReal34, AM_NONE);
+    memPtr = allocWp43s(REAL34_SIZE);
     setRegisterDataPointer(regist, memPtr);
-    real16Zero(memPtr);
+    real34Zero(memPtr);
   }
 
   #ifdef PC_BUILD
@@ -262,7 +260,6 @@ void setupDefaults(void) {
 
   temporaryInformation = TI_NO_INFO;
 
-  decContextDefault(&ctxtReal16, DEC_INIT_DECDOUBLE);
   decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
   decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
   ctxtReal39.digits = 39;
@@ -651,7 +648,7 @@ int main(int argc, char* argv[]) {
   fnReset(CONFIRMED);
 /*
 reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-stringToReal16("-2.1", REGISTER_REAL16_DATA(REGISTER_X));
+stringToReal16("-2.1", REGISTER_REAL34_DATA(REGISTER_X));
 stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));
 printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
 fnSetFlag(FLAG_DANGER);

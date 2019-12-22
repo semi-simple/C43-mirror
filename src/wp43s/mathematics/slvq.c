@@ -29,7 +29,7 @@
  * \return void
  ***********************************************/
 void fnSlvq(uint16_t unusedParamButMandatory) {
-  bool_t result16=true, realCoefs=true, realRoots=true;
+  bool_t realCoefs=true, realRoots=true;
   real75_t aReal, bReal, cReal, rReal, x1Real, x2Real;
   real75_t aImag, bImag, cImag, rImag, x1Imag, x2Imag;
 
@@ -38,24 +38,13 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         realZero(&cImag);
                         break;
 
-    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &cReal);
-                        realZero(&cImag);
-                        break;
-
-    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &cReal);
-                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &cImag);
-                        realCoefs = false;
-                        break;
-
     case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &cReal);
                         realZero(&cImag);
-                        result16 = false;
                         break;
 
     case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &cReal);
                         real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &cImag);
                         realCoefs = false;
-                        result16 = false;
                         break;
 
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -71,24 +60,13 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         realZero(&bImag);
                         break;
 
-    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &bReal);
-                        realZero(&bImag);
-                        break;
-
-    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &bReal);
-                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &bImag);
-                        realCoefs = false;
-                        break;
-
     case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &bReal);
                         realZero(&bImag);
-                        result16 = false;
                         break;
 
     case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &bReal);
                         real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &bImag);
                         realCoefs = false;
-                        result16 = false;
                         break;
 
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
@@ -104,24 +82,13 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         realZero(&aImag);
                         break;
 
-    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Z), &aReal);
-                        realZero(&aImag);
-                        break;
-
-    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Z), &aReal);
-                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Z), &aImag);
-                        realCoefs = false;
-                        break;
-
     case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Z), &aReal);
                         realZero(&aImag);
-                        result16 = false;
                         break;
 
     case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Z), &aReal);
                         real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Z), &aImag);
                         realCoefs = false;
-                        result16 = false;
                         break;
 
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_Z);
@@ -293,85 +260,42 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
 
   if(realRoots) {
-    if(result16) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Z, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(&x1Real, REGISTER_REAL16_DATA(REGISTER_X));
-      realToReal16(&x2Real, REGISTER_REAL16_DATA(REGISTER_Y));
-      realToReal16(&rReal,  REGISTER_REAL16_DATA(REGISTER_Z));
-    }
-    else { // realRoots && !result16
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
-      realToReal34(&rReal,  REGISTER_REAL34_DATA(REGISTER_Z));
-    }
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
+    realToReal34(&rReal,  REGISTER_REAL34_DATA(REGISTER_Z));
   }
   else { // !realRoots
-    if(result16) {
-      if(realIsZero(&x1Imag)) { // x1 is real
-        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-        realToReal16(&x1Real, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-        realToReal16(&x1Real, REGISTER_REAL16_DATA(REGISTER_X));
-        realToReal16(&x1Imag, REGISTER_IMAG16_DATA(REGISTER_X));
-      }
-
-      if(realIsZero(&x2Imag)) { // x2 is real
-        reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, AM_NONE);
-        realToReal16(&x2Real, REGISTER_REAL16_DATA(REGISTER_Y));
-      }
-      else {
-        reallocateRegister(REGISTER_Y, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-        realToReal16(&x2Real, REGISTER_REAL16_DATA(REGISTER_Y));
-        realToReal16(&x2Imag, REGISTER_IMAG16_DATA(REGISTER_Y));
-      }
-
-      if(realIsZero(&rImag)) { // r is real
-        reallocateRegister(REGISTER_Z, dtReal16, REAL16_SIZE, AM_NONE);
-        realToReal16(&rReal, REGISTER_REAL16_DATA(REGISTER_Z));
-      }
-      else {
-        reallocateRegister(REGISTER_Z, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-        realToReal16(&rReal, REGISTER_REAL16_DATA(REGISTER_Z));
-        realToReal16(&rImag, REGISTER_IMAG16_DATA(REGISTER_Z));
-      }
+    if(realIsZero(&x1Imag)) { // x1 is real
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
     }
-    else { // !realRoots && !result16
-      if(realIsZero(&x1Imag)) { // x1 is real
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
-      }
-      else {
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&x1Imag, REGISTER_IMAG34_DATA(REGISTER_X));
-      }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&x1Imag, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
 
-      if(realIsZero(&x2Imag)) { // x2 is real
-        reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
-      }
-      else {
-        reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
-        realToReal34(&x2Imag, REGISTER_IMAG34_DATA(REGISTER_Y));
-      }
+    if(realIsZero(&x2Imag)) { // x2 is real
+      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
+    }
+    else {
+      reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
+      realToReal34(&x2Imag, REGISTER_IMAG34_DATA(REGISTER_Y));
+    }
 
-      if(realIsZero(&rImag)) { // r is real
-        reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
-      }
-      else {
-        reallocateRegister(REGISTER_Z, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_Z));
-      }
+    if(realIsZero(&rImag)) { // r is real
+      reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
+    }
+    else {
+      reallocateRegister(REGISTER_Z, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
+      realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_Z));
     }
   }
 

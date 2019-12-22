@@ -86,29 +86,6 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       longIntegerFree(lgInt);
       break;
 
-    case dtReal16:
-      real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000 + TMP_STR_LENGTH/2);
-      if(strchr(tmpStr3000 + TMP_STR_LENGTH/2, '.') == NULL && strchr(tmpStr3000 + TMP_STR_LENGTH/2, 'E') == NULL) {
-        strcat(tmpStr3000 + TMP_STR_LENGTH/2, ".");
-      }
-      angularUnitToString(getRegisterAngularMode(regist), tmpStr3000 + TMP_STR_LENGTH/2 + strlen(tmpStr3000 + TMP_STR_LENGTH/2));
-      stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
-      break;
-
-    case dtComplex16:
-      real16ToString(REGISTER_REAL16_DATA(regist), tmpStr3000);
-      if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-        strcat(tmpStr3000, " - ix");
-        real16SetPositiveSign(REGISTER_IMAG16_DATA(regist));
-        real16ToString(REGISTER_IMAG16_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
-        real16SetNegativeSign(REGISTER_IMAG16_DATA(regist));
-      }
-      else {
-        strcat(tmpStr3000, " + ix");
-        real16ToString(REGISTER_IMAG16_DATA(regist), tmpStr3000 + strlen(tmpStr3000));
-      }
-      break;
-
     case dtTime:
       strcpy(tmpStr3000, "Copying a time to the clipboard is to be coded!");
       break;
@@ -122,11 +99,11 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
       break;
 
-    case dtReal16Matrix:
+    case dtReal34Matrix:
       strcpy(tmpStr3000, "Copying a real16 matrix to the clipboard is to be coded!");
       break;
 
-    case dtComplex16Matrix:
+    case dtComplex34Matrix:
       strcpy(tmpStr3000, "Copying a complex16 matrix to the clipboard is to be coded!");
       break;
 
@@ -1052,23 +1029,11 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             strcpy(string1, "L = ");
 
-            if(getRegisterDataType(REGISTER_L) == dtReal16) {
-              strcat(string1, "real16 = ");
-              formatReal16Debug(string2, getRegisterDataPointer(REGISTER_L));
-              strcat(string2, " ");
-              strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
-            }
-
-            else if(getRegisterDataType(REGISTER_L) == dtReal34) {
+            if(getRegisterDataType(REGISTER_L) == dtReal34) {
               strcat(string1, "real34 = ");
               formatReal34Debug(string2, getRegisterDataPointer(REGISTER_L));
               strcat(string2, " ");
               strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
-            }
-
-            else if(getRegisterDataType(REGISTER_L) == dtComplex16) {
-              strcat(string1, "complex16 = ");
-              formatComplex16Debug(string2, getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtComplex34) {
@@ -1197,22 +1162,12 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(   displayRealAsFraction
-                  && (
-                          (   getRegisterDataType(regist) == dtReal16
-                           && (
-                                  (   real16CompareAbsGreaterThan(REGISTER_REAL16_DATA(regist), const16_1e_4)
-                                   && real16CompareAbsLessThan(REGISTER_REAL16_DATA(regist), const16_1e6)
-                                  )
-                               || real16IsZero(REGISTER_REAL16_DATA(regist))
+                  && (    getRegisterDataType(regist) == dtReal34
+                       && (
+                              (   real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(regist), const34_1e_4)
+                               && real34CompareAbsLessThan(REGISTER_REAL34_DATA(regist), const34_1e6)
                               )
-                          )
-                       || (   getRegisterDataType(regist) == dtReal34
-                           && (
-                                  (   real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(regist), const34_1e_4)
-                                   && real34CompareAbsLessThan(REGISTER_REAL34_DATA(regist), const34_1e6)
-                                  )
-                               || real34IsZero(REGISTER_REAL34_DATA(regist))
-                              )
+                           || real34IsZero(REGISTER_REAL34_DATA(regist))
                           )
                      )
                  ) {
@@ -1252,89 +1207,6 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
               showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
             }
-          }
-
-          else if(getRegisterDataType(regist) == dtReal16) {
-            if(temporaryInformation == TI_RADIUS_THETA) {
-              if(regist == REGISTER_X) {
-                strcpy(prefix, "r" STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-              if(regist == REGISTER_Y) {
-                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-
-              real16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
-
-              w = stringWidth(tmpStr3000, &numericFont, false, true);
-              lineWidth = w;
-              if(prefixWidth > 0) {
-                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
-              }
-              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-            }
-
-            else if(temporaryInformation == TI_THETA_RADIUS) {
-              if(regist == REGISTER_X) {
-                strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-              if(regist == REGISTER_Y) {
-                strcpy(prefix, "r" STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-
-              real16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
-
-              w = stringWidth(tmpStr3000, &numericFont, false, true);
-              lineWidth = w;
-              if(prefixWidth > 0) {
-                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
-              }
-              showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-            }
-
-            else if(temporaryInformation == TI_X_Y) {
-              if(regist == REGISTER_X) {
-                strcpy(prefix, "x" STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-              else if(regist == REGISTER_Y) {
-                strcpy(prefix, "y" STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-            }
-
-            else if(temporaryInformation == TI_RE_IM) {
-              if(regist == REGISTER_X) {
-                strcpy(prefix, "Im" STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-              else if(regist == REGISTER_Y) {
-                strcpy(prefix, "Re" STD_SPACE_FIGURE "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
-            }
-
-            else if(temporaryInformation == TI_STATISTIC_SUMS) {
-              if(regist == REGISTER_Y) {
-                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(statisticalSumsPointer));
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-                for(w=0; w<SCREEN_WIDTH; w++) {
-                  setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
-                }
-              }
-            }
-
-            real16ToDisplayString(REGISTER_REAL16_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
-
-            w = stringWidth(tmpStr3000, &numericFont, false, true);
-            lineWidth = w;
-            if(prefixWidth > 0) {
-              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
-            }
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
           else if(getRegisterDataType(regist) == dtReal34) {
@@ -1456,7 +1328,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }                                                                       //JM EE ^
 
-            complex16ToDisplayString(REGISTER_COMPLEX16_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

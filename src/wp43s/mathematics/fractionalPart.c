@@ -22,10 +22,10 @@
 
 
 
-void (* const fp[12])(void) = {
-// regX ==> 1            2       3         4        5        6        7        8          9           10            11      12
-//          Long integer Real16  Complex16 Angle16  Time     Date     String   Real16 mat Complex16 m Short integer Real34  Complex34
-            fpLonI,      fpRe16, fpError,  fpError, fpError, fpError, fpError, fpRm16,    fpError,    fpShoI,       fpRe34, fpError
+void (* const fp[9])(void) = {
+// regX ==> 1            2       3         4        5        6        7          8           9
+//          Long integer Real34  Complex34 Time     Date     String   Real34 mat Complex34 m Short integer
+            fpLonI,      fpReal, fpError,  fpError, fpError, fpError, fpRema,    fpError,    fpShoI
 };
 
 
@@ -80,24 +80,7 @@ void fpLonI(void) {
 
 
 
-void fpRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fpRe16:", "cannot use NaN as X input of fp", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16_t x;
-
-  real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
-  real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x ,REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-void fpRm16(void) {
+void fpRema(void) {
   fnToBeCoded();
 }
 
@@ -109,11 +92,11 @@ void fpShoI(void) {
 
 
 
-void fpRe34(void) {
+void fpReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fpRe34:", "cannot use NaN as X input of fp", NULL, NULL);
+      showInfoDialog("In function fpReal:", "cannot use NaN as X input of fp", NULL, NULL);
     #endif
     return;
   }

@@ -313,52 +313,6 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
 
 
 
-void real16ToDisplayString(const real16_t *real16, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits = displayFormatDigits;
-
-  displayHasNDigits = 16;
-
-  if(updateDisplayValueX) {
-    displayValueX[0] = 0;
-  }
-
-  if(angulaMode == AM_NONE) {
-    realToDisplayString2(real16, false, displayString);
-  }
-  else {
-    angle16ToDisplayString2(real16, angulaMode, displayString);
-  }
-
-  while(stringWidth(displayString, font, true, true) > maxWidth) {
-    if(displayFormat == DF_ALL) {
-      if(displayHasNDigits == 2) {
-        break;
-      }
-      displayHasNDigits--;
-    }
-    else {
-      if(displayFormatDigits == 0) {
-        break;
-      }
-      displayFormatDigits--;
-    }
-
-    if(updateDisplayValueX) {
-      displayValueX[0] = 0;
-    }
-
-    if(angulaMode == AM_NONE) {
-      realToDisplayString2(real16, false, displayString);
-    }
-    else {
-      angle16ToDisplayString2(real16, angulaMode, displayString);
-    }
-  }
-  displayFormatDigits = savedDisplayFormatDigits;
-}
-
-
-
 void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
@@ -369,7 +323,7 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
   }
 
   if(angulaMode == AM_NONE) {
-    realToDisplayString2(real34, true, displayString);
+    realToDisplayString2(real34, displayString);
   }
   else {
     angle34ToDisplayString2(real34, angulaMode, displayString);
@@ -394,7 +348,7 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
     }
 
     if(angulaMode == AM_NONE) {
-      realToDisplayString2(real34, true, displayString);
+      realToDisplayString2(real34, displayString);
     }
     else {
       angle34ToDisplayString2(real34, angulaMode, displayString);
@@ -406,14 +360,13 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
 
 
 /********************************************//**
- * \brief Formats a SP or real34
+ * \brief Formats a real
  *
  * \param[out] displayString char* Result string
  * \param[in]  x const real16_t*  Value to format
- * \param[in]  real34 bool_t         x is a real34
  * \return void
  ***********************************************/
-void realToDisplayString2(const void *real, bool_t real34, char *displayString) {
+void realToDisplayString2(const void *real, char *displayString) {
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
@@ -423,72 +376,37 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
 
-  if(real34) {
-    real34_t *value = (real34_t *)real;
+  real34_t *value = (real34_t *)real;
 
-    if(real34IsInfinite(value)) {
-      if(real34IsNegative(value)) {
-        strcpy(displayString, "-" STD_INFINITY);
-        if(updateDisplayValueX) {
-          strcpy(displayValueX + strlen(displayValueX), "-9e9999");
-        }
-      }
-      else {
-        strcpy(displayString, STD_INFINITY);
-        if(updateDisplayValueX) {
-          strcpy(displayValueX + strlen(displayValueX), "9e9999");
-        }
-      }
-      return;
-    }
-
-    if(real34IsNaN(value)) {
-      real34ToString(value, displayString);
+  if(real34IsInfinite(value)) {
+    if(real34IsNegative(value)) {
+      strcpy(displayString, "-" STD_INFINITY);
       if(updateDisplayValueX) {
-        real34ToString(value, displayValueX + strlen(displayValueX));
+        strcpy(displayValueX + strlen(displayValueX), "-9e9999");
       }
-      return;
     }
-
-    bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
-    memset(bcd, 0, MAX_DIGITS);
-
-    sign = real34GetCoefficient(value, bcd + 1);
-    exponent = real34GetExponent(value);
-  }
-  else { // real16
-    real16_t *value = (real16_t *)real;
-
-    if(real16IsInfinite(value)) {
-      if(real16IsNegative(value)) {
-        strcpy(displayString, "-" STD_INFINITY);
-        if(updateDisplayValueX) {
-          strcpy(displayValueX + strlen(displayValueX), "-9e9999");
-        }
-      }
-      else {
-        strcpy(displayString, STD_INFINITY);
-        if(updateDisplayValueX) {
-          strcpy(displayValueX + strlen(displayValueX), "-9e9999");
-        }
-      }
-      return;
-    }
-
-    if(real16IsNaN(value)) {
-      real16ToString(value, displayString);
+    else {
+      strcpy(displayString, STD_INFINITY);
       if(updateDisplayValueX) {
-        real34ToString(value, displayValueX + strlen(displayValueX));
+        strcpy(displayValueX + strlen(displayValueX), "9e9999");
       }
-      return;
     }
-
-    bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
-    memset(bcd, 0, MAX_DIGITS);
-
-    sign = real16GetCoefficient(value, bcd + 1);
-    exponent = real16GetExponent(value) - 18;
+    return;
   }
+
+  if(real34IsNaN(value)) {
+    real34ToString(value, displayString);
+    if(updateDisplayValueX) {
+      real34ToString(value, displayValueX + strlen(displayValueX));
+    }
+    return;
+  }
+
+  bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
+  memset(bcd, 0, MAX_DIGITS);
+
+  sign = real34GetCoefficient(value, bcd + 1);
+  exponent = real34GetExponent(value);
 
   // Calculate the number of significant digits
   for(digitPointer=1; digitPointer<=MAX_DIGITS-3; digitPointer++) {
@@ -621,14 +539,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         if(updateDisplayValueX) {
           displayValueX[valueIndex++] = '0';
         }
-        if(real34) {
-          displayString[charIndex] = 0;
-          strcat(displayString, RADIX34_MARK_STRING);
-          charIndex += 2;
-        }
-        else {
-          displayString[charIndex++] = RADIX16_MARK_CHAR;
-        }
+        displayString[charIndex] = 0;
+        strcat(displayString, RADIX34_MARK_STRING);
+        charIndex++;
         if(updateDisplayValueX) {
           displayValueX[valueIndex++] = '.';
         }
@@ -680,14 +593,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
 
           // Radix mark
           if(digitCount == 0) {
-            if(real34) {
-              displayString[charIndex] = 0;
-              strcat(displayString, RADIX34_MARK_STRING);
-              charIndex += 2;
-            }
-            else {
-              displayString[charIndex++] = RADIX16_MARK_CHAR;
-            }
+            displayString[charIndex] = 0;
+            strcat(displayString, RADIX34_MARK_STRING);
+            charIndex++;
             if(updateDisplayValueX) {
               displayValueX[valueIndex++] = '.';
             }
@@ -753,14 +661,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
         if(updateDisplayValueX) {
           displayValueX[valueIndex++] = '0';
         }
-        if(real34) {
-          displayString[charIndex] = 0;
-          strcat(displayString, RADIX34_MARK_STRING);
-          charIndex += 2;
-        }
-        else {
-          displayString[charIndex++] = RADIX16_MARK_CHAR;
-        }
+        displayString[charIndex] = 0;
+        strcat(displayString, RADIX34_MARK_STRING);
+        charIndex++;
         if(updateDisplayValueX) {
           displayValueX[valueIndex++] = '.';
         }
@@ -834,14 +737,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
           // Radix mark
           if(digitCount == 0) {
             SigFigTmp = 1;                                                                     //JM SIGFIG Set flag to signal decimal point was reached.
-            if(real34) {
               displayString[charIndex] = 0;
               strcat(displayString, RADIX34_MARK_STRING);
               charIndex += 2;
-            }
-            else {
-              displayString[charIndex++] = RADIX16_MARK_CHAR;
-            }
             if(updateDisplayValueX) {
               displayValueX[valueIndex++] = '.';
             }
@@ -901,14 +799,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     }
 
     // Radix mark
-    if(real34) {
-      displayString[charIndex] = 0;
-      strcat(displayString, RADIX34_MARK_STRING);
-      charIndex += 2;
-    }
-    else {
-      displayString[charIndex++] = RADIX16_MARK_CHAR;
-    }
+    displayString[charIndex] = 0;
+    strcat(displayString, RADIX34_MARK_STRING);
+    charIndex++;
     if(updateDisplayValueX) {
       displayValueX[valueIndex++] = '.';
     }
@@ -1016,14 +909,9 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
     }
 
     // Radix Mark
-    if(real34) {
-      displayString[charIndex] = 0;
-      strcat(displayString, RADIX34_MARK_STRING);
-      charIndex += 2;
-    }
-    else {
-      displayString[charIndex++] = RADIX16_MARK_CHAR;
-    }
+    displayString[charIndex] = 0;
+    strcat(displayString, RADIX34_MARK_STRING);
+    charIndex++;
     if(updateDisplayValueX) {
       displayValueX[valueIndex++] = '.';
     }
@@ -1078,41 +966,6 @@ void realToDisplayString2(const void *real, bool_t real34, char *displayString) 
 
 
 
-void complex16ToDisplayString(const complex16_t *complex16, char *displayString, const font_t *font, int16_t maxWidth) {
-  uint8_t savedDisplayFormatDigits = displayFormatDigits;
-
-  displayHasNDigits = 16;
-
-  if(updateDisplayValueX) {
-    displayValueX[0] = 0;
-  }
-
-  complex16ToDisplayString2(complex16, displayString);
-  while(stringWidth(displayString, font, true, true) > maxWidth) {
-    if(displayFormat == DF_ALL) {
-      if(displayHasNDigits == 2) {
-        break;
-      }
-      displayHasNDigits--;
-    }
-    else {
-      if(displayFormatDigits == 0) {
-        break;
-      }
-      displayFormatDigits--;
-    }
-
-    if(updateDisplayValueX) {
-      displayValueX[0] = 0;
-    }
-
-    complex16ToDisplayString2(complex16, displayString);
-  }
-  displayFormatDigits = savedDisplayFormatDigits;
-}
-
-
-
 void complex34ToDisplayString(const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
@@ -1148,66 +1001,6 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
 
 
 
-void complex16ToDisplayString2(const complex16_t *complex16, char *displayString) {
-  int16_t i=100;
-  real16_t real16, imag16;
-  real39_t real39, imagIc;
-
-  if(complexMode == CM_RECTANGULAR) {
-    real16Copy(VARIABLE_REAL16_DATA(complex16), &real16);
-    real16Copy(VARIABLE_IMAG16_DATA(complex16), &imag16);
-  }
-  else if(complexMode == CM_POLAR) {
-    real16ToReal(VARIABLE_REAL16_DATA(complex16), &real39);
-    real16ToReal(VARIABLE_IMAG16_DATA(complex16), &imagIc);
-    real39RectangularToPolar(&real39, &imagIc, &real39, &imagIc); // imagIc in radian
-    convertAngle39FromTo(&imagIc, AM_RADIAN, currentAngularMode);
-    realToReal16(&real39, &real16);
-    realToReal16(&imagIc, &imag16);
-  }
-  else {
-    sprintf(errorMessage, "In function complexToDisplayString2: %d is an unexpected value for complexMode!", complexMode);
-    displayBugScreen(errorMessage);
-  }
-
-  realToDisplayString2(&real16, false, displayString);
-
-  if(updateDisplayValueX) {
-    if(complexMode == CM_RECTANGULAR) {
-      strcat(displayValueX, "i");
-    }
-    else {
-      strcat(displayValueX, "j");
-    }
-  }
-
-  realToDisplayString2(&imag16, false, displayString + i);
-
-  if(complexMode == CM_RECTANGULAR) {
-    if(strncmp(displayString + stringByteLength(displayString) - 2, STD_SPACE_HAIR, 2) != 0) {
-      strcat(displayString, STD_SPACE_HAIR);
-    }
-
-    if(displayString[i] == '-') {
-      strcat(displayString, "-");
-      i++;
-    }
-    else {
-      strcat(displayString, "+");
-    }
-
-    strcat(displayString, COMPLEX_UNIT);
-    strcat(displayString, PRODUCT_SIGN);
-    memmove(strchr(displayString, '\0'), displayString + i, strlen(displayString + i) + 1);
-  }
-  else { // POLAR
-    strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle16ToDisplayString2(&imag16, currentAngularMode, displayString + stringByteLength(displayString));
-  }
-}
-
-
-
 void complex34ToDisplayString2(const complex34_t *complex34, char *displayString) {
   int16_t i=100;
   real34_t real34, imag34;
@@ -1230,7 +1023,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     displayBugScreen(errorMessage);
   }
 
-  realToDisplayString2(&real34, true, displayString);
+  realToDisplayString2(&real34, displayString);
 
   if(updateDisplayValueX) {
     if(complexMode == CM_RECTANGULAR) {
@@ -1241,7 +1034,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     }
   }
 
-  realToDisplayString2(&imag34, true, displayString + i);
+  realToDisplayString2(&imag34, displayString + i);
 
   if(complexMode == CM_RECTANGULAR) {
     if(strncmp(displayString + stringByteLength(displayString) - 2, STD_SPACE_HAIR, 2) != 0) {
@@ -1418,87 +1211,6 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 
-void angle16ToDisplayString2(const real16_t *angle16, uint8_t mode, char *displayString) {
-  if(mode == AM_DMS) {
-    char degStr[27];
-    uint32_t m, s, fs;
-    int16_t sign;
-    real39_t temp, degrees, minutes, seconds;
-
-    real16ToReal(angle16, &temp);
-
-    sign = realIsNegative(&temp) ? -1 : 1;
-    realSetPositiveSign(&temp);
-
-    // Get the degrees
-    realToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
-
-    // Get the minutes
-    realSubtract(&temp, &degrees, &temp, &ctxtReal39);
-    realMultiply(&temp, const_100, &temp, &ctxtReal39);
-    realToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
-
-    // Get the seconds
-    realSubtract(&temp, &minutes, &temp, &ctxtReal39);
-    realMultiply(&temp, const_100, &temp, &ctxtReal39);
-    realToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
-
-    // Get the fractional seconds
-    realSubtract(&temp, &seconds, &temp, &ctxtReal39);
-    realMultiply(&temp, const_100, &temp, &ctxtReal39);
-    realToIntegralValue(&temp, &temp, DEC_ROUND_DOWN, &ctxtReal39);
-
-    realToUInt32(&temp, fs);
-    realToUInt32(&seconds, s);
-    realToUInt32(&minutes, m);
-
-    if(fs >= 100) {
-      fs -= 100;
-      s++;
-    }
-
-    if(s >= 60) {
-      s -= 60;
-      m++;
-    }
-
-    if(m >= 60) {
-      m -= 60;
-      realAdd(&degrees, const_1, &degrees, &ctxtReal39);
-    }
-
-    realToString(&degrees, degStr);
-    for(int32_t i=0; degStr[i]!=0; i++) {
-      if(degStr[i] == '.') {
-        degStr[i] = 0;
-        break;
-      }
-    }
-
-    sprintf(displayString, "%s%s" STD_DEGREE "%s%" FMT32U STD_QUOTE "%s%" FMT32U "%s%02" FMT32U STD_DOUBLE_QUOTE,
-                            sign==-1 ? "-" : "",
-                              degStr,         m < 10 ? STD_SPACE_FIGURE : "",
-                                                m,                   s < 10 ? STD_SPACE_FIGURE : "",
-                                                                       s,         RADIX16_MARK_STRING,
-                                                                                    fs);
-  }
-  else { // Angle is not in DMS
-    realToDisplayString2(angle16, false, displayString);
-
-         if(mode == AM_DEGREE) strcat(displayString, STD_DEGREE);
-    else if(mode == AM_GRAD)   strcat(displayString, STD_SUP_g);
-    else if(mode == AM_MULTPI) strcat(displayString, STD_pi);
-    else if(mode == AM_RADIAN) strcat(displayString, STD_SUP_r);
-    else {
-      strcat(displayString, "?");
-      sprintf(errorMessage, "In function realToDisplayString2: %" FMT8U " is an unexpected value for mode!", mode);
-      displayBugScreen(errorMessage);
-    }
-  }
-}
-
-
-
 void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displayString) {
   if(mode == AM_DMS) {
     char degStr[27];
@@ -1565,7 +1277,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
                                                                                     fs);
   }
   else {
-    realToDisplayString2(angle34, true, displayString);
+    realToDisplayString2(angle34, displayString);
 
          if(mode == AM_DEGREE) strcat(displayString, STD_DEGREE);
     else if(mode == AM_GRAD)   strcat(displayString, STD_SUP_g);

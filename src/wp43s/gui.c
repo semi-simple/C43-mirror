@@ -4115,7 +4115,7 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   calcMode = CM_NIM;
 
   liftStack();
-  real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
+  real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
 //refreshStack();                       //vv dr
   refreshRegisterLine(REGISTER_Y);
   refreshRegisterLine(REGISTER_Z);

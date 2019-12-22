@@ -22,10 +22,10 @@
 
 
 
-void (* const Roundi[12])(void) = {
-// regX ==> 1            2           3            4            5            6            7            8           9            10            11          12
-//          Long integer Real16      Complex16    Angle16      Time         Date         String       Real16 mat  Complex16 m  Short integer Real34      Complex34
-            roundiError, roundiRe16, roundiError, roundiError, roundiError, roundiError, roundiError, roundiRm16, roundiError, roundiError,  roundiRe34, roundiError
+void (* const Roundi[9])(void) = {
+// regX ==> 1            2           3            4            5            6            7           8            9
+//          Long integer Real34      Complex34    Time         Date         String       Real34 mat  Complex34 m  Short integer
+            roundiError, roundiReal, roundiError, roundiError, roundiError, roundiError, roundiRema, roundiError, roundiError
 };
 
 
@@ -64,31 +64,17 @@ void fnRoundi(uint16_t unusedParamButMandatory) {
 
 
 
-void roundiRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function roundiRe16:", "cannot use NaN or ±∞ as an input of ROUNDI", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_HALF_UP);
-}
-
-
-
-void roundiRm16(void) {
+void roundiRema(void) {
   fnToBeCoded();
 }
 
 
 
-void roundiRe34(void) {
+void roundiReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function roundiRe34:", "cannot use NaN or ±∞ as an input of ROUNDI", NULL, NULL);
+      showInfoDialog("In function roundiReal:", "cannot use NaN or ±∞ as an input of ROUNDI", NULL, NULL);
     #endif
     return;
   }

@@ -23,74 +23,46 @@ void subError   (void);
 
 //      RegYRegX
 void subLonILonI(void);
-void subLonIRe16(void);
-void subLonICo16(void);
 void subLonITime(void);
 void subLonIDate(void);
 void subLonIShoI(void);
-void subLonIRe34(void);
-void subLonICo34(void);
-
-//      RegYRegX
-void subRe16LonI(void);
-void subRe16Re16(void);
-void subRe16Co16(void);
-void subRe16Time(void);
-void subRe16Date(void);
-void subRe16ShoI(void);
-void subRe16Re34(void);
-void subRe16Co34(void);
-
-//      RegYRegX
-void subCo16LonI(void);
-void subCo16Re16(void);
-void subCo16Co16(void);
-void subCo16ShoI(void);
-void subCo16Re34(void);
-void subCo16Co34(void);
+void subLonIReal(void);
+void subLonICplx(void);
 
 //      RegYRegX
 void subTimeLonI(void);
-void subTimeRe16(void);
 void subTimeTime(void);
-void subTimeRe34(void);
+void subTimeReal(void);
 
 //      RegYRegX
 void subDateLonI(void);
-void subDateRe16(void);
 void subDateDate(void);
-void subDateRe34(void);
+void subDateReal(void);
 
 //      RegYRegX
-void subRm16Rm16(void);
-void subRm16Cm16(void);
+void subRemaRema(void);
+void subRemaCxma(void);
 
 //      RegYRegX
-void subCm16Rm16(void);
-void subCm16Cm16(void);
+void subCxmaRema(void);
+void subCxmaCxma(void);
 
 //      RegYRegX
 void subShoILonI(void);
-void subShoIRe16(void);
-void subShoICo16(void);
 void subShoIShoI(void);
-void subShoIRe34(void);
-void subShoICo34(void);
+void subShoIReal(void);
+void subShoICplx(void);
 
 //      RegYRegX
-void subRe34LonI(void);
-void subRe34Re16(void);
-void subRe34Co16(void);
-void subRe34Time(void);
-void subRe34Date(void);
-void subRe34ShoI(void);
-void subRe34Re34(void);
-void subRe34Co34(void);
+void subRealLonI(void);
+void subRealTime(void);
+void subRealDate(void);
+void subRealShoI(void);
+void subRealReal(void);
+void subRealCplx(void);
 
 //      RegYRegX
-void subCo34LonI(void);
-void subCo34Re16(void);
-void subCo34Co16(void);
-void subCo34ShoI(void);
-void subCo34Re34(void);
-void subCo34Co34(void);
+void subCplxLonI(void);
+void subCplxShoI(void);
+void subCplxReal(void);
+void subCplxCplx(void);

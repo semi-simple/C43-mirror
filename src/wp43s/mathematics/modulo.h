@@ -23,24 +23,15 @@ void modError(void);
 
 //      RegYRegX
 void modLonILonI(void);
-void modLonIRe16(void);
 void modLonIShoI(void);
-void modLonIRe34(void);
-
-//      RegYRegX
-void modRe16LonI(void);
-void modRe16Re16(void);
-void modRe16ShoI(void);
-void modRe16Re34(void);
+void modLonIReal(void);
 
 //      RegYRegX
 void modShoILonI(void);
-void modShoIRe16(void);
 void modShoIShoI(void);
-void modShoIRe34(void);
+void modShoIReal(void);
 
 //      RegYRegX
-void modRe34LonI(void);
-void modRe34Re16(void);
-void modRe34ShoI(void);
-void modRe34Re34(void);
+void modRealLonI(void);
+void modRealShoI(void);
+void modRealReal(void);

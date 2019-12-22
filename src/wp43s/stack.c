@@ -88,8 +88,8 @@ void liftStack(void) {
     freeRegisterData(REGISTER_X);
   }
 
-  setRegisterDataPointer(REGISTER_X, allocWp43s(REAL16_SIZE));
-  setRegisterDataType(REGISTER_X, dtReal16, AM_NONE);
+  setRegisterDataPointer(REGISTER_X, allocWp43s(REAL34_SIZE));
+  setRegisterDataType(REGISTER_X, dtReal34, AM_NONE);
 }
 
 

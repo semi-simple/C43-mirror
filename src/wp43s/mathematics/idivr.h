@@ -23,24 +23,15 @@ void idivrError(void);
 
 //      RegYRegX
 void idivrLonILonI(void);
-void idivrLonIRe16(void);
 void idivrLonIShoI(void);
-void idivrLonIRe34(void);
-
-//      RegYRegX
-void idivrRe16LonI(void);
-void idivrRe16Re16(void);
-void idivrRe16ShoI(void);
-void idivrRe16Re34(void);
+void idivrLonIReal(void);
 
 //      RegYRegX
 void idivrShoILonI(void);
-void idivrShoIRe16(void);
 void idivrShoIShoI(void);
-void idivrShoIRe34(void);
+void idivrShoIReal(void);
 
 //      RegYRegX
-void idivrRe34LonI(void);
-void idivrRe34Re16(void);
-void idivrRe34ShoI(void);
-void idivrRe34Re34(void);
+void idivrRealLonI(void);
+void idivrRealShoI(void);
+void idivrRealReal(void);

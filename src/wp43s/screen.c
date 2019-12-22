@@ -641,7 +641,7 @@ void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
 
 
 
-#define FN_TIME_DEBUG1
+#define N_FN_TIME_DEBUG1
 
 
 void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler     

@@ -39,6 +39,8 @@ Modes available in the mode menu:
 
 
 
+
+
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
 #define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
 #define JM_SHIFT_TIMER 4000    //ms

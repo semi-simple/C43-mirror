@@ -611,17 +611,17 @@ void Wait_loop() {
 void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
   char charKey[3];
   if (FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) {
-    #ifdef FN_TIME
+    #ifdef FN_TIME_DEBUG
     printf("TIMER check passed \n");
     printf("  %ld, KEY=%d, DC=%d, DE=%d \n",g_get_monotonic_time() / 1000, FN_key_pressed, FN_double_click_detected, FN_delay_exec);
     #endif
     FN_delay_exec = false;
     Wait_loop();
-    #ifdef FN_TIME
+    #ifdef FN_TIME_DEBUG
     printf("  %ld, KEY=%d \n",g_get_monotonic_time() / 1000,FN_key_pressed);
     #endif
     if (TC_compare(JM_FN_DOUBLE_TIMER) == 1) {
-      #ifdef FN_TIME
+      #ifdef FN_TIME_DEBUG
       printf("Delayed Exec \n");
       #endif
     FN_timeouts_in_progress = false;
@@ -640,8 +640,13 @@ void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
 }                                            //JM FN-DOUBLE vv
 
 
-void FN_handler() {                          //JM LONGPRESS vv
-  if(FN_timeouts_in_progress) {              //JM LONGPRESS handlerFN Key shift longpress handler
+
+#define FN_TIME_DEBUG1
+
+
+void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler     
+                                             //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
+  if( (FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
  
     if(FN_counter > JM_FN_TIMER) {
       FN_counter = JM_FN_TIMER;
@@ -650,17 +655,17 @@ void FN_handler() {                          //JM LONGPRESS vv
       FN_counter = 1;
     } 
 
-    if (FN_counter == 1) {    
-      if(!shiftF && !shiftG) {
-        S_shF();
+    if (FN_counter == 1) {                                //   Countdown (t=100 ms) from JM_FN_TIMER (8) to 1
+      if(!shiftF && !shiftG) {                            //   Current shift state
+        S_shF();                                          //   New shift state
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
         showShiftState();
         clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,1, false);
-        FN_counter = JM_FN_TIMER;                        //restart count
-        #ifdef FN_TIME
+        FN_counter = JM_FN_TIMER;                         //  restart count
+        #ifdef FN_TIME_DEBUG1
         printf("Handler 1, KEY=%d \n",FN_key_pressed);
         #endif
       }
@@ -673,19 +678,19 @@ void FN_handler() {                          //JM LONGPRESS vv
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,2, false);    
-        FN_counter = JM_FN_TIMER;                        //restart count
-        #ifdef FN_TIME
+        FN_counter = JM_FN_TIMER;                        //  restart count
+        #ifdef FN_TIME_DEBUG1
         printf("Handler 2, KEY=%d \n",FN_key_pressed);
         #endif
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {        
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //JM keep shift state, so it will stay here every cycle until key released
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //  keep shift state, so it will stay here every cycle until key released
         clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(ITM_NOP, 0);
         FN_timed_out_to_NOP = true;
-        underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
+        underline_softkey(FN_key_pressed-38,3, false);   //  Purposely select row 3 which does not exist, just to activate the 'clear previous line'
         FN_timeouts_in_progress = false;   
-        #ifdef FN_TIME
+        #ifdef FN_TIME_DEBUG1
         printf("Handler 3, KEY=%d \n",FN_key_pressed);
         #endif
       }

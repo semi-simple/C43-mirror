@@ -21,10 +21,8 @@
 void fnCubeRoot(uint16_t unusedParamButMandatory);
 void curtError  (void);
 void curtLonI   (void);
-void curtRe16   (void);
-void curtCo16   (void);
-void curtRm16   (void);
-void curtCm16   (void);
+void curtRema   (void);
+void curtCxma   (void);
 void curtShoI   (void);
-void curtRe34   (void);
-void curtCo34   (void);
+void curtReal   (void);
+void curtCplx   (void);

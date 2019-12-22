@@ -22,10 +22,10 @@
 
 
 
-void (* const sign[12])(void) = {
-// regX ==> 1            2         3               4          5          6          7          8          9           10            11        12
-//          Long integer Real16    Complex16       Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
-            signLonI,    signRe16, unitVectorCo16, signError, signError, signError, signError, signRm16,  signError,  signShoI,     signRe34, unitVectorCo34
+void (* const sign[9])(void) = {
+// regX ==> 1            2         3               4          5          6          7          8           9
+//          Long integer Real34    Complex34       Time       Date       String     Real34 mat Complex34 m Short integer
+            signLonI,    signReal, unitVectorCplx, signError, signError, signError, signRema,  signError,  signShoI
 };
 
 
@@ -87,37 +87,7 @@ void signLonI(void) {
 
 
 
-void signRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function signRe16:", "cannot use NaN as X input of sign", NULL, NULL);
-    #endif
-    return;
-  }
-
-  longInteger_t lgInt;
-
-  longIntegerInit(lgInt);
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    uIntToLongInteger(0, lgInt);
-  }
-  else if(real16IsNegative(REGISTER_REAL16_DATA(REGISTER_X))) {
-    uIntToLongInteger(1, lgInt);
-    longIntegerSetNegativeSign(lgInt);
-  }
-  else {
-    uIntToLongInteger(1, lgInt);
-  }
-
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  longIntegerFree(lgInt);
-}
-
-
-
-void signRm16(void) {
+void signRema(void) {
   fnToBeCoded();
 }
 
@@ -155,11 +125,11 @@ void signShoI(void) {
 
 
 
-void signRe34(void) {
+void signReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function signRe34:", "cannot use NaN as X input of sign", NULL, NULL);
+      showInfoDialog("In function signReal:", "cannot use NaN as X input of sign", NULL, NULL);
     #endif
     return;
   }

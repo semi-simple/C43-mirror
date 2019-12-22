@@ -22,13 +22,8 @@
  * \file registerValueConversions.h
  ***********************************************/
 
-void convertRegister16To34                           (calcRegister_t regist);
-void convertRegister34To16                           (calcRegister_t regist);
-
-void convertLongIntegerRegisterToReal16Register      (calcRegister_t source, calcRegister_t destination);
 void convertLongIntegerRegisterToReal34Register      (calcRegister_t source, calcRegister_t destination);
 void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, calcRegister_t destination);
-void convertLongIntegerRegisterToReal16              (calcRegister_t source, real16_t *destination);
 void convertLongIntegerRegisterToReal34              (calcRegister_t source, real34_t *destination);
 void convertLongIntegerRegisterToReal                (calcRegister_t source, real_t *destination, realContext_t *ctxt);
 void convertLongIntegerRegisterToLongInteger         (calcRegister_t regist, longInteger_t longInteger);
@@ -36,7 +31,6 @@ void convertLongIntegerRegisterToLongInteger         (calcRegister_t regist, lon
 void convertLongIntegerToLongIntegerRegister         (const longInteger_t longInteger, calcRegister_t regist);
 void convertLongIntegerToShortIntegerRegister        (longInteger_t lgInt, uint32_t base, calcRegister_t destination);
 
-void convertShortIntegerRegisterToReal16Register     (calcRegister_t source, calcRegister_t destination);
 void convertShortIntegerRegisterToReal34Register     (calcRegister_t source, calcRegister_t destination);
 void convertShortIntegerRegisterToLongIntegerRegister(calcRegister_t source, calcRegister_t destination);
 void convertShortIntegerRegisterToLongInteger        (calcRegister_t source, longInteger_t lgInt);
@@ -45,9 +39,7 @@ void convertShortIntegerRegisterToReal               (calcRegister_t source, rea
 void convertShortIntegerRegisterToUInt64             (calcRegister_t regist, int16_t *sign, uint64_t *value);
 void convertUInt64ToShortIntegerRegister             (int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist);
 
-void convertReal16ToLongInteger(real16_t *real16, longInteger_t lgInt, enum rounding roundingMode);
 void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum rounding roundingMode);
-void convertReal16ToLongIntegerRegister(real16_t *real16, calcRegister_t dest, enum rounding roundingMode);
 void convertReal34ToLongIntegerRegister(real34_t *real34, calcRegister_t dest, enum rounding roundingMode);
 void convertRealToLongInteger(real_t *real39, longInteger_t lgInt, enum rounding roundingMode);
 void convertRealToLongIntegerRegister(real_t *real39, calcRegister_t dest, enum rounding roundingMode);

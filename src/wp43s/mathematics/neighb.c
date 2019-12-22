@@ -29,13 +29,11 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
 
   dataTypeX = getRegisterDataType(REGISTER_X);
   dataTypeY = getRegisterDataType(REGISTER_Y);
-  if(   dataTypeX == dtComplex16       || dataTypeY == dtComplex16
-     || dataTypeX == dtAngle           || dataTypeY == dtAngle
-     || dataTypeX == dtTime            || dataTypeY == dtTime
+  if(   dataTypeX == dtTime            || dataTypeY == dtTime
      || dataTypeX == dtDate            || dataTypeY == dtDate
      || dataTypeX == dtString          || dataTypeY == dtString
-     || dataTypeX == dtReal16Matrix    || dataTypeY == dtReal16Matrix
-     || dataTypeX == dtComplex16Matrix || dataTypeY == dtComplex16Matrix
+     || dataTypeX == dtReal34Matrix    || dataTypeY == dtReal34Matrix
+     || dataTypeX == dtComplex34Matrix || dataTypeY == dtComplex34Matrix
      || dataTypeX == dtComplex34       || dataTypeY == dtComplex34) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -46,8 +44,7 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  if(   (dataTypeX == dtReal16    && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)))
-     || (dataTypeX == dtReal34    && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)))) {
+  if(dataTypeX == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnNeighb:", "cannot use NaN as X or Y input of NEIGHB", NULL, NULL);
@@ -67,13 +64,6 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
           intToLongInteger(longIntegerCompare(lgIntY, lgIntX) == 0 ? 0 : (longIntegerCompare(lgIntY, lgIntX) > 0 ? 1 : -1), lgIntY);
           break;
 
-        case dtReal16:
-          convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-          longIntegerInit(lgIntY);
-          intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
-          break;
-
         case dtShortInteger:
           convertShortIntegerRegisterToLongInteger(REGISTER_Y, lgIntY);
           intToLongInteger(longIntegerCompare(lgIntY, lgIntX) == 0 ? 0 : (longIntegerCompare(lgIntY, lgIntX) > 0 ? 1 : -1), lgIntY);
@@ -81,7 +71,7 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
 
         case dtReal34:
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
-          real34ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+          real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
           longIntegerInit(lgIntY);
           intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
           break;
@@ -96,35 +86,12 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
       longIntegerFree(lgIntY);
       break;
 
-    case dtReal16:
-      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-      switch(dataTypeY) {
-        case dtLongInteger:  convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);  break;
-        case dtReal16:       real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);                       break;
-        case dtShortInteger: convertShortIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39); break;
-        case dtReal34:       real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);                       break;
-        default:             {}
-      }
-
-      realNextToward(&x, &y, &x, &ctxtReal16);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      break;
-
     case dtShortInteger:
       convertShortIntegerRegisterToLongInteger(REGISTER_X, lgIntX);
       switch(dataTypeY) {
         case dtLongInteger:
           convertLongIntegerRegisterToLongInteger(REGISTER_Y, lgIntY);
           intToLongInteger(longIntegerCompare(lgIntY, lgIntX) == 0 ? 0 : (longIntegerCompare(lgIntY, lgIntX) > 0 ? 1 : -1), lgIntY);
-          longIntegerAdd(lgIntX, lgIntY, lgIntX);
-          convertLongIntegerToShortIntegerRegister(lgIntX, getRegisterShortIntegerBase(REGISTER_X), REGISTER_X);
-          break;
-
-        case dtReal16:
-          convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-          longIntegerInit(lgIntY);
-          intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
           longIntegerAdd(lgIntX, lgIntY, lgIntX);
           convertLongIntegerToShortIntegerRegister(lgIntX, getRegisterShortIntegerBase(REGISTER_X), REGISTER_X);
           break;
@@ -138,7 +105,7 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
 
         case dtReal34:
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
-          real34ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
+          real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
           longIntegerInit(lgIntY);
           intToLongInteger(realCompareEqual(&y, &x) ? 0 : (realCompareGreaterThan(&y, &x) ? 1 : -1), lgIntY);
           longIntegerAdd(lgIntX, lgIntY, lgIntX);
@@ -156,7 +123,6 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
       real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
       switch(dataTypeY) {
         case dtLongInteger:  convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);  break;
-        case dtReal16:       real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);                       break;
         case dtShortInteger: convertShortIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39); break;
         case dtReal34:       real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);                       break;
         default:             {}

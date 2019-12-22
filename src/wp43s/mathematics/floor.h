@@ -21,6 +21,5 @@
 void fnFloor   (uint16_t unusedParamButMandatory);
 void floorError(void);
 void floorLonI (void);
-void floorRe16 (void);
-void floorRm16 (void);
-void floorRe34 (void);
+void floorRema (void);
+void floorReal (void);

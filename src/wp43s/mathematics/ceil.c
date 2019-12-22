@@ -22,10 +22,10 @@
 
 
 
-void (* const Ceil[12])(void) = {
-// regX ==> 1            2         3          4          5          6          7          8          9           10            11        12
-//          Long integer Real16    Complex16  Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
-            ceilLonI,    ceilRe16, ceilError, ceilError, ceilError, ceilError, ceilError, ceilRm16,  ceilError,  ceilError,    ceilRe34, ceilError
+void (* const Ceil[9])(void) = {
+// regX ==> 1            2         3          4          5          6          7          8           9
+//          Long integer Real34    Complex34  Time       Date       String     Real34 mat Complex34 m Short integer
+            ceilLonI,    ceilReal, ceilError, ceilError, ceilError, ceilError, ceilRema,  ceilError,  ceilError
 };
 
 
@@ -69,39 +69,17 @@ void ceilLonI(void) {
 
 
 
-void ceilRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ceilRe16:", "cannot use NaN as X input of ceil", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ceilRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of ceil", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_CEILING);
-}
-
-
-
-void ceilRm16(void) {
+void ceilRema(void) {
   fnToBeCoded();
 }
 
 
 
-void ceilRe34(void) {
+void ceilReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ceilRe34:", "cannot use NaN as X input of ceil", NULL, NULL);
+      showInfoDialog("In function ceilReal:", "cannot use NaN as X input of ceil", NULL, NULL);
     #endif
     return;
   }
@@ -109,7 +87,7 @@ void ceilRe34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ceilRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of ceil", NULL, NULL);
+      showInfoDialog("In function ceilReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of ceil", NULL, NULL);
     #endif
     return;
   }

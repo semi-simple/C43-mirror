@@ -443,11 +443,11 @@ void btnPressed(void *notUsed, void *data) {
         uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
         uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
 
-        if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
-           && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
+        if(   (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+           && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
           showFunctionName(ITM_REtoCX, 10);
         }
-        else if(dataTypeX == dtComplex16 || dataTypeX == dtComplex34) {
+        else if(dataTypeX == dtComplex34) {
           showFunctionName(ITM_CXtoRE, 10);
         }
         else {
@@ -716,28 +716,17 @@ void btnPressed(void *notUsed, void *data) {
       else if(calcMode == CM_NORMAL) {
         switch(getRegisterDataType(REGISTER_X)) {
           case dtLongInteger :
-            convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+            convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
             refreshRegisterLine(REGISTER_X);
             break;
 
-          case dtReal16:
-            if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-              if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-                convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
-              }
-              setRegisterAngularMode(REGISTER_X, AM_NONE);
-              refreshRegisterLine(REGISTER_X);
-            }
-            break;
-
           case dtShortInteger :
-            convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+            convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
             refreshRegisterLine(REGISTER_X);
             break;
 
           case dtReal34:
             if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-              convertRegister34To16(REGISTER_X);
               refreshRegisterLine(REGISTER_X);
             }
             else {

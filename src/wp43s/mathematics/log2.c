@@ -22,10 +22,10 @@
 
 
 
-void (* const logBase2[12])(void) = {
-// regX ==> 1            2         3         4          5          6          7          8          9           10            11        12
-//          Long integer Real16    Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
-            log2LonI,    log2Re16, log2Co16, log2Error, log2Error, log2Error, log2Error, log2Rm16,  log2Cm16,   log2ShoI,     log2Re34, log2Co34
+void (* const logBase2[9])(void) = {
+// regX ==> 1            2         3         4          5          6          7          8           9
+//          Long integer Real34    complex34 Time       Date       String     Real34 mat Complex34 m Short integer
+            log2LonI,    log2Real, log2Cplx, log2Error, log2Error, log2Error, log2Rema,  log2Cxma,   log2ShoI
 };
 
 
@@ -77,8 +77,8 @@ void log2LonI(void) {
 
   if(longIntegerIsZero(lgInt)) {
     if(getFlag(FLAG_DANGER)) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -95,21 +95,21 @@ void log2LonI(void) {
     if(longIntegerIsPositive(lgInt)) {
       WP34S_Ln(&x, &x);
       realDivide(&x, const_ln2, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
       realSetPositiveSign(&x);
       WP34S_Ln(&x, &x);
       realDivide(&x, const_ln2, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       realDivide(const_pi, const_ln2, &x, &ctxtReal39);
-      realToReal16(&x, REGISTER_IMAG16_DATA(REGISTER_X));
+      realToReal34(&x, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else if(getFlag(FLAG_DANGER)) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -124,124 +124,13 @@ void log2LonI(void) {
 
 
 
-void log2Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log2Re16:", "cannot use NaN as X input of log2", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Re16:", "cannot calculate log2(0)", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(!getFlag(FLAG_DANGER)) {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Re16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log2 when flag D is not set", NULL, NULL);
-      #endif
-      return;
-    }
-    else {
-      if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-        realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-    }
-  }
-
-  else {
-    real39_t x;
-
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-    if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-      WP34S_Ln(&x, &x);
-      realDivide(&x, const_ln2, &x, &ctxtReal39);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-     }
-    else if(getFlag(FLAG_CPXRES)) {
-      realSetPositiveSign(&x);
-      WP34S_Ln(&x, &x);
-      realDivide(&x, const_ln2, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      realDivide(const_pi, const_ln2, &x, &ctxtReal39);
-      realToReal16(&x, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    else if(getFlag(FLAG_DANGER)) {
-      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Re16:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
-      #endif
-    }
-  }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void log2Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log2Co16:", "cannot use NaN as X input of log2", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      realToReal16(const_NaN, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Co16:", "cannot calculate log2(0)", NULL, NULL);
-      #endif
-    }
-  }
-  else {
-    real39_t a, b;
-
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-    real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-    real39RectangularToPolar(&a, &b, &a, &b);
-    WP34S_Ln(&a, &a);
-    realDivide(&a, const_ln2, &a, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-    realDivide(&b, const_ln2, &b, &ctxtReal39);
-    realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-}
-
-
-
-void log2Rm16(void) {
+void log2Rema(void) {
   fnToBeCoded();
 }
 
 
 
-void log2Cm16(void) {
+void log2Cxma(void) {
   fnToBeCoded();
 }
 
@@ -253,11 +142,11 @@ void log2ShoI(void) {
 
 
 
-void log2Re34(void) {
+void log2Real(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log2Re34:", "cannot use NaN as X input of log2", NULL, NULL);
+      showInfoDialog("In function log2Real:", "cannot use NaN as X input of log2", NULL, NULL);
     #endif
     return;
   }
@@ -269,7 +158,7 @@ void log2Re34(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Re34:", "cannot calculate log2(0)", NULL, NULL);
+        showInfoDialog("In function log2Real:", "cannot calculate log2(0)", NULL, NULL);
       #endif
     }
   }
@@ -278,7 +167,7 @@ void log2Re34(void) {
     if(!getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Re34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log2 when flag D is not set", NULL, NULL);
+        showInfoDialog("In function log2Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log2 when flag D is not set", NULL, NULL);
       #endif
       return;
     }
@@ -316,7 +205,7 @@ void log2Re34(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Re34:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
+        showInfoDialog("In function log2Real:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -325,11 +214,11 @@ void log2Re34(void) {
 
 
 
-void log2Co34(void) {
+void log2Cplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log2Co34:", "cannot use NaN as X input of log2", NULL, NULL);
+      showInfoDialog("In function log2Cplx:", "cannot use NaN as X input of log2", NULL, NULL);
     #endif
     return;
   }
@@ -342,7 +231,7 @@ void log2Co34(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Co34:", "cannot calculate log2(0)", NULL, NULL);
+        showInfoDialog("In function log2Cplx:", "cannot calculate log2(0)", NULL, NULL);
       #endif
     }
   }

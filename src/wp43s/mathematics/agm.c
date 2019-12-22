@@ -22,7 +22,7 @@
 
 
 void fnAgm(uint16_t unusedParamButMandatory) {
-  bool_t result16=true, realInput=true;
+  bool_t realInput=true;
   real39_t aReal, bReal, cReal;
   real39_t aImag, bImag, cImag;
 
@@ -31,24 +31,13 @@ void fnAgm(uint16_t unusedParamButMandatory) {
                         realZero(&aImag);
                         break;
 
-    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &aReal);
-                        realZero(&aImag);
-                        break;
-
-    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &aReal);
-                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &aImag);
-                        realInput = false;
-                        break;
-
     case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &aReal);
                         realZero(&aImag);
-                        result16 = false;
                         break;
 
     case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &aReal);
                         real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &aImag);
                         realInput = false;
-                        result16 = false;
                         break;
 
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -64,24 +53,13 @@ void fnAgm(uint16_t unusedParamButMandatory) {
                         realZero(&bImag);
                         break;
 
-    case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &bReal);
-                        realZero(&bImag);
-                        break;
-
-    case dtComplex16:   real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &bReal);
-                        real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &bImag);
-                        realInput = false;
-                        break;
-
     case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &bReal);
                         realZero(&bImag);
-                        result16 = false;
                         break;
 
     case dtComplex34:   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &bReal);
                         real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &bImag);
                         realInput = false;
-                        result16 = false;
                         break;
 
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
@@ -113,24 +91,18 @@ void fnAgm(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(realInput) {
-    while(realIdenticalDigits(&aReal, &bReal) <= (result16 ? 16 : 34)) {
+    while(realIdenticalDigits(&aReal, &bReal) <= 34) {
       realAdd(&aReal, &bReal, &cReal, &ctxtReal39);          // c = a + b
       realMultiply(&aReal, &bReal, &bReal, &ctxtReal39);     // b = a * b
       realSquareRoot(&bReal, &bReal, &ctxtReal39);           // b = sqrt(a * b)
       realMultiply(&cReal, const_1on2, &aReal, &ctxtReal39); // a = (a + b) / 2
     }
 
-    if(result16) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(&aReal, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else { // Complex input
-    while(realIdenticalDigits(&aReal, &bReal) <= (result16 ? 16 : 34) || realIdenticalDigits(&aImag, &bImag) <= (result16 ? 16 : 34)) {
+    while(realIdenticalDigits(&aReal, &bReal) <= 34 || realIdenticalDigits(&aImag, &bImag) <= 34) {
       realAdd(&aReal, &bReal, &cReal, &ctxtReal39);                // c = a + b real part
       realAdd(&aImag, &bImag, &cImag, &ctxtReal39);                // c = a + b imag part
 
@@ -146,16 +118,9 @@ void fnAgm(uint16_t unusedParamButMandatory) {
       realMultiply(&cImag, const_1on2, &aImag, &ctxtReal39); // a = (a + b) / 2 imag part
     }
 
-    if(result16) {
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      realToReal16(&aReal, REGISTER_REAL16_DATA(REGISTER_X));
-      realToReal16(&aImag, REGISTER_IMAG16_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(&aImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&aImag, REGISTER_IMAG34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);

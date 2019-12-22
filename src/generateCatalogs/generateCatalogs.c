@@ -46,7 +46,6 @@ bool_t               allowScreenUpdate;
 bool_t               funcOK;
 
 // Variables stored in RAM
-realContext_t        ctxtReal16;  // 16 digits
 realContext_t        ctxtReal34;  // 34 digits
 realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
 realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S

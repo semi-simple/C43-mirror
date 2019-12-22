@@ -21,10 +21,8 @@
 void fnCube   (uint16_t unusedParamButMandatory);
 void cubeError(void);
 void cubeLonI (void);
-void cubeRe16 (void);
-void cubeCo16 (void);
-void cubeRm16 (void);
-void cubeCm16 (void);
+void cubeRema (void);
+void cubeCxma (void);
 void cubeShoI (void);
-void cubeRe34 (void);
-void cubeCo34 (void);
+void cubeReal (void);
+void cubeCplx (void);

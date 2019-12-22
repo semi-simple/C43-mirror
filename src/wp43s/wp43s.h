@@ -311,9 +311,8 @@ typedef int16_t calcRegister_t;
 // Radix Mark 1 bit
 #define RM_PERIOD               0
 #define RM_COMMA                1
-#define RADIX16_MARK_CHAR       (radixMark == RM_PERIOD ? '.' : ',')
-#define RADIX16_MARK_STRING     (radixMark == RM_PERIOD ? "." : ",")
-#define RADIX34_MARK_STRING     (radixMark == RM_PERIOD ? STD_PERIOD34 : STD_COMMA34)
+#define RADIX34_MARK_CHAR       (radixMark == RM_PERIOD ? '.' : ',')
+#define RADIX34_MARK_STRING     (radixMark == RM_PERIOD ? "." : ",")
 
 // Stack size 1 bit
 #define SS_4                    0
@@ -481,14 +480,13 @@ extern const item_t         indexOfItems[];
 extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
 extern const calcKey_t      kbd_std[37];
 extern const font_t         standardFont, numericFont;
-extern void                 (* const addition[12][12])(void);
-extern void                 (* const subtraction[12][12])(void);
-extern void                 (* const multiplication[12][12])(void);
-extern void                 (* const division[12][12])(void);
+extern void                 (* const addition[9][9])(void);
+extern void                 (* const subtraction[9][9])(void);
+extern void                 (* const multiplication[9][9])(void);
+extern void                 (* const division[9][9])(void);
 extern const softmenu_t     softmenu[];
 
 // Variables stored in RAM
-extern realContext_t        ctxtReal16;  // 16 digits
 extern realContext_t        ctxtReal34;  // 34 digits
 extern realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
 extern realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
@@ -595,7 +593,6 @@ extern bool_t               displayLeadingZeros;
 extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
-extern bool_t               nimInputIsReal34;
 extern bool_t               updateDisplayValueX;
 extern calcKey_t            kbd_usr[37];
 extern calcRegister_t       errorMessageRegisterLine;

@@ -21,9 +21,7 @@
 void fnSinh   (uint16_t unusedParamButMandatory);
 void sinhError(void);
 void sinhLonI (void);
-void sinhRe16 (void);
-void sinhCo16 (void);
-void sinhRm16 (void);
-void sinhCm16 (void);
-void sinhRe34 (void);
-void sinhCo34 (void);
+void sinhRema (void);
+void sinhCxma (void);
+void sinhReal (void);
+void sinhCplx (void);

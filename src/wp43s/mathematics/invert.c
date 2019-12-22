@@ -22,10 +22,10 @@
 
 
 
-void (* const invert[12])(void) = {
-// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
-//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
-            invertLonI,  invertRe16, invertCo16, invertError, invertError, invertError, invertError, invertRm16, invertCm16, invertError,  invertRe34, invertCo34
+void (* const invert[9])(void) = {
+// regX ==> 1            2           3            4            5            6            7           8           9
+//          Long integer Real34      complex34    Time         Date         String       Real34 mat  Complex34 m Short integer
+            invertLonI,  invertReal, invertCplx,  invertError, invertError, invertError, invertRema, invertCxma, invertError
 };
 
 
@@ -102,8 +102,8 @@ void invertLonI(void) {
 
       realDivide(const_1, &reX, &reX, &ctxtReal39);
 
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
     }
 
     longIntegerFree(quotient);
@@ -116,88 +116,13 @@ void invertLonI(void) {
 
 
 
-/********************************************//**
- * \brief 1 ÷ X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void invertRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertRe16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function invertRe16:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertRe16:", "cannot divide a real16 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
-    #endif
-  }
-
-  else {
-    real16Divide(const16_1, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-/********************************************//**
- * \brief 1 ÷ X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void invertCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertCo16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, denom;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  realMultiply(&a, &a, &denom, &ctxtReal39);    // c²
-  realFMA(&b, &b, &denom, &denom, &ctxtReal39); // c² + d²
-
-  realDivide(&a, &denom, &a, &ctxtReal39);
-  realChangeSign(&denom);
-  realDivide(&b, &denom, &b, &ctxtReal39);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void invertRm16(void) {
+void invertRema(void) {
   fnToBeCoded();
 }
 
 
 
-void invertCm16(void) {
+void invertCxma(void) {
   fnToBeCoded();
 }
 
@@ -209,11 +134,11 @@ void invertCm16(void) {
  * \param void
  * \return void
  ***********************************************/
-void invertRe34(void) {
+void invertReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertRe34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function invertReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -225,7 +150,7 @@ void invertRe34(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function invertRe34:", "cannot divide a real34 by 0", NULL, NULL);
+        showInfoDialog("In function invertReal:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
     }
   }
@@ -233,7 +158,7 @@ void invertRe34(void) {
   else if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertRe34:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
+      showInfoDialog("In function invertReal:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
     #endif
   }
 
@@ -251,11 +176,11 @@ void invertRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void invertCo34(void) {
+void invertCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertCo34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function invertCplx:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }

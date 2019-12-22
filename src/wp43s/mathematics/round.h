@@ -21,11 +21,9 @@
 void fnRound   (uint16_t unusedParamButMandatory);
 void roundError(void);
 void roundLonI (void);
-void roundRe16 (void);
-void roundCo16 (void);
 void roundTime (void);
 void roundDate (void);
-void roundRm16 (void);
-void roundCm16 (void);
-void roundRe34 (void);
-void roundCo34 (void);
+void roundRema (void);
+void roundCxma (void);
+void roundReal (void);
+void roundCplx (void);

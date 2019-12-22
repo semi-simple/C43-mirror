@@ -125,7 +125,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY);
 void Show_User_Keys(void);
 void fnKEYSELECT(void);
 void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey);
-void JM_convertReal16ToShortInteger(uint16_t confirmation);
+void JM_convertReal34ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
 char* itoa(int value, char* result, int base);

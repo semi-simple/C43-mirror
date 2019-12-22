@@ -1997,7 +1997,7 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
           longIntegerFree(value);
         }
         else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
-          if(nimInputIsReal34) {
+          
             if(Input_Default == ID_CPXDP) {                                         //JM Input default type
               reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE); //JM Input default type
               stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));          //JM Input default type
@@ -2007,7 +2007,7 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
             reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
             stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
             }                                                                       //JM Input default type
-          }
+          
 
         }
         else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {

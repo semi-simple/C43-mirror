@@ -165,7 +165,7 @@ size_t               wp43sMemInBytes;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 void                 (*confirmedFunction)(uint16_t);
-real39_t             const *gammaConstants;
+real51_t             const *gammaLanczosCoefficients;
 real39_t             const *angle180;
 real39_t             const *angle90;
 real39_t             const *angle45;

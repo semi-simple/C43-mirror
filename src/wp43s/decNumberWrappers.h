@@ -61,9 +61,6 @@ typedef struct {
 #define real_t                                            decNumber
 typedef struct {real16_t real, imag;}                     complex16_t;
 typedef struct {real34_t real, imag;}                     complex34_t;
-typedef struct {real39_t real, imag;}                     complex39_t;
-typedef struct {real51_t real, imag;}                     complex51_t;
-typedef struct {real75_t real, imag;}                     complex75_t;
 
 #define REAL16_SIZE                                       sizeof(real16_t)
 #define REAL34_SIZE                                       sizeof(real34_t)
@@ -74,9 +71,6 @@ typedef struct {real75_t real, imag;}                     complex75_t;
 #define REAL855_SIZE                                      sizeof(real855_t)
 #define COMPLEX16_SIZE                                    sizeof(complex16_t)
 #define COMPLEX34_SIZE                                    sizeof(complex34_t)
-#define COMPLEX39_SIZE                                    sizeof(complex39_t)
-#define COMPLEX51_SIZE                                    sizeof(complex51_t)
-#define COMPLEX75_SIZE                                    sizeof(complex75_t)
 
 #define POINTER_TO_LOCAL_FLAGS                            ((dataSize_t  *)(allLocalRegisterPointer))
 #define POINTER_TO_LOCAL_REGISTER(a)                      ((registerDescriptor_t *)(allLocalRegisterPointer + sizeof(dataSize_t) + 4u*(a)))
@@ -220,7 +214,6 @@ typedef struct {real75_t real, imag;}                     complex75_t;
 
 
 
-#define complexCopy(source, destination, size)                 memcpy                   (destination, source, size)
 #define int32ToReal(source, destination)                       decNumberFromInt32       ((real_t *)(destination), source)
 #define realAdd(operand1, operand2, res, ctxt)                 decNumberAdd             ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
 #define realChangeSign(operand)                                ((real_t *)(operand))->bits ^= 0x80

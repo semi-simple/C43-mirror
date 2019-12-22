@@ -21,12 +21,12 @@
 void fnDivide(uint16_t unusedParamButMandatory);
 void divError(void);
 
-void divCo39Co39(const complex39_t *numer, const complex39_t *denom, complex39_t *quotient);
-void divCo51Co51(const complex51_t *numer, const complex51_t *denom, complex51_t *quotient);
-void divCo75Co75(const complex75_t *numer, const complex75_t *denom, complex75_t *quotient);
-void divRe39Co39(const real_t *numer, const complex39_t *denom, complex39_t *quotient);
-void divRe51Co51(const real_t *numer, const complex51_t *denom, complex51_t *quotient);
-void divRe75Co75(const real_t *numer, const complex75_t *denom, complex75_t *quotient);
+void divCo39Co39(const real39_t *numerReal, const real39_t *numerImag, const real39_t *denomReal, const real39_t *denomImag, real39_t *quotientReal, real39_t *quotientImag);
+void divCo51Co51(const real51_t *numerReal, const real51_t *numerImag, const real51_t *denomReal, const real51_t *denomImag, real51_t *quotientReal, real51_t *quotientImag);
+void divCo75Co75(const real75_t *numerReal, const real75_t *numerImag, const real75_t *denomReal, const real75_t *denomImag, real75_t *quotientReal, real75_t *quotientImag);
+void divRe39Co39(const real_t *numer, const real39_t *denomReal, const real39_t *denomImag, real39_t *quotientReal, real39_t *quotientImag);
+void divRe51Co51(const real_t *numer, const real51_t *denomReal, const real51_t *denomImag, real51_t *quotientReal, real51_t *quotientImag);
+void divRe75Co75(const real_t *numer, const real75_t *denomReal, const real75_t *denomImag, real75_t *quotientReal, real75_t *quotientImag);
 
 //      RegYRegX
 void divLonILonI(void);

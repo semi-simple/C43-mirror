@@ -1972,7 +1972,12 @@ void printReal34ToConsole(const real34_t *value) {
 
 
 void printRealToConsole(const real_t *value) {
-  int32_t i, exponent, last;
+  char str[1000];
+
+  realToString(value, str);
+  printf("real %s", str);
+
+/*  int32_t i, exponent, last;
 
   if(realIsNaN(value)) {
     printf("NaN");
@@ -2016,17 +2021,7 @@ void printRealToConsole(const real_t *value) {
 
   if(exponent != 0) {
     printf(" e %" FMT32S, exponent);
-  }
-}
-
-
-
-void printComplex39ToConsole(const complex39_t *value) {
-  printf("complex39 ");
-  printRealToConsole(&value->real);
-  printf(" + ");
-  printRealToConsole(&value->imag);
-  printf(" i");
+  }*/
 }
 
 

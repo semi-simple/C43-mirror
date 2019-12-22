@@ -64,25 +64,25 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 
-void expCo39(const complex39_t *z, complex39_t *res) {
+void expCo39 (const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag) {
   real39_t expa, sin, cos;
 
-  if(realIsZero(&z->imag)) {
-   realExp(&z->real, &res->real, &ctxtReal39);
-   realZero(&res->imag);
+  if(realIsZero(zImag)) {
+   realExp(zReal, resReal, &ctxtReal39);
+   realZero(resImag);
    return;
   }
 
-  if(realIsSpecial(&z->real) || realIsSpecial(&z->imag)) {
-    realCopy(const_NaN, &res->real);
-    realCopy(const_NaN, &res->imag);
+  if(realIsSpecial(zReal) || realIsSpecial(zImag)) {
+    realCopy(const_NaN, resReal);
+    realCopy(const_NaN, resImag);
     return;
   }
 
- realExp(&z->real, &expa, &ctxtReal39);
- WP34S_Cvt2RadSinCosTan(&z->imag, AM_RADIAN, &sin, &cos, NULL);
- realMultiply(&expa, &cos, &res->real, &ctxtReal39);
- realMultiply(&expa, &sin, &res->imag, &ctxtReal39);
+ realExp(zReal, &expa, &ctxtReal39);
+ WP34S_Cvt2RadSinCosTan(zImag, AM_RADIAN, &sin, &cos, NULL);
+ realMultiply(&expa, &cos, resReal, &ctxtReal39);
+ realMultiply(&expa, &sin, resImag, &ctxtReal39);
 }
 
 
@@ -140,15 +140,15 @@ void expCo16(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
+  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &zReal);
+  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &zImag);
 
-  expCo39(&z, &z);
+  expCo39(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&zReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&zImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -212,13 +212,13 @@ void expCo34(void) {
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  expCo39(&z, &z);
+  expCo39(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

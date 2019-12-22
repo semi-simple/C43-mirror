@@ -114,27 +114,28 @@ void tanhCo16(void) {
 
   // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
   real39_t a, b, sina, cosa;
-  complex39_t numer, denom;
+  real39_t numerReal, denomReal;
+  real39_t numerImag, denomImag;
 
   real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
   real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
 
   if(realIsZero(&b)) {
-    WP34S_Tanh(&a, &numer.real);
-    realZero(&numer.imag);
+    WP34S_Tanh(&a, &numerReal);
+    realZero(&numerImag);
   }
   else {
-    WP34S_Tanh(&a, &numer.real);
-    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numer.imag);
+    WP34S_Tanh(&a, &numerReal);
+    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numerImag);
 
-    realCopy(const_1, &denom.real);
-    realMultiply(&numer.real, &numer.imag, &denom.imag, &ctxtReal39);
+    realCopy(const_1, &denomReal);
+    realMultiply(&numerReal, &numerImag, &denomImag, &ctxtReal39);
 
-    divCo39Co39(&numer, &denom, &numer);
+    divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag);
   }
 
-  realToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
+  realToReal16(&numerReal, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal16(&numerImag, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -189,25 +190,26 @@ void tanhCo34(void) {
 
   // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
   real39_t a, b, sina, cosa;
-  complex39_t numer, denom;
+  real39_t numerReal, denomReal;
+  real39_t numerImag, denomImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   if(realIsZero(&b)) {
-    WP34S_Tanh(&a, &numer.real);
-    realZero(&numer.imag);
+    WP34S_Tanh(&a, &numerReal);
+    realZero(&numerImag);
   }
   else {
-    WP34S_Tanh(&a, &numer.real);
-    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numer.imag);
+    WP34S_Tanh(&a, &numerReal);
+    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numerImag);
 
-    realCopy(const_1, &denom.real);
-    realMultiply(&numer.real, &numer.imag, &denom.imag, &ctxtReal39);
+    realCopy(const_1, &denomReal);
+    realMultiply(&numerReal, &numerImag, &denomImag, &ctxtReal39);
 
-    divCo39Co39(&numer, &denom, &numer);
+    divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag);
   }
 
-  realToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&numerReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&numerImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

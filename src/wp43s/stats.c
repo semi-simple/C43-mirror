@@ -44,8 +44,8 @@ void fnSigma(uint16_t plusMinus) {
   real34_t tmpReal1, tmpReal2, tmpReal3;
   real39_t real39;
 
-  if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtReal34)
-     && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal16 || getRegisterDataType(REGISTER_Y) == dtReal34)) {
+  if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal34)
+     && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal34)) {
 
     if(statisticalSumsPointer == NULL) {
       initStatisticalSums();
@@ -55,16 +55,8 @@ void fnSigma(uint16_t plusMinus) {
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     }
 
-    if(getRegisterDataType(REGISTER_X) == dtReal16) {
-      convertRegister16To34(REGISTER_X);
-    }
-
     if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-    }
-
-    if(getRegisterDataType(REGISTER_Y) == dtReal16) {
-      convertRegister16To34(REGISTER_Y);
     }
 
     if(plusMinus == 1) { // SIGMA+
@@ -253,8 +245,6 @@ void fnSigma(uint16_t plusMinus) {
 
     temporaryInformation = TI_STATISTIC_SUMS;
 
-    convertRegister34To16(REGISTER_X);
-    convertRegister34To16(REGISTER_Y);
     refreshStack();
   }
   else {
@@ -282,6 +272,5 @@ void fnStatSum(uint16_t sum) {
    real34Copy(statisticalSumsPointer + REAL34_SIZE*sum, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
-  convertRegister34To16(REGISTER_X);
   refreshStack();
 }

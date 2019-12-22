@@ -22,10 +22,10 @@
 
 
 
-void (* const arccosh[12])(void) = {
-// regX ==> 1             2            3            4             5             6             7             8            9            10             11           12
-//          Long integer  Real16       Complex16    Angle16       Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34
-            arccoshLonI,  arccoshRe16, arccoshCo16, arccoshError, arccoshError, arccoshError, arccoshError, arccoshRm16, arccoshCm16, arccoshError,  arccoshRe34, arccoshCo34
+void (* const arccosh[9])(void) = {
+// regX ==> 1            2            3            4             5             6             7            8            9
+//          Long integer Real34       Complex34    Time          Date          String        Real34 mat   Complex34 m  Short integer
+            arccoshLonI, arccoshReal, arccoshCplx, arccoshError, arccoshError, arccoshError, arccoshRema, arccoshCxma, arccoshError
 };
 
 
@@ -73,8 +73,7 @@ void arccoshLonI(void) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arccoshCo34();
-      convertRegister34To16(REGISTER_X);
+      arccoshCplx();
       return;
     }
     else {
@@ -86,7 +85,7 @@ void arccoshLonI(void) {
     }
   }
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
   // arccosh(x) = ln(x + sqrt(x² - 1))
   realMultiply(&x, &x, &xSquared, &ctxtReal39);
@@ -95,120 +94,28 @@ void arccoshLonI(void) {
   realAdd(&xSquared, &x, &x, &ctxtReal39);
   WP34S_Ln(&x, &x);
 
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
-void arccoshRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccoshRe16:", "cannot use NaN as X input of arccosh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x, xSquared;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-
-  if(realCompareLessThan(&x, const_1)) {
-    if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arccoshCo34();
-      convertRegister34To16(REGISTER_X);
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
-      return;
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arccoshRe16:", "X < 1", "and CPXRES is not set!", NULL);
-      #endif
-      return;
-    }
-  }
-
-  // arccosh(x) = ln(x + sqrt(x² - 1))
-  realMultiply(&x, &x, &xSquared, &ctxtReal39);
-  realSubtract(&xSquared, const_1, &xSquared, &ctxtReal39);
-  realSquareRoot(&xSquared, &xSquared, &ctxtReal39);
-  realAdd(&xSquared, &x, &x, &ctxtReal39);
-  WP34S_Ln(&x, &x);
-
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void arccoshCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccoshCo16:", "cannot use NaN as X input of arccosh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, real, imag;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  // arccosh(z) = ln(z + sqrt(z² - 1))
-  // calculate z²   real part
-  realMultiply(&b, &b, &real, &ctxtReal39);
-  realChangeSign(&real);
-  realFMA(&a, &a, &real, &real, &ctxtReal39);
-
-  // calculate z²   imaginary part
-  realMultiply(&a, &b, &imag, &ctxtReal39);
-  realMultiply(&imag, const_2, &imag, &ctxtReal39);
-
-  // calculate z² - 1
-  realSubtract(&real, const_1, &real, &ctxtReal39);
-
-  // calculate sqrt(z² - 1)
-  real39RectangularToPolar(&real, &imag, &real, &imag);
-  realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
-  real39PolarToRectangular(&real, &imag, &real, &imag);
-
-  // calculate z + sqrt(z² - 1)
-  realAdd(&a, &real, &real, &ctxtReal39);
-  realAdd(&b, &imag, &imag, &ctxtReal39);
-
-  // calculate ln(z + sqtr(z² - 1))
-  real39RectangularToPolar(&real, &imag, &a, &b);
-  WP34S_Ln(&a, &a);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void arccoshRm16(void) {
+void arccoshRema(void) {
   fnToBeCoded();
 }
 
 
 
-void arccoshCm16(void) {
+void arccoshCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void arccoshRe34(void) {
+void arccoshReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccoshRe34:", "cannot use NaN as X input of arccosh", NULL, NULL);
+      showInfoDialog("In function arccoshReal:", "cannot use NaN as X input of arccosh", NULL, NULL);
     #endif
     return;
   }
@@ -222,14 +129,14 @@ void arccoshRe34(void) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arccoshCo34();
+      arccoshCplx();
       setRegisterAngularMode(REGISTER_X, AM_NONE);
       return;
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arccoshRe34:", "X < 1", "and CPXRES is not set!", NULL);
+        showInfoDialog("In function arccoshReal:", "X < 1", "and CPXRES is not set!", NULL);
       #endif
       return;
     }
@@ -249,11 +156,11 @@ void arccoshRe34(void) {
 
 
 
-void arccoshCo34(void) {
+void arccoshCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccoshCo34:", "cannot use NaN as X input of arccosh", NULL, NULL);
+      showInfoDialog("In function arccoshCplx:", "cannot use NaN as X input of arccosh", NULL, NULL);
     #endif
     return;
   }

@@ -30,70 +30,41 @@ void divRe75Co75(const real_t *numer, const real75_t *denomReal, const real75_t 
 
 //      RegYRegX
 void divLonILonI(void);
-void divLonIRe16(void);
-void divLonICo16(void);
 void divLonIShoI(void);
-void divLonIRe34(void);
-void divLonICo34(void);
-
-//      RegYRegX
-void divRe16LonI(void);
-void divRe16Re16(void);
-void divRe16Co16(void);
-void divRe16ShoI(void);
-void divRe16Re34(void);
-void divRe16Co34(void);
-
-//      RegYRegX
-void divCo16LonI(void);
-void divCo16Re16(void);
-void divCo16Co16(void);
-void divCo16ShoI(void);
-void divCo16Re34(void);
-void divCo16Co34(void);
+void divLonIReal(void);
+void divLonICplx(void);
 
 //      RegYRegX
 void divTimeLonI(void);
-void divTimeRe16(void);
 void divTimeShoI(void);
-void divTimeRe34(void);
+void divTimeReal(void);
 
 //      RegYRegX
-void divRm16LonI(void);
-void divRm16Re16(void);
-void divRm16Co16(void);
-void divRm16ShoI(void);
-void divRm16Re34(void);
-void divRm16Co34(void);
+void divRemaLonI(void);
+void divRemaShoI(void);
+void divRemaReal(void);
+void divRemaCplx(void);
 
 //      RegYRegX
-void divCm16LonI(void);
-void divCm16Re16(void);
-void divCm16Co16(void);
-void divCm16ShoI(void);
-void divCm16Re34(void);
-void divCm16Co34(void);
+void divCxmaLonI(void);
+void divCxmaShoI(void);
+void divCxmaReal(void);
+void divCxmaCplx(void);
 
 //      RegYRegX
 void divShoILonI(void);
-void divShoIRe16(void);
-void divShoICo16(void);
 void divShoIShoI(void);
-void divShoIRe34(void);
-void divShoICo34(void);
+void divShoIReal(void);
+void divShoICplx(void);
 
 //      RegYRegX
-void divRe34LonI(void);
-void divRe34Re16(void);
-void divRe34Co16(void);
-void divRe34ShoI(void);
-void divRe34Re34(void);
-void divRe34Co34(void);
+void divRealLonI(void);
+void divRealShoI(void);
+void divRealReal(void);
+void divRealCplx(void);
 
 //      RegYRegX
-void divCo34LonI(void);
-void divCo34Re16(void);
-void divCo34Co16(void);
-void divCo34ShoI(void);
-void divCo34Re34(void);
-void divCo34Co34(void);
+void divCplxLonI(void);
+void divCplxShoI(void);
+void divCplxReal(void);
+void divCplxCplx(void);

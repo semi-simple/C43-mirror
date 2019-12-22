@@ -22,10 +22,10 @@
 
 
 
-void (* const unitVector[12])(void) = {
-// regX ==> 1                2                3               4                5                6                7                8                9                10               11               12
-//          Long integer     Real16           Complex16       Angle16          Time             Date             String           Real16 mat       Complex16 m      Short integer    Real34           Complex34
-            unitVectorError, unitVectorError, unitVectorCo16, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorCo34
+void (* const unitVector[9])(void) = {
+// regX ==> 1                2                3               4                5                6                7                8                9
+//          Long integer     Real34           complex34       Time             Date             String           Real16 mat       Complex16 m      Short integer
+            unitVectorError, unitVectorError, unitVectorCplx, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError, unitVectorError
 };
 
 
@@ -64,37 +64,11 @@ void fnUnitVector(uint16_t unusedParamButMandatory) {
 
 
 
-void unitVectorCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function unitVectorCo16:", "cannot use NaN as an input of unitVector", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, norm;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  realMultiply(&a, &a, &norm, &ctxtReal39);
-  realFMA(&b, &b, &norm, &norm, &ctxtReal39);
-  realSquareRoot(&norm, &norm, &ctxtReal39);
-  realDivide(&a, &norm, &a, &ctxtReal39);
-  realDivide(&b, &norm, &b, &ctxtReal39);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void unitVectorCo34(void) {
+void unitVectorCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function unitVectorCo34:", "cannot use NaN as an input of unitVector", NULL, NULL);
+      showInfoDialog("In function unitVectorCplx:", "cannot use NaN as an input of unitVector", NULL, NULL);
     #endif
     return;
   }

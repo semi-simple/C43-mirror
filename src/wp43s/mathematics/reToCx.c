@@ -33,21 +33,15 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
   uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
   bool_t xIsAReal;
 
-  if(    (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
-      && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
+  if(    (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+      && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     fnSetFlag(FLAG_CPXRES);
 
     xIsAReal = true;
     if(complexMode == CM_POLAR) {
-      if(dataTypeX == dtReal16 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-        convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), AM_RADIAN);
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-        dataTypeX = dtReal16;
-        xIsAReal = false;
-      }
-      else if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+      if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), AM_RADIAN);
         setRegisterAngularMode(REGISTER_X, AM_NONE);
         dataTypeX = dtReal34;
@@ -56,109 +50,45 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
     }
 
     if(dataTypeX == dtLongInteger) {
-      if(dataTypeY == dtReal16 || dataTypeY == dtLongInteger) {
-        convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-        dataTypeX = dtReal16;
-      }
-      else { // dataTypeY == dtReal34
-        convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-        dataTypeX = dtReal34;
-      }
-    }
-
-    if(dataTypeY == dtLongInteger) {
-      if(dataTypeX == dtReal16) {
-        convertLongIntegerRegisterToReal16Register(REGISTER_Y, REGISTER_Y);
-        dataTypeY = dtReal16;
-      }
-      else { // dataTypeX == dtReal34
-        convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-        dataTypeY = dtReal34;
-      }
-    }
-
-    if(dataTypeX == dtReal16 && dataTypeY == dtReal34) {
-      real34_t temp;
-
-      real16ToReal34(REGISTER_REAL16_DATA(REGISTER_X), &temp);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      real34Copy(&temp, REGISTER_REAL34_DATA(REGISTER_X));
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       dataTypeX = dtReal34;
     }
 
-    if(dataTypeY == dtReal16 && dataTypeX == dtReal34) {
-      real34_t temp;
-
-      real16ToReal34(REGISTER_REAL16_DATA(REGISTER_Y), &temp);
-      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-      real34Copy(&temp, REGISTER_REAL34_DATA(REGISTER_Y));
+    if(dataTypeY == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+      dataTypeY = dtReal34;
     }
 
-    if(dataTypeX == dtReal16) {
-      complex16_t temp;
+    complex34_t temp;
 
-      real16Copy(REGISTER_REAL16_DATA(REGISTER_Y), &temp);
-      real16Copy(REGISTER_REAL16_DATA(REGISTER_X), VARIABLE_IMAG16_DATA(&temp));
-      reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), &temp);
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&temp));
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
-      if(complexMode == CM_POLAR) {
-        if(real16CompareEqual(VARIABLE_REAL16_DATA(&temp), const16_0)) {
-          real16Zero(VARIABLE_IMAG16_DATA(&temp));
-        }
-        else {
-          real39_t magnitude, theta;
-
-          real16ToReal(VARIABLE_REAL16_DATA(&temp), &magnitude);
-          real16ToReal(VARIABLE_IMAG16_DATA(&temp), &theta);
-          if(xIsAReal) {
-            convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
-          }
-          if(realCompareLessThan(&magnitude, const_0)) {
-            realSetPositiveSign(&magnitude);
-            realAdd(&theta, const_pi, &theta, &ctxtReal39);
-            realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
-          }
-          real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
-          realToReal16(&magnitude, REGISTER_REAL16_DATA(REGISTER_X));
-          realToReal16(&theta,     REGISTER_IMAG16_DATA(REGISTER_X));
-        }
+    if(complexMode == CM_POLAR) {
+      if(real34CompareEqual(VARIABLE_REAL34_DATA(&temp), const34_0)) {
+        real34Zero(VARIABLE_IMAG34_DATA(&temp));
       }
       else {
-        complex16Copy(&temp, REGISTER_COMPLEX16_DATA(REGISTER_X));
+        real39_t magnitude, theta;
+
+        real34ToReal(VARIABLE_REAL34_DATA(&temp), &magnitude);
+        real34ToReal(VARIABLE_IMAG34_DATA(&temp), &theta);
+        if(xIsAReal) {
+          convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
+        }
+        if(realCompareLessThan(&magnitude, const_0)) {
+          realSetPositiveSign(&magnitude);
+          realAdd(&theta, const_pi, &theta, &ctxtReal39);
+          realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
+        }
+        real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
+        realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
       }
     }
-    else { //dataTypeX == dtReal34
-      complex34_t temp;
-
-      real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), &temp);
-      real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&temp));
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-
-      if(complexMode == CM_POLAR) {
-        if(real34CompareEqual(VARIABLE_REAL34_DATA(&temp), const34_0)) {
-          real34Zero(VARIABLE_IMAG34_DATA(&temp));
-        }
-        else {
-          real39_t magnitude, theta;
-
-          real34ToReal(VARIABLE_REAL34_DATA(&temp), &magnitude);
-          real34ToReal(VARIABLE_IMAG34_DATA(&temp), &theta);
-          if(xIsAReal) {
-            convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
-          }
-          if(realCompareLessThan(&magnitude, const_0)) {
-            realSetPositiveSign(&magnitude);
-            realAdd(&theta, const_pi, &theta, &ctxtReal39);
-            realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
-          }
-          real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
-          realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
-          realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
-        }
-      }
-      else {
-        complex34Copy(&temp, REGISTER_COMPLEX34_DATA(REGISTER_X));
-      }
+    else {
+      complex34Copy(&temp, REGISTER_COMPLEX34_DATA(REGISTER_X));
     }
 
     fnDropY(NOPARAM);

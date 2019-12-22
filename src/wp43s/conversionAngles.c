@@ -28,36 +28,9 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as X input of fnCvtToCurrentAngularMode", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
-      if(getRegisterAngularMode(REGISTER_X) == fromAngularMode) {
-        convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
-        setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      }
-      else {
-        displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          sprintf(errorMessage, "input angle16 must be tagged %s!", getAngularModeName(fromAngularMode));
-          showInfoDialog("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
       break;
 
     case dtReal34:
@@ -109,23 +82,8 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), currentAngularMode, toAngularMode);
-      setRegisterAngularMode(REGISTER_X, toAngularMode);
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as X input of fnCvtFromCurrentAngularMode", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), toAngularMode);
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), currentAngularMode, toAngularMode);
       setRegisterAngularMode(REGISTER_X, toAngularMode);
       break;
 
@@ -166,35 +124,9 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DEGREE, AM_RADIAN);
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_RADIAN);
       setRegisterAngularMode(REGISTER_X, AM_RADIAN);
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as X input of fnCvtDegToRad", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
-      if(getRegisterAngularMode(REGISTER_X) == AM_DEGREE || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DEGREE, AM_RADIAN);
-        setRegisterAngularMode(REGISTER_X, AM_RADIAN);
-      }
-      else {
-        displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToRad:", "cannot use an angle16 not tagged degree as an input of fnCvtDegToRad", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
       break;
 
     case dtReal34:
@@ -245,35 +177,9 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_RADIAN, AM_DEGREE);
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, AM_DEGREE);
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
-      if(getRegisterAngularMode(REGISTER_X) == AM_RADIAN || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_RADIAN, AM_DEGREE);
-        setRegisterAngularMode(REGISTER_X, AM_DEGREE);
-      }
-      else {
-        displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use an angle16 not tagged degree as an input of fnCvtRadToDeg", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
       break;
 
     case dtReal34:
@@ -324,35 +230,9 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
       setRegisterAngularMode(REGISTER_X, AM_DMS);
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as X input of fnCvtDegToDms", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
-      if(getRegisterAngularMode(REGISTER_X) == AM_DEGREE || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
-        setRegisterAngularMode(REGISTER_X, AM_DMS);
-      }
-      else {
-        displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToDms:", "cannot use an angle16 not tagged degree as an input of fnCvtDegToDms", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
       break;
 
     case dtReal34:
@@ -403,35 +283,9 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
       setRegisterAngularMode(REGISTER_X, AM_DEGREE);
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
-      if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
-        setRegisterAngularMode(REGISTER_X, AM_DEGREE);
-      }
-      else {
-        displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use an angle16 not tagged degree as an input of fnCvtRadToDeg", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
       break;
 
     case dtReal34:
@@ -472,16 +326,6 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
   }
 
   refreshRegisterLine(REGISTER_X);
-}
-
-
-
-void convertAngle16FromTo(real16_t *angle16, uint32_t fromAngularMode, uint32_t toAngularMode) {
-  real39_t angle;
-
-  real16ToReal(angle16, &angle);
-  convertAngle39FromTo(&angle, fromAngularMode, toAngularMode);
-  realToReal16(&angle, angle16);
 }
 
 
@@ -613,48 +457,6 @@ void convertAngle39FromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAn
       realSetNegativeSign(angle);
     }
   }
-}
-
-
-
-void checkDms16(real16_t *angle16Dms) {
-  int16_t  sign;
-  real39_t angleDms, degrees, minutes, seconds;
-
-  real16ToReal(angle16Dms, &angleDms);
-
-  sign = realIsNegative(&angleDms) ? -1 : 1;
-  realSetPositiveSign(&angleDms);
-
-  realToIntegralValue(&angleDms, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
-  realSubtract(&angleDms, &degrees, &angleDms, &ctxtReal39);
-
-  realMultiply(&angleDms, const_100, &angleDms, &ctxtReal39);
-  realToIntegralValue(&angleDms, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
-  realSubtract(&angleDms, &minutes, &angleDms, &ctxtReal39);
-
-  realMultiply(&angleDms, const_100, &seconds, &ctxtReal39);
-
-  if(realCompareGreaterEqual(&seconds, const_60)) {
-    realSubtract(&seconds, const_60, &seconds, &ctxtReal39);
-    realAdd(&minutes, const_1, &minutes, &ctxtReal39);
-  }
-
-  if(realCompareGreaterEqual(&minutes, const_60)) {
-    realSubtract(&minutes, const_60, &minutes, &ctxtReal39);
-    realAdd(&degrees, const_1, &degrees, &ctxtReal39);
-  }
-
-  realDivide(&minutes, const_100, &minutes, &ctxtReal39);
-  realAdd(&degrees, &minutes, &angleDms, &ctxtReal39);
-  realDivide(&seconds, const_10000, &seconds, &ctxtReal39);
-  realAdd(&angleDms, &seconds, &angleDms, &ctxtReal39);
-
-  if(sign == -1) {
-    realSetNegativeSign(&angleDms);
-  }
-
-  realToReal16(&angleDms, angle16Dms);
 }
 
 

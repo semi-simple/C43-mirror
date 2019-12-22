@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 26  // 26 = RNG state
+#define BACKUP_VERSION 27  // 27 = removed nimInputIsReal34
 
 void saveCalc(void) {
   size_t size;
@@ -127,7 +127,6 @@ void saveCalc(void) {
   size += fwrite(&stackLiftEnabled,                   1, sizeof(stackLiftEnabled),                   backup); //printf("%8lu stackLiftEnabled\n",                   (unsigned long)size);
   size += fwrite(&savedStackLiftEnabled,              1, sizeof(savedStackLiftEnabled),              backup); //printf("%8lu savedStackLiftEnabled\n",              (unsigned long)size);
   size += fwrite(&rbr1stDigit,                        1, sizeof(rbr1stDigit),                        backup); //printf("%8lu rbr1stDigit\n",                        (unsigned long)size);
-  size += fwrite(&nimInputIsReal34,                   1, sizeof(nimInputIsReal34),                   backup); //printf("%8lu nimInputIsReal34\n",                   (unsigned long)size);
   size += fwrite(&shiftF,                             1, sizeof(shiftF),                             backup); //printf("%8lu shiftF\n",                             (unsigned long)size);
   size += fwrite(&shiftG,                             1, sizeof(shiftG),                             backup); //printf("%8lu shiftG\n",                             (unsigned long)size);
   size += fwrite(&shiftStateChanged,                  1, sizeof(shiftStateChanged),                  backup); //printf("%8lu shiftStateChanged\n",                  (unsigned long)size);
@@ -287,7 +286,6 @@ void restoreCalc(void) {
     size += fread(&stackLiftEnabled,                   1, sizeof(stackLiftEnabled),                   backup); //printf("%8lu stackLiftEnabled\n",                   (unsigned long)size);
     size += fread(&savedStackLiftEnabled,              1, sizeof(savedStackLiftEnabled),              backup); //printf("%8lu savedStackLiftEnabled\n",              (unsigned long)size);
     size += fread(&rbr1stDigit,                        1, sizeof(rbr1stDigit),                        backup); //printf("%8lu rbr1stDigit\n",                        (unsigned long)size);
-    size += fread(&nimInputIsReal34,                   1, sizeof(nimInputIsReal34),                   backup); //printf("%8lu nimInputIsReal34\n",                   (unsigned long)size);
     size += fread(&shiftF,                             1, sizeof(shiftF),                             backup); //printf("%8lu shiftF\n",                             (unsigned long)size);
     size += fread(&shiftG,                             1, sizeof(shiftG),                             backup); //printf("%8lu shiftG\n",                             (unsigned long)size);
     size += fread(&shiftStateChanged,                  1, sizeof(shiftStateChanged),                  backup); //printf("%8lu shiftStateChanged\n",                  (unsigned long)size);

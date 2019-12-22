@@ -22,10 +22,10 @@
 
 
 
-void (* const arccos[12])(void) = {
-// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
-//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
-            arccosLonI,  arccosRe16, arccosCo16, arccosError, arccosError, arccosError, arccosError, arccosRm16, arccosCm16, arccosError,  arccosRe34, arccosCo34
+void (* const arccos[9])(void) = {
+// regX ==> 1            2           3           4            5            6            7           8           9
+//          Long integer Real34      Complex34   Time         Date         String       Real34 mat  Complex34 m Short integer
+            arccosLonI,  arccosReal, arccosCplx, arccosError, arccosError, arccosError, arccosRema, arccosCxma, arccosError
 };
 
 
@@ -73,8 +73,7 @@ void arccosLonI(void) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arccosCo34();
-      convertRegister34To16(REGISTER_X);
+      arccosCplx();
       return;
     }
     else {
@@ -86,16 +85,16 @@ void arccosLonI(void) {
     }
   }
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
 
   if(realIsZero(&x)) {
-    realToReal16(const_1on2, REGISTER_REAL16_DATA(REGISTER_X));
-    convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
+    realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));
+    convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
   }
   else {
     if(realIsNegative(&x)) {
-      realToReal16(const_1, REGISTER_REAL16_DATA(REGISTER_X));
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
+      realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
     }
     else{
       real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
@@ -105,115 +104,23 @@ void arccosLonI(void) {
 
 
 
-void arccosRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccosRe16:", "cannot use NaN as X input of arccos", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  setRegisterAngularMode(REGISTER_X, currentAngularMode);
-
-  if(realCompareAbsGreaterThan(&x, const_1)) {
-    if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arccosCo34();
-      convertRegister34To16(REGISTER_X);
-      return;
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arccosRe16:", "|X| > 1", "and CPXRES is not set!", NULL);
-      #endif
-      return;
-    }
-  }
-  WP34S_Acos(&x, &x);
-  convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-
-  if(currentAngularMode == AM_DMS) {
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-void arccosCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccosCo16:", "cannot use NaN as X input of arccos", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, real, imag;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  // arccos(z) = -i.ln(z + sqrt(z² - 1))
-  // calculate z²   real part
-  realMultiply(&b, &b, &real, &ctxtReal39);
-  realChangeSign(&real);
-  realFMA(&a, &a, &real, &real, &ctxtReal39);
-
-  // calculate z²   imaginary part
-  realMultiply(&a, &b, &imag, &ctxtReal39);
-  realMultiply(&imag, const_2, &imag, &ctxtReal39);
-
-  // calculate z² - 1
-  realSubtract(&real, const_1, &real, &ctxtReal39);
-
-  // calculate sqrt(z² - 1)
-  real39RectangularToPolar(&real, &imag, &real, &imag);
-  realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
-  real39PolarToRectangular(&real, &imag, &real, &imag);
-
-  // calculate z + sqrt(z² - 1)
-  realAdd(&a, &real, &real, &ctxtReal39);
-  realAdd(&b, &imag, &imag, &ctxtReal39);
-
-  // calculate ln(z + sqtr(z² - 1))
-  real39RectangularToPolar(&real, &imag, &a, &b);
-  WP34S_Ln(&a, &a);
-
-  // calculate = -i.ln(z + sqtr(z² - 1))
-  realChangeSign(&a);
-
-  realToReal16(&b, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void arccosRm16(void) {
+void arccosRema(void) {
   fnToBeCoded();
 }
 
 
 
-void arccosCm16(void) {
+void arccosCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void arccosRe34(void) {
+void arccosReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccosRe34:", "cannot use NaN as X input of arccos", NULL, NULL);
+      showInfoDialog("In function arccosReal:", "cannot use NaN as X input of arccos", NULL, NULL);
     #endif
     return;
   }
@@ -228,13 +135,13 @@ void arccosRe34(void) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arccosCo34();
+      arccosCplx();
       return;
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arccosRe34:", "|X| > 1", "and CPXRES is not set!", NULL);
+        showInfoDialog("In function arccosReal:", "|X| > 1", "and CPXRES is not set!", NULL);
       #endif
       return;
     }
@@ -250,11 +157,11 @@ void arccosRe34(void) {
 
 
 
-void arccosCo34(void) {
+void arccosCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arccosCo34:", "cannot use NaN as X input of arccos", NULL, NULL);
+      showInfoDialog("In function arccosCplx:", "cannot use NaN as X input of arccos", NULL, NULL);
     #endif
     return;
   }

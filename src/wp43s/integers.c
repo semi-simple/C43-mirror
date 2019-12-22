@@ -50,48 +50,6 @@ void fnChangeBase(uint16_t base) {
     }
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    if(2 <= base && base <= 16) {
-      longInteger_t lgInt;
-      real39_t x, value;
-      bool_t isNegative;
-      uint32_t tmp32;
-
-      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-      isNegative = realIsNegative(&x);
-      realSetPositiveSign(&x);
-      realToIntegralValue(&x, &x, DEC_ROUND_DOWN, &ctxtReal39);
-
-      // Calculate 32 bit high word
-      realDivide(&x, const_2p32, &value, &ctxtReal39);
-
-      longIntegerInit(lgInt);
-      realToUInt32(&value, tmp32);
-      uIntToLongInteger(tmp32, lgInt);
-      longIntegerLeftShift(lgInt, 32, lgInt);
-
-      // Calculate 32 bit low word
-      realDivideRemainder(&x, const_2p32, &value, &ctxtReal39);
-
-      realToUInt32(&value, tmp32);
-      longIntegerAddUInt(lgInt, tmp32, lgInt);
-      if(isNegative) {
-        longIntegerSetNegativeSign(lgInt);
-      }
-
-      convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-      longIntegerFree(lgInt);
-      fnChangeBase(base);
-    }
-    else {
-      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_T);
-      #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "base = %" FMT16U "! The base must be fron 2 to 16.", base);
-        showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
-      #endif
-    }
-  }
-
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;

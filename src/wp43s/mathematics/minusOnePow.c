@@ -22,10 +22,10 @@
 
 
 
-void (* const m1Pow[12])(void) = {
-// regX ==> 1            2          3          4           5           6           7           8          9            10            11         12
-//          Long integer Real16     Complex16  Angle16     Time        Date        String      Real16 mat Complex16 m  Short integer Real34     Complex34
-            m1PowLonI,   m1PowRe16, m1PowCo16, m1PowError, m1PowError, m1PowError, m1PowError, m1PowRm16, m1PowCm16,   m1PowShoI,    m1PowRe34, m1PowCo34
+void (* const m1Pow[9])(void) = {
+// regX ==> 1            2          3          4           5           6           7          8           9
+//          Long integer Real34     complex34  Time        Date        String      Real34 mat Complex34 m Short integer
+            m1PowLonI,   m1PowReal, m1PowCplx, m1PowError, m1PowError, m1PowError, m1PowRema, m1PowCxma,  m1PowShoI
 };
 
 
@@ -89,71 +89,13 @@ void m1PowLonI(void) {
 
 
 
-void m1PowRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowRe16:", "cannot use NaN as X input of 2^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
-    return;
-  }
-
-  real39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-
-  realMultiply(const_pi, &x, &x, &ctxtReal39);
-  WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, NULL, &x, NULL);
-
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void m1PowCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowCo16:", "cannot use NaN as X input of 2^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t real;
-
-  convertRegister16To34(REGISTER_X);
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
-  realMultiply(const_pi, &real, &real, &ctxtReal39);
-  realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
-
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &real);
-  realMultiply(const_pi, &real, &real, &ctxtReal39);
-  realToReal34(&real, REGISTER_IMAG34_DATA(REGISTER_X));
-
-  uint8_t savedAngularMode = currentAngularMode;
-  currentAngularMode = AM_RADIAN;
-  cosCo34();
-  currentAngularMode = savedAngularMode;
-  convertRegister34To16(REGISTER_X);
-}
-
-
-
-void m1PowRm16(void) {
+void m1PowRema(void) {
   fnToBeCoded();
 }
 
 
 
-void m1PowCm16(void) {
+void m1PowCxma(void) {
   fnToBeCoded();
 }
 
@@ -165,11 +107,11 @@ void m1PowShoI(void) {
 
 
 
-void m1PowRe34(void) {
+void m1PowReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowRe34:", "cannot use NaN as X input of 2^", NULL, NULL);
+      showInfoDialog("In function m1PowReal:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
@@ -193,11 +135,11 @@ void m1PowRe34(void) {
 
 
 
-void m1PowCo34(void) {
+void m1PowCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowCo34:", "cannot use NaN as X input of 2^", NULL, NULL);
+      showInfoDialog("In function m1PowCplx:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
@@ -214,6 +156,6 @@ void m1PowCo34(void) {
 
   uint8_t savedAngularMode = currentAngularMode;
   currentAngularMode = AM_RADIAN;
-  cosCo34();
+  cosCplx();
   currentAngularMode = savedAngularMode;
 }

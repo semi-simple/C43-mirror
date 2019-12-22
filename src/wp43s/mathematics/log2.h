@@ -21,10 +21,8 @@
 void  fnLog2   (uint16_t unusedParamButMandatory);
 void  log2Error(void);
 void  log2LonI (void);
-void  log2Re16 (void);
-void  log2Co16 (void);
-void  log2Rm16 (void);
-void  log2Cm16 (void);
+void  log2Rema (void);
+void  log2Cxma (void);
 void  log2ShoI (void);
-void  log2Re34 (void);
-void  log2Co34 (void);
+void  log2Real (void);
+void  log2Cplx (void);

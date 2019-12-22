@@ -21,10 +21,8 @@
 void fnSquare   (uint16_t unusedParamButMandatory);
 void squareError(void);
 void squareLonI (void);
-void squareRe16 (void);
-void squareCo16 (void);
-void squareRm16 (void);
-void squareCm16 (void);
+void squareRema (void);
+void squareCxma (void);
 void squareShoI (void);
-void squareRe34 (void);
-void squareCo34 (void);
+void squareReal (void);
+void squareCplx (void);

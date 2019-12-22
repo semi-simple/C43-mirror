@@ -22,10 +22,10 @@
 
 
 
-void (* const fact[12])(void) = {
-// regX ==> 1            2         3         4          5          6          7          8          9           10            11        12
-//          Long integer Real16    Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
-            factLonI,    factRe16, factCo16, factError, factError, factError, factError, factError, factError,  factShoI,     factRe34, factCo34
+void (* const fact[9])(void) = {
+// regX ==> 1            2         3         4          5          6          7          8           9
+//          Long integer Real34    Complex34 Time       Date       String     Real34 mat Complex34 m Short integer
+            factLonI,    factReal, factCplx, factError, factError, factError, factError, factError,  factShoI
 };
 
 
@@ -112,48 +112,6 @@ void factLonI(void) {
 
 
 
-void factRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factRe16:", "cannot use NaN as X input of x!", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  WP34S_Factorial(&x, &x);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void factCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factCo16:", "cannot use NaN as X input of x!", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t zReal, zImag;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &zReal);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &zImag);
-
-  realAdd(&zReal, const_1, &zReal, &ctxtReal39);
-  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag);
-
-  realToReal16(&zReal, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&zImag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
 void factShoI(void) {
   int16_t sign;
   uint64_t value;
@@ -204,11 +162,11 @@ void factShoI(void) {
 
 
 
-void factRe34(void) {
+void factReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factRe34:", "cannot use NaN as X input of x!", NULL, NULL);
+      showInfoDialog("In function factReal:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }
@@ -223,11 +181,11 @@ void factRe34(void) {
 
 
 
-void factCo34(void) {
+void factCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function factCo34:", "cannot use NaN as X input of x!", NULL, NULL);
+      showInfoDialog("In function factCplx:", "cannot use NaN as X input of x!", NULL, NULL);
     #endif
     return;
   }

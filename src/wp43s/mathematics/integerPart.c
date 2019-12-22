@@ -22,10 +22,10 @@
 
 
 
-void (* const ip[12])(void) = {
-// regX ==> 1            2       3         4        5        6        7        8          9           10            11      12
-//          Long integer Real16  Complex16 Angle16  Time     Date     String   Real16 mat Complex16 m Short integer Real34  Complex34
-            ipLonI,      ipRe16, ipError,  ipError, ipError, ipError, ipError, ipRm16,    ipError,    ipShoI,       ipRe34, ipError
+void (* const ip[9])(void) = {
+// regX ==> 1            2       3         4        5        6        7          8           9
+//          Long integer Real34  complex34 Time     Date     String   Real34 mat Complex34 m Short integer
+            ipLonI,      ipReal, ipError,  ipError, ipError, ipError, ipRema,    ipError,    ipShoI
 };
 
 
@@ -75,21 +75,7 @@ void ipLonI(void) {
 
 
 
-void ipRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ipRe16:", "cannot use NaN as X input of ip", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-}
-
-
-
-void ipRm16(void) {
+void ipRema(void) {
   fnToBeCoded();
 }
 
@@ -100,11 +86,11 @@ void ipShoI(void) {
 
 
 
-void ipRe34(void) {
+void ipReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ipRe34:", "cannot use NaN as X input of ip", NULL, NULL);
+      showInfoDialog("In function ipReal:", "cannot use NaN as X input of ip", NULL, NULL);
     #endif
     return;
   }

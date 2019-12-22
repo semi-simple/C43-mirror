@@ -42,10 +42,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &reX);
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
@@ -123,10 +120,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   //printf("0 regist = "); printRegisterToConsole(regist, 0); printf("\n");
   real34_t temp0;
 
-  if(getRegisterDataType(regist) == dtReal16) {
-    real16ToReal34(REGISTER_REAL16_DATA(regist), &temp0);
-  }
-  else if(getRegisterDataType(regist) == dtReal34) {
+  if(getRegisterDataType(regist) == dtReal34) {
     real34Copy(REGISTER_REAL34_DATA(regist), &temp0);
   }
   else {
@@ -343,12 +337,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
 
   // The register value
   real39_t r;
-  if(getRegisterDataType(regist) == dtReal16) {
-    real16ToReal(REGISTER_REAL16_DATA(regist), &r);
-  }
-  else if(getRegisterDataType(regist) == dtReal34) {
-    real34ToReal(REGISTER_REAL34_DATA(regist), &r);
-  }
+  real34ToReal(REGISTER_REAL34_DATA(regist), &r);
 
   // The fraction value
   real39_t f, d;

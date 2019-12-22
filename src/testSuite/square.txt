@@ -22,71 +22,6 @@ Out: EC=0 FI=0 SL=1 RL=LonI:"-33333333333334444444" RX=LonI:"1111111111111185185
 
 
 ;=======================================
-; square(Real16) --> Real16
-;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"0.0001"
-Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001" RX=Re16:"1e-8"
-
-In:  AM=GRAD SL=0 FI=0 RX=Re16:"55.5"
-Out: EC=0 FI=0 SL=1 RL=Re16:"55.5" RX=Re16:"3080.25"
-
-In:  AM=DEG SL=0 FI=0 RX=Re16:"-89.999999999988888888"
-Out: EC=0 FI=0 SL=1 RL=Re16:"-89.999999999988888888" RX=Re16:"8099.999999997999999840000123456809876544"
-
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"0.0001":DMS
-Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001":DMS RX=Re16:"1e-8"
-
-In:  AM=GRAD SL=0 FI=0 RX=Re16:"55.5":RAD
-Out: EC=0 FI=0 SL=1 RL=Re16:"55.5":RAD RX=Re16:"3080.25"
-
-In:  AM=DEG SL=0 FI=0 RX=Re16:"-89.999999999988888888":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re16:"-89.999999999988888888":GRAD RX=Re16:"8099.999999997999999840000123456809876544"
-
-; NaN
-In:  SL=0 FI=0 RX=Re16:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":RAD
-
-In:  SL=0 FI=0 RX=Re16:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
-
-; Infinity
-In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
-Out: EC=0 FI=0 SL=1 RL=Re16:"inf" RX=Re16:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"inf"
-Out: EC=1 FI=0 SL=0 RX=Re16:"inf"
-
-In:  SL=0 FI=0 FD=1 RX=Re16:"-inf"
-Out: EC=0 FI=0 SL=1 RL=Re16:"-inf" RX=Re16:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
-Out: EC=1 FI=0 SL=0 RX=Re16:"-inf"
-
-In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
-Out: EC=0 FI=0 SL=1 RL=Re16:"inf":DEG RX=Re16:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"inf":RAD
-Out: EC=1 FI=0 SL=0 RX=Re16:"inf":RAD
-
-In:  SL=0 FI=0 FD=1 RX=Re16:"-inf":MULTPI
-Out: EC=0 FI=0 SL=1 RL=Re16:"-inf":MULTPI RX=Re16:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":GRAD
-Out: EC=1 FI=0 SL=0 RX=Re16:"-inf":GRAD
-
-
-
-;=======================================
-; square(Complex16) --> Complex16
-;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
-Out: EC=0 FI=1 SL=1 RL=Co16:"6.2 i -7.6" RX=Co16:"-19.32 i -94.24"
-
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"-6.012345678987654321 i 7.012345678987654321"
-Out: EC=0 FI=1 SL=1 RL=Co16:"-6.012345678987654321 i 7.012345678987654321" RX=Co16:"-13.024691357975308642 i -84.321292485258344764840420667579942082"
-
-
-;=======================================
 ; square(Time)
 ;=======================================
 
@@ -129,63 +64,63 @@ Out: EC=0 FI=0 SL=1 RL=ShoI:"5#7" RX=ShoI:"34#7"
 ;=======================================
 ; square(Real34) --> Real34
 ;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"0.0001"
-Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001" RX=Re34:"1e-8"
+In:  AM=DEG SL=0 FI=0 RX=Real:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Real:"0.0001" RX=Real:"1e-8"
 
-In:  AM=GRAD SL=0 FI=0 RX=Re34:"55.5"
-Out: EC=0 FI=0 SL=1 RL=Re34:"55.5" RX=Re34:"3080.25"
+In:  AM=GRAD SL=0 FI=0 RX=Real:"55.5"
+Out: EC=0 FI=0 SL=1 RL=Real:"55.5" RX=Real:"3080.25"
 
-In:  AM=DEG SL=0 FI=0 RX=Re34:"-89.999999999988888888"
-Out: EC=0 FI=0 SL=1 RL=Re34:"-89.999999999988888888" RX=Re34:"8099.999999997999999840000123456809876544"
+In:  AM=DEG SL=0 FI=0 RX=Real:"-89.999999999988888888"
+Out: EC=0 FI=0 SL=1 RL=Real:"-89.999999999988888888" RX=Real:"8099.999999997999999840000123456809876544"
 
-In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"0.0001":DMS
-Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001":DMS RX=Re34:"1e-8"
+In:  AM=DEG SL=0 FI=0 RX=Real:"0.0001":DMS
+Out: EC=0 FI=0 SL=1 RL=Real:"0.0001":DMS RX=Real:"1e-8"
 
-In:  AM=GRAD SL=0 FI=0 RX=Re34:"55.5":RAD
-Out: EC=0 FI=0 SL=1 RL=Re34:"55.5":RAD RX=Re34:"3080.25"
+In:  AM=GRAD SL=0 FI=0 RX=Real:"55.5":RAD
+Out: EC=0 FI=0 SL=1 RL=Real:"55.5":RAD RX=Real:"3080.25"
 
-In:  AM=DEG SL=0 FI=0 RX=Re34:"-89.999999999988888888":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re34:"-89.999999999988888888":GRAD RX=Re34:"8099.999999997999999840000123456809876544"
+In:  AM=DEG SL=0 FI=0 RX=Real:"-89.999999999988888888":GRAD
+Out: EC=0 FI=0 SL=1 RL=Real:"-89.999999999988888888":GRAD RX=Real:"8099.999999997999999840000123456809876544"
 
 ; NaN
-In:  SL=0 FI=0 RX=Re34:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":RAD
+In:  SL=0 FI=0 RX=Real:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Real:"NaN":RAD
 
-In:  SL=0 FI=0 RX=Re34:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
+In:  SL=0 FI=0 RX=Real:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
-Out: EC=0 FI=0 SL=1 RL=Re34:"inf" RX=Re34:"inf"
+In:  SL=0 FI=0 FD=1 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"inf"
-Out: EC=1 FI=0 SL=0 RX=Re34:"inf"
+In:  SL=0 FI=0 FD=0 RX=Real:"inf"
+Out: EC=1 FI=0 SL=0 RX=Real:"inf"
 
-In:  SL=0 FI=0 FD=1 RX=Re34:"-inf"
-Out: EC=0 FI=0 SL=1 RL=Re34:"-inf" RX=Re34:"inf"
+In:  SL=0 FI=0 FD=1 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
-Out: EC=1 FI=0 SL=0 RX=Re34:"-inf"
+In:  SL=0 FI=0 FD=0 RX=Real:"-inf"
+Out: EC=1 FI=0 SL=0 RX=Real:"-inf"
 
-In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
-Out: EC=0 FI=0 SL=1 RL=Re34:"inf":DEG RX=Re34:"inf"
+In:  SL=0 FI=0 FD=1 RX=Real:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Real:"inf":DEG RX=Real:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"inf":RAD
-Out: EC=1 FI=0 SL=0 RX=Re34:"inf":RAD
+In:  SL=0 FI=0 FD=0 RX=Real:"inf":RAD
+Out: EC=1 FI=0 SL=0 RX=Real:"inf":RAD
 
-In:  SL=0 FI=0 FD=1 RX=Re34:"-inf":MULTPI
-Out: EC=0 FI=0 SL=1 RL=Re34:"-inf":MULTPI RX=Re34:"inf"
+In:  SL=0 FI=0 FD=1 RX=Real:"-inf":MULTPI
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf":MULTPI RX=Real:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":GRAD
-Out: EC=1 FI=0 SL=0 RX=Re34:"-inf":GRAD
+In:  SL=0 FI=0 FD=0 RX=Real:"-inf":GRAD
+Out: EC=1 FI=0 SL=0 RX=Real:"-inf":GRAD
 
 
 
 ;=======================================
 ; square(Complex34) --> Complex34
 ;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
-Out: EC=0 FI=1 SL=1 RL=Co34:"6.2 i -7.6" RX=Co34:"-19.32 i -94.24"
+In:  AM=DEG SL=0 FI=0 RX=Cplx:"6.2 i -7.6"
+Out: EC=0 FI=1 SL=1 RL=Cplx:"6.2 i -7.6" RX=Cplx:"-19.32 i -94.24"
 
-In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"-6.012345678987654321 i 7.012345678987654321"
-Out: EC=0 FI=1 SL=1 RL=Co34:"-6.012345678987654321 i 7.012345678987654321" RX=Co34:"-13.024691357975308642 i -84.321292485258344764840420667579942082"
+In:  AM=DEG SL=0 FI=0 RX=Cplx:"-6.012345678987654321 i 7.012345678987654321"
+Out: EC=0 FI=1 SL=1 RL=Cplx:"-6.012345678987654321 i 7.012345678987654321" RX=Cplx:"-13.024691357975308642 i -84.321292485258344764840420667579942082"

@@ -28,11 +28,9 @@ void fnToRect(uint16_t unusedParamButMandatory) {
   dataTypeX = getRegisterDataType(REGISTER_X);
   dataTypeY = getRegisterDataType(REGISTER_Y);
 
-  if(   (dataTypeX == dtReal16 || dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
-     && (dataTypeY == dtReal16 || dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
-    if(   (dataTypeX == dtReal16 && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)))
-       || (dataTypeX == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)))
-       || (dataTypeY == dtReal16 && real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)))
+  if(   (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+     && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
+    if(   (dataTypeX == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)))
        || (dataTypeY == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -42,16 +40,14 @@ void fnToRect(uint16_t unusedParamButMandatory) {
     }
 
     real39_t x, y;
-    bool_t real16 = true;
     uint32_t yAngularMode;
 
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     switch(dataTypeX) {
-      case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);      break;
-      case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);                 break;
-      case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x); real16 = false; break;
+      case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39); break;
+      case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);            break;
       default: {
         sprintf(errorMessage, "In function fnToRect: %" FMT32U " is an unexpected dataTypeX value!", dataTypeX);
         displayBugScreen(errorMessage);
@@ -68,13 +64,8 @@ void fnToRect(uint16_t unusedParamButMandatory) {
                           convertAngle39FromTo(&y, currentAngularMode, AM_RADIAN);
                           break;
 
-      case dtReal16:      real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-                          convertAngle39FromTo(&y, yAngularMode, AM_RADIAN);
-                          break;
-
       case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
                           convertAngle39FromTo(&y, yAngularMode, AM_RADIAN);
-                          real16 = false;
                           break;
 
       default: {
@@ -85,18 +76,10 @@ void fnToRect(uint16_t unusedParamButMandatory) {
 
     real39PolarToRectangular(&x, &y, &x, &y);
 
-    if(real16) {
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Y, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      realToReal16(&y, REGISTER_REAL16_DATA(REGISTER_Y));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
-    }
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
 
     temporaryInformation = TI_X_Y;
 
@@ -110,20 +93,6 @@ void fnToRect(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnToRect:", errorMessage, NULL, NULL);
     #endif
   }
-}
-
-
-
-void real16PolarToRectangular(const real16_t *magnitude16, const real16_t *theta16, real16_t *real16, real16_t *imag16) {  // theta16 in radian
-  real39_t real, imag, magnitude, theta;
-
-  real16ToReal(magnitude16, &magnitude);
-  real16ToReal(theta16, &theta);
-
-  real39PolarToRectangular(&magnitude, &theta, &real, &imag);  // theta in radian
-
-  realToReal16(&real, real16);
-  realToReal16(&imag, imag16);
 }
 
 

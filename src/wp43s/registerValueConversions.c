@@ -22,80 +22,6 @@
 
 
 
-/********************************************//**
- * \brief Convert a register to a real34 or complex
- *        if it is not already. Throws an
- *        error if X is not a single or double
- *        precision real or complex.
- *
- * \param r calcRegister_t Register number
- * \return void
- ***********************************************/
-void convertRegister16To34(calcRegister_t regist) {
-  complex34_t temp;
-
-  switch(getRegisterDataType(regist)) {
-    case dtReal16:
-      real16ToReal34(REGISTER_REAL16_DATA(regist), VARIABLE_REAL34_DATA(&temp));
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, getRegisterTag(regist));
-      real34Copy(&temp, REGISTER_REAL34_DATA(regist));
-      break;
-
-    case dtComplex16:
-      real16ToReal34(REGISTER_REAL16_DATA(regist), VARIABLE_REAL34_DATA(&temp));
-      real16ToReal34(REGISTER_IMAG16_DATA(regist), VARIABLE_IMAG34_DATA(&temp));
-      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, getRegisterTag(regist));
-      complex34Copy(&temp, REGISTER_COMPLEX34_DATA(regist));
-      break;
-
-    case dtReal34:
-    case dtComplex34:
-      break;
-
-    default:
-      displayBugScreen("In function convertRegister16To34: the register to convert must be real16, angle16 or complex16!");
-  }
-}
-
-
-
-/********************************************//**
- * \brief Convert a register to a real16 or complex
- *        if it is not already. Throws an
- *        error if X is not a single or double
- *        precision real or complex.
- *
-    * \param r calcRegister_t Register number
- * \return void
- ***********************************************/
-void convertRegister34To16(calcRegister_t regist) {
-  complex16_t temp;
-
-  switch(getRegisterDataType(regist)) {
-    case dtReal16:
-    case dtComplex16:
-      break;
-
-    case dtReal34:
-      real34ToReal16(REGISTER_REAL34_DATA(regist), VARIABLE_REAL16_DATA(&temp));
-      reallocateRegister(regist, dtReal16, REAL16_SIZE, getRegisterTag(regist));
-      real16Copy(&temp, REGISTER_REAL16_DATA(regist));
-      break;
-
-    case dtComplex34:
-      real34ToReal16(REGISTER_REAL34_DATA(regist), VARIABLE_REAL16_DATA(&temp));
-      real34ToReal16(REGISTER_IMAG34_DATA(regist), VARIABLE_IMAG16_DATA(&temp));
-      reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, getRegisterTag(regist));
-      complex16Copy(&temp, REGISTER_COMPLEX16_DATA(regist));
-      break;
-
-    default:
-      displayBugScreen("In function convertRegister34To16: the register to convert must be real34, angle34 or complex34!");
-  }
-}
-
-
-
 void convertLongIntegerToLongIntegerRegister(const longInteger_t lgInt, calcRegister_t regist) {
   reallocateRegister(regist, dtLongInteger, longIntegerSizeInBytes(lgInt), longIntegerSignTag(lgInt));
   memcpy(REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_d, longIntegerSizeInBytes(lgInt));
@@ -119,18 +45,6 @@ void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_
 
 
 
-void convertLongIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
-  longInteger_t lgInt;
-
-  convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-  longIntegerFree(lgInt);
-  reallocateRegister(destination, dtReal16, REAL16_SIZE, AM_NONE);
-  stringToReal16(tmpStr3000, REGISTER_REAL16_DATA(destination));
-}
-
-
-
 void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
   longInteger_t lgInt;
 
@@ -139,17 +53,6 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
   longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
-}
-
-
-
-void convertLongIntegerRegisterToReal16(calcRegister_t source, real16_t *destination) {
-  longInteger_t lgInt;
-
-  convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-  longIntegerFree(lgInt);
-  stringToReal16(tmpStr3000, destination);
 }
 
 
@@ -192,27 +95,6 @@ void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, cal
   convertLongIntegerRegisterToLongInteger(source, lgInt);
   convertLongIntegerToShortIntegerRegister(lgInt, 10, destination);
   longIntegerFree(lgInt);
-}
-
-
-
-void convertShortIntegerRegisterToReal16Register(calcRegister_t source, calcRegister_t destination) {
-  uint64_t value;
-  int16_t sign;
-  real39_t hiWord, lowWord;
-
-  convertShortIntegerRegisterToUInt64(source, &sign, &value);
-
-  uInt32ToReal(value >> 32, &hiWord);
-  uInt32ToReal(value & 0x00000000ffffffff, &lowWord);
-  realFMA(&hiWord, const_2p32, &lowWord, &lowWord, &ctxtReal39);
-
-  reallocateRegister(destination, dtReal16, REAL16_SIZE, AM_NONE);
-  realToReal16(&lowWord, REGISTER_REAL16_DATA(destination));
-
-  if(sign) {
-    real16SetNegativeSign(REGISTER_REAL16_DATA(destination));
-  }
 }
 
 
@@ -337,53 +219,6 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
 
   reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
   *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = value & shortIntegerMask;
-}
-
-
-
-void convertReal16ToLongInteger(real16_t *real16, longInteger_t lgInt, enum rounding roundingMode) {
-  uint8_t bcd[DECDOUBLE_Pmax];
-  int32_t sign, exponent;
-  //longInteger_t coef;
-
-  real16ToIntegralValue(real16, real16, roundingMode);
-  sign = real16GetCoefficient(real16, bcd);
-  exponent = real16GetExponent(real16);
-
-  //longIntegerInit(coef);
-  uIntToLongInteger(bcd[0], lgInt);
-
-  for(int i=1; i<DECDOUBLE_Pmax; i++) {
-    longIntegerMultiplyUInt(lgInt, 10, lgInt);
-    longIntegerAddUInt(lgInt, bcd[i], lgInt);
-  }
-
-  //longIntegerPowerUIntUInt(10, exponent, coef);
-  //longIntegerMultiply(lgInt, coef, lgInt);
-  while(exponent > 0) {
-    longIntegerMultiplyUInt(lgInt, 10, lgInt);
-    exponent--;
-  }
-
-  if(sign) {
-    longIntegerChangeSign(lgInt);
-  }
-
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  //longIntegerFree(coef);
-}
-
-
-
-void convertReal16ToLongIntegerRegister(real16_t *real16, calcRegister_t dest, enum rounding roundingMode) {
-  longInteger_t lgInt;
-
-  longIntegerInit(lgInt);
-
-  convertReal16ToLongInteger(real16, lgInt, roundingMode);
-  convertLongIntegerToLongIntegerRegister(lgInt, dest);
-
-  longIntegerFree(lgInt);
 }
 
 

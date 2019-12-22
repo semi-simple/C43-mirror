@@ -22,10 +22,10 @@
 
 
 
-void (* const Cosh[12])(void) = {
-// regX ==> 1             2         3          4          5          6          7          8           9            10             11        12
-//          Long integer  Real16    Complex16  Angle16    Time       Date       String     Real16 mat  Complex16 m  Short integer  Real34    Complex34
-            coshLonI,     coshRe16, coshCo16,  coshError, coshError, coshError, coshError, coshRm16,   coshCm16,    coshError,     coshRe34, coshCo34
+void (* const Cosh[9])(void) = {
+// regX ==> 1             2         3          4          5          6          7           8            9
+//          Long integer  Real34    Complex34  Time       Date       String     Real34 mat  Complex34 m  Short integer
+            coshLonI,     coshReal, coshCplx,  coshError, coshError, coshError, coshRema,   coshCxma,    coshError
 };
 
 
@@ -70,83 +70,29 @@ void coshLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &cosh, &ctxtReal39);
   WP34S_SinhCosh(&cosh, NULL, &cosh);
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realToReal16(&cosh, REGISTER_REAL16_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&cosh, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
-void coshRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshRe16:", "cannot use NaN as X input of cosh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of cosh when flag D is not set", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  WP34S_SinhCosh(&a, NULL, &a);
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void coshCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshCo16:", "cannot use NaN as X input of cosh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  // cosh(a + i b) = cosh(a) cos(b) + i sinh(a) sin(b)
-  real39_t a, b, sinha, cosha, sinb, cosb;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  WP34S_SinhCosh(&a, &sinha, &cosha);
-  WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sinb, &cosb, NULL);
-
-  realMultiply(&cosha, &cosb, &a, &ctxtReal39);
-  realMultiply(&sinha, &sinb, &b, &ctxtReal39);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void coshRm16(void) {
+void coshRema(void) {
   fnToBeCoded();
 }
 
 
 
-void coshCm16(void) {
+void coshCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void coshRe34(void) {
+void coshReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshRe34:", "cannot use NaN as X input of cosh", NULL, NULL);
+      showInfoDialog("In function coshReal:", "cannot use NaN as X input of cosh", NULL, NULL);
     #endif
     return;
   }
@@ -154,7 +100,7 @@ void coshRe34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of cosh when flag D is not set", NULL, NULL);
+      showInfoDialog("In function coshReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of cosh when flag D is not set", NULL, NULL);
     #endif
     return;
   }
@@ -169,11 +115,11 @@ void coshRe34(void) {
 
 
 
-void coshCo34(void) {
+void coshCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshCo34:", "cannot use NaN as X input of cosh", NULL, NULL);
+      showInfoDialog("In function coshCplx:", "cannot use NaN as X input of cosh", NULL, NULL);
     #endif
     return;
   }

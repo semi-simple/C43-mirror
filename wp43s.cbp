@@ -232,13 +232,10 @@
 		<Unit filename="src/testSuite/2pow.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/addition_complex16.txt">
+		<Unit filename="src/testSuite/addition_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/addition_complex16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/addition_complex34.txt">
+		<Unit filename="src/testSuite/addition_complexMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/addition_date.txt">
@@ -247,13 +244,10 @@
 		<Unit filename="src/testSuite/addition_longInteger.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/addition_real16.txt">
+		<Unit filename="src/testSuite/addition_real.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/addition_real16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/addition_real34.txt">
+		<Unit filename="src/testSuite/addition_realMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/addition_shortInteger.txt">
@@ -316,13 +310,10 @@
 		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/division_complex16.txt">
+		<Unit filename="src/testSuite/division_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/division_complex16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/division_complex34.txt">
+		<Unit filename="src/testSuite/division_complexMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_date.txt">
@@ -331,13 +322,10 @@
 		<Unit filename="src/testSuite/division_longInteger.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/division_real16.txt">
+		<Unit filename="src/testSuite/division_real.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/division_real16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/division_real34.txt">
+		<Unit filename="src/testSuite/division_realMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_shortInteger.txt">
@@ -421,13 +409,10 @@
 		<Unit filename="src/testSuite/modulo.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/multiplication_complex16.txt">
+		<Unit filename="src/testSuite/multiplication_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/multiplication_complex16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/multiplication_complex34.txt">
+		<Unit filename="src/testSuite/multiplication_complexMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_date.txt">
@@ -436,13 +421,10 @@
 		<Unit filename="src/testSuite/multiplication_longInteger.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/multiplication_real16.txt">
+		<Unit filename="src/testSuite/multiplication_real.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/multiplication_real16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/multiplication_real34.txt">
+		<Unit filename="src/testSuite/multiplication_realMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_shortInteger.txt">
@@ -457,13 +439,10 @@
 		<Unit filename="src/testSuite/neighb.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/parallel_complex16.txt">
+		<Unit filename="src/testSuite/parallel_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/parallel_complex16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/parallel_complex34.txt">
+		<Unit filename="src/testSuite/parallel_complexMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/parallel_date.txt">
@@ -472,13 +451,10 @@
 		<Unit filename="src/testSuite/parallel_longInteger.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/parallel_real16.txt">
+		<Unit filename="src/testSuite/parallel_real.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/parallel_real16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/parallel_real34.txt">
+		<Unit filename="src/testSuite/parallel_realMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/parallel_shortInteger.txt">
@@ -493,13 +469,10 @@
 		<Unit filename="src/testSuite/polarToRectangular.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/power_complex16.txt">
+		<Unit filename="src/testSuite/power_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/power_complex16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/power_complex34.txt">
+		<Unit filename="src/testSuite/power_complexMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/power_date.txt">
@@ -508,13 +481,10 @@
 		<Unit filename="src/testSuite/power_longInteger.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/power_real16.txt">
+		<Unit filename="src/testSuite/power_real.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/power_real16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/power_real34.txt">
+		<Unit filename="src/testSuite/power_realMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/power_shortInteger.txt">
@@ -562,13 +532,10 @@
 		<Unit filename="src/testSuite/squareRoot.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/subtraction_complex16.txt">
+		<Unit filename="src/testSuite/subtraction_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/subtraction_complex16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/subtraction_complex34.txt">
+		<Unit filename="src/testSuite/subtraction_complexMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/subtraction_date.txt">
@@ -577,13 +544,10 @@
 		<Unit filename="src/testSuite/subtraction_longInteger.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/subtraction_real16.txt">
+		<Unit filename="src/testSuite/subtraction_real.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/subtraction_real16Matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/subtraction_real34.txt">
+		<Unit filename="src/testSuite/subtraction_realMatrix.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/subtraction_shortInteger.txt">

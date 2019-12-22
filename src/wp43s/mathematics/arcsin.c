@@ -22,10 +22,10 @@
 
 
 
-void (* const arcsin[12])(void) = {
-// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
-//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
-            arcsinLonI,  arcsinRe16, arcsinCo16, arcsinError, arcsinError, arcsinError, arcsinError, arcsinRm16, arcsinCm16, arcsinError,  arcsinRe34, arcsinCo34
+void (* const arcsin[9])(void) = {
+// regX ==> 1            2           3           4            5            6            7           8           9
+//          Long integer Real34      Complex34   Time         Date         String       Real34 mat  Complex34 m Short integer
+            arcsinLonI,  arcsinReal, arcsinCplx, arcsinError, arcsinError, arcsinError, arcsinRema, arcsinCxma, arcsinError
 };
 
 
@@ -73,8 +73,7 @@ void arcsinLonI(void) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arcsinCo34();
-      convertRegister34To16(REGISTER_X);
+      arcsinCplx();
       return;
     }
     else {
@@ -86,134 +85,39 @@ void arcsinLonI(void) {
     }
   }
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, currentAngularMode);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
 
   if(realIsZero(&x)) {
-    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    realToReal16(const_1on2, REGISTER_REAL16_DATA(REGISTER_X));
+    realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));
     if(realIsNegative(&x)) {
-      real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
+      real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
     }
-    convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
   }
 }
 
 
 
-void arcsinRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arcsinRe16:", "cannot use NaN as X input of arcsin", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  setRegisterAngularMode(REGISTER_X, currentAngularMode);
-
-  if(realCompareAbsGreaterThan(&x, const_1)) {
-    if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arcsinCo34();
-      convertRegister34To16(REGISTER_X);
-      return;
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arcsinRe16:", "|X| > 1", "and CPXRES is not set!", NULL);
-      #endif
-      return;
-    }
-  }
-
-  WP34S_Asin(&x, &x);
-  convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-
-  if(currentAngularMode == AM_DMS) {
-    checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-void arcsinCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arcsinCo16:", "cannot use NaN as X input of arcsin", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, real, imag, magnitude, theta;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  // arcsin(z) = -i.ln(iz + sqrt(1 - z²))
-  // calculate z²   real part
-  realMultiply(&b, &b, &real, &ctxtReal39);
-  realChangeSign(&real);
-  realFMA(&a, &a, &real, &real, &ctxtReal39);
-
-  // calculate z²   imaginary part
-  realMultiply(&a, &b, &imag, &ctxtReal39);
-  realMultiply(&imag, const_2, &imag, &ctxtReal39);
-
-  // calculate 1 - z²
-  realSubtract(const_1, &real, &real, &ctxtReal39);
-  realChangeSign(&imag);
-
-  // calculate sqrt(1 - z²)
-  real39RectangularToPolar(&real, &imag, &magnitude, &theta);
-  realSquareRoot(&magnitude, &magnitude, &ctxtReal39);
-  realMultiply(&theta, const_1on2, &theta, &ctxtReal39);
-  real39PolarToRectangular(&magnitude, &theta, &real, &imag);
-
-  // calculate iz + sqrt(1 - z²)
-  realChangeSign(&b);
-  realAdd(&real, &b, &real, &ctxtReal39);
-  realAdd(&imag, &a, &imag, &ctxtReal39);
-
-  // calculate ln(iz + sqrt(1 - z²))
-  real39RectangularToPolar(&real, &imag, &real, &a);
-  WP34S_Ln(&real, &b);
-
-  // calculate = -i.ln(iz + sqrt(1 - z²))
-  realChangeSign(&b);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void arcsinRm16(void) {
+void arcsinRema(void) {
   fnToBeCoded();
 }
 
 
 
-void arcsinCm16(void) {
+void arcsinCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void arcsinRe34(void) {
+void arcsinReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arcsinRe34:", "cannot use NaN as X input of arcsin", NULL, NULL);
+      showInfoDialog("In function arcsinReal:", "cannot use NaN as X input of arcsin", NULL, NULL);
     #endif
     return;
   }
@@ -228,13 +132,13 @@ void arcsinRe34(void) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-      arcsinCo34();
+      arcsinCplx();
       return;
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arcsinRe34:", "|X| > 1", "and CPXRES is not set!", NULL);
+        showInfoDialog("In function arcsinReal:", "|X| > 1", "and CPXRES is not set!", NULL);
       #endif
       return;
     }
@@ -251,11 +155,11 @@ void arcsinRe34(void) {
 
 
 
-void arcsinCo34(void) {
+void arcsinCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arcsinCo34:", "cannot use NaN as X input of arcsin", NULL, NULL);
+      showInfoDialog("In function arcsinCplx:", "cannot use NaN as X input of arcsin", NULL, NULL);
     #endif
     return;
   }

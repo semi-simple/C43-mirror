@@ -519,38 +519,40 @@ int16_t ul_x, ul_y;                           //JM vv LONGPRESS
 void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
 
-  if(!dontclear) {                            //Recursively call the same routine to clear the previous line
-    underline_softkey(ul_x, ul_y, true);
-  }
-  ul_x = xSoftkey;
-  ul_y = ySoftKey;
+  if(jm_FG_LINE) {
+    if(!dontclear) {                            //Recursively call the same routine to clear the previous line
+      underline_softkey(ul_x, ul_y, true);
+    }
+    ul_x = xSoftkey;
+    ul_y = ySoftKey;
 
 
-  if(0 <= xSoftkey && xSoftkey <= 5) {
-    x1 = 67 * xSoftkey - 1;
-    x2 = x1 + 67;
-  } else {
-    x1 = 0;
-    x2 = 0;
-  }
+    if(0 <= xSoftkey && xSoftkey <= 5) {
+      x1 = 67 * xSoftkey - 1;
+      x2 = x1 + 67;
+    } else {
+      x1 = 0;
+      x2 = 0;
+    }
 
-  if(0 <= ySoftKey && ySoftKey <= 2) {
-    y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
-    y2 = y1 + SOFTMENU_HEIGHT;
-  } else {
-    y1 = 0;
-    y2 = 0;
-  }
+    if(0 <= ySoftKey && ySoftKey <= 2) {
+      y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
+      y2 = y1 + SOFTMENU_HEIGHT;
+    } else {
+      y1 = 0;
+      y2 = 0;
+    }
 
-  y = y2-3-1;
-  if(y>=0) {                                  //JM Make provision for out of range parameter, used to not plot the line and only for the recursive line removal
-    for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
-      if(mod(x, 2) == 0) {
-          invertPixel  (x, y);
-          invertPixel  (x, y+2);
-      }
-      else {
-          invertPixel  (x, y+1);
+    y = y2-3-1;
+    if(y>=0) {                                  //JM Make provision for out of range parameter, used to not plot the line and only for the recursive line removal
+      for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
+        if(mod(x, 2) == 0) {
+            invertPixel  (x, y);
+            invertPixel  (x, y+2);
+        }
+        else {
+            invertPixel  (x, y+1);
+        }
       }
     }
   }
@@ -740,49 +742,50 @@ void Shft_handler() {                        //JM SHIFT NEW vv
  * \return void
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
-                                                               // Changed to INVERTPIXEL
-//invertPixel (xx+4,yy+7);   //Used to be SetPixel vv
-  invertPixel (xx+5,yy+6);
-//invertPixel (xx+6,yy+6);
-  invertPixel (xx+6,yy+5);
-//invertPixel (xx+7,yy+4);
-  invertPixel (xx+6,yy+3);
-//invertPixel (xx+6,yy+2);
-  invertPixel (xx+5,yy+2);
-  invertPixel (xx+4,yy+2);
-  invertPixel (xx+3,yy+2);
-//invertPixel (xx+2,yy+2);
-  invertPixel (xx+2,yy+3);
-  invertPixel (xx+2,yy+4);
-  invertPixel (xx+2,yy+5);
-//invertPixel (xx+2,yy+6);
-  invertPixel (xx+3,yy+6);
-  invertPixel (xx+4,yy+6);
-  invertPixel (xx+5,yy+5);
-  invertPixel (xx+6,yy+4);
-  invertPixel (xx+5,yy+3);
-  invertPixel (xx+3,yy+3);
-  invertPixel (xx+3,yy+5);
-/*  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
-  invertPixel (xx+5,yy+7);
-  invertPixel (xx+6,yy+7);
-  invertPixel (xx+6,yy+6);
-  invertPixel (xx+7,yy+6);
-  invertPixel (xx+7,yy+5);
-  invertPixel (xx+7,yy+4);
-  invertPixel (xx+7,yy+3);
-  invertPixel (xx+6,yy+2);
-  invertPixel (xx+6,yy+1);
-  invertPixel (xx+5,yy+1);
-  invertPixel (xx+4,yy+1);
-  invertPixel (xx+3,yy+1);
-  invertPixel (xx+2,yy+2);
-  invertPixel (xx+1,yy+3);
-  invertPixel (xx+1,yy+4);
-  invertPixel (xx+1,yy+5);
-  invertPixel (xx+1,yy+6);
-  invertPixel (xx+2,yy+6);
-  invertPixel (xx+3,yy+7);*/
+if(jm_FG_DOTS) {                                                               // Changed to INVERTPIXEL
+  //invertPixel (xx+4,yy+7);   //Used to be SetPixel vv
+    invertPixel (xx+5,yy+6);
+  //invertPixel (xx+6,yy+6);
+    invertPixel (xx+6,yy+5);
+  //invertPixel (xx+7,yy+4);
+    invertPixel (xx+6,yy+3);
+  //invertPixel (xx+6,yy+2);
+    invertPixel (xx+5,yy+2);
+    invertPixel (xx+4,yy+2);
+    invertPixel (xx+3,yy+2);
+  //invertPixel (xx+2,yy+2);
+    invertPixel (xx+2,yy+3);
+    invertPixel (xx+2,yy+4);
+    invertPixel (xx+2,yy+5);
+  //invertPixel (xx+2,yy+6);
+    invertPixel (xx+3,yy+6);
+    invertPixel (xx+4,yy+6);
+    invertPixel (xx+5,yy+5);
+    invertPixel (xx+6,yy+4);
+    invertPixel (xx+5,yy+3);
+    invertPixel (xx+3,yy+3);
+    invertPixel (xx+3,yy+5);
+  /*  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
+    invertPixel (xx+5,yy+7);
+    invertPixel (xx+6,yy+7);
+    invertPixel (xx+6,yy+6);
+    invertPixel (xx+7,yy+6);
+    invertPixel (xx+7,yy+5);
+    invertPixel (xx+7,yy+4);
+    invertPixel (xx+7,yy+3);
+    invertPixel (xx+6,yy+2);
+    invertPixel (xx+6,yy+1);
+    invertPixel (xx+5,yy+1);
+    invertPixel (xx+4,yy+1);
+    invertPixel (xx+3,yy+1);
+    invertPixel (xx+2,yy+2);
+    invertPixel (xx+1,yy+3);
+    invertPixel (xx+1,yy+4);
+    invertPixel (xx+1,yy+5);
+    invertPixel (xx+1,yy+6);
+    invertPixel (xx+2,yy+6);
+    invertPixel (xx+3,yy+7);*/
+  }
 }
 
 

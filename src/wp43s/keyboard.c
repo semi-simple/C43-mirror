@@ -66,6 +66,7 @@ void showShiftState(void) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
         //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
         if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
+          DOT_G_clear();
           DOT_F();
           if(!FN_timeouts_in_progress) {
             if(!ULFL) {
@@ -187,6 +188,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
         if(lastErrorCode == 0) {
           temporaryInformation = TI_NO_INFO;
+          printf("#--ExecFunction\n"); //JMRESET TEST TEMPORARY
           runFunction(func % 10000);
         }
       }
@@ -367,24 +369,10 @@ void disp_(uint8_t nr, int32_t swTime) {                                    //DI
   showString(snum, &standardFont, 60+nr*30, 40, vmNormal, false, false);
 }
 
-void disp_old(uint8_t nr, int32_t swTime) {                                    //DISPLAY time on DM42 screen
-  char snum[50];
-#ifdef DMCP_BUILD
-  showString("ms:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
-#endif
-#ifdef PC_BUILD
-  showString(STD_mu "s:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
-#endif
-  itoa(swTime, snum, 10);
-  strcat(snum, "         ");
-  showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);
-}
 //**************JM DOUBLE CLICK SUPPORT vv **********************************
 
 
 int16_t T_S1, T_S2, T_S3, T_S4;
-
-
 
 //*************** DEBUG ****************************************************
 #define N_FN_TIME_DEBUG
@@ -400,6 +388,8 @@ void btnFnPressed(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
 #endif
+  printf("#--btnFnPressed\n"); //JMRESET TEST TEMPORARY
+
   FN_timed_out_to_RELEASE_EXEC = false;
   temp = TIME_from_last_read();
 
@@ -474,7 +464,7 @@ void btnFnPressed(void *w, void *data) {
 
   //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
   FN_double_click_detected = false;                                         //JM FN-DOUBLE - Dip detection flag
-  if(FN_state == ST_3_PRESS2 && !shiftF && !shiftG) {
+  if(jm_G_DOUBLETAP && FN_state == ST_3_PRESS2 && !shiftF && !shiftG) {
 
     #ifdef FN_TIME_DEBUG_MINIMAL
     printf("now %ld now_MEM1 %ld  Debounce delta=%d against limit=%d \n",now, now_MEM1, TC_delta(),JM_FN_DOUBLE_DEBOUNCE_TIMER);
@@ -575,6 +565,7 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 #ifdef DMCP_BUILD
 void btnFnReleased(void *w, void *data) {
 #endif
+  printf("#--btnFnReleased\n"); //JMRESET TEST TEMPORARY
   temp = TIME_from_last_read();
   #ifdef FN_TIME_DEBUG
   printf("--------------\n RELEASE LastX %d : ",temp); 
@@ -690,7 +681,7 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 void btnFnClicked(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
-
+printf("#--btnFnClicked\n"); //JMRESET TEST TEMPORARY
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
 
@@ -1703,9 +1694,12 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 void btnReleased(void *notUsed, void *data) {
 #endif
   Shft_timeouts = false;                         //JM SHIFT NEW
+printf("runF1 \n");   //JMRESET TEST TEMPORARY
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
+printf("runF2 \n");  //JMRESET TEST TEMPORARY
     hideFunctionName();
+printf("runF3 \n");  //JMRESET TEST TEMPORARY
     runFunction(item);
   }
 }

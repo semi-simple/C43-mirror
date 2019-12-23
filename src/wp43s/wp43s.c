@@ -321,10 +321,22 @@ void setupDefaults(void) {
   shiftG = false;
   shiftStateChanged = false;
 
-
   jm_FG_LINE = true;                                             //JM Screen / keyboard operation setup
   jm_FG_DOTS = false;                                            //JM Screen / keyboard operation setup
   jm_G_DOUBLETAP = false;                                        //JM Screen / keyboard operation setup
+
+  ULFL = false;                                                  //JM Underline
+  ULGL = false;                                                  //JM Underline
+  FN_delay_exec = false;                                         //JM FN-DOUBLE
+  FN_double_click_detected = false;                              //JM FN-DOUBLE
+  FN_state = ST_0_INIT;                                          //JM FN-DOUBLE
+  FN_key_pressed = 0;                                            //JM LONGPRESS FN
+  FN_key_pressed_last = 0;
+  FN_timeouts_in_progress = false;                               //JM LONGPRESS FN
+  Shft_timeouts = 0;                                             //JM SHIFT NEW
+  FN_counter = JM_FN_TIMER;                                      //JM LONGPRESS FN
+  FN_timed_out_to_RELEASE_EXEC = false;                          //JM LONGPRESS FN
+  FN_timed_out_to_NOP = false;                                   //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
   HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
@@ -342,9 +354,11 @@ void setupDefaults(void) {
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
   #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  now_MEM1 = 0;                                                  //JM FN_DOUBLE
   #endif
   #ifdef PC_BUILD
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  now_MEM1 = 0;                                                  //JM FN_DOUBLE
   #endif
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
@@ -598,11 +612,22 @@ void program_main(void) {
     // == 0 -> Key released
     key = key_pop();
 
-    if(38 <= key && key <=43) {
-      sprintf(charKey, "%c", key+11);
-      btnFnClicked(NULL, charKey);
+//    if(38 <= key && key <=43) {
+//      sprintf(charKey, "%c", key+11);
+//      btnFnClicked(NULL, charKey);
+//      lcd_refresh();
+//    }
+
+    if(38 <= key && key <= 43) {
+      sprintf(charKey, "%c", key +11);
+      btnFnPressed(NULL, charKey);
+      lcd_refresh();
+    } else if(key == 0 && FN_key_pressed != 0) {
+      btnFnReleased(NULL,NULL);
       lcd_refresh();
     }
+
+
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);

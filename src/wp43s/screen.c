@@ -20,6 +20,7 @@
 
 #include "wp43s.h"
 
+
 #ifdef PC_BUILD
 /********************************************//**
  * \brief Draws the calc's screen on the PC window widget
@@ -354,7 +355,6 @@ void waitAndSee(void) {
 }
 
 
-
 /********************************************//**
  * \brief Refreshes calc's screen. This function is
  * called every 100 ms by a GTK timer.
@@ -380,6 +380,10 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
       hideCursor();
     }
   }
+
+  FN_no_double_click_handler();
+  FN_handler();
+  Shft_handler();
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -434,7 +438,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   return TRUE;
 }
 #elif defined DMCP_BUILD
-void refreshScreen(void) {// This function is called roughly every 100 ms from the main loop
+void refreshScreen() {// This function is called roughly every 100 ms from the main loop
   // Cursor blinking
   if(cursorEnabled) {
     cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
@@ -445,6 +449,10 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
       hideCursor();
     }
   }
+
+  FN_no_double_click_handler();
+  FN_handler();
+  Shft_handler();
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -497,6 +505,234 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 
 #ifndef TESTSUITE_BUILD
+
+
+void underline(int16_t y) {
+  int16_t i;
+   for( i = 0; i < 6; i = i + 1 ){
+     underline_softkey(i, y, true);
+   }
+}
+
+
+int16_t ul_x, ul_y;                           //JM vv LONGPRESS
+void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
+  int16_t x, y, x1, y1, x2, y2;
+
+  if(!dontclear) {                            //Recursively call the same routine to clear the previous line
+    underline_softkey(ul_x, ul_y, true);
+  }
+  ul_x = xSoftkey;
+  ul_y = ySoftKey;
+
+
+  if(0 <= xSoftkey && xSoftkey <= 5) {
+    x1 = 67 * xSoftkey - 1;
+    x2 = x1 + 67;
+  } else {
+    x1 = 0;
+    x2 = 0;
+  }
+
+  if(0 <= ySoftKey && ySoftKey <= 2) {
+    y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
+    y2 = y1 + SOFTMENU_HEIGHT;
+  } else {
+    y1 = 0;
+    y2 = 0;
+  }
+
+  y = y2-3-1;
+  if(y>=0) {                                  //JM Make provision for out of range parameter, used to not plot the line and only for the recursive line removal
+    for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
+      if(mod(x, 2) == 0) {
+          invertPixel  (x, y);
+          invertPixel  (x, y+2);
+      }
+      else {
+          invertPixel  (x, y+1);
+      }
+    }
+  }
+}                                            //JM ^^
+
+
+
+void Wait_loop2() {
+#ifdef PC_BUILD                                                           //JM LONGPRESS FN
+    now = g_get_monotonic_time();                   //JM usec
+  while (now + (JM_FN_DOUBLE_TIMER + 6) * 1000 > g_get_monotonic_time());
+#endif
+#ifdef DMCP_BUILD
+#define TIMER_IDX 1
+  sys_timer_start(TIMER_IDX, JM_FN_DOUBLE_TIMER + 6);  // wake up for key
+  sys_sleep();
+  sys_timer_disable(TIMER_IDX);
+#endif
+}
+
+
+void Wait_loop1() {
+  while (TC_compare( JM_FN_DOUBLE_TIMER + 6 ) == 1);  //1: verloopte tyd LANGER as (t).
+}
+
+void Wait_loop() {
+  int8_t tmp;
+  do {
+    tmp = (TC_compare( JM_FN_DOUBLE_TIMER + 6 ) );
+  } while (tmp != 1 && tmp != 127);
+}
+
+
+
+void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
+  char charKey[3];
+  if (FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) {
+    #ifdef FN_TIME_DEBUG
+    printf("TIMER check passed \n");
+    printf("  %ld, KEY=%d, DC=%d, DE=%d \n",g_get_monotonic_time() / 1000, FN_key_pressed, FN_double_click_detected, FN_delay_exec);
+    #endif
+    FN_delay_exec = false;
+    Wait_loop();
+    #ifdef FN_TIME_DEBUG
+    printf("  %ld, KEY=%d \n",g_get_monotonic_time() / 1000,FN_key_pressed);
+    #endif
+    if (TC_compare(JM_FN_DOUBLE_TIMER) == 1) {
+      #ifdef FN_TIME_DEBUG
+      printf("Delayed Exec \n");
+      #endif
+    FN_timeouts_in_progress = false;
+    FN_counter = JM_FN_TIMER;         
+      R_shF();
+      R_shG();
+      sprintf(charKey, "%c", FN_key_pressed + 11);
+      clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+      refreshRegisterLine(REGISTER_T);
+      btnFnClicked(NULL, charKey);
+      resetShiftState();  
+    //FN_cancel();
+
+    }
+  }
+}                                            //JM FN-DOUBLE vv
+
+
+
+#define N_FN_TIME_DEBUG1
+
+
+void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler     
+                                             //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
+  if( (FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
+ 
+    if(FN_counter > JM_FN_TIMER) {
+      FN_counter = JM_FN_TIMER;
+    } else
+    if(FN_counter < 1) {
+      FN_counter = 1;
+    } 
+
+    if (FN_counter == 1) {                                //   Countdown (t=100 ms) from JM_FN_TIMER (8) to 1
+      if(!shiftF && !shiftG) {                            //   Current shift state
+        S_shF();                                          //   New shift state
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+        FN_timed_out_to_RELEASE_EXEC = true;
+        underline_softkey(FN_key_pressed-38,1, false);
+        FN_counter = JM_FN_TIMER;                         //  restart count
+        #ifdef FN_TIME_DEBUG1
+        printf("Handler 1, KEY=%d \n",FN_key_pressed);
+        #endif
+      }
+      else if(shiftF && !shiftG) {
+        S_shG();
+        R_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(nameFunction(FN_key_pressed-37,12),0);
+        FN_timed_out_to_RELEASE_EXEC = true;
+        underline_softkey(FN_key_pressed-38,2, false);    
+        FN_counter = JM_FN_TIMER;                        //  restart count
+        #ifdef FN_TIME_DEBUG1
+        printf("Handler 2, KEY=%d \n",FN_key_pressed);
+        #endif
+      }
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {        
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //  keep shift state, so it will stay here every cycle until key released
+        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        showFunctionName(ITM_NOP, 0);
+        FN_timed_out_to_NOP = true;
+        underline_softkey(FN_key_pressed-38,3, false);   //  Purposely select row 3 which does not exist, just to activate the 'clear previous line'
+        FN_timeouts_in_progress = false;   
+        #ifdef FN_TIME_DEBUG1
+        printf("Handler 3, KEY=%d \n",FN_key_pressed);
+        #endif
+      }
+    } 
+    else { 
+      FN_counter--;
+    }
+  } 
+}                                        //JM ^^
+
+
+void Shft_handler() {                        //JM SHIFT NEW vv
+  if(Shft_timeouts) {
+ 
+    if(FN_counter > JM_FN_TIMER) {
+      FN_counter = JM_FN_TIMER;
+    } else
+    if(FN_counter < 1) {
+      FN_counter = 1;
+    } 
+
+    if (FN_counter == 1) {    
+      if(!shiftF && !shiftG) {
+        S_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        FN_counter = JM_FN_TIMER;                        //restart count
+      }
+      else if(shiftF && !shiftG) {
+        S_shG();
+        R_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        FN_counter = JM_FN_TIMER;                        //restart count
+      }
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
+        Shft_timeouts = false;
+        R_shG();                                         //force into no shift state, i.e. to wait
+        R_shF();
+        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        showShiftState();
+        if(HOME3) {
+          if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
+            popSoftmenu();                                                                                                  //JM shifts
+          }
+          else {
+            if (calcMode == CM_AIM) {                                                                                       //JM shifts
+              showSoftmenu(NULL, -MNU_ALPHA, true);                                                                         //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
+            }
+            else {                                                                                                          //JM SHIFTS
+              showSoftmenu(NULL, -MNU_HOME, true);                                                                          //JM shifts  //JM ALPHA-HOME
+            }                                                                                                               //JM shifts                                                                                                                            //JM shifts
+            softmenuStackPointer_MEM = softmenuStackPointer;                                                                //JM shifts
+          }
+        }   
+
+      }
+    } 
+    else { 
+      FN_counter--;
+    }
+  } 
+}                                        //JM ^^
+
+
 /********************************************//**
  * \brief Draws the dots on the margins of the f and g lines on screen
  *
@@ -504,6 +740,54 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
  * \return void
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
+                                                               // Changed to INVERTPIXEL
+//invertPixel (xx+4,yy+7);   //Used to be SetPixel vv
+  invertPixel (xx+5,yy+6);
+//invertPixel (xx+6,yy+6);
+  invertPixel (xx+6,yy+5);
+//invertPixel (xx+7,yy+4);
+  invertPixel (xx+6,yy+3);
+//invertPixel (xx+6,yy+2);
+  invertPixel (xx+5,yy+2);
+  invertPixel (xx+4,yy+2);
+  invertPixel (xx+3,yy+2);
+//invertPixel (xx+2,yy+2);
+  invertPixel (xx+2,yy+3);
+  invertPixel (xx+2,yy+4);
+  invertPixel (xx+2,yy+5);
+//invertPixel (xx+2,yy+6);
+  invertPixel (xx+3,yy+6);
+  invertPixel (xx+4,yy+6);
+  invertPixel (xx+5,yy+5);
+  invertPixel (xx+6,yy+4);
+  invertPixel (xx+5,yy+3);
+  invertPixel (xx+3,yy+3);
+  invertPixel (xx+3,yy+5);
+/*  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
+  invertPixel (xx+5,yy+7);
+  invertPixel (xx+6,yy+7);
+  invertPixel (xx+6,yy+6);
+  invertPixel (xx+7,yy+6);
+  invertPixel (xx+7,yy+5);
+  invertPixel (xx+7,yy+4);
+  invertPixel (xx+7,yy+3);
+  invertPixel (xx+6,yy+2);
+  invertPixel (xx+6,yy+1);
+  invertPixel (xx+5,yy+1);
+  invertPixel (xx+4,yy+1);
+  invertPixel (xx+3,yy+1);
+  invertPixel (xx+2,yy+2);
+  invertPixel (xx+1,yy+3);
+  invertPixel (xx+1,yy+4);
+  invertPixel (xx+1,yy+5);
+  invertPixel (xx+1,yy+6);
+  invertPixel (xx+2,yy+6);
+  invertPixel (xx+3,yy+7);*/
+}
+
+
+/*
+void JM_DOT_old(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 
 //setPixel (xx+4,yy+7);
   setPixel (xx+5,yy+6);
@@ -548,8 +832,7 @@ void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the do
   clearPixel (xx+2,yy+6);
   clearPixel (xx+3,yy+7);
 }
-
-
+*/
 
 /********************************************//**
  * \brief Sets a pixel on the screen (black).
@@ -596,6 +879,30 @@ void clearPixel(int16_t x, int16_t y) {
 
   #ifdef DMCP_BUILD
     bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE);
+  #endif
+}
+
+
+/********************************************//**  //JM 
+ * \brief Inverts a pixel on the screen (white/black).
+ *
+ * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
+ * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)
+ * \return void
+ ***********************************************/
+void invertPixel(int16_t x, int16_t y) {           //JM
+  #ifdef PC_BUILD
+    if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
+      //printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+      return;
+    }
+
+    *(screenData + y*screenStride + x) = *(screenData + y*screenStride + x) ^ 0xffffff;
+    screenChange = true;
+  #endif
+
+  #ifdef DMCP_BUILD
+    bitblt24(x, 1, y, 1, BLT_XOR, BLT_NONE);
   #endif
 }
 
@@ -957,9 +1264,8 @@ void showFunctionName(int16_t item, int8_t counter) {
   if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 15, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);  //JM
 }
-
 
 
 /********************************************//**

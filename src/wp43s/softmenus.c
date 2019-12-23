@@ -1232,6 +1232,9 @@ void showSoftmenuCurrentPart(void) {
       }
     }
 
+    ULFL = false;                                   //JM Underline
+    ULGL = false;                                   //JM Underline
+
     const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
     for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, softmenu[m].numItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {

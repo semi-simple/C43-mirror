@@ -169,6 +169,43 @@ gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
       CTRL_State = 0;
       break;
 
+
+    case 65470: // F1                      //JM Added this portion to be able to go to NOP on emulator
+      //printf("key pressed: F1\n");
+      btnFnReleased(w, "1");
+      break;
+      
+    case 65471: // F2
+      //printf("key pressed: F2\n");
+      btnFnReleased(w, "2");
+      break;
+
+    case 65472: // F3
+      //printf("key pressed: F3\n");
+      btnFnReleased(w, "3");
+      break;
+
+    case 65473: // F4
+      //printf("key pressed: F4\n");
+      btnFnReleased(w, "4");
+      break;
+
+    case 65474: // F5
+      //printf("key pressed: F5\n");
+      btnFnReleased(w, "5");
+      break;
+
+    case 65475: // F6
+      //printf("key pressed: F6\n");
+      btnFnReleased(w, "6");
+      break;
+
+    case 65505: // left shift  //JM Added this portion to be able to repeat f key on emulator
+      //printf("key pressed: Shift\n"); //dr
+      btnReleased(w, "27");
+      break;
+
+
     default:
       break;
 
@@ -531,34 +568,34 @@ return FALSE;
 
   switch (event_keyval) {
 //ROW 1
-    case 65470: // F1
+    case 65470: // F1                       //JM Changed these to btnFNPressed from btnClicked
       //printf("key pressed: F1\n");
-      btnFnClicked(w, "1");
+      btnFnPressed(w, "1");
       break;
 
     case 65471: // F2
       //printf("key pressed: F2\n");
-      btnFnClicked(w, "2");
+      btnFnPressed(w, "2");
       break;
 
     case 65472: // F3
       //printf("key pressed: F3\n");
-      btnFnClicked(w, "3");
+      btnFnPressed(w, "3");
       break;
 
     case 65473: // F4
       //printf("key pressed: F4\n");
-      btnFnClicked(w, "4");
+      btnFnPressed(w, "4");
       break;
 
     case 65474: // F5
       //printf("key pressed: F5\n");
-      btnFnClicked(w, "5");
+      btnFnPressed(w, "5");
       break;
 
     case 65475: // F6
       //printf("key pressed: F6\n");
-      btnFnClicked(w, "6");
+      btnFnPressed(w, "6");
       break;
 //ROW 2
     case 97:  // a  //dr
@@ -727,7 +764,7 @@ return FALSE;
     case 65505: // left shift  //JM
 //    case 65506: //JM right shift. 65453: // -  //JM Remove Right Shift, to allow * & +
       //printf("key pressed: Shift\n"); //dr
-      btnClicked(w, "27");
+      btnPressed(w, "27");                         //JM PRESSED FOR KEYBOARD F REPEAT
       break;
 
     case 49:    // 1
@@ -2965,12 +3002,25 @@ void setupUI(void) {
   gtk_widget_set_name(btn15, "calcKey");
   gtk_widget_set_name(btn16, "calcKey");
 
-  g_signal_connect(btn11, "clicked", G_CALLBACK(btnFnClicked), "1");
-  g_signal_connect(btn12, "clicked", G_CALLBACK(btnFnClicked), "2");
-  g_signal_connect(btn13, "clicked", G_CALLBACK(btnFnClicked), "3");
-  g_signal_connect(btn14, "clicked", G_CALLBACK(btnFnClicked), "4");
-  g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnClicked), "5");
-  g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnClicked), "6");
+  //g_signal_connect(btn11, "clicked", G_CALLBACK(btnFnClicked), "1");   //JM LONGPRESS vv
+  //g_signal_connect(btn12, "clicked", G_CALLBACK(btnFnClicked), "2");
+  //g_signal_connect(btn13, "clicked", G_CALLBACK(btnFnClicked), "3");
+  //g_signal_connect(btn14, "clicked", G_CALLBACK(btnFnClicked), "4");
+  //g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnClicked), "5");
+  //g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnClicked), "6");
+
+  g_signal_connect(btn11, "pressed", G_CALLBACK(btnFnPressed), "1");
+  g_signal_connect(btn12, "pressed", G_CALLBACK(btnFnPressed), "2");
+  g_signal_connect(btn13, "pressed", G_CALLBACK(btnFnPressed), "3");
+  g_signal_connect(btn14, "pressed", G_CALLBACK(btnFnPressed), "4");
+  g_signal_connect(btn15, "pressed", G_CALLBACK(btnFnPressed), "5");
+  g_signal_connect(btn16, "pressed", G_CALLBACK(btnFnPressed), "6");
+  g_signal_connect(btn11, "released", G_CALLBACK(btnFnReleased), "1");
+  g_signal_connect(btn12, "released", G_CALLBACK(btnFnReleased), "2");
+  g_signal_connect(btn13, "released", G_CALLBACK(btnFnReleased), "3");
+  g_signal_connect(btn14, "released", G_CALLBACK(btnFnReleased), "4");
+  g_signal_connect(btn15, "released", G_CALLBACK(btnFnReleased), "5");
+  g_signal_connect(btn16, "released", G_CALLBACK(btnFnReleased), "6");   //JM LONGPRESS ^^
 
   xPos = X_LEFT_PORTRAIT;
   yPos = Y_TOP_PORTRAIT;

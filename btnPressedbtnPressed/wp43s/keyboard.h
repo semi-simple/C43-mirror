@@ -22,29 +22,19 @@ void resetShiftState(void);
 void showShiftState (void);
 void fnComplexCCCC  (uint16_t unusedParamButMandatory);
 
-
-int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
-
-int8_t TC_compare(uint32_t timecheck);                 //JM vv FN-DOUBLE 
-#define ST_0_INIT     0     //STATE 0 INIT
-#define ST_1_PRESS1   1     //STATE 1 FIRST PRESS
-#define ST_2_REL1     2     //STATE 2 FIRST RELEASE
-#define ST_3_PRESS2   3     //STATE 3 SECOND PRESS     //Double click determination 2 to 3 < 75 ms.
-#define ST_4_REL2     4     //STATE 4 SECOND RELEASE
-#define ST_5_EXEC     5     //STATE FOR EXECUTING
-uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
-
+int16_t FN_key_pressed;   //JM LONGPRESS FN
+bool_t FN_timeouts;       //JM LONGPRESS FN
+int8_t FN_counter;        //JM LONGPRESS FN
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);
-  void btnFnPressed   (GtkWidget *w, gpointer data);   //JM LONGPRESS FN
-  void btnFnReleased  (GtkWidget *w, gpointer data);   //JM LONGPRESS FN
   void btnClicked     (GtkWidget *w, gpointer data);
   void btnPressed     (GtkWidget *w, gpointer data);
   void btnReleased    (GtkWidget *w, gpointer data);
 #endif
 
 #ifdef DMCP_BUILD
+  void showFNFunctionName();   //JM LONGPRESS FN
   void btnFnClicked   (void *w, void *data);
   void btnFnPressed   (void *w, void *data);   //JM LONGPRESS FN
   void btnFnReleased   (void *w, void *data);  //JM LONGPRESS FN

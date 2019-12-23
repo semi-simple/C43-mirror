@@ -6,8 +6,40 @@ make -j8 V=1 clean_all
 rm ./backup.bin
 rm ./wp43c
 
+
+find . -type f -name "* 2.txt" -exec rm {} \;
+
+
+find . -type f -name "* 2.o" -exec rm {} \;
+find . -type f -name "* 3.o" -exec rm {} \;
+find . -type f -name "* 4.o" -exec rm {} \;
+find . -type f -name "* 5.o" -exec rm {} \;
+find . -type f -name "* 6.o" -exec rm {} \;
+find . -type f -name "* 7.o" -exec rm {} \;
+find . -type f -name "* 8.o" -exec rm {} \;
+find . -type f -name "* 9.o" -exec rm {} \;
+find . -type f -name "* 10.o" -exec rm {} \;
+find . -type f -name "* 11.o" -exec rm {} \;
+find . -type f -name "* 12.o" -exec rm {} \;
+find . -type f -name "* 13.o" -exec rm {} \;
+
+find . -type f -name "* 2.d" -exec rm {} \;
+find . -type f -name "* 3.d" -exec rm {} \;
+find . -type f -name "* 4.d" -exec rm {} \;
+find . -type f -name "* 5.d" -exec rm {} \;
+find . -type f -name "* 6.d" -exec rm {} \;
+find . -type f -name "* 7.d" -exec rm {} \;
+find . -type f -name "* 8.d" -exec rm {} \;
+find . -type f -name "* 9.d" -exec rm {} \;
+find . -type f -name "* 10.d" -exec rm {} \;
+find . -type f -name "* 11.d" -exec rm {} \;
+find . -type f -name "* 12.d" -exec rm {} \;
+find . -type f -name "* 13.d" -exec rm {} \;
+
+
 cd ./src
 cd ./wp43s
+
 
 rm "assign 2.o" "assign 3.o" "assign 4.o" "assign 5.o" "assign 6.o" "assign 7.o" "assign 8.o" "assign 9.o" "assign 10.o" "assign 11.o"
 rm "bufferize 2.o" "bufferize 3.o" "bufferize 4.o" "bufferize 5.o" "bufferize 6.o" "bufferize 7.o" "bufferize 8.o" "bufferize 9.o" "bufferize 10.o" "bufferize 11.o"

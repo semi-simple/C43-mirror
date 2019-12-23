@@ -181,6 +181,9 @@ void saveCalc(void) {
   size += fwrite(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
   size += fwrite(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
   size += fwrite(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);
+  size += fwrite(&jm_FG_LINE,                         1, sizeof(jm_FG_LINE),                         backup); //JM jm_FG_LINE //printf("%8lu jm_FG_LINE\n",         (unsigned long)size);
+  size += fwrite(&jm_FG_DOTS,                         1, sizeof(jm_FG_DOTS),                         backup); //JM jm_FG_DOTS //printf("%8lu jm_FG_DOTS\n",         (unsigned long)size);
+  size += fwrite(&jm_G_DOUBLETAP,                     1, sizeof(jm_G_DOUBLETAP),                     backup); //JM jm_G_DOUBLETAP //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
 
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
@@ -365,6 +368,9 @@ void restoreCalc(void) {
     size += fread(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
     size += fread(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
     size += fread(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);
+    size += fread(&jm_FG_LINE,                         1, sizeof(jm_FG_LINE),                         backup); //JM jm_FG_LINE //printf("%8lu jm_FG_LINE\n",         (unsigned long)size);
+    size += fread(&jm_FG_DOTS,                         1, sizeof(jm_FG_DOTS),                         backup); //JM jm_FG_DOTS //printf("%8lu jm_FG_DOTS\n",         (unsigned long)size);
+    size += fread(&jm_G_DOUBLETAP,                     1, sizeof(jm_G_DOUBLETAP),                     backup); //JM jm_G_DOUBLETAP //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
 
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);

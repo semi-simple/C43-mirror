@@ -999,6 +999,18 @@ void fnRebuildRadioState() {
         rb.state = eRPN? 3 : 2;
         break;
 
+      case JC_FG_LINE:                   //JM
+        rb.state = jm_FG_LINE? 3 : 2;
+        break;
+
+      case JC_FG_DOTS:                   //JM
+        rb.state = jm_FG_DOTS? 3 : 2;
+        break;
+
+      case JC_G_DOUBLETAP:               //JM
+        rb.state = jm_G_DOUBLETAP? 3 : 2;
+        break;
+
       case JC_HOME_TRIPLE:
         rb.state = HOME3? 3 : 2;
         break;

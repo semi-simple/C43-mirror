@@ -739,7 +739,7 @@ void realToDisplayString2(const void *real, char *displayString) {
             SigFigTmp = 1;                                                                     //JM SIGFIG Set flag to signal decimal point was reached.
               displayString[charIndex] = 0;
               strcat(displayString, RADIX34_MARK_STRING);
-              charIndex += 2;
+              charIndex ++;
             if(updateDisplayValueX) {
               displayValueX[valueIndex++] = '.';
             }

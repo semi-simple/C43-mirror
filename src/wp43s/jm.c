@@ -165,6 +165,21 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);                                 //dr
     break;
 
+  case JC_FG_LINE:                                          //JM 
+    jm_FG_LINE = !jm_FG_LINE;
+    fnRefreshComboxState(CB_JC, JC_FG_LINE, jm_FG_LINE);                        //jm
+    break;
+
+  case JC_FG_DOTS:                                          //JM 
+    jm_FG_DOTS = !jm_FG_DOTS;
+    fnRefreshComboxState(CB_JC, JC_FG_DOTS, jm_FG_DOTS);                        //jm
+    break;
+
+  case JC_G_DOUBLETAP:                                      //JM 
+    jm_G_DOUBLETAP = !jm_G_DOUBLETAP;
+    fnRefreshComboxState(CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP);                //jm
+    break;
+
   case JC_HOME_TRIPLE:                                      //JM HOME.3
     HOME3 = !HOME3;
     //fnInfo(HOME3);
@@ -294,9 +309,7 @@ void fnShowJM(uint16_t jmConfig) {
   
   case JM_INP_DFLT:
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
-    else if(Input_Default == ID_SP) { stringToLongInteger("1",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
-    else if(Input_Default == ID_CPXSP) { stringToLongInteger("3",10,mem); }
     else if(Input_Default == ID_CPXDP) { stringToLongInteger("4",10,mem); }
     break;
 

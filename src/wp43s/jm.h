@@ -96,6 +96,9 @@ extern bool_t SH_BASE_AHOME;                                         //JM BASEHO
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
 extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
 extern uint8_t Input_Default;                                        //JM Input Default
+extern bool_t jm_FG_LINE;                                            //JM Screen / keyboard operation setup
+extern bool_t jm_FG_DOTS;                                            //JM Screen / keyboard operation setup
+extern bool_t jm_G_DOUBLETAP;                                        //JM Screen / keyboard operation setup
 
 
 // Additional routines needed in jm.c
@@ -134,9 +137,7 @@ char* itoa(int value, char* result, int base);
 #define TI_ABBCCA              31    //JM EE
 #define TI_012                 32    //JM EE
 #define ID_43S                  0    //JM Input Default
-#define ID_SP                   1    //JM Input Default
 #define ID_DP                   2    //JM Input Default
-#define ID_CPXSP                3    //JM Input Default
 #define ID_CPXDP                4    //JM Input Default
 
 #define JC_ERPN                 1    // eRPN
@@ -148,6 +149,10 @@ char* itoa(int value, char* result, int base);
 #define JC_BASE_MYA             7    // MYa
 #define JC_SH_3T                8    // SH.3T
 #define JM_INP_DFLT            15    // Input_Default
+
+#define JC_FG_LINE             20    // screen setup
+#define JC_FG_DOTS             21    // screen setup
+#define JC_G_DOUBLETAP         22    // screen setup
 
 
 //items.c

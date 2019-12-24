@@ -31,29 +31,7 @@
 void fnCxToRe(uint16_t unusedParamButMandatory) {
   uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
-  if(dataTypeX == dtComplex16) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-
-    STACK_LIFT_ENABLE;
-    if(complexMode == CM_RECTANGULAR) {
-      real16Copy(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
-      liftStack();
-      real16Copy(REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_X));
-      temporaryInformation = TI_RE_IM;
-    }
-    else { // CM_POLAR mode
-      liftStack();
-      real16RectangularToPolar(REGISTER_REAL16_DATA(REGISTER_L), REGISTER_IMAG16_DATA(REGISTER_L), REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X)); // X in radians
-      convertAngle16FromTo(REGISTER_REAL16_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
-      setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      temporaryInformation = TI_THETA_RADIUS;
-    }
-
-    refreshStack();
-  }
-
-  else if(dataTypeX == dtComplex34) {
+  if(dataTypeX == dtComplex34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 

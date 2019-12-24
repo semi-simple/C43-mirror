@@ -22,21 +22,18 @@
 
 
 
-void (* const division[12][12])(void) = {
-// regX |    regY ==>   1            2            3            4         5            6         7         8            9            10            11           12
-//      V               Long integer Real16       Complex16    Angle16   Time         Date      String    Real16 mat   Complex16 m  Short integer Real34       Complex34
-/*  1 Long integer  */ {divLonILonI, divRe16LonI, divCo16LonI, divError, divTimeLonI, divError, divError, divRm16LonI, divCm16LonI, divShoILonI,  divRe34LonI, divCo34LonI},
-/*  2 Real16        */ {divLonIRe16, divRe16Re16, divCo16Re16, divError, divTimeRe16, divError, divError, divRm16Re16, divCm16Re16, divShoIRe16,  divRe34Re16, divCo34Re16},
-/*  3 Complex16     */ {divLonICo16, divRe16Co16, divCo16Co16, divError, divError,    divError, divError, divRm16Co16, divCm16Co16, divShoICo16,  divRe34Co16, divCo34Co16},
-/*  4 Angle16       */ {divError,    divError,    divError,    divError, divError,    divError, divError, divError,    divError,    divError,     divError,    divError   },
-/*  5 Time          */ {divError,    divError,    divError,    divError, divError,    divError, divError, divError,    divError,    divError,     divError,    divError   },
-/*  6 Date          */ {divError,    divError,    divError,    divError, divError,    divError, divError, divError,    divError,    divError,     divError,    divError   },
-/*  7 String        */ {divError,    divError,    divError,    divError, divError,    divError, divError, divError,    divError,    divError,     divError,    divError   },
-/*  8 Real16 mat    */ {divError,    divError,    divError,    divError, divError,    divError, divError, divError,    divError,    divError,     divError,    divError   },
-/*  9 Complex16 mat */ {divError,    divError,    divError,    divError, divError,    divError, divError, divError,    divError,    divError,     divError,    divError   },
-/* 10 Short integer */ {divLonIShoI, divRe16ShoI, divCo16ShoI, divError, divTimeShoI, divError, divError, divRm16ShoI, divCm16ShoI, divShoIShoI,  divRe34ShoI, divCo34ShoI},
-/* 11 Real34        */ {divLonIRe34, divRe16Re34, divCo16Re34, divError, divTimeRe34, divError, divError, divRm16Re34, divCm16Re34, divShoIRe34,  divRe34Re34, divCo34Re34},
-/* 12 Complex34     */ {divLonICo34, divRe16Co34, divCo16Co34, divError, divError,    divError, divError, divRm16Co34, divCm16Co34, divShoICo34,  divRe34Co34, divCo34Co34}
+void (* const division[9][9])(void) = {
+// regX |    regY ==>   1            2            3            4            5         6         7            8            9
+//      V               Long integer Real34       Complex34    Time         Date      String    Real34 mat   Complex34 m  Short integer
+/*  1 Long integer  */ {divLonILonI, divRealLonI, divCplxLonI, divTimeLonI, divError, divError, divRemaLonI, divCxmaLonI, divShoILonI},
+/*  2 Real34        */ {divLonIReal, divRealReal, divCplxReal, divTimeReal, divError, divError, divRemaReal, divCxmaReal, divShoIReal},
+/*  3 Complex34     */ {divLonICplx, divRealCplx, divCplxCplx, divError,    divError, divError, divRemaCplx, divCxmaCplx, divShoICplx},
+/*  4 Time          */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError   },
+/*  5 Date          */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError   },
+/*  6 String        */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError   },
+/*  7 Real34 mat    */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError   },
+/*  8 Complex34 mat */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError   },
+/*  9 Short integer */ {divLonIShoI, divRealShoI, divCplxShoI, divTimeShoI, divError, divError, divRemaShoI, divCxmaShoI, divShoIShoI}
 };
 
 
@@ -76,149 +73,149 @@ void fnDivide(uint16_t unusedParamButMandatory) {
 
 
 
-void divCo39Co39(const complex39_t *numer, const complex39_t *denom, complex39_t *quotient) {
+void divCo39Co39(const real39_t *numerReal, const real39_t *numerImag, const real39_t *denomReal, const real39_t *denomImag, real39_t *quotientReal, real39_t *quotientImag) {
   real39_t realNumer, realDenom, a, b, c, d;
 
-  realCopy(&numer->real, &a);
-  realCopy(&numer->imag, &b);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(numerReal, &a);
+  realCopy(numerImag, &b);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal39);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal39);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal39);                    // realNumer = a*c
-  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal39);             // realNumer = a*c + b*d
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal39); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal39);                  // realNumer = a*c
+  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal39);           // realNumer = a*c + b*d
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal39); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realMultiply(&b, &c, &realNumer, &ctxtReal39);                    // realNumer = b*c
-  realChangeSign(&a);                                               // a = -a
-  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal39);             // realNumer = b*c - a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal39); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&b, &c, &realNumer, &ctxtReal39);                  // realNumer = b*c
+  realChangeSign(&a);                                             // a = -a
+  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal39);           // realNumer = b*c - a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal39); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divCo51Co51(const complex51_t *numer, const complex51_t *denom, complex51_t *quotient) {
+void divCo51Co51(const real51_t *numerReal, const real51_t *numerImag, const real51_t *denomReal, const real51_t *denomImag, real51_t *quotientReal, real51_t *quotientImag) {
   real51_t realNumer, realDenom, a, b, c, d;
 
-  realCopy(&numer->real, &a);
-  realCopy(&numer->imag, &b);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(numerReal, &a);
+  realCopy(numerImag, &b);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal51);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal51);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal51);                    // realNumer = a*c
-  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal51);             // realNumer = a*c + b*d
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal51); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal51);                  // realNumer = a*c
+  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal51);           // realNumer = a*c + b*d
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal51); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realMultiply(&b, &c, &realNumer, &ctxtReal51);                    // realNumer = b*c
-  realChangeSign(&a);                                               // a = -a
-  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal51);             // realNumer = b*c - a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal51); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&b, &c, &realNumer, &ctxtReal51);                  // realNumer = b*c
+  realChangeSign(&a);                                             // a = -a
+  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal51);           // realNumer = b*c - a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal51); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divCo75Co75(const complex75_t *numer, const complex75_t *denom, complex75_t *quotient) {
+void divCo75Co75(const real75_t *numerReal, const real75_t *numerImag, const real75_t *denomReal, const real75_t *denomImag, real75_t *quotientReal, real75_t *quotientImag) {
   real75_t realNumer, realDenom, a, b, c, d;
 
-  realCopy(&numer->real, &a);
-  realCopy(&numer->imag, &b);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(numerReal, &a);
+  realCopy(numerImag, &b);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal75);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal75);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal75);                    // realNumer = a*c
-  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal75);             // realNumer = a*c + b*d
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal75); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal75);                  // realNumer = a*c
+  realFMA(&b, &d, &realNumer, &realNumer, &ctxtReal75);           // realNumer = a*c + b*d
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal75); // realPart = (a*c + b*d) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realMultiply(&b, &c, &realNumer, &ctxtReal75);                    // realNumer = b*c
-  realChangeSign(&a);                                               // a = -a
-  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal75);             // realNumer = b*c - a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal75); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+  realMultiply(&b, &c, &realNumer, &ctxtReal75);                  // realNumer = b*c
+  realChangeSign(&a);                                             // a = -a
+  realFMA(&a, &d, &realNumer, &realNumer, &ctxtReal75);           // realNumer = b*c - a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal75); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divRe39Co39(const real_t *numer, const complex39_t *denom, complex39_t *quotient) {
+void divRe39Co39(const real_t *numer, const real39_t *denomReal, const real39_t *denomImag, real39_t *quotientReal, real39_t *quotientImag) {
   real39_t realNumer, realDenom, a, c, d;
 
   realCopy(numer, &a);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal39);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal39);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal39);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal39);                    // realNumer = a*c
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal39); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal39);                  // realNumer = a*c
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal39); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realChangeSign(&a);                                               // a = -a
-  realMultiply(&a, &d, &realNumer, &ctxtReal39);                    // realNumer = -a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal39); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+  realChangeSign(&a);                                             // a = -a
+  realMultiply(&a, &d, &realNumer, &ctxtReal39);                  // realNumer = -a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal39); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divRe51Co51(const real_t *numer, const complex51_t *denom, complex51_t *quotient) {
+void divRe51Co51(const real_t *numer, const real51_t *denomReal, const real51_t *denomImag, real51_t *quotientReal, real51_t *quotientImag) {
   real51_t realNumer, realDenom, a, c, d;
 
   realCopy(numer, &a);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal51);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal51);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal51);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal51);                    // realNumer = a*c
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal51); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal51);                  // realNumer = a*c
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal51); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realChangeSign(&a);                                               // a = -a
-  realMultiply(&a, &d, &realNumer, &ctxtReal51);                    // realNumer = -a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal51); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+  realChangeSign(&a);                                             // a = -a
+  realMultiply(&a, &d, &realNumer, &ctxtReal51);                  // realNumer = -a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal51); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
 
-void divRe75Co75(const real_t *numer, const complex75_t *denom, complex75_t *quotient) {
+void divRe75Co75(const real_t *numer, const real75_t *denomReal, const real75_t *denomImag, real75_t *quotientReal, real75_t *quotientImag) {
   real75_t realNumer, realDenom, a, c, d;
 
   realCopy(numer, &a);
-  realCopy(&denom->real, &c);
-  realCopy(&denom->imag, &d);
+  realCopy(denomReal, &c);
+  realCopy(denomImag, &d);
 
   // Denominator
-  realMultiply(&c, &c, &realDenom, &ctxtReal75);                    // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);             // realDenom = c² + d²
+  realMultiply(&c, &c, &realDenom, &ctxtReal75);                  // realDenom = c²
+  realFMA(&d, &d, &realDenom, &realDenom, &ctxtReal75);           // realDenom = c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, &ctxtReal75);                    // realNumer = a*c
-  realDivide(&realNumer, &realDenom, &quotient->real, &ctxtReal75); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, &realNumer, &ctxtReal75);                  // realNumer = a*c
+  realDivide(&realNumer, &realDenom, quotientReal, &ctxtReal75); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
 
   // imaginary part
-  realChangeSign(&a);                                               // a = -a
-  realMultiply(&a, &d, &realNumer, &ctxtReal75);                    // realNumer = -a*d
-  realDivide(&realNumer, &realDenom, &quotient->imag, &ctxtReal75); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+  realChangeSign(&a);                                             // a = -a
+  realMultiply(&a, &d, &realNumer, &ctxtReal75);                  // realNumer = -a*d
+  realDivide(&realNumer, &realDenom, quotientImag, &ctxtReal75); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
 }
 
 
@@ -260,10 +257,10 @@ void divLonILonI(void) {
 
       convertLongIntegerRegisterToReal(REGISTER_Y, &yIc, &ctxtReal39);
       convertLongIntegerRegisterToReal(REGISTER_X, &xIc, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
       realDivide(&yIc, &xIc, &xIc, &ctxtReal39);
-      realToReal16(&xIc, REGISTER_REAL16_DATA(REGISTER_X));
+      realToReal34(&xIc, REGISTER_REAL34_DATA(REGISTER_X));
     }
 
     longIntegerFree(quotient);
@@ -272,195 +269,6 @@ void divLonILonI(void) {
   }
 
   longIntegerFree(x);
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) ÷ X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divLonIRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divLonIRe16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y, x;
-
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(realIsZero(&y)) {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe16:", "cannot divide 0 by 0", NULL, NULL);
-        #endif
-      }
-    }
-    else {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16((realIsPositive(&y) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe16:", "cannot divide a long integer by 0", NULL, NULL);
-        #endif
-      }
-    }
-  }
-
-  else {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-    realDivide(&y, &x, &x, &ctxtReal39);
-    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) ÷ X(long integer) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16LonI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y, x;
-  uint32_t yAngularMode;
-
-  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-
-  if(realIsZero(&x)) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y))) {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe16:", "cannot divide 0 by 0", NULL, NULL);
-        #endif
-      }
-    }
-    else {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe16:", "cannot divide a real16 by 0", NULL, NULL);
-        #endif
-      }
-    }
-  }
-
-  else {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-    yAngularMode = getRegisterAngularMode(REGISTER_Y);
-
-    if(yAngularMode == AM_NONE) {
-      realDivide(&y, &x, &x, &ctxtReal39);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      if(currentAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
-        realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-        checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      setRegisterAngularMode(REGISTER_X, currentAngularMode);
-    }
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) ÷ X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divLonICo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divLonICo16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y;
-  complex39_t x;
-
-  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-
-  divRe39Co39(&y, &x, &x);
-
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) ÷ X(long integer) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16LonI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, c;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-
-  realDivide(&a, &c, &a, &ctxtReal39);
-  realDivide(&b, &c, &b, &ctxtReal39);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
 }
 
 
@@ -531,11 +339,11 @@ void divShoILonI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divLonIRe34(void) {
+void divLonIReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divLonIRe34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divLonIReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -553,7 +361,7 @@ void divLonIRe34(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe34:", "cannot divide 0 by 0", NULL, NULL);
+          showInfoDialog("In function divLonIReal:", "cannot divide 0 by 0", NULL, NULL);
         #endif
       }
     }
@@ -564,7 +372,7 @@ void divLonIRe34(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe34:", "cannot divide a long integer by 0", NULL, NULL);
+          showInfoDialog("In function divLonIReal:", "cannot divide a long integer by 0", NULL, NULL);
         #endif
       }
     }
@@ -585,11 +393,11 @@ void divLonIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRe34LonI(void) {
+void divRealLonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34LonI:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divRealLonI:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -608,7 +416,7 @@ void divRe34LonI(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe34:", "cannot divide 0 by 0", NULL, NULL);
+          showInfoDialog("In function divLonIReal:", "cannot divide 0 by 0", NULL, NULL);
         #endif
       }
     }
@@ -619,7 +427,7 @@ void divRe34LonI(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe34:", "cannot divide a real34 by 0", NULL, NULL);
+          showInfoDialog("In function divLonIReal:", "cannot divide a real34 by 0", NULL, NULL);
         #endif
       }
     }
@@ -659,26 +467,25 @@ void divRe34LonI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divLonICo34(void) {
+void divLonICplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divLonICo34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divLonICplx:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -689,11 +496,11 @@ void divLonICo34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCo34LonI(void) {
+void divCplxLonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34LonI:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divCplxLonI:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -715,814 +522,6 @@ void divCo34LonI(void) {
 
 
 /******************************************************************************************************************************************************************************************/
-/* real16 / ...                                                                                                                                                                           */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(real16) ÷ X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Re16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Re16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y)) && real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe16Re16:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe16Re16:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else {
-    real39_t y, x;
-    uint32_t yAngularMode, xAngularMode;
-
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-    yAngularMode = getRegisterAngularMode(REGISTER_Y);
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-    xAngularMode = getRegisterAngularMode(REGISTER_X);
-
-    if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) { // angle / angle
-      if(yAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, AM_DMS, AM_DEGREE);
-        yAngularMode = AM_DEGREE;
-      }
-      if(xAngularMode == AM_DMS) {
-        convertAngle39FromTo(&x, AM_DMS, AM_DEGREE);
-        xAngularMode = AM_DEGREE;
-      }
-      convertAngle39FromTo(&x, xAngularMode, yAngularMode);
-      realDivide(&y, &x, &x, &ctxtReal39);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
-    else if(yAngularMode == AM_NONE) { // real / (real or angle)
-      real16Divide(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
-    else { // angle / real
-      if(yAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
-        yAngularMode = AM_DEGREE;
-      }
-
-      realDivide(&y, &x, &x, &ctxtReal39);
-
-      convertAngle39FromTo(&x, yAngularMode, currentAngularMode);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      if(currentAngularMode == AM_DMS) {
-        checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-      }
-    }
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) ÷ X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe16Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Co16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Co16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y;
-  complex39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-
-  divRe39Co39(&y, &x, &x);
-
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) ÷ X(real16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Re16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Re16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16Divide(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_Y)); // real part
-  real16Divide(REGISTER_IMAG16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-  complex16Copy(REGISTER_COMPLEX16_DATA(REGISTER_Y), REGISTER_COMPLEX16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) ÷ X(short integer) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe16ShoI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16ShoI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y, x;
-  uint32_t yAngularMode;
-
-  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-
-  if(realIsZero(&x)) {
-    if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_Y))) {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divRe16ShoI:", "cannot divide 0 by 0", NULL, NULL);
-        #endif
-      }
-    }
-    else {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16((real16IsPositive(REGISTER_REAL16_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divRe16ShoI:", "cannot divide a real16 by 0", NULL, NULL);
-        #endif
-      }
-    }
-  }
-
-  else {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-    yAngularMode = getRegisterAngularMode(REGISTER_Y);
-
-    if(yAngularMode == AM_NONE) {
-      realDivide(&y, &x, &x, &ctxtReal39);
-      realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      if(currentAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
-        realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-        checkDms16(REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      setRegisterAngularMode(REGISTER_X, currentAngularMode);
-    }
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(short integer) ÷ X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divShoIRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divShoIRe16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y, x;
-
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    if(realIsZero(&y)) {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe16:", "cannot divide 0 by 0", NULL, NULL);
-        #endif
-      }
-    }
-    else {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16((realIsPositive(&y) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divLonIRe16:", "cannot divide a long integer by 0", NULL, NULL);
-        #endif
-      }
-    }
-  }
-
-  else {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-    realDivide(&y, &x, &x, &ctxtReal39);
-    realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) ÷ X(real34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe16Re34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Re34:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Re34:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_Y);
-
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe16Re34:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe16Re34:", "cannot divide a real16 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else {
-    real39_t y, x;
-    uint32_t yAngularMode, xAngularMode;
-
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    yAngularMode = getRegisterAngularMode(REGISTER_Y);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-    xAngularMode = getRegisterAngularMode(REGISTER_X);
-
-    if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) { // angle / angle
-      if(yAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, AM_DMS, AM_DEGREE);
-        yAngularMode = AM_DEGREE;
-      }
-      if(xAngularMode == AM_DMS) {
-        convertAngle39FromTo(&x, AM_DMS, AM_DEGREE);
-        xAngularMode = AM_DEGREE;
-      }
-      convertAngle39FromTo(&x, xAngularMode, yAngularMode);
-      realDivide(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
-    else if(yAngularMode == AM_NONE) { // real / (real or angle)
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
-    else { // angle / real
-      if(yAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
-        yAngularMode = AM_DEGREE;
-      }
-
-      realDivide(&y, &x, &x, &ctxtReal39);
-
-      convertAngle39FromTo(&x, yAngularMode, currentAngularMode);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      if(currentAngularMode == AM_DMS) {
-        checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-      }
-    }
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) ÷ X(real16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe34Re16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Re16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Re16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_X);
-
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe34Re16:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    if(getFlag(FLAG_DANGER)) {
-      realToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe34Re16:", "cannot divide a real34 by 0", NULL, NULL);
-      #endif
-    }
-  }
-
-  else {
-    real39_t y, x;
-    uint32_t yAngularMode, xAngularMode;
-
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    yAngularMode = getRegisterAngularMode(REGISTER_Y);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-    xAngularMode = getRegisterAngularMode(REGISTER_X);
-
-    if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) { // angle / angle
-      if(yAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, AM_DMS, AM_DEGREE);
-        yAngularMode = AM_DEGREE;
-      }
-      if(xAngularMode == AM_DMS) {
-        convertAngle39FromTo(&x, AM_DMS, AM_DEGREE);
-        xAngularMode = AM_DEGREE;
-      }
-      convertAngle39FromTo(&x, xAngularMode, yAngularMode);
-      realDivide(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
-    else if(yAngularMode == AM_NONE) { // real / (real or angle)
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
-    else { // angle / real
-      if(yAngularMode == AM_DMS) {
-        convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
-        yAngularMode = AM_DEGREE;
-      }
-
-      realDivide(&y, &x, &x, &ctxtReal39);
-
-      convertAngle39FromTo(&x, yAngularMode, currentAngularMode);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      if(currentAngularMode == AM_DMS) {
-        checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-      }
-    }
-  }
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) ÷ X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe16Co34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Co34:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe16Co34:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y;
-  complex39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
-
-  divRe39Co39(&y, &x, &x);
-
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) ÷ X(real16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo34Re16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Re16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Re16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_X);
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* complex16 / ...                                                                                                                                                                        */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(complex16) ÷ X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo16Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Co16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Co16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  complex39_t y, x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-
-  divCo39Co39(&y, &x, &x);
-
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) ÷ X(short integer) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo16ShoI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16ShoI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, c;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &b);
-  convertShortIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
-
-  realDivide(&a, &c, &a, &ctxtReal39);
-  realDivide(&b, &c, &b, &ctxtReal39);
-
-  reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(short integer) ÷ X(complex16) ==> X(complex16)
- *
- * \param void
- * \return void
- ***********************************************/
-void divShoICo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divShoICo16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y;
-  complex39_t x;
-
-  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-
-  divRe39Co39(&y, &x, &x);
-
-  realToReal16(&x.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&x.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) ÷ X(real34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo16Re34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Re34:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Re34:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  convertRegister16To34(REGISTER_Y);
-  real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  real34Divide(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) ÷ X(complex16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRe34Co16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Co16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Co16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y;
-  complex39_t x;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-
-  divRe39Co39(&y, &x, &x);
-
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16) ÷ X(complex34) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo16Co34(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Co34:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo16Co34:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  complex39_t y, x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_Y), &y.imag);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
-
-  divCo39Co39(&y, &x, &x);
-
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(complex34) ÷ X(complex16) ==> X(complex34)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCo34Co16(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Co16:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Co16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  complex39_t y, x;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &x.imag);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-
-  divCo39Co39(&y, &x, &x);
-
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
 /* time / ...                                                                                                                                                                             */
 /******************************************************************************************************************************************************************************************/
 
@@ -1533,26 +532,6 @@ void divCo34Co16(void) {
  * \return void
  ***********************************************/
 void divTimeLonI(void) {
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(time) ÷ X(real16) ==> X(time)
- *
- * \param void
- * \return void
- ***********************************************/
-void divTimeRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divTimeRe16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -1576,11 +555,11 @@ void divTimeShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divTimeRe34(void) {
+void divTimeReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divTimeRe34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divTimeReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -1608,47 +587,7 @@ void divTimeRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRm16LonI(void) {
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(real16 matrix) ÷ X(real16) ==> X(real16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRm16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRm16Re16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(real16 matrix) ÷ X(complex16) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void divRm16Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRm16Co16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
+void divRemaLonI(void) {
   fnToBeCoded();
 }
 
@@ -1660,7 +599,7 @@ void divRm16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRm16ShoI(void) {
+void divRemaShoI(void) {
   fnToBeCoded();
 }
 
@@ -1672,11 +611,11 @@ void divRm16ShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRm16Re34(void) {
+void divRemaReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRm16Re34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divRemaReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -1692,11 +631,11 @@ void divRm16Re34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRm16Co34(void) {
+void divRemaCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRm16Co34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divRemaCplx:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -1716,47 +655,7 @@ void divRm16Co34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCm16LonI(void) {
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16 matrix) ÷ X(real16) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCm16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCm16Re16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  fnToBeCoded();
-}
-
-
-
-/********************************************//**
- * \brief Y(complex16 matrix) ÷ X(complex16) ==> X(complex16 matrix)
- *
- * \param void
- * \return void
- ***********************************************/
-void divCm16Co16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCm16Co16:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
+void divCxmaLonI(void) {
   fnToBeCoded();
 }
 
@@ -1768,7 +667,7 @@ void divCm16Co16(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCm16ShoI(void) {
+void divCxmaShoI(void) {
   fnToBeCoded();
 }
 
@@ -1780,11 +679,11 @@ void divCm16ShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCm16Re34(void) {
+void divCxmaReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCm16Re34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divCxmaReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -1800,11 +699,11 @@ void divCm16Re34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCm16Co34(void) {
+void divCxmaCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCm16Co34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divCxmaCplx:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -1849,11 +748,11 @@ void divShoIShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divShoIRe34(void) {
+void divShoIReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divShoIRe34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divShoIReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -1871,7 +770,7 @@ void divShoIRe34(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divShoIRe34:", "cannot divide 0 by 0", NULL, NULL);
+          showInfoDialog("In function divShoIReal:", "cannot divide 0 by 0", NULL, NULL);
         #endif
       }
     }
@@ -1882,7 +781,7 @@ void divShoIRe34(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divShoIRe34:", "cannot divide a short integer by 0", NULL, NULL);
+          showInfoDialog("In function divShoIReal:", "cannot divide a short integer by 0", NULL, NULL);
         #endif
       }
     }
@@ -1903,11 +802,11 @@ void divShoIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRe34ShoI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
+void divRealShoI(void) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34ShoI:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divRealShoI:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -1926,7 +825,7 @@ void divRe34ShoI(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divRe34ShoI:", "cannot divide 0 by 0", NULL, NULL);
+          showInfoDialog("In function divRealShoI:", "cannot divide 0 by 0", NULL, NULL);
         #endif
       }
     }
@@ -1937,7 +836,7 @@ void divRe34ShoI(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function divRe34ShoI:", "cannot divide a real34 by 0", NULL, NULL);
+          showInfoDialog("In function divRealShoI:", "cannot divide a real34 by 0", NULL, NULL);
         #endif
       }
     }
@@ -1977,26 +876,25 @@ void divRe34ShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divShoICo34(void) {
+void divShoICplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divShoICo34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divShoICplx:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2007,11 +905,11 @@ void divShoICo34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCo34ShoI(void) {
+void divCplxShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34ShoI:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divCplxShoI:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -2035,11 +933,11 @@ void divCo34ShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRe34Re34(void) {
+void divRealReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Re34:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divRealReal:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -2047,7 +945,7 @@ void divRe34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Re34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divRealReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -2059,7 +957,7 @@ void divRe34Re34(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe34Re34:", "cannot divide 0 by 0", NULL, NULL);
+        showInfoDialog("In function divRealReal:", "cannot divide 0 by 0", NULL, NULL);
       #endif
     }
   }
@@ -2071,7 +969,7 @@ void divRe34Re34(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function divRe34Re34:", "cannot divide a real34 by 0", NULL, NULL);
+        showInfoDialog("In function divRealReal:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
     }
   }
@@ -2129,11 +1027,11 @@ void divRe34Re34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divRe34Co34(void) {
+void divRealCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Co34:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divRealCplx:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -2141,22 +1039,21 @@ void divRe34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRe34Co34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divRealCplx:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
 
-  real39_t y;
-  complex39_t x;
+  real39_t y, xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divRe39Co39(&y, &x, &x);
+  divRe39Co39(&y, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 
@@ -2167,11 +1064,11 @@ void divRe34Co34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCo34Re34(void) {
+void divCplxReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Re34:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divCplxReal:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -2179,7 +1076,7 @@ void divCo34Re34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Re34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divCplxReal:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
@@ -2202,11 +1099,11 @@ void divCo34Re34(void) {
  * \param void
  * \return void
  ***********************************************/
-void divCo34Co34(void) {
+void divCplxCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Co34:", "cannot use NaN as Y input of /", NULL, NULL);
+      showInfoDialog("In function divCplxCplx:", "cannot use NaN as Y input of /", NULL, NULL);
     #endif
     return;
   }
@@ -2214,20 +1111,20 @@ void divCo34Co34(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCo34Co34:", "cannot use NaN as X input of /", NULL, NULL);
+      showInfoDialog("In function divCplxCplx:", "cannot use NaN as X input of /", NULL, NULL);
     #endif
     return;
   }
 
-  complex39_t y, x;
+  real39_t yReal, yImag, xReal, xImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &y.imag);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &x.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  divCo39Co39(&y, &x, &x);
+  divCo39Co39(&yReal, &yImag, &xReal, &xImag, &xReal, &xImag);
 
-  realToReal34(&x.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&x.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

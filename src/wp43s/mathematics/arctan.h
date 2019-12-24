@@ -21,9 +21,7 @@
 void fnArctan   (uint16_t unusedParamButMandatory);
 void arctanError(void);
 void arctanLonI (void);
-void arctanRe16 (void);
-void arctanCo16 (void);
-void arctanRm16 (void);
-void arctanCm16 (void);
-void arctanRe34 (void);
-void arctanCo34 (void);
+void arctanRema (void);
+void arctanCxma (void);
+void arctanReal (void);
+void arctanCplx (void);

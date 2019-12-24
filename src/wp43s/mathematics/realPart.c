@@ -22,10 +22,10 @@
 
 
 
-void (* const realPart[12])(void) = {
-// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12
-//          Long integer   Real16         Complex16     Angle16        Time           Date           String         Real16 mat     Complex16 m   Short integer  Real34         Complex34
-            realPartError, realPartError, realPartCo16, realPartError, realPartError, realPartError, realPartError, realPartError, realPartCm16, realPartError, realPartError, realPartCo34
+void (* const realPart[9])(void) = {
+// regX ==> 1              2              3             4              5              6              7              8             9
+//          Long integer   Real34         Complex34     Time           Date           String         Real34 mat     Complex34 m   Short integer
+            realPartError, realPartError, realPartCplx, realPartError, realPartError, realPartError, realPartError, realPartCxma, realPartError
 };
 
 
@@ -70,34 +70,16 @@ void fnRealPart(uint16_t unusedParamButMandatory) {
 
 
 
-void realPartCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function realPartCo16:", "cannot use NaN as X input of Re", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16_t realPart;
-
-  real16Copy(REGISTER_REAL16_DATA(REGISTER_X), &realPart);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  real16Copy(&realPart, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-void realPartCm16(void) {
+void realPartCxma(void) {
   fnToBeCoded();
 }
 
 
-void realPartCo34(void) {
+void realPartCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function realPartCo34:", "cannot use NaN as X input of Re", NULL, NULL);
+      showInfoDialog("In function realPartCplx:", "cannot use NaN as X input of Re", NULL, NULL);
     #endif
     return;
   }

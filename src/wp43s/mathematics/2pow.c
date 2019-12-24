@@ -22,10 +22,10 @@
 
 
 
-void (* const twoPow[12])(void) = {
-// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
-//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
-            twoPowLonI,  twoPowRe16, twoPowCo16, twoPowError, twoPowError, twoPowError, twoPowError, twoPowRm16, twoPowCm16, twoPowShoI,   twoPowRe34, twoPowCo34
+void (* const twoPow[9])(void) = {
+// regX ==> 1            2           3           4            5            6            7           8           9
+//          Long integer Real34      Complex34   Time         Date         String       Real34 mat  Complex34 m Short integer
+            twoPowLonI,  twoPowReal, twoPowCplx, twoPowError, twoPowError, twoPowError, twoPowRema, twoPowCxma, twoPowShoI
 };
 
 
@@ -142,62 +142,13 @@ void twoPowLonI(void) {
 
 
 
-void twoPowRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function twoPowRe16:", "cannot use NaN X an input of 2^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realPower(const_2, &x, &x, &ctxtReal39);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void twoPowCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function twoPowCo16:", "cannot use NaN as X input of 2^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, factor;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  // ln(2) * (a + bi) --> (a + bi)
-  realMultiply(const_ln2, &a, &a, &ctxtReal39);
-  realMultiply(const_ln2, &b, &b, &ctxtReal39);
-
-  // exp(ln(2) * (a + bi)) --> (a + bi)
-  realExp(&a, &factor, &ctxtReal39);
-  real39PolarToRectangular(const_1, &b, &a, &b);
-  realMultiply(&factor, &a, &a, &ctxtReal39);
-  realMultiply(&factor, &b, &b, &ctxtReal39);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void twoPowRm16(void) {
+void twoPowRema(void) {
   fnToBeCoded();
 }
 
 
 
-void twoPowCm16(void) {
+void twoPowCxma(void) {
   fnToBeCoded();
 }
 
@@ -209,11 +160,11 @@ void twoPowShoI(void) {
 
 
 
-void twoPowRe34(void) {
+void twoPowReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function twoPowRe34:", "cannot use NaN as X input of 2^", NULL, NULL);
+      showInfoDialog("In function twoPowReal:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }
@@ -228,11 +179,11 @@ void twoPowRe34(void) {
 
 
 
-void twoPowCo34(void) {
+void twoPowCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function twoPowCo34:", "cannot use NaN as X input of 2^", NULL, NULL);
+      showInfoDialog("In function twoPowCplx:", "cannot use NaN as X input of 2^", NULL, NULL);
     #endif
     return;
   }

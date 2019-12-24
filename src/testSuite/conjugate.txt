@@ -9,99 +9,52 @@ In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
 Func: fnConjugate
 
 ;=======================================
-; conj(Complex16)
-;=======================================
-In:  SL=0 FI=0 NCSD=16 RX=Co16:"45.25 i -3.459"
-Out: EC=0 FI=0 SL=1 RX=Co16:"45.25 i 3.459"
-Out: EC=0 FI=0 SL=1 RX=Co16:"45.25 i -3.459"
-
-; NaN
-In:  SL=0 FI=0 RX=Co16:"NaN i -1.56"
-Out: EC=1 FI=0 SL=0 RX=Co16:"NaN i -1.56"
-
-In:  SL=0 FI=0 RX=Co16:"-1.56 i Nan"
-Out: EC=1 FI=0 SL=0 RX=Co16:"-1.56 i NaN"
-
-; Infinity
-In:  SL=0 FI=0 FD=1 RX=Co16:"inf i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i -58.67141"
-
-In:  SL=0 FI=0 FD=0 RX=Co16:"inf i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i -58.67141"
-
-In:  SL=0 FI=0 FD=0 RX=Co16:"-inf i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"-inf i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co16:"-inf i -58.67141"
-
-In:  SL=0 FI=0 FD=1 RX=Co16:"6.9 i inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i inf"
-
-In:  SL=0 FI=0 FD=0 RX=Co16:"6.9 i inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i inf"
-
-In:  SL=0 FI=0 FD=0 RX=Co16:"6.9 i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"6.9 i -inf"
-
-In:  SL=0 FI=0 FD=1 RX=Co16:"inf i inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i inf"
-
-In:  SL=0 FI=0 FD=0 RX=Co16:"inf i inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co16:"inf i inf"
-
-;=======================================
 ; conj(Complex16 Matrix)
 ;=======================================
 
 ;=======================================
 ; conj(Complex34)
 ;=======================================
-In:  SL=0 FI=0 NCSD=34 RX=Co34:"45.25 i -3.459"
-Out: EC=0 FI=0 SL=1 RX=Co34:"45.25 i 3.459"
-Out: EC=0 FI=0 SL=1 RX=Co34:"45.25 i -3.459"
+In:  SL=0 FI=0 RX=Cplx:"45.25 i -3.459"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"45.25 i 3.459"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"45.25 i -3.459"
 
 ; NaN
-In:  SL=0 FI=0 RX=Co34:"NaN i -1.56"
-Out: EC=1 FI=0 SL=0 RX=Co34:"NaN i -1.56"
+In:  SL=0 FI=0 RX=Cplx:"NaN i -1.56"
+Out: EC=1 FI=0 SL=0 RX=Cplx:"NaN i -1.56"
 
-In:  SL=0 FI=0 RX=Co34:"-1.56 i Nan"
-Out: EC=1 FI=0 SL=0 RX=Co34:"-1.56 i NaN"
+In:  SL=0 FI=0 RX=Cplx:"-1.56 i Nan"
+Out: EC=1 FI=0 SL=0 RX=Cplx:"-1.56 i NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Co34:"inf i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i -58.67141"
+In:  SL=0 FI=0 FD=1 RX=Cplx:"inf i -58.67141"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i 58.67141"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i -58.67141"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"inf i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i -58.67141"
+In:  SL=0 FI=0 FD=0 RX=Cplx:"inf i -58.67141"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i 58.67141"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i -58.67141"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"-inf i -58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"-inf i 58.67141"
-Out: EC=0 FI=0 SL=1 RX=Co34:"-inf i -58.67141"
+In:  SL=0 FI=0 FD=0 RX=Cplx:"-inf i -58.67141"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"-inf i 58.67141"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"-inf i -58.67141"
 
-In:  SL=0 FI=0 FD=1 RX=Co34:"6.9 i inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i inf"
+In:  SL=0 FI=0 FD=1 RX=Cplx:"6.9 i inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"6.9 i -inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"6.9 i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"6.9 i inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i inf"
+In:  SL=0 FI=0 FD=0 RX=Cplx:"6.9 i inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"6.9 i -inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"6.9 i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"6.9 i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"6.9 i -inf"
+In:  SL=0 FI=0 FD=0 RX=Cplx:"6.9 i -inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"6.9 i inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"6.9 i -inf"
 
-In:  SL=0 FI=0 FD=1 RX=Co34:"inf i inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i inf"
+In:  SL=0 FI=0 FD=1 RX=Cplx:"inf i inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i -inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i inf"
 
-In:  SL=0 FI=0 FD=0 RX=Co34:"inf i inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i -inf"
-Out: EC=0 FI=0 SL=1 RX=Co34:"inf i inf"
+In:  SL=0 FI=0 FD=0 RX=Cplx:"inf i inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i -inf"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"inf i inf"

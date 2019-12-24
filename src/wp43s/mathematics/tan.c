@@ -22,10 +22,10 @@
 
 
 
-void (* const Tan[12])(void) = {
-// regX ==> 1            2        3         4         5         6         7         8          9           10            11       12
-//          Long integer Real16   Complex16 Angle16   Time      Date      String    Real16 mat Complex16 m Short integer Real34   Complex34
-            tanLonI,     tanRe16, tanCo16,  tanError, tanError, tanError, tanError, tanRm16,   tanCm16,    tanError,     tanRe34, tanCo34
+void (* const Tan[9])(void) = {
+// regX ==> 1            2        3         4         5         6         7          8           9
+//          Long integer Real34   complex34 Time      Date      String    Real34 mat Complex34 m Short integer
+            tanLonI,     tanReal, tanCplx,  tanError, tanError, tanError, tanRema,   tanCxma,    tanError
 };
 
 
@@ -89,24 +89,25 @@ void fnTan(uint16_t unusedParamButMandatory) {
 
 
 
-void tanCo39(const complex39_t *zin, complex39_t *zout) {
+void tanCo39(const real39_t *zinReal, const real39_t *zinImag, real39_t *zoutReal, real39_t *zoutImag) {
   //                sin(a)*cosh(b) + i*cos(a)*sinh(b)
   // tan(a + ib) = -----------------------------------
   //                cos(a)*cosh(b) - i*sin(a)*sinh(b)
   real39_t sina, cosa, sinhb, coshb;
-  complex39_t numer, denom;
+  real39_t numerReal, denomReal;
+  real39_t numerImag, denomImag;
 
-  WP34S_Cvt2RadSinCosTan(&zin->real, AM_RADIAN, &sina, &cosa, NULL);
-  WP34S_SinhCosh(&zin->imag, &sinhb, &coshb);
+  WP34S_Cvt2RadSinCosTan(zinReal, AM_RADIAN, &sina, &cosa, NULL);
+  WP34S_SinhCosh(zinImag, &sinhb, &coshb);
 
-  realMultiply(&sina, &coshb, &numer.real, &ctxtReal39);
-  realMultiply(&cosa, &sinhb, &numer.imag, &ctxtReal39);
+  realMultiply(&sina, &coshb, &numerReal, &ctxtReal39);
+  realMultiply(&cosa, &sinhb, &numerImag, &ctxtReal39);
 
-  realMultiply(&cosa, &coshb, &denom.real, &ctxtReal39);
-  realMultiply(&sina, &sinhb, &denom.imag, &ctxtReal39);
-  realChangeSign(&denom.imag);
+  realMultiply(&cosa, &coshb, &denomReal, &ctxtReal39);
+  realMultiply(&sina, &sinhb, &denomImag, &ctxtReal39);
+  realChangeSign(&denomImag);
 
-  divCo39Co39(&numer, &denom, zout);
+  divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, zoutReal, zoutImag);
 }
 
 
@@ -125,87 +126,29 @@ void tanLonI(void) {
     return;
   }
 
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
-void tanRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tanRe16:", "cannot use NaN as an input of tan", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    realToReal16(const_NaN, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    real39_t sin, cos, tan;
-    uint32_t xAngularMode;
-
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &tan);
-    xAngularMode = getRegisterAngularMode(REGISTER_X);
-    WP34S_Cvt2RadSinCosTan(&tan, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &sin, &cos, &tan);
-
-    if(realIsZero(&cos) && !getFlag(FLAG_DANGER)) {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function tanRe16:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
-      #endif
-      return;
-    }
-    else {
-      realToReal16(&tan, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-  }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void tanCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tanCo16:", "cannot use NaN as an input of tan", NULL, NULL);
-    #endif
-    return;
-  }
-
-  complex39_t z;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &z.real);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &z.imag);
-
-  tanCo39(&z, &z);
-
-  realToReal16(&z.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&z.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void tanRm16(void) {
+void tanRema(void) {
   fnToBeCoded();
 }
 
 
 
-void tanCm16(void) {
+void tanCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void tanRe34(void) {
+void tanReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tanRe34:", "cannot use NaN as an input of tan", NULL, NULL);
+      showInfoDialog("In function tanReal:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif
     return;
   }
@@ -224,7 +167,7 @@ void tanRe34(void) {
     if(realIsZero(&cos) && !getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function tanRe34:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
+        showInfoDialog("In function tanReal:", "X = " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
       #endif
       return;
     }
@@ -237,22 +180,22 @@ void tanRe34(void) {
 
 
 
-void tanCo34(void) {
+void tanCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tanCo34:", "cannot use NaN as an input of tan", NULL, NULL);
+      showInfoDialog("In function tanCplx:", "cannot use NaN as an input of tan", NULL, NULL);
     #endif
     return;
   }
 
-  complex39_t z;
+  real39_t zReal, zImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &z.real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &z.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  tanCo39(&z, &z);
+  tanCo39(&zReal, &zImag, &zReal, &zImag);
 
-  realToReal34(&z.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&z.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

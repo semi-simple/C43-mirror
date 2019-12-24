@@ -1,0 +1,44 @@
+/* This file is part of 43S.
+ *
+ * 43S is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * 43S is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/********************************************//**
+ * \file keyboard.h
+ ***********************************************/
+
+void resetShiftState(void);
+void showShiftState (void);
+void fnComplexCCCC  (uint16_t unusedParamButMandatory);
+
+int16_t FN_key_pressed;   //JM LONGPRESS FN
+bool_t FN_timeouts;       //JM LONGPRESS FN
+int8_t FN_counter;        //JM LONGPRESS FN
+
+#ifdef PC_BUILD
+  void btnFnClicked   (GtkWidget *w, gpointer data);
+  void btnClicked     (GtkWidget *w, gpointer data);
+  void btnPressed     (GtkWidget *w, gpointer data);
+  void btnReleased    (GtkWidget *w, gpointer data);
+#endif
+
+#ifdef DMCP_BUILD
+  void showFNFunctionName();   //JM LONGPRESS FN
+  void btnFnClicked   (void *w, void *data);
+  void btnFnPressed   (void *w, void *data);   //JM LONGPRESS FN
+  void btnFnReleased   (void *w, void *data);  //JM LONGPRESS FN
+  void btnClicked     (void *w, void *data);
+  void btnPressed     (void *w, void *data);
+  void btnReleased    (void *w, void *data);
+#endif // DMCP_BUILD

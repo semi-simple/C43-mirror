@@ -129,7 +129,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
   displayFormatDigits = displayFormatN;
   displayRealAsFraction = false;
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   }
   refreshStack();
 }                                                                 //JM UNIT
@@ -163,6 +163,21 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     eRPN = !eRPN;
     //fnInfo(eRPN);
     fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);                                 //dr
+    break;
+
+  case JC_FG_LINE:                                          //JM 
+    jm_FG_LINE = !jm_FG_LINE;
+    fnRefreshComboxState(CB_JC, JC_FG_LINE, jm_FG_LINE);                        //jm
+    break;
+
+  case JC_FG_DOTS:                                          //JM 
+    jm_FG_DOTS = !jm_FG_DOTS;
+    fnRefreshComboxState(CB_JC, JC_FG_DOTS, jm_FG_DOTS);                        //jm
+    break;
+
+  case JC_G_DOUBLETAP:                                      //JM 
+    jm_G_DOUBLETAP = !jm_G_DOUBLETAP;
+    fnRefreshComboxState(CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP);                //jm
     break;
 
   case JC_HOME_TRIPLE:                                      //JM HOME.3
@@ -294,9 +309,7 @@ void fnShowJM(uint16_t jmConfig) {
   
   case JM_INP_DFLT:
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
-    else if(Input_Default == ID_SP) { stringToLongInteger("1",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
-    else if(Input_Default == ID_CPXSP) { stringToLongInteger("3",10,mem); }
     else if(Input_Default == ID_CPXDP) { stringToLongInteger("4",10,mem); }
     break;
 
@@ -486,9 +499,9 @@ void fnJM(uint16_t JM_OPCODE) {
 
     liftStack();                                                // Prepare for new X
 //  setRegisterDataType(REGISTER_X, dtComplex16, AM_NONE);      // Convert X to Complex16
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));      // Set X real = 0
-    stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));      // Set X imag = 0
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));      // Set X real = 0
+    stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      // Set X imag = 0
     fnAdd(0);                                                   // +
     complexMode = CM_POLAR;                                     // SET POLAR
     fnComplexCCCC(0);                                           // COMPLEX
@@ -502,9 +515,9 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
   }
   else
@@ -513,9 +526,9 @@ void fnJM(uint16_t JM_OPCODE) {
      saveStack();
      STACK_LIFT_ENABLE;
      liftStack();
-     reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-     stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-     stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));
+     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+     stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+     stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));
      refreshStack();
   }
   else
@@ -524,9 +537,9 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("1", REGISTER_IMAG34_DATA(REGISTER_X));
     refreshStack();
   }
   else
@@ -636,18 +649,18 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // A1
@@ -659,18 +672,18 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // A1
@@ -698,9 +711,9 @@ void fnJM(uint16_t JM_OPCODE) {
     fnAdd(0);                                                  // +
     fnAdd(0);                                                  // + Va0 = (Va + Vb +Vc)/3
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("3", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));      //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("3", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO
     fnDivide(0);
@@ -708,18 +721,18 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // VC
@@ -734,18 +747,18 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // VC
@@ -771,9 +784,9 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("0", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("1", REGISTER_IMAG16_DATA(REGISTER_X));
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("1", REGISTER_IMAG34_DATA(REGISTER_X));
     fnMultiply(0);                                              // * aa
     fnExp(0);
     refreshStack();
@@ -890,18 +903,18 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRecall(REGISTER_I);                                       //
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
 
     fnRecall(REGISTER_I);                                       //
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    stringToReal16("-0.5", REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16("-0.8660254037844386", REGISTER_IMAG16_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
 
@@ -932,7 +945,7 @@ void fnJMup(uint16_t unusedParamButMandatory) {
   saveStack();
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
-  if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+  if((dataTypeX == dtReal34 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
     R_shF(); //shiftF = false;             //JM. Execur .d
     S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
@@ -946,12 +959,7 @@ void fnJMup(uint16_t unusedParamButMandatory) {
   else
 
   if(dataTypeX == dtShortInteger) {
-    convertShortIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-  else
-
-  if(dataTypeX == dtReal16 || dataTypeX == dtComplex16) {
-    fnConvertXToReal34(0);
+    convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   }
   else
 
@@ -967,7 +975,7 @@ void fnJMup(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief CONVERT DATA TYPES DOWN
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedParamButMandatory uint34_t
  * \return void
  ***********************************************/
 void fnJMdown(uint16_t unusedParamButMandatory) {
@@ -982,7 +990,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   saveStack();
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
-  if((dataTypeX == dtReal16 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+  if((dataTypeX == dtReal34 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
     R_shF(); //shiftF = false;             //JM. Execur .d
     S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
@@ -996,18 +1004,13 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   else
 
   if(dataTypeX == dtLongInteger) {
-//  fnConvertXToReal34(0);
     convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   }
   else
 
-  if(dataTypeX == dtReal34 || dataTypeX == dtComplex34) {
-    fnConvertXToReal16(0);
-  }
-  else
 
-  if(dataTypeX == dtReal16) {
-    JM_convertReal16ToShortInteger(NOT_CONFIRMED);
+  if(dataTypeX == dtReal34) {
+    JM_convertReal34ToShortInteger(NOT_CONFIRMED);
   }
 
   refreshStack();
@@ -1160,17 +1163,17 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {           //JM ASSIGN - RE
 
 
 
-void JM_convertReal16ToShortInteger(uint16_t confirmation) {
-  if(!real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    real16_t x;
-    real16ToIntegralValue(REGISTER_REAL16_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
-    real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x , &x);
-    if(real16IsZero(&x)) { confirmation = CONFIRMED; }
+void JM_convertReal34ToShortInteger(uint16_t confirmation) {
+  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34_t x;
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
+    if(real34IsZero(&x)) { confirmation = CONFIRMED; }
     if(confirmation == NOT_CONFIRMED) {
-      setConfirmationMode(JM_convertReal16ToShortInteger);
+      setConfirmationMode(JM_convertReal34ToShortInteger);
     }
     else {
-      convertReal16ToLongIntegerRegister(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
 
     //setRegisterTag(REGISTER_X,10);
       longInteger_t lgInt;
@@ -1186,10 +1189,10 @@ void JM_convertReal16ToShortInteger(uint16_t confirmation) {
 
 
 void JM_convertReal34ToLongInteger(uint16_t confirmation) {
-  if(!real34IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
+  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     real34_t x;
     real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
-    real34Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x , &x);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
     if(real34IsZero(&x)) { confirmation = CONFIRMED; }
     if(confirmation == NOT_CONFIRMED) {
       setConfirmationMode(JM_convertReal34ToLongInteger);

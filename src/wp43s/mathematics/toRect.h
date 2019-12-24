@@ -19,7 +19,6 @@
  ***********************************************/
 
 void fnToRect                (uint16_t unusedParamButMandatory);
-void real16PolarToRectangular(const real16_t *magnitude16, const real16_t *theta16, real16_t *real16, real16_t *imag16);
 void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta34, real34_t *real34, real34_t *imag34);
 void real39PolarToRectangular(const real_t *magnitude,   const real_t *theta,   real_t *real,   real_t *imag);
 void real51PolarToRectangular(const real_t *magnitude,   const real_t *theta,   real_t *real,   real_t *imag);

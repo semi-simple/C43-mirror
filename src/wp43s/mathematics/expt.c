@@ -22,10 +22,10 @@
 
 
 
-void (* const expt[12])(void) = {
-// regX ==> 1            2         3          4          5          6          7          8          9           10            11        12
-//          Long integer Real16    Complex16  Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
-            exptLonI,    exptRe16, exptError, exptError, exptError, exptError, exptError, exptError, exptError,  exptError,    exptRe34, exptError
+void (* const expt[9])(void) = {
+// regX ==> 1            2         3          4          5          6          7          8           9
+//          Long integer Real34    Complex34  Time       Date       String     Real34 mat Complex34 m Short integer
+            exptLonI,    exptReal, exptError, exptError, exptError, exptError, exptError, exptError,  exptError
 };
 
 
@@ -77,43 +77,14 @@ void exptLonI(void) {
 
 
 
-void exptRe16(void) {
-  real39_t x;
-  longInteger_t lgInt;
-
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function exptRe16:", "cannot use NaN as an input of EXPT", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function exptRe16:", "cannot use ±∞ as an input of EXPT", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  longIntegerInit(lgInt);
-  intToLongInteger((realIsZero(&x) ? 0 : x.exponent + x.digits - 1), lgInt);
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  longIntegerFree(lgInt);
-}
-
-
-
-void exptRe34(void) {
+void exptReal(void) {
   real39_t x;
   longInteger_t lgInt;
 
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function exptRe34:", "cannot use NaN as an input of EXPT", NULL, NULL);
+      showInfoDialog("In function exptReal:", "cannot use NaN as an input of EXPT", NULL, NULL);
     #endif
     return;
   }
@@ -121,7 +92,7 @@ void exptRe34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function exptRe34:", "cannot use ±∞ as an input of EXPT", NULL, NULL);
+      showInfoDialog("In function exptReal:", "cannot use ±∞ as an input of EXPT", NULL, NULL);
     #endif
     return;
   }

@@ -21,5 +21,4 @@
 void fnMant   (uint16_t unusedParamButMandatory);
 void mantError(void);
 void mantLonI (void);
-void mantRe16 (void);
-void mantRe34 (void);
+void mantReal (void);

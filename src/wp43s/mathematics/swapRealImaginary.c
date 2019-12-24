@@ -22,10 +22,10 @@
 
 
 
-void (* const swapReIm[12])(void) = {
-// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12
-//          Long integer   Real16         Complex16     Angle16        Time           Date           String         Real16 mat     Complex16 m   Short integer  Real34         Complex34
-            swapReImError, swapReImError, swapReImCo16, swapReImError, swapReImError, swapReImError, swapReImError, swapReImError, swapReImCm16, swapReImError, swapReImError, swapReImCo34
+void (* const swapReIm[9])(void) = {
+// regX ==> 1              2              3             4              5              6              7              8             9
+//          Long integer   Real34         complex34     Time           Date           String         Real34 mat     Complex34 m   Short integer
+            swapReImError, swapReImError, swapReImCplx, swapReImError, swapReImError, swapReImError, swapReImError, swapReImCxma, swapReImError
 };
 
 
@@ -70,22 +70,12 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
 
 
 
-void swapReImCo16(void) {
-  real16_t temp;
-
-  real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &temp);
-  real16Copy(REGISTER_REAL16_DATA(REGISTER_X), REGISTER_IMAG16_DATA(REGISTER_X));
-  real16Copy(&temp,                            REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-void swapReImCm16(void) {
+void swapReImCxma(void) {
   fnToBeCoded();
 }
 
 
-void swapReImCo34(void) {
+void swapReImCplx(void) {
   real34_t temp;
 
   real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &temp);

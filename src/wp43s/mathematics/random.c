@@ -50,16 +50,18 @@ void fnRandom(uint16_t unusedParamButMandatory) {
 
   saveStack();
 
-  //uInt32ToReal(pcg32_boundedrand(100000000), &x1);
-  //uInt32ToReal(pcg32_boundedrand(100000000), &x2);
-  uInt32ToReal(boundedRand(100000000), &x1);
-  uInt32ToReal(boundedRand(100000000), &x2);
+  uInt32ToReal(boundedRand(100000000),  &x1);
+  uInt32ToReal(boundedRand(100000000),  &x2);
   realFMA(const_1e8, &x1, &x2, &x1, &ctxtReal39);
-  x1.exponent -= 16;
+  uInt32ToReal(boundedRand(1000000000), &x2);
+  realFMA(const_1e9, &x1, &x2, &x1, &ctxtReal39);
+  uInt32ToReal(boundedRand(1000000000), &x2);
+  realFMA(const_1e9, &x1, &x2, &x1, &ctxtReal39);
+  x1.exponent -= 34;
 
   liftStack();
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realToReal16(&x1, REGISTER_REAL16_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&x1, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
   refreshRegisterLine(REGISTER_Y);
@@ -72,13 +74,7 @@ void fnRandom(uint16_t unusedParamButMandatory) {
 void fnSeed(uint16_t unusedParamButMandatory) {
   uint64_t seed=0, sequ=0;
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    if(!real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-      seed = *(uint64_t *)getRegisterDataPointer(REGISTER_X); // The 64 bits of the real16_t
-      sequ = seed;
-    }
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(!real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       seed = *(uint64_t *)getRegisterDataPointer(REGISTER_X);          // First 64 bits of the real34_t
       sequ = *(((uint64_t *)getRegisterDataPointer(REGISTER_X)) + 1);  // Last  64 bits of the real34_t

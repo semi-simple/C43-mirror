@@ -1957,12 +1957,12 @@
 #define MNU_ASN_N                     1903  //JM USER NORMAL
 #define ITM_GET_NORM_E                1904  //JM USER NORMAL
 #define ITM_INP_DEF_43S               1905  //JM INPUT DEFAULT
-#define ITM_INP_DEF_SP                1906  //JM INPUT DEFAULT
+#define ITM_FG_LINE                   1906  //JM FG              **
 #define ITM_INP_DEF_DP                1907  //JM INPUT DEFAULT
 #define ITM_SH_INP_DEF                1908  //JM INPUT DEFAULT
-#define ITM_INP_DEF_CPXSP             1909  //JM INPUT DEFAULT
+#define ITM_FG_DOTS                   1909  //JM FG              **
 #define ITM_INP_DEF_CPXDP             1910  //JM INPUT DEFAULT
-#define ITM_INP_DEF_43D               1911  //JM INPUT DEFAULT
+#define ITM_G_DOUBLETAP               1911  //JM FG              **
 #define ITM_INP_DEF_SI                1912  //JM INPUT DEFAULT
 #define ITM_INP_DEF_LI                1913  //JM INPUT DEFAULT
 

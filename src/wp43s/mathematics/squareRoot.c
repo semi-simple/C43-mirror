@@ -22,10 +22,10 @@
 
 
 
-void (* const Sqrt[12])(void) = {
-// regX ==> 1            2         3         4          5          6          7          8          9           10            11        12
-//          Long integer Real16    Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34    Complex34
-            sqrtLonI,    sqrtRe16, sqrtCo16, sqrtError, sqrtError, sqrtError, sqrtError, sqrtRm16,  sqrtCm16,   sqrtShoI,     sqrtRe34, sqrtCo34
+void (* const Sqrt[9])(void) = {
+// regX ==> 1            2         3         4          5          6          7          8           9
+//          Long integer Real34    complex34 Time       Date       String     Real34 mat Complex34 m Short integer
+            sqrtLonI,    sqrtReal, sqrtCplx, sqrtError, sqrtError, sqrtError, sqrtRema,  sqrtCxma,   sqrtShoI
 };
 
 
@@ -79,19 +79,19 @@ void sqrtLonI(void) {
 
       convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
       realSquareRoot(&a, &a, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-      realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
   else if(getFlag(FLAG_CPXRES)) { // Negative value
     real39_t a;
 
     convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
     realSetPositiveSign(&a);
     realSquareRoot(&a, &a, &ctxtReal39);
-    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-    realToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -106,82 +106,13 @@ void sqrtLonI(void) {
 
 
 
-void sqrtRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtRe16:", "cannot use NaN as X input of sqrt", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtRe16:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of sqrt when flag D is not set", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-
-  if(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X))) {
-    realSquareRoot(&a, &a, &ctxtReal39);
-    realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
-  }
-  else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-    realSetPositiveSign(&a);
-    realSquareRoot(&a, &a, &ctxtReal39);
-    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-    realToReal16(&a, REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-  else {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function sqrtRe16:", errorMessage, NULL, NULL);
-    #endif
-  }
-}
-
-
-
-void sqrtCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtCo16:", "cannot use NaN as X input of sqrt", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  real39RectangularToPolar(&a, &b, &a, &b);
-  realSquareRoot(&a, &a, &ctxtReal39);
-  realMultiply(&b, const_0_5, &b, &ctxtReal39);
-  real39PolarToRectangular(&a, &b, &a, &b);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void sqrtRm16(void) {
+void sqrtRema(void) {
   fnToBeCoded();
 }
 
 
 
-void sqrtCm16(void) {
+void sqrtCxma(void) {
   fnToBeCoded();
 }
 
@@ -193,11 +124,11 @@ void sqrtShoI(void) {
 
 
 
-void sqrtRe34(void) {
+void sqrtReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtRe34:", "cannot use NaN as X input of sqrt", NULL, NULL);
+      showInfoDialog("In function sqrtReal:", "cannot use NaN as X input of sqrt", NULL, NULL);
     #endif
     return;
   }
@@ -205,7 +136,7 @@ void sqrtRe34(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtRe34:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of sqrt when flag D is not set", NULL, NULL);
+      showInfoDialog("In function sqrtReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of sqrt when flag D is not set", NULL, NULL);
     #endif
     return;
   }
@@ -230,18 +161,18 @@ void sqrtRe34(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function sqrtRe34:", errorMessage, NULL, NULL);
+      showInfoDialog("In function sqrtReal:", errorMessage, NULL, NULL);
     #endif
   }
 }
 
 
 
-void sqrtCo34(void) {
+void sqrtCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtCo34:", "cannot use NaN as X input of sqrt", NULL, NULL);
+      showInfoDialog("In function sqrtCplx:", "cannot use NaN as X input of sqrt", NULL, NULL);
     #endif
     return;
   }
@@ -253,7 +184,7 @@ void sqrtCo34(void) {
 
   real39RectangularToPolar(&a, &b, &a, &b);
   realSquareRoot(&a, &a, &ctxtReal39);
-  realMultiply(&b, const_0_5, &b, &ctxtReal39);
+  realMultiply(&b, const_1on2, &b, &ctxtReal39);
   real39PolarToRectangular(&a, &b, &a, &b);
 
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));

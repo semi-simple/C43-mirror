@@ -21,9 +21,7 @@
 void fnCosh   (uint16_t unusedParamButMandatory);
 void coshError(void);
 void coshLonI (void);
-void coshRe16 (void);
-void coshCo16 (void);
-void coshRm16 (void);
-void coshCm16 (void);
-void coshRe34 (void);
-void coshCo34 (void);
+void coshRema (void);
+void coshCxma (void);
+void coshReal (void);
+void coshCplx (void);

@@ -22,10 +22,10 @@
 
 
 
-void (* const tenPow[12])(void) = {
-// regX ==> 1            2           3           4            5            6            7            8           9           10            11          12
-//          Long integer Real16      Complex16   Angle16      Time         Date         String       Real16 mat  Complex16 m Short integer Real34      Complex34
-            tenPowLonI,  tenPowRe16, tenPowCo16, tenPowError, tenPowError, tenPowError, tenPowError, tenPowRm16, tenPowCm16, tenPowShoI,   tenPowRe34, tenPowCo34
+void (* const tenPow[9])(void) = {
+// regX ==> 1            2           3           4            5            6            7           8           9
+//          Long integer Real34      Complex34   Time         Date         String       Real34 mat  Complex34 m Short integer
+            tenPowLonI,  tenPowReal, tenPowCplx, tenPowError, tenPowError, tenPowError, tenPowRema, tenPowCxma, tenPowShoI
 };
 
 
@@ -136,62 +136,13 @@ void tenPowLonI(void) {
 
 
 
-void tenPowRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowRe16:", "cannot use NaN as X input of 10^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-  realPower(const_10, &x, &x, &ctxtReal39);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void tenPowCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowCo16:", "cannot use NaN as X input of 10^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t a, b, factor;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &a);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &b);
-
-  // ln(10) * (a + bi) --> (a + bi)
-  realMultiply(const_ln10, &a, &a, &ctxtReal39);
-  realMultiply(const_ln10, &b, &b, &ctxtReal39);
-
-  // exp(ln(10) * (a + bi)) --> (a + bi)
-  realExp(&a, &factor, &ctxtReal39);
-  real39PolarToRectangular(const_1, &b, &a, &b);
-  realMultiply(&factor, &a, &a, &ctxtReal39);
-  realMultiply(&factor, &b, &b, &ctxtReal39);
-
-  realToReal16(&a, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&b, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void tenPowRm16(void) {
+void tenPowRema(void) {
   fnToBeCoded();
 }
 
 
 
-void tenPowCm16(void) {
+void tenPowCxma(void) {
   fnToBeCoded();
 }
 
@@ -203,11 +154,11 @@ void tenPowShoI(void) {
 
 
 
-void tenPowRe34(void) {
+void tenPowReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowRe34:", "cannot use NaN as X input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowReal:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }
@@ -222,11 +173,11 @@ void tenPowRe34(void) {
 
 
 
-void tenPowCo34(void) {
+void tenPowCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function tenPowCo34:", "cannot use NaN as X input of 10^", NULL, NULL);
+      showInfoDialog("In function tenPowCplx:", "cannot use NaN as X input of 10^", NULL, NULL);
     #endif
     return;
   }

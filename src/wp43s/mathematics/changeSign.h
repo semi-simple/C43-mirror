@@ -23,10 +23,8 @@ void chsError    (void);
 
 //      RegX
 void chsLonI     (void);
-void chsRe16     (void);
-void chsCo16     (void);
-void chsRm16     (void);
-void chsCm16     (void);
+void chsRema     (void);
+void chsCxma     (void);
 void chsShoI     (void);
-void chsRe34     (void);
-void chsCo34     (void);
+void chsReal     (void);
+void chsCplx     (void);

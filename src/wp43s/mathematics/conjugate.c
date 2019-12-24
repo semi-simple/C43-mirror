@@ -22,10 +22,10 @@
 
 
 
-void (* const conjugate[12])(void) = {
-// regX ==> 1            2          3         4          5          6          7          8          9           10            11         12
-//          Long integer Real16     Complex16 Angle16    Time       Date       String     Real16 mat Complex16 m Short integer Real34     Complex34
-            conjError,   conjError, conjCo16, conjError, conjError, conjError, conjError, conjError, conjCm16,   conjError,    conjError, conjCo34
+void (* const conjugate[9])(void) = {
+// regX ==> 1            2          3         4          5          6          7          8           9
+//          Long integer Real34     Complex34 Time       Date       String     Real34 mat Complex34 m Short integer
+            conjError,   conjError, conjCplx, conjError, conjError, conjError, conjError, conjCxma,   conjError
 };
 
 
@@ -70,34 +70,17 @@ void fnConjugate(uint16_t unusedParamButMandatory) {
 
 
 
-void conjCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function conjCo16:", "cannot use NaN as X input of conjugate", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16ChangeSign(REGISTER_IMAG16_DATA(REGISTER_X));
-  if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-    real16SetPositiveSign(REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-}
-
-
-
-void conjCm16(void) {
+void conjCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void conjCo34(void) {
+void conjCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function conjCo34:", "cannot use NaN as X input of conjugate", NULL, NULL);
+      showInfoDialog("In function conjCplx:", "cannot use NaN as X input of conjugate", NULL, NULL);
     #endif
     return;
   }

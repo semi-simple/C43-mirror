@@ -21,5 +21,4 @@
 void fnExpt   (uint16_t unusedParamButMandatory);
 void exptError(void);
 void exptLonI (void);
-void exptRe16 (void);
-void exptRe34 (void);
+void exptReal (void);

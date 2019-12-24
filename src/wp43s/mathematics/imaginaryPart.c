@@ -22,10 +22,10 @@
 
 
 
-void (* const imagPart[12])(void) = {
-// regX ==> 1              2              3             4              5              6              7              8              9             10             11             12
-//          Long integer   Real16         Complex16     Angle16        Time           Date           String         Real16 mat     Complex16 m   Short integer  Real34         Complex34
-            imagPartError, imagPartError, imagPartCo16, imagPartError, imagPartError, imagPartError, imagPartError, imagPartError, imagPartCm16, imagPartError, imagPartError, imagPartCo34
+void (* const imagPart[9])(void) = {
+// regX ==> 1              2              3             4              5              6              7              8             9
+//          Long integer   Real34         complex34     Time           Date           String         Real34 mat     Complex34 m   Short integer
+            imagPartError, imagPartError, imagPartCplx, imagPartError, imagPartError, imagPartError, imagPartError, imagPartCxma, imagPartError
 };
 
 
@@ -70,34 +70,16 @@ void fnImaginaryPart(uint16_t unusedParamButMandatory) {
 
 
 
-void imagPartCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function imagPartCo16:", "cannot use NaN as X input of Im", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16_t imagPart;
-
-  real16Copy(REGISTER_IMAG16_DATA(REGISTER_X), &imagPart);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  real16Copy(&imagPart, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-void imagPartCm16(void) {
+void imagPartCxma(void) {
   fnToBeCoded();
 }
 
 
-void imagPartCo34(void) {
+void imagPartCplx(void) {
   if(real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function imagPartCo34:", "cannot use NaN as X input of Im", NULL, NULL);
+      showInfoDialog("In function imagPartCplx:", "cannot use NaN as X input of Im", NULL, NULL);
     #endif
     return;
   }

@@ -20,5 +20,4 @@
 
 void fnUnitVector   (uint16_t unusedParamButMandatory);
 void unitVectorError(void);
-void unitVectorCo16 (void);
-void unitVectorCo34 (void);
+void unitVectorCplx (void);

@@ -612,21 +612,10 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
-          setRegisterDataType(r, dtReal16, AM_NONE);
-          setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
-          real16Zero(REGISTER_REAL16_DATA(r));
-        }                                                      //JM defaults
-        else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+        if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
           setRegisterDataType(r, dtReal34, AM_NONE);
           setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
           real34Zero(REGISTER_REAL34_DATA(r));
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_CPXSP) {                  //JM defaults vv
-          setRegisterDataType(r, dtComplex16, AM_NONE);
-          setRegisterDataPointer(r, allocWp43s(COMPLEX16_SIZE));
-          real16Zero(REGISTER_REAL16_DATA(r));
-          real16Zero(REGISTER_IMAG16_DATA(r));
         }                                                      //JM defaults ^^
         else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
           setRegisterDataType(r, dtComplex34, AM_NONE);
@@ -658,21 +647,10 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumRegs; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
-          setRegisterDataType(r, dtReal16, AM_NONE);
-          setRegisterDataPointer(r, allocWp43s(REAL16_SIZE));
-          real16Zero(REGISTER_REAL16_DATA(r));
-        }                                                      //JM defaults
-        else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+        if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
           setRegisterDataType(r, dtReal34, AM_NONE);
           setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
           real34Zero(REGISTER_REAL34_DATA(r));
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_CPXSP) {                  //JM defaults vv
-          setRegisterDataType(r, dtComplex16, AM_NONE);
-          setRegisterDataPointer(r, allocWp43s(COMPLEX16_SIZE));
-          real16Zero(REGISTER_REAL16_DATA(r));
-          real16Zero(REGISTER_IMAG16_DATA(r));
         }                                                      //JM defaults ^^
         else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
           setRegisterDataType(r, dtComplex34, AM_NONE);
@@ -750,28 +728,10 @@ void allocateNamedVariable(const char *variableName) {
     regist += 1000;
   }
 
-  // The new named variable is a real16 initialized to 0.0
-  //JM setRegisterDataType(regist, dtReal16, AM_NONE);
+  // The new named variable is a real34 initialized to 0.0
+  setRegisterDataType(regist, dtReal34, AM_NONE);
 
-  //JM   len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
-
-  //JM   setRegisterNamePointer(regist, allocWp43s(len));
-  //JM   setRegisterNameLength(regist, len>>1);
-  //JM   memcpy(getRegisterNamePointer(regist), variableName, len);
-
-  //JM setRegisterDataPointer(regist, allocWp43s(REAL16_SIZE));
-  //JM real16Zero(REGISTER_REAL16_DATA(regist));
-
-  if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
-    setRegisterDataType(regist, dtReal16, AM_NONE);
-    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
-    setRegisterNamePointer(regist, allocWp43s(len));
-    setRegisterNameLength(regist, len>>1);
-    memcpy(getRegisterNamePointer(regist), variableName, len);
-    setRegisterDataPointer(regist, allocWp43s(REAL16_SIZE));
-    real16Zero(REGISTER_REAL16_DATA(regist));
-  }                                                      //JM defaults
-  else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+  if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
     setRegisterDataType(regist, dtReal34, AM_NONE);
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     setRegisterNamePointer(regist, allocWp43s(len));
@@ -779,17 +739,7 @@ void allocateNamedVariable(const char *variableName) {
     memcpy(getRegisterNamePointer(regist), variableName, len);
     setRegisterDataPointer(regist, allocWp43s(REAL34_SIZE));
     real34Zero(REGISTER_REAL34_DATA(regist));
-  }                                                      //JM defaults ^^
-  else if (Input_Default == ID_CPXSP) {                  //JM defaults vv
-    setRegisterDataType(regist, dtComplex16, AM_NONE);
-    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
-    setRegisterNamePointer(regist, allocWp43s(len));
-    setRegisterNameLength(regist, len>>1);
-    memcpy(getRegisterNamePointer(regist), variableName, len);
-    setRegisterDataPointer(regist, allocWp43s(COMPLEX16_SIZE));
-    real16Zero(REGISTER_REAL16_DATA(regist));
-    real16Zero(REGISTER_IMAG16_DATA(regist));
-  }                                                      //JM defaults ^^
+  }                                                      //JM defaults
   else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
     setRegisterDataType(regist, dtComplex34, AM_NONE);
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
@@ -826,6 +776,7 @@ void allocateNamedVariable(const char *variableName) {
     longIntegerFree(lgInt);
   }                                                      //JM defaults ^^
 }
+
 
 
 /********************************************//**
@@ -961,8 +912,6 @@ uint32_t getRegisterMaxDataLength(calcRegister_t regist) {
 uint32_t getRegisterFullSize(calcRegister_t regist) {
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:  return *(REGISTER_DATA_MAX_LEN(regist)) + sizeof(dataSize_t);
-    case dtReal16:       return REAL16_SIZE;
-    case dtComplex16:    return COMPLEX16_SIZE;
     //case dtTime:
     //case dtDate:
     case dtString:       return *(REGISTER_DATA_MAX_LEN(regist)) + sizeof(dataSize_t);
@@ -988,17 +937,7 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
-  if (Input_Default == ID_43S || Input_Default == ID_SP) {                        //JM defaults JMZERO
-    if(getRegisterDataType(regist) == dtReal16) {
-      real16Zero(REGISTER_REAL16_DATA(regist));
-      setRegisterTag(regist, AM_NONE);
-    }
-    else{
-      reallocateRegister(regist, dtReal16, REAL16_SIZE, AM_NONE);
-      real16Zero(REGISTER_REAL16_DATA(regist));
-    }
-  }
-  else if (Input_Default == ID_43D || Input_Default == ID_DP) {                   //JM defaults vv
+  if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
     if(getRegisterDataType(regist) == dtReal34) {
       real34Zero(REGISTER_REAL34_DATA(regist));
       setRegisterTag(regist, AM_NONE);
@@ -1008,18 +947,6 @@ void clearRegister(calcRegister_t regist) {
       real34Zero(REGISTER_REAL34_DATA(regist));
     }
   }                                                                               //JM defaults ^^
-  else if (Input_Default == ID_CPXSP) {                                           //JM defaults vv
-    if(getRegisterDataType(regist) == dtComplex16) {
-      real16Zero(REGISTER_REAL16_DATA(regist));
-      real16Zero(REGISTER_IMAG16_DATA(regist));
-      setRegisterTag(regist, AM_NONE);
-    }
-    else{
-      reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      real16Zero(REGISTER_REAL16_DATA(regist));
-      real16Zero(REGISTER_IMAG16_DATA(regist));
-    }
-  }
   else if (Input_Default == ID_CPXDP) {                                           //JM defaults vv
     if(getRegisterDataType(regist) == dtComplex34) {
       real34Zero(REGISTER_REAL34_DATA(regist));
@@ -1048,6 +975,7 @@ void clearRegister(calcRegister_t regist) {
     longIntegerFree(lgInt);
   }                                                                               //JM defaults ^^
 }
+
 
 
 /********************************************//**
@@ -1102,82 +1030,20 @@ void fnGetLocR(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Convert X to a real16 or complex
- *        if it is not already. Throws an
- *        error if X is not a single or double
- *        precision real or complex.
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnConvertXToReal16(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtComplex34) {
-    convertRegister34To16(REGISTER_X);
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-
-  else if(getRegisterDataType(REGISTER_X) != dtReal16 && getRegisterDataType(REGISTER_X) != dtComplex16) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot convert %s to a SP!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fnConvertXToReal16:", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  refreshRegisterLine(REGISTER_X);
-}
-
-
-
-/********************************************//**
- * \brief Convert X to a real34 or complex
- *        if it is not already. Throws an
- *        error if X is not a single or double
- *        precision real or complex.
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnConvertXToReal34(uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtReal16 || getRegisterDataType(REGISTER_X) == dtComplex16) {
-    convertRegister16To34(REGISTER_X);
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  }
-
-  else if(getRegisterDataType(REGISTER_X) != dtReal34 && getRegisterDataType(REGISTER_X) != dtComplex34) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot convert %s to a DP!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
-      showInfoDialog("In function fnConvertXToReal34:", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  refreshRegisterLine(REGISTER_X);
-}
-
-
-
 void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3) {
   uint32_t resultDataType;
   bool_t oneArgumentIsComplex = false;
 
   if(op1 >= 0) {
-    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op1) == dtComplex16 || getRegisterDataType(op1) == dtComplex34;
+    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op1) == dtComplex34;
   }
 
   if(op2 >= 0) {
-    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op2) == dtComplex16 || getRegisterDataType(op2) == dtComplex34;
+    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op2) == dtComplex34;
   }
 
   if(op3 >= 0) {
-    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op3) == dtComplex16 || getRegisterDataType(op3) == dtComplex34;
+    oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op3) == dtComplex34;
   }
 
   if(lastErrorCode != 0) {
@@ -1190,36 +1056,12 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   if(getFlag(FLAG_DANGER) == false) {
     // D is clear: test infinite values and -0 values
     switch(resultDataType) {
-      case dtReal16:
-        if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
-          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
-        }
-        else if(real16IsZero(REGISTER_REAL16_DATA(res))) {
-          real16SetPositiveSign(REGISTER_REAL16_DATA(res));
-        }
-        break;
-
       case dtReal34:
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         else if(real34IsZero(REGISTER_REAL34_DATA(res))) {
           real34SetPositiveSign(REGISTER_REAL34_DATA(res));
-        }
-        break;
-
-      case dtComplex16:
-        if(real16IsInfinite(REGISTER_REAL16_DATA(res))) {
-          displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
-        }
-        else if(real16IsZero(REGISTER_REAL16_DATA(res))) {
-          real16SetPositiveSign(REGISTER_REAL16_DATA(res));
-        }
-        else if(real16IsInfinite(REGISTER_IMAG16_DATA(res))) {
-          displayCalcErrorMessage(real16IsPositive(REGISTER_IMAG16_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
-        }
-        else if(real16IsZero(REGISTER_IMAG16_DATA(res))) {
-          real16SetPositiveSign(REGISTER_IMAG16_DATA(res));
         }
         break;
 
@@ -1259,17 +1101,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   switch(resultDataType) {
     real39_t tmp;
 
-    case dtReal16:
-      if(significantDigits == 0 || significantDigits >= 16) {
-        break;
-      }
-
-      ctxtReal39.digits = significantDigits;
-      real16ToReal(REGISTER_REAL16_DATA(res), &tmp);
-      ctxtReal39.digits = 39;
-      realToReal16(&tmp, REGISTER_REAL16_DATA(res));
-      break;
-
     case dtReal34:
       if(significantDigits == 0 || significantDigits >= 34) {
         break;
@@ -1279,19 +1110,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       real34ToReal(REGISTER_REAL34_DATA(res), &tmp);
       ctxtReal39.digits = 39;
       realToReal34(&tmp, REGISTER_REAL34_DATA(res));
-      break;
-
-    case dtComplex16:
-      if(significantDigits == 0 || significantDigits >= 16) {
-        break;
-      }
-
-      ctxtReal39.digits = significantDigits;
-      real16ToReal(REGISTER_REAL16_DATA(res), &tmp);
-      realToReal16(&tmp, REGISTER_REAL16_DATA(res));
-      real16ToReal(REGISTER_IMAG16_DATA(res), &tmp);
-      realToReal16(&tmp, REGISTER_IMAG16_DATA(res));
-      ctxtReal39.digits = 39;
       break;
 
     case dtComplex34:
@@ -1337,8 +1155,6 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
 
     switch(getRegisterDataType(sourceRegister)) {
       case dtLongInteger:  size = *(REGISTER_DATA_MAX_LEN(sourceRegister));     break;
-      case dtReal16:       size = REAL16_SIZE;                                  break;
-      case dtComplex16:    size = COMPLEX16_SIZE;                               break;
       //case dtTime:
       //case dtDate:
       case dtString:       size = *(REGISTER_DATA_MAX_LEN(sourceRegister)) - 1; break;
@@ -1877,19 +1693,6 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     return 9999;
   }
 
-  else if(getRegisterDataType(regist) == dtReal16) {
-    if(real16CompareLessThan(REGISTER_REAL16_DATA(regist), const16_0) || real16CompareGreaterEqual(REGISTER_REAL16_DATA(regist), const16_1000)) {
-      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-      #ifdef PC_BUILD
-        real16ToString(REGISTER_REAL16_DATA(regist), errorMessage + 200);
-        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
-        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
-      #endif
-      return 9999;
-    }
-    value = real16ToInt32(REGISTER_REAL16_DATA(regist));
-  }
-
   else if(getRegisterDataType(regist) == dtReal34) {
     if(real34CompareLessThan(REGISTER_REAL34_DATA(regist), const34_0) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(regist), const34_1000)) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
@@ -1975,27 +1778,9 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 void printRegisterToConsole(calcRegister_t regist) {
   char str[3000];
 
-  if(getRegisterDataType(regist) == dtReal16) {
-    real16ToString(REGISTER_REAL16_DATA(regist), str);
-    printf("real16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-  }
-
-  else if(getRegisterDataType(regist) == dtReal34) {
+  if(getRegisterDataType(regist) == dtReal34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
     printf("real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-  }
-
-  else if(getRegisterDataType(regist) == dtComplex16) {
-    real16ToString(REGISTER_REAL16_DATA(regist), str);
-    printf("complex16 %s ", str);
-
-    real16ToString(REGISTER_IMAG16_DATA(regist), str);
-    if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-      printf("- ix%s", str + 1);
-    }
-    else {
-      printf("+ ix%s", str);
-    }
   }
 
   else if(getRegisterDataType(regist) == dtComplex34) {
@@ -2050,29 +1835,9 @@ void printRegisterToConsole(calcRegister_t regist) {
 void printRegisterToString(calcRegister_t regist, char *registerContent) {
   char str[1000];
 
-  if(getRegisterDataType(regist) == dtReal16) {
-    real16ToString(REGISTER_REAL16_DATA(regist), str);
-    sprintf(registerContent, "real16 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-  }
-
-  else if(getRegisterDataType(regist) == dtReal34) {
+  if(getRegisterDataType(regist) == dtReal34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
     sprintf(registerContent, "real34 %s %s", str, getAngularModeName(getRegisterAngularMode(regist)));
-  }
-
-  else if(getRegisterDataType(regist) == dtComplex16) {
-    real16ToString(REGISTER_REAL16_DATA(regist), str);
-    sprintf(registerContent, "complex16 %s ", str);
-
-    real16ToString(REGISTER_IMAG16_DATA(regist), str);
-    if(real16IsNegative(REGISTER_IMAG16_DATA(regist))) {
-      strcat(registerContent, "- ix");
-      strcat(registerContent, str + 1);
-    }
-    else {
-      strcat(registerContent, "+ ix");
-      strcat(registerContent, str);
-    }
   }
 
   else if(getRegisterDataType(regist) == dtComplex34) {
@@ -2119,26 +1884,6 @@ void printRegisterToString(calcRegister_t regist, char *registerContent) {
 
 
 
-void printReal16ToConsole(const real16_t *value) {
-  char str[100];
-
-  real16ToString(value, str);
-  printf("real16 %s", str);
-}
-
-
-
-void printComplex16ToConsole(const complex16_t *value) {
-  char str[100];
-
-  real16ToString((real16_t *)value, str);
-  printf("complex16 %s + ", str);
-  real16ToString((real16_t *)value + 1, str);
-  printf("%si", str);
-}
-
-
-
 void printReal34ToConsole(const real34_t *value) {
   char str[100];
 
@@ -2149,7 +1894,12 @@ void printReal34ToConsole(const real34_t *value) {
 
 
 void printRealToConsole(const real_t *value) {
-  int32_t i, exponent, last;
+  char str[1000];
+
+  realToString(value, str);
+  printf("real %s", str);
+
+/*  int32_t i, exponent, last;
 
   if(realIsNaN(value)) {
     printf("NaN");
@@ -2193,17 +1943,7 @@ void printRealToConsole(const real_t *value) {
 
   if(exponent != 0) {
     printf(" e %" FMT32S, exponent);
-  }
-}
-
-
-
-void printComplex39ToConsole(const complex39_t *value) {
-  printf("complex39 ");
-  printRealToConsole(&value->real);
-  printf(" + ");
-  printRealToConsole(&value->imag);
-  printf(" i");
+  }*/
 }
 
 
@@ -2281,16 +2021,8 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataS
   uint32_t dataSizeWithDataLen = dataSizeWithoutDataLen;
 
   //printf("reallocateRegister: %d to %s tag=%u (%u bytes excluding maxSize) begin\n", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithoutDataLen);
-  if(dataType == dtReal16 && dataSizeWithoutDataLen != REAL16_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real16 or an angle16! It should be REAL16_SIZE=%" FMT32U "!", dataSizeWithoutDataLen, (uint32_t)REAL16_SIZE);
-    displayBugScreen(errorMessage);
-  }
-  else if(dataType == dtReal34 && dataSizeWithoutDataLen != REAL34_SIZE) {
+  if(dataType == dtReal34 && dataSizeWithoutDataLen != REAL34_SIZE) {
     sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a real34 or an angle34! It should be REAL34_SIZE=%" FMT32U "!", dataSizeWithoutDataLen, (uint32_t)REAL34_SIZE);
-    displayBugScreen(errorMessage);
-  }
-  else if(dataType == dtComplex16 && dataSizeWithoutDataLen != COMPLEX16_SIZE) {
-    sprintf(errorMessage, "In function reallocateRegister: %" FMT32U " is an unexpected numByte value for a complex16! It should be COMPLEX16_SIZE=%" FMT32U "!", dataSizeWithoutDataLen, (uint32_t)COMPLEX16_SIZE);
     displayBugScreen(errorMessage);
   }
   else if(dataType == dtComplex34 && dataSizeWithoutDataLen != COMPLEX34_SIZE) {

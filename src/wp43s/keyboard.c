@@ -188,7 +188,6 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
         if(lastErrorCode == 0) {
           temporaryInformation = TI_NO_INFO;
-          printf("#--ExecFunction\n"); //JMRESET TEST TEMPORARY
           runFunction(func % 10000);
         }
       }
@@ -388,7 +387,6 @@ void btnFnPressed(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
 #endif
-  printf("#--btnFnPressed\n"); //JMRESET TEST TEMPORARY
 
   FN_timed_out_to_RELEASE_EXEC = false;
   temp = TIME_from_last_read();
@@ -565,7 +563,6 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 #ifdef DMCP_BUILD
 void btnFnReleased(void *w, void *data) {
 #endif
-  printf("#--btnFnReleased\n"); //JMRESET TEST TEMPORARY
   temp = TIME_from_last_read();
   #ifdef FN_TIME_DEBUG
   printf("--------------\n RELEASE LastX %d : ",temp); 
@@ -639,9 +636,7 @@ void btnFnReleased(void *w, void *data) {
     underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     sprintf(charKey, "%c", FN_key_pressed + 11);
     FN_counter = JM_FN_TIMER;                                               //reset for future
-    #ifdef TRYWITHOUT
     hideFunctionName();
-    #endif
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
     refreshRegisterLine(REGISTER_T);
     if (!FN_timed_out_to_NOP) {
@@ -681,7 +676,6 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 void btnFnClicked(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
-printf("#--btnFnClicked\n"); //JMRESET TEST TEMPORARY
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
 
@@ -1694,12 +1688,9 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 void btnReleased(void *notUsed, void *data) {
 #endif
   Shft_timeouts = false;                         //JM SHIFT NEW
-printf("runF1 \n");   //JMRESET TEST TEMPORARY
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
-printf("runF2 \n");  //JMRESET TEST TEMPORARY
     hideFunctionName();
-printf("runF3 \n");  //JMRESET TEST TEMPORARY
     runFunction(item);
   }
 }

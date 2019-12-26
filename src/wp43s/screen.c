@@ -1591,7 +1591,6 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex34) {
-
              if(temporaryInformation == TI_ABC) {                             //JM EE \/ 
               if(regist == REGISTER_X) {                                         
                 strcpy(prefix, "c" STD_SPACE_FIGURE "=");                        
@@ -1635,17 +1634,22 @@ void refreshRegisterLine(calcRegister_t regist) {
                 strcpy(prefix, "sym0" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
-            }                                                                       //JM EE ^
+            }
 
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            if(prefixWidth > 0) {
+              if(regist == REGISTER_X) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);            
+              } else
+              if(regist == REGISTER_Y) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Y_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Y), vmNormal, true, true);                          
+              } else
+              if(regist == REGISTER_Z) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Z_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Z), vmNormal, true, true);                          
+              }
+            }
+                                                                       //JM EE ^
 
-            w = stringWidth(tmpStr3000, &numericFont, false, true);
-            lineWidth = w;
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-          }
-
-          else if(getRegisterDataType(regist) == dtComplex34) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

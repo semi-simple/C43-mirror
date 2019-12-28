@@ -20,7 +20,6 @@
 
 #include "wp43s.h"
 
-
 #ifdef PC_BUILD
 /********************************************//**
  * \brief Draws the calc's screen on the PC window widget
@@ -355,6 +354,7 @@ void waitAndSee(void) {
 }
 
 
+
 /********************************************//**
  * \brief Refreshes calc's screen. This function is
  * called every 100 ms by a GTK timer.
@@ -381,9 +381,9 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
-  FN_no_double_click_handler();
+  FN_no_double_click_handler();         //vv JM
   FN_handler();
-  Shft_handler();
+  Shft_handler();                       //^^
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -438,7 +438,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   return TRUE;
 }
 #elif defined DMCP_BUILD
-void refreshScreen() {// This function is called roughly every 100 ms from the main loop
+void refreshScreen(void) {// This function is called roughly every 100 ms from the main loop
   // Cursor blinking
   if(cursorEnabled) {
     cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
@@ -450,9 +450,9 @@ void refreshScreen() {// This function is called roughly every 100 ms from the m
     }
   }
 
-  FN_no_double_click_handler();
+  FN_no_double_click_handler();         //vv JM
   FN_handler();
-  Shft_handler();
+  Shft_handler();                       //^^
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -639,7 +639,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         S_shF();                                          //   New shift state
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
         showShiftState();
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,1, false);
@@ -653,7 +653,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         R_shF();
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
         showShiftState();
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,2, false);    
@@ -664,7 +664,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {        
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //  keep shift state, so it will stay here every cycle until key released
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(ITM_NOP, 0);
         FN_timed_out_to_NOP = true;
         underline_softkey(FN_key_pressed-38,3, false);   //  Purposely select row 3 which does not exist, just to activate the 'clear previous line'
@@ -743,21 +743,21 @@ void Shft_handler() {                        //JM SHIFT NEW vv
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 if(jm_FG_DOTS) {                                                               // Changed to INVERTPIXEL
-  //invertPixel (xx+4,yy+7);   //Used to be SetPixel vv
+//  invertPixel (xx+4,yy+7);   //Used to be SetPixel vv
     invertPixel (xx+5,yy+6);
-  //invertPixel (xx+6,yy+6);
+//  invertPixel (xx+6,yy+6);
     invertPixel (xx+6,yy+5);
-  //invertPixel (xx+7,yy+4);
+//  invertPixel (xx+7,yy+4);
     invertPixel (xx+6,yy+3);
-  //invertPixel (xx+6,yy+2);
+//  invertPixel (xx+6,yy+2);
     invertPixel (xx+5,yy+2);
     invertPixel (xx+4,yy+2);
     invertPixel (xx+3,yy+2);
-  //invertPixel (xx+2,yy+2);
+//  invertPixel (xx+2,yy+2);
     invertPixel (xx+2,yy+3);
     invertPixel (xx+2,yy+4);
     invertPixel (xx+2,yy+5);
-  //invertPixel (xx+2,yy+6);
+//  invertPixel (xx+2,yy+6);
     invertPixel (xx+3,yy+6);
     invertPixel (xx+4,yy+6);
     invertPixel (xx+5,yy+5);
@@ -765,7 +765,7 @@ if(jm_FG_DOTS) {                                                               /
     invertPixel (xx+5,yy+3);
     invertPixel (xx+3,yy+3);
     invertPixel (xx+3,yy+5);
-  /*  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
+/*  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
     invertPixel (xx+5,yy+7);
     invertPixel (xx+6,yy+7);
     invertPixel (xx+6,yy+6);
@@ -1264,11 +1264,12 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 15, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);  //JM
+  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);  //JM
 }
+
 
 
 /********************************************//**
@@ -1591,7 +1592,6 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex34) {
-
              if(temporaryInformation == TI_ABC) {                             //JM EE \/ 
               if(regist == REGISTER_X) {                                         
                 strcpy(prefix, "c" STD_SPACE_FIGURE "=");                        
@@ -1635,17 +1635,22 @@ void refreshRegisterLine(calcRegister_t regist) {
                 strcpy(prefix, "sym0" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
-            }                                                                       //JM EE ^
+            }
 
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            if(prefixWidth > 0) {
+              if(regist == REGISTER_X) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);            
+              } else
+              if(regist == REGISTER_Y) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Y_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Y), vmNormal, true, true);                          
+              } else
+              if(regist == REGISTER_Z) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Z_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Z), vmNormal, true, true);                          
+              }
+            }
+                                                                       //JM EE ^
 
-            w = stringWidth(tmpStr3000, &numericFont, false, true);
-            lineWidth = w;
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-          }
-
-          else if(getRegisterDataType(regist) == dtComplex34) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

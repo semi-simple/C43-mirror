@@ -158,9 +158,9 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    row = min(3, sm->numItems/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
-    if(itemShift/6 <= row) {
+    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
       if(func == CHR_PROD_SIGN) {
@@ -188,7 +188,6 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
         if(lastErrorCode == 0) {
           temporaryInformation = TI_NO_INFO;
-          printf("#--ExecFunction\n"); //JMRESET TEST TEMPORARY
           runFunction(func % 10000);
         }
       }
@@ -219,7 +218,6 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
   }
 return func;
 }
-
 
 
 //CONCEPT - actual timing was changed:
@@ -388,7 +386,6 @@ void btnFnPressed(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
 #endif
-  printf("#--btnFnPressed\n"); //JMRESET TEST TEMPORARY
 
   FN_timed_out_to_RELEASE_EXEC = false;
   temp = TIME_from_last_read();
@@ -398,14 +395,15 @@ void btnFnPressed(void *w, void *data) {
   #endif
  
   //Change states according to PRESS/RELEASE incoming sequence
-  if (FN_state == ST_0_INIT || FN_state == ST_4_REL2 || FN_state >= ST_5_EXEC ) { 
-      FN_state =  ST_1_PRESS1;
-      T_S1 = temp;
-  } else
-  if (FN_state == ST_2_REL1) { 
-      FN_state =  ST_3_PRESS2;
-      T_S3 = temp;
-  } else {
+  if(FN_state == ST_0_INIT || FN_state == ST_4_REL2 || FN_state >= ST_5_EXEC ) { 
+    FN_state =  ST_1_PRESS1;
+    T_S1 = temp;
+  }
+  else if(FN_state == ST_2_REL1) { 
+    FN_state =  ST_3_PRESS2;
+    T_S3 = temp;
+  }
+  else {
     #ifdef FN_TIME_DEBUG
     printf("########### ERROR IN STATE COUNT #############");
     #endif
@@ -541,12 +539,12 @@ void btnFnPressed(void *w, void *data) {
     if(!shiftF && !shiftG) {                                                //jump to correct shift state in case shift is already activated
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
       underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
-    } else
-    if(shiftF && !shiftG) {
+    }
+    else if(shiftF && !shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
       underline_softkey(FN_key_pressed-38,1, true /*dontclear at first call*/);
-    } else
-    if(!shiftF && shiftG) {
+    }
+    else if(!shiftF && shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,12),0);  
       underline_softkey(FN_key_pressed-38,2, true /*dontclear at first call*/);
     }                                                                      //further shifts are done within FN_handler
@@ -565,20 +563,20 @@ void btnFnReleased(GtkWidget *w, gpointer data) {                          //JM 
 #ifdef DMCP_BUILD
 void btnFnReleased(void *w, void *data) {
 #endif
-  printf("#--btnFnReleased\n"); //JMRESET TEST TEMPORARY
   temp = TIME_from_last_read();
   #ifdef FN_TIME_DEBUG
   printf("--------------\n RELEASE LastX %d : ",temp); 
   #endif
 
-  if (FN_state == ST_1_PRESS1 ) { 
-      FN_state =  ST_2_REL1;
-      T_S2 = temp;
-  } else
-  if (FN_state == ST_3_PRESS2) { 
-      FN_state =  ST_4_REL2;
-      T_S4 = temp;
-  } else {
+  if(FN_state == ST_1_PRESS1 ) { 
+    FN_state =  ST_2_REL1;
+    T_S2 = temp;
+  }
+  else if(FN_state == ST_3_PRESS2) { 
+    FN_state =  ST_4_REL2;
+    T_S4 = temp;
+  }
+  else {
     #ifdef FN_TIME_DEBUG
     printf("########### ERROR IN STATE COUNT #############");
     #endif
@@ -597,15 +595,15 @@ void btnFnReleased(void *w, void *data) {
   #endif
 
   if(FN_state == ST_2_REL1) {
-      TC_zero_time();                                                         //store the current time
-      #ifdef FN_TIME_DEBUG
-      printf("  Zero time\n");
-      #endif
-      //SET DELAYED OPERATION FOR FIRST RELEASE
-      FN_delay_exec = true; //TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
-      FN_timeouts_in_progress = false;
-      /*FN_state = ST_5_EXEC;*/FN_timed_out_to_RELEASE_EXEC = true;
-      } 
+    TC_zero_time();                                                         //store the current time
+    #ifdef FN_TIME_DEBUG
+    printf("  Zero time\n");
+    #endif
+    //SET DELAYED OPERATION FOR FIRST RELEASE
+    FN_delay_exec = true; //TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
+    FN_timeouts_in_progress = false;
+    /*FN_state = ST_5_EXEC;*/FN_timed_out_to_RELEASE_EXEC = true;
+  } 
 
   else if(FN_state == ST_4_REL2) {
     //ANY RELEASE TOO LONG AFTER LAST RELEASE WILL RESET
@@ -615,7 +613,7 @@ void btnFnReleased(void *w, void *data) {
       #endif
       FN_cancel();
     }
-  FN_timed_out_to_RELEASE_EXEC = true;
+    FN_timed_out_to_RELEASE_EXEC = true;
   }
 
   #ifdef FN_TIME_DEBUG_MINIMAL
@@ -639,12 +637,10 @@ void btnFnReleased(void *w, void *data) {
     underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     sprintf(charKey, "%c", FN_key_pressed + 11);
     FN_counter = JM_FN_TIMER;                                               //reset for future
-    #ifdef TRYWITHOUT
     hideFunctionName();
-    #endif
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
     refreshRegisterLine(REGISTER_T);
-    if (!FN_timed_out_to_NOP) {
+    if(!FN_timed_out_to_NOP) {
       btnFnClicked(w, charKey);                                             //Execute
     }
     resetShiftState();  
@@ -681,7 +677,6 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 void btnFnClicked(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
-printf("#--btnFnClicked\n"); //JMRESET TEST TEMPORARY
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
 
@@ -827,7 +822,6 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();                                                                                                         //JM shifts
     }                                                                                                                         //JM shifts
 
-
     if(ShiftTimoutMode || Home3TimerMode) {
       if(Home3TimerMode) {
         JM_SHIFT_HOME_TIMER2 = JM_SHIFT_HOME_TIMER1;
@@ -842,7 +836,7 @@ void btnPressed(void *notUsed, void *data) {
               popSoftmenu();                                                                                                  //JM shifts
             }
             else {
-              if (calcMode == CM_AIM) {                                                                                       //JM shifts
+              if(calcMode == CM_AIM) {                                                                                        //JM shifts
                 showSoftmenu(NULL, -MNU_ALPHA, true);                                                                         //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
               }
               else {                                                                                                          //JM SHIFTS
@@ -1694,12 +1688,9 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 void btnReleased(void *notUsed, void *data) {
 #endif
   Shft_timeouts = false;                         //JM SHIFT NEW
-printf("runF1 \n");   //JMRESET TEST TEMPORARY
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
-printf("runF2 \n");  //JMRESET TEST TEMPORARY
     hideFunctionName();
-printf("runF3 \n");  //JMRESET TEST TEMPORARY
     runFunction(item);
   }
 }

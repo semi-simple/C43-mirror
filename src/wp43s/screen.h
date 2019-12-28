@@ -65,8 +65,6 @@ void     underline(int16_t y);               //JM SHIFT LINE
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
   #endif
 
-
-
   gboolean drawScreen                         (GtkWidget *widget, cairo_t *cr, gpointer data);
   void     copyScreenToClipboard              (void);
   void     copyRegisterXToClipboard           (void);

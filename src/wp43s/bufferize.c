@@ -311,7 +311,7 @@ void addItemToNimBuffer(int16_t item) {
             STACK_LIFT_DISABLE;      
         } 
         else {                       //JM NEWERPN ^^
-          calcModeNim(NOPARAM);
+        calcModeNim(NOPARAM);
         }                            //JM NEWERPN
         nimBuffer[0] = '+';
         nimBuffer[1] = '1';
@@ -327,7 +327,7 @@ void addItemToNimBuffer(int16_t item) {
             STACK_LIFT_DISABLE;      
         } 
         else {                       //JM NEWERPN ^^
-          calcModeNim(NOPARAM);
+        calcModeNim(NOPARAM);
         }                            //JM NEWERPN
         nimBuffer[0] = '+';
         nimBuffer[1] = '0';
@@ -356,7 +356,7 @@ void addItemToNimBuffer(int16_t item) {
             STACK_LIFT_DISABLE;      
         } 
         else {                       //JM NEWERPN ^^
-          calcModeNim(NOPARAM);
+        calcModeNim(NOPARAM);
         }                            //JM NEWERPN
         nimBuffer[0] = '+';
         nimBuffer[1] = 0;
@@ -724,7 +724,7 @@ void addItemToNimBuffer(int16_t item) {
     case ITM_pi :
       if(nimNumberPart == NP_COMPLEX_INT_PART && nimBuffer[strlen(nimBuffer) - 1] == 'i') {
         done = true;
-        strcat(nimBuffer, "3.141592653589793238462643383279503");      //JM PIDP
+        strcat(nimBuffer, "3.141592653589793238462643383279503");
       }
       break;
 
@@ -1793,16 +1793,16 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
 
 void closeNim(void) {
-if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
-  switch (Input_Default) {
+  if(nimNumberPart == NP_INT_10) {                //JM Input default type vv
+    switch (Input_Default) {
     case ID_43S:
       break;
     case ID_DP:
     case ID_CPXDP:
       nimNumberPart = NP_REAL_FLOAT_PART;
       break;
-  }
-}                                                 //JM ^^
+    }
+  }                                               //JM ^^
   if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
     strcat(nimBuffer, "#0");
     int16_t basePos = strlen(nimBuffer) - 1;
@@ -2007,7 +2007,6 @@ if (nimNumberPart == NP_INT_10) {                 //JM Input default type vv
             reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
             stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
             }                                                                       //JM Input default type
-          
 
         }
         else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {

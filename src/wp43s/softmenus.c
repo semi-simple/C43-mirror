@@ -618,7 +618,7 @@ void showSoftmenuCurrentPart(void) {
     }
     else {
       dottedTopLine = true;
-      yDotted = min(3, softmenu[m].numItems/6 - currentFirstItem/6) - 1;
+      yDotted = min(3, (softmenu[m].numItems + modulo(currentFirstItem - softmenu[m].numItems, 6))/6 - currentFirstItem/6) - 1;
 
       if(   softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)  ]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+1]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+2]==0
          && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+3]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+4]==0 && softmenu[m].softkeyItem[6*(currentFirstItem/6+yDotted)+5]==0) {

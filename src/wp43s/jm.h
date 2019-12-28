@@ -50,7 +50,7 @@ Modes available in the mode menu:
 #define JM_3_SHIFT_CUTOFF  6   //100ms
 #define JM_FN_TIMER        8   //8 = approx 800ms   
 #define JM_FN_DOUBLE_TIMER 150 //75  //ms
-#define JM_FN_DOUBLE_DEBOUNCE_TIMER 35 //ms
+#define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 

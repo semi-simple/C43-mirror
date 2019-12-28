@@ -22,73 +22,6 @@
 
 
 
-bool_t real16CompareAbsGreaterThan(const real16_t *number1, const real16_t *number2) {
-  real16_t compare, num1, num2;
-
-  real16CopyAbs(number1, &num1);
-  real16CopyAbs(number2, &num2);
-  real16Compare(&num1, &num2, &compare);
-  return real16ToInt32(&compare) > 0;
-}
-
-
-
-bool_t real16CompareAbsLessThan(const real16_t *number1, const real16_t *number2) {
-  real16_t compare, num1, num2;
-
-  real16CopyAbs(number1, &num1);
-  real16CopyAbs(number2, &num2);
-  real16Compare(&num1, &num2, &compare);
-  return real16ToInt32(&compare) < 0;
-}
-
-
-
-bool_t real16CompareEqual(const real16_t *number1, const real16_t *number2) {
-  real16_t compare;
-
-  real16Compare(number1, number2, &compare);
-  return real16ToInt32(&compare) == 0;
-}
-
-
-
-bool_t real16CompareGreaterEqual(const real16_t *number1, const real16_t *number2) {
-  real16_t compare;
-
-  real16Compare(number1, number2, &compare);
-  return real16ToInt32(&compare) >= 0;
-}
-
-
-
-bool_t real16CompareGreaterThan(const real16_t *number1, const real16_t *number2) {
-  real16_t compare;
-
-  real16Compare(number1, number2, &compare);
-  return real16ToInt32(&compare) > 0;
-}
-
-
-
-bool_t real16CompareLessEqual(const real16_t *number1, const real16_t *number2) {
-  real16_t compare;
-
-  real16Compare(number1, number2, &compare);
-  return real16ToInt32(&compare) <= 0;
-}
-
-
-
-bool_t real16CompareLessThan(const real16_t *number1, const real16_t *number2) {
-  real16_t compare;
-
-  real16Compare(number1, number2, &compare);
-  return real16ToInt32(&compare) < 0;
-}
-
-
-
 bool_t real34CompareAbsGreaterThan(const real34_t *number1, const real34_t *number2) {
   real34_t compare, num1, num2;
 
@@ -246,25 +179,6 @@ bool_t realCompareLessThan(const real_t *number1, const real_t *number2) {
   realCompare(number1, number2, &compare, &ctxtReal75);
   realToInt32(&compare, cmp);
   return cmp < 0;
-}
-
-
-
-bool_t real16IsAnInteger(const real16_t *x) {
-  real16_t r, y;
-
-  if(real16IsNaN(x)) {
-    return false;
-  }
-
-  if(real16IsInfinite(x)) {
-    return true;
-  }
-
-  real16ToIntegralValue(x, &y, DEC_ROUND_DOWN);
-  real16Subtract(x, &y, &r);
-
-  return real16CompareEqual(&r, const16_0);
 }
 
 

@@ -48,7 +48,11 @@ typedef enum {
 
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
+
+void     FN_no_double_click_handler();       //JM FN-DOUBLE
 void     FN_handler();                       //JM LONGPRESS vv
+void     Shft_handler();                     //JM SHIFT NEW vv
+void     underline(int16_t y);               //JM SHIFT LINE
 
 #ifdef PC_BUILD
   #if (__linux__ == 1)
@@ -60,8 +64,6 @@ void     FN_handler();                       //JM LONGPRESS vv
   #else
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
   #endif
-
-
 
   gboolean drawScreen                         (GtkWidget *widget, cairo_t *cr, gpointer data);
   void     copyScreenToClipboard              (void);

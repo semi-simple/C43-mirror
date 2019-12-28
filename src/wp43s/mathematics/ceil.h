@@ -21,6 +21,5 @@
 void fnCeil   (uint16_t unusedParamButMandatory);
 void ceilError(void);
 void ceilLonI (void);
-void ceilRe16 (void);
-void ceilRm16 (void);
-void ceilRe34 (void);
+void ceilRema (void);
+void ceilReal (void);

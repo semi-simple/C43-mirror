@@ -23,24 +23,15 @@ void idivError(void);
 
 //      RegYRegX
 void idivLonILonI(void);
-void idivLonIRe16(void);
 void idivLonIShoI(void);
-void idivLonIRe34(void);
-
-//      RegYRegX
-void idivRe16LonI(void);
-void idivRe16Re16(void);
-void idivRe16ShoI(void);
-void idivRe16Re34(void);
+void idivLonIReal(void);
 
 //      RegYRegX
 void idivShoILonI(void);
-void idivShoIRe16(void);
 void idivShoIShoI(void);
-void idivShoIRe34(void);
+void idivShoIReal(void);
 
 //      RegYRegX
-void idivRe34LonI(void);
-void idivRe34Re16(void);
-void idivRe34ShoI(void);
-void idivRe34Re34(void);
+void idivRealLonI(void);
+void idivRealShoI(void);
+void idivRealReal(void);

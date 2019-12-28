@@ -24,23 +24,16 @@
 
 static void unitConversion(const real_t * const coefficient, uint16_t multiplyDivide) {
   real39_t reX;
-  bool_t real16;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &reX);
-    real16 = true;
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);
-    real16 = false;
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    real16 = true;
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -69,12 +62,7 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
     realDivide(&reX, coefficient, &reX, &ctxtReal39);
   }
 
-  if(real16) {
-    realToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
-  }
+  realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
@@ -90,23 +78,16 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
  ***********************************************/
 void fnCvtCToF(uint16_t unusedParamButMandatory) {
   real39_t reX;
-  bool_t real16;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &reX);
-    real16 = true;
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);
-    real16 = false;
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    real16 = true;
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -130,12 +111,7 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
 
   realFMA(&reX, const_9on5, const_32, &reX, &ctxtReal39);
 
-  if(real16) {
-    realToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
-  }
+  realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
@@ -151,23 +127,16 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnCvtFToC(uint16_t unusedParamButMandatory) {
   real39_t reX;
-  bool_t real16;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &reX);
-    real16 = true;
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);
-    real16 = false;
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    real16 = true;
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -192,12 +161,7 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
   realSubtract(&reX, const_32, &reX, &ctxtReal39);
   realDivide(&reX, const_9on5, &reX, &ctxtReal39);
 
-  if(real16) {
-    realToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
-  }
+  realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
@@ -262,15 +226,15 @@ void fnCvtmmhgPa(uint16_t multiplyDivide) {          //JM mm.Hg
   if (multiplyDivide == divide) {
     unitConversion(const_InchToM, multiply);
     liftStack();
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    stringToReal16("1000", REGISTER_REAL16_DATA(REGISTER_X));
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    stringToReal34("1000", REGISTER_REAL34_DATA(REGISTER_X));
     fnMultiply(0);    
   }
   else {
     unitConversion(const_InchToM, divide);
     liftStack();
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    stringToReal16("1000", REGISTER_REAL16_DATA(REGISTER_X));
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    stringToReal34("1000", REGISTER_REAL34_DATA(REGISTER_X));
     fnDivide(0);    
   }
 
@@ -441,23 +405,16 @@ void fnCvtHectareM2(uint16_t multiplyDivide) {
  ***********************************************/
 void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
   real39_t reX;
-  bool_t real16;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &reX);
-    real16 = true;
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);
-    real16 = false;
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    real16 = true;
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -482,12 +439,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   WP34S_Log10(&reX, &reX);
   realMultiply(&reX, (tenOrTwenty == 10 ? const_10 : const_20), &reX, &ctxtReal39);
 
-  if(real16) {
-    realToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
-  }
+  realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }
@@ -503,23 +455,16 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
  ***********************************************/
 void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
   real39_t reX;
-  bool_t real16;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal16) {
-    real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &reX);
-    real16 = true;
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);
-    real16 = false;
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    real16 = true;
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -544,12 +489,7 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   realDivide(&reX, (tenOrTwenty == 10 ? const_10 : const_20), &reX, &ctxtReal39);
   realPower(const_10, &reX, &reX, &ctxtReal39);
 
-  if(real16) {
-    realToReal16(&reX, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
-  }
+  realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, -1, -1, -1);
 }

@@ -31,13 +31,11 @@
 char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
   if(article && padWithBlanks) {
     if(dt == dtLongInteger     ) return "a long integer       ";
-    if(dt == dtReal16          ) return "a real16             ";
-    if(dt == dtComplex16       ) return "a complex16          ";
     if(dt == dtTime            ) return "a time               ";
     if(dt == dtDate            ) return "a date               ";
     if(dt == dtString          ) return "a string             ";
-    if(dt == dtReal16Matrix    ) return "a real16 matrix      ";
-    if(dt == dtComplex16Matrix ) return "a complex16 matrix   ";
+    if(dt == dtReal34Matrix    ) return "a real34 matrix      ";
+    if(dt == dtComplex34Matrix ) return "a complex34 matrix   ";
     if(dt == dtShortInteger    ) return "a short integer      ";
     if(dt == dtReal34          ) return "a real34             ";
     if(dt == dtComplex34       ) return "a complex34          ";
@@ -51,13 +49,11 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
   }
   else if(article && !padWithBlanks) {
     if(dt == dtLongInteger     ) return "a long integer";
-    if(dt == dtReal16          ) return "a real16";
-    if(dt == dtComplex16       ) return "a complex16";
     if(dt == dtTime            ) return "a time";
     if(dt == dtDate            ) return "a date";
     if(dt == dtString          ) return "a string";
-    if(dt == dtReal16Matrix    ) return "a real16 matrix";
-    if(dt == dtComplex16Matrix ) return "a complex16 matrix";
+    if(dt == dtReal34Matrix    ) return "a real34 matrix";
+    if(dt == dtComplex34Matrix ) return "a complex34 matrix";
     if(dt == dtShortInteger    ) return "a short integer";
     if(dt == dtReal34          ) return "a real34";
     if(dt == dtComplex34       ) return "a complex34";
@@ -71,13 +67,11 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
   }
   else if(!article && padWithBlanks) {
     if(dt == dtLongInteger     ) return "long integer         ";
-    if(dt == dtReal16          ) return "real16               ";
-    if(dt == dtComplex16       ) return "complex16            ";
     if(dt == dtTime            ) return "time                 ";
     if(dt == dtDate            ) return "date                 ";
     if(dt == dtString          ) return "string               ";
-    if(dt == dtReal16Matrix    ) return "real16 matrix        ";
-    if(dt == dtComplex16Matrix ) return "complex16 matrix     ";
+    if(dt == dtReal34Matrix    ) return "real34 matrix        ";
+    if(dt == dtComplex34Matrix ) return "complex34 matrix     ";
     if(dt == dtShortInteger    ) return "short integer        ";
     if(dt == dtReal34          ) return "real34               ";
     if(dt == dtComplex34       ) return "complex34            ";
@@ -91,13 +85,11 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
   }
   else if(!article && !padWithBlanks) {
     if(dt == dtLongInteger     ) return "long integer";
-    if(dt == dtReal16          ) return "real16";
-    if(dt == dtComplex16       ) return "complex16";
     if(dt == dtTime            ) return "time";
     if(dt == dtDate            ) return "date";
     if(dt == dtString          ) return "string";
-    if(dt == dtReal16Matrix    ) return "real16 matrix";
-    if(dt == dtComplex16Matrix ) return "complex16 matrix";
+    if(dt == dtReal34Matrix    ) return "real34 matrix";
+    if(dt == dtComplex34Matrix ) return "complex34 matrix";
     if(dt == dtShortInteger    ) return "short integer";
     if(dt == dtReal34          ) return "real34";
     if(dt == dtComplex34       ) return "complex34";
@@ -138,7 +130,6 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
         default:                    return "???     ";
       }
 
-    case dtReal16:
     case dtReal34:
       switch(getRegisterTag(regist)) {
         case AM_DEGREE:             return "degree  ";
@@ -150,10 +141,10 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
         default:                    return "???     ";
       }
 
-    case dtComplex16:
     case dtComplex34:
     case dtString:
-    case dtComplex16Matrix:
+    case dtReal34Matrix:
+    case dtComplex34Matrix:
     case dtDate:
     case dtTime:
       switch(getRegisterTag(regist)) {
@@ -552,26 +543,13 @@ void debugNIM(void) {
       n = stringByteLength(string);
     }
 
-    if(getRegisterDataType(regist) == dtReal16) {
-      formatReal16Debug(string + n, getRegisterDataPointer(regist));
-      if(getRegisterAngularMode(regist) != AM_NONE) {
-        n = stringByteLength(string);
-        strcpy(string + n++, " ");
-        strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));
-      }
-    }
-
-    else if(getRegisterDataType(regist) == dtReal34) {
+    if(getRegisterDataType(regist) == dtReal34) {
       formatReal34Debug(string + n, getRegisterDataPointer(regist));
       if(getRegisterAngularMode(regist) != AM_NONE) {
         n = stringByteLength(string);
         strcpy(string + n++, " ");
         strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));
       }
-    }
-
-    else if(getRegisterDataType(regist) == dtComplex16) {
-      formatComplex16Debug(string + n, getRegisterDataPointer(regist));
     }
 
     else if(getRegisterDataType(regist) == dtComplex34) {
@@ -1408,77 +1386,6 @@ void debugNIM(void) {
 
 
 #if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
-  /********************************************//**
-   * \brief Formats a real16 for the debug window
-   *
-   * \param[in] str char*    String receiving the value
-   * \param[in] x real16_t* Value
-   * \return void
-   ***********************************************/
-  void formatReal16Debug(char *str, void *addr) {
-    uint8_t ch, coef, digit;
-    uint8_t bcd[DECDOUBLE_Pmax];
-    int32_t sign, exponent;
-
-    if(real16IsInfinite(addr) || real16IsNaN(addr)) {
-      real16ToString(addr, str);
-      return;
-    }
-
-    if(real16IsZero(addr)) {
-      strcpy(str, "+0.000000000000000e+0");
-      return;
-    }
-
-    sign = real16GetCoefficient(addr, bcd);
-    exponent = real16GetExponent(addr);
-    if(sign) {
-      str[0] = '-';
-    }
-    else {
-      str[0] = '+';
-    }
-
-    coef = 0;
-    while(coef<16 && bcd[coef] == 0) coef++;
-
-    str[1] = '0' + bcd[coef++];
-    digit = 1;
-    str[2] = '.';
-
-    ch = 3;
-    while(coef<16) {
-      str[ch++] = '0' + bcd[coef++];
-      digit++;
-      exponent++;
-    }
-
-    while(digit<16) {
-      str[ch++] = '0';
-      digit++;
-    }
-
-    sprintf(str+ch, "e%+d", exponent);
-  }
-
-
-  /********************************************//**
-   * \brief Formats a complex16 for the debug window
-   *
-   * \param[in] str char*    String receiving the value
-   * \param[in] x real16_t* Value
-   * \return void
-   ***********************************************/
-  void formatComplex16Debug(char *str, void *addr) {
-    formatReal16Debug(str     , addr               );
-    formatReal16Debug(str + 64, addr + REAL16_SIZE);
-
-    strcat(str, " ");
-    memmove(strchr(str, '\0'), str + 64, strlen(str + 64) + 1);
-    strcat(str, "i");
-  }
-
-
   /********************************************//**
    * \brief Formats a real34 for the debug window
    *

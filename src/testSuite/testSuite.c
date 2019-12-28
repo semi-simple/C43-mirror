@@ -21,6 +21,8 @@
 #include "wp43s.h"
 #include "testSuite.h"
 
+#define NUMBER_OF_CORRECT_SIGNIFICANT_DIGITS_EXPECTED 34
+
 
 extern const int16_t menu_FCNS[];
 extern const int16_t menu_CNST[];
@@ -28,7 +30,7 @@ extern const int16_t menu_MENUS[];
 extern const softmenu_t softmenu[];
 char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000], realString[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal;
-int32_t functionIndex, funcType, correctSignificantDigits, numberOfCorrectSignificantDigitsExpected;
+int32_t functionIndex, funcType, correctSignificantDigits;
 void (*funcNoParam)(uint16_t);
 void (*funcCvt)(uint16_t);
 
@@ -60,8 +62,6 @@ const funcTest_t funcTestNoParam[] = {
   {"fnConfigUk",             fnConfigUk            },
   {"fnConfigUsa",            fnConfigUsa           },
   {"fnConjugate",            fnConjugate           },
-  {"fnConvertXToReal16",     fnConvertXToReal16    },
-  {"fnConvertXToReal34",     fnConvertXToReal34    },
   {"fnCos",                  fnCos                 },
   {"fnCosh",                 fnCosh                },
   {"fnCube",                 fnCube                },
@@ -669,27 +669,6 @@ void setParameter(char *p) {
     }
   }
 
-  //Setting number of correct significant digits expected
-  else if(strcmp(l, "NCSD") == 0) {
-    if(   (r[0] >= '0' && r[0] <= '9' && r[1] == 0)
-       || (r[0] >= '0' && r[0] <= '9' && r[1] >= '0' && r[1] <= '9' && r[2] == 0)) {
-      uint16_t ncsd = atoi(r);
-
-      if(1 <= ncsd && ncsd <= 34) {
-        numberOfCorrectSignificantDigitsExpected = ncsd;
-        //printf("  Set significant digits to %d\n", ncsd);
-      }
-      else {
-        printf("\nMissformed number of correct significant digits expected setting. The rvalue must be from 1 to 34.\n");
-        abortTest();
-      }
-    }
-    else {
-      printf("\nMissformed number of correct significant digits expected setting. The rvalue must be a number from 1 to 34.\n");
-      abortTest();
-    }
-  }
-
   //Setting a register
   else if(l[0] == 'R') {
     calcRegister_t regist;
@@ -753,49 +732,7 @@ void setParameter(char *p) {
       convertLongIntegerToLongIntegerRegister(lgInt, regist);
       longIntegerFree(lgInt);
     }
-    else if(strcmp(l, "CO16") == 0) {
-      // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
-      r[strlen(r) - 1] = 0;
-
-      // find the i separating the real and imagynary part
-      i = 0;
-      while(r[i] != 'i' && r[i] != 0) i++;
-      if(r[i] == 0) {
-        printf("\nMissformed register complex16 value. Missing i between real and imaginary part.\n");
-        abortTest();
-      }
-
-      // separate real and imaginary part
-      r[i] = 0;
-      strcpy(real, r);
-      strcpy(imag, r + i + 1);
-
-      // remove leading spaces
-      while(imag[0] == ' ') memmove(imag, imag + 1, strlen(imag));
-
-      // removing trailing spaces from real part
-      while(real[strlen(real) - 1] == ' ') real[strlen(real) - 1] = 0;
-
-      // removing trailing spaces from imaginary part
-      while(imag[strlen(imag) - 1] == ' ') imag[strlen(imag) - 1] = 0;
-
-      // replace , with . in the real part
-      for(int i=0; i<(int)strlen(real); i++) {
-        if(real[i] == ',') real[i] = '.';
-      }
-
-      // replace , with . in the imaginary part
-      for(int i=0; i<(int)strlen(imag); i++) {
-        if(imag[i] == ',') imag[i] = '.';
-      }
-
-      reallocateRegister(regist, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-      stringToReal16(real, REGISTER_REAL16_DATA(regist));
-      stringToReal16(imag, REGISTER_IMAG16_DATA(regist));
-    }
-    else if(strcmp(l, "RE16") == 0 || strcmp(l, "RE34") == 0) {
+    else if(strcmp(l, "REAL") == 0) {
       // find the : separating the real value from the angular mode
       i = 0;
       while(r[i] != ':' && r[i] != 0) i++;
@@ -828,14 +765,8 @@ void setParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      if(strcmp(l, "RE16") == 0) {
-        reallocateRegister(regist, dtReal16, REAL16_SIZE, am);
-        stringToReal16(r, REGISTER_REAL16_DATA(regist));
-      }
-      else {
-        reallocateRegister(regist, dtReal34, REAL34_SIZE, am);
-        stringToReal34(r, REGISTER_REAL34_DATA(regist));
-      }
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, am);
+      stringToReal34(r, REGISTER_REAL34_DATA(regist));
     }
     else if(strcmp(l, "STRI") == 0) {
       getString(r + 1);
@@ -865,7 +796,7 @@ void setParameter(char *p) {
 
       strToShortInteger(r, regist);
     }
-    else if(strcmp(l, "CO34") == 0) {
+    else if(strcmp(l, "CPLX") == 0) {
       // remove beginning and ending " and removing leading spaces
       memmove(r, r + 1, strlen(r));
       while(r[0] == ' ') memmove(r, r + 1, strlen(r));
@@ -988,7 +919,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
       printf("\n");
       abortTest();
     }
-    else if(getRegisterDataType(regist) == dtReal16 || getRegisterDataType(regist) == dtReal34) {
+    else if(getRegisterDataType(regist) == dtReal34) {
       if(letter == 0) {
         printf("\nRegister %u should be a real tagged %s but it is tagged %s!\n", regist, getAngularModeName(expectedTag), getAngularModeName(getRegisterAngularMode(regist)));
         printf("R%u = ", regist);
@@ -1019,55 +950,6 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
 
 
 
-int relativeErrorReal16(real16_t *expectedValue16, real16_t *value16, char *numberPart, calcRegister_t regist, char letter) {
-  real39_t expectedValue, value, relativeError;
-
-  real16ToReal(expectedValue16, &expectedValue);
-  real16ToReal(value16, &value);
-
-  realSubtract(&expectedValue, &value, &relativeError, &ctxtReal39);
-
-  if(!realIsZero(&expectedValue)) {
-    realDivide(&relativeError, &expectedValue, &relativeError, &ctxtReal39);
-  }
-  else {
-    realCopy(&value, &relativeError);
-  }
-  realSetPositiveSign(&relativeError);
-
-  correctSignificantDigits = -relativeError.exponent - relativeError.digits;
-  ctxtReal39.digits = 2;
-  realPlus(&relativeError, &relativeError, &ctxtReal39);
-  ctxtReal39.digits = 39;
-  if(correctSignificantDigits <= 16) {
-    //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
-    realToString(&relativeError, realString);
-    if(letter == 0) {
-      printf("\nThere are only %d correct significant digits in the %s part of register %d! Relative error is %s\n", correctSignificantDigits, numberPart, regist, realString);
-      printf("R%d = ", regist);
-      printReal16ToConsole(value16);
-      printf("\n");
-    }
-    else {
-      printf("\nThere are only %d correct significant digits in the %s part of register %c! Relative error is %s\n", correctSignificantDigits, numberPart, letter, realString);
-      printf("%c = ", letter);
-      printReal16ToConsole(value16);
-      printf("\n");
-    }
-    printf("%s\n", lastInParameters);
-    printf("%s\n", line);
-    printf("in file %s line %d\n", fileName, lineNumber);
-    if(correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
-      puts(registerExpectedAndValue);
-      exit(-1);
-    }
-  }
-
-  return correctSignificantDigits < numberOfCorrectSignificantDigitsExpected ? RE_INACCURATE : RE_ACCURATE;
-}
-
-
-
 int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart, calcRegister_t regist, char letter) {
   real39_t expectedValue, value, relativeError;
 
@@ -1089,7 +971,7 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
   realPlus(&relativeError, &relativeError, &ctxtReal39);
   ctxtReal39.digits = 39;
   if(correctSignificantDigits <= 34) {
-    //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, numberOfCorrectSignificantDigitsExpected);
+    //printf("\nThere are only %d correct significant digits in the %s part of the value: %d are expected!\n", correctSignificantDigits, numberPart, NUMBER_OF_CORRECT_SIGNIFICANT_DIGITS_EXPECTED);
     realToString(&relativeError, realString);
     if(letter == 0) {
       printf("\nThere are only %d correct significant digits in the %s part of register %d! Relative error is %s\n", correctSignificantDigits, numberPart, regist, realString);
@@ -1106,13 +988,13 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
     printf("in file %s line %d\n", fileName, lineNumber);
-    if(correctSignificantDigits < 22 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) {
+    if(correctSignificantDigits < 32 && correctSignificantDigits < NUMBER_OF_CORRECT_SIGNIFICANT_DIGITS_EXPECTED) {
       puts(registerExpectedAndValue);
       exit(-1);
     }
   }
 
-  return (correctSignificantDigits < 22 && correctSignificantDigits < numberOfCorrectSignificantDigitsExpected) ? RE_INACCURATE : RE_ACCURATE;
+  return (correctSignificantDigits < 32 && correctSignificantDigits < NUMBER_OF_CORRECT_SIGNIFICANT_DIGITS_EXPECTED) ? RE_INACCURATE : RE_ACCURATE;
 }
 
 
@@ -1150,24 +1032,6 @@ void expectedAndShouldBeValue(calcRegister_t regist, char letter, char *expected
 
 
 
-bool_t real16AreEqual(real16_t *a, real16_t *b) {
-  if( real16IsNaN(a) &&  real16IsNaN(b)) return true;
-  if( real16IsNaN(a) && !real16IsNaN(b)) return false;
-  if(!real16IsNaN(a) &&  real16IsNaN(b)) return false;
-
-  if( real16IsInfinite(a) && !real16IsInfinite(b)) return false;
-  if(!real16IsInfinite(a) &&  real16IsInfinite(b)) return false;
-  if(real16IsInfinite(a) && real16IsInfinite(b)) {
-    if(real16IsPositive(a) && real16IsPositive(b)) return true;
-    if(real16IsNegative(a) && real16IsNegative(b)) return true;
-    return false;
-  }
-
-  return real16CompareEqual(a, b);
-}
-
-
-
 bool_t real34AreEqual(real34_t *a, real34_t *b) {
   if( real34IsNaN(a) &&  real34IsNaN(b)) return true;
   if( real34IsNaN(a) && !real34IsNaN(b)) return false;
@@ -1189,7 +1053,6 @@ bool_t real34AreEqual(real34_t *a, real34_t *b) {
 void checkExpectedOutParameter(char *p) {
   char l[200], r[200], real[200], imag[200], angMod[200], letter;
   int32_t i, am;
-  real16_t expectedReal16, expectedImag16;
   real34_t expectedReal34, expectedImag34;
 
   //printf("  Checking %s\n", p);
@@ -1568,66 +1431,7 @@ void checkExpectedOutParameter(char *p) {
       longIntegerFree(expectedLongInteger);
       longIntegerFree(registerLongInteger);
     }
-    else if(strcmp(l, "CO16") == 0) {
-      checkRegisterType(regist, letter, dtComplex16, AM_NONE);
-
-      // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
-      r[strlen(r) - 1] = 0;
-
-      // find the i separating the real and imagynary part
-      i = 0;
-      while(r[i] != 'i' && r[i] != 0) i++;
-      if(r[i] == 0) {
-        printf("\nMissformed register complex16 value. Missing i between real and imaginary part.\n");
-        abortTest();
-      }
-
-      // separate real and imaginary part
-      r[i] = 0;
-      strcpy(real, r);
-      strcpy(imag, r + i + 1);
-
-      // remove leading spaces
-      while(imag[0] == ' ') memmove(imag, imag + 1, strlen(imag));
-
-      // removing trailing spaces from real part
-      while(real[strlen(real) - 1] == ' ') real[strlen(real) - 1] = 0;
-
-      // removing trailing spaces from imaginary part
-      while(imag[strlen(imag) - 1] == ' ') imag[strlen(imag) - 1] = 0;
-
-      // replace , with . in the real part
-      for(int i=0; i<(int)strlen(real); i++) {
-        if(real[i] == ',') real[i] = '.';
-      }
-
-      // replace , with . in the imaginary part
-      for(int i=0; i<(int)strlen(imag); i++) {
-        if(imag[i] == ',') imag[i] = '.';
-      }
-
-      stringToReal16(real, &expectedReal16);
-      stringToReal16(imag, &expectedImag16);
-      if(!real16AreEqual(REGISTER_REAL16_DATA(regist), &expectedReal16)) {
-        strcat(r, " +ix ");
-        strcat(r, imag);
-        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
-          wrongRegisterValue(regist, letter, r);
-        }
-      }
-      else if(!real16AreEqual(REGISTER_IMAG16_DATA(regist), &expectedImag16)) {
-        strcat(r, " +ix ");
-        strcat(r, imag);
-        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-        if(relativeErrorReal16(&expectedImag16, REGISTER_IMAG16_DATA(regist), "imaginary", regist, letter) == RE_INACCURATE) {
-          wrongRegisterValue(regist, letter, r);
-        }
-      }
-    }
-    else if(strcmp(l, "RE16") == 0 || strcmp(l, "RE34") == 0) {
+    else if(strcmp(l, "REAL") == 0) {
       // find the : separating the real value from the angular mode
       i = 0;
       while(r[i] != ':' && r[i] != 0) i++;
@@ -1661,29 +1465,17 @@ void checkExpectedOutParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      if(strcmp(l, "RE16") == 0) {
-        checkRegisterType(regist, letter, dtReal16, am);
-        stringToReal16(r, &expectedReal16);
-        if(!real16AreEqual(REGISTER_REAL16_DATA(regist), &expectedReal16)) {
-          expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-          if(relativeErrorReal16(&expectedReal16, REGISTER_REAL16_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
-            wrongRegisterValue(regist, letter, r);
-          }
-        }
-      }
-      else {
-        checkRegisterType(regist, letter, dtReal34, am);
-        stringToReal34(r, &expectedReal34);
+      checkRegisterType(regist, letter, dtReal34, am);
+      stringToReal34(r, &expectedReal34);
 //printf("\nexpectedReal34 = "); printReal34ToConsole(&expectedReal34); printf("\n");
 //printf("\nR%d = ", regist); printRegisterToConsole(regist); printf("\n");
 //printf("\n1<%s|%s|%s>\n", p, l, r);
-        if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
-          expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
-          if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
-            wrongRegisterValue(regist, letter, r);
-          }
-//printf("\n2<%s|%s|%s>\n", p, l, r);
+      if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
+        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
+        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
+          wrongRegisterValue(regist, letter, r);
         }
+//printf("\n2<%s|%s|%s>\n", p, l, r);
       }
     }
     else if(strcmp(l, "STRI") == 0) {
@@ -1751,7 +1543,7 @@ void checkExpectedOutParameter(char *p) {
         wrongRegisterValue(regist, letter, r);
       }
     }
-    else if(strcmp(l, "CO34") == 0) {
+    else if(strcmp(l, "CPLX") == 0) {
       checkRegisterType(regist, letter, dtComplex34, AM_NONE);
 
       // remove beginning and ending " and removing leading spaces

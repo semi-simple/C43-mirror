@@ -11,64 +11,11 @@ Func: fnRoundi
 
 
 ;=======================================
-; roundi(Long Integer) --> Real16
+; roundi(Long Integer) --> Error24
 ;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=LonI:"12345678901234567"
+In:  AM=DEG SL=0 FI=0 RX=LonI:"12345678901234567"
 Out: EC=24 FI=0 SL=0 RX=LonI:"12345678901234567"
 
-
-
-;=======================================
-; roundi(Real16) --> Real16
-;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Re16:"0.0001"
-Out: EC=0 FI=0 SL=1 RL=Re16:"0.0001" RX=LonI:"0"
-
-In:  AM=GRAD SL=0 FI=0 RX=Re16:"50.7"
-Out: EC=0 FI=0 SL=1 RL=Re16:"50.7" RX=LonI:"51"
-
-In:  AM=MULTPI SL=0 FI=0 RX=Re16:"5.678910111213e50"
-Out: EC=0 FI=0 SL=1 RL=Re16:"5.678910111213e50" RX=LonI:"567891011121300000000000000000000000000000000000000"
-
-In:  AM=DEG SL=0 FI=0 RX=Re16:"89.999999999"
-Out: EC=0 FI=0 SL=1 RL=Re16:"89.999999999" RX=LonI:"90"
-
-In:  SL=0 FI=0 NCSD=16 RX=Re16:"-5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=Re16:"-5.32564":DMS RX=LonI:"-5"
-
-In:  SL=0 FI=0 RX=Re16:"-5.72564":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re16:"-5.72564":GRAD RX=LonI:"-6"
-
-In:  SL=0 FI=0 RX=Re16:"45":DEG
-Out: EC=0 FI=0 SL=1 RL=Re16:"45":DEG RX=LonI:"45"
-
-; NaN
-In:  SL=0 FI=0 RX=Re16:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Re16:"NaN":RAD
-
-In:  SL=0 FI=0 RX=Re16:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Re16:"NaN"
-
-; Infinity
-In:  SL=0 FI=0 FD=1 RX=Re16:"inf":DEG
-Out: EC=1 FI=0 SL=0 RX=Re16:"inf":DEG
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"-inf":RAD
-Out: EC=1 FI=0 SL=0 RX=Re16:"-inf":RAD
-
-In:  SL=0 FI=0 FD=1 RX=Re16:"inf"
-Out: EC=1 FI=0 SL=0 RX=Re16:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Re16:"-inf"
-Out: EC=1 FI=0 SL=0 RX=Re16:"-inf"
-
-
-
-;=======================================
-; roundi(Complex16) --> Error24
-;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=16 RX=Co16:"6.2 i -7.6"
-Out: EC=24 FI=0 SL=0 RX=Co16:"6.2 i -7.6"
 
 
 ;=======================================
@@ -114,51 +61,51 @@ Out: EC=24 FI=0 SL=0 RX=ShoI:"5#7"
 ;=======================================
 ; roundi(Real34) --> Real34
 ;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Re34:"0.0001"
-Out: EC=0 FI=0 SL=1 RL=Re34:"0.0001" RX=LonI:"0"
+In:  AM=DEG SL=0 FI=0 RX=Real:"0.0001"
+Out: EC=0 FI=0 SL=1 RL=Real:"0.0001" RX=LonI:"0"
 
-In:  AM=GRAD SL=0 FI=0 RX=Re34:"50.7"
-Out: EC=0 FI=0 SL=1 RL=Re34:"50.7" RX=LonI:"51"
+In:  AM=GRAD SL=0 FI=0 RX=Real:"50.7"
+Out: EC=0 FI=0 SL=1 RL=Real:"50.7" RX=LonI:"51"
 
-In:  AM=MULTPI SL=0 FI=0 RX=Re34:"5.678910111213e50"
-Out: EC=0 FI=0 SL=1 RL=Re34:"5.678910111213e50" RX=LonI:"567891011121300000000000000000000000000000000000000"
+In:  AM=MULTPI SL=0 FI=0 RX=Real:"5.678910111213e50"
+Out: EC=0 FI=0 SL=1 RL=Real:"5.678910111213e50" RX=LonI:"567891011121300000000000000000000000000000000000000"
 
-In:  AM=DEG SL=0 FI=0 RX=Re34:"89.999999999"
-Out: EC=0 FI=0 SL=1 RL=Re34:"89.999999999" RX=LonI:"90"
+In:  AM=DEG SL=0 FI=0 RX=Real:"89.999999999"
+Out: EC=0 FI=0 SL=1 RL=Real:"89.999999999" RX=LonI:"90"
 
-In:  SL=0 FI=0 NCSD=34 RX=Re34:"-5.32564":DMS
-Out: EC=0 FI=0 SL=1 RL=Re34:"-5.32564":DMS RX=LonI:"-5"
+In:  SL=0 FI=0 RX=Real:"-5.32564":DMS
+Out: EC=0 FI=0 SL=1 RL=Real:"-5.32564":DMS RX=LonI:"-5"
 
-In:  SL=0 FI=0 RX=Re34:"-5.72564":GRAD
-Out: EC=0 FI=0 SL=1 RL=Re34:"-5.72564":GRAD RX=LonI:"-6"
+In:  SL=0 FI=0 RX=Real:"-5.72564":GRAD
+Out: EC=0 FI=0 SL=1 RL=Real:"-5.72564":GRAD RX=LonI:"-6"
 
-In:  SL=0 FI=0 RX=Re34:"45":DEG
-Out: EC=0 FI=0 SL=1 RL=Re34:"45":DEG RX=LonI:"45"
+In:  SL=0 FI=0 RX=Real:"45":DEG
+Out: EC=0 FI=0 SL=1 RL=Real:"45":DEG RX=LonI:"45"
 
 ; NaN
-In:  SL=0 FI=0 RX=Re34:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Re34:"NaN":RAD
+In:  SL=0 FI=0 RX=Real:"NaN":RAD
+Out: EC=1 FI=0 SL=0 RX=Real:"NaN":RAD
 
-In:  SL=0 FI=0 RX=Re34:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Re34:"NaN"
+In:  SL=0 FI=0 RX=Real:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Re34:"inf":DEG
-Out: EC=1 FI=0 SL=0 RX=Re34:"inf":DEG
+In:  SL=0 FI=0 FD=1 RX=Real:"inf":DEG
+Out: EC=1 FI=0 SL=0 RX=Real:"inf":DEG
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"-inf":RAD
-Out: EC=1 FI=0 SL=0 RX=Re34:"-inf":RAD
+In:  SL=0 FI=0 FD=0 RX=Real:"-inf":RAD
+Out: EC=1 FI=0 SL=0 RX=Real:"-inf":RAD
 
-In:  SL=0 FI=0 FD=1 RX=Re34:"inf"
-Out: EC=1 FI=0 SL=0 RX=Re34:"inf"
+In:  SL=0 FI=0 FD=1 RX=Real:"inf"
+Out: EC=1 FI=0 SL=0 RX=Real:"inf"
 
-In:  SL=0 FI=0 FD=0 RX=Re34:"-inf"
-Out: EC=1 FI=0 SL=0 RX=Re34:"-inf"
+In:  SL=0 FI=0 FD=0 RX=Real:"-inf"
+Out: EC=1 FI=0 SL=0 RX=Real:"-inf"
 
 
 
 ;=======================================
 ; roundi(Complex34) --> Error24
 ;=======================================
-In:  AM=DEG SL=0 FI=0 NCSD=34 RX=Co34:"6.2 i -7.6"
-Out: EC=24 FI=0 SL=0 RX=Co34:"6.2 i -7.6"
+In:  AM=DEG SL=0 FI=0 RX=Cplx:"6.2 i -7.6"
+Out: EC=24 FI=0 SL=0 RX=Cplx:"6.2 i -7.6"

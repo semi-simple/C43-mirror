@@ -21,9 +21,7 @@
 void fnArccosh   (uint16_t unusedParamButMandatory);
 void arccoshError(void);
 void arccoshLonI (void);
-void arccoshRe16 (void);
-void arccoshCo16 (void);
-void arccoshRm16 (void);
-void arccoshCm16 (void);
-void arccoshRe34 (void);
-void arccoshCo34 (void);
+void arccoshRema (void);
+void arccoshCxma (void);
+void arccoshReal (void);
+void arccoshCplx (void);

@@ -21,9 +21,7 @@
 void fnArcsinh   (uint16_t unusedParamButMandatory);
 void arcsinhError(void);
 void arcsinhLonI (void);
-void arcsinhRe16 (void);
-void arcsinhCo16 (void);
-void arcsinhRm16 (void);
-void arcsinhCm16 (void);
-void arcsinhRe34 (void);
-void arcsinhCo34 (void);
+void arcsinhRema (void);
+void arcsinhCxma (void);
+void arcsinhReal (void);
+void arcsinhCplx (void);

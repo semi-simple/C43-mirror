@@ -22,21 +22,18 @@
 
 
 
-void (* const rmd[12][12])(void) = {
-// regX |    regY ==>   1            2            3         4         5         6         7         8          9           10            11           12
-//      V               Long integer Real16       Complex16 Angle16   Time      Date      String    Real16 mat Complex16 m Short integer Real34       Complex34
-/*  1 Long integer  */ {rmdLonILonI, rmdRe16LonI, rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdShoILonI,  rmdRe34LonI, rmdError},
-/*  2 Real16        */ {rmdLonIRe16, rmdRe16Re16, rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdShoIRe16,  rmdRe34Re16, rmdError},
-/*  3 Complex16     */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError},
-/*  4 Angle16       */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError},
-/*  5 Time          */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError},
-/*  6 Date          */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError},
-/*  7 String        */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError},
-/*  8 Real16 mat    */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError},
-/*  9 Complex16 mat */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError},
-/* 10 Short integer */ {rmdLonIShoI, rmdRe16ShoI, rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdShoIShoI,  rmdRe34ShoI, rmdError},
-/* 11 Real34        */ {rmdLonIRe34, rmdRe16Re34, rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdShoIRe34,  rmdRe34Re34, rmdError},
-/* 12 Complex34     */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError,     rmdError,    rmdError}
+void (* const rmd[9][9])(void) = {
+// regX |    regY ==>   1            2            3         4         5         6         7          8           9
+//      V               Long integer Real34       Complex34 Time      Date      String    Real34 mat Complex34 m Short integer
+/*  1 Long integer  */ {rmdLonILonI, rmdRealLonI, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdShoILonI},
+/*  2 Real34        */ {rmdLonIReal, rmdRealReal, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdShoIReal},
+/*  3 Complex34     */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError   },
+/*  4 Time          */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError   },
+/*  5 Date          */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError   },
+/*  6 String        */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError   },
+/*  7 Real34 mat    */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError   },
+/*  8 Complex34 mat */ {rmdError,    rmdError,    rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdError   },
+/*  9 Short integer */ {rmdLonIShoI, rmdRealShoI, rmdError, rmdError, rmdError, rmdError, rmdError,  rmdError,   rmdShoIShoI}
 };
 
 
@@ -113,78 +110,6 @@ void rmdLonILonI(void) {
   }
 
   longIntegerFree(x);
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) rmd X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void rmdLonIRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonIRe16:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonIRe16:", "cannot IDIVR a long integer by 0", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y, x;
-
-  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) rmd X(long integer) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void rmdRe16LonI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16LonI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  if(realIsZero(&x)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16LonI:", "cannot IDIVR a real16 by 0", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
 }
 
 
@@ -269,11 +194,11 @@ void rmdShoILonI(void) {
  * \param void
  * \return void
  ***********************************************/
-void rmdLonIRe34(void) {
+void rmdLonIReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonIRe34:", "cannot use NaN as X input of IDIVR", NULL, NULL);
+      showInfoDialog("In function rmdLonIReal:", "cannot use NaN as X input of IDIVR", NULL, NULL);
     #endif
     return;
   }
@@ -281,7 +206,7 @@ void rmdLonIRe34(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonIRe34:", "cannot IDIVR a long integer by 0", NULL, NULL);
+      showInfoDialog("In function rmdLonIReal:", "cannot IDIVR a long integer by 0", NULL, NULL);
     #endif
     return;
   }
@@ -304,11 +229,11 @@ void rmdLonIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void rmdRe34LonI(void) {
+void rmdRealLonI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34LonI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
+      showInfoDialog("In function rmdRealLonI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
     #endif
     return;
   }
@@ -319,7 +244,7 @@ void rmdRe34LonI(void) {
   if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34LonI:", "cannot IDIVR a real34 by 0", NULL, NULL);
+      showInfoDialog("In function rmdRealLonI:", "cannot IDIVR a real34 by 0", NULL, NULL);
     #endif
     return;
   }
@@ -327,186 +252,6 @@ void rmdRe34LonI(void) {
   real39_t y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/******************************************************************************************************************************************************************************************/
-/* real16 rmd ...                                                                                                                                                                           */
-/******************************************************************************************************************************************************************************************/
-
-/********************************************//**
- * \brief Y(real16) rmd X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void rmdRe16Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16Re16:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16Re16:", "cannot IDIVR a real16 by 0", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x, y;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) rmd X(short integer) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void rmdRe16ShoI(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16ShoI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  if(realIsZero(&x)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16ShoI:", "cannot IDIVR a real16 by 0", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(short integer) rmd X(real16) ==> X(real16)
- *
- * \param void
- * \return void
- ***********************************************/
-void rmdShoIRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdShoIRe16:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdShoIRe16:", "cannot IDIVR a short integer by 0", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t y, x;
-
-  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
-  realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-/********************************************//**
- * \brief Y(real16) rmd X(real34) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void rmdRe16Re34(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16Re34:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe16Re34:", "cannot IDIVR a real16 by 0", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x, y;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-/********************************************//**
- * \brief Y(real34) rmd X(real16) ==> X(real34)
- *
- * \param void
- * \return void
- ***********************************************/
-void rmdRe34Re16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34Re16:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34Re16:", "cannot IDIVR a real34 by 0", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x, y;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-
   realDivideRemainder(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -563,11 +308,11 @@ void rmdShoIShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void rmdShoIRe34(void) {
+void rmdShoIReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdShoIRe34:", "cannot use NaN as X input of IDIVR", NULL, NULL);
+      showInfoDialog("In function rmdShoIReal:", "cannot use NaN as X input of IDIVR", NULL, NULL);
     #endif
     return;
   }
@@ -575,7 +320,7 @@ void rmdShoIRe34(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdShoIRe34:", "cannot IDIVR a short integer by 0", NULL, NULL);
+      showInfoDialog("In function rmdShoIReal:", "cannot IDIVR a short integer by 0", NULL, NULL);
     #endif
     return;
   }
@@ -598,11 +343,11 @@ void rmdShoIRe34(void) {
  * \param void
  * \return void
  ***********************************************/
-void rmdRe34ShoI(void) {
+void rmdRealShoI(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34ShoI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
+      showInfoDialog("In function rmdRealShoI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
     #endif
     return;
   }
@@ -613,7 +358,7 @@ void rmdRe34ShoI(void) {
   if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34ShoI:", "cannot IDIVR a real34 by 0", NULL, NULL);
+      showInfoDialog("In function rmdRealShoI:", "cannot IDIVR a real34 by 0", NULL, NULL);
     #endif
     return;
   }
@@ -639,11 +384,11 @@ void rmdRe34ShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void rmdRe34Re34(void) {
+void rmdRealReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34Re34:", "cannot use NaN as X input of IDIVR", NULL, NULL);
+      showInfoDialog("In function rmdRealReal:", "cannot use NaN as X input of IDIVR", NULL, NULL);
     #endif
     return;
   }
@@ -651,7 +396,7 @@ void rmdRe34Re34(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRe34Re34:", "cannot IDIVR a real34 by 0", NULL, NULL);
+      showInfoDialog("In function rmdRealReal:", "cannot IDIVR a real34 by 0", NULL, NULL);
     #endif
     return;
   }

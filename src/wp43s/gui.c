@@ -200,6 +200,10 @@ gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
       btnFnReleased(w, "6");
       break;
 
+    case 65505: // left shift  //JM Added this portion to be able to repeat f key on emulator
+      //printf("key pressed: Shift\n"); //dr
+      btnReleased(w, "27");
+      break;
 
 
     default:
@@ -760,7 +764,7 @@ return FALSE;
     case 65505: // left shift  //JM
 //    case 65506: //JM right shift. 65453: // -  //JM Remove Right Shift, to allow * & +
       //printf("key pressed: Shift\n"); //dr
-      btnClicked(w, "27");
+      btnPressed(w, "27");                         //JM PRESSED FOR KEYBOARD F REPEAT
       break;
 
     case 49:    // 1
@@ -4160,7 +4164,7 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   calcMode = CM_NIM;
 
   liftStack();
-  real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
+  real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
 //refreshStack();                       //vv dr
   refreshRegisterLine(REGISTER_Y);
   refreshRegisterLine(REGISTER_Z);

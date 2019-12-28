@@ -22,10 +22,10 @@
 
 
 
-void (* const arctanh[12])(void) = {
-// regX ==> 1             2            3            4             5             6             7             8            9            10             11           12
-//          Long integer  Real16       Complex16    Angle16       Time          Date          String        Real16 mat   Complex16 m  Short integer  Real34       Complex34
-            arctanhLonI,  arctanhRe16, arctanhCo16, arctanhError, arctanhError, arctanhError, arctanhError, arctanhRm16, arctanhCm16, arctanhError,  arctanhRe34, arctanhCo34
+void (* const arctanh[9])(void) = {
+// regX ==> 1             2            3            4             5             6             7            8            9
+//          Long integer  Real34       Complex34    Time          Date          String        Real34 mat   Complex34 m  Short integer
+            arctanhLonI,  arctanhReal, arctanhCplx, arctanhError, arctanhError, arctanhError, arctanhRema, arctanhCxma, arctanhError
 };
 
 
@@ -70,14 +70,14 @@ void arctanhLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
   if(realIsZero(&x)) {
-    reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     if(realCompareEqual(&x, const_1)) {
       if(getFlag(FLAG_DANGER)) {
-        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-        realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -88,8 +88,8 @@ void arctanhLonI(void) {
     }
     else if(realCompareEqual(&x, const__1)) {
       if(getFlag(FLAG_DANGER)) {
-        reallocateRegister(REGISTER_X, dtReal16, REAL16_SIZE, AM_NONE);
-        realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -103,8 +103,7 @@ void arctanhLonI(void) {
         reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
         realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
         real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-        arctanhCo34();
-        convertRegister34To16(REGISTER_X);
+        arctanhCplx();
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -118,131 +117,23 @@ void arctanhLonI(void) {
 
 
 
-void arctanhRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanhRe16:", "cannot use NaN as X input of arctanh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real39_t x;
-
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-
-  if(realIsZero(&x)) {
-    real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    if(realCompareEqual(&x, const_1)) {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16(const_plusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function arctanhRe16:", "X = 1", "and DANGER flag is not set!", NULL);
-        #endif
-       }
-    }
-    else if(realCompareEqual(&x, const__1)) {
-      if(getFlag(FLAG_DANGER)) {
-        realToReal16(const_minusInfinity, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function arctanhRe16:", "X = -1", "and DANGER flag is not set!", NULL);
-        #endif
-       }
-    }
-    else {
-      if(realCompareAbsGreaterThan(&x, const_1)) {
-        if(getFlag(FLAG_CPXRES)) {
-          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-          realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-          real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-          arctanhCo34();
-          convertRegister34To16(REGISTER_X);
-        }
-        else {
-          displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            showInfoDialog("In function arctanhRe16:", "|X| > 1", "and CPXRES is not set!", NULL);
-          #endif
-        }
-      }
-      else {
-        WP34S_ArcTanh(&x, &x);
-        realToReal16(&x, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-    }
-  }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-}
-
-
-
-void arctanhCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanhCo16:", "cannot use NaN as X input of arctanh", NULL, NULL);
-    #endif
-    return;
-  }
-
-  //                    1       1 + (a + ib)
-  // arctanh(a + i b) = - * ln( ------------ )
-  //                    2       1 - (a + ib)
-
-  complex39_t numer, denom;
-
-  // numer = 1 + (a + ib)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &numer.real);
-  realAdd(&numer.real, const_1, &numer.real, &ctxtReal39);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &numer.imag);
-
-  // denom = 1 - (a + ib)
-  real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &denom.real);
-  realSubtract(const_1, &denom.real, &denom.real, &ctxtReal39);
-  real16ToReal(REGISTER_IMAG16_DATA(REGISTER_X), &denom.imag);
-  realChangeSign(&denom.imag);
-
-  // numer = (1 + (a + ib)) / (1 - (a + ib)
-  divCo39Co39(&numer, &denom, &numer);
-
-  // numer = ln((1 + (a + ib)) / (1 - (a + ib))
-  lnCo39(&numer, &numer);
-
-  // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
-  realMultiply(&numer.real, const_1on2, &numer.real, &ctxtReal39);
-  realMultiply(&numer.imag, const_1on2, &numer.imag, &ctxtReal39);
-
-  realToReal16(&numer.real, REGISTER_REAL16_DATA(REGISTER_X));
-  realToReal16(&numer.imag, REGISTER_IMAG16_DATA(REGISTER_X));
-}
-
-
-
-void arctanhRm16(void) {
+void arctanhRema(void) {
   fnToBeCoded();
 }
 
 
 
-void arctanhCm16(void) {
+void arctanhCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void arctanhRe34(void) {
+void arctanhReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanhRe34:", "cannot use NaN as X input of arctanh", NULL, NULL);
+      showInfoDialog("In function arctanhReal:", "cannot use NaN as X input of arctanh", NULL, NULL);
     #endif
     return;
   }
@@ -262,7 +153,7 @@ void arctanhRe34(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function arctanhRe34:", "X = 1", "and DANGER flag is not set!", NULL);
+          showInfoDialog("In function arctanhReal:", "X = 1", "and DANGER flag is not set!", NULL);
         #endif
        }
     }
@@ -273,7 +164,7 @@ void arctanhRe34(void) {
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function arctanhRe34:", "X = -1", "and DANGER flag is not set!", NULL);
+          showInfoDialog("In function arctanhReal:", "X = -1", "and DANGER flag is not set!", NULL);
         #endif
        }
     }
@@ -283,12 +174,12 @@ void arctanhRe34(void) {
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
           realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
           real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-          arctanhCo34();
+          arctanhCplx();
         }
         else {
           displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            showInfoDialog("In function arctanhRe34:", "|X| > 1", "and CPXRES is not set!", NULL);
+            showInfoDialog("In function arctanhReal:", "|X| > 1", "and CPXRES is not set!", NULL);
           #endif
         }
       }
@@ -303,11 +194,11 @@ void arctanhRe34(void) {
 
 
 
-void arctanhCo34(void) {
+void arctanhCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanhCo34:", "cannot use NaN as X input of arctanh", NULL, NULL);
+      showInfoDialog("In function arctanhCplx:", "cannot use NaN as X input of arctanh", NULL, NULL);
     #endif
     return;
   }
@@ -316,29 +207,30 @@ void arctanhCo34(void) {
   // arctanh(a + i b) = - * ln( ------------ )
   //                    2       1 - (a + ib)
 
-  complex39_t numer, denom;
+  real39_t numerReal, denomReal;
+  real39_t numerImag, denomImag;
 
   // numer = 1 + (a + ib)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &numer.real);
-  realAdd(&numer.real, const_1, &numer.real, &ctxtReal39);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &numer.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &numerReal);
+  realAdd(&numerReal, const_1, &numerReal, &ctxtReal39);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &numerImag);
 
   // denom = 1 - (a + ib)
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &denom.real);
-  realSubtract(const_1, &denom.real, &denom.real, &ctxtReal39);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &denom.imag);
-  realChangeSign(&denom.imag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &denomReal);
+  realSubtract(const_1, &denomReal, &denomReal, &ctxtReal39);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &denomImag);
+  realChangeSign(&denomImag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
-  divCo39Co39(&numer, &denom, &numer);
+  divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag);
 
   // numer = ln((1 + (a + ib)) / (1 - (a + ib))
-  lnCo39(&numer, &numer);
+  lnCo39(&numerReal, &numerImag, &numerReal, &numerImag);
 
   // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
-  realMultiply(&numer.real, const_1on2, &numer.real, &ctxtReal39);
-  realMultiply(&numer.imag, const_1on2, &numer.imag, &ctxtReal39);
+  realMultiply(&numerReal, const_1on2, &numerReal, &ctxtReal39);
+  realMultiply(&numerImag, const_1on2, &numerImag, &ctxtReal39);
 
-  realToReal34(&numer.real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&numer.imag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&numerReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&numerImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }

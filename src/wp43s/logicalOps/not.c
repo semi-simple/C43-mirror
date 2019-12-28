@@ -22,10 +22,10 @@
 
 
 
-void (* const not[12])(void) = {
-// regX ==> 1            2         3          4          5          6          7          8           9            10             11        12
-//          Long integer  real16    complex16  angle      Time       Date       String     real16 mat  complex16 m  Short integer  real34    complex34
-            notLonI,     notRe16,  notError,  notError,  notError,  notError,  notError,  notError,   notError,    notShoI,       notRe34,  notError
+void (* const not[9])(void) = {
+// regX ==> 1            5          6          7          8           9            10             11        12
+//          Long integer Time       Date       String     real16 mat  complex16 m  Short integer  real34    complex34
+            notLonI,     notError,  notError,  notError,  notError,   notError,    notShoI,       notReal,  notError
 };
 
 
@@ -94,28 +94,13 @@ void notLonI(void) {
 
 
 
-void notRe16(void) {
-  longInteger_t res;
-
-  longIntegerInit(res);
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X))) {
-    uIntToLongInteger(1, res);
-  }
-
-  convertLongIntegerToLongIntegerRegister(res, REGISTER_X);
-
-  longIntegerFree(res);
-}
-
-
-
 void notShoI(void) {
   *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = ~(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))) & shortIntegerMask;
 }
 
 
 
-void notRe34(void) {
+void notReal(void) {
   longInteger_t res;
 
   longIntegerInit(res);

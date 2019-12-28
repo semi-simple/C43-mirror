@@ -22,10 +22,10 @@
 
 
 
-void (* const Round[12])(void) = {
-// regX ==> 1            2          3          4           5          6          7           8          9           10            11         12
-//          Long integer Real16     Complex16  Angle16     Time       Date       String      Real16 mat Complex16 m Short integer Real34     Complex34
-            roundLonI,   roundRe16, roundCo16, roundError, roundTime, roundDate, roundError, roundRm16, roundCm16,  roundError,   roundRe34, roundCo34
+void (* const Round[9])(void) = {
+// regX ==> 1            2          3          4          5          6           7          8           9
+//          Long integer Real34     Complex34  Time       Date       String      Real34 mat Complex34 m Short integer
+            roundLonI,   roundReal, roundCplx, roundTime, roundDate, roundError, roundRema, roundCxma,  roundError
 };
 
 
@@ -112,95 +112,6 @@ void roundLonI(void) {
 
 
 
-void roundRe16(void) {
-  updateDisplayValueX = true;
-  displayValueX[0] = 0;
-  refreshRegisterLine(REGISTER_X);
-  updateDisplayValueX = false;
-
-  if(!displayRealAsFraction) {
-    stringToReal16(displayValueX, REGISTER_REAL16_DATA(REGISTER_X));
-  }
-  else {
-    int16_t endOfIntegerPart, slashPos;
-    real16_t numerator, denominator;
-
-    endOfIntegerPart = -1;
-    if(fractionType == FT_PROPER) { // a b/c
-      while(displayValueX[++endOfIntegerPart] != ' '); // The ending ; is OK here
-      displayValueX[endOfIntegerPart] = 0;
-      stringToReal16(displayValueX, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else { // FT_IMPROPER d/c
-      real16Zero(REGISTER_REAL16_DATA(REGISTER_X));
-    }
-
-    slashPos = endOfIntegerPart++;
-    while(displayValueX[++slashPos] != '/'); // The ending ; is OK here
-    displayValueX[slashPos++] = 0;
-    int32ToReal16(atoi(displayValueX + endOfIntegerPart), &numerator);
-    int32ToReal16(atoi(displayValueX + slashPos), &denominator);
-    real16Divide(&numerator, &denominator, &numerator);
-    if(displayValueX[0] == '-') {
-      real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &numerator, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-    else {
-      real16Add(REGISTER_REAL16_DATA(REGISTER_X), &numerator, REGISTER_REAL16_DATA(REGISTER_X));
-    }
-  }
-}
-
-
-
-void roundCo16(void) {
-  int32_t pos, posI;
-  bool_t polar = false;
-
-  updateDisplayValueX = true;
-  displayValueX[0] = 0;
-  refreshRegisterLine(REGISTER_X);
-  updateDisplayValueX = false;
-
-  posI = DISPLAY_VALUE_LEN - 1;
-  pos = 0;
-  while(displayValueX[pos] != 0) {
-    if(displayValueX[pos] == 'i') {
-      posI = pos;
-      break;
-    }
-    pos++;
-  }
-
-  if(posI == DISPLAY_VALUE_LEN - 1) {
-    pos = 0;
-    while(displayValueX[pos] != 0) {
-      if(displayValueX[pos] == 'j') {
-        posI = pos;
-        polar = true;
-        break;
-      }
-      pos++;
-    }
-  }
-
-  displayValueX[posI++] = 0;
-  if(polar) {
-    real39_t magnitude, theta;
-
-    stringToReal(displayValueX,        &magnitude, &ctxtReal39);
-    stringToReal(displayValueX + posI, &theta,     &ctxtReal39);
-    real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta);
-    realToReal16(&magnitude, REGISTER_REAL16_DATA(REGISTER_X));
-    realToReal16(&theta,     REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-  else {
-    stringToReal16(displayValueX,        REGISTER_REAL16_DATA(REGISTER_X));
-    stringToReal16(displayValueX + posI, REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-}
-
-
-
 void roundTime(void) {
   fnToBeCoded();
 }
@@ -213,19 +124,19 @@ void roundDate(void) {
 
 
 
-void roundRm16(void) {
+void roundRema(void) {
   fnToBeCoded();
 }
 
 
 
-void roundCm16(void) {
+void roundCxma(void) {
   fnToBeCoded();
 }
 
 
 
-void roundRe34(void) {
+void roundReal(void) {
   updateDisplayValueX = true;
   displayValueX[0] = 0;
   refreshRegisterLine(REGISTER_X);
@@ -265,7 +176,7 @@ void roundRe34(void) {
 
 
 
-void roundCo34(void) {
+void roundCplx(void) {
   int32_t pos, posI;
   bool_t polar = false;
 

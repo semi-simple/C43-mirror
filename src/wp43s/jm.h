@@ -39,15 +39,18 @@ Modes available in the mode menu:
 
 
 
+
+
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
 #define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
 #define JM_SHIFT_TIMER 4000    //ms
 #define JM_CLRDROP_TIMER 500   //ms
 #define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
 #define JM_SHIFT_TIMER_OFF 255
-#define JM_3_SHIFT_CUTOFF 6 //100ms
-#define JM_FN_TIMER 6      //10 = 1000ms   
-#define JM_FN_DOUBLE_TIMER 500  //ms
+#define JM_3_SHIFT_CUTOFF  6   //100ms
+#define JM_FN_TIMER        8   //8 = approx 800ms   
+#define JM_FN_DOUBLE_TIMER 150 //75  //ms
+#define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
@@ -55,22 +58,28 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 //keyboard.c  screen.c
 bool_t JM_auto_drop_activated;
 bool_t JM_auto_drop_enabled;                         //JM TIMER CLRDROP
-bool_t FN_double_click;
+bool_t FN_double_click_detected;                     //JM FN-DOUBLE
+bool_t FN_delay_exec;                                //JM FN-DOUBLE
+
 uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changeable mode
 uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
 int16_t JM_ASN_MODE;                                //JM ASSIGN
 
+bool_t ULFL,ULGL;                                 //JM Underline
 
-int16_t FN_key_pressed;                           //JM LONGPRESS FN
-bool_t FN_timeouts;                               //JM LONGPRESS FN
+int16_t FN_key_pressed, FN_key_pressed_last;      //JM LONGPRESS FN
+bool_t FN_timeouts_in_progress;                   //JM LONGPRESS FN
+bool_t Shft_timeouts;                             //JM SHIFT NEW FN
 int8_t FN_counter;                                //JM LONGPRESS FN
+bool_t FN_timed_out_to_NOP;                       //JM LONGPRESS FN
+bool_t FN_timed_out_to_RELEASE_EXEC;              //JM LONGPRESS FN
 
 //keyboard.c
 #ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
-uint32_t now_MEM, now_MEM1;                       //JM FN DOUBLE
+uint32_t now_MEM, now_MEM1, now_tmp;              //JM FN DOUBLE
 #endif
 #ifdef PC_BUILD
-gint64 now_MEM, now_MEM1;                         //JM FN DOUBLE
+gint64 now_MEM, now_MEM1, now_tmp;                //JM FN DOUBLE
 #endif
 
 #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
@@ -102,6 +111,9 @@ extern bool_t SH_BASE_AHOME;                                         //JM BASEHO
 extern bool_t SH_BASE_MYA;                                           //JM BASEHOME Create a flag to enable or disable triple shift
 extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
 extern uint8_t Input_Default;                                        //JM Input Default
+extern bool_t jm_FG_LINE;                                            //JM Screen / keyboard operation setup
+extern bool_t jm_FG_DOTS;                                            //JM Screen / keyboard operation setup
+extern bool_t jm_G_DOUBLETAP;                                        //JM Screen / keyboard operation setup
 
 
 // Additional routines needed in jm.c
@@ -131,7 +143,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY);
 void Show_User_Keys(void);
 void fnKEYSELECT(void);
 void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey);
-void JM_convertReal16ToShortInteger(uint16_t confirmation);
+void JM_convertReal34ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
 char* itoa(int value, char* result, int base);
@@ -140,10 +152,11 @@ char* itoa(int value, char* result, int base);
 #define TI_ABBCCA              31    //JM EE
 #define TI_012                 32    //JM EE
 #define ID_43S                  0    //JM Input Default
-#define ID_SP                   1    //JM Input Default
 #define ID_DP                   2    //JM Input Default
-#define ID_CPXSP                3    //JM Input Default
 #define ID_CPXDP                4    //JM Input Default
+#define ID_43D                  5    //JM Input Default
+#define ID_SI                   6    //JM Input Default
+#define ID_LI                   7    //JM Input Default
 
 #define JC_ERPN                 1    // eRPN
 #define JC_HOME_TRIPLE          2    // HOME.3
@@ -154,6 +167,10 @@ char* itoa(int value, char* result, int base);
 #define JC_BASE_MYA             7    // MYa
 #define JC_SH_3T                8    // SH.3T
 #define JM_INP_DFLT            15    // Input_Default
+
+#define JC_FG_LINE             20    // screen setup
+#define JC_FG_DOTS             21    // screen setup
+#define JC_G_DOUBLETAP         22    // screen setup
 
 
 //items.c
@@ -166,6 +183,7 @@ void JM_DOT(int16_t xx, int16_t yy);
 #endif
 
 void Reset_Shift_Mem(void);
+
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX

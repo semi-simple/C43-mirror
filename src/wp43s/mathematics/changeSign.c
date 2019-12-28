@@ -22,10 +22,10 @@
 
 
 
-void (* const chs[12])(void) = {
-// regX ==> 1            2        3         4         5          6         7         8          9           10            11       12
-//          Long integer real16   Complex16 Angle16   Time       Date      String    Real16 mat Complex16 m Short integer Real34   Complex34
-            chsLonI,     chsRe16, chsCo16,  chsError, chsError,  chsError, chsError, chsRm16,   chsCm16,    chsShoI,      chsRe34, chsCo34
+void (* const chs[9])(void) = {
+// regX ==> 1            2        3         4         5         6         7          8           9
+//          Long integer Real34   Complex34 Time      Date      String    Real34 mat Complex34 m Short integer
+            chsLonI,     chsReal, chsCplx,  chsError, chsError, chsError, chsRema,   chsCxma,    chsShoI
 };
 
 
@@ -80,79 +80,13 @@ void chsLonI(void) {
 
 
 
-void chsRe16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsRe16:", "cannot use NaN as X input of +/-", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(!getFlag(FLAG_DANGER) && real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsRe16:", "cannot change infinity sign while D flag is clear", NULL, NULL);
-    #endif
-    return;
-  }
-
-  real16ChangeSign(REGISTER_REAL16_DATA(REGISTER_X));
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-    real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-}
-
-
-
-void chsCo16(void) {
-  if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsNaN(REGISTER_IMAG16_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsCo16:", "cannot use NaN as X input of +/-", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(!getFlag(FLAG_DANGER)) {
-    if(real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-      displayCalcErrorMessage(real16IsPositive(REGISTER_REAL16_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function chsCo16:", "cannot change infinity sign of real part while D flag is clear", NULL, NULL);
-      #endif
-      return;
-    }
-
-    if(real16IsInfinite(REGISTER_IMAG16_DATA(REGISTER_X))) {
-      displayCalcErrorMessage(real16IsPositive(REGISTER_IMAG16_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function chsCo16:", "cannot change infinity sign of imaginary part while D flag is clear", NULL, NULL);
-      #endif
-      return;
-    }
-  }
-
-  complex16ChangeSign(REGISTER_COMPLEX16_DATA(REGISTER_X));
-
-  if(real16IsZero(REGISTER_REAL16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-    real16SetPositiveSign(REGISTER_REAL16_DATA(REGISTER_X));
-  }
-
-  if(real16IsZero(REGISTER_IMAG16_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
-    real16SetPositiveSign(REGISTER_IMAG16_DATA(REGISTER_X));
-  }
-}
-
-
-
-void chsRm16(void) {
+void chsRema(void) {
   fnToBeCoded();
 }
 
 
 
-void chsCm16(void) {
+void chsCxma(void) {
   fnToBeCoded();
 }
 
@@ -164,11 +98,11 @@ void chsShoI(void) {
 
 
 
-void chsRe34(void) {
+void chsReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsRe34:", "cannot use NaN as X input of +/-", NULL, NULL);
+      showInfoDialog("In function chsReal:", "cannot use NaN as X input of +/-", NULL, NULL);
     #endif
     return;
   }
@@ -176,7 +110,7 @@ void chsRe34(void) {
   if(!getFlag(FLAG_DANGER) && real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsRe34:", "cannot change infinity sign while D flag is clear", NULL, NULL);
+      showInfoDialog("In function chsReal:", "cannot change infinity sign while D flag is clear", NULL, NULL);
     #endif
     return;
   }
@@ -190,11 +124,11 @@ void chsRe34(void) {
 
 
 
-void chsCo34(void) {
+void chsCplx(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsCo34:", "cannot use NaN as X input of +/-", NULL, NULL);
+      showInfoDialog("In function chsCplx:", "cannot use NaN as X input of +/-", NULL, NULL);
     #endif
     return;
   }
@@ -203,7 +137,7 @@ void chsCo34(void) {
     if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
       displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function chsCo34:", "cannot change infinity sign of real part while D flag is clear", NULL, NULL);
+        showInfoDialog("In function chsCplx:", "cannot change infinity sign of real part while D flag is clear", NULL, NULL);
       #endif
       return;
     }
@@ -211,7 +145,7 @@ void chsCo34(void) {
     if(real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_X))) {
       displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function chsCo34:", "cannot change infinity sign of imaginary part while D flag is clear", NULL, NULL);
+        showInfoDialog("In function chsCplx:", "cannot change infinity sign of imaginary part while D flag is clear", NULL, NULL);
       #endif
       return;
     }

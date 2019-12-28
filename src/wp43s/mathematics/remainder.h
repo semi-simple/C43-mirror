@@ -23,24 +23,15 @@ void rmdError(void);
 
 //      RegYRegX
 void rmdLonILonI(void);
-void rmdLonIRe16(void);
 void rmdLonIShoI(void);
-void rmdLonIRe34(void);
-
-//      RegYRegX
-void rmdRe16LonI(void);
-void rmdRe16Re16(void);
-void rmdRe16ShoI(void);
-void rmdRe16Re34(void);
+void rmdLonIReal(void);
 
 //      RegYRegX
 void rmdShoILonI(void);
-void rmdShoIRe16(void);
 void rmdShoIShoI(void);
-void rmdShoIRe34(void);
+void rmdShoIReal(void);
 
 //      RegYRegX
-void rmdRe34LonI(void);
-void rmdRe34Re16(void);
-void rmdRe34ShoI(void);
-void rmdRe34Re34(void);
+void rmdRealLonI(void);
+void rmdRealShoI(void);
+void rmdRealReal(void);

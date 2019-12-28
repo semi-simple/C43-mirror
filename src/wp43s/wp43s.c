@@ -46,7 +46,6 @@ bool_t               allowScreenUpdate;
 bool_t               funcOK;
 
 // Variables stored in RAM
-realContext_t        ctxtReal16;  // 16 digits
 realContext_t        ctxtReal34;  // 34 digits
 realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
 realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
@@ -136,6 +135,9 @@ uint8_t              temporaryInformation;
 uint8_t              rbrMode;
 uint8_t              numScreensNumericFont;
 uint8_t              currentAngularMode;
+bool_t               jm_FG_LINE;                              //JM Screen / keyboard operation setup
+bool_t               jm_FG_DOTS;                              //JM Screen / keyboard operation setup
+bool_t               jm_G_DOUBLETAP;                          //JM Screen / keyboard operation setup
 uint8_t              SigFigMode;                              //JM SIGFIG
 bool_t               eRPN;                                    //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 bool_t               HOME3;                                   //JM HOME Create a flag to enable or disable triple shift HOME3.
@@ -166,7 +168,6 @@ bool_t               displayLeadingZeros;
 bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
-bool_t               nimInputIsReal34;
 bool_t               updateDisplayValueX;
 calcKey_t            kbd_usr[37];
 radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
@@ -189,7 +190,7 @@ freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
 int32_t              numberOfFreeBlocks;
 int32_t              lgCatalogSelection;
 void                 (*confirmedFunction)(uint16_t);
-real39_t             const *gammaConstants;
+real51_t             const *gammaLanczosCoefficients;
 real39_t             const *angle180;
 real39_t             const *angle90;
 real39_t             const *angle45;
@@ -245,18 +246,18 @@ void setupDefaults(void) {
 
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal16, AM_NONE);
-    memPtr = allocWp43s(REAL16_SIZE);
+    setRegisterDataType(regist, dtReal34, AM_NONE);
+    memPtr = allocWp43s(REAL34_SIZE);
     setRegisterDataPointer(regist, memPtr);
-    real16Zero(memPtr);
+    real34Zero(memPtr);
   }
 
   // initialize the 9+1 saved stack registers
   for(calcRegister_t regist=SAVED_REGISTER_X; regist<=LAST_SAVED_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal16, AM_NONE);
-    memPtr = allocWp43s(REAL16_SIZE);
+    setRegisterDataType(regist, dtReal34, AM_NONE);
+    memPtr = allocWp43s(REAL34_SIZE);
     setRegisterDataPointer(regist, memPtr);
-    real16Zero(memPtr);
+    real34Zero(memPtr);
   }
 
   #ifdef PC_BUILD
@@ -266,7 +267,6 @@ void setupDefaults(void) {
 
   temporaryInformation = TI_NO_INFO;
 
-  decContextDefault(&ctxtReal16, DEC_INIT_DECDOUBLE);
   decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
   decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
   ctxtReal39.digits = 39;
@@ -325,9 +325,22 @@ void setupDefaults(void) {
   shiftG = false;
 //shiftStateChanged = false;            //dr
 
-  FN_key_pressed = 0;                   //JM LONGPRESS FN
-  FN_timeouts = false;                  //JM LONGPRESS FN
-  FN_counter = JM_FN_TIMER;             //JM LONGPRESS FN
+  jm_FG_LINE = true;                                             //JM Screen / keyboard operation setup
+  jm_FG_DOTS = false;                                            //JM Screen / keyboard operation setup
+  jm_G_DOUBLETAP = false;                                        //JM Screen / keyboard operation setup
+
+  ULFL = false;                                                  //JM Underline
+  ULGL = false;                                                  //JM Underline
+  FN_delay_exec = false;                                         //JM FN-DOUBLE
+  FN_double_click_detected = false;                              //JM FN-DOUBLE
+  FN_state = ST_0_INIT;                                          //JM FN-DOUBLE
+  FN_key_pressed = 0;                                            //JM LONGPRESS FN
+  FN_key_pressed_last = 0;
+  FN_timeouts_in_progress = false;                               //JM LONGPRESS FN
+  Shft_timeouts = 0;                                             //JM SHIFT NEW
+  FN_counter = JM_FN_TIMER;                                      //JM LONGPRESS FN
+  FN_timed_out_to_RELEASE_EXEC = false;                          //JM LONGPRESS FN
+  FN_timed_out_to_NOP = false;                                   //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
   eRPN = false;                                                  //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
   HOME3 = true;                                                  //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
@@ -355,7 +368,6 @@ void setupDefaults(void) {
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   now_MEM1 = 0;                                                  //JM FN_DOUBLE
   #endif
-  FN_double_click = false;                                       //JM FN_DOUBLE
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
@@ -409,7 +421,8 @@ void setupDefaults(void) {
 
   hideUserMode();
 
-  gammaConstants = const_gammaC01;
+  gammaLanczosCoefficients = (real51_t *)const_gammaC01;
+
   angle180 = const_180;
   angle90  = const_90;
   angle45  = const_45;
@@ -620,7 +633,7 @@ void program_main(void) {
       if(testEnabled) { fnSwStop(1); }
 #endif                                  //^^
     }
-    else if(key == 0 && FN_timeouts) {            //JM
+    else if(key == 0 && FN_key_pressed != 0) {    //JM
 #ifdef INLINE_TEST                      //vv dr
       if(testEnabled) { fnSwStart(2); }
 #endif                                  //^^
@@ -682,7 +695,7 @@ int main(int argc, char* argv[]) {
   fnReset(CONFIRMED);
 /*
 reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-stringToReal16("-2.1", REGISTER_REAL16_DATA(REGISTER_X));
+stringToReal16("-2.1", REGISTER_REAL34_DATA(REGISTER_X));
 stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));
 printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
 fnSetFlag(FLAG_DANGER);

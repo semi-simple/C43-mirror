@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 24  // 24 = lgCatalogSelection
+#define BACKUP_VERSION 25  // 5 = lgCatalogSelection
 
 void saveCalc(void) {
   size_t size;
@@ -127,7 +127,6 @@ void saveCalc(void) {
   size += fwrite(&stackLiftEnabled,                   1, sizeof(stackLiftEnabled),                   backup); //printf("%8lu stackLiftEnabled\n",                   (unsigned long)size);
   size += fwrite(&savedStackLiftEnabled,              1, sizeof(savedStackLiftEnabled),              backup); //printf("%8lu savedStackLiftEnabled\n",              (unsigned long)size);
   size += fwrite(&rbr1stDigit,                        1, sizeof(rbr1stDigit),                        backup); //printf("%8lu rbr1stDigit\n",                        (unsigned long)size);
-  size += fwrite(&nimInputIsReal34,                   1, sizeof(nimInputIsReal34),                   backup); //printf("%8lu nimInputIsReal34\n",                   (unsigned long)size);
   size += fwrite(&shiftF,                             1, sizeof(shiftF),                             backup); //printf("%8lu shiftF\n",                             (unsigned long)size);
   size += fwrite(&shiftG,                             1, sizeof(shiftG),                             backup); //printf("%8lu shiftG\n",                             (unsigned long)size);
 //size += fwrite(&shiftStateChanged,                  1, sizeof(shiftStateChanged),                  backup); //printf("%8lu shiftStateChanged\n",                  (unsigned long)size);
@@ -182,6 +181,9 @@ void saveCalc(void) {
   size += fwrite(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
   size += fwrite(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
   size += fwrite(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);
+  size += fwrite(&jm_FG_LINE,                         1, sizeof(jm_FG_LINE),                         backup); //JM jm_FG_LINE //printf("%8lu jm_FG_LINE\n",         (unsigned long)size);
+  size += fwrite(&jm_FG_DOTS,                         1, sizeof(jm_FG_DOTS),                         backup); //JM jm_FG_DOTS //printf("%8lu jm_FG_DOTS\n",         (unsigned long)size);
+  size += fwrite(&jm_G_DOUBLETAP,                     1, sizeof(jm_G_DOUBLETAP),                     backup); //JM jm_G_DOUBLETAP //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
 
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
@@ -301,7 +303,6 @@ void restoreCalc(void) {
     size += fread(&stackLiftEnabled,                   1, sizeof(stackLiftEnabled),                   backup); //printf("%8lu stackLiftEnabled\n",                   (unsigned long)size);
     size += fread(&savedStackLiftEnabled,              1, sizeof(savedStackLiftEnabled),              backup); //printf("%8lu savedStackLiftEnabled\n",              (unsigned long)size);
     size += fread(&rbr1stDigit,                        1, sizeof(rbr1stDigit),                        backup); //printf("%8lu rbr1stDigit\n",                        (unsigned long)size);
-    size += fread(&nimInputIsReal34,                   1, sizeof(nimInputIsReal34),                   backup); //printf("%8lu nimInputIsReal34\n",                   (unsigned long)size);
     size += fread(&shiftF,                             1, sizeof(shiftF),                             backup); //printf("%8lu shiftF\n",                             (unsigned long)size);
     size += fread(&shiftG,                             1, sizeof(shiftG),                             backup); //printf("%8lu shiftG\n",                             (unsigned long)size);
 //  size += fread(&shiftStateChanged,                  1, sizeof(shiftStateChanged),                  backup); //printf("%8lu shiftStateChanged\n",                  (unsigned long)size);
@@ -367,6 +368,9 @@ void restoreCalc(void) {
     size += fread(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
     size += fread(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
     size += fread(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);
+    size += fread(&jm_FG_LINE,                         1, sizeof(jm_FG_LINE),                         backup); //JM jm_FG_LINE //printf("%8lu jm_FG_LINE\n",         (unsigned long)size);
+    size += fread(&jm_FG_DOTS,                         1, sizeof(jm_FG_DOTS),                         backup); //JM jm_FG_DOTS //printf("%8lu jm_FG_DOTS\n",         (unsigned long)size);
+    size += fread(&jm_G_DOUBLETAP,                     1, sizeof(jm_G_DOUBLETAP),                     backup); //JM jm_G_DOUBLETAP //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
 
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);

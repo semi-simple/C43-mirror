@@ -44,23 +44,6 @@ void fnMin(uint16_t unusedParamButMandatory) {
           longIntegerFree(lgIntY);
           break;
 
-        case dtReal16:
-          // X = long integer    Y = real16
-          if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMin:", "cannot use NaN as Y input of min", NULL, NULL);
-            #endif
-            break;
-          }
-
-          convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-          if(realCompareLessThan(&y, &x)) {
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          }
-          break;
-
         case dtShortInteger:
           // X = long integer    Y = short integer
           convertLongIntegerRegisterToLongInteger(REGISTER_X, lgIntX);
@@ -83,76 +66,6 @@ void fnMin(uint16_t unusedParamButMandatory) {
           }
 
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
-          real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-          if(realCompareLessThan(&y, &x)) {
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          }
-          break;
-
-        default:
-          displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "cannot get the min from %s", getRegisterDataTypeName(REGISTER_X, true, false));
-            sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "and %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-            showInfoDialog("In function fnMin:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-          #endif
-      }
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnMin:", "cannot use NaN as X input of min", NULL, NULL);
-        #endif
-        break;
-      }
-
-      switch(getRegisterDataType(REGISTER_Y)) {
-        case dtLongInteger:
-          // X = real16    Y = long integer
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-          convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);
-          if(realCompareLessThan(&y, &x)) {
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          }
-          break;
-
-        case dtReal16:
-          // X = real16    Y = real16
-          if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMin:", "cannot use NaN as Y input of min", NULL, NULL);
-            #endif
-            break;
-          }
-
-          if(real16CompareLessThan(REGISTER_REAL16_DATA(REGISTER_Y), REGISTER_REAL16_DATA(REGISTER_X))) {
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          }
-          break;
-
-        case dtShortInteger:
-          // X = real16    Y = short integer
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
-          convertShortIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);
-          if(realCompareLessThan(&y, &x)) {
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          }
-          break;
-
-        case dtReal34:
-          // X = real16    Y = real34
-          if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMin:", "cannot use NaN as Y input of min", NULL, NULL);
-            #endif
-            break;
-          }
-
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_X), &x);
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
           if(realCompareLessThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -226,23 +139,6 @@ void fnMin(uint16_t unusedParamButMandatory) {
           longIntegerFree(lgIntY);
           break;
 
-        case dtReal16:
-          // X = short integer    Y = real16
-          if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMin:", "cannot use NaN as Y input of min", NULL, NULL);
-            #endif
-            break;
-          }
-
-          convertShortIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
-          if(realCompareLessThan(&y, &x)) {
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          }
-          break;
-
         case dtShortInteger:
           // X = short integer    Y = short integer
           convertShortIntegerRegisterToLongInteger(REGISTER_X, lgIntX);
@@ -295,23 +191,6 @@ void fnMin(uint16_t unusedParamButMandatory) {
           // X = real34    Y = long integer
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
           convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&y, &ctxtReal39);
-          if(realCompareLessThan(&y, &x)) {
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          }
-          break;
-
-        case dtReal16:
-          // X = real34    Y = real16
-          if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMin:", "cannot use NaN as Y input of min", NULL, NULL);
-            #endif
-            break;
-          }
-
-          real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-          real16ToReal(REGISTER_REAL16_DATA(REGISTER_Y), &y);
           if(realCompareLessThan(&y, &x)) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }

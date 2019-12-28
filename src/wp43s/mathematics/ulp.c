@@ -22,7 +22,6 @@
 
 
 void fnUlp(uint16_t unusedParamButMandatory) {
-  real16_t x16;
   real34_t x34;
   longInteger_t lgInt;
 
@@ -35,26 +34,6 @@ void fnUlp(uint16_t unusedParamButMandatory) {
       intToLongInteger(1, lgInt);
       convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
       longIntegerFree(lgInt);
-      break;
-
-    case dtReal16:
-      if(real16IsNaN(REGISTER_REAL16_DATA(REGISTER_X)) || real16IsInfinite(REGISTER_REAL16_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnUlp:", "cannot use NaN as X or ±∞ input of ULP?", NULL, NULL);
-        #endif
-      }
-
-      real16NextPlus(REGISTER_REAL16_DATA(REGISTER_X), &x16);
-      if(real16IsInfinite(&x16)) {
-        real16NextMinus(REGISTER_REAL16_DATA(REGISTER_X), &x16);
-        real16Subtract(REGISTER_REAL16_DATA(REGISTER_X), &x16, REGISTER_REAL16_DATA(REGISTER_X));
-      }
-      else {
-        real16Subtract(&x16, REGISTER_REAL16_DATA(REGISTER_X), REGISTER_REAL16_DATA(REGISTER_X));
-      }
-
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
       break;
 
     case dtShortInteger:

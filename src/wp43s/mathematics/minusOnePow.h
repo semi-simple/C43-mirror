@@ -21,10 +21,8 @@
 void fnM1Pow   (uint16_t unusedButMandatoryParameter);
 void m1PowError(void);
 void m1PowLonI (void);
-void m1PowRe16 (void);
-void m1PowCo16 (void);
-void m1PowRm16 (void);
-void m1PowCm16 (void);
+void m1PowRema (void);
+void m1PowCxma (void);
 void m1PowShoI (void);
-void m1PowRe34 (void);
-void m1PowCo34 (void);
+void m1PowReal (void);
+void m1PowCplx (void);

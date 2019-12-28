@@ -78,7 +78,7 @@
   #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
 #endif
 
-#ifdef TESTSUITE_BUILD
+#if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
   #undef  PC_BUILD
   #undef  DMCP_BUILD
   #undef  DEBUG_PANEL

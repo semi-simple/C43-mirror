@@ -127,7 +127,12 @@ void tanLonI(void) {
   }
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
+  if(realIsZero(&cos)) {
+    realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    realToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
+  }
 }
 
 
@@ -172,7 +177,12 @@ void tanReal(void) {
       return;
     }
     else {
-      realToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
+      if(realIsZero(&cos)) {
+        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        realToReal34(&tan, REGISTER_REAL34_DATA(REGISTER_X));
+      }
     }
   }
   setRegisterAngularMode(REGISTER_X, AM_NONE);

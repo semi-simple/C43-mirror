@@ -495,6 +495,9 @@ void generateAllConstants(void) {
   generateConstantArray34("1000",        "+1.000000000000000000000000000000000000000000000000000000e+03");
   generateConstantArray34("1e6",         "+1.000000000000000000000000000000000000000000000000000000e+06");
 
+  generateConstantArray("rt3",         "+1.732050807568877293527446341505872366942805253810380628e+00");                                         //JM ELEC Constants
+  generateConstantArray("rt3on2",      "+8.660254037844386467637231707529361834714026269051903140e-01");                                         //JM ELEC Constants
+
   strcat(realArray, "};\n");
 }
 

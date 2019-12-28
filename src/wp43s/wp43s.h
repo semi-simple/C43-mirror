@@ -76,7 +76,7 @@
   #define EXTRA_INFO_ON_CALC_ERROR 0
 #endif
 
-#ifdef TESTSUITE_BUILD
+#if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
   #undef  PC_BUILD
   #undef  DMCP_BUILD
   #undef  DEBUG_PANEL
@@ -108,7 +108,7 @@
   #define hideUserMode()          {}
   #define showDateTime()          {}
   #define showAlphaMode()         {}
-#endif // TESTSUITE_BUILD
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>

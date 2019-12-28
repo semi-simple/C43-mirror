@@ -135,14 +135,14 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,            ITM_SSIZE4,                  ITM_SSIZE8,
                                      ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 #if DMCP_BUILD
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 #else
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines                
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
 #endif
 
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_CLSTK,                           //JM
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_CLSTK,                          //JM
                                      ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             ITM_ERPN,                           //JM
                                      ITM_BASE_HOME,                 ITM_BASE_MYMENU,            ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
 
@@ -324,7 +324,7 @@ const int16_t menu_ConvP[]       = { ITM_HPEtoW,                    ITM_WtoHPE, 
 const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_BARtoPA,              ITM_PAtoBAR,           ITM_PSItoPA,                 ITM_PAtoPSI,
                                      10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    10000+ITM_ATMtoPA,           10000+ITM_PAtoATM,
                                      20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,          20000+ITM_PAtoATMb,           
-                                     10000+ITM_mmHGtoPAb,           10000+ITM_PAtommHGb,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                            //JM
+                                     10000+ITM_mmHGtoPAb,           10000+ITM_PAtommHGb,        ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                            //JM
                                      30000+ITM_mmHGtoPA,            30000+ITM_PAtommHG,         ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                       };    //JM
 
 const int16_t menu_ConvM[]       = { ITM_LBStoKG,                   ITM_KGtoLBS,                ITM_CWTtoKG,              ITM_KGtoCWT,           ITM_OZtoKG,                  ITM_KGtoOZ,
@@ -410,14 +410,14 @@ const int16_t menu_MyMenu[]      = { ITM_cos                                    
 
 const int16_t menu_BASE[]        = {  
                                      ITM_2HEX,                      ITM_2DEC,                   ITM_2OCT,                 ITM_2BIN,              -MNU_BITS,                   -MNU_INTS,                          //JM BASE MENU ADDED
-                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               KEY_HASH,                    ITM_toINT,                          //JM                      
+                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               KEY_HASH,                    ITM_toINT,                          //JM
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,  /*ITM_HASH*/ITM_NULL,                    ITM_NULL                      };    //JM BASE MENU ADDED
 
-const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE           
+const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
                                      ITM_DEG,                       ITM_RAD,                    ITM_DtoR,                 ITM_RtoD,              ITM_RECT,                    ITM_POLAR,                          //JM EE
 
-                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_EE_EXP_TH,                ITM_CLSTK,                         //JM EE           
+                                     ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_EE_EXP_TH,                ITM_CLSTK,                         //JM EE
                                      ITM_EE_STO_V_I,                ITM_EE_STO_IR,              ITM_EE_STO_V_Z,           ITM_EE_X2BAL,          ITM_PARALLEL,                -MNU_CPX,                           //JM EE
                                      ITM_EE_STO_Z,                  ITM_EE_RCL_Z,               ITM_EE_STO_V,             ITM_EE_RCL_V,          ITM_EE_STO_I,                ITM_EE_RCL_I                  };    //JM EE
 
@@ -505,8 +505,8 @@ const int16_t menu_HOME[]        = {
 const int16_t menu_ALPHA[]        = { 
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
 /* 03 */                            -MNU_MyAlpha,                   -MNU_ALPHA_OMEGA,           -MNU_alpha_omega,         -MNU_ALPHADOT,        -MNU_ALPHAMATH,              -MNU_ALPHAINTL,                      //JM
-                                     ITM_ASSIGN,                    KEY_USERMODE,               ITM_NULL,                 -MNU_CATALOG,          -MNU_MODE,                   ITM_NULL,                           //JM                     
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM                     
+                                     ITM_ASSIGN,                    KEY_USERMODE,               ITM_NULL,                 -MNU_CATALOG,          -MNU_MODE,                   ITM_NULL,                           //JM 
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
 
 #include "softmenuCatalogs.h"
 

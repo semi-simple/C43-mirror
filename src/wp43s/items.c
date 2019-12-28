@@ -351,6 +351,27 @@ void fnComplexCCCC              (uint16_t unusedParamButMandatory) {}
 void registerBrowser            (uint16_t unusedParamButMandatory) {}
 void flagBrowser                (uint16_t unusedParamButMandatory) {}
 void fontBrowser                (uint16_t unusedParamButMandatory) {}
+void fnLastX                    (uint16_t unusedParamButMandatory) {}           //vv JM
+void fnJM                       (uint16_t unusedParamButMandatory) {}
+void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
+void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
+void fnComplexCCCC_CC1          (uint16_t unusedParamButMandatory) {}
+void fnCvtmmhgPa                (uint16_t unusedParamButMandatory) {}
+void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
+void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
+void fnDisplayFormatUnit        (uint16_t unusedParamButMandatory) {}
+void fnShowJM                   (uint16_t unusedParamButMandatory) {}
+void fnJMup                     (uint16_t unusedParamButMandatory) {}
+void fnJMdown                   (uint16_t unusedParamButMandatory) {}
+void fnUserJM                   (uint16_t unusedParamButMandatory) {}
+void fnSigmaAssign              (uint16_t unusedParamButMandatory) {}
+void fnGetSigmaAssignToX        (uint16_t unusedParamButMandatory) {}
+void fnJM_GetXToNORMmode        (uint16_t unusedParamButMandatory) {}
+void fnInDefault                (uint16_t unusedParamButMandatory) {}
+void fnJMUSERmode               (uint16_t unusedParamButMandatory) {}
+void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
+void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
+void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -842,7 +863,7 @@ const item_t indexOfItems[] = {
 /*  483 */  { fnAngularMode,               AM_RADIAN,                   "RAD",                                         "RAD",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  484 */  { fnCvtToCurrentAngularMode,   AM_RADIAN,                   "RAD" STD_RIGHT_ARROW,                         "RAD" STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  485 */  { itemToBeCoded,               NOPARAM,                     "RAM",                                         "RAM",                                         CAT_MENU, SLS_UNCHANGED},
-/*  486 */  { fnRandom,                    NOPARAM,                     "RAN#",                                        "RAN#",                                        CAT_FNCT, SLS_ENABLED},
+/*  486 */  { fnRandom,                    NOPARAM,                     "RAN#",                                        "RAN#",                                        CAT_FNCT, SLS_ENABLED  },
 /*  487 */  { registerBrowser,             NOPARAM,                     "REGS.V",                                      "REGS.V",                                      CAT_FNCT, SLS_UNCHANGED},      //JM Changed RBR to REGS
 /*  488 */  { fnRecall,                    TM_STORCL,                   "RCL",                                         "RCL",                                         CAT_FNCT, SLS_ENABLED  },
 /*  489 */  { fnRecallConfig,              NOPARAM,                     "RCLCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
@@ -1319,7 +1340,7 @@ const item_t indexOfItems[] = {
 /*  958 */  { itemToBeCoded,               NOPARAM,                     "0958",                                        "0958",                                        CAT_FREE, SLS_UNCHANGED},
 /*  959 */  { addItemToBuffer,             CHR_ZETA,                    "",                                            STD_ZETA,                                      CAT_NONE, SLS_UNCHANGED},
 /*  960 */  { addItemToBuffer,             CHR_ETA,                     "",                                            STD_ETA,                                       CAT_NONE, SLS_UNCHANGED},
-/*  961 */  { itemToBeCoded,               NOPARAM,                     "0961",                                        "0961",                                        CAT_NONE, SLS_UNCHANGED},
+/*  961 */  { itemToBeCoded,               NOPARAM,                     "0961",                                        "0961",                                        CAT_FREE, SLS_UNCHANGED},
 /*  962 */  { addItemToBuffer,             CHR_THETA,                   "",                                            STD_THETA,                                     CAT_NONE, SLS_UNCHANGED},
 /*  963 */  { addItemToBuffer,             CHR_IOTA,                    "",                                            STD_IOTA,                                      CAT_NONE, SLS_UNCHANGED},
 /*  964 */  { itemToBeCoded,               NOPARAM,                     "0964",                                        "0964",                                        CAT_FREE, SLS_UNCHANGED},
@@ -1874,7 +1895,7 @@ const item_t indexOfItems[] = {
 /* 1513 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                   CAT_NONE, SLS_UNCHANGED},
 /* 1515 */  { fnUserMode,                  NOPARAM,                     "",                                            "USER",                                        CAT_NONE, SLS_UNCHANGED},
-/* 1516 */  { fnComplexCCCC_CC,            NOPARAM,                     "",                                            "CC",                                          CAT_NONE, SLS_UNCHANGED},      //JM Change CC to COMPLEX
+/* 1516 */  { fnComplexCCCC_CC,            NOPARAM,                     "CC",                                          "CC",                                          CAT_FNCT, SLS_UNCHANGED},      //JM Change CC to COMPLEX
 /* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1519 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UP_ARROW,                                  CAT_NONE, SLS_UNCHANGED},
@@ -2286,7 +2307,6 @@ const item_t indexOfItems[] = {
 /* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "",                                            "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1912 */  { fnInDefault,                 ID_SI        ,               "",                                            "i" STD_SPACE_3_PER_EM "SI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI        ,               "",                                            "i" STD_SPACE_3_PER_EM "LI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-
 
 /* 1914 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

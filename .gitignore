@@ -5,8 +5,8 @@
 *.layout
 *.depend
 .stamp-constantPointers
-.stamp-rasterFontsData
 .stamp-softmenuCatalog
+.stamp-rasterFontsData
 callgrind.out*
 gmon.out
 bin/
@@ -14,13 +14,10 @@ obj/
 build/
 gmp-6.1.2/
 gmp-6.1.2.tar.bz2
-DMCP_build/src
-DMCP_build/decNumberICU
 src/qspi_crc.h
 
 !windows\ binaries/wp43.exe
 !DM42\ binary/keymap.bin
-!DMCP_build/bin
 
 # / before the executable files else directories under src/ are ignored
 /generateConstants

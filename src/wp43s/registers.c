@@ -612,30 +612,30 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
-          setRegisterDataType(r, dtReal34, AM_NONE);
-          setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
-          real34Zero(REGISTER_REAL34_DATA(r));
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
+        if(Input_Default == ID_43S || Input_Default == ID_DP) {                 //JM defaults JMZERO
+        setRegisterDataType(r, dtReal34, AM_NONE);
+        setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
+        real34Zero(REGISTER_REAL34_DATA(r));
+        }                                                   //JM defaults ^^
+        else if(Input_Default == ID_CPXDP) {                //JM defaults vv
           setRegisterDataType(r, dtComplex34, AM_NONE);
           setRegisterDataPointer(r, allocWp43s(COMPLEX34_SIZE));
           real34Zero(REGISTER_REAL34_DATA(r));
           real34Zero(REGISTER_IMAG34_DATA(r));
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_SI) {                     //JM defaults vv
+        }                                                   //JM defaults ^^
+        else if(Input_Default == ID_SI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           convertLongIntegerToShortIntegerRegister(lgInt, 10, r);
           setRegisterShortIntegerBase(r, 10);  
           longIntegerFree(lgInt);
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_LI) {                     //JM defaults vv
+        }                                                   //JM defaults ^^
+        else if(Input_Default == ID_LI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           convertLongIntegerToLongIntegerRegister(lgInt, r);
           longIntegerFree(lgInt);
-        }                                                      //JM defaults ^^
+        }                                                   //JM defaults ^^
       }
     }
 
@@ -647,30 +647,30 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumRegs; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
-          setRegisterDataType(r, dtReal34, AM_NONE);
-          setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
-          real34Zero(REGISTER_REAL34_DATA(r));
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
+        if(Input_Default == ID_43S || Input_Default == ID_DP) {                 //JM defaults JMZERO
+        setRegisterDataType(r, dtReal34, AM_NONE);
+        setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
+        real34Zero(REGISTER_REAL34_DATA(r));
+        }                                                   //JM defaults ^^
+        else if(Input_Default == ID_CPXDP) {                //JM defaults vv
           setRegisterDataType(r, dtComplex34, AM_NONE);
           setRegisterDataPointer(r, allocWp43s(COMPLEX34_SIZE));
           real34Zero(REGISTER_REAL34_DATA(r));
           real34Zero(REGISTER_IMAG34_DATA(r));
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_SI) {                     //JM defaults vv
+        }                                                   //JM defaults ^^
+        else if(Input_Default == ID_SI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           convertLongIntegerToShortIntegerRegister(lgInt, 10, r);
           setRegisterShortIntegerBase(r, 10);  
           longIntegerFree(lgInt);
-        }                                                      //JM defaults ^^
-        else if (Input_Default == ID_LI) {                     //JM defaults vv
+        }                                                   //JM defaults ^^
+        else if(Input_Default == ID_LI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           convertLongIntegerToLongIntegerRegister(lgInt, r);
           longIntegerFree(lgInt);
-        }                                                      //JM defaults ^^
+        }                                                   //JM defaults ^^
       }
     }
 
@@ -731,16 +731,19 @@ void allocateNamedVariable(const char *variableName) {
   // The new named variable is a real34 initialized to 0.0
   setRegisterDataType(regist, dtReal34, AM_NONE);
 
-  if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
+  if(Input_Default == ID_43S || Input_Default == ID_DP) {                       //JM defaults JMZERO
     setRegisterDataType(regist, dtReal34, AM_NONE);
-    len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
-    setRegisterNamePointer(regist, allocWp43s(len));
-    setRegisterNameLength(regist, len>>1);
-    memcpy(getRegisterNamePointer(regist), variableName, len);
-    setRegisterDataPointer(regist, allocWp43s(REAL34_SIZE));
-    real34Zero(REGISTER_REAL34_DATA(regist));
-  }                                                      //JM defaults
-  else if (Input_Default == ID_CPXDP) {                  //JM defaults vv
+
+  len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+
+  setRegisterNamePointer(regist, allocWp43s(len));
+  setRegisterNameLength(regist, len>>1);
+  memcpy(getRegisterNamePointer(regist), variableName, len);
+
+  setRegisterDataPointer(regist, allocWp43s(REAL34_SIZE));
+  real34Zero(REGISTER_REAL34_DATA(regist));
+  }                                                         //JM defaults
+  else if(Input_Default == ID_CPXDP) {                      //JM defaults vv
     setRegisterDataType(regist, dtComplex34, AM_NONE);
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     setRegisterNamePointer(regist, allocWp43s(len));
@@ -749,8 +752,8 @@ void allocateNamedVariable(const char *variableName) {
     setRegisterDataPointer(regist, allocWp43s(COMPLEX34_SIZE));
     real34Zero(REGISTER_REAL34_DATA(regist));
     real34Zero(REGISTER_IMAG34_DATA(regist));
-  }                                                      //JM defaults ^^
-  else if (Input_Default == ID_SI) {                     //JM defaults vv
+  }                                                         //JM defaults ^^
+  else if(Input_Default == ID_SI) {                         //JM defaults vv
     setRegisterDataType(regist, dtShortInteger, AM_NONE);
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     setRegisterNamePointer(regist, allocWp43s(len));
@@ -762,8 +765,8 @@ void allocateNamedVariable(const char *variableName) {
     convertLongIntegerToShortIntegerRegister(lgInt, 10, regist);
     setRegisterShortIntegerBase(regist, 10);  
     longIntegerFree(lgInt);
-  }                                                      //JM defaults ^^
-  else if (Input_Default == ID_LI) {                     //JM defaults vv
+  }                                                         //JM defaults ^^
+  else if(Input_Default == ID_LI) {                         //JM defaults vv
     setRegisterDataType(regist, dtShortInteger, AM_NONE);
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     setRegisterNamePointer(regist, allocWp43s(len));
@@ -774,7 +777,7 @@ void allocateNamedVariable(const char *variableName) {
     longIntegerInit(lgInt);
     convertLongIntegerToLongIntegerRegister(lgInt, regist);
     longIntegerFree(lgInt);
-  }                                                      //JM defaults ^^
+  }                                                         //JM defaults ^^
 }
 
 
@@ -937,17 +940,17 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
-  if (Input_Default == ID_43S || Input_Default == ID_DP) {                        //JM defaults JMZERO
-    if(getRegisterDataType(regist) == dtReal34) {
-      real34Zero(REGISTER_REAL34_DATA(regist));
-      setRegisterTag(regist, AM_NONE);
-    }
-    else{
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
-      real34Zero(REGISTER_REAL34_DATA(regist));
-    }
-  }                                                                               //JM defaults ^^
-  else if (Input_Default == ID_CPXDP) {                                           //JM defaults vv
+  if(Input_Default == ID_43S || Input_Default == ID_DP) {                       //JM defaults JMZERO
+  if(getRegisterDataType(regist) == dtReal34) {
+    real34Zero(REGISTER_REAL34_DATA(regist));
+    setRegisterTag(regist, AM_NONE);
+  }
+  else{
+    reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+    real34Zero(REGISTER_REAL34_DATA(regist));
+  }
+  }                                                                             //JM defaults ^^
+  else if(Input_Default == ID_CPXDP) {                                          //JM defaults vv
     if(getRegisterDataType(regist) == dtComplex34) {
       real34Zero(REGISTER_REAL34_DATA(regist));
       real34Zero(REGISTER_IMAG34_DATA(regist));
@@ -958,22 +961,22 @@ void clearRegister(calcRegister_t regist) {
       real34Zero(REGISTER_REAL34_DATA(regist));
       real34Zero(REGISTER_IMAG34_DATA(regist));
     }
-  }                                                                               //JM defaults ^^
-  else if (Input_Default == ID_SI) {                                              //JM defaults vv
+  }                                                                             //JM defaults ^^
+  else if(Input_Default == ID_SI) {                                             //JM defaults vv
     //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
     longInteger_t lgInt;
     longIntegerInit(lgInt);
     convertLongIntegerToShortIntegerRegister(lgInt, 10, regist);
     setRegisterShortIntegerBase(regist, 10);  
     longIntegerFree(lgInt);
-  }                                                                               //JM defaults ^^
-  else if (Input_Default == ID_LI) {                                              //JM defaults vv
+  }                                                                             //JM defaults ^^
+  else if(Input_Default == ID_LI) {                                             //JM defaults vv
     //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
     longInteger_t lgInt;
     longIntegerInit(lgInt);
     convertLongIntegerToLongIntegerRegister(lgInt, regist);
     longIntegerFree(lgInt);
-  }                                                                               //JM defaults ^^
+  }                                                                             //JM defaults ^^
 }
 
 
@@ -1655,14 +1658,16 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnEnter(uint16_t unusedParamButMandatory) {
-
   //printf("fnEnter calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification
   if( !eRPN ) {                                    //JM NEWERPN
-    STACK_LIFT_ENABLE;
-    liftStack();
-    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-    refreshStack();
-    STACK_LIFT_DISABLE;                           //JM NEWERPN (COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN)
+  STACK_LIFT_ENABLE;
+
+  liftStack();
+  copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+
+  refreshStack();
+
+  STACK_LIFT_DISABLE;                             //JM NEWERPN (COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN)
   }                                               //JM NEWERPN vv
   else {
     if(stackLiftEnabled) {

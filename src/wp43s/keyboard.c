@@ -93,9 +93,9 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    row = min(3, sm->numItems/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
-    if(itemShift/6 <= row) {
+    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
       if(func == CHR_PROD_SIGN) {

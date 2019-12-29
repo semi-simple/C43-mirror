@@ -245,8 +245,8 @@ void btnPressed(void *notUsed, void *data) {
   allowScreenUpdate = true;
 
 
-  // Shift f pressed
-  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift f pressed and shift g not active
+  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -259,14 +259,13 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     shiftF = !shiftF;
-    shiftG = false;
     shiftStateChanged = true;
 
     showShiftState();
   }
 
-  // Shift g pressed
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift g pressed and shift f not active
+  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -279,7 +278,6 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     shiftG = !shiftG;
-    shiftF = false;
     shiftStateChanged = true;
 
     showShiftState();
@@ -546,7 +544,7 @@ void btnPressed(void *notUsed, void *data) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-          if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+          if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
             alphaCase = AC_UPPER;
             showAlphaMode();
             softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
@@ -625,7 +623,7 @@ void btnPressed(void *notUsed, void *data) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-          if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
+          if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
             alphaCase = AC_LOWER;
             showAlphaMode();
             softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
@@ -968,17 +966,13 @@ void btnReleased(void *notUsed, void *data) {
 
 
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
-  if(!shiftF) {
-    shiftF = true;
-    shiftStateChanged = true;
-  }
+  // Emulating a CC key stroke
 
-  #ifdef PC_BUILD
-    btnClicked(NULL, "02");
-  #endif
+  //if(!shiftF) {
+  //  shiftF = true;
+  //  shiftStateChanged = true;
+  //}
 
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "02");
-  #endif
+  btnClicked(NULL, "09"); // Index 9 of kbd_std array (beginning with "{34,   KEY_CC,") in file assign.c
 }
 #endif // TESTSUITE_BUILD

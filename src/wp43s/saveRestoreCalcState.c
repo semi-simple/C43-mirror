@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 27  // 27 = removed nimInputIsReal34
+#define BACKUP_VERSION 28  // 28 = USER on f shifted g key
 
 void saveCalc(void) {
   size_t size;

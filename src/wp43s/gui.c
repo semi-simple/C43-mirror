@@ -160,7 +160,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
 
     case 81:  // Q
     case 113: // q
-      //printf("key pressed: Q Quadradwurzel\n");
+      //printf("key pressed: Q Quadrad\n");
       btnClicked(w, "05");
       break;
 
@@ -1288,6 +1288,8 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl34G);
   gtk_widget_show(lbl34H);
   gtk_widget_show(lbl34L);
+  gtk_widget_show(lbl35G);
+  gtk_widget_show(lbl36F);
 
   gtk_widget_show(btn41);
   gtk_widget_show(btn42);
@@ -1510,6 +1512,8 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);
   gtk_widget_show(lbl34Gr);
+  //gtk_widget_show(lbl35G);
+  gtk_widget_show(lbl36F);
 
   gtk_widget_show(btn41);
   gtk_widget_show(btn42);
@@ -1537,7 +1541,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn55);
 
   gtk_widget_show(lbl51L);
-  gtk_widget_show(lbl51F);
+  //gtk_widget_show(lbl51F);
   gtk_widget_show(lbl51G);
   gtk_widget_show(lbl52L);
   gtk_widget_show(lbl53L);
@@ -1708,6 +1712,8 @@ void calcModeAsmGui(void) {
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);
   gtk_widget_show(lbl34Gr);
+  //gtk_widget_show(lbl35G);
+  gtk_widget_show(lbl36F);
 
   gtk_widget_show(btn41);
   gtk_widget_show(btn42);
@@ -1735,7 +1741,7 @@ void calcModeAsmGui(void) {
   gtk_widget_show(btn55);
 
   gtk_widget_show(lbl51L);
-  gtk_widget_show(lbl51F);
+  //gtk_widget_show(lbl51F);
   gtk_widget_show(lbl51G);
   gtk_widget_show(lbl52L);
   gtk_widget_show(lbl53L);
@@ -2851,7 +2857,7 @@ void setupUI(void) {
     btnRegisters           = gtk_button_new_with_label("Registers");
     btnLocalRegisters      = gtk_button_new_with_label("Local registers");
     btnStatisticalSums     = gtk_button_new_with_label("Statistical sums");
-    btnNamedVariables      = gtk_button_new_with_label("Named registers");
+    btnNamedVariables      = gtk_button_new_with_label("Named variables");
     btnSavedStackRegisters = gtk_button_new_with_label("Saved stack registers");
     chkHexaString          = gtk_check_button_new_with_label("Strings in hexadecimal form");
 

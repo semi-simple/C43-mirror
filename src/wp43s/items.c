@@ -385,7 +385,7 @@ const item_t indexOfItems[] = {
 /*   31 */  { itemToBeCoded,               NOPARAM,                     "ASSIGN",                                      "ASN",                                         CAT_FNCT, SLS_UNCHANGED},
 /*   32 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    "atm" STD_RIGHT_ARROW "Pa",                    CAT_FNCT, SLS_ENABLED  },
 /*   33 */  { fnCvtAuM,                    multiply,                    "au" STD_RIGHT_ARROW "m",                      "au" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
-/*   34 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},
+/*   34 */  { itemToBeCoded,               NOPARAM,                     "0034",                                        "0034",                                        CAT_FREE, SLS_UNCHANGED},
 /*   35 */  { itemToBeCoded,               NOPARAM,                     "A:",                                          "A:",                                          CAT_MENU, SLS_UNCHANGED},
 /*   36 */  { fnConstant,                  4,                           "a" STD_SUB_EARTH,                             "a" STD_SUB_EARTH,                             CAT_CNST, SLS_ENABLED  },
 /*   37 */  { itemToBeCoded,               NOPARAM,                     "B",                                           "B",                                           CAT_RVAR, SLS_UNCHANGED},
@@ -1227,7 +1227,7 @@ const item_t indexOfItems[] = {
 /*  873 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    STD_RIGHT_ARROW " kg",                         CAT_DUPL, SLS_ENABLED  },
 
 /*  874 */  { fontBrowser,                 NOPARAM,                     "FBR",                                         "FBR",                                         CAT_FNCT, SLS_UNCHANGED}, // Font Browser
-/*  875 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED}, // Small latin letters
+/*  875 */  { itemToBeCoded,               NOPARAM,                     "CFG",                                         "CFG",                                         CAT_MENU, SLS_UNCHANGED},
 /*  876 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_ELLIPSIS STD_omega,              STD_alpha STD_ELLIPSIS STD_omega,              CAT_MENU, SLS_UNCHANGED}, // Small greek letters
 /*  877 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "intl",                              STD_alpha "intl",                              CAT_MENU, SLS_UNCHANGED}, // Small intl letters
 /*  878 */  { addItemToBuffer,             REGISTER_X,                  "REG_X",                                       "X",                                           CAT_NONE, SLS_UNCHANGED}, // The order

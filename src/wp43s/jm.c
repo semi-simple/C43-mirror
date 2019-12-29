@@ -452,6 +452,8 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
 
 
 
+
+
 void fn_cnst_op_j() {
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 //    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));
@@ -1431,6 +1433,123 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
   userModeEnabled = userModeEnabledMEM;
 }
 //JM^^^^^^^
+
+
+
+
+//-----------------------------------------------------
+
+real_t tmpy;
+char ttt[40];
+float tmpyy;
+real34_t tmpx;
+float array[400];
+
+void Fn_Lbl_A(void) {
+
+    copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
+
+                     // cos(x)/x + sin(5x)/5
+    fnCos(0);        // SIN
+
+    STACK_LIFT_ENABLE; 
+    liftStack();
+    copySourceRegisterToDestRegister(99, REGISTER_X);   // STO L
+
+    fnDivide(0);     // /
+
+    STACK_LIFT_ENABLE; 
+    liftStack();
+    copySourceRegisterToDestRegister(99, REGISTER_X);   // STO L
+
+    STACK_LIFT_ENABLE;   // 5
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    stringToReal34("5", REGISTER_REAL34_DATA(REGISTER_X));
+
+    fnMultiply(0);   // *
+    fnSin(0);        // SIN
+
+    STACK_LIFT_ENABLE;   // 5
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    stringToReal34("5", REGISTER_REAL34_DATA(REGISTER_X));
+
+    fnDivide(0);     // /
+
+    fnAdd(0);     // /
+    
+}
+
+
+void graph (uint16_t unusedParamButMandatory){
+int16_t screen_x(float xb, float x, float xe) {
+  return ((x-xb)/(xe-xb)*SCREEN_WIDTH);
+}
+
+int16_t screen_y(float yb, float y, float ye) {
+  return (SCREEN_HEIGHT-(y-yb)/(ye-yb)*SCREEN_HEIGHT);
+}
+
+  int16_t cnt;
+//  int16_t x1;
+  float xb,xe,yb,ye,x,y;
+
+  //GRAPH RANGE
+  xb=-10.000001; //Graph range x
+  xe=10;
+  yb=-1;         //Graph range y
+  ye=1;
+
+  fnAngularMode(AM_RADIAN);
+
+  //GRAPH
+  cnt=0;
+  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH)
+  {
+//  y = (sin(x*1))/(x) + sin(x*6)*0.3;
+    //convert to X register
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    gcvt(x, 34, ttt); 
+    stringToReal34(ttt, REGISTER_REAL34_DATA(REGISTER_X));
+
+    Fn_Lbl_A();
+
+    //Convert from X register
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
+    realToString(&tmpy, ttt);
+    tmpyy = strtof (ttt, NULL);
+    y = tmpyy;
+
+    array[cnt]=y;
+    cnt++;
+  }
+
+  clearScreen(true,true,true);
+
+  //AXIS
+  cnt = 0;
+  while (cnt!=1+SCREEN_WIDTH)   { setPixel(cnt,screen_y(yb,0,ye)); cnt++; }
+  while (cnt!=1+SCREEN_HEIGHT)  { setPixel(screen_x(xb,0,xe),cnt); cnt++; }
+
+  //GRAPH
+  cnt = 0;
+  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH) {
+    setPixel(screen_x(xb,x,xe),screen_y(yb,array[cnt],ye));
+
+//    for(x1=screen_x(xb,x1,xe)+0.5; x1<=screen_x(xb,x1,xe)+0.5; x1+= 0.25) {
+//      setPixel( x1, screen_y(yb, (array[cnt+1]-array[cnt])/2,ye));
+//    }
+
+    cnt++;
+  }
+}
+
+
+//-----------------------------------------------------
+
+
+
 
 
 

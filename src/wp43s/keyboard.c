@@ -203,20 +203,33 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
   int16_t row, func;
   func = 0;
   const softmenu_t *sm;
-  if(softmenuStackPointer > 0) {
+
+  if(softmenuStackPointer > 0) {                                            //Martin's update from Executefunction
+    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
+    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+
+    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
+      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+
+      if(func == CHR_PROD_SIGN) {
+        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+      }
+
+/*  if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, sm->numItems/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
     if(itemShift/6 <= row) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
-      }      
+      }
+*/
       if(func < 0) {
         func = - func;
       }      
     }
   }
-return func;
+return func % 10000;
 }
 
 
@@ -536,7 +549,7 @@ void btnFnPressed(void *w, void *data) {
     FN_counter = JM_FN_TIMER;                                               //start new cycle
     FN_timeouts_in_progress = true;
     FN_timed_out_to_NOP = false;
-    if(!shiftF && !shiftG) {                                                //jump to correct shift state in case shift is already activated
+    if(!shiftF && !shiftG) {   
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
       underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
     }
@@ -548,13 +561,15 @@ void btnFnPressed(void *w, void *data) {
       showFunctionName(nameFunction(FN_key_pressed-37,12),0);  
       underline_softkey(FN_key_pressed-38,2, true /*dontclear at first call*/);
     }                                                                      //further shifts are done within FN_handler
-  }     
+  }
   #ifdef FN_TIME_DEBUG
   printf("  B KEY=%d, KEYlast=%d, DoubleClick=%d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
   printf("  5 end \n");                                                                    //JM LONGPRESS ^^
   #endif
+//printf("4: %d\n",nameFunction(FN_key_pressed-37,0));                                            //jump to correct shift state in case shift is already activated
 }
 
+ 
 
 //*************----------*************------- FN KEY RELEASED -------***************-----------------
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN

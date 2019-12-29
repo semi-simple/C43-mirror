@@ -1411,18 +1411,12 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
     id = -MNU_ALPHAintl;
   }
-  else if(id==-MNU_A_Z && alphaCase==AC_LOWER) { // A...Z
-    id = -MNU_a_z;
-  }
   else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
     id = -MNU_alpha_omega;
   }
 
   if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
     id = -MNU_ALPHAintl;
-  }
-  else if((id==0 && !strcmp(menu, "A" STD_ELLIPSIS "Z")) && alphaCase==AC_LOWER) { // A...Z
-    id = -MNU_a_z;
   }
   else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
     id = -MNU_alpha_omega;

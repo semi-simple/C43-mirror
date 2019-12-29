@@ -692,6 +692,7 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 void btnFnClicked(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
+
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
 
@@ -889,8 +890,8 @@ void btnPressed(void *notUsed, void *data) {
                                                                                                                               //JM shifts
 #endif
 
-  // Shift f pressed
-  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift f pressed and shift g not active
+  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -907,14 +908,14 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftF = !shiftF;
-    shiftG = false;
+    // shiftG = false; //Martin removed with !shiftG check above
     shiftStateChanged = true;
 
     showShiftState();
   }
 
-  // Shift g pressed
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift g pressed and shift f not active
+  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -931,7 +932,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftG = !shiftG;
-    shiftF = false;
+    // shiftF = false; //Martin removed with the addition of the !shiftF flag
     shiftStateChanged = true;
 
     showShiftState();
@@ -1136,7 +1137,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
+            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -1150,7 +1151,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
         displayBugScreen(errorMessage);
       }
     }
@@ -1244,7 +1245,7 @@ void btnPressed(void *notUsed, void *data) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-          if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+          if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
             alphaCase = AC_UPPER;
             if(calcMode == CM_AIM)      //vv dr
             {
@@ -1349,7 +1350,7 @@ void btnPressed(void *notUsed, void *data) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-          if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
+          if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
             alphaCase = AC_LOWER;
             if(calcMode == CM_AIM)      //vv dr
             {

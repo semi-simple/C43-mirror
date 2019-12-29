@@ -533,7 +533,7 @@ void debugNIM(void) {
     char     string[3000], *p;
     uint16_t i, k, n=0;
 
-    if(1000 <= regist && regist < 1000+numberOfNamedVariables) { // Named register
+    if(1000 <= regist && regist < 1000+numberOfNamedVariables) { // Named variable
       n = stringByteLength(getRegisterNamePointer(regist));
       for(i=0, p=getRegisterNamePointer(regist); i<=n; i++, p++) {
         string[i] = *p;
@@ -1291,7 +1291,7 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
-      sprintf(string, "Content of the %" FMT16U " named registers", numberOfNamedVariables);
+      sprintf(string, "Content of the %" FMT16U " named variables", numberOfNamedVariables);
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);

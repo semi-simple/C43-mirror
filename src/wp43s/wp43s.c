@@ -75,7 +75,6 @@ int16_t              tamCurrentOperation;
 int16_t              currentRegisterBrowserScreen;
 int16_t              lineTWidth;
 int16_t              rbrRegister;
-int16_t              displayHasNDigits;
 int16_t              alphaSelectionMenu;
 int16_t              lastFcnsMenuPos;
 int16_t              lastMenuMenuPos;
@@ -226,15 +225,15 @@ void setupDefaults(void) {
          //JM vv bug: Overwritten by fnReset
   // Initialization of user key assignments
   memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
-  kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
-  kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
-  kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
-  kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
-  kbd_usr[18].fShifted    = -MNU_VARS;
-  kbd_usr[18].gShifted    = CST_54;
-  kbd_usr[19].fShifted    = ITM_SW;
-  kbd_usr[19].gShifted    = ITM_SXY;
-  kbd_usr[20].gShifted    = ITM_LYtoM;
+  //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
+  //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
+  //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
+  //kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
+  //kbd_usr[18].fShifted    = -MNU_VARS;
+  //kbd_usr[18].gShifted    = CST_54;
+  //kbd_usr[19].fShifted    = ITM_SW;
+  //kbd_usr[19].gShifted    = ITM_SXY;
+  //kbd_usr[20].gShifted    = ITM_LYtoM;
          //JM ^^ bug: Overwritten by fnReset
 
   // initialize the RadaioButton/Checkbox items

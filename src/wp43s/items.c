@@ -1122,7 +1122,7 @@ const item_t indexOfItems[] = {
 /*  741 */  { fnConstant,                  71,                          STD_mu STD_SUB_u,                              STD_mu STD_SUB_u,                              CAT_CNST, SLS_ENABLED  },
 /*  742 */  { fnConstant,                  72,                          STD_mu STD_SUB_mu,                             STD_mu STD_SUB_mu,                             CAT_CNST, SLS_ENABLED  },
 /*  743 */  { itemToBeCoded,               NOPARAM,                     STD_PI STD_SUB_n,                              STD_PI STD_SUB_n,                              CAT_FNCT, SLS_UNCHANGED},
-/*  744 */  { fnPi,                        NOPARAM,                     "",                                            STD_pi,                                        CAT_NONE, SLS_ENABLED  },
+/*  744 */  { fnPi,                        NOPARAM,                     STD_pi,                                        STD_pi,                                        CAT_NONE, SLS_ENABLED  },
 /*  745 */  { itemToBeCoded,               NOPARAM,                     STD_SIGMA STD_SUB_n,                           STD_SIGMA STD_SUB_n,                           CAT_FNCT, SLS_UNCHANGED},
 /*  746 */  { itemToBeCoded,               NOPARAM,                     STD_sigma,                                     STD_sigma,                                     CAT_FNCT, SLS_UNCHANGED},
 /*  747 */  { fnConstant,                  73,                          STD_sigma STD_SUB_B,                           STD_sigma STD_SUB_B,                           CAT_CNST, SLS_ENABLED  },
@@ -1164,7 +1164,7 @@ const item_t indexOfItems[] = {
 /*  783 */  { itemToBeCoded,               NOPARAM,                     STD_CROSS "MOD",                               STD_CROSS "MOD",                               CAT_FNCT, SLS_UNCHANGED},
 /*  784 */  { fnDivide,                    ITM_DIV,                     "/",                                           "/",                                           CAT_FNCT, SLS_ENABLED  },
 /*  785 */  { itemToBeCoded,               NOPARAM,                     STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               CAT_FNCT, SLS_UNCHANGED},
-/*  786 */  { addItemToBuffer,             ITM_INDIRECTION,             "",                                            STD_RIGHT_ARROW,                               CAT_NONE, SLS_UNCHANGED},
+/*  786 */  { addItemToBuffer,             ITM_INDIRECTION,             STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               CAT_NONE, SLS_UNCHANGED},
 /*  787 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "DATE",                        STD_RIGHT_ARROW "DATE",                        CAT_FNCT, SLS_UNCHANGED},
 /*  788 */  { fnCvtFromCurrentAngularMode, AM_DEGREE,                   STD_RIGHT_ARROW "DEG",                         STD_RIGHT_ARROW "DEG",                         CAT_FNCT, SLS_ENABLED  },
 /*  789 */  { fnCvtFromCurrentAngularMode, AM_DMS,                      STD_RIGHT_ARROW "D.MS",                        STD_RIGHT_ARROW "D.MS",                        CAT_FNCT, SLS_ENABLED  },
@@ -1194,7 +1194,7 @@ const item_t indexOfItems[] = {
 /*  813 */  { itemToBeCoded,               NOPARAM,                     "^MOD",                                        "^MOD",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  814 */  { itemToBeCoded,               NOPARAM,                     "|M|",                                         "|M|",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  815 */  { fnMagnitude,                 NOPARAM,                     "|x|",                                         "|x|",                                         CAT_FNCT, SLS_ENABLED  },
-/*  816 */  { fnParallel,                  NOPARAM,                     "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                    CAT_FNCT, SLS_ENABLED  },      //JM
+/*  816 */  { fnParallel,                  NOPARAM,                     "||",                                          "|" STD_SPACE_3_PER_EM "|",                    CAT_FNCT, SLS_ENABLED  },
 /*  817 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                               CAT_FNCT, SLS_UNCHANGED},
 /*  818 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                         CAT_FNCT, SLS_UNCHANGED},
 /*  819 */  { fnJM,                        002,       /*JMCALC*/        STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_UNCHANGED},      //JM CALC

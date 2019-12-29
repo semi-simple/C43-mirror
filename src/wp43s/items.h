@@ -60,7 +60,7 @@
 #define ITM_ASSIGN                      31
 #define ITM_ATMtoPA                     32
 #define ITM_AUtoM                       33
-#define MNU_A_Z                         34
+#define ITM_0034                        34
 #define MNU_CONVA                       35
 #define CST_04                          36
 #define ITM_REGB                        37
@@ -903,7 +903,7 @@
 #define ITM_TRZtoKGb                   873
 
 #define ITM_FBR                        874
-#define MNU_a_z                        875
+#define MNU_CFG                        875
 #define MNU_alpha_omega                876
 #define MNU_ALPHAintl                  877
 #define ITM_REG_X                      878

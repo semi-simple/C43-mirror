@@ -207,15 +207,15 @@ void setupDefaults(void) {
 
   // Initialization of user key assignments
   memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
-  kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
-  kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
-  kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
-  kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
-  kbd_usr[18].fShifted    = -MNU_VARS;
-  kbd_usr[18].gShifted    = CST_54;
-  kbd_usr[19].fShifted    = ITM_SW;
-  kbd_usr[19].gShifted    = ITM_SXY;
-  kbd_usr[20].gShifted    = ITM_LYtoM;
+  //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
+  //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
+  //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
+  //kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
+  //kbd_usr[18].fShifted    = -MNU_VARS;
+  //kbd_usr[18].gShifted    = CST_54;
+  //kbd_usr[19].fShifted    = ITM_SW;
+  //kbd_usr[19].gShifted    = ITM_SXY;
+  //kbd_usr[20].gShifted    = ITM_LYtoM;
 
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {

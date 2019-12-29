@@ -75,7 +75,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
         if(getRegisterDataType(regist) == dtReal34) {
           if(showContent) {
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
@@ -83,7 +83,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex34) {
           if(showContent) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)COMPLEX34_SIZE);
@@ -155,7 +155,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
             if(getRegisterDataType(regist) == dtReal34) {
               if(showContent) {
-                real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
               }
               else {
                 sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
@@ -163,7 +163,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex34) {
               if(showContent) {
-                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
               }
               else {
                 sprintf(tmpStr3000, "4+%d bytes", (int16_t)COMPLEX34_SIZE);

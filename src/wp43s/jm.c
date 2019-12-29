@@ -422,6 +422,58 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
 
 
 
+void fn_cnst_op_j() {
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("1", REGISTER_IMAG34_DATA(REGISTER_X));
+    realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(const_1, REGISTER_IMAG34_DATA(REGISTER_X));
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    refreshStack();
+  }
+
+void fn_cnst_op_aa() {
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//     stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//     stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));
+    realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 - 0.866
+    realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
+    fnChangeSign(ITM_CHS);
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    refreshStack();
+  }
+
+void fn_cnst_op_a() {
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 + 0.866i  : op a
+    fnChangeSign(ITM_CHS);
+    realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    refreshStack();
+  }
+
+void fn_cnst_0_cpx() {
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));      // Set X real = 0
+//    stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      // Set X imag = 0
+    realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
+    realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    refreshStack();
+  }
+
+void fn_cnst_1_cpx() {
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));      // Set X real = 0
+//    stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      // Set X imag = 0
+    realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
+    realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    refreshStack();
+  }
+
 /********************************************//**
  * RPN PROGRAM.
  *
@@ -433,7 +485,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 1) {                                          // JM_OPCODE = 1 : Parallel, not using the stack, destroying I, J & K
     saveStack();
-                                                                //                    * DO THE PARALLEL FUNCTION XY / (X+Y)
+/*                                                                //                    * DO THE PARALLEL FUNCTION XY / (X+Y)
                                                                 //                    * Drops X and Y, enables stack lift and refreshes the stack
                                                                 //                    * Leaves answer in X and update Last X
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
@@ -449,34 +501,20 @@ void fnJM(uint16_t JM_OPCODE) {
     fnSwapXY(0);                                                // X<>Y
     fnDivide(0);                                                // /
     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);   // STO I into L (To update LAST X)
-    refreshStack();
+*/    refreshStack();
   }
   else
 
   if(JM_OPCODE == 2) {                                          // JM_OPCODE = 2 : Angle from complex number.
     saveStack();
-                                                                //                    * Using the stack, push once.
-                                                                //                    * Leaves angle in X
-    cm = complexMode;                                           // STO POLAR MODE
+    cm = complexMode;
     STACK_LIFT_ENABLE;
-/*  btnClicked(NULL, "28");  // 1     // Get unity complex number & multiply with X, for the sole reason to convert X to complex type.
-    btnClicked(NULL, "14");  // CHS   //   I do not know how to set up the unity complex vector ootherwise
-    btnClicked(NULL, "02");  // sqrt  // Force i
-    shiftF = true;           // .     // Force i.i
-    shiftG = false;          // .
-    Reset_Shift_Mem();       // .
-    btnClicked(NULL, "02");  // sq.   // Force -1
-    btnClicked(NULL, "14");  // -1    // Force 1
-    btnClicked(NULL, "26");  // *.    // Multiply with X  */
-
     liftStack();                                                // Prepare for new X
-//  setRegisterDataType(REGISTER_X, dtComplex16, AM_NONE);      // Convert X to Complex16
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));      // Set X real = 0
-    stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      // Set X imag = 0
+    fn_cnst_0_cpx();
     fnAdd(0);                                                   // +
     complexMode = CM_POLAR;                                     // SET POLAR
-    fnComplexCCCC(0);                                           // COMPLEX
+    fnComplexCCCC_CPX(0);                                       // COMPLEX
     fnDropY(0);                                                 // DROP Y
     complexMode = cm;                                           // RCL POLAR MODE
     refreshStack();
@@ -487,10 +525,7 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+    fn_cnst_op_a();
   }
   else
 
@@ -498,10 +533,7 @@ void fnJM(uint16_t JM_OPCODE) {
      saveStack();
      STACK_LIFT_ENABLE;
      liftStack();
-     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-     stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-     stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));
-     refreshStack();
+     fn_cnst_op_aa();
   }
   else
 
@@ -509,10 +541,7 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("1", REGISTER_IMAG34_DATA(REGISTER_X));
-    refreshStack();
+    fn_cnst_op_j();
   }
   else
 
@@ -621,19 +650,21 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_a();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_aa();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // A1
     fnMultiply(0);                                              // * aa
@@ -644,19 +675,21 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_aa();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_a();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // A1
     fnMultiply(0);                                              // * aa
@@ -685,7 +718,7 @@ void fnJM(uint16_t JM_OPCODE) {
     liftStack();
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
     stringToReal34("3", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      //4676372317075293618347140262690519031402790348972596650845440001854057309
+    stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      //
     refreshStack();
     copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO
     fnDivide(0);
@@ -693,19 +726,21 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_a();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_aa();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // VC
     fnMultiply(0);                                              // * aa
@@ -719,19 +754,21 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_aa();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
-    refreshStack();
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_a();
+//    refreshStack();
     STACK_LIFT_ENABLE;
     fnRecall(REGISTER_I);                                       // VC
     fnMultiply(0);                                              // * aa
@@ -756,9 +793,10 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("1", REGISTER_IMAG34_DATA(REGISTER_X));
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("0", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("1", REGISTER_IMAG34_DATA(REGISTER_X));
+    fn_cnst_op_j();
     fnMultiply(0);                                              // * aa
     fnExp(0);
     refreshStack();
@@ -875,18 +913,20 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRecall(REGISTER_I);                                       //
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_a();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
 
     fnRecall(REGISTER_I);                                       //
     STACK_LIFT_ENABLE;
     liftStack();
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
-    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+//    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+//    stringToReal34("-0.5", REGISTER_REAL34_DATA(REGISTER_X));
+//    stringToReal34("-0.8660254037844386467637231707529362", REGISTER_IMAG34_DATA(REGISTER_X));   //4676372317075293618347140262690519031402790348972596650845440001854057309
+    fn_cnst_op_aa();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
 

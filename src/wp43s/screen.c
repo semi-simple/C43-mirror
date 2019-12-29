@@ -639,7 +639,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         shiftF = true;        //S_shF();                  //   New shift state
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
         showShiftState();
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,1, false);
@@ -653,7 +653,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         shiftF = false;       //R_shF();
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
         showShiftState();
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,2, false);    
@@ -664,7 +664,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {        
         JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //  keep shift state, so it will stay here every cycle until key released
-        clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+        refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(ITM_NOP, 0);
         FN_timed_out_to_NOP = true;
         underline_softkey(FN_key_pressed-38,3, false);   //  Purposely select row 3 which does not exist, just to activate the 'clear previous line'
@@ -1264,10 +1264,10 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 15, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);  //JM
+  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);  //JM
 }
 
 

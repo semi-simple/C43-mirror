@@ -111,7 +111,7 @@
   #define showDateTime()          {}
   #define showAlphaMode()         {}
   #define JM_LAYOUT_1A               //Preferred layout
-#endif // TESTSUITE_BUILD
+#endif
 
 #ifndef TESTSUITE_BUILD                 //vv dr
 #define INLINE_TEST

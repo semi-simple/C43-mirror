@@ -75,7 +75,6 @@ int16_t              tamCurrentOperation;
 int16_t              currentRegisterBrowserScreen;
 int16_t              lineTWidth;
 int16_t              rbrRegister;
-int16_t              displayHasNDigits;
 int16_t              alphaSelectionMenu;
 int16_t              lastFcnsMenuPos;
 int16_t              lastMenuMenuPos;

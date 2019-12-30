@@ -185,7 +185,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
   displayString += 2;
   displayString[0] = 0;
 
-  if(updateDisplayValueX) {
+  if(displayValueString != NULL) {
     *displayValueString++ = 'e';
     *displayValueString = 0;
   }
@@ -203,7 +203,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
 
 
 void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {
-  if(updateDisplayValueX) {
+  if(displayValueString != NULL) {
     sprintf(displayValueString, "%" FMT32S, supNumber);
   }
 
@@ -257,7 +257,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
 
 
 void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {
-  if(updateDisplayValueX) {
+  if(displayValueString != NULL) {
     sprintf(displayValueString, "%" FMT32S, subNumber);
   }
 
@@ -349,15 +349,13 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
+  real39_t value39;
 
-  // The 6 following lines are to prevent 1.0000000000000001 to be displayed as 1.000 000 000 000 000
-  //real39_t value39;
-  //real34ToReal(real34, &value39);
-  //ctxtReal39.digits = displayHasNDigits;
-  //realPlus(&value39, &value39, &ctxtReal39);
-  //ctxtReal39.digits = 39;
-  //realToReal34(&value39, &value34);
-  real34Copy(real34, &value34);
+  real34ToReal(real34, &value39);
+  ctxtReal39.digits = displayHasNDigits;
+  realPlus(&value39, &value39, &ctxtReal39);
+  ctxtReal39.digits = 39;
+  realToReal34(&value39, &value34);
 
   if(real34IsInfinite(&value34)) {
     if(real34IsNegative(&value34)) {

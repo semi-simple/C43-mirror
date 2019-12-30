@@ -70,15 +70,6 @@ void fnAgm(uint16_t unusedParamButMandatory) {
                         return;
   }
 
-  if(    realIsNaN(&aReal) || realIsNaN(&aImag)
-      || realIsNaN(&bReal) || realIsNaN(&bImag)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnAgm:", "cannot use NaN as X or Y input of AGM", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(realInput && (realIsNegative(&aReal) || realIsNegative(&bReal))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

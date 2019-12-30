@@ -340,14 +340,6 @@ void divShoILonI(void) {
  * \return void
  ***********************************************/
 void divLonIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divLonIReal:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
 
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -394,14 +386,6 @@ void divLonIReal(void) {
  * \return void
  ***********************************************/
 void divRealLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRealLonI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
   uint32_t yAngularMode;
 
@@ -468,14 +452,6 @@ void divRealLonI(void) {
  * \return void
  ***********************************************/
 void divLonICplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divLonICplx:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, xReal, xImag;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -497,14 +473,6 @@ void divLonICplx(void) {
  * \return void
  ***********************************************/
 void divCplxLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCplxLonI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t a, b, c;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -556,14 +524,6 @@ void divTimeShoI(void) {
  * \return void
  ***********************************************/
 void divTimeReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divTimeReal:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -612,14 +572,6 @@ void divRemaShoI(void) {
  * \return void
  ***********************************************/
 void divRemaReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRemaReal:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -632,14 +584,6 @@ void divRemaReal(void) {
  * \return void
  ***********************************************/
 void divRemaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRemaCplx:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -680,14 +624,6 @@ void divCxmaShoI(void) {
  * \return void
  ***********************************************/
 void divCxmaReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCxmaReal:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -700,14 +636,6 @@ void divCxmaReal(void) {
  * \return void
  ***********************************************/
 void divCxmaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCxmaCplx:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -749,14 +677,6 @@ void divShoIShoI(void) {
  * \return void
  ***********************************************/
 void divShoIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divShoIReal:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
 
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -803,14 +723,6 @@ void divShoIReal(void) {
  * \return void
  ***********************************************/
 void divRealShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRealShoI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
   uint32_t yAngularMode;
 
@@ -877,14 +789,6 @@ void divRealShoI(void) {
  * \return void
  ***********************************************/
 void divShoICplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divShoICplx:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, xReal, xImag;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -906,14 +810,6 @@ void divShoICplx(void) {
  * \return void
  ***********************************************/
 void divCplxShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCplxShoI:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Divide(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
@@ -934,22 +830,6 @@ void divCplxShoI(void) {
  * \return void
  ***********************************************/
 void divRealReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRealReal:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRealReal:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
@@ -1028,22 +908,6 @@ void divRealReal(void) {
  * \return void
  ***********************************************/
 void divRealCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRealCplx:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divRealCplx:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
@@ -1065,22 +929,6 @@ void divRealCplx(void) {
  * \return void
  ***********************************************/
 void divCplxReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCplxReal:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCplxReal:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Divide(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -1100,22 +948,6 @@ void divCplxReal(void) {
  * \return void
  ***********************************************/
 void divCplxCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCplxCplx:", "cannot use NaN as Y input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function divCplxCplx:", "cannot use NaN as X input of /", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t yReal, yImag, xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);

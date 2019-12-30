@@ -89,14 +89,6 @@ void coshCxma(void) {
 
 
 void coshReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshReal:", "cannot use NaN as X input of cosh", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -116,14 +108,6 @@ void coshReal(void) {
 
 
 void coshCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshCplx:", "cannot use NaN as X input of cosh", NULL, NULL);
-    #endif
-    return;
-  }
-
   // cosh(a + i b) = cosh(a) cos(b) + i sinh(a) sin(b)
   real39_t a, b, sinha, cosha, sinb, cosb;
 

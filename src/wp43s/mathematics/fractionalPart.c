@@ -93,14 +93,6 @@ void fpShoI(void) {
 
 
 void fpReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fpReal:", "cannot use NaN as X input of fp", NULL, NULL);
-    #endif
-    return;
-  }
-
   real34_t x;
 
   real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);

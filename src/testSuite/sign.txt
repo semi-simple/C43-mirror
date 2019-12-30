@@ -98,6 +98,9 @@ Out: EC=0 FI=0 SL=1 RL=Real:"0":RAD RX=LonI:"0"
 In:  SL=0 FI=0 RX=Real:"NaN":RAD
 Out: EC=1 FI=0 SL=0 RX=Real:"NaN":RAD
 
+In:  SL=0 FI=0 RX=Real:"NaN"
+Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
+
 ; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf":DEG
 Out: EC=0 FI=0 SL=1 RL=Real:"inf":DEG RX=LonI:"1"
@@ -108,11 +111,6 @@ Out: EC=0 FI=0 SL=1 RL=Real:"inf":MULTPI RX=LonI:"1"
 In:  SL=0 FI=0 FD=0 RX=Real:"-inf":RAD
 Out: EC=0 FI=0 SL=1 RL=Real:"-inf":RAD RX=LonI:"-1"
 
-; NaN
-In:  SL=0 FI=0 RX=Real:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
-
-; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf"
 Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=LonI:"1"
 

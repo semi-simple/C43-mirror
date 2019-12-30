@@ -109,14 +109,6 @@ void parallelLonILonI(void) {
  * \return void
  ***********************************************/
 void parallelLonIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelLonIReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x, product;
 
   // y || x = xy / (x+y)
@@ -142,14 +134,6 @@ void parallelLonIReal(void) {
  * \return void
  ***********************************************/
 void parallelRealLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRealLonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x, product;
 
   // y || x = xy / (x+y)
@@ -176,14 +160,6 @@ void parallelRealLonI(void) {
  * \return void
  ***********************************************/
 void parallelLonICplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelLonICplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y;
   real39_t xReal, productReal, sumReal;
   real39_t xImag, productImag, sumImag;
@@ -214,14 +190,6 @@ void parallelLonICplx(void) {
  * \return void
  ***********************************************/
 void parallelCplxLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCplxLonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t x;
   real39_t yReal, productReal, sumReal;
   real39_t yImag, productImag, sumImag;
@@ -257,22 +225,6 @@ void parallelCplxLonI(void) {
  * \return void
  ***********************************************/
 void parallelRealReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRealReal:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRealReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x, product;
 
   // y || x = xy / (x+y)
@@ -298,22 +250,6 @@ void parallelRealReal(void) {
  * \return void
  ***********************************************/
 void parallelRealCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRealCplx:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelRealCplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y;
   real39_t xReal, productReal, sumReal;
   real39_t xImag, productImag, sumImag;
@@ -344,22 +280,6 @@ void parallelRealCplx(void) {
  * \return void
  ***********************************************/
 void parallelCplxReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCplxReal:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCplxReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t x;
   real39_t yReal, productReal, sumReal;
   real39_t yImag, productImag, sumImag;
@@ -395,22 +315,6 @@ void parallelCplxReal(void) {
  * \return void
  ***********************************************/
 void parallelCplxCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCplxCplx:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function parallelCplxCplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t yReal, xReal, productReal, sumReal;
   real39_t yImag, xImag, productImag, sumImag;
 

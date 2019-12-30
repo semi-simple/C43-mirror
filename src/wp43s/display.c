@@ -891,8 +891,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
 void complex34ToDisplayString(const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
-  displayHasNDigits = 16;
-
   if(updateDisplayValueX) {
     displayValueX[0] = 0;
   }

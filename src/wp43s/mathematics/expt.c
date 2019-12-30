@@ -78,16 +78,16 @@ void exptLonI(void) {
 
 
 void exptReal(void) {
-  real39_t x;
-  longInteger_t lgInt;
-
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function exptReal:", "cannot use NaN as an input of EXPT", NULL, NULL);
+      showInfoDialog("In function exptReal:", "cannot use NaN as X input of EXPT", NULL, NULL);
     #endif
     return;
   }
+
+  real39_t x;
+  longInteger_t lgInt;
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

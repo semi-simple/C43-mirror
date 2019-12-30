@@ -81,7 +81,10 @@ Out: EC=0 FI=0 SL=1 RX=Real:"5.32564"
 
 ; NaN
 In:  SL=0 FI=0 RX=Real:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
+Out: EC=0 FI=0 SL=1 RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"NaN":RAD
+Out: EC=0 FI=0 SL=1 RX=Real:"NaN":RAD
 
 ; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf"
@@ -98,11 +101,6 @@ In:  SL=0 FI=0 RX=Real:"32.5487897":RAD
 Out: EC=0 FI=0 SL=1 RX=Real:"-32.5487897":RAD
 Out: EC=0 FI=0 SL=1 RX=Real:"32.5487897":RAD
 
-; NaN
-In:  SL=0 FI=0 RX=Real:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN":RAD
-
-; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf":GRAD
 Out: EC=0 FI=0 SL=1 RX=Real:"-inf":GRAD
 Out: EC=0 FI=0 SL=1 RX=Real:"inf":GRAD
@@ -124,10 +122,10 @@ Out: EC=0 FI=0 SL=1 RX=Cplx:"45.25 i -3.459"
 
 ; NaN
 In:  SL=0 FI=0 RX=Cplx:"NaN i -1.56"
-Out: EC=1 FI=0 SL=0 RX=Cplx:"NaN i -1.56"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"NaN i +1.56"
 
 In:  SL=0 FI=0 RX=Cplx:"-1.56 i Nan"
-Out: EC=1 FI=0 SL=0 RX=Cplx:"-1.56 i NaN"
+Out: EC=0 FI=0 SL=1 RX=Cplx:"1.56 i NaN"
 
 ; Infinity
 In:  SL=0 FI=0 FD=1 RX=Cplx:"inf i -58.67141"

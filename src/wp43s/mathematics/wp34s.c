@@ -25,9 +25,8 @@
  * This functions are borrowed from the WP34S project
  ******************************************************/
 
-/* Have to be careful here to ensure that every function we call can handle
- * the increased size of the numbers we're using.
- */
+// Have to be careful here to ensure that every function we call can handle
+// the increased size of the numbers we're using.
 void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sin39, real_t *cos39, real_t *tan39) {
   bool_t sinNeg = false, cosNeg = false, swap = false;
   real39_t angle;
@@ -143,8 +142,7 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sin3
 }
 
 
-/* Calculate sin, cos by Taylor series and tan by division
- */
+// Calculate sin, cos by Taylor series and tan by division
 void WP34S_SinCosTanTaylor(const real_t *a39, bool_t swap, real_t *sinOut39, real_t *cosOut39, real_t *tanOut39) { // a in radian
   real51_t angle, a2, t, j, z, sin, cos, compare;
   int i, odd;
@@ -874,9 +872,18 @@ bool_t WP34S_RelativeError(const real_t *x, const real_t *y, const real_t *tol) 
 void WP34S_SinhCosh(const real_t *x, real_t *sinhOut, real_t *coshOut) {
   real39_t t, u, v;
 
+  if(realIsNaN(x)) {
+    if(sinhOut != NULL) {
+      realCopy(const_NaN, sinhOut);
+    }
+    if(coshOut != NULL) {
+      realCopy(const_NaN, coshOut);
+    }
+  }
+
   if(sinhOut != NULL) {
     if(realCompareAbsLessThan(x, const_1on2)) {
-      WP34S_ExpM1(x, &u);                           // u = e^x - 1
+      WP34S_ExpM1(x, &u);                                      // u = e^x - 1
       realMultiply(&u, const_1on2, &t, &ctxtReal39);           // t = (e^x - 1) / 2
 
       realAdd(&u, const_1, &u, &ctxtReal39);                   // u = e^x
@@ -903,7 +910,10 @@ void WP34S_SinhCosh(const real_t *x, real_t *sinhOut, real_t *coshOut) {
 
 
 void WP34S_Tanh(const real_t *x, real_t *res) {
-  if(realCompareAbsGreaterThan(x, const_47)) { // equals 1 to 39 digits
+  if(realIsNaN(x)) {
+    realCopy(const_NaN, res);
+  }
+  else if(realCompareAbsGreaterThan(x, const_47)) { // equals 1 to 39 digits
     realCopy((realIsPositive(x) ? const_1 : const__1), res);
   }
   else {
@@ -949,6 +959,10 @@ void WP34S_ArcCosh(const real_t *xin, real_t *res) {
 void WP34S_ArcTanh(const real_t *x, real_t *res) {
   real39_t y, z;
 
+  if(realIsNaN(x)) {
+    realCopy(const_NaN, res);
+  }
+
   // Not the obvious formula but more stable...
   realSubtract(const_1, x, &z, &ctxtReal39);      // z = 1-x
   realDivide(x, &z, &y, &ctxtReal39);             // y = x / (1-x)
@@ -963,8 +977,8 @@ void WP34S_ArcTanh(const real_t *x, real_t *res) {
 void WP34S_Ln1P(const real_t *x, real_t *res) {
   real39_t u, v, w;
 
-  if(realIsZero(x)) {
-    realZero(res);
+  if(realIsSpecial(x) || realIsZero(x)) {
+    realCopy(x, res);
   }
   else {
     realAdd(x, const_1, &u, &ctxtReal39);       // u = x+1
@@ -985,6 +999,15 @@ void WP34S_Ln1P(const real_t *x, real_t *res) {
 /* exp(x)-1 */
 void WP34S_ExpM1(const real_t *x, real_t *res) {
   real39_t u, v, w;
+
+  if(realIsInfinite(x)) {
+    if(realIsPositive(x)) {
+      realCopy(const_plusInfinity, res);
+    }
+    else {
+      realCopy(const__1, res);
+    }
+  }
 
   realExp(x, &u, &ctxtReal39);
   realSubtract(&u, const_1, &v, &ctxtReal39);
@@ -1046,28 +1069,30 @@ static void WP34S_ComplexGammaLnGamma(const real39_t *zReal, const real39_t *zIm
   bool_t reflect = false;
 
   // Check for special cases
-/*  if(decNumberIsSpecial(xin) || decNumberIsSpecial(yin)) {
-    if(decNumberIsNaN(xin) || decNumberIsNaN(yin))
-      cmplx_NaN(rx, ry);
+  if(realIsSpecial(zReal) || realIsSpecial(zImag)) {
+    if(realIsNaN(zReal) || realIsNaN(zImag)) {
+      realCopy(const_NaN, resReal);
+      realCopy(const_NaN, resImag);
+    }
     else {
-      if(decNumberIsInfinite(xin)) {
-        if(decNumberIsInfinite(yin))
-          cmplx_NaN(rx, ry);
-        else if(decNumberIsNegative(xin))
-          cmplx_NaN(rx, ry);
+      if(realIsInfinite(zReal)) {
+        if(realIsInfinite(zImag) || realIsNegative(zReal)) {
+          realCopy(const_NaN, resReal);
+          realCopy(const_NaN, resImag);
+        }
         else {
-          set_inf(rx);
-          decNumberZero(ry);
+          realCopy(const_plusInfinity, resReal);
+          realZero(resImag);
         }
       }
       else {
-        decNumberZero(rx);
-        decNumberZero(ry);
+        realZero(resReal);
+        realZero(resImag);
       }
     }
     return;
   }
-*/
+
   // Correct our argument and begin the inversion if it is negative
   if(realIsNegative(zReal)) {
     reflect = true;
@@ -1147,33 +1172,4 @@ void WP34S_BigMod(const real_t *x, const real_t *y, real_t *res) {
 
  realDivideRemainder(x, y, &out, &ctxtReal855);
  realPlus(&out, res, &ctxtReal39);
-}
-
-
-void WP34S_real39Mantissa(const real_t *x, real_t *res) {
-	if(decNumberIsSpecial(x)) {
-		 realCopy(const_NaN, res);
-		 return;
-	}
-
-	if(realIsZero(x)) {
- 		realZero(res);
- 		return;
-	}
-
-	realCopy(x, res);
-	res->exponent = 1 - res->digits;
-}
-
-
-int32_t WP34S_real39Exponent(const real_t *x) {
- 	if(realIsSpecial(x)) {
- 		 return -99999;
- 	}
-
- 	if(realIsZero(x)) {
- 	 	return 0;
- 	}
-
- 	return x->exponent + x->digits - 1;
 }

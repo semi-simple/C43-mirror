@@ -337,14 +337,6 @@ void powShoILonI(void) {
  * \return void
  ***********************************************/
 void powLonIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powLonIReal:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -364,14 +356,6 @@ void powLonIReal(void) {
  * \return void
  ***********************************************/
 void powRealLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRealLonI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -405,14 +389,6 @@ void powRealLonI(void) {
  * \return void
  ***********************************************/
 void powLonICplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powLonICplx:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t a, c, d;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
@@ -445,14 +421,6 @@ void powLonICplx(void) {
  * \return void
  ***********************************************/
 void powCplxLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCplxLonI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -541,14 +509,6 @@ void powRemaShoI(void) {
  * \return void
  ***********************************************/
 void powRemaReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRemaReal:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -561,14 +521,6 @@ void powRemaReal(void) {
  * \return void
  ***********************************************/
 void powRemaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRemaCplx:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -609,14 +561,6 @@ void powCxmaShoI(void) {
  * \return void
  ***********************************************/
 void powCxmaReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCxmaReal:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -629,14 +573,6 @@ void powCxmaReal(void) {
  * \return void
  ***********************************************/
 void powCxmaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCxmaCplx:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -666,14 +602,6 @@ void powShoIShoI(void) {
  * \return void
  ***********************************************/
 void powShoIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powShoIReal:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -693,14 +621,6 @@ void powShoIReal(void) {
  * \return void
  ***********************************************/
 void powRealShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRealShoI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -734,14 +654,6 @@ void powRealShoI(void) {
  * \return void
  ***********************************************/
 void powShoICplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powShoICplx:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t a, c, d;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
@@ -774,14 +686,6 @@ void powShoICplx(void) {
  * \return void
  ***********************************************/
 void powCplxShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCplxShoI:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -834,22 +738,6 @@ void powCplxShoI(void) {
  * \return void
  ***********************************************/
 void powRealReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRealReal:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRealReal:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -882,22 +770,6 @@ void powRealReal(void) {
  * \return void
  ***********************************************/
 void powRealCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRealCplx:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powRealCplx:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -944,22 +816,6 @@ void powRealCplx(void) {
  * \return void
  ***********************************************/
 void powCplxReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCplxReal:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCplxReal:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -1012,22 +868,6 @@ void powCplxReal(void) {
  * \return void
  ***********************************************/
 void powCplxCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCplxCplx:", "cannot use NaN as Y input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powCplxCplx:", "cannot use NaN as X input of ^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);

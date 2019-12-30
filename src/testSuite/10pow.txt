@@ -75,7 +75,10 @@ Out: EC=0 FI=0 SL=1 RL=Real:"-5.32564":GRAD RX=Real:"4.7245451100764234683218100
 
 ; NaN
 In:  SL=0 FI=0 RX=Real:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN":RAD
+Out: EC=0 FI=0 SL=1 RL=Real:"NaN":RAD RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"NaN"
+Out: EC=0 FI=0 SL=1 RL=Real:"NaN" RX=Real:"NaN"
 
 ; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf":DEG
@@ -87,11 +90,6 @@ Out: EC=4 FI=0 SL=0 RX=Real:"inf":MULTPI
 In:  SL=0 FI=0 FD=0 RX=Real:"-inf":RAD
 Out: EC=0 FI=0 SL=1 RX=Real:"0"
 
-; NaN
-In:  SL=0 FI=0 RX=Real:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
-
-; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf"
 Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
 

@@ -381,7 +381,7 @@ const int16_t menu_MyMenu[]      = { ITM_cos                                    
 const int16_t menu_CFG[]         = { ITM_POLAR,                     ITM_RECT,                   ITM_RDXCOM,               ITM_RDXPER,            ITM_CPXRES,                  ITM_REALRES,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_SCIOVR,
                                      ITM_MULTCR,                    ITM_MULTDOT,                ITM_LZON,                 ITM_LZOFF,             ITM_QUIET,                   ITM_ENGOVR,
-                                     ITM_CLK12,                     ITM_CLK24,                  ITM_SLOW,                 ITM_FAST,              ITM_NULL,                    ITM_NULL                      };
+                                     ITM_CLK12,                     ITM_CLK24,                  ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8                    };
 
 #include "softmenuCatalogs.h"
 

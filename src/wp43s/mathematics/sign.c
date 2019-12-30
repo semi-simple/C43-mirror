@@ -126,16 +126,16 @@ void signShoI(void) {
 
 
 void signReal(void) {
+  longInteger_t lgInt;
+  longIntegerInit(lgInt);
+
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function signReal:", "cannot use NaN as X input of sign", NULL, NULL);
+      showInfoDialog("In function signReal:", "cannot use NaN as X input of SIGN", NULL, NULL);
     #endif
     return;
   }
-
-  longInteger_t lgInt;
-  longIntegerInit(lgInt);
 
   if(!real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X))) {

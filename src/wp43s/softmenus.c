@@ -260,11 +260,12 @@ const int16_t menu_alpha_intl[]  = { CHR_a_MACRON,                  CHR_a_ACUTE,
 
 const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_DIGITS,                -MNU_CHARS,               -MNU_PROGS,            -MNU_VARS,                   -MNU_MENUS                    };
 
-const int16_t menu_DIGITS[]      = { CHR_0,                         CHR_1,                      CHR_2,                    CHR_3,                 CHR_4,                       CHR_5,
-                                     CHR_6,                         CHR_7,                      CHR_8,                    CHR_9,                 CHR_A,                       CHR_B,
-                                     CHR_C,                         CHR_D,                      CHR_E,                    CHR_F,                 CHR_i,                       ITM_NULL                      };
+const int16_t menu_DIGITS[]      = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
+                                     CHR_5,                         CHR_6,                      CHR_7,                    CHR_8,                 CHR_9,                       CHR_i,
+                                     CHR_0,                         CHR_1,                      CHR_2,                    CHR_3,                 CHR_4,                       ITM_NULL                      };
 
-const int16_t menu_CHARS[]       = { -MNU_A_Z,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,                -MNU_ALPHADOT                 };
+const int16_t menu_CHARS[]       = { -MNU_A_Z,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,                -MNU_ALPHADOT,
+                                     -MNU_a_z,                      -MNU_alpha_omega,           ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
 
 const int16_t menu_PROGS[]       = { -MNU_RAM,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_FLASH                    };
 
@@ -409,9 +410,9 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 const int16_t menu_BASE[]        = {  
-                                     ITM_2HEX,                      ITM_2DEC,                   ITM_2OCT,                 ITM_2BIN,              -MNU_BITS,                   -MNU_INTS,                          //JM BASE MENU ADDED
-                                     ITM_WS64,                      ITM_WS32,                   ITM_WS16,                 ITM_WS8,               KEY_HASH,                    ITM_toINT,                          //JM
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,  /*ITM_HASH*/ITM_NULL,                    ITM_NULL                      };    //JM BASE MENU ADDED
+                                     ITM_NULL,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
+                                     -MNU_BITS,                     -MNU_INTS,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                            //JM
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,             	      ITM_NULL                      };    //JM BASE MENU ADDED
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
@@ -1411,12 +1412,18 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
     id = -MNU_ALPHAintl;
   }
+  else if(id==-MNU_A_Z && alphaCase==AC_LOWER) { // A...Z
+    id = -MNU_a_z;
+  }
   else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
     id = -MNU_alpha_omega;
   }
 
   if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
     id = -MNU_ALPHAintl;
+  }
+  else if((id==0 && !strcmp(menu, "A" STD_ELLIPSIS "Z")) && alphaCase==AC_LOWER) { // A...Z
+    id = -MNU_a_z;
   }
   else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
     id = -MNU_alpha_omega;

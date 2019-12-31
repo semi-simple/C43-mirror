@@ -1232,20 +1232,20 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
+/*    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
       alphaCase = AC_UPPER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
 #ifdef PC_BUILD     //dr - new AIM
       calcModeAimGui();
 #endif
       }                                                                         //JM CASE JM CAPS
-
-    else if(item == KEY_UP) {
+*/
+    else if((item == KEY_UP) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-          if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+          if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
             alphaCase = AC_UPPER;
             if(calcMode == CM_AIM)      //vv dr
             {
@@ -1267,10 +1267,15 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
+
+          else if (item == CHR_case) {  //JM
+            showSoftmenuCurrentPart();
+            setCatalogLastPos();
+            }
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-            if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+            if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
               softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
               showSoftmenuCurrentPart();
             }
@@ -1336,7 +1341,7 @@ void btnPressed(void *notUsed, void *data) {
        displayBugScreen("In function btnPressed: unexpected case while processing key UP!");
       }
     }
-
+/*
     else if((calcMode == CM_AIM) && (item == CHR_case)  && (alphaCase == AC_UPPER)) {     //JM CASE JM CAPS
       alphaCase = AC_LOWER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
@@ -1344,13 +1349,13 @@ void btnPressed(void *notUsed, void *data) {
       calcModeAimGui();
 #endif
     }                                                                          //JM CASE JM CAPS
-
-    else if(item == KEY_DOWN) {
+*/
+    else if((item == KEY_DOWN) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-          if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
+          if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
             alphaCase = AC_LOWER;
             if(calcMode == CM_AIM)      //vv dr
             {
@@ -1372,7 +1377,11 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
-          else {
+          else if (item == CHR_case) {  //JM
+            showSoftmenuCurrentPart();
+            setCatalogLastPos();
+            }
+            else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
@@ -1571,7 +1580,7 @@ void btnPressed(void *notUsed, void *data) {
         showFunctionName(item, 10);
       }
       else {
-        addItemToNimBuffer(item);
+        addItemToNimBuffer(item);                 //JM #, set to 
       }
     }
 

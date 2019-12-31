@@ -60,7 +60,7 @@
 #define ITM_ASSIGN                      31
 #define ITM_ATMtoPA                     32
 #define ITM_AUtoM                       33
-#define MNU_A_Z                         34
+#define ITM_0034                        34
 #define MNU_CONVA                       35
 #define CST_04                          36
 #define ITM_REGB                        37
@@ -819,7 +819,7 @@
 #define ITM_toGRAD                     790
 #define ITM_toHR                       791
 #define ITM_toHMS                      792
-#define ITM_toINT                      793
+#define ITM_toINT                      793     // JM #
 #define ITM_toMULpi                    794
 #define ITM_toPOL                      795
 #define ITM_toRAD                      796
@@ -903,7 +903,7 @@
 #define ITM_TRZtoKGb                   873
 
 #define ITM_FBR                        874
-#define MNU_a_z                        875
+#define MNU_CFG                        875
 #define MNU_alpha_omega                876
 #define MNU_ALPHAintl                  877
 #define ITM_REG_X                      878
@@ -1774,7 +1774,7 @@
 #define CHR_sampi                     1735  //JM GREEK
 #define CHR_case                      1736  //JM CAPS
 #define KEY_HASH                      1737  //JM BASE ## test
-#define ITM_HASH                      1738  //JM BASE ### test
+#define Not_Used_1738                 1738  
 #define ITM_op_a                      1739  //JM OPERATORS
 #define ITM_op_a2                     1740  //JM OPERATORS
 #define ITM_op_j                      1741  //JM OPERATORS
@@ -1966,10 +1966,11 @@
 #define ITM_INP_DEF_SI                1912  //JM INPUT DEFAULT
 #define ITM_INP_DEF_LI                1913  //JM INPUT DEFAULT
 #define ITM_GRAPH                     1914  //JM GRAPHING
+#define MNU_A_Z                       1915  //  34
+#define MNU_a_z                       1916  //  875
 
 
-
-#define LAST_ITEM                     1915  //JM
+#define LAST_ITEM                     1917  //JM
 
 #define CHR_PROD_SIGN                 9999
 

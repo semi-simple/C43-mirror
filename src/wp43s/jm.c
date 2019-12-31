@@ -75,25 +75,23 @@ void S_shG(void) {
 
 
 /********************************************//**
- * NOT TESTED YET. NOT WORKING. CALLED FROM ## in BASE
+ * SEEMS TO BE WORKING. CALLED FROM ## in BASE
  *
  * FROM keyboard.c
  ***********************************************/
 void fnBASE_Hash(uint16_t unusedParamButMandatory) {
-  R_shF(); //shiftF = false;                   //JM
-  S_shG(); //shiftG = true;                    //JM
-  Reset_Shift_Mem();                //JM
-//calcMode = CM_NIM;                //JM Trying to put the calculator into Number Input Mode
-
-#ifdef PC_BUILD
-  btnClicked(NULL, "01");
-#endif
-#ifdef DMCP_BUILD
-  btnClicked(NULL, "01");
-#endif
-// addItemToNimBuffer(/*CHR_NUMBER_SIGN*/KEY_HASH); //Trying out different things
-// The point is I am trying to do: 12 # 10, i.e. activate # while input buffer is active, like the true button.
+  int16_t lastChar;
+  lastChar = strlen(nimBuffer) - 1;
+  if(lastChar >= 1) {
+    calcMode = CM_NIM;
+    addItemToNimBuffer(ITM_toINT);
+  } else {
+    runFunction(ITM_toINT);
+    //fnChangeBase(TM_VALUE_CHB);
+    //showFunctionName(ITM_toINT, 10);
+  }
 }
+
 
 
 
@@ -1443,14 +1441,14 @@ real_t tmpy;
 char ttt[40];
 float tmpyy;
 real34_t tmpx;
-float array[400];
+uint8_t array[400];
 
 void Fn_Lbl_A(void) {
 
     copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
 
-                     // cos(x)/x + sin(5x)/5
-    fnCos(0);        // SIN
+                     // sin(x)/x + sin(5x)/5
+    fnSin(0);        // SIN
 
     STACK_LIFT_ENABLE; 
     liftStack();
@@ -1477,22 +1475,34 @@ void Fn_Lbl_A(void) {
 
     fnDivide(0);     // /
 
-    fnAdd(0);     // /
+    fnAdd(0);     // +
     
 }
 
 
 void graph (uint16_t unusedParamButMandatory){
+
 int16_t screen_x(float xb, float x, float xe) {
-  return ((x-xb)/(xe-xb)*SCREEN_WIDTH);
+int16_t tt;
+  tt = ((x-xb)/(xe-xb)*SCREEN_WIDTH);
+  if (tt>SCREEN_WIDTH) {tt=SCREEN_WIDTH;}
+  else if (tt<0) {tt=0;}
+  
+  return tt;
 }
 
 int16_t screen_y(float yb, float y, float ye) {
-  return (SCREEN_HEIGHT-(y-yb)/(ye-yb)*SCREEN_HEIGHT);
+int16_t tt;
+  tt = (SCREEN_HEIGHT-(y-yb)/(ye-yb)*SCREEN_HEIGHT);;
+  if (tt>SCREEN_HEIGHT) {tt=SCREEN_HEIGHT;}
+  else if (tt<0) {tt=0;}
+  
+  return tt;
 }
 
-  int16_t cnt;
-//  int16_t x1;
+  uint16_t cnt;
+  uint16_t x1;
+  uint8_t y1;
   float xb,xe,yb,ye,x,y;
 
   //GRAPH RANGE
@@ -1503,25 +1513,27 @@ int16_t screen_y(float yb, float y, float ye) {
 
   fnAngularMode(AM_RADIAN);
 
+  clearScreen(true,true,true);	
+
+
   //GRAPH
   cnt=0;
-  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH)
-  {
+  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH) {
 //  y = (sin(x*1))/(x) + sin(x*6)*0.3;
     //convert to X register
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    gcvt(x, 34, ttt); 
-    stringToReal34(ttt, REGISTER_REAL34_DATA(REGISTER_X));
-
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      gcvt(x, 34, ttt); 
+      stringToReal34(ttt, REGISTER_REAL34_DATA(REGISTER_X));
     Fn_Lbl_A();
-
     //Convert from X register
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, ttt);
-    tmpyy = strtof (ttt, NULL);
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
+      realToString(&tmpy, ttt);
+      tmpyy = strtof (ttt, NULL);
     y = tmpyy;
 
-    array[cnt]=y;
+    array[cnt]=screen_y(yb,y,ye);
+    printf("Calc:%d %f %f %d\n",cnt, x, y,array[cnt]);
+    setPixel(cnt,screen_y(yb,0,ye)); //progress
     cnt++;
   }
 
@@ -1533,16 +1545,37 @@ int16_t screen_y(float yb, float y, float ye) {
   while (cnt!=1+SCREEN_HEIGHT)  { setPixel(screen_x(xb,0,xe),cnt); cnt++; }
 
   //GRAPH
-  cnt = 0;
-  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH) {
-    setPixel(screen_x(xb,x,xe),screen_y(yb,array[cnt],ye));
+//  cnt = 0;
+//  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH-1) {
+//    setPixel(screen_x(xb,x,xe),array[cnt]);
+    for(cnt=0; cnt<=SCREEN_WIDTH-2; cnt+=1) {
+      printf("View: %d %d, ",cnt,array[cnt]);
+      x1 = cnt;
+      if(array[cnt] > array[cnt+1]) {
+        for(y1=array[cnt]; y1!=array[cnt+1]; y1-=1) {
+          printf("  ----: %d %d %d\n",y1,array[cnt], array[cnt+1]);
+       	  setPixel(x1,y1);
+        }
+      } 
+      else {
+        for(y1=array[cnt]; y1!=array[cnt+1]; y1+=1) {
+          printf("  ----: %d %d %d\n",y1,array[cnt], array[cnt+1]);
+     	  setPixel(x1,y1);
+        }
+      }
+
+
+//        if(y1 < (array[cnt]>>1) + (array[cnt+1]>>1) ) { 
+  //      	x1=cnt; 
+    //    } else {
+      //  	x1=cnt+1;
+        //}
+    }
 
 //    for(x1=screen_x(xb,x1,xe)+0.5; x1<=screen_x(xb,x1,xe)+0.5; x1+= 0.25) {
 //      setPixel( x1, screen_y(yb, (array[cnt+1]-array[cnt])/2,ye));
 //    }
-
-    cnt++;
-  }
+  
 }
 
 

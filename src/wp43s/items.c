@@ -376,7 +376,7 @@ void graph                      (uint16_t unusedParamButMandatory) {}           
 #endif
 
 const item_t indexOfItems[] = {
-
+//            *func                        param                        itemCatalogName                                itemSoftmenuName                               catalog.  stackLiftStatus      //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
@@ -412,7 +412,7 @@ const item_t indexOfItems[] = {
 /*   31 */  { itemToBeCoded,               NOPARAM,                     "ASSIGN",                                      "ASN",                                         CAT_FNCT, SLS_UNCHANGED},
 /*   32 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    "atm" STD_RIGHT_ARROW "Pa",                    CAT_FNCT, SLS_ENABLED  },
 /*   33 */  { fnCvtAuM,                    multiply,                    "au" STD_RIGHT_ARROW "m",                      "au" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
-/*   34 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},
+/*   34 */  { itemToBeCoded,               NOPARAM,                     "0034",                                        "0034",                                        CAT_FREE, SLS_UNCHANGED},
 /*   35 */  { itemToBeCoded,               NOPARAM,                     "A:",                                          "A:",                                          CAT_MENU, SLS_UNCHANGED},
 /*   36 */  { fnConstant,                  4,                           "a" STD_SUB_EARTH,                             "a" STD_SUB_EARTH,                             CAT_CNST, SLS_ENABLED  },
 /*   37 */  { itemToBeCoded,               NOPARAM,                     "B",                                           "B",                                           CAT_RVAR, SLS_UNCHANGED},
@@ -1254,7 +1254,7 @@ const item_t indexOfItems[] = {
 /*  873 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    STD_RIGHT_ARROW " kg",                         CAT_DUPL, SLS_ENABLED  },
 
 /*  874 */  { fontBrowser,                 NOPARAM,                     "FBR",                                         "FBR",                                         CAT_FNCT, SLS_UNCHANGED}, // Font Browser
-/*  875 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED}, // Small latin letters
+/*  875 */  { itemToBeCoded,               NOPARAM,                     "CFG",                                         "CFG",                                         CAT_NONE, SLS_UNCHANGED}, // JM Menu not defined 
 /*  876 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_ELLIPSIS STD_omega,              STD_alpha STD_ELLIPSIS STD_omega,              CAT_MENU, SLS_UNCHANGED}, // Small greek letters
 /*  877 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "intl",                              STD_alpha "intl",                              CAT_MENU, SLS_UNCHANGED}, // Small intl letters
 /*  878 */  { addItemToBuffer,             REGISTER_X,                  "REG_X",                                       "X",                                           CAT_NONE, SLS_UNCHANGED}, // The order
@@ -2128,7 +2128,7 @@ const item_t indexOfItems[] = {
 /* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                     CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1736 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                      CAT_NONE, SLS_UNCHANGED},      //JM CASE
 /* 1737 */  { fnBASE_Hash,      /*TEST!*/  NOPARAM,                     "",                                            "##",                                          CAT_NONE, SLS_UNCHANGED},      //JM ##
-/* 1738 */  { addItemToBuffer,  /*TEST!*/  CHR_NUMBER_SIGN,             "",                                            "###",                                         CAT_NONE, SLS_UNCHANGED},      //JM ##
+/* 1738 */  { itemToBeCoded,               NOPARAM,                     "1738",                                        "1738",                                        CAT_FREE, SLS_UNCHANGED},
 
 /* 1739 */  { fnJM,                        3,                           "op_a",                                        "a",                                           CAT_FNCT, SLS_ENABLED  },      //JM Operator a
 /* 1740 */  { fnJM,                        4,                           "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 CAT_FNCT, SLS_ENABLED  },      //JM Operator a
@@ -2309,6 +2309,8 @@ const item_t indexOfItems[] = {
 /* 1912 */  { fnInDefault,                 ID_SI        ,               "",                                            "i" STD_SPACE_3_PER_EM "SI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI        ,               "",                                            "i" STD_SPACE_3_PER_EM "LI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1914 */  { graph,                       NOPARAM      ,               "",                                            "GRAPH",                                       CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
+/* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 34
+/* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 875 Small latin letters
 
-/* 1915 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1917 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

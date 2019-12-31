@@ -24,7 +24,6 @@
 #include "wp43s.h"
 
 
-
 /********************************************//**
  * RESET TIME FOR SHIFT CANCELLING
  * THIS IS STANDALONE RESET FOR SHIFT TO BE SET BY EMU KEYS. IT ALSO GETS RESET IN KEYBOARD.C
@@ -1450,10 +1449,6 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
 
 //-----------------------------------------------------
 
-real_t tmpy;
-char ttt[40];
-real34_t tmpx;
-uint8_t array[400];
 
 void Fn_Lbl_A(void) {
     copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
@@ -1492,7 +1487,11 @@ void Fn_Lbl_A(void) {
 
 void Fn_Lbl_B(void) {
     copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
-//    fnSin(0);        // SIN
+    fnSin(0);        // SIN    
+    copySourceRegisterToDestRegister(99, REGISTER_X);   // STO L
+    fnSquare(0);
+    fnSin(0);        // SIN
+    fnAdd(0);     // +    
 }
 
 
@@ -1521,6 +1520,8 @@ int16_t tt;
   uint8_t yo, yn;
   float xb,xe,yb,ye,x,y;
   yn = 0;
+  real_t tmpy;
+
 
   //GRAPH RANGE
   xb=-20.000001; //Graph range x
@@ -1561,15 +1562,16 @@ int16_t tt;
 
     //convert float to X register
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      gcvt(x, 34, ttt); 
-      stringToReal34(ttt, REGISTER_REAL34_DATA(REGISTER_X));
+      //gcvt( x, 34, tmpStr3000); 
+      snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16f", x);
+      stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 
     Fn_Lbl_B();
 
     //Convert from X register to float
       real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-      realToString(&tmpy, ttt);
-      y = strtof (ttt, NULL);
+      realToString(&tmpy, tmpStr3000);
+      y = strtof (tmpStr3000, NULL);
 
     yo = yn;   //old , new
     yn = screen_y(yb,y,ye);

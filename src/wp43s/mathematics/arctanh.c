@@ -130,14 +130,6 @@ void arctanhCxma(void) {
 
 
 void arctanhReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanhReal:", "cannot use NaN as X input of arctanh", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
@@ -195,14 +187,6 @@ void arctanhReal(void) {
 
 
 void arctanhCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function arctanhCplx:", "cannot use NaN as X input of arctanh", NULL, NULL);
-    #endif
-    return;
-  }
-
   //                    1       1 + (a + ib)
   // arctanh(a + i b) = - * ln( ------------ )
   //                    2       1 - (a + ib)

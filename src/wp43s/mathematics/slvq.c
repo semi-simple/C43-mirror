@@ -99,16 +99,6 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         return;
   }
 
-  if(    realIsNaN(&aReal) || realIsNaN(&aImag)
-      || realIsNaN(&bReal) || realIsNaN(&bImag)
-      || realIsNaN(&cReal) || realIsNaN(&cImag)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnSlqv:", "cannot use NaN as X, Y, or Z input of SLVQ", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(   realIsZero(&aReal) && realIsZero(&aImag)
      && realIsZero(&bReal) && realIsZero(&bImag)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

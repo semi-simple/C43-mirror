@@ -61,7 +61,7 @@
 // Register numbering:
 //    0 to  111 global resisters
 //  112 to  199 local registers (.00 to .87)
-// 1000 to 1999 named registers
+// 1000 to 1999 named variables
 // 2000 to 2009 saved stack registers (UNDO item)
 
 

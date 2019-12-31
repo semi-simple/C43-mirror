@@ -3998,7 +3998,7 @@ void setupUI(void) {
     btnRegisters           = gtk_button_new_with_label("Registers");
     btnLocalRegisters      = gtk_button_new_with_label("Local registers");
     btnStatisticalSums     = gtk_button_new_with_label("Statistical sums");
-    btnNamedVariables      = gtk_button_new_with_label("Named registers");
+    btnNamedVariables      = gtk_button_new_with_label("Named variables");
     btnSavedStackRegisters = gtk_button_new_with_label("Saved stack registers");
     chkHexaString          = gtk_check_button_new_with_label("Strings in hexadecimal form");
 

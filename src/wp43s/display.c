@@ -210,7 +210,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
   displayString += 2;
   displayString[0] = 0;
 
-  if(updateDisplayValueX) {
+  if(displayValueString != NULL) {
     *displayValueString++ = 'e';
     *displayValueString = 0;
   }
@@ -228,7 +228,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
 
 
 void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {
-  if(updateDisplayValueX) {
+  if(displayValueString != NULL) {
     sprintf(displayValueString, "%" FMT32S, supNumber);
   }
 
@@ -282,7 +282,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
 
 
 void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {
-  if(updateDisplayValueX) {
+  if(displayValueString != NULL) {
     sprintf(displayValueString, "%" FMT32S, subNumber);
   }
 
@@ -313,20 +313,18 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
 
 
 
-void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth) {
+void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
-
-  displayHasNDigits = 16;
 
   if(updateDisplayValueX) {
     displayValueX[0] = 0;
   }
 
   if(angulaMode == AM_NONE) {
-    realToDisplayString2(real34, displayString);
+    realToDisplayString2(real34, displayString, displayHasNDigits);
   }
   else {
-    angle34ToDisplayString2(real34, angulaMode, displayString);
+    angle34ToDisplayString2(real34, angulaMode, displayString, displayHasNDigits);
   }
 
   while(stringWidth(displayString, font, true, true) > maxWidth) {
@@ -348,10 +346,10 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
     }
 
     if(angulaMode == AM_NONE) {
-      realToDisplayString2(real34, displayString);
+      realToDisplayString2(real34, displayString, displayHasNDigits);
     }
     else {
-      angle34ToDisplayString2(real34, angulaMode, displayString);
+      angle34ToDisplayString2(real34, angulaMode, displayString, displayHasNDigits);
     }
   }
   displayFormatDigits = savedDisplayFormatDigits;
@@ -366,7 +364,7 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
  * \param[in]  x const real16_t*  Value to format
  * \return void
  ***********************************************/
-void realToDisplayString2(const void *real, char *displayString) {
+void realToDisplayString2(const real34_t *real34, char *displayString, int16_t displayHasNDigits) {
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
@@ -375,11 +373,17 @@ void realToDisplayString2(const void *real, char *displayString) {
   int16_t digitsToDisplay, numDigits, digitPointer, firstDigit, lastDigit, i, digitCount, digitsToTruncate, exponent;
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
+  real34_t value34;
+  real39_t value39;
 
-  real34_t *value = (real34_t *)real;
+  real34ToReal(real34, &value39);
+  ctxtReal39.digits = displayHasNDigits;
+  realPlus(&value39, &value39, &ctxtReal39);
+  ctxtReal39.digits = 39;
+  realToReal34(&value39, &value34);
 
-  if(real34IsInfinite(value)) {
-    if(real34IsNegative(value)) {
+  if(real34IsInfinite(&value34)) {
+    if(real34IsNegative(&value34)) {
       strcpy(displayString, "-" STD_INFINITY);
       if(updateDisplayValueX) {
         strcpy(displayValueX + strlen(displayValueX), "-9e9999");
@@ -394,10 +398,10 @@ void realToDisplayString2(const void *real, char *displayString) {
     return;
   }
 
-  if(real34IsNaN(value)) {
-    real34ToString(value, displayString);
+  if(real34IsNaN(&value34)) {
+    real34ToString(&value34, displayString);
     if(updateDisplayValueX) {
-      real34ToString(value, displayValueX + strlen(displayValueX));
+      real34ToString(&value34, displayValueX + strlen(displayValueX));
     }
     return;
   }
@@ -405,8 +409,8 @@ void realToDisplayString2(const void *real, char *displayString) {
   bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
   memset(bcd, 0, MAX_DIGITS);
 
-  sign = real34GetCoefficient(value, bcd + 1);
-  exponent = real34GetExponent(value);
+  sign = real34GetCoefficient(&value34, bcd + 1);
+  exponent = real34GetExponent(&value34);
 
   // Calculate the number of significant digits
   for(digitPointer=1; digitPointer<=MAX_DIGITS-3; digitPointer++) {
@@ -966,16 +970,14 @@ void realToDisplayString2(const void *real, char *displayString) {
 
 
 
-void complex34ToDisplayString(const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth) {
+void complex34ToDisplayString(const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
-
-  displayHasNDigits = 16;
 
   if(updateDisplayValueX) {
     displayValueX[0] = 0;
   }
 
-  complex34ToDisplayString2(complex34, displayString);
+  complex34ToDisplayString2(complex34, displayString, displayHasNDigits);
   while(stringWidth(displayString, font, true, true) > maxWidth) {
     if(displayFormat == DF_ALL) {
       if(displayHasNDigits == 2) {
@@ -994,14 +996,14 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
       displayValueX[0] = 0;
     }
 
-    complex34ToDisplayString2(complex34, displayString);
+    complex34ToDisplayString2(complex34, displayString, displayHasNDigits);
   }
   displayFormatDigits = savedDisplayFormatDigits;
 }
 
 
 
-void complex34ToDisplayString2(const complex34_t *complex34, char *displayString) {
+void complex34ToDisplayString2(const complex34_t *complex34, char *displayString, int16_t displayHasNDigits) {
   int16_t i=100;
   real34_t real34, imag34;
   real39_t real39, imagIc;
@@ -1023,7 +1025,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     displayBugScreen(errorMessage);
   }
 
-  realToDisplayString2(&real34, displayString);
+  realToDisplayString2(&real34, displayString, displayHasNDigits);
 
   if(updateDisplayValueX) {
     if(complexMode == CM_RECTANGULAR) {
@@ -1034,7 +1036,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     }
   }
 
-  realToDisplayString2(&imag34, displayString + i);
+  realToDisplayString2(&imag34, displayString + i, displayHasNDigits);
 
   if(complexMode == CM_RECTANGULAR) {
     if(strncmp(displayString + stringByteLength(displayString) - 2, STD_SPACE_HAIR, 2) != 0) {
@@ -1055,7 +1057,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle34ToDisplayString2(&imag34, currentAngularMode, displayString + stringByteLength(displayString));
+    angle34ToDisplayString2(&imag34, currentAngularMode, displayString + stringByteLength(displayString), displayHasNDigits);
   }
 }
 
@@ -1211,7 +1213,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 
-void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displayString) {
+void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displayString, int16_t displayHasNDigits) {
   if(mode == AM_DMS) {
     char degStr[27];
     uint32_t m, s, fs;
@@ -1277,7 +1279,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
                                                                                     fs);
   }
   else {
-    realToDisplayString2(angle34, displayString);
+    realToDisplayString2(angle34, displayString, displayHasNDigits);
 
          if(mode == AM_DEGREE) strcat(displayString, STD_DEGREE);
     else if(mode == AM_GRAD)   strcat(displayString, STD_SUP_g);

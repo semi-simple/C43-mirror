@@ -201,14 +201,6 @@ void modShoILonI(void) {
  * \return void
  ***********************************************/
 void modLonIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function modLonIReal:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -240,14 +232,6 @@ void modLonIReal(void) {
  * \return void
  ***********************************************/
 void modRealLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function modRealLonI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
@@ -325,14 +309,6 @@ void modShoIShoI(void) {
  * \return void
  ***********************************************/
 void modShoIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function modShoIReal:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -364,14 +340,6 @@ void modShoIReal(void) {
  * \return void
  ***********************************************/
 void modRealShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function modRealShoI:", "cannot use NaN as Y input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
@@ -409,14 +377,6 @@ void modRealShoI(void) {
  * \return void
  ***********************************************/
 void modRealReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function modRealReal:", "cannot use NaN as X input of IDIVR", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

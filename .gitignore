@@ -15,6 +15,8 @@ build/
 gmp-6.1.2/
 gmp-6.1.2.tar.bz2
 src/qspi_crc.h
+DMCP_build/src
+DMCP_build/decNumberICU
 
 !windows\ binaries/wp43.exe
 !DM42\ binary/keymap.bin

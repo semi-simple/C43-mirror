@@ -1530,7 +1530,7 @@ void refreshRegisterLine(calcRegister_t regist) {
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
 
-              real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+              real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS);
 
               w = stringWidth(tmpStr3000, &numericFont, false, true);
               lineWidth = w;
@@ -1550,7 +1550,7 @@ void refreshRegisterLine(calcRegister_t regist) {
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
 
-              real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+              real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS);
 
               w = stringWidth(tmpStr3000, &numericFont, false, true);
               lineWidth = w;
@@ -1581,7 +1581,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
@@ -1650,7 +1650,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
                                                                        //JM EE ^
 
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

@@ -692,6 +692,7 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 void btnFnClicked(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
+
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
 
@@ -889,8 +890,8 @@ void btnPressed(void *notUsed, void *data) {
                                                                                                                               //JM shifts
 #endif
 
-  // Shift f pressed
-  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift f pressed and shift g not active
+  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -907,14 +908,14 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftF = !shiftF;
-    shiftG = false;
+    // shiftG = false; //Martin removed with !shiftG check above
     shiftStateChanged = true;
 
     showShiftState();
   }
 
-  // Shift g pressed
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift g pressed and shift f not active
+  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
       refreshRegisterLine(REGISTER_X);
@@ -931,7 +932,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftG = !shiftG;
-    shiftF = false;
+    // shiftF = false; //Martin removed with the addition of the !shiftF flag
     shiftStateChanged = true;
 
     showShiftState();
@@ -1136,7 +1137,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
+            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -1150,7 +1151,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
         displayBugScreen(errorMessage);
       }
     }
@@ -1231,15 +1232,15 @@ void btnPressed(void *notUsed, void *data) {
       }
     }
 
-    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
+/*    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
       alphaCase = AC_UPPER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
 #ifdef PC_BUILD     //dr - new AIM
       calcModeAimGui();
 #endif
       }                                                                         //JM CASE JM CAPS
-
-    else if(item == KEY_UP) {
+*/
+    else if((item == KEY_UP) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1266,10 +1267,15 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
+
+          else if (item == CHR_case) {  //JM
+            showSoftmenuCurrentPart();
+            setCatalogLastPos();
+            }
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-            if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+            if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
               softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
               showSoftmenuCurrentPart();
             }
@@ -1335,7 +1341,7 @@ void btnPressed(void *notUsed, void *data) {
        displayBugScreen("In function btnPressed: unexpected case while processing key UP!");
       }
     }
-
+/*
     else if((calcMode == CM_AIM) && (item == CHR_case)  && (alphaCase == AC_UPPER)) {     //JM CASE JM CAPS
       alphaCase = AC_LOWER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
@@ -1343,8 +1349,8 @@ void btnPressed(void *notUsed, void *data) {
       calcModeAimGui();
 #endif
     }                                                                          //JM CASE JM CAPS
-
-    else if(item == KEY_DOWN) {
+*/
+    else if((item == KEY_DOWN) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1371,7 +1377,11 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
-          else {
+          else if (item == CHR_case) {  //JM
+            showSoftmenuCurrentPart();
+            setCatalogLastPos();
+            }
+            else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
@@ -1570,7 +1580,7 @@ void btnPressed(void *notUsed, void *data) {
         showFunctionName(item, 10);
       }
       else {
-        addItemToNimBuffer(item);
+        addItemToNimBuffer(item);                 //JM #, set to 
       }
     }
 

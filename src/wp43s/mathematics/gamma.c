@@ -183,14 +183,6 @@ void lnGammaLonI(void) {
 void gammaReal(void) {
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function gammaReal:", "cannot use NaN as X input of gamma", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(!getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -231,14 +223,6 @@ void lnGammaReal(void) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
   setRegisterAngularMode(REGISTER_X, AM_NONE);
-
-  if(realIsNaN(&xReal)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnGammaReal:", "cannot use NaN as X input of lnGamma", NULL, NULL);
-    #endif
-    return;
-  }
 
   if(realIsInfinite(&xReal)) {
     if(!getFlag(FLAG_DANGER)) {
@@ -304,14 +288,6 @@ void lnGammaReal(void) {
 
 
 void gammaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function gammaCplx:", "cannot use NaN as X input of gamma", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
@@ -326,14 +302,6 @@ void gammaCplx(void) {
 
 
 void lnGammaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function lnGammaCplx:", "cannot use NaN as X input of lnGamma", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);

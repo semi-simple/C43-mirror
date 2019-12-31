@@ -143,14 +143,6 @@ void log10ShoI(void) {
 
 
 void log10Real(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log10Real:", "cannot use NaN as X input of log10", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
@@ -215,14 +207,6 @@ void log10Real(void) {
 
 
 void log10Cplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function log10Cplx:", "cannot use NaN as X input of log10", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));

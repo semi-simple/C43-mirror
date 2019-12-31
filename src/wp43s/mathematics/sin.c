@@ -102,14 +102,6 @@ void sinCxma(void) {
 
 
 void sinReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sinReal:", "cannot use NaN as X input of sin", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -128,14 +120,6 @@ void sinReal(void) {
 
 
 void sinCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sinCplx:", "cannot use NaN as X input of sin", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);

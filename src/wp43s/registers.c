@@ -490,7 +490,7 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
       #endif
     }
     else {
-      displayBugScreen("In function setRegisterDataInfo: no named registers defined!");
+      displayBugScreen("In function setRegisterDataInfo: no named variables defined!");
     }
    }
   else if(regist < 3000) { // Saved stack register
@@ -536,7 +536,7 @@ void setRegisterNameLength(calcRegister_t regist, uint16_t length) {
       #endif
     }
     else {
-      displayBugScreen("In function setRegisterNameLength: no named registers defined!");
+      displayBugScreen("In function setRegisterNameLength: no named variables defined!");
     }
   }
   else {
@@ -812,19 +812,19 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint32_t maxDataLen) {
     }
     #endif
   }
-  else if(regist < SAVED_REGISTER_X) { // Named register
+  else if(regist < SAVED_REGISTER_X) { // Named variable
     if(numberOfNamedVariables > 0) {
       if(regist-1000 < numberOfNamedVariables) {
         *(dataSize_t *)REGISTER_DATA(regist) = maxDataLen;
       }
       else {
-        sprintf(errorMessage, "In function setRegisterMaxDataLength: named register %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - 1000, numberOfNamedVariables - 1);
+        sprintf(errorMessage, "In function setRegisterMaxDataLength: named variable %" FMT16S " is not defined! Must be from 0 to %" FMT16U, regist - 1000, numberOfNamedVariables - 1);
         displayBugScreen(errorMessage);
       }
     }
     #ifdef PC_BUILD
     else {
-      showInfoDialog("In function setRegisterMaxDataLength:", "no named registers defined!", NULL, NULL);
+      showInfoDialog("In function setRegisterMaxDataLength:", "no named variables defined!", NULL, NULL);
     }
     #endif
   }

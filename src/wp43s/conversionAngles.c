@@ -34,16 +34,6 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtToCurrentAngularMode:", "cannot use NaN as X input of fnCvtToCurrentAngularMode", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
       if(getRegisterAngularMode(REGISTER_X) == fromAngularMode) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
         setRegisterAngularMode(REGISTER_X, currentAngularMode);
@@ -88,16 +78,6 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtFromCurrentAngularMode:", "cannot use NaN as X input of fnCvtFromCurrentAngularMode", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
       convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), toAngularMode);
       setRegisterAngularMode(REGISTER_X, toAngularMode);
       break;
@@ -130,16 +110,6 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToRad:", "cannot use NaN as X input of fnCvtDegToRad", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
       if(getRegisterAngularMode(REGISTER_X) == AM_DEGREE || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_RADIAN);
         setRegisterAngularMode(REGISTER_X, AM_RADIAN);
@@ -183,16 +153,6 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
       if(getRegisterAngularMode(REGISTER_X) == AM_RADIAN || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, AM_DEGREE);
         setRegisterAngularMode(REGISTER_X, AM_DEGREE);
@@ -236,16 +196,6 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtDegToDms:", "cannot use NaN as X input of fnCvtDegToDms", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
       if(getRegisterAngularMode(REGISTER_X) == AM_DEGREE || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
         setRegisterAngularMode(REGISTER_X, AM_DMS);
@@ -289,16 +239,6 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use NaN as X input of fnCvtRadToDeg", NULL, NULL);
-        #endif
-        restoreStack();
-        refreshStack();
-        return;
-      }
-
       if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
         setRegisterAngularMode(REGISTER_X, AM_DEGREE);

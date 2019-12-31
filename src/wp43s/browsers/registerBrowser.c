@@ -64,18 +64,18 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
 
         // register name or number
-        registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, false, true);
+        registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219 - 22 * row, vmNormal, false, true);
 
         if(   (regist <  REGISTER_X && regist % 5 == 4)
            || (regist >= REGISTER_X && regist % 4 == 3)) {
           for(int16_t x=0; x<SCREEN_WIDTH; x++) {
-            setPixel(x, 218-22*row);
+            setPixel(x, 218 - 22 * row);
           }
         }
 
         if(getRegisterDataType(regist) == dtReal34) {
           if(showContent) {
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
@@ -83,7 +83,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtComplex34) {
           if(showContent) {
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
           }
           else {
             sprintf(tmpStr3000, "%d bytes", (int16_t)COMPLEX34_SIZE);
@@ -144,18 +144,18 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             sprintf(tmpStr3000, "R.%02d:", regist);
 
             // register number
-            registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219-22*row, vmNormal, true, true);
+            registerNameWidth = showString(tmpStr3000, &standardFont, 1, 219 - 22 * row, vmNormal, true, true);
 
             if(   (regist <  REGISTER_X && regist % 5 == 4)
                || (regist >= REGISTER_X && regist % 4 == 3)) {
               for(int16_t x=0; x<SCREEN_WIDTH; x++) {
-                setPixel(x, 218-22*row);
+                setPixel(x, 218 - 22 * row);
               }
             }
 
             if(getRegisterDataType(regist) == dtReal34) {
               if(showContent) {
-                real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
               }
               else {
                 sprintf(tmpStr3000, "%d bytes", (int16_t)REAL34_SIZE);
@@ -163,7 +163,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtComplex34) {
               if(showContent) {
-                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth);
+                complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &standardFont, SCREEN_WIDTH - 1 - registerNameWidth, 34);
               }
               else {
                 sprintf(tmpStr3000, "4+%d bytes", (int16_t)COMPLEX34_SIZE);
@@ -209,7 +209,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
               sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, true));
             }
 
-            showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), 219-22*row, vmNormal, false, true);
+            showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), 219 - 22 * row, vmNormal, false, true);
           }
         }
       }

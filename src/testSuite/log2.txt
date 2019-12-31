@@ -105,10 +105,10 @@ Out: EC=0 FI=1 SL=1 RL=Real:"-5" RX=Cplx:"2.321928094887362347870319429489390175
 
 ; NaN
 In:  SL=0 FI=0 RX=Real:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN":RAD
+Out: EC=0 FI=0 SL=1 RL=Real:"NaN":RAD RX=Real:"NaN"
 
 In:  SL=0 FI=0 RX=Real:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
+Out: EC=0 FI=0 SL=1 RL=Real:"NaN" RX=Real:"NaN"
 
 ; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf":DEG

@@ -71,10 +71,18 @@ void roundiRema(void) {
 
 
 void roundiReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function roundiReal:", "cannot use NaN or ±∞ as an input of ROUNDI", NULL, NULL);
+      showInfoDialog("In function roundiReal:", "cannot use NaN as X input of ROUNDI", NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function roundiReal:", "cannot use ±∞ as an input of ROUNDI", NULL, NULL);
     #endif
     return;
   }

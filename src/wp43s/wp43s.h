@@ -160,6 +160,7 @@ typedef int16_t calcRegister_t;
   #include "decNumberWrappers.h"
 #endif
 
+#define NUMBER_OF_DISPLAY_DIGITS 16
 #define MAX_LONG_INTEGER_SIZE_IN_BITS 3328
 
 #if (LIBGMP == 1)
@@ -533,7 +534,6 @@ extern int16_t              tamCurrentOperation;
 extern int16_t              currentRegisterBrowserScreen;
 extern int16_t              lineTWidth;
 extern int16_t              rbrRegister;
-extern int16_t              displayHasNDigits;
 extern int16_t              alphaSelectionMenu;
 extern int16_t              lastFcnsMenuPos;
 extern int16_t              lastMenuMenuPos;

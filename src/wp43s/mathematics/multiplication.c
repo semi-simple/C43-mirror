@@ -284,14 +284,6 @@ void mulShoILonI(void) {
  * \return void
  ***********************************************/
 void mulLonIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulLonIReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
   uint32_t xAngularMode;
 
@@ -329,14 +321,6 @@ void mulLonIReal(void) {
  * \return void
  ***********************************************/
 void mulRealLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealLonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
   uint32_t yAngularMode;
 
@@ -375,14 +359,6 @@ void mulRealLonI(void) {
  * \return void
  ***********************************************/
 void mulLonICplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulLonICplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t a, c, d;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
@@ -405,14 +381,6 @@ void mulLonICplx(void) {
  * \return void
  ***********************************************/
 void mulCplxLonI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCplxLonI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t a, b, c;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
@@ -464,14 +432,6 @@ void mulShoITime(void) {
  * \return void
  ***********************************************/
 void mulTimeReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulTimeReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -484,14 +444,6 @@ void mulTimeReal(void) {
  * \return void
  ***********************************************/
 void mulRealTime(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealTime:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -580,14 +532,6 @@ void mulShoIRema(void) {
  * \return void
  ***********************************************/
 void mulRemaReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRemaReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -600,14 +544,6 @@ void mulRemaReal(void) {
  * \return void
  ***********************************************/
 void mulRealRema(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealRema:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -620,14 +556,6 @@ void mulRealRema(void) {
  * \return void
  ***********************************************/
 void mulRemaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRemaCplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -640,14 +568,6 @@ void mulRemaCplx(void) {
  * \return void
  ***********************************************/
 void mulCplxRema(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRemaCplx:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -700,14 +620,6 @@ void mulShoICxma(void) {
  * \return void
  ***********************************************/
 void mulCxmaReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCxmaReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -720,14 +632,6 @@ void mulCxmaReal(void) {
  * \return void
  ***********************************************/
 void mulRealCxma(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealCxma:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -740,14 +644,6 @@ void mulRealCxma(void) {
  * \return void
  ***********************************************/
 void mulCxmaCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCxmaCplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -760,14 +656,6 @@ void mulCxmaCplx(void) {
  * \return void
  ***********************************************/
 void mulCplxCxma(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCplxCxma:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   fnToBeCoded();
 }
 
@@ -797,14 +685,6 @@ void mulShoIShoI(void) {
  * \return void
  ***********************************************/
 void mulShoIReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulShoIReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
   uint32_t xAngularMode;
 
@@ -842,14 +722,6 @@ void mulShoIReal(void) {
  * \return void
  ***********************************************/
 void mulRealShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealShoI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t y, x;
   uint32_t yAngularMode;
 
@@ -888,14 +760,6 @@ void mulRealShoI(void) {
  * \return void
  ***********************************************/
 void mulShoICplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulShoICplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // real part
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // imaginary part
@@ -910,14 +774,6 @@ void mulShoICplx(void) {
  * \return void
  ***********************************************/
 void mulCplxShoI(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCplxShoI:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
@@ -938,22 +794,6 @@ void mulCplxShoI(void) {
  * \return void
  ***********************************************/
 void mulRealReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealReal:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   uint32_t yAngularMode, xAngularMode;
 
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
@@ -1009,22 +849,6 @@ void mulRealReal(void) {
  * \return void
  ***********************************************/
 void mulRealCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealCplx:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulRealCplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // real part
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X)); // imaginary part
 }
@@ -1038,22 +862,6 @@ void mulRealCplx(void) {
  * \return void
  ***********************************************/
 void mulCplxReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCplxReal:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCplxReal:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Multiply(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -1073,22 +881,6 @@ void mulCplxReal(void) {
  * \return void
  ***********************************************/
 void mulCplxCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_Y);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCplxCplx:", "cannot use NaN as Y input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function mulCplxCplx:", "cannot use NaN as X input of x", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t yReal, yImag, xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);

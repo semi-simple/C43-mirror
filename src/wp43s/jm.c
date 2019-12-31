@@ -1452,12 +1452,10 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
 
 real_t tmpy;
 char ttt[40];
-float tmpyy;
 real34_t tmpx;
 uint8_t array[400];
 
 void Fn_Lbl_A(void) {
-
     copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
 
                      // sin(x)/x + sin(5x)/5
@@ -1488,107 +1486,113 @@ void Fn_Lbl_A(void) {
 
     fnDivide(0);     // /
 
-    fnAdd(0);     // +
-    
+    fnAdd(0);     // +    
+}
+
+
+void Fn_Lbl_B(void) {
+    copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
+//    fnSin(0);        // SIN
 }
 
 
 void graph (uint16_t unusedParamButMandatory){
+#define SG 20
+#define SH SCREEN_HEIGHT
 
 int16_t screen_x(float xb, float x, float xe) {
 int16_t tt;
   tt = ((x-xb)/(xe-xb)*SCREEN_WIDTH);
-  if (tt>SCREEN_WIDTH) {tt=SCREEN_WIDTH;}
+  if (tt>SCREEN_WIDTH-1) {tt=SCREEN_WIDTH-1;}
   else if (tt<0) {tt=0;}
-  
   return tt;
 }
 
 int16_t screen_y(float yb, float y, float ye) {
 int16_t tt;
-  tt = (SCREEN_HEIGHT-(y-yb)/(ye-yb)*SCREEN_HEIGHT);;
-  if (tt>SCREEN_HEIGHT) {tt=SCREEN_HEIGHT;}
-  else if (tt<0) {tt=0;}
-  
-  return tt;
+  tt = (y-yb)/(ye-yb)*(SH-SG);
+    if (tt>SH-SG-1) {tt=SH-1-SG;}
+  else if (tt<0) {tt=0;}  
+  return (SH - tt);
 }
 
+
   uint16_t cnt;
-  uint16_t x1;
-  uint8_t y1;
+  uint8_t yo, yn;
   float xb,xe,yb,ye,x,y;
+  yn = 0;
 
   //GRAPH RANGE
-  xb=-10.000001; //Graph range x
-  xe=10;
-  yb=-1;         //Graph range y
-  ye=1;
+  xb=-20.000001; //Graph range x
+  xe=20;
+  yb=-2;         //Graph range y
+  ye=+2;
+
+
+  calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
 
   fnAngularMode(AM_RADIAN);
-
-  clearScreen(true,true,true);	
-
+  clearScreen(false,true,true);
 
   //GRAPH
-  cnt=0;
+  uint16_t xzero, x1; //range 0-399
+  uint8_t  yzero, y1;  //range 0-239
+  yzero = screen_y(yb,0,ye);
+  xzero = screen_x(xb,0,xe);
+
+
+  //AXIS
+  cnt = 0;  while (cnt!=SCREEN_WIDTH-1)   { setPixel(cnt,yzero); cnt++; }
+  cnt = SG;  while (cnt!=SH-1)  { setPixel(xzero,cnt); cnt++; }
+
+  //GRAPH
+  cnt = 0;
   for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH) {
-//  y = (sin(x*1))/(x) + sin(x*6)*0.3;
-    //convert to X register
+
+    float a_ft = (x/((xe-xb)/20));
+    if(a_ft<0) { a_ft=-a_ft; }
+    int16_t a_int = (int) a_ft;    
+    float a_frac = a_ft - a_int;
+    if(a_frac < (xe-xb)/400) {
+      setPixel(cnt,yzero+1); //tick
+      setPixel(cnt,yzero-1); //tick
+    }
+
+
+    //convert float to X register
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       gcvt(x, 34, ttt); 
       stringToReal34(ttt, REGISTER_REAL34_DATA(REGISTER_X));
-    Fn_Lbl_A();
-    //Convert from X register
+
+    Fn_Lbl_B();
+
+    //Convert from X register to float
       real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
       realToString(&tmpy, ttt);
-      tmpyy = strtof (ttt, NULL);
-    y = tmpyy;
+      y = strtof (ttt, NULL);
 
-    array[cnt]=screen_y(yb,y,ye);
-    printf("Calc:%d %f %f %d\n",cnt, x, y,array[cnt]);
-    setPixel(cnt,screen_y(yb,0,ye)); //progress
+    yo = yn;   //old , new
+    yn = screen_y(yb,y,ye);
+
+    printf("Calc: cnt = %d xy[%f %f]  yold->new(%d -> %d)\n",cnt, x, y, yo, yn);
     cnt++;
-  }
 
-  clearScreen(true,true,true);
 
-  //AXIS
-  cnt = 0;
-  while (cnt!=1+SCREEN_WIDTH)   { setPixel(cnt,screen_y(yb,0,ye)); cnt++; }
-  while (cnt!=1+SCREEN_HEIGHT)  { setPixel(screen_x(xb,0,xe),cnt); cnt++; }
-
-  //GRAPH
-//  cnt = 0;
-//  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH-1) {
-//    setPixel(screen_x(xb,x,xe),array[cnt]);
-    for(cnt=0; cnt<=SCREEN_WIDTH-2; cnt+=1) {
-      printf("View: %d %d, ",cnt,array[cnt]);
-      x1 = cnt;
-      if(array[cnt] > array[cnt+1]) {
-        for(y1=array[cnt]; y1!=array[cnt+1]; y1-=1) {
-          printf("  ----: %d %d %d\n",y1,array[cnt], array[cnt+1]);
-       	  setPixel(x1,y1);
+  if(cnt > 0) {       //Fill in all y coords if coords are skipped due to large dy/dx.
+      x1 = cnt-1;     //First half on cnt-1, second half on cnt. Not implemented yet., All on cnt-1.
+      if(yo > yn) {
+        for(y1=yo; y1!=yn; y1-=1) {
+          setPixel(x1,y1);
         }
       } 
       else {
-        for(y1=array[cnt]; y1!=array[cnt+1]; y1+=1) {
-          printf("  ----: %d %d %d\n",y1,array[cnt], array[cnt+1]);
-     	  setPixel(x1,y1);
+        for(y1=yo; y1!=yn; y1+=1) {
+        setPixel(x1,y1);
         }
+      printf("\n");
       }
-
-
-//        if(y1 < (array[cnt]>>1) + (array[cnt+1]>>1) ) { 
-  //      	x1=cnt; 
-    //    } else {
-      //  	x1=cnt+1;
-        //}
-    }
-
-//    for(x1=screen_x(xb,x1,xe)+0.5; x1<=screen_x(xb,x1,xe)+0.5; x1+= 0.25) {
-//      setPixel( x1, screen_y(yb, (array[cnt+1]-array[cnt])/2,ye));
-//    }
-  
+    }  
+  }
 }
 
 

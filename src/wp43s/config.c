@@ -1011,6 +1011,10 @@ void fnRebuildRadioState() {
         rb.state = jm_G_DOUBLETAP? 3 : 2;
         break;
 
+      case JC_POLAR:                     //JM   Rectangular is 0, polar = 1
+        rb.state = (complexMode == CM_POLAR)? 3 : 2;
+        break;
+
       case JC_HOME_TRIPLE:
         rb.state = HOME3? 3 : 2;
         break;

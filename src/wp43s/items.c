@@ -2311,6 +2311,7 @@ const item_t indexOfItems[] = {
 /* 1914 */  { graph,                       NOPARAM      ,               "",                                            "GRAPH",                                       CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 875 Small latin letters
+/* 1917 */  { fnSetSetJM,                  JC_POLAR     ,               "",                                            "POLAR",                                       CAT_NONE, SLS_UNCHANGED},      //JM RECT/POLAR TOGGLE
 
-/* 1917 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1918 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

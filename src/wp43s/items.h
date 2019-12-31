@@ -1968,9 +1968,10 @@
 #define ITM_GRAPH                     1914  //JM GRAPHING
 #define MNU_A_Z                       1915  //  34
 #define MNU_a_z                       1916  //  875
+#define ITM_POLAR_TOGGLE              1917  //JM TOGGLE POLAR
 
 
-#define LAST_ITEM                     1917  //JM
+#define LAST_ITEM                     1918  //JM
 
 #define CHR_PROD_SIGN                 9999
 

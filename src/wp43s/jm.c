@@ -220,6 +220,18 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
+
+  case JC_POLAR:                                            //JM JC_POLAR
+    if(complexMode == CM_POLAR) {
+      fnComplexMode(CM_RECTANGULAR);                              // SET RECT
+    } else {
+      fnComplexMode(CM_POLAR);                                    // SET POLAR
+    }
+    fnRefreshComboxState(CB_JC, JC_POLAR, complexMode);                //jm
+    break;
+
+
+
   default:
     break;
   }
@@ -252,6 +264,7 @@ void fnSigmaAssign(uint16_t sigmaAssign) {
 
   fnRefreshRadioState(RB_SA, sigmaAssign);
 }
+
 
 
 

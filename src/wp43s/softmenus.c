@@ -34,7 +34,7 @@ const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,   
                                      ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                    ITM_MA36                      };
 
 const int16_t menu_ADV[]         = { ITM_SOLVE,                     ITM_SLVQ,                   ITM_FQX,                  ITM_PI,                ITM_SIGMA,                   -MNU_Sfdx,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_FDQX,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+                                     ITM_PGMSLV,                    ITM_NULL,                   ITM_FDQX,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_Sfdx[]        = { ITM_NULL,                      ITM_NULL,                   ITM_ACC,                  ITM_DLIM,              ITM_ULIM,                    ITM_INTEGRAL                  };
 
@@ -44,8 +44,7 @@ const int16_t menu_BITS[]        = { ITM_AND,                       ITM_OR,     
                                      ITM_SL,                        ITM_RL,                     ITM_RLC,                  ITM_RRC,               ITM_RR,                      ITM_SR,
                                      ITM_LJ,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_RJ,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_LZON,                    ITM_WSIZE,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                   ITM_NULL                      };
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE                     };
 
 const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE,                 ITM_DATEto,               ITM_WDAY,              ITM_TIME,                    ITM_XtoDATE,
                                      ITM_JtoD,                      ITM_DtoJ,                   ITM_NULL,                 ITM_DAY,               ITM_MONTH,                   ITM_YEAR,
@@ -106,8 +105,7 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
                                      ITM_IDIV,                      ITM_RMD,                    ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
                                      ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,              ITM_CEIL,                    ITM_GCD,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_LZON,                    ITM_WSIZE,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_LZOFF,                   ITM_NULL                      };
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE                     };
 
 const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                     ITM_ISG,
                                      ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_INC                       };
@@ -188,11 +186,11 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
-const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SQUARE,
-                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     ITM_SUM,
+const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SUM,
+                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     ITM_NULL,
                                      ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
-                                     ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_XCIRC,             ITM_YCIRC,                   ITM_SQUARE,
-                                     ITM_NULL,                      ITM_XH,                     ITM_COV,                  ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,               ITM_XCIRC,                   ITM_YCIRC,
+                                     ITM_NULL,                      ITM_XH,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_NULL,                      ITM_XRMS,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_BESTF,
                                      ITM_ORTHOF,                    ITM_GAUSSF,                 ITM_CAUCHF,               ITM_PARABF,            ITM_HYPF,                    ITM_ROOTF                     };
@@ -227,36 +225,44 @@ const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,     
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 // Following menu is UPPER CASE for lower case: +80
-const int16_t menu_alpha_INTL[]  = { CHR_A_MACRON,                  CHR_A_ACUTE,                CHR_A_BREVE,              CHR_A_GRAVE,           CHR_A_DIARESIS,              CHR_A_TILDE,
-                                     CHR_A_CIRC,                    CHR_A_RING,                 CHR_AE,                   CHR_A_OGONEK,          CHR_C_ACUTE,                 CHR_C_CARON,
-                                     CHR_C_CEDILLA,                 CHR_D_STROKE,               CHR_D_CARON,              CHR_E_MACRON,          CHR_E_ACUTE,                 CHR_E_BREVE,
-                                     CHR_E_GRAVE,                   CHR_E_DIARESIS,             CHR_E_CIRC,               CHR_E_DOT,             CHR_E_BREVE,                 CHR_E_OGONEK,
-                                     CHR_G_BREVE,                   CHR_I_MACRON,               CHR_I_ACUTE,              CHR_I_BREVE,           CHR_I_GRAVE,                 CHR_I_DIARESIS,
-                                     CHR_I_CIRC,                    CHR_I_OGONEK,               CHR_I_DOT,                CHR_I_DOTLESS,         CHR_L_STROKE,                CHR_L_ACUTE,
-                                     CHR_L_APOSTROPHE,              CHR_N_ACUTE,                CHR_N_CARON,              CHR_N_TILDE,           CHR_O_MACRON,                CHR_O_ACUTE,
-                                     CHR_O_BREVE,                   CHR_O_GRAVE,                CHR_O_DIARESIS,           CHR_O_TILDE,           CHR_O_CIRC,                  CHR_O_STROKE,
-                                     CHR_OE,                        CHR_R_CARON,                CHR_R_ACUTE,              ITM_NULL,              CHR_S_ACUTE,                 CHR_S_CARON,
-                                     CHR_S_CEDILLA,                 CHR_T_CARON,                CHR_T_CEDILLA,            CHR_U_MACRON,          CHR_U_ACUTE,                 CHR_U_BREVE,
-                                     CHR_U_GRAVE,                   CHR_U_DIARESIS,             CHR_U_TILDE,              CHR_U_CIRC,            CHR_U_RING,                  CHR_U_OGONEK,
-                                     CHR_W_CIRC,                    CHR_Y_CIRC,                 CHR_Y_ACUTE,              CHR_Y_DIARESIS,        CHR_Z_ACUTE,                 CHR_Z_CARON,
-                                     CHR_Z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_alpha_INTL[]  = { CHR_A,                         CHR_A_MACRON,               CHR_A_ACUTE,              CHR_A_BREVE,           CHR_A_GRAVE,                 CHR_A_DIARESIS,
+                                     CHR_A_TILDE,                   CHR_A_CIRC,                 CHR_A_RING,               CHR_AE,                CHR_A_OGONEK,                CHR_B,
+                                     CHR_C,                         CHR_C_ACUTE,                CHR_C_CARON,              CHR_C_CEDILLA,         CHR_D,                       CHR_D_STROKE,
+                                     CHR_D_CARON,                   CHR_E,                      CHR_E_MACRON,             CHR_E_ACUTE,           CHR_E_BREVE,                 CHR_E_GRAVE,
+                                     CHR_E_DIARESIS,                CHR_E_CIRC,                 CHR_E_DOT,                CHR_E_BREVE,           CHR_E_OGONEK,                CHR_F,
+                                     CHR_G,                         CHR_G_BREVE,                CHR_H,                    CHR_I,                 CHR_I_MACRON,                CHR_I_ACUTE,
+                                     CHR_I_BREVE,                   CHR_I_GRAVE,                CHR_I_DIARESIS,           CHR_I_CIRC,            CHR_I_OGONEK,                CHR_I_DOT,
+                                     CHR_I_DOTLESS,                 CHR_J,                      CHR_K,                    CHR_L,                 CHR_L_STROKE,                CHR_L_ACUTE,
+                                     CHR_L_APOSTROPHE,              CHR_M,                      CHR_N,                    CHR_N_ACUTE,           CHR_N_CARON,                 CHR_N_TILDE,
+                                     CHR_O,                         CHR_O_MACRON,               CHR_O_ACUTE,              CHR_O_BREVE,           CHR_O_GRAVE,                 CHR_O_DIARESIS,
+                                     CHR_O_TILDE,                   CHR_O_CIRC,                 CHR_O_STROKE,             CHR_OE,                CHR_P,                       CHR_Q,
+                                     CHR_R,                         CHR_R_CARON,                CHR_R_ACUTE,              CHR_S,                 ITM_NULL,                    CHR_S_ACUTE,
+                                     CHR_S_CARON,                   CHR_S_CEDILLA,              CHR_T,                    CHR_T_CARON,           CHR_T_CEDILLA,               CHR_U,
+                                     CHR_U_MACRON,                  CHR_U_ACUTE,                CHR_U_BREVE,              CHR_U_GRAVE,           CHR_U_DIARESIS,              CHR_U_TILDE,
+                                     CHR_U_CIRC,                    CHR_U_RING,                 CHR_U_OGONEK,             CHR_V,                 CHR_W,                       CHR_W_CIRC,
+                                     CHR_X,                         CHR_Y,                      CHR_Y_CIRC,               CHR_Y_ACUTE,           CHR_Y_DIARESIS,              CHR_Z,
+                                     CHR_Z_ACUTE,                   CHR_Z_CARON,                CHR_Z_DOT,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_alpha_intl[]  = { CHR_a_MACRON,                  CHR_a_ACUTE,                CHR_a_BREVE,              CHR_a_GRAVE,           CHR_a_DIARESIS,              CHR_a_TILDE,
-                                     CHR_a_CIRC,                    CHR_a_RING,                 CHR_ae,                   CHR_a_OGONEK,          CHR_c_ACUTE,                 CHR_c_CARON,
-                                     CHR_c_CEDILLA,                 CHR_d_STROKE,               CHR_d_APOSTROPHE,         CHR_e_MACRON,          CHR_e_ACUTE,                 CHR_e_BREVE,
-                                     CHR_e_GRAVE,                   CHR_e_DIARESIS,             CHR_e_CIRC,               CHR_e_DOT,             CHR_e_BREVE,                 CHR_e_OGONEK,
-                                     CHR_g_BREVE,                   CHR_i_MACRON,               CHR_i_ACUTE,              CHR_i_BREVE,           CHR_i_GRAVE,                 CHR_i_DIARESIS,
-                                     CHR_i_CIRC,                    CHR_i_OGONEK,               CHR_i_DOT,                CHR_i_DOTLESS,         CHR_l_STROKE,                CHR_l_ACUTE,
-                                     CHR_l_APOSTROPHE,              CHR_n_ACUTE,                CHR_n_CARON,              CHR_n_TILDE,           CHR_o_MACRON,                CHR_o_ACUTE,
-                                     CHR_o_BREVE,                   CHR_o_GRAVE,                CHR_o_DIARESIS,           CHR_o_TILDE,           CHR_o_CIRC,                  CHR_o_STROKE,
-                                     CHR_oe,                        CHR_r_CARON,                CHR_r_ACUTE,              CHR_s_SHARP,           CHR_s_ACUTE,                 CHR_s_CARON,
-                                     CHR_s_CEDILLA,                 CHR_t_APOSTROPHE,           CHR_t_CEDILLA,            CHR_u_MACRON,          CHR_u_ACUTE,                 CHR_u_BREVE,
-                                     CHR_u_GRAVE,                   CHR_u_DIARESIS,             CHR_u_TILDE,              CHR_u_CIRC,            CHR_u_RING,                  CHR_u_OGONEK,
-                                     CHR_w_CIRC,                    CHR_y_CIRC,                 CHR_y_ACUTE,              CHR_y_DIARESIS,        CHR_z_ACUTE,                 CHR_z_CARON,
-                                     CHR_z_DOT,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+const int16_t menu_alpha_intl[]  = { CHR_a,                         CHR_a_MACRON,               CHR_a_ACUTE,              CHR_a_BREVE,           CHR_a_GRAVE,                 CHR_a_DIARESIS,
+                                     CHR_a_TILDE,                   CHR_a_CIRC,                 CHR_a_RING,               CHR_ae,                CHR_a_OGONEK,                CHR_b,
+                                     CHR_c,                         CHR_c_ACUTE,                CHR_c_CARON,              CHR_c_CEDILLA,         CHR_d,                       CHR_d_STROKE,
+                                     CHR_d_APOSTROPHE,              CHR_e,                      CHR_e_MACRON,             CHR_e_ACUTE,           CHR_e_BREVE,                 CHR_e_GRAVE,
+                                     CHR_e_DIARESIS,                CHR_e_CIRC,                 CHR_e_DOT,                CHR_e_BREVE,           CHR_e_OGONEK,                CHR_f,
+                                     CHR_g,                         CHR_g_BREVE,                CHR_h,                    CHR_i,                 CHR_i_MACRON,                CHR_i_ACUTE,
+                                     CHR_i_BREVE,                   CHR_i_GRAVE,                CHR_i_DIARESIS,           CHR_i_CIRC,            CHR_i_OGONEK,                CHR_i_DOT,
+                                     CHR_i_DOTLESS,                 CHR_j,                      CHR_k,                    CHR_l,                 CHR_l_STROKE,                CHR_l_ACUTE,
+                                     CHR_l_APOSTROPHE,              CHR_m,                      CHR_n,                    CHR_n_ACUTE,           CHR_n_CARON,                 CHR_n_TILDE,
+                                     CHR_o,                         CHR_o_MACRON,               CHR_o_ACUTE,              CHR_o_BREVE,           CHR_o_GRAVE,                 CHR_o_DIARESIS,
+                                     CHR_o_TILDE,                   CHR_o_CIRC,                 CHR_o_STROKE,             CHR_oe,                CHR_p,                       CHR_q,
+                                     CHR_r,                         CHR_r_CARON,                CHR_r_ACUTE,              CHR_s,                 CHR_s_SHARP,                 CHR_s_ACUTE,
+                                     CHR_s_CARON,                   CHR_s_CEDILLA,              CHR_t,                    CHR_t_APOSTROPHE,      CHR_t_CEDILLA,               CHR_u,
+                                     CHR_u_MACRON,                  CHR_u_ACUTE,                CHR_u_BREVE,              CHR_u_GRAVE,           CHR_u_DIARESIS,              CHR_u_TILDE,
+                                     CHR_u_CIRC,                    CHR_u_RING,                 CHR_u_OGONEK,             CHR_v,                 CHR_w,                       CHR_w_CIRC,
+                                     CHR_x,                         CHR_y,                      CHR_y_CIRC,               CHR_y_ACUTE,           CHR_y_DIARESIS,              CHR_z,
+                                     CHR_z_ACUTE,                   CHR_z_CARON,                CHR_z_DOT,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_DIGITS,                -MNU_CHARS,               -MNU_PROGS,            -MNU_VARS,                   -MNU_MENUS                    };
 
@@ -383,8 +389,8 @@ const int16_t menu_alphaMATH[]   = { CHR_LESS_THAN,                 CHR_LESS_EQU
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_alphaDot[]    = { CHR_EXCLAMATION_MARK,          CHR_COLON,                  CHR_SEMICOLON,            CHR_QUOTE,             CHR_DOUBLE_QUOTE,            CHR_AT,
-                                     CHR_INVERTED_EXCLAMATION_MARK, CHR_INVERTED_QUESTION_MARK, CHR_SECTION,              CHR_UNDERSCORE,        CHR_TILDE,                   CHR_BACK_SLASH,
+const int16_t menu_alphaDot[]    = { CHR_EXCLAMATION_MARK,          CHR_SEMICOLON,              CHR_UNDERSCORE,           CHR_QUOTE,             CHR_DOUBLE_QUOTE,            CHR_AT,
+                                     CHR_INVERTED_EXCLAMATION_MARK, CHR_INVERTED_QUESTION_MARK, CHR_SECTION,              ITM_NULL,              CHR_TILDE,                   CHR_BACK_SLASH,
                                      CHR_DOLLAR,                    CHR_EURO,                   CHR_PERCENT,              CHR_AMPERSAND,         CHR_POUND,                   CHR_YEN,
                                      CHR_LEFT_ARROW,                CHR_UP_ARROW,               CHR_SERIAL_IO,            CHR_DOWN_ARROW,        CHR_RIGHT_ARROW,             CHR_PGM_BEGIN,
                                      CHR_LEFT_DOUBLE_ANGLE,         CHR_RIGHT_DOUBLE_ANGLE,     CHR_EMPTY_SET,            CHR_WATCH,             CHR_BULLET,                  CHR_ASTERISK,

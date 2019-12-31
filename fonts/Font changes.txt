@@ -129,3 +129,7 @@
            U+2713 Checkmark
 
 2019-11-23 New WP43S_StandardFont.ttf generated.
+
+2019-12-31 Updated copyright information in both ttf files:
+           2019 ==> 2020
+

@@ -96,7 +96,7 @@ gint64 now, tmpval;                               //JM usec  //JM TIMER EMULATOR
 #define ITEM_CONF_N ITM_CHS
 
 // Define the second tagline
-#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2019.Oct.08" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
+#define WHO2       "WP" STD_SPACE_3_PER_EM "43C" STD_SPACE_3_PER_EM "2020.Jan.01" STD_SPACE_3_PER_EM "DM42" STD_SPACE_3_PER_EM "Compatible," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
 extern uint8_t SigFigMode;                                           //JM SIGFIG 

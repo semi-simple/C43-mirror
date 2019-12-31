@@ -76,14 +76,6 @@ void realPartCxma(void) {
 
 
 void realPartCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function realPartCplx:", "cannot use NaN as X input of Re", NULL, NULL);
-    #endif
-    return;
-  }
-
   real34_t realPart;
 
   real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &realPart);

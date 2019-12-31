@@ -96,10 +96,10 @@ Out: EC=0 FI=0 SL=1 RL=Real:"9.999999999":RAD RX=Real:"11013.2328636901604626398
 
 ; NaN
 In:  SL=0 FI=0 RX=Real:"NaN":RAD
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN":RAD
+Out: EC=0 FI=0 SL=1 RL=Real:"NaN":RAD RX=Real:"NaN"
 
 In:  SL=0 FI=0 RX=Real:"NaN"
-Out: EC=1 FI=0 SL=0 RX=Real:"NaN"
+Out: EC=0 FI=0 SL=1 RL=Real:"NaN" RX=Real:"NaN"
 
 ; Infinity
 In:  SL=0 FI=0 FD=1 RX=Real:"inf"

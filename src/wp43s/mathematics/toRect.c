@@ -23,25 +23,13 @@
 
 
 void fnToRect(uint16_t unusedParamButMandatory) {
-  uint32_t dataTypeX, dataTypeY;
+  uint32_t dataTypeX, dataTypeY, yAngularMode;
+  real39_t x, y;
 
   dataTypeX = getRegisterDataType(REGISTER_X);
   dataTypeY = getRegisterDataType(REGISTER_Y);
 
-  if(   (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
-     && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
-    if(   (dataTypeX == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)))
-       || (dataTypeY == dtReal34 && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)))) {
-      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnToRect:", "cannot use NaN as an input of " STD_RIGHT_ARROW "Rect", NULL, NULL);
-      #endif
-      return;
-    }
-
-    real39_t x, y;
-    uint32_t yAngularMode;
-
+  if((dataTypeX == dtReal34 || dataTypeX == dtLongInteger) && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 

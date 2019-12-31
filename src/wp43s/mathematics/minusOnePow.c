@@ -108,14 +108,6 @@ void m1PowShoI(void) {
 
 
 void m1PowReal(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowReal:", "cannot use NaN as X input of 2^", NULL, NULL);
-    #endif
-    return;
-  }
-
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -136,14 +128,6 @@ void m1PowReal(void) {
 
 
 void m1PowCplx(void) {
-  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function m1PowCplx:", "cannot use NaN as X input of 2^", NULL, NULL);
-    #endif
-    return;
-  }
-
   real39_t real;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);

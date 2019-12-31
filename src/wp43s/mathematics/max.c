@@ -57,14 +57,6 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
         case dtReal34:
           // X = long integer    Y = real34
-          if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMax:", "cannot use NaN as Y input of max", NULL, NULL);
-            #endif
-            break;
-          }
-
           convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
           if(realCompareGreaterThan(&y, &x)) {
@@ -152,14 +144,6 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
         case dtReal34:
           // X = short integer    Y = real34
-          if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMax:", "cannot use NaN as Y input of max", NULL, NULL);
-            #endif
-            break;
-          }
-
           convertShortIntegerRegisterToReal(REGISTER_X, (real_t *)&x, &ctxtReal39);
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
           if(realCompareGreaterThan(&y, &x)) {
@@ -178,14 +162,6 @@ void fnMax(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnMax:", "cannot use NaN as X input of max", NULL, NULL);
-        #endif
-        break;
-      }
-
       switch(getRegisterDataType(REGISTER_Y)) {
         case dtLongInteger:
           // X = real34    Y = long integer
@@ -207,14 +183,6 @@ void fnMax(uint16_t unusedParamButMandatory) {
 
         case dtReal34:
           // X = real34    Y = real34
-          if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y))) {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function fnMax:", "cannot use NaN as Y input of max", NULL, NULL);
-            #endif
-            break;
-          }
-
           if(real34CompareGreaterThan(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X))) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }

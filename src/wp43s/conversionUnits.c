@@ -45,16 +45,6 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
     return;
   }
 
-  if(realIsNaN(&reX)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function unitConversion:", "cannot use NaN as X input of unitConversion", NULL, NULL);
-    #endif
-    restoreStack();
-    refreshStack();
-    return;
-  }
-
   if(multiplyDivide == multiply) {
     realMultiply(&reX, coefficient, &reX, &ctxtReal39);
   }
@@ -99,16 +89,6 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  if(realIsNaN(&reX)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtCToF:", "cannot use NaN as X input of fnCvtCToF", NULL, NULL);
-    #endif
-    restoreStack();
-    refreshStack();
-    return;
-  }
-
   realFMA(&reX, const_9on5, const_32, &reX, &ctxtReal39);
 
   realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
@@ -142,16 +122,6 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtFToC:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
-    #endif
-    restoreStack();
-    refreshStack();
-    return;
-  }
-
-  if(realIsNaN(&reX)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtFToC:", "cannot use NaN as X input of fnCvtFToC", NULL, NULL);
     #endif
     restoreStack();
     refreshStack();
@@ -426,16 +396,6 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     return;
   }
 
-  if(realIsNaN(&reX)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
-    #endif
-    restoreStack();
-    refreshStack();
-    return;
-  }
-
   WP34S_Log10(&reX, &reX);
   realMultiply(&reX, (tenOrTwenty == 10 ? const_10 : const_20), &reX, &ctxtReal39);
 
@@ -470,16 +430,6 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
-    #endif
-    restoreStack();
-    refreshStack();
-    return;
-  }
-
-  if(realIsNaN(&reX)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnCvtRatioDb:", "cannot use NaN as X input of fnCvtRatioDb", NULL, NULL);
     #endif
     restoreStack();
     refreshStack();

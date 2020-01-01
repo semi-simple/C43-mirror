@@ -1449,49 +1449,39 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
 
 //-----------------------------------------------------
 
+void fnStrInput(void) {
+    STACK_LIFT_ENABLE;   // 5
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
 
 void Fn_Lbl_A(void) {
+	fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
     copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
-
                      // sin(x)/x + sin(5x)/5
     fnSin(0);        // SIN
-
-    STACK_LIFT_ENABLE; 
-    liftStack();
-    copySourceRegisterToDestRegister(99, REGISTER_X);   // STO L
-
+    STACK_LIFT_ENABLE; fnRecall(99);
     fnDivide(0);     // /
-
-    STACK_LIFT_ENABLE; 
-    liftStack();
-    copySourceRegisterToDestRegister(99, REGISTER_X);   // STO L
-
-    STACK_LIFT_ENABLE;   // 5
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    stringToReal34("5", REGISTER_REAL34_DATA(REGISTER_X));
-
+    STACK_LIFT_ENABLE; fnRecall(99);
+    tmpStr3000[1]=0; strcat(tmpStr3000,"10"); fnStrInput();
     fnMultiply(0);   // *
     fnSin(0);        // SIN
-
-    STACK_LIFT_ENABLE;   // 5
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    stringToReal34("5", REGISTER_REAL34_DATA(REGISTER_X));
-
+    tmpStr3000[1]=0; strcat(tmpStr3000,"5"); fnStrInput();
     fnDivide(0);     // /
-
     fnAdd(0);     // +    
 }
 
 
 void Fn_Lbl_B(void) {
-    copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
-    fnSin(0);        // SIN    
-    copySourceRegisterToDestRegister(99, REGISTER_X);   // STO L
-    fnSquare(0);
-    fnSin(0);        // SIN
-    fnAdd(0);     // +    
+	fnAngularMode(AM_RADIAN);   //Does not belong here -- it is repeated. It is convenient.
+    fnStore(99);
+    fnSin(0);                // SIN    
+    STACK_LIFT_ENABLE; fnRecall(99);
+    fnSquare(0);             // square
+    fnSin(0);                // SIN
+    fnAdd(0);                // +    
 }
 
 
@@ -1524,15 +1514,13 @@ int16_t tt;
 
 
   //GRAPH RANGE
-  xb=-20.000001; //Graph range x
-  xe=20;
+  xb=-0.3*3.14150; //Graph range x
+  xe=0.6*3.14159;
   yb=-2;         //Graph range y
   ye=+2;
 
 
   calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-
-  fnAngularMode(AM_RADIAN);
   clearScreen(false,true,true);
 
   //GRAPH
@@ -1546,13 +1534,24 @@ int16_t tt;
   cnt = 0;  while (cnt!=SCREEN_WIDTH-1)   { setPixel(cnt,yzero); cnt++; }
   cnt = SG;  while (cnt!=SH-1)  { setPixel(xzero,cnt); cnt++; }
 
+  float tick_int_f = (xe-xb)/20;            //Obtain scaling of ticks, to about 20 left to right.
+  //printf("tick interval:%f ",tick_int_f);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
+  tick_int_f = strtof (tmpStr3000, NULL);
+  //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "Tick spacing: %.0e", tick_int_f);
+  //printf("%s\n",tmpStr3000);
+  showString(tmpStr3000, &standardFont, 20, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
+
+
+//-----------------------------------------------------
   //GRAPH
   cnt = 0;
   for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH) {
 
-    float a_ft = (x/((xe-xb)/20));
+    float a_ft = (x/( tick_int_f /*(xe-xb)/20)*/ ));          //Draw ticks
     if(a_ft<0) { a_ft=-a_ft; }
-    int16_t a_int = (int) a_ft;    
+    int16_t a_int = (int) a_ft;
     float a_frac = a_ft - a_int;
     if(a_frac < (xe-xb)/400) {
       setPixel(cnt,yzero+1); //tick
@@ -1576,7 +1575,8 @@ int16_t tt;
     yo = yn;   //old , new
     yn = screen_y(yb,y,ye);
 
-    printf("Calc: cnt = %d xy[%f %f]  yold->new(%d -> %d)\n",cnt, x, y, yo, yn);
+    //printf("Calc: cnt = %d xy[%f %f]  yold->new(%d -> %d)\n",cnt, x, y, yo, yn);
+    //printf("%d ",cnt);
     cnt++;
 
 
@@ -1591,14 +1591,13 @@ int16_t tt;
         for(y1=yo; y1!=yn; y1+=1) {
         setPixel(x1,y1);
         }
-      printf("\n");
       }
-    }  
+    }
   }
-}
-
-
+//printf("\n");
 //-----------------------------------------------------
+
+}
 
 
 

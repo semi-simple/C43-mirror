@@ -1465,10 +1465,10 @@ void Fn_Lbl_A(void) {
     STACK_LIFT_ENABLE; fnRecall(99);
     fnDivide(0);     // /
     STACK_LIFT_ENABLE; fnRecall(99);
-    tmpStr3000[1]=0; strcat(tmpStr3000,"10"); fnStrInput();
+    tmpStr3000[0]=0; strcat(tmpStr3000,"10"); fnStrInput();
     fnMultiply(0);   // *
     fnSin(0);        // SIN
-    tmpStr3000[1]=0; strcat(tmpStr3000,"5"); fnStrInput();
+    tmpStr3000[0]=0; strcat(tmpStr3000,"5"); fnStrInput();
     fnDivide(0);     // /
     fnAdd(0);     // +    
 }
@@ -1587,10 +1587,12 @@ int16_t tt;
           setPixel(x1,y1);
         }
       } 
-      else {
+      else if(yo < yn) {
         for(y1=yo; y1!=yn; y1+=1) {
         setPixel(x1,y1);
         }
+      } else {
+        setPixel(x1,yn);
       }
     }
   }

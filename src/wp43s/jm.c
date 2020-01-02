@@ -45,24 +45,24 @@ void Reset_Shift_Mem(void) {                            //JM
 
 
 /********************************************//**
- * NOT TESTED YET. NOT WORKING. CALLED FROM ## in BASE
+ * SEEMS TO BE WORKING. CALLED FROM ## in BASE
  *
  * FROM keyboard.c
  ***********************************************/
 void fnBASE_Hash(uint16_t unusedParamButMandatory) {
-  shiftF = false;                   //JM
-  shiftG = true;                    //JM
-  Reset_Shift_Mem();                //JM
-//calcMode = CM_NIM;                //JM Trying to put the calculator into Number Input Mode
-
-#ifdef PC_BUILD
-  btnClicked(NULL, "01");
+#ifndef TESTSUITE_BUILD
+  int16_t lastChar;
+  lastChar = strlen(nimBuffer) - 1;
+  if(lastChar >= 1) {
+    calcMode = CM_NIM;
+    addItemToNimBuffer(ITM_toINT);
+  }
+  else {
+    runFunction(ITM_toINT);
+    //fnChangeBase(TM_VALUE_CHB);
+    //showFunctionName(ITM_toINT, 10);
+  }
 #endif
-#ifdef DMCP_BUILD
-  btnClicked(NULL, "01");
-#endif
-// addItemToNimBuffer(/*CHR_NUMBER_SIGN*/KEY_HASH); //Trying out different things
-// The point is I am trying to do: 12 # 10, i.e. activate # while input buffer is active, like the true button.
 }
 
 
@@ -190,6 +190,16 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     Home3TimerMode = !Home3TimerMode;
     //fnInfo(Home3TimerMode);
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
+    break;
+
+  case JC_POLAR:                                            //JM JC_POLAR
+    if(complexMode == CM_POLAR) {
+      fnComplexMode(CM_RECTANGULAR);                              // SET RECT
+    }
+    else {
+      fnComplexMode(CM_POLAR);                                    // SET POLAR
+    }
+  //fnRefreshComboxState(CB_JC, JC_POLAR, complexMode);                //jm
     break;
 
   default:
@@ -360,7 +370,7 @@ void fnJMUSERmode(uint16_t JM_KEY) {
     X_REG = longIntegerToInt(lgInt);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
-    if (JM_KEY >= 256) {
+    if(JM_KEY >= 256) {
       kbd_usr[JM_KEY - 256].primary = X_REG;
     //printf(".primary %d\n", kbd_usr[JM_KEY - 256].primary);
       Show_User_Keys();
@@ -1037,7 +1047,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnUserJM(uint16_t jmUser) {
-  switch (jmUser) {
+  switch(jmUser) {
   case USER_DEFAULTS:                                           //USER_DEFAULTS FOR USER: E+ CC
     kbd_usr[0].primary     = KEY_CC;
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
@@ -1126,7 +1136,7 @@ void fnKEYSELECT(void) {                                        //JM ASSIGN - RE
 //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
 //gets here only after valid function and any key is selected
 void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {           //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
-  switch (tempkey) {
+  switch(tempkey) {
     case 0:
     case 1:
     case 2:
@@ -1401,6 +1411,168 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
   userModeEnabled = userModeEnabledMEM;
 }
 //JM^^^^^^^
+
+
+
+//-----------------------------------------------------
+
+void fnStrInput(void) {
+  STACK_LIFT_ENABLE;   // 5
+  liftStack();
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+
+void Fn_Lbl_A(void) {
+  fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
+  copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
+                   // sin(x)/x + sin(5x)/5
+  fnSin(0);        // SIN
+  STACK_LIFT_ENABLE; fnRecall(99);
+  fnDivide(0);     // /
+  STACK_LIFT_ENABLE; fnRecall(99);
+  tmpStr3000[0]=0; strcat(tmpStr3000,"10"); fnStrInput();
+  fnMultiply(0);   // *
+  fnSin(0);        // SIN
+  tmpStr3000[0]=0; strcat(tmpStr3000,"5"); fnStrInput();
+  fnDivide(0);     // /
+  fnAdd(0);        // +    
+}
+
+
+void Fn_Lbl_B(void) {
+  fnAngularMode(AM_RADIAN);   //Does not belong here -- it is repeated. It is convenient.
+  fnStore(99);
+  fnSin(0);                // SIN    
+  STACK_LIFT_ENABLE; fnRecall(99);
+  fnSquare(0);             // square
+  fnSin(0);                // SIN
+  fnAdd(0);                // +    
+}
+
+
+void graph(uint16_t unusedParamButMandatory){
+#ifndef TESTSUITE_BUILD
+#define SG 20
+#define SH SCREEN_HEIGHT
+
+  int16_t screen_x(float xb, float x, float xe) {
+    int16_t tt;
+    tt = ((x-xb)/(xe-xb)*SCREEN_WIDTH);
+    if(tt>SCREEN_WIDTH-1) {tt=SCREEN_WIDTH-1;}
+    else if(tt<0) {tt=0;}
+  
+    return tt;
+  }
+
+  int16_t screen_y(float yb, float y, float ye) {
+    int16_t tt;
+    tt = (y-yb)/(ye-yb)*(SH-SG);
+    if(tt>SH-SG-1) {tt=SH-1-SG;}
+    else if(tt<0) {tt=0;}  
+  
+    return (SH - tt);
+  }
+
+
+  uint16_t cnt;
+  uint8_t yo, yn;
+  float xb,xe,yb,ye,x,y;
+  yn = 0;
+  real_t tmpy;
+
+
+  //GRAPH RANGE
+  xb=-0.3*3.14150; //Graph range x
+  xe=0.6*3.14159;
+  yb=-2;         //Graph range y
+  ye=+2;
+
+
+  calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+  clearScreen(false,true,true);
+
+  //GRAPH
+  uint16_t xzero, x1; //range 0-399
+  uint8_t  yzero, y1; //range 0-239
+  yzero = screen_y(yb,0,ye);
+  xzero = screen_x(xb,0,xe);
+
+
+  //AXIS
+  cnt = 0;  while(cnt!=SCREEN_WIDTH-1) { setPixel(cnt,yzero); cnt++; }
+  cnt = SG; while(cnt!=SH-1) { setPixel(xzero,cnt); cnt++; }
+
+  float tick_int_f = (xe-xb)/20;            //Obtain scaling of ticks, to about 20 left to right.
+  //printf("tick interval:%f ",tick_int_f);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
+  tick_int_f = strtof(tmpStr3000, NULL);
+  //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "Tick spacing: %.0e", tick_int_f);
+  //printf("%s\n",tmpStr3000);
+  showString(tmpStr3000, &standardFont, 20, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
+
+
+//-----------------------------------------------------
+  //GRAPH
+  cnt = 0;
+  for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH) {
+
+    float a_ft = (x/( tick_int_f /*(xe-xb)/20)*/ ));          //Draw ticks
+    if(a_ft<0) { a_ft=-a_ft; }
+    int16_t a_int = (int) a_ft;    
+    float a_frac = a_ft - a_int;
+    if(a_frac < (xe-xb)/400) {
+      setPixel(cnt,yzero+1); //tick
+      setPixel(cnt,yzero-1); //tick
+    }
+
+
+    //convert float to X register
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    //gcvt( x, 34, tmpStr3000); 
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16f", x);
+    stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+
+    Fn_Lbl_B();
+
+    //Convert from X register to float
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
+    realToString(&tmpy, tmpStr3000);
+    y = strtof(tmpStr3000, NULL);
+
+    yo = yn;   //old , new
+    yn = screen_y(yb,y,ye);
+
+    //printf("Calc: cnt = %d xy[%f %f]  yold->new(%d -> %d)\n",cnt, x, y, yo, yn);
+    //printf("%d ",cnt);
+    cnt++;
+
+
+    if(cnt > 0) {       //Fill in all y coords if coords are skipped due to large dy/dx.
+      x1 = cnt-1;       //First half on cnt-1, second half on cnt. Not implemented yet., All on cnt-1.
+      if(yo > yn) {
+        for(y1=yo; y1!=yn; y1-=1) {
+          setPixel(x1,y1);
+        }
+      } 
+      else if(yo < yn) {
+        for(y1=yo; y1!=yn; y1+=1) {
+          setPixel(x1,y1);
+        }
+      }
+      else {
+        setPixel(x1,yn);
+      }
+    }  
+  }
+//printf("\n");
+#endif
+}
+
+
+//-----------------------------------------------------
 
 
 

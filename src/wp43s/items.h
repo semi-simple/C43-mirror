@@ -60,7 +60,7 @@
 #define ITM_ASSIGN                      31
 #define ITM_ATMtoPA                     32
 #define ITM_AUtoM                       33
-#define MNU_A_Z                         34
+#define ITM_0034                        34
 #define MNU_CONVA                       35
 #define CST_04                          36
 #define ITM_REGB                        37
@@ -819,7 +819,7 @@
 #define ITM_toGRAD                     790
 #define ITM_toHR                       791
 #define ITM_toHMS                      792
-#define ITM_toINT                      793
+#define ITM_toINT                      793     // JM #
 #define ITM_toMULpi                    794
 #define ITM_toPOL                      795
 #define ITM_toRAD                      796
@@ -903,7 +903,7 @@
 #define ITM_TRZtoKGb                   873
 
 #define ITM_FBR                        874
-#define MNU_a_z                        875
+#define MNU_CFG                        875
 #define MNU_alpha_omega                876
 #define MNU_ALPHAintl                  877
 #define ITM_REG_X                      878
@@ -1731,8 +1731,8 @@
 #define ITM_WS64                      1692  //JM BASE
 #define ITM_UNIT                      1693  //JM UNIT
 #define ITM_SH_ERPN                   1694  //JM SHOW
-#define Not_Used1995                  1995
-#define Not_Used1996                  1996
+#define Not_used1695                  1695
+#define Not_used1696                  1696
 #define CHR_QOPPA                     1697  //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
 #define CHR_DIGAMMA                   1698  //JM GREEK
 #define CHR_SAMPI                     1699  //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
@@ -1774,7 +1774,7 @@
 #define CHR_sampi                     1735  //JM GREEK
 #define CHR_case                      1736  //JM CAPS
 #define KEY_HASH                      1737  //JM BASE ## test
-#define ITM_HASH                      1738  //JM BASE ### test
+#define Not_used1738                  1738
 #define ITM_op_a                      1739  //JM OPERATORS
 #define ITM_op_a2                     1740  //JM OPERATORS
 #define ITM_op_j                      1741  //JM OPERATORS
@@ -1807,7 +1807,7 @@
 #define KEY_TYPCON_UP                 1768  //JM CPX
 #define KEY_TYPCON_DN                 1769  //JM CPX
 #define ITM_HOMEx3T                   1770  //JM HOME.3T
-#define Not_Used1771                  1771
+#define Not_used1771                  1771
 
 #define MNU_ASN 1772  //JM USER
 #define K_00U   1773  //JM USER MODE TEST
@@ -1934,22 +1934,22 @@
 #ifdef INLINE_TEST
 #define ITM_TEST                      1892
 #else
-#define Not_Used1892                  1892
+#define Not_used1892                  1892
 #endif
 #define ITM_U_KEY_MM                  1893  //JM USER
 #ifdef INLINE_TEST
 #define ITM_GET_TEST_BS               1894
 #else
-#define Not_Used1894                  1894
+#define Not_used1894                  1894
 #endif
 #define ITM_U_KEY_SIGMA               1895  //JM USER
 #ifdef INLINE_TEST
 #define ITM_SET_TEST_BS               1896
 #else
-#define Not_Used1896                  1896
+#define Not_used1896                  1896
 #endif
 #define ITM_U_KEY_PRGM                1897  //JM USER
-#define Not_Used1898                  1898
+#define Not_used1898                  1898
 #define ITM_U_KEY_ALPHA               1899  //JM USER
 #define ITM_SH_NORM_E                 1900  //JM USER NORMAL
 #define ITM_JM_ASN                    1901  //JM ASSIGN
@@ -1965,10 +1965,13 @@
 #define ITM_G_DOUBLETAP               1911  //JM FG              **
 #define ITM_INP_DEF_SI                1912  //JM INPUT DEFAULT
 #define ITM_INP_DEF_LI                1913  //JM INPUT DEFAULT
+#define ITM_GRAPH                     1914  //JM GRAPHING
+#define MNU_A_Z                       1915  //  34
+#define MNU_a_z                       1916  //  875
+#define ITM_POLAR_TOGGLE              1917  //JM TOGGLE POLAR
 
 
-
-#define LAST_ITEM                     1914  //JM
+#define LAST_ITEM                     1918  //JM
 
 #define CHR_PROD_SIGN                 9999
 

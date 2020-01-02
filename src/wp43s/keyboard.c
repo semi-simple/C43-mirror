@@ -914,6 +914,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
 
   // Shift f pressed
+  //JM no shifted menu on g-shift-key as in WP43S
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
@@ -931,13 +932,14 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftF = !shiftF;
-    shiftG = false;
+    shiftG = false;                     //JM no shifted menu on g-shift-key as in WP43S
 //  shiftStateChanged = true; //dr
 
     showShiftState();
   }
 
   // Shift g pressed
+  //JM no shifted menu on f-shift-key as in WP43S
   else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     if(temporaryInformation != TI_NO_INFO) {
       temporaryInformation = TI_NO_INFO;
@@ -955,7 +957,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftG = !shiftG;
-    shiftF = false;
+    shiftF = false;                     //JM no shifted menu on g-shift-key as in WP43S
 //  shiftStateChanged = true; //dr
 
     showShiftState();
@@ -1254,16 +1256,16 @@ void btnPressed(void *notUsed, void *data) {
         displayBugScreen("In function btnPressed: unexpected case while processing key BACKSPACE!");
       }
     }
-
+/*
     else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
       alphaCase = AC_UPPER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
 #ifdef PC_BUILD     //dr - new AIM
       calcModeAimGui();
 #endif
-      }                                                                         //JM CASE JM CAPS
-
-    else if(item == KEY_UP) {
+    }                                                                           //JM CASE JM CAPS
+*/
+    else if((item == KEY_UP) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1290,10 +1292,14 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
+          else if(item == CHR_case) {   //vv JM
+            showSoftmenuCurrentPart();
+            setCatalogLastPos();
+          }                             //^^
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-            if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+            if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
               softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
               showSoftmenuCurrentPart();
             }
@@ -1359,7 +1365,7 @@ void btnPressed(void *notUsed, void *data) {
        displayBugScreen("In function btnPressed: unexpected case while processing key UP!");
       }
     }
-
+/*
     else if((calcMode == CM_AIM) && (item == CHR_case)  && (alphaCase == AC_UPPER)) {     //JM CASE JM CAPS
       alphaCase = AC_LOWER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
@@ -1367,8 +1373,8 @@ void btnPressed(void *notUsed, void *data) {
       calcModeAimGui();
 #endif
     }                                                                          //JM CASE JM CAPS
-
-    else if(item == KEY_DOWN) {
+*/
+    else if((item == KEY_DOWN) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1395,6 +1401,10 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
+          else if (item == CHR_case) {  //vvJM
+            showSoftmenuCurrentPart();
+            setCatalogLastPos();
+          }                             //^^
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
@@ -1594,7 +1604,7 @@ void btnPressed(void *notUsed, void *data) {
         showFunctionName(item, 10);
       }
       else {
-        addItemToNimBuffer(item);
+        addItemToNimBuffer(item);                 //JM #, set to 
       }
     }
 

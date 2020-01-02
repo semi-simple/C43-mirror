@@ -23,9 +23,9 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2019.12"
+#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2020.01"
 #define COPYRIGHT "The WP43S team"
-#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2019.12" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2020.01" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -232,7 +232,7 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     72                                               //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     73                                               //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0

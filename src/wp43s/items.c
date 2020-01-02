@@ -476,7 +476,7 @@ const item_t indexOfItems[] = {
 /*   95 */  { itemToBeCoded,               NOPARAM,                     "CPX",                                         "CPX",                                         CAT_MENU, SLS_UNCHANGED},
 /*   96 */  { fnComplexUnit,               CU_I,                        "CPXi",                                        "CPXi",                                        CAT_FNCT, SLS_UNCHANGED},
 /*   97 */  { fnComplexUnit,               CU_J,                        "CPXj",                                        "CPXj",                                        CAT_FNCT, SLS_UNCHANGED},
-/*   98 */  { fnComplexResult,             true,                        "CPXRES",                                      "CPXRES",                                      CAT_FNCT, SLS_UNCHANGED},
+/*   98 */  { fnComplexResult,             true,                        "CPXRES",                                      "CPXRES",                                      CAT_NONE, SLS_UNCHANGED},      //dr
 /*   99 */  { itemToBeCoded,               NOPARAM,                     "CPXS",                                        "CPXS",                                        CAT_MENU, SLS_UNCHANGED},
 /*  100 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  101 */  { itemToBeCoded,               NOPARAM,                     "CROSS",                                       "cross",                                       CAT_FNCT, SLS_UNCHANGED},
@@ -713,8 +713,8 @@ const item_t indexOfItems[] = {
 /*  332 */  { itemToBeCoded,               NOPARAM,                     "LOOP",                                        "LOOP",                                        CAT_MENU, SLS_UNCHANGED},
 /*  333 */  { fnConstant,                  23,                          "l" STD_SUB_P STD_SUB_L,                       "l" STD_SUB_P STD_SUB_L,                       CAT_CNST, SLS_ENABLED  },
 /*  334 */  { fnCvtLyM,                    multiply,                    "ly" STD_RIGHT_ARROW "m",                      "ly" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
-/*  335 */  { fnLeadingZeros,              false,                       "LZOFF",                                       "LZOFF",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  336 */  { fnLeadingZeros,              true,                        "LZON",                                        "LZON",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  335 */  { fnLeadingZeros,              false,                       "LZOFF",                                       "LZOFF",                                       CAT_NONE, SLS_UNCHANGED},      //dr
+/*  336 */  { fnLeadingZeros,              true,                        "LZON",                                        "LZON",                                        CAT_NONE, SLS_UNCHANGED},      //dr
 /*  337 */  { itemToBeCoded,               NOPARAM,                     "L.R.",                                        "L.R.",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  338 */  { fnCvtAcreM2,                 divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "m" STD_SUP_2 " " STD_RIGHT_ARROW,             CAT_FNCT, SLS_ENABLED  },
 /*  339 */  { fnCvtAcreusM2,               divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "m" STD_SUP_2 " " STD_RIGHT_ARROW,             CAT_FNCT, SLS_ENABLED  },
@@ -882,7 +882,7 @@ const item_t indexOfItems[] = {
 /*  501 */  { fnRadixMark,                 RM_PERIOD,                   "RDX.",                                        "RDX.",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  502 */  { fnConstant,                  40,                          "r" STD_SUB_e,                                 "r" STD_SUB_e,                                 CAT_CNST, SLS_ENABLED  },
 /*  503 */  { fnRealPart,                  NOPARAM,                     "Re",                                          "Re",                                          CAT_FNCT, SLS_ENABLED  },
-/*  504 */  { fnComplexResult,             false,                       "REALRE",                                      "REALRE",                                      CAT_FNCT, SLS_UNCHANGED},
+/*  504 */  { fnComplexResult,             false,                       "REALRE",                                      "REALRE",                                      CAT_NONE, SLS_UNCHANGED},      //dr
 /*  505 */  { itemToBeCoded,               NOPARAM,                     "REALS",                                       "REALS",                                       CAT_MENU, SLS_UNCHANGED},
 /*  506 */  { itemToBeCoded,               NOPARAM,                     "REAL?",                                       "REAL?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  507 */  { fnComplexMode,               CM_RECTANGULAR,              "RECT",                                        "RECT",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -2070,10 +2070,10 @@ const item_t indexOfItems[] = {
 /* 1678 */  { fnSetSetJM,                  JC_ERPN,                     "SET_ERPN",                                    "eRPN",                                        CAT_FNCT, SLS_ENABLED  },      //JM eRPN
 /* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "SET_HOME_TRIPLE",                             "HOME.3",                                      CAT_FNCT, SLS_ENABLED  },      //JM HOME.3
 /* 1680 */  { fnSetSetJM,                  JC_SHFT_4s,                  "SET_SHFT_4s",                                 "SH_4s",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHIFT CANCEL
-/* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_FNCT, SLS_UNCHANGED},      //JM HOME
+/* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_MENU, SLS_UNCHANGED},      //JM HOME
 /* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIGFIG",                                      "SIGFIG",                                      CAT_FNCT, SLS_UNCHANGED},      //JM SIGFIG
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       CAT_FNCT, SLS_UNCHANGED},      //JM ALPHA
-/* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                        CAT_FNCT, SLS_UNCHANGED},      //JM BASE
+/* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                        CAT_MENU, SLS_UNCHANGED},      //JM BASE
 /* 1685 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                         CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1686 */  { fnChangeBase,                8,                           STD_RIGHT_ARROW "OCT",                         STD_RIGHT_ARROW "OCT",                         CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1687 */  { fnChangeBase,                10,                          STD_RIGHT_ARROW "DEC",                         STD_RIGHT_ARROW "DEC",                         CAT_FNCT, SLS_UNCHANGED},      //JM HEX
@@ -2084,8 +2084,8 @@ const item_t indexOfItems[] = {
 /* 1692 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                       CAT_FNCT, SLS_UNCHANGED},      //JM UNIT
 /* 1694 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHOW
-/* 1695 */  { itemToBeCoded,               NOPARAM,                     "1695",                                        "1695",                                        CAT_FREE, SLS_UNCHANGED},
-/* 1696 */  { itemToBeCoded,               NOPARAM,                     "1696",                                        "1696",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1695 */  { fnSetSetJM,                  JC_BCR,                      "CPXRES",                                      "CPXRES",                                      CAT_FNCT, SLS_UNCHANGED},      //dr
+/* 1696 */  { fnSetSetJM,                  JC_BLZ,                      "Lead Z",                                      "Lead Z",                                      CAT_FNCT, SLS_UNCHANGED},      //dr
 /* 1697 */  { addItemToBuffer,             CHR_QOPPA,                   "",                                            STD_QOPPA,                                     CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1698 */  { addItemToBuffer,             CHR_DIGAMMA,                 "",                                            STD_DIGAMMA,                                   CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1699 */  { addItemToBuffer,             CHR_SAMPI,                   "",                                            STD_SAMPI,                                     CAT_NONE, SLS_UNCHANGED},      //JM GREEK

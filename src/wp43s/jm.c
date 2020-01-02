@@ -219,6 +219,14 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
+  case JC_BCR:                                              //JM bit ComplexResult
+    fnComplexResult(!getFlag(FLAG_CPXRES));                                     //dr
+    break;
+
+  case JC_BLZ:                                              //JM bit LeadingZeros
+    fnLeadingZeros(!displayLeadingZeros);                                       //dr
+    break;
+
   default:
     break;
   }

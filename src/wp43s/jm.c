@@ -59,8 +59,6 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory) {
   }
   else {
     runFunction(ITM_toINT);
-    //fnChangeBase(TM_VALUE_CHB);
-    //showFunctionName(ITM_toINT, 10);
   }
 #endif
 }
@@ -192,14 +190,12 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
-  case JC_POLAR:                                            //JM JC_POLAR
-    if(complexMode == CM_POLAR) {
-      fnComplexMode(CM_RECTANGULAR);                              // SET RECT
-    }
-    else {
-      fnComplexMode(CM_POLAR);                                    // SET POLAR
-    }
-  //fnRefreshComboxState(CB_JC, JC_POLAR, complexMode);                //jm
+  case JC_BCR:                                              //JM bit ComplexResult
+    fnComplexResult(!getFlag(FLAG_CPXRES));                                     //dr
+    break;
+
+  case JC_BLZ:                                              //JM bit LeadingZeros
+    fnLeadingZeros(!displayLeadingZeros);                                       //dr
     break;
 
   default:
@@ -1484,25 +1480,34 @@ void graph(uint16_t unusedParamButMandatory){
 
 
   //GRAPH RANGE
-  xb=-0.3*3.14150; //Graph range x
-  xe=0.6*3.14159;
-  yb=-2;         //Graph range y
-  ye=+2;
+  xb=-3*3.14150;  xe=2*3.14159;
+  yb=-2;            ye=+2;
 
 
   calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
   clearScreen(false,true,true);
 
   //GRAPH
-  uint16_t xzero, x1; //range 0-399
-  uint8_t  yzero, y1; //range 0-239
+  uint8_t  y1;  //range 0-239
+  uint16_t x1; //range 0-399
+  uint8_t  yzero;
+  uint16_t xzero;
   yzero = screen_y(yb,0,ye);
   xzero = screen_x(xb,0,xe);
 
 
   //AXIS
-  cnt = 0;  while(cnt!=SCREEN_WIDTH-1) { setPixel(cnt,yzero); cnt++; }
-  cnt = SG; while(cnt!=SH-1) { setPixel(xzero,cnt); cnt++; }
+  cnt = 0;  
+  while(cnt!=SCREEN_WIDTH-1) { 
+    setPixel(cnt,yzero); 
+    cnt++; 
+  }
+  cnt = SG;  
+  while(cnt!=SH-1) { 
+    setPixel(xzero,cnt); 
+    cnt++; 
+  }
+
 
   float tick_int_f = (xe-xb)/20;            //Obtain scaling of ticks, to about 20 left to right.
   //printf("tick interval:%f ",tick_int_f);
@@ -1523,7 +1528,7 @@ void graph(uint16_t unusedParamButMandatory){
     if(a_ft<0) { a_ft=-a_ft; }
     int16_t a_int = (int) a_ft;    
     float a_frac = a_ft - a_int;
-    if(a_frac < (xe-xb)/400) {
+    if(a_frac < (xe-xb)/300) {
       setPixel(cnt,yzero+1); //tick
       setPixel(cnt,yzero-1); //tick
     }

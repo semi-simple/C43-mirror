@@ -1731,8 +1731,8 @@
 #define ITM_WS64                      1692  //JM BASE
 #define ITM_UNIT                      1693  //JM UNIT
 #define ITM_SH_ERPN                   1694  //JM SHOW
-#define Not_used1695                  1695
-#define Not_used1696                  1696
+#define ITM_CB_CPXRES                 1695  //JM cb ComplexResult
+#define ITM_CB_LEADING_ZERO           1696  //JM cb LeadingZeros
 #define CHR_QOPPA                     1697  //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
 #define CHR_DIGAMMA                   1698  //JM GREEK
 #define CHR_SAMPI                     1699  //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
@@ -1968,10 +1968,9 @@
 #define ITM_GRAPH                     1914  //JM GRAPHING
 #define MNU_A_Z                       1915  //  34
 #define MNU_a_z                       1916  //  875
-#define ITM_POLAR_TOGGLE              1917  //JM TOGGLE POLAR
 
 
-#define LAST_ITEM                     1918  //JM
+#define LAST_ITEM                     1917  //JM
 
 #define CHR_PROD_SIGN                 9999
 

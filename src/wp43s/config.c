@@ -154,7 +154,8 @@ void fnIntegerMode(uint16_t mode) {
 void fnLeadingZeros(uint16_t dlz) {
   displayLeadingZeros = dlz;
 
-  fnRefreshRadioState(RB_BLZ, dlz);                                             //dr
+//fnRefreshRadioState(RB_BLZ, dlz);                                             //dr
+  fnRefreshComboxState(CB_JC, JC_BLZ, displayLeadingZeros);                     //dr
 
   refreshStack();
 }
@@ -475,7 +476,8 @@ void fnComplexUnit(uint16_t cu) {
 void fnComplexResult(uint16_t complexResult) {
   complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
 
-  fnRefreshRadioState(RB_BCR, complexResult);                                   //dr
+//fnRefreshRadioState(RB_BCR, complexResult);                                   //dr
+  fnRefreshComboxState(CB_JC, JC_BCR, complexResult);                           //dr
 }
 
 /********************************************//**
@@ -487,8 +489,7 @@ void fnComplexResult(uint16_t complexResult) {
 void fnComplexMode(uint16_t cm) {
   complexMode = cm;
 
-//fnRefreshRadioState(RB_CM, cm);                                               //dr
-  fnRefreshComboxState(CB_JC, JC_POLAR, complexMode);                           //dr
+  fnRefreshRadioState(RB_CM, cm);                                               //dr
 
   showComplexMode();
   refreshStack();
@@ -749,7 +750,7 @@ void fnRebuildRadioState() {
       }
       i++;
     }
-  /*else if(indexOfItems[k].func == fnComplexMode) {
+    else if(indexOfItems[k].func == fnComplexMode) {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
@@ -759,7 +760,7 @@ void fnRebuildRadioState() {
         indexOfRadioCbItems[i] = rb;
       }
       i++;
-    }*/
+    }
     else if(indexOfItems[k].func == fnComplexUnit) {
       radiocb_t rb;
       rb.itemNr = k;
@@ -948,7 +949,7 @@ void fnRebuildRadioState() {
       }
       i++;
     }
-    else if(indexOfItems[k].func == fnSetWordSize) {
+    else if((indexOfItems[k].func == fnSetWordSize) && (k != ITM_WSIZE)) {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
@@ -981,7 +982,7 @@ void fnRebuildRadioState() {
       }
       i++;
     }
-    else if(indexOfItems[k].func == fnComplexResult) {
+  /*else if(indexOfItems[k].func == fnComplexResult) {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
@@ -991,8 +992,8 @@ void fnRebuildRadioState() {
         indexOfRadioCbItems[i] = rb;
       }
       i++;
-    }
-    else if(indexOfItems[k].func == fnLeadingZeros) {
+    }*/
+  /*else if(indexOfItems[k].func == fnLeadingZeros) {
       radiocb_t rb;
       rb.itemNr = k;
       rb.param = indexOfItems[k].param;
@@ -1002,7 +1003,7 @@ void fnRebuildRadioState() {
         indexOfRadioCbItems[i] = rb;
       }
       i++;
-    }
+    }*/
     else if(indexOfItems[k].func == fnSetSetJM) {
       radiocb_t rb;
       rb.itemNr = k;
@@ -1023,10 +1024,6 @@ void fnRebuildRadioState() {
 
       case JC_G_DOUBLETAP:               //JM
         rb.state = jm_G_DOUBLETAP? 3 : 2;
-        break;
-
-      case JC_POLAR:                     //JM   Rectangular is 0, polar = 1
-        rb.state = (complexMode == CM_POLAR)? 3 : 2;
         break;
 
       case JC_HOME_TRIPLE:
@@ -1055,6 +1052,14 @@ void fnRebuildRadioState() {
 
       case JC_SH_3T:
         rb.state = Home3TimerMode? 3 : 2;
+        break;
+
+      case JC_BCR:
+        rb.state = getFlag(FLAG_CPXRES)? 3 : 2;
+        break;
+
+      case JC_BLZ:
+        rb.state = displayLeadingZeros? 3 : 2;
         break;
 
       default:

@@ -166,12 +166,13 @@ char* itoa(int value, char* result, int base);
 #define JC_BASE_AHOME           6    // aHOME
 #define JC_BASE_MYA             7    // MYa
 #define JC_SH_3T                8    // SH.3T
+#define JC_BCR                  9    // CB ComplexResult
+#define JC_BLZ                 10    // CB LeadingZeros
 #define JM_INP_DFLT            15    // Input_Default
 
 #define JC_FG_LINE             20    // screen setup
 #define JC_FG_DOTS             21    // screen setup
 #define JC_G_DOUBLETAP         22    // screen setup
-#define JC_POLAR               23    // screen setup
 
 
 //items.c

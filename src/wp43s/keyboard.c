@@ -989,7 +989,7 @@ void btnPressed(void *notUsed, void *data) {
     int16_t item = determineItem(key);
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( stringToKeyNumber(data) == 0) )) {
+    if((calcMode == CM_NORMAL) && (!userModeEnabled && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
       //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }

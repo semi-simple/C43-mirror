@@ -83,11 +83,11 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory) {
   lastChar = strlen(nimBuffer) - 1;
   if(lastChar >= 1) {
     calcMode = CM_NIM;
+#ifndef TESTSUITE_BUILD
     addItemToNimBuffer(ITM_toINT);
   } else {
     runFunction(ITM_toINT);
-    //fnChangeBase(TM_VALUE_CHB);
-    //showFunctionName(ITM_toINT, 10);
+#endif
   }
 }
 
@@ -1437,6 +1437,16 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
 
 //-----------------------------------------------------
 
+/*void fnStrInput2(char[] inp1;) {  //
+    tmpStr3000[0]=0; 
+    strcat(tmpStr3000,inp1);
+    STACK_LIFT_ENABLE;   // 5
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+}
+*/
+
 void fnStrInput(void) {  //
     STACK_LIFT_ENABLE;   // 5
     liftStack();
@@ -1477,6 +1487,7 @@ void graph (uint16_t unusedParamButMandatory){
 #define SG 20
 #define SH SCREEN_HEIGHT
 
+#ifndef TESTSUITE_BUILD
 int16_t screen_x(float xb, float x, float xe) {
 int16_t tt;
   tt = ((x-xb)/(xe-xb)*SCREEN_WIDTH);
@@ -1484,6 +1495,7 @@ int16_t tt;
   else if (tt<0) {tt=0;}
   return tt;
 }
+#endif
 
 int16_t screen_y(float yb, float y, float ye) {
 int16_t tt;
@@ -1510,24 +1522,43 @@ int16_t tt;
   clearScreen(false,true,true);
 
   //GRAPH
-  uint16_t xzero, x1; //range 0-399
-  uint8_t  yzero, y1;  //range 0-239
+  uint8_t  y1;  //range 0-239
+  #ifndef TESTSUITE_BUILD
+  uint16_t x1; //range 0-399
+  uint8_t  yzero;
+  uint16_t xzero;
   yzero = screen_y(yb,0,ye);
   xzero = screen_x(xb,0,xe);
 
-
   //AXIS
-  cnt = 0;  while (cnt!=SCREEN_WIDTH-1)   { setPixel(cnt,yzero); cnt++; }
-  cnt = SG;  while (cnt!=SH-1)  { setPixel(xzero,cnt); cnt++; }
+  cnt = 0;  
+  while (cnt!=SCREEN_WIDTH-1) { 
+      #ifndef TESTSUITE_BUILD
+      setPixel(cnt,yzero); 
+      #endif
+      cnt++; 
+    }
+  cnt = SG;  
+  while (cnt!=SH-1) { 
+      #ifndef TESTSUITE_BUILD
+      setPixel(xzero,cnt); 
+      #endif
+      cnt++; 
+    }
+
+  #endif
+
 
   float tick_int_f = (xe-xb)/20;            //Obtain scaling of ticks, to about 20 left to right.
   //printf("tick interval:%f ",tick_int_f);
+  #ifndef TESTSUITE_BUILD
   snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
   tick_int_f = strtof (tmpStr3000, NULL);
   //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
   snprintf(tmpStr3000, sizeof(tmpStr3000), "Tick spacing: %.0e", tick_int_f);
   //printf("%s\n",tmpStr3000);
   showString(tmpStr3000, &standardFont, 20, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
+  #endif
 
 
 //-----------------------------------------------------
@@ -1540,8 +1571,10 @@ int16_t tt;
     int16_t a_int = (int) a_ft;
     float a_frac = a_ft - a_int;
     if(a_frac < (xe-xb)/300) {
+      #ifndef TESTSUITE_BUILD
       setPixel(cnt,yzero+1); //tick
       setPixel(cnt,yzero-1); //tick
+      #endif
     }
 
 
@@ -1567,26 +1600,38 @@ int16_t tt;
 
 
   if(cnt > 0) {       //Fill in all y coords if coords are skipped due to large dy/dx.
+      #ifndef TESTSUITE_BUILD
       x1 = cnt-1;     //First half on cnt-1, second half on cnt. Not implemented yet., All on cnt-1.
+      #endif
       if(yo > yn) {
         for(y1=yo; y1!=yn; y1-=1) {
+          #ifndef TESTSUITE_BUILD
           setPixel(x1,y1);
+          #endif
         }
       } 
       else if(yo < yn) {
         for(y1=yo; y1!=yn; y1+=1) {
+        #ifndef TESTSUITE_BUILD
         setPixel(x1,y1);
+        #endif
         }
       } else {
+        #ifndef TESTSUITE_BUILD
         setPixel(x1,yn);
+        #endif
       }
     }
   }
 //printf("\n");
 //-----------------------------------------------------
 
-}
+/*fnStrInput2("1");
+fnStrInput2("1000");
+*/
 
+
+}
 
 
 

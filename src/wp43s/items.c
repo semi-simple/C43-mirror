@@ -1170,7 +1170,7 @@ const item_t indexOfItems[] = {
 /*  789 */  { fnCvtFromCurrentAngularMode, AM_DMS,                      STD_RIGHT_ARROW "D.MS",                        STD_RIGHT_ARROW "D.MS",                        CAT_FNCT, SLS_ENABLED  },
 /*  790 */  { fnCvtFromCurrentAngularMode, AM_GRAD,                     STD_RIGHT_ARROW "GRAD",                        STD_RIGHT_ARROW "GRAD",                        CAT_FNCT, SLS_ENABLED  },
 /*  791 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "HR",                          ".d",                                          CAT_FNCT, SLS_ENABLED  },
-/*  792 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "H.MS",                        "h.ms",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  792 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "H.MS",                        STD_RIGHT_ARROW "h.ms",                        CAT_FNCT, SLS_UNCHANGED},     //JM mod
 /*  793 */  { fnChangeBase,                TM_VALUE_CHB,                STD_RIGHT_ARROW "INT",                         "#",                                           CAT_FNCT, SLS_UNCHANGED},
 /*  794 */  { fnCvtFromCurrentAngularMode, AM_MULTPI,                   STD_RIGHT_ARROW "MUL" STD_pi,                  STD_RIGHT_ARROW "MUL" STD_pi,                  CAT_FNCT, SLS_ENABLED  },
 /*  795 */  { fnToPolar,                   NOPARAM,                     STD_RIGHT_ARROW "POL",                         STD_RIGHT_ARROW "P",                           CAT_FNCT, SLS_ENABLED  },
@@ -1912,7 +1912,7 @@ const item_t indexOfItems[] = {
 #ifdef JM_LAYOUT_1A
 /* 1526 */  { fnAim,                       NOPARAM,                     "",                                            STD_alpha,                                     CAT_NONE, SLS_UNCHANGED},      //JM
 #endif //JM END OF LAYOUT 1
-/* 1527 */  { itemToBeCoded,               NOPARAM,                     "",                                            ".d",                                          CAT_NONE, SLS_UNCHANGED},
+/* 1527 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_RIGHT_ARROW ".d",                          CAT_NONE, SLS_UNCHANGED},      //JM mod
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
@@ -2311,7 +2311,6 @@ const item_t indexOfItems[] = {
 /* 1914 */  { graph,                       NOPARAM      ,               "",                                            "GRAPH",                                       CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 875 Small latin letters
-/* 1917 */  { fnSetSetJM,                  JC_POLAR     ,               "",                                            "POLAR",                                       CAT_NONE, SLS_UNCHANGED},      //JM RECT/POLAR TOGGLE
 
-/* 1918 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1917 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

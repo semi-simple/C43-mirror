@@ -23,18 +23,65 @@
 //This variable is to store in flash memory
 const calcKey_t kbd_std[37] = {
 
+/*
+// JM Latest WP43S, for reference only, not used.
+ {21,   ITM_1ONX,      ITM_PROFRC,      ITM_IMPFRC,      ITM_NULL,        CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     },
+ {22,   ITM_YX,        ITM_toINT,      -MNU_EXP,         CHR_NUMBER_SIGN, CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     },
+ {23,  -MNU_TRI,       ITM_DMS,         ITM_pi,          ITM_NULL,        CHR_C,             ITM_NULL,        CHR_GAMMA,     ITM_ST_C     },
+ {24,   ITM_LN,        KEY_dotD,        ITM_LOG10,       ITM_NULL,        CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base
+ {25,   ITM_EX,        ITM_toHMS,       ITM_10x,         ITM_NULL,        CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     },
+ {26,   ITM_SQUARE,    ITM_AIM,         ITM_SQUAREROOTX, CHR_CHECK_MARK,  CHR_F,             CHR_CHECK_MARK,  CHR_PHI,       CHR_alpha    },
+
+ {31,   ITM_STO,       ITM_ASSIGN,      ITM_SAVE,        ITM_NULL,        CHR_G,             ITM_ASSIGN,      CHR_GAMMA,     ITM_NULL     },
+ {32,   ITM_RCL,       ITM_VIEW,       -MNU_CNST,        ITM_NULL,        CHR_H,             ITM_NULL,        CHR_CHI,       ITM_HEX      },
+ {33,   ITM_Rdown,     ITM_Rup,        -MNU_CPX,         ITM_NULL,        CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
+ {34,   KEY_CC,        ITM_MAGNITUDE,   ITM_VANGLE,      ITM_NULL,        CHR_J,             ITM_NULL,        CHR_ETA,       ITM_REGJ     }, // If KEY_CC is moved: adapt the function fnComplexCCCC in keyboard.c
+ {35,   KEY_f,         ITM_NULL,       -MNU_ALPHAFN,     KEY_f,           KEY_f,             ITM_NULL,        ITM_NULL,      KEY_f        },
+ {36,   KEY_g,         KEY_USERMODE,    ITM_NULL,        KEY_g,           KEY_g,             KEY_USERMODE,    ITM_NULL,      KEY_g        },
+
+ {41,   ITM_ENTER,     ITM_FILL,        ITM_DROP,        ITM_ENTER,       ITM_ENTER,         ITM_NULL,        ITM_NULL,      ITM_ENTER    },
+ {42,   ITM_XexY,      ITM_RBR,        -MNU_STK,         CHR_ex,          CHR_K,             CHR_ex,          CHR_KAPPA,     ITM_REGK     },
+ {43,   ITM_CHS,       ITM_DELTAPC,    -MNU_FIN,         CHR_PLUS_MINUS,  CHR_L,             CHR_PLUS_MINUS,  CHR_LAMBDA,    ITM_REGL     },
+ {44,   ITM_EXPONENT,  ITM_SHOW,       -MNU_DISP,        ITM_NULL,        CHR_M,             CHR_UP_ARROW,    CHR_MU,        ITM_NULL     },
+ {45,   KEY_BACKSPACE, KEY_UNDO,       -MNU_CLR,         KEY_BACKSPACE,   KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE},
+
+ {51,   ITM_DIV,       ITM_RMD,        -MNU_FLAGS,       CHR_SLASH,       CHR_COLON,         CHR_SLASH,      -MNU_MODE,      ITM_DIV      },
+ {52,   CHR_7,         ITM_SF,          ITM_CF,          CHR_7,           CHR_N,             CHR_7,           CHR_NU,        CHR_7        },
+ {53,   CHR_8,         ITM_NULL,        ITM_NULL,        CHR_8,           CHR_O,             CHR_8,           CHR_OMEGA,     CHR_8        },
+ {54,   CHR_9,         ITM_NULL,       -MNU_CFG,         CHR_9,           CHR_P,             CHR_9,           CHR_PI,        CHR_9        },
+ {55,   ITM_XEQ,       ITM_GTO,         ITM_LBL,         ITM_NULL,        CHR_Q,             ITM_NULL,        ITM_NULL,      ITM_NULL     },
+
+ {61,   ITM_MULT,      ITM_XFACT,      -MNU_PROB,        CHR_CROSS,       CHR_R,             CHR_PROD_SIGN,   CHR_RHO,       ITM_MULT     },
+ {62,   CHR_4,        -MNU_STAT,       -MNU_SUMS,        CHR_4,           CHR_S,             CHR_4,           CHR_SIGMA,     CHR_4        },
+ {63,   CHR_5,         ITM_toREC,       ITM_toPOL,       CHR_5,           CHR_T,             CHR_5,           CHR_TAU,       CHR_5        },
+ {64,   CHR_6,        -MNU_UNITCONV,   -MNU_ANGLECONV,   CHR_6,           CHR_U,             CHR_6,           CHR_THETA,     CHR_6        },
+ {65,   KEY_UP,        KEY_BST,         ITM_RTN,         KEY_UP,          KEY_UP,            KEY_BST,         ITM_NULL,      KEY_UP       },
+
+ {71,   ITM_SUB,      -MNU_BITS,       -MNU_INTS,        CHR_MINUS,       CHR_V,             CHR_MINUS,      -MNU_ALPHAMATH, ITM_SUB      },
+ {72,   CHR_1,        -MNU_ADV,        -MNU_EQN,         CHR_1,           CHR_W,             CHR_1,           CHR_PSI,       CHR_1        },
+ {73,   CHR_2,        -MNU_MATX,       -MNU_XFN,         CHR_2,           CHR_X,             CHR_2,           CHR_XI,        CHR_2        },
+ {74,   CHR_3,         ITM_TIMER,      -MNU_CLK,         CHR_3,           CHR_Y,             CHR_3,           CHR_UPSILON,   CHR_3        },
+ {75,   KEY_DOWN,      KEY_SST,        -MNU_MODE,        KEY_DOWN,        KEY_DOWN,          KEY_SST,        -MNU_FLAGS,     KEY_DOWN     },
+
+ {81,   ITM_ADD,       KEY_PRTX,       -MNU_IO,          CHR_PLUS,        CHR_QUESTION_MARK, CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      },
+ {82,   CHR_0,        -MNU_LOOP,       -MNU_TEST,        CHR_0,           CHR_Z,             CHR_0,           CHR_ZETA,      CHR_0        },
+ {83,   CHR_PERIOD,   -MNU_PARTS,      -MNU_INFO,        CHR_PERIOD,      CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   },
+ {84,   ITM_RS,        ITM_PR,         -MNU_PFN,         ITM_NULL,        CHR_SPACE,         CHR_PRINTER,     ITM_NULL,      ITM_NULL     },
+ {85,   KEY_EXIT,     -MNU_CATALOG,     ITM_OFF,         KEY_EXIT,        KEY_EXIT,         -MNU_CATALOG,     ITM_OFF,       KEY_EXIT     }
+*/
+
 
  #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. OPTIMAL
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
- {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_DMS,      CHR_CHECK_MARK, CHR_C,             CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
+ {22,   ITM_1ONX,         ITM_YX,    /*ITM_toINT*/-MNU_BASE,    CHR_NUMBER_SIGN,CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_RMD,      CHR_CHECK_MARK, CHR_C,             CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_LBL,      ITM_NULL,       CHR_F,             ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
 
  {31,   ITM_STO,          ITM_MAGNITUDE,   ITM_ANGLE,    ITM_NULL,       CHR_G,             ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
- {32,   ITM_RCL,          ITM_PC,    /*KEY_TYPCON*/ITM_DELTAPC,  ITM_NULL,       CHR_H,             ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
+ {32,   ITM_RCL,          ITM_PC,          ITM_DELTAPC,  ITM_NULL,       CHR_H,             ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
  {33,   ITM_Rdown,        ITM_pi,          ITM_Rup,      ITM_NULL,       CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {34,   ITM_sin,          ITM_arcsin,      ITM_toREC,    ITM_NULL,       CHR_J,             CHR_case,        CHR_THETA,     ITM_REGJ     }, //JM
  {35,   ITM_cos,          ITM_arccos,      ITM_toPOL,    ITM_NULL,       CHR_K,             ITM_NULL,        CHR_KAPPA,     ITM_REGK     }, //JM
@@ -77,13 +124,13 @@ const calcKey_t kbd_std[37] = {
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,            ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,            CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_DMS,      CHR_SQUARE_ROOT,CHR_C,            CHR_SQUARE_ROOT, CHR_CHI,       ITM_ST_C     }, //JM
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_RMD,      CHR_SQUARE_ROOT,CHR_C,            CHR_SQUARE_ROOT, CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,            ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,            ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_LBL,      ITM_NULL,       CHR_F,            ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
 
  {31,   ITM_STO,          KEY_COMPLEX,     ITM_MAGNITUDE,ITM_NULL,       CHR_G,            ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
- {32,   ITM_RCL,          ITM_PC,    /*KEY_TYPCON*/ITM_DELTAPC,  ITM_NULL,       CHR_H,            ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
+ {32,   ITM_RCL,          ITM_PC,          ITM_DELTAPC,  ITM_NULL,       CHR_H,            ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
  {33,   ITM_Rdown,        ITM_pi,          ITM_ANGLE,    ITM_NULL,       CHR_I,            CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {34,   ITM_sin,          ITM_arcsin,      ITM_toREC,    ITM_NULL,       CHR_J,            CHR_case,        CHR_THETA,     ITM_REGJ     }, //JM
  {35,   ITM_cos,          ITM_arccos,      ITM_toPOL,    ITM_NULL,       CHR_K,            ITM_NULL,        CHR_KAPPA,     ITM_REGK     }, //JM

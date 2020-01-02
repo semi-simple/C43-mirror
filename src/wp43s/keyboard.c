@@ -962,9 +962,9 @@ void btnPressed(void *notUsed, void *data) {
 
   else {
     int16_t item = determineItem(key);
-
+    //printf("1: %d, %s, %s, calcMode %d CM_NORMAL %d, userModeEnabled %d shiftF %d shiftG %d \n",item, indexOfItems[item].itemCatalogName,indexOfItems[item].itemSoftmenuName, calcMode,CM_NORMAL,userModeEnabled,shiftF,shiftG);
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-    if((calcMode == CM_NORMAL) && (!userModeEnabled && ( stringToKeyNumber(data) == 0) )) {
+    if((calcMode == CM_NORMAL) && (!userModeEnabled && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
       //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }
@@ -973,6 +973,7 @@ void btnPressed(void *notUsed, void *data) {
     if(item == CHR_PROD_SIGN) {
       item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);
     }
+    //printf("2: %d, %s, %s, calcMode %d CM_NORMAL %d, userModeEnabled %d shiftF %d shiftG %d \n",item, indexOfItems[item].itemCatalogName,indexOfItems[item].itemSoftmenuName, calcMode,CM_NORMAL,userModeEnabled,shiftF,shiftG);
 
     resetShiftState();
 

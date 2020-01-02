@@ -219,18 +219,6 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
-
-  case JC_POLAR:                                            //JM JC_POLAR
-    if(complexMode == CM_POLAR) {
-      fnComplexMode(CM_RECTANGULAR);                              // SET RECT
-    } else {
-      fnComplexMode(CM_POLAR);                                    // SET POLAR
-    }
-    fnRefreshComboxState(CB_JC, JC_POLAR, complexMode);                //jm
-    break;
-
-
-
   default:
     break;
   }
@@ -1449,7 +1437,7 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
 
 //-----------------------------------------------------
 
-void fnStrInput(void) {
+void fnStrInput(void) {  //
     STACK_LIFT_ENABLE;   // 5
     liftStack();
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -1514,10 +1502,8 @@ int16_t tt;
 
 
   //GRAPH RANGE
-  xb=-0.3*3.14150; //Graph range x
-  xe=0.6*3.14159;
-  yb=-2;         //Graph range y
-  ye=+2;
+  xb=-3*3.14150;  xe=2*3.14159;
+  yb=-2;            ye=+2;
 
 
   calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
@@ -1553,7 +1539,7 @@ int16_t tt;
     if(a_ft<0) { a_ft=-a_ft; }
     int16_t a_int = (int) a_ft;
     float a_frac = a_ft - a_int;
-    if(a_frac < (xe-xb)/400) {
+    if(a_frac < (xe-xb)/300) {
       setPixel(cnt,yzero+1); //tick
       setPixel(cnt,yzero-1); //tick
     }

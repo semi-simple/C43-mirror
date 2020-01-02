@@ -172,7 +172,6 @@ char* itoa(int value, char* result, int base);
 #define JC_FG_DOTS             21    // screen setup
 #define JC_G_DOUBLETAP         22    // screen setup
 
-#define JC_POLAR               23    // screen setup
 
 
 //items.c

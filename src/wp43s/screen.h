@@ -91,6 +91,7 @@ int      getPixel             (int16_t x, int16_t y);
 int16_t  showString           (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
 int16_t  showGlyph            (const char *ch,    const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
 int16_t  showGlyphCode        (uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+void     force_refresh        (void);                                                  //JM SCREEN 
 void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);
 void     showCursor           (void);
 void     hideCursor           (void);

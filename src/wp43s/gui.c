@@ -3998,7 +3998,7 @@ void setupUI(void) {
     btnRegisters           = gtk_button_new_with_label("Registers");
     btnLocalRegisters      = gtk_button_new_with_label("Local registers");
     btnStatisticalSums     = gtk_button_new_with_label("Statistical sums");
-    btnNamedVariables      = gtk_button_new_with_label("Named registers");
+    btnNamedVariables      = gtk_button_new_with_label("Named variables");
     btnSavedStackRegisters = gtk_button_new_with_label("Saved stack registers");
     chkHexaString          = gtk_check_button_new_with_label("Strings in hexadecimal form");
 
@@ -4076,10 +4076,10 @@ void calcModeNormal(void) {
     STACK_LIFT_ENABLE;
   }
 
-//  if (SH_BASE_HOME && (softmenuStackPointer_MEM == -1)) {  //JM HOMEBASE
+//  if(SH_BASE_HOME && (softmenuStackPointer_MEM == -1)) {  //JM HOMEBASE
 //     showSoftmenu(NULL, -MNU_HOME, false);      //JM HOME  Change to initialize the menu stack. it was true.
-//    }
-//  if (SH_BASE_MYMENU) {}
+//  }
+//  if(!SH_BASE_HOME) {}
 
   calcMode = CM_NORMAL;
   hideCursor();
@@ -4102,7 +4102,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
   saveStack();
   liftStack();
   refreshStack();
-  if(SH_BASE_MYA) {
+  if(!SH_BASE_AHOME) {
     showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
   }

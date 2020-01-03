@@ -1774,18 +1774,18 @@
 #define CHR_sampi                     1735  //JM GREEK
 #define CHR_case                      1736  //JM CAPS
 #define KEY_HASH                      1737  //JM BASE ## test
-#define Not_used1738                  1738
+#define Not_used1738                  1738  //JM
 #define ITM_op_a                      1739  //JM OPERATORS
 #define ITM_op_a2                     1740  //JM OPERATORS
 #define ITM_op_j                      1741  //JM OPERATORS
 #define ITM_BASE_HOME                 1742  //JM BASEMENU
-#define ITM_BASE_MYMENU               1743  //JM BASEMENU
+#define Not_used1743                  1743  //JM
 #define ITM_BASE_AHOME                1744  //JM BASEMENU
-#define ITM_BASE_MYA                  1745  //JM BASEMENU
+#define Not_used1745                  1745  //JM BASEMENU
 #define ITM_SH_BASE_HOME              1746  //JM BASEMENU
-#define ITM_SH_BASE_MYMENU            1747  //JM BASEMENU
+#define Not_used1747                  1747  //JM 
 #define ITM_SH_BASE_AHOME             1748  //JM BASEMENU
-#define ITM_SH_BASE_MYA               1749  //JM BASEMENU
+#define Not_used1749                  1749  //JM
 #define ITM_EE_D2Y                    1750  //JM EE
 #define ITM_EE_Y2D                    1751  //JM EE
 #define ITM_EE_A2S                    1752  //JM EE

@@ -99,7 +99,7 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
                                      ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,                 
 
-                                     ITM_SH_INP_DEF,                ITM_SH_ERPN,                ITM_SH_BASE_HOME,         ITM_SH_BASE_AHOME,     ITM_SH_BASE_MYMENU,          ITM_SH_BASE_MYA               };    //JM INFO
+                                     ITM_SH_INP_DEF,                ITM_SH_ERPN,                ITM_SH_BASE_HOME,         ITM_SH_BASE_AHOME,     ITM_NULL,                    ITM_NULL                      };    //JM INFO
               
 
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
@@ -433,8 +433,8 @@ const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,  
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
 
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
-                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             ITM_NULL,                           //JM
-                                     ITM_BASE_HOME,                 ITM_BASE_MYMENU,            ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
+                                     ITM_NULL,                      ITM_NULL,                   ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             ITM_NULL,                           //JM
+                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
 
 
 

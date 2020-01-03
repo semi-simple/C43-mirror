@@ -1038,16 +1038,8 @@ void fnRebuildRadioState() {
         rb.state = SH_BASE_HOME? 3 : 2;
         break;
 
-      case JC_BASE_MYMENU:
-        rb.state = SH_BASE_MYMENU? 3 : 2;
-        break;
-
       case JC_BASE_AHOME:
         rb.state = SH_BASE_AHOME? 3 : 2;
-        break;
-
-      case JC_BASE_MYA:
-        rb.state = SH_BASE_MYA? 3 : 2;
         break;
 
       case JC_SH_3T:

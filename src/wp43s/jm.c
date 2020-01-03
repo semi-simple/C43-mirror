@@ -195,24 +195,12 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_BASE_HOME, SH_BASE_HOME);                    //dr
     break;
 
-  case JC_BASE_MYMENU:                                      //JM MYMNU
-    SH_BASE_MYMENU = !SH_BASE_MYMENU;
-    //fnInfo(SH_BASE_MYMENU);
-    fnRefreshComboxState(CB_JC, JC_BASE_MYMENU, SH_BASE_MYMENU);                //dr
-    break;
-
   case JC_BASE_AHOME:                                       //JM aHOME
     SH_BASE_AHOME = !SH_BASE_AHOME;
     //fnInfo(SH_BASE_AHOME);
     fnRefreshComboxState(CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);                  //dr
     break;
 
-  case JC_BASE_MYA:                                         //JM MYa
-    SH_BASE_MYA = !SH_BASE_MYA;
-    //fnInfo(SH_BASE_MYA);
-    fnRefreshComboxState(CB_JC, JC_BASE_MYA, SH_BASE_MYA);                      //dr
-    break;
-  
   case JC_SH_3T:                                            //JM SH.3T
     Home3TimerMode = !Home3TimerMode;
     //fnInfo(Home3TimerMode);
@@ -292,27 +280,17 @@ void fnShowJM(uint16_t jmConfig) {
     if(eRPN) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
-  
+
   case JC_BASE_HOME:
     if(SH_BASE_HOME) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
-  
-  case JC_BASE_MYMENU:
-    if(SH_BASE_MYMENU) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-  
+
   case JC_BASE_AHOME:
     if(SH_BASE_AHOME) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
-  
-  case JC_BASE_MYA:
-    if(SH_BASE_MYA) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-  
+
   case JM_INP_DFLT:
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }

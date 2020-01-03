@@ -2133,14 +2133,14 @@ const item_t indexOfItems[] = {
 /* 1739 */  { fnJM,                        3,                           "op_a",                                        "a",                                           CAT_FNCT, SLS_ENABLED  },      //JM Operator a
 /* 1740 */  { fnJM,                        4,                           "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 CAT_FNCT, SLS_ENABLED  },      //JM Operator a
 /* 1741 */  { fnJM,                        5,                           "op_j",                                        "j",                                           CAT_FNCT, SLS_ENABLED  },      //JM Operator a
-/* 1742 */  { fnSetSetJM,                  JC_BASE_HOME,                "SET_BASE_HOME",                               "HOME",                                        CAT_FNCT, SLS_ENABLED  },      //JM eRPN
-/* 1743 */  { fnSetSetJM,                  JC_BASE_MYMENU,              "SET_BASE_MYMENU",                             "MYMNU",                                       CAT_FNCT, SLS_ENABLED  },      //JM eRPN
-/* 1744 */  { fnSetSetJM,                  JC_BASE_AHOME,               "SET_BASE_AHOME",                              STD_alpha "HOME",                              CAT_FNCT, SLS_ENABLED  },      //JM eRPN
-/* 1745 */  { fnSetSetJM,                  JC_BASE_MYA,                 "SET_BASE_MYA",                                "MY" STD_alpha,                                CAT_FNCT, SLS_ENABLED  },      //JM eRPN
-/* 1746 */  { fnShowJM,                    JC_BASE_HOME,                "BASE_HOME?",                                  "HOME?",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHOW
-/* 1747 */  { fnShowJM,                    JC_BASE_MYMENU,              "BASE_MYMENU?",                                "MYMNU?",                                      CAT_FNCT, SLS_ENABLED  },      //JM SHOW
-/* 1748 */  { fnShowJM,                    JC_BASE_AHOME,               "BASE_AHOME?",                                 STD_alpha "HOME?",                             CAT_FNCT, SLS_ENABLED  },      //JM SHOW
-/* 1749 */  { fnShowJM,                    JC_BASE_MYA,                 "BASE_MYA?",                                   "MY" STD_alpha "?",                            CAT_FNCT, SLS_ENABLED  },      //JM SHOW
+/* 1742 */  { fnSetSetJM,                  JC_BASE_HOME,                "SB_HOME",                                     "HOME",                                        CAT_FNCT, SLS_ENABLED  },      //JM eRPN
+/* 1743 */  { itemToBeCoded,               NOPARAM,                     "1743",                                        "1743",                                        CAT_FREE, SLS_UNCHANGED},      //JM
+/* 1744 */  { fnSetSetJM,                  JC_BASE_AHOME,               "SB_AHOME",                                    STD_alpha "HOME",                              CAT_FNCT, SLS_ENABLED  },      //JM eRPN
+/* 1745 */  { itemToBeCoded,               NOPARAM,                     "1745",                                        "1745",                                        CAT_FREE, SLS_UNCHANGED},      //JM
+/* 1746 */  { fnShowJM,                    JC_BASE_HOME,                "B_HOME?",                                     "HOME?",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHOW
+/* 1747 */  { itemToBeCoded,               NOPARAM,                     "1747",                                        "1747",                                        CAT_FREE, SLS_UNCHANGED},      //JM
+/* 1748 */  { fnShowJM,                    JC_BASE_AHOME,               "B_AHOME?",                                    STD_alpha "HOME?",                             CAT_FNCT, SLS_ENABLED  },      //JM SHOW
+/* 1749 */  { itemToBeCoded,               NOPARAM,                     "1749",                                        "1749",                                        CAT_FREE, SLS_UNCHANGED},      //JM
 /* 1750 */  { fnJM,                        7,                           "YtoD",                                        "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA,          CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1751 */  { fnJM,                        6,                           "DtoY",                                        STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y",          CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1752 */  { fnJM,                        9,                           "AtoSYM",                                      STD_RIGHT_ARROW STD_SPACE_3_PER_EM "012",      CAT_FNCT, SLS_ENABLED  },      //JM EE
@@ -2308,7 +2308,7 @@ const item_t indexOfItems[] = {
 /* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "",                                            "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1912 */  { fnInDefault,                 ID_SI        ,               "",                                            "i" STD_SPACE_3_PER_EM "SI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI        ,               "",                                            "i" STD_SPACE_3_PER_EM "LI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1914 */  { graph,                       NOPARAM      ,               "",                                            "GRAPH",                                       CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
+/* 1914 */  { graph,                       NOPARAM      ,               "GRAPH",                                       "GRAPH",                                       CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 875 Small latin letters
 

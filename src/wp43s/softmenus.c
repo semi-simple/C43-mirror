@@ -409,8 +409,8 @@ const int16_t menu_1stDeriv[]    = { ITM_Not,                       ITM_yet,    
 const int16_t menu_2ndDeriv[]    = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_Sf[]          = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_Solver[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-const int16_t menu_IO[]          = { ITM_BEEP,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,                  ITM_LOADSIGMA,
-                                     ITM_QUIET,                     ITM_TONE,                   ITM_NULL,                 ITM_NULL,              ITM_RECV,                    ITM_SEND,
+const int16_t menu_IO[]          = { ITM_SAVE,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,                  ITM_LOADSIGMA,                      //JM ADDED SAVE
+                                     ITM_QUIET,                     ITM_TONE,                   ITM_BEEP,                 ITM_NULL,              ITM_RECV,                    ITM_SEND,                           //JM RELOCATED BEEP
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_PRINTERADV,                ITM_PRINTERCHAR,            ITM_PRINTERDLAY,          ITM_PRINTERLCD,        ITM_PRINTERMODE,             ITM_PRINTERPROG,
                                      ITM_PRINTERR,                  ITM_PRINTERREGS,            ITM_PRINTERSTK,           ITM_PRINTERTAB,        ITM_PRINTERUSER,             ITM_PRINTERWIDTH,
@@ -439,7 +439,7 @@ const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,  
 
 
 const int16_t menu_BASE[]        = {  
-                                     ITM_NULL,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
+                                     ITM_CB_LEADING_ZERO,           KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
                                      -MNU_BITS,                     -MNU_INTS,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                            //JM
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,             	      ITM_NULL                      };    //JM BASE MENU ADDED
 

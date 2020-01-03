@@ -2085,7 +2085,7 @@ const item_t indexOfItems[] = {
 /* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                       CAT_FNCT, SLS_UNCHANGED},      //JM UNIT
 /* 1694 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHOW
 /* 1695 */  { fnSetSetJM,                  JC_BCR,                      "CPXRES",                                      "CPXRES",                                      CAT_FNCT, SLS_UNCHANGED},      //dr
-/* 1696 */  { fnSetSetJM,                  JC_BLZ,                      "Lead Z",                                      "Lead Z",                                      CAT_FNCT, SLS_UNCHANGED},      //dr
+/* 1696 */  { fnSetSetJM,                  JC_BLZ,                      "LEAD0",                                       "LEAD0",                                       CAT_FNCT, SLS_UNCHANGED},      //dr
 /* 1697 */  { addItemToBuffer,             CHR_QOPPA,                   "",                                            STD_QOPPA,                                     CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1698 */  { addItemToBuffer,             CHR_DIGAMMA,                 "",                                            STD_DIGAMMA,                                   CAT_NONE, SLS_UNCHANGED},      //JM GREEK
 /* 1699 */  { addItemToBuffer,             CHR_SAMPI,                   "",                                            STD_SAMPI,                                     CAT_NONE, SLS_UNCHANGED},      //JM GREEK
@@ -2156,15 +2156,15 @@ const item_t indexOfItems[] = {
 /* 1762 */  { fnJM,                        17,                          "V.I",                                         "V" STD_DIVIDE "I",                            CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1763 */  { fnJM,                        18,                          "V/Z",                                         "I" STD_CROSS "Z",                             CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1764 */  { fnJM,                        19,                          "V/Z",                                         "V" STD_DIVIDE "Z",                            CAT_FNCT, SLS_ENABLED  },      //JM EE
-/* 1765 */  { fnJM,                        20,                          "X to BALANCED",                               "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",              CAT_FNCT, SLS_ENABLED  },      //JM EE
+/* 1765 */  { fnJM,                        20,                          "X" STD_RIGHT_ARROW "BAL",                     "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",              CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1766 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                     "COMPLEX",                                     CAT_FNCT, SLS_ENABLED  },      //JM Change CC to COMPLEX
 /* 1767 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                         "CC1",                                         CAT_FNCT, SLS_ENABLED  },      //JM Change CC to CC1
-/* 1768 */  { fnJMup,                      NOPARAM,                     "convert Data Types up",                       ">>",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
-/* 1769 */  { fnJMdown,                    NOPARAM,                     "convert Data Types down",                     "<<",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
+/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     ">>",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
+/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "<<",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_FNCT, SLS_ENABLED  },      //JM HOME.3T
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASSIGN",                                 "ASN",                                         CAT_MENU, SLS_UNCHANGED},      //JM USER
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASN",                                    "ASN",                                         CAT_MENU, SLS_UNCHANGED},      //JM USER
 
 /* 1773 */  { fnJMUSERmode,                256+  0,                     "KEY  00U",                                    "K_00U",                                       CAT_NONE, SLS_UNCHANGED},  //JM USER MODE TEST
 /* 1774 */  { fnJMUSERmode_f,              256+  0,                     "KEY f00U",                                    "Kf00U",                                       CAT_NONE, SLS_UNCHANGED},  //JM USER MODE TEST

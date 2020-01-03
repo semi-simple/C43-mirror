@@ -1137,6 +1137,45 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
 
 
+
+void Wait_loop3(uint16_t tim) {
+#ifdef PC_BUILD                                                           //JM LONGPRESS FN
+    uint32_t now;
+    now = g_get_monotonic_time() + tim * 1000;                   //JM usec
+  while (now > g_get_monotonic_time());
+#endif
+#ifdef DMCP_BUILD
+#define TIMER_IDX 1
+  sys_timer_start(TIMER_IDX, tim);  // wake up for key
+  sys_sleep();
+  sys_timer_disable(TIMER_IDX);
+#endif
+}
+
+
+
+void force_refresh(void) {                                      //JM vv  
+#ifdef PC_BUILD
+  gtk_widget_queue_draw(screen);
+
+//refreshScreen(NULL);
+
+//gtk_widget_queue_draw(screen);  
+//while (g_main_context_pending(NULL)) {
+//    g_main_context_iteration(NULL,FALSE);
+//}
+
+
+//  while(gtk_events_pending()) {
+//    gtk_main_iteration();
+//  }
+#endif
+
+#if DMCP_BUILD
+  lcd_forced_refresh ();
+#endif
+}                                                              //JM ^^
+
 /********************************************//**
  * \brief Clears parts of the screen
  *

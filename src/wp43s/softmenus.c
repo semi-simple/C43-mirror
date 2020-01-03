@@ -130,7 +130,7 @@ const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW
 
 const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_NULL,
                                      ITM_RECT,                      ITM_POLAR,                  ITM_RM,                   ITM_ERPN,              ITM_SETSIG,                  ITM_DENMAX,                         //JM modifoed
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG,                           //JM
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG                            //JM
 
 
 //JM
@@ -140,7 +140,7 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 */
 #if DMCP_BUILD
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
+                                 ,   ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 #else
@@ -424,9 +424,9 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 
-const int16_t menu_CFG[]         = { ITM_POLAR,                     ITM_RECT,                   ITM_RDXCOM,               ITM_RDXPER,            ITM_CPXRES,                  ITM_REALRES,
+const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXPER,               ITM_RDXCOM,            ITM_CB_CPXRES,               ITM_NULL,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_QUIET,                          //JM sequence change
-                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_LZON,                 ITM_LZOFF,             ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
+                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_CB_LEADING_ZERO,      ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
                                      ITM_CLK12,                     ITM_CLK24,                  ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
@@ -496,23 +496,23 @@ const int16_t menu_HOME[]        = {
           /*-2------*/                                                                                                                                                                                            //JM HOME
 /*expanded functions*/               ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                          //JM HOME
                                      ITM_toREC,                     ITM_toPOL,                  ITM_PARALLEL,             -MNU_CPX,              ITM_MAGNITUDE,               ITM_ANGLE,                          //JM HOME
-/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_POLAR,                   ITM_RECT,                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-1------*/                                                                                                                                                                                            //JM HOME
 /* 03 */                             ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                          //JM HOME
                                      -MNU_ASN/*ITM_toDP*/,          KEY_TYPCON_DN/*ITM_toSP*/,  KEY_TYPCON_UP /*ITM_IP*/, ITM_op_j,              CST_09,                      -MNU_EE,                            //JM HOME
-                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_POLAR,                   ITM_RECT,                           //JM HOME
+                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-3------*/                                                                                                                                                                                            //JM HOME
                                      ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                          //JM HOME
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
-/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_POLAR,                   ITM_RECT,                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-5------*/                                                                                                                                                                                            //JM HOME
                                      -MNU_MENUS,                    -MNU_MyMenu,                -MNU_INFO,                -MNU_MODE,             -MNU_DISP,                   ITM_CLSTK,                          //JM HOME
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
-/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_POLAR,                   ITM_RECT,                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-4------*/                                                                                                                                                                                            //JM HOME
                                      ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,                           //JM HOME
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
-/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_POLAR,                   ITM_RECT                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_RECT,                    ITM_POLAR                           //JM HOME
 
 
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.

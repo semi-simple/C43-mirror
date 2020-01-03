@@ -424,7 +424,7 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 
-const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXCOM,               ITM_RDXPER,            ITM_CB_CPXRES,               ITM_NULL,
+const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXPER,               ITM_RDXCOM,            ITM_CB_CPXRES,               ITM_NULL,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_QUIET,                          //JM sequence change
                                      ITM_MULTCR,                    ITM_MULTDOT,                ITM_CB_LEADING_ZERO,      ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
@@ -504,7 +504,7 @@ const int16_t menu_HOME[]        = {
           /*-3------*/                                                                                                                                                                                            //JM HOME
                                      ITM_pi,                        ITM_XFACT,                  ITM_SQUARE,               ITM_10x,               CST_09,                      ITM_CLSTK,                          //JM HOME
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
-/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_RECT,ITM_POLAR,                                              //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_RECT,                    ITM_POLAR,                          //JM HOME
           /*-5------*/                                                                                                                                                                                            //JM HOME
                                      -MNU_MENUS,                    -MNU_MyMenu,                -MNU_INFO,                -MNU_MODE,             -MNU_DISP,                   ITM_CLSTK,                          //JM HOME
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME

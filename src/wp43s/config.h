@@ -72,8 +72,9 @@ void     fnRebuildRadioState   (void);                                          
 #define RB_RM   ',' // RadixMark
 #define RB_SS   '-' // StackSize
 #define RB_TF   '.' // TimeFormat
-#define RB_BCR  '/' // ComplexResult
-#define RB_BLZ  '0' // LeadingZeros
+#define RB_WS   '/' // WordSize
+#define RB_BCR  '0' // ComplexResult
+#define RB_BLZ  '1' // LeadingZeros
 #define RB_SA   '>' // SigmaAssign
 #define RB_ID   '?' // InputDefault
 #define CB_NO   '@'

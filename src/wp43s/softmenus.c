@@ -99,7 +99,7 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
                                      ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,                 
 
-                                     ITM_SH_INP_DEF,                ITM_SH_ERPN,                ITM_SH_BASE_HOME,         ITM_SH_BASE_AHOME,     ITM_SH_BASE_MYMENU,          ITM_SH_BASE_MYA               };    //JM INFO
+                                     ITM_SH_INP_DEF,                ITM_SH_ERPN,                ITM_SH_BASE_HOME,         ITM_SH_BASE_AHOME,     ITM_NULL,                    ITM_NULL                      };    //JM INFO
               
 
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
@@ -403,8 +403,8 @@ const int16_t menu_1stDeriv[]    = { ITM_Not,                       ITM_yet,    
 const int16_t menu_2ndDeriv[]    = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_Sf[]          = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_Solver[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-const int16_t menu_IO[]          = { ITM_BEEP,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,                  ITM_LOADSIGMA,
-                                     ITM_QUIET,                     ITM_TONE,                   ITM_NULL,                 ITM_NULL,              ITM_RECV,                    ITM_SEND,
+const int16_t menu_IO[]          = { ITM_SAVE,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,                  ITM_LOADSIGMA,                      //JM ADDED SAVE
+                                     ITM_QUIET,                     ITM_TONE,                   ITM_BEEP,                 ITM_NULL,              ITM_RECV,                    ITM_SEND,                           //JM RELOCATED BEEP
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_PRINTERADV,                ITM_PRINTERCHAR,            ITM_PRINTERDLAY,          ITM_PRINTERLCD,        ITM_PRINTERMODE,             ITM_PRINTERPROG,
                                      ITM_PRINTERR,                  ITM_PRINTERREGS,            ITM_PRINTERSTK,           ITM_PRINTERTAB,        ITM_PRINTERUSER,             ITM_PRINTERWIDTH,
@@ -418,7 +418,7 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 
-const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXCOM,               ITM_RDXPER,            ITM_CB_CPXRES,               ITM_NULL,
+const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXPER,               ITM_RDXCOM,            ITM_CB_CPXRES,               ITM_NULL,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_QUIET,                          //JM sequence change
                                      ITM_MULTCR,                    ITM_MULTDOT,                ITM_CB_LEADING_ZERO,      ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
@@ -428,14 +428,14 @@ const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,  
 
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
 #if !defined(DMCP_BUILD) && defined (INLINE_TEST)                               //vv dr
-                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             -MNU_INL_TST,                       //JM
+                                     ITM_NULL,                      ITM_NULL,                   ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             -MNU_INL_TST,                       //JM
 #else                                                                           //^^
-                                     ITM_BASE_AHOME,                ITM_BASE_MYA,               ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             ITM_NULL,                           //JM
+                                     ITM_NULL,                      ITM_NULL,                   ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             ITM_NULL,                           //JM
 #endif                                                                          //dr
-                                     ITM_BASE_HOME,                 ITM_BASE_MYMENU,            ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
+                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
 
 const int16_t menu_BASE[]        = {  
-                                     ITM_NULL,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
+                                     ITM_CB_LEADING_ZERO,           KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
                                      -MNU_BITS,                     -MNU_INTS,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                            //JM
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,             	      ITM_NULL                      };    //JM BASE MENU ADDED
 

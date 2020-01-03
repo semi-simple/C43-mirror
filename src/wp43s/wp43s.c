@@ -144,9 +144,7 @@ bool_t               ShiftTimoutMode;                         //JM SHIFT Create 
 bool_t               Home3TimerMode;                          //JM HOME Create a flag to enable or disable HOME TIMER CANCEL.
 bool_t               UNITDisplay;                             //JM UNITDisplay
 bool_t               SH_BASE_HOME;                            //JM BASEHOME
-bool_t               SH_BASE_MYMENU;                          //JM BASEHOME
 bool_t               SH_BASE_AHOME;                           //JM BASEHOME
-bool_t               SH_BASE_MYA;                             //JM BASEHOME
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 uint8_t              Input_Default;                           //JM Input Default
 #ifdef INLINE_TEST                      //vv dr
@@ -350,10 +348,8 @@ void setupDefaults(void) {
   testEnabled = false;
   testBitset = 0x0000;
 #endif                                  //^^
-  SH_BASE_HOME   = true;      
-  SH_BASE_MYMENU = false;    
-  SH_BASE_AHOME  = false;    
-  SH_BASE_MYA    = true;       
+  SH_BASE_HOME   = true;
+  SH_BASE_AHOME  = false;
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
 

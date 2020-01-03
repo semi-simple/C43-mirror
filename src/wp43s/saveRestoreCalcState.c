@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 25  // 5 = lgCatalogSelection
+#define BACKUP_VERSION 26  // 26 = SH_BASE_MYMENU
 
 void saveCalc(void) {
   size_t size;
@@ -175,9 +175,7 @@ void saveCalc(void) {
   size += fwrite(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                    (unsigned long)size);
   size += fwrite(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                 (unsigned long)size);
   size += fwrite(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME                                      (unsigned long)size);
-  size += fwrite(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU                                    (unsigned long)size);
   size += fwrite(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME                                     (unsigned long)size);
-  size += fwrite(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA                                       (unsigned long)size);
   size += fwrite(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
   size += fwrite(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
   size += fwrite(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);
@@ -362,9 +360,7 @@ void restoreCalc(void) {
     size += fread(&UNITDisplay,                        1, sizeof(UNITDisplay),                        backup); //JM UNIT //printf("%8lu HOME3\n",                    (unsigned long)size);
     size += fread(&SigFigMode,                         1, sizeof(SigFigMode),                         backup); //JM SIGFIG //printf("%8lu SIGFIG\n",                 (unsigned long)size);
     size += fread(&SH_BASE_HOME,                       1, sizeof(SH_BASE_HOME  ),                     backup); //JMSH_BASE_HOME                                      (unsigned long)size);
-    size += fread(&SH_BASE_MYMENU,                     1, sizeof(SH_BASE_MYMENU),                     backup); //JMSH_BASE_MYMENU                                    (unsigned long)size);
     size += fread(&SH_BASE_AHOME,                      1, sizeof(SH_BASE_AHOME ),                     backup); //JMSH_BASE_AHOME                                     (unsigned long)size);
-    size += fread(&SH_BASE_MYA,                        1, sizeof(SH_BASE_MYA   ),                     backup); //JMSH_BASE_MYA                                       (unsigned long)size);
     size += fread(&Home3TimerMode,                     1, sizeof(Home3TimerMode),                     backup); //JM SHIFT //printf("%8lu Home3TimerMode\n",          (unsigned long)size);
     size += fread(&Norm_Key_00_VAR,                    1, sizeof(Norm_Key_00_VAR),                    backup); //JM SHIFT //printf("%8lu Norm_Key_00_VAR\n",         (unsigned long)size);
     size += fread(&Input_Default,                      1, sizeof(Input_Default),                      backup); //JM SHIFT //printf("%8lu Input_Default\n",           (unsigned long)size);

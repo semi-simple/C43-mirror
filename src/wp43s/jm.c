@@ -166,24 +166,12 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_BASE_HOME, SH_BASE_HOME);                    //dr
     break;
 
-  case JC_BASE_MYMENU:                                      //JM MYMNU
-    SH_BASE_MYMENU = !SH_BASE_MYMENU;
-    //fnInfo(SH_BASE_MYMENU);
-    fnRefreshComboxState(CB_JC, JC_BASE_MYMENU, SH_BASE_MYMENU);                //dr
-    break;
-
   case JC_BASE_AHOME:                                       //JM aHOME
     SH_BASE_AHOME = !SH_BASE_AHOME;
     //fnInfo(SH_BASE_AHOME);
     fnRefreshComboxState(CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);                  //dr
     break;
 
-  case JC_BASE_MYA:                                         //JM MYa
-    SH_BASE_MYA = !SH_BASE_MYA;
-    //fnInfo(SH_BASE_MYA);
-    fnRefreshComboxState(CB_JC, JC_BASE_MYA, SH_BASE_MYA);                      //dr
-    break;
-  
   case JC_SH_3T:                                            //JM SH.3T
     Home3TimerMode = !Home3TimerMode;
     //fnInfo(Home3TimerMode);
@@ -262,27 +250,17 @@ void fnShowJM(uint16_t jmConfig) {
     if(eRPN) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
-  
+
   case JC_BASE_HOME:
     if(SH_BASE_HOME) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
-  
-  case JC_BASE_MYMENU:
-    if(SH_BASE_MYMENU) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-  
+
   case JC_BASE_AHOME:
     if(SH_BASE_AHOME) { stringToLongInteger("1",10,mem); }
     else { stringToLongInteger("0",10,mem); }
     break;
-  
-  case JC_BASE_MYA:
-    if(SH_BASE_MYA) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-  
+
   case JM_INP_DFLT:
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
@@ -1412,7 +1390,23 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
 
 //-----------------------------------------------------
 
-void fnStrInput(void) {
+void fnStrInput2(char inp1[]) {  //
+  tmpStr3000[0] = 0;
+  strcat(tmpStr3000,inp1);
+  STACK_LIFT_ENABLE;   // 5
+  liftStack();
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+
+void fnRCL(int16_t inp) {
+  STACK_LIFT_ENABLE; 
+  fnRecall(inp);
+}
+
+
+void fnStrInput(void) {  //
   STACK_LIFT_ENABLE;   // 5
   liftStack();
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -1421,142 +1415,123 @@ void fnStrInput(void) {
 
 
 void Fn_Lbl_A(void) {
-  fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
-  copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO L
-                   // sin(x)/x + sin(5x)/5
-  fnSin(0);        // SIN
-  STACK_LIFT_ENABLE; fnRecall(99);
+	fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
+  copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO
+                    // (sin(x)/x + sin(10x)/5) / 2 + 2/x
+ 
+  fnSin(0);         // SIN
+  fnRCL(99);        // RCL 99
+  fnDivide(0);      // /
+ 
+  fnRCL(99);        // RCL 99
+  fnStrInput2("10");// 10
+  fnMultiply(0);    // *
+  fnSin(0);         // SIN
+  fnStrInput2("5"); // 5
+  fnDivide(0);      // /
+ 
+  fnAdd(0);         // +    
+
+  fnStrInput2("2");// 2
   fnDivide(0);     // /
-  STACK_LIFT_ENABLE; fnRecall(99);
-  tmpStr3000[0]=0; strcat(tmpStr3000,"10"); fnStrInput();
-  fnMultiply(0);   // *
-  fnSin(0);        // SIN
-  tmpStr3000[0]=0; strcat(tmpStr3000,"5"); fnStrInput();
+
+  fnStrInput2("2");// 2
+  fnRCL(99);       // RCL 99
   fnDivide(0);     // /
   fnAdd(0);        // +    
 }
 
 
 void Fn_Lbl_B(void) {
-  fnAngularMode(AM_RADIAN);   //Does not belong here -- it is repeated. It is convenient.
+	fnAngularMode(AM_RADIAN);   //Does not belong here -- it is repeated. It is convenient.
   fnStore(99);
   fnSin(0);                // SIN    
-  STACK_LIFT_ENABLE; fnRecall(99);
+  fnRCL(99);
   fnSquare(0);             // square
   fnSin(0);                // SIN
   fnAdd(0);                // +    
 }
 
-
-void graph(uint16_t unusedParamButMandatory){
-#ifndef TESTSUITE_BUILD
 #define SG 20
 #define SH SCREEN_HEIGHT
 
-  int16_t screen_x(float xb, float x, float xe) {
-    int16_t tt;
-    tt = ((x-xb)/(xe-xb)*SCREEN_WIDTH);
-    if(tt>SCREEN_WIDTH-1) {tt=SCREEN_WIDTH-1;}
-    else if(tt<0) {tt=0;}
+#ifndef TESTSUITE_BUILD
+int16_t screen_x(float xb, float x, float xe) {
+  int16_t tt;
+  tt = ((x-xb)/(xe-xb)*SCREEN_WIDTH);
+  if(tt>SCREEN_WIDTH-1) {tt=SCREEN_WIDTH-1;}
+  else if(tt<0) {tt=0;}
   
-    return tt;
-  }
+  return tt;
+}
+#endif
 
-  int16_t screen_y(float yb, float y, float ye) {
-    int16_t tt;
-    tt = (y-yb)/(ye-yb)*(SH-SG);
-    if(tt>SH-SG-1) {tt=SH-1-SG;}
-    else if(tt<0) {tt=0;}  
+
+int16_t screen_y(float yb, float y, float ye) {
+  int16_t tt;
+  tt = (y-yb)/(ye-yb)*(SH-1-SG);
+  if(tt>SH-SG-1) {tt=SH-SG-1;}
+  else if(tt<0) {tt=0;}  
   
-    return (SH - tt);
-  }
+  return (SH - tt);
+}
 
 
+void graph_draw(uint8_t nbr, float xb, float xe, float yb, float ye, float tick_int_f, uint16_t xzero, uint8_t yzero) {
+#ifndef TESTSUITE_BUILD
   uint16_t cnt;
-  uint8_t yo, yn;
-  float xb,xe,yb,ye,x,y;
-  yn = 0;
   real_t tmpy;
-
-
-  //GRAPH RANGE
-  xb=-3*3.14150;  xe=2*3.14159;
-  yb=-2;            ye=+2;
-
-
-  calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-  clearScreen(false,true,true);
-
-  //GRAPH
+  uint8_t yo; 
+  uint8_t yn;
+  yn = 0;
+  float x; 
+  float y;
+  uint16_t x1;  //range 0-399
   uint8_t  y1;  //range 0-239
-  uint16_t x1; //range 0-399
-  uint8_t  yzero;
-  uint16_t xzero;
-  yzero = screen_y(yb,0,ye);
-  xzero = screen_x(xb,0,xe);
 
-
-  //AXIS
-  cnt = 0;  
-  while(cnt!=SCREEN_WIDTH-1) { 
-    setPixel(cnt,yzero); 
-    cnt++; 
-  }
-  cnt = SG;  
-  while(cnt!=SH-1) { 
-    setPixel(xzero,cnt); 
-    cnt++; 
-  }
-
-
-  float tick_int_f = (xe-xb)/20;            //Obtain scaling of ticks, to about 20 left to right.
-  //printf("tick interval:%f ",tick_int_f);
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
-  tick_int_f = strtof(tmpStr3000, NULL);
-  //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "Tick spacing: %.0e", tick_int_f);
-  //printf("%s\n",tmpStr3000);
-  showString(tmpStr3000, &standardFont, 20, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
-
-
-//-----------------------------------------------------
   //GRAPH
   cnt = 0;
   for(x=xb; x<=xe; x+=(xe-xb)/SCREEN_WIDTH) {
 
-    float a_ft = (x/( tick_int_f /*(xe-xb)/20)*/ ));          //Draw ticks
+    float a_ft = (x/( tick_int_f));          //Draw ticks
     if(a_ft<0) { a_ft=-a_ft; }
-    int16_t a_int = (int) a_ft;    
+    int16_t a_int = (int) a_ft;
     float a_frac = a_ft - a_int;
-    if(a_frac < (xe-xb)/300) {
+    if(a_frac < (xe-xb)/300) {               //Frac < 6.6 % is deemed close enough
       setPixel(cnt,yzero+1); //tick
       setPixel(cnt,yzero-1); //tick
+      setPixel(cnt,yzero+2); //tick
+      setPixel(cnt,yzero-2); //tick
+      force_refresh();
     }
-
 
     //convert float to X register
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    //gcvt( x, 34, tmpStr3000); 
     snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16f", x);
     stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 
-    Fn_Lbl_B();
+
+    if(nbr == 1) {
+      Fn_Lbl_A();
+    }
+    else if(nbr == 2) {
+      Fn_Lbl_B();
+    }
 
     //Convert from X register to float
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
     realToString(&tmpy, tmpStr3000);
-    y = strtof(tmpStr3000, NULL);
+    y = strtof (tmpStr3000, NULL);
 
     yo = yn;   //old , new
     yn = screen_y(yb,y,ye);
 
     //printf("Calc: cnt = %d xy[%f %f]  yold->new(%d -> %d)\n",cnt, x, y, yo, yn);
-    //printf("%d ",cnt);
     cnt++;
 
 
     if(cnt > 0) {       //Fill in all y coords if coords are skipped due to large dy/dx.
-      x1 = cnt-1;       //First half on cnt-1, second half on cnt. Not implemented yet., All on cnt-1.
+      x1 = cnt-1;     //First half on cnt-1, second half on cnt. Not implemented yet., All on cnt-1.
       if(yo > yn) {
         for(y1=yo; y1!=yn; y1-=1) {
           setPixel(x1,y1);
@@ -1570,14 +1545,86 @@ void graph(uint16_t unusedParamButMandatory){
       else {
         setPixel(x1,yn);
       }
-    }  
+      setPixel(cnt,SH- (0)       );
+      setPixel(cnt,SH- (SH-SG-1) );
+    }
   }
-//printf("\n");
+  fnDrop(0);
 #endif
 }
 
 
+
+void graph (uint16_t unusedParamButMandatory){
+#ifndef TESTSUITE_BUILD
+  uint16_t cnt;
+  float xb,xe,yb,ye;
+
+  //GRAPH RANGE
+  xb=-3*3.14150;  xe=2*3.14159;
+  yb=-2;            ye=+2;
+
+  //GRAPH SETUP
+  calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+  clearScreen(false,true,true);
+
+  //GRAPH ZERO AXIS
+  uint8_t  yzero;
+  uint16_t xzero;
+  yzero = screen_y(yb,0,ye);
+  xzero = screen_x(xb,0,xe);
+
+  //DRAW AXIS
+  cnt = 0;  
+  while(cnt!=SCREEN_WIDTH-1) { 
+    setPixel(cnt,yzero); 
+    cnt++; 
+  }
+  cnt = SG;  
+  while(cnt!=SH-1) { 
+    setPixel(xzero,cnt); 
+    cnt++; 
+  }
+
+
+  force_refresh();
+
+
+  //Obtain scaling of ticks, to about 20 intervals left to right.
+  float tick_int_f = (xe-xb)/20;                                                 //printf("tick interval:%f ",tick_int_f);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
+  char tx[4];
+  tx[0] = tmpStr3000[0];
+  tx[1] = tmpStr3000[1];
+  tx[2] = tmpStr3000[2];
+  tx[3] = 0;
+  //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpStr3000, tx);
+  tick_int_f = strtof (tx, NULL);                                        //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
+  //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpStr3000, tx);
+  if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpStr3000[0] = '0'; tmpStr3000[2]='2'; } else
+  if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpStr3000[0] = '0'; tmpStr3000[2]='5'; } else
+  if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpStr3000[0] = '1'; tmpStr3000[2]='0'; } else
+  if(tick_int_f > 1.3 && tick_int_f <=  1.7)  {tmpStr3000[0] = '1'; tmpStr3000[2]='5'; } else
+  if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpStr3000[0] = '2'; tmpStr3000[2]='0'; } else
+  if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpStr3000[0] = '5'; tmpStr3000[2]='0'; } else
+  if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpStr3000[0] = '7'; tmpStr3000[2]='5'; }
+  tick_int_f = strtof (tmpStr3000, NULL);                                        //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
+  //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpStr3000, tx);
+
+
+
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "x tick spacing: %.1e", tick_int_f);    //printf("%s\n",tmpStr3000);
+  //printf("tick3 %f str %s tx %s \n",tick_int_f, tmpStr3000, tx);
+  showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
+
+
+  graph_draw(1, xb, xe, yb, ye, tick_int_f, xzero, yzero);
+  graph_draw(2, xb, xe, yb, ye, tick_int_f, xzero, yzero);
+
+#endif
+//printf("\n");
 //-----------------------------------------------------
+}
 
 
 

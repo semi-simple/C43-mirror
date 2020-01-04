@@ -616,6 +616,9 @@ void fnReset(uint16_t confirmation) {
     // RNG initialisation
     pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
 
+    lastIntegerBase = 0;
+
+
     // initialize the RadaioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, CheckBox
 

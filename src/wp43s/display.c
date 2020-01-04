@@ -190,6 +190,9 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatGap(uint16_t gap) {
+ if(gap == 1) {
+   gap = 0;
+ }
   groupingGap = gap;
   refreshStack();
 }
@@ -491,7 +494,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   }
 
   charIndex = 0;
-  valueIndex = strlen(displayValueX);
+  valueIndex = (updateDisplayValueX ? strlen(displayValueX) : 0);
 
   //////////////
   // ALL mode //
@@ -848,7 +851,12 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     }
 
     if(exponent != 0) {
-      exponentToDisplayString(exponent, displayString + charIndex, displayValueX + valueIndex, false);
+      if(updateDisplayValueX) {
+        exponentToDisplayString(exponent, displayString + charIndex, displayValueX + valueIndex, false);
+      }
+      else {
+        exponentToDisplayString(exponent, displayString + charIndex, NULL,                       false);
+      }
     }
     return;
   }
@@ -959,10 +967,14 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
 
     if(exponent != 0) {
       if(UNITDisplay == false) {                                                        //JM UNIT
-      exponentToDisplayString(exponent, displayString + charIndex, displayValueX + valueIndex, false);
-      }                                                                                 //JM UNIT
-      else {                                                                            //JM UNIT
-         exponentToUnitDisplayString(exponent, displayString+charIndex, false);         //JM UNIT   //JM_TOCHANGE!!
+        if(updateDisplayValueX) {
+          exponentToDisplayString(exponent, displayString + charIndex, displayValueX + valueIndex, false);
+        }
+        else {
+          exponentToDisplayString(exponent, displayString + charIndex, NULL,                       false);
+        }                                                                                 //JM UNIT
+      } else {                                                                            //JM UNIT
+           exponentToUnitDisplayString(exponent, displayString+charIndex, false);         //JM UNIT   //JM_TOCHANGE!!
       }                                                                                 //JM UNIT
     }
   }
@@ -1561,7 +1573,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth) {
+void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp) {
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
@@ -1571,7 +1583,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
   exponentShift = (longIntegerBits(lgInt) - 1) * 0.3010299956639811952137;
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);
   exponentShift = (exponentShift / exponentStep + 1) * exponentStep;
-  exponentShiftLimit = (50 / exponentStep + 1) * exponentStep;
+  exponentShiftLimit = (maxExp / exponentStep + 1) * exponentStep;
   if(exponentShift > exponentShiftLimit) {
     exponentShift -= exponentShiftLimit;
 
@@ -1749,4 +1761,141 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 
 void timeToDisplayString(calcRegister_t regist, char *displayString) {
   sprintf(displayString, "%" FMT64S, *(int64_t *)(REGISTER_DATA(regist)));
+}
+
+
+
+void fnShow(uint16_t unusedParamButMandatory) {
+  uint8_t concat, savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
+  int16_t source, dest, last, d;
+  real34_t real34;
+  char *tenExponent;
+
+  displayFormat = DF_ALL;
+  displayFormatDigits = 0;
+
+  tmpStr3000[ 300] = 0; // L2
+  tmpStr3000[ 600] = 0; // L3
+  tmpStr3000[ 900] = 0; // L4
+  tmpStr3000[1200] = 0; // L5
+  tmpStr3000[1500] = 0; // L6
+  tmpStr3000[1800] = 0; // L7
+
+  temporaryInformation = TI_SHOW_REGISTER;
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 7*400 - 8, 350);
+      tenExponent = strstr(tmpStr3000 + 2100, PRODUCT_SIGN);
+
+      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      source = 2100;
+      dest = 0;
+      for(d=0; d<=1800 ; d+=300) {
+        dest = d;
+        while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= SCREEN_WIDTH - 8) {
+          tmpStr3000[dest] = tmpStr3000[source];
+          if(tmpStr3000[dest] & 0x80) {
+            tmpStr3000[++dest] = tmpStr3000[++source];
+          }
+          source++;
+          tmpStr3000[++dest] = 0;
+        }
+      }
+      break;
+
+    case dtReal34:
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, 2000, 34);
+
+      if(stringWidth(tmpStr3000, &standardFont, true, true) > SCREEN_WIDTH) {
+        tenExponent = strstr(tmpStr3000, PRODUCT_SIGN);
+        if(tenExponent != NULL) {
+          strcpy(tmpStr3000 + 300, tenExponent);
+          *tenExponent = 0;
+        }
+      }
+      break;
+
+    case dtComplex34:
+      // Real part
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34);
+
+      // Ten exponent of the real part
+      tenExponent = strstr(tmpStr3000, PRODUCT_SIGN);
+      if(tenExponent != NULL) {
+        strcpy(tmpStr3000 + 300, tenExponent);
+        *tenExponent = 0;
+      }
+      else {
+        tmpStr3000[300] = 0;
+      }
+
+      // +/- i×
+      real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
+      strcat(tmpStr3000 + 600, (real34IsNegative(&real34) ? "-" : "+"));
+      strcat(tmpStr3000 + 600, COMPLEX_UNIT);
+      strcat(tmpStr3000 + 600, PRODUCT_SIGN);
+
+      // Imaginary part
+      real34SetPositiveSign(&real34);
+      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 900, &standardFont, 2000, 34);
+
+      // Ten exponent of the imaginary part
+      tenExponent = strstr(tmpStr3000 + 900, PRODUCT_SIGN);
+      if(tenExponent != NULL) {
+        strcpy(tmpStr3000 + 1200, tenExponent);
+        *tenExponent = 0;
+      }
+      else {
+        tmpStr3000[1200] = 0;
+      }
+
+      concat = 0;
+      while(concat < 4 && stringWidth(tmpStr3000, &standardFont, true, true) + stringWidth(tmpStr3000 + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
+        strncat(tmpStr3000,       tmpStr3000 +  300, 299);
+        strcpy(tmpStr3000 + 300, tmpStr3000 +  600);
+        strcpy(tmpStr3000 + 600, tmpStr3000 +  900);
+        strcpy(tmpStr3000 + 900, tmpStr3000 + 1200);
+        tmpStr3000[1200] = 0;
+        concat++;
+      }
+
+      while(concat < 4 && stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
+        strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299);
+        strcpy(tmpStr3000 + 600, tmpStr3000 +  900);
+        strcpy(tmpStr3000 + 900, tmpStr3000 + 1200);
+        tmpStr3000[1200] = 0;
+        concat++;
+      }
+
+      while(concat < 4 && stringWidth(tmpStr3000 + 600, &standardFont, true, true) + stringWidth(tmpStr3000 + 900, &standardFont, true, true) <= SCREEN_WIDTH) {
+        strncat(tmpStr3000 + 600, tmpStr3000 +  900, 299);
+        strcpy(tmpStr3000 + 900, tmpStr3000 + 1200);
+        tmpStr3000[1200] = 0;
+        concat++;
+      }
+
+      if(concat < 4 && stringWidth(tmpStr3000 + 900, &standardFont, true, true) + stringWidth(tmpStr3000 + 1200, &standardFont, true, true) <= SCREEN_WIDTH) {
+        strncat(tmpStr3000 + 900, tmpStr3000 + 1200, 299);
+        tmpStr3000[1200] = 0;
+      }
+      break;
+
+    default:
+      temporaryInformation = TI_NO_INFO;
+      displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(REGISTER_X, true, false));
+        showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
+      #endif
+      return;
+  }
+
+  refreshRegisterLine(REGISTER_T);
+  if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
+  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
+  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);
+
+  displayFormat = savedDisplayFormat;
+  displayFormatDigits = savedDisplayFormatDigits;
 }

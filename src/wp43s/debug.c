@@ -121,6 +121,8 @@ char * getRegisterDataTypeName(calcRegister_t regist, bool_t article, bool_t pad
 
 
 char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
+  static char base[9];
+
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
       switch(getRegisterTag(regist)) {
@@ -153,8 +155,8 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
       }
 
     case dtShortInteger:
-      sprintf(tmpStr3000, "base %2" FMT32U " ", getRegisterTag(regist));
-                                    return tmpStr3000;
+      sprintf(base, "base %2" FMT32U " ", getRegisterTag(regist));
+                                    return base;
 
     default:                        return "???     ";
   }
@@ -530,7 +532,7 @@ void debugNIM(void) {
    *
    ***********************************************/
   void debugRegisterValue(calcRegister_t regist, int row) {
-    char     string[3000], *p;
+    char     string[3000], *p, tmpStr[1000];
     uint16_t i, k, n=0;
 
     if(1000 <= regist && regist < 1000+numberOfNamedVariables) { // Named variable
@@ -581,7 +583,7 @@ void debugNIM(void) {
     }
 
     else if(getRegisterDataType(regist) == dtLongInteger) {
-      longIntegerToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH);
+      longIntegerToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50);
     }
 
     else {
@@ -592,9 +594,9 @@ void debugNIM(void) {
       string[stringLastGlyph(string)] = 0;
     }
 
-    stringToUtf8(string, (uint8_t *)tmpStr3000);
+    stringToUtf8(string, (uint8_t *)tmpStr);
 
-    gtk_label_set_label(GTK_LABEL(lbl2[row]), tmpStr3000);
+    gtk_label_set_label(GTK_LABEL(lbl2[row]), tmpStr);
     gtk_widget_show(lbl2[row]);
   }
 
@@ -1062,7 +1064,6 @@ void debugNIM(void) {
         gtk_widget_hide(lbl2[i]);
       }
 
-      //showInfoDialog(tmpStr3000, NULL, NULL, NULL);
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
       sprintf(string, "Content of the %" FMT16U " local registers", numberOfLocalRegisters);

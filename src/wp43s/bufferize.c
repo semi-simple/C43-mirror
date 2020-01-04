@@ -861,31 +861,21 @@ void addItemToNimBuffer(int16_t item) {
     case ITM_ENTER :
       sprintf(errorMessage, "In bufferize.c, look at NEWERPN case ITM_ENTER");
       displayBugScreen(errorMessage);
-/*
-//JM NEWERPN This section is not running at the moment and must be fixed
-//once the FLAG_CPXRES is working again.
-printf("ITM_ENTER from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
-      done = true;
-      closeNim();
-      if(calcMode != CM_NIM && lastErrorCode == 0) {
-        if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
-          fnSetFlag(FLAG_CPXRES);
-    
-          fnRefreshRadioState(RB_BCR, true);                                    //dr
-        }
-
-//JM NEWERPN This section is not running at the moment and must be fixed
-//once the FLAG_CPXRES is working again.
-printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
-        STACK_LIFT_ENABLE;
-        if(eRPN == false) {                                         //JM eRPN modification, experiment
-        liftStack();
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-        refreshStack();
-        STACK_LIFT_DISABLE;
-        }                                                           //JM eRPN modification
-        return;
-      } */
+    // Reported bt Jaco Mostert January 3th 2020: following lines are useless
+    //  done = true;
+    //  closeNim();
+    //  if(calcMode != CM_NIM && lastErrorCode == 0) {
+    //    if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
+    //      fnSetFlag(FLAG_CPXRES);
+    //    }
+    //
+    //    STACK_LIFT_ENABLE;
+    //    liftStack();
+    //    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+    //    refreshStack();
+    //    STACK_LIFT_DISABLE;
+    //    return;
+    //  }
       break;
 
     case ITM_LN :
@@ -2123,7 +2113,7 @@ void closeNim(void) {
               if(realCompareLessThan(&magnitude, const_0)) {
                 realSetPositiveSign(&magnitude);
                 realAdd(&theta, const_pi, &theta, &ctxtReal39);
-                realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
+                WP34S_Mod(&theta, const1071_2pi, &theta);
               }
               real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
               realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));

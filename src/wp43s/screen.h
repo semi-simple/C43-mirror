@@ -82,21 +82,23 @@ void     underline(int16_t y);               //JM SHIFT LINE
 
 #ifndef TESTSUITE_BUILD
 uint8_t  compressString;                                    //JM compressString
-void     underline_softkey    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);  //JM LONGPRESS
-void     JM_DOT               (int16_t xx, int16_t yy);
-void     setPixel             (int16_t x, int16_t y);
-void     clearPixel           (int16_t x, int16_t y);
-void     invertPixel          (int16_t x, int16_t y);
-int      getPixel             (int16_t x, int16_t y);
-int16_t  showString           (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-int16_t  showGlyph            (const char *ch,    const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-int16_t  showGlyphCode        (uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-void     force_refresh        (void);                                                  //JM SCREEN 
-void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);
-void     showCursor           (void);
-void     hideCursor           (void);
-void     showFunctionName     (int16_t item, int8_t counter);
-void     hideFunctionName     (void);
-void     clearRegisterLine    (int16_t yStart, int16_t height);
-void     refreshRegisterLine  (calcRegister_t regist);
+void     underline_softkey        (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);  //JM LONGPRESS
+void     JM_DOT                   (int16_t xx, int16_t yy);
+void     setPixel                 (int16_t x, int16_t y);
+void     clearPixel               (int16_t x, int16_t y);
+void     invertPixel              (int16_t x, int16_t y);
+int      getPixel                 (int16_t x, int16_t y);
+int16_t  showString               (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+int16_t  showGlyph                (const char *ch,    const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+int16_t  showGlyphCode            (uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+void     force_refresh            (void);                                                  //JM SCREEN 
+void     clearScreen              (bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);
+void     showCursor               (void);
+void     hideCursor               (void);
+void     showFunctionName         (int16_t item, int8_t counter);
+void     hideFunctionName         (void);
+void     clearRegisterLine        (int16_t yStart, int16_t height);
+void     resetTemporaryInformation(void);
+void     refreshRegisterLine      (calcRegister_t regist);
+
 #endif

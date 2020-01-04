@@ -970,11 +970,7 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-    if(temporaryInformation != TI_NO_INFO && temporaryInformation != TI_ARE_YOU_SURE) {
-      temporaryInformation = TI_NO_INFO;
-      refreshRegisterLine(REGISTER_X);
-      refreshRegisterLine(REGISTER_Y);
-    }
+    resetTemporaryInformation();
 
     if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
       if(calcMode == CM_AIM) {

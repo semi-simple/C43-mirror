@@ -147,6 +147,13 @@ bool_t               SH_BASE_HOME;                            //JM BASEHOME
 bool_t               SH_BASE_AHOME;                           //JM BASEHOME
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 uint8_t              Input_Default;                           //JM Input Default
+float                graph_xmin;                              //JM Graph
+float                graph_xmax;                              //JM Graph
+float                graph_ymin;                              //JM Graph
+float                graph_ymax;                              //JM Graph
+float                graph_dx;                                //JM Graph
+float                graph_dy;                                //JM Graph
+
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -344,7 +351,12 @@ void setupDefaults(void) {
   SH_BASE_AHOME  = false;    
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
-
+  graph_xmin = -3*3.14159;                                       //JM GRAPH
+  graph_xmax = +3*3.14159;                                       //JM GRAPH
+  graph_ymin = -2;                                               //JM GRAPH
+  graph_ymax = +2;                                               //JM GRAPH
+  graph_dx   = 0;                                                //JM GRAPH
+  graph_dy   = 0;                                                //JM GRAPH
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
   #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time

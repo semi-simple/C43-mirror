@@ -65,11 +65,8 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
                                      KEY_COMPLEX,                   KEY_CC,                     KEY_CC1,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM CPX
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
-                                     ITM_SDL,                       ITM_SDR,                    ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                            //JM added SIGFIG & UNIT
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_CFG,                           //JM added CFG
-                                     ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_MULTCR,               ITM_MULTDOT,           ITM_RDXPER,                  ITM_RDXCOM,
-                                     ITM_GAP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DSTACK,
-                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA                    };
+                                     ITM_RECT,                      ITM_POLAR,                  ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                            //JM added SIGFIG & UNIT
+                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_GAP,               ITM_DSTACK,                  -MNU_CFG                      };   //JM added CFG
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -227,7 +224,7 @@ const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,     
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
                                      ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_NULL,              ITM_NULL,                    ITM_PARALLEL,                 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_GRAPH,                   -MNU_EE                        };    //JM Added 
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              -MNU_GRAPH,                   -MNU_EE                        };    //JM Added 
 
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -424,17 +421,17 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 
-const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXPER,               ITM_RDXCOM,            ITM_CB_CPXRES,               ITM_NULL,
+const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXPER,               ITM_RDXCOM,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_QUIET,                          //JM sequence change
-                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_CB_LEADING_ZERO,      ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
+                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_NULL,                 ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
+                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
                                      ITM_CLK12,                     ITM_CLK24,                  ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM
-                                     ITM_NULL,                      ITM_NULL,                   ITM_FG_LINE,              ITM_FG_DOTS,           ITM_G_DOUBLETAP,             ITM_NULL,                           //JM
-                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                     };    //JM
+                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
+
 
 
 
@@ -528,8 +525,15 @@ const int16_t menu_HOME[]        = {
 /* Middle f    */  /* 3 */           ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
 /* Top    g    */  /* 2 */           ITM_IMPFRC,                    ITM_toINT,                  ITM_DMS,                  KEY_dotD,              ITM_toHMS,                   ITM_LBL     /*LAST ONE NO COMMA*/   //JM HOME
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
-
                                      };                                                                                                                                                                           //JM HOME
+
+const int16_t menu_GRAPH[]        = { 
+          /*-1------*/                                                                                                                                                                                            //JM ALPHA
+                                     ITM_GRF_X0,                    ITM_GRF_Y0,                 ITM_GRF_X1,               ITM_GRF_HLP,           ITM_GRAPH,                   ITM_GRF_DX,                         //JM GRAPH
+                                     ITM_NULL,                      ITM_GRF_Y1,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GRF_DY,                         //JM GRAPH
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM GRAPH
+
+
 
 
 const int16_t menu_ALPHA[]        = { 
@@ -638,8 +642,9 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ASN_N,       .numItems = sizeof(menu_ASN_N      )/sizeof(int16_t), .softkeyItem = menu_ASN_N       },  //JM USER NORMAL
   {.menuId = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
   {.menuId = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME
+  {.menuId = -MNU_GRAPH,       .numItems = sizeof(menu_GRAPH      )/sizeof(int16_t), .softkeyItem = menu_GRAPH       },  //JM GRAPH
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
-  {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM HOME
+  {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
   {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };

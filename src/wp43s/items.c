@@ -372,7 +372,7 @@ void fnJMUSERmode               (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
-void graph                      (uint16_t unusedParamButMandatory) {}           //^^
+void fnGraph                    (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -2154,7 +2154,7 @@ const item_t indexOfItems[] = {
 /* 1760 */  { fnJM,                        15,                          "STO 3I",                                      "STO" STD_SPACE_3_PER_EM "3I",                 CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1761 */  { fnJM,                        16,                          "RCL 3I",                                      "RCL" STD_SPACE_3_PER_EM "3I",                 CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1762 */  { fnJM,                        17,                          "V.I",                                         "V" STD_DIVIDE "I",                            CAT_FNCT, SLS_ENABLED  },      //JM EE
-/* 1763 */  { fnJM,                        18,                          "V/Z",                                         "I" STD_CROSS "Z",                             CAT_FNCT, SLS_ENABLED  },      //JM EE
+/* 1763 */  { fnJM,                        18,                          "I.Z",                                         "I" STD_CROSS "Z",                             CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1764 */  { fnJM,                        19,                          "V/Z",                                         "V" STD_DIVIDE "Z",                            CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1765 */  { fnJM,                        20,                          "X" STD_RIGHT_ARROW "BAL",                     "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",              CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1766 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                     "COMPLEX",                                     CAT_FNCT, SLS_ENABLED  },      //JM Change CC to COMPLEX
@@ -2308,9 +2308,17 @@ const item_t indexOfItems[] = {
 /* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "",                                            "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1912 */  { fnInDefault,                 ID_SI        ,               "",                                            "i" STD_SPACE_3_PER_EM "SI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI        ,               "",                                            "i" STD_SPACE_3_PER_EM "LI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1914 */  { graph,                       NOPARAM      ,               "GRAPH",                                       "GRAPH",                                       CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
+/* 1914 */  { fnGraph,                     NOPARAM      ,               "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 875 Small latin letters
+/* 1917 */  { itemToBeCoded,               NOPARAM,                     "GRAPH",                                       "GRAPH",                                       CAT_MENU, SLS_UNCHANGED},      //JM GRAPH
+/* 1918 */  { fnJM,                        21,                          "GRF_X0",                                      "Xmin",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1919 */  { fnJM,                        22,                          "GRF_X1",                                      "Xmax",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1920 */  { fnJM,                        23,                          "GRF_Y0",                                      "Ymin",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1921 */  { fnJM,                        24,                          "GRF_X1",                                      "Ymax",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1922 */  { fnJM,                        25,                          "GRF_DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1923 */  { fnJM,                        26,                          "GRF_DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1924 */  { fnJM,                        27,                          "GRF_SET",                                     "LIMITS",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
 
-/* 1917 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1925 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

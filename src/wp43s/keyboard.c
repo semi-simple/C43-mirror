@@ -122,7 +122,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
         }
 
         if(lastErrorCode == 0) {
-          temporaryInformation = TI_NO_INFO;
+          resetTemporaryInformation();
           runFunction(func % 10000);
         }
       }
@@ -247,11 +247,7 @@ void btnPressed(void *notUsed, void *data) {
 
   // Shift f pressed and shift g not active
   if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
-    if(temporaryInformation != TI_NO_INFO) {
-      temporaryInformation = TI_NO_INFO;
-      refreshRegisterLine(REGISTER_X);
-      refreshRegisterLine(REGISTER_Y);
-    }
+    resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
@@ -266,11 +262,7 @@ void btnPressed(void *notUsed, void *data) {
 
   // Shift g pressed and shift f not active
   else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
-    if(temporaryInformation != TI_NO_INFO) {
-      temporaryInformation = TI_NO_INFO;
-      refreshRegisterLine(REGISTER_X);
-      refreshRegisterLine(REGISTER_Y);
-    }
+    resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
@@ -297,11 +289,7 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-    if(temporaryInformation != TI_NO_INFO && temporaryInformation != TI_ARE_YOU_SURE) {
-      temporaryInformation = TI_NO_INFO;
-      refreshRegisterLine(REGISTER_X);
-      refreshRegisterLine(REGISTER_Y);
-    }
+    resetTemporaryInformation();
 
     if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
       if(calcMode == CM_AIM) {

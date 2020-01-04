@@ -59,19 +59,19 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sin3
 
   switch(angularMode) {
     case AM_DEGREE:
-      realDivideRemainder(&angle, const_360,    &angle, &ctxtReal39); // mod(angle, 360°) --> angle
+      WP34S_Mod(&angle, const_360,     &angle); // mod(angle, 360°) --> angle
       break;
 
     case AM_GRAD:
-      realDivideRemainder(&angle, const_400,    &angle, &ctxtReal39); // mod(angle, 400g) --> angle
+      WP34S_Mod(&angle, const_400,     &angle); // mod(angle, 400g) --> angle
       break;
 
     case AM_RADIAN:
-      WP34S_Mod(&angle,           const459_2pi, &angle);              // mod(angle, 2pi) --> angle
+      WP34S_Mod(&angle, const1071_2pi, &angle); // mod(angle, 2pi) --> angle
       break;
 
     case AM_MULTPI:
-      realDivideRemainder(&angle, const_2,      &angle, &ctxtReal39); // mod(angle, 2) --> angle
+      WP34S_Mod(&angle, const_2,       &angle); // mod(angle, 2) --> angle
       break;
 
     default: {}
@@ -668,7 +668,7 @@ static void WP34S_Gamma_LnGamma(const real_t *xin, const bool_t calculateLnGamma
 
   if(reflect) {
     // figure out xin * PI mod 2PI
-    realDivideRemainder(xin, const_2, &t, &ctxtReal39);
+    WP34S_Mod(xin, const_2, &t);
     realMultiply(&t, const_pi, &t, &ctxtReal39);      // t = xin·pi
     WP34S_SinCosTanTaylor(&t, false, &x, NULL, NULL); // x = sin(xin·pi)
 
@@ -1157,19 +1157,19 @@ void WP34S_Mod(const real_t *x, const real_t *y, real_t *res) {
  /* Declare a structure large enough to hold a really long number.
   * This structure is likely to be larger than is required.
   */
- real459_t out;
+ real1071_t out;
 
- realDivideRemainder(x, y, &out, &ctxtReal459);
+ realDivideRemainder(x, y, &out, &ctxtReal1071);
  realPlus(&out, res, &ctxtReal39);
 }
 
 
-void WP34S_BigMod(const real_t *x, const real_t *y, real_t *res) {
- /* Declare a structure large enough to hold a really long number.
-  * This structure is likely to be larger than is required.
-  */
- real855_t out;
-
- realDivideRemainder(x, y, &out, &ctxtReal855);
- realPlus(&out, res, &ctxtReal39);
-}
+//void WP34S_BigMod(const real_t *x, const real_t *y, real_t *res) {
+// /* Declare a structure large enough to hold a really long number.
+//  * This structure is likely to be larger than is required.
+//  */
+// real2139_t out;
+//
+// realDivideRemainder(x, y, &out, &ctxtReal2139);
+// realPlus(&out, res, &ctxtReal39);
+//}

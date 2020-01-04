@@ -72,7 +72,7 @@ void fnChangeBase(uint16_t base) {
       longIntegerLeftShift(lgInt, 32, lgInt);
 
       // Calculate 32 bit low word
-      realDivideRemainder(&x, const_2p32, &value, &ctxtReal39);
+      WP34S_Mod(&x, const_2p32, &value);
 
       realToUInt32(&value, tmp32);
       longIntegerAddUInt(lgInt, tmp32, lgInt);

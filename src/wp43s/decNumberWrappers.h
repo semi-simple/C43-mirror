@@ -24,7 +24,7 @@ typedef struct {
                        // range: -1999999997 through 999999999
   uint8_t bits;        // Indicator bits (see above)
                        // Coefficient, from least significant unit
-  decNumberUnit lsu[(51+DECDPUN-1)/DECDPUN];
+  decNumberUnit lsu[(51+DECDPUN-1)/DECDPUN]; // 51 = 39 + 1*12
 } real51_t; // used for trigonometric functions borrowed from WP34S
 
 typedef struct {
@@ -33,7 +33,7 @@ typedef struct {
                        // range: -1999999997 through 999999999
   uint8_t bits;        // Indicator bits (see above)
                        // Coefficient, from least significant unit
-  decNumberUnit lsu[(75+DECDPUN-1)/DECDPUN];
+  decNumberUnit lsu[(75+DECDPUN-1)/DECDPUN]; // 75 = 39 + 3*12
 } real75_t; // used in SLVQ
 
 typedef struct {
@@ -42,17 +42,17 @@ typedef struct {
                        // range: -1999999997 through 999999999
   uint8_t bits;        // Indicator bits (see above)
                        // Coefficient, from least significant unit
-  decNumberUnit lsu[(459+DECDPUN-1)/DECDPUN];
-} real459_t; // used for radian angle reduction
+  decNumberUnit lsu[(1071+DECDPUN-1)/DECDPUN]; // 1071 = 39 + 86*12
+} real1071_t; // used for radian angle reduction
 
-typedef struct {
-  int32_t digits;      // Count of digits in the coefficient; >0
-  int32_t exponent;    // Unadjusted exponent, unbiased, in
-                       // range: -1999999997 through 999999999
-  uint8_t bits;        // Indicator bits (see above)
-                       // Coefficient, from least significant unit
-  decNumberUnit lsu[(855+DECDPUN-1)/DECDPUN];
-} real855_t;
+//typedef struct {
+//  int32_t digits;      // Count of digits in the coefficient; >0
+//  int32_t exponent;    // Unadjusted exponent, unbiased, in
+//                       // range: -1999999997 through 999999999
+//  uint8_t bits;        // Indicator bits (see above)
+//                       // Coefficient, from least significant unit
+//  decNumberUnit lsu[(2139+DECDPUN-1)/DECDPUN]; // 2139 = 39 + 175*12
+//} real2139_t;
 
 #define realContext_t                                     decContext
 #define real34_t                                          decQuad      // 34 digits
@@ -64,8 +64,8 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define REAL39_SIZE                                       sizeof(real39_t)
 #define REAL51_SIZE                                       sizeof(real51_t)
 #define REAL75_SIZE                                       sizeof(real75_t)
-#define REAL459_SIZE                                      sizeof(real459_t)
-#define REAL855_SIZE                                      sizeof(real855_t)
+#define REAL1071_SIZE                                     sizeof(real1071_t)
+//#define REAL2139_SIZE                                     sizeof(real2139_t)
 #define COMPLEX34_SIZE                                    sizeof(complex34_t)
 
 #define POINTER_TO_LOCAL_FLAGS                            ((dataSize_t  *)(allLocalRegisterPointer))

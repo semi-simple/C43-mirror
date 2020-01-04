@@ -76,18 +76,19 @@ int8_t   showFunctionNameCounter;
 #endif
 
 #ifndef TESTSUITE_BUILD
-void     setPixel             (int16_t x, int16_t y);
-void     clearPixel           (int16_t x, int16_t y);
-void     invertPixel          (int16_t x, int16_t y);
-int      getPixel             (int16_t x, int16_t y);
-int16_t  showString           (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-int16_t  showGlyph            (const char *ch,    const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-int16_t  showGlyphCode        (uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);
-void     showCursor           (void);
-void     hideCursor           (void);
-void     showFunctionName     (int16_t item, int8_t counter);
-void     hideFunctionName     (void);
-void     clearRegisterLine    (int16_t yStart, int16_t height);
-void     refreshRegisterLine  (calcRegister_t regist);
+void     setPixel                 (int16_t x, int16_t y);
+void     clearPixel               (int16_t x, int16_t y);
+void     invertPixel              (int16_t x, int16_t y);
+int      getPixel                 (int16_t x, int16_t y);
+int16_t  showString               (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+int16_t  showGlyph                (const char *ch,    const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+int16_t  showGlyphCode            (uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+void     clearScreen              (bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);
+void     showCursor               (void);
+void     hideCursor               (void);
+void     showFunctionName         (int16_t item, int8_t counter);
+void     hideFunctionName         (void);
+void     clearRegisterLine        (int16_t yStart, int16_t height);
+void     resetTemporaryInformation(void);
+void     refreshRegisterLine      (calcRegister_t regist);
 #endif

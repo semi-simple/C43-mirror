@@ -309,7 +309,7 @@ extern const real_t * const const_gammaC26;
 extern const real_t * const const_gammaC27;
 extern const real_t * const const_gammaC28;
 extern const real_t * const const_gammaC29;
-extern const real_t * const const459_2pi;
+extern const real_t * const const1071_2pi;
 extern const real34_t * const const34_0;
 extern const real34_t * const const34_1e_6;
 extern const real34_t * const const34_1e_4;

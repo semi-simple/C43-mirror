@@ -23,6 +23,7 @@ void fnDisplayFormatEng           (uint16_t displayFormat);
 void fnDisplayFormatAll           (uint16_t displayFormat);
 //void fnDisplayFormatDsp           (uint16_t displayFormat);
 void fnDisplayFormatGap           (uint16_t gap);
+void fnShow                       (uint16_t unusedParamButMandatory);
 void real34ToDisplayString        (const real34_t *real34, uint32_t tag, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits);
 void realToDisplayString2         (const real34_t *real34, char *displayString, int16_t displayHasNDigits);
 void complex34ToDisplayString     (const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits);
@@ -30,7 +31,7 @@ void complex34ToDisplayString2    (const complex34_t *complex34, char *displaySt
 void fractionToDisplayString      (calcRegister_t regist, char *displayString);
 void angle34ToDisplayString2      (const real34_t *angle34, uint8_t mode, char *displayString, int16_t displayHasNDigits);
 void shortIntegerToDisplayString  (calcRegister_t regist, char *displayString, const font_t **font);
-void longIntegerToDisplayString   (calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth);
+void longIntegerToDisplayString   (calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp);
 void dateToDisplayString          (calcRegister_t regist, char *displayString);
 void timeToDisplayString          (calcRegister_t regist, char *displayString);
 void exponentToDisplayString      (int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode);

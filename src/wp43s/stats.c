@@ -254,9 +254,9 @@ void fnSigma(uint16_t plusMinus) {
       showInfoDialog("In function fnSigma:", errorMessage, NULL, NULL);
     #endif
   }
-for(int i=0; i<STATISTICAL_SUMS; i++) {
-printf("sum %02d ", i); printReal34ToConsole(((real34_t *)statisticalSumsPointer) + i); printf("\n");
-}
+//for(int i=0; i<STATISTICAL_SUMS; i++) {
+//printf("sum %02d ", i); printReal34ToConsole(((real34_t *)statisticalSumsPointer) + i); printf("\n");
+//}
 }
 
 

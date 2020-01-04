@@ -252,7 +252,7 @@ void lnGammaReal(void) {
     }
     else { // x is negative and not an integer
       realMinus(&xReal, &xImag, &ctxtReal39); // x.imag is used as a temp variable here
-      realDivideRemainder(&xImag, const_2, &xImag, &ctxtReal39);
+      WP34S_Mod(&xImag, const_2, &xImag);
       if(realCompareGreaterThan(&xImag, const_1)) { // the result is a real
         WP34S_LnGamma(&xReal, &xReal);
         realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));

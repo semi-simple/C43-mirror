@@ -119,6 +119,9 @@ void runFunction(int16_t func) {
 #endif
 
 #ifdef GENERATE_CATALOGS
+void registerBrowser            (uint16_t unusedParamButMandatory) {}
+void flagBrowser                (uint16_t unusedParamButMandatory) {}
+void fontBrowser                (uint16_t unusedParamButMandatory) {}
 void fnPow10                    (uint16_t unusedParamButMandatory) {}
 void fnIntegerMode              (uint16_t unusedParamButMandatory) {}
 void fnConstant                 (uint16_t unusedParamButMandatory) {}
@@ -343,9 +346,7 @@ void addItemToBuffer            (uint16_t unusedParamButMandatory) {}
 void fnOff                      (uint16_t unusedParamButMandatory) {}
 void fnAim                      (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC              (uint16_t unusedParamButMandatory) {}
-void registerBrowser            (uint16_t unusedParamButMandatory) {}
-void flagBrowser                (uint16_t unusedParamButMandatory) {}
-void fontBrowser                (uint16_t unusedParamButMandatory) {}
+void fnShow                     (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -1884,7 +1885,7 @@ const item_t indexOfItems[] = {
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
-/* 1531 */  { itemToBeCoded,               NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
+/* 1531 */  { fnShow,                      NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    CAT_FNCT, SLS_ENABLED  },
 /* 1534 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },

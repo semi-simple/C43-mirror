@@ -390,7 +390,7 @@ void addStriLonI(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-  longIntegerToDisplayString(REGISTER_X, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH);
+  longIntegerToDisplayString(REGISTER_X, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50);
   len2 = stringByteLength(tmpStr3000);
 
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);

@@ -214,7 +214,7 @@ void modLonIReal(void) {
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  WP34S_Mod(&y, &x, &r);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -246,7 +246,7 @@ void modRealLonI(void) {
   real39_t y, r;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  WP34S_Mod(&y, &x, &r);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -322,7 +322,7 @@ void modShoIReal(void) {
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  WP34S_Mod(&y, &x, &r);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -355,7 +355,7 @@ void modRealShoI(void) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  WP34S_Mod(&y, &x, &r);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -390,7 +390,7 @@ void modRealReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realDivideRemainder(&y, &x, &r, &ctxtReal39);
+  WP34S_Mod(&y, &x, &r);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }

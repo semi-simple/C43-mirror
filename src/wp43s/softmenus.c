@@ -66,7 +66,9 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
                                      ITM_RECT,                      ITM_POLAR,                  ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                            //JM added SIGFIG & UNIT
-                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_GAP,               ITM_DSTACK,                  -MNU_CFG                      };   //JM added CFG
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_GAP,               ITM_DSTACK,                  -MNU_CFG,                           //JM added CFG
+
+                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM TEMPORARY UNTIL A HOME IS FOUND
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -125,8 +127,8 @@ const int16_t menu_M_EDIT[]      = { CHR_LEFT_ARROW,                CHR_UP_ARROW
 const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,              CHR_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_NULL,
-                                     ITM_RECT,                      ITM_POLAR,                  ITM_RM,                   ITM_ERPN,              ITM_SETSIG,                  ITM_DENMAX,                         //JM modifoed
+const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     -MNU_PFN,
+                                     ITM_RECT,                      ITM_POLAR,                  ITM_NULL,                   ITM_ERPN,              ITM_SETSIG,                ITM_NULL,                         //JM modifoed
                                      ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG                            //JM
 
 
@@ -421,15 +423,14 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 
-const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXPER,               ITM_RDXCOM,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
+const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_QUIET,                          //JM sequence change
-                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_NULL,                 ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
+                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_DENMAX,            ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
                                      ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
                                      ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_RDXPER,                    ITM_RDXCOM,                 ITM_GAP,                  ITM_DMY,               ITM_YMD,                     ITM_MDY,
 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8,
                                      ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
 
@@ -1190,7 +1191,18 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
   }
   else {
 //  w = stringWidth(label, &standardFont, false, false);
-    showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+ 
+              char tmp[30];                                               //JM vv WAIT FOR GAP, and add the actual GAP value to the sodtkey
+              char tmp1[12];
+              tmp[0]=0;
+              strcat(tmp,label);
+              if(tmp[0]==71 && tmp[1]==65 && tmp[2]==80 && tmp[3]==0) {
+                  strcat(tmp,STD_SPACE_HAIR);
+                  itoa(groupingGap, tmp1, 10);
+                  strcat(tmp,tmp1);
+              }                                                          //JM ^^
+
+    showString(tmp, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
   }
 
 //  w = stringWidth(label, &standardFont, false, false);

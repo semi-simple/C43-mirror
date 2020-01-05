@@ -89,9 +89,9 @@ int16_t temp;
 }
 #endif
 
-int16_t screen_window_y(float graph_ymin, float y, float y_max) {
+int16_t screen_window_y(float y_min, float y, float y_max) {
 int16_t temp;
-  temp = (y-graph_ymin)/(y_max-graph_ymin)*(SCREEN_HEIGHT_GRAPH-1-SCREEN_MIN_GRAPH);
+  temp = (y-y_min)/(y_max-y_min)*(SCREEN_HEIGHT_GRAPH-1-SCREEN_MIN_GRAPH);
     if (temp>SCREEN_HEIGHT_GRAPH-SCREEN_MIN_GRAPH-1) {temp=SCREEN_HEIGHT_GRAPH-SCREEN_MIN_GRAPH-1;}
   else if (temp<0) {temp=0;}  
   return (SCREEN_HEIGHT_GRAPH - temp);

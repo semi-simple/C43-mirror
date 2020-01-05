@@ -218,6 +218,9 @@ void addItemToBuffer(uint16_t item) {
       else if(tamFunction == ITM_toINT && item == ITM_HEX) {
         tamTransitionSystem(TT_BASE16);
       }
+      else if(tamFunction == ITM_toINT && item == ITM_ST_B) {
+        tamTransitionSystem(TT_BASE16);
+      }
       else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_K) { // Lettered register
         tamLetteredRegister = indexOfItems[item].param;
         tamTransitionSystem(TT_LETTER);
@@ -858,10 +861,8 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    case ITM_ENTER :
-      sprintf(errorMessage, "In bufferize.c, look at NEWERPN case ITM_ENTER");
-      displayBugScreen(errorMessage);
     // Reported bt Jaco Mostert January 3th 2020: following lines are useless
+    //case ITM_ENTER :
     //  done = true;
     //  closeNim();
     //  if(calcMode != CM_NIM && lastErrorCode == 0) {
@@ -876,9 +877,9 @@ void addItemToNimBuffer(int16_t item) {
     //    STACK_LIFT_DISABLE;
     //    return;
     //  }
-      break;
+    //  break;
 
-    case ITM_LN :
+    case ITM_LOG10 :                                                                //JM layout different
       if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // D for decimal base
         done = true;
 
@@ -891,6 +892,14 @@ void addItemToNimBuffer(int16_t item) {
         done = true;
 
         strcat(nimBuffer, "16");
+      }
+      break;
+
+    case ITM_1ONX :                                                                 //JM layout different Added B for binary
+      if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // Binary. Only works in direct NIM
+        done = true;
+
+        strcat(nimBuffer, "2");
       }
       break;
 
@@ -1785,11 +1794,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
 void closeNim(void) {
   if(nimNumberPart == NP_INT_10) {                //JM Input default type vv
     switch (Input_Default) {
-    case ID_43S:
+    case ID_43S:                                  //   Do nothing, this is default LI/DP
+    case ID_LI:                                   //   Do nothing, because default is LI/DP 
       break;
-    case ID_DP:
-    case ID_CPXDP:
+    case ID_DP:                                   //   Do Real default for DP
+    case ID_CPXDP:                                //                       CPX
       nimNumberPart = NP_REAL_FLOAT_PART;
+      break;
+    case ID_SI:                                   //   lastIntegerBase is set in fnInDefault; I do not set it here, as the user can change it of course.
       break;
     }
   }                                               //JM ^^

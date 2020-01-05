@@ -231,6 +231,12 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
 void fnInDefault(uint16_t inputDefault) {
   Input_Default = inputDefault;
 
+  if(Input_Default == ID_SI) {
+    lastIntegerBase = 10;
+  } else {
+    lastIntegerBase = 0;    
+  }
+
   fnRefreshRadioState(RB_ID, inputDefault);
 }
 

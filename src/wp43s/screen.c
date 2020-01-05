@@ -1352,6 +1352,41 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
 
 
 
+void resetTemporaryInformation(void) {
+  uint8_t tempInfo = temporaryInformation;
+
+  temporaryInformation = TI_NO_INFO;
+
+  switch(tempInfo) {
+    case TI_NO_INFO:           break;
+
+    case TI_RADIUS_THETA:
+    case TI_THETA_RADIUS:
+    case TI_X_Y:
+    case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
+                               refreshRegisterLine(REGISTER_Y); break;
+
+    case TI_STATISTIC_SUMS:    refreshRegisterLine(REGISTER_Y); break;
+
+    case TI_RESET:
+    case TI_ARE_YOU_SURE:
+    case TI_VERSION:
+    case TI_WHO:
+    case TI_FALSE:
+    case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
+
+    case TI_SHOW_REGISTER:     refreshRegisterLine(REGISTER_T);
+                               if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
+                               if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
+                               if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
+                               break;
+
+    default:                   sprintf(errorMessage, "In function resetTemporaryInformation: %" FMT8U " is an unexpected value for temporaryInformation!", temporaryInformation);
+                               displayBugScreen(errorMessage);
+  }
+}
+
+
 
 /********************************************//**
  * \brief Displays one register line
@@ -1361,7 +1396,7 @@ void clearRegisterLine(int16_t yStart, int16_t height) {
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
   int16_t w, wLastBase, prefixWidth, lineWidth = 0;
-  char    prefix[15], lastBase[4];
+  char prefix[15], lastBase[4];
 
   #if (DEBUG_PANEL == 1)
     refreshDebugPanel();
@@ -1370,11 +1405,11 @@ void refreshRegisterLine(calcRegister_t regist) {
   if(calcMode != CM_BUG_ON_SCREEN) {
     if(REGISTER_X <= regist && regist <= REGISTER_T) {
       if(lastErrorCode == 0 || regist != errorRegisterLine) {
-        clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), REGISTER_LINE_HEIGHT);
+        clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), REGISTER_LINE_HEIGHT + (regist == REGISTER_X ? 3 : 0));
 
         #ifdef PC_BUILD
           #if (DEBUG_REGISTER_L == 1)
-            char     string1[1000], string2[1000], *p;
+            char string1[1000], string2[1000], *p, tmpStr[1000];
             uint16_t i;
 
             strcpy(string1, "L = ");
@@ -1409,18 +1444,18 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
               strcat(string1, "long integer = ");
-              longIntegerToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH);
+              longIntegerToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50);
             }
 
             else {
               sprintf(string2, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
             }
 
-            stringToUtf8(string1, (uint8_t *)tmpStr3000);
-            stringToUtf8(string2, (uint8_t *)tmpStr3000 + TMP_STR_LENGTH / 2);
+            stringToUtf8(string1, (uint8_t *)tmpStr);
+            stringToUtf8(string2, (uint8_t *)tmpStr + 500);
 
-            gtk_label_set_label(GTK_LABEL(lblRegisterL1), tmpStr3000);
-            gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr3000 + TMP_STR_LENGTH / 2);
+            gtk_label_set_label(GTK_LABEL(lblRegisterL1), tmpStr);
+            gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr + 500);
             gtk_widget_show(lblRegisterL1);
             gtk_widget_show(lblRegisterL2);
           #endif
@@ -1428,8 +1463,8 @@ void refreshRegisterLine(calcRegister_t regist) {
             char string[1000];
 
             sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43C %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMemInBytes, (uint32_t)gmpMemInBytes); //JM WP43C
-            stringToUtf8(string, (uint8_t *)tmpStr3000);
-            gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr3000);
+            stringToUtf8(string, (uint8_t *)tmpStr);
+            gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
             gtk_widget_show(lblMemoryStatus);
           #endif
         #endif
@@ -1463,6 +1498,49 @@ void refreshRegisterLine(calcRegister_t regist) {
           sprintf(tmpStr3000, "Data, programs, and definitions cleared");
           w = stringWidth(tmpStr3000, &standardFont, true, true);
           showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+        }
+
+        else if(temporaryInformation == TI_SHOW_REGISTER) {
+          switch(regist) {
+            // L1
+            case REGISTER_T: w = stringWidth(tmpStr3000, &standardFont, true, true);
+                             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
+                             break;
+
+            // L2 & L3
+            case REGISTER_Z: w = stringWidth(tmpStr3000 + 300, &standardFont, true, true);
+                             showString(tmpStr3000 + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21, vmNormal, true, true);
+
+                             if(tmpStr3000[600]) {
+                               w = stringWidth(tmpStr3000 + 600, &standardFont, true, true);
+                               showString(tmpStr3000 + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
+                             }
+                             break;
+
+            // L4 & L5
+            case REGISTER_Y: w = stringWidth(tmpStr3000 + 900, &standardFont, true, true);
+                             showString(tmpStr3000 + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
+
+                             if(tmpStr3000[1200]) {
+                               w = stringWidth(tmpStr3000 + 1200, &standardFont, true, true);
+                               showString(tmpStr3000 + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal, true, true);
+                             }
+                             break;
+
+            // L6 & L7
+            case REGISTER_X: w = stringWidth(tmpStr3000 + 1500, &standardFont, true, true);
+                             showString(tmpStr3000 + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
+
+                             if(tmpStr3000[1800]) {
+                               w = stringWidth(tmpStr3000 + 1800, &standardFont, true, true);
+                               showString(tmpStr3000 + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal, true, true);
+                             }
+                             break;
+
+            default: {}
+          }
+
+          real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, SCREEN_WIDTH, 34);
         }
 
         else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
@@ -1522,16 +1600,6 @@ void refreshRegisterLine(calcRegister_t regist) {
                      )
                  ) {
             fractionToDisplayString(regist, tmpStr3000);
-
-            if(temporaryInformation == TI_STATISTIC_SUMS) {
-              if(regist == REGISTER_Y) {
-                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(statisticalSumsPointer));
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-                for(w=0; w<SCREEN_WIDTH; w++) {
-                  setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
-                }
-              }
-            }
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
@@ -1618,6 +1686,23 @@ void refreshRegisterLine(calcRegister_t regist) {
               else if(regist == REGISTER_Y) {
                 strcpy(prefix, "Re" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            else if(temporaryInformation == TI_STATISTIC_SUMS) {
+              if(regist == REGISTER_Y) {
+                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(statisticalSumsPointer));
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+
+                #ifdef PC_BUILD
+                  for(w=0; w<SCREEN_WIDTH; w++) {
+                    setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
+                  }
+                #endif
+
+                #if DMCP_BUILD
+                  lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0);
+                #endif
               }
             }
 
@@ -1719,7 +1804,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtLongInteger) {
-            longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH);
+            longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

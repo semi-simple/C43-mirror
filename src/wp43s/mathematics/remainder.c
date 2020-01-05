@@ -208,7 +208,7 @@ void rmdLonIReal(void) {
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  WP34S_Mod(&y, &x, &x);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -236,7 +236,7 @@ void rmdRealLonI(void) {
   real39_t y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  WP34S_Mod(&y, &x, &x);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -306,7 +306,7 @@ void rmdShoIReal(void) {
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  WP34S_Mod(&y, &x, &x);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -335,7 +335,7 @@ void rmdRealShoI(void) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  WP34S_Mod(&y, &x, &x);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -366,7 +366,7 @@ void rmdRealReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  realDivideRemainder(&y, &x, &x, &ctxtReal39);
+  WP34S_Mod(&y, &x, &x);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }

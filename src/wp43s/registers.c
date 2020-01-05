@@ -925,7 +925,7 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
     case dtComplex34:    return COMPLEX34_SIZE;
 
     default:
-      sprintf(errorMessage, "In function getRegisterFullSize: data type %s is unknown!", getDataTypeName(getRegisterDataType(regist), true, false));
+      sprintf(errorMessage, "In function getRegisterFullSize: data type %s is unknown!", getDataTypeName(getRegisterDataType(regist), false, false));
       displayBugScreen(errorMessage);
       return 0;
   }

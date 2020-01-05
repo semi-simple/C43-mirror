@@ -82,7 +82,7 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
         if(realCompareLessThan(&magnitude, const_0)) {
           realSetPositiveSign(&magnitude);
           realAdd(&theta, const_pi, &theta, &ctxtReal39);
-          realDivideRemainder(&theta, const_2pi, &theta, &ctxtReal39);
+          WP34S_Mod(&theta, const1071_2pi, &theta);
         }
         real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
         realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));

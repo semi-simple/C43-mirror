@@ -29,11 +29,11 @@
  * \return void
  ***********************************************/
 void fnConfigChina(uint16_t unusedParamButMandatory) {
-  radixMark = RM_PERIOD;
+  fnRadixMark(RM_PERIOD);
   groupingGap = 4;
   refreshStack();
-  timeFormat = TF_H24;
-  dateFormat = DF_YMD;
+  fnTimeFormat(TF_H24);
+  fnDateFormat(DF_YMD);
   oldTime[0] = 0;
   firstGregorianDay = 1949; // JDN of the first day in the Gregorian calendar
 }
@@ -47,11 +47,11 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigEurope(uint16_t unusedParamButMandatory) {
-  radixMark = RM_COMMA;
+  fnRadixMark(RM_COMMA);
   groupingGap = 3;
   refreshStack();
-  timeFormat = TF_H24;
-  dateFormat = DF_DMY;
+  fnTimeFormat(TF_H24);
+  fnDateFormat(DF_DMY);
   oldTime[0] = 0;
   firstGregorianDay = 1582; // JDN of the first day in the Gregorian calendar
 }
@@ -65,11 +65,11 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigIndia(uint16_t unusedParamButMandatory) {
-  radixMark = RM_PERIOD;
+  fnRadixMark(RM_PERIOD);
   groupingGap = 3;
   refreshStack();
-  timeFormat = TF_H24;
-  dateFormat = DF_DMY;
+  fnTimeFormat(TF_H24);
+  fnDateFormat(DF_DMY);
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
 }
@@ -83,11 +83,11 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigJapan(uint16_t unusedParamButMandatory) {
-  radixMark = RM_PERIOD;
+  fnRadixMark(RM_PERIOD);
   groupingGap = 3;
   refreshStack();
-  timeFormat = TF_H24;
-  dateFormat = DF_YMD;
+  fnTimeFormat(TF_H24);
+  fnDateFormat(DF_YMD);
   oldTime[0] = 0;
   firstGregorianDay = 1873; // JDN of the first day in the Gregorian calendar
 }
@@ -101,11 +101,11 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUk(uint16_t unusedParamButMandatory) {
-  radixMark = RM_PERIOD;
+  fnRadixMark(RM_PERIOD);
   groupingGap = 3;
   refreshStack();
-  timeFormat = TF_H12;
-  dateFormat = DF_DMY;
+  fnTimeFormat(TF_H12);
+  fnDateFormat(DF_DMY);
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
 }
@@ -119,11 +119,11 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUsa(uint16_t unusedParamButMandatory) {
-  radixMark = RM_PERIOD;
+  fnRadixMark(RM_PERIOD);
   groupingGap = 3;
   refreshStack();
-  timeFormat = TF_H12;
-  dateFormat = DF_MDY;
+  fnTimeFormat(TF_H12);
+  fnDateFormat(DF_MDY);
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
 }
@@ -600,6 +600,16 @@ void fnReset(uint16_t confirmation) {
     showOverflowCarry();
     hideUserMode();
 
+    graph_xmin = -3*3.14159;                                       //JM GRAPH
+    graph_xmax = +3*3.14159;                                       //JM GRAPH
+    graph_ymin = -2;                                               //JM GRAPH
+    graph_ymax = +2;                                               //JM GRAPH
+    graph_dx   = 0;                                                //JM GRAPH
+    graph_dy   = 0;                                                //JM GRAPH
+
+
+
+
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
@@ -982,28 +992,28 @@ void fnRebuildRadioState() {
       }
       i++;
     }
-  /*else if(indexOfItems[k].func == fnComplexResult) {
-      radiocb_t rb;
-      rb.itemNr = k;
-      rb.param = indexOfItems[k].param;
-      rb.state = (getFlag(FLAG_CPXRES) == rb.param) ? 1 : 0;
-      rb.radioButton = RB_BCR;
-      if(i<MAX_RADIO_CB_ITEMS) {
-        indexOfRadioCbItems[i] = rb;
-      }
-      i++;
-    }*/
-  /*else if(indexOfItems[k].func == fnLeadingZeros) {
-      radiocb_t rb;
-      rb.itemNr = k;
-      rb.param = indexOfItems[k].param;
-      rb.state = (displayLeadingZeros == rb.param) ? 1 : 0;
-      rb.radioButton = RB_BLZ;
-      if(i<MAX_RADIO_CB_ITEMS) {
-        indexOfRadioCbItems[i] = rb;
-      }
-      i++;
-    }*/
+  //else if(indexOfItems[k].func == fnComplexResult) {
+  //  radiocb_t rb;
+  //  rb.itemNr = k;
+  //  rb.param = indexOfItems[k].param;
+  //  rb.state = (getFlag(FLAG_CPXRES) == rb.param) ? 1 : 0;
+  //  rb.radioButton = RB_BCR;
+  //  if(i<MAX_RADIO_CB_ITEMS) {
+  //    indexOfRadioCbItems[i] = rb;
+  //  }
+  //  i++;
+  //}
+  //else if(indexOfItems[k].func == fnLeadingZeros) {
+  //  radiocb_t rb;
+  //  rb.itemNr = k;
+  //  rb.param = indexOfItems[k].param;
+  //  rb.state = (displayLeadingZeros == rb.param) ? 1 : 0;
+  //  rb.radioButton = RB_BLZ;
+  //  if(i<MAX_RADIO_CB_ITEMS) {
+  //    indexOfRadioCbItems[i] = rb;
+  //  }
+  //  i++;
+  //}
     else if(indexOfItems[k].func == fnSetSetJM) {
       radiocb_t rb;
       rb.itemNr = k;

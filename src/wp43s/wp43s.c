@@ -46,12 +46,12 @@ bool_t               allowScreenUpdate;
 bool_t               funcOK;
 
 // Variables stored in RAM
-realContext_t        ctxtReal34;  // 34 digits
-realContext_t        ctxtReal39;  // 39 digits: used for 34 digits intermediate calculations
-realContext_t        ctxtReal51;  // 51 digits: used in trigonometric function from WP34S
-realContext_t        ctxtReal75;  // 75 digits: used in SLVQ
-realContext_t        ctxtReal459; // 459 digits: used in radian angle reduction
-realContext_t        ctxtReal855; // 855 digits: used for really big modulo
+realContext_t        ctxtReal34;   //   34 digits
+realContext_t        ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
+realContext_t        ctxtReal51;   //   51 digits: used in trigonometric function from WP34S
+realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
+realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
+//realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo
 uint16_t             flags[7];
 char                 tmpStr3000[TMP_STR_LENGTH];
 char                 errorMessage[ERROR_MESSAGE_LENGTH];
@@ -147,6 +147,12 @@ bool_t               SH_BASE_HOME;                            //JM BASEHOME
 bool_t               SH_BASE_AHOME;                           //JM BASEHOME
 int16_t              Norm_Key_00_VAR;                         //JM USER NORMAL
 uint8_t              Input_Default;                           //JM Input Default
+float                graph_xmin;                              //JM Graph
+float                graph_xmax;                              //JM Graph
+float                graph_ymin;                              //JM Graph
+float                graph_ymax;                              //JM Graph
+float                graph_dx;                                //JM Graph
+float                graph_dy;                                //JM Graph
 #ifdef INLINE_TEST                      //vv dr
 bool_t               testEnabled;
 uint16_t             testBitset;
@@ -277,13 +283,13 @@ void setupDefaults(void) {
   ctxtReal75.digits = 75;
   ctxtReal75.traps  = 0;
 
-  decContextDefault(&ctxtReal459,  DEC_INIT_DECQUAD);
-  ctxtReal459.digits  = 459;
-  ctxtReal459.traps   = 0;
+  decContextDefault(&ctxtReal1071,  DEC_INIT_DECQUAD);
+  ctxtReal1071.digits = 1071;
+  ctxtReal1071.traps  = 0;
 
-  decContextDefault(&ctxtReal855,  DEC_INIT_DECQUAD);
-  ctxtReal855.digits  = 855;
-  ctxtReal855.traps   = 0;
+  //decContextDefault(&ctxtReal2139,  DEC_INIT_DECQUAD);
+  //ctxtReal2139.digits = 2139;
+  //ctxtReal2139.traps  = 0;
 
   statisticalSumsPointer = NULL;
 
@@ -352,7 +358,12 @@ void setupDefaults(void) {
   SH_BASE_AHOME  = false;
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
-
+  graph_xmin = -3*3.14159;                                       //JM GRAPH
+  graph_xmax = +3*3.14159;                                       //JM GRAPH
+  graph_ymin = -2;                                               //JM GRAPH
+  graph_ymax = +2;                                               //JM GRAPH
+  graph_dx   = 0;                                                //JM GRAPH
+  graph_dy   = 0;                                                //JM GRAPH
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
   #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time
@@ -511,6 +522,7 @@ int main(int argc, char* argv[]) {
 
 
   restoreCalc();
+  //fnReset(CONFIRMED);
 
   gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
 

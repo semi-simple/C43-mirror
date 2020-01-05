@@ -112,6 +112,14 @@ extern uint8_t Input_Default;                                        //JM Input 
 extern bool_t jm_FG_LINE;                                            //JM Screen / keyboard operation setup
 extern bool_t jm_FG_DOTS;                                            //JM Screen / keyboard operation setup
 extern bool_t jm_G_DOUBLETAP;                                        //JM Screen / keyboard operation setup
+extern float graph_xmin;                                             //JM Graph
+extern float graph_xmax;                                             //JM Graph
+extern float graph_ymin;                                             //JM Graph
+extern float graph_ymax;                                             //JM Graph
+extern float graph_dx;                                               //JM Graph
+extern float graph_dy;                                               //JM Graph
+
+
 
 
 // Additional routines needed in jm.c
@@ -135,12 +143,15 @@ void fnUserJM(uint16_t jmUser);
 #define JM_SEEK_FN       28
 
 void fnJM_GetXToNORMmode(uint16_t Rubbish);
-void fnJMUSERmode(uint16_t JM_KEY);
-void fnJMUSERmode_f(uint16_t JM_KEY);
-void fnJMUSERmode_g(uint16_t JM_KEY);
-void Show_User_Keys(void);
-void fnKEYSELECT(void);
-void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey);
+void fnJMUSERmode   (uint16_t JM_KEY);
+void fnJMUSERmode_f (uint16_t JM_KEY);
+void fnJMUSERmode_g (uint16_t JM_KEY);
+void fnStrtoX       (char aimBuffer[]);
+void fnStrInput2    (char inp1[]);
+void fnRCL          (int16_t inp);
+void Show_User_Keys (void);
+void fnKEYSELECT    (void);
+void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 void JM_convertReal34ToShortInteger(uint16_t confirmation);
 void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
@@ -189,9 +200,6 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory);
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX
-
-void graph (uint16_t unusedParamButMandatory);
-
 
 //display.c
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode);

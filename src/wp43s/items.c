@@ -124,6 +124,9 @@ void runFunction(int16_t func) {
 #endif
 
 #ifdef GENERATE_CATALOGS
+void registerBrowser            (uint16_t unusedParamButMandatory) {}
+void flagBrowser                (uint16_t unusedParamButMandatory) {}
+void fontBrowser                (uint16_t unusedParamButMandatory) {}
 void fnPow10                    (uint16_t unusedParamButMandatory) {}
 void fnIntegerMode              (uint16_t unusedParamButMandatory) {}
 void fnConstant                 (uint16_t unusedParamButMandatory) {}
@@ -348,9 +351,7 @@ void addItemToBuffer            (uint16_t unusedParamButMandatory) {}
 void fnOff                      (uint16_t unusedParamButMandatory) {}
 void fnAim                      (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC              (uint16_t unusedParamButMandatory) {}
-void registerBrowser            (uint16_t unusedParamButMandatory) {}
-void flagBrowser                (uint16_t unusedParamButMandatory) {}
-void fontBrowser                (uint16_t unusedParamButMandatory) {}
+void fnShow                     (uint16_t unusedParamButMandatory) {}
 void fnLastX                    (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnJM                       (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
@@ -371,8 +372,8 @@ void fnInDefault                (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode               (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
-void graph                      (uint16_t unusedParamButMandatory) {}
-void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}           //^^
+void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
+void fnGraph                    (uint16_t unusedParamButMandatory) {}           //^^
 void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
 void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
 void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
@@ -1919,7 +1920,7 @@ const item_t indexOfItems[] = {
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
-/* 1531 */  { itemToBeCoded,               NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
+/* 1531 */  { fnShow,                      NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    CAT_FNCT, SLS_ENABLED  },
 /* 1534 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
@@ -2070,9 +2071,9 @@ const item_t indexOfItems[] = {
 /* 1676 */  { fnCvtmmhgPa,                 multiply,                    "mmHg" STD_RIGHT_ARROW "Pa",                   STD_RIGHT_ARROW " Pa",                         CAT_DUPL, SLS_ENABLED  },
 /* 1677 */  { fnCvtmmhgPa,                 divide,                      "Pa" STD_RIGHT_ARROW "mmHg",                   "mm.Hg",                                       CAT_DUPL, SLS_ENABLED  },
 
-/* 1678 */  { fnSetSetJM,                  JC_ERPN,                     "SET_ERPN",                                    "eRPN",                                        CAT_FNCT, SLS_ENABLED  },      //JM eRPN
-/* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "SET_HOME_TRIPLE",                             "HOME.3",                                      CAT_FNCT, SLS_ENABLED  },      //JM HOME.3
-/* 1680 */  { fnSetSetJM,                  JC_SHFT_4s,                  "SET_SHFT_4s",                                 "SH_4s",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHIFT CANCEL
+/* 1678 */  { fnSetSetJM,                  JC_ERPN,                     "SET_ERPN",                                    "eRPN",                                        CAT_FNCT, SLS_UNCHANGED},      //JM eRPN
+/* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "SET_HOME_TRIPLE",                             "HOME.3",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HOME.3
+/* 1680 */  { fnSetSetJM,                  JC_SHFT_4s,                  "SET_SHFT_4s",                                 "SH_4s",                                       CAT_FNCT, SLS_UNCHANGED},      //JM SHIFT CANCEL
 /* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_MENU, SLS_UNCHANGED},      //JM HOME
 /* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIGFIG",                                      "SIGFIG",                                      CAT_FNCT, SLS_UNCHANGED},      //JM SIGFIG
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       CAT_FNCT, SLS_UNCHANGED},      //JM ALPHA
@@ -2136,9 +2137,9 @@ const item_t indexOfItems[] = {
 /* 1739 */  { fnJM,                        3,                           "op_a",                                        "a",                                           CAT_FNCT, SLS_ENABLED  },      //JM Operator a
 /* 1740 */  { fnJM,                        4,                           "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 CAT_FNCT, SLS_ENABLED  },      //JM Operator a
 /* 1741 */  { fnJM,                        5,                           "op_j",                                        "j",                                           CAT_FNCT, SLS_ENABLED  },      //JM Operator a
-/* 1742 */  { fnSetSetJM,                  JC_BASE_HOME,                "SB_HOME",                                     "HOME",                                        CAT_FNCT, SLS_ENABLED  },      //JM eRPN
+/* 1742 */  { fnSetSetJM,                  JC_BASE_HOME,                "SB_HOME",                                     "HOME",                                        CAT_FNCT, SLS_UNCHANGED},      //JM eRPN
 /* 1743 */  { itemToBeCoded,               NOPARAM,                     "1743",                                        "1743",                                        CAT_FREE, SLS_UNCHANGED},      //JM
-/* 1744 */  { fnSetSetJM,                  JC_BASE_AHOME,               "SB_AHOME",                                    STD_alpha "HOME",                              CAT_FNCT, SLS_ENABLED  },      //JM eRPN
+/* 1744 */  { fnSetSetJM,                  JC_BASE_AHOME,               "SB_AHOME",                                    STD_alpha "HOME",                              CAT_FNCT, SLS_UNCHANGED},      //JM eRPN
 /* 1745 */  { itemToBeCoded,               NOPARAM,                     "1745",                                        "1745",                                        CAT_FREE, SLS_UNCHANGED},      //JM
 /* 1746 */  { fnShowJM,                    JC_BASE_HOME,                "B_HOME?",                                     "HOME?",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHOW
 /* 1747 */  { itemToBeCoded,               NOPARAM,                     "1747",                                        "1747",                                        CAT_FREE, SLS_UNCHANGED},      //JM
@@ -2157,14 +2158,14 @@ const item_t indexOfItems[] = {
 /* 1760 */  { fnJM,                        15,                          "STO 3I",                                      "STO" STD_SPACE_3_PER_EM "3I",                 CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1761 */  { fnJM,                        16,                          "RCL 3I",                                      "RCL" STD_SPACE_3_PER_EM "3I",                 CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1762 */  { fnJM,                        17,                          "V.I",                                         "V" STD_DIVIDE "I",                            CAT_FNCT, SLS_ENABLED  },      //JM EE
-/* 1763 */  { fnJM,                        18,                          "V/Z",                                         "I" STD_CROSS "Z",                             CAT_FNCT, SLS_ENABLED  },      //JM EE
+/* 1763 */  { fnJM,                        18,                          "I.Z",                                         "I" STD_CROSS "Z",                             CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1764 */  { fnJM,                        19,                          "V/Z",                                         "V" STD_DIVIDE "Z",                            CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1765 */  { fnJM,                        20,                          "X" STD_RIGHT_ARROW "BAL",                     "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",              CAT_FNCT, SLS_ENABLED  },      //JM EE
 /* 1766 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                     "COMPLEX",                                     CAT_FNCT, SLS_ENABLED  },      //JM Change CC to COMPLEX
 /* 1767 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                         "CC1",                                         CAT_FNCT, SLS_ENABLED  },      //JM Change CC to CC1
 /* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     ">>",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
 /* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "<<",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
-/* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_FNCT, SLS_ENABLED  },      //JM HOME.3T
+/* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_FNCT, SLS_UNCHANGED},      //JM HOME.3T
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 
 /* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASN",                                    "ASN",                                         CAT_MENU, SLS_UNCHANGED},      //JM USER
@@ -2314,18 +2315,26 @@ const item_t indexOfItems[] = {
 /* 1902 */  { fnUserJM,                    JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                            CAT_NONE, SLS_UNCHANGED},      //JM ASSIGN SEEK FUNCTION
 /* 1903 */  { itemToBeCoded,               NOPARAM      ,               "",                                            STD_SIGMA "+ ASN",                             CAT_NONE, SLS_UNCHANGED},      //JM USER NORMAL
 /* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM      ,               "",                                            "X to"STD_SIGMA "+",                           CAT_NONE, SLS_ENABLED  },      //JM USER NORMAL
-/* 1905 */  { fnInDefault,                 ID_43S       ,               "",                                            "i" STD_SPACE_3_PER_EM "LI/RL",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1906 */  { fnSetSetJM,                  JC_FG_LINE   ,               "",                                            "FG" STD_SPACE_3_PER_EM "LINE",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1907 */  { fnInDefault,                 ID_DP        ,               "",                                            "i" STD_SPACE_3_PER_EM "REAL",                 CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1905 */  { fnInDefault,                 ID_43S       ,               "i" STD_SPACE_3_PER_EM "LI/RL",                "i" STD_SPACE_3_PER_EM "LI/RL",                CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1906 */  { fnSetSetJM,                  JC_FG_LINE   ,               "f/g LINE",                                    "FG" STD_SPACE_3_PER_EM "LINE",                CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1907 */  { fnInDefault,                 ID_DP        ,               "i" STD_SPACE_3_PER_EM "REAL",                 "i" STD_SPACE_3_PER_EM "REAL",                 CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "",                                            "i" STD_SPACE_3_PER_EM "Dflt?",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1909 */  { fnSetSetJM,                  JC_FG_DOTS   ,               "",                                            "FG" STD_SPACE_3_PER_EM "DOTS",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1910 */  { fnInDefault,                 ID_CPXDP     ,               "",                                            "i" STD_SPACE_3_PER_EM "CPX",                  CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "",                                            "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1912 */  { fnInDefault,                 ID_SI        ,               "",                                            "i" STD_SPACE_3_PER_EM "SI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1913 */  { fnInDefault,                 ID_LI        ,               "",                                            "i" STD_SPACE_3_PER_EM "LI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1914 */  { graph,                       NOPARAM      ,               "GRAPH",                                       "GRAPH",                                       CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
+/* 1909 */  { fnSetSetJM,                  JC_FG_DOTS   ,               "f/g DOTS",                                    "FG" STD_SPACE_3_PER_EM "DOTS",                CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1910 */  { fnInDefault,                 ID_CPXDP     ,               "i" STD_SPACE_3_PER_EM "CPX",                  "i" STD_SPACE_3_PER_EM "CPX",                  CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "g TAPTAP",                                    "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1912 */  { fnInDefault,                 ID_SI        ,               "i" STD_SPACE_3_PER_EM "SI",                   "i" STD_SPACE_3_PER_EM "SI",                   CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1913 */  { fnInDefault,                 ID_LI        ,               "i" STD_SPACE_3_PER_EM "LI",                   "i" STD_SPACE_3_PER_EM "LI",                   CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1914 */  { fnGraph,                     NOPARAM      ,               "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 875 Small latin letters
+/* 1917 */  { itemToBeCoded,               NOPARAM,                     "GRAPH",                                       "GRAPH",                                       CAT_MENU, SLS_UNCHANGED},      //JM GRAPH
+/* 1918 */  { fnJM,                        21,                          "GRF_X0",                                      "Xmin",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1919 */  { fnJM,                        22,                          "GRF_X1",                                      "Xmax",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1920 */  { fnJM,                        23,                          "GRF_Y0",                                      "Ymin",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1921 */  { fnJM,                        24,                          "GRF_X1",                                      "Ymax",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1922 */  { fnJM,                        25,                          "GRF_DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1923 */  { fnJM,                        26,                          "GRF_DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1924 */  { fnJM,                        27,                          "GRF_SET",                                     "LIMITS",                                      CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
 
-/* 1917 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1925 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

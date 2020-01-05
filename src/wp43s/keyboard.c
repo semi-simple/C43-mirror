@@ -179,7 +179,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
         }
 
         if(lastErrorCode == 0) {
-          temporaryInformation = TI_NO_INFO;
+          resetTemporaryInformation();
           runFunction(func % 10000);
         }
       }
@@ -850,11 +850,7 @@ void btnPressed(void *notUsed, void *data) {
   if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
     FN_counter = JM_FN_TIMER;
-    if(temporaryInformation != TI_NO_INFO) {                                                                                  //JM shifts
-      temporaryInformation = TI_NO_INFO;                                                                                      //JM shifts
-      refreshRegisterLine(REGISTER_X);                                                                                        //JM shifts
-      refreshRegisterLine(REGISTER_Y);                                                                                        //JM shifts
-    }                                                                                                                         //JM shifts
+    resetTemporaryInformation();                                                                                              //JM shifts
                                                                                                                               //JM shifts
     if(lastErrorCode != 0) {                                                                                                  //JM shifts
       lastErrorCode = 0;                                                                                                      //JM shifts
@@ -916,11 +912,7 @@ void btnPressed(void *notUsed, void *data) {
   // Shift f pressed
   //JM no shifted menu on g-shift-key as in WP43S
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
-    if(temporaryInformation != TI_NO_INFO) {
-      temporaryInformation = TI_NO_INFO;
-      refreshRegisterLine(REGISTER_X);
-      refreshRegisterLine(REGISTER_Y);
-    }
+    resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
@@ -941,11 +933,7 @@ void btnPressed(void *notUsed, void *data) {
   // Shift g pressed
   //JM no shifted menu on f-shift-key as in WP43S
   else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
-    if(temporaryInformation != TI_NO_INFO) {
-      temporaryInformation = TI_NO_INFO;
-      refreshRegisterLine(REGISTER_X);
-      refreshRegisterLine(REGISTER_Y);
-    }
+    resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
@@ -1006,11 +994,7 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-    if(temporaryInformation != TI_NO_INFO && temporaryInformation != TI_ARE_YOU_SURE) {
-      temporaryInformation = TI_NO_INFO;
-      refreshRegisterLine(REGISTER_X);
-      refreshRegisterLine(REGISTER_Y);
-    }
+    resetTemporaryInformation();
 
     if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
       if(calcMode == CM_AIM) {

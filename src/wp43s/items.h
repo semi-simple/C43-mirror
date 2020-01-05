@@ -1968,9 +1968,17 @@
 #define ITM_GRAPH                     1914  //JM GRAPHING
 #define MNU_A_Z                       1915  //  34
 #define MNU_a_z                       1916  //  875
+#define MNU_GRAPH                     1917  //JM GRAPH
+#define ITM_GRF_X0                    1918  //JM GRAPH
+#define ITM_GRF_X1                    1919  //JM GRAPH
+#define ITM_GRF_Y0                    1920  //JM GRAPH
+#define ITM_GRF_Y1                    1921  //JM GRAPH
+#define ITM_GRF_DX                    1922  //JM GRAPH
+#define ITM_GRF_DY                    1923  //JM GRAPH
+#define ITM_GRF_HLP                   1924  //JM GRAPH
 
 
-#define LAST_ITEM                     1917  //JM
+#define LAST_ITEM                     1925  //JM
 
 #define CHR_PROD_SIGN                 9999
 

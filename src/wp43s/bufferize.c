@@ -218,9 +218,6 @@ void addItemToBuffer(uint16_t item) {
       else if(tamFunction == ITM_toINT && item == ITM_HEX) {
         tamTransitionSystem(TT_BASE16);
       }
-      else if(tamFunction == ITM_toINT && item == ITM_ST_B) {
-        tamTransitionSystem(TT_BASE16);
-      }
       else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_K) { // Lettered register
         tamLetteredRegister = indexOfItems[item].param;
         tamTransitionSystem(TT_LETTER);

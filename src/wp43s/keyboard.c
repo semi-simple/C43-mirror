@@ -1496,7 +1496,7 @@ void btnPressed(void *notUsed, void *data) {
       if(item < 0) {
         showSoftmenu(NULL, item, false);
       }
-      else if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
+      else if(item == ITM_EXPONENT || item == CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
         addItemToNimBuffer(item);
       }
       else {

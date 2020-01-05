@@ -523,7 +523,7 @@ const int16_t menu_HOME[]        = {
                                                                                                                                                                                                                   //JM HOME
 /* Bottom Prim */  /* sample */      ITM_PROFRC,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLSTK,                          //JM HOME
 /* Middle f    */  /* 3 */           ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
-/* Top    g    */  /* 2 */           ITM_IMPFRC,                    ITM_toINT,                  ITM_DMS,                  KEY_dotD,              ITM_toHMS,                   ITM_LBL     /*LAST ONE NO COMMA*/   //JM HOME
+/* Top    g    */  /* 2 */           ITM_IMPFRC,                    KEY_HASH/*ITM_toINT*/,      ITM_DMS,                  KEY_dotD,              ITM_toHMS,                   ITM_LBL     /*LAST ONE NO COMMA*/   //JM HOME
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
                                      };                                                                                                                                                                           //JM HOME
 

@@ -426,9 +426,10 @@ const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,  
                                      ITM_MULTCR,                    ITM_MULTDOT,                ITM_NULL,                 ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
                                      ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
-                                     ITM_CLK12,                     ITM_CLK24,                  ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_RDXPER,                    ITM_RDXCOM,                 ITM_GAP,                  ITM_DMY,               ITM_YMD,                     ITM_MDY,
 
+                                     ITM_NULL,                      ITM_NULL,                   ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8,
                                      ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
 

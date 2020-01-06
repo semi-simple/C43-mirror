@@ -42,6 +42,81 @@ uint32_t boundedRand(uint32_t s) { // random integer in [0 , s)
 
 
 
+void fnRandomI(uint16_t unusedParamButMandatory) {
+  longInteger_t regX, regY, mini, maxi;
+  uint32_t maxRand;
+  int32_t cmp;
+
+  saveStack();
+
+  if(getRegisterDataType(REGISTER_X) != dtLongInteger) {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot RANI# with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
+      showInfoDialog("In function fnRandomI:", errorMessage, NULL, NULL);
+    #endif
+    return;
+  }
+
+  if(getRegisterDataType(REGISTER_Y) != dtLongInteger) {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot RANI# with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
+      showInfoDialog("In function fnRandomI:", errorMessage, NULL, NULL);
+    #endif
+    return;
+  }
+
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, regX);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, regY);
+
+  cmp = longIntegerCompare(regX, regY);
+  if(cmp == 0) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnRandomI:", "cannot RANI# with X = Y", NULL, NULL);
+    #endif
+    return;
+  }
+
+  longIntegerInit(mini);
+  longIntegerInit(maxi);
+  if(cmp < 0) {
+    longIntegerToLongInteger(regX, mini);
+    longIntegerToLongInteger(regY, maxi);
+  }
+  else {
+    longIntegerToLongInteger(regX, maxi);
+    longIntegerToLongInteger(regY, mini);
+  }
+
+  longIntegerSubtract(maxi, mini, regX);
+  if(longIntegerCompareUInt(regX, 0xFFFFFFFF) >= 0) { // 2^32 - 1
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function fnRandomI:", "cannot RANI# with |X - Y| >= 2^32", NULL, NULL);
+    #endif
+    return;
+  }
+
+
+  maxRand = longIntegerToUInt(regX) + 1;
+  longIntegerAddUInt(mini, boundedRand(maxRand), maxi);
+
+  stackLiftEnabled = true;
+  liftStack();
+  convertLongIntegerToLongIntegerRegister(maxi, REGISTER_X);
+
+  longIntegerFree(regX);
+  longIntegerFree(regY);
+  longIntegerFree(maxi);
+  longIntegerFree(mini);
+
+  refreshStack();
+}
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // Method for pseudo random number generation: http://www.pcg-random.org/
 

@@ -204,6 +204,7 @@ void fnMax                      (uint16_t unusedParamButMandatory) {}
 void fnStatSum                  (uint16_t unusedParamButMandatory) {}
 void fnIsPrime                  (uint16_t unusedParamButMandatory) {}
 void fnRandom                   (uint16_t unusedParamButMandatory) {}
+void fnRandomI                  (uint16_t unusedParamButMandatory) {}
 void fnImaginaryPart            (uint16_t unusedParamButMandatory) {}
 void fnRecall                   (uint16_t unusedParamButMandatory) {}
 void fnRecallConfig             (uint16_t unusedParamButMandatory) {}

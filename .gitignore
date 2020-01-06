@@ -119,4 +119,3 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/osx,linux,windows
 DM42 binary/Key_stickers.xcf
 DM42 binary/WP43S_overlay.xcf
-fonts/WP43S_NumericFont.ttf

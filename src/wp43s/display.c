@@ -1767,7 +1767,7 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 
 void fnShow(uint16_t unusedParamButMandatory) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
-  int16_t source, dest, last, d;
+  int16_t source, dest, last, d, i;
   real34_t real34;
 
   displayFormat = DF_ALL;
@@ -1809,6 +1809,11 @@ void fnShow(uint16_t unusedParamButMandatory) {
     case dtComplex34:
       // Real part
       real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34);
+      for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
+        if(tmpStr3000[i] == 0x08) {
+          tmpStr3000[i] = 0x05;
+        }
+      }
 
       // +/- i×
       real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
@@ -1819,6 +1824,11 @@ void fnShow(uint16_t unusedParamButMandatory) {
       // Imaginary part
       real34SetPositiveSign(&real34);
       real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34);
+      for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
+        if(tmpStr3000[600 + i] == 0x08) {
+          tmpStr3000[600 + i] = 0x05;
+        }
+      }
 
       if(stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
         strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299);

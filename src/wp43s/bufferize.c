@@ -858,37 +858,25 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    case ITM_ENTER :
-      sprintf(errorMessage, "In bufferize.c, look at NEWERPN case ITM_ENTER");
-      displayBugScreen(errorMessage);
-/*
-//JM NEWERPN This section is not running at the moment and must be fixed
-//once the FLAG_CPXRES is working again.
-printf("ITM_ENTER from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
-      done = true;
-      closeNim();
-      if(calcMode != CM_NIM && lastErrorCode == 0) {
-        if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
-          fnSetFlag(FLAG_CPXRES);
-    
-          fnRefreshRadioState(RB_BCR, true);                                    //dr
-        }
+    // Reported bt Jaco Mostert January 3th 2020: following lines are useless
+    //case ITM_ENTER :
+    //  done = true;
+    //  closeNim();
+    //  if(calcMode != CM_NIM && lastErrorCode == 0) {
+    //    if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
+    //      fnSetFlag(FLAG_CPXRES);
+    //    }
+    //
+    //    STACK_LIFT_ENABLE;
+    //    liftStack();
+    //    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+    //    refreshStack();
+    //    STACK_LIFT_DISABLE;
+    //    return;
+    //  }
+    //  break;
 
-//JM NEWERPN This section is not running at the moment and must be fixed
-//once the FLAG_CPXRES is working again.
-printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification, experiment
-        STACK_LIFT_ENABLE;
-        if(eRPN == false) {                                         //JM eRPN modification, experiment
-        liftStack();
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-        refreshStack();
-        STACK_LIFT_DISABLE;
-        }                                                           //JM eRPN modification
-        return;
-      } */
-      break;
-
-    case ITM_LN :
+    case ITM_LOG10 :                                                                //JM layout different
       if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // D for decimal base
         done = true;
 
@@ -901,6 +889,14 @@ printf("... from addItemToNimBuffer calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d
         done = true;
 
         strcat(nimBuffer, "16");
+      }
+      break;
+
+    case ITM_1ONX :                                                                 //JM layout different Added B for binary
+      if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // Binary. Only works in direct NIM
+        done = true;
+
+        strcat(nimBuffer, "2");
       }
       break;
 
@@ -1795,11 +1791,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
 void closeNim(void) {
   if(nimNumberPart == NP_INT_10) {                //JM Input default type vv
     switch (Input_Default) {
-    case ID_43S:
+    case ID_43S:                                  //   Do nothing, this is default LI/DP
+    case ID_LI:                                   //   Do nothing, because default is LI/DP 
       break;
-    case ID_DP:
-    case ID_CPXDP:
+    case ID_DP:                                   //   Do Real default for DP
+    case ID_CPXDP:                                //                       CPX
       nimNumberPart = NP_REAL_FLOAT_PART;
+      break;
+    case ID_SI:                                   //   lastIntegerBase is set in fnInDefault; I do not set it here, as the user can change it of course.
       break;
     }
   }                                               //JM ^^

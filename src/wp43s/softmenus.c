@@ -60,13 +60,15 @@ const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,    
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
 const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,                     ITM_MAGNITUDE,            ITM_ANGLE,             ITM_CONJ,                    ITM_REexIM,                         //JM re-arranged menu. CPX menu
-                                     ITM_DOT,                       ITM_CROSS,                  ITM_SIGN,                 ITM_UNITV,             ITM_NULL,                    ITM_NULL,                           //JM re-arranged menu. CPX menu
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_CXtoRE,               ITM_REtoCX,            ITM_RECT,                    ITM_POLAR,                          //JM re-arranged menu
-                                     KEY_COMPLEX,                   KEY_CC,                     KEY_CC1,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM CPX
+                                     KEY_COMPLEX,                   KEY_CC,                     ITM_DOT,                  ITM_CROSS,             ITM_SIGN,                    ITM_UNITV,                                          //JM re-arranged menu. CPX menu
+                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_CXtoRE,               ITM_REtoCX,            ITM_RECT,                    ITM_POLAR                     };    //JM re-arranged menu
+                        /*KEY_CC1 removed this one*/
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
-                                     ITM_RECT,                      ITM_POLAR,                  ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                            //JM added SIGFIG & UNIT
-                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_GAP,               ITM_DSTACK,                  -MNU_CFG                      };    //JM added CFG
+                                     ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_NULL,                    -MNU_CFG,                           //JM added CFG
+                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                          //JM added SIGFIG & UNIT
+
+                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM TEMPORARY UNTIL A HOME IS FOUND
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -125,12 +127,14 @@ const int16_t menu_M_EDIT[]      = { CHR_LEFT_ARROW,                CHR_UP_ARROW
 const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,              CHR_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_NULL,
-                                     ITM_RECT,                      ITM_POLAR,                  ITM_RM,                   ITM_ERPN,              ITM_SETSIG,                  ITM_DENMAX,                         //JM modifoed
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG                            //JM
+const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     -MNU_PFN,
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG,                            //JM
+                                     ITM_ERPN,                      ITM_SETSIG,                 ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                            //JM modifoed
+
+
 //JM
-/*                                   ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_SETSIG,                  ITM_DENMAX,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_RM,                   ITM_NULL,              ITM_NULL,                    ITM_NULL,
+/*                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,
+                                     ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,             ITM_REALRES,                 ITM_CPXRES,
                                      ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,            ITM_SSIZE4,                  ITM_SSIZE8,
                                      ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 */
@@ -415,13 +419,13 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VARS,  
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 
-const int16_t menu_CFG[]         = { ITM_RECT,                      ITM_POLAR,                  ITM_RDXPER,               ITM_RDXCOM,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
+const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_QUIET,                          //JM sequence change
-                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_NULL,                 ITM_NULL,              ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
+                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_DENMAX,            ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
                                      ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
-                                     ITM_CLK12,                     ITM_CLK24,                  ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_RDXPER,                    ITM_RDXCOM,                 ITM_GAP,                  ITM_DMY,               ITM_YMD,                     ITM_MDY,
 
 #if !defined(DMCP_BUILD) && defined (INLINE_TEST)                               //vv dr
                                      ITM_BASE_HOME,                 ITM_BASE_AHOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
@@ -525,7 +529,7 @@ const int16_t menu_HOME[]        = {
                                                                                                                                                                                                                   //JM HOME
 /* Bottom Prim */  /* sample */      ITM_PROFRC,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLSTK,                          //JM HOME
 /* Middle f    */  /* 3 */           ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
-/* Top    g    */  /* 2 */           ITM_IMPFRC,                    ITM_toINT,                  ITM_DMS,                  KEY_dotD,              ITM_toHMS,                   ITM_LBL     /*LAST ONE NO COMMA*/   //JM HOME
+/* Top    g    */  /* 2 */           ITM_IMPFRC,                    KEY_HASH/*ITM_toINT*/,      ITM_DMS,                  KEY_dotD,              ITM_toHMS,                   ITM_LBL     /*LAST ONE NO COMMA*/   //JM HOME
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
                                      };                                                                                                                                                                           //JM HOME
 
@@ -1094,7 +1098,65 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
  * \param[in] bottomLine bool_t     Draw a bottom line
  * \return void
  ***********************************************/
-void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb) {
+void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {
+char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
+char *figlabel() {
+              char tmp1[12];
+              tmp[0]=0;
+              strcat(tmp,label);
+
+/*************
+              if(tmp[0]==71 && tmp[1]==65 && tmp[2]==80 && tmp[3]==0) { //GAP
+                  strcat(tmp,STD_SPACE_HAIR);
+                  snprintf(tmp1, 12, "%d", groupingGap);
+                  strcat(tmp,tmp1);
+              } 
+              else 
+              if(displayFormat==DF_FIX && SigFigMode == 0 && tmp[0]==70 && tmp[1]==73 && tmp[2]==88 && tmp[3]==0) { //FIX
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }
+              else
+              if(displayFormat==DF_SCI && tmp[0]==83 && tmp[1]==67 && tmp[2]==73 && tmp[3]==0) { //SCI
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_ENG && UNITDisplay == false && tmp[0]==69 && tmp[1]==78 && tmp[2]==71 && tmp[3]==0) { //ENG
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_ALL && tmp[0]==65 && tmp[1]==76 && tmp[2]==76 && tmp[3]==0) { //ALL
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_FIX && SigFigMode != 0 && tmp[0]==83 && tmp[1]==73 && tmp[2]==71 && tmp[3]==0) { //SIG
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_ENG && UNITDisplay == true && tmp[0]==85 && tmp[1]==78 && tmp[2]==73 && tmp[3]==84 && tmp[4]==0) { //UNT
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }
+*************/
+  if(showValue > 0) {
+    strcat(tmp,STD_SPACE_3_PER_EM);
+    snprintf(tmp1, 12, "%d", showValue);
+    strcat(tmp,tmp1);
+  }
+
+  return tmp;                                                                  //JM ^^
+}
+
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
 
@@ -1182,19 +1244,19 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
-  w = stringWidth(label, &standardFont, false, false);
+  w = stringWidth(figlabel(label), &standardFont, false, false);
   if((showCb >= 0) || (w >= 50)) {
     compressWidth = 1;         //JM compressWidth
-    w = stringWidth(label, &standardFont, false, false);
+    w = stringWidth(figlabel(label), &standardFont, false, false);
     compressWidth = 0;         //JM compressWidth
     if(showCb >= 0) { w = w + 8; }
     compressString = 1;       //JM compressString
-    showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+    showString(figlabel(label), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
     compressString = 0;       //JM compressString
   }
   else {
 //  w = stringWidth(label, &standardFont, false, false);
-    showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+     showString(figlabel(label), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
   }
 
 //  w = stringWidth(label, &standardFont, false, false);
@@ -1286,6 +1348,7 @@ void showSoftmenuCurrentPart(void) {
           item = softkeyItem[x];
         }
         int8_t showCb = fnCbIsSet(item%10000);                                  //dr
+        int16_t showValue = fnItemShowValue(item%10000);                        //dr
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {
@@ -1307,11 +1370,11 @@ void showSoftmenuCurrentPart(void) {
             else {
 #ifdef INLINE_TEST                                                              //vv dr
               if(softmenu[menu].menuId == -MNU_INL_TST) {
-                showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, -1);
+                showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, -1, -1);
               }
               else {
 #endif                                                                          //^^
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
 #ifdef INLINE_TEST                                                              //vv dr
               }
 #endif                                                                          //^^
@@ -1319,17 +1382,17 @@ void showSoftmenuCurrentPart(void) {
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb);
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb, showValue);
         }
         else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
           else {
-            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
+            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
         }
       }

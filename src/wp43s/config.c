@@ -616,8 +616,10 @@ void fnReset(uint16_t confirmation) {
     // RNG initialisation
     pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
 
-    // initialize the RadaioButton/Checkbox items
-    fnRebuildRadioState();                                                      //dr build RadioButton, CheckBox
+    lastIntegerBase = 0;
+
+    // initialize the RadioButton/Checkbox items
+    fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
 
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {
@@ -706,6 +708,42 @@ int8_t fnCbIsSet(int16_t item) {
     if(indexOfRadioCbItems[i].itemNr == itemNr) {
       result = indexOfRadioCbItems[i].state;
     }
+  }
+
+  return result;
+}
+
+
+
+int16_t fnItemShowValue(int16_t item) {
+  int16_t result = -1;
+  uint16_t itemNr = max(item, -item);
+
+  switch (itemNr)
+  {
+  case ITM_DSTACK:  //  132
+    result = displayStack;
+    break;
+
+  case ITM_GAP:     //  215
+    result = groupingGap;
+    break;
+
+  case ITM_ALL:     //   20
+  case ITM_ENG:     //  145
+  case ITM_FIX:     //  185
+  case ITM_SCI:     //  545
+  case ITM_SIGFIG:  // 1682
+  case ITM_UNIT:    // 1693
+    result = displayFormatDigits;
+    break;
+
+  case ITM_WSIZE:   //  664
+    result = shortIntegerWordSize;
+    break;
+
+  default:
+    break;
   }
 
   return result;

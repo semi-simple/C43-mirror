@@ -626,13 +626,16 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
         else if(Input_Default == ID_SI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
-          convertLongIntegerToShortIntegerRegister(lgInt, 10, r);
-          setRegisterShortIntegerBase(r, 10);  
+          uint16_t val =0;
+          uIntToLongInteger(val,lgInt);
+          convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
         else if(Input_Default == ID_LI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
+          uint16_t val =0;
+          uIntToLongInteger(val,lgInt);
           convertLongIntegerToLongIntegerRegister(lgInt, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
@@ -661,13 +664,16 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
         else if(Input_Default == ID_SI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
-          convertLongIntegerToShortIntegerRegister(lgInt, 10, r);
-          setRegisterShortIntegerBase(r, 10);  
+          uint16_t val =0;
+          uIntToLongInteger(val,lgInt);
+          convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
         else if(Input_Default == ID_LI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
+          uint16_t val =0;
+          uIntToLongInteger(val,lgInt);
           convertLongIntegerToLongIntegerRegister(lgInt, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
@@ -762,8 +768,9 @@ void allocateNamedVariable(const char *variableName) {
     setRegisterDataPointer(regist, allocWp43s(SHORT_INTEGER_SIZE));
     longInteger_t lgInt;
     longIntegerInit(lgInt);
-    convertLongIntegerToShortIntegerRegister(lgInt, 10, regist);
-    setRegisterShortIntegerBase(regist, 10);  
+    uint16_t val =0;
+    uIntToLongInteger(val,lgInt);
+    convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, regist);
     longIntegerFree(lgInt);
   }                                                         //JM defaults ^^
   else if(Input_Default == ID_LI) {                         //JM defaults vv
@@ -775,6 +782,8 @@ void allocateNamedVariable(const char *variableName) {
     setRegisterDataPointer(regist, allocWp43s(SHORT_INTEGER_SIZE));
     longInteger_t lgInt;
     longIntegerInit(lgInt);
+    uint16_t val =0;
+    uIntToLongInteger(val,lgInt);
     convertLongIntegerToLongIntegerRegister(lgInt, regist);
     longIntegerFree(lgInt);
   }                                                         //JM defaults ^^
@@ -941,14 +950,14 @@ uint32_t getRegisterFullSize(calcRegister_t regist) {
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
   if(Input_Default == ID_43S || Input_Default == ID_DP) {                       //JM defaults JMZERO
-  if(getRegisterDataType(regist) == dtReal34) {
-    real34Zero(REGISTER_REAL34_DATA(regist));
-    setRegisterTag(regist, AM_NONE);
-  }
-  else{
-    reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
-    real34Zero(REGISTER_REAL34_DATA(regist));
-  }
+    if(getRegisterDataType(regist) == dtReal34) {
+      real34Zero(REGISTER_REAL34_DATA(regist));
+      setRegisterTag(regist, AM_NONE);
+    }
+    else{
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Zero(REGISTER_REAL34_DATA(regist));
+    }
   }                                                                             //JM defaults ^^
   else if(Input_Default == ID_CPXDP) {                                          //JM defaults vv
     if(getRegisterDataType(regist) == dtComplex34) {
@@ -966,14 +975,17 @@ void clearRegister(calcRegister_t regist) {
     //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
     longInteger_t lgInt;
     longIntegerInit(lgInt);
-    convertLongIntegerToShortIntegerRegister(lgInt, 10, regist);
-    setRegisterShortIntegerBase(regist, 10);  
+    uint16_t val =0;
+    uIntToLongInteger(val,lgInt);
+    convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, regist);
     longIntegerFree(lgInt);
   }                                                                             //JM defaults ^^
   else if(Input_Default == ID_LI) {                                             //JM defaults vv
     //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
     longInteger_t lgInt;
     longIntegerInit(lgInt);
+    uint16_t val =0;
+    uIntToLongInteger(val,lgInt);
     convertLongIntegerToLongIntegerRegister(lgInt, regist);
     longIntegerFree(lgInt);
   }                                                                             //JM defaults ^^

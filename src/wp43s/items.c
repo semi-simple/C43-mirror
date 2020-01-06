@@ -1076,7 +1076,7 @@ const item_t indexOfItems[] = {
 /*  691 */  { itemToBeCoded,               NOPARAM,                     "x" STD_LESS_EQUAL " ?",                       "x" STD_LESS_EQUAL " ?",                       CAT_FNCT, SLS_UNCHANGED},
 /*  692 */  { itemToBeCoded,               NOPARAM,                     "x" STD_GREATER_EQUAL " ?",                    "x" STD_GREATER_EQUAL " ?",                    CAT_FNCT, SLS_UNCHANGED},
 /*  693 */  { itemToBeCoded,               NOPARAM,                     "x> ?",                                        "x> ?",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  694 */  { itemToBeCoded,               NOPARAM,                     STD_xTH_ROOT STD_y_UNDER_ROOT,                 STD_xTH_ROOT STD_y_UNDER_ROOT,                 CAT_FNCT, SLS_ENABLED  },
+/*  694 */  { fnJM,                        1,                           STD_xTH_ROOT STD_y_UNDER_ROOT,                 STD_xTH_ROOT STD_y_UNDER_ROOT,                 CAT_FNCT, SLS_ENABLED  },
 /*  695 */  { fnCvtYardM,                  multiply,                    "yd." STD_RIGHT_ARROW "m",                     "yd." STD_RIGHT_ARROW "m",                     CAT_FNCT, SLS_ENABLED  },
 /*  696 */  { itemToBeCoded,               NOPARAM,                     "YEAR",                                        "YEAR",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  697 */  { fnCvtYearS,                  multiply,                    "year" STD_RIGHT_ARROW "s",                    "year" STD_RIGHT_ARROW "s",                    CAT_FNCT, SLS_ENABLED  },
@@ -2075,7 +2075,7 @@ const item_t indexOfItems[] = {
 /* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "SET_HOME_TRIPLE",                             "HOME.3",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HOME.3
 /* 1680 */  { fnSetSetJM,                  JC_SHFT_4s,                  "SET_SHFT_4s",                                 "SH_4s",                                       CAT_FNCT, SLS_UNCHANGED},      //JM SHIFT CANCEL
 /* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_MENU, SLS_UNCHANGED},      //JM HOME
-/* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIGFIG",                                      "SIGFIG",                                      CAT_FNCT, SLS_UNCHANGED},      //JM SIGFIG
+/* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SET SIGFIG",                                  "SIG",                                         CAT_FNCT, SLS_UNCHANGED},      //JM SIGFIG
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       CAT_FNCT, SLS_UNCHANGED},      //JM ALPHA
 /* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                        CAT_MENU, SLS_UNCHANGED},      //JM BASE
 /* 1685 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                         CAT_FNCT, SLS_UNCHANGED},      //JM HEX
@@ -2086,7 +2086,7 @@ const item_t indexOfItems[] = {
 /* 1690 */  { fnSetWordSize,               16,                          "16-BIT",                                      "16-BIT",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1691 */  { fnSetWordSize,               32,                          "32-BIT",                                      "32-BIT",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1692 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HEX
-/* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SETUNIT",                                     "UNITS",                                       CAT_FNCT, SLS_UNCHANGED},      //JM UNIT
+/* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SET UNIT",                                    "UNIT",                                        CAT_FNCT, SLS_UNCHANGED},      //JM UNIT
 /* 1694 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHOW
 /* 1695 */  { fnSetSetJM,                  JC_BCR,                      "CPXRES",                                      "CPXRES",                                      CAT_FNCT, SLS_UNCHANGED},      //dr
 /* 1696 */  { fnSetSetJM,                  JC_BLZ,                      "LEAD0",                                       "LEAD0",                                       CAT_FNCT, SLS_UNCHANGED},      //dr

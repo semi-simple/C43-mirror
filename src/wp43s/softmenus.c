@@ -60,13 +60,13 @@ const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,    
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
 const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,                     ITM_MAGNITUDE,            ITM_ANGLE,             ITM_CONJ,                    ITM_REexIM,                         //JM re-arranged menu. CPX menu
-                                     ITM_DOT,                       ITM_CROSS,                  ITM_SIGN,                 ITM_UNITV,             ITM_NULL,                    ITM_NULL,                           //JM re-arranged menu. CPX menu
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_CXtoRE,               ITM_REtoCX,            ITM_RECT,                    ITM_POLAR,                          //JM re-arranged menu
-                                     KEY_COMPLEX,                   KEY_CC,                     KEY_CC1,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM CPX
+                                     KEY_COMPLEX,                   KEY_CC,                     ITM_DOT,                  ITM_CROSS,             ITM_SIGN,                    ITM_UNITV,                                          //JM re-arranged menu. CPX menu
+                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_CXtoRE,               ITM_REtoCX,            ITM_RECT,                    ITM_POLAR                     };    //JM re-arranged menu
+                        /*KEY_CC1 removed this one*/
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
-                                     ITM_RECT,                      ITM_POLAR,                  ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                            //JM added SIGFIG & UNIT
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_GAP,               ITM_DSTACK,                  -MNU_CFG,                           //JM added CFG
+                                     ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_NULL,                    -MNU_CFG,                           //JM added CFG
+                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,             //JM added SIGFIG & UNIT
 
                                      ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM TEMPORARY UNTIL A HOME IS FOUND
 
@@ -128,8 +128,8 @@ const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
 const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     -MNU_PFN,
-                                     ITM_RECT,                      ITM_POLAR,                  ITM_NULL,                   ITM_ERPN,              ITM_SETSIG,                ITM_NULL,                         //JM modifoed
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG                            //JM
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG,                            //JM
+                                     ITM_ERPN,                      ITM_SETSIG,                 ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                            //JM modifoed
 
 
 //JM
@@ -1079,6 +1079,7 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 //^^
 
 
+
 /********************************************//**
  * \brief Displays one softkey
  *
@@ -1092,6 +1093,56 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
  * \return void
  ***********************************************/
 void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb) {
+char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
+char *figlabel() {
+              char tmp1[12];
+              tmp[0]=0;
+              strcat(tmp,label);
+
+              if(tmp[0]==71 && tmp[1]==65 && tmp[2]==80 && tmp[3]==0) { //GAP
+                  strcat(tmp,STD_SPACE_HAIR);
+                  snprintf(tmp1, 12, "%d", groupingGap);
+                  strcat(tmp,tmp1);
+              } 
+              else 
+              if(displayFormat==DF_FIX && SigFigMode == 0 && tmp[0]==70 && tmp[1]==73 && tmp[2]==88 && tmp[3]==0) { //FIX
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }
+              else
+              if(displayFormat==DF_SCI && tmp[0]==83 && tmp[1]==67 && tmp[2]==73 && tmp[3]==0) { //SCI
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_ENG && UNITDisplay == false && tmp[0]==69 && tmp[1]==78 && tmp[2]==71 && tmp[3]==0) { //ENG
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_ALL && tmp[0]==65 && tmp[1]==76 && tmp[2]==76 && tmp[3]==0) { //ALL
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_FIX && SigFigMode != 0 && tmp[0]==83 && tmp[1]==73 && tmp[2]==71 && tmp[3]==0) { //SIG
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+              else
+              if(displayFormat==DF_ENG && UNITDisplay == true && tmp[0]==85 && tmp[1]==78 && tmp[2]==73 && tmp[3]==84 && tmp[4]==0) { //UNT
+                  strcat(tmp,STD_SPACE_3_PER_EM);
+                  snprintf(tmp1, 12, "%d", displayFormatDigits);
+                  strcat(tmp,tmp1);
+              }      
+return tmp;                                                                  //JM ^^
+}
+
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
 
@@ -1179,30 +1230,19 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
-  w = stringWidth(label, &standardFont, false, false);
+  w = stringWidth(figlabel(label), &standardFont, false, false);
   if((showCb >= 0) || (w >= 50)) {
     compressWidth = 1;         //JM compressWidth
-    w = stringWidth(label, &standardFont, false, false);
+    w = stringWidth(figlabel(label), &standardFont, false, false);
     compressWidth = 0;         //JM compressWidth
     if(showCb >= 0) { w = w + 8; }
     compressString = 1;       //JM compressString
-    showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+    showString(figlabel(label), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
     compressString = 0;       //JM compressString
   }
   else {
 //  w = stringWidth(label, &standardFont, false, false);
- 
-              char tmp[30];                                               //JM vv WAIT FOR GAP, and add the actual GAP value to the sodtkey
-              char tmp1[12];
-              tmp[0]=0;
-              strcat(tmp,label);
-              if(tmp[0]==71 && tmp[1]==65 && tmp[2]==80 && tmp[3]==0) {
-                  strcat(tmp,STD_SPACE_HAIR);
-                  itoa(groupingGap, tmp1, 10);
-                  strcat(tmp,tmp1);
-              }                                                          //JM ^^
-
-    showString(tmp, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+     showString(figlabel(label), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
   }
 
 //  w = stringWidth(label, &standardFont, false, false);

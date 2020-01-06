@@ -98,7 +98,7 @@ int16_t temp;
 }
 
 
-void graph_draw(uint8_t nbr, float x_min, float x_max, float graph_ymin, float y_max, float tick_x, float tick_y, uint16_t xzero, uint8_t yzero) {
+void graph_draw(uint8_t nbr, float x_min, float x_max, float y_min, float y_max, float tick_x, float tick_y, uint16_t xzero, uint8_t yzero) {
   #ifndef TESTSUITE_BUILD
   uint16_t cnt;
   real_t tmpy;
@@ -110,8 +110,8 @@ void graph_draw(uint8_t nbr, float x_min, float x_max, float graph_ymin, float y
   uint16_t x1;  //range 0-399
   uint8_t  y1;  //range 0-239
 
-  for(y=graph_ymin; y<=y_max; y+=tick_y) {
-    cnt = screen_window_y(graph_ymin,y,y_max);
+  for(y=y_min; y<=y_max; y+=tick_y) {
+    cnt = screen_window_y(y_min,y,y_max);
     setPixel(xzero-1,cnt); //tick
     setPixel(xzero-2,cnt); //tick
     setPixel(xzero+1,cnt); //tick
@@ -156,7 +156,7 @@ void graph_draw(uint8_t nbr, float x_min, float x_max, float graph_ymin, float y
     y = strtof (tmpStr3000, NULL);
 
     yo = yn;   //old , new
-    yn = screen_window_y(graph_ymin,y,y_max);
+    yn = screen_window_y(y_min,y,y_max);
 
     //printf("Calc: cnt = %d xy[%f %f]  yold->new(%d -> %d)\n",cnt, x, y, yo, yn);
     cnt++;

@@ -574,26 +574,30 @@ void fn_cnst_1_cpx() {
 void fnJM(uint16_t JM_OPCODE) {
   uint16_t cm;
 
-  if(JM_OPCODE == 1) {                                          // JM_OPCODE = 1 : Parallel, not using the stack, destroying I, J & K
+  if(JM_OPCODE == 1) {                                          // JM_OPCODE = 1 : Temporary implementation of xthe root of y, until Martins is done
     saveStack();
-/*                                                                //                    * DO THE PARALLEL FUNCTION XY / (X+Y)
-                                                                //                    * Drops X and Y, enables stack lift and refreshes the stack
-                                                                //                    * Leaves answer in X and update Last X
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
-    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);   // STO Y into J
-    fnMultiply(0);                                              // *
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_K);   // STO K
-    fnDrop(0);                                                  // DROP
-    fnRecall(REGISTER_I);                                       // RCL I
-    STACK_LIFT_ENABLE;
-    fnRecall(REGISTER_J);                                       // RCL J
-    fnAdd(0);                                                   // +
-    fnRecall(REGISTER_K);                                       // RCL K
-    fnSwapXY(0);                                                // X<>Y
-    fnDivide(0);                                                // /
-    copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);   // STO I into L (To update LAST X)
-*/    refreshStack();
-  }
+  
+    float tmpr;
+    if(getRegisterDataType(REGISTER_X) != dtReal34) {
+      tmpr = 0;
+    } else {
+      real_t tmpy;
+      fnConverttoReal();
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
+      realToString(&tmpy, tmpStr3000);
+      tmpr = strtof (tmpStr3000, NULL);
+    }
+
+    if(tmpr == 3){
+      fnDrop(0);
+      fnCubeRoot(0);      
+    } else {
+      fnInvert(0);
+      fnPower(0);
+    }
+      refreshStack();
+
+    } //end OPCODE 1
   else
 
   if(JM_OPCODE == 2) {                                          // JM_OPCODE = 2 : Angle from complex number.

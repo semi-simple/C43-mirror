@@ -1766,12 +1766,15 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 void fnShow(uint16_t unusedParamButMandatory) {
-  uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
+  uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
+  bool_t savedUNITDisplay = UNITDisplay;
   int16_t source, dest, last, d, i;
   real34_t real34;
 
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
+  SigFigMode = 0;                                //JM SIGFIG
+  UNITDisplay = false;                           //JM SIGFIG
 
   tmpStr3000[ 300] = 0; // L2
   tmpStr3000[ 600] = 0; // L3
@@ -1859,4 +1862,8 @@ void fnShow(uint16_t unusedParamButMandatory) {
 
   displayFormat = savedDisplayFormat;
   displayFormatDigits = savedDisplayFormatDigits;
+  SigFigMode = savedSigFigMode;                            //JM SIGFIG
+  UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
+
+
 }

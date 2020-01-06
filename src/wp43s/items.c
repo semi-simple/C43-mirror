@@ -1118,7 +1118,7 @@ const item_t indexOfItems[] = {
 /*  763 */  { fnSigma,                     2,                           STD_SIGMA "-",                                 STD_SIGMA "-",                                 CAT_FNCT, SLS_DISABLED },
 /*  764 */  { fnConstant,                  74,                          STD_PHI,                                       STD_PHI,                                       CAT_CNST, SLS_ENABLED  },
 /*  765 */  { fnConstant,                  75,                          STD_PHI STD_SUB_0,                             STD_PHI STD_SUB_0,                             CAT_CNST, SLS_ENABLED  },
-/*  766 */  { itemToBeCoded,               NOPARAM,                     "0766",                                        "0766",                                        CAT_FREE, SLS_UNCHANGED},
+/*  766 */  { fnRandomI,                   NOPARAM,                     "RANI#",                                       "RANI#",                                       CAT_FNCT, SLS_ENABLED  },
 /*  767 */  { itemToBeCoded,               NOPARAM,                     "0767",                                        "0767",                                        CAT_FREE, SLS_UNCHANGED},
 /*  768 */  { itemToBeCoded,               NOPARAM,                     "0768",                                        "0768",                                        CAT_FREE, SLS_UNCHANGED},
 /*  769 */  { itemToBeCoded,               NOPARAM,                     "0769",                                        "0769",                                        CAT_FREE, SLS_UNCHANGED},

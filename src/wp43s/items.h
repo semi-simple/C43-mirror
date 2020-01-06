@@ -792,11 +792,11 @@
 #define ITM_SIGMAMINUS                 763
 #define CST_74                         764
 #define CST_75                         765
-#define ITM_PHIux                      766
-#define ITM_PHIx                       767
-#define ITM_phix                       768
-#define ITM_PHIM1p                     769
-#define MNU_PHI                        770
+#define ITM_RANI                       766
+#define ITM_0767                       767
+#define ITM_0768                       768
+#define ITM_0769                       769
+#define ITM_0770                       770
 #define ITM_chi2x                      771
 #define ITM_chi2Px                     772
 #define ITM_chi2ux                     773

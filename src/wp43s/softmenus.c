@@ -140,10 +140,9 @@ const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,     
 const int16_t menu_PROB[]        = { -MNU_NORML,                    -MNU_T,                     ITM_COMB,                 ITM_PERM,              -MNU_F,                      -MNU_CHI2,
                                      -MNU_LGNRM,                    -MNU_CAUCH,                 ITM_NULL,                 -MNU_EXPON,            -MNU_LOGIS,                  -MNU_WEIBL,
                                      ITM_NULL,                      -MNU_NBIN,                  -MNU_GEOM,                -MNU_HYPER,            -MNU_BINOM,                  -MNU_POISS,
-                                     ITM_RAN,                       ITM_SEED,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GAMMAX                    };
+                                     ITM_RAN,                       ITM_SEED,                   ITM_RANI,                 ITM_NULL,              ITM_LNGAMMA,                 ITM_GAMMAX                    };
 
 const int16_t menu_t[]           = { ITM_TPX,                       ITM_TX,                     ITM_NULL,                 ITM_NULL,              ITM_TUX,                     ITM_TM1P                      };
-const int16_t menu_PHI[]         = { ITM_phix,                      ITM_PHIx,                   ITM_NULL,                 ITM_NULL,              ITM_PHIux,                   ITM_PHIM1p                    };
 const int16_t menu_F[]           = { ITM_FPX,                       ITM_FX,                     ITM_NULL,                 ITM_NULL,              ITM_FUX,                     ITM_FM1P                      };
 const int16_t menu_chi2[]        = { ITM_chi2Px,                    ITM_chi2x,                  ITM_NULL,                 ITM_NULL,              ITM_chi2ux,                  ITM_chi2M1                    };
 const int16_t menu_Norml[]       = { ITM_NORMLP,                    ITM_NORML,                  ITM_NULL,                 ITM_NULL,              ITM_NORMLU,                  ITM_NORMLM1                   };
@@ -417,7 +416,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_PARTS,       .numItems = sizeof(menu_PARTS      )/sizeof(int16_t), .softkeyItem = menu_PARTS       },
   {.menuId = -MNU_PROB,        .numItems = sizeof(menu_PROB       )/sizeof(int16_t), .softkeyItem = menu_PROB        },
   {.menuId = -MNU_T,           .numItems = sizeof(menu_t          )/sizeof(int16_t), .softkeyItem = menu_t           },
-  {.menuId = -MNU_PHI,         .numItems = sizeof(menu_PHI        )/sizeof(int16_t), .softkeyItem = menu_PHI         },
   {.menuId = -MNU_F,           .numItems = sizeof(menu_F          )/sizeof(int16_t), .softkeyItem = menu_F           },
   {.menuId = -MNU_CHI2,        .numItems = sizeof(menu_chi2       )/sizeof(int16_t), .softkeyItem = menu_chi2        },
   {.menuId = -MNU_NORML,       .numItems = sizeof(menu_Norml      )/sizeof(int16_t), .softkeyItem = menu_Norml       },

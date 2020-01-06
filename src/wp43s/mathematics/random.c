@@ -91,6 +91,7 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
   }
 
   longIntegerSubtract(maxi, mini, regX);
+  longIntegerAddUInt(regX, 1, regX);
   if(longIntegerCompareUInt(regX, 0xFFFFFFFF) >= 0) { // 2^32 - 1
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -99,8 +100,7 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
     return;
   }
 
-
-  maxRand = longIntegerToUInt(regX) + 1;
+  maxRand = longIntegerToUInt(regX);
   longIntegerAddUInt(mini, boundedRand(maxRand), maxi);
 
   stackLiftEnabled = true;

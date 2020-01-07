@@ -715,6 +715,96 @@ int8_t fnCbIsSet(int16_t item) {
 
 
 
+/*int16_t fnItemShowValue(int16_t item) {
+  int16_t result = -1;
+  uint16_t itemNr = max(item, -item);
+
+  switch (itemNr)
+  {
+  case ITM_DSTACK:  //  132
+    result = displayStack;
+    break;
+
+  case ITM_GAP:     //  215
+    result = groupingGap;
+    break;
+
+  case ITM_ALL:     //   20
+  case ITM_ENG:     //  145
+  case ITM_FIX:     //  185
+  case ITM_SCI:     //  545
+  case ITM_SIGFIG:  // 1682
+  case ITM_UNIT:    // 1693
+    result = displayFormatDigits;
+    break;
+
+  case ITM_WSIZE:   //  664
+    result = shortIntegerWordSize;
+    break;
+
+  default:
+    break;
+  }
+
+  return result;
+}*/
+int16_t fnItemShowValue(int16_t item) {
+  int16_t result = -1;
+  uint16_t itemNr = max(item, -item);
+
+  switch (itemNr)
+  {
+  case ITM_DSTACK:  //  132
+    result = displayStack;
+    break;
+
+  case ITM_GAP:     //  215
+    result = groupingGap;
+    break;
+
+  case ITM_FIX:     //  185
+    if (displayFormat==DF_FIX && SigFigMode == 0) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_SIGFIG:  // 1682
+    if (displayFormat==DF_FIX && SigFigMode != 0) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_ENG:     //  145
+    if (displayFormat==DF_ENG && !UNITDisplay) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_UNIT:    // 1693
+    if (displayFormat==DF_ENG && UNITDisplay) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_SCI:     //  545
+    if (displayFormat==DF_SCI) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_ALL:     //   20
+    if (displayFormat==DF_ALL) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_WSIZE:   //  664
+    result = shortIntegerWordSize;
+    break;
+
+  default:
+    break;
+  }
+
+  return result;
+}
+
+
+
 void fnRefreshRadioState(char rb, uint16_t mode) {
   for(uint8_t i=0; i < cntOfRadioCbItems; i++) {
     if(indexOfRadioCbItems[i].radioButton == rb) {

@@ -792,11 +792,11 @@
 #define ITM_SIGMAMINUS                 763
 #define CST_74                         764
 #define CST_75                         765
-#define ITM_PHIux                      766
-#define ITM_PHIx                       767
-#define ITM_phix                       768
-#define ITM_PHIM1p                     769
-#define MNU_PHI                        770
+#define ITM_RANI                       766
+#define ITM_0767                       767
+#define ITM_0768                       768
+#define ITM_0769                       769
+#define ITM_0770                       770
 #define ITM_chi2x                      771
 #define ITM_chi2Px                     772
 #define ITM_chi2ux                     773
@@ -1976,9 +1976,10 @@
 #define ITM_GRF_DX                    1922  //JM GRAPH
 #define ITM_GRF_DY                    1923  //JM GRAPH
 #define ITM_GRF_HLP                   1924  //JM GRAPH
+#define ITM_toSI                      1925  //JM SHORTINT
 
 
-#define LAST_ITEM                     1925  //JM
+#define LAST_ITEM                     1926  //JM
 
 #define CHR_PROD_SIGN                 9999
 

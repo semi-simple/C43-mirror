@@ -209,6 +209,7 @@ void fnMax                      (uint16_t unusedParamButMandatory) {}
 void fnStatSum                  (uint16_t unusedParamButMandatory) {}
 void fnIsPrime                  (uint16_t unusedParamButMandatory) {}
 void fnRandom                   (uint16_t unusedParamButMandatory) {}
+void fnRandomI                  (uint16_t unusedParamButMandatory) {}
 void fnImaginaryPart            (uint16_t unusedParamButMandatory) {}
 void fnRecall                   (uint16_t unusedParamButMandatory) {}
 void fnRecallConfig             (uint16_t unusedParamButMandatory) {}
@@ -373,7 +374,8 @@ void fnJMUSERmode               (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
-void fnGraph                    (uint16_t unusedParamButMandatory) {}           //^^
+void fnGraph                    (uint16_t unusedParamButMandatory) {}
+void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           //^^
 void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
 void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
 void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
@@ -554,7 +556,7 @@ const item_t indexOfItems[] = {
 /*  169 */  { itemToBeCoded,               NOPARAM,                     "e/m" STD_SUB_e,                               "e/m" STD_SUB_e,                               CAT_NONE, SLS_ENABLED  },
 /*  170 */  { itemToBeCoded,               NOPARAM,                     "E:",                                          "E:",                                          CAT_MENU, SLS_UNCHANGED},
 /*  171 */  { fnConstant,                  10,                          "F",                                           "F",                                           CAT_CNST, SLS_ENABLED  },
-/*  172 */  { fnStackSize,                 SS_8,                     "FAST",                                        "FAST",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  172 */  { itemToBeCoded,               NOPARAM,                     "FAST",                                        "FAST",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  173 */  { itemToBeCoded,               NOPARAM,                     "FB",                                          "FB",                                          CAT_FNCT, SLS_UNCHANGED},
 /*  174 */  { itemToBeCoded,               NOPARAM,                     "FCNS",                                        "FCNS",                                        CAT_MENU, SLS_UNCHANGED},
 /*  175 */  { fnIsFlagClear,               TM_FLAG,                     "FC?",                                         "FC?",                                         CAT_FNCT, SLS_UNCHANGED},
@@ -956,7 +958,7 @@ const item_t indexOfItems[] = {
 /*  571 */  { fnSinh,                      NOPARAM,                     "sinh",                                        "sinh",                                        CAT_FNCT, SLS_ENABLED  },
 /*  572 */  { itemToBeCoded,               NOPARAM,                     "SKIP",                                        "SKIP",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  573 */  { itemToBeCoded,               NOPARAM,                     "SL",                                          "SL",                                          CAT_FNCT, SLS_UNCHANGED},
-/*  574 */  { fnStackSize,                 SS_4,                     "SLOW",                                        "SLOW",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  574 */  { itemToBeCoded,               NOPARAM,                     "SLOW",                                        "SLOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  575 */  { fnSlvq,                      NOPARAM,                     "SLVQ",                                        "SLVQ",                                        CAT_FNCT, SLS_ENABLED  },
 /*  576 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_m,                                 "s" STD_SUB_m,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  577 */  { fnGetIntegerSignMode,        NOPARAM,                     "SMODE?",                                      "SMODE?",                                      CAT_FNCT, SLS_ENABLED  },
@@ -1148,7 +1150,7 @@ const item_t indexOfItems[] = {
 /*  763 */  { fnSigma,                     2,                           STD_SIGMA "-",                                 STD_SIGMA "-",                                 CAT_FNCT, SLS_DISABLED },
 /*  764 */  { fnConstant,                  74,                          STD_PHI,                                       STD_PHI,                                       CAT_CNST, SLS_ENABLED  },
 /*  765 */  { fnConstant,                  75,                          STD_PHI STD_SUB_0,                             STD_PHI STD_SUB_0,                             CAT_CNST, SLS_ENABLED  },
-/*  766 */  { itemToBeCoded,               NOPARAM,                     "0766",                                        "0766",                                        CAT_FREE, SLS_UNCHANGED},
+/*  766 */  { fnRandomI,                   NOPARAM,                     "RANI#",                                       "RANI#",                                       CAT_FNCT, SLS_ENABLED  },
 /*  767 */  { itemToBeCoded,               NOPARAM,                     "0767",                                        "0767",                                        CAT_FREE, SLS_UNCHANGED},
 /*  768 */  { itemToBeCoded,               NOPARAM,                     "0768",                                        "0768",                                        CAT_FREE, SLS_UNCHANGED},
 /*  769 */  { itemToBeCoded,               NOPARAM,                     "0769",                                        "0769",                                        CAT_FREE, SLS_UNCHANGED},
@@ -2335,6 +2337,7 @@ const item_t indexOfItems[] = {
 /* 1922 */  { fnJM,                        25,                          "GRF_DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
 /* 1923 */  { fnJM,                        26,                          "GRF_DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF_SET",                                     "LIMITS",                                      CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "SI",                          STD_RIGHT_ARROW "SI",                          CAT_FNCT, SLS_ENABLED  },      //JM SHORTINT
 
-/* 1925 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1926 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

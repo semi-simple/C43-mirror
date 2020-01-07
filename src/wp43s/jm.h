@@ -131,6 +131,7 @@ void fnSigmaAssign(uint16_t sigmaAssign);
 void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory);
 void fnJMup(uint16_t unusedParamButMandatory);
 void fnJMdown(uint16_t unusedParamButMandatory);
+void fnJM_2SI(uint16_t unusedParamButMandatory);
 void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);

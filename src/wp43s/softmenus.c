@@ -66,9 +66,7 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
                                      ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_NULL,                    -MNU_CFG,                           //JM added CFG
-                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                          //JM added SIGFIG & UNIT
-
-                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM TEMPORARY UNTIL A HOME IS FOUND
+                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };    //JM added SIGFIG & UNIT
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -127,28 +125,14 @@ const int16_t menu_M_EDIT[]      = { CHR_LEFT_ARROW,                CHR_UP_ARROW
 const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,              CHR_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     -MNU_PFN,
+const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_NULL,
                                      ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG,                            //JM
-                                     ITM_ERPN,                      ITM_SETSIG,                 ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                            //JM modifoed
-
-
-//JM
-/*                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,
-                                     ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,             ITM_REALRES,                 ITM_CPXRES,
-                                     ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,            ITM_SSIZE4,                  ITM_SSIZE8,
-                                     ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-*/
-#if DMCP_BUILD
-                                 ,   ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-#else
-//                                   ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-//                                   ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-//                                   ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-                                                                                                                                                                                                            };
+#ifndef DMCP_BUILD
+                                     ITM_NULL,                      ITM_ERPN,                   ITM_SETSIG,               ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };      //JM modifoed
 #endif
-
+#ifdef DMCP_BUILD
+                                     ITM_SYSTEM,                    ITM_ERPN,                   ITM_SETSIG,               ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };
+#endif
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
                                      ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,
@@ -160,10 +144,9 @@ const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,     
 const int16_t menu_PROB[]        = { -MNU_NORML,                    -MNU_T,                     ITM_COMB,                 ITM_PERM,              -MNU_F,                      -MNU_CHI2,
                                      -MNU_LGNRM,                    -MNU_CAUCH,                 ITM_XFACT,                -MNU_EXPON,            -MNU_LOGIS,                  -MNU_WEIBL,                         //JM Added x! where it belongs, directly above Cyx
                                      ITM_NULL,                      -MNU_NBIN,                  -MNU_GEOM,                -MNU_HYPER,            -MNU_BINOM,                  -MNU_POISS,
-                                     ITM_RAN,                       ITM_SEED,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_GAMMAX                    };
+                                     ITM_RAN,                       ITM_SEED,                   ITM_RANI,                 ITM_NULL,              ITM_LNGAMMA,                 ITM_GAMMAX                    };
 
 const int16_t menu_t[]           = { ITM_TPX,                       ITM_TX,                     ITM_NULL,                 ITM_NULL,              ITM_TUX,                     ITM_TM1P                      };
-const int16_t menu_PHI[]         = { ITM_phix,                      ITM_PHIx,                   ITM_NULL,                 ITM_NULL,              ITM_PHIux,                   ITM_PHIM1p                    };
 const int16_t menu_F[]           = { ITM_FPX,                       ITM_FX,                     ITM_NULL,                 ITM_NULL,              ITM_FUX,                     ITM_FM1P                      };
 const int16_t menu_chi2[]        = { ITM_chi2Px,                    ITM_chi2x,                  ITM_NULL,                 ITM_NULL,              ITM_chi2ux,                  ITM_chi2M1                    };
 const int16_t menu_Norml[]       = { ITM_NORMLP,                    ITM_NORML,                  ITM_NULL,                 ITM_NULL,              ITM_NORMLU,                  ITM_NORMLM1                   };
@@ -437,7 +420,7 @@ const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,   
 const int16_t menu_BASE[]        = {  
                                      ITM_CB_LEADING_ZERO,           KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
                                      -MNU_BITS,                     -MNU_INTS,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                            //JM
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,             	      ITM_NULL                      };    //JM BASE MENU ADDED
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_toSI,             	      ITM_WSIZE                      };    //JM BASE MENU ADDED
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
@@ -582,7 +565,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_PARTS,       .numItems = sizeof(menu_PARTS      )/sizeof(int16_t), .softkeyItem = menu_PARTS       },
   {.menuId = -MNU_PROB,        .numItems = sizeof(menu_PROB       )/sizeof(int16_t), .softkeyItem = menu_PROB        },
   {.menuId = -MNU_T,           .numItems = sizeof(menu_t          )/sizeof(int16_t), .softkeyItem = menu_t           },
-  {.menuId = -MNU_PHI,         .numItems = sizeof(menu_PHI        )/sizeof(int16_t), .softkeyItem = menu_PHI         },
   {.menuId = -MNU_F,           .numItems = sizeof(menu_F          )/sizeof(int16_t), .softkeyItem = menu_F           },
   {.menuId = -MNU_CHI2,        .numItems = sizeof(menu_chi2       )/sizeof(int16_t), .softkeyItem = menu_chi2        },
   {.menuId = -MNU_NORML,       .numItems = sizeof(menu_Norml      )/sizeof(int16_t), .softkeyItem = menu_Norml       },
@@ -1086,90 +1068,6 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 //^^
 
 
-
-int16_t fnItemShowValue(int16_t item) {
-  int16_t result = -1;
-  uint16_t itemNr = max(item, -item);
-
-  switch (itemNr)
-  {
-  case ITM_DSTACK:  //  132
-    result = displayStack;
-    break;
-
-  case ITM_GAP:     //  215
-    result = groupingGap;
-    break;
-
-  case ITM_FIX:     //  185
-    if (displayFormat==DF_FIX && SigFigMode == 0) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_SIGFIG:  // 1682
-    if (displayFormat==DF_FIX && SigFigMode != 0) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_ENG:     //  145
-    if (displayFormat==DF_ENG && !UNITDisplay) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_UNIT:    // 1693
-    if (displayFormat==DF_ENG && UNITDisplay) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_SCI:     //  545
-    if (displayFormat==DF_SCI) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_ALL:     //   20
-    if (displayFormat==DF_ALL) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_WSIZE:   //  664
-    result = shortIntegerWordSize;
-    break;
-
-  default:
-    break;
-  }
-
-  return result;
-}
-
-int8_t fnItemShowCB(int16_t item) {
-  int8_t result = -1;
-  uint16_t itemNr = max(item, -item);
-  #define RB_0 0;
-  #define RB_1 1;
-  #define CB_0 2;
-  #define CB_1 3;
-
-  switch (itemNr)
-  {
-
-  case ITM_SLOW:  // ????
-    if   (stackSize == SS_4) {result = RB_1;}
-    else                     {result = RB_0;}
-    break;
-
-  case ITM_FAST:  // ????
-    if   (stackSize == SS_8) {result = RB_1;}
-    else                     {result = RB_0;}
-    break;
-
-  default:
-    break;
-  }
-  return result;
-}
-
-
 /********************************************//**
  * \brief Displays one softkey
  *
@@ -1185,17 +1083,57 @@ int8_t fnItemShowCB(int16_t item) {
 void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {
 
 char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
+char tmp2[12];
 char *figlabel() {
-  char tmp1[12];
+  char *use_base_glyphs(int16_t xx){               //Needs non-local variable tmp2
+    void add_digitglyph_to_tmp2(int16_t xx) {
+       switch (xx)
+       {
+          case  0: strcat(tmp2, STD_SUB_0); break; 
+          case  1: strcat(tmp2, STD_BASE_1); break; 
+          case  2: strcat(tmp2, STD_BASE_2); break; 
+          case  3: strcat(tmp2, STD_BASE_3); break; 
+          case  4: strcat(tmp2, STD_BASE_4); break; 
+          case  5: strcat(tmp2, STD_BASE_5); break; 
+          case  6: strcat(tmp2, STD_BASE_6); break; 
+          case  7: strcat(tmp2, STD_BASE_7); break; 
+          case  8: strcat(tmp2, STD_BASE_8); break; 
+          case  9: strcat(tmp2, STD_BASE_9); break; 
+          case 10: strcat(tmp2, STD_BASE_10); break; 
+          case 11: strcat(tmp2, STD_BASE_11); break; 
+          case 12: strcat(tmp2, STD_BASE_12); break; 
+          case 13: strcat(tmp2, STD_BASE_13); break; 
+          case 14: strcat(tmp2, STD_BASE_14); break; 
+          case 15: strcat(tmp2, STD_BASE_15); break; 
+          case 16: strcat(tmp2, STD_BASE_16); break; 
+          default: ;
+       }
+    }
+    tmp2[0]=0;                
+    if (xx<=16) {
+       add_digitglyph_to_tmp2(xx); 
+    } else
+
+    if(xx<=99) {
+       add_digitglyph_to_tmp2(xx / 10);
+       add_digitglyph_to_tmp2(xx % 10);
+    }
+    else {
+       snprintf(tmp2, 12, "%d", xx);
+    }
+    return tmp2;
+  }
+  char tmp1[12];     //temporary and expendible
   tmp[0]=0;
   strcat(tmp,label);
   if(showValue > 0) {
-    strcat(tmp,STD_SPACE_3_PER_EM);
-    snprintf(tmp1, 12, "%d", showValue);
+    //strcat(tmp,STD_SPACE_3_PER_EM);
+    //snprintf(tmp1, 12, "%d", showValue);
+    strcpy(tmp1,use_base_glyphs(showValue));
     strcat(tmp,tmp1);
   }
-  return tmp;                                              //JM ^^
-}
+  return tmp; 
+}                                                                     //JM ^^
 
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
@@ -1384,12 +1322,11 @@ void showSoftmenuCurrentPart(void) {
         if(softkeyItem + x >= softmenu[m].softkeyItem + softmenu[m].numItems) {
           item = ITM_NULL;
         }
-        else { 
+        else {
           item = softkeyItem[x];
         }
-//JM        int8_t showCb = fnCbIsSet(item%10000);                                  //dr
+        int8_t showCb = fnCbIsSet(item%10000);                                  //dr
         int16_t showValue = fnItemShowValue(item%10000);                        //dr
-        int8_t showCb = fnItemShowCB(item%10000);
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {

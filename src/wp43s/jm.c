@@ -1108,7 +1108,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   saveStack();
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
-  if((dataTypeX == dtReal34 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
     R_shF(); //shiftF = false;             //JM. Execur .d
     S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
@@ -1133,6 +1133,15 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
 
   refreshStack();
 }
+
+
+
+void fnJM_2SI(uint16_t unusedParamButMandatory) {
+  fnConverttoReal();
+  JM_convertReal34ToShortInteger(CONFIRMED);
+  refreshStack();
+}
+
 
 
 
@@ -1296,7 +1305,11 @@ void JM_convertReal34ToShortInteger(uint16_t confirmation) {
     //setRegisterTag(REGISTER_X,10);
       longInteger_t lgInt;
       convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-      convertLongIntegerToShortIntegerRegister(lgInt, 10, REGISTER_X);
+      if(lastIntegerBase == 0) {
+        convertLongIntegerToShortIntegerRegister(lgInt, 10, REGISTER_X);
+      } else {
+        convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, REGISTER_X);        
+      }
       longIntegerFree(lgInt);
 
     //convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);

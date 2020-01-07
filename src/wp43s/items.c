@@ -374,7 +374,8 @@ void fnJMUSERmode               (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
-void fnGraph                    (uint16_t unusedParamButMandatory) {}           //^^
+void fnGraph                    (uint16_t unusedParamButMandatory) {}
+void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -2321,6 +2322,7 @@ const item_t indexOfItems[] = {
 /* 1922 */  { fnJM,                        25,                          "GRF_DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
 /* 1923 */  { fnJM,                        26,                          "GRF_DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF_SET",                                     "LIMITS",                                        CAT_NONE, SLS_UNCHANGED},      //JM GRAPH
+/* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "SI",                          STD_RIGHT_ARROW "SI",                          CAT_FNCT, SLS_ENABLED  },      //JM SHORTINT
 
-/* 1925 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1926 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

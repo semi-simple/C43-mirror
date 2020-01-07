@@ -1086,6 +1086,90 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 //^^
 
 
+
+int16_t fnItemShowValue(int16_t item) {
+  int16_t result = -1;
+  uint16_t itemNr = max(item, -item);
+
+  switch (itemNr)
+  {
+  case ITM_DSTACK:  //  132
+    result = displayStack;
+    break;
+
+  case ITM_GAP:     //  215
+    result = groupingGap;
+    break;
+
+  case ITM_FIX:     //  185
+    if (displayFormat==DF_FIX && SigFigMode == 0) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_SIGFIG:  // 1682
+    if (displayFormat==DF_FIX && SigFigMode != 0) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_ENG:     //  145
+    if (displayFormat==DF_ENG && !UNITDisplay) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_UNIT:    // 1693
+    if (displayFormat==DF_ENG && UNITDisplay) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_SCI:     //  545
+    if (displayFormat==DF_SCI) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_ALL:     //   20
+    if (displayFormat==DF_ALL) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_WSIZE:   //  664
+    result = shortIntegerWordSize;
+    break;
+
+  default:
+    break;
+  }
+
+  return result;
+}
+
+int8_t fnItemShowCB(int16_t item) {
+  int8_t result = -1;
+  uint16_t itemNr = max(item, -item);
+  #define RB_0 0;
+  #define RB_1 1;
+  #define CB_0 2;
+  #define CB_1 3;
+
+  switch (itemNr)
+  {
+
+  case ITM_SLOW:  // ????
+    if   (stackSize == SS_4) {result = RB_1;}
+    else                     {result = RB_0;}
+    break;
+
+  case ITM_FAST:  // ????
+    if   (stackSize == SS_8) {result = RB_1;}
+    else                     {result = RB_0;}
+    break;
+
+  default:
+    break;
+  }
+  return result;
+}
+
+
 /********************************************//**
  * \brief Displays one softkey
  *
@@ -1099,62 +1183,18 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
  * \return void
  ***********************************************/
 void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {
+
 char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
 char *figlabel() {
-              char tmp1[12];
-              tmp[0]=0;
-              strcat(tmp,label);
-
-/*************
-              if(tmp[0]==71 && tmp[1]==65 && tmp[2]==80 && tmp[3]==0) { //GAP
-                  strcat(tmp,STD_SPACE_HAIR);
-                  snprintf(tmp1, 12, "%d", groupingGap);
-                  strcat(tmp,tmp1);
-              } 
-              else 
-              if(displayFormat==DF_FIX && SigFigMode == 0 && tmp[0]==70 && tmp[1]==73 && tmp[2]==88 && tmp[3]==0) { //FIX
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }
-              else
-              if(displayFormat==DF_SCI && tmp[0]==83 && tmp[1]==67 && tmp[2]==73 && tmp[3]==0) { //SCI
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_ENG && UNITDisplay == false && tmp[0]==69 && tmp[1]==78 && tmp[2]==71 && tmp[3]==0) { //ENG
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_ALL && tmp[0]==65 && tmp[1]==76 && tmp[2]==76 && tmp[3]==0) { //ALL
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_FIX && SigFigMode != 0 && tmp[0]==83 && tmp[1]==73 && tmp[2]==71 && tmp[3]==0) { //SIG
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_ENG && UNITDisplay == true && tmp[0]==85 && tmp[1]==78 && tmp[2]==73 && tmp[3]==84 && tmp[4]==0) { //UNT
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }
-*************/
+  char tmp1[12];
+  tmp[0]=0;
+  strcat(tmp,label);
   if(showValue > 0) {
     strcat(tmp,STD_SPACE_3_PER_EM);
     snprintf(tmp1, 12, "%d", showValue);
     strcat(tmp,tmp1);
   }
-
-  return tmp;                                                                  //JM ^^
+  return tmp;                                              //JM ^^
 }
 
   int16_t x, y, x1, y1, x2, y2;
@@ -1344,11 +1384,12 @@ void showSoftmenuCurrentPart(void) {
         if(softkeyItem + x >= softmenu[m].softkeyItem + softmenu[m].numItems) {
           item = ITM_NULL;
         }
-        else {
+        else { 
           item = softkeyItem[x];
         }
-        int8_t showCb = fnCbIsSet(item%10000);                                  //dr
+//JM        int8_t showCb = fnCbIsSet(item%10000);                                  //dr
         int16_t showValue = fnItemShowValue(item%10000);                        //dr
+        int8_t showCb = fnItemShowCB(item%10000);
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {

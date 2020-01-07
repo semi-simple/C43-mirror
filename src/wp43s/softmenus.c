@@ -1076,55 +1076,21 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
  * \param[in] bottomLine bool_t     Draw a bottom line
  * \return void
  ***********************************************/
-void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb) {
+void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {
+
 char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
 char *figlabel() {
               char tmp1[12];
               tmp[0]=0;
               strcat(tmp,label);
 
-              if(tmp[0]==71 && tmp[1]==65 && tmp[2]==80 && tmp[3]==0) { //GAP
-                  strcat(tmp,STD_SPACE_HAIR);
-                  snprintf(tmp1, 12, "%d", groupingGap);
-                  strcat(tmp,tmp1);
-              } 
-              else 
-              if(displayFormat==DF_FIX && SigFigMode == 0 && tmp[0]==70 && tmp[1]==73 && tmp[2]==88 && tmp[3]==0) { //FIX
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }
-              else
-              if(displayFormat==DF_SCI && tmp[0]==83 && tmp[1]==67 && tmp[2]==73 && tmp[3]==0) { //SCI
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_ENG && UNITDisplay == false && tmp[0]==69 && tmp[1]==78 && tmp[2]==71 && tmp[3]==0) { //ENG
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_ALL && tmp[0]==65 && tmp[1]==76 && tmp[2]==76 && tmp[3]==0) { //ALL
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_FIX && SigFigMode != 0 && tmp[0]==83 && tmp[1]==73 && tmp[2]==71 && tmp[3]==0) { //SIG
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-              else
-              if(displayFormat==DF_ENG && UNITDisplay == true && tmp[0]==85 && tmp[1]==78 && tmp[2]==73 && tmp[3]==84 && tmp[4]==0) { //UNT
-                  strcat(tmp,STD_SPACE_3_PER_EM);
-                  snprintf(tmp1, 12, "%d", displayFormatDigits);
-                  strcat(tmp,tmp1);
-              }      
-return tmp;                                                                  //JM ^^
+  if(showValue > 0) {
+    strcat(tmp,STD_SPACE_3_PER_EM);
+    snprintf(tmp1, 12, "%d", showValue);
+    strcat(tmp,tmp1);
+  }
+
+  return tmp;                                                                  //JM ^^
 }
 
   int16_t x, y, x1, y1, x2, y2;
@@ -1318,6 +1284,7 @@ void showSoftmenuCurrentPart(void) {
           item = softkeyItem[x];
         }
         int8_t showCb = fnCbIsSet(item%10000);                                  //dr
+        int16_t showValue = fnItemShowValue(item%10000);                        //dr
         if(item < 0) { // softmenu
           menu = 0;
           while(softmenu[menu].menuId != 0) {
@@ -1337,22 +1304,22 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, showCb);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
             }
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb);
+          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb, showValue);
         }
         else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
           // item : +10000 -> no top line
           //        +20000 -> no bottom line
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
-            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
           else {
-            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb);
+            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
         }
       }

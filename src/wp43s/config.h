@@ -49,6 +49,7 @@ void     fnClPAll              (uint16_t confirmation);
 void     fnClSigma             (uint16_t unusedParamButMandatory);
 void     backToSystem          (uint16_t unusedParamButMandatory);
 int8_t   fnCbIsSet             (int16_t item);                                  //dr build RadioButton, CheckBox
+int16_t  fnItemShowValue       (int16_t item);
 void     fnRefreshRadioState   (char rb, uint16_t mode);
 void     fnRefreshComboxState  (char rb, uint16_t param, bool_t state);
 void     fnRebuildRadioState   (void);                                          //^^

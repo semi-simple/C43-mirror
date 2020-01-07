@@ -886,8 +886,9 @@ void btnPressed(void *notUsed, void *data) {
                                                                                                                               //JM shifts
 #endif
 
-  // Shift f pressed and shift g not active
-  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift f pressed
+  //JM no shifted menu on g-shift-key as in WP43S
+  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
@@ -900,14 +901,15 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftF = !shiftF;
-    // shiftG = false; //Martin removed with !shiftG check above
+    shiftG = false;                     //JM no shifted menu on g-shift-key as in WP43S
     shiftStateChanged = true;
 
     showShiftState();
   }
 
-  // Shift g pressed and shift f not active
-  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  // Shift g pressed
+  //JM no shifted menu on f-shift-key as in WP43S
+  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
     resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
@@ -920,7 +922,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                           //^^
 
     shiftG = !shiftG;
-    // shiftF = false; //Martin removed with the addition of the !shiftF flag
+    shiftF = false;                     //JM no shifted menu on g-shift-key as in WP43S
     shiftStateChanged = true;
 
     showShiftState();
@@ -1122,7 +1124,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
+            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -1136,7 +1138,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
         displayBugScreen(errorMessage);
       }
     }

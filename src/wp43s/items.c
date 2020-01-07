@@ -2074,7 +2074,7 @@ const item_t indexOfItems[] = {
 /* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "SET_HOME_TRIPLE",                             "HOME.3",                                      CAT_FNCT, SLS_ENABLED  },      //JM HOME.3
 /* 1680 */  { fnSetSetJM,                  JC_SHFT_4s,                  "SET_SHFT_4s",                                 "SH_4s",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHIFT CANCEL
 /* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_MENU, SLS_UNCHANGED},      //JM HOME
-/* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SET SIGFIG",                                  "SIG",                                      CAT_FNCT, SLS_UNCHANGED},      //JM SIGFIG
+/* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SET SIGFIG",                                  "SIG",                                         CAT_FNCT, SLS_UNCHANGED},      //JM SIGFIG
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       CAT_FNCT, SLS_UNCHANGED},      //JM ALPHA
 /* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                        CAT_MENU, SLS_UNCHANGED},      //JM BASE
 /* 1685 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                         CAT_FNCT, SLS_UNCHANGED},      //JM HEX
@@ -2085,7 +2085,7 @@ const item_t indexOfItems[] = {
 /* 1690 */  { fnSetWordSize,               16,                          "16-BIT",                                      "16-BIT",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1691 */  { fnSetWordSize,               32,                          "32-BIT",                                      "32-BIT",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HEX
 /* 1692 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                      CAT_FNCT, SLS_UNCHANGED},      //JM HEX
-/* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SET UNIT",                                    "UNIT",                                       CAT_FNCT, SLS_UNCHANGED},      //JM UNIT
+/* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "SET UNIT",                                    "UNIT",                                        CAT_FNCT, SLS_UNCHANGED},      //JM UNIT
 /* 1694 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                       CAT_FNCT, SLS_ENABLED  },      //JM SHOW
 /* 1695 */  { fnSetSetJM,                  JC_BCR,                      "CPXRES",                                      "CPXRES",                                      CAT_FNCT, SLS_UNCHANGED},      //dr
 /* 1696 */  { fnSetSetJM,                  JC_BLZ,                      "LEAD0",                                       "LEAD0",                                       CAT_FNCT, SLS_UNCHANGED},      //dr
@@ -2164,7 +2164,7 @@ const item_t indexOfItems[] = {
 /* 1767 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                         "CC1",                                         CAT_FNCT, SLS_ENABLED  },      //JM Change CC to CC1
 /* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     ">>",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
 /* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "<<",                                          CAT_FNCT, SLS_ENABLED  },      //JM TYPE CONVERT
-/* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_FNCT, SLS_ENABLED  },      //JM HOME.3T
+/* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_FNCT, SLS_UNCHANGED},      //JM HOME.3T
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 
 /* 1772 */  { itemToBeCoded,               NOPARAM,                     "MENU ASN",                                    "ASN",                                         CAT_MENU, SLS_UNCHANGED},      //JM USER
@@ -2302,15 +2302,15 @@ const item_t indexOfItems[] = {
 /* 1902 */  { fnUserJM,                    JM_SEEK_FN   ,               "",                                            "FN" STD_DOT "ASN",                            CAT_NONE, SLS_UNCHANGED},      //JM ASSIGN SEEK FUNCTION
 /* 1903 */  { itemToBeCoded,               NOPARAM      ,               "",                                            STD_SIGMA "+ ASN",                             CAT_NONE, SLS_UNCHANGED},      //JM USER NORMAL
 /* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM      ,               "",                                            "X to"STD_SIGMA "+",                           CAT_NONE, SLS_ENABLED  },      //JM USER NORMAL
-/* 1905 */  { fnInDefault,                 ID_43S       ,               "",                                            "i" STD_SPACE_3_PER_EM "LI/RL",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1906 */  { fnSetSetJM,                  JC_FG_LINE   ,               "",                                            "FG" STD_SPACE_3_PER_EM "LINE",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1907 */  { fnInDefault,                 ID_DP        ,               "",                                            "i" STD_SPACE_3_PER_EM "REAL",                 CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1905 */  { fnInDefault,                 ID_43S       ,               "i" STD_SPACE_3_PER_EM "LI/RL",                "i" STD_SPACE_3_PER_EM "LI/RL",                CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1906 */  { fnSetSetJM,                  JC_FG_LINE   ,               "f/g LINE",                                    "FG" STD_SPACE_3_PER_EM "LINE",                CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1907 */  { fnInDefault,                 ID_DP        ,               "i" STD_SPACE_3_PER_EM "REAL",                 "i" STD_SPACE_3_PER_EM "REAL",                 CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1908 */  { fnShowJM,                    JM_INP_DFLT  ,               "",                                            "i" STD_SPACE_3_PER_EM "Dflt?",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1909 */  { fnSetSetJM,                  JC_FG_DOTS   ,               "",                                            "FG" STD_SPACE_3_PER_EM "DOTS",                CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1910 */  { fnInDefault,                 ID_CPXDP     ,               "",                                            "i" STD_SPACE_3_PER_EM "CPX",                  CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "",                                            "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1912 */  { fnInDefault,                 ID_SI        ,               "",                                            "i" STD_SPACE_3_PER_EM "SI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
-/* 1913 */  { fnInDefault,                 ID_LI        ,               "",                                            "i" STD_SPACE_3_PER_EM "LI",                   CAT_NONE, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1909 */  { fnSetSetJM,                  JC_FG_DOTS   ,               "f/g DOTS",                                    "FG" STD_SPACE_3_PER_EM "DOTS",                CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1910 */  { fnInDefault,                 ID_CPXDP     ,               "i" STD_SPACE_3_PER_EM "CPX",                  "i" STD_SPACE_3_PER_EM "CPX",                  CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "g TAPTAP",                                    "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1912 */  { fnInDefault,                 ID_SI        ,               "i" STD_SPACE_3_PER_EM "SI",                   "i" STD_SPACE_3_PER_EM "SI",                   CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
+/* 1913 */  { fnInDefault,                 ID_LI        ,               "i" STD_SPACE_3_PER_EM "LI",                   "i" STD_SPACE_3_PER_EM "LI",                   CAT_FNCT, SLS_UNCHANGED},      //JM INPUT DEFAULT
 /* 1914 */  { fnGraph,                     NOPARAM      ,               "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},      //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},      // Ex 875 Small latin letters

@@ -66,9 +66,8 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
                                      ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_NULL,                    -MNU_CFG,                           //JM added CFG
-                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,             //JM added SIGFIG & UNIT
+                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };    //JM added SIGFIG & UNIT
 
-                                     ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM TEMPORARY UNTIL A HOME IS FOUND
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -127,26 +126,13 @@ const int16_t menu_M_EDIT[]      = { CHR_LEFT_ARROW,                CHR_UP_ARROW
 const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,              CHR_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     -MNU_PFN,
+const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_NULL,
                                      ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG,                            //JM
-                                     ITM_ERPN,                      ITM_SETSIG,                 ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                            //JM modifoed
-
-
-//JM
-/*                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_RECT,                    ITM_POLAR,
-                                     ITM_FAST,                      ITM_SLOW,                   ITM_RM,                   ITM_QUIET,             ITM_REALRES,                 ITM_CPXRES,
-                                     ITM_DENMAX,                    ITM_DENANY,                 ITM_DENFAC,               ITM_DENFIX,            ITM_SSIZE4,                  ITM_SSIZE8,
-                                     ITM_SETSIG,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-*/
-#if DMCP_BUILD
-                                 ,   ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-#else
-//                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-//                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM added the dummy line under #else, to keep the sequence correct for following lines
-//                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-                                                                                                                                                                                                            };
+#ifndef DMCP_BUILD
+                                     ITM_NULL,                      ITM_ERPN,                   ITM_SETSIG,               ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };      //JM modifoed
+#endif
+#ifdef DMCP_BUILD
+                                     ITM_SYSTEM,                    ITM_ERPN,                   ITM_SETSIG,               ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };
 #endif
 
 

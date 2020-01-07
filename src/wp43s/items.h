@@ -1976,9 +1976,10 @@
 #define ITM_GRF_DX                    1922  //JM GRAPH
 #define ITM_GRF_DY                    1923  //JM GRAPH
 #define ITM_GRF_HLP                   1924  //JM GRAPH
+#define ITM_toSI                      1925  //JM SHORTINT
 
 
-#define LAST_ITEM                     1925  //JM
+#define LAST_ITEM                     1926  //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -425,7 +425,7 @@ const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,   
 const int16_t menu_BASE[]        = {  
                                      ITM_CB_LEADING_ZERO,           KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
                                      -MNU_BITS,                     -MNU_INTS,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                            //JM
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,             	      ITM_NULL                      };    //JM BASE MENU ADDED
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_toSI,             	      ITM_WSIZE                      };    //JM BASE MENU ADDED
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
@@ -1064,6 +1064,62 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 
 
 
+int16_t fnItemShowValue(int16_t item) {               //JM dr GAP digits vv
+  int16_t result = -1;
+  uint16_t itemNr = max(item, -item);
+
+  switch (itemNr)
+  {
+  case ITM_DSTACK:  //  132
+    result = displayStack;
+    break;
+
+  case ITM_GAP:     //  215
+    result = groupingGap;
+    break;
+
+  case ITM_FIX:     //  185
+    if (displayFormat==DF_FIX && SigFigMode == 0) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_SIGFIG:  // 1682
+    if (displayFormat==DF_FIX && SigFigMode != 0) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_ENG:     //  145
+    if (displayFormat==DF_ENG && !UNITDisplay) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_UNIT:    // 1693
+    if (displayFormat==DF_ENG && UNITDisplay) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_SCI:     //  545
+    if (displayFormat==DF_SCI) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_ALL:     //   20
+    if (displayFormat==DF_ALL) 
+      {result = displayFormatDigits;}
+    break;
+
+  case ITM_WSIZE:   //  664
+    result = shortIntegerWordSize;
+    break;
+
+  default:
+    break;
+  }
+
+  return result;
+}                                                           //JM dr ^^
+
+
 /********************************************//**
  * \brief Displays one softkey
  *
@@ -1079,19 +1135,57 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {
 
 char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
+char tmp2[12];
 char *figlabel() {
-              char tmp1[12];
-              tmp[0]=0;
-              strcat(tmp,label);
+  char *use_base_glyphs(int16_t xx){               //Needs non-local variable tmp2
+    void add_digitglyph_to_tmp2(int16_t xx) {
+       switch (xx)
+       {
+          case  0: strcat(tmp2, STD_SUB_0); break; 
+          case  1: strcat(tmp2, STD_BASE_1); break; 
+          case  2: strcat(tmp2, STD_BASE_2); break; 
+          case  3: strcat(tmp2, STD_BASE_3); break; 
+          case  4: strcat(tmp2, STD_BASE_4); break; 
+          case  5: strcat(tmp2, STD_BASE_5); break; 
+          case  6: strcat(tmp2, STD_BASE_6); break; 
+          case  7: strcat(tmp2, STD_BASE_7); break; 
+          case  8: strcat(tmp2, STD_BASE_8); break; 
+          case  9: strcat(tmp2, STD_BASE_9); break; 
+          case 10: strcat(tmp2, STD_BASE_10); break; 
+          case 11: strcat(tmp2, STD_BASE_11); break; 
+          case 12: strcat(tmp2, STD_BASE_12); break; 
+          case 13: strcat(tmp2, STD_BASE_13); break; 
+          case 14: strcat(tmp2, STD_BASE_14); break; 
+          case 15: strcat(tmp2, STD_BASE_15); break; 
+          case 16: strcat(tmp2, STD_BASE_16); break; 
+          default: ;
+       }
+    }
+    tmp2[0]=0;                
+    if (xx<=16) {
+       add_digitglyph_to_tmp2(xx); 
+    } else
 
+    if(xx<=99) {
+       add_digitglyph_to_tmp2(xx / 10);
+       add_digitglyph_to_tmp2(xx % 10);
+    }
+    else {
+       snprintf(tmp2, 12, "%d", xx);
+    }
+    return tmp2;
+  }
+  char tmp1[12];     //temporary and expendible
+  tmp[0]=0;
+  strcat(tmp,label);
   if(showValue > 0) {
-    strcat(tmp,STD_SPACE_3_PER_EM);
-    snprintf(tmp1, 12, "%d", showValue);
+    //strcat(tmp,STD_SPACE_3_PER_EM);
+    //snprintf(tmp1, 12, "%d", showValue);
+    strcpy(tmp1,use_base_glyphs(showValue));
     strcat(tmp,tmp1);
   }
-
-  return tmp;                                                                  //JM ^^
-}
+  return tmp; 
+}                                                                     //JM ^^
 
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
@@ -1304,7 +1398,7 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, showCb, showValue);
             }
           }
         }

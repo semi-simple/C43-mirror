@@ -381,8 +381,6 @@ void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus      //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
-
-
 /*    0 */  {itemToBeCoded,                NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},   
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },   
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },   
@@ -718,7 +716,7 @@ const item_t indexOfItems[] = {
 /*  332 */  { itemToBeCoded,               NOPARAM,                     "LOOP",                                        "LOOP",                                        CAT_MENU, SLS_UNCHANGED},   
 /*  333 */  { fnConstant,                  23,                          "l" STD_SUB_P STD_SUB_L,                       "l" STD_SUB_P STD_SUB_L,                       CAT_CNST, SLS_ENABLED  },   
 /*  334 */  { fnCvtLyM,                    multiply,                    "ly" STD_RIGHT_ARROW "m",                      "ly" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },   
-/*  335 */  { fnLeadingZeros,              FALSE,                       "LZOFF",                                       "LZOFF",                                       CAT_NONE, SLS_UNCHANGED},   //dr
+/*  335 */  { fnLeadingZeros,              false,                       "LZOFF",                                       "LZOFF",                                       CAT_NONE, SLS_UNCHANGED},   //dr
 /*  336 */  { fnLeadingZeros,              true,                        "LZON",                                        "LZON",                                        CAT_NONE, SLS_UNCHANGED},   //dr
 /*  337 */  { itemToBeCoded,               NOPARAM,                     "L.R.",                                        "L.R.",                                        CAT_FNCT, SLS_UNCHANGED},   
 /*  338 */  { fnCvtAcreM2,                 divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "m" STD_SUP_2 " " STD_RIGHT_ARROW,             CAT_FNCT, SLS_ENABLED  },   
@@ -887,7 +885,7 @@ const item_t indexOfItems[] = {
 /*  501 */  { fnRadixMark,                 RM_PERIOD,                   "RDX.",                                        "RDX.",                                        CAT_FNCT, SLS_UNCHANGED},   
 /*  502 */  { fnConstant,                  40,                          "r" STD_SUB_e,                                 "r" STD_SUB_e,                                 CAT_CNST, SLS_ENABLED  },   
 /*  503 */  { fnRealPart,                  NOPARAM,                     "Re",                                          "Re",                                          CAT_FNCT, SLS_ENABLED  },   
-/*  504 */  { fnComplexResult,             FALSE,                       "REALRE",                                      "REALRE",                                      CAT_NONE, SLS_UNCHANGED},   //dr
+/*  504 */  { fnComplexResult,             false,                       "REALRE",                                      "REALRE",                                      CAT_NONE, SLS_UNCHANGED},   //dr
 /*  505 */  { itemToBeCoded,               NOPARAM,                     "REALS",                                       "REALS",                                       CAT_MENU, SLS_UNCHANGED},   
 /*  506 */  { itemToBeCoded,               NOPARAM,                     "REAL?",                                       "REAL?",                                       CAT_FNCT, SLS_UNCHANGED},   
 /*  507 */  { fnComplexMode,               CM_RECTANGULAR,              "RECT",                                        "RECT",                                        CAT_FNCT, SLS_UNCHANGED},   
@@ -2313,18 +2311,19 @@ const item_t indexOfItems[] = {
 /* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_FNCT, SLS_UNCHANGED},   //JM KEY TAP DOUBLE SETTING
 /* 1912 */  { fnInDefault,                 ID_SI,                       "i" STD_SPACE_3_PER_EM "SI",                   "i" STD_SPACE_3_PER_EM "SI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI,                       "i" STD_SPACE_3_PER_EM "LI",                   "i" STD_SPACE_3_PER_EM "LI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
-/* 1914 */  { fnGraph,                     NOPARAM,                     "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},   //JM GRAPHING
-/* 1915 */  { itemToBeCoded,               NOPARAM,                     "A" STD_ELLIPSIS "Z",                          "A" STD_ELLIPSIS "Z",                          CAT_MENU, SLS_UNCHANGED},   // Ex 34
-/* 1916 */  { itemToBeCoded,               NOPARAM,                     "a" STD_ELLIPSIS "z",                          "a" STD_ELLIPSIS "z",                          CAT_MENU, SLS_UNCHANGED},   // Ex 875 Small latin letters
+/* 1914 */  { fnGraph,                     NOPARAM,                     "PLTGRF",                                      "PLTGRF",                                      CAT_FNCT, SLS_UNCHANGED},   //JM GRAPHING
+/* 1915 */  { itemToBeCoded,               NOPARAM,                     "A..Z",                                        "A..Z",                                        CAT_MENU, SLS_UNCHANGED},   // Ex 34
+/* 1916 */  { itemToBeCoded,               NOPARAM,                     "a..z",                                        "a..z",                                        CAT_MENU, SLS_UNCHANGED},   // Ex 875 Small latin letters
 /* 1917 */  { itemToBeCoded,               NOPARAM,                     "GRAPH",                                       "GRAPH",                                       CAT_MENU, SLS_UNCHANGED},   //JM GRAPH
-/* 1918 */  { fnJM,                        21,                          "Xmin",                                        "Xmin",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1919 */  { fnJM,                        22,                          "Xmax",                                        "Xmax",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1920 */  { fnJM,                        23,                          "Ymin",                                        "Ymin",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1921 */  { fnJM,                        24,                          "Ymax",                                        "Ymax",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1922 */  { fnJM,                        25,                          "TICK DX",                                     "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1923 */  { fnJM,                        26,                          "TICK DY",                                     "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1924 */  { fnJM,                        27,                          "LIMITS",                                      "LIMITS",                                      CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1918 */  { fnJM,                        21,                          "GRF.X1",                                      "Xmin",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1919 */  { fnJM,                        22,                          "GRF.X2",                                      "Xmax",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1920 */  { fnJM,                        23,                          "GRF.Y1",                                      "Ymin",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1921 */  { fnJM,                        24,                          "GRF.Y2",                                      "Ymax",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1922 */  { fnJM,                        25,                          "GRF.DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1924 */  { fnJM,                        27,                          "GRF.LIM",                                     "LIMITS",                                      CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "SI",                          STD_RIGHT_ARROW "SI",                          CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
+
 
 /* 1926 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

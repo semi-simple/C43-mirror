@@ -618,9 +618,8 @@ void fnReset(uint16_t confirmation) {
 
     lastIntegerBase = 0;
 
-
-    // initialize the RadaioButton/Checkbox items
-    fnRebuildRadioState();                                                      //dr build RadioButton, CheckBox
+    // initialize the RadioButton/Checkbox items
+    fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
 
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {
@@ -995,28 +994,28 @@ void fnRebuildRadioState() {
       }
       i++;
     }
-  /*else if(indexOfItems[k].func == fnComplexResult) {
-      radiocb_t rb;
-      rb.itemNr = k;
-      rb.param = indexOfItems[k].param;
-      rb.state = (getFlag(FLAG_CPXRES) == rb.param) ? 1 : 0;
-      rb.radioButton = RB_BCR;
-      if(i<MAX_RADIO_CB_ITEMS) {
-        indexOfRadioCbItems[i] = rb;
-      }
-      i++;
-    }*/
-  /*else if(indexOfItems[k].func == fnLeadingZeros) {
-      radiocb_t rb;
-      rb.itemNr = k;
-      rb.param = indexOfItems[k].param;
-      rb.state = (displayLeadingZeros == rb.param) ? 1 : 0;
-      rb.radioButton = RB_BLZ;
-      if(i<MAX_RADIO_CB_ITEMS) {
-        indexOfRadioCbItems[i] = rb;
-      }
-      i++;
-    }*/
+  //else if(indexOfItems[k].func == fnComplexResult) {
+  //  radiocb_t rb;
+  //  rb.itemNr = k;
+  //  rb.param = indexOfItems[k].param;
+  //  rb.state = (getFlag(FLAG_CPXRES) == rb.param) ? 1 : 0;
+  //  rb.radioButton = RB_BCR;
+  //  if(i<MAX_RADIO_CB_ITEMS) {
+  //    indexOfRadioCbItems[i] = rb;
+  //  }
+  //  i++;
+  //}
+  //else if(indexOfItems[k].func == fnLeadingZeros) {
+  //  radiocb_t rb;
+  //  rb.itemNr = k;
+  //  rb.param = indexOfItems[k].param;
+  //  rb.state = (displayLeadingZeros == rb.param) ? 1 : 0;
+  //  rb.radioButton = RB_BLZ;
+  //  if(i<MAX_RADIO_CB_ITEMS) {
+  //    indexOfRadioCbItems[i] = rb;
+  //  }
+  //  i++;
+  //}
     else if(indexOfItems[k].func == fnSetSetJM) {
       radiocb_t rb;
       rb.itemNr = k;

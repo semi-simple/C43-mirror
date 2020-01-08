@@ -568,15 +568,11 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
   
     float tmpr;
-    if(getRegisterDataType(REGISTER_X) != dtReal34) {
-      tmpr = 0;
-    } else {
-      real_t tmpy;
-      fnConverttoReal();
-      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-      realToString(&tmpy, tmpStr3000);
-      tmpr = strtof (tmpStr3000, NULL);
-    }
+    real_t tmpy;
+    fnConverttoReal();
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
+    realToString(&tmpy, tmpStr3000);
+    tmpr = strtof (tmpStr3000, NULL);
 
     if(tmpr == 3){
       fnDrop(0);

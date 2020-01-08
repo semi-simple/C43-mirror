@@ -492,6 +492,7 @@ int main(int argc, char* argv[]) {
   }
 
   if(strcmp(indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item") != 0) {
+    printf("%d %s %s\n",LAST_ITEM, indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item");  //JM
     printf("The last item of indexOfItems[] is not \"Last item\"\n");
     exit(1);
   }

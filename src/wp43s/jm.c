@@ -287,16 +287,6 @@ void fnShowJM(uint16_t jmConfig) {
     else { stringToLongInteger("0",10,mem); }
     break;
 
-  case JC_BASE_HOME:
-    if(SH_BASE_HOME) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
-  case JC_BASE_AHOME:
-    if(SH_BASE_AHOME) { stringToLongInteger("1",10,mem); }
-    else { stringToLongInteger("0",10,mem); }
-    break;
-
   case JM_INP_DFLT:
     if(Input_Default == ID_43S) { stringToLongInteger("0",10,mem); }
     else if(Input_Default == ID_DP) { stringToLongInteger("2",10,mem); }
@@ -578,15 +568,11 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
   
     float tmpr;
-    if(getRegisterDataType(REGISTER_X) != dtReal34) {
-      tmpr = 0;
-    } else {
-      real_t tmpy;
-      fnConverttoReal();
-      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-      realToString(&tmpy, tmpStr3000);
-      tmpr = strtof (tmpStr3000, NULL);
-    }
+    real_t tmpy;
+    fnConverttoReal();
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
+    realToString(&tmpy, tmpStr3000);
+    tmpr = strtof (tmpStr3000, NULL);
 
     if(tmpr == 3){
       fnDrop(0);

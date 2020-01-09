@@ -231,6 +231,9 @@ int16_t fnItemShowValue(int16_t item) {
     break;
 
   default:
+    if(indexOfItems[itemNr].func == itemToBeCoded) {
+      result = ITEM_NOT_CODED;
+    }
     break;
   }
 

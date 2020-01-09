@@ -24,6 +24,8 @@
 #define CB_FALSE    2
 #define CB_TRUE     3
 
+#define ITEM_NOT_CODED     -127
+
 
 int8_t   fnCbIsSet             (int16_t item);
 void     fnRefreshRadioState   (char rb, uint16_t mode);

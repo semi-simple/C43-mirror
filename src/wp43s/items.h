@@ -2009,3 +2009,4 @@ typedef struct {
 
 void runFunction(int16_t func);
 void fnToBeCoded(void);
+void itemToBeCoded(uint16_t);                //JM

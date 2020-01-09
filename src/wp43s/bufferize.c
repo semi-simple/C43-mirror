@@ -2131,7 +2131,8 @@ void closeNim(void) {
           }
           fnSetFlag(FLAG_CPXRES);
     
-          fnRefreshRadioState(RB_BCR, true);                                    //dr
+//        fnRefreshRadioState(RB_BCR, true);                                    //dr
+          fnRefreshComboxState(CB_JC, JC_BCR, true);                            //dr
         }
         else {
           sprintf(errorMessage, "In function closeNIM: %d is an unexpected nimNumberPart value!", nimNumberPart);

@@ -26,7 +26,7 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
-#define ITM_NULL                         0   //TEST
+#define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
 #define ITM_10x                          3
@@ -1929,13 +1929,29 @@
 #define ITM_USER_SHIFTS               1887   //JM USER
 #define ITM_USER_RESET                1888   //JM USER
 #define ITM_U_KEY_USER                1889   //JM USER
+#ifdef INLINE_TEST
 #define MNU_INL_TST                   1890
+#else
+#define Not_used1890                  1890
+#endif
 #define ITM_U_KEY_CC                  1891   //JM USER
+#ifdef INLINE_TEST
+#define ITM_TEST                      1892
+#else
 #define Not_used1892                  1892
+#endif
 #define ITM_U_KEY_MM                  1893   //JM USER
+#ifdef INLINE_TEST
+#define ITM_GET_TEST_BS               1894
+#else
 #define Not_used1894                  1894
+#endif
 #define ITM_U_KEY_SIGMA               1895   //JM USER
+#ifdef INLINE_TEST
+#define ITM_SET_TEST_BS               1896
+#else
 #define Not_used1896                  1896
+#endif
 #define ITM_U_KEY_PRGM                1897   //JM USER
 #define Not_used1898                  1898
 #define ITM_U_KEY_ALPHA               1899   //JM USER
@@ -1967,8 +1983,7 @@
 #define ITM_toSI                      1925   //JM SHORTINT
 
 
-
-#define LAST_ITEM                     1926  //JM
+#define LAST_ITEM                     1926   //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -1109,7 +1109,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   if(setCpxRes && oneArgumentIsComplex && resultDataType != dtString) {
     fnSetFlag(FLAG_CPXRES);
     
-    fnRefreshRadioState(RB_BCR, true);                                    //dr
+//  fnRefreshRadioState(RB_BCR, true);                                          //dr
+    fnRefreshComboxState(CB_JC, JC_BCR, true);                                  //dr
   }
 
   // Round the register value

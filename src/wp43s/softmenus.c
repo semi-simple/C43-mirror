@@ -1106,7 +1106,7 @@ char *figlabel() {
           case 14: strcat(tmp2, STD_BASE_14); break; 
           case 15: strcat(tmp2, STD_BASE_15); break; 
           case 16: strcat(tmp2, STD_BASE_16); break; 
-          default: ;
+          default: break;
        }
     }
     tmp2[0]=0;                
@@ -1253,13 +1253,13 @@ char *figlabel() {
   //vv EXTRA DRAWINGS FOR RADIO_BUTTON AND CHECK_BOX
   if(showCb >= 0) {
     if(videoMode == vmNormal) {
-      if(showCb == 0) {
+      if(showCb == RB_FALSE) {
         RB_UNCHECKED(x2-11, y2-16);
       }
-      else if(showCb == 1) {
+      else if(showCb == RB_TRUE) {
         RB_CHECKED(x2-11, y2-16);
       }
-      else if(showCb == 3) {
+      else if(showCb == CB_TRUE) {
         CB_CHECKED(x2-11, y2-16);
       }
       else {

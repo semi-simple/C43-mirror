@@ -67,7 +67,7 @@ SRC_WP43S                = \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
 		fonts.c fractions.c gui.c inlineTest.c integers.c items.c keyboard.c \
-		rasterFontsData.c registerValueConversions.c registers.c \
+		rasterFontsData.c radioButtonCatalog.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c timer.c \
 		wp43s.c memory.c) \

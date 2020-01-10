@@ -32,11 +32,13 @@
 void fontBrowser(uint16_t unusedParamButMandatory) {
   uint16_t x, y, g, first;
 
-  if(currentFntScr == 0) { // Init
-    currentFntScr = 1;
-
+  if(calcMode != CM_FONT_BROWSER) {
     previousCalcMode = calcMode;
     calcMode = CM_FONT_BROWSER;
+  }
+
+  if(currentFntScr == 0) { // Init
+    currentFntScr = 1;
 
     numLinesNumericFont  = 0;
     for(g=0; g<numericFont.numberOfGlyphs;) {

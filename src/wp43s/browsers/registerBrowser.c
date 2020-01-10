@@ -32,12 +32,16 @@
 void registerBrowser(uint16_t unusedParamButMandatory) {
   int16_t registerNameWidth;
 
+  if(calcMode != CM_REGISTER_BROWSER) {
+    previousCalcMode = calcMode;
+    calcMode = CM_REGISTER_BROWSER;
+  }
+
   if(currentRegisterBrowserScreen == 9999) { // Init
     currentRegisterBrowserScreen = REGISTER_X;
     rbrMode = RBR_GLOBAL;
     showContent = true;
     rbr1stDigit = true;
-    calcMode = CM_REGISTER_BROWSER;
   }
 
   if(currentRegisterBrowserScreen < 9999) {

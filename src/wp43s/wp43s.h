@@ -209,6 +209,7 @@ typedef int16_t calcRegister_t;
 #include "timer.h"
 #include "jm_graph.h"                                    //JM include 
 #include "jm.h"                                          //JM include
+#include "radioButtonCatalog.h"         //dr
 
 
 #define min(a,b)                ((a)<(b)?(a):(b))
@@ -221,12 +222,13 @@ typedef int16_t calcRegister_t;
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50
 
+#define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))
 #ifdef DMCP_BUILD
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     70                                               //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     72                                               //dr build RadioButton, CheckBox
 
 // On/Off 1 bit
 #define OFF                     0

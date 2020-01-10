@@ -1064,62 +1064,6 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 
 
 
-int16_t fnItemShowValue(int16_t item) {               //JM dr GAP digits vv
-  int16_t result = -1;
-  uint16_t itemNr = max(item, -item);
-
-  switch (itemNr)
-  {
-  case ITM_DSTACK:  //  132
-    result = displayStack;
-    break;
-
-  case ITM_GAP:     //  215
-    result = groupingGap;
-    break;
-
-  case ITM_FIX:     //  185
-    if (displayFormat==DF_FIX && SigFigMode == 0) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_SIGFIG:  // 1682
-    if (displayFormat==DF_FIX && SigFigMode != 0) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_ENG:     //  145
-    if (displayFormat==DF_ENG && !UNITDisplay) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_UNIT:    // 1693
-    if (displayFormat==DF_ENG && UNITDisplay) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_SCI:     //  545
-    if (displayFormat==DF_SCI) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_ALL:     //   20
-    if (displayFormat==DF_ALL) 
-      {result = displayFormatDigits;}
-    break;
-
-  case ITM_WSIZE:   //  664
-    result = shortIntegerWordSize;
-    break;
-
-  default:
-    break;
-  }
-
-  return result;
-}                                                           //JM dr ^^
-
-
 /********************************************//**
  * \brief Displays one softkey
  *
@@ -1158,7 +1102,7 @@ char *figlabel() {
           case 14: strcat(tmp2, STD_BASE_14); break; 
           case 15: strcat(tmp2, STD_BASE_15); break; 
           case 16: strcat(tmp2, STD_BASE_16); break; 
-          default: ;
+          default: break;
        }
     }
     tmp2[0]=0;                
@@ -1305,13 +1249,13 @@ char *figlabel() {
   //vv EXTRA DRAWINGS FOR RADIO_BUTTON AND CHECK_BOX
   if(showCb >= 0) {
     if(videoMode == vmNormal) {
-      if(showCb == 0) {
+      if(showCb == RB_FALSE) {
         RB_UNCHECKED(x2-11, y2-16);
       }
-      else if(showCb == 1) {
+      else if(showCb == RB_TRUE) {
         RB_CHECKED(x2-11, y2-16);
       }
-      else if(showCb == 3) {
+      else if(showCb == CB_TRUE) {
         CB_CHECKED(x2-11, y2-16);
       }
       else {

@@ -171,7 +171,7 @@ bool_t               rbr1stDigit;
 bool_t               updateDisplayValueX;
 calcKey_t            kbd_usr[37];
 radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   //vv dr build RadioButton, CheckBox
-uint16_t             cntOfRadioCbItems;                                         //^^
+//uint16_t           cntOfRadioCbItems;                                         //^^
 calcRegister_t       errorMessageRegisterLine;
 calcRegister_t       errorRegisterLine;
 uint16_t             row[100];

@@ -618,6 +618,16 @@ void fnReset(uint16_t confirmation) {
 
     lastIntegerBase = 0;
 
+    lastFcnsMenuPos = 0;
+    lastMenuMenuPos = 0;
+    lastCnstMenuPos = 0;
+
+    currentFntScr = 0;
+    currentFlgScr = 0;
+    currentRegisterBrowserScreen = 9999;
+
+
+
     // initialize the RadioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
 

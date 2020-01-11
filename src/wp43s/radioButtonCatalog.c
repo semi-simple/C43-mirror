@@ -348,8 +348,66 @@ void fnRebuildRadioState() {
 #endif
 
   size_t n = nbrOfElements(indexOfRadioCbEepromItems);
-  printf("Nbr of RadioButton/Checkbox  %zu\n", n);      //JM changed this due to errors on Mac compiler
+  printf("Nbr of RadioButton/Checkbox  %zu\n", n);          //JM changed this due to errors on Mac compiler
 }
+
+
+
+
+char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
+char tmp2[12];
+char *figlabel(const char *label, int16_t showValue) {                                          //JM 
+  char *use_base_glyphs(int16_t xx){                            //Needs non-local variable tmp2
+    void add_digitglyph_to_tmp2(int16_t xx) {
+       switch (xx)
+       {
+          case  0: strcat(tmp2, STD_SUB_0); break; 
+          case  1: strcat(tmp2, STD_BASE_1); break; 
+          case  2: strcat(tmp2, STD_BASE_2); break; 
+          case  3: strcat(tmp2, STD_BASE_3); break; 
+          case  4: strcat(tmp2, STD_BASE_4); break; 
+          case  5: strcat(tmp2, STD_BASE_5); break; 
+          case  6: strcat(tmp2, STD_BASE_6); break; 
+          case  7: strcat(tmp2, STD_BASE_7); break; 
+          case  8: strcat(tmp2, STD_BASE_8); break; 
+          case  9: strcat(tmp2, STD_BASE_9); break; 
+          case 10: strcat(tmp2, STD_BASE_10); break; 
+          case 11: strcat(tmp2, STD_BASE_11); break; 
+          case 12: strcat(tmp2, STD_BASE_12); break; 
+          case 13: strcat(tmp2, STD_BASE_13); break; 
+          case 14: strcat(tmp2, STD_BASE_14); break; 
+          case 15: strcat(tmp2, STD_BASE_15); break; 
+          case 16: strcat(tmp2, STD_BASE_16); break; 
+          default: ;
+       }
+    }
+    tmp2[0]=0;                
+    if (xx<=16) {
+       add_digitglyph_to_tmp2(xx); 
+    } else
+
+    if(xx<=99) {
+       add_digitglyph_to_tmp2(xx / 10);
+       add_digitglyph_to_tmp2(xx % 10);
+    }
+    else {
+       snprintf(tmp2, 12, "%d", xx);
+    }
+    return tmp2;
+  }
+  char tmp1[12];     //temporary and expendible
+  tmp[0]=0;
+  strcat(tmp,label);
+  if(showValue >= 0) {
+    //strcat(tmp,STD_SPACE_3_PER_EM);
+    //snprintf(tmp1, 12, "%d", showValue);
+    strcpy(tmp1,use_base_glyphs(showValue));
+    strcat(tmp,tmp1);
+  }
+  return tmp; 
+}                                                                     //JM ^^
+
+
 
 
 /*******

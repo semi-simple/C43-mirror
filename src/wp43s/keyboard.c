@@ -1111,9 +1111,6 @@ void btnPressed(void *notUsed, void *data) {
         clearScreen(false, true, true);
         refreshStack();
         showSoftmenuCurrentPart();
-        currentFlgScr = 0;
-        currentFntScr = 0;
-        currentRegisterBrowserScreen = 9999;
         oldTime[0] = 0;
         showDateTime();
       }
@@ -1216,9 +1213,6 @@ void btnPressed(void *notUsed, void *data) {
         clearScreen(false, true, true);
         refreshStack();
         showSoftmenuCurrentPart();
-        currentFlgScr = 0;
-        currentFntScr = 0;
-        currentRegisterBrowserScreen = 9999;
         oldTime[0] = 0;
         showDateTime();
       }
@@ -1634,15 +1628,12 @@ void btnPressed(void *notUsed, void *data) {
         rbr1stDigit = true;
         if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
           calcMode = previousCalcMode;
-          currentFlgScr = 0;
-          currentFntScr = 0;
           oldTime[0] = 0;
           showDateTime();
           clearScreen(false, true, true);
           fnRecall(currentRegisterBrowserScreen);
           STACK_LIFT_ENABLE;
           refreshStack();
-          currentRegisterBrowserScreen = 9999;
         }
         else if(rbrMode == RBR_NAMED) {
         }

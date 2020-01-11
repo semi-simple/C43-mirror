@@ -32,10 +32,13 @@
 void flagBrowser(uint16_t unusedParamButMandatory) {
   int16_t f, x, y;
 
-  if(currentFlgScr == 0) { // Init
-    currentFlgScr = 1;
+  if(calcMode != CM_FLAG_BROWSER) {
     previousCalcMode = calcMode;
     calcMode = CM_FLAG_BROWSER;
+  }
+
+  if(currentFlgScr == 0) { // Init
+    currentFlgScr = 1;
   }
 
   if(currentFlgScr == 1) { // Memory and flags from 0 to 79

@@ -26,7 +26,7 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
-#define ITM_NULL                         0   //TEST
+#define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
 #define ITM_10x                          3
@@ -1967,8 +1967,7 @@
 #define ITM_toSI                      1925   //JM SHORTINT
 
 
-
-#define LAST_ITEM                     1926  //JM
+#define LAST_ITEM                     1926   //JM
 
 #define CHR_PROD_SIGN                 9999
 
@@ -1994,3 +1993,4 @@ typedef struct {
 
 void runFunction(int16_t func);
 void fnToBeCoded(void);
+void itemToBeCoded(uint16_t);                //JM

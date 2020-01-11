@@ -40,7 +40,7 @@ typedef struct {
   int16_t firstItem; ///< Current first item on the screen (unshifted F1 = bottom left)
 } softmenuStack_t;
 
-void showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue, bool_t diagonal); //dr JM
+void showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue); //dr
 void showSoftmenuCurrentPart(void);
 void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);
 void initSoftmenuStack      (int16_t softmenu);

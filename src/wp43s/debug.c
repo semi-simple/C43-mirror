@@ -353,12 +353,18 @@ void debugNIM(void) {
    * \return char*          Name of the calc mode
    ***********************************************/
   char * getCalcModeName(uint16_t cm) {
-    if(cm == CM_AIM)    return "AIM   ";
-    if(cm == CM_NORMAL) return "normal";
-    if(cm == CM_TAM)    return "TAM   ";
-    if(cm == CM_NIM)    return "NIM   ";
-    if(cm == CM_ASM)    return "ASM   ";
-
+    if(cm == CM_AIM)              return "AIM         ";
+    if(cm == CM_NORMAL)           return "NORMAL      ";
+    if(cm == CM_TAM)              return "TAM         ";
+    if(cm == CM_NIM)              return "NIM         ";
+    if(cm == CM_ASM)              return "ASM         ";
+    if(cm == CM_ASSIGN)           return "ASSIGN      ";
+    if(cm == CM_REGISTER_BROWSER) return "REG.BROWSER ";
+    if(cm == CM_FLAG_BROWSER)     return "FLAG.BROWSER";
+    if(cm == CM_FONT_BROWSER)     return "FONT.BROWSER";
+    if(cm == CM_ERROR_MESSAGE)    return "ERROR.MSG   ";
+    if(cm == CM_BUG_ON_SCREEN)    return "BUG.ON.SCR  ";
+    if(cm == CM_CONFIRMATION)     return "CONFIRMATION";
     return "???   ";
   }
 

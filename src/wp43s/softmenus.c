@@ -1319,6 +1319,13 @@ void showSoftmenuCurrentPart(void) {
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue, indexOfItems[item%10000].func == itemToBeCoded);
           }
+          if(indexOfItems[item%10000].func == itemToBeCoded) {
+            int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
+            for(int16_t xStroke=x*67 + 1; xStroke<x*67 + 66; xStroke++) {
+              if(xStroke%3 == 0) yStroke--;
+              setPixel(xStroke, yStroke);
+            }
+          }
         }
       }
     }

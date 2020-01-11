@@ -1546,14 +1546,66 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnEnter(uint16_t unusedParamButMandatory) {
-  STACK_LIFT_ENABLE;
+  switch(calcMode) {
+    case CM_NORMAL:
+      STACK_LIFT_ENABLE;
 
-  liftStack();
-  copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+      liftStack();
+      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+      refreshStack();
 
-  refreshStack();
+      STACK_LIFT_DISABLE;
+      break;
 
-  STACK_LIFT_DISABLE;
+    case CM_AIM:
+      calcModeNormal();
+      showAlphaMode();
+      popSoftmenu();
+
+      if(aimBuffer[0] == 0) {
+        restoreStack();
+      }
+      else {
+        int16_t mem = stringByteLength(aimBuffer);
+
+        reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
+        memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
+
+        STACK_LIFT_ENABLE;
+        liftStack();
+        STACK_LIFT_DISABLE;
+
+        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+        aimBuffer[0] = 0;
+      }
+
+      refreshStack();
+      break;
+
+    case CM_NIM:
+      closeNim();
+      showFunctionName(ITM_ENTER, 10);
+      break;
+
+    case CM_TAM:
+    case CM_ASM:
+    case CM_REGISTER_BROWSER:
+    case CM_FLAG_BROWSER:
+    case CM_FONT_BROWSER:
+    case CM_ERROR_MESSAGE:
+    case CM_BUG_ON_SCREEN:
+      break;
+
+    case CM_CONFIRMATION:
+      calcMode = previousCalcMode;
+      confirmedFunction(CONFIRMED);
+      refreshStack();
+      break;
+
+    default:
+      sprintf(errorMessage, "In function fnEnter: unexpected calcMode value (%" FMT8U ") while processing key ENTER!", calcMode);
+      displayBugScreen(errorMessage);
+  }
 }
 
 

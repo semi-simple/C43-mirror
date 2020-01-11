@@ -187,7 +187,7 @@ $(GEN_SRC_CONSTANTPOINTERS): .stamp-constantPointers
 
 
 clean_generateCatalogs: 
-	rm -f $(OBJ_GENERATECCATALOGS)
+	rm -f $(OBJ_GENERATECATALOGS)
 	rm -f $(DEPS_GENERATECATALOGS)
 
 -include $(DEPS_GENERATECATALOGS)

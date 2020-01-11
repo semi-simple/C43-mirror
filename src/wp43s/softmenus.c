@@ -1077,60 +1077,6 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
  * \return void
  ***********************************************/
 void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {
-
-char tmp[12];                                               //JM vv WAIT FOR GAP/FIX text, and add the actual setting value to the sodtkey              
-char tmp2[12];
-char *figlabel() {
-  char *use_base_glyphs(int16_t xx){               //Needs non-local variable tmp2
-    void add_digitglyph_to_tmp2(int16_t xx) {
-       switch (xx)
-       {
-          case  0: strcat(tmp2, STD_SUB_0); break; 
-          case  1: strcat(tmp2, STD_BASE_1); break; 
-          case  2: strcat(tmp2, STD_BASE_2); break; 
-          case  3: strcat(tmp2, STD_BASE_3); break; 
-          case  4: strcat(tmp2, STD_BASE_4); break; 
-          case  5: strcat(tmp2, STD_BASE_5); break; 
-          case  6: strcat(tmp2, STD_BASE_6); break; 
-          case  7: strcat(tmp2, STD_BASE_7); break; 
-          case  8: strcat(tmp2, STD_BASE_8); break; 
-          case  9: strcat(tmp2, STD_BASE_9); break; 
-          case 10: strcat(tmp2, STD_BASE_10); break; 
-          case 11: strcat(tmp2, STD_BASE_11); break; 
-          case 12: strcat(tmp2, STD_BASE_12); break; 
-          case 13: strcat(tmp2, STD_BASE_13); break; 
-          case 14: strcat(tmp2, STD_BASE_14); break; 
-          case 15: strcat(tmp2, STD_BASE_15); break; 
-          case 16: strcat(tmp2, STD_BASE_16); break; 
-          default: break;
-       }
-    }
-    tmp2[0]=0;                
-    if (xx<=16) {
-       add_digitglyph_to_tmp2(xx); 
-    } else
-
-    if(xx<=99) {
-       add_digitglyph_to_tmp2(xx / 10);
-       add_digitglyph_to_tmp2(xx % 10);
-    }
-    else {
-       snprintf(tmp2, 12, "%d", xx);
-    }
-    return tmp2;
-  }
-  char tmp1[12];     //temporary and expendible
-  tmp[0]=0;
-  strcat(tmp,label);
-  if(showValue > 0) {
-    //strcat(tmp,STD_SPACE_3_PER_EM);
-    //snprintf(tmp1, 12, "%d", showValue);
-    strcpy(tmp1,use_base_glyphs(showValue));
-    strcat(tmp,tmp1);
-  }
-  return tmp; 
-}                                                                     //JM ^^
-
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
 
@@ -1218,25 +1164,37 @@ char *figlabel() {
     }
   }
 
-  w = stringWidth(figlabel(label), &standardFont, false, false);
+  w = stringWidth(figlabel(label, showValue), &standardFont, false, false);
   if((showCb >= 0) || (w >= 50)) {
     compressWidth = 1;         //JM compressWidth
-    w = stringWidth(figlabel(label), &standardFont, false, false);
+    w = stringWidth(figlabel(label, showValue), &standardFont, false, false);
     compressWidth = 0;         //JM compressWidth
     if(showCb >= 0) { w = w + 8; }
     compressString = 1;       //JM compressString
-    showString(figlabel(label), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+    showString(figlabel(label, showValue), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
     compressString = 0;       //JM compressString
   }
   else {
 //  w = stringWidth(label, &standardFont, false, false);
-     showString(figlabel(label), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+     showString(figlabel(label, showValue), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
   }
 
 //  w = stringWidth(label, &standardFont, false, false);
 //  if(showCb >= 0) { compressString = 1; w = w +2; }         //JM compressString
 //  showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
 //  if(showCb >= 0) { compressString = 0; }                   //JM unCompressString
+
+  //   Diagonal line                                          //JM temporary indication if menu items are implemented or not
+  if(showValue == ITEM_NOT_CODED) {
+    float yf = y1+4;
+    for(x=max(0,x1)+10; x<min(x2,SCREEN_WIDTH)-10; x++) {
+      y = (int)(yf);
+      if(topLine) {
+        invertPixel(x, y);
+      }
+      yf = yf + /*0.3433*/ 0.32;
+    }
+  }                                                           //JM ^^
 
 #ifdef JM_LINE2_DRAW
   if(showCb >= 0) {

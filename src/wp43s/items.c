@@ -2290,28 +2290,24 @@ const item_t indexOfItems[] = {
 /* 1887 */  { fnUserJM,                    USER_SHIFTS,                 "U" " SHFT",                                   "U" " SHFT",                                   CAT_NONE, SLS_UNCHANGED},   //JM USER
 /* 1888 */  { fnUserJM,                    USER_RESET,                  "U" " RSET",                                   "U" " RSET",                                   CAT_NONE, SLS_UNCHANGED},
 /* 1889 */  { fnSigmaAssign,               KEY_USERMODE,                STD_SIGMA "+USR",                              STD_SIGMA "+USR",                              CAT_NONE, SLS_UNCHANGED},
-#ifdef INLINE_TEST
-/* 1890 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Inl. Tst",                                    CAT_NONE, SLS_UNCHANGED},
-#else
-/* 1890 */  { itemToBeCoded,               NOPARAM,                     "1890",                                        "1890",                                        CAT_FREE, SLS_UNCHANGED},
-#endif
+/* 1890 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Inl. Tst",                                    CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 /* 1891 */  { fnSigmaAssign,               KEY_CC,                      STD_SIGMA "+CC",                               STD_SIGMA "+CC",                               CAT_NONE, SLS_UNCHANGED},
 #ifdef INLINE_TEST
-/* 1892 */  { fnSetInlineTest,             DR_ITM_TST,                  "",                                            "Test",                                        CAT_NONE, SLS_UNCHANGED},
+/* 1892 */  { fnSetInlineTest,             DR_ITM_TST,                  "",                                            "Test",                                        CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 #else
-/* 1892 */  { itemToBeCoded,               NOPARAM,                     "1892",                                        "1892",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1892 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Test",                                        CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 #endif
 /* 1893 */  { fnSigmaAssign,               -MNU_MyMenu,                 STD_SIGMA "+MyM",                              STD_SIGMA "+MyM",                              CAT_NONE, SLS_UNCHANGED},
 #ifdef INLINE_TEST
-/* 1894 */  { fnGetInlineTestBsToX,        NOPARAM,                     "",                                            "Get BS",                                      CAT_NONE, SLS_ENABLED  },
+/* 1894 */  { fnGetInlineTestBsToX,        NOPARAM,                     "",                                            "Get BS",                                      CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 #else
-/* 1894 */  { itemToBeCoded,               NOPARAM,                     "1894",                                        "1894",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1894 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Get BS",                                      CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 #endif
 /* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               STD_SIGMA "+",                                 STD_SIGMA "+",                                 CAT_NONE, SLS_UNCHANGED},   //JM USER
 #ifdef INLINE_TEST
-/* 1896 */  { fnSetInlineTestXToBs,        NOPARAM,                     "",                                            "Set BS",                                      CAT_NONE, SLS_ENABLED  },
+/* 1896 */  { fnSetInlineTestXToBs,        NOPARAM,                     "",                                            "Set BS",                                      CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 #else
-/* 1896 */  { itemToBeCoded,               NOPARAM,                     "1896",                                        "1896",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1896 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Set BS",                                      CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 #endif
 /* 1897 */  { fnSigmaAssign,               ITM_PR,                      STD_SIGMA "+PGM",                              STD_SIGMA "+PGM",                              CAT_NONE, SLS_UNCHANGED},   //JM USER
 /* 1898 */  { itemToBeCoded,               NOPARAM,                     "1898",                                        "1898",                                        CAT_FREE, SLS_UNCHANGED},

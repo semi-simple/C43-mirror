@@ -839,7 +839,7 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    // Reported bt Jaco Mostert January 3th 2020: following lines are useless
+    // Reported by Jaco Mostert January 3th 2020: following lines are useless
     //case ITM_ENTER :
     //  done = true;
     //  closeNim();

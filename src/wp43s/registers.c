@@ -1676,8 +1676,6 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
 }
 
 
-
-
 /********************************************//**
  * \brief returns the integer part of the value of a register
  *

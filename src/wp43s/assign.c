@@ -71,7 +71,7 @@ const calcKey_t kbd_std[37] = {
 */
 
 
- #ifdef JM_LAYOUT_1B  //JM LAYOUT 1B. OPTIMAL. SIMULATOR.
+ #ifdef JM_LAYOUT_1A  //JM UPDATED TO LAYOUT 1B. OPTIMAL. SIMULATOR.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM

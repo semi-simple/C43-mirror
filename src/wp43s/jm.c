@@ -1005,10 +1005,22 @@ void fnJM(uint16_t JM_OPCODE) {
     fnStrtoX(tmpStr3000);
     fnStrtoX("then press PLOT to display graph");
     refreshStack();
+  } else
+  if(JM_OPCODE == 28) {                                         //toRECT
+    if(getRegisterDataType(REGISTER_X) == dtComplex34) {
+      fnComplexMode(CM_RECTANGULAR);
+    } else
+      fnToRect(0);
+  } 
+  
 
+  else
+  if(JM_OPCODE == 29) {                                         //toPOLAR
+    if(getRegisterDataType(REGISTER_X) == dtComplex34) {      
+      fnComplexMode(CM_POLAR);
+    } else
+      fnToPolar(0);
   }
-
-
 
 }
 
@@ -1107,10 +1119,21 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
 
 
 
-void fnJM_2SI(uint16_t unusedParamButMandatory) {
-  fnConverttoReal();
-  JM_convertReal34ToShortInteger(CONFIRMED);
-  refreshStack();
+void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Conver Real to Longint; Longint to shortint; shortint to longint
+printf("%d\n",getRegisterDataType(REGISTER_X));
+  switch (getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+       fnChangeBase(10);                                //This converts shortint, longint and real to shortint!
+       break;
+    case dtReal34:
+       ipReal();                                        //This converts real to longint!
+       break;
+    case dtShortInteger:
+       convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!
+       break;
+    default:;
+  }
+refreshStack();
 }
 
 

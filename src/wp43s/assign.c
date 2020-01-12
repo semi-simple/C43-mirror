@@ -71,7 +71,7 @@ const calcKey_t kbd_std[37] = {
 */
 
 
- #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. OPTIMAL
+ #ifdef JM_LAYOUT_1B  //JM LAYOUT 1B. OPTIMAL. SIMULATOR.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
@@ -101,12 +101,12 @@ const calcKey_t kbd_std[37] = {
 
  {61,   KEY_DOWN,         KEY_SST,         ITM_STATUS,   KEY_DOWN,       KEY_DOWN,          KEY_SST,         ITM_NULL,      KEY_DOWN     }, //JM
  {62,   CHR_4,            ITM_AIM,        -MNU_CLK,      CHR_4,          CHR_T,             CHR_4,           CHR_TAU,       CHR_4        }, //JM
- {63,   CHR_5,           -MNU_ANGLECONV,  -MNU_UNITCONV, CHR_5,          CHR_U,             CHR_5,           CHR_PHI,       CHR_5        }, //JM
+ {63,   CHR_5,           -MNU_ANGLECONV,  -MNU_BASE/*-MNU_UNITCONV*/, CHR_5,          CHR_U,             CHR_5,           CHR_PHI,       CHR_5        }, //JM
  {64,   CHR_6,           -MNU_FLAGS,      -MNU_BITS,     CHR_6,          CHR_V,             CHR_6,           CHR_PSI,       CHR_6        }, //JM
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     CHR_CROSS,      CHR_W,             CHR_CROSS,       CHR_OMEGA,     ITM_MULT     }, //JM
 
- {71,   KEY_fg,            ITM_NULL,        ITM_NULL,     KEY_fg,          KEY_fg,             ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
- {72,   CHR_1,/*ITM_ASSIGN*/-MNU_ASN,     -MNU_BASE,     CHR_1,          CHR_X,             CHR_1,           CHR_XI,        CHR_1        }, //JM
+ {71,   KEY_fg,           ITM_NULL,        ITM_NULL,     KEY_fg,         KEY_fg,            ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
+ {72,   CHR_1,            ITM_ASSIGN,     -MNU_ASN,      CHR_1,          CHR_X,             CHR_1,           CHR_XI,        CHR_1        }, //JM
  {73,   CHR_2,            KEY_USERMODE,   -MNU_LOOP,     CHR_2,          CHR_Y,             CHR_2,           CHR_UPSILON,   CHR_2        }, //JM
  {74,   CHR_3,           -MNU_PARTS,      -MNU_TEST,     CHR_3,          CHR_Z,             CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_STK,        -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,    CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM

@@ -73,8 +73,8 @@ const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW, 
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,                     ITM_SQUARE,               ITM_LOG2,              ITM_LN1X,                    ITM_LOGXY,                          //JM re-arranged menu. logxy and square to follow DM42 keyboard. Re-aligned with 42S keys.
-                                     ITM_CUBEROOT,                  ITM_XTHROOT,                ITM_NULL,                 ITM_2X,                ITM_EX1,                     ITM_NULL,                           //JM re-arranged menu. Added YˆX to follow DM42 keyboard. Swapped YˆX and Yˆ(1/X). Re-aligned with 42S keys.
-                                     ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
+                                     ITM_CUBEROOT,                  ITM_XTHROOT,                ITM_SQUAREROOTX,          ITM_2X,                ITM_EX1,                     ITM_NULL,                           //JM re-arranged menu. Added YˆX to follow DM42 keyboard. Swapped YˆX and Yˆ(1/X). Re-aligned with 42S keys.
+                                     ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };
 
 const int16_t menu_TRI[]         = { ITM_sin,                       ITM_cos,                    ITM_tan,                  ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
 //                                   ITM_toREC,                     ITM_toPOL,                  ITM_pi,                   ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
@@ -302,8 +302,8 @@ const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,   
                                      CHR_alpha_TONOS,               CHR_epsilon_TONOS,          CHR_eta_TONOS,            CHR_iotaTON,           CHR_iota_DIALYTIKA_TONOS,    ITM_NULL,                            //JM modified greek sequence
                                      CHR_iota_DIALYTIKA,            CHR_omicron_TONOS,          CHR_upsilon_TONOS,        CHR_upsilon_DIALYTIKA, CHR_upsilon_DIALYTIKA_TONOS, CHR_omega_TONOS               };
 
-const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_NULL,              ITM_toDMS,                   ITM_toMULpi,
-                                     ITM_DEGto,                     ITM_RADto,                  ITM_GRADto,               ITM_NULL,              ITM_DMSto,                   ITM_MULPIto,
+const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_toMULpi,           ITM_toDMS,                   -MNU_UNITCONV,                       //JM mod
+                                     ITM_DEGto,                     ITM_RADto,                  ITM_GRADto,               ITM_MULPIto,           ITM_DMSto,                   ITM_NULL,
                                      ITM_DtoR,                      ITM_RtoD,                   ITM_NULL,                 ITM_DtoDMS,            ITM_DMStoD,                  ITM_NULL                      };
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */

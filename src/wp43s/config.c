@@ -690,17 +690,17 @@ void fnReset(uint16_t confirmation) {
       refreshDebugPanel();
     #endif
 
-    fnStrtoX("Reg 7,8 & 9 have: The 3 cubes = 3.");
-    fnStore(6);
+    fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
+    fnStore(10);
     fnDrop(0);
     fnStrInput2("569936821221962380720");
-    fnStore(7);
+    fnStore(11);
     fnDrop(0);
     fnStrInput2("-569936821113563493509");
-    fnStore(8);
+    fnStore(12);
     fnDrop(0);
     fnStrInput2("-472715493453327032");
-    fnStore(9);
+    fnStore(13);
     fnDrop(0);
 
 

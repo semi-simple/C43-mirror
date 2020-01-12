@@ -77,7 +77,7 @@
 #define longIntegerCompareUInt(op, uint)                                  mpz_cmp_ui    (op, uint)
 #define longIntegerCompareInt(op, sint)                                   mpz_cmp_si    (op, sint)
 #define longIntegerAddUInt(op, uint, result)                              mpz_add_ui    (result, op, uint)
-#define longIntegerSubtractUInt(op, uint, result)                         mpz_mul_ui    (result, op, uint)
+#define longIntegerSubtractUInt(op, uint, result)                         mpz_sub_ui    (result, op, uint)
 #define longIntegerMultiplyUInt(op, uint, result)                         mpz_mul_ui    (result, op, uint)
 #define longIntegerDivideRemainderUInt(op, uint, result, remainder)       mpz_tdiv_qr_ui(remainder, result, op, uint) /* op/uint => result*uint + remainder == op */
 #define longIntegerDivideUInt(op, uint, result)                           mpz_tdiv_q_ui (result, op, uint)            /* op/uint => result*uint + remainder == op */

@@ -23,9 +23,9 @@
 
 
 void (* const not[9])(void) = {
-// regX ==> 1            5          6          7          8           9            10             11        12
-//          Long integer Time       Date       String     real16 mat  complex16 m  Short integer  real34    complex34
-            notLonI,     notError,  notError,  notError,  notError,   notError,    notShoI,       notReal,  notError
+// regX ==> 1            2        3         4         5         6         7          8           9
+//          Long integer Real34   Complex34 Time      Date      String    Real34 mat Complex34 m Short integer
+            notLonI,     notReal, notError, notError, notError, notError, notError,  notError,   notShoI
 };
 
 

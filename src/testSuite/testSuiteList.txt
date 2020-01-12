@@ -57,6 +57,9 @@ max
 changeSign
 sign
 
+not
+mirror
+
 conversionAngles
 
 addition_longInteger

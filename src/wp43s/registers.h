@@ -134,6 +134,7 @@ void              fnStoreStack                    (uint16_t r);
 void              fnStoreElement                  (uint16_t r);
 void              fnStoreIJ                       (uint16_t r);
 void              fnRecall                        (uint16_t r);
+void              fnLastX                         (uint16_t unusedParamButMandatory);
 void              fnRecallAdd                     (uint16_t r);
 void              fnRecallSub                     (uint16_t r);
 void              fnRecallMult                    (uint16_t r);

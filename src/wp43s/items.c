@@ -348,6 +348,7 @@ void fnOff                      (uint16_t unusedParamButMandatory) {}
 void fnAim                      (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC              (uint16_t unusedParamButMandatory) {}
 void fnShow                     (uint16_t unusedParamButMandatory) {}
+void fnLastX                    (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -649,7 +650,7 @@ const item_t indexOfItems[] = {
 /*  293 */  { fnConstant,                  22,                          "K" STD_SUB_J,                                 "K" STD_SUB_J,                                 CAT_CNST, SLS_ENABLED  },
 /*  294 */  { itemToBeCoded,               NOPARAM,                     "KTYP?",                                       "KTYP?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  295 */  { addItemToBuffer,             REGISTER_L,                  "L",                                           "L",                                           CAT_RVAR, SLS_UNCHANGED},
-/*  296 */  { itemToBeCoded,               NOPARAM,                     "LASTx",                                       "LASTx",                                       CAT_FNCT, SLS_UNCHANGED},
+/*  296 */  { fnLastX,                     NOPARAM,                     "LASTx",                                       "LASTx",                                       CAT_FNCT, SLS_ENABLED  },
 /*  297 */  { fnCvtLbfN,                   multiply,                    "lbf" STD_RIGHT_ARROW "N",                     "lbf" STD_RIGHT_ARROW "N",                     CAT_FNCT, SLS_ENABLED  },
 /*  298 */  { itemToBeCoded,               NOPARAM,                     "LBL",                                         "LBL",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  299 */  { itemToBeCoded,               NOPARAM,                     "LBL?",                                        "LBL?",                                        CAT_FNCT, SLS_UNCHANGED},

@@ -1452,6 +1452,18 @@ void fnRecall(uint16_t regist) {
 
 
 /********************************************//**
+ * \brief Recalls register L in X
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnLastX(uint16_t unusedParamButMandatory) {
+  fnRecall(REGISTER_L);
+}
+
+
+
+/********************************************//**
  * \brief Adds a register to X
  *
  * \param[in] regist uint16_t

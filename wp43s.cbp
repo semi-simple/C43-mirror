@@ -395,6 +395,9 @@
 		<Unit filename="src/testSuite/minusOnePow.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/mirror.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/modulo.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -426,6 +429,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/neighb.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/not.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/parallel_complex.txt">

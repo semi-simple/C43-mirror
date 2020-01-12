@@ -296,13 +296,7 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   char strValue[22];
   longIntegerToAllocatedString(value, strValue, sizeof(strValue));
 
-  uint64_t val;
-  if(longIntegerIsNegative(value)) {
-    val = atoll(strValue + 1); // value is negative: discard the minus sign
-  }
-  else {
-    val = atoll(strValue); // value is positive
-  }
+  uint64_t val = strtoull(strValue + (longIntegerIsNegative(value) ? 1 : 0), NULL, 10); // when value is negative: discard the minus sign
 
   if(shortIntegerMode == SIM_UNSIGN) {
   }

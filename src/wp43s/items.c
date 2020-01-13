@@ -2324,7 +2324,8 @@ const item_t indexOfItems[] = {
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF.LIM",                                     "LIMITS",                                      CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1925 */  { fnJM_2SI,                    NOPARAM,                     "R" STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", "R" STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
+/* 1926 */  { fnJM,                        30,                          ".ms",                                         ".ms",                                         CAT_NONE, SLS_UNCHANGED},   //JM DMS HMS
 
 
-/* 1926 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1927 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

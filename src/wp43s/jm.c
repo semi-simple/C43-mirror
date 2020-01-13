@@ -1022,6 +1022,29 @@ void fnJM(uint16_t JM_OPCODE) {
       fnToPolar(0);
   }
 
+
+
+  else
+  if(JM_OPCODE == 30) {                                         //.ms
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      printf("!\n");
+      switch (getRegisterAngularMode(REGISTER_X)) {
+          
+      case AM_NONE  : {setRegisterAngularMode(REGISTER_X, currentAngularMode); runFunction(ITM_toDEG);} break;
+      case AM_DEGREE: {fnCvtDegToDms(0);} break;
+      case AM_DMS   : {fnCvtDmsToDeg(0);  fnCvtToCurrentAngularMode(AM_DEGREE);} break;
+      case AM_GRAD  : {fnCvtFromCurrentAngularMode(AM_NONE);} break;
+      case AM_RADIAN: {fnCvtFromCurrentAngularMode(AM_NONE);} break; 
+      case AM_MULTPI: {fnCvtFromCurrentAngularMode(AM_NONE);} break; 
+      
+      default:;
+      } 
+    refreshRegisterLine(REGISTER_X); 
+    }
+  }
+
+
 }
 
 

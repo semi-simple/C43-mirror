@@ -1037,16 +1037,14 @@ void fnJM(uint16_t JM_OPCODE) {
 void fnJMup(uint16_t unusedParamButMandatory) {
   // >>
   /*
-  if Angle mode: change to SP or DP as applicable using .d.
-  If SHORTINT: change to SP
-  if SP: change to DP
-  if DP: change to LONGINT
-  if ComplexSP change to ComplexDP
+  if Angle mode: change to DP as applicable using .d.
+  If SHORTINT: change to Real
+  if Real change to LONGINT
   */
   saveStack();
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
-  if((dataTypeX == dtReal34 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
     R_shF(); //shiftF = false;             //JM. Execur .d
     S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
@@ -1082,11 +1080,9 @@ void fnJMup(uint16_t unusedParamButMandatory) {
 void fnJMdown(uint16_t unusedParamButMandatory) {
   // <<
   /*
-  if Angle mode: change to SP or DP, as applicable using .d
-  If LONGINT: change to DP
-  if DP: change to SP
-  if SP: change to ShortInt
-  if ComplexDP change to ComplexSP
+  if Angle mode: change DP, as applicable using .d
+  If LONGINT: change to Real
+  if Real change to ShortInt
   */
   saveStack();
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
@@ -1109,7 +1105,6 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   }
   else
 
-
   if(dataTypeX == dtReal34) {
     JM_convertReal34ToShortInteger(NOT_CONFIRMED);
   }
@@ -1119,8 +1114,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
 
 
 
-void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Conver Real to Longint; Longint to shortint; shortint to longint
-printf("%d\n",getRegisterDataType(REGISTER_X));
+void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longint; Longint to shortint; shortint to longint
   switch (getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
        fnChangeBase(10);                                //This converts shortint, longint and real to shortint!
@@ -1323,9 +1317,12 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
       setConfirmationMode(JM_convertReal34ToLongInteger);
     }
     else {
-      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+//      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      ipReal();                                        //This converts real to longint!
     }
-  }
+  } 
+
+
 }
 
 

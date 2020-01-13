@@ -381,6 +381,7 @@ void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus      //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -780,7 +781,7 @@ const item_t indexOfItems[] = {
 /*  396 */  { itemToBeCoded,               NOPARAM,                     "M.SIMQ",                                      "M.SIMQ",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  397 */  { itemToBeCoded,               NOPARAM,                     "M.SQR?",                                      "M.SQR?",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  398 */  { itemToBeCoded,               NOPARAM,                     "M.WRAP",                                      "WRAP",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  399 */  { itemToBeCoded,               NOPARAM,                     "mass:",                                       "mass:",                                       CAT_MENU, SLS_UNCHANGED},
+/*  399 */  { itemToBeCoded,               NOPARAM,                     "Mass:",                                       "Mass:",                                       CAT_MENU, SLS_UNCHANGED},
 /*  400 */  { fnCvtAuM,                    divide,                      "m" STD_RIGHT_ARROW "au",                      "m" STD_RIGHT_ARROW "au",                      CAT_FNCT, SLS_ENABLED  },
 /*  401 */  { fnCvtFtM,                    divide,                      "m" STD_RIGHT_ARROW "ft.",                     "m" STD_RIGHT_ARROW "ft.",                     CAT_FNCT, SLS_ENABLED  },
 /*  402 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "m " STD_RIGHT_ARROW,                          CAT_FNCT, SLS_ENABLED  },
@@ -1033,7 +1034,7 @@ const item_t indexOfItems[] = {
 /*  649 */  { fnVersion,                   NOPARAM,                     "VERS?",                                       "VERS?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  650 */  { itemToBeCoded,               NOPARAM,                     "VIEW",                                        "VIEW",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  651 */  { fnConstant,                  54,                          "V" STD_SUB_m,                                 "V" STD_SUB_m,                                 CAT_CNST, SLS_ENABLED  },
-/*  652 */  { itemToBeCoded,               NOPARAM,                     "Vol.:",                                       "Vol.:",                                       CAT_MENU, SLS_UNCHANGED},
+/*  652 */  { itemToBeCoded,               NOPARAM,                     "Volume:",                                     "Volume:",                                     CAT_MENU, SLS_UNCHANGED},
 /*  653 */  { itemToBeCoded,               NOPARAM,                     "WDAY",                                        "WDAY",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  654 */  { itemToBeCoded,               NOPARAM,                     "Weibl",                                       "Weibl",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  655 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_SUB_p,                             "Weibl" STD_SUB_p,                             CAT_FNCT, SLS_UNCHANGED},
@@ -2322,7 +2323,8 @@ const item_t indexOfItems[] = {
 /* 1922 */  { fnJM,                        25,                          "GRF.DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF.LIM",                                     "LIMITS",                                      CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1925 */  { fnJM_2SI,                    NOPARAM,                     "R" STD_RIGHT_ARROW "L" STD_LEFT_RIGHT_ARROWS "SI", "R" STD_RIGHT_ARROW "L" STD_LEFT_RIGHT_ARROWS "SI", CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
+/* 1925 */  { fnJM_2SI,                    NOPARAM,                     "R" STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", "R" STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
+
 
 /* 1926 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

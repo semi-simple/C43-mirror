@@ -559,16 +559,20 @@ void fnJM(uint16_t JM_OPCODE) {
     realToString(&tmpy, tmpStr3000);
     tmpr = strtof (tmpStr3000, NULL);
 
-    if(tmpr == 3){
+    if(tmpr == 3){       //If 3, rather use the internal third root routine using 39 bits and with some logic allowing (-8)^(1/3)=-2
       fnDrop(0);
       fnCubeRoot(0);      
-    } else {
-      fnInvert(0);
-      fnPower(0);
-    }
-      refreshStack();
-
+    } else
+      if(tmpr == 2){     //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
+        fnDrop(0);
+        fnSquareRoot(0);
+      } else {
+          fnInvert(0);
+          fnPower(0);
+        }
+    refreshStack();
     } //end OPCODE 1
+
   else
 
   if(JM_OPCODE == 2) {                                          // JM_OPCODE = 2 : Angle from complex number.
@@ -926,6 +930,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 21) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -936,6 +941,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 22) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -946,6 +952,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 23) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -956,6 +963,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 24) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -966,6 +974,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 25) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -976,6 +985,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 26) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -986,6 +996,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 27) {                                         //Graph
+    saveStack();
     fnStrtoX("Type x and y limits into X Register,");
     fnStrtoX("then press Xmin, Xmax, Ymin, Ymax, dX, dY.");
     tmpStr3000[0]=0;
@@ -1016,6 +1027,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   else
   if(JM_OPCODE == 29) {                                         //toPOLAR
+    saveStack();
     if(getRegisterDataType(REGISTER_X) == dtComplex34) {      
       fnComplexMode(CM_POLAR);
     } else
@@ -1026,23 +1038,31 @@ void fnJM(uint16_t JM_OPCODE) {
 
   else
   if(JM_OPCODE == 30) {                                         //.ms
+    saveStack();
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
     if(getRegisterDataType(REGISTER_X) == dtReal34) {
-      printf("!\n");
-      switch (getRegisterAngularMode(REGISTER_X)) {
-          
-      case AM_NONE  : {setRegisterAngularMode(REGISTER_X, currentAngularMode); runFunction(ITM_toDEG);} break;
-      case AM_DEGREE: {fnCvtDegToDms(0);} break;
-      case AM_DMS   : {fnCvtDmsToDeg(0);  fnCvtToCurrentAngularMode(AM_DEGREE);} break;
-      case AM_GRAD  : {fnCvtFromCurrentAngularMode(AM_NONE);} break;
-      case AM_RADIAN: {fnCvtFromCurrentAngularMode(AM_NONE);} break; 
-      case AM_MULTPI: {fnCvtFromCurrentAngularMode(AM_NONE);} break; 
-      
-      default:;
-      } 
+      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
+      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {printf("Still ADM AM_NONE. Something is wrong\n");}
+
+      if(getRegisterAngularMode(REGISTER_X) != AM_DMS /*&& getRegisterAngularMode(REGISTER_X) != AM_HMS*/) {
+        runFunction(ITM_toDMS);
+      } else
+      /*if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {
+        runFunction(ITM_toHMS); break;
+        } else
+      */
+      switch (getRegisterAngularMode(REGISTER_X)) {        
+        case AM_DEGREE: {runFunction(ITM_DEGto);} break;
+        case AM_DMS   : {runFunction(ITM_DMSto);} break;
+        case AM_GRAD  : {runFunction(ITM_GRADto);} break;
+        case AM_RADIAN: {runFunction(ITM_RADto);} break; 
+        case AM_MULTPI: {runFunction(ITM_MULPIto);} break; 
+        default:;
+      }
+    } 
     refreshRegisterLine(REGISTER_X); 
-    }
   }
+
 
 
 }

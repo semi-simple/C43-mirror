@@ -413,7 +413,7 @@ const item_t indexOfItems[] = {
 /*   28 */  { fnArcsinh,                   NOPARAM,                     "arsinh",                                      "arsinh",                                      CAT_FNCT, SLS_ENABLED  },
 /*   29 */  { fnArctanh,                   NOPARAM,                     "artanh",                                      "artanh",                                      CAT_FNCT, SLS_ENABLED  },
 /*   30 */  { itemToBeCoded,               NOPARAM,                     "ASR",                                         "ASR",                                         CAT_FNCT, SLS_UNCHANGED},
-/*   31 */  { itemToBeCoded,               NOPARAM,                     "ASSIGN",                                      "ASSIGN",                                      CAT_FNCT, SLS_UNCHANGED},
+/*   31 */  { itemToBeCoded,               NOPARAM,                     "ASN",                                         "ASN",                                         CAT_FNCT, SLS_UNCHANGED},
 /*   32 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    "atm" STD_RIGHT_ARROW "Pa",                    CAT_FNCT, SLS_ENABLED  },
 /*   33 */  { fnCvtAuM,                    multiply,                    "au" STD_RIGHT_ARROW "m",                      "au" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
 /*   34 */  { itemToBeCoded,               NOPARAM,                     "0034",                                        "0034",                                        CAT_FREE, SLS_UNCHANGED},
@@ -2168,7 +2168,7 @@ const item_t indexOfItems[] = {
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "ASN",                                         "ASN",                                         CAT_MENU, SLS_UNCHANGED},
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "PPP",                                         "PPP",                                         CAT_MENU, SLS_UNCHANGED},
 
 /* 1773 */  { fnJMUSERmode,                256+0,                       "",                                            "K_00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)
 /* 1774 */  { fnJMUSERmode_f,              256+0,                       "",                                            "Kf00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)

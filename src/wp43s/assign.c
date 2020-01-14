@@ -143,14 +143,14 @@ const calcKey_t kbd_std[37] = {
  {45,   KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,     KEY_BACKSPACE,  KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,      KEY_BACKSPACE}, //JM
                  
  {51,   KEY_UP,           KEY_BST,         ITM_RBR,      KEY_UP,         KEY_UP,           KEY_BST,         ITM_NULL,      KEY_UP       }, //JM
- {52,   CHR_7,           -MNU_EQN,         ITM_VIEW,     CHR_7,          CHR_P,            CHR_7,           CHR_PI,        CHR_7        }, //JM
+ {52,   CHR_7,           -MNU_EQN,        -MNU_INFO,     CHR_7,          CHR_P,            CHR_7,           CHR_PI,        CHR_7        }, //JM
  {53,   CHR_8,           -MNU_ADV,        -MNU_CNST,     CHR_8,          CHR_Q,            CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
  {54,   CHR_9,           -MNU_MATX,       -MNU_XFN,      CHR_9,          CHR_R,            CHR_9,           CHR_RHO,       CHR_9        }, //JM
  {55,   ITM_DIV,         -MNU_STAT,       -MNU_SUMS,     CHR_DIVIDE,     CHR_S,            CHR_DIVIDE,      CHR_SIGMA,     ITM_DIV      }, //JM
 
  {61,   KEY_DOWN,         KEY_SST,         ITM_STATUS,   KEY_DOWN,       KEY_DOWN,         KEY_SST,         ITM_NULL,      KEY_DOWN     }, //JM
  {62,   CHR_4,           -MNU_BASE,       -MNU_CLK,      CHR_4,          CHR_T,            CHR_4,           CHR_TAU,       CHR_4        }, //JM
- {63,   CHR_5,           -MNU_ANGLECONV,   ITM_NULL,     CHR_5,          CHR_U,            CHR_5,           CHR_PHI,       CHR_5        }, //JM
+ {63,   CHR_5,           -MNU_ANGLECONV,  -MNU_UNITCONV, CHR_5,          CHR_U,            CHR_5,           CHR_PHI,       CHR_5        }, //JM
  {64,   CHR_6,           -MNU_FLAGS,      -MNU_BITS,     CHR_6,          CHR_V,            CHR_6,           CHR_PSI,       CHR_6        }, //JM
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     CHR_CROSS,      CHR_W,            CHR_CROSS,       CHR_OMEGA,     ITM_MULT     }, //JM
 
@@ -162,7 +162,7 @@ const calcKey_t kbd_std[37] = {
 
  {81,   KEY_EXIT,         ITM_OFF,         KEY_PRTX,     KEY_EXIT,       KEY_EXIT,         ITM_OFF,         ITM_NULL,      KEY_EXIT     }, //JM
  {82,   CHR_0,           -MNU_HOME,        ITM_TIMER,    CHR_0,          CHR_COLON,        CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
- {83,   CHR_PERIOD,       ITM_SHOW,       -MNU_INFO,     CHR_PERIOD,     CHR_COMMA,        CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
+ {83,   CHR_PERIOD,       ITM_SHOW,        ITM_VIEW,     CHR_PERIOD,     CHR_COMMA,        CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
  {84,   ITM_RS,           ITM_PR,         -MNU_STK,      ITM_NULL,       CHR_QUESTION_MARK,CHR_PRINTER,    -MNU_ALPHAMATH, ITM_NULL     }, //JM
  {85,   ITM_ADD,         -MNU_CATALOG,    -MNU_PARTS,    CHR_PLUS,       CHR_SPACE,        CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      }  //JM
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam

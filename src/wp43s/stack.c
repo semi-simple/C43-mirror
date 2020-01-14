@@ -344,6 +344,9 @@ void fnEnter(uint16_t unusedParamButMandatory) {
 
     case CM_TAM:
     case CM_ASM:
+      addItemToBuffer(ITM_ENTER);
+      break;
+
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:

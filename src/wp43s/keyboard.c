@@ -324,18 +324,18 @@ int8_t TC_compare(uint32_t timecheck) {               //JM-DOUBLE vv input in ms
     #ifdef DMCP_BUILD                                 //JM TIMER 
       now = sys_current_ms();                         //JM TIMER 
       tmpval = now_MEM1 + timecheck;
-      if (now > tmpval)   {tmp = 1;} else             //equivalent to TC Delta < timevheck, 
-      if (now < tmpval)   {tmp = -1;} else            //  now - now_MEM1 < timecheck then -1
-      if (now ==  tmpval) {tmp = 0;}
-      if (now_MEM1 == 0)  {tmp = 127;}
+      if     (now > tmpval)   {tmp =   1;}            //equivalent to TC Delta < timevheck, 
+      else if(now < tmpval)   {tmp =  -1;}            //  now - now_MEM1 < timecheck then -1
+      else if(now ==  tmpval) {tmp =   0;}
+      if(now_MEM1 == 0)       {tmp = 127;}
     #endif                                            //JM TIMER 
     #ifdef PC_BUILD                                   //JM TIMER 
       now = g_get_monotonic_time();                   //JM usec
       tmpval = now_MEM1 + timecheck *1000;
-      if (now > tmpval)   {tmp = 1;} else
-      if (now < tmpval)   {tmp = -1;} else
-      if (now ==  tmpval) {tmp = 0;}
-      if (now_MEM1 == 0)  {tmp = 127;}
+      if     (now > tmpval)   {tmp =   1;}
+      else if(now < tmpval)   {tmp =  -1;}
+      else if(now ==  tmpval) {tmp =   0;}
+      if(now_MEM1 == 0)       {tmp = 127;}
     #endif                                            //JM TIMER
 return tmp;
 }
@@ -549,11 +549,12 @@ void btnFnPressed(void *w, void *data) {
       showFunctionName(nameFunction(FN_key_pressed-37,12),0);  
       underline_softkey(FN_key_pressed-38,2, true /*dontclear at first call*/);
     }                                                                      //further shifts are done within FN_handler
-  }     
+  }
   #ifdef FN_TIME_DEBUG
   printf("  B KEY=%d, KEYlast=%d, DoubleClick=%d  \n",FN_key_pressed,FN_key_pressed_last, FN_double_click_detected );
   printf("  5 end \n");                                                                    //JM LONGPRESS ^^
   #endif
+//printf("4: %d\n",nameFunction(FN_key_pressed-37,0));                                            //jump to correct shift state in case shift is already activated
 #ifdef PC_BUILD
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(1); }      //dr
@@ -975,7 +976,7 @@ void btnPressed(void *notUsed, void *data) {
 
   else {
     int16_t item = determineItem(key);
-
+    //printf("1: %d, %s, %s, calcMode %d CM_NORMAL %d, userModeEnabled %d shiftF %d shiftG %d \n",item, indexOfItems[item].itemCatalogName,indexOfItems[item].itemSoftmenuName, calcMode,CM_NORMAL,userModeEnabled,shiftF,shiftG);
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
     if((calcMode == CM_NORMAL) && (!userModeEnabled && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
       //printf("%d", stringToKeyNumber(data));
@@ -986,6 +987,7 @@ void btnPressed(void *notUsed, void *data) {
     if(item == CHR_PROD_SIGN) {
       item = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);
     }
+    //printf("2: %d, %s, %s, calcMode %d CM_NORMAL %d, userModeEnabled %d shiftF %d shiftG %d \n",item, indexOfItems[item].itemCatalogName,indexOfItems[item].itemSoftmenuName, calcMode,CM_NORMAL,userModeEnabled,shiftF,shiftG);
 
     resetShiftState();
 
@@ -996,54 +998,8 @@ void btnPressed(void *notUsed, void *data) {
 
     resetTemporaryInformation();
 
-    if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
-      if(calcMode == CM_AIM) {
-        calcModeNormal();
-        showAlphaMode();
-        popSoftmenu();
-
-        if(aimBuffer[0] == 0) {
-          restoreStack();
-        }
-        else {
-          int16_t mem = stringByteLength(aimBuffer);
-
-          reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
-
-          STACK_LIFT_ENABLE;
-          liftStack();
-          STACK_LIFT_DISABLE;
-
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          aimBuffer[0] = 0;
-        }
-
-        refreshStack();
-      }
-
-      else if(calcMode == CM_TAM || calcMode == CM_ASM) {
-        addItemToBuffer(ITM_ENTER);
-      }
-
-      else if(calcMode == CM_FONT_BROWSER) {
-      }
-
-      else if(calcMode == CM_FLAG_BROWSER) {
-      }
-
-      else if(calcMode == CM_REGISTER_BROWSER) {
-      }
-
-      else if(calcMode == CM_CONFIRMATION) {
-        calcMode = previousCalcMode;
-        confirmedFunction(CONFIRMED);
-        refreshStack();
-      }
-
-      else {
-        displayBugScreen("In function btnPressed: unexpected case while processing key ENTER!");
-      }
+    if(item == ITM_ENTER) {
+      fnEnter(NOPARAM);
     }
 
     else if(item == KEY_EXIT) {
@@ -1379,7 +1335,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
-          else if (item == CHR_case) {  //vvJM
+          else if(item == CHR_case) {   //vvJM
             showSoftmenuCurrentPart();
             setCatalogLastPos();
           }                             //^^
@@ -1576,10 +1532,6 @@ void btnPressed(void *notUsed, void *data) {
     else if(calcMode == CM_NIM) {
       if(item < 0) {
         showSoftmenu(NULL, item, false);
-      }
-      else if(item == ITM_ENTER) {                //JM ERPNNEW NOTE NIM ENTER
-        closeNim();
-        showFunctionName(item, 10);
       }
       else {
         addItemToNimBuffer(item);                 //JM #, set to 

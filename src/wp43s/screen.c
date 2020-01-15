@@ -1716,7 +1716,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
-          else if(getRegisterDataType(regist) == dtComplex34) {
+          else if(getRegisterDataType(regist) == dtComplex34 || getRegisterDataType(regist) == dtReal34) {
              if(temporaryInformation == TI_ABC) {                             //JM EE \/ 
               if(regist == REGISTER_X) {                                         
                 strcpy(prefix, "c" STD_SPACE_FIGURE "=");                        

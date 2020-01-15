@@ -1452,6 +1452,21 @@ void fnRecall(uint16_t regist) {
 
 
 /********************************************//**
+ * \brief Recalls register L in X
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnLastX(uint16_t unusedParamButMandatory) {
+//fnRecall(REGISTER_L);
+  liftStack();                                    //JM LastX improved version
+  copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
+  refreshStack();                                 //JM LastX improved verison
+}
+
+
+
+/********************************************//**
  * \brief Adds a register to X
  *
  * \param[in] regist uint16_t
@@ -1661,35 +1676,6 @@ void fnXLessThan(uint16_t unusedParamButMandatory) {
   #ifdef PC_BUILD
     showInfoDialog("In function fnXLessThan:", "To be coded", NULL, NULL);
   #endif
-}
-
-
-/********************************************//**
- * \brief Lifts the stack and copies X to Y
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnEnter(uint16_t unusedParamButMandatory) {
-  //printf("fnEnter calcmode:%d NORMAL:%d NIM:%d nimBuffer[0]:%d \n", calcMode, CM_NORMAL, CM_NIM, nimBuffer[0]); //JM eRPN modification
-  if( !eRPN ) {                                    //JM NEWERPN
-  STACK_LIFT_ENABLE;
-
-  liftStack();
-  copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-
-  refreshStack();
-
-  STACK_LIFT_DISABLE;                             //JM NEWERPN (COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN)
-  }                                               //JM NEWERPN vv
-  else {
-    if(stackLiftEnabled) {
-      liftStack();
-      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-      refreshStack();
-    }   
-    STACK_LIFT_DISABLE;                           //JM NEWERPN (COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN)
-  }                                               //JM NEWERPN ^^
 }
 
 

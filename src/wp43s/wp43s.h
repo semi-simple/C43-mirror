@@ -622,7 +622,7 @@ extern bool_t               rbr1stDigit;
 extern bool_t               updateDisplayValueX;
 extern calcKey_t            kbd_usr[37];
 extern radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];            //vv dr build RadioButton, CheckBox
-extern uint16_t             cntOfRadioCbItems;                                  //^^
+//extern uint16_t           cntOfRadioCbItems;                                  //^^
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
 extern uint16_t             row[100];

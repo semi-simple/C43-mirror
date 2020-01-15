@@ -209,8 +209,4 @@ void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX
 //display.c
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode);
 
-//stack.c
-void fnLastX   (uint16_t unusedParamButMandatory);            //JM LastX
-
-
 void fnShowJM  (uint16_t jmConfig);

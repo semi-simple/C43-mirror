@@ -974,54 +974,8 @@ void btnPressed(void *notUsed, void *data) {
 
     resetTemporaryInformation();
 
-    if(item == ITM_ENTER && calcMode != CM_NORMAL && calcMode != CM_NIM) {
-      if(calcMode == CM_AIM) {
-        calcModeNormal();
-        showAlphaMode();
-        popSoftmenu();
-
-        if(aimBuffer[0] == 0) {
-          restoreStack();
-        }
-        else {
-          int16_t mem = stringByteLength(aimBuffer);
-
-          reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
-
-          STACK_LIFT_ENABLE;
-          liftStack();
-          STACK_LIFT_DISABLE;
-
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          aimBuffer[0] = 0;
-        }
-
-        refreshStack();
-      }
-
-      else if(calcMode == CM_TAM || calcMode == CM_ASM) {
-        addItemToBuffer(ITM_ENTER);
-      }
-
-      else if(calcMode == CM_FONT_BROWSER) {
-      }
-
-      else if(calcMode == CM_FLAG_BROWSER) {
-      }
-
-      else if(calcMode == CM_REGISTER_BROWSER) {
-      }
-
-      else if(calcMode == CM_CONFIRMATION) {
-        calcMode = previousCalcMode;
-        confirmedFunction(CONFIRMED);
-        refreshStack();
-      }
-
-      else {
-        displayBugScreen("In function btnPressed: unexpected case while processing key ENTER!");
-      }
+    if(item == ITM_ENTER) {
+      fnEnter(NOPARAM);
     }
 
     else if(item == KEY_EXIT) {
@@ -1121,7 +1075,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
+            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -1135,7 +1089,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
         displayBugScreen(errorMessage);
       }
     }
@@ -1555,10 +1509,6 @@ void btnPressed(void *notUsed, void *data) {
     else if(calcMode == CM_NIM) {
       if(item < 0) {
         showSoftmenu(NULL, item, false);
-      }
-      else if(item == ITM_ENTER) {                //JM ERPNNEW NOTE NIM ENTER
-        closeNim();
-        showFunctionName(item, 10);
       }
       else {
         addItemToNimBuffer(item);                 //JM #, set to 

@@ -1965,9 +1965,9 @@
 #define ITM_GRF_DY                    1923   //JM GRAPH
 #define ITM_GRF_HLP                   1924   //JM GRAPH
 #define ITM_toSI                      1925   //JM SHORTINT
+#define ITM_ms                        1926   //JM DMS HMS
 
-
-#define LAST_ITEM                     1926   //JM
+#define LAST_ITEM                     1927   //JM
 
 #define CHR_PROD_SIGN                 9999
 
@@ -1993,4 +1993,4 @@ typedef struct {
 
 void runFunction(int16_t func);
 void fnToBeCoded(void);
-void itemToBeCoded(uint16_t);                //JM
+void itemToBeCoded(uint16_t unusedParamButMandatory);

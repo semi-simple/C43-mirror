@@ -609,7 +609,6 @@ void fnReset(uint16_t confirmation) {
 
 
 
-
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
@@ -626,6 +625,8 @@ void fnReset(uint16_t confirmation) {
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
 
+
+
     // initialize the RadioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
 
@@ -640,7 +641,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnJM(USER_DEFAULTS);                         //JM USER
+    fnUserJM(USER_DEFAULTS);                         //JM USER
 //    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
@@ -688,6 +689,20 @@ void fnReset(uint16_t confirmation) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkHexaString), false);
       refreshDebugPanel();
     #endif
+
+    fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
+    fnStore(10);
+    fnDrop(0);
+    fnStrInput2("569936821221962380720");
+    fnStore(11);
+    fnDrop(0);
+    fnStrInput2("-569936821113563493509");
+    fnStore(12);
+    fnDrop(0);
+    fnStrInput2("-472715493453327032");
+    fnStore(13);
+    fnDrop(0);
+
 
     refreshStack();
   }

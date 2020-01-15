@@ -479,7 +479,7 @@ void fnStrtoX(char aimBuffer[]) {
 }
 
 
-void fnStrInput2(char inp1[]) {  //
+void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X
     tmpStr3000[0]=0; 
     strcat(tmpStr3000,inp1);
     STACK_LIFT_ENABLE;   // 5
@@ -488,6 +488,18 @@ void fnStrInput2(char inp1[]) {  //
     stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
+void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X
+    tmpStr3000[0]=0; 
+    strcat(tmpStr3000,inp1);
+    STACK_LIFT_ENABLE;   // 5
+    liftStack();
+
+    longInteger_t lgInt;
+    longIntegerInit(lgInt);
+    stringToLongInteger(tmpStr3000 + (tmpStr3000[0] == '+' ? 1 : 0), 10, lgInt);
+    convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+    longIntegerFree(lgInt);
+}
 
 
 void fnRCL(int16_t inp) {

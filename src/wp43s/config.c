@@ -693,13 +693,13 @@ void fnReset(uint16_t confirmation) {
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
     fnDrop(0);
-    fnStrInput2("569936821221962380720");
+    fnStrInputLongint("569936821221962380720");
     fnStore(11);
     fnDrop(0);
-    fnStrInput2("-569936821113563493509");
+    fnStrInputLongint("-569936821113563493509");
     fnStore(12);
     fnDrop(0);
-    fnStrInput2("-472715493453327032");
+    fnStrInputLongint("-472715493453327032");
     fnStore(13);
     fnDrop(0);
 

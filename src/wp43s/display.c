@@ -1733,7 +1733,9 @@ void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLen
     str[0] = '-';
   }
   else {
-    stringLen = digits + 1; // 1 for the trailing 0
+    stringLen = digits + 1 ;//+2; // 1 for the trailing 0 //JM add space
+    //str[0] = 0xa0;             //JM add space 218a   a1 8a     batt:242a a4 2a
+    //str[1] = 0x08;             //JM add space
   }
 
   if(strLen < stringLen) {

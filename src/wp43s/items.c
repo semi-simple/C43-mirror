@@ -900,8 +900,8 @@ const item_t indexOfItems[] = {
 /*  515 */  { itemToBeCoded,               NOPARAM,                     "RL",                                          "RL",                                          CAT_FNCT, SLS_UNCHANGED},
 /*  516 */  { itemToBeCoded,               NOPARAM,                     "RLC",                                         "RLC",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  517 */  { fnConstant,                  42,                          "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   CAT_CNST, SLS_ENABLED  },
-/*  518 */  { itemToBeCoded,               NOPARAM,                     "RM",                                          "RM",                                          CAT_FNCT, SLS_UNCHANGED},
-/*  519 */  { fnGetRoundingMode,           NOPARAM,                     "RM?",                                         "RM?",                                         CAT_FNCT, SLS_ENABLED  },
+/*  518 */  { itemToBeCoded,               NOPARAM,                     "RMODE",                                       "RMODE",                                       CAT_FNCT, SLS_UNCHANGED},
+/*  519 */  { fnGetRoundingMode,           NOPARAM,                     "RMODE?",                                      "RMODE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  520 */  { fnRmd,                       NOPARAM,                     "RMD",                                         "RMD",                                         CAT_FNCT, SLS_ENABLED  },
 /*  521 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  522 */  { fnRound,                     NOPARAM,                     "ROUND",                                       "ROUND",                                       CAT_FNCT, SLS_ENABLED  },
@@ -1890,7 +1890,7 @@ const item_t indexOfItems[] = {
 /* 1503 */  { addItemToBuffer,             ITM_MA34,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1504 */  { addItemToBuffer,             ITM_MA35,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1505 */  { addItemToBuffer,             ITM_MA36,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
-/* 1506 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UNDO,                                      CAT_NONE, SLS_UNCHANGED},
+/* 1506 */  { fnJM,                        31,                          "",                                            STD_UNDO,                                      CAT_NONE, SLS_UNCHANGED},   //JM added temporary routine for undo
 /* 1507 */  { itemToBeCoded,               NOPARAM,                     "",                                            "PRGM",                                        CAT_NONE, SLS_UNCHANGED},   //JM Change P/R to PRGM
 /* 1508 */  { itemToBeCoded,               NOPARAM,                     "",                                            "R/S",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1509 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         CAT_NONE, SLS_UNCHANGED},

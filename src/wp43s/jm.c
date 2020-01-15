@@ -1076,6 +1076,10 @@ void fnJM(uint16_t JM_OPCODE) {
   }
 
 
+else
+  if(JM_OPCODE == 31) {                                       //UNDO
+    restoreStack();
+  }
 
 }
 
@@ -1122,7 +1126,7 @@ void fnJMup(uint16_t unusedParamButMandatory) {
   else
 
   if(dataTypeX == dtReal34) {
-    JM_convertReal34ToLongInteger(NOT_CONFIRMED);
+    JM_convertReal34ToLongInteger(CONFIRMED);
   }
 
   refreshStack();
@@ -1168,7 +1172,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   else
 
   if(dataTypeX == dtReal34) {
-    JM_convertReal34ToShortInteger(NOT_CONFIRMED);
+    JM_convertReal34ToShortInteger(CONFIRMED);
   }
 
   refreshStack();

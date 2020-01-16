@@ -192,6 +192,17 @@ void executeFunction(int16_t fn, int16_t itemShift) {
         }
       }
     }
+  } else {
+    switch(fn) {
+      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
+      case 1: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[0].gShifted) : (kbd_usr[0].gShifted)) ;} break;
+      case 2: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[1].gShifted) : (kbd_usr[1].gShifted)) ;} break;
+      case 3: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[2].gShifted) : (kbd_usr[2].gShifted)) ;} break;
+      case 4: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[3].gShifted) : (kbd_usr[3].gShifted)) ;} break;
+      case 5: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[4].gShifted) : (kbd_usr[4].gShifted)) ;} break;
+      case 6: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[5].gShifted) : (kbd_usr[5].gShifted)) ;} break;
+      default:break;
+    }
   }
 }
 
@@ -720,6 +731,7 @@ void btnFnClicked(void *w, void *data) {
     }
     else {
       resetShiftState();
+      executeFunction(fn, 0);          //JM FN NOMENU KEYS
     }
   }
 }

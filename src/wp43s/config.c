@@ -704,6 +704,21 @@ void fnReset(uint16_t confirmation) {
     fnDrop(0);
 
 
+    fnStrtoX("Reg 15, 16 & 17 have: The 3 cubes = 42.");
+    fnStore(14);
+    fnDrop(0);
+    fnStrInputLongint("-80538738812075974");
+    fnStore(15);
+    fnDrop(0);
+    fnStrInputLongint("80435758145817515");
+    fnStore(16);
+    fnDrop(0);
+    fnStrInputLongint("12602123297335631");
+    fnStore(17);
+    fnDrop(0);
+
+
+
     refreshStack();
   }
 }

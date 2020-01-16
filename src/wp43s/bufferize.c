@@ -1167,14 +1167,8 @@ static int16_t insertGapFP(char *displayBuffer, int16_t numDigits, int16_t nth) 
     }
 */
 
-void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
-  int16_t numDigits, source, dest;
+/*
 
-  if(*nimBuffer == '-') {
-    *(displayBuffer++) = '-';
-  }
-  nimBuffer++;
-  int16_t groupingGapM = groupingGap; //JMGAP vv
   switch (groupingGap) {            
     case 2: groupingGap = 2; break;
     case 3: groupingGap = 2; break;
@@ -1184,7 +1178,53 @@ void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
     case 7: groupingGap = 2; break;
     case 8: groupingGap = 8; break;
     default:;                          
-  }                                   //JMGAP ^^
+  }                                   
+
+*/
+
+void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
+  int16_t numDigits, source, dest;
+
+  if(*nimBuffer == '-') {
+    *(displayBuffer++) = '-';
+  }
+  nimBuffer++;
+
+Somewhere else, base2 is set to GAP4. That must be found.
+
+  int16_t groupingGapM = groupingGap;                   //JMGAP vv
+  //printf("--1-- GroupingGap %d nimnumberpart %d lastIntegerBase %d\n",groupingGapM,nimNumberPart,lastIntegerBase);
+  switch (nimNumberPart) {
+    case NP_INT_10 :          // +12345 longint
+    case NP_INT_BASE :        // +123AB#16
+      switch (lastIntegerBase) {            
+        case 0: groupingGap = groupingGapM; break;
+        case 2: groupingGap = 4; break;
+        case 3: break; //no change from default
+        case 4: break; //no change from default
+        case 5: break; //no change from default
+        case 6: break; //no change from default
+        case 7: break; //no change from default
+        case 8: groupingGap = 3; break;
+        case 9: break; //no change from default
+        case 10: groupingGap = 3; break;
+        case 11: break; //no change from default
+        case 12: break; //no change from default
+        case 13: break; //no change from default
+        case 14: break; //no change from default
+        case 15: break; //no change from default
+        case 16: groupingGap = 2; break;
+        default:;                          
+      }
+      break;                                          
+    case NP_INT_16 :          // +123AB
+        groupingGap = 2; 
+        break;                                 
+    default:;  
+    } 
+  //printf("--2-- GroupingGap %d \n",groupingGap);
+
+                                                      //JMGAP ^^
 
   for(numDigits=0; nimBuffer[numDigits]!=0 && nimBuffer[numDigits]!='e' && nimBuffer[numDigits]!='.' && nimBuffer[numDigits]!=' ' && nimBuffer[numDigits]!='#' && nimBuffer[numDigits]!='+' && nimBuffer[numDigits]!='-'; numDigits++); // The semicolon here is OK
 

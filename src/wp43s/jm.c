@@ -1070,10 +1070,11 @@ void fnJM(uint16_t JM_OPCODE) {
         runFunction(ITM_toDMS);
 #endif
       } else {
-      /*if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {
+/*      if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {     //JM wait for futur HMS
         runFunction(ITM_toHMS); break;
-        } else
-      */
+        }
+      } else { 
+*/
 #ifndef TESTSUITE_BUILD
         switch (getRegisterAngularMode(REGISTER_X)) {
           case AM_DEGREE: {runFunction(ITM_DEGto);} break;

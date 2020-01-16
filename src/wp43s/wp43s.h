@@ -64,6 +64,7 @@
     #define DEBUG_PANEL 0
   #endif
   #define JM_LAYOUT_1A               //Preferred layout
+  // #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary. Change here for screen picture. Also change GUI.C to get the blues back.
 #endif
 
 #ifdef DMCP_BUILD

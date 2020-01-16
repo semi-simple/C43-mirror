@@ -6,6 +6,8 @@ make -j8 V=1 clean_all
 rm ./backup.bin
 rm ./wp43c
 
+make -j8 V=1 mrproper
+
 
 find . -type f -name "* 2.txt" -exec rm {} \;
 find . -type f -name "* 3.txt" -exec rm {} \;

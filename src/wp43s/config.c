@@ -609,7 +609,6 @@ void fnReset(uint16_t confirmation) {
 
 
 
-
     // Initialization of user key assignments
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
 
@@ -642,7 +641,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnJM(USER_DEFAULTS);                         //JM USER
+    fnUserJM(USER_DEFAULTS);                         //JM USER
 //    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
@@ -690,6 +689,35 @@ void fnReset(uint16_t confirmation) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkHexaString), false);
       refreshDebugPanel();
     #endif
+
+    fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
+    fnStore(10);
+    fnDrop(0);
+    fnStrInputLongint("569936821221962380720");
+    fnStore(11);
+    fnDrop(0);
+    fnStrInputLongint("-569936821113563493509");
+    fnStore(12);
+    fnDrop(0);
+    fnStrInputLongint("-472715493453327032");
+    fnStore(13);
+    fnDrop(0);
+
+
+    fnStrtoX("Reg 15, 16 & 17 have: The 3 cubes = 42.");
+    fnStore(14);
+    fnDrop(0);
+    fnStrInputLongint("-80538738812075974");
+    fnStore(15);
+    fnDrop(0);
+    fnStrInputLongint("80435758145817515");
+    fnStore(16);
+    fnDrop(0);
+    fnStrInputLongint("12602123297335631");
+    fnStore(17);
+    fnDrop(0);
+
+
 
     refreshStack();
   }

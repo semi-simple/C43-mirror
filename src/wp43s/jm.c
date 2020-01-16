@@ -133,21 +133,6 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
 
 
 
-/********************************************//**   //JM LastX
- * \brief Restores Last X and refreshes the stack   //JM LastX
- *                                                  //JM LastX
- * \param[in] unusedParamButMandatory uint16_t      //JM LastX
- * \return void                                     //JM LastX
- ***********************************************/   //JM LastX
-void fnLastX(uint16_t unusedParamButMandatory) {    //JM LastX
-  //  fnRecall(REGISTER_L);                         //JM LastX
-  liftStack();                                      //JM LastX improved verison
-  copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X); //JM LastX improved verison
-  refreshStack();                                   //JM LastX improved verison
-}                                                   //JM LastX
-
-
-
 /********************************************//**
  * \brief Sets/resets flag
  *
@@ -494,7 +479,7 @@ void fnStrtoX(char aimBuffer[]) {
 }
 
 
-void fnStrInput2(char inp1[]) {  //
+void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X
     tmpStr3000[0]=0; 
     strcat(tmpStr3000,inp1);
     STACK_LIFT_ENABLE;   // 5
@@ -503,6 +488,18 @@ void fnStrInput2(char inp1[]) {  //
     stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
+void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X
+    tmpStr3000[0]=0; 
+    strcat(tmpStr3000,inp1);
+    STACK_LIFT_ENABLE;   // 5
+    liftStack();
+
+    longInteger_t lgInt;
+    longIntegerInit(lgInt);
+    stringToLongInteger(tmpStr3000 + (tmpStr3000[0] == '+' ? 1 : 0), 10, lgInt);
+    convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+    longIntegerFree(lgInt);
+}
 
 
 void fnRCL(int16_t inp) {
@@ -566,7 +563,8 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 1) {                                          // JM_OPCODE = 1 : Temporary implementation of xthe root of y, until Martins is done
     saveStack();
-  
+    copySourceRegisterToDestRegister(REGISTER_X, 99);   // STO TMP
+
     float tmpr;
     real_t tmpy;
     fnConverttoReal();
@@ -574,19 +572,25 @@ void fnJM(uint16_t JM_OPCODE) {
     realToString(&tmpy, tmpStr3000);
     tmpr = strtof (tmpStr3000, NULL);
 
-    if(tmpr == 3){
+    if(tmpr == 3){       //If 3, rather use the internal third root routine using 39 bits and with some logic allowing (-8)^(1/3)=-2
       fnDrop(0);
       fnCubeRoot(0);      
-    } else {
-      fnInvert(0);
-      fnPower(0);
-    }
-      refreshStack();
-
+    } else
+      if(tmpr == 2){     //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
+        fnDrop(0);
+        fnSquareRoot(0);
+      } else {
+          fnInvert(0);
+          fnPower(0);
+        }
+    refreshStack();
+    copySourceRegisterToDestRegister(99, REGISTER_L);   // STO TMP
     } //end OPCODE 1
+
   else
 
   if(JM_OPCODE == 2) {                                          // JM_OPCODE = 2 : Angle from complex number.
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
     saveStack();
     cm = complexMode;
     STACK_LIFT_ENABLE;
@@ -604,6 +608,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 3) {                                          //operator a
     saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
     STACK_LIFT_ENABLE;
     liftStack();
     fn_cnst_op_a();
@@ -612,6 +617,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 4) {                                          //operater a sq
      saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
      STACK_LIFT_ENABLE;
      liftStack();
      fn_cnst_op_aa();
@@ -620,6 +626,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 5) {                                          //Operator j
     saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
     STACK_LIFT_ENABLE;
     liftStack();
     fn_cnst_op_j();
@@ -812,6 +819,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 10) {                                         //e^theta.j j
     saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
     STACK_LIFT_ENABLE;
     liftStack();
     fn_cnst_op_j();
@@ -941,6 +949,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 21) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -951,6 +960,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 22) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -961,6 +971,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 23) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -971,6 +982,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 24) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -981,6 +993,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 25) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -991,6 +1004,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 26) {                                         //Graph
+    saveStack();
     //Convert from X register to float
     real_t tmpy;
     fnConverttoReal();
@@ -1001,6 +1015,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDrop(0);
   } else
   if(JM_OPCODE == 27) {                                         //Graph
+    saveStack();
     fnStrtoX("Type x and y limits into X Register,");
     fnStrtoX("then press Xmin, Xmax, Ymin, Ymax, dX, dY.");
     tmpStr3000[0]=0;
@@ -1020,10 +1035,61 @@ void fnJM(uint16_t JM_OPCODE) {
     fnStrtoX(tmpStr3000);
     fnStrtoX("then press PLOT to display graph");
     refreshStack();
+  } else
+  if(JM_OPCODE == 28) {                                         //toRECT
+    if(getRegisterDataType(REGISTER_X) == dtComplex34) {
+      fnComplexMode(CM_RECTANGULAR);
+    } else
+      fnToRect(0);
+  } 
+  
 
+  else
+  if(JM_OPCODE == 29) {                                         //toPOLAR
+    saveStack();
+    if(getRegisterDataType(REGISTER_X) == dtComplex34) {      
+      fnComplexMode(CM_POLAR);
+    } else
+      fnToPolar(0);
   }
 
 
+
+  else
+  if(JM_OPCODE == 30) {                                         //.ms
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_L, 99);   // STO TMP
+
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
+      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {printf("Still ADM AM_NONE. Something is wrong\n");}
+
+      if(getRegisterAngularMode(REGISTER_X) != AM_DMS /*&& getRegisterAngularMode(REGISTER_X) != AM_HMS*/) {
+        runFunction(ITM_toDMS);
+      } else
+      /*if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {
+        runFunction(ITM_toHMS); break;
+        } else
+      */
+      switch (getRegisterAngularMode(REGISTER_X)) {        
+        case AM_DEGREE: {runFunction(ITM_DEGto);} break;
+        case AM_DMS   : {runFunction(ITM_DMSto);} break;
+        case AM_GRAD  : {runFunction(ITM_GRADto);} break;
+        case AM_RADIAN: {runFunction(ITM_RADto);} break; 
+        case AM_MULTPI: {runFunction(ITM_MULPIto);} break; 
+        default:;
+      }
+    } 
+    copySourceRegisterToDestRegister(99, REGISTER_L);   // STO TMP
+    refreshRegisterLine(REGISTER_X); 
+  }
+
+
+else
+  if(JM_OPCODE == 31) {                                       //UNDO
+    restoreStack();
+  }
 
 }
 
@@ -1040,16 +1106,19 @@ void fnJM(uint16_t JM_OPCODE) {
 void fnJMup(uint16_t unusedParamButMandatory) {
   // >>
   /*
-  if Angle mode: change to SP or DP as applicable using .d.
-  If SHORTINT: change to SP
-  if SP: change to DP
-  if DP: change to LONGINT
-  if ComplexSP change to ComplexDP
+  if Angle mode: change to Real as applicable using .d.
+  If SHORTINT: change to Real
+  if Real change to LONGINT
   */
   saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
-  if((dataTypeX == dtReal34 || dataTypeX == dtReal34) && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+    bool_t userModeEnabledMEM = userModeEnabled;
+    userModeEnabled = false;
+
     R_shF(); //shiftF = false;             //JM. Execur .d
     S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
@@ -1059,6 +1128,7 @@ void fnJMup(uint16_t unusedParamButMandatory) {
 #ifdef DMCP_BUILD
     btnClicked(NULL, "03");     //JM changed from 02
 #endif
+    userModeEnabled = userModeEnabledMEM;
   }
   else
 
@@ -1068,7 +1138,7 @@ void fnJMup(uint16_t unusedParamButMandatory) {
   else
 
   if(dataTypeX == dtReal34) {
-    JM_convertReal34ToLongInteger(NOT_CONFIRMED);
+    JM_convertReal34ToLongInteger(CONFIRMED);
   }
 
   refreshStack();
@@ -1085,16 +1155,18 @@ void fnJMup(uint16_t unusedParamButMandatory) {
 void fnJMdown(uint16_t unusedParamButMandatory) {
   // <<
   /*
-  if Angle mode: change to SP or DP, as applicable using .d
-  If LONGINT: change to DP
-  if DP: change to SP
-  if SP: change to ShortInt
-  if ComplexDP change to ComplexSP
+  if Angle mode: change Real, as applicable using .d
+  If LONGINT: change to Real
+  if Real change to ShortInt
   */
   saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+    bool_t userModeEnabledMEM = userModeEnabled;
+    userModeEnabled = false;
     R_shF(); //shiftF = false;             //JM. Execur .d
     S_shG(); //shiftG = true;              //JM
     Reset_Shift_Mem();          //JM
@@ -1104,6 +1176,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
 #ifdef DMCP_BUILD
     btnClicked(NULL, "03");     //JM changed from 02
 #endif
+    userModeEnabled = userModeEnabledMEM;
   }
   else
 
@@ -1112,9 +1185,8 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   }
   else
 
-
   if(dataTypeX == dtReal34) {
-    JM_convertReal34ToShortInteger(NOT_CONFIRMED);
+    JM_convertReal34ToShortInteger(CONFIRMED);
   }
 
   refreshStack();
@@ -1122,10 +1194,24 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
 
 
 
-void fnJM_2SI(uint16_t unusedParamButMandatory) {
-  fnConverttoReal();
-  JM_convertReal34ToShortInteger(CONFIRMED);
-  refreshStack();
+void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longint; Longint to shortint; shortint to longint
+  switch (getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+       if (lastIntegerBase != 0) {
+         fnChangeBase(lastIntegerBase);                 //This converts shortint, longint and real to shortint!
+         } else {
+         fnChangeBase(10);                              //This converts shortint, longint and real to shortint!          
+         }
+       break;
+    case dtReal34:
+       ipReal();                                        //This converts real to longint!
+       break;
+    case dtShortInteger:
+       convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!
+       break;
+    default:;
+  }
+refreshStack();
 }
 
 
@@ -1286,19 +1372,26 @@ void JM_convertReal34ToShortInteger(uint16_t confirmation) {
       setConfirmationMode(JM_convertReal34ToShortInteger);
     }
     else {
-      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      ipReal();                                        //This converts real to longint!
+      //convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
 
-    //setRegisterTag(REGISTER_X,10);
-      longInteger_t lgInt;
-      convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-      if(lastIntegerBase == 0) {
-        convertLongIntegerToShortIntegerRegister(lgInt, 10, REGISTER_X);
-      } else {
-        convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, REGISTER_X);        
-      }
-      longIntegerFree(lgInt);
+      if (lastIntegerBase != 0) {
+        fnChangeBase(lastIntegerBase);                 //This converts shortint, longint and real to shortint!
+        } else {
+        fnChangeBase(10);                              //This converts shortint, longint and real to shortint!          
+        }
 
-    //convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
+      refreshStack();
+
+      //longInteger_t lgInt;
+      //convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+      //if(lastIntegerBase == 0) {
+      //  convertLongIntegerToShortIntegerRegister(lgInt, 10, REGISTER_X);
+      //} else {
+      //  convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, REGISTER_X);        
+      //}
+      //longIntegerFree(lgInt);
+
     }
   }
 }
@@ -1315,9 +1408,13 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
       setConfirmationMode(JM_convertReal34ToLongInteger);
     }
     else {
-      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+//      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      ipReal();                                        //This converts real to longint!
+      refreshStack();
     }
-  }
+  } 
+
+
 }
 
 
@@ -1325,12 +1422,20 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
 void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination) {
   char snum[10];
   itoa(inp, snum, base);
+
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
   stringToLongInteger(snum,base,mem);
   convertLongIntegerToShortIntegerRegister(mem, base, destination);
-  setRegisterShortIntegerBase(destination, base);
+
+  //setRegisterShortIntegerBase(destination, base);
+  if (lastIntegerBase != 0) {
+    fnChangeBase(lastIntegerBase);                 //This converts shortint, longint and real to shortint!
+    } else {
+    fnChangeBase(base);                              //This converts shortint, longint and real to shortint!          
+    }
+
   longIntegerFree(mem);
   refreshStack();
 }

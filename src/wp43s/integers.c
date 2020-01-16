@@ -106,6 +106,7 @@ void fnChangeBase(uint16_t base) {
 
 void fnMirror(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intMirror(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
   }
 

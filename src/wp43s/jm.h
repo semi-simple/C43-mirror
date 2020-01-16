@@ -148,7 +148,8 @@ void fnJMUSERmode   (uint16_t JM_KEY);
 void fnJMUSERmode_f (uint16_t JM_KEY);
 void fnJMUSERmode_g (uint16_t JM_KEY);
 void fnStrtoX       (char aimBuffer[]);
-void fnStrInput2    (char inp1[]);
+void fnStrInputReal34 (char inp1[]);
+void fnStrInputLongint(char inp1[]);
 void fnRCL          (int16_t inp);
 void Show_User_Keys (void);
 void fnKEYSELECT    (void);
@@ -208,9 +209,5 @@ void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX
 
 //display.c
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode);
-
-//stack.c
-void fnLastX   (uint16_t unusedParamButMandatory);            //JM LastX
-
 
 void fnShowJM  (uint16_t jmConfig);

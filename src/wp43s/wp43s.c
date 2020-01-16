@@ -260,6 +260,8 @@ void setupDefaults(void) {
     real34Zero(memPtr);
   }
 
+
+
   #ifdef PC_BUILD
     debugWindow = DBG_REGISTERS;
   #endif

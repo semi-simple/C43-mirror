@@ -1580,8 +1580,12 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
+  int16_t max_Width;                                        //JM align longints
 
   convertLongIntegerRegisterToLongInteger(regist, lgInt);
+
+  if(longIntegerIsNegative(lgInt)) {max_Width = maxWidth;}  //JM align longints
+  else {max_Width = maxWidth - 8;}                          //JM align longints
 
   exponentShift = (longIntegerBits(lgInt) - 1) * 0.3010299956639811952137;
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);

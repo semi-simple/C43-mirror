@@ -1584,12 +1584,16 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp) {
+void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWid, int16_t maxExp) {
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
+  int16_t maxWidth;                                          //JM align longints
 
   convertLongIntegerRegisterToLongInteger(regist, lgInt);
+
+  if(longIntegerIsNegative(lgInt)) {maxWidth = maxWid;}      //JM align longints
+  else {maxWidth = maxWid - 8;}                              //JM align longints
 
   exponentShift = (longIntegerBits(lgInt) - 1) * 0.3010299956639811952137;
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);

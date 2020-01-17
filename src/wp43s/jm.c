@@ -616,11 +616,11 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 4) {                                          //operater a sq
-     saveStack();
+    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
-     STACK_LIFT_ENABLE;
-     liftStack();
-     fn_cnst_op_aa();
+    STACK_LIFT_ENABLE;
+    liftStack();
+    fn_cnst_op_aa();
   }
   else
 
@@ -1066,23 +1066,29 @@ void fnJM(uint16_t JM_OPCODE) {
       if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {printf("Still ADM AM_NONE. Something is wrong\n");}
 
       if(getRegisterAngularMode(REGISTER_X) != AM_DMS /*&& getRegisterAngularMode(REGISTER_X) != AM_HMS*/) {
+#ifndef TESTSUITE_BUILD
         runFunction(ITM_toDMS);
-      } else
-      /*if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {
+#endif
+      } else {
+/*      if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {     //JM wait for futur HMS
         runFunction(ITM_toHMS); break;
-        } else
-      */
-      switch (getRegisterAngularMode(REGISTER_X)) {        
-        case AM_DEGREE: {runFunction(ITM_DEGto);} break;
-        case AM_DMS   : {runFunction(ITM_DMSto);} break;
-        case AM_GRAD  : {runFunction(ITM_GRADto);} break;
-        case AM_RADIAN: {runFunction(ITM_RADto);} break; 
-        case AM_MULTPI: {runFunction(ITM_MULPIto);} break; 
-        default:;
+        }
+      } else { 
+*/
+#ifndef TESTSUITE_BUILD
+        switch (getRegisterAngularMode(REGISTER_X)) {
+          case AM_DEGREE: {runFunction(ITM_DEGto);} break;
+          case AM_DMS   : {runFunction(ITM_DMSto);} break;
+          case AM_GRAD  : {runFunction(ITM_GRADto);} break;
+          case AM_RADIAN: {runFunction(ITM_RADto);} break;
+          case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
+          default: break;
+        }
+#endif
       }
-    } 
+    }
     copySourceRegisterToDestRegister(99, REGISTER_L);   // STO TMP
-    refreshRegisterLine(REGISTER_X); 
+    refreshRegisterLine(REGISTER_X);
   }
 
 

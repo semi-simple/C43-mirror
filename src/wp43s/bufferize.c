@@ -1106,81 +1106,6 @@ static int16_t insertGapFP(char *displayBuffer, int16_t numDigits, int16_t nth) 
 }
 
 
-/*
-
-  switch (nimNumberPart) {
-    case NP_INT_10 :          // +12345 longint
-      switch (groupingGap) {            
-        case 2: groupingGap = 3; break;
-        case 4: groupingGap = 3; break;
-        case 5: groupingGap = 3; break;
-        case 7: groupingGap = 3; break;
-        case 8: groupingGap = 3; break;
-        default:;                          
-      }
-      break;                                 //JMGAP ^^
-    case NP_INT_16 :          // +123AB
-      switch (groupingGap) {            
-        case 2: groupingGap = 2; break;
-        case 3: groupingGap = 2; break;
-        case 4: groupingGap = 4; break;
-        case 5: groupingGap = 2; break;
-        case 6: groupingGap = 2; break;
-        case 7: groupingGap = 2; break;
-        case 8: groupingGap = 8; break;
-        default:;                          
-      }
-      break;                                 //JMGAP ^^
-    case NP_INT_BASE :        // +123AB#16
-      switch (lastIntegerBase) {
-      
-        case 2:               // 1010101
-          switch (groupingGap) {            
-            case 3: groupingGap = 2; break;
-            case 5: groupingGap = 2; break;
-            case 6: groupingGap = 2; break;
-            case 7: groupingGap = 2; break;
-            default:;                          
-          }
-          break;
-        case 4:
-          groupingGap = 4; 
-          break;
-        case 8:
-          groupingGap = 3; 
-          break;
-        case 16:
-          switch (groupingGap) {            
-            case 3: groupingGap = 2; break;
-            case 5: groupingGap = 4; break;
-            case 6: groupingGap = 4; break;
-            case 7: groupingGap = 4; break;
-            default:;                          
-          }
-          break;
-
-        default:;
-      }
-      break;
-
-    default:;
-    }
-*/
-
-/*
-
-  switch (groupingGap) {            
-    case 2: groupingGap = 2; break;
-    case 3: groupingGap = 2; break;
-    case 4: groupingGap = 4; break;
-    case 5: groupingGap = 2; break;
-    case 6: groupingGap = 2; break;
-    case 7: groupingGap = 2; break;
-    case 8: groupingGap = 8; break;
-    default:;                          
-  }                                   
-
-*/
 
 void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
   int16_t numDigits, source, dest;
@@ -1190,41 +1115,35 @@ void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
   }
   nimBuffer++;
 
-Somewhere else, base2 is set to GAP4. That must be found.
-
   int16_t groupingGapM = groupingGap;                   //JMGAP vv
-  //printf("--1-- GroupingGap %d nimnumberpart %d lastIntegerBase %d\n",groupingGapM,nimNumberPart,lastIntegerBase);
   switch (nimNumberPart) {
-    case NP_INT_10 :          // +12345 longint
-    case NP_INT_BASE :        // +123AB#16
+    case NP_INT_10 :              // +12345 longint
+    case NP_INT_BASE :            // +123AB#16
       switch (lastIntegerBase) {            
-        case 0: groupingGap = groupingGapM; break;
-        case 2: groupingGap = 4; break;
-        case 3: break; //no change from default
-        case 4: break; //no change from default
-        case 5: break; //no change from default
-        case 6: break; //no change from default
-        case 7: break; //no change from default
-        case 8: groupingGap = 3; break;
-        case 9: break; //no change from default
-        case 10: groupingGap = 3; break;
-        case 11: break; //no change from default
-        case 12: break; //no change from default
-        case 13: break; //no change from default
-        case 14: break; //no change from default
-        case 15: break; //no change from default
-        case 16: groupingGap = 2; break;
+        case  0: groupingGap = groupingGapM; break;
+        case  2: groupingGap =  4; break;
+        case  3: groupingGap = 3; break;
+        case  4: groupingGap =  2; break;
+        case  5: groupingGap = 3; break;
+        case  6: groupingGap = 3; break;
+        case  7: groupingGap = 3; break;
+        case  8: groupingGap =  3; break;
+        case  9: groupingGap = 3; break;
+        case 10: groupingGap =  3; break;
+        case 11: groupingGap = 3; break;
+        case 12: groupingGap = 3; break;
+        case 13: groupingGap = 3; break;
+        case 14: groupingGap = 3; break;
+        case 15: groupingGap = 3; break;
+        case 16: groupingGap =  2; break;
         default:;                          
       }
       break;                                          
-    case NP_INT_16 :          // +123AB
+    case NP_INT_16 :              // +123AB
         groupingGap = 2; 
         break;                                 
     default:;  
-    } 
-  //printf("--2-- GroupingGap %d \n",groupingGap);
-
-                                                      //JMGAP ^^
+    }                                                  //JMGAP ^^
 
   for(numDigits=0; nimBuffer[numDigits]!=0 && nimBuffer[numDigits]!='e' && nimBuffer[numDigits]!='.' && nimBuffer[numDigits]!=' ' && nimBuffer[numDigits]!='#' && nimBuffer[numDigits]!='+' && nimBuffer[numDigits]!='-'; numDigits++); // The semicolon here is OK
 
@@ -1233,7 +1152,7 @@ Somewhere else, base2 is set to GAP4. That must be found.
     dest += insertGapIP(displayBuffer + dest, numDigits, source);
   }
 
-  groupingGap = groupingGapM;         //JMGAP
+  groupingGap = groupingGapM;                          //JMGAP
   displayBuffer[dest] = 0;
 
   if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {

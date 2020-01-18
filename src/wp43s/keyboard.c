@@ -192,18 +192,57 @@ void executeFunction(int16_t fn, int16_t itemShift) {
         }
       }
     }
-  } else {
-    switch(fn) {
-      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
-      case 1: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[0].gShifted) : (kbd_usr[0].gShifted)) ;} break;
-      case 2: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[1].gShifted) : (kbd_usr[1].gShifted)) ;} break;
-      case 3: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[2].gShifted) : (kbd_usr[2].gShifted)) ;} break;
-      case 4: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[3].gShifted) : (kbd_usr[3].gShifted)) ;} break;
-      case 5: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[4].gShifted) : (kbd_usr[4].gShifted)) ;} break;
-      case 6: {resetTemporaryInformation(); runFunction( !userModeEnabled ? (kbd_std[5].gShifted) : (kbd_usr[5].gShifted)) ;} break;
-      default:break;
-    }
-  }
+  } else if(lastErrorCode == 0) {               //FN KEYS
+    func = ( !userModeEnabled ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted));
+    if ((fn>=1 && fn<=6)) {
+      	if (func == KEY_dotD) { 
+      	  fn_dot_d(0);
+      	  return;
+      	} else
+      	  if (func == ITM_toINT) { 
+      	  fnBASE_Hash(0);
+      	  return;
+      	}
+	    else switch(fn) {
+	      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
+	      case 1: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[0].gShifted) : (kbd_usr[0].gShifted)) ;} break;
+	      case 2: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[1].gShifted) : (kbd_usr[1].gShifted)) ;} break;
+	      case 3: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[2].gShifted) : (kbd_usr[2].gShifted)) ;} break;
+	      case 4: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[3].gShifted) : (kbd_usr[3].gShifted)) ;} break;
+	      case 5: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[4].gShifted) : (kbd_usr[4].gShifted)) ;} break;
+	      case 6: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[5].gShifted) : (kbd_usr[5].gShifted)) ;} break;
+	      default: break;
+	    }
+	  }
+      if(func == CHR_PROD_SIGN) {
+        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+      }
+
+      if(func < 0) { // softmenu
+        showSoftmenu(NULL, func, true);
+      }
+      else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=func && func<=CHR_F)) {
+        addItemToNimBuffer(func);
+      }
+      else if(calcMode == CM_TAM) {
+        addItemToBuffer(func);
+      }
+      else if(func > 0) { // function
+        if(calcMode == CM_NIM && func != KEY_CC && func != KEY_CC1 ) {     //JM CPX Added CC1
+          closeNim();
+          if(calcMode != CM_NIM) {
+            if(indexOfItems[func % 10000].func == fnConstant) {
+              STACK_LIFT_ENABLE;
+            }
+          }
+        }
+
+        if(lastErrorCode == 0) {
+          resetTemporaryInformation();
+          runFunction(func % 10000);
+        }
+      }
+  }   // JM FN KEYS ^^
 }
 
 

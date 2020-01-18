@@ -102,7 +102,8 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
                                      ITM_IDIV,                      ITM_RMD,                    ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
                                      ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,              ITM_CEIL,                    ITM_GCD,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE                     };
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE,
+                                     KEY_TYPCON_DN,                 KEY_dotD,                   KEY_TYPCON_UP,            ITM_toSI,              ITM_NULL,                    ITM_NULL                      };   //JM                     };
 
 const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                     ITM_ISG,
                                      ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_INC                       };
@@ -303,7 +304,7 @@ const int16_t menu_alpha_omega[] = { CHR_alpha,                     CHR_beta,   
 
 const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_toMULpi,           ITM_toDMS,                   -MNU_UNITCONV,                       //JM mod
                                      ITM_DEGto,                     ITM_RADto,                  ITM_GRADto,               ITM_MULPIto,           ITM_DMSto,                   ITM_NULL,
-                                     ITM_DtoR,                      ITM_RtoD,                   ITM_toHMS,                ITM_NULL,              ITM_DtoDMS,                  ITM_DMStoD                    };     //JM Added H.MS
+                                     ITM_DtoR,                      ITM_RtoD,                   ITM_toHMS,                ITM_ms,                ITM_DtoDMS,                  ITM_DMStoD                    };     //JM Added H.MS
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */

@@ -1916,7 +1916,7 @@ const item_t indexOfItems[] = {
 #ifdef JM_LAYOUT_1A
 /* 1526 */  { fnAim,                       NOPARAM,                     "",                                            STD_alpha,                                     CAT_NONE, SLS_UNCHANGED},   //JM
 #endif //JM END OF LAYOUT 1
-/* 1527 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_RIGHT_ARROW ".d",                          CAT_NONE, SLS_UNCHANGED},   //JM mod
+/* 1527 */  { fnJM,                        32,                          "",                                            STD_RIGHT_ARROW ".d",                          CAT_NONE, SLS_UNCHANGED},   //JM mod
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
@@ -2163,8 +2163,8 @@ const item_t indexOfItems[] = {
 /* 1765 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", CAT_FNCT, SLS_ENABLED  },   //JM EE
 /* 1766 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                     "COMPLEX",                                     CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1767 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                         "CC1",                                         CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to CC1
-/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     ">>L",                                         CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
-/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "S<<",                                         CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
+/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW STD_RIGHT_ARROW "L",           CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
+/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "S" STD_LEFT_ARROW STD_LEFT_ARROW,             CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 

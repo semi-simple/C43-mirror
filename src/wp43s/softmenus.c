@@ -409,8 +409,8 @@ const int16_t menu_MyMenu[]      = { ITM_cos                                    
 
 
 const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_QUIET,                          //JM sequence change
-                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_DENMAX,            ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
+                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_DENMAX,                          //JM sequence change
+                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_QUIET,             ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
                                      ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
                                      ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,

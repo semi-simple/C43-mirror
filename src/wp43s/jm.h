@@ -49,7 +49,7 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_OFF 255
 #define JM_3_SHIFT_CUTOFF  6   //100ms
 #define JM_FN_TIMER        8   //8 = approx 800ms   
-#define JM_FN_DOUBLE_TIMER 150 //75  //ms
+#define JM_FN_DOUBLE_TIMER 200 //75  //ms
 #define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
@@ -81,6 +81,9 @@ uint32_t now_MEM, now_MEM1, now_tmp;              //JM FN DOUBLE
 #ifdef PC_BUILD
 gint64 now_MEM, now_MEM1, now_tmp;                //JM FN DOUBLE
 #endif
+int32_t TC_mem, TC_tmp, TC_mem_double, TC_tmp_double;  //JM FN DOUBLE
+
+
 
 #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
 uint32_t now, tmpval;                             //JM TIMER DMCP SHIFTCANCEL & //JM FN DOUBLE

@@ -369,6 +369,11 @@ void setupDefaults(void) {
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   now_MEM1 = 0;                                                  //JM FN_DOUBLE
   #endif
+  TC_mem = 0;                                                    //JM FN_DOUBLE
+  TC_tmp = 0;                                                    //JM FN_DOUBLE
+  TC_mem_double = 0;                                             //JM FN_DOUBLE
+  TC_tmp_double = 0;                                             //JM FN_DOUBLE
+
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER

@@ -353,13 +353,18 @@ int32_t TIME_now() {                                   //JM TIMER
   return now_tmp;
 }
 
-int32_t TC_mem;
 int16_t TIME_from_last_read() {
-int32_t TC_tmp;
-   TC_tmp = TIME_now();
    TC_mem = TC_tmp;
+   TC_tmp = TIME_now();
    return TC_tmp - TC_mem;
 }
+
+int16_t TIME_from_last_read_double() {
+   TC_mem_double = TC_tmp_double;
+   TC_tmp_double = TIME_now();
+   return TC_tmp_double - TC_mem_double;
+}
+
 
 void TC_zero_time() {                                 //JM TIMER 
     #ifdef DMCP_BUILD                                 //JM TIMER 
@@ -384,6 +389,14 @@ int16_t TC_delta() {                                  //JM-DOUBLE vv input in ms
     #endif                                            //JM TIMER
 return tmp;
 }
+
+//******************
+//PURPOSE: Time Check
+//Input:   Time to check if expired, since ZERO TIME
+//Output:  TC_Expired      1: Already Expired
+//Output:  TC_Not_expired -1: Not yet expired
+//Output:  TC_Equals       0: Exactly Expired
+//Output:  TC_NA         127: Zero time not available
 
 int8_t TC_compare(uint32_t timecheck) {               //JM-DOUBLE vv input in ms
     int8_t tmp = 0;
@@ -420,14 +433,14 @@ void FN_cancel() {
 void disp_(uint8_t nr, int32_t swTime) {                                    //DISPLAY time on DM42 screen
   char snum[50];
 #ifdef DMCP_BUILD
-  showString("ms:", &standardFont, 30+nr*30, 40, vmNormal, false, false);
+  showString("ms:", &standardFont, 30, 50+nr*18, vmNormal, false, false);
 #endif
 #ifdef PC_BUILD
-  showString(STD_mu "s:", &standardFont, 30+nr*30, 40, vmNormal, false, false);
+  showString(STD_mu "s:", &standardFont, 30, 50+nr*18, vmNormal, false, false);
 #endif
   itoa(swTime, snum, 10);
   strcat(snum, "         ");
-  showString(snum, &standardFont, 60+nr*30, 40, vmNormal, false, false);
+  showString(snum, &standardFont, 60, 50+nr*18, vmNormal, false, false);
 }
 
 //**************JM DOUBLE CLICK SUPPORT vv **********************************
@@ -442,7 +455,7 @@ int16_t T_S1, T_S2, T_S3, T_S4;
 
 
 //*************----------*************------- FN KEY PRESSED -------***************-----------------
-int16_t temp;
+int16_t temp, temp_double;
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN
 void btnFnPressed(GtkWidget *w, gpointer data) { 
 #endif
@@ -453,10 +466,26 @@ void btnFnPressed(void *w, void *data) {
   FN_timed_out_to_RELEASE_EXEC = false;
   temp = TIME_from_last_read();
 
+                                                      //### NOTE THE ERROR IN ORIGINAL TIME_from_last_read !!
+
   #ifdef FN_TIME_DEBUG
   printf("--------------\n PRESS LastX %d : ",temp); 
   #endif
  
+
+  //Check accellerated change states according to PRESS incoming sequence
+  temp_double = TIME_from_last_read_double();
+  if(temp_double < JM_FN_DOUBLE_TIMER) {
+    if(jm_G_DOUBLETAP && (FN_state == ST_1_PRESS1 || FN_state == ST_2_REL1)) { 
+      #ifdef FN_TIME_DEBUG
+      printf("\nDETECTED: ACCELLERATED MOVE TO STATE 3 %d \n",temp_double); 
+      #endif
+      FN_state = ST_3_PRESS2;
+    }
+  }
+ 
+
+
   //Change states according to PRESS/RELEASE incoming sequence
   if(FN_state == ST_0_INIT || FN_state == ST_4_REL2 || FN_state >= ST_5_EXEC ) { 
     FN_state =  ST_1_PRESS1;
@@ -484,7 +513,7 @@ void btnFnPressed(void *w, void *data) {
   printf("  PRESS   STATE=%d, KEY=%d, KEYLAST=%d  \n",FN_state, FN_key_pressed, FN_key_pressed_last );
   #endif
 
-  //IF 2-->3 is longer than double click time, then move to sate 1
+  //IF 2-->3 is longer than double click time, then move to state 1
   if(FN_state == ST_3_PRESS2 && temp > JM_FN_DOUBLE_TIMER + 5 /*JM_FN_TIMER * 2 *100*/) {
     #ifdef FN_TIME_DEBUG
     printf(" %d cancel1, %d ",  JM_FN_TIMER * 2 *100, temp);
@@ -495,18 +524,6 @@ void btnFnPressed(void *w, void *data) {
     FN_state = ST_1_PRESS1; 
   }
 
-#ifdef TRYITWITHOUT
-  //ANY RELEASE TOO LONG AFTER LAST RELEASE WILL RESET
-  if(FN_state == ST_3_PRESS2 && TC_compare( JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100) == 1) {  //Double click time-out
-    #ifdef FN_TIME_DEBUG
-    printf(" %d cancel2, ", JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100);
-    #endif
-    FN_timeouts_in_progress = false;
-    FN_double_click_detected = false;
-    FN_delay_exec = false;
-    FN_state = ST_1_PRESS1;
-  }
-#endif
 
   if(FN_state == ST_1_PRESS1) {
     FN_key_pressed_last = FN_key_pressed;
@@ -531,7 +548,7 @@ void btnFnPressed(void *w, void *data) {
     printf("now %ld now_MEM1 %ld  Debounce delta=%d against limit=%d \n",now, now_MEM1, TC_delta(),JM_FN_DOUBLE_DEBOUNCE_TIMER);
     #endif
 
-    if(TC_compare(JM_FN_DOUBLE_DEBOUNCE_TIMER) == 1) {                      //Time since last zero (FN release) > 5 ms
+    if(TC_compare(JM_FN_DOUBLE_DEBOUNCE_TIMER) == TC_Expired) {                      //Time since last zero (FN release) > 5 ms
       #ifdef FN_TIME_DEBUG
       printf("  (>5 ms), Delta=%d ",TC_delta());
       #endif
@@ -546,9 +563,14 @@ void btnFnPressed(void *w, void *data) {
         disp_(2, T_S2);
         disp_(3, T_S3);
         disp_(4, T_S4);
+  int8_t tmp;
+  do {
+    tmp = (TC_compare(1000));
+  } while (tmp != TC_Expired && tmp != TC_NA);
+
       #endif
 
-      if(TC_compare(JM_FN_DOUBLE_TIMER) == -1) {                            //Time since last zero (FN release) < 75 ms
+      if(TC_compare(JM_FN_DOUBLE_TIMER) == TC_Not_expired) {                            //Time since last zero (FN release) < 75 ms
         #ifdef FN_TIME_DEBUG_MINIMAL
         printf(" (<75 ms), key: %d == %d?, ",FN_key_pressed,FN_key_pressed_last);
         #endif
@@ -672,7 +694,7 @@ void btnFnReleased(void *w, void *data) {
 
   else if(FN_state == ST_4_REL2) {
     //ANY RELEASE TOO LONG AFTER LAST RELEASE WILL RESET
-    if(TC_compare( JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100) == 1) {  //Double click time-out
+    if(TC_compare( JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100) == TC_Expired) {  //Double click time-out
       #ifdef FN_TIME_DEBUG
       printf(" %d 4 cancel, ", JM_FN_DOUBLE_TIMER + JM_FN_TIMER * 2 *100);
       #endif

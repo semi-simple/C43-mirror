@@ -600,12 +600,13 @@ void fnReset(uint16_t confirmation) {
     showOverflowCarry();
     hideUserMode();
 
-    graph_xmin = -3*3.14159;                                       //JM GRAPH
-    graph_xmax = +3*3.14159;                                       //JM GRAPH
+    graph_xmin = -3*3.14159265;                                    //JM GRAPH
+    graph_xmax = +3*3.14159265;                                    //JM GRAPH
     graph_ymin = -2;                                               //JM GRAPH
     graph_ymax = +2;                                               //JM GRAPH
     graph_dx   = 0;                                                //JM GRAPH
     graph_dy   = 0;                                                //JM GRAPH
+
 
 
 
@@ -625,8 +626,6 @@ void fnReset(uint16_t confirmation) {
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
 
-
-
     // initialize the RadioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
 
@@ -641,7 +640,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnUserJM(USER_DEFAULTS);                         //JM USER
+    fnUserJM(USER_DEFAULTS);                     //JM USER
 //    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
@@ -690,6 +689,7 @@ void fnReset(uint16_t confirmation) {
       refreshDebugPanel();
     #endif
 
+    //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
     fnDrop(0);
@@ -703,7 +703,6 @@ void fnReset(uint16_t confirmation) {
     fnStore(13);
     fnDrop(0);
 
-
     fnStrtoX("Reg 15, 16 & 17 have: The 3 cubes = 42.");
     fnStore(14);
     fnDrop(0);
@@ -716,7 +715,6 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("12602123297335631");
     fnStore(17);
     fnDrop(0);
-
 
 
     refreshStack();

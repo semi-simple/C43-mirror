@@ -1377,9 +1377,12 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     if(base == 2) {
       gap = 4;
     }
-    else if(base == 4 || base == 8 || base == 16) {
+    else if(base == 4 || base == 16) { //JMGAP vv
       gap = 2;
     }
+    else if(base == 8) {
+      gap = 3;
+    }                                  //JMGAP ^^ 
     else {
       gap = 3;
     }

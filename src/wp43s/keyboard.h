@@ -26,6 +26,11 @@ void fnComplexCCCC  (uint16_t unusedParamButMandatory);
 int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
 
 int8_t TC_compare(uint32_t timecheck);                 //JM vv FN-DOUBLE 
+#define TC_Expired     1    //Timecheck Time expired
+#define TC_Not_expired -1   //Timecheck Time not yet expired
+#define TC_Equals      0    //Timecheck Time expired
+#define TC_NA          127  //Timecheck Time ZERO not available
+
 #define ST_0_INIT     0     //STATE 0 INIT
 #define ST_1_PRESS1   1     //STATE 1 FIRST PRESS
 #define ST_2_REL1     2     //STATE 2 FIRST RELEASE

@@ -26,9 +26,7 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
-
-
-#define ITM_NULL                         0   //TEST
+#define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
 #define ITM_10x                          3

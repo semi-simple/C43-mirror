@@ -191,24 +191,27 @@ void fnCvtInhgPa(uint16_t multiplyDivide) {
   unitConversion(const_InhgToPa, multiplyDivide);
 }
 
+
 void fnCvtmmhgPa(uint16_t multiplyDivide) {                         //JM vv mm.Hg
   unitConversion(const_InhgToPa, multiplyDivide);
-  if (multiplyDivide == divide) {
+  if(multiplyDivide == divide) {
     unitConversion(const_InchToM, multiply);
-    STACK_LIFT_ENABLE; liftStack();
+    STACK_LIFT_ENABLE;
+    liftStack();
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     stringToReal34("1000", REGISTER_REAL34_DATA(REGISTER_X));
     fnMultiply(0);    
   }
   else {
     unitConversion(const_InchToM, divide);
-    STACK_LIFT_ENABLE; liftStack();
+    STACK_LIFT_ENABLE;
+    liftStack();
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     stringToReal34("1000", REGISTER_REAL34_DATA(REGISTER_X));
     fnDivide(0);    
-  }                                                                 //JM ^^ mm.Hg
+  }
+}                                                                 //JM ^^ mm.Hg
 
-}
 
 void fnCvtTorrPa(uint16_t multiplyDivide) {
   unitConversion(const_TorrToPa, multiplyDivide);

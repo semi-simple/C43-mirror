@@ -1124,7 +1124,6 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
 
 
-
 void force_refresh(void) {                                      //JM vv  
 #ifdef PC_BUILD
   gtk_widget_queue_draw(screen);
@@ -1133,6 +1132,8 @@ void force_refresh(void) {                                      //JM vv
   lcd_forced_refresh ();
 #endif
 }                                                              //JM ^^
+
+
 
 /********************************************//**
  * \brief Clears parts of the screen

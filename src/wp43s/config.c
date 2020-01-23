@@ -562,46 +562,47 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
-    fnTimeFormat(TF_H24);              //JMnote This section is over-writing the content of setupdefaults
-    fnIntegerMode(SIM_2COMPL);         //JMnote This section is over-writing the content of setupdefaults
-    fnDisplayFormatAll(3);          //JM DEFAULT //JMnote This section is over-writing the content of setupdefaults
-    fnDisplayFormatGap(3);             //JMnote This section is over-writing the content of setupdefaults
-    fnComplexUnit(CU_I);               //JMnote This section is over-writing the content of setupdefaults
-    fnAngularMode(AM_DEGREE);          //JMnote This section is over-writing the content of setupdefaults
-    fnDenMode(DM_FAC);              //JM DEFAULT //JMnote This section is over-writing the content of setupdefaults
+    fnTimeFormat(TF_H24);              //JMnote This line is over-writing the content of setupdefaults
+    fnIntegerMode(SIM_2COMPL);         //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayFormatAll(3);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayFormatGap(3);             //JMnote This line is over-writing the content of setupdefaults
+    fnComplexUnit(CU_I);               //JMnote This line is over-writing the content of setupdefaults
+    fnAngularMode(AM_DEGREE);          //JMnote This line is over-writing the content of setupdefaults
+    fnDenMode(DM_FAC);              //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
     fnStrInputLongint("32");        //JM DEFAULT 
-     fnDenMax(0);                       //JMnote This section is over-writing the content of setupdefaults
+     fnDenMax(0);                       //JMnote This line is over-writing the content of setupdefaults
      fnDrop(0);
-    fnDisplayStack(4);                 //JMnote This section is over-writing the content of setupdefaults
-    firstGregorianDay = 1752;          //JMnote This section is over-writing the content of setupdefaults
-    fnCurveFitting(CF_LINEAR_FITTING); //JMnote This section is over-writing the content of setupdefaults
-    fnLeadingZeros(true);           //JM DEFAULT //JMnote This section is over-writing the content of setupdefaults
-    fnProductSign(PS_CROSS);           //JMnote This section is over-writing the content of setupdefaults
-    fnFractionType(FT_PROPER); // a b/c//JMnote This section is over-writing the content of setupdefaults
-    fnRadixMark(RM_PERIOD);            //JMnote This section is over-writing the content of setupdefaults
-    fnRoundingMode(RM_HALF_EVEN);      //JMnote This section is over-writing the content of setupdefaults
-    fnDisplayOvr(DO_SCI);              //JMnote This section is over-writing the content of setupdefaults
-    fnStackSize(SS_8);              //JM DEFAULT //JMnote This section is over-writing the content of setupdefaults
+    fnDisplayStack(4);                 //JMnote This line is over-writing the content of setupdefaults
+    firstGregorianDay = 1752;          //JMnote This line is over-writing the content of setupdefaults
+    fnCurveFitting(CF_LINEAR_FITTING); //JMnote This line is over-writing the content of setupdefaults
+    fnLeadingZeros(true);           //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnProductSign(PS_CROSS);           //JMnote This line is over-writing the content of setupdefaults
+    fnFractionType(FT_PROPER); // a b/c//JMnote This line is over-writing the content of setupdefaults
+    fnRadixMark(RM_PERIOD);            //JMnote This line is over-writing the content of setupdefaults
+    fnRoundingMode(RM_HALF_EVEN);      //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayOvr(DO_SCI);              //JMnote This line is over-writing the content of setupdefaults
+    fnStackSize(SS_8);              //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
     //tDisp = -1;
-    fnSetWordSize(64);                 //JMnote This section is over-writing the content of setupdefaults
-    fnDateFormat(DF_YMD);              //JMnote This section is over-writing the content of setupdefaults
-    fnComplexMode(CM_RECTANGULAR);     //JMnote This section is over-writing the content of setupdefaults
+    fnSetWordSize(64);                 //JMnote This line is over-writing the content of setupdefaults
+    fnDateFormat(DF_YMD);              //JMnote This line is over-writing the content of setupdefaults
+    fnComplexMode(CM_RECTANGULAR);     //JMnote This line is over-writing the content of setupdefaults
     showRealComplexResult();
     allocateLocalRegisters(0);
-    fnComplexResult(true);          //JM DEFAULT //JMnote This section is over-writing the content of setupdefaults
+    fnComplexResult(true);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
     fnSetFlag(FLAG_DANGER);         //JM infinity etc.
 
-    displayRealAsFraction = false;     //JMnote This section is over-writing the content of setupdefaults
+    displayRealAsFraction = false;     //JMnote This line is over-writing the content of setupdefaults
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();
 
-    graph_xmin = -3*3.14159265;     //JM DEFAULT GRAPH
-    graph_xmax = +3*3.14159265;     //JM DEFAULT GRAPH
-    graph_ymin = -2;                //JM DEFAULT GRAPH
-    graph_ymax = +2;                //JM DEFAULT GRAPH
-    graph_dx   = 0;                 //JM DEFAULT GRAPH
-    graph_dy   = 0;                 //JM DEFAULT GRAPH
+    graph_xmin = -3*3.14159265;                                    //JM GRAPH
+    graph_xmax = +3*3.14159265;                                    //JM GRAPH
+    graph_ymin = -2;                                               //JM GRAPH
+    graph_ymax = +2;                                               //JM GRAPH
+    graph_dx   = 0;                                                //JM GRAPH
+    graph_dy   = 0;                                                //JM GRAPH
+
 
 
 
@@ -621,8 +622,6 @@ void fnReset(uint16_t confirmation) {
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
 
-
-
     // initialize the RadioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
 
@@ -637,7 +636,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnUserJM(USER_DEFAULTS);                         //JM USER
+    fnUserJM(USER_DEFAULTS);                     //JM USER
 //    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
@@ -686,8 +685,6 @@ void fnReset(uint16_t confirmation) {
       refreshDebugPanel();
     #endif
 
-
-   
     //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
@@ -701,6 +698,7 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("-472715493453327032");
     fnStore(13);
     fnDrop(0);
+
     fnStrtoX("Reg 15, 16 & 17 have: The 3 cubes = 42.");
     fnStore(14);
     fnDrop(0);
@@ -713,7 +711,6 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("12602123297335631");
     fnStore(17);
     fnDrop(0);
-
 
 
     refreshStack();

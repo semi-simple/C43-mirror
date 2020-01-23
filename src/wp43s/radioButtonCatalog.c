@@ -423,10 +423,10 @@ void fnRebuildRadioState() {
   fnRefreshComboxState(CB_JC, DR_ITM_TST, false);
 #endif
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    size_t n = nbrOfElements(indexOfRadioCbEepromItems);
-    printf("Nbr of RadioButton/Checkbox  %6" FMTSIZE "\n",n);
-  #endif
+#if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+  size_t n = nbrOfElements(indexOfRadioCbEepromItems);
+  printf("Nbr of RadioButton/Checkbox  %6" FMTSIZE "\n",n);
+#endif
 }
 
 

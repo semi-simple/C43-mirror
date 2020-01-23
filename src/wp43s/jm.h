@@ -76,13 +76,13 @@ bool_t FN_timed_out_to_RELEASE_EXEC;              //JM LONGPRESS FN
 
 //keyboard.c
 #ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
-uint32_t now_MEM, now_MEM1, now_tmp;              //JM FN DOUBLE
+uint32_t now_MEM, now_MEM1;                       //JM FN DOUBLE
 #endif
 #ifdef PC_BUILD
-gint64 now_MEM, now_MEM1, now_tmp;                //JM FN DOUBLE
+gint64 now_MEM, now_MEM1;                         //JM FN DOUBLE
 #endif
-int32_t TC_mem, TC_tmp, TC_mem_double, TC_tmp_double;  //JM FN DOUBLE
-
+int32_t TC_mem, TC_tmp;                           //JM FN DOUBLE
+int32_t TC_mem_double, TC_tmp_double;             //JM FN DOUBLE
 
 
 #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL

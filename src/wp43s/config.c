@@ -570,7 +570,8 @@ void fnReset(uint16_t confirmation) {
     fnAngularMode(AM_DEGREE);          //JMnote This section is over-writing the content of setupdefaults
     fnDenMode(DM_FAC);              //JM DEFAULT //JMnote This section is over-writing the content of setupdefaults
     fnStrInputLongint("32");        //JM DEFAULT 
-    fnDenMax(0);                       //JMnote This section is over-writing the content of setupdefaults
+     fnDenMax(0);                       //JMnote This section is over-writing the content of setupdefaults
+     fnDrop(0);
     fnDisplayStack(4);                 //JMnote This section is over-writing the content of setupdefaults
     firstGregorianDay = 1752;          //JMnote This section is over-writing the content of setupdefaults
     fnCurveFitting(CF_LINEAR_FITTING); //JMnote This section is over-writing the content of setupdefaults

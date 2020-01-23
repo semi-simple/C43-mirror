@@ -381,7 +381,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
-  FN_no_double_click_handler();         //vv JM
+  //FN_no_double_click_handler();         //vv JM
   FN_handler();
   Shft_handler();                       //^^
 
@@ -450,7 +450,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     }
   }
 
-  FN_no_double_click_handler();         //vv JM
+  //FN_no_double_click_handler();         //vv JM
   FN_handler();
   Shft_handler();                       //^^
 
@@ -560,47 +560,51 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 
 
-
+/*
 void Wait_loop() {
   int8_t tmp;
   do {
     tmp = (TC_compare( JM_FN_DOUBLE_TIMER + 6 ) );
   } while (tmp != TC_Expired && tmp != TC_NA);
 }
+*/
 
-
-
+/*
 void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
   char charKey[3];
+  //printf("Delayed_BOOLE:%d, 1:%d, 2:%d, 3:%d, F:%d, G:%d \n",(FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec), FN_key_pressed != 0, FN_double_click_detected, FN_delay_exec, shiftF, shiftG);
+
   if (FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) {
-    #ifdef FN_TIME_DEBUG
+//    #ifdef FN_TIME_DEBUG
     printf("TIMER check passed \n");
-    printf("  %ld, KEY=%d, DC=%d, DE=%d \n",g_get_monotonic_time() / 1000, FN_key_pressed, FN_double_click_detected, FN_delay_exec);
-    #endif
+//    printf("  %ld, KEY=%d, DC=%d, DE=%d \n",g_get_monotonic_time() / 1000, FN_key_pressed, FN_double_click_detected, FN_delay_exec);
+//    #endif
     FN_delay_exec = false;
-    Wait_loop();
+    //Wait_loop();                            //FORCE EXPIRY
     #ifdef FN_TIME_DEBUG
     printf("  %ld, KEY=%d \n",g_get_monotonic_time() / 1000,FN_key_pressed);
     #endif
     if (TC_compare(JM_FN_DOUBLE_TIMER) == TC_Expired) {
+      disp__(7,7);
       #ifdef FN_TIME_DEBUG
       printf("Delayed Exec \n");
       #endif
-    FN_timeouts_in_progress = false;
-    FN_counter = JM_FN_TIMER;         
+      FN_timeouts_in_progress = false;
+      FN_counter = JM_FN_TIMER;         
       R_shF();
       R_shG();
       sprintf(charKey, "%c", FN_key_pressed + 11);
       clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
       refreshRegisterLine(REGISTER_T);
-      btnFnClicked(NULL, charKey);
+      //btnFnClicked(NULL, charKey);
+      fnStrInputLongint("999");
       resetShiftState();  
     //FN_cancel();
 
     }
   }
 }                                            //JM FN-DOUBLE vv
-
+*/
 
 
 #define N_FN_TIME_DEBUG1

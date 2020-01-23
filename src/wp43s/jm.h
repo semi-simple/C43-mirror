@@ -49,7 +49,7 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_OFF 255
 #define JM_3_SHIFT_CUTOFF  6   //100ms
 #define JM_FN_TIMER        8   //8 = approx 800ms   
-#define JM_FN_DOUBLE_TIMER 150 //75  //ms
+#define JM_FN_DOUBLE_TIMER 200 //75  //ms
 #define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
@@ -75,21 +75,10 @@ bool_t FN_timed_out_to_NOP;                       //JM LONGPRESS FN
 bool_t FN_timed_out_to_RELEASE_EXEC;              //JM LONGPRESS FN
 
 //keyboard.c
-#ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
-uint32_t now_MEM, now_MEM1, now_tmp;              //JM FN DOUBLE
-#endif
-#ifdef PC_BUILD
-gint64 now_MEM, now_MEM1, now_tmp;                //JM FN DOUBLE
-#endif
+uint32_t now_MEM, now_MEM1/*, now_tmp*/;          //JM FN DOUBLE TIMER variable tmp mem, to check expired time
+int32_t TC_mem, TC_tmp, TC_mem_double, TC_tmp_double;       //JM FN DOUBLE
 
-#ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
 uint32_t now, tmpval;                             //JM TIMER DMCP SHIFTCANCEL & //JM FN DOUBLE
-#endif                                            //JM TIMER DMCP SHIFTCANCEL
-#ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
-gint64 now, tmpval;                               //JM usec  //JM TIMER EMULATOR SHIFTCANCEL  & //JM FN DOUBLE
-#endif                                            //JM TIMER DMCP SHIFTCANCEL
-
-
 
 // Confirmation Y or N changed from original WP43S because the alpha keys order changed
 #define ITEM_CONF_Y CHR_2 
@@ -199,6 +188,7 @@ void Reset_Shift_Mem(void);
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
+void fn_dot_d           (uint16_t unusedParamButMandatory);  //FOR dotd
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX

@@ -24,7 +24,6 @@
 #include "wp43s.h"
 
 
-
 /********************************************//**
  * RESET TIME FOR SHIFT CANCELLING
  * THIS IS STANDALONE RESET FOR SHIFT TO BE SET BY EMU KEYS. IT ALSO GETS RESET IN KEYBOARD.C
@@ -32,14 +31,12 @@
  * FROM keyboard.c
  ***********************************************/
 void Reset_Shift_Mem(void) {                            //JM
-#ifdef DMCP_BUILD                                       //JM TIMER DMCP SHIFTCANCEL
-  now = sys_current_ms();                               //JM TIMER DMCP SHIFTCANCEL
+#ifndef TESTSUITE_BUILD
+  now = getUptimeMs();                                  //JM TIMER DMCP SHIFTCANCEL
+#else
+  now = 0;
+#endif
   now_MEM = now;                                        //JM TIMER -- any last key pressed
-#endif                                                  //JM
-#ifdef PC_BUILD                                         //JM TIMER EMULATOR SHIFTCANCEL
-  now = g_get_monotonic_time();                         //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
-  now_MEM = now;                                        //JM TIMER -- any last key pressed
-#endif                                                  //JM
 }
 
 
@@ -392,10 +389,14 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
 
 
 void fnConverttoReal() {    //copied from keyboard.c, dotd
+
+fn_dot_d(0);
+
+/*
   if(calcMode == CM_NIM) {
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    showInfoDialog("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
-  #endif
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    showInfoDialog("In function fnConverttoReal:", "the data type date is to be coded!", NULL, NULL);
+#endif
   }
 
   else if(displayRealAsFraction) {
@@ -436,6 +437,7 @@ void fnConverttoReal() {    //copied from keyboard.c, dotd
       #endif
     }
   }
+*/
 }
 
 
@@ -1042,6 +1044,7 @@ void fnJM(uint16_t JM_OPCODE) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_L, 99);   // STO TMP
 
+    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
     if(getRegisterDataType(REGISTER_X) == dtReal34) {
       if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
@@ -1053,10 +1056,10 @@ void fnJM(uint16_t JM_OPCODE) {
 #endif
       }
       else {
-      /*if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {
+/*    if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {   //JM wait for future HMS
         runFunction(ITM_toHMS); break;
-        } else
-      */
+      }
+      else { */
 #ifndef TESTSUITE_BUILD
         switch (getRegisterAngularMode(REGISTER_X)) {
           case AM_DEGREE: {runFunction(ITM_DEGto);  } break;
@@ -1076,6 +1079,11 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 31) {                                         //UNDO
     restoreStack();
+  }
+  else
+
+  if(JM_OPCODE == 32) {                                       //dotd
+    fn_dot_d(0);
   }
 
 }
@@ -1510,6 +1518,23 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
 //JM\/\/\/\/
 
 bool_t userModeEnabledMEM;
+
+
+
+void fn_dot_d(uint16_t unusedParamButMandatory) {      //FOR dotd
+  userModeEnabledMEM = userModeEnabled;
+  userModeEnabled = false;
+  shiftF = false;                 //JM
+  shiftG = true;                  //JM
+  Reset_Shift_Mem();              //JM
+#ifdef PC_BUILD
+  btnClicked(NULL, "03");         //JM changed from 02
+#endif
+#ifdef DMCP_BUILD
+  btnClicked(NULL, "03");         //JM changed from 02
+#endif
+  userModeEnabled = userModeEnabledMEM;
+}
 
 
 

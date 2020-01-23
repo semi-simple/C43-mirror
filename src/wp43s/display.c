@@ -1369,9 +1369,12 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     if(base == 2) {
       gap = 4;
     }
-    else if(base == 4 || base == 8 || base == 16) {
+    else if(base == 4 || base == 16) { //JMGAP vv
       gap = 2;
     }
+    else if(base == 8) {
+      gap = 3;
+    }                                  //JMGAP ^^
     else {
       gap = 3;
     }
@@ -1576,16 +1579,16 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp) {
+void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp) {
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
-  int16_t max_Width;                                        //JM align longints
+  int16_t maxWidth;                                         //JM align longints
 
   convertLongIntegerRegisterToLongInteger(regist, lgInt);
 
-  if(longIntegerIsNegative(lgInt)) {max_Width = maxWidth;}  //JM align longints
-  else {max_Width = maxWidth - 8;}                          //JM align longints
+  if(longIntegerIsNegative(lgInt)) {maxWidth = max_Width;}  //JM align longints
+  else {maxWidth = max_Width - 8;}                          //JM align longints
 
   exponentShift = (longIntegerBits(lgInt) - 1) * 0.3010299956639811952137;
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);

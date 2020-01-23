@@ -214,6 +214,7 @@ typedef int16_t calcRegister_t;
 #include "timer.h"
 #include "jm_graph.h"                                    //JM include 
 #include "jm.h"                                          //JM include
+#include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
 #ifdef INLINE_TEST                      //vv dr
 #include "inlineTest.h"
@@ -648,6 +649,7 @@ extern real39_t             const *angle45;
 extern pcg32_random_t       pcg32_global;
 #ifdef DMCP_BUILD
   extern bool_t               backToDMCP;
+  extern uint32_t             nextTimerRefresh;   //dr
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"

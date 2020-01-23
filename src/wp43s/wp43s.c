@@ -200,6 +200,7 @@ real39_t             const *angle45;
 pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
   bool_t               backToDMCP;
+  uint32_t             nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
@@ -366,14 +367,12 @@ void setupDefaults(void) {
   graph_dy   = 0;                                                //JM GRAPH
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
-  #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   now_MEM1 = 0;                                                  //JM FN_DOUBLE
-  #endif
-  #ifdef PC_BUILD
-  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
-  now_MEM1 = 0;                                                  //JM FN_DOUBLE
-  #endif
+  TC_mem = 0;                                                    //JM FN_DOUBLE
+  TC_tmp = 0;                                                    //JM FN_DOUBLE
+  TC_mem_double = 0;                                             //JM FN_DOUBLE
+  TC_tmp_double = 0;                                             //JM FN_DOUBLE
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
@@ -525,6 +524,9 @@ int main(int argc, char* argv[]) {
   //fnReset(CONFIRMED);
 
   gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
+  fnTimerReset();                                                                                   //vv dr TEST Timer
+  fnTimerConfig(0, fnTimerDummyTest, 1/*, 50*/);
+  gdk_threads_add_timeout(10, refreshTimer, NULL); // refreshTimer is called every 10 ms            //^^
 
   gtk_main();
 
@@ -566,6 +568,9 @@ void program_main(void) {
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
+  fnTimerReset();                                                               //vv dr TEST Timer
+  fnTimerConfig(0, fnTimerDummyTest, 1/*, 50*/);
+  nextTimerRefresh = 0;                                                         //vv
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -578,8 +583,13 @@ void program_main(void) {
       sys_sleep();
     }
     else if ((!ST(STAT_PGM_END) && key_empty())) {          // Just wait if no keys available.
+      uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
+      if(nextTimerRefresh != 0) {
+        uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
+        sleepTime = min(sleepTime, timeoutTime);
+      }                                                                         //^^
       CLR_ST(STAT_RUNNING);
-      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));  // wake up for screen refresh
+      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));                           // wake up for screen refresh
       sys_sleep();
       sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
@@ -630,25 +640,13 @@ void program_main(void) {
 
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);
-#ifdef INLINE_TEST                      //vv dr
-      if(testEnabled) { fnSwStart(1); }
-#endif                                  //^^
 //    btnFnClicked(NULL, charKey);
       btnFnPressed(NULL, charKey);                //JM
       lcd_refresh();
-#ifdef INLINE_TEST                      //vv dr
-      if(testEnabled) { fnSwStop(1); }
-#endif                                  //^^
     }
     else if(key == 0 && FN_key_pressed != 0) {    //JM
-#ifdef INLINE_TEST                      //vv dr
-      if(testEnabled) { fnSwStart(2); }
-#endif                                  //^^
       btnFnReleased(NULL,NULL);
       lcd_refresh();
-#ifdef INLINE_TEST                      //vv dr
-      if(testEnabled) { fnSwStop(2); }
-#endif                                  //^^
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
@@ -661,6 +659,10 @@ void program_main(void) {
     }
 
     uint32_t now = sys_current_ms();
+    if(nextTimerRefresh != 0 && nextTimerRefresh <= now) {            //vv dr Timer
+      refreshTimer();
+    }                                                                 //^^
+    now = sys_current_ms();
     if(nextScreenRefresh <= now) {
       nextScreenRefresh += LCD_REFRESH_TIMEOUT;
       if(nextScreenRefresh < now) {

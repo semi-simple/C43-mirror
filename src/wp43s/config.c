@@ -600,8 +600,8 @@ void fnReset(uint16_t confirmation) {
     showOverflowCarry();
     hideUserMode();
 
-    graph_xmin = -3*3.14159;                                       //JM GRAPH
-    graph_xmax = +3*3.14159;                                       //JM GRAPH
+    graph_xmin = -3*3.14159265;                                    //JM GRAPH
+    graph_xmax = +3*3.14159265;                                    //JM GRAPH
     graph_ymin = -2;                                               //JM GRAPH
     graph_ymax = +2;                                               //JM GRAPH
     graph_dx   = 0;                                                //JM GRAPH
@@ -689,6 +689,7 @@ void fnReset(uint16_t confirmation) {
       refreshDebugPanel();
     #endif
 
+    //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
     fnDrop(0);

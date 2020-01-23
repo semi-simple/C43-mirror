@@ -57,8 +57,6 @@ void DOT_G_clear() {
   }
 } 
 
-
-
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(shiftStateChanged) {
@@ -192,17 +190,19 @@ void executeFunction(int16_t fn, int16_t itemShift) {
         }
       }
     }
-  } else if(lastErrorCode == 0) {               //FN KEYS
+  }
+  else if(lastErrorCode == 0) {               //FN KEYS
     func = ( !userModeEnabled ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted));
-    if ((fn>=1 && fn<=6)) {
-      	if (func == KEY_dotD) { 
-      	  fn_dot_d(0);
-      	  return;
-      	} else
-      	  if (func == ITM_toINT) { 
+    if((fn>=1 && fn<=6)) {
+      if(func == KEY_dotD) {
+        fn_dot_d(0);
+        return;
+      }
+      else
+        if (func == ITM_toINT) {
       	  fnBASE_Hash(0);
       	  return;
-      	}
+      }
 	    else switch(fn) {
 	      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
 	      case 1: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[0].gShifted) : (kbd_usr[0].gShifted)) ;} break;
@@ -214,34 +214,34 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 	      default: break;
 	    }
 	  }
-      if(func == CHR_PROD_SIGN) {
-        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
-      }
+    if(func == CHR_PROD_SIGN) {
+      func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+    }
 
-      if(func < 0) { // softmenu
-        showSoftmenu(NULL, func, true);
-      }
-      else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=func && func<=CHR_F)) {
-        addItemToNimBuffer(func);
-      }
-      else if(calcMode == CM_TAM) {
-        addItemToBuffer(func);
-      }
-      else if(func > 0) { // function
-        if(calcMode == CM_NIM && func != KEY_CC && func != KEY_CC1 ) {     //JM CPX Added CC1
-          closeNim();
-          if(calcMode != CM_NIM) {
-            if(indexOfItems[func % 10000].func == fnConstant) {
-              STACK_LIFT_ENABLE;
-            }
+    if(func < 0) { // softmenu
+      showSoftmenu(NULL, func, true);
+    }
+    else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=func && func<=CHR_F)) {
+      addItemToNimBuffer(func);
+    }
+    else if(calcMode == CM_TAM) {
+      addItemToBuffer(func);
+    }
+    else if(func > 0) { // function
+      if(calcMode == CM_NIM && func != KEY_CC && func != KEY_CC1 ) {     //JM CPX Added CC1
+        closeNim();
+        if(calcMode != CM_NIM) {
+          if(indexOfItems[func % 10000].func == fnConstant) {
+            STACK_LIFT_ENABLE;
           }
         }
-
-        if(lastErrorCode == 0) {
-          resetTemporaryInformation();
-          runFunction(func % 10000);
-        }
       }
+
+      if(lastErrorCode == 0) {
+        resetTemporaryInformation();
+        runFunction(func % 10000);
+      }
+    }
   }   // JM FN KEYS ^^
 }
 
@@ -279,7 +279,8 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
       }      
     }
   }
-return func % 10000;
+  
+  return func % 10000;
 }
 
 
@@ -426,11 +427,11 @@ return tmp;
 
 //**************JM DOUBLE CLICK SUPPORT vv **********************************
 void FN_cancel() {
-    FN_double_click_detected = false;
-    FN_delay_exec = false;
-    FN_key_pressed = 0;
-    FN_timeouts_in_progress = false;
-    FN_counter = JM_FN_TIMER;                                               //reset for future
+  FN_double_click_detected = false;
+  FN_delay_exec = false;
+  FN_key_pressed = 0;
+  FN_timeouts_in_progress = false;
+  FN_counter = JM_FN_TIMER;                                                 //reset for future
 }
 
 
@@ -1128,14 +1129,14 @@ void btnPressed(void *notUsed, void *data) {
         displayBugScreen("In function btnPressed: unexpected case while processing key BACKSPACE!");
       }
     }
-
-/*    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
+/*
+    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
       alphaCase = AC_UPPER;                                                     //JM CASE JM CAPS
       showAlphaMode();                                                          //JM CASE JM CAPS
 #ifdef PC_BUILD     //dr - new AIM
       calcModeAimGui();
 #endif
-      }                                                                         //JM CASE JM CAPS
+    }                                                                           //JM CASE JM CAPS
 */
     else if((item == KEY_UP) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
@@ -1164,15 +1165,14 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
-
-          else if (item == CHR_case) {  //JM
+          else if(item == CHR_case) {   //vv JM
             showSoftmenuCurrentPart();
             setCatalogLastPos();
-            }
+          }                             //^^
           else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-            if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+            if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
               softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
               showSoftmenuCurrentPart();
             }
@@ -1274,11 +1274,11 @@ void btnPressed(void *notUsed, void *data) {
 #endif
             }                           //^^
           }
-          else if (item == CHR_case) {  //JM
+          else if(item == CHR_case) {   //vvJM
             showSoftmenuCurrentPart();
             setCatalogLastPos();
-            }
-            else {
+          }                             //^^
+          else {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {

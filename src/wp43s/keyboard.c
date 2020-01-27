@@ -193,7 +193,9 @@ void executeFunction(int16_t fn, int16_t itemShift) {
   }
   else if(lastErrorCode == 0) {               //FN KEYS
     func = ( !userModeEnabled ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted));
+
     if((fn>=1 && fn<=6)) {
+/*                                               //SPECIAL KEYS
       if(func == KEY_dotD) {
         fn_dot_d(0);
         return;
@@ -203,17 +205,21 @@ void executeFunction(int16_t fn, int16_t itemShift) {
       	  fnBASE_Hash(0);
       	  return;
       }
-	    else switch(fn) {
+	    else
+*/
+
+      switch(fn) {
 	      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
-	      case 1: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[0].gShifted) : (kbd_usr[0].gShifted)) ;} break;
-	      case 2: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[1].gShifted) : (kbd_usr[1].gShifted)) ;} break;
-	      case 3: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[2].gShifted) : (kbd_usr[2].gShifted)) ;} break;
-	      case 4: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[3].gShifted) : (kbd_usr[3].gShifted)) ;} break;
-	      case 5: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[4].gShifted) : (kbd_usr[4].gShifted)) ;} break;
-	      case 6: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[5].gShifted) : (kbd_usr[5].gShifted)) ;} break;
-	      default: break;
+	      case 1: {resetTemporaryInformation(); func = ( ITM_pi ) ;} break;
+	      case 2: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
+	      case 3: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
+	      case 4: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
+	      case 5: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
+	      case 6: {resetTemporaryInformation(); func = ( ITM_CLSTK ) ;} break;
+	      default:;
 	    }
 	  }
+
     if(func == CHR_PROD_SIGN) {
       func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
     }
@@ -515,7 +521,7 @@ void btnFnPressed(void *w, void *data) {
   if(jm_G_DOUBLETAP && FN_state == ST_3_PRESS2 && !shiftF && !shiftG) {
   printf("!2"); disp__(2,2);
 
-    if(TC_compare(JM_FN_DOUBLE_DEBOUNCE_TIMER) == TC_Expired) {                      //Time since last zero (FN release) > 5 ms
+    if(true){ //|| TC_compare(JM_FN_DOUBLE_DEBOUNCE_TIMER) == TC_Expired) {                      //Time since last zero (FN release) > 5 ms
       printf("!3"); disp__(3,3);
 
       if(TC_compare(JM_FN_DOUBLE_TIMER) == TC_Not_expired) {                            //Time since last zero (FN release) < 75 ms

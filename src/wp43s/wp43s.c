@@ -338,7 +338,7 @@ void setupDefaults(void) {
   FN_key_pressed = 0;                                            //JM LONGPRESS FN
   FN_key_pressed_last = 0;
   FN_timeouts_in_progress = false;                               //JM LONGPRESS FN
-  Shft_timeouts = 0;                                             //JM SHIFT NEW
+  Shft_timeouts = false;                                         //JM SHIFT NEW
   FN_counter = JM_FN_TIMER;                                      //JM LONGPRESS FN
   FN_timed_out_to_RELEASE_EXEC = false;                          //JM LONGPRESS FN
   FN_timed_out_to_NOP = false;                                   //JM LONGPRESS FN
@@ -366,6 +366,7 @@ void setupDefaults(void) {
   TC_tmp = 0;                                                    //JM FN_DOUBLE
   TC_mem_double = 0;                                             //JM FN_DOUBLE
   TC_tmp_double = 0;                                             //JM FN_DOUBLE
+
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
@@ -543,7 +544,7 @@ void program_main(void) {
   lcd_clear_buf();
 /*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");                  //vv dr - no keymap is used
   lcd_refresh();
-  while (key != 33 && key != 37) {
+  while(key != 33 && key != 37) {
     key = key_pop();
     while(key == -1) {
       sys_sleep();

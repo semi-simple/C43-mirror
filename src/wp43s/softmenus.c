@@ -403,7 +403,7 @@ const int16_t menu_MyMenu[]      = { ITM_cos                                    
 
 
 const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_DENMAX,                          //JM sequence change
+                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_DENMAX,                         //JM sequence change
                                      ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_QUIET,             ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
 
                                      ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
@@ -418,7 +418,7 @@ const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,   
 
 const int16_t menu_BASE[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
                                      ITM_toSI,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
-                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                       };    //JM BASE MENU ADDED
+                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                      };    //JM BASE MENU ADDED
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
@@ -1297,8 +1297,7 @@ void showSoftmenuCurrentPart(void) {
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
-//          if(indexOfItems[item%10000].func == itemToBeCoded) { //DR TOCHECK
-            if(showValue == ITEM_NOT_CODED) {
+          if(showValue == ITEM_NOT_CODED) {
             int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
             for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod
               if(xStroke%3 == 0) yStroke--;

@@ -190,7 +190,6 @@ void saveCalc(void) {
   size += fwrite(&graph_dy  ,                         1, sizeof(graph_dy  ),                         backup); //JM graph_dy   //printf("%8lu graph_dy  \n",         (unsigned long)size);
 
 
-
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
 
   fclose(backup);

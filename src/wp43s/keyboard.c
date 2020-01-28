@@ -47,15 +47,15 @@ void DOT_G() {
 
 void DOT_F_clear() {
   if(DOT_F_painted) {
-    DOT_F(); 
+    DOT_F();
   }
-} 
+}
 
 void DOT_G_clear() {
   if(DOT_G_painted) {
-    DOT_G(); 
+    DOT_G();
   }
-} 
+}
 
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
@@ -191,22 +191,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
       }
     }
   }
-  else if(lastErrorCode == 0) {               //FN KEYS
-    func = ( !userModeEnabled ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted));
-
-    if((fn>=1 && fn<=6)) {
-/*                                               //SPECIAL KEYS
-      if(func == KEY_dotD) {
-        fn_dot_d(0);
-        return;
-      }
-      else
-        if (func == ITM_toINT) {
-      	  fnBASE_Hash(0);
-      	  return;
-      }
-	    else
-*/
+  else if(lastErrorCode == 0) {                  //JM FN KEYS, when no softmenu is present
 
       switch(fn) {
 	      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
@@ -216,9 +201,8 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 	      case 4: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
 	      case 5: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
 	      case 6: {resetTemporaryInformation(); func = ( ITM_CLSTK ) ;} break;
-	      default:;
+	      default:{func = 0;}
 	    }
-	  }
 
     if(func == CHR_PROD_SIGN) {
       func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
@@ -271,21 +255,12 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
       }
 
-/*  if(softmenuStackPointer > 0) {
-    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    row = min(3, sm->numItems/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
-    if(itemShift/6 <= row) {
-      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
-      if(func == CHR_PROD_SIGN) {
-        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
-      }
-*/
       if(func < 0) {
         func = - func;
-      }      
+      }
     }
   }
-  
+
   return func % 10000;
 }
 
@@ -293,7 +268,7 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
 //CONCEPT - actual timing was changed:
 
 /* Switching profile, to jump to g[FN]:
-    <166  <333  set g                       
+    <166  <333  set g
 ____-----_______--------->
     P    R      P
 
@@ -349,36 +324,44 @@ Timing is reset to start 800 ms from G again
 */
 
 //************* JM TIMING LIBRARY vv ****************
+/*
+int32_t TIME_now() {                                  //JM TIMER
+  uint32_t now_tmp;                                   //JM TIMER
+#ifdef DMCP_BUILD                                     //JM TIMER
+  now_tmp = (uint32_t)sys_current_ms();               //JM TIMER
+#endif                                                //JM TIMER
+#ifdef PC_BUILD                                       //JM TIMER
+  gint64 now_tmp1 = g_get_monotonic_time();           //JM TIMER
+  now_tmp = (uint32_t)(now_tmp1 / 1000);              //JM TIMER usec. Fast enough in PC to do normal divide
+#endif                                                //JM TIMER
 
-int32_t TIME_now() {                                  //JM TIMER 
-    uint32_t now_tmp;                                 //JM TIMER 
-    #ifdef DMCP_BUILD                                 //JM TIMER 
-      now_tmp = sys_current_ms();                     //JM TIMER 
-    #endif                                            //JM TIMER 
-    #ifdef PC_BUILD                                   //JM TIMER 
-      gint64 now_tmp1;                                //JM TIMER 
-      now_tmp1 = g_get_monotonic_time();              //JM TIMER
-      now_tmp = now_tmp1 / 1000;                      //JM TIMER usec. Fast enough in PC to do normal divide
-    #endif                                            //JM TIMER
-  return now_tmp;
+  return (int32_t)now_tmp;
 }
+*/
+
 
 int16_t TIME_from_last_read() {
-   TC_mem = TC_tmp;
-   TC_tmp = TIME_now();
-   return TC_tmp - TC_mem;
+  TC_mem = TC_tmp;
+  TC_tmp = (int32_t)getUptimeMs();          //TIME_now();
+
+  if(TC_tmp > TC_mem) { return (int16_t)(TC_tmp - TC_mem); }
+  else                { return (int16_t)(TC_tmp); }
 }
 
+
+
 int16_t TIME_from_last_read_double() {
-   TC_mem_double = TC_tmp_double;
-   TC_tmp_double = TIME_now();
-   return TC_tmp_double - TC_mem_double;
+  TC_mem_double = TC_tmp_double;
+  TC_tmp_double = (int32_t)getUptimeMs();   //TIME_now();
+
+  if(TC_tmp_double > TC_mem_double) { return (int16_t)(TC_tmp_double - TC_mem_double); }
+  else                              { return (int16_t)(TC_tmp_double); }
 }
 
 
 void TC_zero_time() {                                 //JM TIMER 
     #ifdef DMCP_BUILD                                 //JM TIMER 
-      now = sys_current_ms();                         //JM TIMER 
+      now = (uint32_t)sys_current_ms();               //JM TIMER 
       now_MEM1 = now;
     #endif                                            //JM TIMER 
     #ifdef PC_BUILD                                   //JM TIMER 
@@ -387,17 +370,22 @@ void TC_zero_time() {                                 //JM TIMER
     #endif                                            //JM TIMER
 }
 
-int16_t TC_delta() {                                  //JM-DOUBLE vv input in ms
-    int16_t tmp;
-    #ifdef DMCP_BUILD                                 //JM TIMER 
-      now = sys_current_ms();                         //JM TIMER 
-      tmp = now - now_MEM1;
-    #endif                                            //JM TIMER 
-    #ifdef PC_BUILD                                   //JM TIMER 
-      now = g_get_monotonic_time();                   //JM usec
-      tmp = (now - now_MEM1)/1000;
-    #endif                                            //JM TIMER
-return tmp;
+
+
+int32_t TC_delta() {                                  //JM TIMER
+  int32_t tmp;
+#ifdef DMCP_BUILD                                     //JM TIMER
+  uint32_t now = (uint32_t)sys_current_ms();          //JM TIMER
+  if(now > now_MEM1)  { tmp = (int32_t)(now - now_MEM1); }
+  else                { tmp = (int32_t)(now); }
+#endif                                                //JM TIMER
+#ifdef PC_BUILD                                       //JM TIMER
+  gint64 now = g_get_monotonic_time();                //JM TIMER
+  if(now > now_MEM1)  { tmp = (int32_t)((now - now_MEM1) / 1000); }
+  else                { tmp = (int32_t)(now / 1000); }
+#endif                                                //JM TIMER
+
+  return tmp;
 }
 
 //******************
@@ -446,7 +434,7 @@ void disp__(uint8_t nr, int32_t dud) {                                    //DISP
   int32_t swTime;
   swTime = TC_delta();
   itoa(swTime, snum, 10);
-  //strcat(snum, "         ");
+//strcat(snum, "         ");
   showString(snum, &standardFont, nr*45, 85, vmNormal, false, false);
 }
 
@@ -460,31 +448,31 @@ void btnFnPressed(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnPressed(void *w, void *data) {
 #endif
+
   FN_timed_out_to_RELEASE_EXEC = false;
   temp = TIME_from_last_read();                                           //### NOTE THE ERROR IN ORIGINAL TIME_from_last_read !!
- 
+
 
   //Check accellerated change states according to PRESS incoming sequence
   temp_double = TIME_from_last_read_double();
   if(temp_double < JM_FN_DOUBLE_TIMER) {
-    if(jm_G_DOUBLETAP && (FN_state == ST_2_REL1)) { 
+    if(jm_G_DOUBLETAP && (FN_state == ST_2_REL1)) {
       FN_state = ST_3_PRESS2;
       FN_delay_exec = false;                                              //prevent delayed execution of primary FN
     }
   }
- 
+
 
   //Change states according to PRESS/RELEASE incoming sequence
-  if(FN_state == ST_0_INIT || FN_state == ST_4_REL2 || FN_state >= ST_5_EXEC ) { 
+  if(FN_state == ST_0_INIT || FN_state == ST_4_REL2 || FN_state >= ST_5_EXEC ) {
     FN_state =  ST_1_PRESS1;
-  } else
-  if(FN_state == ST_2_REL1) {
+  }
+  else if(FN_state == ST_2_REL1) {
     FN_state = ST_3_PRESS2;
   }
 
-  
+
   if(FN_state == ST_3_PRESS2 && TC_compare( JM_FN_DOUBLE_TIMER ) == TC_Expired) {
-  
     //----------------Copied here
     char charKey[3];
     underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
@@ -493,12 +481,10 @@ void btnFnPressed(void *w, void *data) {
     hideFunctionName();
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
     refreshRegisterLine(REGISTER_T);
+  }
 
-    }
 
-  
   FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
-
 
 
   //IF 2-->3 is longer than double click time, then move back to state 1
@@ -506,13 +492,13 @@ void btnFnPressed(void *w, void *data) {
     FN_timeouts_in_progress = false;
     FN_double_click_detected = false;
     FN_delay_exec = false;
-    FN_state = ST_1_PRESS1; 
+    FN_state = ST_1_PRESS1;
   }
 
 
   if(FN_state == ST_1_PRESS1) {
     FN_key_pressed_last = FN_key_pressed;
-  } 
+  }
 
 
   //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
@@ -536,12 +522,13 @@ void btnFnPressed(void *w, void *data) {
           FN_double_click_detected = true;                                  //JM --> FORCE INTO LONGPRESS
           FN_delay_exec = false;                                            //JM cancels delayed execution upon second press
         }
-      } else {   
+      }
+      else {
         FN_timeouts_in_progress = false;       //still in no shift mode
       }
-    }    
+    }
   }
-printf("!6\n"); disp__(6,6);
+  printf("!6\n"); disp__(6,6);
 
 
   //STAGE 1 AND 3 GO HERE
@@ -550,22 +537,21 @@ printf("!6\n"); disp__(6,6);
     FN_counter = JM_FN_TIMER;                                               //start new cycle
     FN_timeouts_in_progress = true;
     FN_timed_out_to_NOP = false;
-    if(!shiftF && !shiftG) {   
-      showFunctionName(nameFunction(FN_key_pressed-37,0),0);  
+    if(!shiftF && !shiftG) {
+      showFunctionName(nameFunction(FN_key_pressed-37,0),0);
       underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
     }
     else if(shiftF && !shiftG) {
-      showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+      showFunctionName(nameFunction(FN_key_pressed-37,6),0);
       underline_softkey(FN_key_pressed-38,1, true /*dontclear at first call*/);
     }
     else if(!shiftF && shiftG) {
-      showFunctionName(nameFunction(FN_key_pressed-37,12),0);  
+      showFunctionName(nameFunction(FN_key_pressed-37,12),0);
       underline_softkey(FN_key_pressed-38,2, true /*dontclear at first call*/);
     }                                                                      //further shifts are done within FN_handler
   }
 }
 
- 
 
 //*************----------*************------- FN KEY RELEASED -------***************-----------------
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN
@@ -578,10 +564,10 @@ void btnFnReleased(void *w, void *data) {
   temp = TIME_from_last_read();
 
 
-  if(FN_state == ST_1_PRESS1 ) { 
+  if(FN_state == ST_1_PRESS1 ) {
     FN_state =  ST_2_REL1;
   }
-  else if(FN_state == ST_3_PRESS2) { 
+  else if(FN_state == ST_3_PRESS2) {
     FN_state =  ST_4_REL2;
   }
 
@@ -589,7 +575,7 @@ void btnFnReleased(void *w, void *data) {
   if(FN_state == ST_2_REL1) {
     TC_zero_time();                                                         //store the current time
     FN_delay_exec = true;                                 //SET DELAYED OPERATION FOR FIRST RELEASE. TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
-  
+
 
     int8_t tmp;                                           //Delay loop. Rather use wait_for_key_release(2)
     do {
@@ -617,7 +603,7 @@ void btnFnReleased(void *w, void *data) {
 
   EXEC_pri = (FN_timeouts_in_progress && (FN_key_pressed != 0));
   // EXEC_FROM_LONGPRESS_RELEASE     EXEC_FROM_LONGPRESS_TIMEOUT  EXEC FN primary
-  if( (FN_timed_out_to_RELEASE_EXEC || FN_timed_out_to_NOP || EXEC_pri ))  {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms) 
+  if( (FN_timed_out_to_RELEASE_EXEC || FN_timed_out_to_NOP || EXEC_pri ))  {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms)
     printf("--->\n");
 
     underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
@@ -630,7 +616,7 @@ void btnFnReleased(void *w, void *data) {
     if(!FN_timed_out_to_NOP) {
       btnFnClicked(w, charKey);                                             //Execute
     }
-    resetShiftState();  
+    resetShiftState();
     FN_cancel();
   }
 
@@ -725,7 +711,6 @@ uint16_t determineItem(const calcKey_t *key) {
     result = shiftF ? key->fShiftedAim :
              shiftG ? key->gShiftedAim :
                       key->primaryAim;
-
   }
   else if(calcMode == CM_TAM) {
     result = key->primaryTam; // No shifted function in TAM
@@ -768,7 +753,7 @@ void btnPressed(void *notUsed, void *data) {
 
 #ifdef JM_MULTISHIFT ////MULTISHIFT AND CLRDROP                                //JM TIMER - checks on any key pressed.
 
-  JM_auto_drop_enabled=true;                          //JM TIMER CLRDROP
+  JM_auto_drop_enabled = true;                        //JM TIMER CLRDROP
   if(key->primary == KEY_BACKSPACE) {
     #ifdef DMCP_BUILD                                 //JM TIMER DMCP CLRDROP
     now = sys_current_ms();                           //JM TIMER DMCP SHIFTCANCEL
@@ -1479,7 +1464,7 @@ void btnPressed(void *notUsed, void *data) {
         showSoftmenu(NULL, item, false);
       }
       else {
-        addItemToNimBuffer(item);                 //JM #, set to 
+        addItemToNimBuffer(item);                 //JM #, set to
       }
     }
 

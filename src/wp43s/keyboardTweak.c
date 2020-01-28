@@ -21,59 +21,13 @@
 #include "wp43s.h"
 
 
-kb_timer_t timer[TMR_NUMBER];
-
-
+kb_timer_t  timer[TMR_NUMBER];
 #ifdef PC_BUILD
-/********************************************//**
- * \brief Refreshes timer. This function is
- * called every 10 ms by a GTK timer.
- *
- * \param[in] data gpointer Not used
- * \return gboolean         What will happen next?
- *                          * true  = timer will call this function again
- *                          * false = timer stops calling this function
- ***********************************************/
-gboolean refreshTimer(gpointer data) {  // This function is called every 10 ms by a GTK timer
-  uint32_t now = getUptimeMs();
-  
-  for(int i=0; i<TMR_NUMBER; i++) {
-    if(timer[i].state == TMR_RUNNING) {
-      if(timer[i].timer_will_expire <= now)
-      {
-        timer[i].state = TMR_COMPLETED;
-        timer[i].func(timer[i].param);
-      }
-    }
-  }
-
-  return TRUE;
-}
+gint64      timerLastCalled;
 #endif
-
 #ifdef DMCP_BUILD
-void refreshTimer(void) {               // This function is called when nextTimerRefresh has been elapsed
-  uint32_t now = getUptimeMs();
-  
-  for(int i=0; i<TMR_NUMBER; i++) {
-    if(timer[i].state == TMR_RUNNING) {
-      if(timer[i].timer_will_expire <= now)
-      {
-        timer[i].state = TMR_COMPLETED;
-        timer[i].func(timer[i].param);  // Callback to configured function
-      }
-    }
-  }
-}
+uint32_t    timerLastCalled;
 #endif
-
-
-void fnTimerDummyTest(uint16_t unusedParamButMandatory) {
-#if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-  printf("fnTimerDummyTest called  %u\n", unusedParamButMandatory);
-#endif
-}
-
 
 
 void fnRebuildTimerRefresh(void) {
@@ -101,11 +55,97 @@ void fnRebuildTimerRefresh(void) {
 }
 
 
+#ifdef PC_BUILD
+/********************************************//**
+ * \brief Refreshes timer. This function is
+ * called every 10 ms by a GTK timer.
+ *
+ * \param[in] data gpointer Not used
+ * \return gboolean         What will happen next?
+ *                          * true  = timer will call this function again
+ *                          * false = timer stops calling this function
+ ***********************************************/
+gboolean refreshTimer(gpointer data) {      // This function is called every 10 ms by a GTK timer
+  gint64 now = g_get_monotonic_time();
+
+  if(now < timerLastCalled) {
+    for(int i=0; i<TMR_NUMBER; i++) {
+      if(timer[i].state == TMR_RUNNING) {
+        timer[i].state = TMR_COMPLETED;
+        timer[i].func(timer[i].param);      // Callback to configured function
+      }
+    }
+  }
+  else {
+    for(int i=0; i<TMR_NUMBER; i++) {
+      if(timer[i].state == TMR_RUNNING) {
+        if(timer[i].timer_will_expire <= now)
+        {
+          timer[i].state = TMR_COMPLETED;
+          timer[i].func(timer[i].param);    // Callback to configured function
+        }
+      }
+    }
+  }
+
+  timerLastCalled = now;
+
+//fnRebuildTimerRefresh();
+
+  return TRUE;
+}
+#endif
+
+#ifdef DMCP_BUILD
+void refreshTimer(void) {                   // This function is called when nextTimerRefresh has been elapsed
+  uint32_t now = (uint32_t)sys_current_ms();
+
+  if(now < timerLastCalled) {
+    for(int i=0; i<TMR_NUMBER; i++) {
+      if(timer[i].state == TMR_RUNNING) {
+        timer[i].state = TMR_COMPLETED;
+        timer[i].func(timer[i].param);      // Callback to configured function
+      }
+    }
+  }
+  else {
+    for(int i=0; i<TMR_NUMBER; i++) {
+      if(timer[i].state == TMR_RUNNING) {
+        if(timer[i].timer_will_expire <= now)
+        {
+          timer[i].state = TMR_COMPLETED;
+          timer[i].func(timer[i].param);    // Callback to configured function
+        }
+      }
+    }
+  }
+
+  timerLastCalled = now;
+
+  fnRebuildTimerRefresh();
+}
+#endif
+
+
+void fnTimerDummyTest(uint16_t param) {
+#if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+  printf("fnTimerDummyTest called  %u\n", param);
+#endif
+}
+
+
 
 void fnTimerReset(void) {
+#ifndef TESTSUITE_BUILD
+  timerLastCalled = 0;
+#endif
+
   for(int i=0; i<TMR_NUMBER; i++) {
     timer[i].state = TMR_UNUSED;
+    timer[i].func  = fnTimerDummyTest;
+    timer[i].param = 0;
   }
+
   fnRebuildTimerRefresh();
 }
 
@@ -124,15 +164,28 @@ void fnTimerConfig(uint8_t nr, void(*func)(uint16_t), uint16_t param/*, uint32_t
 
 
 void fnTimerStart(uint8_t nr, uint16_t param, uint32_t time) {
-#ifndef TESTSUITE_BUILD
-  uint32_t now = getUptimeMs();
-#else
-  uint32_t now = 0;
+#ifdef DMCP_BUILD
+  uint32_t now = (uint32_t)sys_current_ms();
 #endif
+#ifdef PC_BUILD
+  gint64 now = g_get_monotonic_time();
+#endif
+#ifndef TESTSUITE_BUILD
+  timerLastCalled = now;
+#endif
+
   if(nr < TMR_NUMBER) {
     timer[nr].param = param;
   //timer[nr].time = time;
-    timer[nr].timer_will_expire = now + time;
+#ifdef DMCP_BUILD
+    timer[nr].timer_will_expire = (uint32_t)(now + time);
+#endif
+#ifdef PC_BUILD
+    timer[nr].timer_will_expire = (gint64)(now + time *1000);
+    if(timer[nr].timer_will_expire < 0) {
+      timer[nr].timer_will_expire = time *1000;
+    }
+#endif
     timer[nr].state = TMR_RUNNING;
   }
   fnRebuildTimerRefresh();
@@ -148,9 +201,22 @@ void fnTimerStop(uint8_t nr) {
 }
 
 
+
 void fnTimerDel(uint8_t nr) {
   if(nr < TMR_NUMBER) {
     timer[nr].state = TMR_UNUSED;
   }
   fnRebuildTimerRefresh();
+}
+
+
+
+uint8_t fnTimerGetStatus(uint8_t nr) {
+  uint8_t result = TMR_UNUSED;
+  
+  if(nr < TMR_NUMBER) {
+    result = timer[nr].state;
+  }
+
+  return result;
 }

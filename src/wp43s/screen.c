@@ -427,7 +427,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
         resetShiftState();                       //JM TIMER
       }                                          //JM TIMER
       else {
-        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) { 
+        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) {
           JM_SHIFT_RESET++;
         }
       }
@@ -491,7 +491,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
         resetShiftState();                       //JM TIMER
       }                                          //JM TIMER
       else {
-        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) { 
+        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) {
           JM_SHIFT_RESET++;
         }
       }
@@ -501,7 +501,6 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 }
 #endif
-
 
 
 #ifndef TESTSUITE_BUILD
@@ -610,7 +609,7 @@ void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
 #define N_FN_TIME_DEBUG1
 
 
-void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler     
+void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler
                                              //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
   if( (FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
  
@@ -703,16 +702,15 @@ void Shft_handler() {                        //JM SHIFT NEW vv
             popSoftmenu();                                                                                                  //JM shifts
           }
           else {
-            if (calcMode == CM_AIM) {                                                                                       //JM shifts
+            if(calcMode == CM_AIM) {                                                                                        //JM shifts
               showSoftmenu(NULL, -MNU_ALPHA, true);                                                                         //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
             }
             else {                                                                                                          //JM SHIFTS
               showSoftmenu(NULL, -MNU_HOME, true);                                                                          //JM shifts  //JM ALPHA-HOME
-            }                                                                                                               //JM shifts                                                                                                                            //JM shifts
+            }                                                                                                               //JM shifts
             softmenuStackPointer_MEM = softmenuStackPointer;                                                                //JM shifts
           }
-        }   
-
+        }
       }
     } 
     else { 
@@ -873,7 +871,7 @@ void clearPixel(int16_t x, int16_t y) {
 }
 
 
-/********************************************//**  //JM 
+/********************************************//**  //JM
  * \brief Inverts a pixel on the screen (white/black).
  *
  * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
@@ -1124,7 +1122,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
 
 
-void force_refresh(void) {                                      //JM vv  
+void force_refresh(void) {                                      //JM vv
 #ifdef PC_BUILD
   gtk_widget_queue_draw(screen);
 #endif
@@ -1675,9 +1673,9 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtComplex34 || getRegisterDataType(regist) == dtReal34) {
-             if(temporaryInformation == TI_ABC) {                             //JM EE \/ 
-              if(regist == REGISTER_X) {                                         
-                strcpy(prefix, "c" STD_SPACE_FIGURE "=");                        
+             if(temporaryInformation == TI_ABC) {                             //JM EE \/
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "c" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
               else if(regist == REGISTER_Y) {

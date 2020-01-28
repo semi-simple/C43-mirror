@@ -30,11 +30,12 @@ gboolean refreshTimer         (gpointer data);
 void     refreshTimer         (void);
 #endif
 void     fnTimerReset         (void);
-void     fnTimerDummyTest     (uint16_t unusedParamButMandatory);
+void     fnTimerDummyTest     (uint16_t param);
 void     fnTimerConfig        (uint8_t nr, void(*func)(uint16_t), uint16_t param/*, uint32_t time*/);
 void     fnTimerStart         (uint8_t nr, uint16_t param, uint32_t time);      // Start Timer, 0..n-1
 void     fnTimerStop          (uint8_t nr);                                     // Stop Timer, 0..n-1
 void     fnTimerDel           (uint8_t nr);                                     // Delete Timer, 0..n-1
+uint8_t  fnTimerGetStatus     (uint8_t nr);
 
 
 /********************************************//**
@@ -54,6 +55,10 @@ typedef struct {
   void     (*func)(uint16_t); ///< Function called to execute the timer
   uint16_t param;             ///< 1st parameter to the above
 //uint32_t time;              ///<
+#ifndef PC_BUILD
   uint32_t timer_will_expire; ///<
+#else
+  gint64   timer_will_expire; ///<
+#endif
   uint8_t  state;             ///<
 } kb_timer_t;

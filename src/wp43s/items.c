@@ -2309,7 +2309,7 @@ const item_t indexOfItems[] = {
 /* 1908 */  { fnShowJM,                    JM_INP_DFLT,                 "i" STD_SPACE_3_PER_EM "Dflt?",                "i" STD_SPACE_3_PER_EM "Dflt?",                CAT_NONE, SLS_UNCHANGED},   //JM INPUT DEFAULT
 /* 1909 */  { fnSetSetJM,                  JC_FG_DOTS,                  "fg" STD_SPACE_3_PER_EM "DOTS",                "fg" STD_SPACE_3_PER_EM "DOTS",                CAT_FNCT, SLS_UNCHANGED},   //JM UNDERLINING
 /* 1910 */  { fnInDefault,                 ID_CPXDP,                    "i" STD_SPACE_3_PER_EM "CPX",                  "i" STD_SPACE_3_PER_EM "CPX",                  CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
-/* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_FNCT, SLS_UNCHANGED},   //JM KEY TAP DOUBLE SETTING
+/* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "g" STD_SPACE_3_PER_EM "2TAP",                 "g" STD_SPACE_3_PER_EM "2TAP",                 CAT_FNCT, SLS_UNCHANGED},   //JM KEY TAP DOUBLE SETTING
 /* 1912 */  { fnInDefault,                 ID_SI,                       "i" STD_SPACE_3_PER_EM "SI",                   "i" STD_SPACE_3_PER_EM "SI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI,                       "i" STD_SPACE_3_PER_EM "LI",                   "i" STD_SPACE_3_PER_EM "LI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
 /* 1914 */  { fnGraph,                     NOPARAM,                     "PLTGRF",                                      "PLTGRF",                                      CAT_FNCT, SLS_UNCHANGED},   //JM GRAPHING

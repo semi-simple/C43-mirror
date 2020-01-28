@@ -42,6 +42,7 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 void disp__(uint8_t nr, int32_t dud);                                    //DISPLAY time on DM42 screen
 
 
+
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);
   void btnFnPressed   (GtkWidget *w, gpointer data);   //JM LONGPRESS FN

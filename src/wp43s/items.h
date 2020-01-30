@@ -26,7 +26,7 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
-#define ITM_NULL                         0
+#define ITM_NULL                         0   //TEST
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
 #define ITM_10x                          3
@@ -1937,7 +1937,7 @@
 #define ITM_U_KEY_SIGMA               1895   //JM USER
 #define Not_used1896                  1896
 #define ITM_U_KEY_PRGM                1897   //JM USER
-#define Not_used1898                  1898
+#define ITM_RND                       1898   //JM ROUND
 #define ITM_U_KEY_ALPHA               1899   //JM USER
 #define ITM_SH_NORM_E                 1900   //JM USER NORMAL
 #define ITM_JM_ASN                    1901   //JM ASSIGN

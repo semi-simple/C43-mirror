@@ -760,7 +760,7 @@ const item_t indexOfItems[] = {
 /*  374 */  { fnProductSign,               PS_DOT,                      "MULT" STD_DOT,                                "MULT" STD_DOT,                                CAT_FNCT, SLS_UNCHANGED},
 /*  375 */  { fnAngularMode,               AM_MULTPI,                   "MUL" STD_pi,                                  "MUL" STD_pi,                                  CAT_FNCT, SLS_UNCHANGED},
 /*  376 */  { itemToBeCoded,               NOPARAM,                     "MVAR",                                        "MVAR",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  377 */  { itemToBeCoded,               NOPARAM,                     "MyMenu",                                      "MyMenu",                                      CAT_MENU, SLS_UNCHANGED},
+/*  377 */  { itemToBeCoded,               NOPARAM,                     "MyMenu",                                      "MyM",                                         CAT_MENU, SLS_UNCHANGED},
 /*  378 */  { itemToBeCoded,               NOPARAM,                     "My" STD_alpha,                                "My" STD_alpha,                                CAT_MENU, SLS_UNCHANGED},
 /*  379 */  { fnConstant,                  33,                          "m" STD_SUB_mu,                                "m" STD_SUB_mu,                                CAT_CNST, SLS_ENABLED  },
 /*  380 */  { itemToBeCoded,               NOPARAM,                     "M.DELR",                                      "DELR",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -2164,8 +2164,8 @@ const item_t indexOfItems[] = {
 /* 1765 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", CAT_FNCT, SLS_ENABLED  },   //JM EE
 /* 1766 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                     "COMPLEX",                                     CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1767 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                         "CC1",                                         CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to CC1
-/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW "R" STD_RIGHT_ARROW "L",       CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
-/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "S" STD_LEFT_ARROW "R" STD_LEFT_ARROW,         CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
+/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW STD_RIGHT_ARROW "L",           CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
+/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "S" STD_LEFT_ARROW STD_LEFT_ARROW,             CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 
@@ -2297,7 +2297,7 @@ const item_t indexOfItems[] = {
 /* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               STD_SIGMA "+",                                 STD_SIGMA "+",                                 CAT_NONE, SLS_UNCHANGED},   //JM USER
 /* 1896 */  { itemToBeCoded,               NOPARAM,                     "1896",                                        "1896",                                        CAT_FREE, SLS_UNCHANGED},
 /* 1897 */  { fnSigmaAssign,               ITM_PR,                      STD_SIGMA "+PGM",                              STD_SIGMA "+PGM",                              CAT_NONE, SLS_UNCHANGED},   //JM USER
-/* 1898 */  { fnRound,                     NOPARAM,                     "Rnd",                                         "Rnd",                                         CAT_FNCT, SLS_ENABLED  },
+/* 1898 */  { fnRound,                     NOPARAM,                     "ROUND",                                       "RND",                                         CAT_NONE, SLS_ENABLED  },
 /* 1899 */  { fnSigmaAssign,               ITM_AIM,                     STD_SIGMA "+" STD_alpha,                       STD_SIGMA "+" STD_alpha,                       CAT_NONE, SLS_UNCHANGED},
 /* 1900 */  { fnGetSigmaAssignToX,         NOPARAM,                     STD_SIGMA "+ toX",                             STD_SIGMA "+ toX",                             CAT_NONE, SLS_UNCHANGED},
 /* 1901 */  { fnUserJM,                    JM_ASSIGN,                   "ASSIGN",                                      "ASSIGN",                                      CAT_NONE, SLS_UNCHANGED},

@@ -1285,6 +1285,7 @@ void fnUserJM(uint16_t jmUser) {
 
   case USER_RESET:                                              //USER_RESET 26
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
+    userModeEnabled = false;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
     Show_User_Keys();
     break;

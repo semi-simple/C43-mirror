@@ -634,7 +634,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnUserJM(USER_DEFAULTS);                     //JM USER
+    fnUserJM(USER_RESET);                        //JM USER
 //    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults

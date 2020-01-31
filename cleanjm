@@ -18,6 +18,16 @@ find . -type f -name "* 7.txt" -exec rm {} \;
 find . -type f -name "* 8.txt" -exec rm {} \;
 find . -type f -name "* 9.txt" -exec rm {} \;
 find . -type f -name "* 10.txt" -exec rm {} \;
+find . -type f -name "* 11.txt" -exec rm {} \;
+find . -type f -name "* 12.txt" -exec rm {} \;
+find . -type f -name "* 13.txt" -exec rm {} \;
+find . -type f -name "* 14.txt" -exec rm {} \;
+find . -type f -name "* 15.txt" -exec rm {} \;
+find . -type f -name "* 16.txt" -exec rm {} \;
+find . -type f -name "* 17.txt" -exec rm {} \;
+find . -type f -name "* 18.txt" -exec rm {} \;
+find . -type f -name "* 19.txt" -exec rm {} \;
+find . -type f -name "* 20.txt" -exec rm {} \;
 
 find . -type f -name "* 2.o" -exec rm {} \;
 find . -type f -name "* 3.o" -exec rm {} \;
@@ -28,6 +38,16 @@ find . -type f -name "* 7.o" -exec rm {} \;
 find . -type f -name "* 8.o" -exec rm {} \;
 find . -type f -name "* 9.o" -exec rm {} \;
 find . -type f -name "* 10.o" -exec rm {} \;
+find . -type f -name "* 11.o" -exec rm {} \;
+find . -type f -name "* 12.o" -exec rm {} \;
+find . -type f -name "* 13.o" -exec rm {} \;
+find . -type f -name "* 14.o" -exec rm {} \;
+find . -type f -name "* 15.o" -exec rm {} \;
+find . -type f -name "* 16.o" -exec rm {} \;
+find . -type f -name "* 17.o" -exec rm {} \;
+find . -type f -name "* 18.o" -exec rm {} \;
+find . -type f -name "* 19.o" -exec rm {} \;
+find . -type f -name "* 20.o" -exec rm {} \;
 
 find . -type f -name "* 2.d" -exec rm {} \;
 find . -type f -name "* 3.d" -exec rm {} \;
@@ -38,6 +58,16 @@ find . -type f -name "* 7.d" -exec rm {} \;
 find . -type f -name "* 8.d" -exec rm {} \;
 find . -type f -name "* 9.d" -exec rm {} \;
 find . -type f -name "* 10.d" -exec rm {} \;
+find . -type f -name "* 11.d" -exec rm {} \;
+find . -type f -name "* 12.d" -exec rm {} \;
+find . -type f -name "* 13.d" -exec rm {} \;
+find . -type f -name "* 14.d" -exec rm {} \;
+find . -type f -name "* 15.d" -exec rm {} \;
+find . -type f -name "* 16.d" -exec rm {} \;
+find . -type f -name "* 17.d" -exec rm {} \;
+find . -type f -name "* 18.d" -exec rm {} \;
+find . -type f -name "* 19.d" -exec rm {} \;
+find . -type f -name "* 20.d" -exec rm {} \;
 
 
 cd ./src

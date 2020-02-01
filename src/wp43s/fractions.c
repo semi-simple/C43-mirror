@@ -104,9 +104,22 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
  * \param[in] fractionType uint16_t Fraction type
  * \return void
  ***********************************************/
-void fnFractionType(uint16_t ft) {
-  fractionType = ft;
-  displayRealAsFraction = true;
+void fnToggleFractionType(uint16_t unusedParamButMandatory) {
+  switch(fractionType) {
+    case FT_NONE:
+      fractionType = FT_PROPER;
+      break;
+
+    case FT_PROPER:
+      fractionType = FT_IMPROPER;
+      break;
+
+    case FT_IMPROPER:
+      fractionType = FT_PROPER;
+      break;
+
+    default: {}
+  }
   refreshStack();
 }
 

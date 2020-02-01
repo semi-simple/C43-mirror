@@ -556,7 +556,6 @@ void fnReset(uint16_t confirmation) {
     fnCurveFitting(CF_LINEAR_FITTING);
     fnLeadingZeros(false);
     fnProductSign(PS_CROSS);
-    fnFractionType(FT_PROPER); // a b/c
     fnRadixMark(RM_PERIOD);
     fnRoundingMode(RM_HALF_EVEN);
     fnDisplayOvr(DO_SCI);
@@ -568,7 +567,7 @@ void fnReset(uint16_t confirmation) {
     showRealComplexResult();
     allocateLocalRegisters(0);
 
-    displayRealAsFraction = false;
+    fractionType = FT_NONE;
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();

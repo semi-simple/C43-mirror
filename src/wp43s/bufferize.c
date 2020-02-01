@@ -2030,8 +2030,7 @@ void closeNim(void) {
             real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
           }
 
-          if(!displayRealAsFraction) {
-            displayRealAsFraction = true;
+          if(fractionType == FT_NONE) {
             fractionType = (integer == 0 ? FT_IMPROPER : FT_PROPER); // d/c or a b/c
           }
         }

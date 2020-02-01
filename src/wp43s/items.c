@@ -232,7 +232,7 @@ void fnConfigIndia              (uint16_t unusedParamButMandatory) {}
 void fnConfigJapan              (uint16_t unusedParamButMandatory) {}
 void fnConfigUk                 (uint16_t unusedParamButMandatory) {}
 void fnConfigUsa                (uint16_t unusedParamButMandatory) {}
-void fnFractionType             (uint16_t unusedParamButMandatory) {}
+void fnToggleFractionType       (uint16_t unusedParamButMandatory) {}
 void fnLcm                      (uint16_t unusedParamButMandatory) {}
 void fnSign                     (uint16_t unusedParamButMandatory) {}
 void fnSlvq                     (uint16_t unusedParamButMandatory) {}

@@ -145,7 +145,6 @@ bool_t               shiftStateChanged;
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
-bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               updateDisplayValueX;
@@ -278,8 +277,7 @@ void setupDefaults(void) {
   fnCurveFitting(CF_LINEAR_FITTING);
   fnLeadingZeros(false);
   fnProductSign(PS_CROSS);
-  fnFractionType(FT_PROPER); // a b/c
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   fnRadixMark(RM_PERIOD);
   fnComplexResult(false);
   fnComplexMode(CM_RECTANGULAR);

@@ -642,8 +642,8 @@ void btnPressed(void *notUsed, void *data) {
         #endif
       }
 
-      else if(displayRealAsFraction) {
-        displayRealAsFraction = false;
+      else if(fractionType != FT_NONE) {
+        fractionType = FT_NONE;
         refreshStack();
       }
 

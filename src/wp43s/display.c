@@ -70,7 +70,7 @@ void fnRadixMark(uint16_t rm) {
 void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
 
   refreshStack();
 }
@@ -86,7 +86,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
 void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
 
   refreshStack();
 }
@@ -102,7 +102,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
 void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
 
   refreshStack();
 }
@@ -119,7 +119,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   //if(0 <= displayFormatN && displayFormatN <= 15) {
     displayFormat = DF_ALL;
     displayFormatDigits = displayFormatN;
-    displayRealAsFraction = false;
+    fractionType = FT_NONE;
 
     refreshStack();
   //}

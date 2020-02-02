@@ -41,6 +41,9 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 
 void disp__(uint8_t nr, int32_t dud);                                    //DISPLAY time on DM42 screen
 
+#ifdef DMCP_BUILD
+  #include <dmcp.h>
+#endif
 
 
 #ifdef PC_BUILD

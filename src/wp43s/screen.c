@@ -571,14 +571,14 @@ void Wait_loop() {
 /*
 void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
   char charKey[3];
-  //printf("Delayed_BOOLE:%d, 1:%d, 2:%d, 3:%d, F:%d, G:%d \n",(FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec), FN_key_pressed != 0, FN_double_click_detected, FN_delay_exec, shiftF, shiftG);
+  //printf("Delayed_BOOLE:%d, 1:%d, 2:%d, 3:%d, F:%d, G:%d \n",(FN_key_pressed != 0 && !FN_double_click_detected && FN_block_exec), FN_key_pressed != 0, FN_double_click_detected, FN_block_exec, shiftF, shiftG);
 
-  if (FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) {
+  if (FN_key_pressed != 0 && !FN_double_click_detected && FN_block_exec) {
 //    #ifdef FN_TIME_DEBUG
     printf("TIMER check passed \n");
-//    printf("  %ld, KEY=%d, DC=%d, DE=%d \n",g_get_monotonic_time() / 1000, FN_key_pressed, FN_double_click_detected, FN_delay_exec);
+//    printf("  %ld, KEY=%d, DC=%d, DE=%d \n",g_get_monotonic_time() / 1000, FN_key_pressed, FN_double_click_detected, FN_block_exec);
 //    #endif
-    FN_delay_exec = false;
+    FN_block_exec = false;
     //Wait_loop();                            //FORCE EXPIRY
     #ifdef FN_TIME_DEBUG
     printf("  %ld, KEY=%d \n",g_get_monotonic_time() / 1000,FN_key_pressed);

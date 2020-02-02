@@ -422,7 +422,7 @@ return tmp;
 //**************JM DOUBLE CLICK SUPPORT vv **********************************
 void FN_cancel() {
   FN_double_click_detected = false;
-  FN_delay_exec = false;
+  FN_block_exec = false;
   FN_key_pressed = 0;
   FN_timeouts_in_progress = false;
   FN_counter = JM_FN_TIMER;                                                 //reset for future
@@ -438,6 +438,27 @@ void disp__(uint8_t nr, int32_t dud) {                                    //DISP
   showString(snum, &standardFont, nr*45, 85, vmNormal, false, false);
 }
 
+void disp_v(uint8_t nr, int32_t val) {                                    //DISPLAY time on DM42 screen
+  char snum[50];
+  itoa(val, snum, 10);
+  showString(snum, &standardFont, nr*45, 70, vmNormal, false, false);
+}
+
+void disp_b(uint8_t nr, bool_t v1, bool_t v2, bool_t v3, bool_t v4) {                                    //DISPLAY time on DM42 screen
+  char snum[50];
+  char snum2[50]="";
+  
+  itoa(v1, snum, 10);
+  strcpy(snum2,snum);
+  itoa(v2, snum, 10);
+  strcat(snum2,snum);
+  itoa(v3, snum, 10);
+  strcat(snum2,snum);
+  itoa(v4, snum, 10);
+  strcat(snum2,snum);
+  
+  showString(snum2, &standardFont, nr*45, 55, vmNormal, false, false);
+}
 
 
 //*************----------*************------- FN KEY PRESSED -------***************-----------------
@@ -452,13 +473,12 @@ void btnFnPressed(void *w, void *data) {
   FN_timed_out_to_RELEASE_EXEC = false;
   temp = TIME_from_last_read();                                           //### NOTE THE ERROR IN ORIGINAL TIME_from_last_read !!
 
-
   //Check accellerated change states according to PRESS incoming sequence
   temp_double = TIME_from_last_read_double();
   if(temp_double < JM_FN_DOUBLE_TIMER) {
     if(jm_G_DOUBLETAP && (FN_state == ST_2_REL1)) {
       FN_state = ST_3_PRESS2;
-      FN_delay_exec = false;                                              //prevent delayed execution of primary FN
+      FN_block_exec = false;                                              //prevent delayed execution of primary FN
     }
   }
 
@@ -471,6 +491,8 @@ void btnFnPressed(void *w, void *data) {
     FN_state = ST_3_PRESS2;
   }
 
+  printf("!0 st=%d st%d t=%d - \n",FN_state,ST_3_PRESS2,temp);
+  disp_v(0, FN_state);
 
   if(FN_state == ST_3_PRESS2 && TC_compare( JM_FN_DOUBLE_TIMER ) == TC_Expired) {
     //----------------Copied here
@@ -486,15 +508,19 @@ void btnFnPressed(void *w, void *data) {
 
   FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
 
+  printf("!a st=%d st%d t=%d - \n",FN_state,ST_3_PRESS2,temp);
+  disp_v(2, FN_state);
 
   //IF 2-->3 is longer than double click time, then move back to state 1
   if(FN_state == ST_3_PRESS2 && temp > JM_FN_DOUBLE_TIMER /*+ 5*/ /*JM_FN_TIMER * 2 *100*/) {
     FN_timeouts_in_progress = false;
     FN_double_click_detected = false;
-    FN_delay_exec = false;
+    FN_block_exec = false;
     FN_state = ST_1_PRESS1;
   }
 
+  printf("!b st=%d st%d t=%d - \n",FN_state,ST_3_PRESS2,temp);
+  disp_v(3, FN_state);
 
   if(FN_state == ST_1_PRESS1) {
     FN_key_pressed_last = FN_key_pressed;
@@ -503,7 +529,9 @@ void btnFnPressed(void *w, void *data) {
 
   //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
   FN_double_click_detected = false;                                         //JM FN-DOUBLE - Dip detection flag
-  printf("!1"); disp__(1,1);
+  printf("!1 %d %d - ",FN_state,ST_3_PRESS2); disp__(1,1);
+  disp_v(1, FN_state);
+  disp_b(1,shiftF,shiftG,false,false);
   if(jm_G_DOUBLETAP && FN_state == ST_3_PRESS2 && !shiftF && !shiftG) {
   printf("!2"); disp__(2,2);
 
@@ -513,14 +541,14 @@ void btnFnPressed(void *w, void *data) {
       if(TC_compare(JM_FN_DOUBLE_TIMER) == TC_Not_expired) {                            //Time since last zero (FN release) < 75 ms
         printf("!4"); disp__(4,4);
 
-        if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {   //Identified valid double press dip, the same key in rapid succession
-
+        if(FN_key_pressed !=0 /*&& FN_key_pressed == FN_key_pressed_last*/) {   //Identified valid double press dip, the same key in rapid succession
           printf("!5"); disp__(5,5);
           R_shF(); //shiftF = false;                                        //JM
           S_shG(); //shiftG = true;                                         //JM
           Reset_Shift_Mem();                                                //JM
           FN_double_click_detected = true;                                  //JM --> FORCE INTO LONGPRESS
-          FN_delay_exec = false;                                            //JM cancels delayed execution upon second press
+          FN_block_exec = false;                                            //JM cancels delayed execution upon second press
+          disp_b(5,shiftF,shiftG,false,false);
         }
       }
       else {
@@ -529,7 +557,8 @@ void btnFnPressed(void *w, void *data) {
     }
   }
   printf("!6\n"); disp__(6,6);
-
+  disp_v(6, FN_state);
+  disp_b(6,!FN_timeouts_in_progress ,FN_double_click_detected,FN_key_pressed != 0,(!FN_timeouts_in_progress || FN_double_click_detected) && FN_key_pressed != 0);
 
   //STAGE 1 AND 3 GO HERE
   //**************JM LONGPRESS ****************************************************
@@ -537,6 +566,7 @@ void btnFnPressed(void *w, void *data) {
     FN_counter = JM_FN_TIMER;                                               //start new cycle
     FN_timeouts_in_progress = true;
     FN_timed_out_to_NOP = false;
+    disp_b(7,shiftF,shiftG,false,false);
     if(!shiftF && !shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);
       underline_softkey(FN_key_pressed-38,0, true /*dontclear at first call*/);
@@ -570,20 +600,34 @@ void btnFnReleased(void *w, void *data) {
   else if(FN_state == ST_3_PRESS2) {
     FN_state =  ST_4_REL2;
   }
+  disp_v(7, FN_state);
 
 
   if(FN_state == ST_2_REL1) {
     TC_zero_time();                                                         //store the current time
-    FN_delay_exec = true;                                 //SET DELAYED OPERATION FOR FIRST RELEASE. TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
 
+  	if(FN_state == ST_2_REL1 && jm_G_DOUBLETAP){
 
-    int8_t tmp;                                           //Delay loop. Rather use wait_for_key_release(2)
-    do {
-      tmp = (TC_compare( JM_FN_DOUBLE_TIMER - 5) );
-    } while (tmp != TC_Expired && tmp != TC_NA);
+  	  int8_t tmp;                                           //Delay loop. Rather use wait_for_key_release(2)
+  	  do {
+        #ifdef DMCP_BUILD
+        sys_delay(1);
+        #endif
+  	    tmp = (TC_compare( JM_FN_DOUBLE_TIMER) );
 
-
-
+      #ifdef DMCP_BUILD
+  	  } while (tmp != TC_Expired && tmp != TC_NA && (key_empty()));
+  	  if(!key_empty()) {
+  	  	FN_block_exec = true;                                 //SET DELAYED OPERATION FOR FIRST RELEASE. TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
+  	  }    
+      #endif
+      #ifdef PC_BUILD                                                           //JM LONGPRESS FN
+      } while (tmp != TC_Expired && tmp != TC_NA );
+//      if(gtk_events_pending()){  hierdie is nog n probleem
+  //      FN_block_exec = true;                                 //SET DELAYED OPERATION FOR FIRST RELEASE. TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
+    //  }
+      #endif
+  	}
   } 
 
   else if(FN_state == ST_4_REL2) {
@@ -599,11 +643,11 @@ void btnFnReleased(void *w, void *data) {
   // **************JM LONGPRESS EXECUTE**************************************************** 
   char charKey[3];
   bool_t EXEC_pri;
-  printf("FN_timed_out_to_RELEASE_EXEC=%d, FN_timed_out_to_NOP=%d, FN_timeouts_in_progress=%d, 1=%d, 2=%d, 3=%d ",FN_timed_out_to_RELEASE_EXEC, FN_timed_out_to_NOP, FN_timeouts_in_progress, FN_key_pressed, FN_double_click_detected, FN_delay_exec);
+  printf("FN_timed_out_to_RELEASE_EXEC=%d, FN_timed_out_to_NOP=%d, FN_timeouts_in_progress=%d, 1=%d, 2=%d, 3=%d ",FN_timed_out_to_RELEASE_EXEC, FN_timed_out_to_NOP, FN_timeouts_in_progress, FN_key_pressed, FN_double_click_detected, FN_block_exec);
 
   EXEC_pri = (FN_timeouts_in_progress && (FN_key_pressed != 0));
   // EXEC_FROM_LONGPRESS_RELEASE     EXEC_FROM_LONGPRESS_TIMEOUT  EXEC FN primary
-  if( (FN_timed_out_to_RELEASE_EXEC || FN_timed_out_to_NOP || EXEC_pri ))  {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms)
+  if( ((FN_timed_out_to_RELEASE_EXEC || FN_timed_out_to_NOP || EXEC_pri) && !FN_block_exec) ) {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms)
     printf("--->\n");
 
     underline_softkey(FN_key_pressed-38,3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
@@ -619,7 +663,7 @@ void btnFnReleased(void *w, void *data) {
     resetShiftState();
     FN_cancel();
   }
-
+  FN_block_exec = false;
 
 
 

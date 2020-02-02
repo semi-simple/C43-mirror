@@ -332,7 +332,7 @@ void setupDefaults(void) {
 
   ULFL = false;                                                  //JM Underline
   ULGL = false;                                                  //JM Underline
-  FN_delay_exec = false;                                         //JM FN-DOUBLE
+  FN_block_exec = false;                                         //JM FN-DOUBLE
   FN_double_click_detected = false;                              //JM FN-DOUBLE
   FN_state = ST_0_INIT;                                          //JM FN-DOUBLE
   FN_key_pressed = 0;                                            //JM LONGPRESS FN

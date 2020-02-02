@@ -120,7 +120,7 @@ const calcKey_t kbd_std[37] = {
 #endif //JM END OF LAYOUT 1a.
 
 
-#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT. NAME CHANGE TO LAYOUT 42B
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_RND,         ITM_PROFRC,   ITM_NULL,       CHR_A,            ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,            CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
@@ -140,7 +140,7 @@ const calcKey_t kbd_std[37] = {
  {42,   ITM_XexY,         ITM_LASTX,      -MNU_CPX,      CHR_ex,         CHR_M,            CHR_ex,          CHR_MU,        ITM_NULL     }, //JM
  {43,   ITM_CHS,         -MNU_MODE,       -MNU_EXP,      CHR_PLUS_MINUS, CHR_N,            CHR_PLUS_MINUS,  CHR_NU,        ITM_NULL     }, //JM
  {44,   ITM_EXPONENT,    -MNU_DISP,       -MNU_FIN,      ITM_NULL,       CHR_O,            CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
- {45,   KEY_BACKSPACE,    KEY_UNDO,       -MNU_CLR,      KEY_BACKSPACE,  KEY_BACKSPACE,    KEY_UNDO,        -MNU_CLR,      KEY_BACKSPACE}, //JM
+ {45,   KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,     KEY_BACKSPACE,  KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,      KEY_BACKSPACE}, //JM
                  
  {51,   KEY_UP,           KEY_BST,         ITM_RBR,      KEY_UP,         KEY_UP,           KEY_BST,         ITM_NULL,      KEY_UP       }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_INFO,     CHR_7,          CHR_P,            CHR_7,           CHR_PI,        CHR_7        }, //JM

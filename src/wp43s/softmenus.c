@@ -489,7 +489,7 @@ const int16_t menu_HOME[]        = {
           /*-4------*/                                                                                                                                                                                            //JM HOME
                                      ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,                           //JM HOME
 /* 02 */                             -MNU_TRI,                      -MNU_EXP,                   -MNU_BASE,                -MNU_CPX,              -MNU_ANGLECONV,              -MNU_XFN,                           //JM HOME
-/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR,                           //JM HOME
+/* 03 */                             ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR                           //JM HOME
 
 
 #ifdef DMCP_BUILD              //JM LAYOUT 2. DM42 STRICT.

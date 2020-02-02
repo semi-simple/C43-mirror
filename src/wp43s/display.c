@@ -79,7 +79,7 @@ void fnRadixMark(uint16_t rm) {
 void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -99,7 +99,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
 void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -119,7 +119,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
 void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -140,7 +140,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   //if(0 <= displayFormatN && displayFormatN <= 15) {
     displayFormat = DF_ALL;
     displayFormatDigits = displayFormatN;
-    displayRealAsFraction = false;
+    fractionType = FT_NONE;
     SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
     UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -190,9 +190,9 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatGap(uint16_t gap) {
-  if(gap == 1 || gap ==2) {
-    gap = 0;
-  }
+ if(gap == 1 || gap == 2) {
+   gap = 0;
+ }
   groupingGap = gap;
   refreshStack();
 }

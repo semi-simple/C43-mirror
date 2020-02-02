@@ -28,3 +28,5 @@ DMCP_build/decNumberICU
 /testTtf2RasterFonts
 /wp43s
 /.vscode
+
+.DS_Store

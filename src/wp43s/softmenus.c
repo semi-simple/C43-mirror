@@ -1297,15 +1297,9 @@ void showSoftmenuCurrentPart(void) {
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
-<<<<<<< HEAD
           if(showValue == ITEM_NOT_CODED) {
             int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
             for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod
-=======
-          if(indexOfItems[item%10000].func == itemToBeCoded) {
-            int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 3;
-            for(int16_t xStroke=x*67 + 10; xStroke<x*67 + 57; xStroke++) {
->>>>>>> origin/master
               if(xStroke%3 == 0) yStroke--;
               invertPixel(xStroke, yStroke -3);                                       //JM mod
             }

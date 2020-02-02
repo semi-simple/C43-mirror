@@ -1148,7 +1148,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
           }
 
-          else if(   displayRealAsFraction
+          else if(   fractionType != FT_NONE
                   && (    getRegisterDataType(regist) == dtReal34
                        && (
                               (   real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(regist), const34_1e_4)

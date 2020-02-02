@@ -23,9 +23,9 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2020.01"
+#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2020.02"
 #define COPYRIGHT "The WP43S team"
-#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2020.01" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2020.02" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -305,9 +305,10 @@ typedef int16_t calcRegister_t;
 #define PS_CROSS                1
 #define PRODUCT_SIGN            (productSign == PS_CROSS ? STD_CROSS : STD_DOT)
 
-// Fraction type 1 bit
-#define FT_PROPER               0 // a b/c
-#define FT_IMPROPER             1 // d/c
+// Fraction type 2 bit
+#define FT_NONE                 0 // real
+#define FT_PROPER               1 // a b/c
+#define FT_IMPROPER             2 // d/c
 
 // Radix Mark 1 bit
 #define RM_PERIOD               0
@@ -592,7 +593,6 @@ extern bool_t               shiftStateChanged;
 extern bool_t               showContent;
 extern bool_t               stackLiftEnabled;
 extern bool_t               displayLeadingZeros;
-extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               updateDisplayValueX;

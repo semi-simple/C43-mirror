@@ -23,7 +23,7 @@
 //This variable is to store in flash memory
 const calcKey_t kbd_std[37] = {
 //keyId primary        fShifted         gShifted         keyLblAim        primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_1ONX,      ITM_PROFRC,      ITM_IMPFRC,      ITM_NULL,        CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     },
+ {21,   ITM_1ONX,      ITM_PROFRC,     -MNU_ALPHAFN,     ITM_NULL,        CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     },
  {22,   ITM_YX,        ITM_toINT,      -MNU_EXP,         CHR_NUMBER_SIGN, CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     },
  {23,  -MNU_TRI,       ITM_DMS,         ITM_pi,          ITM_NULL,        CHR_C,             ITM_NULL,        CHR_GAMMA,     ITM_ST_C     },
  {24,   ITM_LN,        KEY_dotD,        ITM_LOG10,       ITM_NULL,        CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base
@@ -32,13 +32,13 @@ const calcKey_t kbd_std[37] = {
 
  {31,   ITM_STO,       ITM_ASSIGN,      ITM_SAVE,        ITM_NULL,        CHR_G,             ITM_ASSIGN,      CHR_GAMMA,     ITM_NULL     },
  {32,   ITM_RCL,       ITM_VIEW,       -MNU_CNST,        ITM_NULL,        CHR_H,             ITM_NULL,        CHR_CHI,       ITM_HEX      },
- {33,   ITM_Rdown,     ITM_Rup,        -MNU_CPX,         ITM_NULL,        CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
+ {33,   ITM_Rdown,     ITM_Rup,         ITM_RBR,         ITM_NULL,        CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {34,   KEY_CC,        ITM_MAGNITUDE,   ITM_VANGLE,      ITM_NULL,        CHR_J,             ITM_NULL,        CHR_ETA,       ITM_REGJ     }, // If KEY_CC is moved: adapt the function fnComplexCCCC in keyboard.c
- {35,   KEY_f,         ITM_NULL,       -MNU_ALPHAFN,     KEY_f,           KEY_f,             ITM_NULL,        ITM_NULL,      KEY_f        },
+ {35,   KEY_f,         ITM_NULL,       -MNU_CPX,         KEY_f,           KEY_f,             ITM_NULL,        ITM_NULL,      KEY_f        },
  {36,   KEY_g,         KEY_USERMODE,    ITM_NULL,        KEY_g,           KEY_g,             KEY_USERMODE,    ITM_NULL,      KEY_g        },
 
- {41,   ITM_ENTER,     ITM_FILL,        ITM_DROP,        ITM_ENTER,       ITM_ENTER,         ITM_NULL,        ITM_NULL,      ITM_ENTER    },
- {42,   ITM_XexY,      ITM_RBR,        -MNU_STK,         CHR_ex,          CHR_K,             CHR_ex,          CHR_KAPPA,     ITM_REGK     },
+ {41,   ITM_ENTER,     ITM_STATUS,      ITM_DROP,        ITM_ENTER,       ITM_ENTER,         ITM_NULL,        ITM_NULL,      ITM_ENTER    },
+ {42,   ITM_XexY,      ITM_FILL,       -MNU_STK,         CHR_ex,          CHR_K,             CHR_ex,          CHR_KAPPA,     ITM_REGK     },
  {43,   ITM_CHS,       ITM_DELTAPC,    -MNU_FIN,         CHR_PLUS_MINUS,  CHR_L,             CHR_PLUS_MINUS,  CHR_LAMBDA,    ITM_REGL     },
  {44,   ITM_EXPONENT,  ITM_SHOW,       -MNU_DISP,        ITM_NULL,        CHR_M,             CHR_UP_ARROW,    CHR_MU,        ITM_NULL     },
  {45,   KEY_BACKSPACE, KEY_UNDO,       -MNU_CLR,         KEY_BACKSPACE,   KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE},

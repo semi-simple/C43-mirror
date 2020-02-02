@@ -349,6 +349,7 @@ void fnAim                      (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC              (uint16_t unusedParamButMandatory) {}
 void fnShow                     (uint16_t unusedParamButMandatory) {}
 void fnLastX                    (uint16_t unusedParamButMandatory) {}
+void fnToReal                   (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {

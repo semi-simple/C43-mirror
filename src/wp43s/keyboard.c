@@ -348,6 +348,7 @@ void btnPressed(void *notUsed, void *data) {
 
       else if(calcMode == CM_ASM) {
         calcModeNormal();
+        showAlphaMode();
       }
 
       else if(calcMode == CM_NIM) {

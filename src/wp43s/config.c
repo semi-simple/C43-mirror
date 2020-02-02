@@ -589,7 +589,7 @@ void fnReset(uint16_t confirmation) {
     fnComplexResult(true);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
     fnSetFlag(FLAG_DANGER);         //JM infinity etc.
 
-    displayRealAsFraction = false;     //JMnote This line is over-writing the content of setupdefaults
+    fractionType = FT_NONE;
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();

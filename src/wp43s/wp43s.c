@@ -165,7 +165,6 @@ bool_t               shiftStateChanged;
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
-bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               updateDisplayValueX;
@@ -307,7 +306,7 @@ void setupDefaults(void) {
   fnCurveFitting(CF_LINEAR_FITTING);                         //JM bug: Overwritten by fnReset
   fnLeadingZeros(false);                                     //JM bug: Overwritten by fnReset
   fnProductSign(PS_CROSS);                                   //JM bug: Overwritten by fnReset
-  fnFractionType(FT_PROPER);                                 //JM bug: Overwritten by fnReset
+  fnFractionType(FT_NONE);                                 //JM bug: Overwritten by fnReset
   displayRealAsFraction = false;                             //JM bug: Overwritten by fnReset
   fnRadixMark(RM_PERIOD);                                    //JM bug: Overwritten by fnReset
   fnComplexResult(true);                        //JM change: //JM bug: Overwritten by fnReset. CPXRES set default
@@ -653,7 +652,7 @@ void program_main(void) {
       btnPressed(NULL, charKey);
       lcd_refresh();
     } else if(key == 0) {
-      btnReleased(NULL,NULL);
+      btnReleased(NULL, NULL);
       lcd_refresh();
     }
 

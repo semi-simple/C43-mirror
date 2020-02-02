@@ -142,7 +142,7 @@ void roundReal(void) {
   refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
-  if(!displayRealAsFraction) {
+  if(fractionType == FT_NONE) {
     stringToReal34(displayValueX, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {

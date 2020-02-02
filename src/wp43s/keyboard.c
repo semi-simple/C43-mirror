@@ -413,6 +413,7 @@ void FN_cancel() {
 }
 
 
+#ifdef TIME_DEBUG
 void disp__(uint8_t nr, int32_t dud) {                                    //DISPLAY time on DM42 screen
   char snum[50];
   int32_t swTime;
@@ -443,7 +444,7 @@ void disp_b(uint8_t nr, bool_t v1, bool_t v2, bool_t v3, bool_t v4) {           
   
   showString(snum2, &standardFont, nr*45, 55, vmNormal, false, false);
 }
-
+#endif
 
 //*************----------*************------- FN KEY PRESSED -------***************-----------------
 int16_t temp, temp_double;
@@ -529,7 +530,7 @@ void btnFnPressed(void *w, void *data) {
   #ifdef TIME_DEBUG
   printf("!2"); disp__(2,2);
   #endif
-
+  
     if(true){ //|| TC_compare(JM_FN_DOUBLE_DEBOUNCE_TIMER) == TC_Expired) {  //Time since last zero (FN release) > 5 ms
       #ifdef TIME_DEBUG
       printf("!3"); disp__(3,3);
@@ -549,7 +550,9 @@ void btnFnPressed(void *w, void *data) {
           Reset_Shift_Mem();                                                //JM
           FN_double_click_detected = true;                                  //JM --> FORCE INTO LONGPRESS
           FN_block_exec = false;                                            //JM cancels delayed execution upon second press
+          #ifdef TIME_DEBUG
           disp_b(5,shiftF,shiftG,false,false);
+          #endif
         }
       }
       else {

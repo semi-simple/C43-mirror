@@ -147,17 +147,17 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);                                 //dr
     break;
 
-  case JC_FG_LINE:                                          //JM 
+  case JC_FG_LINE:                                          //JM
     jm_FG_LINE = !jm_FG_LINE;
     fnRefreshComboxState(CB_JC, JC_FG_LINE, jm_FG_LINE);                        //jm
     break;
 
-  case JC_FG_DOTS:                                          //JM 
+  case JC_FG_DOTS:                                          //JM
     jm_FG_DOTS = !jm_FG_DOTS;
     fnRefreshComboxState(CB_JC, JC_FG_DOTS, jm_FG_DOTS);                        //jm
     break;
 
-  case JC_G_DOUBLETAP:                                      //JM 
+  case JC_G_DOUBLETAP:                                      //JM
     jm_G_DOUBLETAP = !jm_G_DOUBLETAP;
     fnRefreshComboxState(CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP);                //jm
     break;
@@ -220,7 +220,7 @@ void fnInDefault(uint16_t inputDefault) {
     lastIntegerBase = 10;
   }
   else {
-    lastIntegerBase = 0;    
+    lastIntegerBase = 0;
   }
 
   fnRefreshRadioState(RB_ID, inputDefault);
@@ -303,7 +303,7 @@ void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
-  
+
   itoa(Norm_Key_00_VAR, snum, 10);
   stringToLongInteger(snum,10,mem);
 
@@ -318,7 +318,7 @@ void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {
 //JM CONFIGURE USER MODE - ASSIGN KEYS
 
 /********************************************//**
- * \brief 
+ * \brief
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
@@ -340,7 +340,7 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
- * \brief 
+ * \brief
  *
  * \param[in] JM_KEY uint16_t
  * \return void
@@ -366,7 +366,7 @@ void fnJMUSERmode(uint16_t JM_KEY) {
 
 
 /********************************************//**
- * \brief 
+ * \brief
  *
  * \param[in] JM_KEY uint16_t
  * \return void
@@ -392,7 +392,7 @@ void fnJMUSERmode_f(uint16_t JM_KEY) {
 
 
 /********************************************//**
- * \brief 
+ * \brief
  *
  * \param[in] JM_KEY uint16_t
  * \return void
@@ -485,7 +485,7 @@ void fnStrtoX(char aimBuffer[]) {
 
 
 void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X
-  tmpStr3000[0] = 0; 
+  tmpStr3000[0] = 0;
   strcat(tmpStr3000, inp1);
   STACK_LIFT_ENABLE;   // 5
   liftStack();
@@ -496,7 +496,7 @@ void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X
 
 
 void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X
-  tmpStr3000[0]=0; 
+  tmpStr3000[0]=0;
   strcat(tmpStr3000, inp1);
   STACK_LIFT_ENABLE;   // 5
   liftStack();
@@ -511,7 +511,7 @@ void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X
 
 
 void fnRCL(int16_t inp) {
-  STACK_LIFT_ENABLE; 
+  STACK_LIFT_ENABLE;
   fnRecall(inp);
 }
 
@@ -583,7 +583,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
     if(tmpr == 3) {           //If 3, rather use the internal third root routine using 39 bits and with some logic allowing (-8)^(1/3)=-2
       fnDrop(0);
-      fnCubeRoot(0);      
+      fnCubeRoot(0);
     }
     else if(tmpr == 2) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
       fnDrop(0);
@@ -1226,7 +1226,7 @@ void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longin
         fnChangeBase(lastIntegerBase);                  //This converts shortint, longint and real to shortint!
       }
       else {
-        fnChangeBase(10);                               //This converts shortint, longint and real to shortint!          
+        fnChangeBase(10);                               //This converts shortint, longint and real to shortint!
       }
       break;
     case dtReal34:
@@ -1303,7 +1303,7 @@ void fnUserJM(uint16_t jmUser) {
     showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
 #endif
     break;
-  
+
   default:
     break;
   }
@@ -1406,7 +1406,7 @@ void JM_convertReal34ToShortInteger(uint16_t confirmation) {
         fnChangeBase(lastIntegerBase);                 //This converts shortint, longint and real to shortint!
       }
       else {
-        fnChangeBase(10);                              //This converts shortint, longint and real to shortint!          
+        fnChangeBase(10);                              //This converts shortint, longint and real to shortint!
       }
 
       refreshStack();
@@ -1417,7 +1417,7 @@ void JM_convertReal34ToShortInteger(uint16_t confirmation) {
       //  convertLongIntegerToShortIntegerRegister(lgInt, 10, REGISTER_X);
       //}
       //else {
-      //  convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, REGISTER_X);        
+      //  convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, REGISTER_X);
       //}
       //longIntegerFree(lgInt);
     }
@@ -1453,13 +1453,13 @@ void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcReg
   liftStack();
   stringToLongInteger(snum,base,mem);
   convertLongIntegerToShortIntegerRegister(mem, base, destination);
-  
+
   //setRegisterShortIntegerBase(destination, base);
   if(lastIntegerBase != 0) {
     fnChangeBase(lastIntegerBase);                     //This converts shortint, longint and real to shortint!
   }
   else {
-    fnChangeBase(base);                                //This converts shortint, longint and real to shortint!          
+    fnChangeBase(base);                                //This converts shortint, longint and real to shortint!
   }
 
   longIntegerFree(mem);
@@ -1571,10 +1571,8 @@ void fn_dot_d(uint16_t unusedParamButMandatory) {      //FOR dotd
 
 
 
-
-
 /********************************************//**
- * \brief 
+ * \brief
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
@@ -1613,7 +1611,7 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
 
 
 /********************************************//**
- * \brief 
+ * \brief
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
@@ -1636,7 +1634,7 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
 
 
 /********************************************//**
- * \brief 
+ * \brief
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void

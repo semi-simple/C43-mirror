@@ -348,8 +348,8 @@ void setupDefaults(void) {
   ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
   Home3TimerMode = true;                                         //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
-  SH_BASE_HOME   = true;      
-  SH_BASE_AHOME  = false;    
+  SH_BASE_HOME   = true;
+  SH_BASE_AHOME  = false;
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
   graph_xmin = -3*3.14159;                                       //JM GRAPH
@@ -360,8 +360,14 @@ void setupDefaults(void) {
   graph_dy   = 0;                                                //JM GRAPH
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
-  now_MEM = 0;                                                   //JM FN_DOUBLE
+#ifdef DMCP_BUILD                                                //JM TIMER variable tmp mem, to check expired time
+  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   now_MEM1 = 0;                                                  //JM FN_DOUBLE
+#endif
+#ifdef PC_BUILD
+  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  now_MEM1 = 0;                                                  //JM FN_DOUBLE
+#endif
   TC_mem = 0;                                                    //JM FN_DOUBLE
   TC_tmp = 0;                                                    //JM FN_DOUBLE
   TC_mem_double = 0;                                             //JM FN_DOUBLE

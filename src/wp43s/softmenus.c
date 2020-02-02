@@ -675,8 +675,8 @@ void showSoftmenuCurrentPart(void) {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
           }
           if(indexOfItems[item%10000].func == itemToBeCoded) {
-            int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
-            for(int16_t xStroke=x*67 + 1; xStroke<x*67 + 66; xStroke++) {
+            int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 3;
+            for(int16_t xStroke=x*67 + 10; xStroke<x*67 + 57; xStroke++) {
               if(xStroke%3 == 0) yStroke--;
               setPixel(xStroke, yStroke);
             }

@@ -154,6 +154,7 @@ void      printLongIntegerToConsole       (longInteger_t value);
 void      reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
 void      printRegisterToConsole          (calcRegister_t regist);
 void      printRegisterDescriptorToConsole(calcRegister_t regist);
+void      fnToReal                        (uint16_t unusedParamButMandatory);
 
 #define getRegisterAngularMode(reg)            getRegisterTag(reg)
 #define setRegisterAngularMode(reg, am)        setRegisterTag(reg, am)

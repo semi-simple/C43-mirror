@@ -649,37 +649,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_NORMAL) {
-        switch(getRegisterDataType(REGISTER_X)) {
-          case dtLongInteger :
-            convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-            refreshRegisterLine(REGISTER_X);
-            break;
-
-          case dtShortInteger :
-            convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-            refreshRegisterLine(REGISTER_X);
-            break;
-
-          case dtReal34:
-            if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-              refreshRegisterLine(REGISTER_X);
-            }
-            else {
-              if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-                convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
-              }
-              setRegisterAngularMode(REGISTER_X, AM_NONE);
-              refreshRegisterLine(REGISTER_X);
-            }
-            break;
-
-          default :
-            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              sprintf(errorMessage, "data type %s cannot be converted to a real16!", getRegisterDataTypeName(REGISTER_X, false, false));
-              showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
-            #endif
-        }
+        fnToReal(NOPARAM);
       }
 
       else if(calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_REGISTER_BROWSER) {

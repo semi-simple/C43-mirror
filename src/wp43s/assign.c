@@ -71,13 +71,13 @@ const calcKey_t kbd_std[37] = {
 */
 
 
- #ifdef JM_LAYOUT_1A  //JM LAYOUT 1A. OPTIMAL
+ #ifdef JM_LAYOUT_1A  //JM UPDATED TO LAYOUT 1B. OPTIMAL. SIMULATOR.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
+ {21,   ITM_SIGMAPLUS,    ITM_RND,         ITM_PROFRC,   ITM_NULL,       CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
  {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_XTHROOT,  CHR_CHECK_MARK, CHR_C,             CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
- {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
+ {25,   ITM_LN,           ITM_EX,          /*ITM_toHMS*/ITM_ms,    ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_LBL,      ITM_NULL,       CHR_F,             ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
 
  {31,   ITM_STO,          ITM_MAGNITUDE,   ITM_ANGLE,    ITM_NULL,       CHR_G,             ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
@@ -91,7 +91,7 @@ const calcKey_t kbd_std[37] = {
  {42,   ITM_XexY,         ITM_LASTX,      -MNU_CPX,      CHR_ex,         CHR_M,             CHR_ex,          CHR_MU,        ITM_NULL     }, //JM
  {43,   ITM_CHS,         -MNU_MODE,       -MNU_EXP,      CHR_PLUS_MINUS, CHR_N,             CHR_PLUS_MINUS,  CHR_NU,        ITM_NULL     }, //JM
  {44,   ITM_EXPONENT,    -MNU_DISP,       -MNU_FIN,      ITM_NULL,       CHR_O,             CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
- {45,   KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,     KEY_BACKSPACE,  KEY_BACKSPACE,    -MNU_CLR,         KEY_UNDO,      KEY_BACKSPACE}, //JM
+ {45,   KEY_BACKSPACE,    KEY_UNDO,       -MNU_CLR,      KEY_BACKSPACE,  KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE}, //JM
                   
  {51,   KEY_UP,           KEY_BST,         ITM_RBR,      KEY_UP,         KEY_UP,            KEY_BST,         ITM_NULL,      KEY_UP       }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_HOME,     CHR_7,          CHR_P,             CHR_7,           CHR_PI,        CHR_7        }, //JM
@@ -101,12 +101,12 @@ const calcKey_t kbd_std[37] = {
 
  {61,   KEY_DOWN,         KEY_SST,         ITM_STATUS,   KEY_DOWN,       KEY_DOWN,          KEY_SST,         ITM_NULL,      KEY_DOWN     }, //JM
  {62,   CHR_4,            ITM_AIM,        -MNU_CLK,      CHR_4,          CHR_T,             CHR_4,           CHR_TAU,       CHR_4        }, //JM
- {63,   CHR_5,           -MNU_ANGLECONV,  -MNU_UNITCONV, CHR_5,          CHR_U,             CHR_5,           CHR_PHI,       CHR_5        }, //JM
+ {63,   CHR_5,           -MNU_ANGLECONV,  -MNU_BASE/*-MNU_UNITCONV*/, CHR_5,          CHR_U,             CHR_5,           CHR_PHI,       CHR_5        }, //JM
  {64,   CHR_6,           -MNU_FLAGS,      -MNU_BITS,     CHR_6,          CHR_V,             CHR_6,           CHR_PSI,       CHR_6        }, //JM
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     CHR_CROSS,      CHR_W,             CHR_CROSS,       CHR_OMEGA,     ITM_MULT     }, //JM
 
- {71,   KEY_fg,            ITM_NULL,        ITM_NULL,     KEY_fg,          KEY_fg,             ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
- {72,   CHR_1,/*ITM_ASSIGN*/-MNU_ASN,     -MNU_BASE,     CHR_1,          CHR_X,             CHR_1,           CHR_XI,        CHR_1        }, //JM
+ {71,   KEY_fg,           ITM_NULL,        ITM_NULL,     KEY_fg,         KEY_fg,            ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
+ {72,   CHR_1,            ITM_ASSIGN,     -MNU_ASN,      CHR_1,          CHR_X,             CHR_1,           CHR_XI,        CHR_1        }, //JM
  {73,   CHR_2,            KEY_USERMODE,   -MNU_LOOP,     CHR_2,          CHR_Y,             CHR_2,           CHR_UPSILON,   CHR_2        }, //JM
  {74,   CHR_3,           -MNU_PARTS,      -MNU_TEST,     CHR_3,          CHR_Z,             CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_STK,        -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,    CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
@@ -120,13 +120,13 @@ const calcKey_t kbd_std[37] = {
 #endif //JM END OF LAYOUT 1a.
 
 
-#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT. NAME CHANGE TO LAYOUT 42B
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_SIGMAPLUS,    ITM_PROFRC,      ITM_IMPFRC,   ITM_NULL,       CHR_A,            ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
+ {21,   ITM_SIGMAPLUS,    ITM_RND,         ITM_PROFRC,   ITM_NULL,       CHR_A,            ITM_NULL,        CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,            CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
  {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_XTHROOT,  CHR_SQUARE_ROOT,CHR_C,            CHR_SQUARE_ROOT, CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,            ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
- {25,   ITM_LN,           ITM_EX,          ITM_toHMS,    ITM_NULL,       CHR_E,            ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
+ {25,   ITM_LN,           ITM_EX,          /*ITM_toHMS*/ITM_ms,    ITM_NULL,       CHR_E,            ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_LBL,      ITM_NULL,       CHR_F,            ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
 
  {31,   ITM_STO,          KEY_COMPLEX,     ITM_MAGNITUDE,ITM_NULL,       CHR_G,            ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
@@ -155,7 +155,7 @@ const calcKey_t kbd_std[37] = {
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     CHR_CROSS,      CHR_W,            CHR_CROSS,       CHR_OMEGA,     ITM_MULT     }, //JM
 
  {71,   KEY_fg,            ITM_NULL,        ITM_NULL,     KEY_fg,          KEY_fg,            ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
- {72,   CHR_1,/*ITM_ASSIGN*/-MNU_ASN,       ITM_SAVE,     CHR_1,          CHR_X,            CHR_1,           CHR_XI,        CHR_1        }, //JM
+ {72,   CHR_1,            ITM_ASSIGN,     -MNU_ASN,      CHR_1,          CHR_X,            CHR_1,           CHR_XI,        CHR_1        }, //JM
  {73,   CHR_2,            KEY_USERMODE,   -MNU_LOOP,     CHR_2,          CHR_Y,            CHR_2,           CHR_UPSILON,   CHR_2        }, //JM
  {74,   CHR_3,           -MNU_PFN,        -MNU_TEST,     CHR_3,          CHR_Z,            CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_IO,         -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,   CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM

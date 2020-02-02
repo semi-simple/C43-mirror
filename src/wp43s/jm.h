@@ -39,8 +39,6 @@ Modes available in the mode menu:
 
 
 
-
-
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
 #define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
 #define JM_SHIFT_TIMER 4000    //ms
@@ -49,8 +47,7 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_OFF 255
 #define JM_3_SHIFT_CUTOFF  6   //100ms
 #define JM_FN_TIMER        8   //8 = approx 800ms   
-#define JM_FN_DOUBLE_TIMER 150 //75  //ms
-#define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
+#define JM_FN_DOUBLE_TIMER 250 //75  //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
@@ -59,7 +56,7 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 bool_t JM_auto_drop_activated;
 bool_t JM_auto_drop_enabled;                         //JM TIMER CLRDROP
 bool_t FN_double_click_detected;                     //JM FN-DOUBLE
-bool_t FN_delay_exec;                                //JM FN-DOUBLE
+bool_t FN_block_exec;                                //JM FN-DOUBLE
 
 uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changeable mode
 uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
@@ -76,11 +73,14 @@ bool_t FN_timed_out_to_RELEASE_EXEC;              //JM LONGPRESS FN
 
 //keyboard.c
 #ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
-uint32_t now_MEM, now_MEM1, now_tmp;              //JM FN DOUBLE
+uint32_t now_MEM, now_MEM1;                       //JM FN DOUBLE
 #endif
 #ifdef PC_BUILD
-gint64 now_MEM, now_MEM1, now_tmp;                //JM FN DOUBLE
+gint64 now_MEM, now_MEM1;                         //JM FN DOUBLE
 #endif
+int32_t TC_mem, TC_tmp;                           //JM FN DOUBLE
+int32_t TC_mem_double, TC_tmp_double;             //JM FN DOUBLE
+
 
 #ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
 uint32_t now, tmpval;                             //JM TIMER DMCP SHIFTCANCEL & //JM FN DOUBLE
@@ -148,7 +148,8 @@ void fnJMUSERmode   (uint16_t JM_KEY);
 void fnJMUSERmode_f (uint16_t JM_KEY);
 void fnJMUSERmode_g (uint16_t JM_KEY);
 void fnStrtoX       (char aimBuffer[]);
-void fnStrInput2    (char inp1[]);
+void fnStrInputReal34 (char inp1[]);
+void fnStrInputLongint(char inp1[]);
 void fnRCL          (int16_t inp);
 void Show_User_Keys (void);
 void fnKEYSELECT    (void);
@@ -202,15 +203,12 @@ void S_shG(void);
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
+void fn_dot_d           (uint16_t unusedParamButMandatory);  //FOR dotd
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX
 
 //display.c
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode);
-
-//stack.c
-void fnLastX   (uint16_t unusedParamButMandatory);            //JM LastX
-
 
 void fnShowJM  (uint16_t jmConfig);

@@ -197,6 +197,7 @@ real39_t             const *angle45;
 pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
   bool_t               backToDMCP;
+  uint32_t             nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
@@ -331,13 +332,13 @@ void setupDefaults(void) {
 
   ULFL = false;                                                  //JM Underline
   ULGL = false;                                                  //JM Underline
-  FN_delay_exec = false;                                         //JM FN-DOUBLE
+  FN_block_exec = false;                                         //JM FN-DOUBLE
   FN_double_click_detected = false;                              //JM FN-DOUBLE
   FN_state = ST_0_INIT;                                          //JM FN-DOUBLE
   FN_key_pressed = 0;                                            //JM LONGPRESS FN
   FN_key_pressed_last = 0;
   FN_timeouts_in_progress = false;                               //JM LONGPRESS FN
-  Shft_timeouts = 0;                                             //JM SHIFT NEW
+  Shft_timeouts = false;                                         //JM SHIFT NEW
   FN_counter = JM_FN_TIMER;                                      //JM LONGPRESS FN
   FN_timed_out_to_RELEASE_EXEC = false;                          //JM LONGPRESS FN
   FN_timed_out_to_NOP = false;                                   //JM LONGPRESS FN
@@ -347,8 +348,8 @@ void setupDefaults(void) {
   ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
   Home3TimerMode = true;                                         //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
-  SH_BASE_HOME   = true;      
-  SH_BASE_AHOME  = false;    
+  SH_BASE_HOME   = true;
+  SH_BASE_AHOME  = false;
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
   graph_xmin = -3*3.14159;                                       //JM GRAPH
@@ -359,14 +360,19 @@ void setupDefaults(void) {
   graph_dy   = 0;                                                //JM GRAPH
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
-  #ifdef DMCP_BUILD                                              //JM TIMER variable tmp mem, to check expired time
+#ifdef DMCP_BUILD                                                //JM TIMER variable tmp mem, to check expired time
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   now_MEM1 = 0;                                                  //JM FN_DOUBLE
-  #endif
-  #ifdef PC_BUILD
+#endif
+#ifdef PC_BUILD
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   now_MEM1 = 0;                                                  //JM FN_DOUBLE
-  #endif
+#endif
+  TC_mem = 0;                                                    //JM FN_DOUBLE
+  TC_tmp = 0;                                                    //JM FN_DOUBLE
+  TC_mem_double = 0;                                             //JM FN_DOUBLE
+  TC_tmp_double = 0;                                             //JM FN_DOUBLE
+
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
@@ -518,6 +524,9 @@ int main(int argc, char* argv[]) {
   //fnReset(CONFIRMED);
 
   gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
+  fnTimerReset();                                                                                   //vv dr TEST Timer
+  fnTimerConfig(0, fnTimerDummyTest, 1/*, 50*/);
+  gdk_threads_add_timeout(10, refreshTimer, NULL); // refreshTimer is called every 10 ms            //^^
 
   gtk_main();
 
@@ -541,7 +550,7 @@ void program_main(void) {
   lcd_clear_buf();
 /*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");                  //vv dr - no keymap is used
   lcd_refresh();
-  while (key != 33 && key != 37) {
+  while(key != 33 && key != 37) {
     key = key_pop();
     while(key == -1) {
       sys_sleep();
@@ -559,6 +568,9 @@ void program_main(void) {
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
+  fnTimerReset();                                                               //vv dr TEST Timer
+  fnTimerConfig(0, fnTimerDummyTest, 1/*, 50*/);
+  nextTimerRefresh = 0;                                                         //vv
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -569,9 +581,15 @@ void program_main(void) {
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
-    } else if ((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
+    }
+    else if ((!ST(STAT_PGM_END) && key_empty())) {          // Just wait if no keys available.
+      uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
+      if(nextTimerRefresh != 0) {
+        uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
+        sleepTime = min(sleepTime, timeoutTime);
+      }                                                                         //^^
       CLR_ST(STAT_RUNNING);
-      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));  // wake up for screen refresh
+      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));                           // wake up for screen refresh
       sys_sleep();
       sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
@@ -620,22 +638,16 @@ void program_main(void) {
     // == 0 -> Key released
     key = key_pop();
 
-//    if(38 <= key && key <=43) {
-//      sprintf(charKey, "%c", key+11);
-//      btnFnClicked(NULL, charKey);
-//      lcd_refresh();
-//    }
-
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);
-      btnFnPressed(NULL, charKey);
+//    btnFnClicked(NULL, charKey);
+      btnFnPressed(NULL, charKey);                //JM
       lcd_refresh();
-    } else if(key == 0 && FN_key_pressed != 0) {
+    }
+    else if(key == 0 && FN_key_pressed != 0) {    //JM
       btnFnReleased(NULL,NULL);
       lcd_refresh();
     }
-
-
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);
@@ -646,6 +658,10 @@ void program_main(void) {
     }
 
     uint32_t now = sys_current_ms();
+    if(nextTimerRefresh != 0 && nextTimerRefresh <= now) {            //vv dr Timer
+      refreshTimer();
+    }                                                                 //^^
+    now = sys_current_ms();
     if(nextScreenRefresh <= now) {
       nextScreenRefresh += LCD_REFRESH_TIMEOUT;
       if(nextScreenRefresh < now) {

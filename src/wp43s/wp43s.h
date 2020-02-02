@@ -64,6 +64,7 @@
     #define DEBUG_PANEL 0
   #endif
   #define JM_LAYOUT_1A               //Preferred layout
+//#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary. Change here for screen picture. Also change GUI.C to get the blues back.
 #endif
 
 #ifdef DMCP_BUILD
@@ -111,7 +112,7 @@
   #define showDateTime()          {}
   #define showAlphaMode()         {}
   #define JM_LAYOUT_1A               //Preferred layout
-#endif // TESTSUITE_BUILD
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -209,6 +210,7 @@ typedef int16_t calcRegister_t;
 #include "timer.h"
 #include "jm_graph.h"                                    //JM include 
 #include "jm.h"                                          //JM include
+#include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
 
 
@@ -615,7 +617,7 @@ extern bool_t               rbr1stDigit;
 extern bool_t               updateDisplayValueX;
 extern calcKey_t            kbd_usr[37];
 extern radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];            //vv dr build RadioButton, CheckBox
-extern uint16_t             cntOfRadioCbItems;                                  //^^
+//extern uint16_t           cntOfRadioCbItems;                                  //^^
 extern calcRegister_t       errorMessageRegisterLine;
 extern calcRegister_t       errorRegisterLine;
 extern uint16_t             row[100];
@@ -641,6 +643,7 @@ extern real39_t             const *angle45;
 extern pcg32_random_t       pcg32_global;
 #ifdef DMCP_BUILD
   extern bool_t               backToDMCP;
+  extern uint32_t             nextTimerRefresh;   //dr
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"

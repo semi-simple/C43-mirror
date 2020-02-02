@@ -562,46 +562,40 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
-                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
-    fnTimeFormat(TF_H24);
-    fnIntegerMode(SIM_2COMPL);
-    fnDisplayFormatAll(0);
-    fnDisplayFormatGap(3);
-    fnComplexUnit(CU_I);
-    fnAngularMode(AM_DEGREE);
-    fnDenMode(DM_ANY);
-                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
-    fnDenMax(0);
-    fnDisplayStack(4);                 //JM ..
-    firstGregorianDay = 1752;
-                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
-    fnCurveFitting(CF_LINEAR_FITTING);
-    fnLeadingZeros(false);
-    fnProductSign(PS_CROSS);
-    fnFractionType(FT_PROPER); // a b/c
-    fnRadixMark(RM_PERIOD);
-    fnRoundingMode(RM_HALF_EVEN);
-    fnDisplayOvr(DO_SCI);
-    fnStackSize(SS_8);               //JM DEFAULT
+    fnTimeFormat(TF_H24);              //JMnote This line is over-writing the content of setupdefaults
+    fnIntegerMode(SIM_2COMPL);         //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayFormatAll(3);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayFormatGap(3);             //JMnote This line is over-writing the content of setupdefaults
+    fnComplexUnit(CU_I);               //JMnote This line is over-writing the content of setupdefaults
+    fnAngularMode(AM_DEGREE);          //JMnote This line is over-writing the content of setupdefaults
+    fnDenMode(DM_ANY);                 //JMnote This line is over-writing the content of setupdefaults
+    fnDenMax(0);                       //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayStack(4);                 //JMnote This line is over-writing the content of setupdefaults
+    firstGregorianDay = 1752;          //JMnote This line is over-writing the content of setupdefaults
+    fnCurveFitting(CF_LINEAR_FITTING); //JMnote This line is over-writing the content of setupdefaults
+    fnLeadingZeros(true);           //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnProductSign(PS_CROSS);           //JMnote This line is over-writing the content of setupdefaults
+    fnFractionType(FT_PROPER); // a b/c//JMnote This line is over-writing the content of setupdefaults
+    fnRadixMark(RM_PERIOD);            //JMnote This line is over-writing the content of setupdefaults
+    fnRoundingMode(RM_HALF_EVEN);      //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayOvr(DO_SCI);              //JMnote This line is over-writing the content of setupdefaults
+    fnStackSize(SS_8);              //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
     //tDisp = -1;
-    fnSetWordSize(64);
-    fnDateFormat(DF_YMD);
-    fnComplexMode(CM_RECTANGULAR);
-                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
+    fnSetWordSize(64);                 //JMnote This line is over-writing the content of setupdefaults
+    fnDateFormat(DF_YMD);              //JMnote This line is over-writing the content of setupdefaults
+    fnComplexMode(CM_RECTANGULAR);     //JMnote This line is over-writing the content of setupdefaults
     showRealComplexResult();
     allocateLocalRegisters(0);
-    fnComplexResult(true);           //JM CPXRES set     //JM bug. over-writing the content of setupdefaults
-    fnSetFlag(FLAG_DANGER);          //JM infinity etc.
+    fnComplexResult(true);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnSetFlag(FLAG_DANGER);         //JM infinity etc.
 
-                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
-    displayRealAsFraction = false;
-                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
+    displayRealAsFraction = false;     //JMnote This line is over-writing the content of setupdefaults
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();
 
-    graph_xmin = -3*3.14159;                                       //JM GRAPH
-    graph_xmax = +3*3.14159;                                       //JM GRAPH
+    graph_xmin = -3*3.14159265;                                    //JM GRAPH
+    graph_xmax = +3*3.14159265;                                    //JM GRAPH
     graph_ymin = -2;                                               //JM GRAPH
     graph_ymax = +2;                                               //JM GRAPH
     graph_dx   = 0;                                                //JM GRAPH
@@ -626,8 +620,6 @@ void fnReset(uint16_t confirmation) {
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
 
-
-
     // initialize the RadioButton/Checkbox items
     fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
 
@@ -642,7 +634,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnJM(USER_DEFAULTS);                         //JM USER
+    fnUserJM(USER_RESET);                        //JM USER
 //    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
@@ -690,6 +682,34 @@ void fnReset(uint16_t confirmation) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkHexaString), false);
       refreshDebugPanel();
     #endif
+
+    //JM TEMPORARY TEST DATA IN REGISTERS
+    fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
+    fnStore(10);
+    fnDrop(0);
+    fnStrInputLongint("569936821221962380720");
+    fnStore(11);
+    fnDrop(0);
+    fnStrInputLongint("-569936821113563493509");
+    fnStore(12);
+    fnDrop(0);
+    fnStrInputLongint("-472715493453327032");
+    fnStore(13);
+    fnDrop(0);
+
+    fnStrtoX("Reg 15, 16 & 17 have: The 3 cubes = 42.");
+    fnStore(14);
+    fnDrop(0);
+    fnStrInputLongint("-80538738812075974");
+    fnStore(15);
+    fnDrop(0);
+    fnStrInputLongint("80435758145817515");
+    fnStore(16);
+    fnDrop(0);
+    fnStrInputLongint("12602123297335631");
+    fnStore(17);
+    fnDrop(0);
+
 
     refreshStack();
   }

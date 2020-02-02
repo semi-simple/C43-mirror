@@ -32,7 +32,7 @@ void     fnRefreshRadioState   (char rb, uint16_t mode);
 void     fnRefreshComboxState  (char rb, uint16_t param, bool_t state);
 int16_t  fnItemShowValue       (int16_t item);
 void     fnRebuildRadioState   (void);
-char *figlabel                 (const char *label, int16_t showValue);
+char*    figlabel              (const char* label, int16_t showValue);
 
 
 /********************************************//**

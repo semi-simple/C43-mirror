@@ -38,18 +38,18 @@ void Fn_Lbl_A(void) {                                   //Temporary RPN function
     fnDivide(0);             // /
  
     fnRCL(99);               // RCL 99
-    fnStrInput2("10");       // 10
+    fnStrInputReal34("10");  // 10
     fnMultiply(0);           // *
     fnSin(0);                // SIN
-    fnStrInput2("5");        // 5
+    fnStrInputReal34("5");   // 5
     fnDivide(0);             // /
  
     fnAdd(0);                // +    
 
-    fnStrInput2("2");        // 2
+    fnStrInputReal34("2");   // 2
     fnDivide(0);             // /
 
-    fnStrInput2("2");        // 2
+    fnStrInputReal34("2");   // 2
     fnRCL(99);               // RCL 99
     fnDivide(0);             // /
     fnAdd(0);                // +    

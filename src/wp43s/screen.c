@@ -381,7 +381,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
-  FN_no_double_click_handler();         //vv JM
+  //FN_no_double_click_handler();         //vv JM
   FN_handler();
   Shft_handler();                       //^^
 
@@ -427,7 +427,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
         resetShiftState();                       //JM TIMER
       }                                          //JM TIMER
       else {
-        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) { 
+        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) {
           JM_SHIFT_RESET++;
         }
       }
@@ -450,7 +450,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     }
   }
 
-  FN_no_double_click_handler();         //vv JM
+  //FN_no_double_click_handler();         //vv JM
   FN_handler();
   Shft_handler();                       //^^
 
@@ -491,7 +491,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
         resetShiftState();                       //JM TIMER
       }                                          //JM TIMER
       else {
-        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) { 
+        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) {
           JM_SHIFT_RESET++;
         }
       }
@@ -501,7 +501,6 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 }
 #endif
-
 
 
 #ifndef TESTSUITE_BUILD
@@ -560,71 +559,13 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 
 
-void Wait_loop2() {
-#ifdef PC_BUILD                                                           //JM LONGPRESS FN
-    now = g_get_monotonic_time();                   //JM usec
-  while (now + (JM_FN_DOUBLE_TIMER + 6) * 1000 > g_get_monotonic_time());
-#endif
-#ifdef DMCP_BUILD
-#define TIMER_IDX 1
-  sys_timer_start(TIMER_IDX, JM_FN_DOUBLE_TIMER + 6);  // wake up for key
-  sys_sleep();
-  sys_timer_disable(TIMER_IDX);
-#endif
-}
-
-
-void Wait_loop1() {
-  while (TC_compare( JM_FN_DOUBLE_TIMER + 6 ) == 1);  //1: verloopte tyd LANGER as (t).
-}
-
-void Wait_loop() {
-  int8_t tmp;
-  do {
-    tmp = (TC_compare( JM_FN_DOUBLE_TIMER + 6 ) );
-  } while (tmp != 1 && tmp != 127);
-}
-
-
-
-void FN_no_double_click_handler() {          //JM FN-DOUBLE vv
-  char charKey[3];
-  if (FN_key_pressed != 0 && !FN_double_click_detected && FN_delay_exec) {
-    #ifdef FN_TIME_DEBUG
-    printf("TIMER check passed \n");
-    printf("  %ld, KEY=%d, DC=%d, DE=%d \n",g_get_monotonic_time() / 1000, FN_key_pressed, FN_double_click_detected, FN_delay_exec);
-    #endif
-    FN_delay_exec = false;
-    Wait_loop();
-    #ifdef FN_TIME_DEBUG
-    printf("  %ld, KEY=%d \n",g_get_monotonic_time() / 1000,FN_key_pressed);
-    #endif
-    if (TC_compare(JM_FN_DOUBLE_TIMER) == 1) {
-      #ifdef FN_TIME_DEBUG
-      printf("Delayed Exec \n");
-      #endif
-    FN_timeouts_in_progress = false;
-    FN_counter = JM_FN_TIMER;         
-      R_shF();
-      R_shG();
-      sprintf(charKey, "%c", FN_key_pressed + 11);
-      clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-      refreshRegisterLine(REGISTER_T);
-      btnFnClicked(NULL, charKey);
-      resetShiftState();  
-    //FN_cancel();
-
-    }
-  }
-}                                            //JM FN-DOUBLE vv
-
-
+                                            //JM FN-DOUBLE vv
 
 #define N_FN_TIME_DEBUG1
 
 
-void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler     
-                                             //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
+void FN_handler() {                                       //JM FN LONGPRESS vv Handler FN Key shift longpress handler
+                                                          //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
   if( (FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
  
     if(FN_counter > JM_FN_TIMER) {
@@ -716,16 +657,15 @@ void Shft_handler() {                        //JM SHIFT NEW vv
             popSoftmenu();                                                                                                  //JM shifts
           }
           else {
-            if (calcMode == CM_AIM) {                                                                                       //JM shifts
+            if(calcMode == CM_AIM) {                                                                                        //JM shifts
               showSoftmenu(NULL, -MNU_ALPHA, true);                                                                         //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
             }
             else {                                                                                                          //JM SHIFTS
               showSoftmenu(NULL, -MNU_HOME, true);                                                                          //JM shifts  //JM ALPHA-HOME
-            }                                                                                                               //JM shifts                                                                                                                            //JM shifts
+            }                                                                                                               //JM shifts
             softmenuStackPointer_MEM = softmenuStackPointer;                                                                //JM shifts
           }
-        }   
-
+        }
       }
     } 
     else { 
@@ -886,7 +826,7 @@ void clearPixel(int16_t x, int16_t y) {
 }
 
 
-/********************************************//**  //JM 
+/********************************************//**  //JM
  * \brief Inverts a pixel on the screen (white/black).
  *
  * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
@@ -1137,44 +1077,16 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
 
 
-
-void Wait_loop3(uint16_t tim) {
-#ifdef PC_BUILD                                                           //JM LONGPRESS FN
-    uint32_t now;
-    now = g_get_monotonic_time() + tim * 1000;                   //JM usec
-  while (now > g_get_monotonic_time());
-#endif
-#ifdef DMCP_BUILD
-#define TIMER_IDX 1
-  sys_timer_start(TIMER_IDX, tim);  // wake up for key
-  sys_sleep();
-  sys_timer_disable(TIMER_IDX);
-#endif
-}
-
-
-
-void force_refresh(void) {                                      //JM vv  
+void force_refresh(void) {                                      //JM vv
 #ifdef PC_BUILD
   gtk_widget_queue_draw(screen);
-
-//refreshScreen(NULL);
-
-//gtk_widget_queue_draw(screen);  
-//while (g_main_context_pending(NULL)) {
-//    g_main_context_iteration(NULL,FALSE);
-//}
-
-
-//  while(gtk_events_pending()) {
-//    gtk_main_iteration();
-//  }
 #endif
-
 #if DMCP_BUILD
   lcd_forced_refresh ();
 #endif
 }                                                              //JM ^^
+
+
 
 /********************************************//**
  * \brief Clears parts of the screen
@@ -1715,10 +1627,10 @@ void refreshRegisterLine(calcRegister_t regist) {
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
 
-          else if(getRegisterDataType(regist) == dtComplex34) {
-             if(temporaryInformation == TI_ABC) {                             //JM EE \/ 
-              if(regist == REGISTER_X) {                                         
-                strcpy(prefix, "c" STD_SPACE_FIGURE "=");                        
+          else if(getRegisterDataType(regist) == dtComplex34 || getRegisterDataType(regist) == dtReal34) {
+             if(temporaryInformation == TI_ABC) {                             //JM EE \/
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "c" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
               else if(regist == REGISTER_Y) {

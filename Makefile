@@ -66,7 +66,7 @@ SRC_WP43S                = \
 		jm.c jm_graph.c assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
-		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
+		fonts.c fractions.c gui.c integers.c items.c keyboard.c keyboardTweak.c \
 		rasterFontsData.c radioButtonCatalog.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c timer.c \
@@ -187,7 +187,7 @@ $(GEN_SRC_CONSTANTPOINTERS): .stamp-constantPointers
 
 
 clean_generateCatalogs: 
-	rm -f $(OBJ_GENERATECCATALOGS)
+	rm -f $(OBJ_GENERATECATALOGS)
 	rm -f $(DEPS_GENERATECATALOGS)
 
 -include $(DEPS_GENERATECATALOGS)

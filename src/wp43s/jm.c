@@ -106,7 +106,7 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
 
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   refreshStack();
 }                                                                 //JM SIGFIG
 
@@ -124,7 +124,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
 
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   }
@@ -1141,7 +1141,8 @@ void fnJMup(uint16_t unusedParamButMandatory) {
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    bool_t userModeEnabledMEM = userModeEnabled;
+
+/*    bool_t userModeEnabledMEM = userModeEnabled;
     userModeEnabled = false;
 
     R_shF(); //shiftF = false;             //JM. Execur .d
@@ -1154,7 +1155,7 @@ void fnJMup(uint16_t unusedParamButMandatory) {
     btnClicked(NULL, "03");     //JM changed from 02
 #endif
     userModeEnabled = userModeEnabledMEM;
-  }
+*/ fnToReal(NOPARAM);  }
   else
 
   if(dataTypeX == dtShortInteger) {
@@ -1190,7 +1191,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    bool_t userModeEnabledMEM = userModeEnabled;
+/*    bool_t userModeEnabledMEM = userModeEnabled;
     userModeEnabled = false;
     R_shF(); //shiftF = false;             //JM. Execur .d
     S_shG(); //shiftG = true;              //JM
@@ -1202,7 +1203,7 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
     btnClicked(NULL, "03");     //JM changed from 02
 #endif
     userModeEnabled = userModeEnabledMEM;
-  }
+*/fnToReal(NOPARAM);  }
   else
 
   if(dataTypeX == dtLongInteger) {
@@ -1555,7 +1556,7 @@ bool_t userModeEnabledMEM;
 
 
 void fn_dot_d(uint16_t unusedParamButMandatory) {      //FOR dotd
-  userModeEnabledMEM = userModeEnabled;
+/*  userModeEnabledMEM = userModeEnabled;
   userModeEnabled = false;
   R_shF(); //shiftF = true;                  //JM
   S_shG(); //shiftG = false;                 //JM
@@ -1567,6 +1568,7 @@ void fn_dot_d(uint16_t unusedParamButMandatory) {      //FOR dotd
   btnClicked(NULL, "03");         //JM changed from 02
 #endif
   userModeEnabled = userModeEnabledMEM;
+*/fnToReal(NOPARAM);
 }
 
 

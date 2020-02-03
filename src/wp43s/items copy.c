@@ -1181,7 +1181,7 @@ const item_t indexOfItems[] = {
 /*  794 */  { fnCvtFromCurrentAngularMode, AM_MULTPI,                   STD_RIGHT_ARROW "MUL" STD_pi,                  STD_RIGHT_ARROW "MUL" STD_pi,                  CAT_FNCT, SLS_ENABLED  },
 /*  795 */  { fnJM/*fnToPolar*/,           29,                          STD_RIGHT_ARROW "POLAR",                       STD_RIGHT_ARROW "P",                           CAT_FNCT, SLS_ENABLED  },   //JM TEXT & point to function to add POLAR/RECT
 /*  796 */  { fnCvtFromCurrentAngularMode, AM_RADIAN,                   STD_RIGHT_ARROW "RAD",                         STD_RIGHT_ARROW "RAD",                         CAT_FNCT, SLS_ENABLED  },
-/*  797 */  { fnToReal,                    NOPARAM,                     STD_RIGHT_ARROW "REAL",                        ".d",                                          CAT_FNCT, SLS_ENABLED  },
+/*  797 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "REAL",                        ".d",                                          CAT_FNCT, SLS_ENABLED  },
 /*  798 */  { fnJM/*fnToRect*/,            28,                          STD_RIGHT_ARROW "RECT",                        STD_RIGHT_ARROW "R",                           CAT_FNCT, SLS_ENABLED  },   //SWAPPED ARROW DIRECTION & JM TEXT & point to function to add POLAR/RECT
 /*  799 */  { fnCvtDegToDms,               NOPARAM,                     "D" STD_RIGHT_ARROW "D.MS",                    "D" STD_RIGHT_ARROW "D.MS",                    CAT_FNCT, SLS_ENABLED  },
 /*  800 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW "Lim",                            STD_UP_ARROW "Lim",                            CAT_RVAR, SLS_UNCHANGED},

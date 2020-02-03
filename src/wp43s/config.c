@@ -575,7 +575,6 @@ void fnReset(uint16_t confirmation) {
     fnCurveFitting(CF_LINEAR_FITTING); //JMnote This line is over-writing the content of setupdefaults
     fnLeadingZeros(true);           //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
     fnProductSign(PS_CROSS);           //JMnote This line is over-writing the content of setupdefaults
-    fnFractionType(FT_PROPER); // a b/c//JMnote This line is over-writing the content of setupdefaults
     fnRadixMark(RM_PERIOD);            //JMnote This line is over-writing the content of setupdefaults
     fnRoundingMode(RM_HALF_EVEN);      //JMnote This line is over-writing the content of setupdefaults
     fnDisplayOvr(DO_SCI);              //JMnote This line is over-writing the content of setupdefaults

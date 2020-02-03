@@ -203,7 +203,6 @@ void S_shG(void);
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
-void fn_dot_d           (uint16_t unusedParamButMandatory);  //FOR dotd
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX

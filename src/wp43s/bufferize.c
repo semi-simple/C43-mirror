@@ -145,8 +145,12 @@ int32_t findFirstItem(const char *twoLetters) {
   }
 
   middle = first + (last - first) / 2;
+  //const int16_t *f = softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+  //printf("\n----------------------------------\nfirst  = %3" FMT64S "   %3d\n", (int64_t)(first - f), *first);
+  //printf("middle = %3" FMT64S "   %3d\n", (int64_t)(middle - f), *middle);
+  //printf("last   = %3" FMT64S "   %3d\n", (int64_t)(last - f), *last);
   while(first + 1 < last) {
-    if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) < 0) {
+    if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
       last = middle;
     }
     else {
@@ -154,17 +158,20 @@ int32_t findFirstItem(const char *twoLetters) {
     }
 
     middle = first + (last - first) / 2;
+  //printf("\nfirst  = %3" FMT64S "   %3d\n", (int64_t)(first - f), *first);
+  //printf("middle = %3" FMT64S "   %3d\n", (int64_t)(middle - f), *middle);
+  //printf("last   = %3" FMT64S "   %3d\n", (int64_t)(last - f), *last);
   }
 
-
   if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
+    //printf("first\n");
     return first - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
   }
   else {
+    //printf("last\n");
     return last - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
   }
 }
-
 
 
 void resetAlphaSelectionBuffer(void) {

@@ -317,7 +317,6 @@ void btnPressed(void *notUsed, void *data) {
       else if(calcMode == CM_AIM) {
         if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU) {
           calcModeNormal();
-          showAlphaMode();
           popSoftmenu();
 
           if(aimBuffer[0] == 0) {
@@ -348,7 +347,6 @@ void btnPressed(void *notUsed, void *data) {
 
       else if(calcMode == CM_ASM) {
         calcModeNormal();
-        showAlphaMode();
       }
 
       else if(calcMode == CM_NIM) {

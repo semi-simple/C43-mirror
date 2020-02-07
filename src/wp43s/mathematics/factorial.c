@@ -80,11 +80,11 @@ void factLonI(void) {
     return;
   }
 
-  if(longIntegerCompareUInt(x, 450) > 0) {
+  if(longIntegerCompareUInt(x, MAX_FACTORIAL) > 0) {                            //JM
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50);
-      sprintf(errorMessage, "cannot calculate factorial(%s), the limit is 450, it's to ensure that the 3328 bits limit is not exceeded", errorMessage + 100);
+      sprintf(errorMessage, "cannot calculate factorial(%s), the limit is %d, it's to ensure that the %d bits limit is not exceeded", errorMessage + 100,MAX_FACTORIAL, MAX_LONG_INTEGER_SIZE_IN_BITS);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
     longIntegerFree(x);

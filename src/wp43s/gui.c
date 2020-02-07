@@ -918,10 +918,10 @@ void prepareCssData(void) {
   int  i, fileLg;
 
 
-#ifdef JM_LAYOUT_2_DM42_STRICT                    //JM LAYOUT 2
+#if defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
   #define CSSFILE "wp43s_pre_L2.css"              //JM L
 #endif //JM L
-#ifdef JM_LAYOUT_1A                               //JM LAYOUT 1
+#if defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
   #define CSSFILE "wp43s_pre.css"
 #endif //JM L
 
@@ -2892,7 +2892,7 @@ void setupUI(void) {
   }
   else {
 
-#ifdef JM_LAYOUT_2_DM42_STRICT //JM L2
+#if defined(JM_LAYOUT_2_DM42_STRICT) //JM L2
     backgroundImage = gtk_image_new_from_file("dm42l_L2.png");
 #endif //JM Layout
 #if defined(JM_LAYOUT_1A) //JM LAYOUT 1

@@ -4084,6 +4084,7 @@ void calcModeNormal(void) {
   calcMode = CM_NORMAL;
   hideCursor();
   cursorEnabled = false;
+  showAlphaMode();
 
   #ifdef PC_BUILD
     calcModeNormalGui();

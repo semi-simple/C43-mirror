@@ -301,7 +301,6 @@ void fnEnter(uint16_t unusedParamButMandatory) {
     #ifndef TESTSUITE_BUILD
     case CM_AIM:
       calcModeNormal();
-      showAlphaMode();
       popSoftmenu();
 
       if(aimBuffer[0] == 0) {

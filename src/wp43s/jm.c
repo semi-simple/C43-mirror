@@ -1058,7 +1058,23 @@ void fnJM(uint16_t JM_OPCODE) {
   if(JM_OPCODE == 31) {                                         //UNDO
     restoreStack();
   }
+  else
 
+  if(JM_OPCODE == 32) {                                       
+  //REMOVED, NOTHING
+  }
+
+  else
+
+  if(JM_OPCODE == 33) {                                       //screenshot
+      #ifdef DMCP_BUILD
+      create_screenshot(0);
+      #endif
+    }
+
+
+// Item 255 is NOP
+  
 }
 
 

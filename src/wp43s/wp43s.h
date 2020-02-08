@@ -166,7 +166,7 @@ typedef int16_t calcRegister_t;
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
 #define MAX_LONG_INTEGER_SIZE_IN_BITS 15000 //JM 3328
-#define MAX_FACTORIAL                 1388  //JM
+#define MAX_FACTORIAL                 1388  //JM  450
 
 #if (LIBGMP == 1)
   #include <gmp.h>

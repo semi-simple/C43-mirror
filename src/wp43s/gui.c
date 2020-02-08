@@ -2892,7 +2892,7 @@ void setupUI(void) {
   }
   else {
 
-#if defined(JM_LAYOUT_2_DM42_STRICT) //JM L2
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM L2
     backgroundImage = gtk_image_new_from_file("dm42l_L2.png");
 #endif //JM Layout
 #if defined(JM_LAYOUT_1A) //JM LAYOUT 1

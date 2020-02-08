@@ -51,8 +51,8 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1693 */  { ITM_UNIT,             DF_UN,                  RB_DI },  //fnDisplayFormatUnit
 /*  146 */  { ITM_ENGOVR,           DO_ENG,                 RB_DO },  //fnDisplayOvr
 /*  547 */  { ITM_SCIOVR,           DO_SCI,                 RB_DO },  //fnDisplayOvr
-/*  251 */  { ITM_IMPFRC,           FT_IMPROPER,            RB_FT },  //fnFractionType
-/*  471 */  { ITM_PROFRC,           FT_PROPER,              RB_FT },  //fnFractionType
+/*  251 */  { ITM_IMPFRC,           JC_IMPROPER,            CB_JC },  //fnToggleFractionType
+/*  471 */  { ITM_PROFRC,           JC_PROPER,              CB_JC },  //fnToggleFractionType
 /* 1905 */  { ITM_INP_DEF_43S,      ID_43S,                 RB_ID },  //fnInDefault
 /* 1910 */  { ITM_INP_DEF_CPXDP,    ID_CPXDP,               RB_ID },  //fnInDefault
 /* 1907 */  { ITM_INP_DEF_DP,       ID_DP,                  RB_ID },  //fnInDefault
@@ -358,9 +358,11 @@ void fnRebuildRadioState() {
 //  146     { ITM_ENGOVR,           DO_ENG,                 RB_DO },  //fnDisplayOvr
 //  547     { ITM_SCIOVR,           DO_SCI,                 RB_DO },  //fnDisplayOvr
   fnRefreshRadioState(RB_DO, displayModeOverride);
-//  251     { ITM_IMPFRC,           FT_IMPROPER,            RB_FT },  //fnFractionType
-//  471     { ITM_PROFRC,           FT_PROPER,              RB_FT },  //fnFractionType
-  fnRefreshRadioState(RB_FT, fractionType);
+//  251     { ITM_IMPFRC,           JC_IMPROPER,            CB_JC },  //fnToggleFractionType
+//  471     { ITM_PROFRC,           JC_PROPER,              CB_JC },  //fnToggleFractionType
+//fnRefreshRadioState(RB_FT, fractionType);
+  fnRefreshComboxState(CB_JC, JC_IMPROPER, fractionType == FT_IMPROPER);
+  fnRefreshComboxState(CB_JC, JC_PROPER, fractionType == FT_PROPER);
 // 1905     { ITM_INP_DEF_43S,      ID_43S,                 RB_ID },  //fnInDefault
 // 1910     { ITM_INP_DEF_CPXDP,    ID_CPXDP,               RB_ID },  //fnInDefault
 // 1907     { ITM_INP_DEF_DP,       ID_DP,                  RB_ID },  //fnInDefault

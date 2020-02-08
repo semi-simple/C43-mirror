@@ -618,24 +618,15 @@ void btnFnReleased(void *w, void *data) {
 
   	if(FN_state == ST_2_REL1 && jm_G_DOUBLETAP){
 
-  	  int8_t tmp;                                                           //Delay loop
-  	  do {
-        #ifdef DMCP_BUILD
-        sys_delay(1);
-        #endif
-  	    tmp = (TC_compare( JM_FN_DOUBLE_TIMER) );
-
       #ifdef DMCP_BUILD
+  	  int8_t tmp;                                                           //Delay loop only for DMCP not simulator
+  	  do {
+        sys_delay(1);
+  	    tmp = (TC_compare( JM_FN_DOUBLE_TIMER) );
   	  } while (tmp != TC_Expired && tmp != TC_NA && (key_empty()));
   	  if(!key_empty()) {
   	  	FN_block_exec = true;                                              //SET DELAYED OPERATION FOR FIRST RELEASE. TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
   	  }    
-      #endif
-      #ifdef PC_BUILD                                                      //JM LONGPRESS FN
-      } while (tmp != TC_Expired && tmp != TC_NA );
-//      if(gtk_events_pending()){  hierdie is nog n probleem
-  //      FN_block_exec = true;                                            //SET DELAYED OPERATION FOR FIRST RELEASE. TO DISABLE DELAYED EXECUTION TEMPORARILY, SET TO false
-    //  }
       #endif
   	}
   } 
@@ -1009,7 +1000,6 @@ void btnPressed(void *notUsed, void *data) {
       else if(calcMode == CM_AIM) {
         if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/) {      //JM ALPHA-HOME make sure we are at the bottom of the stack
           calcModeNormal();
-          showAlphaMode();
           popSoftmenu();
 
           if(aimBuffer[0] == 0) {
@@ -1040,7 +1030,6 @@ void btnPressed(void *notUsed, void *data) {
 
       else if(calcMode == CM_ASM) {
         calcModeNormal();
-        showAlphaMode();
       }
 
       else if(calcMode == CM_NIM) {

@@ -306,8 +306,7 @@ void setupDefaults(void) {
   fnCurveFitting(CF_LINEAR_FITTING);                         //JM bug: Overwritten by fnReset
   fnLeadingZeros(false);                                     //JM bug: Overwritten by fnReset
   fnProductSign(PS_CROSS);                                   //JM bug: Overwritten by fnReset
-  fnFractionType(FT_NONE);                                 //JM bug: Overwritten by fnReset
-  displayRealAsFraction = false;                             //JM bug: Overwritten by fnReset
+  fractionType = FT_NONE;                                    //JM bug: Overwritten by fnReset
   fnRadixMark(RM_PERIOD);                                    //JM bug: Overwritten by fnReset
   fnComplexResult(true);                        //JM change: //JM bug: Overwritten by fnReset. CPXRES set default
   fnComplexMode(CM_RECTANGULAR);                             //JM bug: Overwritten by fnReset

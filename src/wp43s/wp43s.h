@@ -64,7 +64,10 @@
     #define DEBUG_PANEL 0
   #endif
   #define JM_LAYOUT_1A               //Preferred layout
-//#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary. Change here for screen picture. Also change GUI.C to get the blues back.
+//#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
+  #if defined(JM_LAYOUT_2_DM42_STRICT)
+    #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
+  #endif
 #endif
 
 #ifdef DMCP_BUILD
@@ -162,7 +165,8 @@ typedef int16_t calcRegister_t;
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 15000 //JM 3328
+#define MAX_FACTORIAL                 1388  //JM  450
 
 #if (LIBGMP == 1)
   #include <gmp.h>

@@ -201,6 +201,14 @@ void fnTimerStop(uint8_t nr) {
 }
 
 
+void fnTimerExec(uint8_t nr) {
+  if(nr < TMR_NUMBER && timer[nr].state == TMR_RUNNING) {
+    timer[nr].state = TMR_COMPLETED;
+    timer[nr].func(timer[nr].param);        // Callback to configured function
+  }
+}
+
+
 
 void fnTimerDel(uint8_t nr) {
   if(nr < TMR_NUMBER) {

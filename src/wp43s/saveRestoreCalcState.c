@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 01  //JM reduced by another 1
+#define BACKUP_VERSION 02  //JM reduced by another 1
 
 void saveCalc(void) {
   size_t size;

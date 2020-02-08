@@ -179,6 +179,8 @@ char* itoa(int value, char* result, int base);
 #define JC_SH_3T                8    // SH.3T
 #define JC_BCR                  9    // CB ComplexResult
 #define JC_BLZ                 10    // CB LeadingZeros
+#define JC_PROPER              11    // CB FractionType
+#define JC_IMPROPER            12    // CB FractionType
 #define JM_INP_DFLT            15    // Input_Default
 
 #define JC_FG_LINE             20    // screen setup
@@ -203,7 +205,6 @@ void S_shG(void);
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
-void fn_dot_d           (uint16_t unusedParamButMandatory);  //FOR dotd
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX

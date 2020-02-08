@@ -2139,7 +2139,7 @@ const item_t indexOfItems[] = {
 /* 1740 */  { fnJM,                        4,                           "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 CAT_FNCT, SLS_ENABLED  },   //JM Operator a.a
 /* 1741 */  { fnJM,                        5,                           "op_j",                                        "j",                                           CAT_FNCT, SLS_ENABLED  },   //JM Operator j
 /* 1742 */  { fnSetSetJM,                  JC_BASE_HOME,                "_HOME",                                       "HOME",                                        CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
-/* 1743 */  { itemToBeCoded,               NOPARAM,                     "1743",                                        "1743",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1743 */  { fnJM,                        33,                          "S.SHOT",                                      "S.SHOT",                                      CAT_FNCT, SLS_UNCHANGED},   // JM SCREEN SHOT
 /* 1744 */  { fnSetSetJM,                  JC_BASE_AHOME,               "_" STD_alpha "HOME",                          STD_alpha "HOME",                              CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
 /* 1745 */  { itemToBeCoded,               NOPARAM,                     "1745",                                        "1745",                                        CAT_FREE, SLS_UNCHANGED},
 /* 1746 */  { itemToBeCoded,               NOPARAM,                     "1746",                                        "1746",                                        CAT_FREE, SLS_UNCHANGED},
@@ -2323,7 +2323,7 @@ const item_t indexOfItems[] = {
 /* 1921 */  { fnJM,                        24,                          "GRF.Y2",                                      "Ymax",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1922 */  { fnJM,                        25,                          "GRF.DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1924 */  { fnJM,                        27,                          "GRF.LIM",                                     "LIMITS",                                      CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1924 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                      CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
 /* 1926 */  { fnJM,                        30,                          ".ms",                                         ".ms",                                         CAT_NONE, SLS_UNCHANGED},   //JM DMS HMS
 

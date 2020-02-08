@@ -977,24 +977,24 @@ void fnJM(uint16_t JM_OPCODE) {
   else
   if(JM_OPCODE == 27) {                                         //Graph
     saveStack();
-    fnStrtoX("Type x and y limits into X Register,");
-    fnStrtoX("then press Xmin, Xmax, Ymin, Ymax, dX, dY.");
+    fnStrtoX("Type limits into X Register and press");
+    fnStrtoX("[Xmin], [Xmax], [Ymin], [Ymax], [dX], [dY]");
     tmpStr3000[0]=0;
     char tmp[12];
-    snprintf(tmp, 12, "%.1f, ", graph_xmin);
+    snprintf(tmp, 12, "%.5f, ", graph_xmin);
     strcat(tmpStr3000,tmp);
-    snprintf(tmp, 12, "%.1f, ", graph_xmax);
+    snprintf(tmp, 12, "%.5f, ", graph_xmax);
     strcat(tmpStr3000,tmp);
-    snprintf(tmp, 12, "%.1f, ", graph_ymin);
+    snprintf(tmp, 12, "%.5f, ", graph_ymin);
     strcat(tmpStr3000,tmp);
-    snprintf(tmp, 12, "%.1f, ", graph_ymax);
+    snprintf(tmp, 12, "%.5f, ", graph_ymax);
     strcat(tmpStr3000,tmp);
-    snprintf(tmp, 12, "%.1f, ", graph_dx);
+    snprintf(tmp, 12, "%.3f, ", graph_dx);
     strcat(tmpStr3000,tmp);
-    snprintf(tmp, 12, "%.1f", graph_dy);
+    snprintf(tmp, 12, "%.3f", graph_dy);
     strcat(tmpStr3000,tmp);
     fnStrtoX(tmpStr3000);
-    fnStrtoX("then press PLOT to display graph");
+    fnStrtoX("[PLOT] graphs, [S.SHOT] saves screen");
     refreshStack();
   }
   else

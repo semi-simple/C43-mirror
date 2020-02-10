@@ -87,5 +87,6 @@
 #include "toRect.h"
 #include "ulp.h"
 #include "unitVector.h"
+#include "cyx.h"
 #include "wp34s.h"
 

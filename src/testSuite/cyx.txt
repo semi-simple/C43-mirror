@@ -1,0 +1,92 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                        C(y, x)                          **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FD=0 FI=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnCyx
+
+;=======================================
+; Cyx(Long Integer, Long Integer) --> Long Integer
+;=======================================
+In:  WS=64 SL=1 RY=LonI:"50" RX=LonI:"10"
+Out: EC=0  FI=0 SL=1 RL=LonI:"10" RX=LonI:"10272278170"
+
+;=======================================
+; Cyx(Short Integer, Short Integer) --> Short Integer
+;=======================================
+In:  WS=64 SL=1 RY=ShoI:"10#10" RX=ShoI:"5#10"
+Out: EC=0  FI=0 SL=1 RL=ShoI:"5#10" RX=ShoI:"252#10"
+
+;=======================================
+; Cyx(Short Integer, Long Integer) --> Long Integer
+;=======================================
+In:  WS=64 SL=1 RY=ShoI:"10#10" RX=LonI:"5"
+Out: EC=0  FI=0 SL=1 RL=LonI:"5" RX=LonI:"252"
+
+;=======================================
+; Cyx(Long Integer, Short Integer) --> Long Integer
+;=======================================
+In:  WS=64 SL=1 RY=LonI:"10" RX=ShoI:"5#10"
+Out: EC=0  FI=0 SL=1 RL=ShoI:"5#10" RX=LonI:"252"
+
+;=======================================
+; Error case: ERROR_OUT_OF_RANGE
+;=======================================
+In:  SL=0 RY=LonI:"451" RX=LonI:"10"
+Out: EC=8 SL=0 RY=LonI:"451" RX=LonI:"10"
+
+In:  SL=0 RY=LonI:"10" RX=LonI:"451"
+Out: EC=8 SL=0 RY=LonI:"10" RX=LonI:"451"
+
+In:  SL=0 RY=ShoI:"21#10" RX=ShoI:"2#10"
+Out: EC=8 SL=0 RY=ShoI:"21#10" RX=ShoI:"2#10"
+
+In:  SL=0 RY=ShoI:"2#10" RX=ShoI:"21#10"
+Out: EC=8 SL=0 RY=ShoI:"2#10" RX=ShoI:"21#10"
+
+;=======================================
+; Error case: ERROR_INVALID_DATA_INPUT_FOR_OP
+;=======================================
+In:  SL=0  RY=LonI:"10" RX=LonI:"450"
+Out: EC=24 SL=0 RY=LonI:"10" RX=LonI:"450"
+
+In:  SL=0  RY=ShoI:"10#10" RX=LonI:"450"
+Out: EC=24 SL=0 RY=ShoI:"10#10" RX=LonI:"450"
+
+In:  SL=0  RY=LonI:"10" RX=ShoI:"20#10"
+Out: EC=24 SL=0 RY=LonI:"10" RX=ShoI:"20#10"
+
+In:  SL=0  RY=ShoI:"10#10" RX=ShoI:"20#10"
+Out: EC=24 SL=0 RY=ShoI:"10#10" RX=ShoI:"20#10"
+
+In:  SL=0  RY=ShoI:"10#10" RX=Real:"123.456"
+Out: EC=24 SL=0 RY=ShoI:"10#10" RX=Real:"123.456"
+
+In:  SL=0  RY=ShoI:"10#10" RX=Stri:"ABC"
+Out: EC=24 SL=0 RY=ShoI:"10#10" RX=Stri:"ABC"
+
+;=======================================
+; Error case: ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN
+;=======================================
+In:  SL=0 RY=LonI:"-50" RX=LonI:"-10"
+Out: EC=1 SL=0 RY=LonI:"-50" RX=LonI:"-10"
+
+In:  SL=0 RY=LonI:"-50" RX=LonI:"10"
+Out: EC=1 SL=0 RY=LonI:"-50" RX=LonI:"10"
+
+In:  SL=0 RY=LonI:"50" RX=LonI:"-10"
+Out: EC=1 SL=0 RY=LonI:"50" RX=LonI:"-10"
+
+In:  SL=0 RY=ShoI:"-50#10" RX=LonI:"-10"
+Out: EC=1 SL=0 RY=ShoI:"-50#10" RX=LonI:"-10"
+
+In:  SL=0 RY=LonI:"50" RX=ShoI:"-10#10"
+Out: EC=1 SL=0 RY=LonI:"50" RX=ShoI:"-10#10"
+
+In:  SL=0 RY=ShoI:"-50#10" RX=ShoI:"-10#10"
+Out: EC=1 SL=0 RY=ShoI:"-50#10" RX=ShoI:"-10#10"
+
+

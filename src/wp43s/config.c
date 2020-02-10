@@ -709,6 +709,17 @@ void fnReset(uint16_t confirmation) {
     fnStore(17);
     fnDrop(0);
 
+    fnStrtoX("37 digits of pi, Reg19 / Reg20.");
+    fnStore(18);
+    fnDrop(0);
+    fnStrInputLongint("2646693125139304345");
+    fnStore(19);
+    fnDrop(0);
+    fnStrInputLongint("842468587426513207");
+    fnStore(20);
+    fnDrop(0);
+
+
 
     refreshStack();
   }

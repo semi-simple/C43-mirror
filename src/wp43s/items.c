@@ -349,6 +349,7 @@ void fnAim                      (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC              (uint16_t unusedParamButMandatory) {}
 void fnShow                     (uint16_t unusedParamButMandatory) {}
 void fnLastX                    (uint16_t unusedParamButMandatory) {}
+void fnCyx                      (uint16_t unusedParamButMandatory) {}
 void fnToReal                   (uint16_t unusedParamButMandatory) {}
 #endif
 
@@ -442,7 +443,7 @@ const item_t indexOfItems[] = {
 /*   84 */  { fnClX,                       NOPARAM,                     "CLX",                                         "CLX",                                         CAT_FNCT, SLS_DISABLED },
 /*   85 */  { fnClSigma,                   NOPARAM,                     "CL" STD_SIGMA,                                "CL" STD_SIGMA,                                CAT_FNCT, SLS_UNCHANGED},
 /*   86 */  { itemToBeCoded,               NOPARAM,                     "CNST",                                        "CNST",                                        CAT_MENU, SLS_UNCHANGED},
-/*   87 */  { itemToBeCoded,               NOPARAM,                     "COMB",                                        "C" STD_SUB_y STD_SUB_x,                       CAT_FNCT, SLS_UNCHANGED},
+/*   87 */  { fnCyx,                       NOPARAM,                     "COMB",                                        "C" STD_SUB_y STD_SUB_x,                       CAT_FNCT, SLS_UNCHANGED},
 /*   88 */  { fnConjugate,                 NOPARAM,                     "CONJ",                                        "conj",                                        CAT_FNCT, SLS_ENABLED  },
 /*   89 */  { itemToBeCoded,               NOPARAM,                     "CONST",                                       "CONST",                                       CAT_FNCT, SLS_UNCHANGED},
 /*   90 */  { itemToBeCoded,               NOPARAM,                     "CONVG?",                                      "CONVG?",                                      CAT_FNCT, SLS_UNCHANGED},

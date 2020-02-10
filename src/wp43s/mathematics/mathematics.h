@@ -39,6 +39,7 @@
 #include "cube.h"
 #include "cubeRoot.h"
 #include "cxToRe.h"
+#include "cyx.h"
 #include "division.h"
 #include "exp.h"
 #include "expt.h"
@@ -87,6 +88,5 @@
 #include "toRect.h"
 #include "ulp.h"
 #include "unitVector.h"
-#include "cyx.h"
 #include "wp34s.h"
 

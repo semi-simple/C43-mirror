@@ -483,11 +483,10 @@ const int16_t menu_HOME[]        = {
                                                                                                                                                                                                                   //JM HOME
                                      ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                          //JM HOME
                                      ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,                           //JM HOME
-                                     ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR                           //JM HOME
-                                                                                                                                                                                                                  //JM HOME
+                                     ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR,                          //JM HOME
 
 #ifdef DMCP_BUILD              //JM LAYOUT 2. DM42 STRICT.
-/* 9 Bottom Prim */  /* 8 */      ,  KEY_PRTX,                      ITM_NULL,                   ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
+/* 9 Bottom Prim */  /* 8 */         KEY_PRTX,                      ITM_NULL,                   ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
 /* 8 Middle f    */  /* 7 */         KEY_fg,                        ITM_NULL,                   -MNU_ASN,                 -MNU_LOOP,             -MNU_TEST,                   -MNU_ALPHAFN,                       //JM HOME
 /* 7 Top    g    */  /*   */         ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME
                                                                                                                                                                                                                   //JM HOME
@@ -497,8 +496,15 @@ const int16_t menu_HOME[]        = {
                                                                                                                                                                                                                   //JM HOME
 /* 3 Bottom Prim */  /* sample */    ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
 /* 2 Middle f    */  /* 3 */         ITM_PROFRC,                    KEY_HASH/*ITM_toINT*/,      ITM_XTHROOT,              KEY_dotD,              ITM_ms,                      ITM_LBL,                            //JM HOME
-/* 1 Top    g    */  /* 2 */         ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK   /*LAST ONE NO COMMA*/   //JM HOME
+/* 1 Top    g    */  /* 2 */         ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,  /*LAST ONE NO COMMA*/   //JM HOME
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
+
+                                     ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                          //JM HOME
+                                     ITM_SI_p,                      ITM_SI_n,                   ITM_SI_u,                 ITM_SI_m,              ITM_SI_k,                    ITM_SI_M,                           //JM UNITS SI
+                                     ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR                           //JM HOME
+
+
+
                                      };                                                                                                                                                                           //JM HOME
 
 const int16_t menu_GRAPH[]        = {

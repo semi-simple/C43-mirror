@@ -26,6 +26,8 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
+
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1966,8 +1968,15 @@
 #define ITM_GRF_HLP                   1924   //JM GRAPH
 #define ITM_toSI                      1925   //JM SHORTINT
 #define ITM_ms                        1926   //JM DMS HMS
+#define ITM_SI_p                      1927   //JM PRE UNIT
+#define ITM_SI_n                      1928   //JM PRE UNIT
+#define ITM_SI_u                      1929   //JM PRE UNIT
+#define ITM_SI_m                      1930   //JM PRE UNIT
+#define ITM_SI_k                      1931   //JM PRE UNIT
+#define ITM_SI_M                      1932   //JM PRE UNIT
 
-#define LAST_ITEM                     1927   //JM
+
+#define LAST_ITEM                     1933   //JM
 
 #define CHR_PROD_SIGN                 9999
 

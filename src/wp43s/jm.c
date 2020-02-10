@@ -1045,7 +1045,7 @@ void fnJM(uint16_t JM_OPCODE) {
           case AM_GRAD  : {runFunction(ITM_GRADto); } break;
           case AM_RADIAN: {runFunction(ITM_RADto);  } break;
           case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
-         default: break;
+          default:;
         }
 #endif
       }
@@ -1067,10 +1067,59 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 33) {                                       //screenshot
-      #ifdef DMCP_BUILD
-      create_screenshot(0);
-      #endif
+    #ifdef DMCP_BUILD
+    create_screenshot(0);
+    #endif
+  }
+
+
+  else
+
+  if(JM_OPCODE >= 34 && JM_OPCODE <= 39) {                                       //screenshot
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_L, 99);   // STO TMP
+    switch (JM_OPCODE) {
+      case 34: {
+        fnStrInputLongint("1000000000000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      case 35: {
+        fnStrInputLongint("1000000000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      case 36: {
+        fnStrInputLongint("1000000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      case 37: {
+        fnStrInputLongint("1000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      case 38: {
+        fnStrInputLongint("1000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      case 39: {
+        fnStrInputLongint("1000000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      default:;
     }
+    copySourceRegisterToDestRegister(99, REGISTER_L);   // STO TMP
+    refreshRegisterLine(REGISTER_X);
+  }
 
 
 // Item 255 is NOP

@@ -23,6 +23,7 @@ DMCP_build/decNumberICU
 
 # / before the executable files else directories under src/ are ignored
 /generateConstants
+/generateCatalogs
 /testSuite
 /ttf2RasterFonts
 /testTtf2RasterFonts

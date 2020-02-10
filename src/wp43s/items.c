@@ -383,6 +383,7 @@ const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus      //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
 
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -2323,9 +2324,15 @@ const item_t indexOfItems[] = {
 /* 1921 */  { fnJM,                        24,                          "GRF.Y2",                                      "Ymax",                                        CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1922 */  { fnJM,                        25,                          "GRF.DX",                                      "TICK DX",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1924 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                      CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
+/* 1924 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
 /* 1926 */  { fnJM,                        30,                          ".ms",                                         ".ms",                                         CAT_NONE, SLS_UNCHANGED},   //JM DMS HMS
+/* 1927 */  { fnJM,                        34,                          STD_DOT "p",                                   STD_DOT "p",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1928 */  { fnJM,                        35,                          STD_DOT "n",                                   STD_DOT "n",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1929 */  { fnJM,                        36,                          STD_DOT STD_mu,                                STD_DOT STD_mu,                                CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1930 */  { fnJM,                        37,                          STD_DOT "m",                                   STD_DOT "m",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1931 */  { fnJM,                        38,                          STD_DOT "k",                                   STD_DOT "k",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 
 
 /* 1927 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM

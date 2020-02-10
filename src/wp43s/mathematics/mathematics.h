@@ -39,6 +39,7 @@
 #include "cube.h"
 #include "cubeRoot.h"
 #include "cxToRe.h"
+#include "cyx.h"
 #include "division.h"
 #include "exp.h"
 #include "expt.h"

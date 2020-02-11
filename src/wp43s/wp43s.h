@@ -63,6 +63,10 @@
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
   #endif
+  #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
+    #undef  DEBUG_PANEL
+    #define D EBUG_PANEL 0
+  #endif
   #define JM_LAYOUT_1A               //Preferred layout
 //#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
   #if defined(JM_LAYOUT_2_DM42_STRICT)
@@ -415,18 +419,7 @@ typedef int16_t calcRegister_t;
 #define CMP_CLEANED_STRING_ONLY 1
 #define CMP_EXTENSIVE           2
 
-#if (__linux__ == 1)
-  #define FMT64U  "lu"
-  #define FMT64S  "ld"
-  #define FMT32U  "u"
-  #define FMT32S  "d"
-  #define FMT16U  "u"
-  #define FMT16S  "d"
-  #define FMT8U   "u"
-  #define FMT8S   "d"
-  #define FMTPTR  "lu"
-  #define FMTSIZE "zd"
-#elif defined(__arm__)
+#if defined(__arm__)
   #define FMT64U  "llu"
   #define FMT64S  "lld"
   #define FMT32U  "lu"
@@ -437,6 +430,17 @@ typedef int16_t calcRegister_t;
   #define FMT8S   "d"
   #define FMTPTR  "d"
   #define FMTSIZE "d"
+#elif (__linux__ == 1)
+  #define FMT64U  "lu"
+  #define FMT64S  "ld"
+  #define FMT32U  "u"
+  #define FMT32S  "d"
+  #define FMT16U  "u"
+  #define FMT16S  "d"
+  #define FMT8U   "u"
+  #define FMT8S   "d"
+  #define FMTPTR  "lu"
+  #define FMTSIZE "zd"
 #elif defined(__MINGW64__)
   #define FMT64U  "I64u"
   #define FMT64S  "I64d"

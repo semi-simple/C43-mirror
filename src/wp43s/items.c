@@ -1065,7 +1065,7 @@ const item_t indexOfItems[] = {
 /*  677 */  { itemToBeCoded,               NOPARAM,                     STD_x_CIRC,                                    STD_x_CIRC,                                    CAT_FNCT, SLS_UNCHANGED},
 /*  678 */  { itemToBeCoded,               NOPARAM,                     "X.FN",                                        "X.FN",                                        CAT_MENU, SLS_UNCHANGED},
 /*  679 */  { fnFactorial,                 NOPARAM,                     "x!",                                          "x!",                                          CAT_FNCT, SLS_ENABLED  },
-/*  680 */  { itemToBeCoded,               NOPARAM,                     "dist s:",                                     "dist s:",                                     CAT_MENU, SLS_UNCHANGED},
+/*  680 */  { itemToBeCoded,               NOPARAM,                     "Dist:",                                       "Dist:",                                     CAT_MENU, SLS_UNCHANGED},
 /*  681 */  { itemToBeCoded,               NOPARAM,                     "x" STD_RIGHT_ARROW "DATE",                    "x" STD_RIGHT_ARROW "DATE",                    CAT_FNCT, SLS_UNCHANGED},
 /*  682 */  { itemToBeCoded,               NOPARAM,                     "x" STD_RIGHT_ARROW STD_alpha,                 "x" STD_RIGHT_ARROW STD_alpha,                 CAT_FNCT, SLS_UNCHANGED},
 /*  683 */  { itemToBeCoded,               NOPARAM,                     "x" STD_LEFT_RIGHT_ARROWS,                     "x" STD_LEFT_RIGHT_ARROWS,                     CAT_FNCT, SLS_UNCHANGED},

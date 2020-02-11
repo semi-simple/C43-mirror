@@ -119,6 +119,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
   {"fnPower",                fnPower               },
+  {"fnPyx",                  fnPyx                 },
   {"fnRealPart",             fnRealPart            },
   {"fnReToCx",               fnReToCx              },
   {"fnRmd",                  fnRmd                 },

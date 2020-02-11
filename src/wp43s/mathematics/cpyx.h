@@ -15,7 +15,7 @@
  */
 
 /********************************************//**
- * \file cyx.h
+ * \file cpyx.h
  ***********************************************/
  
 
@@ -23,3 +23,7 @@
 void fnCyx(uint16_t unusedParamButMandatory);
 void cyxLonI(void);
 void cyxShoI(void);
+
+void fnPyx(uint16_t unusedParamButMandatory);
+void pyxLonI(void);
+void pyxShoI(void);

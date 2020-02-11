@@ -636,6 +636,13 @@ void program_main(void) {
     // == 0 -> Key released
     key = key_pop();
 
+    if(sys_last_key() == 44 ) {                                 //JM DISP for special SCREEN DUMP key code. Supposed to be 16 but shift decoding done already to 44
+      R_shF();
+      R_shG();
+      fnJM(33);                                                 //SCREEN DUMP
+    } 
+
+
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);
 //    btnFnClicked(NULL, charKey);

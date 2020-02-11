@@ -807,7 +807,7 @@ const item_t indexOfItems[] = {
 /*  447 */  { fnCvtTorrPa,                 divide,                      "Pa" STD_RIGHT_ARROW "tor",                    "Pa " STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  448 */  { itemToBeCoded,               NOPARAM,                     "PARTS",                                       "PARTS",                                       CAT_MENU, SLS_UNCHANGED},
 /*  449 */  { fnCvtPcM,                    multiply,                    "pc" STD_RIGHT_ARROW "m",                      "pc" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
-/*  450 */  { fnPyx,                       NOPARAM,                     "PERM",                                        "P" STD_SUB_y STD_SUB_x,                       CAT_FNCT, SLS_UNCHANGED},
+/*  450 */  { fnPyx,                       NOPARAM,                     "PERM",                                        "P" STD_SUB_y STD_SUB_x,                       CAT_FNCT, SLS_ENABLED  },
 /*  451 */  { itemToBeCoded,               NOPARAM,                     "PER/a",                                       "per/a",                                       CAT_RVAR, SLS_UNCHANGED},
 /*  452 */  { itemToBeCoded,               NOPARAM,                     "PGMINT",                                      "PGMINT",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  453 */  { itemToBeCoded,               NOPARAM,                     "PGMSLV",                                      "PGMSLV",                                      CAT_FNCT, SLS_UNCHANGED},

@@ -180,6 +180,7 @@ cube
 cubeRoot
 
 cyx
+pyx
 
 lnGamma
 gamma

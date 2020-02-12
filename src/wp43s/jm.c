@@ -1302,7 +1302,7 @@ void Show_User_Keys(void) {
 
 
 void fnKEYSELECT(void) {                                        //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
-  if(JM_ASN_MODE == KEY_EXIT || JM_ASN_MODE == KEY_BACKSPACE) {
+  if(JM_ASN_MODE == KEY_EXIT1 || JM_ASN_MODE == KEY_BACKSPACE) {
     JM_ASN_MODE = 0;
 #ifndef TESTSUITE_BUILD
     showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);

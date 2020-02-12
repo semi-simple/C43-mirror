@@ -856,7 +856,7 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    case KEY_EXIT :
+    case KEY_EXIT1 :
       done = true;
       closeNim();
       if(calcMode != CM_NIM && lastErrorCode == 0) {

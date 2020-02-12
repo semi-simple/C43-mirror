@@ -967,7 +967,7 @@ void btnPressed(void *notUsed, void *data) {
 
     resetShiftState();
 
-    if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
+    if(lastErrorCode != 0 && item != KEY_EXIT1 && item != KEY_BACKSPACE) {
       lastErrorCode = 0;
       refreshStack();
     }
@@ -978,7 +978,7 @@ void btnPressed(void *notUsed, void *data) {
       fnEnter(NOPARAM);
     }
 
-    else if(item == KEY_EXIT) {
+    else if(item == KEY_EXIT1) {
 
       if(calcMode == CM_BUG_ON_SCREEN) {
         calcMode = previousCalcMode;
@@ -1033,7 +1033,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else if(calcMode == CM_NIM) {
-        addItemToNimBuffer(KEY_EXIT);
+        addItemToNimBuffer(KEY_EXIT1);
       }
 
       else if(calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_REGISTER_BROWSER) {
@@ -1174,7 +1174,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
     }                                                                           //JM CASE JM CAPS
 */
-    else if((item == KEY_UP) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
+    else if((item == KEY_UP1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1283,7 +1283,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
     }                                                                          //JM CASE JM CAPS
 */
-    else if((item == KEY_DOWN) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
+    else if((item == KEY_DOWN1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {

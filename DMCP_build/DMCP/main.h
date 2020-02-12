@@ -43,7 +43,7 @@
 #ifndef __PGM_MAIN_H__
 #define __PGM_MAIN_H__
 
-#define PROGRAM_NAME    "WP43S"
+#define PROGRAM_NAME    "WP43C"
 #define PROGRAM_VERSION "0.1"
 
 #define DBG_PRINT

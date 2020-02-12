@@ -1554,11 +1554,11 @@
 #define KEY_CC                        1516
 #define KEY_f                         1517
 #define KEY_g                         1518
-#define KEY_UP                        1519
+#define KEY_UP1                        1519
 #define KEY_BST                       1520
-#define KEY_DOWN                      1521
+#define KEY_DOWN1                      1521
 #define KEY_SST                       1522
-#define KEY_EXIT                      1523
+#define KEY_EXIT1                      1523
 #define KEY_BACKSPACE                 1524
 #define KEY_PRTX                      1525
 #define ITM_AIM                       1526

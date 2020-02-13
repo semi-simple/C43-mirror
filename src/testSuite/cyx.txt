@@ -33,6 +33,12 @@ In:  WS=64 SL=1 RY=LonI:"10" RX=ShoI:"5#10"
 Out: EC=0  FI=0 SL=1 RL=ShoI:"5#10" RX=LonI:"252"
 
 ;=======================================
+; Cyx(Long Integer, Real) --> Real
+;=======================================
+In:  SL=0  RY=Real:"123.456" RX=ShoI:"10#10"
+Out: EC=0  FI=0 SL=1 RL=ShoI:"10#10" RX=Real:"1.55895589329"
+
+;=======================================
 ; Error case: ERROR_OUT_OF_RANGE
 ;=======================================
 In:  SL=0 RY=LonI:"451" RX=LonI:"10"
@@ -62,9 +68,6 @@ Out: EC=24 SL=0 RY=LonI:"10" RX=ShoI:"20#10"
 In:  SL=0  RY=ShoI:"10#10" RX=ShoI:"20#10"
 Out: EC=24 SL=0 RY=ShoI:"10#10" RX=ShoI:"20#10"
 
-In:  SL=0  RY=ShoI:"10#10" RX=Real:"123.456"
-Out: EC=24 SL=0 RY=ShoI:"10#10" RX=Real:"123.456"
-
 In:  SL=0  RY=ShoI:"10#10" RX=Stri:"ABC"
 Out: EC=24 SL=0 RY=ShoI:"10#10" RX=Stri:"ABC"
 
@@ -89,4 +92,6 @@ Out: EC=1 SL=0 RY=LonI:"50" RX=ShoI:"-10#10"
 In:  SL=0 RY=ShoI:"-50#10" RX=ShoI:"-10#10"
 Out: EC=1 SL=0 RY=ShoI:"-50#10" RX=ShoI:"-10#10"
 
+In:  SL=0  RY=ShoI:"10#10" RX=Real:"123.456"
+Out: EC=24 SL=0 RY=ShoI:"10#10" RX=Real:"123.456"
 

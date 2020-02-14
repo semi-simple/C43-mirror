@@ -15,30 +15,32 @@
  */
 
 /********************************************//**
- * \file cyx.h
+ * \file cpyx.h
  ***********************************************/
- 
 
- 
 void fnCyx(uint16_t unusedParamButMandatory);
+void fnPyx(uint16_t unusedParamButMandatory);
 
-void cyxLonILonI(void);
-void cyxLonIReal(void);
-void cyxLonICplx(void);
-void cyxLonIShoI(void);
+/*
+ * When flag!=0 => Cyx
+ *      flag==0 => Pyx
+ */
+void cpyxLonILonI(uint16_t flag);
+void cpyxLonIReal(uint16_t flag);
+void cpyxLonICplx(uint16_t flag);
+void cpyxLonIShoI(uint16_t flag);
 
-void cyxRealLonI(void);
-void cyxRealReal(void);
-void cyxRealCplx(void);
-void cyxRealShoI(void);
+void cpyxRealLonI(uint16_t flag);
+void cpyxRealReal(uint16_t flag);
+void cpyxRealCplx(uint16_t flag);
+void cpyxRealShoI(uint16_t flag);
 
-void cyxCplxLonI(void);
-void cyxCplxReal(void);
-void cyxCplxCplx(void);
-void cyxCplxShoI(void);
+void cpyxCplxLonI(uint16_t flag);
+void cpyxCplxReal(uint16_t flag);
+void cpyxCplxCplx(uint16_t flag);
+void cpyxCplxShoI(uint16_t flag);
 
-void cyxShoILonI(void);
-void cyxShoIReal(void);
-void cyxShoICplx(void);
-void cyxShoIShoI(void);
-
+void cpyxShoILonI(uint16_t flag);
+void cpyxShoIReal(uint16_t flag);
+void cpyxShoICplx(uint16_t flag);
+void cpyxShoIShoI(uint16_t flag);

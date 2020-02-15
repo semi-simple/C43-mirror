@@ -17,13 +17,30 @@
 /********************************************//**
  * \file cpyx.h
  ***********************************************/
- 
 
- 
 void fnCyx(uint16_t unusedParamButMandatory);
-void cyxLonI(void);
-void cyxShoI(void);
-
 void fnPyx(uint16_t unusedParamButMandatory);
-void pyxLonI(void);
-void pyxShoI(void);
+
+/*
+ * When combOrPerm == CP_COMBINATION => Cyx
+ *      combOrPerm == CP_PERMUTATION => Pyx
+ */
+void cpyxLonILonI(uint16_t combOrPerm);
+void cpyxLonIReal(uint16_t combOrPerm);
+void cpyxLonICplx(uint16_t combOrPerm);
+void cpyxLonIShoI(uint16_t combOrPerm);
+
+void cpyxRealLonI(uint16_t combOrPerm);
+void cpyxRealReal(uint16_t combOrPerm);
+void cpyxRealCplx(uint16_t combOrPerm);
+void cpyxRealShoI(uint16_t combOrPerm);
+
+void cpyxCplxLonI(uint16_t combOrPerm);
+void cpyxCplxReal(uint16_t combOrPerm);
+void cpyxCplxCplx(uint16_t combOrPerm);
+void cpyxCplxShoI(uint16_t combOrPerm);
+
+void cpyxShoILonI(uint16_t combOrPerm);
+void cpyxShoIReal(uint16_t combOrPerm);
+void cpyxShoICplx(uint16_t combOrPerm);
+void cpyxShoIShoI(uint16_t combOrPerm);

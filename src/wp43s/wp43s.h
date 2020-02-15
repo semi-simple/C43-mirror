@@ -23,9 +23,9 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2020.01"
+#define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM "2020.02"
 #define COPYRIGHT "The WP43S team"
-#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2020.01" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM "2020.02" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-result"
@@ -63,7 +63,15 @@
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
   #endif
+  #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
+    #undef  DEBUG_PANEL
+    #define DEBUG_PANEL 0
+  #endif
   #define JM_LAYOUT_1A               //Preferred layout
+//#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
+  #if defined(JM_LAYOUT_2_DM42_STRICT)
+    #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
+  #endif
 #endif
 
 #ifdef DMCP_BUILD
@@ -111,7 +119,12 @@
   #define showDateTime()          {}
   #define showAlphaMode()         {}
   #define JM_LAYOUT_1A               //Preferred layout
-#endif // TESTSUITE_BUILD
+#endif
+
+#ifndef TESTSUITE_BUILD                 //vv dr
+#define INLINE_TEST
+#undef INLINE_TEST
+#endif                                  //^^
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -161,7 +174,8 @@ typedef int16_t calcRegister_t;
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 15000 //JM 3328
+#define MAX_FACTORIAL                 1388  //JM  450
 
 #if (LIBGMP == 1)
   #include <gmp.h>
@@ -209,8 +223,11 @@ typedef int16_t calcRegister_t;
 #include "timer.h"
 #include "jm_graph.h"                                    //JM include 
 #include "jm.h"                                          //JM include
+#include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
-
+#ifdef INLINE_TEST                      //vv dr
+#include "inlineTest.h"
+#endif                                  //^^
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))
@@ -224,11 +241,20 @@ typedef int16_t calcRegister_t;
 
 #define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))
 #ifdef DMCP_BUILD
-#define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
+#define LCD_REFRESH_TIMEOUT   125 //timeout for lcd refresh in ms
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
 #define MAX_RADIO_CB_ITEMS     72                                               //dr build RadioButton, CheckBox
+
+// timer nr for FG and FN use
+#define TO_FG_LONG              0
+#define TO_FG_TIMR              1
+#define TO_FN_LONG              2
+#define TO_FN_EXEC              3
+#define TO_3S_CTFF              4
+#define TO_CL_DROP              5
+#define TO_KB_ACTV              6
 
 // On/Off 1 bit
 #define OFF                     0
@@ -322,9 +348,10 @@ typedef int16_t calcRegister_t;
 #define PS_CROSS                1
 #define PRODUCT_SIGN            (productSign == PS_CROSS ? STD_CROSS : STD_DOT)
 
-// Fraction type 1 bit
-#define FT_PROPER               0 // a b/c
-#define FT_IMPROPER             1 // d/c
+// Fraction type 2 bit
+#define FT_NONE                 0 // real
+#define FT_PROPER               1 // a b/c
+#define FT_IMPROPER             2 // d/c
 
 // Radix Mark 1 bit
 #define RM_PERIOD               0
@@ -408,18 +435,7 @@ typedef int16_t calcRegister_t;
 #define CMP_CLEANED_STRING_ONLY 1
 #define CMP_EXTENSIVE           2
 
-#if (__linux__ == 1)
-  #define FMT64U  "lu"
-  #define FMT64S  "ld"
-  #define FMT32U  "u"
-  #define FMT32S  "d"
-  #define FMT16U  "u"
-  #define FMT16S  "d"
-  #define FMT8U   "u"
-  #define FMT8S   "d"
-  #define FMTPTR  "lu"
-  #define FMTSIZE "zd"
-#elif defined(__arm__)
+#if defined(__arm__)
   #define FMT64U  "llu"
   #define FMT64S  "lld"
   #define FMT32U  "lu"
@@ -430,6 +446,17 @@ typedef int16_t calcRegister_t;
   #define FMT8S   "d"
   #define FMTPTR  "d"
   #define FMTSIZE "d"
+#elif (__linux__ == 1)
+  #define FMT64U  "lu"
+  #define FMT64S  "ld"
+  #define FMT32U  "u"
+  #define FMT32S  "d"
+  #define FMT16U  "u"
+  #define FMT16S  "d"
+  #define FMT8U   "u"
+  #define FMT8S   "d"
+  #define FMTPTR  "lu"
+  #define FMTSIZE "zd"
 #elif defined(__MINGW64__)
   #define FMT64U  "I64u"
   #define FMT64S  "I64d"
@@ -609,7 +636,6 @@ extern bool_t               shiftStateChanged;
 extern bool_t               showContent;
 extern bool_t               stackLiftEnabled;
 extern bool_t               displayLeadingZeros;
-extern bool_t               displayRealAsFraction;
 extern bool_t               savedStackLiftEnabled;
 extern bool_t               rbr1stDigit;
 extern bool_t               updateDisplayValueX;
@@ -641,6 +667,7 @@ extern real39_t             const *angle45;
 extern pcg32_random_t       pcg32_global;
 #ifdef DMCP_BUILD
   extern bool_t               backToDMCP;
+  extern uint32_t             nextTimerRefresh;   //dr
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"

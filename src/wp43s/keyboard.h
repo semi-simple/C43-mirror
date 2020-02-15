@@ -39,6 +39,12 @@ int8_t TC_compare(uint32_t timecheck);                 //JM vv FN-DOUBLE
 #define ST_5_EXEC     5     //STATE FOR EXECUTING
 uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 
+void disp__(uint8_t nr, int32_t dud);                                    //DISPLAY time on DM42 screen
+
+#ifdef DMCP_BUILD
+  #include <dmcp.h>
+#endif
+
 
 #ifdef PC_BUILD
   void btnFnClicked   (GtkWidget *w, gpointer data);

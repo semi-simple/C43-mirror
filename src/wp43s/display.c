@@ -79,7 +79,7 @@ void fnRadixMark(uint16_t rm) {
 void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -99,7 +99,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
 void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -119,7 +119,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
 void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
+  fractionType = FT_NONE;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -140,7 +140,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   //if(0 <= displayFormatN && displayFormatN <= 15) {
     displayFormat = DF_ALL;
     displayFormatDigits = displayFormatN;
-    displayRealAsFraction = false;
+    fractionType = FT_NONE;
     SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
     UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -378,15 +378,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
   real39_t value39;
-/*
-  void printf_bcd() {                                      //JM SIGFIG DISPLAY BCD NUMBER
-  uint8_t ii;
-     for (ii = firstDigit; ii <= lastDigit; ii++) {  //JM SIGFIG
-      printf("%d",bcd[ii]);
-      } 
-     printf("\n");
-  }                                                  //JM SIGFIG
-*/
+
   real34ToReal(real34, &value39);
   ctxtReal39.digits = displayHasNDigits;
   realPlus(&value39, &value39, &ctxtReal39);
@@ -461,7 +453,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
                                                                                       //JM SIGFIG
     uint8_t  SigFigTmp;                                                               //JM SIGFIG
     uint8_t  SigFigCnt;                                                               //JM SIGFIG
-
                                                                                       //JM SIGFIG
   if(SigFigMode >= 1) {                                                               //JM SIGFIG 0 is disabled
                                                                                       //JM SIGFIG
@@ -642,8 +633,8 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits - exponent - 1, 0);
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
-    if(SigFigMode == 0) {                  //JM SIGFIG vv
 
+      if(SigFigMode == 0) {                       //JM SIGFIG vv
       // Round the displayed number
       if(bcd[lastDigit+1] >= 5) {
         bcd[lastDigit]++;
@@ -663,7 +654,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         numDigits = 1;
         exponent++;
       }
-    }                                     //JM SIGFIG ^^
+      }                                           //JM SIGFIG ^^
 
       // The sign
       if(sign) {
@@ -755,9 +746,9 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
           // Radix mark
           if(digitCount == 0) {
             SigFigTmp = 1;                                                                     //JM SIGFIG Set flag to signal decimal point was reached.
-              displayString[charIndex] = 0;
-              strcat(displayString, RADIX34_MARK_STRING);
-              charIndex++;
+            displayString[charIndex] = 0;
+            strcat(displayString, RADIX34_MARK_STRING);
+            charIndex++;
             if(updateDisplayValueX) {
               displayValueX[valueIndex++] = '.';
             }
@@ -983,9 +974,10 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         }
         else {
           exponentToDisplayString(exponent, displayString + charIndex, NULL,                       false);
-        }                                                                                 //JM UNIT
-      } else {                                                                            //JM UNIT
-           exponentToUnitDisplayString(exponent, displayString+charIndex, false);         //JM UNIT   //JM_TOCHANGE!!
+        }
+      }                                                                                 //JM UNIT
+      else {                                                                            //JM UNIT
+        exponentToUnitDisplayString(exponent, displayString+charIndex, false);          //JM UNIT   //JM_TOCHANGE!!
       }                                                                                 //JM UNIT
     }
   }
@@ -1382,7 +1374,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     }
     else if(base == 8) {
       gap = 3;
-    }                                  //JMGAP ^^ 
+    }                                  //JMGAP ^^
     else {
       gap = 3;
     }
@@ -1587,16 +1579,16 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWid, int16_t maxExp) {
+void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp) {
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
-  int16_t maxWidth;                                          //JM align longints
+  int16_t maxWidth;                                         //JM align longints
 
   convertLongIntegerRegisterToLongInteger(regist, lgInt);
 
-  if(longIntegerIsNegative(lgInt)) {maxWidth = maxWid;}      //JM align longints
-  else {maxWidth = maxWid - 8;}                              //JM align longints
+  if(longIntegerIsNegative(lgInt)) {maxWidth = max_Width;}  //JM align longints
+  else {maxWidth = max_Width - 8;}                          //JM align longints
 
   exponentShift = (longIntegerBits(lgInt) - 1) * 0.3010299956639811952137;
   exponentStep = (groupingGap == 0 ? 1 : groupingGap);
@@ -1882,6 +1874,4 @@ void fnShow(uint16_t unusedParamButMandatory) {
   displayFormatDigits = savedDisplayFormatDigits;
   SigFigMode = savedSigFigMode;                            //JM SIGFIG
   UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
-
-
 }

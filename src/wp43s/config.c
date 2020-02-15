@@ -562,40 +562,33 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
-                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
-    fnTimeFormat(TF_H24);
-    fnIntegerMode(SIM_2COMPL);
-    fnDisplayFormatAll(0);
-    fnDisplayFormatGap(3);
-    fnComplexUnit(CU_I);
-    fnAngularMode(AM_DEGREE);
-    fnDenMode(DM_ANY);
-                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
-    fnDenMax(0);
-    fnDisplayStack(4);                 //JM ..
-    firstGregorianDay = 1752;
-                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
-    fnCurveFitting(CF_LINEAR_FITTING);
-    fnLeadingZeros(false);
-    fnProductSign(PS_CROSS);
-    fnFractionType(FT_PROPER); // a b/c
-    fnRadixMark(RM_PERIOD);
-    fnRoundingMode(RM_HALF_EVEN);
-    fnDisplayOvr(DO_SCI);
-    fnStackSize(SS_8);               //JM DEFAULT
+    fnTimeFormat(TF_H24);              //JMnote This line is over-writing the content of setupdefaults
+    fnIntegerMode(SIM_2COMPL);         //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayFormatAll(3);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayFormatGap(3);             //JMnote This line is over-writing the content of setupdefaults
+    fnComplexUnit(CU_I);               //JMnote This line is over-writing the content of setupdefaults
+    fnAngularMode(AM_DEGREE);          //JMnote This line is over-writing the content of setupdefaults
+    fnDenMode(DM_ANY);                 //JMnote This line is over-writing the content of setupdefaults
+    fnDenMax(0);                       //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayStack(4);                 //JMnote This line is over-writing the content of setupdefaults
+    firstGregorianDay = 1752;          //JMnote This line is over-writing the content of setupdefaults
+    fnCurveFitting(CF_LINEAR_FITTING); //JMnote This line is over-writing the content of setupdefaults
+    fnLeadingZeros(true);           //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnProductSign(PS_CROSS);           //JMnote This line is over-writing the content of setupdefaults
+    fnRadixMark(RM_PERIOD);            //JMnote This line is over-writing the content of setupdefaults
+    fnRoundingMode(RM_HALF_EVEN);      //JMnote This line is over-writing the content of setupdefaults
+    fnDisplayOvr(DO_SCI);              //JMnote This line is over-writing the content of setupdefaults
+    fnStackSize(SS_8);              //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
     //tDisp = -1;
-    fnSetWordSize(64);
-    fnDateFormat(DF_YMD);
-    fnComplexMode(CM_RECTANGULAR);
-                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
+    fnSetWordSize(64);                 //JMnote This line is over-writing the content of setupdefaults
+    fnDateFormat(DF_YMD);              //JMnote This line is over-writing the content of setupdefaults
+    fnComplexMode(CM_RECTANGULAR);     //JMnote This line is over-writing the content of setupdefaults
     showRealComplexResult();
     allocateLocalRegisters(0);
-    fnComplexResult(true);           //JM CPXRES set     //JM bug. over-writing the content of setupdefaults
-    fnSetFlag(FLAG_DANGER);          //JM infinity etc.
+    fnComplexResult(true);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnSetFlag(FLAG_DANGER);         //JM infinity etc.
 
-                                       //JM vv identified bug: This section is over-writing the content of setupdefaults
-    displayRealAsFraction = false;
-                                       //JM ^^ identified bug: This section is over-writing the content of setupdefaults
+    fractionType = FT_NONE;
     STACK_LIFT_DISABLE;
     showOverflowCarry();
     hideUserMode();
@@ -640,7 +633,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnUserJM(USER_DEFAULTS);                     //JM USER
+    fnUserJM(USER_RESET);                        //JM USER
 //    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
@@ -715,6 +708,17 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("12602123297335631");
     fnStore(17);
     fnDrop(0);
+
+    fnStrtoX("37 digits of pi, Reg19 / Reg20.");
+    fnStore(18);
+    fnDrop(0);
+    fnStrInputLongint("2646693125139304345");
+    fnStore(19);
+    fnDrop(0);
+    fnStrInputLongint("842468587426513207");
+    fnStore(20);
+    fnDrop(0);
+
 
 
     refreshStack();

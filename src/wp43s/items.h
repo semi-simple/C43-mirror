@@ -1552,11 +1552,11 @@
 #define KEY_CC                        1516
 #define KEY_f                         1517
 #define KEY_g                         1518
-#define KEY_UP                        1519
+#define KEY_UP1                       1519
 #define KEY_BST                       1520
-#define KEY_DOWN                      1521
+#define KEY_DOWN1                     1521
 #define KEY_SST                       1522
-#define KEY_EXIT                      1523
+#define KEY_EXIT1                     1523
 #define KEY_BACKSPACE                 1524
 #define KEY_PRTX                      1525
 #define ITM_AIM                       1526
@@ -1779,7 +1779,7 @@
 #define ITM_op_a2                     1740   //JM OPERATORS
 #define ITM_op_j                      1741   //JM OPERATORS
 #define ITM_BASE_HOME                 1742   //JM BASEMENU
-#define Not_used1743                  1743   //JM
+#define ITM_SSHOT                     1743   //JM
 #define ITM_BASE_AHOME                1744   //JM BASEMENU
 #define Not_used1745                  1745
 #define Not_used1746                  1746
@@ -1937,7 +1937,7 @@
 #define ITM_U_KEY_SIGMA               1895   //JM USER
 #define ITM_SET_TEST_BS               1896
 #define ITM_U_KEY_PRGM                1897   //JM USER
-#define Not_used1898                  1898
+#define ITM_RND                       1898   //JM ROUND
 #define ITM_U_KEY_ALPHA               1899   //JM USER
 #define ITM_SH_NORM_E                 1900   //JM USER NORMAL
 #define ITM_JM_ASN                    1901   //JM ASSIGN
@@ -1966,8 +1966,15 @@
 #define ITM_GRF_HLP                   1924   //JM GRAPH
 #define ITM_toSI                      1925   //JM SHORTINT
 #define ITM_ms                        1926   //JM DMS HMS
+#define ITM_SI_p                      1927   //JM PRE UNIT
+#define ITM_SI_n                      1928   //JM PRE UNIT
+#define ITM_SI_u                      1929   //JM PRE UNIT
+#define ITM_SI_m                      1930   //JM PRE UNIT
+#define ITM_SI_k                      1931   //JM PRE UNIT
+#define ITM_SI_M                      1932   //JM PRE UNIT
 
-#define LAST_ITEM                     1927   //JM
+
+#define LAST_ITEM                     1933   //JM
 
 #define CHR_PROD_SIGN                 9999
 

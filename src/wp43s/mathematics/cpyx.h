@@ -15,14 +15,15 @@
  */
 
 /********************************************//**
- * \file factorial.h
+ * \file cpyx.h
  ***********************************************/
+ 
 
-void fnFactorial(uint16_t unusedParamButMandatory);
-void factError  (void);
-void factLonI   (void);
-void factShoI   (void);
-void factReal   (void);
-void factCplx   (void);
+ 
+void fnCyx(uint16_t unusedParamButMandatory);
+void cyxLonI(void);
+void cyxShoI(void);
 
-uint64_t fact_uint64(uint64_t value);
+void fnPyx(uint16_t unusedParamButMandatory);
+void pyxLonI(void);
+void pyxShoI(void);

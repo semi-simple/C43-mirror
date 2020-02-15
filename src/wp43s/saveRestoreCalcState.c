@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 26  // 28 = USER on f shifted g key //JM reduced by another 1
+#define BACKUP_VERSION 02  //JM reduced by another 1
 
 void saveCalc(void) {
   size_t size;
@@ -139,7 +139,6 @@ void saveCalc(void) {
   size += fwrite(&numLinesStandardFont,               1, sizeof(numLinesStandardFont),               backup); //printf("%8lu numLinesStandardFont\n",               (unsigned long)size);
   size += fwrite(&numScreensStandardFont,             1, sizeof(numScreensStandardFont),             backup); //printf("%8lu numScreensStandardFont\n",             (unsigned long)size);
   size += fwrite(&previousCalcMode,                   1, sizeof(previousCalcMode),                   backup); //printf("%8lu previousCalcMode\n",                   (unsigned long)size);
-  size += fwrite(&displayRealAsFraction,              1, sizeof(displayRealAsFraction),              backup); //printf("%8lu displayRealAsFraction\n",              (unsigned long)size);
   size += fwrite(&lastErrorCode,                      1, sizeof(lastErrorCode),                      backup); //printf("%8lu lastErrorCode\n",                      (unsigned long)size);
   size += fwrite(&nimNumberPart,                      1, sizeof(nimNumberPart),                      backup); //printf("%8lu nimNumberPart\n",                      (unsigned long)size);
   size += fwrite(&displayStack,                       1, sizeof(displayStack),                       backup); //printf("%8lu displayStack\n",                       (unsigned long)size);
@@ -182,13 +181,12 @@ void saveCalc(void) {
   size += fwrite(&jm_FG_LINE,                         1, sizeof(jm_FG_LINE),                         backup); //JM jm_FG_LINE //printf("%8lu jm_FG_LINE\n",         (unsigned long)size);
   size += fwrite(&jm_FG_DOTS,                         1, sizeof(jm_FG_DOTS),                         backup); //JM jm_FG_DOTS //printf("%8lu jm_FG_DOTS\n",         (unsigned long)size);
   size += fwrite(&jm_G_DOUBLETAP,                     1, sizeof(jm_G_DOUBLETAP),                     backup); //JM jm_G_DOUBLETAP //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
-  size += fwrite(&graph_xmin,                         1, sizeof(graph_xmin),                         backup); //JM graph_xmin //printf("%8lu graph_xmin\n", (unsigned long)size);
-  size += fwrite(&graph_xmax,                         1, sizeof(graph_xmax),                         backup); //JM graph_xmax //printf("%8lu graph_xmax\n", (unsigned long)size);
-  size += fwrite(&graph_ymin,                         1, sizeof(graph_ymin),                         backup); //JM graph_ymin //printf("%8lu graph_ymin\n", (unsigned long)size);
-  size += fwrite(&graph_ymax,                         1, sizeof(graph_ymax),                         backup); //JM graph_ymax //printf("%8lu graph_ymax\n", (unsigned long)size);
-  size += fwrite(&graph_dx  ,                         1, sizeof(graph_dx  ),                         backup); //JM graph_dx   //printf("%8lu graph_dx  \n", (unsigned long)size);
-  size += fwrite(&graph_dy  ,                         1, sizeof(graph_dy  ),                         backup); //JM graph_dy   //printf("%8lu graph_dy  \n", (unsigned long)size);
-
+  size += fwrite(&graph_xmin,                         1, sizeof(graph_xmin),                         backup); //JM graph_xmin //printf("%8lu graph_xmin\n",         (unsigned long)size);
+  size += fwrite(&graph_xmax,                         1, sizeof(graph_xmax),                         backup); //JM graph_xmax //printf("%8lu graph_xmax\n",         (unsigned long)size);
+  size += fwrite(&graph_ymin,                         1, sizeof(graph_ymin),                         backup); //JM graph_ymin //printf("%8lu graph_ymin\n",         (unsigned long)size);
+  size += fwrite(&graph_ymax,                         1, sizeof(graph_ymax),                         backup); //JM graph_ymax //printf("%8lu graph_ymax\n",         (unsigned long)size);
+  size += fwrite(&graph_dx  ,                         1, sizeof(graph_dx  ),                         backup); //JM graph_dx   //printf("%8lu graph_dx  \n",         (unsigned long)size);
+  size += fwrite(&graph_dy  ,                         1, sizeof(graph_dy  ),                         backup); //JM graph_dy   //printf("%8lu graph_dy  \n",         (unsigned long)size);
 
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
@@ -320,7 +318,6 @@ void restoreCalc(void) {
     size += fread(&numLinesStandardFont,               1, sizeof(numLinesStandardFont),               backup); //printf("%8lu numLinesStandardFont\n",               (unsigned long)size);
     size += fread(&numScreensStandardFont,             1, sizeof(numScreensStandardFont),             backup); //printf("%8lu numScreensStandardFont\n",             (unsigned long)size);
     size += fread(&previousCalcMode,                   1, sizeof(previousCalcMode),                   backup); //printf("%8lu previousCalcMode\n",                   (unsigned long)size);
-    size += fread(&displayRealAsFraction,              1, sizeof(displayRealAsFraction),              backup); //printf("%8lu displayRealAsFraction\n",              (unsigned long)size);
     size += fread(&lastErrorCode,                      1, sizeof(lastErrorCode),                      backup); //printf("%8lu lastErrorCode\n",                      (unsigned long)size);
     size += fread(&nimNumberPart,                      1, sizeof(nimNumberPart),                      backup); //printf("%8lu nimNumberPart\n",                      (unsigned long)size);
     size += fread(&displayStack,                       1, sizeof(displayStack),                       backup); //printf("%8lu displayStack\n",                       (unsigned long)size);

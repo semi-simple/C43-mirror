@@ -146,7 +146,7 @@ int32_t findFirstItem(const char *twoLetters) {
 
   middle = first + (last - first) / 2;
   while(first + 1 < last) {
-    if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) < 0) {
+    if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
       last = middle;
     }
     else {
@@ -849,7 +849,7 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    case KEY_EXIT :
+    case KEY_EXIT1 :
       done = true;
       closeNim();
       if(calcMode != CM_NIM && lastErrorCode == 0) {
@@ -2111,8 +2111,7 @@ void closeNim(void) {
             real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
           }
 
-          if(!displayRealAsFraction) {
-            displayRealAsFraction = true;
+          if(fractionType == FT_NONE) {
             fractionType = (integer == 0 ? FT_IMPROPER : FT_PROPER); // d/c or a b/c
           }
         }

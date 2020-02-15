@@ -153,7 +153,10 @@ float                graph_ymin;                              //JM Graph
 float                graph_ymax;                              //JM Graph
 float                graph_dx;                                //JM Graph
 float                graph_dy;                                //JM Graph
-
+#ifdef INLINE_TEST                      //vv dr
+bool_t               testEnabled;
+uint16_t             testBitset;
+#endif                                  //^^
 bool_t               hourGlassIconEnabled;
 bool_t               watchIconEnabled;
 bool_t               userModeEnabled;
@@ -165,7 +168,6 @@ bool_t               shiftStateChanged;
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
-bool_t               displayRealAsFraction;
 bool_t               savedStackLiftEnabled;
 bool_t               rbr1stDigit;
 bool_t               updateDisplayValueX;
@@ -197,6 +199,7 @@ real39_t             const *angle45;
 pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
   bool_t               backToDMCP;
+  uint32_t             nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
@@ -306,8 +309,7 @@ void setupDefaults(void) {
   fnCurveFitting(CF_LINEAR_FITTING);                         //JM bug: Overwritten by fnReset
   fnLeadingZeros(false);                                     //JM bug: Overwritten by fnReset
   fnProductSign(PS_CROSS);                                   //JM bug: Overwritten by fnReset
-  fnFractionType(FT_PROPER);                                 //JM bug: Overwritten by fnReset
-  displayRealAsFraction = false;                             //JM bug: Overwritten by fnReset
+  fractionType = FT_NONE;                                    //JM bug: Overwritten by fnReset
   fnRadixMark(RM_PERIOD);                                    //JM bug: Overwritten by fnReset
   fnComplexResult(true);                        //JM change: //JM bug: Overwritten by fnReset. CPXRES set default
   fnComplexMode(CM_RECTANGULAR);                             //JM bug: Overwritten by fnReset
@@ -331,14 +333,14 @@ void setupDefaults(void) {
 
   ULFL = false;                                                  //JM Underline
   ULGL = false;                                                  //JM Underline
-  FN_delay_exec = false;                                         //JM FN-DOUBLE
+//FN_delay_exec = false;                                         //JM FN-DOUBLE
   FN_double_click_detected = false;                              //JM FN-DOUBLE
   FN_state = ST_0_INIT;                                          //JM FN-DOUBLE
   FN_key_pressed = 0;                                            //JM LONGPRESS FN
   FN_key_pressed_last = 0;
   FN_timeouts_in_progress = false;                               //JM LONGPRESS FN
-  Shft_timeouts = 0;                                             //JM SHIFT NEW
-  FN_counter = JM_FN_TIMER;                                      //JM LONGPRESS FN
+  Shft_timeouts = false;                                         //JM SHIFT NEW
+//FN_counter = JM_FN_TIMER;                                      //JM LONGPRESS FN
   FN_timed_out_to_RELEASE_EXEC = false;                          //JM LONGPRESS FN
   FN_timed_out_to_NOP = false;                                   //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
@@ -347,8 +349,12 @@ void setupDefaults(void) {
   ShiftTimoutMode = true;                                        //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
   Home3TimerMode = true;                                         //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
   UNITDisplay = false;                                           //JM HOME Default. Create a flag to enable or disable UNIT display
-  SH_BASE_HOME   = true;      
-  SH_BASE_AHOME  = false;    
+#ifdef INLINE_TEST                      //vv dr
+  testEnabled = false;
+  testBitset = 0x0000;
+#endif                                  //^^
+  SH_BASE_HOME   = true;
+  SH_BASE_AHOME  = false;
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
   graph_xmin = -3*3.14159;                                       //JM GRAPH
@@ -359,16 +365,23 @@ void setupDefaults(void) {
   graph_dy   = 0;                                                //JM GRAPH
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
+#ifdef DMCP_BUILD                                                //JM TIMER variable tmp mem, to check expired time
   now_MEM = 0;                                                   //JM HOME temporary flag to remember and
   now_MEM1 = 0;                                                  //JM FN_DOUBLE
+#endif
+#ifdef PC_BUILD
+  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
+  now_MEM1 = 0;                                                  //JM FN_DOUBLE
+#endif
   TC_mem = 0;                                                    //JM FN_DOUBLE
   TC_tmp = 0;                                                    //JM FN_DOUBLE
   TC_mem_double = 0;                                             //JM FN_DOUBLE
   TC_tmp_double = 0;                                             //JM FN_DOUBLE
-  JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
-  JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
-  JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
-  JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;                    //JM TIMER
+
+//JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
+//JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
+//JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
+  JM_SHIFT_HOME_TIMER1 = 1;                                      //JM TIMER
   JM_ASN_MODE = 0;                                               //JM ASSIGN
 
   
@@ -516,6 +529,15 @@ int main(int argc, char* argv[]) {
   //fnReset(CONFIRMED);
 
   gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
+  fnTimerReset();                                                                                   //vv dr TEST Timer
+  fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
+  fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
+  fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG/*, 450*/);
+  fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
+  fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
+  fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
+  //fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);
+  gdk_threads_add_timeout(5, refreshTimer, NULL); // refreshTimer is called every 5 ms              //^^
 
   gtk_main();
 
@@ -539,7 +561,7 @@ void program_main(void) {
   lcd_clear_buf();
 /*lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");                  //vv dr - no keymap is used
   lcd_refresh();
-  while (key != 33 && key != 37) {
+  while(key != 33 && key != 37) {
     key = key_pop();
     while(key == -1) {
       sys_sleep();
@@ -555,8 +577,17 @@ void program_main(void) {
 
   backToDMCP = false;
 
-  lcd_refresh();
+  lcd_forced_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
+  fnTimerReset();                                                               //vv dr TEST Timer
+  fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
+  fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
+  fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG/*, 450*/);
+  fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
+  fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
+  fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
+  fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);
+  nextTimerRefresh = 0;                                                         //vv
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -564,12 +595,24 @@ void program_main(void) {
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
   while(!backToDMCP) {
-    if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
+    if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) {            // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
-    } else if ((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
+    }
+    else if ((!ST(STAT_PGM_END) && key_empty())) {          // Just wait if no keys available.
+      uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
+      if(nextTimerRefresh != 0) {
+        uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
+        sleepTime = min(sleepTime, timeoutTime);
+      }
+      if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) {
+        sleepTime = min(sleepTime, 25);
+      }
+      if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {
+        sleepTime = min(sleepTime, 15);
+      }                                                                         //^^
       CLR_ST(STAT_RUNNING);
-      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh-sys_current_ms()));  // wake up for screen refresh
+      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));                           // wake up for screen refresh
       sys_sleep();
       sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
@@ -618,39 +661,53 @@ void program_main(void) {
     // == 0 -> Key released
     key = key_pop();
 
-//    if(38 <= key && key <=43) {
-//      sprintf(charKey, "%c", key+11);
-//      btnFnClicked(NULL, charKey);
-//      lcd_refresh();
-//    }
+    if(sys_last_key() == 44 ) {                                 //JM DISP for special SCREEN DUMP key code. Supposed to be 16 but shift decoding done already to 44
+      R_shF();
+      R_shG();
+      fnJM(33);                                                 //SCREEN DUMP
+    } 
 
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);
-      btnFnPressed(NULL, charKey);
-      lcd_refresh();
-    } else if(key == 0 && FN_key_pressed != 0) {
-      btnFnReleased(NULL,NULL);
-      lcd_refresh();
+//    btnFnClicked(NULL, charKey);
+      btnFnPressed(NULL, charKey);                //JM
+      lcd_refresh_dma();
     }
-
-
+    else if(key == 0 && FN_key_pressed != 0) {    //JM
+      btnFnReleased(NULL,NULL);
+      lcd_refresh_dma();
+    }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);
-      lcd_refresh();
-    } else if(key == 0) {
+      lcd_refresh_dma();
+    }
+    else if(key == 0) {
       btnReleased(NULL,NULL);
-      lcd_refresh();
+      lcd_refresh_dma();
+    }
+
+    if(key >= 0) {
+      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 6000);
     }
 
     uint32_t now = sys_current_ms();
+    if(nextTimerRefresh != 0 && nextTimerRefresh <= now) {            //vv dr Timer
+      refreshTimer();
+    }                                                                 //^^
+    now = sys_current_ms();
     if(nextScreenRefresh <= now) {
       nextScreenRefresh += LCD_REFRESH_TIMEOUT;
       if(nextScreenRefresh < now) {
         nextScreenRefresh = now + LCD_REFRESH_TIMEOUT;                // we were out longer than expected; just skip ahead.
       }
       refreshScreen();
-      lcd_refresh();
+      if(key >= 0) {
+        lcd_refresh();
+      }
+      else {
+        lcd_refresh_wait();
+      }
     }
   }
 }

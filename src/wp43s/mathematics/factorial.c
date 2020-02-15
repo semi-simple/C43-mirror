@@ -80,11 +80,11 @@ void factLonI(void) {
     return;
   }
 
-  if(longIntegerCompareUInt(x, 450) > 0) {
+  if(longIntegerCompareUInt(x, MAX_FACTORIAL) > 0) {                            //JM
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50);
-      sprintf(errorMessage, "cannot calculate factorial(%s), the limit is 450, it's to ensure that the 3328 bits limit is not exceeded", errorMessage + 100);
+      sprintf(errorMessage, "cannot calculate factorial(%s), the limit is %d, it's to ensure that the %d bits limit is not exceeded", errorMessage + 100,MAX_FACTORIAL, MAX_LONG_INTEGER_SIZE_IN_BITS);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
     longIntegerFree(x);
@@ -105,11 +105,25 @@ void factLonI(void) {
     longIntegerFactorial(longIntegerToUInt(x), fact); //TODO why this line fails?
   #endif
 
+
   convertLongIntegerToLongIntegerRegister(fact, REGISTER_X);
+
   longIntegerFree(fact);
   longIntegerFree(x);
 }
 
+uint64_t fact_uint64(uint64_t value)
+{
+  uint64_t result = value;
+
+  if(value <= 1)
+    result = 1;
+  else 
+    for(uint64_t i=value-1 ; i > 1 ; result *= i--)
+      ;
+
+  return result;
+}
 
 
 void factShoI(void) {
@@ -138,20 +152,7 @@ void factShoI(void) {
     return;
   }
 
-  uint64_t fact;
-
-  if(value <= 1) {
-    fact = 1;
-  }
-  else {
-    uint32_t counter;
-
-    fact = value;
-    counter = value - 1;
-    while(counter > 1) {
-      fact *= counter--;
-    }
-  }
+  uint64_t fact = fact_uint64(value);
 
   if(fact > shortIntegerMask) {
     fnSetFlag(FLAG_OVERFLOW);

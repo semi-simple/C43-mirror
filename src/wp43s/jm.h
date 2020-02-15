@@ -39,8 +39,6 @@ Modes available in the mode menu:
 
 
 
-
-
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
 #define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
 #define JM_SHIFT_TIMER 4000    //ms
@@ -49,8 +47,7 @@ Modes available in the mode menu:
 #define JM_SHIFT_TIMER_OFF 255
 #define JM_3_SHIFT_CUTOFF  6   //100ms
 #define JM_FN_TIMER        8   //8 = approx 800ms   
-#define JM_FN_DOUBLE_TIMER 200 //75  //ms
-#define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
+#define JM_FN_DOUBLE_TIMER 250 //75  //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
@@ -59,7 +56,7 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 bool_t JM_auto_drop_activated;
 bool_t JM_auto_drop_enabled;                         //JM TIMER CLRDROP
 bool_t FN_double_click_detected;                     //JM FN-DOUBLE
-bool_t FN_delay_exec;                                //JM FN-DOUBLE
+bool_t FN_block_exec;                                //JM FN-DOUBLE
 
 uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changeable mode
 uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
@@ -75,10 +72,22 @@ bool_t FN_timed_out_to_NOP;                       //JM LONGPRESS FN
 bool_t FN_timed_out_to_RELEASE_EXEC;              //JM LONGPRESS FN
 
 //keyboard.c
-uint32_t now_MEM, now_MEM1/*, now_tmp*/;          //JM TIMER variable tmp mem, to check expired time, FN DOUBLE
-int32_t TC_mem, TC_tmp, TC_mem_double, TC_tmp_double;       //JM FN DOUBLE
+#ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
+uint32_t now_MEM, now_MEM1;                       //JM FN DOUBLE
+#endif
+#ifdef PC_BUILD
+gint64 now_MEM, now_MEM1;                         //JM FN DOUBLE
+#endif
+int32_t TC_mem, TC_tmp;                           //JM FN DOUBLE
+int32_t TC_mem_double, TC_tmp_double;             //JM FN DOUBLE
 
+
+#ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
 uint32_t now, tmpval;                             //JM TIMER DMCP SHIFTCANCEL & //JM FN DOUBLE
+#endif                                            //JM TIMER DMCP SHIFTCANCEL
+#ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
+gint64 now, tmpval;                               //JM usec  //JM TIMER EMULATOR SHIFTCANCEL  & //JM FN DOUBLE
+#endif                                            //JM TIMER DMCP SHIFTCANCEL
 
 
 
@@ -170,6 +179,8 @@ char* itoa(int value, char* result, int base);
 #define JC_SH_3T                8    // SH.3T
 #define JC_BCR                  9    // CB ComplexResult
 #define JC_BLZ                 10    // CB LeadingZeros
+#define JC_PROPER              11    // CB FractionType
+#define JC_IMPROPER            12    // CB FractionType
 #define JM_INP_DFLT            15    // Input_Default
 
 #define JC_FG_LINE             20    // screen setup
@@ -194,7 +205,6 @@ void S_shG(void);
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 
-void fn_dot_d           (uint16_t unusedParamButMandatory);  //FOR dotd
 void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
 void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX

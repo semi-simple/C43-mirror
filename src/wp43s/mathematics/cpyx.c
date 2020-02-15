@@ -20,8 +20,6 @@
 
 #include "wp43s.h"
 
-#include "cpyx.h"
-
 static void cpyxDataTypeError(uint16_t);
 
 void (* const cpyx[9][9])(uint16_t) = {
@@ -61,25 +59,23 @@ void (* const cpyx[9][9])(uint16_t) = {
 #endif // EXTRA_INFO_ON_CALC_ERROR
 
 
-static void cpyxError(uint16_t error)
-{
-    switch(error)
-    {
-        case DOMAIN_ERROR:
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-            EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, y and x must be greater or equal than zero.");
-            break;
+static void cpyxError(uint16_t error) {
+  switch(error) {
+    case DOMAIN_ERROR:
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, y and x must be greater or equal than zero.");
+        break;
 
-        case INVALID_DATA_CMP_ERROR:
-            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-            EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, y must be greater or equal than x.");
-            break;
+    case INVALID_DATA_CMP_ERROR:
+        displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, y must be greater or equal than x.");
+        break;
 
-        case DATA_OUT_OF_RANGE_ERROR:
-            displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-            EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, the limit for Long is 450 and for Short is 20.");
-            break;
-    }
+    case DATA_OUT_OF_RANGE_ERROR:
+        displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+        EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, the limit for Long is 450 and for Short is 20.");
+        break;
+  }
 }
 
 /********************************************//**
@@ -88,99 +84,92 @@ static void cpyxError(uint16_t error)
  * \param[in] unusedParamButMandatory
  * \return void
  ***********************************************/
-static void cpyxDataTypeError(uint16_t unused)
-{
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+static void cpyxDataTypeError(uint16_t unused) {
+  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnCyx/fnPyx:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-#endif
+  #endif
 }
 
 //=============================================================================
 // Cyx/Pyx calculation function
 //-----------------------------------------------------------------------------
 
-static void cyxReal(real39_t *y, real39_t *x, real39_t *result)
-{
-    realSubtract(y, x, result, &ctxtReal39);        // t = y-x
-    WP34S_Factorial(result, result);                // t = (y-x)!
+static void cyxReal(real39_t *y, real39_t *x, real39_t *result) {
+  realSubtract(y, x, result, &ctxtReal39);        // t = y-x
+  WP34S_Factorial(result, result);                // t = (y-x)!
 
-    WP34S_Factorial(y, y);                          // y = y!
+  WP34S_Factorial(y, y);                          // y = y!
 
-    WP34S_Factorial(x, x);                          // x = x!
+  WP34S_Factorial(x, x);                          // x = x!
 
-    realMultiply(x, result, result, &ctxtReal39);   // t = x! * (y-x)!
+  realMultiply(x, result, result, &ctxtReal39);   // t = x! * (y-x)!
 
-    realDivide(y, result, result, &ctxtReal39);     // t = y! / [x! * (y-x)!]
+  realDivide(y, result, result, &ctxtReal39);     // t = y! / [x! * (y-x)!]
 }
 
-static void cyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result)
-{
-    longIntegerSubtract(*y, *x, *result);						// t = y-x
-    longIntegerFactorial(longIntegerToUInt(*result), *result);	// t = (y-x)!
+static void cyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result) {
+  longIntegerSubtract(*y, *x, *result);						// t = y-x
+  longIntegerFactorial(longIntegerToUInt(*result), *result);	// t = (y-x)!
 
-    longIntegerFactorial(longIntegerToUInt(*y), *y);            // y = y!
+  longIntegerFactorial(longIntegerToUInt(*y), *y);            // y = y!
 
-    longIntegerFactorial(longIntegerToUInt(*x), *x);		    // x = x!
+  longIntegerFactorial(longIntegerToUInt(*x), *x);		    // x = x!
 
-    longIntegerMultiply(*x, *result, *result);					// t = x! * (y-x)!
+  longIntegerMultiply(*x, *result, *result);					// t = x! * (y-x)!
 
-    longIntegerDivide(*y, *result, *result);					// t = y! / [x! * (y -x)!]
+  longIntegerDivide(*y, *result, *result);					// t = y! / [x! * (y -x)!]
 }
 
-static void cyxCplx(real39_t *yReal, real39_t *yImag, real39_t *xReal, real39_t *xImag, real39_t *rReal, real39_t *rImag)
-{
-    realSubtract(yReal, xReal, rReal, &ctxtReal39);             // r = y-x
-    realSubtract(yImag, xImag, rImag, &ctxtReal39);
+static void cyxCplx(real39_t *yReal, real39_t *yImag, real39_t *xReal, real39_t *xImag, real39_t *rReal, real39_t *rImag) {
+  realSubtract(yReal, xReal, rReal, &ctxtReal39);             // r = y-x
+  realSubtract(yImag, xImag, rImag, &ctxtReal39);
 
-    realAdd(rReal, const_1, rReal, &ctxtReal39);                // r = t+1
-    WP34S_ComplexGamma(rReal, rImag, rReal, rImag);             // r = Gamma(t+1) = (y-x)!
+  realAdd(rReal, const_1, rReal, &ctxtReal39);                // r = t+1
+  WP34S_ComplexGamma(rReal, rImag, rReal, rImag);             // r = Gamma(t+1) = (y-x)!
 
-    realAdd(xReal, const_1, xReal, &ctxtReal39);                // x = x+1
-    WP34S_ComplexGamma(xReal, xImag, xReal, xImag);             // x = Gamma(x+1) = x!
+  realAdd(xReal, const_1, xReal, &ctxtReal39);                // x = x+1
+  WP34S_ComplexGamma(xReal, xImag, xReal, xImag);             // x = Gamma(x+1) = x!
 
-    realAdd(yReal, const_1, yReal, &ctxtReal39);                // y = y+1
-    WP34S_ComplexGamma(yReal, yImag, yReal, yImag);             // y = Gamma(y+1) = y!
+  realAdd(yReal, const_1, yReal, &ctxtReal39);                // y = y+1
+  WP34S_ComplexGamma(yReal, yImag, yReal, yImag);             // y = Gamma(y+1) = y!
 
-    mulCo39Co39(rReal, rImag, xReal, xImag, rReal, rImag);      // r = x! * (y-x)!
-    divCo39Co39(yReal, yImag, rReal, rImag, rReal, rImag);      // r = y! / [x! * (y-x)!]
+  mulCo39Co39(rReal, rImag, xReal, xImag, rReal, rImag);      // r = x! * (y-x)!
+  divCo39Co39(yReal, yImag, rReal, rImag, rReal, rImag);      // r = y! / [x! * (y-x)!]
 }
 
-static void pyxReal(real39_t *y, real39_t *x, real39_t *result)
-{
-    realSubtract(y, x, result, &ctxtReal39);    // t = y-x
-    WP34S_Factorial(result, result);            // t = (y-x)!
+static void pyxReal(real39_t *y, real39_t *x, real39_t *result) {
+  realSubtract(y, x, result, &ctxtReal39);    // t = y-x
+  WP34S_Factorial(result, result);            // t = (y-x)!
 
-    WP34S_Factorial(y, y);                      // y = y!
+  WP34S_Factorial(y, y);                      // y = y!
 
-    realDivide(y, result, result, &ctxtReal39); // t = y! / (y-x)!
+  realDivide(y, result, result, &ctxtReal39); // t = y! / (y-x)!
 }
 
-static void pyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result)
-{
-    longIntegerSubtract(*y, *x, *result);						// t = y-x
-    longIntegerFactorial(longIntegerToUInt(*result), *result);	// t = (y-x)!
+static void pyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result) {
+  longIntegerSubtract(*y, *x, *result);						// t = y-x
+  longIntegerFactorial(longIntegerToUInt(*result), *result);	// t = (y-x)!
 
-    longIntegerFactorial(longIntegerToUInt(*y), *y);            // y = y!
+  longIntegerFactorial(longIntegerToUInt(*y), *y);            // y = y!
 
-    longIntegerDivide(*y, *result, *result);					// t = y! / (y -x)!
+  longIntegerDivide(*y, *result, *result);					// t = y! / (y -x)!
 }
 
-static void pyxCplx(real39_t *yReal, real39_t *yImag, real39_t *xReal, real39_t *xImag, real39_t *rReal, real39_t *rImag)
-{
-    realSubtract(yReal, xReal, rReal, &ctxtReal39);             // r = y-x
-    realSubtract(yImag, xImag, rImag, &ctxtReal39);
+static void pyxCplx(real39_t *yReal, real39_t *yImag, real39_t *xReal, real39_t *xImag, real39_t *rReal, real39_t *rImag) {
+  realSubtract(yReal, xReal, rReal, &ctxtReal39);             // r = y-x
+  realSubtract(yImag, xImag, rImag, &ctxtReal39);
 
-    realAdd(rReal, const_1, rReal, &ctxtReal39);                // r = t+1
-    WP34S_ComplexGamma(rReal, rImag, rReal, rImag);             // r = Gamma(t+1) = (y-x)!
+  realAdd(rReal, const_1, rReal, &ctxtReal39);                // r = t+1
+  WP34S_ComplexGamma(rReal, rImag, rReal, rImag);             // r = Gamma(t+1) = (y-x)!
 
-    realAdd(yReal, const_1, yReal, &ctxtReal39);                // y = y+1
-    WP34S_ComplexGamma(yReal, yImag, yReal, yImag);             // y = Gamma(y+1) = y!
+  realAdd(yReal, const_1, yReal, &ctxtReal39);                // y = y+1
+  WP34S_ComplexGamma(yReal, yImag, yReal, yImag);             // y = Gamma(y+1) = y!
 
-    divCo39Co39(yReal, yImag, rReal, rImag, rReal, rImag);      // r = y! / (y-x)!
+  divCo39Co39(yReal, yImag, rReal, rImag, rReal, rImag);      // r = y! / (y-x)!
 }
 
 //=============================================================================
@@ -195,15 +184,14 @@ static void pyxCplx(real39_t *yReal, real39_t *yImag, real39_t *xReal, real39_t 
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnCyx(uint16_t unusedParamButMandatory)
-{
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+void fnCyx(uint16_t unusedParamButMandatory) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](1);
+  cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](CP_COMBINATION);
 
-    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
-    adjustResult(REGISTER_Y, true, true, REGISTER_Y, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_Y, true, true, REGISTER_Y, -1, -1);
 }
 
 /********************************************//**
@@ -214,15 +202,14 @@ void fnCyx(uint16_t unusedParamButMandatory)
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnPyx(uint16_t unusedParamButMandatory)
-{
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+void fnPyx(uint16_t unusedParamButMandatory) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](0);
+  cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](CP_PERMUTATION);
 
-    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
-    adjustResult(REGISTER_Y, true, true, REGISTER_Y, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_Y, true, true, REGISTER_Y, -1, -1);
 }
 
 //=============================================================================
@@ -235,32 +222,33 @@ void fnPyx(uint16_t unusedParamButMandatory)
  * \param void
  * \return void
  ***********************************************/
-void cpyxLonILonI(uint16_t flag)
-{
-    longInteger_t x, y;
+void cpyxLonILonI(uint16_t combOrPerm) {
+  longInteger_t x, y;
 
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
-    convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
 
-    if(longIntegerIsNegative(x) || longIntegerIsNegative(y))
-        cpyxError(DOMAIN_ERROR);
-    else if(longIntegerCompareUInt(x, 450) > 0 || longIntegerCompareUInt(y, 450) > 0)
-        cpyxError(DATA_OUT_OF_RANGE_ERROR);
-    else if(longIntegerCompare(y, x) < 0)
-        cpyxError(INVALID_DATA_CMP_ERROR);
-    else
-    {
-        longInteger_t t;
-        longIntegerInit(t);
+  if(longIntegerIsNegative(x) || longIntegerIsNegative(y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else if(longIntegerCompareUInt(x, 450) > 0 || longIntegerCompareUInt(y, 450) > 0) {
+    cpyxError(DATA_OUT_OF_RANGE_ERROR);
+  }
+  else if(longIntegerCompare(y, x) < 0) {
+    cpyxError(INVALID_DATA_CMP_ERROR);
+  }
+  else {
+    longInteger_t t;
+    longIntegerInit(t);
 
-        (flag) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
 
-        convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
-        longIntegerFree(t);
-    }
+    convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
+    longIntegerFree(t);
+  }
 
-    longIntegerFree(x);
-    longIntegerFree(y);
+  longIntegerFree(x);
+  longIntegerFree(y);
 }
 
 /********************************************//**
@@ -269,24 +257,23 @@ void cpyxLonILonI(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxLonIReal(uint16_t flag)
-{
-    real39_t x, y;
+void cpyxLonIReal(uint16_t combOrPerm) {
+  real39_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-    convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
 
-    if(realIsNegative(&x) || realIsNegative(&y))
-        cpyxError(DOMAIN_ERROR);
-    else
-    {
-        real39_t t;
+  if(realIsNegative(&x) || realIsNegative(&y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else {
+    real39_t t;
 
-        (flag) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
 
-        realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+    realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 /********************************************//**
@@ -295,21 +282,20 @@ void cpyxLonIReal(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxLonICplx(uint16_t flag)
-{
-    real39_t xReal, xImag, yReal, yImag;
-    real39_t tReal, tImag;
+void cpyxLonICplx(uint16_t combOrPerm) {
+  real39_t xReal, xImag, yReal, yImag;
+  real39_t tReal, tImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    (flag) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
+  (combOrPerm == CP_COMBINATION) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
 
-    realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 /********************************************//**
@@ -318,32 +304,33 @@ void cpyxLonICplx(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxLonIShoI(uint16_t flag)
-{
-    longInteger_t x, y;
+void cpyxLonIShoI(uint16_t combOrPerm) {
+  longInteger_t x, y;
 
-    convertShortIntegerRegisterToLongInteger(REGISTER_X, x);
-    convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertShortIntegerRegisterToLongInteger(REGISTER_X, x);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, y);
 
-    if(longIntegerIsNegative(x) || longIntegerIsNegative(y))
-        cpyxError(DOMAIN_ERROR);
-    else if(longIntegerCompareUInt(x, 450) > 0 || longIntegerCompareUInt(y, 450) > 0)
-        cpyxError(DATA_OUT_OF_RANGE_ERROR);
-    else if(longIntegerCompare(y, x) < 0)
-        cpyxError(INVALID_DATA_CMP_ERROR);
-    else
-    {
-        longInteger_t t;
-        longIntegerInit(t);
+  if(longIntegerIsNegative(x) || longIntegerIsNegative(y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else if(longIntegerCompareUInt(x, 450) > 0 || longIntegerCompareUInt(y, 450) > 0) {
+    cpyxError(DATA_OUT_OF_RANGE_ERROR);
+  }
+  else if(longIntegerCompare(y, x) < 0) {
+    cpyxError(INVALID_DATA_CMP_ERROR);
+  }
+  else {
+    longInteger_t t;
+    longIntegerInit(t);
 
-        (flag) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
 
-        convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
-        longIntegerFree(t);
-    }
+    convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
+    longIntegerFree(t);
+  }
 
-    longIntegerFree(x);
-    longIntegerFree(y);
+  longIntegerFree(x);
+  longIntegerFree(y);
 }
 
 //=============================================================================
@@ -356,25 +343,24 @@ void cpyxLonIShoI(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxRealLonI(uint16_t flag)
-{
-    real39_t x, y;
+void cpyxRealLonI(uint16_t combOrPerm) {
+  real39_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    if(realIsNegative(&x) || realIsNegative(&y))
-        cpyxError(DOMAIN_ERROR);
-    else
-    {
-        real39_t t;
+  if(realIsNegative(&x) || realIsNegative(&y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else {
+    real39_t t;
 
-        (flag) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
 
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 /********************************************//**
@@ -383,24 +369,23 @@ void cpyxRealLonI(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxRealReal(uint16_t flag)
-{
-    real39_t x, y;
+void cpyxRealReal(uint16_t combOrPerm) {
+  real39_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-    if(realIsNegative(&x) || realIsNegative(&y))
-        cpyxError(DOMAIN_ERROR);
-    else
-    {
-        real39_t t;
+  if(realIsNegative(&x) || realIsNegative(&y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else {
+    real39_t t;
 
-        (flag) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
 
-        realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+    realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 /********************************************//**
@@ -409,21 +394,20 @@ void cpyxRealReal(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxRealCplx(uint16_t flag)
-{
-    real39_t xReal, xImag, yReal, yImag;
-    real39_t tReal, tImag;
+void cpyxRealCplx(uint16_t combOrPerm) {
+  real39_t xReal, xImag, yReal, yImag;
+  real39_t tReal, tImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(const34_0, &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(const34_0, &yImag);
 
-    (flag) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
+  (combOrPerm == CP_COMBINATION) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
 
-    realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 /********************************************//**
@@ -432,25 +416,24 @@ void cpyxRealCplx(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxRealShoI(uint16_t flag)
-{
-    real39_t x, y;
+void cpyxRealShoI(uint16_t combOrPerm) {
+  real39_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    if(realIsNegative(&x) || realIsNegative(&y))
-        cpyxError(DOMAIN_ERROR);
-    else
-    {
-        real39_t t;
+  if(realIsNegative(&x) || realIsNegative(&y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else {
+    real39_t t;
 
-        (flag) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
 
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 //=============================================================================
@@ -463,22 +446,21 @@ void cpyxRealShoI(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxCplxLonI(uint16_t flag)
-{
-    real39_t xReal, xImag, yReal, yImag;
-    real39_t tReal, tImag;
+void cpyxCplxLonI(uint16_t combOrPerm) {
+  real39_t xReal, xImag, yReal, yImag;
+  real39_t tReal, tImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    (flag) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
+  (combOrPerm == CP_COMBINATION) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
 
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 /********************************************//**
@@ -487,22 +469,21 @@ void cpyxCplxLonI(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxCplxReal(uint16_t flag)
-{
-    real39_t xReal, xImag, yReal, yImag;
-    real39_t tReal, tImag;
+void cpyxCplxReal(uint16_t combOrPerm) {
+  real39_t xReal, xImag, yReal, yImag;
+  real39_t tReal, tImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(const34_0, &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(const34_0, &xImag);
 
-    (flag) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
+  (combOrPerm == CP_COMBINATION) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
 
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 /********************************************//**
@@ -511,21 +492,20 @@ void cpyxCplxReal(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxCplxCplx(uint16_t flag)
-{
-    real39_t xReal, xImag, yReal, yImag;
-    real39_t tReal, tImag;
+void cpyxCplxCplx(uint16_t combOrPerm) {
+  real39_t xReal, xImag, yReal, yImag;
+  real39_t tReal, tImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    (flag) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
+  (combOrPerm == CP_COMBINATION) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
 
-    realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 /********************************************//**
@@ -534,22 +514,21 @@ void cpyxCplxCplx(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxCplxShoI(uint16_t flag)
-{
-    real39_t xReal, xImag, yReal, yImag;
-    real39_t tReal, tImag;
+void cpyxCplxShoI(uint16_t combOrPerm) {
+  real39_t xReal, xImag, yReal, yImag;
+  real39_t tReal, tImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    (flag) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
+  (combOrPerm == CP_COMBINATION) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
 
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 //=============================================================================
@@ -562,32 +541,33 @@ void cpyxCplxShoI(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxShoILonI(uint16_t flag)
-{
-    longInteger_t x, y;
+void cpyxShoILonI(uint16_t combOrPerm) {
+  longInteger_t x, y;
 
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
-    convertShortIntegerRegisterToLongInteger(REGISTER_Y, y);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+  convertShortIntegerRegisterToLongInteger(REGISTER_Y, y);
 
-    if(longIntegerIsNegative(x) || longIntegerIsNegative(y))
-        cpyxError(DOMAIN_ERROR);
-    else if(longIntegerCompareUInt(x, 450) > 0 || longIntegerCompareUInt(y, 450) > 0)
-        cpyxError(DATA_OUT_OF_RANGE_ERROR);
-    else if(longIntegerCompare(y, x) < 0)
-        cpyxError(INVALID_DATA_CMP_ERROR);
-    else
-    {
-        longInteger_t t;
-        longIntegerInit(t);
+  if(longIntegerIsNegative(x) || longIntegerIsNegative(y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else if(longIntegerCompareUInt(x, 450) > 0 || longIntegerCompareUInt(y, 450) > 0) {
+    cpyxError(DATA_OUT_OF_RANGE_ERROR);
+  }
+  else if(longIntegerCompare(y, x) < 0) {
+    cpyxError(INVALID_DATA_CMP_ERROR);
+  }
+  else {
+    longInteger_t t;
+    longIntegerInit(t);
 
-        (flag) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
 
-        convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
-        longIntegerFree(t);
-    }
+    convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
+    longIntegerFree(t);
+  }
 
-    longIntegerFree(x);
-    longIntegerFree(y);
+  longIntegerFree(x);
+  longIntegerFree(y);
 }
 
 /********************************************//**
@@ -596,25 +576,24 @@ void cpyxShoILonI(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxShoIReal(uint16_t flag)
-{
-    real39_t x, y;
+void cpyxShoIReal(uint16_t combOrPerm) {
+  real39_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-    convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
 
-    if(realIsNegative(&x) || realIsNegative(&y))
-        cpyxError(DOMAIN_ERROR);
-    else
-    {
-        real39_t t;
+  if(realIsNegative(&x) || realIsNegative(&y)) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else {
+    real39_t t;
 
-        (flag) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxReal(&y, &x, &t) : pyxReal(&y, &x, &t);
 
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&t, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 /********************************************//**
@@ -623,21 +602,20 @@ void cpyxShoIReal(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxShoICplx(uint16_t flag)
-{
-    real39_t xReal, xImag, yReal, yImag;
-    real39_t tReal, tImag;
+void cpyxShoICplx(uint16_t combOrPerm) {
+  real39_t xReal, xImag, yReal, yImag;
+  real39_t tReal, tImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    (flag) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
+  (combOrPerm == CP_COMBINATION) ? cyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag) : pyxCplx(&yReal, &yImag, &xReal, &xImag, &tReal, &tImag);
 
-    realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&tReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&tImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
 
 /********************************************//**
@@ -646,30 +624,32 @@ void cpyxShoICplx(uint16_t flag)
  * \param void
  * \return void
  ***********************************************/
-void cpyxShoIShoI(uint16_t flag)
-{
-    int16_t x_sign, y_sign;
-    uint64_t x_value, y_value;
+void cpyxShoIShoI(uint16_t combOrPerm) {
+  int16_t x_sign, y_sign;
+  uint64_t x_value, y_value;
 
-    convertShortIntegerRegisterToUInt64(REGISTER_X, &x_sign, &x_value);
-    convertShortIntegerRegisterToUInt64(REGISTER_Y, &y_sign, &y_value);
+  convertShortIntegerRegisterToUInt64(REGISTER_X, &x_sign, &x_value);
+  convertShortIntegerRegisterToUInt64(REGISTER_Y, &y_sign, &y_value);
 
-    if(x_sign==1 || y_sign==1)
-        cpyxError(DOMAIN_ERROR);
-    else if(x_value > 20 || y_value > 20)
-        cpyxError(DATA_OUT_OF_RANGE_ERROR);
-    else if(y_value < x_value)
-        cpyxError(INVALID_DATA_CMP_ERROR);
-    else
-    {
-        uint64_t value = (flag) 
-                ? fact_uint64(y_value) / ( fact_uint64(x_value) * fact_uint64(y_value - x_value))
-                : fact_uint64(y_value) / fact_uint64(y_value - x_value);
+  if(x_sign==1 || y_sign==1) {
+    cpyxError(DOMAIN_ERROR);
+  }
+  else if(x_value > 20 || y_value > 20) {
+    cpyxError(DATA_OUT_OF_RANGE_ERROR);
+  }
+  else if(y_value < x_value) {
+    cpyxError(INVALID_DATA_CMP_ERROR);
+  }
+  else {
+    uint64_t value = (combOrPerm == CP_COMBINATION)
+            ? fact_uint64(y_value) / ( fact_uint64(x_value) * fact_uint64(y_value - x_value))
+            : fact_uint64(y_value) / fact_uint64(y_value - x_value);
 
-        if(value > shortIntegerMask)
-            fnSetFlag(FLAG_OVERFLOW);
-
-        convertUInt64ToShortIntegerRegister(0, value, getRegisterTag(REGISTER_X), REGISTER_X);
+    if(value > shortIntegerMask) {
+      fnSetFlag(FLAG_OVERFLOW);
     }
+
+    convertUInt64ToShortIntegerRegister(0, value, getRegisterTag(REGISTER_X), REGISTER_X);
+  }
 }
 

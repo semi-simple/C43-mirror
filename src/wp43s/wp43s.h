@@ -396,6 +396,10 @@ typedef int16_t calcRegister_t;
 #define CMP_CLEANED_STRING_ONLY 1
 #define CMP_EXTENSIVE           2
 
+// Combination / permutation
+#define CP_PERMUTATION 0
+#define CP_COMBINATION 1
+
 #if defined(__arm__)
   #define FMT64U  "llu"
   #define FMT64S  "lld"

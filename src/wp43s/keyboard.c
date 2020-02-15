@@ -1103,6 +1103,8 @@ void btnPressed(void *notUsed, void *data) {
           showFunctionName(ITM_CLX, 10);
         }
 
+        FN_counter = JM_FN_TIMER;          //JM TIMER CLRCLSTK ON LONGPRESS
+        JM_auto_clstk_enabled = true;      //JM TIMER CLRCLSTK ON LONGPRESS
         if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
@@ -1609,6 +1611,7 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 void btnReleased(void *notUsed, void *data) {
 #endif
   Shft_timeouts = false;                         //JM SHIFT NEW
+  JM_auto_clstk_enabled = false;                 //JM TIMER CLRCLSTK ON LONGPRESS
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();

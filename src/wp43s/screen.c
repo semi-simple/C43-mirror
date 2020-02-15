@@ -382,6 +382,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   }
 
   //FN_no_double_click_handler();         //vv JM
+  CLSTK_handler();
   FN_handler();
   Shft_handler();                       //^^
 
@@ -451,6 +452,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
   }
 
   //FN_no_double_click_handler();         //vv JM
+  CLSTK_handler();
   FN_handler();
   Shft_handler();                       //^^
 
@@ -667,6 +669,28 @@ void Shft_handler() {                        //JM SHIFT NEW vv
           }
         }
       }
+    } 
+    else { 
+      FN_counter--;
+    }
+  } 
+}                                        //JM ^^
+
+
+void CLSTK_handler() {                        //JM CLSTK NEW vv
+  if(JM_auto_clstk_enabled) {
+ 
+    if(FN_counter > JM_FN_TIMER) {
+      FN_counter = JM_FN_TIMER;
+    } else
+    if(FN_counter < 1) {
+      FN_counter = 1;
+    } 
+
+    if (FN_counter == 1) {    
+      showFunctionName(ITM_CLSTK, 10);        //fnClearStack(0);
+      FN_counter = JM_FN_TIMER;               //restart count
+      JM_auto_clstk_enabled = false;
     } 
     else { 
       FN_counter--;

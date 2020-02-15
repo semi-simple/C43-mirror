@@ -373,6 +373,7 @@ void setupDefaults(void) {
 
   JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
   JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
+  JM_auto_clstk_enabled = false;                                 //JM AUTO-DROP TIMER
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
   JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;                    //JM TIMER
   JM_ASN_MODE = 0;                                               //JM ASSIGN

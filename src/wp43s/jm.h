@@ -48,7 +48,7 @@ Modes available in the mode menu:
 #define JM_FN_DOUBLE_TIMER 150   //ms TO_FN_EXEC
 #define JM_TO_FN_LONG 	   450   //ms TO_FN_LONG
 
-#define JM_CLRDROP_TIMER   1000  //ms TO_CL_DROP   //DROP increased following H2X
+#define JM_CLRDROP_TIMER   500  //ms TO_CL_DROP    //DROP
 #define JM_TO_CL_LONG      800   //ms TO_CL_LONG   //CLSTK
 
 #define JM_TO_3S_CTFF 	   600   //ms TO_3S_CTFF

@@ -140,7 +140,6 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   S_shF(); //  shiftF = true;       //JM
   R_shG(); //  shiftG = false;      //JM
-  Reset_Shift_Mem();   //JM
   btnPressed(w, data);
   btnReleased(w, data);
 }
@@ -149,7 +148,6 @@ void btnClicked_NU(GtkWidget *w, gpointer data) {
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
   R_shF(); //  shiftF = false;       //JM
   S_shG(); //  shiftG = true;        //JM
-  Reset_Shift_Mem();    //JM
   btnClicked(NULL, "34");     //Alphadot
   //Only : is working at this point
 }
@@ -568,7 +566,7 @@ return FALSE;
 
   switch (event_keyval) {
 //ROW 1
-    case 65470: // F1                       //JM Changed these to btnFNPressed from btnClicked
+    case 65470: // F1                       //JM Changed these to btnFnPressed from btnFnClicked
       //printf("key pressed: F1\n");
       btnFnPressed(w, "1");
       break;
@@ -649,7 +647,6 @@ return FALSE;
       //printf("key pressed: p pi\n"); //dr
       S_shF(); //  shiftF = true;       //dr
       R_shG(); //  shiftG = false;      //JM
-      Reset_Shift_Mem();   //JM
       btnClicked(w, "08"); //dr
       break;               //dr
 

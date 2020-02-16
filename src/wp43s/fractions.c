@@ -123,6 +123,11 @@ void fnToggleFractionType(uint16_t unusedParamButMandatory) {
 
     default: {}
   }
+
+//fnRefreshRadioState(RB_FT, fractionType);                                     //dr
+  fnRefreshComboxState(CB_JC, JC_IMPROPER, fractionType == FT_IMPROPER);        //dr
+  fnRefreshComboxState(CB_JC, JC_PROPER, fractionType == FT_PROPER);            //dr
+
   refreshStack();
 }
 

@@ -1295,12 +1295,12 @@ void showSoftmenuCurrentPart(void) {
           if(softmenu[m].menuId == -MNU_FCNS) {
             showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
-          else   //JM vv display i or j properly on display
-           if (item == ITM_op_j && complexUnit == CU_J) {
-               showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-            } else if (item == ITM_op_j && complexUnit == CU_I) {
-               showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-            }     //JM ^^
+          else if(item == ITM_op_j && complexUnit == CU_J) {   //JM vv display i or j properly on display
+            showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+          }
+          else if(item == ITM_op_j && complexUnit == CU_I) {
+            showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+          }     //JM ^^
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }

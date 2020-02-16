@@ -65,7 +65,7 @@
   #endif
   #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
     #undef  DEBUG_PANEL
-    #define D EBUG_PANEL 0
+    #define DEBUG_PANEL 0
   #endif
   #define JM_LAYOUT_1A               //Preferred layout
 //#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
@@ -120,6 +120,11 @@
   #define showAlphaMode()         {}
   #define JM_LAYOUT_1A               //Preferred layout
 #endif
+
+#ifndef TESTSUITE_BUILD                 //vv dr
+#define INLINE_TEST
+#undef INLINE_TEST
+#endif                                  //^^
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -220,7 +225,9 @@ typedef int16_t calcRegister_t;
 #include "jm.h"                                          //JM include
 #include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
-
+#ifdef INLINE_TEST                      //vv dr
+#include "inlineTest.h"
+#endif                                  //^^
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))
@@ -234,11 +241,20 @@ typedef int16_t calcRegister_t;
 
 #define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))
 #ifdef DMCP_BUILD
-#define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
+#define LCD_REFRESH_TIMEOUT   125 //timeout for lcd refresh in ms
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
 #define MAX_RADIO_CB_ITEMS     72                                               //dr build RadioButton, CheckBox
+
+// timer nr for FG and FN use
+#define TO_FG_LONG              0
+#define TO_FG_TIMR              1
+#define TO_FN_LONG              2
+#define TO_FN_EXEC              3
+#define TO_3S_CTFF              4
+#define TO_CL_DROP              5
+#define TO_KB_ACTV              6
 
 // On/Off 1 bit
 #define OFF                     0

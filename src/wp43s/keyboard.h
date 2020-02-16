@@ -21,29 +21,18 @@
 void resetShiftState(void);
 void showShiftState (void);
 void fnComplexCCCC  (uint16_t unusedParamButMandatory);
-
+void execFnTimeout  (uint16_t key);
+void shiftCutoff    (uint16_t unusedParamButMandatory);
 
 int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
 
-int8_t TC_compare(uint32_t timecheck);                 //JM vv FN-DOUBLE 
-#define TC_Expired     1    //Timecheck Time expired
-#define TC_Not_expired -1   //Timecheck Time not yet expired
-#define TC_Equals      0    //Timecheck Time expired
-#define TC_NA          127  //Timecheck Time ZERO not available
 
-#define ST_0_INIT     0     //STATE 0 INIT
+#define ST_0_INIT     0     //STATE 0 INIT             //JM vv FN-DOUBLE
 #define ST_1_PRESS1   1     //STATE 1 FIRST PRESS
 #define ST_2_REL1     2     //STATE 2 FIRST RELEASE
 #define ST_3_PRESS2   3     //STATE 3 SECOND PRESS     //Double click determination 2 to 3 < 75 ms.
 #define ST_4_REL2     4     //STATE 4 SECOND RELEASE
-#define ST_5_EXEC     5     //STATE FOR EXECUTING
 uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
-
-void disp__(uint8_t nr, int32_t dud);                                    //DISPLAY time on DM42 screen
-
-#ifdef DMCP_BUILD
-  #include <dmcp.h>
-#endif
 
 
 #ifdef PC_BUILD
@@ -57,8 +46,8 @@ void disp__(uint8_t nr, int32_t dud);                                    //DISPL
 
 #ifdef DMCP_BUILD
   void btnFnClicked   (void *w, void *data);
-  void btnFnPressed   (void *w, void *data);   //JM LONGPRESS FN
-  void btnFnReleased   (void *w, void *data);  //JM LONGPRESS FN
+  void btnFnPressed   (void *w, void *data);           //JM LONGPRESS FN
+  void btnFnReleased  (void *w, void *data);           //JM LONGPRESS FN
   void btnClicked     (void *w, void *data);
   void btnPressed     (void *w, void *data);
   void btnReleased    (void *w, void *data);

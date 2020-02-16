@@ -377,7 +377,7 @@ void setupDefaults(void) {
   JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
   JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;                    //JM TIMER
   JM_ASN_MODE = 0;                                               //JM ASSIGN
-
+  // Load_HOME(); //JMHOME: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK
   
   #ifndef TESTSUITE_BUILD
     showShiftState();

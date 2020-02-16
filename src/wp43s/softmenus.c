@@ -469,7 +469,7 @@ const int16_t menu_ASN[]         = {
 
 
 
-const int16_t menu_HOME[]        = {
+const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
 /*HOME1 */
                                      ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                          //JM HOME
                                      ITM_toREC,                     ITM_toPOL,                  ITM_PARALLEL,             ITM_XFACT,             ITM_MAGNITUDE,               ITM_ANGLE,                          //JM HOME
@@ -1335,6 +1335,14 @@ void showSoftmenuCurrentPart(void) {
 }
 
 
+//JMHOME: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
+//        Here a HOME menu config can be loaded from disk
+/*void Load_HOME(void) {
+  menu_HOME[0] = 744; //pi=744
+  menu_HOME[1] = 744; //pi=744
+  menu_HOME[2] = 744; //pi=744
+}*/
+//JMHOME: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
 
 /********************************************//**
  * \brief Initializes the softmenu stack with a

@@ -672,7 +672,7 @@ void program_main(void) {
     }
 
     if(key >= 0) {
-      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 6000);
+      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);
     }
 
     uint32_t now = sys_current_ms();

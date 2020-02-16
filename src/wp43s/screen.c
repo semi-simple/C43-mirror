@@ -536,7 +536,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         showFunctionName(nameFunction(FN_key_pressed-37,6),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,1, false);
-        fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);          //dr
+        fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 1, KEY=%d \n",FN_key_pressed);
         #endif
@@ -549,7 +549,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,2, false);
-        fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);          //dr
+        fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 2, KEY=%d \n",FN_key_pressed);
         #endif
@@ -580,13 +580,13 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 #endif
       if(!shiftF && !shiftG) {
         shiftF = true;        //S_shF();
-        fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);          //dr
+        fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);          //dr
         showShiftState();
       }
       else if(shiftF && !shiftG) {
         shiftG = true;        //S_shG();
         shiftF = false;       //R_shF();
-        fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);          //dr
+        fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);          //dr
         showShiftState();
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {

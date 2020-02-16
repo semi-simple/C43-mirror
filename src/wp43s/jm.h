@@ -40,15 +40,19 @@ Modes available in the mode menu:
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
-#define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
-#define JM_SHIFT_TIMER 4000    //ms
-#define JM_CLRDROP_TIMER 500   //ms
-//#define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
-//#define JM_SHIFT_TIMER_OFF 255
-//#define JM_3_SHIFT_CUTOFF  6   //100ms
-//#define JM_FN_TIMER        8   //8 = approx 800ms
-#define JM_FN_DOUBLE_TIMER 150 //75  //ms
-//#define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
+#define JM_MULTISHIFT            //MULTISHIFT AND CLRDROP
+
+#define JM_SHIFT_TIMER     4000  //ms TO_FG_TIMR
+#define JM_TO_FG_LONG 	   580   //ms TO_FG_LONG
+
+#define JM_FN_DOUBLE_TIMER 150   //ms TO_FN_EXEC
+#define JM_TO_FN_LONG 	   450   //ms TO_FN_LONG
+
+#define JM_CLRDROP_TIMER   500   //ms TO_CL_DROP   //DROP
+#define JM_TO_CL_LONG      800   //ms TO_CL_LONG   //CLSTK
+
+#define JM_TO_3S_CTFF 	   600   //ms TO_3S_CTFF
+#define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 

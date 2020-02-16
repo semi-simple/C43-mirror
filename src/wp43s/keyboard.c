@@ -411,7 +411,7 @@ void btnFnPressed(void *w, void *data) {
   //**************JM LONGPRESS ****************************************************
   if( (FN_state == ST_1_PRESS1 || FN_state == ST_3_PRESS2) && (!FN_timeouts_in_progress || double_click_detected) && FN_key_pressed != 0) {
     FN_timeouts_in_progress = true;
-    fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);              //dr
+    fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);              //dr
     FN_timed_out_to_NOP = false;
     if(!shiftF && !shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);
@@ -670,7 +670,7 @@ void btnPressed(void *notUsed, void *data) {
   // JM Inserted new section and removed old f and g key processing sections
   if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
-    fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);              //dr
+    fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);              //dr
     fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER);   //dr
     resetTemporaryInformation();
                                                                                                                               //JM shifts
@@ -706,7 +706,7 @@ void btnPressed(void *notUsed, void *data) {
         }
         if(fnTimerGetStatus(TO_3S_CTFF) == TMR_STOPPED) {
           JM_SHIFT_HOME_TIMER1 = 1;
-          fnTimerStart(TO_3S_CTFF, TO_3S_CTFF, 600);        //dr
+          fnTimerStart(TO_3S_CTFF, TO_3S_CTFF, JM_TO_3S_CTFF);        //dr
         }
       }
     }
@@ -956,7 +956,7 @@ void btnPressed(void *notUsed, void *data) {
         }
 
         JM_auto_clstk_enabled = true;      //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-        fnTimerStart(TO_CL_LONG, TO_CL_LONG, 500);              //dr
+        fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);              //dr
         if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           restoreStack();                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE

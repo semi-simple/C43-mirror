@@ -381,10 +381,6 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     }
   }
 
-  //FN_no_double_click_handler();         //vv JM
-  FN_handler();
-  Shft_handler();                       //^^
-
   // Function name display
   if(showFunctionNameCounter>0) {
     if(--showFunctionNameCounter == 0) {
@@ -418,23 +414,6 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
     resetAlphaSelectionBuffer();
   }
 
-#ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
-  if((ShiftTimoutMode || Home3TimerMode)) {      //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
-    if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
-      JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP - JM_3_SHIFT_CUTOFF - 1;   //JM TIMER
-      JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;  //JM TIMER //max forces previous delay to max
-      if(ShiftTimoutMode) {                      //JM TIMER
-        resetShiftState();                       //JM TIMER
-      }                                          //JM TIMER
-      else {
-        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) {
-          JM_SHIFT_RESET++;
-        }
-      }
-    }                                            //JM TIMER
-  }                                              //JM TIMER
-#endif                                           //JM TIMER
-
   return TRUE;
 }
 #elif defined DMCP_BUILD
@@ -449,10 +428,6 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
       hideCursor();
     }
   }
-
-  //FN_no_double_click_handler();         //vv JM
-  FN_handler();
-  Shft_handler();                       //^^
 
   // Function name display
   if(showFunctionNameCounter>0) {
@@ -481,29 +456,17 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
   if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
     resetAlphaSelectionBuffer();
   }
-
-#ifdef JM_MULTISHIFT                             //JM TIMER - checks on any key pressed.
-  if((ShiftTimoutMode || Home3TimerMode)) {      //JM  && (shiftF || shiftG)      //JM TIMER - Only consider if a shift is actually pending
-    if(JM_SHIFT_RESET-- == 0) {                  //JM TIMER
-      JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP - JM_3_SHIFT_CUTOFF - 1;    //JM TIMER
-      JM_SHIFT_HOME_TIMER1 = JM_SHIFT_TIMER_LOOP;  //JM TIMER //max forces previous delay to max
-      if(ShiftTimoutMode) {                      //JM TIMER
-        resetShiftState();                       //JM TIMER
-      }                                          //JM TIMER
-      else {
-        if(JM_SHIFT_RESET == JM_SHIFT_TIMER_OFF - 1) {
-          JM_SHIFT_RESET++;
-        }
-      }
-    }                                            //JM TIMER
-  }                                              //JM TIMER
-#endif                                           //JM TIMER
-
 }
 #endif
 
 
 #ifndef TESTSUITE_BUILD
+void refreshFn(uint16_t timerType) {
+  if(timerType == TO_FG_LONG) { Shft_handler(); }
+  if(timerType == TO_FG_TIMR) { Shft_stop(); }
+  if(timerType == TO_FN_LONG) { FN_handler(); }
+}
+
 
 
 void underline(int16_t y) {
@@ -559,99 +522,80 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 
 
-                                            //JM FN-DOUBLE vv
+void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler
+                                             //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
+  if((FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
 
-#define N_FN_TIME_DEBUG1
-
-
-void FN_handler() {                                       //JM FN LONGPRESS vv Handler FN Key shift longpress handler
-                                                          //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
-  if( (FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
- 
-    if(FN_counter > JM_FN_TIMER) {
-      FN_counter = JM_FN_TIMER;
-    } else
-    if(FN_counter < 1) {
-      FN_counter = 1;
-    } 
-
-    if (FN_counter == 1) {                                //   Countdown (t=100 ms) from JM_FN_TIMER (8) to 1
+    if(fnTimerGetStatus(TO_FN_LONG) == TMR_COMPLETED) {
+      FN_handle_timed_out_to_EXEC = false;
       if(!shiftF && !shiftG) {                            //   Current shift state
-        S_shF();                                          //   New shift state
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        shiftF = true;        //S_shF();                  //   New shift state
         showShiftState();
         refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-        showFunctionName(nameFunction(FN_key_pressed-37,6),0);  
+        showFunctionName(nameFunction(FN_key_pressed-37,6),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,1, false);
-        FN_counter = JM_FN_TIMER;                         //  restart count
+        fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);          //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 1, KEY=%d \n",FN_key_pressed);
         #endif
       }
       else if(shiftF && !shiftG) {
-        S_shG();
-        R_shF();
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        shiftG = true;        //S_shG();
+        shiftF = false;       //R_shF();
         showShiftState();
         refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         FN_timed_out_to_RELEASE_EXEC = true;
-        underline_softkey(FN_key_pressed-38,2, false);    
-        FN_counter = JM_FN_TIMER;                        //  restart count
+        underline_softkey(FN_key_pressed-38,2, false);
+        fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);          //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 2, KEY=%d \n",FN_key_pressed);
         #endif
       }
-      else if((!shiftF && shiftG) || (shiftF && shiftG)) {        
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;           //  keep shift state, so it will stay here every cycle until key released
+      else if((!shiftF && shiftG) || (shiftF && shiftG)) {
         refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(ITM_NOP, 0);
         FN_timed_out_to_NOP = true;
         underline_softkey(FN_key_pressed-38,3, false);   //  Purposely select row 3 which does not exist, just to activate the 'clear previous line'
-        FN_timeouts_in_progress = false;   
+        FN_timeouts_in_progress = false;
+        fnTimerStop(TO_FN_LONG);                            //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 3, KEY=%d \n",FN_key_pressed);
         #endif
       }
-    } 
-    else { 
-      FN_counter--;
     }
-  } 
+  }
 }                                        //JM ^^
+
 
 
 void Shft_handler() {                        //JM SHIFT NEW vv
   if(Shft_timeouts) {
- 
-    if(FN_counter > JM_FN_TIMER) {
-      FN_counter = JM_FN_TIMER;
-    } else
-    if(FN_counter < 1) {
-      FN_counter = 1;
-    } 
 
-    if (FN_counter == 1) {    
+    if(fnTimerGetStatus(TO_FG_LONG) == TMR_COMPLETED) {
+#ifdef JM_MULTISHIFT
+      fnTimerStop(TO_3S_CTFF);
+#endif
       if(!shiftF && !shiftG) {
-        S_shF();
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        shiftF = true;        //S_shF();
+        fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);          //dr
         showShiftState();
-        FN_counter = JM_FN_TIMER;                        //restart count
       }
       else if(shiftF && !shiftG) {
-        S_shG();
-        R_shF();
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
+        shiftG = true;        //S_shG();
+        shiftF = false;       //R_shF();
+        fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);          //dr
         showShiftState();
-        FN_counter = JM_FN_TIMER;                        //restart count
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
         Shft_timeouts = false;
-        R_shG();                                         //force into no shift state, i.e. to wait
-        R_shF();
-        JM_SHIFT_RESET =  JM_SHIFT_TIMER_LOOP;
-        showShiftState();
+        fnTimerStop(TO_FG_LONG);                            //dr
+        fnTimerStop(TO_FG_TIMR);                            //dr
+      //shiftG = false;       //R_shG();                 //force into no shift state, i.e. to wait
+      //shiftF = false;       //R_shF();
+        resetShiftState();
+      //showShiftState();
         if(HOME3) {
           if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
             popSoftmenu();                                                                                                  //JM shifts
@@ -667,12 +611,20 @@ void Shft_handler() {                        //JM SHIFT NEW vv
           }
         }
       }
-    } 
-    else { 
-      FN_counter--;
     }
-  } 
+  }
 }                                        //JM ^^
+
+
+
+void Shft_stop() {
+  Shft_timeouts = false;
+  fnTimerStop(TO_FG_LONG);                                  //dr
+  fnTimerStop(TO_FG_TIMR);                                  //dr
+  resetShiftState();
+//showShiftState();
+}
+
 
 
 /********************************************//**
@@ -1675,13 +1627,13 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             if(prefixWidth > 0) {
               if(regist == REGISTER_X) {
-                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);            
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
               } else
               if(regist == REGISTER_Y) {
-                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Y_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Y), vmNormal, true, true);                          
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Y_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Y), vmNormal, true, true);
               } else
               if(regist == REGISTER_Z) {
-                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Z_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Z), vmNormal, true, true);                          
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Z_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Z), vmNormal, true, true);
               }
             }
                                                                        //JM EE ^

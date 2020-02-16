@@ -24,24 +24,6 @@
 #include "wp43s.h"
 
 
-/********************************************//**
- * RESET TIME FOR SHIFT CANCELLING
- * THIS IS STANDALONE RESET FOR SHIFT TO BE SET BY EMU KEYS. IT ALSO GETS RESET IN KEYBOARD.C
- *
- * FROM keyboard.c
- ***********************************************/
-void Reset_Shift_Mem(void) {                            //JM
-#ifdef DMCP_BUILD                                       //JM TIMER DMCP SHIFTCANCEL
-  now = sys_current_ms();                               //JM TIMER DMCP SHIFTCANCEL
-  now_MEM = now;                                        //JM TIMER -- any last key pressed
-#endif                                                  //JM
-#ifdef PC_BUILD                                         //JM TIMER EMULATOR SHIFTCANCEL
-  now = g_get_monotonic_time();                         //JM usec  //JM TIMER EMULATOR SHIFTCANCEL
-  now_MEM = now;                                        //JM TIMER -- any last key pressed
-#endif                                                  //JM
-}
-
-
 void R_shF(void) {
   if(shiftF) {
     shiftF = false;
@@ -1045,7 +1027,7 @@ void fnJM(uint16_t JM_OPCODE) {
           case AM_GRAD  : {runFunction(ITM_GRADto); } break;
           case AM_RADIAN: {runFunction(ITM_RADto);  } break;
           case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
-          default:;
+          default: break;
         }
 #endif
       }
@@ -1063,7 +1045,6 @@ void fnJM(uint16_t JM_OPCODE) {
   if(JM_OPCODE == 32) {                                       
   //REMOVED, NOTHING
   }
-
   else
 
   if(JM_OPCODE == 33) {                                       //screenshot
@@ -1071,8 +1052,6 @@ void fnJM(uint16_t JM_OPCODE) {
     create_screenshot(0);
     #endif
   }
-
-
   else
 
   if(JM_OPCODE >= 34 && JM_OPCODE <= 39) {                                       //screenshot
@@ -1115,7 +1094,7 @@ void fnJM(uint16_t JM_OPCODE) {
         multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
         adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
       } break;
-      default:;
+      default: break;
     }
     copySourceRegisterToDestRegister(99, REGISTER_L);   // STO TMP
     refreshRegisterLine(REGISTER_X);
@@ -1123,7 +1102,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
 // Item 255 is NOP
-  
+
 }
 
 
@@ -1548,7 +1527,6 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
 #ifdef JM_LAYOUT_1A               //JM LAYOUT 1A. CHALLENGE.
   S_shF(); //shiftF = true;                  //JM
   R_shG(); //shiftG = false;                 //JM
-  Reset_Shift_Mem();              //JM
   #ifdef PC_BUILD
   btnClicked(NULL, "12");         //JM changed from 02
   #endif
@@ -1560,7 +1538,6 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
 #ifdef JM_LAYOUT_2_DM42_STRICT    //JM LAYOUT 2. DM42 STRICT.
   S_shF(); //shiftF = true;                  //JM
   R_shG(); //shiftG = false;                 //JM
-  Reset_Shift_Mem();              //JM
   #ifdef PC_BUILD
   btnClicked(NULL, "06");         //JM changed from 02
   #endif
@@ -1585,7 +1562,6 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
   userModeEnabled = true;
   S_shF(); //shiftF = true;                  //JM
   R_shG(); //shiftG = false;                 //JM
-  Reset_Shift_Mem();              //JM
 #ifdef PC_BUILD
   btnClicked(NULL, "00");         //JM changed from 02
 #endif
@@ -1608,7 +1584,6 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
   userModeEnabled = true;
   R_shF(); //shiftF = false;                  //JM
   R_shG(); //shiftG = false;                 //JM
-  Reset_Shift_Mem();              //JM
   #ifdef PC_BUILD
     btnClicked(NULL, "00");       //JM changed from 02
   #endif

@@ -333,14 +333,11 @@ void setupDefaults(void) {
 
   ULFL = false;                                                  //JM Underline
   ULGL = false;                                                  //JM Underline
-//FN_delay_exec = false;                                         //JM FN-DOUBLE
-  FN_double_click_detected = false;                              //JM FN-DOUBLE
   FN_state = ST_0_INIT;                                          //JM FN-DOUBLE
   FN_key_pressed = 0;                                            //JM LONGPRESS FN
   FN_key_pressed_last = 0;
   FN_timeouts_in_progress = false;                               //JM LONGPRESS FN
   Shft_timeouts = false;                                         //JM SHIFT NEW
-//FN_counter = JM_FN_TIMER;                                      //JM LONGPRESS FN
   FN_timed_out_to_RELEASE_EXEC = false;                          //JM LONGPRESS FN
   FN_timed_out_to_NOP = false;                                   //JM LONGPRESS FN
   SigFigMode = 0;                                                //JM SIGFIG Default 0.
@@ -365,22 +362,7 @@ void setupDefaults(void) {
   graph_dy   = 0;                                                //JM GRAPH
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
-#ifdef DMCP_BUILD                                                //JM TIMER variable tmp mem, to check expired time
-  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
-  now_MEM1 = 0;                                                  //JM FN_DOUBLE
-#endif
-#ifdef PC_BUILD
-  now_MEM = 0;                                                   //JM HOME temporary flag to remember and
-  now_MEM1 = 0;                                                  //JM FN_DOUBLE
-#endif
-  TC_mem = 0;                                                    //JM FN_DOUBLE
-  TC_tmp = 0;                                                    //JM FN_DOUBLE
-  TC_mem_double = 0;                                             //JM FN_DOUBLE
-  TC_tmp_double = 0;                                             //JM FN_DOUBLE
 
-//JM_auto_drop_activated = false;                                //JM AUTO-DROP TIMER
-//JM_auto_drop_enabled = false;                                  //JM AUTO-DROP TIMER
-//JM_SHIFT_RESET = JM_SHIFT_TIMER_LOOP;                          //JM TIMER
   JM_SHIFT_HOME_TIMER1 = 1;                                      //JM TIMER
   JM_ASN_MODE = 0;                                               //JM ASSIGN
 
@@ -536,7 +518,7 @@ int main(int argc, char* argv[]) {
   fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
   fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
   fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
-  //fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);
+//fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);  // no keyboard scan boost for emulator
   gdk_threads_add_timeout(5, refreshTimer, NULL); // refreshTimer is called every 5 ms              //^^
 
   gtk_main();

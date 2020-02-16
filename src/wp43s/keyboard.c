@@ -1107,6 +1107,7 @@ void btnPressed(void *notUsed, void *data) {
         JM_auto_clstk_enabled = true;      //JM TIMER CLRCLSTK ON LONGPRESS
         if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          restoreStack();                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           JM_auto_drop_activated = true;   //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE

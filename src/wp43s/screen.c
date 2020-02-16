@@ -463,6 +463,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 #ifndef TESTSUITE_BUILD
 void refreshFn(uint16_t timerType) {
   if(timerType == TO_FG_LONG) { Shft_handler(); }
+  if(timerType == TO_CL_LONG) { Clx_handler(); }
   if(timerType == TO_FG_TIMR) { Shft_stop(); }
   if(timerType == TO_FN_LONG) { FN_handler(); }
 }
@@ -614,6 +615,17 @@ void Shft_handler() {                        //JM SHIFT NEW vv
     }
   }
 }                                        //JM ^^
+
+
+
+void Clx_handler() {
+  if(fnTimerGetStatus(TO_CL_LONG) == TMR_COMPLETED) {
+    if(JM_auto_clstk_enabled) {
+      showFunctionName(ITM_CLSTK, 10);            //fnClearStack(0);
+      JM_auto_clstk_enabled = false;
+    } 
+  }
+}
 
 
 

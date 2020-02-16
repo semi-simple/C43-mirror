@@ -52,6 +52,7 @@ int8_t   showFunctionNameCounter;
 void     FN_no_double_click_handler();       //JM FN-DOUBLE
 void     FN_handler();                       //JM LONGPRESS vv
 void     Shft_handler();                     //JM SHIFT NEW vv
+void     Clx_handler();
 void     Shft_stop();
 void     underline(int16_t y);               //JM SHIFT LINE
 

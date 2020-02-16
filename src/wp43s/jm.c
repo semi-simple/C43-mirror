@@ -24,37 +24,6 @@
 #include "wp43s.h"
 
 
-void R_shF(void) {
-  if(shiftF) {
-    shiftF = false;
-    shiftStateChanged = true;
-  }
-}
-
-void R_shG(void) {
-  if(shiftG) {
-    shiftG = false;
-    shiftStateChanged = true;
-  }
-}
-
-void S_shF(void) {
-  if(!shiftF) {
-    shiftF = true;
-    shiftStateChanged = true;
-  }
-}
-
-void S_shG(void) {
-  if(!shiftG) {
-    shiftG = true;
-    shiftStateChanged = true;
-  }
-}
-
-
-
-
 /********************************************//**
  * SEEMS TO BE WORKING. CALLED FROM ## in BASE
  *
@@ -1525,8 +1494,8 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
   userModeEnabled = false;
 
 #ifdef JM_LAYOUT_1A               //JM LAYOUT 1A. CHALLENGE.
-  S_shF(); //shiftF = true;                  //JM
-  R_shG(); //shiftG = false;                 //JM
+  shiftF = true;                  //JM
+  shiftG = false;                 //JM
   #ifdef PC_BUILD
   btnClicked(NULL, "12");         //JM changed from 02
   #endif
@@ -1536,8 +1505,8 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
 #endif
 
 #ifdef JM_LAYOUT_2_DM42_STRICT    //JM LAYOUT 2. DM42 STRICT.
-  S_shF(); //shiftF = true;                  //JM
-  R_shG(); //shiftG = false;                 //JM
+  shiftF = true;                  //JM
+  shiftG = false;                 //JM
   #ifdef PC_BUILD
   btnClicked(NULL, "06");         //JM changed from 02
   #endif
@@ -1560,8 +1529,8 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
 void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = true;
-  S_shF(); //shiftF = true;                  //JM
-  R_shG(); //shiftG = false;                 //JM
+  shiftF = true;                  //JM
+  shiftG = false;                 //JM
 #ifdef PC_BUILD
   btnClicked(NULL, "00");         //JM changed from 02
 #endif
@@ -1582,8 +1551,8 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
 void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = true;
-  R_shF(); //shiftF = false;                  //JM
-  R_shG(); //shiftG = false;                 //JM
+  shiftF = false;                 //JM
+  shiftG = false;                 //JM
   #ifdef PC_BUILD
     btnClicked(NULL, "00");       //JM changed from 02
   #endif

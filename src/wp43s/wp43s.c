@@ -164,7 +164,7 @@ bool_t               printerIconEnabled;
 bool_t               batteryIconEnabled;
 bool_t               shiftF;
 bool_t               shiftG;
-bool_t               shiftStateChanged;
+//bool_t             shiftStateChanged; //dr
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
@@ -325,7 +325,7 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
-  shiftStateChanged = false;
+//shiftStateChanged = false;            //dr
 
   jm_FG_LINE = true;                                             //JM Screen / keyboard operation setup
   jm_FG_DOTS = false;                                            //JM Screen / keyboard operation setup
@@ -513,6 +513,7 @@ int main(int argc, char* argv[]) {
   gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
   fnTimerReset();                                                                                   //vv dr TEST Timer
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
+  fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
   fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
   fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG/*, 450*/);
   fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
@@ -563,6 +564,7 @@ void program_main(void) {
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
   fnTimerReset();                                                               //vv dr TEST Timer
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
+  fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
   fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
   fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG/*, 450*/);
   fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
@@ -644,8 +646,8 @@ void program_main(void) {
     key = key_pop();
 
     if(sys_last_key() == 44 ) {                                 //JM DISP for special SCREEN DUMP key code. Supposed to be 16 but shift decoding done already to 44
-      R_shF();
-      R_shG();
+      shiftF = false; //R_shF();
+      shiftG = false; //R_shG();
       fnJM(33);                                                 //SCREEN DUMP
     } 
 

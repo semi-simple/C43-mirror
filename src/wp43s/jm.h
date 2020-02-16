@@ -55,6 +55,7 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 //keyboard.c  screen.c
 bool_t JM_auto_drop_enabled;                      //JM TIMER CLRDROP
+bool_t JM_auto_clstk_enabled;                     //JM TIMER CLRDROP
 
 uint8_t JM_SHIFT_HOME_TIMER1;                     //Local to keyboard.c, but defined here
 int16_t JM_ASN_MODE;                              //JM ASSIGN
@@ -174,11 +175,6 @@ void fnDisplayFormatUnit(uint16_t displayFormatN);
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);
 #endif
-
-void R_shF(void);
-void S_shF(void);
-void R_shG(void);
-void S_shG(void);
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 

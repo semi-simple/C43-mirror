@@ -27,6 +27,7 @@
  * \return void
  ***********************************************/
 void fnClX(uint16_t unusedParamButMandatory) {
+  saveStack();               //JM
   clearRegister(REGISTER_X);
   refreshRegisterLine(REGISTER_X);
 }
@@ -41,6 +42,7 @@ void fnClX(uint16_t unusedParamButMandatory) {
  *
  ***********************************************/
 void fnClearStack(uint16_t unusedParamButMandatory) {
+  saveStack();               //JM
   for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
     clearRegister(regist);
   }
@@ -57,6 +59,7 @@ void fnClearStack(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnDrop(uint16_t unusedParamButMandatory) {
+  saveStack();               //JM
   freeRegisterData(REGISTER_X);
   for(calcRegister_t regist=REGISTER_X; regist<getStackTop(); regist++) {
     reg[regist] = reg[regist + 1];

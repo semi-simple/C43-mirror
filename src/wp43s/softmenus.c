@@ -52,7 +52,6 @@ const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE, 
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
                                      ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JonG                      };
 
-
 const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,                    ITM_CF,                   ITM_CLMENU,            ITM_CLSTK,                   ITM_CLX,
                                      ITM_CLREGS,                    ITM_CLPALL,                 ITM_CLFALL,               ITM_CLCVAR,            ITM_CLLCD,                   ITM_CLALL,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_RESET                     };
@@ -411,11 +410,12 @@ const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,   
                                      ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_RDXPER,                    ITM_RDXCOM,                 ITM_GAP,                  ITM_DMY,               ITM_YMD,                     ITM_MDY,
 
+#if !defined(DMCP_BUILD) && defined (INLINE_TEST)                               //vv dr
+                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
+#else                                                                           //^^
                                      ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
+#endif                                                                          //dr
                                      -MNU_ASN,                      ITM_NULL,                   ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
-
-
-
 
 const int16_t menu_BASE[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
                                      ITM_toSI,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
@@ -429,6 +429,9 @@ const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,   
                                      ITM_EE_STO_V_I,                ITM_EE_STO_IR,              ITM_EE_STO_V_Z,           ITM_EE_X2BAL,          ITM_PARALLEL,                -MNU_CPX,                           //JM EE
                                      ITM_EE_STO_Z,                  ITM_EE_RCL_Z,               ITM_EE_STO_V,             ITM_EE_RCL_V,          ITM_EE_STO_I,                ITM_EE_RCL_I                  };    //JM EE
 
+#ifdef INLINE_TEST
+const int16_t menu_Inl_Tst[]     = { ITM_TEST,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_GET_TEST_BS,             ITM_SET_TEST_BS               };    //dr
+#endif
 
 
 const int16_t menu_ASN_N[]       = { 
@@ -493,7 +496,11 @@ const int16_t menu_HOME[]        = {
                                                                                                                                                                                                                   //JM HOME
 /* 6 Bottom Prim */  /* 6 */         ITM_STATUS,                    ITM_NULL,                   -MNU_CLK,                 -MNU_UNITCONV,         -MNU_BITS,                   -MNU_INTS,                          //JM HOME
 /* 5 Middle f    */  /* 5 */         ITM_RBR,                       ITM_NULL,                   -MNU_INFO,                -MNU_CNST,             -MNU_XFN,                    -MNU_SUMS,                          //JM HOME
+#ifdef INLINE_TEST                                                              //vv dr
+/* 4 Top    g    */  /* 4 */         ITM_DROP,                      -MNU_INL_TST,               -MNU_CPX,                 -MNU_EXP,              -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+#else                                                                           //^^
 /* 4 Top    g    */  /* 4 */         ITM_DROP,                      ITM_NULL,                   -MNU_CPX,                 -MNU_EXP,              -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+#endif                                                                          //dr
                                                                                                                                                                                                                   //JM HOME
 /* 3 Bottom Prim */  /* sample */    ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
 /* 2 Middle f    */  /* 3 */         ITM_PROFRC,                    KEY_HASH/*ITM_toINT*/,      ITM_XTHROOT,              KEY_dotD,              ITM_ms,                      ITM_LBL,                            //JM HOME
@@ -503,9 +510,6 @@ const int16_t menu_HOME[]        = {
                                      ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,                          //JM HOME
                                      ITM_SI_p,                      ITM_SI_n,                   ITM_SI_u,                 ITM_SI_m,              ITM_SI_k,                    ITM_SI_M,                           //JM UNITS SI
                                      ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR                           //JM HOME
-
-
-
                                      };                                                                                                                                                                           //JM HOME
 
 const int16_t menu_GRAPH[]        = {
@@ -626,6 +630,9 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
+#ifdef INLINE_TEST                                                              //vv dr
+  {.menuId = -MNU_INL_TST,     .numItems = sizeof(menu_Inl_Tst    )/sizeof(int16_t), .softkeyItem = menu_Inl_Tst     },
+#endif                                                                          //^^
   {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
 
@@ -1281,7 +1288,16 @@ void showSoftmenuCurrentPart(void) {
               displayBugScreen(errorMessage);
             }
             else {
+#ifdef INLINE_TEST                                                              //vv dr
+              if(softmenu[menu].menuId == -MNU_INL_TST) {
+                showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, -1, -1);
+              }
+              else {
+#endif                                                                          //^^
               showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+#ifdef INLINE_TEST                                                              //vv dr
+              }
+#endif                                                                          //^^
             }
           }
         }
@@ -1295,7 +1311,8 @@ void showSoftmenuCurrentPart(void) {
           if(softmenu[m].menuId == -MNU_FCNS) {
             showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
-          else if(item == ITM_op_j && complexUnit == CU_J) {   //JM vv display i or j properly on display
+          else   //JM vv display i or j properly on display
+          if(item == ITM_op_j && complexUnit == CU_J) {
             showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
           else if(item == ITM_op_j && complexUnit == CU_I) {

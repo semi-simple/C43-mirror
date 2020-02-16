@@ -138,18 +138,16 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 
 //JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
-  S_shF(); //  shiftF = true;       //JM
-  R_shG(); //  shiftG = false;      //JM
-  Reset_Shift_Mem();   //JM
+  shiftF = true;       //JM
+  shiftG = false;      //JM
   btnPressed(w, data);
   btnReleased(w, data);
 }
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
-  R_shF(); //  shiftF = false;       //JM
-  S_shG(); //  shiftG = true;        //JM
-  Reset_Shift_Mem();    //JM
+  shiftF = false;       //JM
+  shiftG = true;        //JM
   btnClicked(NULL, "34");     //Alphadot
   //Only : is working at this point
 }
@@ -568,7 +566,7 @@ return FALSE;
 
   switch (event_keyval) {
 //ROW 1
-    case 65470: // F1                       //JM Changed these to btnFNPressed from btnClicked
+    case 65470: // F1                       //JM Changed these to btnFnPressed from btnFnClicked
       //printf("key pressed: F1\n");
       btnFnPressed(w, "1");
       break;
@@ -647,9 +645,8 @@ return FALSE;
 
     case 112: // p         //dr                //JM Special case: p = pi
       //printf("key pressed: p pi\n"); //dr
-      S_shF(); //  shiftF = true;       //dr
-      R_shG(); //  shiftG = false;      //JM
-      Reset_Shift_Mem();   //JM
+      shiftF = true;       //dr
+      shiftG = false;      //JM
       btnClicked(w, "08"); //dr
       break;               //dr
 

@@ -1458,7 +1458,10 @@ void fnRecall(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnLastX(uint16_t unusedParamButMandatory) {
-  fnRecall(REGISTER_L);
+//fnRecall(REGISTER_L);
+  liftStack();                                    //JM LastX improved version
+  copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
+  refreshStack();                                 //JM LastX improved verison
 }
 
 

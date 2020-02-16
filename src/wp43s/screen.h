@@ -53,6 +53,8 @@ void     FN_no_double_click_handler();       //JM FN-DOUBLE
 void     CLSTK_handler();                    //JM CLSTK NEW
 void     FN_handler();                       //JM LONGPRESS vv
 void     Shft_handler();                     //JM SHIFT NEW vv
+void     Clx_handler();
+void     Shft_stop();
 void     underline(int16_t y);               //JM SHIFT LINE
 
 #ifdef PC_BUILD
@@ -82,6 +84,7 @@ void     underline(int16_t y);               //JM SHIFT LINE
 #endif
 
 #ifndef TESTSUITE_BUILD
+void     refreshFn            (uint16_t timerType);
 uint8_t  compressString;                                    //JM compressString
 void     underline_softkey    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);  //JM LONGPRESS
 void     JM_DOT               (int16_t xx, int16_t yy);

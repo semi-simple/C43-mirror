@@ -27,7 +27,6 @@
 #define SLS_UNCHANGED 2
 
 
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1554,11 +1553,11 @@
 #define KEY_CC                        1516
 #define KEY_f                         1517
 #define KEY_g                         1518
-#define KEY_UP1                        1519
+#define KEY_UP1                       1519
 #define KEY_BST                       1520
-#define KEY_DOWN1                      1521
+#define KEY_DOWN1                     1521
 #define KEY_SST                       1522
-#define KEY_EXIT1                      1523
+#define KEY_EXIT1                     1523
 #define KEY_BACKSPACE                 1524
 #define KEY_PRTX                      1525
 #define ITM_AIM                       1526
@@ -1931,13 +1930,13 @@
 #define ITM_USER_SHIFTS               1887   //JM USER
 #define ITM_USER_RESET                1888   //JM USER
 #define ITM_U_KEY_USER                1889   //JM USER
-#define MNU_INL_TST                   1890
+#define MNU_INL_TST                   1890   //INLINE_TEST
 #define ITM_U_KEY_CC                  1891   //JM USER
-#define Not_used1892                  1892
+#define ITM_TEST                      1892   //INLINE_TEST
 #define ITM_U_KEY_MM                  1893   //JM USER
-#define Not_used1894                  1894
+#define ITM_GET_TEST_BS               1894   //INLINE_TEST
 #define ITM_U_KEY_SIGMA               1895   //JM USER
-#define Not_used1896                  1896
+#define ITM_SET_TEST_BS               1896   //INLINE_TEST
 #define ITM_U_KEY_PRGM                1897   //JM USER
 #define ITM_RND                       1898   //JM ROUND
 #define ITM_U_KEY_ALPHA               1899   //JM USER
@@ -1974,7 +1973,6 @@
 #define ITM_SI_m                      1930   //JM PRE UNIT
 #define ITM_SI_k                      1931   //JM PRE UNIT
 #define ITM_SI_M                      1932   //JM PRE UNIT
-
 
 #define LAST_ITEM                     1933   //JM
 

@@ -43,53 +43,31 @@ Modes available in the mode menu:
 #define JM_MULTISHIFT          //MULTISHIFT AND CLRDROP
 #define JM_SHIFT_TIMER 4000    //ms
 #define JM_CLRDROP_TIMER 500   //ms
-#define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
-#define JM_SHIFT_TIMER_OFF 255
-#define JM_3_SHIFT_CUTOFF  6   //100ms
-#define JM_FN_TIMER        8   //8 = approx 800ms   
-#define JM_FN_DOUBLE_TIMER 250 //75  //ms
+//#define JM_SHIFT_TIMER_LOOP JM_SHIFT_TIMER/100 //4000/100=40     40x100 ms = 4 second  //Make sure this figure is not higher than 128/2-1=63;
+//#define JM_SHIFT_TIMER_OFF 255
+//#define JM_3_SHIFT_CUTOFF  6   //100ms
+//#define JM_FN_TIMER        8   //8 = approx 800ms
+#define JM_FN_DOUBLE_TIMER 150 //75  //ms
+//#define JM_FN_DOUBLE_DEBOUNCE_TIMER 5 //ms
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 
 //keyboard.c  screen.c
-bool_t JM_auto_drop_activated;
-bool_t JM_auto_drop_enabled;                         //JM TIMER CLRDROP
-bool_t JM_auto_clstk_enabled;                         //JM TIMER CLRDROP
-bool_t FN_double_click_detected;                     //JM FN-DOUBLE
-bool_t FN_block_exec;                                //JM FN-DOUBLE
+bool_t JM_auto_drop_enabled;                      //JM TIMER CLRDROP
+bool_t JM_auto_clstk_enabled;                     //JM TIMER CLRDROP
 
-uint8_t JM_SHIFT_RESET;                              //JM non-stored non-changeable mode
-uint8_t JM_SHIFT_HOME_TIMER2, JM_SHIFT_HOME_TIMER1;  //Local to keyboard.c, but defined here
-int16_t JM_ASN_MODE;                                //JM ASSIGN
+uint8_t JM_SHIFT_HOME_TIMER1;                     //Local to keyboard.c, but defined here
+int16_t JM_ASN_MODE;                              //JM ASSIGN
 
-bool_t ULFL,ULGL;                                 //JM Underline
+bool_t ULFL, ULGL;                                //JM Underline
 
 int16_t FN_key_pressed, FN_key_pressed_last;      //JM LONGPRESS FN
 bool_t FN_timeouts_in_progress;                   //JM LONGPRESS FN
 bool_t Shft_timeouts;                             //JM SHIFT NEW FN
-int8_t FN_counter;                                //JM LONGPRESS FN
 bool_t FN_timed_out_to_NOP;                       //JM LONGPRESS FN
 bool_t FN_timed_out_to_RELEASE_EXEC;              //JM LONGPRESS FN
-
-//keyboard.c
-#ifdef DMCP_BUILD                                 //JM TIMER variable tmp mem, to check expired time
-uint32_t now_MEM, now_MEM1;                       //JM FN DOUBLE
-#endif
-#ifdef PC_BUILD
-gint64 now_MEM, now_MEM1;                         //JM FN DOUBLE
-#endif
-int32_t TC_mem, TC_tmp;                           //JM FN DOUBLE
-int32_t TC_mem_double, TC_tmp_double;             //JM FN DOUBLE
-
-
-#ifdef DMCP_BUILD                                 //JM TIMER DMCP SHIFTCANCEL
-uint32_t now, tmpval;                             //JM TIMER DMCP SHIFTCANCEL & //JM FN DOUBLE
-#endif                                            //JM TIMER DMCP SHIFTCANCEL
-#ifdef PC_BUILD                                   //JM TIMER EMULATOR SHIFTCANCEL
-gint64 now, tmpval;                               //JM usec  //JM TIMER EMULATOR SHIFTCANCEL  & //JM FN DOUBLE
-#endif                                            //JM TIMER DMCP SHIFTCANCEL
-
+bool_t FN_handle_timed_out_to_EXEC;
 
 
 // Confirmation Y or N changed from original WP43S because the alpha keys order changed
@@ -197,12 +175,6 @@ void fnDisplayFormatUnit(uint16_t displayFormatN);
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);
 #endif
-
-void Reset_Shift_Mem(void);
-void R_shF(void);
-void S_shF(void);
-void R_shG(void);
-void S_shG(void);
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
 

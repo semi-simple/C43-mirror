@@ -379,13 +379,14 @@ void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           //^^
+void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
+void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
+void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {
-//            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus      //JM
+//            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
-
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -1066,7 +1067,7 @@ const item_t indexOfItems[] = {
 /*  677 */  { itemToBeCoded,               NOPARAM,                     STD_x_CIRC,                                    STD_x_CIRC,                                    CAT_FNCT, SLS_UNCHANGED},
 /*  678 */  { itemToBeCoded,               NOPARAM,                     "X.FN",                                        "X.FN",                                        CAT_MENU, SLS_UNCHANGED},
 /*  679 */  { fnFactorial,                 NOPARAM,                     "x!",                                          "x!",                                          CAT_FNCT, SLS_ENABLED  },
-/*  680 */  { itemToBeCoded,               NOPARAM,                     "Dist:",                                       "Dist:",                                     CAT_MENU, SLS_UNCHANGED},
+/*  680 */  { itemToBeCoded,               NOPARAM,                     "Dist:",                                       "Dist:",                                       CAT_MENU, SLS_UNCHANGED},
 /*  681 */  { itemToBeCoded,               NOPARAM,                     "x" STD_RIGHT_ARROW "DATE",                    "x" STD_RIGHT_ARROW "DATE",                    CAT_FNCT, SLS_UNCHANGED},
 /*  682 */  { itemToBeCoded,               NOPARAM,                     "x" STD_RIGHT_ARROW STD_alpha,                 "x" STD_RIGHT_ARROW STD_alpha,                 CAT_FNCT, SLS_UNCHANGED},
 /*  683 */  { itemToBeCoded,               NOPARAM,                     "x" STD_LEFT_RIGHT_ARROWS,                     "x" STD_LEFT_RIGHT_ARROWS,                     CAT_FNCT, SLS_UNCHANGED},
@@ -2292,13 +2293,13 @@ const item_t indexOfItems[] = {
 /* 1887 */  { fnUserJM,                    USER_SHIFTS,                 "U" " SHFT",                                   "U" " SHFT",                                   CAT_NONE, SLS_UNCHANGED},   //JM USER
 /* 1888 */  { fnUserJM,                    USER_RESET,                  "U" " RSET",                                   "U" " RSET",                                   CAT_NONE, SLS_UNCHANGED},
 /* 1889 */  { fnSigmaAssign,               KEY_USERMODE,                STD_SIGMA "+USR",                              STD_SIGMA "+USR",                              CAT_NONE, SLS_UNCHANGED},
-/* 1890 */  { itemToBeCoded,               NOPARAM,                     "1890",                                        "1890",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1890 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Inl. Tst",                                    CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 /* 1891 */  { fnSigmaAssign,               KEY_CC,                      STD_SIGMA "+CC",                               STD_SIGMA "+CC",                               CAT_NONE, SLS_UNCHANGED},
-/* 1892 */  { itemToBeCoded,               NOPARAM,                     "1892",                                        "1892",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1892 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Test",                                        CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 /* 1893 */  { fnSigmaAssign,               -MNU_MyMenu,                 STD_SIGMA "+MyM",                              STD_SIGMA "+MyM",                              CAT_NONE, SLS_UNCHANGED},
-/* 1894 */  { itemToBeCoded,               NOPARAM,                     "1894",                                        "1894",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1894 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Get BS",                                      CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 /* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               STD_SIGMA "+",                                 STD_SIGMA "+",                                 CAT_NONE, SLS_UNCHANGED},   //JM USER
-/* 1896 */  { itemToBeCoded,               NOPARAM,                     "1896",                                        "1896",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1896 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Set BS",                                      CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 /* 1897 */  { fnSigmaAssign,               ITM_PR,                      STD_SIGMA "+PGM",                              STD_SIGMA "+PGM",                              CAT_NONE, SLS_UNCHANGED},   //JM USER
 /* 1898 */  { fnRound,                     NOPARAM,                     "ROUND",                                       "RND",                                         CAT_NONE, SLS_ENABLED  },
 /* 1899 */  { fnSigmaAssign,               ITM_AIM,                     STD_SIGMA "+" STD_alpha,                       STD_SIGMA "+" STD_alpha,                       CAT_NONE, SLS_UNCHANGED},
@@ -2336,6 +2337,5 @@ const item_t indexOfItems[] = {
 /* 1931 */  { fnJM,                        38,                          STD_DOT "k",                                   STD_DOT "k",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 
-
-/* 1927 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1933 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

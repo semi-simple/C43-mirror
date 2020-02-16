@@ -179,6 +179,9 @@ squareRoot
 cube
 cubeRoot
 
+cyx
+pyx
+
 lnGamma
 gamma
 factorial
@@ -197,3 +200,6 @@ unitVector
 
 slvq
 agm
+
+
+

@@ -105,11 +105,25 @@ void factLonI(void) {
     longIntegerFactorial(longIntegerToUInt(x), fact); //TODO why this line fails?
   #endif
 
+
   convertLongIntegerToLongIntegerRegister(fact, REGISTER_X);
+
   longIntegerFree(fact);
   longIntegerFree(x);
 }
 
+uint64_t fact_uint64(uint64_t value)
+{
+  uint64_t result = value;
+
+  if(value <= 1)
+    result = 1;
+  else 
+    for(uint64_t i=value-1 ; i > 1 ; result *= i--)
+      ;
+
+  return result;
+}
 
 
 void factShoI(void) {
@@ -138,20 +152,7 @@ void factShoI(void) {
     return;
   }
 
-  uint64_t fact;
-
-  if(value <= 1) {
-    fact = 1;
-  }
-  else {
-    uint32_t counter;
-
-    fact = value;
-    counter = value - 1;
-    while(counter > 1) {
-      fact *= counter--;
-    }
-  }
+  uint64_t fact = fact_uint64(value);
 
   if(fact > shortIntegerMask) {
     fnSetFlag(FLAG_OVERFLOW);

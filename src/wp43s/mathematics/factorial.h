@@ -24,3 +24,5 @@ void factLonI   (void);
 void factShoI   (void);
 void factReal   (void);
 void factCplx   (void);
+
+uint64_t fact_uint64(uint64_t value);

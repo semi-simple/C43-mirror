@@ -34,6 +34,7 @@ else ifeq ($(detected_OS),Linux)
 	CFLAGS += -D LINUX
 endif
 
+RASPBERRY = $(shell ./onARaspberry)
 
 
 CC = gcc
@@ -51,10 +52,14 @@ else
 	CFLAGS += -O2
 endif
 
-CFLAGS += -Wextra -Wall -std=c11 -m64 -fshort-enums -DPC_BUILD -DTFM_NO_ASM -DTFM_X86_64 -MMD
+ifeq ($(RASPBERRY),YES)
+        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -DRASPBERRY
+else
+        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -m64 -fshort-enums
+        LDFLAGS += -m64
+endif
 CFLAGS += `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0`
 
-LDFLAGS += -m64
 LDFLAGS += -lgmp -lm `pkg-config --libs freetype2` `pkg-config --libs gtk+-3.0`
 
 SRC_DECIMAL              = $(addprefix decNumberICU/, decContext.c decDouble.c decimal128.c decimal64.c decNumber.c decQuad.c)
@@ -74,7 +79,7 @@ SRC_WP43S                = \
 	$(addprefix src/wp43s/mathematics/, \
 		10pow.c 2pow.c addition.c agm.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \
 		ceil.c changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cube.c cubeRoot.c \
-		cxToRe.c idiv.c idivr.c \
+		cxToRe.c cpyx.c idiv.c idivr.c \
 		division.c exp.c expt.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \
 		log2.c magnitude.c mant.c max.c min.c minusOnePow.c modulo.c multiplication.c neighb.c parallel.c pcg_basic.c power.c \

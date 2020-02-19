@@ -53,10 +53,10 @@ else
 endif
 
 ifeq ($(RASPBERRY),YES)
-	CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -DRASPBERRY
+        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -DRASPBERRY
 else
-	CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -m64 -fshort-enums
-	LDFLAGS += -m64
+        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -m64 -fshort-enums
+        LDFLAGS += -m64
 endif
 CFLAGS += `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0`
 
@@ -71,7 +71,7 @@ SRC_WP43S                = \
 		jm.c jm_graph.c assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
-		fonts.c fractions.c gui.c inlineTest.c integers.c items.c keyboard.c keyboardTweak.c \
+		fonts.c fractions.c gui.c integers.c items.c keyboard.c keyboardTweak.c \
 		rasterFontsData.c radioButtonCatalog.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c timer.c \

@@ -56,19 +56,19 @@ const calcKey_t kbd_std[37] = {
  {62,   CHR_4,        -MNU_STAT,       -MNU_SUMS,        CHR_4,           CHR_S,             CHR_4,           CHR_SIGMA,     CHR_4        },
  {63,   CHR_5,         ITM_toREC,       ITM_toPOL,       CHR_5,           CHR_T,             CHR_5,           CHR_TAU,       CHR_5        },
  {64,   CHR_6,        -MNU_UNITCONV,   -MNU_ANGLECONV,   CHR_6,           CHR_U,             CHR_6,           CHR_THETA,     CHR_6        },
- {65,   KEY_UP1,        KEY_BST,         ITM_RTN,         KEY_UP1,          KEY_UP1,            KEY_BST,         ITM_NULL,      KEY_UP1       },
+ {65,   KEY_UP1,       KEY_BST,         ITM_RTN,         KEY_UP1,         KEY_UP1,           KEY_BST,         ITM_NULL,      KEY_UP1      },
 
  {71,   ITM_SUB,      -MNU_BITS,       -MNU_INTS,        CHR_MINUS,       CHR_V,             CHR_MINUS,      -MNU_ALPHAMATH, ITM_SUB      },
  {72,   CHR_1,        -MNU_ADV,        -MNU_EQN,         CHR_1,           CHR_W,             CHR_1,           CHR_PSI,       CHR_1        },
  {73,   CHR_2,        -MNU_MATX,       -MNU_XFN,         CHR_2,           CHR_X,             CHR_2,           CHR_XI,        CHR_2        },
  {74,   CHR_3,         ITM_TIMER,      -MNU_CLK,         CHR_3,           CHR_Y,             CHR_3,           CHR_UPSILON,   CHR_3        },
- {75,   KEY_DOWN1,      KEY_SST,        -MNU_MODE,        KEY_DOWN1,        KEY_DOWN1,          KEY_SST,        -MNU_FLAGS,     KEY_DOWN1     },
+ {75,   KEY_DOWN1,     KEY_SST,        -MNU_MODE,        KEY_DOWN1,       KEY_DOWN1,         KEY_SST,        -MNU_FLAGS,     KEY_DOWN1    },
 
  {81,   ITM_ADD,       KEY_PRTX,       -MNU_IO,          CHR_PLUS,        CHR_QUESTION_MARK, CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      },
  {82,   CHR_0,        -MNU_LOOP,       -MNU_TEST,        CHR_0,           CHR_Z,             CHR_0,           CHR_ZETA,      CHR_0        },
  {83,   CHR_PERIOD,   -MNU_PARTS,      -MNU_INFO,        CHR_PERIOD,      CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   },
  {84,   ITM_RS,        ITM_PR,         -MNU_PFN,         ITM_NULL,        CHR_SPACE,         CHR_PRINTER,     ITM_NULL,      ITM_NULL     },
- {85,   KEY_EXIT1,     -MNU_CATALOG,     ITM_OFF,         KEY_EXIT1,        KEY_EXIT1,         -MNU_CATALOG,     ITM_OFF,       KEY_EXIT1     }
+ {85,   KEY_EXIT1,    -MNU_CATALOG,     ITM_OFF,         KEY_EXIT1,       KEY_EXIT1,        -MNU_CATALOG,     ITM_OFF,       KEY_EXIT1    }
 */
 
 
@@ -94,13 +94,13 @@ const calcKey_t kbd_std[37] = {
  {44,   ITM_EXPONENT,    -MNU_DISP,       -MNU_FIN,      ITM_NULL,       CHR_O,             CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
  {45,   KEY_BACKSPACE,    KEY_UNDO,       -MNU_CLR,      KEY_BACKSPACE,  KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE}, //JM
                   
- {51,   KEY_UP1,           KEY_BST,         ITM_RBR,      KEY_UP1,         KEY_UP1,            KEY_BST,         ITM_NULL,      KEY_UP1       }, //JM
+ {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,           KEY_BST,         ITM_NULL,      KEY_UP1      }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_HOME,     CHR_7,          CHR_P,             CHR_7,           CHR_PI,        CHR_7        }, //JM
  {53,   CHR_8,           -MNU_ADV,        -MNU_CNST,     CHR_8,          CHR_Q,             CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
  {54,   CHR_9,           -MNU_MATX,       -MNU_XFN,      CHR_9,          CHR_R,             CHR_9,           CHR_RHO,       CHR_9        }, //JM
  {55,   ITM_DIV,         -MNU_STAT,       -MNU_SUMS,     CHR_DIVIDE,     CHR_S,             CHR_DIVIDE,      CHR_SIGMA,     ITM_DIV      }, //JM
 
- {61,   KEY_DOWN1,         KEY_SST,         ITM_STATUS,   KEY_DOWN1,       KEY_DOWN1,          KEY_SST,         ITM_NULL,      KEY_DOWN1     }, //JM
+ {61,   KEY_DOWN1,        KEY_SST,         ITM_STATUS,   KEY_DOWN1,      KEY_DOWN1,         KEY_SST,         ITM_NULL,      KEY_DOWN1    }, //JM
  {62,   CHR_4,            ITM_AIM,        -MNU_CLK,      CHR_4,          CHR_T,             CHR_4,           CHR_TAU,       CHR_4        }, //JM
  {63,   CHR_5,           -MNU_ANGLECONV,  -MNU_UNITCONV, CHR_5,          CHR_U,             CHR_5,           CHR_PHI,       CHR_5        }, //JM
  {64,   CHR_6,           -MNU_FLAGS,      -MNU_BITS,     CHR_6,          CHR_V,             CHR_6,           CHR_PSI,       CHR_6        }, //JM
@@ -112,7 +112,7 @@ const calcKey_t kbd_std[37] = {
  {74,   CHR_3,           -MNU_PARTS,      -MNU_TEST,     CHR_3,          CHR_Z,             CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_STK,        -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,    CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
 
- {81,   KEY_EXIT1,         ITM_OFF,         KEY_PRTX,     KEY_EXIT1,       KEY_EXIT1,          ITM_OFF,         ITM_NULL,      KEY_EXIT1     }, //JM
+ {81,   KEY_EXIT1,        ITM_OFF,         KEY_PRTX,     KEY_EXIT1,      KEY_EXIT1,         ITM_OFF,         ITM_NULL,      KEY_EXIT1    }, //JM
  {82,   CHR_0,            ITM_TIMER,       ITM_VIEW,     CHR_0,          CHR_COLON,         CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,       -MNU_INFO,     CHR_PERIOD,     CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
  {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, CHR_PRINTER,    -MNU_ALPHAMATH, ITM_NULL     }, //JM
@@ -143,25 +143,25 @@ const calcKey_t kbd_std[37] = {
  {44,   ITM_EXPONENT,    -MNU_DISP,       -MNU_FIN,      ITM_NULL,       CHR_O,            CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
  {45,   KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,     KEY_BACKSPACE,  KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,      KEY_BACKSPACE}, //JM
                  
- {51,   KEY_UP1,           KEY_BST,         ITM_RBR,      KEY_UP1,         KEY_UP1,           KEY_BST,         ITM_NULL,      KEY_UP1       }, //JM
+ {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,          KEY_BST,         ITM_NULL,      KEY_UP1      }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_INFO,     CHR_7,          CHR_P,            CHR_7,           CHR_PI,        CHR_7        }, //JM
  {53,   CHR_8,           -MNU_ADV,        -MNU_CNST,     CHR_8,          CHR_Q,            CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
  {54,   CHR_9,           -MNU_MATX,       -MNU_XFN,      CHR_9,          CHR_R,            CHR_9,           CHR_RHO,       CHR_9        }, //JM
  {55,   ITM_DIV,         -MNU_STAT,       -MNU_SUMS,     CHR_DIVIDE,     CHR_S,            CHR_DIVIDE,      CHR_SIGMA,     ITM_DIV      }, //JM
 
- {61,   KEY_DOWN1,         KEY_SST,         ITM_STATUS,   KEY_DOWN1,       KEY_DOWN1,         KEY_SST,         ITM_NULL,      KEY_DOWN1     }, //JM
+ {61,   KEY_DOWN1,        KEY_SST,         ITM_STATUS,   KEY_DOWN1,      KEY_DOWN1,        KEY_SST,         ITM_NULL,      KEY_DOWN1    }, //JM
  {62,   CHR_4,           -MNU_BASE,       -MNU_CLK,      CHR_4,          CHR_T,            CHR_4,           CHR_TAU,       CHR_4        }, //JM
  {63,   CHR_5,           -MNU_ANGLECONV,  -MNU_UNITCONV, CHR_5,          CHR_U,            CHR_5,           CHR_PHI,       CHR_5        }, //JM
  {64,   CHR_6,           -MNU_FLAGS,      -MNU_BITS,     CHR_6,          CHR_V,            CHR_6,           CHR_PSI,       CHR_6        }, //JM
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     CHR_CROSS,      CHR_W,            CHR_CROSS,       CHR_OMEGA,     ITM_MULT     }, //JM
 
- {71,   KEY_fg,            ITM_NULL,        ITM_NULL,     KEY_fg,          KEY_fg,            ITM_NULL,        ITM_NULL,      KEY_fg        }, //JM
+ {71,   KEY_fg,           ITM_NULL,        ITM_NULL,     KEY_fg,         KEY_fg,           ITM_NULL,        ITM_NULL,      KEY_fg       }, //JM
  {72,   CHR_1,            ITM_ASSIGN,     -MNU_ASN,      CHR_1,          CHR_X,            CHR_1,           CHR_XI,        CHR_1        }, //JM
  {73,   CHR_2,            KEY_USERMODE,   -MNU_LOOP,     CHR_2,          CHR_Y,            CHR_2,           CHR_UPSILON,   CHR_2        }, //JM
  {74,   CHR_3,           -MNU_PFN,        -MNU_TEST,     CHR_3,          CHR_Z,            CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_IO,         -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,   CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
 
- {81,   KEY_EXIT1,         ITM_OFF,         KEY_PRTX,     KEY_EXIT1,       KEY_EXIT1,         ITM_OFF,         ITM_NULL,      KEY_EXIT1     }, //JM
+ {81,   KEY_EXIT1,        ITM_OFF,         KEY_PRTX,     KEY_EXIT1,      KEY_EXIT1,        ITM_OFF,         ITM_NULL,      KEY_EXIT1    }, //JM
  {82,   CHR_0,           -MNU_HOME,        ITM_TIMER,    CHR_0,          CHR_COLON,        CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,        ITM_VIEW,     CHR_PERIOD,     CHR_COMMA,        CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
  {84,   ITM_RS,           ITM_PR,         -MNU_STK,      ITM_NULL,       CHR_QUESTION_MARK,CHR_PRINTER,    -MNU_ALPHAMATH, ITM_NULL     }, //JM

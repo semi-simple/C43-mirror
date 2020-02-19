@@ -53,10 +53,10 @@ else
 endif
 
 ifeq ($(RASPBERRY),YES)
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -DRASPBERRY
+	CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -DRASPBERRY
 else
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -m64 -fshort-enums
-        LDFLAGS += -m64
+	CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD -m64 -fshort-enums
+	LDFLAGS += -m64
 endif
 CFLAGS += `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0`
 

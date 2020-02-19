@@ -49,12 +49,10 @@ typedef enum {
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
 
-void     FN_no_double_click_handler();       //JM FN-DOUBLE
-void     CLSTK_handler();                    //JM CLSTK NEW
-void     FN_handler();                       //JM LONGPRESS vv
-void     Shft_handler();                     //JM SHIFT NEW vv
-void     Clx_handler();
-void     Shft_stop();
+void     FN_handler();                       //JM LONGPRESS
+void     Shft_handler();                     //JM LONGPRESS f/g
+void     Clx_handler();                      //JM LONGPRESS CLX
+void     Shft_stop();                        //JM reset shift after  4s
 void     underline(int16_t y);               //JM SHIFT LINE
 
 #ifdef PC_BUILD
@@ -84,7 +82,7 @@ void     underline(int16_t y);               //JM SHIFT LINE
 #endif
 
 #ifndef TESTSUITE_BUILD
-void     refreshFn            (uint16_t timerType);
+void     refreshFn            (uint16_t timerType);         //dr - general timeout handler 
 uint8_t  compressString;                                    //JM compressString
 void     underline_softkey    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);  //JM LONGPRESS
 void     JM_DOT               (int16_t xx, int16_t yy);

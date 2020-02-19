@@ -21,8 +21,8 @@
 void resetShiftState(void);
 void showShiftState (void);
 void fnComplexCCCC  (uint16_t unusedParamButMandatory);
-void execFnTimeout  (uint16_t key);
-void shiftCutoff    (uint16_t unusedParamButMandatory);
+void execFnTimeout  (uint16_t key);                         //dr - delayed call of the primary function key
+void shiftCutoff    (uint16_t unusedParamButMandatory);     //dr - press shift three times within one second to call HOME timer
 
 int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
 

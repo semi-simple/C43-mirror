@@ -511,7 +511,7 @@ int main(int argc, char* argv[]) {
   //fnReset(CONFIRMED);
 
   gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
-  fnTimerReset();                                                                                   //vv dr TEST Timer
+  fnTimerReset();                                                                         //vv dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
   fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
   fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
@@ -520,7 +520,7 @@ int main(int argc, char* argv[]) {
   fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
   fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
 //fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);  // no keyboard scan boost for emulator
-  gdk_threads_add_timeout(5, refreshTimer, NULL); // refreshTimer is called every 5 ms              //^^
+  gdk_threads_add_timeout(5, refreshTimer, NULL); // refreshTimer is called every 5 ms    //^^
 
   gtk_main();
 
@@ -562,7 +562,7 @@ void program_main(void) {
 
   lcd_forced_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
-  fnTimerReset();                                                               //vv dr TEST Timer
+  fnTimerReset();                                                                         //vv dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
   fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
   fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
@@ -571,7 +571,7 @@ void program_main(void) {
   fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
   fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
   fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);
-  nextTimerRefresh = 0;                                                         //vv
+  nextTimerRefresh = 0;                                                                   //vv
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)

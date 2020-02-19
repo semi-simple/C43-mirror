@@ -411,7 +411,7 @@ void btnFnPressed(void *w, void *data) {
   //**************JM LONGPRESS ****************************************************
   if( (FN_state == ST_1_PRESS1 || FN_state == ST_3_PRESS2) && (!FN_timeouts_in_progress || double_click_detected) && FN_key_pressed != 0) {
     FN_timeouts_in_progress = true;
-    fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);              //dr
+    fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);    //dr
     FN_timed_out_to_NOP = false;
     if(!shiftF && !shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);
@@ -487,7 +487,7 @@ void btnFnReleased(void *w, void *data) {
 
 
 
-void execFnTimeout(uint16_t key) {
+void execFnTimeout(uint16_t key) {                          //dr - delayed call of the primary function key
   char charKey[3];
   sprintf(charKey, "%c", key + 11);
   int16_t fn = *((char *)charKey) - '0';
@@ -522,6 +522,12 @@ void execFnTimeout(uint16_t key) {
       executeFunction(fn, 0);          //JM FN NOMENU KEYS
     }
   }
+}
+
+
+
+void shiftCutoff(uint16_t unusedParamButMandatory) {        //dr - press shift three times within one second to call HOME timer
+  fnTimerStop(TO_3S_CTFF);
 }
 
 
@@ -618,12 +624,6 @@ uint16_t determineItem(const calcKey_t *key) {
 
 
 
-void shiftCutoff(uint16_t unusedParamButMandatory) {
-  fnTimerStop(TO_3S_CTFF);
-}
-
-
-
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
 
 
@@ -670,8 +670,10 @@ void btnPressed(void *notUsed, void *data) {
   // JM Inserted new section and removed old f and g key processing sections
   if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
-    fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);              //dr
-    fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER);   //dr
+    if(ShiftTimoutMode) {                                   //vv dr
+      fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
+    }
+    fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER);   //^^
     resetTemporaryInformation();
                                                                                                                               //JM shifts
     if(lastErrorCode != 0) {                                                                                                  //JM shifts
@@ -744,10 +746,7 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-    if(ShiftTimoutMode) {                       //vv JM
-      fnTimerStop(TO_FG_LONG);                              //dr
-    }                                           //^^
-
+    fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
 
     shiftF = !shiftF;
@@ -767,10 +766,7 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-    if(ShiftTimoutMode) {                       //vv JM
-      fnTimerStop(TO_FG_LONG);                              //dr
-    }                                           //^^
-
+    fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
 
     shiftG = !shiftG;
@@ -956,7 +952,7 @@ void btnPressed(void *notUsed, void *data) {
         }
 
         JM_auto_clstk_enabled = true;      //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-        fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);              //dr
+        fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
         if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           restoreStack();                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE

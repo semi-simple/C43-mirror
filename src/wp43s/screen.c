@@ -461,11 +461,12 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 
 
 #ifndef TESTSUITE_BUILD
-void refreshFn(uint16_t timerType) {
+void refreshFn(uint16_t timerType) {                        //vv dr - general timeout handler
   if(timerType == TO_FG_LONG) { Shft_handler(); }
+  if(timerType == TO_CL_LONG) { Clx_handler(); }
   if(timerType == TO_FG_TIMR) { Shft_stop(); }
   if(timerType == TO_FN_LONG) { FN_handler(); }
-}
+}                                                           //^^
 
 
 
@@ -535,7 +536,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         showFunctionName(nameFunction(FN_key_pressed-37,6),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,1, false);
-        fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);          //dr
+        fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 1, KEY=%d \n",FN_key_pressed);
         #endif
@@ -548,7 +549,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         FN_timed_out_to_RELEASE_EXEC = true;
         underline_softkey(FN_key_pressed-38,2, false);
-        fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);          //dr
+        fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 2, KEY=%d \n",FN_key_pressed);
         #endif
@@ -559,7 +560,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         FN_timed_out_to_NOP = true;
         underline_softkey(FN_key_pressed-38,3, false);   //  Purposely select row 3 which does not exist, just to activate the 'clear previous line'
         FN_timeouts_in_progress = false;
-        fnTimerStop(TO_FN_LONG);                            //dr
+        fnTimerStop(TO_FN_LONG);                                      //dr
         #ifdef FN_TIME_DEBUG1
         printf("Handler 3, KEY=%d \n",FN_key_pressed);
         #endif
@@ -578,23 +579,27 @@ void Shft_handler() {                        //JM SHIFT NEW vv
       fnTimerStop(TO_3S_CTFF);
 #endif
       if(!shiftF && !shiftG) {
-        shiftF = true;        //S_shF();
-        fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);          //dr
+        shiftF = true;
+        if(ShiftTimoutMode) {
+          fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
+        }
         showShiftState();
       }
       else if(shiftF && !shiftG) {
-        shiftG = true;        //S_shG();
-        shiftF = false;       //R_shF();
-        fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);          //dr
+        shiftG = true;
+        shiftF = false;
+        if(ShiftTimoutMode) {
+          fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
+        }
         showShiftState();
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
         Shft_timeouts = false;
-        fnTimerStop(TO_FG_LONG);                            //dr
-        fnTimerStop(TO_FG_TIMR);                            //dr
-      //shiftG = false;       //R_shG();                 //force into no shift state, i.e. to wait
-      //shiftF = false;       //R_shF();
-        resetShiftState();
+        fnTimerStop(TO_FG_LONG);
+        fnTimerStop(TO_FG_TIMR);
+      //shiftG = false;
+      //shiftF = false;
+        resetShiftState();                        //force into no shift state, i.e. to wait
       //showShiftState();
         if(HOME3) {
           if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
@@ -617,12 +622,23 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 
 
 
+void Clx_handler() {
+  if(fnTimerGetStatus(TO_CL_LONG) == TMR_COMPLETED) {
+    if(JM_auto_clstk_enabled) {
+      showFunctionName(ITM_CLSTK, 10);            //fnClearStack(0);
+      JM_auto_clstk_enabled = false;
+    } 
+  }
+}
+
+
+
 void Shft_stop() {
   Shft_timeouts = false;
-  fnTimerStop(TO_FG_LONG);                                  //dr
-  fnTimerStop(TO_FG_TIMR);                                  //dr
+  fnTimerStop(TO_FG_LONG);
+  fnTimerStop(TO_FG_TIMR);
   resetShiftState();
-//showShiftState();
+//showShiftState();                     // no need to call because of resetShiftState()
 }
 
 

@@ -59,7 +59,7 @@ void DOT_G_clear() {
 
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-    if(shiftStateChanged) {
+//  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
         //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
@@ -108,8 +108,8 @@ void showShiftState(void) {
         }
       }
 
-      shiftStateChanged = false;
-    }
+//    shiftStateChanged = false;                                                //vv dr
+//  }                                                                           //^^
   }
 }
 
@@ -125,17 +125,11 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
-  if(shiftF) {
+  if(shiftF || shiftG) {                                                        //vv dr
     shiftF = false;
-    shiftStateChanged = true;
-  }
-
-  if(shiftG) {
     shiftG = false;
-    shiftStateChanged = true;
-  }
-
-  showShiftState();
+    showShiftState();
+  }                                                                             //^^
 }
 
 
@@ -193,16 +187,16 @@ void executeFunction(int16_t fn, int16_t itemShift) {
   }
   else if(lastErrorCode == 0) {                  //JM FN KEYS, when no softmenu is present
 
-      switch(fn) {
-	      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
-	      case 1: {resetTemporaryInformation(); func = ( ITM_pi ) ;} break;
-	      case 2: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
-	      case 3: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
-	      case 4: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
-	      case 5: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
-	      case 6: {resetTemporaryInformation(); func = ( ITM_CLSTK ) ;} break;
-	      default:{func = 0;}
-	    }
+    switch(fn) {
+      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
+      case 1: {resetTemporaryInformation(); func = ( ITM_pi ) ;} break;
+      case 2: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
+      case 3: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
+      case 4: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
+      case 5: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
+      case 6: {resetTemporaryInformation(); func = ( ITM_XTHROOT ) ;} break;
+      default:{func = 0;} break;
+    }
 
     if(func == CHR_PROD_SIGN) {
       func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
@@ -244,7 +238,7 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
   func = 0;
   const softmenu_t *sm;
 
-  if(softmenuStackPointer > 0) {                                            //Martin's update from Executefunction
+  if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
@@ -417,7 +411,7 @@ void btnFnPressed(void *w, void *data) {
   //**************JM LONGPRESS ****************************************************
   if( (FN_state == ST_1_PRESS1 || FN_state == ST_3_PRESS2) && (!FN_timeouts_in_progress || double_click_detected) && FN_key_pressed != 0) {
     FN_timeouts_in_progress = true;
-    fnTimerStart(TO_FN_LONG, TO_FN_LONG, 450);              //dr
+    fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);    //dr
     FN_timed_out_to_NOP = false;
     if(!shiftF && !shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);
@@ -493,7 +487,7 @@ void btnFnReleased(void *w, void *data) {
 
 
 
-void execFnTimeout(uint16_t key) {
+void execFnTimeout(uint16_t key) {                          //dr - delayed call of the primary function key
   char charKey[3];
   sprintf(charKey, "%c", key + 11);
   int16_t fn = *((char *)charKey) - '0';
@@ -528,6 +522,12 @@ void execFnTimeout(uint16_t key) {
       executeFunction(fn, 0);          //JM FN NOMENU KEYS
     }
   }
+}
+
+
+
+void shiftCutoff(uint16_t unusedParamButMandatory) {        //dr - press shift three times within one second to call HOME timer
+  fnTimerStop(TO_3S_CTFF);
 }
 
 
@@ -624,12 +624,6 @@ uint16_t determineItem(const calcKey_t *key) {
 
 
 
-void shiftCutoff(uint16_t unusedParamButMandatory) {
-  fnTimerStop(TO_3S_CTFF);
-}
-
-
-
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
 
 
@@ -676,8 +670,10 @@ void btnPressed(void *notUsed, void *data) {
   // JM Inserted new section and removed old f and g key processing sections
   if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
-    fnTimerStart(TO_FG_LONG, TO_FG_LONG, 580);              //dr
-    fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER);   //dr
+    if(ShiftTimoutMode) {                                   //vv dr
+      fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
+    }
+    fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER);   //^^
     resetTemporaryInformation();
                                                                                                                               //JM shifts
     if(lastErrorCode != 0) {                                                                                                  //JM shifts
@@ -691,8 +687,8 @@ void btnPressed(void *notUsed, void *data) {
           JM_SHIFT_HOME_TIMER1++;
           if(JM_SHIFT_HOME_TIMER1 >= 3) {
             fnTimerStop(TO_3S_CTFF);
-            R_shF(); //shiftF = false;  // Set it up, for flags to be cleared below.
-            S_shG(); //shiftG = true;
+            shiftF = false;  // Set it up, for flags to be cleared below.
+            shiftG = true;
             if(HOME3) {
               if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                          //JM shifts
                 popSoftmenu();                                                                                                //JM shifts
@@ -712,26 +708,26 @@ void btnPressed(void *notUsed, void *data) {
         }
         if(fnTimerGetStatus(TO_3S_CTFF) == TMR_STOPPED) {
           JM_SHIFT_HOME_TIMER1 = 1;
-          fnTimerStart(TO_3S_CTFF, TO_3S_CTFF, 600);        //dr
+          fnTimerStart(TO_3S_CTFF, TO_3S_CTFF, JM_TO_3S_CTFF);        //dr
         }
       }
     }
 
     if(!shiftF && !shiftG) {                                                                                                  //JM shifts
-      S_shF(); //shiftF = true;                                                                                                          //JM shifts
-      R_shG(); //shiftG = false;
+      shiftF = true;                                                                                                          //JM shifts
+      shiftG = false;
     }                                                                                                                         //JM shifts
     else if(shiftF && !shiftG) {                                                                                              //JM shifts
-      R_shF(); //shiftF = false;                                                                                                         //JM shifts
-      S_shG(); //shiftG = true;                                                                                                          //JM shifts
+      shiftF = false;                                                                                                         //JM shifts
+      shiftG = true;                                                                                                          //JM shifts
     }
     else if(!shiftF && shiftG) {                                                                                              //JM shifts
-      R_shF(); //shiftF = false;                                                                                                         //JM shifts
-      R_shG(); //shiftG = false;                                                                                                         //JM shifts
+      shiftF = false;                                                                                                         //JM shifts
+      shiftG = false;                                                                                                         //JM shifts
     }
     else if(shiftF && shiftG) {                                                                                               //JM shifts  should never be possible. included for completeness
-      R_shF(); //shiftF = false;                                                                                                         //JM shifts
-      R_shG(); //shiftG = false;                                                                                                         //JM shifts
+      shiftF = false;                                                                                                         //JM shifts
+      shiftG = false;                                                                                                         //JM shifts
     }                                                                                                                         //JM shifts
                                                                                                                               //JM shifts
     showShiftState();                                                                                                         //JM shifts
@@ -750,15 +746,12 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-    if(ShiftTimoutMode) {                       //vv JM
-      fnTimerStop(TO_FG_LONG);                              //dr
-    }                                           //^^
-
+    fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
 
     shiftF = !shiftF;
     shiftG = false;                     //JM no shifted menu on g-shift-key as in WP43S
-    shiftStateChanged = true;
+//  shiftStateChanged = true; //dr
 
     showShiftState();
   }
@@ -773,15 +766,12 @@ void btnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-    if(ShiftTimoutMode) {                       //vv JM
-      fnTimerStop(TO_FG_LONG);                              //dr
-    }                                           //^^
-
+    fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
 
     shiftG = !shiftG;
     shiftF = false;                     //JM no shifted menu on g-shift-key as in WP43S
-    shiftStateChanged = true;
+//  shiftStateChanged = true; //dr
 
     showShiftState();
   }
@@ -792,8 +782,8 @@ void btnPressed(void *notUsed, void *data) {
     JM_ASN_MODE = determineItem(key);        //JM The result is the function number, item number, asnd is placed in
     fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
-    R_shG(); //shiftG = false;
-    R_shF(); //shiftF = false;
+    shiftG = false;
+    shiftF = false;
   }
 
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
@@ -803,8 +793,8 @@ void btnPressed(void *notUsed, void *data) {
     fnASSIGN(JM_ASN_MODE, tempkey);          //JM CHECKS FOR INVALID KEYS IN HERE
     JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
     key = (kbd_std + 32);                    //JM EXIT key to exit when done and cancel shifts
-    R_shG(); //shiftG = false;
-    R_shF(); //shiftF = false;
+    shiftG = false;
+    shiftF = false;
   }
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
@@ -932,7 +922,7 @@ void btnPressed(void *notUsed, void *data) {
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
+            sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
           #endif
         }
@@ -946,7 +936,7 @@ void btnPressed(void *notUsed, void *data) {
       }
 
       else {
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing CC function (complex closing, composing, cutting, & converting)!", calcMode);
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value for calcMode while processing Complex Construct function (complex closing, composing, cutting, & converting)!", calcMode); //JM Changed reference to CC
         displayBugScreen(errorMessage);
       }
     }
@@ -961,8 +951,11 @@ void btnPressed(void *notUsed, void *data) {
           showFunctionName(ITM_CLX, 10);
         }
 
+        JM_auto_clstk_enabled = true;      //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+        fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
         if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          restoreStack();                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
@@ -1039,25 +1032,25 @@ void btnPressed(void *notUsed, void *data) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
           if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
             alphaCase = AC_UPPER;
-            if(calcMode == CM_AIM)      //vv dr
+            if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
               showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
               calcModeAimGui();
 #endif
-            }                           //^^
+            }                                               //^^
             softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
             showSoftmenuCurrentPart();
           }
           else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
             alphaCase = AC_UPPER;
-            if(calcMode == CM_AIM)      //vv dr
+            if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
               showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
               calcModeAimGui();
 #endif
-            }                           //^^
+            }                                               //^^
           }
           else if(item == CHR_case) {   //vv JM
             showSoftmenuCurrentPart();
@@ -1081,13 +1074,13 @@ void btnPressed(void *notUsed, void *data) {
         else {
           if(alphaCase != AC_UPPER) {
             alphaCase = AC_UPPER;
-            if(calcMode == CM_AIM)      //vv dr
+            if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
               showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
               calcModeAimGui();
 #endif
-            }                           //^^
+            }                                               //^^
           }
         }
       }
@@ -1148,25 +1141,25 @@ void btnPressed(void *notUsed, void *data) {
           int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
           if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
             alphaCase = AC_LOWER;
-            if(calcMode == CM_AIM)      //vv dr
+            if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
               showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
               calcModeAimGui();
 #endif
-            }                           //^^
+            }                                               //^^
             softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
             showSoftmenuCurrentPart();
           }
           else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
             alphaCase = AC_LOWER;
-            if(calcMode == CM_AIM)      //vv dr
+            if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
               showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
               calcModeAimGui();
 #endif
-            }                           //^^
+            }                                               //^^
           }
           else if(item == CHR_case) {   //vvJM
             showSoftmenuCurrentPart();
@@ -1192,13 +1185,13 @@ void btnPressed(void *notUsed, void *data) {
         else {
           if(alphaCase != AC_LOWER) {
             alphaCase = AC_LOWER;
-            if(calcMode == CM_AIM)      //vv dr
+            if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
               showAlphaMode();
 #ifdef PC_BUILD     //dr - new AIM
               calcModeAimGui();
 #endif
-            }                           //^^
+            }                                               //^^
           }
         }
       }
@@ -1272,7 +1265,7 @@ void btnPressed(void *notUsed, void *data) {
       if(item < 0) {
         showSoftmenu(NULL, item, false);
       }
-      else if(item == ITM_EXPONENT || item == CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
+      else if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
         addItemToNimBuffer(item);
       }
       else {
@@ -1467,6 +1460,7 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 void btnReleased(void *notUsed, void *data) {
 #endif
   Shft_timeouts = false;                         //JM SHIFT NEW
+  JM_auto_clstk_enabled = false;                 //JM TIMER CLRCLSTK ON LONGPRESS
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();
@@ -1479,7 +1473,7 @@ void btnReleased(void *notUsed, void *data) {
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   if(!shiftF) {
     shiftF = true;
-    shiftStateChanged = true;
+//  shiftStateChanged = true; //dr
   }
 
   #ifdef PC_BUILD

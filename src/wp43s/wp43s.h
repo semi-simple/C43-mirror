@@ -249,12 +249,13 @@ typedef int16_t calcRegister_t;
 
 // timer nr for FG and FN use
 #define TO_FG_LONG              0
-#define TO_FG_TIMR              1
-#define TO_FN_LONG              2
-#define TO_FN_EXEC              3
-#define TO_3S_CTFF              4
-#define TO_CL_DROP              5
-#define TO_KB_ACTV              6
+#define TO_CL_LONG              1
+#define TO_FG_TIMR              2
+#define TO_FN_LONG              3
+#define TO_FN_EXEC              4
+#define TO_3S_CTFF              5
+#define TO_CL_DROP              6
+#define TO_KB_ACTV              7
 
 // On/Off 1 bit
 #define OFF                     0
@@ -434,6 +435,10 @@ typedef int16_t calcRegister_t;
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY 1
 #define CMP_EXTENSIVE           2
+
+// Combination / permutation
+#define CP_PERMUTATION 0
+#define CP_COMBINATION 1
 
 #if defined(__arm__)
   #define FMT64U  "llu"
@@ -632,7 +637,7 @@ extern bool_t               printerIconEnabled;
 extern bool_t               batteryIconEnabled;
 extern bool_t               shiftF;
 extern bool_t               shiftG;
-extern bool_t               shiftStateChanged;
+//extern bool_t             shiftStateChanged;    //dr
 extern bool_t               showContent;
 extern bool_t               stackLiftEnabled;
 extern bool_t               displayLeadingZeros;

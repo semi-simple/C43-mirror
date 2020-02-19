@@ -164,7 +164,7 @@ bool_t               printerIconEnabled;
 bool_t               batteryIconEnabled;
 bool_t               shiftF;
 bool_t               shiftG;
-bool_t               shiftStateChanged;
+//bool_t             shiftStateChanged; //dr
 bool_t               showContent;
 bool_t               stackLiftEnabled;
 bool_t               displayLeadingZeros;
@@ -325,7 +325,7 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
-  shiftStateChanged = false;
+//shiftStateChanged = false;            //dr
 
   jm_FG_LINE = true;                                             //JM Screen / keyboard operation setup
   jm_FG_DOTS = false;                                            //JM Screen / keyboard operation setup
@@ -365,7 +365,7 @@ void setupDefaults(void) {
 
   JM_SHIFT_HOME_TIMER1 = 1;                                      //JM TIMER
   JM_ASN_MODE = 0;                                               //JM ASSIGN
-
+  // Load_HOME(); //JMHOME: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK
   
   #ifndef TESTSUITE_BUILD
     showShiftState();
@@ -511,15 +511,16 @@ int main(int argc, char* argv[]) {
   //fnReset(CONFIRMED);
 
   gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); // refreshScreen is called every 100 ms
-  fnTimerReset();                                                                                   //vv dr TEST Timer
+  fnTimerReset();                                                                         //vv dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
+  fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
   fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
   fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG/*, 450*/);
   fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
   fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
   fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
 //fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);  // no keyboard scan boost for emulator
-  gdk_threads_add_timeout(5, refreshTimer, NULL); // refreshTimer is called every 5 ms              //^^
+  gdk_threads_add_timeout(5, refreshTimer, NULL); // refreshTimer is called every 5 ms    //^^
 
   gtk_main();
 
@@ -561,15 +562,16 @@ void program_main(void) {
 
   lcd_forced_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
-  fnTimerReset();                                                               //vv dr TEST Timer
+  fnTimerReset();                                                                         //vv dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
+  fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
   fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
   fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG/*, 450*/);
   fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
   fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
   fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
   fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);
-  nextTimerRefresh = 0;                                                         //vv
+  nextTimerRefresh = 0;                                                                   //vv
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -644,8 +646,8 @@ void program_main(void) {
     key = key_pop();
 
     if(sys_last_key() == 44 ) {                                 //JM DISP for special SCREEN DUMP key code. Supposed to be 16 but shift decoding done already to 44
-      R_shF();
-      R_shG();
+      shiftF = false; //R_shF();
+      shiftG = false; //R_shG();
       fnJM(33);                                                 //SCREEN DUMP
     } 
 
@@ -670,7 +672,7 @@ void program_main(void) {
     }
 
     if(key >= 0) {
-      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 6000);
+      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);
     }
 
     uint32_t now = sys_current_ms();

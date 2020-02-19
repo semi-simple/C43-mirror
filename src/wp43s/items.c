@@ -1714,7 +1714,7 @@ const item_t indexOfItems[] = {
 /* 1325 */  { addItemToBuffer,             CHR_PIPE,                    "",                                            STD_PIPE,                                      CAT_NONE, SLS_UNCHANGED},
 /* 1326 */  { addItemToBuffer,             CHR_RIGHT_CURLY_BRACKET,     "",                                            STD_RIGHT_CURLY_BRACKET,                       CAT_NONE, SLS_UNCHANGED},
 /* 1327 */  { addItemToBuffer,             CHR_TILDE,                   "",                                            STD_TILDE,                                     CAT_NONE, SLS_UNCHANGED},
-/* 1328 */  { addItemToBuffer,             CHR_INVERTED_EXCLAMATION_MARK, "",                                          STD_INVERTED_EXCLAMATION_MARK,                 CAT_NONE, SLS_UNCHANGED},
+/* 1328 */  { addItemToBuffer,             CHR_INVERTED_EXCLAMATION_MARK, "",                                            STD_INVERTED_EXCLAMATION_MARK,                 CAT_NONE, SLS_UNCHANGED},
 /* 1329 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_CENT,                                      CAT_NONE, SLS_UNCHANGED},
 /* 1330 */  { addItemToBuffer,             CHR_POUND,                   "",                                            STD_POUND,                                     CAT_NONE, SLS_UNCHANGED},
 /* 1331 */  { addItemToBuffer,             CHR_YEN,                     "",                                            STD_YEN,                                       CAT_NONE, SLS_UNCHANGED},
@@ -2333,7 +2333,6 @@ const item_t indexOfItems[] = {
 /* 1930 */  { fnJM,                        37,                          STD_DOT "m",                                   STD_DOT "m",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1931 */  { fnJM,                        38,                          STD_DOT "k",                                   STD_DOT "k",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
-
 
 /* 1933 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

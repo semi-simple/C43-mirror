@@ -65,7 +65,7 @@ void fnRebuildTimerRefresh(void) {
  *                          * true  = timer will call this function again
  *                          * false = timer stops calling this function
  ***********************************************/
-gboolean refreshTimer(gpointer data) {      // This function is called every 10 ms by a GTK timer
+gboolean refreshTimer(gpointer data) {      // This function is called every 5 ms by a GTK timer
   gint64 now = g_get_monotonic_time();
 
   if(now < timerLastCalled) {

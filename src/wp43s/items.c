@@ -379,9 +379,6 @@ void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           //^^
-void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
-void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
-void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {

@@ -624,6 +624,21 @@ uint16_t determineItem(const calcKey_t *key) {
 
 
 
+/********************************************//**
+ * \brief convert a string containing the key number to int16_t
+ *
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return int16_t
+ ***********************************************/
+//#ifdef DMCP_BUILD
+//int16_t stringToKeyNumber(void *data) {
+//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+//}
+//#else
+//int16_t stringToKeyNumber(gpointer data) {
+//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
+//}
+//#endif
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
 
 
@@ -670,10 +685,10 @@ void btnPressed(void *notUsed, void *data) {
   // JM Inserted new section and removed old f and g key processing sections
   if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
-    if(ShiftTimoutMode) {                                   //vv dr
-      fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
+    fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
+    if(ShiftTimoutMode) {
+      fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
     }
-    fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER);   //^^
     resetTemporaryInformation();
                                                                                                                               //JM shifts
     if(lastErrorCode != 0) {                                                                                                  //JM shifts

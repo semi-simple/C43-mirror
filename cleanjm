@@ -8,6 +8,25 @@ rm ./wp43c
 
 make -j8 V=1 mrproper
 
+find . -type f -name "* 2.css" -exec rm {} \;
+find . -type f -name "* 3.css" -exec rm {} \;
+find . -type f -name "* 4.css" -exec rm {} \;
+find . -type f -name "* 5.css" -exec rm {} \;
+find . -type f -name "* 6.css" -exec rm {} \;
+find . -type f -name "* 7.css" -exec rm {} \;
+find . -type f -name "* 8.css" -exec rm {} \;
+find . -type f -name "* 9.css" -exec rm {} \;
+find . -type f -name "* 10.css" -exec rm {} \;
+find . -type f -name "* 11.css" -exec rm {} \;
+find . -type f -name "* 12.css" -exec rm {} \;
+find . -type f -name "* 13.css" -exec rm {} \;
+find . -type f -name "* 14.css" -exec rm {} \;
+find . -type f -name "* 15.css" -exec rm {} \;
+find . -type f -name "* 16.css" -exec rm {} \;
+find . -type f -name "* 17.css" -exec rm {} \;
+find . -type f -name "* 18.css" -exec rm {} \;
+find . -type f -name "* 19.css" -exec rm {} \;
+find . -type f -name "* 20.css" -exec rm {} \;
 
 find . -type f -name "* 2.txt" -exec rm {} \;
 find . -type f -name "* 3.txt" -exec rm {} \;

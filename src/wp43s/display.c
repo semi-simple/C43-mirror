@@ -1793,7 +1793,12 @@ void fnShow(uint16_t unusedParamButMandatory) {
   tmpStr3000[1500] = 0; // L6
   tmpStr3000[1800] = 0; // L7
 
-  temporaryInformation = TI_SHOW_REGISTER;
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {  //JM vv JMSHOW
+    temporaryInformation = TI_SHOW_REGISTER_JM;         //JMSHOW
+  } else
+  {
+    temporaryInformation = TI_SHOW_REGISTER;
+  }                                                 //JM ^^ JMSHOW
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
@@ -1816,7 +1821,32 @@ void fnShow(uint16_t unusedParamButMandatory) {
       break;
 
     case dtReal34:
-      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, 2000, 34);
+      if (temporaryInformation == TI_SHOW_REGISTER) {
+        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, 2000, 34);
+      } else
+//JM vv JMSHOW
+      if (temporaryInformation == TI_SHOW_REGISTER_JM) {
+        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000 + 2102, &numericFont, 2000, 34);
+        tmpStr3000[2100]=62;
+        tmpStr3000[2101]=62;
+        strcat(tmpStr3000 + 2100,"<<      ");
+        last = 2100 + stringByteLength(tmpStr3000 + 2100);
+        source = 2100;
+        dest = 0;
+        for(d=0; d<=900 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpStr3000[dest] = tmpStr3000[source];
+            if(tmpStr3000[dest] & 0x80) {
+              tmpStr3000[++dest] = tmpStr3000[++source];
+            }
+            source++;
+            tmpStr3000[++dest] = 0;
+          }
+        }
+      strcat(tmpStr3000 + 600,"---------");
+      }
+//JM ^^ JMSHOW
       break;
 
     case dtComplex34:

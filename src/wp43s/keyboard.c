@@ -624,21 +624,6 @@ uint16_t determineItem(const calcKey_t *key) {
 
 
 
-/********************************************//**
- * \brief convert a string containing the key number to int16_t
- *
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return int16_t
- ***********************************************/
-//#ifdef DMCP_BUILD
-//int16_t stringToKeyNumber(void *data) {
-//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
-//}
-//#else
-//int16_t stringToKeyNumber(gpointer data) {
-//  return (*((char *)data) - '0')*10 + *(((char *)data)+1) - '0';
-//}
-//#endif
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
 
 

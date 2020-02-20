@@ -580,17 +580,13 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 #endif
       if(!shiftF && !shiftG) {
         shiftF = true;
-        if(ShiftTimoutMode) {
-          fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
-        }
+        fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
         showShiftState();
       }
       else if(shiftF && !shiftG) {
         shiftG = true;
         shiftF = false;
-        if(ShiftTimoutMode) {
-          fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
-        }
+        fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
         showShiftState();
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {

@@ -670,10 +670,10 @@ void btnPressed(void *notUsed, void *data) {
   // JM Inserted new section and removed old f and g key processing sections
   if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
-    if(ShiftTimoutMode) {                                   //vv dr
-      fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
+    fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
+    if(ShiftTimoutMode) {
+      fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
     }
-    fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER);   //^^
     resetTemporaryInformation();
                                                                                                                               //JM shifts
     if(lastErrorCode != 0) {                                                                                                  //JM shifts

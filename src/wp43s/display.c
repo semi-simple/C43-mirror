@@ -1793,7 +1793,8 @@ void fnShow(uint16_t unusedParamButMandatory) {
   tmpStr3000[1500] = 0; // L6
   tmpStr3000[1800] = 0; // L7
 
-  if(getRegisterDataType(REGISTER_X) == dtReal34) {  //JM vv JMSHOW
+  if(getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtComplex34) {  //JM vv JMSHOW
+    clearScreen(false, true, true);
     temporaryInformation = TI_SHOW_REGISTER_JM;         //JMSHOW
   } else
   {
@@ -1826,10 +1827,8 @@ void fnShow(uint16_t unusedParamButMandatory) {
       } else
 //JM vv JMSHOW
       if (temporaryInformation == TI_SHOW_REGISTER_JM) {
-        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000 + 2102, &numericFont, 2000, 34);
-        tmpStr3000[2100]=62;
-        tmpStr3000[2101]=62;
-        strcat(tmpStr3000 + 2100,"<<      ");
+        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000 + 2100, &numericFont, 2000, 34);
+        strcat(tmpStr3000 + 2100,"          ");
         last = 2100 + stringByteLength(tmpStr3000 + 2100);
         source = 2100;
         dest = 0;
@@ -1844,44 +1843,129 @@ void fnShow(uint16_t unusedParamButMandatory) {
             tmpStr3000[++dest] = 0;
           }
         }
-      strcat(tmpStr3000 + 600,"---------");
       }
 //JM ^^ JMSHOW
       break;
 
+
     case dtComplex34:
-      // Real part
-      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34);
-      for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
-        if(tmpStr3000[i] == 0x08) {
-          tmpStr3000[i] = 0x05;
+      if (temporaryInformation == TI_SHOW_REGISTER) {
+        // Real part
+        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34);
+        for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
+          if(tmpStr3000[i] == 0x08) {
+            tmpStr3000[i] = 0x05;
+          }
+        }
+
+        // +/- i×
+        real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
+        strcat(tmpStr3000 + 300, (real34IsNegative(&real34) ? "-" : "+"));
+        strcat(tmpStr3000 + 300, COMPLEX_UNIT);
+        strcat(tmpStr3000 + 300, PRODUCT_SIGN);
+
+        // Imaginary part
+        real34SetPositiveSign(&real34);
+        real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34);
+        for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
+          if(tmpStr3000[600 + i] == 0x08) {
+            tmpStr3000[600 + i] = 0x05;
+          }
+        }
+
+        if(stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
+          strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299);
+          tmpStr3000[600] = 0;
+        }
+
+        if(stringWidth(tmpStr3000, &standardFont, true, true) + stringWidth(tmpStr3000 + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
+          strncat(tmpStr3000, tmpStr3000 +  300, 299);
+          strcpy(tmpStr3000 + 300, tmpStr3000 + 600);
+          tmpStr3000[600] = 0;
         }
       }
-
-      // +/- i×
-      real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
-      strcat(tmpStr3000 + 300, (real34IsNegative(&real34) ? "-" : "+"));
-      strcat(tmpStr3000 + 300, COMPLEX_UNIT);
-      strcat(tmpStr3000 + 300, PRODUCT_SIGN);
-
-      // Imaginary part
-      real34SetPositiveSign(&real34);
-      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34);
-      for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
-        if(tmpStr3000[600 + i] == 0x08) {
-          tmpStr3000[600 + i] = 0x05;
+      else
+      if (temporaryInformation == TI_SHOW_REGISTER_JM) {
+        // Real part
+        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &numericFont, 2000, 34);
+        for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
+          if(tmpStr3000[i] == 0x08) {
+            tmpStr3000[i] = 0x05;
+          }
         }
-      }
 
-      if(stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
-        strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299);
-        tmpStr3000[600] = 0;
-      }
+        // +/- i×
+        real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
+        strcat(tmpStr3000 + 300, (real34IsNegative(&real34) ? "-" : "+"));
+        strcat(tmpStr3000 + 300, COMPLEX_UNIT);
+        strcat(tmpStr3000 + 300, PRODUCT_SIGN);
 
-      if(stringWidth(tmpStr3000, &standardFont, true, true) + stringWidth(tmpStr3000 + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
-        strncat(tmpStr3000, tmpStr3000 +  300, 299);
-        strcpy(tmpStr3000 + 300, tmpStr3000 + 600);
+        // Imaginary part
+        real34SetPositiveSign(&real34);
+        real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &numericFont, 2000, 34);
+        for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
+          if(tmpStr3000[600 + i] == 0x08) {
+            tmpStr3000[600 + i] = 0x05;
+          }
+        }
+
+
+        strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299); //add +i. and imag
         tmpStr3000[600] = 0;
+
+
+        if(stringWidth(tmpStr3000, &numericFont, true, true) + stringWidth(tmpStr3000 + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
+          strncat(tmpStr3000, tmpStr3000 +  300, 299);
+          tmpStr3000[300] = 0;
+        }
+
+        strcpy(tmpStr3000 + 2100, tmpStr3000 + 0);
+        tmpStr3000[0] = 0;
+
+        strcpy(tmpStr3000 + 2400, tmpStr3000 + 300);
+        tmpStr3000[300] = 0;
+
+
+        last = 2100 + stringByteLength(tmpStr3000 + 2100);
+        source = 2100;
+        for(d=0; d<=300 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpStr3000[dest] = tmpStr3000[source];
+            if(tmpStr3000[dest] & 0x80) {                  //why would there be bit 0x80? mmm copying the next byte if it is a multi byte character i think. probably the x or .
+              tmpStr3000[++dest] = tmpStr3000[++source];
+            }
+            source++;
+            tmpStr3000[++dest] = 0;                        //end the string after every addition
+          }
+        }
+        
+        last = 2400 + stringByteLength(tmpStr3000 + 2400);
+        source = 2400;
+        for(d=600; d<=900 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpStr3000[dest] = tmpStr3000[source];
+            if(tmpStr3000[dest] & 0x80) {
+              tmpStr3000[++dest] = tmpStr3000[++source];
+            }
+            source++;
+            tmpStr3000[++dest] = 0;
+          }
+        }
+
+        if (tmpStr3000[300]==0) {                          //shift up if line is empty
+          strcpy(tmpStr3000 + 300, tmpStr3000 + 600);
+          strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
+          tmpStr3000[900] = 0;
+        }
+
+        if (tmpStr3000[600]==0) {                          //shift up if line is empty
+          strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
+          tmpStr3000[900] = 0;
+        }
+
+
       }
       break;
 
@@ -1897,7 +1981,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
 
   refreshRegisterLine(REGISTER_T);
   if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
+  if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);  //bug changed 900 to 600
   if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);
 
   displayFormat = savedDisplayFormat;

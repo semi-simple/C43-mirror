@@ -1256,10 +1256,10 @@ void resetTemporaryInformation(void) {
                                if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
                                break;
 
-    case TI_SHOW_REGISTER_JM:  refreshRegisterLine(REGISTER_T);                         //JMSHOW vv
-                               if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-                               if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);
-                               if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);
+    case TI_SHOW_REGISTER_JM:  //refresh the complete screen
+                               clearScreen(false, true, true);
+                               refreshStack();
+                               showSoftmenuCurrentPart();
                                break;                                                   //JMSHOW ^^
 
     default:                   sprintf(errorMessage, "In function resetTemporaryInformation: %" FMT8U " is an unexpected value for temporaryInformation!", temporaryInformation);
@@ -1426,7 +1426,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
 //JM vv JMSHOW
         else if(temporaryInformation == TI_SHOW_REGISTER_JM) {
-          #define line_h 40
+          #define line_h 39
           switch(regist) {
             // L1
             case REGISTER_T: w = stringWidth(tmpStr3000, &numericFont, true, true);

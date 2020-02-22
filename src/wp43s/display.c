@@ -1774,12 +1774,21 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 }
 
 
+int16_t SHOWregis;                              //JMSHOW
 
-void fnShow(uint16_t unusedParamButMandatory) {
+void fnShow(uint16_t fnShow_param) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
   int16_t source, dest, last, d, i;
   real34_t real34;
+
+  switch(fnShow_param) {
+    case 0: {SHOWregis = REGISTER_X;} break;
+    case 1: {SHOWregis++; if(SHOWregis>=112) SHOWregis = 0;  } break;
+    case 2: {SHOWregis--; if(SHOWregis<=0)   SHOWregis = 111;} break;
+    default: break;
+  }
+
 
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
@@ -1793,30 +1802,72 @@ void fnShow(uint16_t unusedParamButMandatory) {
   tmpStr3000[1500] = 0; // L6
   tmpStr3000[1800] = 0; // L7
 
-  if(getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtComplex34) {  //JM vv JMSHOW
-    clearScreen(false, true, true);
-    temporaryInformation = TI_SHOW_REGISTER_JM;         //JMSHOW
+
+
+  clearScreen(false, true, true);
+  temporaryInformation = TI_SHOW_REGISTER_JM;         //JMSHOW
+  tmpStr3000[2100] = 0;                             //REGISTER NUMBER
+  if(SHOWregis >= 0 && SHOWregis < 100) {
+    snprintf(tmpStr3000 + 2100, 10, "%d:", SHOWregis);
   } else
-  {
-    temporaryInformation = TI_SHOW_REGISTER;
-  }                                                 //JM ^^ JMSHOW
+  switch (SHOWregis) {
+    case 100: strcpy(tmpStr3000 + 2100, "X: "); break;
+    case 101: strcpy(tmpStr3000 + 2100, "Y: "); break;
+    case 102: strcpy(tmpStr3000 + 2100, "Z: "); break;
+    case 103: strcpy(tmpStr3000 + 2100, "T: "); break;
+    case 104: strcpy(tmpStr3000 + 2100, "A: "); break;
+    case 105: strcpy(tmpStr3000 + 2100, "B: "); break;
+    case 106: strcpy(tmpStr3000 + 2100, "C: "); break;
+    case 107: strcpy(tmpStr3000 + 2100, "D: "); break;
+    case 108: strcpy(tmpStr3000 + 2100, "L: "); break;
+    case 109: strcpy(tmpStr3000 + 2100, "I: "); break;
+    case 110: strcpy(tmpStr3000 + 2100, "J: "); break;
+    case 111: strcpy(tmpStr3000 + 2100, "K: "); break;
+    default: break;
+  }
+
+
+
+//    temporaryInformation = TI_SHOW_REGISTER;
+
+
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 7*400 - 8, 350);
+      if (temporaryInformation == TI_SHOW_REGISTER) {
+        longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 7*400 - 8, 350);
 
-      last = 2100 + stringByteLength(tmpStr3000 + 2100);
-      source = 2100;
-      dest = 0;
-      for(d=0; d<=1800 ; d+=300) {
-        dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= SCREEN_WIDTH - 8) {
-          tmpStr3000[dest] = tmpStr3000[source];
-          if(tmpStr3000[dest] & 0x80) {
-            tmpStr3000[++dest] = tmpStr3000[++source];
+        last = 2100 + stringByteLength(tmpStr3000 + 2100);
+        source = 2100;
+        dest = 0;
+        for(d=0; d<=1800 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= SCREEN_WIDTH - 8) {
+            tmpStr3000[dest] = tmpStr3000[source];
+            if(tmpStr3000[dest] & 0x80) {
+              tmpStr3000[++dest] = tmpStr3000[++source];
+            }
+            source++;
+            tmpStr3000[++dest] = 0;
           }
-          source++;
-          tmpStr3000[++dest] = 0;
+        }
+      } else
+      if (temporaryInformation == TI_SHOW_REGISTER_JM) {
+        longIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350);
+
+        last = 2100 + stringByteLength(tmpStr3000 + 2100);
+        source = 2100;
+        dest = 0;
+        for(d=0; d<=1800 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= SCREEN_WIDTH - 8) {
+            tmpStr3000[dest] = tmpStr3000[source];
+            if(tmpStr3000[dest] & 0x80) {
+              tmpStr3000[++dest] = tmpStr3000[++source];
+            }
+            source++;
+            tmpStr3000[++dest] = 0;
+          }
         }
       }
       break;
@@ -1825,10 +1876,12 @@ void fnShow(uint16_t unusedParamButMandatory) {
       if (temporaryInformation == TI_SHOW_REGISTER) {
         real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, 2000, 34);
       } else
-//JM vv JMSHOW
+
+//JM vv JMSHOW REAL
       if (temporaryInformation == TI_SHOW_REGISTER_JM) {
-        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000 + 2100, &numericFont, 2000, 34);
+        real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), getRegisterAngularMode(SHOWregis), tmpStr3000 + 2103, &numericFont, 2000, 34);
         strcat(tmpStr3000 + 2100,"          ");
+
         last = 2100 + stringByteLength(tmpStr3000 + 2100);
         source = 2100;
         dest = 0;
@@ -1844,14 +1897,14 @@ void fnShow(uint16_t unusedParamButMandatory) {
           }
         }
       }
-//JM ^^ JMSHOW
+//JM ^^ JMSHOW REAL
       break;
 
 
     case dtComplex34:
       if (temporaryInformation == TI_SHOW_REGISTER) {
         // Real part
-        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34);
+        real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), AM_NONE, tmpStr3000, &standardFont, 2000, 34);
         for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
           if(tmpStr3000[i] == 0x08) {
             tmpStr3000[i] = 0x05;
@@ -1859,7 +1912,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
         }
 
         // +/- i×
-        real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
+        real34Copy(REGISTER_IMAG34_DATA(SHOWregis), &real34);
         strcat(tmpStr3000 + 300, (real34IsNegative(&real34) ? "-" : "+"));
         strcat(tmpStr3000 + 300, COMPLEX_UNIT);
         strcat(tmpStr3000 + 300, PRODUCT_SIGN);
@@ -1885,9 +1938,12 @@ void fnShow(uint16_t unusedParamButMandatory) {
         }
       }
       else
+
+
+//--------------------JMSHOWvv COMPLEX
       if (temporaryInformation == TI_SHOW_REGISTER_JM) {
         // Real part
-        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &numericFont, 2000, 34);
+        real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), AM_NONE, tmpStr3000, &numericFont, 2000, 34);
         for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
           if(tmpStr3000[i] == 0x08) {
             tmpStr3000[i] = 0x05;
@@ -1895,7 +1951,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
         }
 
         // +/- i×
-        real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
+        real34Copy(REGISTER_IMAG34_DATA(SHOWregis), &real34);
         strcat(tmpStr3000 + 300, (real34IsNegative(&real34) ? "-" : "+"));
         strcat(tmpStr3000 + 300, COMPLEX_UNIT);
         strcat(tmpStr3000 + 300, PRODUCT_SIGN);
@@ -1919,10 +1975,14 @@ void fnShow(uint16_t unusedParamButMandatory) {
           tmpStr3000[300] = 0;
         }
 
-        strcpy(tmpStr3000 + 2100, tmpStr3000 + 0);
+
+
+
+        strncat(tmpStr3000 + 2103, tmpStr3000 + 0, 299-3);  //COPY REAL
+//        strcpy(tmpStr3000 + 2100, tmpStr3000 + 0);
         tmpStr3000[0] = 0;
 
-        strcpy(tmpStr3000 + 2400, tmpStr3000 + 300);
+        strcpy(tmpStr3000 + 2400, tmpStr3000 + 300);        //COPY IMAG
         tmpStr3000[300] = 0;
 
 
@@ -1964,25 +2024,32 @@ void fnShow(uint16_t unusedParamButMandatory) {
           strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
           tmpStr3000[900] = 0;
         }
-
-
       }
       break;
+//--------------------JMSHOW COMPLEX ^^
 
     default:
       temporaryInformation = TI_NO_INFO;
-      displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, SHOWregis);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(REGISTER_X, true, false));
+        sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(SHOWregis, true, false));
         showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
       #endif
       return;
   }
 
+if (temporaryInformation == TI_SHOW_REGISTER) {
   refreshRegisterLine(REGISTER_T);
   if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-  if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);  //bug changed 900 to 600
-  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);
+  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
+  if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);  //bug changed 900 to 1500
+} else
+if (temporaryInformation == TI_SHOW_REGISTER_JM) {
+  refreshRegisterLine(REGISTER_T);
+  if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
+  if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);
+  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);  //bug changed 900 to 1500
+}
 
   displayFormat = savedDisplayFormat;
   displayFormatDigits = savedDisplayFormatDigits;

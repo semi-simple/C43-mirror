@@ -1922,7 +1922,7 @@ const item_t indexOfItems[] = {
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
-/* 1531 */  { fnShow,                      NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
+/* 1531 */  { fnShow,                      0,                           "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    CAT_FNCT, SLS_ENABLED  },
 /* 1534 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
@@ -2333,6 +2333,9 @@ const item_t indexOfItems[] = {
 /* 1930 */  { fnJM,                        37,                          STD_DOT "m",                                   STD_DOT "m",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1931 */  { fnJM,                        38,                          STD_DOT "k",                                   STD_DOT "k",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1933 */  { fnShow,                      1,                           "SHOW UP",                                     STD_UP_ARROW,                                  CAT_NONE, SLS_UNCHANGED},   //JMSHOW
+/* 1934 */  { fnShow,                      2,                           "SHOW DN",                                     STD_DOWN_ARROW,                                CAT_NONE, SLS_UNCHANGED},   //JMSHOW
+/* 1935 */  { itemToBeCoded,               NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_MENU, SLS_UNCHANGED},   //JMSHOW
 
-/* 1933 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1936 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

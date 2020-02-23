@@ -155,6 +155,9 @@ void      reallocateRegister              (calcRegister_t regist, uint32_t dataT
 void      printRegisterToConsole          (calcRegister_t regist);
 void      printRegisterDescriptorToConsole(calcRegister_t regist);
 void      fnToReal                        (uint16_t unusedParamButMandatory);
+void      fnDec                           (uint16_t r);
+void      fnInc                           (uint16_t r);
+
 
 #define getRegisterAngularMode(reg)            getRegisterTag(reg)
 #define setRegisterAngularMode(reg, am)        setRegisterTag(reg, am)

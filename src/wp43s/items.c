@@ -352,6 +352,9 @@ void fnLastX                    (uint16_t unusedParamButMandatory) {}
 void fnCyx                      (uint16_t unusedParamButMandatory) {}
 void fnPyx                      (uint16_t unusedParamButMandatory) {}
 void fnToReal                   (uint16_t unusedParamButMandatory) {}
+void fnDec                      (uint16_t unusedParamButMandatory) {}
+void fnInc                      (uint16_t unusedParamButMandatory) {}
+
 #endif
 
 const item_t indexOfItems[] = {
@@ -472,7 +475,7 @@ const item_t indexOfItems[] = {
 /*  112 */  { itemToBeCoded,               NOPARAM,                     "DBL/",                                        "DBL/",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  113 */  { fnCvtDbRatio,                20,                          "dB" STD_RIGHT_ARROW "fr",                     "dB " STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  114 */  { fnCvtDbRatio,                10,                          "dB" STD_RIGHT_ARROW "pr",                     "dB " STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
-/*  115 */  { itemToBeCoded,               NOPARAM,                     "DEC",                                         "DEC",                                         CAT_FNCT, SLS_UNCHANGED},
+/*  115 */  { fnDec,                       TM_REGISTER,                 "DEC",                                         "DEC",                                         CAT_FNCT, SLS_ENABLED  },
 /*  116 */  { itemToBeCoded,               NOPARAM,                     "DECOMP",                                      "DECOMP",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  117 */  { fnAngularMode,               AM_DEGREE,                   "DEG",                                         "DEG",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  118 */  { fnCvtToCurrentAngularMode,   AM_DEGREE,                   "DEG" STD_RIGHT_ARROW,                         "DEG" STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
@@ -609,7 +612,7 @@ const item_t indexOfItems[] = {
 /*  249 */  { itemToBeCoded,               NOPARAM,                     "L.INTS",                                      "L.INTS",                                      CAT_MENU, SLS_UNCHANGED},
 /*  250 */  { fnImaginaryPart,             NOPARAM,                     "Im",                                          "Im",                                          CAT_FNCT, SLS_ENABLED  },
 /*  251 */  { fnToggleFractionType,        NOPARAM,                     "IMPFRC",                                      "d/c",                                         CAT_FNCT, SLS_UNCHANGED},
-/*  252 */  { itemToBeCoded,               NOPARAM,                     "INC",                                         "INC",                                         CAT_FNCT, SLS_UNCHANGED},
+/*  252 */  { fnInc,                       TM_REGISTER,                 "INC",                                         "INC",                                         CAT_FNCT, SLS_ENABLED  },
 /*  253 */  { itemToBeCoded,               NOPARAM,                     "INDEX",                                       "INDEX",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  254 */  { itemToBeCoded,               NOPARAM,                     "INFO",                                        "INFO",                                        CAT_MENU, SLS_UNCHANGED},
 /*  255 */  { itemToBeCoded,               NOPARAM,                     "INPUT",                                       "INPUT",                                       CAT_FNCT, SLS_UNCHANGED},

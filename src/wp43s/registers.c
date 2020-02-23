@@ -1968,3 +1968,125 @@ void fnToReal(uint16_t unusedParamButMandatory) {
 
   refreshRegisterLine(REGISTER_X);
 }
+
+//=============================================================================
+// Inc and Dec functions
+//-----------------------------------------------------------------------------
+
+#define INC_FLAG    0
+#define DEC_FLAG    1
+
+static void incError(uint16_t regist, uint8_t flag)
+{
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, regist);
+
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "Cannot increment/decrement, incompatible type.");								                \
+    showInfoDialog("In function inc/dec:", errorMessage, NULL, NULL);
+#endif
+}
+
+static void incLonI(uint16_t regist, uint8_t flag)
+{
+    longInteger_t r;
+
+    convertLongIntegerRegisterToLongInteger(regist, r);
+
+    (flag==INC_FLAG) ? longIntegerAddUInt(r, 1, r) : longIntegerSubtractUInt(r, 1, r);
+
+    convertLongIntegerToLongIntegerRegister(r, regist);
+
+    longIntegerFree(r);
+}
+
+static void incReal(uint16_t regist, uint8_t flag)
+{
+    real39_t r;
+
+    real34ToReal(REGISTER_REAL34_DATA(regist), &r);
+    (flag==INC_FLAG) ? realAdd(&r, const_1, &r, &ctxtReal39) : realSubtract(&r, const_1, &r, &ctxtReal39);
+
+    realToReal34(&r, REGISTER_REAL34_DATA(regist));
+}
+
+static void incCplx(uint16_t regist, uint8_t flag)
+{
+    real39_t r_real;
+
+    real34ToReal(REGISTER_REAL34_DATA(regist), &r_real);
+
+    (flag==INC_FLAG) ? realAdd(&r_real, const_1, &r_real, &ctxtReal39) : realSubtract(&r_real, const_1, &r_real, &ctxtReal39);
+
+    realToReal34(&r_real, REGISTER_REAL34_DATA(regist));
+}
+
+static void incShoI(uint16_t regist, uint8_t flag)
+{
+    int16_t r_sign;
+    uint64_t r_value;
+
+    convertShortIntegerRegisterToUInt64(regist, &r_sign, &r_value);
+
+    if(r_sign)  // regiter regist negative
+        (flag!=INC_FLAG) ? r_value++ : r_value--;
+    else        // register regist positive
+        (flag==INC_FLAG) ? r_value++ : r_value--;
+
+    convertUInt64ToShortIntegerRegister(r_sign, r_value, getRegisterTag(regist), regist);
+}
+
+static void (* const increment[9])(uint16_t, uint8_t) = {
+// reg ==>   1            2        3         4         5         6         7          8            9
+//           Long integer Real34   Complex34 Time      Date      String    Real34 mat Complex34 m  Short integer
+             incLonI,     incReal, incCplx,  incError, incError, incError, incError,  incError,    incShoI
+};
+
+
+
+/********************************************//**
+ * \brief Decrement a register
+ *
+ * \param[in] registerNumber uint16_t
+ * \return void
+ ***********************************************/
+void fnDec(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+
+        increment[getRegisterDataType(regist)](regist, DEC_FLAG);
+
+        if(REGISTER_X <= regist && regist <= REGISTER_T) {
+            refreshRegisterLine(regist);
+        }
+    }
+#ifdef PC_BUILD
+    else {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnDec:", errorMessage, "is not defined!", NULL);
+    }
+#endif
+}
+
+/********************************************//**
+ * \brief Increment a register
+ *
+ * \param[in] registerNumber uint16_t
+ * \return void
+ ***********************************************/
+ void fnInc(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+
+        increment[getRegisterDataType(regist)](regist, INC_FLAG);
+
+        if(REGISTER_X <= regist && regist <= REGISTER_T) {
+            refreshRegisterLine(regist);
+        }
+    }
+#ifdef PC_BUILD
+    else {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnInc:", errorMessage, "is not defined!", NULL);
+    }
+#endif
+}

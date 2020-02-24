@@ -1025,8 +1025,10 @@ void btnPressed(void *notUsed, void *data) {
 #endif
     }                                                                           //JM CASE JM CAPS
 */
+
+    else if((item == KEY_UP1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow(1);}                                          //JMSHOW
+    
     else if((item == KEY_UP1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
-      if( (item == KEY_UP1) && (calcMode == CM_NORMAL) ) {fnShow(1);}                                          //JMSHOW
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1135,8 +1137,10 @@ void btnPressed(void *notUsed, void *data) {
 #endif
     }                                                                          //JM CASE JM CAPS
 */
+
+    else if((item == KEY_DOWN1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow(2);}                                          //JMSHOW
+
     else if((item == KEY_DOWN1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
-      if( (item == KEY_DOWN1) && (calcMode == CM_NORMAL) ) {fnShow(2);}                                          //JMSHOW
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {

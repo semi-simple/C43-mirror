@@ -1973,12 +1973,8 @@
 #define ITM_SI_m                      1930   //JM PRE UNIT
 #define ITM_SI_k                      1931   //JM PRE UNIT
 #define ITM_SI_M                      1932   //JM PRE UNIT
-#define ITM_SHOW_UP                   1933
-#define ITM_SHOW_DN                   1934
-#define MNU_SHOW                      1935
 
-
-#define LAST_ITEM                     1936   //JM
+#define LAST_ITEM                     1933   //JM
 
 #define CHR_PROD_SIGN                 9999
 

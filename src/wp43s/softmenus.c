@@ -434,9 +434,6 @@ const int16_t menu_Inl_Tst[]     = { ITM_TEST,                      ITM_NULL,   
 #endif
 
 
-const int16_t menu_SHOW[]       = {  ITM_SHOW,                      ITM_SHOW_UP,                ITM_SHOW_DN,              ITM_NULL,              ITM_NULL,                     ITM_NULL                     };    //JMSHOW
-
-
 const int16_t menu_ASN_N[]       = { 
                                      ITM_U_KEY_USER,                ITM_U_KEY_SIGMA,            ITM_U_KEY_CC,             ITM_U_KEY_PRGM,        ITM_U_KEY_MM,                ITM_U_KEY_ALPHA,                    //JM USER NAORMAL MODE
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM USER NAORMAL MODE
@@ -482,7 +479,7 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
                                      ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR,                          //JM HOME
 /*HOME5*/                                                                                                                                                                                                         //JM HOME
                                      ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XTHROOT,                        //JM HOME
-                                    -MNU_SHOW,                      KEY_TYPCON_DN,              KEY_TYPCON_UP,            ITM_toSI,              -MNU_BASE,                   -MNU_INTS,                          //JM HOME
+                                     ITM_NULL,                      KEY_TYPCON_DN,              KEY_TYPCON_UP,            ITM_toSI,              -MNU_BASE,                   -MNU_INTS,                          //JM HOME
                                      ITM_SF,                        ITM_CF,                     ITM_RL,                   ITM_RR,                ITM_RMD,                     ITM_IDIV,                           //JM HOME
 /*HOME4*/                                                                                                                                                                                                         //JM HOME
                                      ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XTHROOT,                        //JM HOME
@@ -631,7 +628,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_TAM,         .numItems = sizeof(menu_Tam        )/sizeof(int16_t), .softkeyItem = menu_Tam         },
   {.menuId = -MNU_TAMCMP,      .numItems = sizeof(menu_TamCmp     )/sizeof(int16_t), .softkeyItem = menu_TamCmp      },
   {.menuId = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
-  {.menuId = -MNU_SHOW,        .numItems = sizeof(menu_SHOW       )/sizeof(int16_t), .softkeyItem = menu_SHOW        },  //JMSHOW  
   {.menuId = -MNU_ASN_N,       .numItems = sizeof(menu_ASN_N      )/sizeof(int16_t), .softkeyItem = menu_ASN_N       },  //JM USER NORMAL
   {.menuId = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
   {.menuId = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME

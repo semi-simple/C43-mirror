@@ -1784,8 +1784,8 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
   switch(fnShow_param) {
     case NOPARAM:
     case 0: {SHOWregis = REGISTER_X;} break;
-    case 1: {SHOWregis++; if(SHOWregis>=112) SHOWregis = 100;  } break;
-    case 2: {SHOWregis--; if(SHOWregis<=100)   SHOWregis = 111;} break;
+    case 1: {SHOWregis++; if(SHOWregis > REGISTER_K) SHOWregis = REGISTER_X;  } break;   //Activate by KEY_UP
+    case 2: {SHOWregis--; if(SHOWregis < REGISTER_X) SHOWregis = REGISTER_K;  } break;   //Activate by Key_DOWN
     default: break;
   }
 
@@ -1812,18 +1812,18 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
 //    snprintf(tmpStr3000 + 2100, 10, "%d:", SHOWregis);
 //  } else
   switch (SHOWregis) {
-    case 100: strcpy(tmpStr3000 + 2100, "X: "); break;//STACK NAMES
-    case 101: strcpy(tmpStr3000 + 2100, "Y: "); break;
-    case 102: strcpy(tmpStr3000 + 2100, "Z: "); break;
-    case 103: strcpy(tmpStr3000 + 2100, "T: "); break;
-    case 104: strcpy(tmpStr3000 + 2100, "A: "); break;
-    case 105: strcpy(tmpStr3000 + 2100, "B: "); break;
-    case 106: strcpy(tmpStr3000 + 2100, "C: "); break;
-    case 107: strcpy(tmpStr3000 + 2100, "D: "); break;
-    case 108: strcpy(tmpStr3000 + 2100, "L: "); break;
-    case 109: strcpy(tmpStr3000 + 2100, "I: "); break;
-    case 110: strcpy(tmpStr3000 + 2100, "J: "); break;
-    case 111: strcpy(tmpStr3000 + 2100, "K: "); break;
+    case REGISTER_X: strcpy(tmpStr3000 + 2100, "X: "); break;//STACK NAMES
+    case REGISTER_Y: strcpy(tmpStr3000 + 2100, "Y: "); break;
+    case REGISTER_Z: strcpy(tmpStr3000 + 2100, "Z: "); break;
+    case REGISTER_T: strcpy(tmpStr3000 + 2100, "T: "); break;
+    case REGISTER_A: strcpy(tmpStr3000 + 2100, "A: "); break;
+    case REGISTER_B: strcpy(tmpStr3000 + 2100, "B: "); break;
+    case REGISTER_C: strcpy(tmpStr3000 + 2100, "C: "); break;
+    case REGISTER_D: strcpy(tmpStr3000 + 2100, "D: "); break;
+    case REGISTER_L: strcpy(tmpStr3000 + 2100, "L: "); break;
+    case REGISTER_I: strcpy(tmpStr3000 + 2100, "I: "); break;
+    case REGISTER_J: strcpy(tmpStr3000 + 2100, "J: "); break;
+    case REGISTER_K: strcpy(tmpStr3000 + 2100, "K: "); break;
     default: break;
   }
 

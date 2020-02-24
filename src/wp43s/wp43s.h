@@ -411,7 +411,7 @@ typedef int16_t calcRegister_t;
 #define TI_TRUE                11
 #define TI_SHOW_REGISTER       12
 #define TI_VIEW_REGISTER       13
-#define TI_SHOW_REGISTER_JM    14      //JM_SHOW
+#define TI_SHOW_REGISTER_BIG   14      //JM_SHOW
 
 // Register browser mode
 #define RBR_GLOBAL              0

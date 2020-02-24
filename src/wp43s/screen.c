@@ -1256,7 +1256,7 @@ void resetTemporaryInformation(void) {
                                if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
                                break;
 
-    case TI_SHOW_REGISTER_JM:  //refresh the complete screen
+    case TI_SHOW_REGISTER_BIG: //refresh the complete screen
                                clearScreen(false, true, true);
                                refreshStack();
                                showSoftmenuCurrentPart();
@@ -1425,7 +1425,7 @@ void refreshRegisterLine(calcRegister_t regist) {
         }
 
 //JM vv JMSHOW
-        else if(temporaryInformation == TI_SHOW_REGISTER_JM) {
+        else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
           #define line_h 39
           switch(regist) {
             // L1

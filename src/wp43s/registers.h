@@ -172,26 +172,12 @@ void      fnInc                           (uint16_t r);
 
 
 //=============================================================================
-// Register Min/Max functions
+// Register Comparison and Min/Max functions
 //-----------------------------------------------------------------------------
 
-#define CMP_MAX     0
-#define CMP_MIN     1
+bool_t registerCmp(calcRegister_t reg1, calcRegister_t reg2, int8_t *result);
+void registerCmpError(calcRegister_t regist1, calcRegister_t regist2);
 
-void registerCmpLonILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpLonIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpLonIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpTimeTime(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpDateDate(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpStriStri(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpShoILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpShoIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpShoIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpRealLonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpRealShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpRealReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-void registerCmpError(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination);
-
-extern void (* const registerCmp[9][9])(uint8_t, calcRegister_t reg1, calcRegister_t reg2, calcRegister_t);
-
+void registerMax(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest);
+void registerMin(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest);
 

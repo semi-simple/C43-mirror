@@ -1223,7 +1223,7 @@ void fnStoreMin(uint16_t regist)
 {
     if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
     {
-        registerCmp[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)](CMP_MAX, regist, REGISTER_X, regist);
+        registerMin(REGISTER_X, regist, regist);
 
         if(REGISTER_X <= regist && regist <= REGISTER_T)
             refreshRegisterLine(regist);
@@ -1249,7 +1249,7 @@ void fnStoreMax(uint16_t regist)
 {
     if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
     {
-        registerCmp[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)](CMP_MAX, regist, REGISTER_X, regist);
+        registerMax(REGISTER_X, regist, regist);
 
         if(REGISTER_X <= regist && regist <= REGISTER_T)
             refreshRegisterLine(regist);
@@ -2119,7 +2119,7 @@ void fnDec(uint16_t regist)
 // Register Min/Max functions
 //-----------------------------------------------------------------------------
 
-void registerCmpLonILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpLonILonI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Long Integer, regist2 = Long Integer
 
@@ -2130,19 +2130,13 @@ void registerCmpLonILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
 
     int8_t value = longIntegerCompare(r1, r2);
 
-    if(value!=0)
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
-    }
-
     longIntegerFree(r1);
     longIntegerFree(r2);
+
+    *result = value;
 }
 
-void registerCmpLonIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpLonIShoI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Long Integer, regist2 = Short Integer
 
@@ -2153,19 +2147,13 @@ void registerCmpLonIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
 
     int8_t value = longIntegerCompare(r1, r2);
 
-    if(value!=0)
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
-    }
-
     longIntegerFree(r1);
     longIntegerFree(r2);
+
+    *result = value;
 }
 
-void registerCmpLonIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpLonIReal(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Long Integer, regist2 = Real
 
@@ -2174,39 +2162,28 @@ void registerCmpLonIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
     convertLongIntegerRegisterToReal(regist1, (real_t *)&r1, &ctxtReal39);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &r2);
 
-    if(! realCompareEqual(&r1, &r2))
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
-    }
+    if(realCompareEqual(&r1, &r2))
+        *result = 0;
+    else
+        *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
-void registerCmpTimeTime(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpTimeTime(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     fnToBeCoded();
 }
 
-void registerCmpDateDate(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpDateDate(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     fnToBeCoded();
 }
 
-void registerCmpStriStri(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpStriStri(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
-     int32_t value = compareString(REGISTER_STRING_DATA(regist1), REGISTER_STRING_DATA(regist2), CMP_EXTENSIVE);
-
-     if(value!=0)
-     {
-         if (cmp == CMP_MAX)
-             copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
-         else
-             copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
-     }
+    *result = compareString(REGISTER_STRING_DATA(regist1), REGISTER_STRING_DATA(regist2), CMP_EXTENSIVE);
 }
 
-void registerCmpShoILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpShoILonI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Short Integer, regist2 = Long Integer
 
@@ -2217,19 +2194,13 @@ void registerCmpShoILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
 
     int8_t value = longIntegerCompare(r1, r2);
 
-    if(value!=0)
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
-    }
-
     longIntegerFree(r1);
     longIntegerFree(r2);
+
+    *result = value;
 }
 
-void registerCmpShoIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpShoIShoI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Short Integer, regist2 = Short Integer
 
@@ -2240,19 +2211,13 @@ void registerCmpShoIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
 
     int8_t value = longIntegerCompare(r1, r2);
 
-    if(value!=0)
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
-    }
-
     longIntegerFree(r1);
     longIntegerFree(r2);
+
+    *result = value;
 }
 
-void registerCmpShoIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpShoIReal(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Short Integer, regist2 = Real
 
@@ -2261,16 +2226,13 @@ void registerCmpShoIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
     convertShortIntegerRegisterToReal(regist1, (real_t *)&r1, &ctxtReal39);
     real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);
 
-    if(! realCompareEqual(&r1, &r2))
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
-    }
+    if(realCompareEqual(&r1, &r2))
+        *result = 0;
+    else
+        *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
-void registerCmpRealLonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpRealLonI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Real, regist2 = Long Integer
 
@@ -2279,16 +2241,13 @@ void registerCmpRealLonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
     real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
     convertLongIntegerRegisterToReal(regist2, (real_t *)&r2, &ctxtReal39);
 
-    if(! realCompareEqual(&r1, &r2))
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
-    }
+    if(realCompareEqual(&r1, &r2))
+        *result = 0;
+    else
+        *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
-void registerCmpRealShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpRealShoI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Real, regist2 = Short Integer
 
@@ -2297,16 +2256,13 @@ void registerCmpRealShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
     real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
     convertShortIntegerRegisterToReal(regist2, (real_t *)&r2, &ctxtReal39);
 
-    if(! realCompareEqual(&r1, &r2))
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
-    }
+    if(realCompareEqual(&r1, &r2))
+        *result = 0;
+    else
+        *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
-void registerCmpRealReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+static void registerCmpRealReal(calcRegister_t regist1, calcRegister_t regist2, int8_t *result)
 {
     // regist1 = Real, regist2 = Real
 
@@ -2315,40 +2271,81 @@ void registerCmpRealReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t reg
     real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
     real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);
 
-    if(! realCompareEqual(&r1, &r2))
-    {
-        if (cmp == CMP_MAX)
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
-        else
-            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
-    }
+    if(realCompareEqual(&r1, &r2))
+        *result = 0;
+    else 
+        *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
-void registerCmpError(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+
+//void (* const registerCmp[9][9])(uint8_t, calcRegister_t reg1, calcRegister_t reg2, calcRegister_t) = {
+//// reg1 |    reg2 ==>    1                    2                    3                 4                    5                    6                        7                 8                 9
+////      V                Long integer         Real34               Complex34         Time                 Date                 String                   Real34 mat        Complex34 mat     Short integer
+///*  1 Long integer  */ { registerCmpLonILonI, registerCmpLonIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpLonIShoI },
+///*  2 Real34        */ { registerCmpRealLonI, registerCmpRealReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpRealShoI },
+///*  3 Complex34     */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+///*  4 Time          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpTimeTime, registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+///*  5 Date          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpDateDate, registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+///*  6 String        */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpStriStri, registerCmpError, registerCmpError, registerCmpError    },
+///*  7 Real34 mat    */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+///*  8 Complex34 mat */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+///*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpShoIShoI }
+//};
+
+static void (* const cmpFunc[9][9])(calcRegister_t reg1, calcRegister_t reg2, int8_t*) = {
+// reg1 |    reg2 ==>    1                    2                    3          4                    5                    6                    7              8               9
+//      V                Long integer         Real34               Complex34  Time                 Date                 String               Real34 mat     Complex34 mat   Short integer
+/*  1 Long integer  */ { registerCmpLonILonI, registerCmpLonIReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpLonIShoI },
+/*  2 Real34        */ { registerCmpRealLonI, registerCmpRealReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpRealShoI },
+/*  3 Complex34     */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL                },
+/*  4 Time          */ { NULL,                NULL,                NULL,      registerCmpTimeTime, NULL,                NULL,                NULL,          NULL,           NULL                },
+/*  5 Date          */ { NULL,                NULL,                NULL,      NULL,                registerCmpDateDate, NULL,                NULL,          NULL,           NULL                },
+/*  6 String        */ { NULL,                NULL,                NULL,      NULL,                NULL,                registerCmpStriStri, NULL,          NULL,           NULL                },
+/*  7 Real34 mat    */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL                },
+/*  8 Complex34 mat */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL                },
+/*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpShoIShoI }
+};
+
+
+void registerCmpError(calcRegister_t regist1, calcRegister_t regist2)
 {
-     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot get the %s from %s", cmp==CMP_MAX ? "max" : "min",
-            getRegisterDataTypeName(regist1, true, false));
+    sprintf(errorMessage, "cannot get compare: %s", getRegisterDataTypeName(regist1, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "and %s", getRegisterDataTypeName(regist2, true, false));
     showInfoDialog("In function registerCmp:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
 #endif
 
 }
 
+bool_t registerCmp(calcRegister_t reg1, calcRegister_t reg2, int8_t *result)
+{
+    void (*func)(calcRegister_t, calcRegister_t, int8_t*) = cmpFunc[getRegisterDataType(reg1)][getRegisterDataType(reg2)];
 
-void (* const registerCmp[9][9])(uint8_t, calcRegister_t reg1, calcRegister_t reg2, calcRegister_t) = {
-// reg1 |    reg2 ==>    1                    2                    3                 4                    5                    6                        7                 8                 9
-//      V                Long integer         Real34               Complex34         Time                 Date                 String                   Real34 mat        Complex34 mat     Short integer
-/*  1 Long integer  */ { registerCmpLonILonI, registerCmpLonIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpLonIShoI },
-/*  2 Real34        */ { registerCmpRealLonI, registerCmpRealReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpRealShoI },
-/*  3 Complex34     */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-/*  4 Time          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpTimeTime, registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-/*  5 Date          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpDateDate, registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-/*  6 String        */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpStriStri, registerCmpError, registerCmpError, registerCmpError    },
-/*  7 Real34 mat    */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-/*  8 Complex34 mat */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-/*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpShoIShoI }
-};
+    if(func==NULL)
+        return false;
 
+    func(reg1, reg2, result);
 
+    return true;
+}
+
+void registerMax(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest)
+{
+    int8_t result = 0;
+
+    if(! registerCmp(reg1, reg2, &result))
+        registerCmpError(reg1, reg2);
+    else if(result!=0)
+        copySourceRegisterToDestRegister(result>0 ? reg1 : reg2, dest);
+}
+
+void registerMin(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest)
+{
+    int8_t result = 0;
+
+    if(! registerCmp(reg1, reg2, &result))
+        registerCmpError(reg1, reg2);
+    else if(result!=0)
+        copySourceRegisterToDestRegister(result>0 ? reg2 : reg1, dest);
+}

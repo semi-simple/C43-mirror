@@ -20,9 +20,17 @@
 
 #include "wp43s.h"
 
+void fnMin(uint16_t unusedParamButMandatory)
+{
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    
+    registerCmp[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](CMP_MIN, REGISTER_X, REGISTER_Y, REGISTER_X);
 
+    adjustResult(REGISTER_X, true, false, REGISTER_X, -1, -1);
+}
 
-void fnMin(uint16_t unusedParamButMandatory) {
+void fnMin2(uint16_t unusedParamButMandatory) {
   real39_t x, y;
   longInteger_t lgIntX, lgIntY;
 

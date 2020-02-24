@@ -1219,10 +1219,22 @@ void fnStoreDiv(uint16_t regist) {
  * \param[in] registerNumber uint16_t
  * \return void
  ***********************************************/
-void fnStoreMin(uint16_t r) {
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnStoreMin:", "To be coded", NULL, NULL);
-  #endif
+void fnStoreMin(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
+    {
+        registerCmp[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)](CMP_MAX, regist, REGISTER_X, regist);
+
+        if(REGISTER_X <= regist && regist <= REGISTER_T)
+            refreshRegisterLine(regist);
+    }
+#ifdef PC_BUILD
+    else
+    {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnStoreMin:", errorMessage, "is not defined!", NULL);
+    }
+#endif
 }
 
 
@@ -1233,10 +1245,22 @@ void fnStoreMin(uint16_t r) {
  * \param[in] registerNumber uint16_t
  * \return void
  ***********************************************/
-void fnStoreMax(uint16_t r) {
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnStoreMax:", "To be coded", NULL, NULL);
-  #endif
+void fnStoreMax(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
+    {
+        registerCmp[getRegisterDataType(regist)][getRegisterDataType(REGISTER_X)](CMP_MAX, regist, REGISTER_X, regist);
+
+        if(REGISTER_X <= regist && regist <= REGISTER_T)
+            refreshRegisterLine(regist);
+    }
+#ifdef PC_BUILD
+    else
+    {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
+    }
+#endif
 }
 
 
@@ -2090,3 +2114,241 @@ void fnDec(uint16_t regist)
     }
 #endif
 }
+
+//=============================================================================
+// Register Min/Max functions
+//-----------------------------------------------------------------------------
+
+void registerCmpLonILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Long Integer, regist2 = Long Integer
+
+    longInteger_t r1, r2;
+
+    convertLongIntegerRegisterToLongInteger(regist1, r1);
+    convertLongIntegerRegisterToLongInteger(regist2, r2);
+
+    int8_t value = longIntegerCompare(r1, r2);
+
+    if(value!=0)
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
+    }
+
+    longIntegerFree(r1);
+    longIntegerFree(r2);
+}
+
+void registerCmpLonIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Long Integer, regist2 = Short Integer
+
+    longInteger_t r1, r2;
+
+    convertLongIntegerRegisterToLongInteger(regist1, r1);
+    convertShortIntegerRegisterToLongInteger(regist2, r2);
+
+    int8_t value = longIntegerCompare(r1, r2);
+
+    if(value!=0)
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
+    }
+
+    longIntegerFree(r1);
+    longIntegerFree(r2);
+}
+
+void registerCmpLonIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Long Integer, regist2 = Real
+
+    real39_t r1, r2;
+
+    convertLongIntegerRegisterToReal(regist1, (real_t *)&r1, &ctxtReal39);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &r2);
+
+    if(! realCompareEqual(&r1, &r2))
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
+    }
+}
+
+void registerCmpTimeTime(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    fnToBeCoded();
+}
+
+void registerCmpDateDate(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    fnToBeCoded();
+}
+
+void registerCmpStriStri(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+     int32_t value = compareString(REGISTER_STRING_DATA(regist1), REGISTER_STRING_DATA(regist2), CMP_EXTENSIVE);
+
+     if(value!=0)
+     {
+         if (cmp == CMP_MAX)
+             copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
+         else
+             copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
+     }
+}
+
+void registerCmpShoILonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Short Integer, regist2 = Long Integer
+
+    longInteger_t r1, r2;
+
+    convertShortIntegerRegisterToLongInteger(regist1, r1);
+    convertLongIntegerRegisterToLongInteger(regist2, r2);
+
+    int8_t value = longIntegerCompare(r1, r2);
+
+    if(value!=0)
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
+    }
+
+    longIntegerFree(r1);
+    longIntegerFree(r2);
+}
+
+void registerCmpShoIShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Short Integer, regist2 = Short Integer
+
+    longInteger_t r1, r2;
+
+    convertShortIntegerRegisterToLongInteger(regist1, r1);
+    convertShortIntegerRegisterToLongInteger(regist2, r2);
+
+    int8_t value = longIntegerCompare(r1, r2);
+
+    if(value!=0)
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister((value > 0) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister((value > 0) ? regist2 : regist1, destination);
+    }
+
+    longIntegerFree(r1);
+    longIntegerFree(r2);
+}
+
+void registerCmpShoIReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Short Integer, regist2 = Real
+
+    real39_t r1, r2;
+
+    convertShortIntegerRegisterToReal(regist1, (real_t *)&r1, &ctxtReal39);
+    real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);
+
+    if(! realCompareEqual(&r1, &r2))
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
+    }
+}
+
+void registerCmpRealLonI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Real, regist2 = Long Integer
+
+    real39_t r1, r2;
+
+    real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
+    convertLongIntegerRegisterToReal(regist2, (real_t *)&r2, &ctxtReal39);
+
+    if(! realCompareEqual(&r1, &r2))
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
+    }
+}
+
+void registerCmpRealShoI(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Real, regist2 = Short Integer
+
+    real39_t r1, r2;
+
+    real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
+    convertShortIntegerRegisterToReal(regist2, (real_t *)&r2, &ctxtReal39);
+
+    if(! realCompareEqual(&r1, &r2))
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
+    }
+}
+
+void registerCmpRealReal(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+    // regist1 = Real, regist2 = Real
+
+    real39_t r1, r2;
+
+    real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
+    real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);
+
+    if(! realCompareEqual(&r1, &r2))
+    {
+        if (cmp == CMP_MAX)
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist1 : regist2, destination);
+        else
+            copySourceRegisterToDestRegister(realCompareGreaterThan(&r1, &r2) ? regist2 : regist1, destination);
+    }
+}
+
+void registerCmpError(uint8_t cmp, calcRegister_t regist1, calcRegister_t regist2, calcRegister_t destination)
+{
+     displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot get the %s from %s", cmp==CMP_MAX ? "max" : "min",
+            getRegisterDataTypeName(regist1, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "and %s", getRegisterDataTypeName(regist2, true, false));
+    showInfoDialog("In function registerCmp:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+#endif
+
+}
+
+
+void (* const registerCmp[9][9])(uint8_t, calcRegister_t reg1, calcRegister_t reg2, calcRegister_t) = {
+// reg1 |    reg2 ==>    1                    2                    3                 4                    5                    6                        7                 8                 9
+//      V                Long integer         Real34               Complex34         Time                 Date                 String                   Real34 mat        Complex34 mat     Short integer
+/*  1 Long integer  */ { registerCmpLonILonI, registerCmpLonIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpLonIShoI },
+/*  2 Real34        */ { registerCmpRealLonI, registerCmpRealReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpRealShoI },
+/*  3 Complex34     */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+/*  4 Time          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpTimeTime, registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+/*  5 Date          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpDateDate, registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+/*  6 String        */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpStriStri, registerCmpError, registerCmpError, registerCmpError    },
+/*  7 Real34 mat    */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+/*  8 Complex34 mat */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
+/*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpShoIShoI }
+};
+
+

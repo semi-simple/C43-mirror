@@ -1837,7 +1837,8 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
       source = 2100;
       dest = 0;
 
-      if (stringByteLength(tmpStr3000 + 2100) > 80) {
+
+      if (stringByteLength(tmpStr3000 + 2100) >= 80) {
         temporaryInformation = TI_SHOW_REGISTER;
         for(d=0; d<=1800 ; d+=300) {
           dest = d;
@@ -1851,7 +1852,9 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
           }
         } 
       } 
-    else if (stringByteLength(tmpStr3000 + 2100) <= 80) {
+    else
+
+     if (stringByteLength(tmpStr3000 + 2100) <= 79) {
       temporaryInformation = TI_SHOW_REGISTER_BIG;
       for(d=0; d<=1800 ; d+=300) {
         dest = d;
@@ -1864,7 +1867,8 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
           tmpStr3000[++dest] = 0;
         }
       }
-    }      
+    }   
+   
       break;
 
     case dtReal34:

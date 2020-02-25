@@ -1426,7 +1426,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
 //JM vv JMSHOW
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
-          #define line_h 39
+          #define line_h 38
           switch(regist) {
             // L1
             case REGISTER_T: w = stringWidth(tmpStr3000, &numericFont, true, true);

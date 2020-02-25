@@ -14,8 +14,8 @@
    viewBox="0 0 105 148"
    version="1.1"
    id="svg8"
-   sodipodi:docname="WP43S layout.svg"
-   inkscape:version="0.92.4 5da689c313, 2019-01-14">
+   sodipodi:docname="WP43S_layout.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <defs
      id="defs2">
     <clipPath
@@ -8073,16 +8073,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4716214"
-     inkscape:cx="199.81095"
-     inkscape:cy="281.82768"
+     inkscape:cx="169.62218"
+     inkscape:cy="269.62606"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1909"
-     inkscape:window-height="1021"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1858"
+     inkscape:window-height="1057"
+     inkscape:window-x="1916"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
      showguides="false" />
   <metadata
      id="metadata5">
@@ -8092,7 +8092,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-nc-sa/4.0/" />
       </cc:Work>
@@ -8120,7 +8120,8 @@
      id="layer3"
      inkscape:label="Background"
      style="display:inline"
-     transform="translate(0,-149)">
+     transform="translate(0,-149)"
+     sodipodi:insensitive="true">
     <rect
        style="fill:#000000;stroke:#000000;stroke-width:0.04142284;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
        id="rect54862"
@@ -8943,20 +8944,6 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
-       id="g55501"
-       transform="translate(-91.871587,48.768655)">
-      <g
-         id="text30477"
-         style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:CambriaMath;-inkscape-font-specification:CambriaMath;writing-mode:lr-tb;fill:#ffc000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
-         aria-label="△">
-        <path
-           inkscape:connector-curvature="0"
-           id="path53524"
-           style="stroke-width:0.35277778"
-           d="m 170.33736,208.15592 1.06003,1.89768 h -2.12142 z m 0.78445,1.73397 -0.78445,-1.41337 -0.78581,1.41337 z" />
-      </g>
-    </g>
-    <g
        id="g55465"
        transform="translate(-91.871587,48.768655)">
       <g
@@ -9063,20 +9050,6 @@
        aria-label=" "
        style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:ArialMT;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
        id="text31321" />
-    <g
-       id="g55630"
-       transform="translate(-91.572987,48.834017)">
-      <g
-         id="text31345"
-         style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:CambriaMath;-inkscape-font-specification:CambriaMath;writing-mode:lr-tb;fill:#ffc000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
-         aria-label="▽">
-        <path
-           inkscape:connector-curvature="0"
-           id="path53647"
-           style="stroke-width:0.35277778"
-           d="m 168.59861,219.24726 h 2.12143 l -1.06003,1.89768 z m 0.27558,0.16371 0.78582,1.41337 0.78445,-1.41337 z" />
-      </g>
-    </g>
     <g
        aria-label=" "
        style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:ArialMT;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#ffc000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
@@ -9393,6 +9366,106 @@
        aria-label="  "
        style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:ArialMT;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#00ccff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
        id="text32861" />
+    <g
+       id="g3652">
+      <g
+         transform="translate(-91.871587,48.768655)"
+         id="g55501">
+        <g
+           aria-label="△"
+           style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:CambriaMath;-inkscape-font-specification:CambriaMath;writing-mode:lr-tb;fill:#ffc000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
+           id="text30477">
+          <path
+             d="m 170.33736,208.15592 1.06003,1.89768 h -2.12142 z m 0.78445,1.73397 -0.78445,-1.41337 -0.78581,1.41337 z"
+             style="stroke-width:0.35277778"
+             id="path53524"
+             inkscape:connector-curvature="0" />
+        </g>
+      </g>
+      <g
+         transform="matrix(0.13230697,0,0,0.13230697,60.554969,236.73361)"
+         id="g3541"
+         style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none">
+        <rect
+           style="fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508"
+           width="12"
+           height="2"
+           x="113.05"
+           y="156.95" />
+        <rect
+           style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508-9"
+           width="12"
+           height="2"
+           x="113.05"
+           y="152.95" />
+        <rect
+           style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508-4"
+           width="12"
+           height="2"
+           x="113.05"
+           y="160.95" />
+        <rect
+           style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508-44"
+           width="12"
+           height="2"
+           x="113.05"
+           y="164.95" />
+      </g>
+    </g>
+    <g
+       id="g3662">
+      <g
+         transform="translate(-91.572987,48.834017)"
+         id="g55630">
+        <g
+           aria-label="▽"
+           style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:CambriaMath;-inkscape-font-specification:CambriaMath;writing-mode:lr-tb;fill:#ffc000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
+           id="text31345">
+          <path
+             d="m 168.59861,219.24726 h 2.12143 l -1.06003,1.89768 z m 0.27558,0.16371 0.78582,1.41337 0.78445,-1.41337 z"
+             style="stroke-width:0.35277778"
+             id="path53647"
+             inkscape:connector-curvature="0" />
+        </g>
+      </g>
+      <g
+         transform="matrix(0.13230697,0,0,0.13230697,60.176209,247.84493)"
+         id="g3541-5"
+         style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none">
+        <rect
+           style="fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508-0"
+           width="12"
+           height="2"
+           x="113.05"
+           y="156.95" />
+        <rect
+           style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508-9-9"
+           width="12"
+           height="2"
+           x="113.05"
+           y="152.95" />
+        <rect
+           style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508-4-4"
+           width="12"
+           height="2"
+           x="113.05"
+           y="160.95" />
+        <rect
+           style="display:inline;fill:#ffc000;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3508-44-4"
+           width="12"
+           height="2"
+           x="113.05"
+           y="164.95" />
+      </g>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -10445,10 +10518,9 @@
       </g>
     </g>
     <g
-       style="display:inline"
-       id="g55827"
-       transform="translate(-91.27463,48.284442)">
+       id="g3694">
       <g
+         transform="matrix(0.78617812,0,0,0.78568203,-59.466972,98.420466)"
          id="text32539"
          style="font-variant:normal;font-weight:normal;font-size:2.11666656px;font-family:ArialMT;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#00ccff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
          aria-label="●">
@@ -10462,7 +10534,7 @@
          inkscape:connector-curvature="0"
          id="path32549"
          style="fill:#00ccff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.35277778"
-         d="m 149.18116,236.56486 h 1.27 v -0.16933 h -1.27 z" />
+         d="m 57.90653,284.8493 h 1.27 v -0.16933 h -1.27 z" />
     </g>
     <g
        id="g13347"
@@ -10484,11 +10556,9 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
-       style="display:inline"
-       id="g55647"
-       transform="translate(-91.493297,48.834018)">
+       id="g3686">
       <g
-         transform="translate(-0.32722319)"
+         transform="matrix(0.91996478,0,0,1,-82.234097,48.834018)"
          id="text31539"
          style="font-variant:normal;font-weight:normal;font-size:2.79399991px;font-family:ArialMT;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#00ccff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
          aria-label="&lt;">
@@ -10502,7 +10572,7 @@
          inkscape:connector-curvature="0"
          id="path31549"
          style="fill:#00ccff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.35277778"
-         d="m 119.62191,225.20894 h 1.60867 v -0.16933 h -1.60867 z" />
+         d="m 28.083669,274.04296 h 1.60867 v -0.16933 h -1.60867 z" />
     </g>
   </g>
   <g
@@ -10976,7 +11046,8 @@
      id="layer8"
      inkscape:label="Decoration"
      style="display:inline"
-     transform="translate(0,-149)">
+     transform="translate(0,-149)"
+     sodipodi:insensitive="true">
     <g
        style="display:inline;fill-rule:nonzero"
        id="g54882"
@@ -11125,7 +11196,8 @@
      id="layer4"
      inkscape:label="Overlay"
      style="display:inline"
-     transform="translate(0,-149)">
+     transform="translate(0,-149)"
+     sodipodi:insensitive="true">
     <path
        style="fill:none;stroke:#ffffff;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 87.500015,277.89987 h 1 v 3 h -1 v 10.1 H 17.000009 v -10.1 h -1 v -3 h 1 v -30 h -1 v -3 h 1 v -30 h -1 v -3 h 1 v -10.4 h 70.500006 v 10.4 h 1 v 3 h -1 v 30 h 1 v 3 h -1 z"
@@ -11438,13 +11510,47 @@
        id="path3519-1-7-4-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:WP43S_StandardFont;-inkscape-font-specification:WP43S_StandardFont;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="120.27975"
+       y="176.18088"
+       id="text6187"><tspan
+         sodipodi:role="line"
+         id="tspan6185"
+         x="120.27975"
+         y="185.97046"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:WP43S_StandardFont;-inkscape-font-specification:WP43S_StandardFont;stroke-width:0.26458332" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:WP43S_StandardFont;-inkscape-font-specification:WP43S_StandardFont;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="118.48184"
+       y="172.58507"
+       id="text6191"><tspan
+         sodipodi:role="line"
+         id="tspan6189"
+         x="118.48184"
+         y="182.37465"
+         style="stroke-width:0.26458332" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:WP43S_StandardFont;-inkscape-font-specification:WP43S_StandardFont;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-49.262558"
+       y="145.9761"
+       id="text3506"><tspan
+         sodipodi:role="line"
+         id="tspan3504"
+         x="-49.262558"
+         y="155.76569"
+         style="stroke-width:0.26458332" /></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer5"
-     inkscape:label="Keys"
+     inkscape:label="Key frames"
      style="display:inline"
-     transform="translate(0,-149)">
+     transform="translate(0,-149)"
+     sodipodi:insensitive="true">
     <path
        style="display:inline;fill:none;stroke:#ffffff;stroke-width:0.25039876;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 20.07521,210.37467 v -4.9496 h 6.849605 v 4.9496 z"
@@ -11707,7 +11813,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Key printing"
+     inkscape:label="Keys"
      style="display:inline"
      transform="translate(0,-149)">
     <g
@@ -11900,10 +12006,10 @@
       </g>
     </g>
     <g
-       style="display:inline"
-       id="g55179"
-       transform="matrix(1.0103962,0,0,0.9771602,-93.041231,54.261355)">
+       id="g3534"
+       transform="translate(0.50893537)">
       <g
+         transform="matrix(1.0103962,0,0,0.9771602,-93.041231,54.261355)"
          id="text28091"
          style="font-variant:normal;font-weight:normal;font-size:4.23333311px;font-family:Calibri;-inkscape-font-specification:Calibri;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
          aria-label="R">
@@ -11916,7 +12022,7 @@
       <g
          id="text28103"
          style="font-variant:normal;font-weight:normal;font-size:5.09760809px;font-family:Wingdings3;-inkscape-font-specification:Wingdings3;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.10044632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-         transform="scale(1.2041595,0.83045479)"
+         transform="matrix(0.73232672,0,0,0.81881093,-37.521333,52.68092)"
          aria-label="">
         <path
            inkscape:connector-curvature="0"
@@ -11981,10 +12087,10 @@
       </g>
     </g>
     <g
-       style="display:inline"
-       id="g55318"
-       transform="matrix(1.0103962,0,0,0.9771602,-92.749321,54.208991)">
+       id="g3562"
+       transform="translate(0.17893091)">
       <g
+         transform="matrix(1.0103962,0,0,0.9771602,-92.749321,54.208991)"
          id="text28987"
          style="font-variant:normal;font-weight:normal;font-size:4.23333311px;font-family:Calibri;-inkscape-font-specification:Calibri;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277778"
          aria-label="ENTER">
@@ -12017,7 +12123,7 @@
       <g
          id="text28999"
          style="font-variant:normal;font-weight:normal;font-size:5.09760809px;font-family:Wingdings3;-inkscape-font-specification:Wingdings3;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.10044632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-         transform="scale(1.2041595,0.83045479)"
+         transform="matrix(0.7498309,0,0,0.81148737,-44.202743,54.208991)"
          aria-label="">
         <path
            inkscape:connector-curvature="0"

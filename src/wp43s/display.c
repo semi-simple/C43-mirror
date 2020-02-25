@@ -1868,7 +1868,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
   refreshRegisterLine(REGISTER_T);
   if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
   if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
-  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);
+  if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
 
   displayFormat = savedDisplayFormat;
   displayFormatDigits = savedDisplayFormatDigits;

@@ -1146,7 +1146,7 @@ void fnStoreSub(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnStoreMinus:", errorMessage, "is not defined!", NULL);
+    showInfoDialog("In function fnStoreSub:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -1413,7 +1413,7 @@ void fnRecallSub(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnRecallMinus:", errorMessage, "is not defined!", NULL);
+    showInfoDialog("In function fnRecallSub:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -1484,10 +1484,21 @@ void fnRecallDiv(uint16_t regist) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallMin(uint16_t r) {
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallMin:", "To be coded", NULL, NULL);
-  #endif
+void fnRecallMin(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
+    {
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        registerMin(REGISTER_X, regist, REGISTER_X);
+        refreshRegisterLine(REGISTER_X);
+    }
+#ifdef PC_BUILD
+    else
+    {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
+    }
+#endif
 }
 
 
@@ -1498,10 +1509,21 @@ void fnRecallMin(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallMax(uint16_t r) {
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallMax:", "To be coded", NULL, NULL);
-  #endif
+void fnRecallMax(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
+    {
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        registerMax(REGISTER_X, regist, REGISTER_X);
+        refreshRegisterLine(REGISTER_X);
+    }
+#ifdef PC_BUILD
+    else
+    {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnReallMax:", errorMessage, "is not defined!", NULL);
+    }
+#endif
 }
 
 

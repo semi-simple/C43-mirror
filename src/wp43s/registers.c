@@ -1271,7 +1271,7 @@ void fnStoreSub(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnStoreMinus:", errorMessage, "is not defined!", NULL);
+    showInfoDialog("In function fnStoreSub:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -1541,7 +1541,7 @@ void fnRecallSub(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnRecallMinus:", errorMessage, "is not defined!", NULL);
+    showInfoDialog("In function fnRecallSub:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -1612,10 +1612,21 @@ void fnRecallDiv(uint16_t regist) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallMin(uint16_t r) {
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallMin:", "To be coded", NULL, NULL);
-  #endif
+void fnRecallMin(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
+    {
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        registerMin(REGISTER_X, regist, REGISTER_X);
+        refreshRegisterLine(REGISTER_X);
+    }
+#ifdef PC_BUILD
+    else
+    {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
+    }
+#endif
 }
 
 
@@ -1626,10 +1637,21 @@ void fnRecallMin(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallMax(uint16_t r) {
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallMax:", "To be coded", NULL, NULL);
-  #endif
+void fnRecallMax(uint16_t regist)
+{
+    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
+    {
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        registerMax(REGISTER_X, regist, REGISTER_X);
+        refreshRegisterLine(REGISTER_X);
+    }
+#ifdef PC_BUILD
+    else
+    {
+        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+        showInfoDialog("In function fnReallMax:", errorMessage, "is not defined!", NULL);
+    }
+#endif
 }
 
 
@@ -2405,21 +2427,6 @@ static void registerCmpRealReal(calcRegister_t regist1, calcRegister_t regist2, 
         *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
-
-//void (* const registerCmp[9][9])(uint8_t, calcRegister_t reg1, calcRegister_t reg2, calcRegister_t) = {
-//// reg1 |    reg2 ==>    1                    2                    3                 4                    5                    6                        7                 8                 9
-////      V                Long integer         Real34               Complex34         Time                 Date                 String                   Real34 mat        Complex34 mat     Short integer
-///*  1 Long integer  */ { registerCmpLonILonI, registerCmpLonIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpLonIShoI },
-///*  2 Real34        */ { registerCmpRealLonI, registerCmpRealReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpRealShoI },
-///*  3 Complex34     */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-///*  4 Time          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpTimeTime, registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-///*  5 Date          */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpDateDate, registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-///*  6 String        */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpStriStri, registerCmpError, registerCmpError, registerCmpError    },
-///*  7 Real34 mat    */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-///*  8 Complex34 mat */ { registerCmpError,    registerCmpError,    registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpError    },
-///*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, registerCmpError, registerCmpError,    registerCmpError,    registerCmpError,        registerCmpError, registerCmpError, registerCmpShoIShoI }
-//};
-
 static void (* const cmpFunc[9][9])(calcRegister_t reg1, calcRegister_t reg2, int8_t*) = {
 // reg1 |    reg2 ==>    1                    2                    3          4                    5                    6                    7              8               9
 //      V                Long integer         Real34               Complex34  Time                 Date                 String               Real34 mat     Complex34 mat   Short integer
@@ -2433,7 +2440,6 @@ static void (* const cmpFunc[9][9])(calcRegister_t reg1, calcRegister_t reg2, in
 /*  8 Complex34 mat */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL                },
 /*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpShoIShoI }
 };
-
 
 void registerCmpError(calcRegister_t regist1, calcRegister_t regist2)
 {

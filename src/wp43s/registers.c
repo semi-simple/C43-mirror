@@ -1488,10 +1488,9 @@ void fnRecallMin(uint16_t regist)
 {
     if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
     {
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
         registerMin(REGISTER_X, regist, REGISTER_X);
-
-        if(REGISTER_X <= regist && regist <= REGISTER_T)
-        refreshRegisterLine(regist);
+        refreshRegisterLine(REGISTER_X);
     }
 #ifdef PC_BUILD
     else
@@ -1514,16 +1513,15 @@ void fnRecallMax(uint16_t regist)
 {
     if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
     {
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
         registerMax(REGISTER_X, regist, REGISTER_X);
-
-        if(REGISTER_X <= regist && regist <= REGISTER_T)
-        refreshRegisterLine(regist);
+        refreshRegisterLine(REGISTER_X);
     }
 #ifdef PC_BUILD
     else
     {
         sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-        showInfoDialog("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
+        showInfoDialog("In function fnReallMax:", errorMessage, "is not defined!", NULL);
     }
 #endif
 }

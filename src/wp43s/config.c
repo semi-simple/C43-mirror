@@ -349,7 +349,7 @@ void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
   #endif
 
   #ifdef DMCP_BUILD
-    int32ToReal(read_power_voltage(), &value);
+    int32ToReal(get_vbat(), &value);
   #endif
 
   realDivide(&value, const_1000, &value, &ctxtReal39);

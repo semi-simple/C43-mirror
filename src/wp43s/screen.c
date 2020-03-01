@@ -444,7 +444,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     strcpy(oldTime, dateTimeString);
     showDateTime();
 
-    if(get_lowbat_state() == 1) {
+    if(get_lowbat_state() == 1 || get_vbat() < 2500) {
       showLowBattery();
     }
     else {

@@ -806,6 +806,9 @@ void btnPressed(void *notUsed, void *data) {
       //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }
+
+   if((item != KEY_UP1) && (item != KEY_DOWN1)) {fnShow(99);} //JMSHOW Reset show register, so that after any operation it starts at X again
+
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
     if(item == CHR_PROD_SIGN) {

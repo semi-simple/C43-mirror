@@ -1538,7 +1538,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
+    if(temporaryInformation == TI_SHOW_REGISTER_BIG || stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {     //JMSHOW
       return;
     }
 
@@ -1774,22 +1774,39 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 }
 
 
-int16_t SHOWregis;                              //JMSHOW
-void fnShow(uint16_t fnShow_param) {            //JMSHOW
+int16_t SHOWregis;                               //JMSHOW
+void fnShow(uint16_t fnShow_param) {             //JMSHOW Heavily modified from the original fnShow
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
   int16_t source, dest, last, d, i;
   real34_t real34;
+  #define lowest_SHOW 0 //REGISTER_X           //JMSHOW lowest register. Use 0 for all registers, or REGISTER_X 
 
-  switch(fnShow_param) {
+  switch(fnShow_param) {                         //JMSHOW vv
     case NOPARAM:
-    case 0: {SHOWregis = REGISTER_X;} break;
-    case 1: {SHOWregis++; if(SHOWregis > REGISTER_K) SHOWregis = REGISTER_X;  } break;   //Activate by KEY_UP
-    case 2: {SHOWregis--; if(SHOWregis < REGISTER_X) SHOWregis = REGISTER_K;  } break;   //Activate by Key_DOWN
-    default: break;
-  }
+    case 0:  SHOWregis = REGISTER_X;
+             break;
+    case 1:  SHOWregis++;                         //Activated by KEY_UP
+             if(SHOWregis > REGISTER_K) {
+               SHOWregis = lowest_SHOW;  
+             }
+             break;   
+    case 2: 
+             SHOWregis--;                         //Activate by Key_DOWN
+             if(SHOWregis < lowest_SHOW) {
+               SHOWregis = REGISTER_K;  
+             } 
+             break; 
+    case 99:                               //RESET every time a key is pressed.
+             SHOWregis = REGISTER_X;
+             return;
+             break;
 
+    default: 
+      break;
+  }                                              //JMSHOW ^^
 
+temporaryInformation = TI_SHOW_REGISTER;
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
   SigFigMode = 0;                                //JM SIGFIG
@@ -1802,17 +1819,18 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
   tmpStr3000[1500] = 0; // L6
   tmpStr3000[1800] = 0; // L7
 
-  tmpStr3000[2100] = 0; // temp
-  tmpStr3000[2400] = 0; // temp
+  tmpStr3000[   0] = 0; // JM Initialise         //JMSHOW vv
+  tmpStr3000[2100] = 0; // JM temp
+  tmpStr3000[2400] = 0; // JM temp               //JMSHOW ^^
   
 
   clearScreen(false, true, false);
-//  tmpStr3000[2100] = 0;                        //REGISTER NUMBER
-//  if(SHOWregis >= 0 && SHOWregis < 100) {
-//    snprintf(tmpStr3000 + 2100, 10, "%d:", SHOWregis);
-//  } else
+  tmpStr3000[2100] = 0;                        //JMSHOW vv REGISTER NUMBER
+  if(SHOWregis >= 0 && SHOWregis < 100) {
+    snprintf(tmpStr3000 + 2100, 10, "%d:", SHOWregis);
+  } else
   switch (SHOWregis) {
-    case REGISTER_X: strcpy(tmpStr3000 + 2100, "X: "); break;//STACK NAMES
+    case REGISTER_X: strcpy(tmpStr3000 + 2100, "X: "); break;//JMSHOW vv STACK NAMES
     case REGISTER_Y: strcpy(tmpStr3000 + 2100, "Y: "); break;
     case REGISTER_Z: strcpy(tmpStr3000 + 2100, "Z: "); break;
     case REGISTER_T: strcpy(tmpStr3000 + 2100, "T: "); break;
@@ -1825,20 +1843,42 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
     case REGISTER_J: strcpy(tmpStr3000 + 2100, "J: "); break;
     case REGISTER_K: strcpy(tmpStr3000 + 2100, "K: "); break;
     default: break;
-  }
+  }                                              //JMSHOW ^^
 
 
 
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
       longIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350);
+      strcat(tmpStr3000 + 2100,"          ");    //JMSHOW move short strings into the middle
+
+
+//JMSHOW Attempt to line up groups of three. Not working.
+//      char tmp[12];  
+//      tmp[0]=0;
+//      if(  tmpStr3000[2103]!=45) {                //if not -, then add + to keep len consistent
+//        strcat(tmp,"+");
+//        if(tmpStr3000[2105]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION); strcat(tmp,STD_SPACE_PUNCTUATION);}
+//        if(tmpStr3000[2106]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION);}
+//      } else {
+//        if(tmpStr3000[2106]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION); strcat(tmp,STD_SPACE_PUNCTUATION);}
+//        if(tmpStr3000[2107]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION);}
+//      }
+//      if(tmp[0]!=0){
+//        strcpy(tmpStr3000 + 2103,tmp);
+//        longIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103 + stringByteLength(tmp), TMP_STR_LENGTH, 7*400 - 8, 350);
+//      }
+
+//JMSHOW add final GAP to line up. See above. Not working.
+//      strcat(tmpStr3000 + 2100,STD_SPACE_PUNCTUATION);
+
 
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
       dest = 0;
 
-
-      if (stringByteLength(tmpStr3000 + 2100) >= 80) {
+      //printf("1: %d\n",stringByteLength(tmpStr3000 + 2100));
+      if (stringByteLength(tmpStr3000 + 2100) > 137) {
         temporaryInformation = TI_SHOW_REGISTER;
         for(d=0; d<=1800 ; d+=300) {
           dest = d;
@@ -1854,7 +1894,8 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
       } 
     else
 
-     if (stringByteLength(tmpStr3000 + 2100) <= 79) {
+     //printf("2: %d\n",stringByteLength(tmpStr3000 + 2100));
+     if (stringByteLength(tmpStr3000 + 2100) <= 137) {
       temporaryInformation = TI_SHOW_REGISTER_BIG;
       for(d=0; d<=1800 ; d+=300) {
         dest = d;
@@ -1874,7 +1915,7 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
     case dtReal34:
       temporaryInformation = TI_SHOW_REGISTER_BIG;         //JMSHOW
         real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), getRegisterAngularMode(SHOWregis), tmpStr3000 + 2103, &numericFont, 2000, 34);
-        strcat(tmpStr3000 + 2100,"          ");
+        strcat(tmpStr3000 + 2100,"          ");            //JMSHOW move short strings into the middle
 
         last = 2100 + stringByteLength(tmpStr3000 + 2100);
         source = 2100;
@@ -1924,16 +1965,16 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
         tmpStr3000[600] = 0;
 
 
+        strcat(tmpStr3000 + 300,"          ");              //JMSHOW, centre short numbers
+
+
         if(stringWidth(tmpStr3000, &numericFont, true, true) + stringWidth(tmpStr3000 + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
           strncat(tmpStr3000, tmpStr3000 +  300, 299);
           tmpStr3000[300] = 0;
         }
 
 
-
-
-        strncat(tmpStr3000 + 2103, tmpStr3000 + 0, 299-3);  //COPY REAL
-//        strcpy(tmpStr3000 + 2100, tmpStr3000 + 0);
+        strncat(tmpStr3000 + 2103, tmpStr3000 + 0, 299-3);  //COPY REAL   //JMSHOW
         tmpStr3000[0] = 0;
 
         strcpy(tmpStr3000 + 2400, tmpStr3000 + 300);        //COPY IMAG
@@ -1980,14 +2021,74 @@ void fnShow(uint16_t fnShow_param) {            //JMSHOW
         }
       break;
 
+
+
+    case dtShortInteger:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;         //JMSHOW
+      bool_t displayLeadingZerosMem = displayLeadingZeros;
+      displayLeadingZeros = true;
+        const font_t *font_tmp;
+        font_tmp = &numericFont; //&numericFont;
+        shortIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, &font_tmp);
+        strcat(tmpStr3000 + 2100,"          ");            //JMSHOW move short strings into the middle
+
+        last = 2100 + stringByteLength(tmpStr3000 + 2100);
+        source = 2100;
+        dest = 0;
+        for(d=0; d<=900 ; d+=300) {
+          dest = d;
+          if(dest != 0){strcat(tmpStr3000 + dest,"  ");dest+=2;}               //JMSHOW space below the T:
+          while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpStr3000[dest] = tmpStr3000[source];
+            if(tmpStr3000[dest] & 0x80) {
+              tmpStr3000[++dest] = tmpStr3000[++source];
+            }
+            source++;
+            tmpStr3000[++dest] = 0;
+          }
+        }
+      displayLeadingZeros = displayLeadingZerosMem;
+      break;
+
+    case dtString:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;         //JMSHOW
+      strcpy(tmpStr3000 + 2103, "'");
+      strncat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis), stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 1);
+      strcat(tmpStr3000 + 2100, "'");
+      strcat(tmpStr3000 + 2100,"          ");            //JMSHOW move short strings into the middle
+      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      source = 2100;
+      dest = 0;
+      for(d=0; d<=900 ; d+=300) {
+        dest = d;
+        while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          tmpStr3000[dest] = tmpStr3000[source];
+          if(tmpStr3000[dest] & 0x80) {
+            tmpStr3000[++dest] = tmpStr3000[++source];
+          }
+          source++;
+          tmpStr3000[++dest] = 0;
+        }
+      }
+      break;
+
+
+
+                                                                              //  JMSHOW ^^
+
     default:
-      temporaryInformation = TI_NO_INFO;
+      strcat(tmpStr3000 + 2103," Type not yet supported by SHOW");             //  JMSOW vv
+      strcpy(tmpStr3000 + 0, tmpStr3000 +2100);
+
+/*      temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, SHOWregis);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(SHOWregis, true, false));
         showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
       #endif
       return;
+*/
+
   }
 
 if (temporaryInformation == TI_SHOW_REGISTER) {

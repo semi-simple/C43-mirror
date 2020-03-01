@@ -1256,7 +1256,7 @@ void resetTemporaryInformation(void) {
                                if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
                                break;
 
-    case TI_SHOW_REGISTER_BIG: //refresh the complete screen
+    case TI_SHOW_REGISTER_BIG: //refresh the complete screen                            //JMSHOW vv
                                clearScreen(false, true, true);
                                refreshStack();
                                showSoftmenuCurrentPart();
@@ -1424,7 +1424,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, SCREEN_WIDTH, 34);
         }
 
-//JM vv JMSHOW
+                                                                         //JM vv JMSHOW
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
           #define line_h 38
           switch(regist) {
@@ -1453,7 +1453,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
           real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, 34);
         }
-//JM ^^
+                                                                         //JM ^^
 
 
         else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {

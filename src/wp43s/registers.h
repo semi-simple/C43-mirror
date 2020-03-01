@@ -155,6 +155,9 @@ void      reallocateRegister              (calcRegister_t regist, uint32_t dataT
 void      printRegisterToConsole          (calcRegister_t regist);
 void      printRegisterDescriptorToConsole(calcRegister_t regist);
 void      fnToReal                        (uint16_t unusedParamButMandatory);
+void      fnDec                           (uint16_t r);
+void      fnInc                           (uint16_t r);
+
 
 #define getRegisterAngularMode(reg)            getRegisterTag(reg)
 #define setRegisterAngularMode(reg, am)        setRegisterTag(reg, am)
@@ -166,3 +169,15 @@ void      fnToReal                        (uint16_t unusedParamButMandatory);
 #ifdef TESTSUITE_BUILD
   void    printRegisterToString           (calcRegister_t regist, char *registerContent);
 #endif // TESTSUITE_BUILD
+
+
+//=============================================================================
+// Register Comparison and Min/Max functions
+//-----------------------------------------------------------------------------
+
+bool_t registerCmp(calcRegister_t reg1, calcRegister_t reg2, int8_t *result);
+void registerCmpError(calcRegister_t regist1, calcRegister_t regist2);
+
+void registerMax(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest);
+void registerMin(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest);
+

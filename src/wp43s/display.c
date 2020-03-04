@@ -1780,7 +1780,7 @@ void fnShow(uint16_t fnShow_param) {             //JMSHOW Heavily modified from 
   bool_t savedUNITDisplay = UNITDisplay;
   int16_t source, dest, last, d, i;
   real34_t real34;
-  #define lowest_SHOW 0 //REGISTER_X           //JMSHOW lowest register. Use 0 for all registers, or REGISTER_X 
+  #define lowest_SHOW REGISTER_X //0             //JMSHOW lowest register. Use 0 for all registers, or REGISTER_X 
 
   switch(fnShow_param) {                         //JMSHOW vv
     case NOPARAM:

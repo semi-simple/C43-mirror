@@ -1,7 +1,13 @@
-grep -q Raspberry /proc/cpuinfo
-if [ $? = 0 ]; then
-  echo YES
+CPUINFO=/proc/cpuinfo
+
+if [ -f $CPUINFO ]; then
+	grep -q Raspberry $CPUINFO
+	if [ $? = 0 ]; then
+  		echo YES
+	else
+  		echo NO
+	fi
 else
-  echo NO
+	echo NO
 fi
 

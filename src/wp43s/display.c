@@ -1774,7 +1774,6 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 }
 
 
-int16_t SHOWregis;                               //JMSHOW
 void fnShow(uint16_t fnShow_param) {             //JMSHOW Heavily modified from the original fnShow
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
@@ -1786,16 +1785,23 @@ void fnShow(uint16_t fnShow_param) {             //JMSHOW Heavily modified from 
     case NOPARAM:
     case 0:  SHOWregis = REGISTER_X;
              break;
-    case 1:  SHOWregis++;                         //Activated by KEY_UP
-             if(SHOWregis > REGISTER_K) {
-               SHOWregis = lowest_SHOW;  
+    case 1:  if(SHOWregis==9999) {SHOWregis = REGISTER_X;}
+             else
+             {
+               SHOWregis++;                         //Activated by KEY_UP
+               if(SHOWregis > REGISTER_K) {
+                 SHOWregis = lowest_SHOW;  
+               }
              }
              break;   
-    case 2: 
-             SHOWregis--;                         //Activate by Key_DOWN
-             if(SHOWregis < lowest_SHOW) {
-               SHOWregis = REGISTER_K;  
-             } 
+    case 2:  if(SHOWregis==9999) {SHOWregis = REGISTER_X;}
+             else
+             {
+               SHOWregis--;                         //Activate by Key_DOWN
+               if(SHOWregis < lowest_SHOW) {
+                 SHOWregis = REGISTER_K;  
+               } 
+             }
              break; 
     case 99:                               //RESET every time a key is pressed.
              SHOWregis = REGISTER_X;
@@ -1805,8 +1811,9 @@ void fnShow(uint16_t fnShow_param) {             //JMSHOW Heavily modified from 
     default: 
       break;
   }                                              //JMSHOW ^^
+  
 
-temporaryInformation = TI_SHOW_REGISTER;
+  temporaryInformation = TI_SHOW_REGISTER;
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
   SigFigMode = 0;                                //JM SIGFIG

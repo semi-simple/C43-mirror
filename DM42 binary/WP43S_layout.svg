@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    sodipodi:docname="WP43S_layout.svg"
-   inkscape:version="0.92.4 5da689c313, 2019-01-14">
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <defs
      id="defs2">
     <clipPath
@@ -8149,17 +8149,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.496326"
+     inkscape:zoom="1.5910755"
      inkscape:cx="396.85039"
      inkscape:cy="279.68504"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer7"
+     inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1909"
-     inkscape:window-height="1021"
-     inkscape:window-x="1920"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1858"
+     inkscape:window-height="1057"
+     inkscape:window-x="1916"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
      showguides="true"
      inkscape:showpageshadow="false" />
   <metadata
@@ -10109,17 +10109,6 @@
     </g>
     <g
        transform="translate(0,149)"
-       aria-label="/"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:-0.13229169px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       id="text4516-1-1-4">
-      <path
-         d="m 112.09193,105.57645 q -0.008,0.0269 -0.0227,0.0413 -0.0124,0.0165 -0.0331,0.0248 -0.0207,0.008 -0.0517,0.0124 -0.0289,0.004 -0.0724,0.004 -0.0517,0 -0.0868,-0.008 -0.0331,-0.006 -0.0517,-0.0207 -0.0186,-0.0124 -0.0227,-0.0331 -0.004,-0.0186 0.008,-0.0455 l 1.25057,-3.42925 q 0.008,-0.0269 0.0207,-0.0413 0.0145,-0.0165 0.0331,-0.0248 0.0207,-0.0103 0.0517,-0.0124 0.031,-0.004 0.0744,-0.004 0.0517,0 0.0847,0.008 0.0331,0.006 0.0517,0.0186 0.0186,0.0124 0.0227,0.0331 0.004,0.0207 -0.006,0.0476 z"
-         style="letter-spacing:-0.13229169px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458332"
-         id="path6134"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       transform="translate(0,149)"
        aria-label="STO"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:-0.13229169px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        id="text4516-1-76-5">
@@ -10553,6 +10542,17 @@
          x="132.97499"
          y="71.974739"
          style="letter-spacing:-0.13229169px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458332">TRI</tspan></text>
+    <g
+       aria-label="/"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:-0.13229167px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       id="text4516-1-1-9"
+       transform="matrix(1.4999474,0,0,1,93.725619,149.00008)">
+      <path
+         d="m 12.092098,105.57632 q -0.0083,0.0269 -0.02274,0.0414 -0.0124,0.0165 -0.03307,0.0248 -0.02067,0.008 -0.05168,0.0124 -0.02894,0.004 -0.07235,0.004 -0.05168,0 -0.08682,-0.008 -0.03307,-0.006 -0.05168,-0.0207 -0.0186,-0.0124 -0.02274,-0.0331 -0.0041,-0.0186 0.0083,-0.0455 l 1.25057,-3.42925 q 0.0083,-0.0269 0.02067,-0.0413 0.01447,-0.0165 0.03307,-0.0248 0.02067,-0.0103 0.05168,-0.0124 0.03101,-0.004 0.07441,-0.004 0.05168,0 0.08475,0.008 0.03307,0.006 0.05168,0.0186 0.0186,0.0124 0.02274,0.0331 0.0041,0.0207 -0.0062,0.0476 z"
+         style="letter-spacing:-0.13229167px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458332"
+         id="path4044-8"
+         inkscape:connector-curvature="0" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -13794,17 +13794,6 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:-0.13229167px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="11.744832"
-       y="105.07816"
-       id="text4516-1-1"><tspan
-         sodipodi:role="line"
-         id="tspan4514-7-5"
-         x="11.744832"
-         y="105.07816"
-         style="letter-spacing:-0.13229167px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458332">/</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:-0.13229167px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="9.3812389"
        y="83.186729"
        id="text4516-1-76"><tspan
@@ -15761,5 +15750,16 @@
        id="path4051-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccc" />
+    <g
+       aria-label="/"
+       style="display:inline;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;letter-spacing:-0.13229167px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       id="text4516-1-1"
+       transform="matrix(1.4999474,0,0,1,-6.2743808,0)">
+      <path
+         d="m 12.092098,105.57632 q -0.0083,0.0269 -0.02274,0.0414 -0.0124,0.0165 -0.03307,0.0248 -0.02067,0.008 -0.05168,0.0124 -0.02894,0.004 -0.07235,0.004 -0.05168,0 -0.08682,-0.008 -0.03307,-0.006 -0.05168,-0.0207 -0.0186,-0.0124 -0.02274,-0.0331 -0.0041,-0.0186 0.0083,-0.0455 l 1.25057,-3.42925 q 0.0083,-0.0269 0.02067,-0.0413 0.01447,-0.0165 0.03307,-0.0248 0.02067,-0.0103 0.05168,-0.0124 0.03101,-0.004 0.07441,-0.004 0.05168,0 0.08475,0.008 0.03307,0.006 0.05168,0.0186 0.0186,0.0124 0.02274,0.0331 0.0041,0.0207 -0.0062,0.0476 z"
+         style="letter-spacing:-0.13229167px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458332"
+         id="path4044"
+         inkscape:connector-curvature="0" />
+    </g>
   </g>
 </svg>

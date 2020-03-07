@@ -42,10 +42,12 @@
 
 #fSoftkeyArea {
   background: $fGold;
+  font-size:  1px;
 }
 
 #gSoftkeyArea {
   background: $gBlue;
+  font-size:  1px;
 }
 
 #softkeyArea {

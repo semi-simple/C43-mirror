@@ -133,3 +133,5 @@
 2019-12-31 Updated copyright information in both ttf files:
            2019 ==> 2020
 
+2020-03-07 Changed glyph U+21CD (undo)
+           New WP43S_StandardFont.ttf generated.

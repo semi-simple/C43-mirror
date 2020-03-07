@@ -1026,6 +1026,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                                                           //JM CASE JM CAPS
 */
     else if((item == KEY_UP1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
+printf("PT1\n");
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1042,7 +1043,7 @@ void btnPressed(void *notUsed, void *data) {
             softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
             showSoftmenuCurrentPart();
           }
-          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
+          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || -MNU_ALPHA) && alphaCase == AC_LOWER) {
             alphaCase = AC_UPPER;
             if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
@@ -1135,6 +1136,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                                                          //JM CASE JM CAPS
 */
     else if((item == KEY_DOWN1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
+printf("PT2\n");
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
         if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
@@ -1151,7 +1153,7 @@ void btnPressed(void *notUsed, void *data) {
             softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
             showSoftmenuCurrentPart();
           }
-          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
+          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || -MNU_ALPHA) && alphaCase == AC_UPPER) {
             alphaCase = AC_LOWER;
             if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {

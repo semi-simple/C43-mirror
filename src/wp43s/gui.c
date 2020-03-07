@@ -1398,8 +1398,8 @@ void moveLabels(void) {
   xPos += 2*DELTA_KEYS_X;
   gtk_widget_get_preferred_size(  lbl42F, NULL, &lblF);
   gtk_widget_get_preferred_size(  lbl42G, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl42F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-  gtk_fixed_move(GTK_FIXED(grid), lbl42G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+  gtk_fixed_move(GTK_FIXED(grid), lbl42F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP/2-lblG.width+2)/2-GAP/2, yPos - Y_OFFSET_SHIFTED_LABEL);           //JMWIDTH MODIFIED FOR EXP, CPX & BASE mod
+  gtk_fixed_move(GTK_FIXED(grid), lbl42G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP/2-lblG.width+2)/2-GAP/2, yPos - Y_OFFSET_SHIFTED_LABEL);           //JMWIDTH MODIFIED FOR EXP, CPX & BASE mod
   gtk_widget_get_preferred_size(  lbl42Gr, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl42Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
   gtk_widget_get_preferred_size(  lbl42Fa, NULL, &lblF);                                                                        //vv dr - new AIM
@@ -1408,8 +1408,8 @@ void moveLabels(void) {
   xPos += DELTA_KEYS_X;
   gtk_widget_get_preferred_size(  lbl43F, NULL, &lblF);
   gtk_widget_get_preferred_size(  lbl43G, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl43F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-  gtk_fixed_move(GTK_FIXED(grid), lbl43G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+  gtk_fixed_move(GTK_FIXED(grid), lbl43F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP/2-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);                 //JMWIDTH MODIFIED FOR EXP, CPX & BASE mod
+  gtk_fixed_move(GTK_FIXED(grid), lbl43G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP/2-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);                 //JMWIDTH MODIFIED FOR EXP, CPX & BASE mod
   gtk_widget_get_preferred_size(  lbl43Gr, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl43Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
   gtk_widget_get_preferred_size(  lbl43Fa, NULL, &lblF);                                                                        //vv dr - new AIM
@@ -1418,8 +1418,8 @@ void moveLabels(void) {
   xPos += DELTA_KEYS_X;
   gtk_widget_get_preferred_size(  lbl44F, NULL, &lblF);
   gtk_widget_get_preferred_size(  lbl44G, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl44F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-  gtk_fixed_move(GTK_FIXED(grid), lbl44G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+  gtk_fixed_move(GTK_FIXED(grid), lbl44F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP/2-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);                 //JMWIDTH MODIFIED FOR EXP, CPX & BASE mod
+  gtk_fixed_move(GTK_FIXED(grid), lbl44G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP/2-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);                 //JMWIDTH MODIFIED FOR EXP, CPX & BASE mod
   gtk_widget_get_preferred_size(  lbl44Gr, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl44Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
 

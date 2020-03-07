@@ -60,7 +60,7 @@
 #define ITM_ASSIGN                      31
 #define ITM_ATMtoPA                     32
 #define ITM_AUtoM                       33
-#define ITM_0034                        34
+#define MNU_PRINT                       34
 #define MNU_CONVA                       35
 #define CST_04                          36
 #define ITM_REGB                        37
@@ -150,7 +150,7 @@
 #define ITM_DENFIX                     121
 #define ITM_DENMAX                     122
 #define MNU_DIGITS                     123
-#define MNU_DISP                       124
+#define MNU_DSP                        124
 #define ITM_DOT                        125
 #define ITM_toDP                       126
 #define ITM_DROP                       127
@@ -210,7 +210,7 @@
 #define ITM_FIB                        181
 #define ITM_FILL                       182
 #define MNU_FIN                        183
-#define MNU_FINTS                      184
+#define MNU_SINTS                      184
 #define ITM_FIX                        185
 #define MNU_FLAGS                      186
 #define MNU_FLASH                      187
@@ -275,7 +275,7 @@
 #define ITM_REGI                       246
 #define ITM_IDIV                       247
 #define ITM_IHGtoPA                    248
-#define MNU_IINTS                      249
+#define MNU_LINTS                      249
 #define ITM_IM                         250
 #define ITM_IMPFRC                     251
 #define ITM_INC                        252
@@ -793,8 +793,8 @@
 #define CST_74                         764
 #define CST_75                         765
 #define ITM_RANI                       766
-#define ITM_0767                       767
-#define ITM_0768                       768
+#define ITM_PRINTERX                   767
+#define MNU_SYSFL                      768
 #define ITM_0769                       769
 #define ITM_0770                       770
 #define ITM_chi2x                      771

@@ -24,6 +24,8 @@
 GtkWidget *grid;
 GtkWidget *backgroundImage;
 GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
+GtkWidget *lblFKey1,*lblFKey2,*lblFKey3;
+GtkWidget *lblGKey1,*lblGKey2,*lblGKey3;
 GtkWidget *lblBehindScreen;
 
 GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
@@ -32,6 +34,7 @@ GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
 GtkWidget *lbl21F,  *lbl22F,  *lbl23F,  *lbl24F,  *lbl25F,  *lbl26F;
 GtkWidget *lbl21G,  *lbl22G,  *lbl23G,  *lbl24G,  *lbl25G,  *lbl26G;
 GtkWidget *lbl21L,  *lbl22L,  *lbl23L,  *lbl24L,  *lbl25L,  *lbl26L;
+GtkWidget *lbl21H;
 GtkWidget *lbl21Gr, *lbl22Gr, *lbl23Gr, *lbl24Gr, *lbl25Gr, *lbl26Gr;
 GtkWidget *btn21A,  *btn22A,  *btn23A,  *btn24A,  *btn25A,  *btn26A;    //dr - new AIM
 GtkWidget           *lbl22Fa, *lbl23Fa;                                 //JM
@@ -1012,6 +1015,7 @@ void hideAllWidgets(void) {
 
   gtk_widget_hide(lbl21F);
   gtk_widget_hide(lbl21G);
+  gtk_widget_hide(lbl21H);
   gtk_widget_hide(lbl21L);
   gtk_widget_hide(lbl22F);
   gtk_widget_hide(lbl22G);
@@ -2050,6 +2054,7 @@ void calcModeNormalGui(void) {
 
   gtk_widget_show(lbl21F);
   gtk_widget_show(lbl21G);
+  gtk_widget_show(lbl21H);
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22F);
   gtk_widget_show(lbl22G);
@@ -2319,6 +2324,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl22Fa);    //JM
   gtk_widget_show(lbl23Fa);    //JM
   
+  gtk_widget_show(lbl21H);
 /*gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);
   gtk_widget_show(lbl23L);
@@ -2559,6 +2565,8 @@ void calcModeAsmGui(void) {
   gtk_widget_show(btn24);
   gtk_widget_show(btn25);
   gtk_widget_show(btn26);
+
+  gtk_widget_show(lbl21H);
 
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);
@@ -2915,6 +2923,39 @@ void setupUI(void) {
   gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
   gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
 #endif //JM
+
+  // Frame around the f key
+  lblFKey1 = gtk_label_new("");
+  lblFKey2 = gtk_label_new("");
+  //lblFKey3 = gtk_label_new("");
+  gtk_widget_set_name(lblFKey1, "fSoftkeyArea");
+  gtk_widget_set_name(lblFKey2, "fSoftkeyArea");
+  //gtk_widget_set_name(lblFKey3, "fSoftkeyArea");
+  gtk_widget_set_size_request(lblFKey1,  5-2, 45-2-2);
+  gtk_widget_set_size_request(lblFKey2, 61-8-2,  5-2);
+  //gtk_widget_set_size_request(lblFKey3,  5, 45);
+  gtk_fixed_put(GTK_FIXED(grid), lblFKey1, 349+4, 522+2);
+  gtk_fixed_put(GTK_FIXED(grid), lblFKey2, 350+4, 563);
+  //gtk_fixed_put(GTK_FIXED(grid), lblFKey3, 407, 522);
+
+
+
+  // Frame around the g key
+  lblGKey1 = gtk_label_new("");
+  lblGKey2 = gtk_label_new("");
+  //lblGKey3 = gtk_label_new("");
+  gtk_widget_set_name(lblGKey1, "gSoftkeyArea");
+  gtk_widget_set_name(lblGKey2, "gSoftkeyArea");
+  //gtk_widget_set_name(lblGKey3, "gSoftkeyArea");
+  gtk_widget_set_size_request(lblGKey1,  5-2, 45-2-2);
+  gtk_widget_set_size_request(lblGKey2, 61-8-2,  5-2);
+  //gtk_widget_set_size_request(lblGKey3,  5, 45);
+  gtk_fixed_put(GTK_FIXED(grid), lblGKey1, 349+4 + DELTA_KEYS_X, 522+2);
+  gtk_fixed_put(GTK_FIXED(grid), lblGKey2, 350+4 + DELTA_KEYS_X, 563);
+  //gtk_fixed_put(GTK_FIXED(grid), lblGKey3, 407 + DELTA_KEYS_X, 522);
+
+
+
   // Area for the softkeys
   //lblSoftkeyArea1 = gtk_label_new("");
   //gtk_widget_set_name(lblSoftkeyArea1, "softkeyArea");
@@ -3077,6 +3118,7 @@ void setupUI(void) {
   lbl24G  = gtk_label_new("");
   lbl25G  = gtk_label_new("");
   lbl26G  = gtk_label_new("");
+  lbl21H  = gtk_label_new("A"); // ?
   lbl21L  = gtk_label_new("");
   lbl22L  = gtk_label_new("");
   lbl23L  = gtk_label_new("");
@@ -3102,6 +3144,9 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn24A, KEY_WIDTH_1, 0);
   gtk_widget_set_size_request(btn25A, KEY_WIDTH_1, 0);
   gtk_widget_set_size_request(btn26A, KEY_WIDTH_1, 0);  //^^
+
+  gtk_widget_set_name(lbl21H,  "fShiftedUnderline");
+
 
   g_signal_connect(btn21, "pressed", G_CALLBACK(btnPressed), "00");
   g_signal_connect(btn22, "pressed", G_CALLBACK(btnPressed), "01");
@@ -3160,6 +3205,7 @@ void setupUI(void) {
 
   gtk_fixed_put(GTK_FIXED(grid), btn21,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl21L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
+  gtk_fixed_put(GTK_FIXED(grid), lbl21H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);
   gtk_fixed_put(GTK_FIXED(grid), btn21A, xPos,                         yPos);   //dr - new AIM
 
   xPos += DELTA_KEYS_X;

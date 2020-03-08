@@ -23,7 +23,7 @@
 //This variable is to store in flash memory
 const calcKey_t kbd_std[37] = {
 //keyId primary        fShifted         gShifted         keyLblAim        primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_1ONX,      ITM_PROFRC,     -MNU_ALPHAFN,     ITM_NULL,        CHR_A,             ITM_NULL,        CHR_ALPHA,     ITM_ST_A     },
+ {21,   ITM_1ONX,      ITM_PROFRC,     -MNU_ALPHAFN,     ITM_NULL,        CHR_A,            -MNU_ALPHAintl,   CHR_ALPHA,     ITM_ST_A     },
  {22,   ITM_YX,        ITM_toINT,      -MNU_EXP,         CHR_NUMBER_SIGN, CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     },
  {23,  -MNU_TRI,       ITM_DMS,         ITM_pi,          ITM_NULL,        CHR_C,             ITM_NULL,        CHR_GAMMA,     ITM_ST_C     },
  {24,   ITM_LN,        KEY_dotD,        ITM_LOG10,       ITM_NULL,        CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base
@@ -44,7 +44,7 @@ const calcKey_t kbd_std[37] = {
  {45,   KEY_BACKSPACE, KEY_UNDO,       -MNU_CLR,         KEY_BACKSPACE,   KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE},
 
  {51,   ITM_DIV,       ITM_RMD,        -MNU_FLAGS,       CHR_SLASH,       CHR_COLON,         CHR_SLASH,      -MNU_FLAGS,     ITM_DIV      },
- {52,   CHR_7,         ITM_SF,          ITM_CF,          CHR_7,           CHR_N,             CHR_7,           CHR_NU,        CHR_7        },
+ {52,   CHR_7,         ITM_NULL,        ITM_NULL,        CHR_7,           CHR_N,             CHR_7,           CHR_NU,        CHR_7        },
  {53,   CHR_8,         ITM_NULL,        ITM_NULL,        CHR_8,           CHR_O,             CHR_8,           CHR_OMEGA,     CHR_8        },
  {54,   CHR_9,         ITM_NULL,       -MNU_CFG,         CHR_9,           CHR_P,             CHR_9,           CHR_PI,        CHR_9        },
  {55,   ITM_XEQ,       ITM_GTO,         ITM_LBL,         ITM_NULL,        CHR_Q,             ITM_NULL,        ITM_NULL,      ITM_NULL     },

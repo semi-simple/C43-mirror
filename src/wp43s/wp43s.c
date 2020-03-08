@@ -230,6 +230,7 @@ void setupDefaults(void) {
     #pragma GCC diagnostic pop
   #endif
 
+//JM Where commented, fnReset is over-writing the content of setupdefaults. fnReset is in config.c
          //JM vv bug: Overwritten by fnReset
   // Initialization of user key assignments
   memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -293,7 +294,7 @@ void setupDefaults(void) {
 
   statisticalSumsPointer = NULL;
 
-//JM below, indented if fnReset is over-writing the content of setupdefaults. fnReset is in config.c
+//JM Where commented, fnReset is over-writing the content of setupdefaults. fnReset is in config.c
   fnSetWordSize(64); // word size from 1 to 64               //JM bug: Overwritten by fnReset
   fnIntegerMode(SIM_2COMPL);                                 //JM bug: Overwritten by fnReset
 

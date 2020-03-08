@@ -1190,6 +1190,18 @@ void fnUserJM(uint16_t jmUser) {
     Show_User_Keys();
     break;
 
+#ifdef JM_LAYOUT_1A                         //JM LAYOUT 1A.
+  case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
+    kbd_usr[12].fShifted   = KEY_CC;                            //JM Changed CPX menu therefore USER MODE changes
+    kbd_usr[0].primary     = -MNU_MyMenu;
+    kbd_usr[0].gShifted    = KEY_TYPCON_UP;
+    kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+    Norm_Key_00_VAR        = -MNU_MyMenu;
+    Show_User_Keys();
+    break;
+#endif
+
+#ifdef JM_LAYOUT_2_DM42_STRICT              //JM LAYOUT 42
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].gShifted   = KEY_CC;
     kbd_usr[0].primary     = -MNU_MyMenu;
@@ -1198,6 +1210,7 @@ void fnUserJM(uint16_t jmUser) {
     Norm_Key_00_VAR        = -MNU_MyMenu;
     Show_User_Keys();
     break;
+#endif
 
   case USER_SHIFTS:                                             //USER_SHIFTS 25          //JM Sectioon to be put on a menu
     kbd_usr[0].primary     = KEY_USERMODE;

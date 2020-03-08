@@ -4,9 +4,9 @@ This fork of the WP43S project is to make the user interface of the calculator c
 
 Two options for the WP43C are being developed:
 
-  Version L1A needs only a keyboard overlay for the yellow and blue shifted functions.
+  Version L1C needs only a keyboard overlay for the yellow and blue shifted functions.
 
-  Version L2 needs no keyboard overlay as almost all DM42 yellow labels are maintained. On L2 the blue functions are provided on a soft menu. L2 is good for impatient DM42 users.
+  Version L42C needs no keyboard overlay as almost all DM42 yellow labels are maintained. On L2 the blue functions are provided on a soft menu. L42C is good for impatient DM42 users.
 
 
 # WP43S

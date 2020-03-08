@@ -1052,7 +1052,7 @@ void btnPressed(void *notUsed, void *data) {
             softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
             showSoftmenuCurrentPart();
           }
-          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
+          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || -MNU_ALPHA) && alphaCase == AC_LOWER) {
             alphaCase = AC_UPPER;
             if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
@@ -1164,7 +1164,7 @@ void btnPressed(void *notUsed, void *data) {
             softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
             showSoftmenuCurrentPart();
           }
-          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
+          else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || -MNU_ALPHA) && alphaCase == AC_UPPER) {
             alphaCase = AC_LOWER;
             if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
             {
@@ -1434,7 +1434,6 @@ void btnPressed(void *notUsed, void *data) {
     }
 
     else if(calcMode == CM_CONFIRMATION) {
-    /*if(item == CHR_3 || item == ITM_XEQ) { // Yes or XEQ*/                    // JM YN
       if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ                // JM YN For Layout DM42, changed "Y" on CHR_3 to ITM_SUB as the alpha character move due to operator swap
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
@@ -1442,7 +1441,6 @@ void btnPressed(void *notUsed, void *data) {
         refreshStack();
       }
 
-    /*else if(item == CHR_7) { // No*/                                          // JM YN
       else if(item == ITEM_CONF_N ) { // No                                     // JM YN
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
@@ -1484,17 +1482,14 @@ void btnReleased(void *notUsed, void *data) {
 
 
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
-  if(!shiftF) {
-    shiftF = true;
-//  shiftStateChanged = true; //dr
-  }
-
-  #ifdef PC_BUILD
-    btnClicked(NULL, "02");
-  #endif
-
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "02");
-  #endif
+  // Emulating a CC key stroke
+  //if(!shiftF) {
+  //shiftF = true;
+  //shiftStateChanged = true; //dr
+  //}
+  int16_t Norm_Key_00_VAR_M = Norm_Key_00_VAR;   //JM Use key 00 as temporary location for CC, which is not normally on the 43C keyboard.
+  Norm_Key_00_VAR        = KEY_CC;               //JM
+  btnClicked(NULL, "00");
+  Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
 }
 #endif // END IF NOT TESTSUITE_BUILD

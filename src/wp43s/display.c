@@ -1774,7 +1774,112 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 }
 
 
-void fnShow(uint16_t fnShow_param) {             //JMSHOW Heavily modified from the original fnShow
+
+
+void fnShow(uint16_t unusedParamButMandatory) {
+  uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
+  bool_t savedUNITDisplay = UNITDisplay;
+  int16_t source, dest, last, d, i;
+  real34_t real34;
+
+  displayFormat = DF_ALL;
+  displayFormatDigits = 0;
+  SigFigMode = 0;                                //JM SIGFIG
+  UNITDisplay = false;                           //JM SIGFIG
+
+  tmpStr3000[ 300] = 0; // L2
+  tmpStr3000[ 600] = 0; // L3
+  tmpStr3000[ 900] = 0; // L4
+  tmpStr3000[1200] = 0; // L5
+  tmpStr3000[1500] = 0; // L6
+  tmpStr3000[1800] = 0; // L7
+
+  temporaryInformation = TI_SHOW_REGISTER;
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 7*400 - 8, 350);
+
+      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      source = 2100;
+      dest = 0;
+      for(d=0; d<=1800 ; d+=300) {
+        dest = d;
+        while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= SCREEN_WIDTH - 8) {
+          tmpStr3000[dest] = tmpStr3000[source];
+          if(tmpStr3000[dest] & 0x80) {
+            tmpStr3000[++dest] = tmpStr3000[++source];
+          }
+          source++;
+          tmpStr3000[++dest] = 0;
+        }
+      }
+      break;
+
+    case dtReal34:
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, 2000, 34);
+      break;
+
+    case dtComplex34:
+      // Real part
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34);
+      for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
+        if(tmpStr3000[i] == 0x08) {
+          tmpStr3000[i] = 0x05;
+        }
+      }
+
+      // +/- i×
+      real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
+      strcat(tmpStr3000 + 300, (real34IsNegative(&real34) ? "-" : "+"));
+      strcat(tmpStr3000 + 300, COMPLEX_UNIT);
+      strcat(tmpStr3000 + 300, PRODUCT_SIGN);
+
+      // Imaginary part
+      real34SetPositiveSign(&real34);
+      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34);
+      for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
+        if(tmpStr3000[600 + i] == 0x08) {
+          tmpStr3000[600 + i] = 0x05;
+        }
+      }
+
+      if(stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
+        strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299);
+        tmpStr3000[600] = 0;
+      }
+
+      if(stringWidth(tmpStr3000, &standardFont, true, true) + stringWidth(tmpStr3000 + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
+        strncat(tmpStr3000, tmpStr3000 +  300, 299);
+        strcpy(tmpStr3000 + 300, tmpStr3000 + 600);
+        tmpStr3000[600] = 0;
+      }
+      break;
+
+    default:
+      temporaryInformation = TI_NO_INFO;
+      displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(REGISTER_X, true, false));
+        showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
+      #endif
+      return;
+  }
+
+  refreshRegisterLine(REGISTER_T);
+  if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
+  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
+  if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
+
+  displayFormat = savedDisplayFormat;
+  displayFormatDigits = savedDisplayFormatDigits;
+  SigFigMode = savedSigFigMode;                            //JM SIGFIG
+  UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
+}
+
+
+
+void fnShow_SCROLL(uint16_t fnShow_param) {             //JMSHOW Heavily modified from the original fnShow
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
   int16_t source, dest, last, d, i;

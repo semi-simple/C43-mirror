@@ -24,6 +24,7 @@ void fnDisplayFormatAll           (uint16_t displayFormat);
 //void fnDisplayFormatDsp           (uint16_t displayFormat);
 void fnDisplayFormatGap           (uint16_t gap);
 void fnShow                       (uint16_t unusedParamButMandatory);
+void fnShow_SCROLL                (uint16_t fnShow_param);
 void real34ToDisplayString        (const real34_t *real34, uint32_t tag, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits);
 void realToDisplayString2         (const real34_t *real34, char *displayString, int16_t displayHasNDigits);
 void complex34ToDisplayString     (const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits);

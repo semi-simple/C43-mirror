@@ -380,7 +380,8 @@ void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
-void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           //^^
+void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
+void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -1036,7 +1037,7 @@ const item_t indexOfItems[] = {
 /*  647 */  { itemToBeCoded,               NOPARAM,                     "VARMNU",                                      "VARMNU",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  648 */  { itemToBeCoded,               NOPARAM,                     "VARS",                                        "VARS",                                        CAT_MENU, SLS_UNCHANGED},
 /*  649 */  { fnVersion,                   NOPARAM,                     "VERS?",                                       "VERS?",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  650 */  { itemToBeCoded,               NOPARAM,                     "VIEW",                                        "VIEW",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  650 */  { fnShow_SCROLL,               NOPARAM,                     "VIEW",                                        "VIEW",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  651 */  { fnConstant,                  54,                          "V" STD_SUB_m,                                 "V" STD_SUB_m,                                 CAT_CNST, SLS_ENABLED  },
 /*  652 */  { itemToBeCoded,               NOPARAM,                     "Volume:",                                     "Volume:",                                     CAT_MENU, SLS_UNCHANGED},
 /*  653 */  { itemToBeCoded,               NOPARAM,                     "WDAY",                                        "WDAY",                                        CAT_FNCT, SLS_UNCHANGED},

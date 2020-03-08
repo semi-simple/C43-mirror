@@ -1033,7 +1033,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                                                           //JM CASE JM CAPS
 */
 
-    else if((item == KEY_UP1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow(1);}                                      //JMSHOW
+    else if((item == KEY_UP1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow_SCROLL(1);}                                      //JMSHOW
     
     else if((item == KEY_UP1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
@@ -1145,7 +1145,7 @@ void btnPressed(void *notUsed, void *data) {
     }                                                                          //JM CASE JM CAPS
 */
 
-    else if((item == KEY_DOWN1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow(2);}                                          //JMSHOW
+    else if((item == KEY_DOWN1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow_SCROLL(2);}                                          //JMSHOW
 
     else if((item == KEY_DOWN1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {

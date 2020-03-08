@@ -44,7 +44,7 @@ const calcKey_t kbd_std[37] = {
  {45,   KEY_BACKSPACE, KEY_UNDO,       -MNU_CLR,         KEY_BACKSPACE,   KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE},
 
  {51,   ITM_DIV,       ITM_RMD,        -MNU_FLAGS,       CHR_SLASH,       CHR_COLON,         CHR_SLASH,      -MNU_FLAGS,     ITM_DIV      },
- {52,   CHR_7,         ITM_SF,          ITM_CF,          CHR_7,           CHR_N,             CHR_7,           CHR_NU,        CHR_7        },
+ {52,   CHR_7,         ITM_NULL,        ITM_NULL,        CHR_7,           CHR_N,             CHR_7,           CHR_NU,        CHR_7        },
  {53,   CHR_8,         ITM_NULL,        ITM_NULL,        CHR_8,           CHR_O,             CHR_8,           CHR_OMEGA,     CHR_8        },
  {54,   CHR_9,         ITM_NULL,       -MNU_CFG,         CHR_9,           CHR_P,             CHR_9,           CHR_PI,        CHR_9        },
  {55,   ITM_XEQ,       ITM_GTO,         ITM_LBL,         ITM_NULL,        CHR_Q,             ITM_NULL,        ITM_NULL,      ITM_NULL     },

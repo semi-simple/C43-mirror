@@ -40,6 +40,7 @@
 #include "cubeRoot.h"
 #include "cxToRe.h"
 #include "cpyx.h"
+#include "decomp.h"
 #include "division.h"
 #include "exp.h"
 #include "expt.h"

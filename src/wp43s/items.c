@@ -359,6 +359,7 @@ void fnPyx                      (uint16_t unusedParamButMandatory) {}
 void fnToReal                   (uint16_t unusedParamButMandatory) {}
 void fnDec                      (uint16_t unusedParamButMandatory) {}
 void fnInc                      (uint16_t unusedParamButMandatory) {}
+void fnDecomp                   (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
@@ -502,7 +503,7 @@ const item_t indexOfItems[] = {
 /*  113 */  { fnCvtDbRatio,                20,                          "dB" STD_RIGHT_ARROW "fr",                     "dB " STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  114 */  { fnCvtDbRatio,                10,                          "dB" STD_RIGHT_ARROW "pr",                     "dB " STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  115 */  { fnDec,                       TM_REGISTER,                 "DEC",                                         "DEC",                                         CAT_FNCT, SLS_ENABLED  },
-/*  116 */  { itemToBeCoded,               NOPARAM,                     "DECOMP",                                      "DECOMP",                                      CAT_FNCT, SLS_UNCHANGED},
+/*  116 */  { fnDecomp,                    NOPARAM,                     "DECOMP",                                      "DECOMP",                                      CAT_FNCT, SLS_ENABLED  },
 /*  117 */  { fnAngularMode,               AM_DEGREE,                   "DEG",                                         "DEG",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  118 */  { fnCvtToCurrentAngularMode,   AM_DEGREE,                   "DEG" STD_RIGHT_ARROW,                         "DEG" STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  119 */  { fnDenMode,                   DM_ANY,                      "DENANY",                                      "DENANY",                                      CAT_FNCT, SLS_UNCHANGED},

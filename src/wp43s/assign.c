@@ -46,17 +46,17 @@ const calcKey_t kbd_std[37] = {
  {44,   ITM_EXPONENT,  ITM_SHOW,       -MNU_DSP,         ITM_NULL,        CHR_M,             CHR_UP_ARROW,    CHR_MU,        ITM_NULL     },
  {45,   KEY_BACKSPACE, KEY_UNDO,       -MNU_CLR,         KEY_BACKSPACE,   KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE},
 
- {51,   ITM_DIV,       ITM_RMD,        -MNU_FLAGS,       CHR_SLASH,       CHR_COLON,         CHR_SLASH,      -MNU_FLAGS,     ITM_DIV      },
- {52,   CHR_7,         ITM_NULL,        ITM_NULL,        CHR_7,           CHR_N,             CHR_7,           CHR_NU,        CHR_7        },
- {53,   CHR_8,         ITM_NULL,        ITM_NULL,        CHR_8,           CHR_O,             CHR_8,           CHR_OMEGA,     CHR_8        },
- {54,   CHR_9,         ITM_NULL,       -MNU_CFG,         CHR_9,           CHR_P,             CHR_9,           CHR_PI,        CHR_9        },
- {55,   ITM_XEQ,       ITM_GTO,         ITM_LBL,         ITM_NULL,        CHR_Q,             ITM_NULL,        ITM_NULL,      ITM_NULL     },
+ {51,   ITM_DIV,       ITM_RMD,         ITM_MOD,         CHR_SLASH,       CHR_N,             CHR_SLASH,       CHR_NU,        ITM_DIV      },
+ {52,   CHR_7,         ITM_NULL,        ITM_NULL,        CHR_7,           CHR_O,             CHR_7,           CHR_OMEGA,     CHR_7        },
+ {53,   CHR_8,         ITM_NULL,       -MNU_CFG,         CHR_8,           CHR_P,             CHR_8,           CHR_PI,        CHR_8        },
+ {54,   CHR_9,         ITM_NULL,        ITM_RTN,         CHR_9,           CHR_Q,             CHR_9,           ITM_RTN,        CHR_9        },
+ {55,   ITM_XEQ,       ITM_GTO,         ITM_LBL,         ITM_NULL,        ITM_NULL,          ITM_NULL,        ITM_NULL,      ITM_NULL     },
 
  {61,   ITM_MULT,      ITM_XFACT,      -MNU_PROB,        CHR_CROSS,       CHR_R,             CHR_PROD_SIGN,   CHR_RHO,       ITM_MULT     },
  {62,   CHR_4,        -MNU_STAT,       -MNU_SUMS,        CHR_4,           CHR_S,             CHR_4,           CHR_SIGMA,     CHR_4        },
  {63,   CHR_5,         ITM_toREC,       ITM_toPOL,       CHR_5,           CHR_T,             CHR_5,           CHR_TAU,       CHR_5        },
  {64,   CHR_6,        -MNU_UNITCONV,   -MNU_ANGLECONV,   CHR_6,           CHR_U,             CHR_6,           CHR_THETA,     CHR_6        },
- {65,   KEY_UP,        KEY_BST,         ITM_RTN,         KEY_UP,          KEY_UP,            KEY_BST,         ITM_RTN,       KEY_UP       },
+ {65,   KEY_UP,        KEY_BST,        -MNU_FLAGS,       KEY_UP,          KEY_UP,            KEY_BST,        -MNU_FLAGS,     KEY_UP       },
 
  {71,   ITM_SUB,      -MNU_BITS,       -MNU_INTS,        CHR_MINUS,       CHR_V,             CHR_MINUS,      -MNU_ALPHAMATH, ITM_SUB      },
  {72,   CHR_1,        -MNU_ADV,        -MNU_EQN,         CHR_1,           CHR_W,             CHR_1,           CHR_PSI,       CHR_1        },
@@ -64,8 +64,8 @@ const calcKey_t kbd_std[37] = {
  {74,   CHR_3,         ITM_TIMER,      -MNU_CLK,         CHR_3,           CHR_Y,             CHR_3,           CHR_UPSILON,   CHR_3        },
  {75,   KEY_DOWN,      KEY_SST,        -MNU_MODE,        KEY_DOWN,        KEY_DOWN,          KEY_SST,        -MNU_MODE,      KEY_DOWN     },
 
- {81,   ITM_ADD,      -MNU_IO,         -MNU_PRINT,       CHR_PLUS,        CHR_QUESTION_MARK, CHR_PLUS,        CHR_PRINTER,   ITM_ADD      },
- {82,   CHR_0,        -MNU_LOOP,       -MNU_TEST,        CHR_0,           CHR_Z,             CHR_0,           CHR_ZETA,      CHR_0        },
+ {81,   ITM_ADD,      -MNU_IO,         -MNU_PRINT,       CHR_PLUS,        CHR_Z,             CHR_PLUS,        CHR_ZETA,      ITM_ADD      },
+ {82,   CHR_0,        -MNU_LOOP,       -MNU_TEST,        CHR_0,           CHR_QUESTION_MARK, CHR_0,           CHR_PRINTER,   CHR_0        },
  {83,   CHR_PERIOD,   -MNU_PARTS,      -MNU_INFO,        CHR_PERIOD,      CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   },
  {84,   ITM_RS,        ITM_PR,         -MNU_PFN,         ITM_NULL,        CHR_SPACE,         ITM_NULL,        ITM_NULL,      ITM_NULL     },
  {85,   KEY_EXIT,     -MNU_CATALOG,     ITM_OFF,         KEY_EXIT,        KEY_EXIT,         -MNU_CATALOG,     ITM_OFF,       KEY_EXIT     }

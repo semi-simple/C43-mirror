@@ -75,7 +75,7 @@ GtkWidget *btn81,   *btn82,   *btn83,   *btn84,   *btn85;
 GtkWidget *lbl81F,  *lbl82F,  *lbl83F,  *lbl84F,  *lbl85F;
 GtkWidget *lbl81G,  *lbl82G,  *lbl83G,  *lbl84G,  *lbl85G;
 GtkWidget *lbl81L,  *lbl82L,  *lbl83L,  *lbl84L,  *lbl85L;
-GtkWidget *lbl81H,            *lbl83H,  *lbl84H;
+GtkWidget           *lbl82H,  *lbl83H,  *lbl84H;
 GtkWidget *lbl81Gr, *lbl82Gr, *lbl83Gr, *lbl84Gr, *lbl85Gr;
 GtkWidget                                         *lblOn;
 
@@ -682,7 +682,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl81F);
   gtk_widget_hide(lbl81G);
   gtk_widget_hide(lbl81L);
-  gtk_widget_hide(lbl81H);
+  gtk_widget_hide(lbl82H);
   gtk_widget_hide(lbl82F);
   gtk_widget_hide(lbl82G);
   gtk_widget_hide(lbl82L);
@@ -863,8 +863,8 @@ void moveLabels(void) {
   gtk_widget_get_preferred_size(  lbl51G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl51F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl51G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-  //gtk_widget_get_preferred_size(  lbl51Gr, NULL, &lblG);
-  //gtk_fixed_move(GTK_FIXED(grid), lbl51Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
+  gtk_widget_get_preferred_size(  lbl51Gr, NULL, &lblG);
+  gtk_fixed_move(GTK_FIXED(grid), lbl51Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
 
   xPos += DELTA_KEYS_X + 18;
   gtk_widget_get_preferred_size(  lbl52F, NULL, &lblF);
@@ -984,7 +984,7 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl81G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl81Gr, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl81Gr, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER,              yPos - 3);
+  gtk_fixed_move(GTK_FIXED(grid), lbl81Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
 
   xPos += DELTA_KEYS_X + 18;
   gtk_widget_get_preferred_size(  lbl82F, NULL, &lblF);
@@ -992,7 +992,7 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl82F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_fixed_move(GTK_FIXED(grid), lbl82G, (2*xPos+KEY_WIDTH_2+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl82Gr, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, xPos+KEY_WIDTH_2*2/3,                              yPos - Y_OFFSET_GREEK);
+  gtk_fixed_move(GTK_FIXED(grid), lbl82Gr, xPos+KEY_WIDTH_2 + X_OFFSET_LETTER,                yPos - 3);
 
   xPos += DELTA_KEYS_X + 17;
   gtk_widget_get_preferred_size(  lbl83F, NULL, &lblF);
@@ -1139,14 +1139,14 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 
   if(lblGreek == lbl71Gr) {
     gtk_widget_set_name(lblGreek, "gShiftedUnderline");
-    lbl[3] = 0; // To get alphaM instead of alphaMath
+    lbl[0] = '<'; // To get < instead of alphaMath
+    lbl[1] = 0;
     gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
   }
   else if(lblGreek == lbl83Gr) {
     gtk_widget_set_name(lblGreek, "gShiftedUnderline");
-  }
-  else if(lblGreek == lbl81Gr) {
-    gtk_widget_set_name(lblGreek, "gShifted");
+    memcpy(lbl, "\u2219", 4); // To get . instead of alpha.
+    gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
   }
   else if(key->gShiftedAim < 0) {
     gtk_widget_set_name(lblGreek, "greekUnderline");
@@ -1406,7 +1406,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl81F);
   gtk_widget_show(lbl81G);
   gtk_widget_show(lbl81L);
-  gtk_widget_show(lbl81H);
+  gtk_widget_show(lbl82H);
   gtk_widget_show(lbl82F);
   gtk_widget_show(lbl82G);
   gtk_widget_show(lbl82L);
@@ -1559,12 +1559,13 @@ void calcModeAimGui(void) {
 
   gtk_widget_show(lbl51L);
   //gtk_widget_show(lbl51F);
-  gtk_widget_show(lbl51G);
+  //gtk_widget_show(lbl51G);
+
   gtk_widget_show(lbl52L);
   gtk_widget_show(lbl53L);
   gtk_widget_show(lbl54L);
   gtk_widget_show(lbl55L);
-  //gtk_widget_show(lbl51Gr);
+  gtk_widget_show(lbl51Gr);
   gtk_widget_show(lbl52Gr);
   gtk_widget_show(lbl53Gr);
   gtk_widget_show(lbl54Gr);
@@ -1767,7 +1768,7 @@ void calcModeAsmGui(void) {
   gtk_widget_show(lbl53L);
   gtk_widget_show(lbl54L);
   gtk_widget_show(lbl55L);
-  //gtk_widget_show(lbl51Gr);
+  gtk_widget_show(lbl51Gr);
   gtk_widget_show(lbl52Gr);
   gtk_widget_show(lbl53Gr);
   gtk_widget_show(lbl54Gr);
@@ -2707,8 +2708,8 @@ void setupUI(void) {
   lbl73G  = gtk_label_new("");
   lbl74G  = gtk_label_new("");
   lbl75G  = gtk_label_new("");
-  lbl71H  = gtk_label_new("\u03b1M"); // Menu alphaMATH for AIM
-  lbl72H  = gtk_label_new("\u03c8");  // psi
+  lbl71H  = gtk_label_new("<"); // Menu alphaMATH for AIM
+  lbl72H  = gtk_label_new("\u03c8"); // psi
   lbl71L  = gtk_label_new("");
   lbl72L  = gtk_label_new("");
   lbl73L  = gtk_label_new("");
@@ -2803,8 +2804,8 @@ void setupUI(void) {
   lbl83G  = gtk_label_new("");
   lbl84G  = gtk_label_new("");
   lbl85G  = gtk_label_new("");
-  lbl81H  = gtk_label_new("\u2399"); // Printer
-  lbl83H  = gtk_label_new("\u03b1\u2219"); // Menu alphaDOT for AIM
+  lbl82H  = gtk_label_new("\u2399"); // Printer
+  lbl83H  = gtk_label_new("\u2219"); // Menu alphaDOT for AIM
   lbl84H  = gtk_label_new("");
   lbl81L  = gtk_label_new("");
   lbl82L  = gtk_label_new("");
@@ -2825,7 +2826,7 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn84, KEY_WIDTH_2, 0);
   gtk_widget_set_size_request(btn85, KEY_WIDTH_2, 0);
 
-  gtk_widget_set_name(lbl81H, "gShifted");
+  gtk_widget_set_name(lbl82H, "gShifted");
   gtk_widget_set_name(lbl83H, "gShiftedUnderline");
   //gtk_widget_set_name(lbl84H, "fShifted");
   gtk_widget_set_name(lblOn,  "On");
@@ -2862,11 +2863,11 @@ void setupUI(void) {
   yPos += DELTA_KEYS_Y + 1;
   gtk_fixed_put(GTK_FIXED(grid), btn81,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl81L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
-  gtk_fixed_put(GTK_FIXED(grid), lbl81H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);
 
   xPos += DELTA_KEYS_X + 18;
   gtk_fixed_put(GTK_FIXED(grid), btn82,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl82L, xPos + KEY_WIDTH_2 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
+  gtk_fixed_put(GTK_FIXED(grid), lbl82H, xPos + KEY_WIDTH_2 + X_OFFSET_LETTER, yPos -  1);
 
   xPos += DELTA_KEYS_X + 17;
   gtk_fixed_put(GTK_FIXED(grid), btn83,  xPos,                         yPos);

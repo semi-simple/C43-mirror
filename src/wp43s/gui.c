@@ -2935,10 +2935,10 @@ void setupUI(void) {
   gtk_widget_set_name(lblFKey1, "fSoftkeyArea");
   gtk_widget_set_name(lblFKey2, "fSoftkeyArea");
   //gtk_widget_set_name(lblFKey3, "fSoftkeyArea");
-  gtk_widget_set_size_request(lblFKey1,  5-2, 45-2-2-1);
+  gtk_widget_set_size_request(lblFKey1,  5-2, 45-2-2-1-1);
   gtk_widget_set_size_request(lblFKey2, 61-8-2,  5-2);
   //gtk_widget_set_size_request(lblFKey3,  5, 45);
-  gtk_fixed_put(GTK_FIXED(grid), lblFKey1, 349+4, 522+2);
+  gtk_fixed_put(GTK_FIXED(grid), lblFKey1, 349+4, 522+2+1);
   gtk_fixed_put(GTK_FIXED(grid), lblFKey2, 350+4, 563-1);
   //gtk_fixed_put(GTK_FIXED(grid), lblFKey3, 407, 522);
 
@@ -2951,10 +2951,10 @@ void setupUI(void) {
   gtk_widget_set_name(lblGKey1, "gSoftkeyArea");
   gtk_widget_set_name(lblGKey2, "gSoftkeyArea");
   //gtk_widget_set_name(lblGKey3, "gSoftkeyArea");
-  gtk_widget_set_size_request(lblGKey1,  5-2, 45-2-2-1);
+  gtk_widget_set_size_request(lblGKey1,  5-2, 45-2-2-1-1);
   gtk_widget_set_size_request(lblGKey2, 61-8-2,  5-2);
   //gtk_widget_set_size_request(lblGKey3,  5, 45);
-  gtk_fixed_put(GTK_FIXED(grid), lblGKey1, 349+4 + DELTA_KEYS_X, 522+2);
+  gtk_fixed_put(GTK_FIXED(grid), lblGKey1, 349+4 + DELTA_KEYS_X, 522+2+1);
   gtk_fixed_put(GTK_FIXED(grid), lblGKey2, 350+4 + DELTA_KEYS_X, 563-1);
   //gtk_fixed_put(GTK_FIXED(grid), lblGKey3, 407 + DELTA_KEYS_X, 522);
 

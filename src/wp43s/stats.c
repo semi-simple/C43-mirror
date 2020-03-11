@@ -274,3 +274,30 @@ void fnStatSum(uint16_t sum) {
 
   refreshStack();
 }
+
+/********************************************//**
+ * \brief regX ==> regL and SUM ==> regX, regY
+ * enables stack lift and refreshes the stack.
+ * regX = SUM x, regY = SUM y
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnSumXY(uint16_t unusedParamButMandatory) {
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+
+    if(statisticalSumsPointer == NULL) {
+        real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+        real34Zero(REGISTER_REAL34_DATA(REGISTER_Y));
+    } else {
+        real34Copy(statisticalSumsPointer + REAL34_SIZE * 1, REGISTER_REAL34_DATA(REGISTER_X));  // sigma x
+        real34Copy(statisticalSumsPointer + REAL34_SIZE * 2, REGISTER_REAL34_DATA(REGISTER_Y));  // sigma y
+    }
+
+    temporaryInformation = TI_SUMX_SUMY;
+    refreshStack();
+}

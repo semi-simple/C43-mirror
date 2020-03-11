@@ -187,6 +187,7 @@ void fnInDefault(uint16_t inputDefault) {
  ***********************************************/
 void fnSigmaAssign(uint16_t sigmaAssign) {
   Norm_Key_00_VAR = sigmaAssign;
+  userModeEnabled = !userModeEnabled; toggleUserMode(); //JMUSER
 
   fnRefreshRadioState(RB_SA, sigmaAssign);
 }
@@ -285,6 +286,7 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
     Norm_Key_00_VAR = X_REG;
+    userModeEnabled = !userModeEnabled; toggleUserMode(); //JMUSER
   }
 }
 

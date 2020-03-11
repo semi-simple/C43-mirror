@@ -1672,6 +1672,10 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemSoftmenuName, lbl);
   }
 
+  if(key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && !userModeEnabled) {                       //JMUSER
+    stringToUtf8(indexOfItems[max(Norm_Key_00_VAR, -Norm_Key_00_VAR)].itemSoftmenuName, lbl);            //JMUSER
+  }                                                                                                      //JM
+
   if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {    //JM wqs 85  //JM Changed CATALOG to CAT
     lbl[3] = 0;
   }

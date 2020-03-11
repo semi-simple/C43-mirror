@@ -2058,7 +2058,7 @@ void calcModeNormalGui(void) {
 
   gtk_widget_show(lbl21F);
   gtk_widget_show(lbl21G);
-  //gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
+  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22F);
   gtk_widget_show(lbl22G);
@@ -2328,7 +2328,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl22Fa);    //JM
   gtk_widget_show(lbl23Fa);    //JM
   
-  //gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
+  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
 /*gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);
   gtk_widget_show(lbl23L);
@@ -2570,7 +2570,7 @@ void calcModeAsmGui(void) {
   gtk_widget_show(btn25);
   gtk_widget_show(btn26);
 
-  //gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
+  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
 
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);

@@ -1672,7 +1672,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemSoftmenuName, lbl);
   }
 
-  if(key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && !userModeEnabled) {                       //JMUSER
+  if(key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && !userModeEnabled) {                       //JMUSER Change the name inside the Sigma+ button
     stringToUtf8(indexOfItems[max(Norm_Key_00_VAR, -Norm_Key_00_VAR)].itemSoftmenuName, lbl);            //JMUSER
   }                                                                                                      //JM
 
@@ -1686,7 +1686,10 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
   }                                                          //JM
 
-  if(key->primary == KEY_f) {
+  if((key->primary == ITM_AIM && userModeEnabled && calcMode == CM_NORMAL ) || (!userModeEnabled && key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && Norm_Key_00_VAR == ITM_AIM)) {
+    gtk_widget_set_name(button, "calcKeyF");                 //JMALPHA Colour the alpha key gold if assigned.
+  }
+  else if(key->primary == KEY_f) {
     gtk_widget_set_name(button, "calcKeyF");
   }
   else if(key->primary == KEY_g) {

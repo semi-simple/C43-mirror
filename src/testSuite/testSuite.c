@@ -136,6 +136,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSquare",               fnSquare              },
   {"fnSquareRoot",           fnSquareRoot          },
   {"fnSubtract",             fnSubtract            },
+  {"fnSumXY",                fnSumXY               },
   {"fnSwapRealImaginary",    fnSwapRealImaginary   },
   {"fnSwapXY",               fnSwapXY              },
   {"fnTan",                  fnTan                 },

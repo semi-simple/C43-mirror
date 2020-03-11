@@ -1237,6 +1237,7 @@ void resetTemporaryInformation(void) {
 
     case TI_RADIUS_THETA:
     case TI_THETA_RADIUS:
+    case TI_SUMX_SUMY:
     case TI_X_Y:
     case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
                                refreshRegisterLine(REGISTER_Y); break;
@@ -1553,6 +1554,7 @@ void refreshRegisterLine(calcRegister_t regist) {
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
             }
+
             else if(temporaryInformation == TI_RE_IM) {
               if(regist == REGISTER_X) {
                 strcpy(prefix, "Im" STD_SPACE_FIGURE "=");
@@ -1562,6 +1564,17 @@ void refreshRegisterLine(calcRegister_t regist) {
                 strcpy(prefix, "Re" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
+            }
+
+            else if(temporaryInformation == TI_SUMX_SUMY) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_SIGMA "x" STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_SIGMA "y" STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
             }
 
             else if(temporaryInformation == TI_STATISTIC_SUMS) {

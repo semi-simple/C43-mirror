@@ -1240,6 +1240,17 @@ void fnUserJM(uint16_t jmUser) {
     Show_User_Keys();
     break;
 
+  case USER_GSHFT:                                           //USER_DEFAULTS FOR USER: E+ SHIFT G
+    kbd_usr[0].primary     = KEY_g;
+    kbd_usr[0].gShifted    = ITM_NULL;
+    kbd_usr[0].fShifted    = ITM_NULL;
+    Norm_Key_00_VAR        = KEY_g;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+
+
   case USER_RESET:                                              //USER_RESET 26
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
     userModeEnabled = false;

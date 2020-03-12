@@ -46,7 +46,7 @@ Modes available in the mode menu:
 #define JM_TO_FG_LONG 	   580   //ms TO_FG_LONG
 
 #define JM_FN_DOUBLE_TIMER 150   //ms TO_FN_EXEC
-#define JM_TO_FN_LONG 	   450   //ms TO_FN_LONG
+#define JM_TO_FN_LONG 	   400   //ms TO_FN_LONG  //  450 on 2020-03-13
 
 #define JM_CLRDROP_TIMER   500  //ms TO_CL_DROP    //DROP
 #define JM_TO_CL_LONG      800   //ms TO_CL_LONG   //CLSTK
@@ -123,7 +123,8 @@ void fnUserJM(uint16_t jmUser);
 #define USER_COMPLEX     24
 #define USER_SHIFTS      25
 #define USER_RESET       26
-#define USER_ALPHA       33 //last number
+#define USER_ALPHA       33
+#define USER_GSHFT       34 //last number
 #define JM_ASSIGN        27
 #define JM_SEEK_FN       28
 

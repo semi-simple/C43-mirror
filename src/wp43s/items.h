@@ -1975,8 +1975,9 @@
 #define ITM_SI_k                      1931   //JM PRE UNIT
 #define ITM_SI_M                      1932   //JM PRE UNIT
 #define ITM_USER_ALPHA                1933   //JM USER
+#define ITM_USER_GSHFT                1934   //JM USER
 
-#define LAST_ITEM                     1934   //JM
+#define LAST_ITEM                     1935   //JM
 
 #define CHR_PROD_SIGN                 9999
 

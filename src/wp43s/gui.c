@@ -1851,7 +1851,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     gtk_widget_set_name(button, "calcKeyG");
   }
   else if(key->keyLblAim == KEY_fg) {                                 //JM 
-    gtk_widget_set_name(button, "calcKeyF");                          //JM
+    gtk_widget_set_name(button, "calcKeyFG");                          //JM
   }
   else {
     /*        //vv dr - new AIM
@@ -1976,7 +1976,7 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
     gtk_widget_set_name(button, "calcKeyG");
   }
   else if(key->primaryTam == KEY_fg) {                              //JM
-    gtk_widget_set_name(button, "calcKeyF");                        //JM
+    gtk_widget_set_name(button, "calcKeyFG");                        //JM
   }
 
   else if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {      //JM increase the font size of the operators to the numeric key size
@@ -3936,7 +3936,7 @@ void setupUI(void) {
   lbl84G  = gtk_label_new("");
   lbl85G  = gtk_label_new("");
   lbl82H  = gtk_label_new("\u221D");        //JM ALPHA
-  lbl83H  = gtk_label_new("\u2022");  //JM Alphadot -  Menu alphaDOT for AIM 2218
+  lbl83H  = gtk_label_new("\u2219");  //JM Alphadot -  Menu alphaDOT for AIM 2218
   lbl84H  = gtk_label_new("\u222E");  //JM Alpha MATH - also considered pi \u03C0
   lbl85H  = gtk_label_new("\u00f1");  //JM Alpha Intnl - also considered \u2139
   lbl81L  = gtk_label_new("");

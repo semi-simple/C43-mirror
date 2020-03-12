@@ -1172,7 +1172,7 @@ const item_t indexOfItems[] = {
 /*  781 */  { fnConstant,                  77,                          "-" STD_INFINITY,                              "-" STD_INFINITY,                              CAT_CNST, SLS_ENABLED  },
 /*  782 */  { fnMultiply,                  ITM_MULT,                    STD_CROSS,                                     STD_CROSS,                                     CAT_FNCT, SLS_ENABLED  },
 /*  783 */  { itemToBeCoded,               NOPARAM,                     STD_CROSS "MOD",                               STD_CROSS "MOD",                               CAT_FNCT, SLS_UNCHANGED},
-/*  784 */  { fnDivide,                    ITM_DIV,                     "/",                                           "/",                                           CAT_FNCT, SLS_ENABLED  },
+/*  784 */  { fnDivide,                    ITM_DIV,                     STD_DIVIDE,                                    STD_DIVIDE,                                    CAT_FNCT, SLS_ENABLED  },
 /*  785 */  { itemToBeCoded,               NOPARAM,                     STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               CAT_FNCT, SLS_UNCHANGED},
 /*  786 */  { addItemToBuffer,             ITM_INDIRECTION,             STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               CAT_NONE, SLS_UNCHANGED},
 /*  787 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "DATE",                        STD_RIGHT_ARROW "DATE",                        CAT_FNCT, SLS_UNCHANGED},

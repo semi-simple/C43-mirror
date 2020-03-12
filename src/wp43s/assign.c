@@ -75,7 +75,7 @@ const calcKey_t kbd_std[37] = {
  #ifdef JM_LAYOUT_1A  //JM UPDATED TO LAYOUT 1C. OPTIMAL. SIMULATOR.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_RND,         ITM_PROFRC,   ITM_NULL,       CHR_A,            -MNU_ALPHAintl,   CHR_ALPHA,     ITM_ST_A     }, //JM
- {22,   ITM_1ONX,         ITM_YX,          ITM_XTHROOT,  CHR_NUMBER_SIGN,CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
+ {22,   ITM_1ONX,         ITM_YX,          ITM_XTHROOT,  ITM_NULL,       CHR_B,             ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM
  {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_toINT,    CHR_CHECK_MARK, CHR_C,             CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_ms,       ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
@@ -112,10 +112,10 @@ const calcKey_t kbd_std[37] = {
  {74,   CHR_3,           -MNU_PARTS,      -MNU_TEST,     CHR_3,          CHR_Z,             CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_STK,        -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,    CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
 
- {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT,    KEY_EXIT1,      KEY_EXIT1,         ITM_OFF,         CHR_PRINTER,   KEY_EXIT1    }, //JM
+ {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT,    KEY_EXIT1,      KEY_EXIT1,         ITM_OFF,         ITM_NULL,      KEY_EXIT1    }, //JM
  {82,   CHR_0,            ITM_VIEW,       ITM_TIMER,     CHR_0,          CHR_COLON,         CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,       -MNU_INFO,     CHR_PERIOD,     CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
- {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, CHR_PRINTER,    -MNU_ALPHAMATH, ITM_NULL     }, //JM
+ {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, CHR_SLASH,      -MNU_ALPHAMATH, ITM_NULL     }, //JM
  {85,   ITM_ADD,         -MNU_CATALOG,    -MNU_IO,       CHR_PLUS,       CHR_SPACE,         CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      }  //JM
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
 #endif //JM END OF LAYOUT 1a.
@@ -124,8 +124,8 @@ const calcKey_t kbd_std[37] = {
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM DM42 STRICT. NAME CHANGE TO LAYOUT 42C
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_RND,         ITM_PROFRC,   ITM_NULL,       CHR_A,           -MNU_ALPHAintl,   CHR_ALPHA,     ITM_ST_A     }, //JM
- {22,   ITM_1ONX,         ITM_YX,          ITM_XTHROOT,  CHR_NUMBER_SIGN,CHR_B,            CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_toINT,    CHR_SQUARE_ROOT,CHR_C,            CHR_SQUARE_ROOT, CHR_CHI,       ITM_ST_C     }, //JM
+ {22,   ITM_1ONX,         ITM_YX,          ITM_XTHROOT,  ITM_NULL,       CHR_B,            ITM_NULL,        CHR_BETA,      ITM_ST_B     }, //JM
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_toINT,    CHR_CHECK_MARK, CHR_C,            CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,            ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_ms,       ITM_NULL,       CHR_E,            ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_LBL,      ITM_NULL,       CHR_F,            ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
@@ -161,10 +161,10 @@ const calcKey_t kbd_std[37] = {
  {74,   CHR_3,           -MNU_PFN,        -MNU_TEST,     CHR_3,          CHR_Z,            CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_IO,         -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,   CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
 
- {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT,    KEY_EXIT1,      KEY_EXIT1,        ITM_OFF,         CHR_PRINTER,   KEY_EXIT1    }, //JM
+ {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT,    KEY_EXIT1,      KEY_EXIT1,        ITM_OFF,         ITM_NULL,      KEY_EXIT1    }, //JM
  {82,   CHR_0,           -MNU_HOME,        ITM_TIMER,    CHR_0,          CHR_COLON,        CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,        ITM_VIEW,     CHR_PERIOD,     CHR_COMMA,        CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
- {84,   ITM_RS,           ITM_PR,         -MNU_STK,      ITM_NULL,       CHR_QUESTION_MARK,CHR_PRINTER,    -MNU_ALPHAMATH, ITM_NULL     }, //JM
+ {84,   ITM_RS,           ITM_PR,         -MNU_STK,      ITM_NULL,       CHR_QUESTION_MARK,CHR_SLASH,      -MNU_ALPHAMATH, ITM_NULL     }, //JM
  {85,   ITM_ADD,         -MNU_CATALOG,    -MNU_PARTS,    CHR_PLUS,       CHR_SPACE,        CHR_PLUS,       -MNU_ALPHAINTL, ITM_ADD      }  //JM
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
 #endif //JM END OF LAYOUT 2 DM42 STRICT.

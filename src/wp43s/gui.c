@@ -1682,12 +1682,12 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
 
   gtk_button_set_label(GTK_BUTTON(button), (gchar *)lbl);
 
-  if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {    //JM if "/", re-do to "÷". Presumed easier than to fix the UTf8 conversion above.
-  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
-  }                                                          //JM
+//  if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {    //JM if "/", re-do to "÷". Presumed easier than to fix the UTf8 conversion above.
+//  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
+//  }                                                          //JM
 
   if((key->primary == ITM_AIM && userModeEnabled && calcMode == CM_NORMAL ) || (!userModeEnabled && key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && Norm_Key_00_VAR == ITM_AIM)) {
-    gtk_widget_set_name(button, "calcKeyF");                 //JMALPHA Colour the alpha key gold if assigned.
+    gtk_widget_set_name(button, "AlphaKey");                 //JMALPHA Colour the alpha key gold if assigned.
   }
   else if(key->primary == KEY_f) {
     gtk_widget_set_name(button, "calcKeyF");
@@ -1696,12 +1696,12 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     gtk_widget_set_name(button, "calcKeyG");
   }
   else if(key->primary == KEY_fg) {
-    gtk_widget_set_name(button, "calcKeyF");
+    gtk_widget_set_name(button, "calcKeyFG");
   }
   else if((key->primary >= CHR_0 && key->primary <= CHR_9) || key->primary == CHR_PERIOD) {
     gtk_widget_set_name(button, "calcNumericKey");
   }
-  else if(strcmp((char *)lbl, "/") == 0 && key->keyId == 55) {      //JM increase the font size of the operators to the numeric key size
+  else if(strcmp((char *)lbl, "÷") == 0 && key->keyId == 55) {      //JM increase the font size of the operators to the numeric key size
     gtk_widget_set_name(button, "calcNumericKey");                  //JM increase the font size of the operators
   }                                                                 //JM increase the font size of the operators
   else if(strcmp((char *)lbl, "×") == 0 && key->keyId == 65) {      //JM increase the font size of the operators
@@ -2061,7 +2061,7 @@ void calcModeNormalGui(void) {
 
   gtk_widget_show(lbl21F);
   gtk_widget_show(lbl21G);
-  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
+  //gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22F);
   gtk_widget_show(lbl22G);
@@ -2331,7 +2331,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl22Fa);    //JM
   gtk_widget_show(lbl23Fa);    //JM
   
-  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
+//  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
 /*gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);
   gtk_widget_show(lbl23L);
@@ -2573,7 +2573,7 @@ void calcModeAsmGui(void) {
   gtk_widget_show(btn25);
   gtk_widget_show(btn26);
 
-  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
+//  gtk_widget_show(lbl21H); //JMALPHA temporary remove A from Sigma+
 
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);

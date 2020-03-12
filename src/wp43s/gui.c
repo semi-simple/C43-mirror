@@ -993,6 +993,11 @@ void prepareCssData(void) {
  * \return void
  ***********************************************/
 void hideAllWidgets(void) {
+  gtk_widget_hide(lblFKey1);  //JM
+  gtk_widget_hide(lblGKey1);  //JM
+  gtk_widget_hide(lblFKey2);  //JM
+  gtk_widget_hide(lblGKey2);  //JM
+  
   gtk_widget_hide(btn11);
   gtk_widget_hide(btn12);
   gtk_widget_hide(btn13);
@@ -2001,6 +2006,11 @@ void calcModeNormalGui(void) {
 
   hideAllWidgets();
 
+  gtk_widget_show( lblFKey1);  //JM
+  gtk_widget_show( lblGKey1);  //JM
+  gtk_widget_show( lblFKey2);  //JM
+  gtk_widget_show( lblGKey2);  //JM
+
   labelCaptionNormal(keys++, btn21, lbl21F, lbl21G, lbl21L);
   labelCaptionNormal(keys++, btn22, lbl22F, lbl22G, lbl22L);
   labelCaptionNormal(keys++, btn23, lbl23F, lbl23G, lbl23L);
@@ -2249,7 +2259,8 @@ void calcModeAimGui(void) {
   labelCaptionAim(keys++, btn21A, lbl21Gr, lbl21L);     //vv dr - new AIM
   labelCaptionAim(keys++, btn22A, lbl22Gr, lbl22L);
   labelCaptionAim(keys++, btn23A, lbl23Gr, lbl23L);
-  labelCaptionAimFaChr(   keys,   lbl23Fa, CHR_SQUARE_ROOT);          //JM
+  labelCaptionAimFaChr(   keys,   lbl22Fa, CHR_SQUARE_ROOT);          //JM new
+  labelCaptionAimFaChr(   keys,   lbl23Fa, CHR_NUMBER_SIGN);          //JM
   labelCaptionAim(keys++, btn24A, lbl24Gr, lbl24L);
   labelCaptionAim(keys++, btn25A, lbl25Gr, lbl25L);
   labelCaptionAim(keys++, btn26A, lbl26Gr, lbl26L);

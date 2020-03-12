@@ -445,7 +445,7 @@ const int16_t menu_ASN_N[]       = {
 
 const int16_t menu_ASN[]         = { 
       ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_JM_SEEK, /*ITM_JM_ASN*/ KEY_USERMODE,
-      ITM_NULL,          ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
+      ITM_USER_ALPHA,    ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
      -MNU_ASN_N,         ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
 
       K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER

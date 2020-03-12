@@ -123,6 +123,7 @@ void fnUserJM(uint16_t jmUser);
 #define USER_COMPLEX     24
 #define USER_SHIFTS      25
 #define USER_RESET       26
+#define USER_ALPHA       33 //last number
 #define JM_ASSIGN        27
 #define JM_SEEK_FN       28
 

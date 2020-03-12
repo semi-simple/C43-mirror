@@ -1193,6 +1193,13 @@ void fnUserJM(uint16_t jmUser) {
     Show_User_Keys();
     break;
 
+  case USER_ALPHA:                                              //USER_DEFAULTS FOR USER: E+ ALPHA
+    kbd_usr[0].primary     = ITM_AIM;
+    Norm_Key_00_VAR        = ITM_AIM;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
 #ifdef JM_LAYOUT_1A                         //JM LAYOUT 1A.
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].fShifted   = KEY_CC;                            //JM Changed CPX menu therefore USER MODE changes

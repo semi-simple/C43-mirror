@@ -2174,7 +2174,7 @@ const item_t indexOfItems[] = {
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "ASN PAC",                                     "PAC",                                         CAT_MENU, SLS_UNCHANGED},
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "PAC",                                         "PAC",                                         CAT_MENU, SLS_UNCHANGED},
 
 /* 1773 */  { fnJMUSERmode,                256+0,                       "",                                            "K_00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)
 /* 1774 */  { fnJMUSERmode_f,              256+0,                       "",                                            "Kf00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)
@@ -2337,6 +2337,7 @@ const item_t indexOfItems[] = {
 /* 1930 */  { fnJM,                        37,                          STD_DOT "m",                                   STD_DOT "m",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1931 */  { fnJM,                        38,                          STD_DOT "k",                                   STD_DOT "k",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               CAT_NONE, SLS_UNCHANGED},
 
-/* 1933 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1934 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

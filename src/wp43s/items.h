@@ -27,6 +27,7 @@
 #define SLS_UNCHANGED 2
 
 
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1973,8 +1974,9 @@
 #define ITM_SI_m                      1930   //JM PRE UNIT
 #define ITM_SI_k                      1931   //JM PRE UNIT
 #define ITM_SI_M                      1932   //JM PRE UNIT
+#define ITM_USER_ALPHA                1933   //JM USER
 
-#define LAST_ITEM                     1933   //JM
+#define LAST_ITEM                     1934   //JM
 
 #define CHR_PROD_SIGN                 9999
 

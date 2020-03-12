@@ -3936,7 +3936,7 @@ void setupUI(void) {
   lbl84G  = gtk_label_new("");
   lbl85G  = gtk_label_new("");
   lbl82H  = gtk_label_new("\u221D");        //JM ALPHA
-  lbl83H  = gtk_label_new("\u2218");  //JM Alphadot -  Menu alphaDOT for AIM
+  lbl83H  = gtk_label_new("\u2022");  //JM Alphadot -  Menu alphaDOT for AIM 2218
   lbl84H  = gtk_label_new("\u222E");  //JM Alpha MATH - also considered pi \u03C0
   lbl85H  = gtk_label_new("\u00f1");  //JM Alpha Intnl - also considered \u2139
   lbl81L  = gtk_label_new("");

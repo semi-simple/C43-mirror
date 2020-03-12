@@ -355,6 +355,7 @@ void fnToReal                   (uint16_t unusedParamButMandatory) {}
 void fnDec                      (uint16_t unusedParamButMandatory) {}
 void fnInc                      (uint16_t unusedParamButMandatory) {}
 void fnDecomp                   (uint16_t unusedParamButMandatory) {}
+void fnSumXY                    (uint16_t unusedParamButMandatory) {}
 
 #endif
 
@@ -973,7 +974,7 @@ const item_t indexOfItems[] = {
 /*  609 */  { addItemToBuffer,             REGISTER_X,                  "ST.X",                                        "ST.X",                                        CAT_RVAR, SLS_UNCHANGED},
 /*  610 */  { addItemToBuffer,             REGISTER_Y,                  "ST.Y",                                        "ST.Y",                                        CAT_RVAR, SLS_UNCHANGED},
 /*  611 */  { addItemToBuffer,             REGISTER_Z,                  "ST.Z",                                        "ST.Z",                                        CAT_RVAR, SLS_UNCHANGED},
-/*  612 */  { itemToBeCoded,               NOPARAM,                     "SUM",                                         "SUM",                                         CAT_FNCT, SLS_UNCHANGED},
+/*  612 */  { fnSumXY,                     NOPARAM,                     "SUM",                                         "SUM",                                         CAT_FNCT, SLS_ENABLED  },
 /*  613 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_w,                                 "s" STD_SUB_w,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  614 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_x STD_SUB_y,                       "s" STD_SUB_x STD_SUB_y,                       CAT_FNCT, SLS_UNCHANGED},
 /*  615 */  { fnCvtShorttonKg,             multiply,                    "s.t" STD_RIGHT_ARROW "kg",                    "short",                                       CAT_FNCT, SLS_ENABLED  },

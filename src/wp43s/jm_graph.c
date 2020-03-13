@@ -167,7 +167,7 @@ void graph_calc(uint8_t nbr, float x_min, float x_max, float y_min, float y_max,
   real_t tmpy;
   float x; 
   float y;
-  float sx, sy, ty, tx;
+//  float sx, sy, ty, tx;
 
   SetupGRAPH1();
   sx=0;

@@ -101,10 +101,8 @@
 #define CONST_76 2736
 #define CONST_77 2772
 #define CONST_78 2808
-#define CONST_79 2844
 
 extern const uint8_t constants[];
-extern const real_t * const const_1on2;
 extern const real_t * const const_a;
 extern const real_t * const const_a0;
 extern const real_t * const const_aMoon;
@@ -191,7 +189,7 @@ extern const real_t * const const_1;
 extern const real_t * const const_90;
 extern const real_t * const const_100;
 extern const real_t * const const_piOn2;
-extern const real_t * const const_0_5;
+extern const real_t * const const_1on2;
 extern const real_t * const const_45;
 extern const real_t * const const_50;
 extern const real_t * const const_piOn4;

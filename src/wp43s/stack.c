@@ -329,6 +329,9 @@ void fnEnter(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_TAM:
+        tamTransitionSystem(TT_ENTER);
+      break;
+
     case CM_ASM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:

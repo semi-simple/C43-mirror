@@ -74,15 +74,18 @@ void arcsinLonI(void) {
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arcsinCplx();
-      return;
+    }
+    else if(getFlag(FLAG_DANGER)) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function arcsinLonI:", "|X| > 1", "and CPXRES is not set!", NULL);
       #endif
-      return;
     }
+    return;
   }
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
@@ -126,6 +129,9 @@ void arcsinReal(void) {
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arcsinCplx();
       return;
+    }
+    else if(getFlag(FLAG_DANGER)) {
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

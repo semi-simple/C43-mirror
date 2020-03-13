@@ -283,7 +283,7 @@ void copyAllRegistersToClipboard(void) {
   }
 
   if(statisticalSumsPointer != NULL) {
-    for(int32_t regist=0; regist<STATISTICAL_SUMS; regist++) {
+    for(int32_t regist=0; regist<NUMBER_OF_STATISTICAL_SUMS; regist++) {
       ptr += strlen(ptr);
 
       switch(regist) {
@@ -923,6 +923,7 @@ void resetTemporaryInformation(void) {
     case TI_RADIUS_THETA:
     case TI_THETA_RADIUS:
     case TI_SUMX_SUMY:
+    case TI_MEANX_MEANY:
     case TI_X_Y:
     case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
                                refreshRegisterLine(REGISTER_Y); break;
@@ -1257,6 +1258,17 @@ void refreshRegisterLine(calcRegister_t regist) {
                 }
                 else if(regist == REGISTER_Y) {
                     strcpy(prefix, STD_SIGMA "y" STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_MEANX_MEANY) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_y_BAR STD_SPACE_FIGURE "=");
                     prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                 }
             }

@@ -46,11 +46,12 @@
 #define ERROR_WP34S_COMPAT                 25
 #define ERROR_ENTER_NEW_NAME               26
 #define ERROR_CANNOT_DELETE_PREDEF_ITEM    27
-#define ERROR_BAD_INPUT                    28
-#define ERROR_ITEM_TO_BE_CODED             29
-#define ERROR_FUNCTION_TO_BE_CODED         30
+#define ERROR_NO_SUMMATION_DATA            28
+#define ERROR_BAD_INPUT                    29
+#define ERROR_ITEM_TO_BE_CODED             30
+#define ERROR_FUNCTION_TO_BE_CODED         31
 
-#define NUMBER_OF_ERROR_CODES              31
+#define NUMBER_OF_ERROR_CODES              32
 
 #ifndef TESTSUITE_BUILD
 void displayBugScreen       (const char *message);

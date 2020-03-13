@@ -1697,7 +1697,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   else if(key->primary == KEY_f) {
     gtk_widget_set_name(button, "calcKeyF");
   }
-  else if(key->primary == KEY_g) {
+  else if(key->primary == KEY_g  || (key->primary == ITM_SIGMAPLUS && Norm_Key_00_VAR == KEY_g) ) {
     gtk_widget_set_name(button, "calcKeyG");
   }
   else if(key->primary == KEY_fg) {

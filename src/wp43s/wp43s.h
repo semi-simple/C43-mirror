@@ -372,6 +372,7 @@ typedef int16_t calcRegister_t;
 #define TI_SHOW_REGISTER       12
 #define TI_VIEW_REGISTER       13
 #define TI_SUMX_SUMY           14
+#define TI_MEANX_MEANY         15
 
 // Register browser mode
 #define RBR_GLOBAL              0
@@ -400,6 +401,32 @@ typedef int16_t calcRegister_t;
 // Combination / permutation
 #define CP_PERMUTATION 0
 #define CP_COMBINATION 1
+
+// Statistical sums
+#define NUMBER_OF_STATISTICAL_SUMS 23
+#define SIGMA_N      (statisticalSumsPointer)
+#define SIGMA_X      (statisticalSumsPointer + REAL34_SIZE)
+#define SIGMA_Y      (statisticalSumsPointer + REAL34_SIZE *  2)
+#define SIGMA_X2     (statisticalSumsPointer + REAL34_SIZE *  3)
+#define SIGMA_X2Y    (statisticalSumsPointer + REAL34_SIZE *  4)
+#define SIGMA_Y2     (statisticalSumsPointer + REAL34_SIZE *  5)
+#define SIGMA_XY     (statisticalSumsPointer + REAL34_SIZE *  6)
+#define SIGMA_lnXlnY (statisticalSumsPointer + REAL34_SIZE *  7)
+#define SIGMA_lnX    (statisticalSumsPointer + REAL34_SIZE *  8)
+#define SIGMA_ln2X   (statisticalSumsPointer + REAL34_SIZE *  9)
+#define SIGMA_YlnX   (statisticalSumsPointer + REAL34_SIZE * 10)
+#define SIGMA_lnY    (statisticalSumsPointer + REAL34_SIZE * 11)
+#define SIGMA_ln2Y   (statisticalSumsPointer + REAL34_SIZE * 12)
+#define SIGMA_XlnY   (statisticalSumsPointer + REAL34_SIZE * 13)
+#define SIGMA_lnYonX (statisticalSumsPointer + REAL34_SIZE * 14)
+#define SIGMA_X2onY  (statisticalSumsPointer + REAL34_SIZE * 15)
+#define SIGMA_1onX   (statisticalSumsPointer + REAL34_SIZE * 16)
+#define SIGMA_1onX2  (statisticalSumsPointer + REAL34_SIZE * 17)
+#define SIGMA_XonY   (statisticalSumsPointer + REAL34_SIZE * 18)
+#define SIGMA_1onY   (statisticalSumsPointer + REAL34_SIZE * 19)
+#define SIGMA_1onY2  (statisticalSumsPointer + REAL34_SIZE * 20)
+#define SIGMA_X3     (statisticalSumsPointer + REAL34_SIZE * 21)
+#define SIGMA_X4     (statisticalSumsPointer + REAL34_SIZE * 22)
 
 #if defined(__arm__)
   #define FMT64U  "llu"
@@ -459,8 +486,6 @@ typedef int16_t calcRegister_t;
   #define STACK_LIFT_ENABLE  stackLiftEnabled = true;
   #define STACK_LIFT_DISABLE stackLiftEnabled = false;
 #endif
-
-#define STATISTICAL_SUMS 23
 
 // Variables for the simulator
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)

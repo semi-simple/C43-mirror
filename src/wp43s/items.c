@@ -356,6 +356,7 @@ void fnDec                      (uint16_t unusedParamButMandatory) {}
 void fnInc                      (uint16_t unusedParamButMandatory) {}
 void fnDecomp                   (uint16_t unusedParamButMandatory) {}
 void fnSumXY                    (uint16_t unusedParamButMandatory) {}
+void fnMeanXY                   (uint16_t unusedParamButMandatory) {}
 
 #endif
 
@@ -1036,7 +1037,7 @@ const item_t indexOfItems[] = {
 /*  671 */  { itemToBeCoded,               NOPARAM,                     "XEQ",                                         "XEQ",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  672 */  { itemToBeCoded,               NOPARAM,                     "XNOR",                                        "XNOR",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  673 */  { itemToBeCoded,               NOPARAM,                     "XOR",                                         "XOR",                                         CAT_FNCT, SLS_UNCHANGED},
-/*  674 */  { itemToBeCoded,               NOPARAM,                     STD_x_BAR,                                     STD_x_BAR,                                     CAT_FNCT, SLS_UNCHANGED},
+/*  674 */  { fnMeanXY,                    NOPARAM,                     STD_x_BAR,                                     STD_x_BAR,                                     CAT_FNCT, SLS_ENABLED  },
 /*  675 */  { itemToBeCoded,               NOPARAM,                     STD_x_BAR STD_SUB_G,                           STD_x_BAR STD_SUB_G,                           CAT_FNCT, SLS_UNCHANGED},
 /*  676 */  { itemToBeCoded,               NOPARAM,                     STD_x_BAR STD_SUB_w,                           STD_x_BAR STD_SUB_w,                           CAT_FNCT, SLS_UNCHANGED},
 /*  677 */  { itemToBeCoded,               NOPARAM,                     STD_x_CIRC,                                    STD_x_CIRC,                                    CAT_FNCT, SLS_UNCHANGED},

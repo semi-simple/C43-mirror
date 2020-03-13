@@ -547,7 +547,7 @@ void fnClPAll(uint16_t confirmation) {
 
 void fnClSigma(uint16_t unusedParamButMandatory) {
   if(statisticalSumsPointer != NULL) {
-    freeWp43s(statisticalSumsPointer, 14*REAL34_SIZE);
+    freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS*REAL34_SIZE);
     statisticalSumsPointer = NULL;
   }
 }

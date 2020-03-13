@@ -261,16 +261,18 @@ void fnSigma(uint16_t plusMinus) {
 
 
 void fnStatSum(uint16_t sum) {
-  liftStack();
-
   if(statisticalSumsPointer == NULL) {
-   real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is no statistical data available!");
+      showInfoDialog("In function fnStatSum:", errorMessage, NULL, NULL);
+    #endif
   }
   else {
+   liftStack();
    real34Copy(statisticalSumsPointer + REAL34_SIZE*sum, REGISTER_REAL34_DATA(REGISTER_X));
+   refreshStack();
   }
-
-  refreshStack();
 }
 
 /********************************************//**

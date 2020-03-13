@@ -345,6 +345,9 @@ void fnEnter(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_TAM:
+        tamTransitionSystem(TT_ENTER);
+      break;
+
     case CM_ASM:
       addItemToBuffer(ITM_ENTER);
       break;

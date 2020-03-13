@@ -1792,6 +1792,11 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
     lbl[0] = 0;
   }
 
+  if(key->primary == ITM_RS) {    //JM R/S change to /
+  lbl[0]=47;                      //JM DIV
+  lbl[1]=0;                       //JM
+  }                               //JM
+
   gtk_label_set_label(GTK_LABEL(lblF), (gchar*)lbl);
   if(key->primary < 0) gtk_widget_set_name(lblF, "fShiftedUnderline"); else  gtk_widget_set_name(lblF, "fShifted");
 }

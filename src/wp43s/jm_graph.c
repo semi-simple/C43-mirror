@@ -126,7 +126,7 @@ void SetupGRAPH1(void) {
 
 
 void EndGRAPH1(void) {
-  int i;
+//  int i;
         // Print the elements of the array 
 //        printf("The elements of the array are: "); 
   //      for (i = 0; i < LIM; ++i) { 
@@ -167,12 +167,11 @@ void graph_calc(uint8_t nbr, float x_min, float x_max, float y_min, float y_max,
   real_t tmpy;
   float x; 
   float y;
-  float sx, sy;
-  float ty, tx;
+  //float sx, sy, ty, tx;
 
   SetupGRAPH1();
-  sx=0;
-  sy=0;
+  //sx=0;
+  //sy=0;
 
   //GRAPH
   cnt = 0;

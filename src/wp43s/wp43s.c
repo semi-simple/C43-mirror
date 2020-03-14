@@ -352,7 +352,7 @@ void setupDefaults(void) {
   testBitset = 0x0000;
 #endif                                  //^^
   SH_BASE_HOME   = true;
-  SH_BASE_AHOME  = false;
+  SH_BASE_AHOME  = true;
   Norm_Key_00_VAR  = ITM_SIGMAPLUS;
   Input_Default =  ID_43S;                                       //JM Input Default
   graph_xmin = -3*3.14159;                                       //JM GRAPH

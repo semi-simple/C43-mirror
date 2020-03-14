@@ -1189,6 +1189,14 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = KEY_CC;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+  case USER_ALPHA:                                              //USER_DEFAULTS FOR USER: E+ ALPHA
+    kbd_usr[0].primary     = ITM_AIM;
+    Norm_Key_00_VAR        = ITM_AIM;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
 
@@ -1199,6 +1207,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = -MNU_MyMenu;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
 #endif
@@ -1210,6 +1219,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = -MNU_MyMenu;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
 #endif
@@ -1226,13 +1236,26 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[11].fShifted   = ITM_NULL;
     kbd_usr[11].gShifted   = ITM_NULL;
     Norm_Key_00_VAR        = KEY_USERMODE;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
+
+  case USER_GSHFT:                                           //USER_DEFAULTS FOR USER: E+ SHIFT G
+    kbd_usr[0].primary     = KEY_g;
+    kbd_usr[0].gShifted    = ITM_NULL;
+    kbd_usr[0].fShifted    = ITM_NULL;
+    Norm_Key_00_VAR        = KEY_g;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+
 
   case USER_RESET:                                              //USER_RESET 26
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
     userModeEnabled = false;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
 

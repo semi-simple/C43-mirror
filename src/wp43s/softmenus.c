@@ -390,7 +390,8 @@ const int16_t menu_2ndDeriv[]    = { ITM_Not,                       ITM_yet,    
 const int16_t menu_Sf[]          = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_Solver[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_IO[]          = { ITM_SAVE,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,                  ITM_LOADSIGMA,                      //JM ADDED SAVE
-                                     ITM_QUIET,                     ITM_TONE,                   ITM_BEEP,                 -MNU_PRINT,            ITM_RECV,                    ITM_SEND                      };    //JM RELOCATED BEEP
+                                     ITM_QUIET,                     ITM_TONE,                   ITM_BEEP,                 -MNU_PRINT,            ITM_RECV,                    ITM_SEND,                           //JM RELOCATED BEEP
+                                     -MNU_PRINT,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM ADDED PRINT 
 const int16_t menu_PRINT[]       = { ITM_PRINTERX,                  ITM_PRINTERR,               ITM_PRINTERSIGMA,         ITM_PRINTERADV,        ITM_PRINTERLCD,              ITM_PRINTERPROG,
                                      ITM_PRINTERSTK,                ITM_PRINTERREGS,            ITM_PRINTERUSER,          ITM_PRINTERTAB,        ITM_PRINTERHASH,             ITM_PRINTERCHAR,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_PRINTERWIDTH,      ITM_PRINTERDLAY,             ITM_PRINTERMODE               };
@@ -444,7 +445,7 @@ const int16_t menu_ASN_N[]       = {
 
 const int16_t menu_ASN[]         = { 
       ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_JM_SEEK, /*ITM_JM_ASN*/ KEY_USERMODE,
-      ITM_NULL,          ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
+      ITM_USER_ALPHA,    ITM_NULL,         ITM_USER_GSHFT,  ITM_NULL,       ITM_NULL,      ITM_NULL,
      -MNU_ASN_N,         ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
 
       K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER

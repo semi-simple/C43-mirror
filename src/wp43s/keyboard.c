@@ -762,7 +762,7 @@ void btnPressed(void *notUsed, void *data) {
 
   // Shift g pressed
   //JM no shifted menu on f-shift-key as in WP43S
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  else if(  (key->primary == KEY_g  || (key->primary == ITM_SIGMAPLUS && Norm_Key_00_VAR == KEY_g))    && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {  //JM
     resetTemporaryInformation();
 
     if(lastErrorCode != 0) {

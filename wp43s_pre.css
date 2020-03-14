@@ -34,11 +34,33 @@
 /* Replace $numericKeyBackground with #3a2517 */
 /* Replace $numericKeyLabelColor with #ffffff */
 /* Replace $radius               with 3px     */
+/* Replace $AlphaGold            with #e36c50 */
+/* Replace $AlphaHoverGold       with #FF8669 */
+/* Replace $menubackground       with #303030 */
+/* Replace $fgGold               with #f1b053 */
+/* Replace $fgHoverGold          with #E7D7A0 */
 /**********************************************/
 
 #mainWindow {
   background:  $bezelBackground;
 }
+
+#AlphaKey {
+  background:    $AlphaGold;
+  color:         black;
+  font-family:   WP43S_StandardFont;
+  font-style:    normal;
+  font-weight:   normal;
+  font-size:     22px;
+  border-radius: $radius;
+  padding:       0px;
+  padding-left:  2px;
+  padding-top:   5px;
+  padding-bottom:5px;
+  border-color:  $keyBorder;
+  border-width:  2px;
+}
+#AlphaKey:hover {background-color: $AlphaHoverGold;}
 
 #fSoftkeyArea {
   background: $fGold;
@@ -47,6 +69,11 @@
 
 #gSoftkeyArea {
   background: $gBlue;
+  font-size:  1px;
+}
+
+#eSoftkeyArea {
+  background: $keyLabelColor;
   font-size:  1px;
 }
 
@@ -145,6 +172,22 @@
 }
 #calcKeyG:hover {background-color: $gHoverBlue;}
 
+#calcKeyFG {
+  background:    $fgGold;
+  color:         black;
+  font-family:   WP43S_StandardFont;
+  font-style:    normal;
+  font-weight:   normal;
+  font-size:     27px;
+  border-radius: $radius;
+  padding:       0px;
+  padding-left:  2px;
+  padding-top:   2px;
+  padding-bottom:2px;
+  border-width:  2px;
+}
+#calcKeyFG:hover {background-color: $fgHoverGold;}
+
 #fShifted {
   background:  $bezelBackground;
   color:       $fGold;
@@ -156,7 +199,7 @@
 }
 
 #fShiftedUnderline {
-  background:  #303030;
+  background:  $menubackground;
   color:       $fGold;
   font-family: WP43S_StandardFont;
   font-style:  normal;
@@ -164,6 +207,18 @@
   font-size:   18px;  
   padding:     0px;
   /* JM removed "text-decoration: underline;" and changed from "background:  $bezelBackground;" */
+}
+
+#AimfShiftedUnderline {
+  background:  $menubackground;
+  text-decoration: underline;
+  color:       $fGold;
+  font-family: WP43S_StandardFont;
+  font-style:  normal;
+  font-weight: normal;
+  font-size:   18px;  
+  padding:     0px;
+  /* JM added label; changed from "background:  $bezelBackground;" */
 }
 
 #gShifted {
@@ -177,7 +232,7 @@
 }
 
 #gShiftedUnderline {
-  background:  #303030;
+  background:  $menubackground;
   color:       $gBlue;
   font-family: WP43S_StandardFont;
   font-style:  normal;

@@ -22,3 +22,5 @@
 
 void fnSigma  (uint16_t plusMinus);
 void fnStatSum(uint16_t sum);
+void fnSumXY  (uint16_t unusedParamButMandatory);
+void fnMeanXY (uint16_t unusedParamButMandatory);

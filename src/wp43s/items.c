@@ -426,7 +426,7 @@ const item_t indexOfItems[] = {
 /*   31 */  { itemToBeCoded,               NOPARAM,                     "ASN",                                         "ASN",                                         CAT_FNCT, SLS_UNCHANGED},
 /*   32 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    "atm" STD_RIGHT_ARROW "Pa",                    CAT_FNCT, SLS_ENABLED  },
 /*   33 */  { fnCvtAuM,                    multiply,                    "au" STD_RIGHT_ARROW "m",                      "au" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
-/*   34 */  { itemToBeCoded,               NOPARAM,                     "PRINT",                                       "PRINT",                                       CAT_MENU, SLS_UNCHANGED},
+/*   34 */  { itemToBeCoded,               NOPARAM,                     "PRINT",                                       STD_PRINTER,                                   CAT_MENU, SLS_UNCHANGED},
 /*   35 */  { itemToBeCoded,               NOPARAM,                     "Area:",                                       "Area:",                                       CAT_MENU, SLS_UNCHANGED},
 /*   36 */  { fnConstant,                  4,                           "a" STD_SUB_EARTH,                             "a" STD_SUB_EARTH,                             CAT_CNST, SLS_ENABLED  },
 /*   37 */  { itemToBeCoded,               NOPARAM,                     "B",                                           "B",                                           CAT_RVAR, SLS_UNCHANGED},
@@ -2178,7 +2178,7 @@ const item_t indexOfItems[] = {
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
 /* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "PAC",                                         "PAC",                                         CAT_MENU, SLS_UNCHANGED},
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "K.PK",                                        "K.PK",                                        CAT_MENU, SLS_UNCHANGED},
 
 /* 1773 */  { fnJMUSERmode,                256+0,                       "",                                            "K_00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)
 /* 1774 */  { fnJMUSERmode_f,              256+0,                       "",                                            "Kf00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)

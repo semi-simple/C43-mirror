@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    sodipodi:docname="WP43S_layout.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+   inkscape:version="0.92.4 5da689c313, 2019-01-14">
   <defs
      id="defs2">
     <clipPath
@@ -8149,17 +8149,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4319679"
+     inkscape:zoom="1.405152"
      inkscape:cx="396.85039"
-     inkscape:cy="280.73508"
+     inkscape:cy="279.68504"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1909"
-     inkscape:window-height="1021"
-     inkscape:window-x="1920"
+     inkscape:window-width="1896"
+     inkscape:window-height="1006"
+     inkscape:window-x="1915"
      inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      showguides="true"
      inkscape:showpageshadow="false" />
   <metadata
@@ -12568,6 +12568,17 @@
        id="path4051-6-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccc" />
+    <g
+       aria-label="ü"
+       transform="matrix(0.91947648,0,0,1.0875754,86.979628,148.83806)"
+       style="display:inline;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.56940675px;line-height:1.25;font-family:Wingdings;-inkscape-font-specification:Wingdings;letter-spacing:0px;word-spacing:0px;fill:#ffbf00;fill-opacity:1;stroke:none;stroke-width:0.24331503"
+       id="text15970-687-2-8">
+      <path
+         d="m 96.881218,63.418075 0.04391,0.06273 q -0.268483,0.20199 -0.597186,0.622279 -0.328704,0.420288 -0.501838,0.785375 l -0.09284,0.06273 q -0.115423,0.08029 -0.156825,0.119186 -0.01631,-0.05897 -0.07151,-0.193207 l -0.03513,-0.08155 q -0.07528,-0.175643 -0.140514,-0.259701 -0.06398,-0.08406 -0.144279,-0.111659 0.135496,-0.143023 0.24841,-0.143023 0.0966,0 0.214535,0.26221 l 0.03889,0.08782 q 0.212026,-0.357559 0.544493,-0.695044 0.332467,-0.337486 0.649879,-0.518147 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.56940675px;font-family:Wingdings;-inkscape-font-specification:Wingdings;fill:#ffbf00;fill-opacity:1;stroke-width:0.24331503"
+         id="path7777"
+         inkscape:connector-curvature="0" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -14936,6 +14947,18 @@
          x="12.831405"
          y="99.688354"
          style="font-size:2.79399991px;fill:#00caff;fill-opacity:1;stroke-width:0.26458332">MOD</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.56940675px;line-height:1.25;font-family:Wingdings;-inkscape-font-specification:Wingdings;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffbf00;fill-opacity:1;stroke:none;stroke-width:0.24331504"
+       x="80.838692"
+       y="65.236664"
+       id="text15970-687-2"
+       transform="scale(0.91947645,1.0875754)"><tspan
+         sodipodi:role="line"
+         id="tspan15968-04-3"
+         x="80.838692"
+         y="65.236664"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.56940675px;font-family:Wingdings;-inkscape-font-specification:Wingdings;fill:#ffbf00;fill-opacity:1;stroke-width:0.24331504">ü</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"

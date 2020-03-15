@@ -386,7 +386,8 @@ void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
-void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}           //^^
+void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
+void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -847,7 +848,7 @@ const item_t indexOfItems[] = {
 /*  452 */  { itemToBeCoded,               NOPARAM,                     "PGMINT",                                      "PGMINT",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  453 */  { itemToBeCoded,               NOPARAM,                     "PGMSLV",                                      "PGMSLV",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  454 */  { itemToBeCoded,               NOPARAM,                     "PIXEL",                                       "PIXEL",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  455 */  { itemToBeCoded,               NOPARAM,                     "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  455 */  { fnGraph,                     4,                           "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  456 */  { itemToBeCoded,               NOPARAM,                     "PMT",                                         "PMT",                                         CAT_RVAR, SLS_UNCHANGED},
 /*  457 */  { itemToBeCoded,               NOPARAM,                     "P" STD_SUB_n,                                 "P" STD_SUB_n,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  458 */  { itemToBeCoded,               NOPARAM,                     "POINT",                                       "POINT",                                       CAT_FNCT, SLS_UNCHANGED},
@@ -1930,7 +1931,7 @@ const item_t indexOfItems[] = {
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
-/* 1531 */  { fnShow,                      NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
+/* 1531 */  { fnShow_SCROLL,               NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    CAT_FNCT, SLS_ENABLED  },
 /* 1534 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
@@ -2176,7 +2177,7 @@ const item_t indexOfItems[] = {
 /* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW STD_RIGHT_ARROW "LI",          CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "SI" STD_LEFT_ARROW STD_LEFT_ARROW,            CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
-/* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1771 */  { fnGraph,                     3,                           "DEMO",                                        "DEMO",                                        CAT_FNCT, SLS_ENABLED  },
 
 /* 1772 */  { itemToBeCoded,               NOPARAM,                     "K.PK",                                        "K.PK",                                        CAT_MENU, SLS_UNCHANGED},
 
@@ -2322,7 +2323,7 @@ const item_t indexOfItems[] = {
 /* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_FNCT, SLS_UNCHANGED},   //JM KEY TAP DOUBLE SETTING
 /* 1912 */  { fnInDefault,                 ID_SI,                       "i" STD_SPACE_3_PER_EM "SI",                   "i" STD_SPACE_3_PER_EM "SI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI,                       "i" STD_SPACE_3_PER_EM "LI",                   "i" STD_SPACE_3_PER_EM "LI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
-/* 1914 */  { fnGraph,                     NOPARAM,                     "PLTGRF",                                      "PLTGRF",                                      CAT_FNCT, SLS_UNCHANGED},   //JM GRAPHING
+/* 1914 */  { fnGraph,                     1,                           "PLTGRF",                                      "PLTGRF",                                      CAT_FNCT, SLS_UNCHANGED},   //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A..Z",                                        "A..Z",                                        CAT_MENU, SLS_UNCHANGED},   // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a..z",                                        "a..z",                                        CAT_MENU, SLS_UNCHANGED},   // Ex 875 Small latin letters
 /* 1917 */  { itemToBeCoded,               NOPARAM,                     "GRAPH",                                       "GRAPH",                                       CAT_MENU, SLS_UNCHANGED},   //JM GRAPH

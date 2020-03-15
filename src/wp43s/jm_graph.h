@@ -26,10 +26,18 @@
 
 #define SCREEN_MIN_GRAPH 20
 #define SCREEN_HEIGHT_GRAPH SCREEN_HEIGHT
+#define LIM 400   
 
 
+void fnGraph          (uint16_t func);
+
+void graph_sigmaplus(void);
+void graph_sigmaminus(void);
+
+void graph_setupmemory(void);
+void graph_end        (void);
 
 
-void fnGraph      (uint16_t unusedParamButMandatory);
-
-
+//TODO
+void autoscale(void);
+void defaultscale(void);

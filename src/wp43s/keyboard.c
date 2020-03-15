@@ -927,7 +927,7 @@ void btnPressed(void *notUsed, void *data) {
           showFunctionName(ITM_CXtoRE, 10);
         }
         else {
-          displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+          displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             sprintf(errorMessage, "You cannot use Complex Construct with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false)); //JM changed text referring to CC
             showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);

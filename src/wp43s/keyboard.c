@@ -651,7 +651,11 @@ void btnPressed(void *notUsed, void *data) {
 
   allowScreenUpdate = true;
 
-
+  switch(key->primary) {                              //JMSHOW
+    case      KEY_UP1:
+    case      KEY_DOWN1: break;
+    default:  SHOWregis = 9999; break;     
+  }
 
 #ifdef JM_MULTISHIFT ////MULTISHIFT AND CLRDROP                                //JM TIMER - checks on any key pressed.
 
@@ -806,6 +810,9 @@ void btnPressed(void *notUsed, void *data) {
       //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }
+
+//   if((item != KEY_UP1) && (item != KEY_DOWN1)) {fnShow(99);} //JMSHOW Reset show register, so that after any operation it starts at X again
+
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
 
     if(item == CHR_PROD_SIGN) {
@@ -1025,6 +1032,9 @@ void btnPressed(void *notUsed, void *data) {
 #endif
     }                                                                           //JM CASE JM CAPS
 */
+
+    else if((item == KEY_UP1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow_SCROLL(1);}                                      //JMSHOW
+    
     else if((item == KEY_UP1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();
@@ -1134,6 +1144,9 @@ void btnPressed(void *notUsed, void *data) {
 #endif
     }                                                                          //JM CASE JM CAPS
 */
+
+    else if((item == KEY_DOWN1) && (calcMode == CM_NORMAL) && (softmenuStackPointer == 0)) {fnShow_SCROLL(2);}                                          //JMSHOW
+
     else if((item == KEY_DOWN1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_UPPER))) {    //JM
       if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
         resetAlphaSelectionBuffer();

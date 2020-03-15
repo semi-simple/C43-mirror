@@ -37,7 +37,7 @@ void (* const logBase2[9])(void) = {
  * \return void
  ***********************************************/
 void log2Error(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate log2 for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnLog2:", errorMessage, NULL, NULL);

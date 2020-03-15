@@ -40,17 +40,17 @@ void (* const cpyx[9][9])(uint16_t) = {
 // Error handling
 //-----------------------------------------------------------------------------
 
-#define DOMAIN_ERROR			    1
-#define INVALID_DATA_CMP_ERROR		2
-#define DATA_OUT_OF_RANGE_ERROR		3
+#define DOMAIN_ERROR            1
+#define INVALID_DATA_CMP_ERROR  2
+#define DATA_OUT_OF_RANGE_ERROR 3
 
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 
-#define EXTRA_INFO_MESSAGE(msg) 								                \
-	do { 																        \
-		sprintf(errorMessage, msg);								                \
-		showInfoDialog("In function fnCyx/fnPyx:", errorMessage, NULL, NULL);   \
-	} while(0)
+#define EXTRA_INFO_MESSAGE(msg)                                         \
+ do {                                                                   \
+  sprintf(errorMessage, msg);                                           \
+  showInfoDialog("In function fnCyx/fnPyx:", errorMessage, NULL, NULL); \
+ } while(0)
 
 #else // EXTRA_INFO_ON_CALC_ERROR != 1
 
@@ -67,7 +67,7 @@ static void cpyxError(uint16_t error) {
         break;
 
     case INVALID_DATA_CMP_ERROR:
-        displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
         EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, y must be greater or equal than x.");
         break;
 
@@ -85,7 +85,7 @@ static void cpyxError(uint16_t error) {
  * \return void
  ***********************************************/
 static void cpyxDataTypeError(uint16_t unused) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
@@ -112,16 +112,16 @@ static void cyxReal(real39_t *y, real39_t *x, real39_t *result) {
 }
 
 static void cyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result) {
-  longIntegerSubtract(*y, *x, *result);						// t = y-x
-  longIntegerFactorial(longIntegerToUInt(*result), *result);	// t = (y-x)!
+  longIntegerSubtract(*y, *x, *result);                      // t = y-x
+  longIntegerFactorial(longIntegerToUInt(*result), *result); // t = (y-x)!
 
-  longIntegerFactorial(longIntegerToUInt(*y), *y);            // y = y!
+  longIntegerFactorial(longIntegerToUInt(*y), *y);           // y = y!
 
-  longIntegerFactorial(longIntegerToUInt(*x), *x);		    // x = x!
+  longIntegerFactorial(longIntegerToUInt(*x), *x);           // x = x!
 
-  longIntegerMultiply(*x, *result, *result);					// t = x! * (y-x)!
+  longIntegerMultiply(*x, *result, *result);                 // t = x! * (y-x)!
 
-  longIntegerDivide(*y, *result, *result);					// t = y! / [x! * (y -x)!]
+  longIntegerDivide(*y, *result, *result);                   // t = y! / [x! * (y -x)!]
 }
 
 static void cyxCplx(real39_t *yReal, real39_t *yImag, real39_t *xReal, real39_t *xImag, real39_t *rReal, real39_t *rImag) {
@@ -151,12 +151,12 @@ static void pyxReal(real39_t *y, real39_t *x, real39_t *result) {
 }
 
 static void pyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result) {
-  longIntegerSubtract(*y, *x, *result);						// t = y-x
-  longIntegerFactorial(longIntegerToUInt(*result), *result);	// t = (y-x)!
+  longIntegerSubtract(*y, *x, *result);                      // t = y-x
+  longIntegerFactorial(longIntegerToUInt(*result), *result); // t = (y-x)!
 
-  longIntegerFactorial(longIntegerToUInt(*y), *y);            // y = y!
+  longIntegerFactorial(longIntegerToUInt(*y), *y);           // y = y!
 
-  longIntegerDivide(*y, *result, *result);					// t = y! / (y -x)!
+  longIntegerDivide(*y, *result, *result);                   // t = y! / (y -x)!
 }
 
 static void pyxCplx(real39_t *yReal, real39_t *yImag, real39_t *xReal, real39_t *xImag, real39_t *rReal, real39_t *rImag) {

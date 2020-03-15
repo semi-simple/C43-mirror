@@ -34,7 +34,7 @@ GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
 GtkWidget *lbl21F,  *lbl22F,  *lbl23F,  *lbl24F,  *lbl25F,  *lbl26F;
 GtkWidget *lbl21G,  *lbl22G,  *lbl23G,  *lbl24G,  *lbl25G,  *lbl26G;
 GtkWidget *lbl21L,  *lbl22L,  *lbl23L,  *lbl24L,  *lbl25L,  *lbl26L;
-GtkWidget *lbl21H;
+GtkWidget *lbl21H,                                          *lbl26H;
 GtkWidget *lbl21Gr, *lbl22Gr, *lbl23Gr, *lbl24Gr, *lbl25Gr, *lbl26Gr;
 
 GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
@@ -517,6 +517,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl25L);
   gtk_widget_hide(lbl26F);
   gtk_widget_hide(lbl26G);
+  gtk_widget_hide(lbl26H);
   gtk_widget_hide(lbl26L);
   gtk_widget_hide(lbl21Gr);
   gtk_widget_hide(lbl22Gr);
@@ -1282,6 +1283,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl26L);
   gtk_widget_show(lbl26F);
   gtk_widget_show(lbl26G);
+  gtk_widget_show(lbl26H);
 
   gtk_widget_show(btn31);
   gtk_widget_show(btn32);
@@ -1496,6 +1498,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn26);
 
   gtk_widget_show(lbl21H);
+  gtk_widget_show(lbl26H);
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);
   gtk_widget_show(lbl23L);
@@ -1699,6 +1702,7 @@ void calcModeAsmGui(void) {
   gtk_widget_show(btn26);
 
   gtk_widget_show(lbl21H);
+  gtk_widget_show(lbl26H);
 
   gtk_widget_show(lbl21L);
   gtk_widget_show(lbl22L);
@@ -2205,12 +2209,13 @@ void setupUI(void) {
   lbl24G  = gtk_label_new("");
   lbl25G  = gtk_label_new("");
   lbl26G  = gtk_label_new("");
-  lbl21H  = gtk_label_new("A"); // ?
+  lbl21H  = gtk_label_new("A"); // alphaIntl menu
   lbl21L  = gtk_label_new("");
   lbl22L  = gtk_label_new("");
   lbl23L  = gtk_label_new("");
   lbl24L  = gtk_label_new("");
   lbl25L  = gtk_label_new("");
+  lbl26H  = gtk_label_new("\u2713"); // Checkmark
   lbl26L  = gtk_label_new("");
   lbl21Gr = gtk_label_new("");
   lbl22Gr = gtk_label_new("");
@@ -2227,6 +2232,7 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn26, KEY_WIDTH_1, 0);
 
   gtk_widget_set_name(lbl21H,  "fShiftedUnderline");
+  gtk_widget_set_name(lbl26H,  "fShifted");
 
   g_signal_connect(btn21, "pressed", G_CALLBACK(btnPressed), "00");
   g_signal_connect(btn22, "pressed", G_CALLBACK(btnPressed), "01");
@@ -2292,6 +2298,7 @@ void setupUI(void) {
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn26,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl26L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
+  gtk_fixed_put(GTK_FIXED(grid), lbl26H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);
 
 
 

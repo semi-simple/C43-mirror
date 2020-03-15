@@ -37,7 +37,7 @@ void (* const Cos[9])(void) = {
  * \return void
  ***********************************************/
 void cosError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnCos:", errorMessage, NULL, NULL);

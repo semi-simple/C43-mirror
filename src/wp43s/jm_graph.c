@@ -90,6 +90,7 @@ void Fn_Lbl_C(void) {                                   //Temporary RPN function
 }
 
 void Fn_Lbl_D(void) {                                   //Temporary RPN function
+#ifndef TESTSUITE_BUILD
     fnStore(99);             // STO 99
     runFunction(ITM_ENTER);   // *             // /
     fnStrInputReal34("0.1"); // 4
@@ -111,10 +112,12 @@ void Fn_Lbl_D(void) {                                   //Temporary RPN function
     fnStrInputReal34("2.5"); // 4
     runFunction(ITM_ADD);   // *             // /
     fnRCL(99);
+#endif
 }
 
 
 void Fn_Lbl_E(void) {                                   //Temporary RPN function
+#ifndef TESTSUITE_BUILD
     fnStore(99);             // STO 99
     fnStrInputReal34("0.2"); // 0.2
     runFunction(ITM_MULT);   // *             // /
@@ -128,6 +131,7 @@ void Fn_Lbl_E(void) {                                   //Temporary RPN function
 
     runFunction(ITM_ADD);    // +             // /
     fnRCL(99);               //leaving y in Y and x in X
+#endif
 }
 
 
@@ -260,11 +264,12 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 }
 
 void placePixel(uint16_t x, uint8_t y) {
+#ifndef TESTSUITE_BUILD
   if(x<SCREEN_WIDTH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+SCREEN_MIN_GRAPH) {
     setPixel(x,y);
   }
+#endif
 }
-
 
 float auto_tick(float tick_int_f) {
     //Obtain scaling of ticks, to about 20 intervals left to right.

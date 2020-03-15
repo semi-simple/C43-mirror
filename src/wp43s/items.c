@@ -2176,7 +2176,7 @@ const item_t indexOfItems[] = {
 /* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW STD_RIGHT_ARROW "LI",          CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "SI" STD_LEFT_ARROW STD_LEFT_ARROW,            CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
-/* 1771 */  { itemToBeCoded,               NOPARAM,                     "1771",                                        "1771",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1771 */  { fnGraph,                     3,                           "DEMO",                                        "DEMO",                                        CAT_FNCT, SLS_ENABLED  },
 
 /* 1772 */  { itemToBeCoded,               NOPARAM,                     "K.PK",                                        "K.PK",                                        CAT_MENU, SLS_UNCHANGED},
 
@@ -2322,7 +2322,7 @@ const item_t indexOfItems[] = {
 /* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 CAT_FNCT, SLS_UNCHANGED},   //JM KEY TAP DOUBLE SETTING
 /* 1912 */  { fnInDefault,                 ID_SI,                       "i" STD_SPACE_3_PER_EM "SI",                   "i" STD_SPACE_3_PER_EM "SI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
 /* 1913 */  { fnInDefault,                 ID_LI,                       "i" STD_SPACE_3_PER_EM "LI",                   "i" STD_SPACE_3_PER_EM "LI",                   CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
-/* 1914 */  { fnGraph,                     4,                           "PLTGRF",                                      "PLTGRF",                                      CAT_FNCT, SLS_UNCHANGED},   //JM GRAPHING
+/* 1914 */  { fnGraph,                     1,                           "PLTGRF",                                      "PLTGRF",                                      CAT_FNCT, SLS_UNCHANGED},   //JM GRAPHING
 /* 1915 */  { itemToBeCoded,               NOPARAM,                     "A..Z",                                        "A..Z",                                        CAT_MENU, SLS_UNCHANGED},   // Ex 34
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "a..z",                                        "a..z",                                        CAT_MENU, SLS_UNCHANGED},   // Ex 875 Small latin letters
 /* 1917 */  { itemToBeCoded,               NOPARAM,                     "GRAPH",                                       "GRAPH",                                       CAT_MENU, SLS_UNCHANGED},   //JM GRAPH

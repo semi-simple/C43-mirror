@@ -27,7 +27,6 @@
 #define SLS_UNCHANGED 2
 
 
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1809,7 +1808,7 @@
 #define KEY_TYPCON_UP                 1768   //JM CPX
 #define KEY_TYPCON_DN                 1769   //JM CPX
 #define ITM_HOMEx3T                   1770   //JM HOME.3T
-#define Not_used1771                  1771
+#define STAT_DEMO                     1771   //LOAD STATS GRAPH
 
 #define MNU_ASN                       1772   //JM USER
 #define K_00U                         1773   //JM USER MODE TEST

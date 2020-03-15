@@ -50,9 +50,10 @@ const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /* 26 */  "Please enter a NEW name",
 /* 27 */  "Cannot delete a predefined item",
 /* 28 */  "No summation data",
-/* 29 */  "Bad input",
-/* 30 */  "Item to be coded",
-/* 31 */  "Function to be coded for that data type"
+/* 29 */  "Item to be coded",
+/* 30 */  "Function to be coded for that data type",
+/* 31 */  "Input data types do not match",
+/* 32 */  "Bad input" // This error is not in the ReM and could theorically not happen
 };
 
 

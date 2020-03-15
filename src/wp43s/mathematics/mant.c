@@ -37,7 +37,7 @@ void (* const mant[9])(void) = {
  * \return void
  ***********************************************/
 void mantError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate MANT for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function mantError:", errorMessage, NULL, NULL);
@@ -68,7 +68,7 @@ void mantLonI(void) {
   real39_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
- 	x.exponent = 1 - x.digits;
+  x.exponent = 1 - x.digits;
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -87,7 +87,7 @@ void mantReal(void) {
   real39_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
- 	x.exponent = 1 - x.digits;
+  x.exponent = 1 - x.digits;
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }

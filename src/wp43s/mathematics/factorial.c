@@ -37,7 +37,7 @@ void (* const fact[9])(void) = {
  * \return void
  ***********************************************/
 void factError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate x! for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnFactorial:", errorMessage, NULL, NULL);
@@ -118,7 +118,7 @@ uint64_t fact_uint64(uint64_t value)
 
   if(value <= 1)
     result = 1;
-  else 
+  else
     for(uint64_t i=value-1 ; i > 1 ; result *= i--)
       ;
 

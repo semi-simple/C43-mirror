@@ -94,7 +94,7 @@ void fnChangeBase(uint16_t base) {
   }
 
   else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for " STD_RIGHT_ARROW "INT!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnChangeBase:", errorMessage, NULL, NULL);
@@ -111,7 +111,7 @@ void fnMirror(uint16_t unusedButMandatoryParameter) {
   }
 
   else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for MIRROR!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnMirror:", errorMessage, NULL, NULL);
@@ -134,6 +134,7 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
 
     convertLongIntegerRegisterToLongInteger(REGISTER_X, value);
     prime = longIntegerProbabPrime(value); // 0=composite 1=probably prime 2=prime
+    prime = prime*(3*prime - 5) / 2;       // -1=probably prime 0=composite 1=prime
     uIntToLongInteger(prime, value);
 
     convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
@@ -142,7 +143,7 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   }
 
   else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for PRIME?!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       showInfoDialog("In function fnIsPrime:", errorMessage, NULL, NULL);

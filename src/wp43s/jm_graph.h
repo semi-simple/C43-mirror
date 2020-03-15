@@ -22,6 +22,7 @@
 
 //graph.h
 
+float telltale;
 
 
 #define SCREEN_MIN_GRAPH 20

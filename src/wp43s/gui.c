@@ -27,6 +27,7 @@ GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
 GtkWidget *lblFKey2;
 GtkWidget *lblGKey2;
 GtkWidget *lblEKey;
+GtkWidget *lblSKey;
 GtkWidget *lblBehindScreen;
 
 GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
@@ -35,7 +36,7 @@ GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
 GtkWidget *lbl21F,  *lbl22F,  *lbl23F,  *lbl24F,  *lbl25F,  *lbl26F;
 GtkWidget *lbl21G,  *lbl22G,  *lbl23G,  *lbl24G,  *lbl25G,  *lbl26G;
 GtkWidget *lbl21L,  *lbl22L,  *lbl23L,  *lbl24L,  *lbl25L,  *lbl26L;
-GtkWidget *lbl21H;
+GtkWidget *lbl21H,                                          *lbl26H;
 GtkWidget *lbl21Gr, *lbl22Gr, *lbl23Gr, *lbl24Gr, *lbl25Gr, *lbl26Gr;
 GtkWidget *btn21A,  *btn22A,  *btn23A,  *btn24A,  *btn25A,  *btn26A;    //dr - new AIM
 GtkWidget *lbl21Fa, *lbl22Fa, *lbl23Fa;                                 //JM
@@ -994,10 +995,12 @@ void prepareCssData(void) {
  * \return void
  ***********************************************/
 void hideAllWidgets(void) {
+#if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
   gtk_widget_hide(lblFKey2);  //JMLINES
   gtk_widget_hide(lblGKey2);  //JMLINES
   gtk_widget_hide(lblEKey);   //JMLINES
-  
+  gtk_widget_hide(lblSKey);   //JMLINES
+#endif  
   gtk_widget_hide(btn11);
   gtk_widget_hide(btn12);
   gtk_widget_hide(btn13);
@@ -1036,6 +1039,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl25L);
   gtk_widget_hide(lbl26F);
   gtk_widget_hide(lbl26G);
+  gtk_widget_hide(lbl26H);
   gtk_widget_hide(lbl26L);
   gtk_widget_hide(lbl21Gr);
   gtk_widget_hide(lbl22Gr);
@@ -2014,9 +2018,12 @@ void calcModeNormalGui(void) {
 
   hideAllWidgets();
 
+#if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
   gtk_widget_show( lblFKey2);  //JMLINES
   gtk_widget_show( lblGKey2);  //JMLINES
   gtk_widget_show( lblEKey);   //JMLINES
+  gtk_widget_show( lblSKey);   //JMLINES
+#endif
 
   labelCaptionNormal(keys++, btn21, lbl21F, lbl21G, lbl21L);
   labelCaptionNormal(keys++, btn22, lbl22F, lbl22G, lbl22L);
@@ -2095,6 +2102,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl26L);
   gtk_widget_show(lbl26F);
   gtk_widget_show(lbl26G);
+  gtk_widget_show(lbl26H);
 
   gtk_widget_show(btn31);
   gtk_widget_show(btn32);
@@ -2952,7 +2960,6 @@ void setupUI(void) {
   gtk_widget_set_name(lblFSoftkeyArea, "fSoftkeyArea");
   gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
   gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
-#endif //JM
 
   // Frame around the f key
   lblFKey2 = gtk_label_new("");  
@@ -2974,7 +2981,13 @@ void setupUI(void) {
   gtk_widget_set_size_request(lblEKey, 61-8-2-2,  5-2);
   gtk_fixed_put(GTK_FIXED(grid), lblEKey, 350+4+2 - 4 * DELTA_KEYS_X, 563-1 - DELTA_KEYS_Y);
 
+  // Frame around the SIN key
+  lblSKey = gtk_label_new("");
+  gtk_widget_set_name(lblSKey,"eSoftkeyArea");
+  gtk_widget_set_size_request(lblSKey, 61-8-2-2,  5-2);
+  gtk_fixed_put(GTK_FIXED(grid), lblSKey, 350+4+2 - 1 * DELTA_KEYS_X, 563-1 -0* DELTA_KEYS_Y);
 
+#endif //JM
 
   // Area for the softkeys
   //lblSoftkeyArea1 = gtk_label_new("");
@@ -3145,6 +3158,7 @@ void setupUI(void) {
   lbl23L  = gtk_label_new("");
   lbl24L  = gtk_label_new("");
   lbl25L  = gtk_label_new("");
+  lbl26H  = gtk_label_new("\u2713"); // Checkmark
   lbl26L  = gtk_label_new("");
   lbl21Gr = gtk_label_new("");
   lbl22Gr = gtk_label_new("");

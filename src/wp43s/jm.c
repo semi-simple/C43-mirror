@@ -29,6 +29,9 @@
  *
  * FROM keyboard.c
  ***********************************************/
+bool_t userModeEnabledMEM;
+
+
 void fnBASE_Hash(uint16_t unusedParamButMandatory) {
   int16_t lastChar;
   lastChar = strlen(nimBuffer) - 1;
@@ -42,6 +45,23 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory) {
 #endif
   }
 }
+
+
+
+void fnKeyDotD(uint16_t unusedParamButMandatory) {      //FOR   HARDWIRED 
+  userModeEnabledMEM = userModeEnabled;
+  userModeEnabled = false;
+  shiftF = false;                  //JM
+  shiftG = true;                 //JM
+#ifdef PC_BUILD
+  btnClicked(NULL, "03");         //JM changed from 02
+#endif
+#ifdef DMCP_BUILD
+  btnClicked(NULL, "03");         //JM changed from 02
+#endif
+  userModeEnabled = userModeEnabledMEM;
+}
+
 
 
 
@@ -1519,7 +1539,6 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
 
 //JM\/\/\/\/
 
-bool_t userModeEnabledMEM;
 
 /********************************************//**
  * \brief

@@ -20,4 +20,14 @@
 
 
 
+#include "and.h"
+#include "countBits.h"
+#include "mask.h"
+#include "nand.h"
+#include "nor.h"
 #include "not.h"
+#include "or.h"
+#include "rotateBits.h"
+#include "setClearFlipBits.h"
+#include "xnor.h"
+#include "xor.h"

@@ -291,12 +291,12 @@ void fnSetWordSize(uint16_t WS) {
 
   if(shortIntegerWordSize == 64) {
     shortIntegerMask    = -1;
-    shortIntegerSignBit = (uint64_t)1 << 63;
   }
   else {
     shortIntegerMask    = ((uint64_t)1 << shortIntegerWordSize) - 1;
-    shortIntegerSignBit = (uint64_t)1 << (shortIntegerWordSize - 1);
   }
+
+  shortIntegerSignBit = (uint64_t)1 << (shortIntegerWordSize - 1);
   //printf("shortIntegerMask  =   %08x-%08x\n", (unsigned int)(shortIntegerMask>>32), (unsigned int)(shortIntegerMask&0xffffffff));
   //printf("shortIntegerSignBit = %08x-%08x\n", (unsigned int)(shortIntegerSignBit>>32), (unsigned int)(shortIntegerSignBit&0xffffffff));
 

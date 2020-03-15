@@ -29,6 +29,7 @@ static void initStatisticalSums(void) {
     for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
       real34Zero((real34_t *)(statisticalSumsPointer + REAL34_SIZE*sum));
     }
+    graph_setupmemory(); //JMGRAPH
   }
 }
 
@@ -149,6 +150,9 @@ void fnSigma(uint16_t plusMinus) {
       // sigma 1/y
       real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Add(SIGMA_1onY, &tmpReal1, SIGMA_1onY);
+
+      graph_sigmaplus(); //JMGRAPH
+
     }
     else { // SIGMA-
       // n
@@ -240,6 +244,8 @@ void fnSigma(uint16_t plusMinus) {
       // sigma 1/y
       real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Subtract(SIGMA_1onY, &tmpReal1, SIGMA_1onY);
+
+      graph_sigmaminus(); //JMGRAPH
     }
 
     temporaryInformation = TI_STATISTIC_SUMS;

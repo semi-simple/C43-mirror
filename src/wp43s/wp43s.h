@@ -67,6 +67,7 @@
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
   #endif
+//SWAP THE BELOW TWO DEFINES
   #define JM_LAYOUT_1A               //Preferred layout
 //#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
   #if defined(JM_LAYOUT_2_DM42_STRICT)

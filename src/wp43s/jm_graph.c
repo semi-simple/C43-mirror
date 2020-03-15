@@ -89,6 +89,13 @@ void Fn_Lbl_C(void) {                                   //Temporary RPN function
     fnDivide(0);             // /
 }
 
+
+
+
+
+
+
+//FOR STAT GRANH. LEAVES ANSWER IN X & Y
 void Fn_Lbl_D(void) {                                   //Temporary RPN function
 #ifndef TESTSUITE_BUILD
     fnStore(99);             // STO 99
@@ -159,27 +166,32 @@ void execute_rpn_function(int16_t nbr){
 
 void graph_setupmemory(void) {
   int i;
-  gr_x = (float*)malloc(LIM * sizeof(float)); 
-  gr_y = (float*)malloc(LIM * sizeof(float)); 
-
-  if (gr_x == NULL || gr_y == NULL) { 
+  if(telltale != 199) {
+    gr_x = (float*)malloc(LIM * sizeof(float)); 
+    gr_y = (float*)malloc(LIM * sizeof(float)); 
+    telltale = 199;
+  }
+  if ((telltale != 199) || (gr_x == NULL || gr_y == NULL)) { 
   #ifdef PC_BUILD
      showInfoDialog("In function graph_setupmemory:", "error allocating memory for graph!", NULL, NULL);
      exit(1);
   #endif
   } 
-  else {
+  
+  if((telltale==199) && (gr_x != NULL) && (gr_y != NULL)){
     for (i = 0; i < LIM; ++i) { 
       gr_x[i] = 0;
       gr_y[i] = 0; 
-    }   
-  } 
+    }
+  }   
+  
 }
 
 
 void graph_end(void) {
   free(gr_x);
   free(gr_y);
+  telltale = 0;
 }
 
 
@@ -247,6 +259,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   #ifndef TESTSUITE_BUILD
   float x; 
   fnClearStack(0);
+  runFunction(ITM_CLSIGMA);
 
 //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH) {
   for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
@@ -260,6 +273,8 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
     execute_rpn_function(nbr);
     fnSigma(1);
   }
+fnClearStack(0);
+runFunction(ITM_SIGMAx);
 #endif
 }
 
@@ -411,110 +426,123 @@ void graph_plotmem(void) {
   uint16_t x1;  //range 0-399
   uint8_t  y1;  //range 0-239
 
-  //Convert from real to int
-  real34ToReal(SIGMA_N, &tmpy);
-  realToString(&tmpy, tmpStr3000);
-  statnum = atoi (tmpStr3000);
+  if(telltale == 199) {
 
-  x_min = 1e99;
-  x_max = -1e99;
-  y_min = 1e99;
-  y_max = -1e99;
-  for(cnt=0; cnt<statnum; cnt++) {
-    if(gr_x[cnt]<x_min) {x_min = gr_x[cnt];}
-    if(gr_x[cnt]>x_max) {x_max = gr_x[cnt];}
-    if(gr_y[cnt]<y_min) {y_min = gr_y[cnt];}
-    if(gr_y[cnt]>y_max) {y_max = gr_y[cnt];}
-  }
-  if(x_min>0 && x_max>0) {if(x_min<x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
-  if(x_min<0 && x_max<0) {if(x_min>x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
-  if(y_min>0 && y_max>0) {if(y_min<y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
-  if(y_min<0 && y_max<0) {if(y_min>y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
+    //runFunction(ITM_NSIGMA);
+    runFunction(ITM_SUM);
 
-  x_min = 1.05 * x_min;
-  x_max = 1.05 * x_max;
-  y_min = 1.05 * y_min;
-  y_max = 1.05 * y_max;
-  graph_axis();
+    //Convert from real to int
+    real34ToReal(SIGMA_N, &tmpy);
+    realToString(&tmpy, tmpStr3000);
+    statnum = atoi (tmpStr3000);
 
+    x_min = 1e99;
+    x_max = -1e99;
+    y_min = 1e99;
+    y_max = -1e99;
+    for(cnt=0; cnt<statnum; cnt++) {
+      if(gr_x[cnt]<x_min) {x_min = gr_x[cnt];}
+      if(gr_x[cnt]>x_max) {x_max = gr_x[cnt];}
+      if(gr_y[cnt]<y_min) {y_min = gr_y[cnt];}
+      if(gr_y[cnt]>y_max) {y_max = gr_y[cnt];}
+    }
+    if(x_min>0 && x_max>0) {if(x_min<x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
+    if(x_min<0 && x_max<0) {if(x_min>x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
+    if(y_min>0 && y_max>0) {if(y_min<y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
+    if(y_min<0 && y_max<0) {if(y_min>y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
 
- 
-
-    /* //Sample data
-    gr_x[0] = 0; gr_y[0] = 1;
-    gr_x[1] = 1; gr_y[1] = 0.7;
-    gr_x[2] = 2; gr_y[2] = 0.9;
-    gr_x[3] = 3; gr_y[3] = 0.2;
-    gr_x[4] = 4; gr_y[4] = 0.2;
-    gr_x[5] = 5; gr_y[5] = 0.3;
-    gr_x[6] = 6; gr_y[6] = 0.301;
-    statnum = 7;
-    */
-
-  yn = screen_window_y(y_min,gr_y[0],y_max);
-  xn = screen_window_x(x_min,gr_x[0],x_max);
-xN = xn;
-yN = yn;
-
-  //GRAPH
-  ix = 0;
-  for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
-    x = gr_x[ix];
-    y = gr_y[ix];
-    //printf("plotting graph table[%d] = x:%f y:%f\n",ix,x,y);
-
-xo = xN;
-yo = yN;
-
-    xN = screen_window_x(x_min,x,x_max);
-    yN = screen_window_y(y_min,y,y_max);
-
-    if(xN<SCREEN_WIDTH && xN>0 && yN<SCREEN_HEIGHT_GRAPH && yN>1+SCREEN_MIN_GRAPH) {
-//      yo = yn;                              //old , new, to be able to draw a line between samples
-      yn = yN;
-//      xo = xn;
-      xn = xN;
-
-      placePixel(xn,yn);                     //PLOT a cross
-      placePixel(xn-1,yn-1);
-      placePixel(xn-1,yn+1);
-      placePixel(xn+1,yn-1);
-      placePixel(xn+1,yn+1);
-      placePixel(xn-2,yn-2);
-      placePixel(xn-2,yn+2);
-      placePixel(xn+2,yn-2);
-      placePixel(xn+2,yn+2);
+    x_min = 1.05 * x_min;
+    x_max = 1.05 * x_max;
+    y_min = 1.05 * y_min;
+    y_max = 1.05 * y_max;
+    graph_axis();
 
 
-      if(xo > xn) {
-        for(x1=xo; x1!=xn; x1-=1) {
-          y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-          placePixel(x1,y1);
+   
+
+      /* //Sample data
+      gr_x[0] = 0; gr_y[0] = 1;
+      gr_x[1] = 1; gr_y[1] = 0.7;
+      gr_x[2] = 2; gr_y[2] = 0.9;
+      gr_x[3] = 3; gr_y[3] = 0.2;
+      gr_x[4] = 4; gr_y[4] = 0.2;
+      gr_x[5] = 5; gr_y[5] = 0.3;
+      gr_x[6] = 6; gr_y[6] = 0.301;
+      statnum = 7;
+      */
+
+    yn = screen_window_y(y_min,gr_y[0],y_max);
+    xn = screen_window_x(x_min,gr_x[0],x_max);
+  xN = xn;
+  yN = yn;
+
+    //GRAPH
+    ix = 0;
+    for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
+      x = gr_x[ix];
+      y = gr_y[ix];
+      //printf("plotting graph table[%d] = x:%f y:%f\n",ix,x,y);
+
+  xo = xN;
+  yo = yN;
+
+      xN = screen_window_x(x_min,x,x_max);
+      yN = screen_window_y(y_min,y,y_max);
+
+      if(xN<SCREEN_WIDTH && xN>0 && yN<SCREEN_HEIGHT_GRAPH && yN>1+SCREEN_MIN_GRAPH) {
+  //      yo = yn;                              //old , new, to be able to draw a line between samples
+        yn = yN;
+  //      xo = xn;
+        xn = xN;
+
+        placePixel(xn,yn);                     //PLOT a cross
+        placePixel(xn-1,yn-1);
+        placePixel(xn-1,yn+1);
+        placePixel(xn+1,yn-1);
+        placePixel(xn+1,yn+1);
+        placePixel(xn-2,yn-2);
+        placePixel(xn-2,yn+2);
+        placePixel(xn+2,yn-2);
+        placePixel(xn+2,yn+2);
+
+
+        if(xo > xn) {
+          for(x1=xo; x1!=xn; x1-=1) {
+            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
+            placePixel(x1,y1);
+          }
+        } 
+        else if(xo < xn) {
+          for(x1=xo; x1!=xn; x1+=1) {
+            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
+            placePixel(x1,y1);
+          }
         }
-      } 
-      else if(xo < xn) {
-        for(x1=xo; x1!=xn; x1+=1) {
-          y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-          placePixel(x1,y1);
-        }
-      }
 
 
-      if(yo > yn) {
-        for(y1=yo; y1!=yn; y1-=1) {
-          x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-          placePixel(x1,y1);
+        if(yo > yn) {
+          for(y1=yo; y1!=yn; y1-=1) {
+            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
+            placePixel(x1,y1);
+          }
+        } 
+        else if(yo < yn) {
+          for(y1=yo; y1!=yn; y1+=1) {
+            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
+            placePixel(x1,y1);
+          }
+        } else {
+          placePixel(xn,yn);
         }
-      } 
-      else if(yo < yn) {
-        for(y1=yo; y1!=yn; y1+=1) {
-          x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-          placePixel(x1,y1);
-        }
-      } else {
-        placePixel(xn,yn);
       }
     }
+  } else {
+    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is no statistical data available!");
+      showInfoDialog("In function graph_plotmem:", errorMessage, NULL, NULL);
+    #endif
+    refreshStack();
   }
 #endif
 }
@@ -524,10 +552,11 @@ yo = yN;
 void graph_prepscreen (void){
   #ifndef TESTSUITE_BUILD
 
-  //GRAPH SETUP
-  calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-  clearScreen(false,true,true);
-
+  if(telltale == 199) {
+    //GRAPH SETUP
+    calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+    clearScreen(false,true,true);
+  }
   #endif
 }
 
@@ -673,12 +702,15 @@ void fnGraph_old (uint16_t selection){
 //-----------------------------------------------------//-----------------------------------------------------
 //-----------------------------------------------------//-----------------------------------------------------
 
+#define randnum(min, max)  ((rand() % (int)(((max) + 1) - (min))) + (min))
+
+
 void fnGraph (uint16_t func){
   switch (func) 
   {
 	  case 1:   fnGraph_old(3);
               break;
-	  case 3:   graph_demo(4, graph_xmin, graph_xmax);
+	  case 3:   graph_demo(randnum(4,5), graph_xmin, graph_xmax);
 	            break;
 	  case 4:   graph_prepscreen();
 	            graph_plotmem();

@@ -421,7 +421,8 @@ void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
-void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}           //^^
+void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}
+void fnKeyDotD                  (uint16_t unusedParamButMandatory) {}          //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -772,9 +773,9 @@ const item_t indexOfItems[] = {
 /*  342 */  { fnCvtGalukM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_UK,     "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_UK,     CAT_FNCT, SLS_ENABLED  },
 /*  343 */  { fnCvtGalusM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_US,     "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_US,     CAT_FNCT, SLS_ENABLED  },
 /*  344 */  { fnMant,                      NOPARAM,                     "MANT",                                        "MANT",                                        CAT_FNCT, SLS_ENABLED  },
-/*  345 */  { itemToBeCoded,               NOPARAM,                     "MASKL",                                       "MASKL",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  346 */  { fnMaskl,                     TM_VALUE,                    "MASKR",                                       "MASKR",                                       CAT_FNCT, SLS_ENABLED  },
-/*  347 */  { fnMaskr,                     TM_VALUE,                    "MATRS",                                       "MATRS",                                       CAT_MENU, SLS_ENABLED  },
+/*  345 */  { fnMaskl,                     TM_VALUE,                    "MASKL",                                       "MASKL",                                       CAT_FNCT, SLS_ENABLED  },
+/*  346 */  { fnMaskr,                     TM_VALUE,                    "MASKR",                                       "MASKR",                                       CAT_FNCT, SLS_ENABLED  },
+/*  347 */  { itemToBeCoded,               NOPARAM,                     "MATRS",                                       "MATRS",                                       CAT_MENU, SLS_UNCHANGED},
 /*  348 */  { itemToBeCoded,               NOPARAM,                     "MATR?",                                       "MATR?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  349 */  { itemToBeCoded,               NOPARAM,                     "MATX",                                        "MATX",                                        CAT_MENU, SLS_UNCHANGED},
 /*  350 */  { itemToBeCoded,               NOPARAM,                     "Mat_A",                                       "Mat A",                                       CAT_RVAR, SLS_UNCHANGED},
@@ -2378,6 +2379,7 @@ const item_t indexOfItems[] = {
 /* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               CAT_NONE, SLS_UNCHANGED},
 /* 1934 */  { fnUserJM,                    USER_GSHFT,                  "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        CAT_NONE, SLS_UNCHANGED},
+/* 1935 */  { fnKeyDotD,                   NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },
 
-/* 1935 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1936 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

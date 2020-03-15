@@ -27,6 +27,7 @@ GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
 GtkWidget *lblFKey2;
 GtkWidget *lblGKey2;
 GtkWidget *lblEKey;
+GtkWidget *lblSKey;
 GtkWidget *lblBehindScreen;
 
 GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
@@ -994,10 +995,12 @@ void prepareCssData(void) {
  * \return void
  ***********************************************/
 void hideAllWidgets(void) {
+#if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
   gtk_widget_hide(lblFKey2);  //JMLINES
   gtk_widget_hide(lblGKey2);  //JMLINES
   gtk_widget_hide(lblEKey);   //JMLINES
-  
+  gtk_widget_hide(lblSKey);   //JMLINES
+#endif  
   gtk_widget_hide(btn11);
   gtk_widget_hide(btn12);
   gtk_widget_hide(btn13);
@@ -2015,9 +2018,12 @@ void calcModeNormalGui(void) {
 
   hideAllWidgets();
 
+#if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
   gtk_widget_show( lblFKey2);  //JMLINES
   gtk_widget_show( lblGKey2);  //JMLINES
   gtk_widget_show( lblEKey);   //JMLINES
+  gtk_widget_show( lblSKey);   //JMLINES
+#endif
 
   labelCaptionNormal(keys++, btn21, lbl21F, lbl21G, lbl21L);
   labelCaptionNormal(keys++, btn22, lbl22F, lbl22G, lbl22L);
@@ -2954,7 +2960,6 @@ void setupUI(void) {
   gtk_widget_set_name(lblFSoftkeyArea, "fSoftkeyArea");
   gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
   gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
-#endif //JM
 
   // Frame around the f key
   lblFKey2 = gtk_label_new("");  
@@ -2976,7 +2981,13 @@ void setupUI(void) {
   gtk_widget_set_size_request(lblEKey, 61-8-2-2,  5-2);
   gtk_fixed_put(GTK_FIXED(grid), lblEKey, 350+4+2 - 4 * DELTA_KEYS_X, 563-1 - DELTA_KEYS_Y);
 
+  // Frame around the SIN key
+  lblSKey = gtk_label_new("");
+  gtk_widget_set_name(lblSKey,"eSoftkeyArea");
+  gtk_widget_set_size_request(lblSKey, 61-8-2-2,  5-2);
+  gtk_fixed_put(GTK_FIXED(grid), lblSKey, 350+4+2 - 1 * DELTA_KEYS_X, 563-1 -0* DELTA_KEYS_Y);
 
+#endif //JM
 
   // Area for the softkeys
   //lblSoftkeyArea1 = gtk_label_new("");

@@ -494,21 +494,21 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
                                      ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,                           //JM HOME
                                      ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR,                          //JM HOME
 */
-#ifdef DMCP_BUILD              //JM LAYOUT 2. DM42 STRICT.
-/* 9 Bottom Prim */  /* 8 */         KEY_PRTX,                      ITM_NULL,                   ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
+#if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
+/* 9 Bottom Prim */  /* 8 */         MNU_PRINT,                     ITM_NULL,                   ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
 /* 8 Middle f    */  /* 7 */         KEY_fg,                        ITM_NULL,                   -MNU_ASN,                 -MNU_LOOP,             -MNU_TEST,                   -MNU_ALPHAFN,                       //JM HOME
 /* 7 Top    g    */  /*   */         ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME
                                                                                                                                                                                                                   //JM HOME
 /* 6 Bottom Prim */  /* 6 */         ITM_STATUS,                    ITM_NULL,                   -MNU_CLK,                 -MNU_UNITCONV,         -MNU_BITS,                   -MNU_INTS,                          //JM HOME
 /* 5 Middle f    */  /* 5 */         ITM_RBR,                       ITM_NULL,                   -MNU_INFO,                -MNU_CNST,             -MNU_XFN,                    -MNU_SUMS,                          //JM HOME
 #ifdef INLINE_TEST                                                              //vv dr
-/* 4 Top    g    */  /* 4 */         ITM_DROP,                      -MNU_INL_TST,               -MNU_CPX,                 -MNU_EXP,              -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+/* 4 Top    g    */  /* 4 */         -MNU_CPX,                      -MNU_INL_TST,               -MNU_EXP,                 -MNU_BASE,             -MNU_FIN,                    KEY_UNDO,                           //JM HOME
 #else                                                                           //^^
-/* 4 Top    g    */  /* 4 */         ITM_DROP,                      ITM_NULL,                   -MNU_CPX,                 -MNU_EXP,              -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+/* 4 Top    g    */  /* 4 */         -MNU_CPX,                      ITM_NULL,                   -MNU_EXP,                 -MNU_BASE,             -MNU_FIN,                    KEY_UNDO,                           //JM HOME
 #endif                                                                          //dr
                                                                                                                                                                                                                   //JM HOME
 /* 3 Bottom Prim */  /* sample */    ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
-/* 2 Middle f    */  /* 3 */         ITM_PROFRC,                    KEY_HASH/*ITM_toINT*/,      ITM_XTHROOT,              KEY_dotD,              ITM_ms,                      ITM_LBL,                            //JM HOME
+/* 2 Middle f    */  /* 3 */         ITM_PROFRC,                    ITM_XTHROOT,                KEY_HASH,                 ITM_DOTDEMU,           ITM_ms,                      ITM_LBL,                            //JM HOME
 /* 1 Top    g    */  /* 2 */         ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_CLSTK,  /*LAST ONE NO COMMA*/   //JM HOME
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
 

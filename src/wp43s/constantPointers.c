@@ -415,8 +415,8 @@ const real_t * const const_1e6           = (real_t *)(constants +  6120);
 const real_t * const const_1e8           = (real_t *)(constants +  6156);
 const real_t * const const_1e9           = (real_t *)(constants +  6192);
 const real_t * const const_2p32          = (real_t *)(constants +  6228);
-const real_t * const const_rt3           = (real_t *)(constants +  8436);
-const real_t * const const_rt3on2        = (real_t *)(constants +  8472);
+const real_t * const const_rt3           = (real_t *)(constants +  8420);
+const real_t * const const_rt3on2        = (real_t *)(constants +  8456);
 
 const real_t * const const_gammaC00      = (real_t *)(constants +  6264);
 const real_t * const const_gammaC01      = (real_t *)(constants +  6308);

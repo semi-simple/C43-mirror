@@ -216,7 +216,10 @@ typedef int16_t calcRegister_t;
 //#define modulo(n, d)            ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
 #define modulo(n, d)            ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
 
-#define NUMBER_OF_CONSTANTS_IN_CNST_CATALOG 78 // Dont forget to change the define in generateConstants.c
+#define NUMBER_OF_CONSTANTS_39   174
+#define NUMBER_OF_CONSTANTS_51    30
+#define NUMBER_OF_CONSTANTS_1071   1
+#define NUMBER_OF_CONSTANTS_34     7
 
 #define RAM_SIZE        (64*1024) // 96*1024 = 96kb
 #define MAX_FREE_BLOCKS 50

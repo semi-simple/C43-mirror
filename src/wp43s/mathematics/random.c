@@ -50,7 +50,7 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
   saveStack();
 
   if(getRegisterDataType(REGISTER_X) != dtLongInteger) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot RANI# with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
       showInfoDialog("In function fnRandomI:", errorMessage, NULL, NULL);
@@ -59,7 +59,7 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
   }
 
   if(getRegisterDataType(REGISTER_Y) != dtLongInteger) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot RANI# with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
       showInfoDialog("In function fnRandomI:", errorMessage, NULL, NULL);
@@ -162,7 +162,7 @@ void fnSeed(uint16_t unusedParamButMandatory) {
     }
   }
   else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use %s as a seed for the RNG!\n it must be a SP or DP real or a long integer", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       showInfoDialog("In function fnSeed:", errorMessage, NULL, NULL);

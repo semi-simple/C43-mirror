@@ -37,7 +37,7 @@ void (* const cube[9])(void) = {
  * \return void
  ***********************************************/
 void cubeError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot cube %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnCube:", errorMessage, NULL, NULL);

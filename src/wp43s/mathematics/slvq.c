@@ -47,7 +47,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         realCoefs = false;
                         break;
 
-    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot SLVQ with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
                           showInfoDialog("In function fnSlqv:", errorMessage, NULL, NULL);
@@ -69,7 +69,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         realCoefs = false;
                         break;
 
-    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
+    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot SLVQ with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
                           showInfoDialog("In function fnSlqv:", errorMessage, NULL, NULL);
@@ -91,7 +91,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         realCoefs = false;
                         break;
 
-    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_Z);
+    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Z);
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot SLVQ with %s in Z", getRegisterDataTypeName(REGISTER_Z, true, false));
                           showInfoDialog("In function fnSlqv:", errorMessage, NULL, NULL);

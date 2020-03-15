@@ -37,7 +37,7 @@ void (* const chs[9])(void) = {
  * \return void
  ***********************************************/
 void chsError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot change the sign of %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnChangeSign:", errorMessage, NULL, NULL);

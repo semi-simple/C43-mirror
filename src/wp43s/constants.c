@@ -27,13 +27,28 @@
  * \brief Replaces the X content with the selected
  * constant. Enables \b stack \b lift and refreshes the stack
  *
- * \param[in] cst uint16_t Index of the constant to store in X
+ * \param[in] cnst uint16_t Index of the constant to store in X
  * \return void
  ***********************************************/
-void fnConstant(const uint16_t cst) {
+void fnConstant(const uint16_t cnst) {
   liftStack();
 
-  realToReal34((real_t *)constants + cst, REGISTER_REAL34_DATA(REGISTER_X));
+  if(cnst < NUMBER_OF_CONSTANTS_39) { // 39 digit constants
+    realToReal34(constants + cnst*REAL39_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else if(cnst < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51) { // 51 digit constants (gamma coefficients)
+    realToReal34(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE
+                           + (cnst - NUMBER_OF_CONSTANTS_39) * REAL51_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else if(cnst < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071) { // 1071 digit constant
+    realToReal34(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE + NUMBER_OF_CONSTANTS_51 * REAL51_SIZE
+                           + (cnst - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51) * REAL1071_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else { // 34 digit constants
+    real34Copy(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE + NUMBER_OF_CONSTANTS_51 * REAL51_SIZE + NUMBER_OF_CONSTANTS_1071 * REAL1071_SIZE
+                         + (cnst - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51 - NUMBER_OF_CONSTANTS_1071) * REAL34_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 
   refreshRegisterLine(REGISTER_Y);

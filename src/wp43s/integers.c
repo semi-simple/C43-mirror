@@ -129,13 +129,13 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    int prime;
+    int32_t prime;
     longInteger_t value;
 
     convertLongIntegerRegisterToLongInteger(REGISTER_X, value);
     prime = longIntegerProbabPrime(value); // 0=composite 1=probably prime 2=prime
     prime = prime*(3*prime - 5) / 2;       // -1=probably prime 0=composite 1=prime
-    uIntToLongInteger(prime, value);
+    intToLongInteger(prime, value);
 
     convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
 

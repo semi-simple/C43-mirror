@@ -30,23 +30,31 @@
  * \return void
  ***********************************************/
 void fnMaskl(uint16_t numberOfBits) {
-  uint64_t mask;
-
-  saveStack();
-
-  liftStack();
-
-  if(numberOfBits == 0) {
-    mask = 0;
+  if(numberOfBits > shortIntegerWordSize) {
+    displayCalcErrorMessage(ERROR_WORD_SIZE_TOO_SMALL, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot calculate MASKL(%d) word size is %d", numberOfBits, shortIntegerWordSize);
+      showInfoDialog("In function fnMaskl:", errorMessage, NULL, NULL);
+    #endif
   }
   else {
-    mask = (~(1 << numberOfBits) & shortIntegerMask) << (shortIntegerWordSize - numberOfBits);
+    uint64_t mask;
+
+    saveStack();
+    liftStack();
+
+    if(numberOfBits == 0) {
+      mask = 0;
+    }
+    else {
+      mask = (((1ULL << numberOfBits) - 1) & shortIntegerMask) << (shortIntegerWordSize - numberOfBits);
+    }
+
+    reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, 2);
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = mask;
+
+    refreshStack();
   }
-
-  reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, 2);
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = mask;
-
-  refreshStack();
 }
 
 
@@ -59,21 +67,29 @@ void fnMaskl(uint16_t numberOfBits) {
  * \return void
  ***********************************************/
 void fnMaskr(uint16_t numberOfBits) {
-  uint64_t mask;
-
-  saveStack();
-
-  liftStack();
-
-  if(numberOfBits == 0) {
-    mask = 0;
+  if(numberOfBits > shortIntegerWordSize) {
+    displayCalcErrorMessage(ERROR_WORD_SIZE_TOO_SMALL, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot calculate MASKR(%d) word size is %d", numberOfBits, shortIntegerWordSize);
+      showInfoDialog("In function fnMaskr:", errorMessage, NULL, NULL);
+    #endif
   }
   else {
-    mask = (1 << numberOfBits) - 1;
+    uint64_t mask;
+
+    saveStack();
+    liftStack();
+
+    if(numberOfBits == 0) {
+      mask = 0;
+    }
+    else {
+      mask = (1ULL << numberOfBits) - 1;
+    }
+
+    reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, 2);
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = mask;
+
+    refreshStack();
   }
-
-  reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, 2);
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = mask;
-
-  refreshStack();
 }

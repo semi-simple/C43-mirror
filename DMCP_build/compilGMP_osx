@@ -17,7 +17,7 @@
 #
 PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
 
-cd gmp-6.1.2
+cd gmp-6.2.0
 
 ./configure \
   --host=arm-none-eabi \

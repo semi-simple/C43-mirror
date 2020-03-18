@@ -5,16 +5,15 @@
 *.layout
 *.depend
 .stamp-constantPointers
-.stamp-softmenuCatalog
 .stamp-rasterFontsData
+.stamp-softmenuCatalog
 callgrind.out*
 gmon.out
 bin/
 obj/
 *build*/
-gmp-6.1.2/
-gmp-6.1.2.tar.bz2
-src/qspi_crc.h
+gmp-6.2.0/
+gmp-6.2.0.tar.bz2
 DMCP_build/src
 DMCP_build/decNumberICU
 

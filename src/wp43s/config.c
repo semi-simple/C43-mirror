@@ -720,6 +720,22 @@ void fnReset(uint16_t confirmation) {
     fnStore(20);
     fnDrop(0);
 
+    fnStrtoX("Primes: Carol, Kynea, repunit, Woodal");
+    fnStore(21);
+    fnDrop(0);
+    fnStrInputLongint("18014398241046527");
+    fnStore(22);
+    fnDrop(0);
+    fnStrInputLongint("18446744082299486207");
+    fnStore(23);
+    fnDrop(0);
+    fnStrInputLongint("7369130657357778596659");
+    fnStore(24);
+    fnDrop(0);
+    fnStrInputLongint("195845982777569926302400511");
+    fnStore(25);
+    fnDrop(0);
+
 
 
     refreshStack();

@@ -548,8 +548,8 @@ void program_main(void) {
       // 2: | 1/x |Sum+ | SIN | LN  | LOG |SQRT |
       //    | 1: 2| 2: 1| 3:10| 4: 5| 5: 4| 6: 3|
       //    +-----+-----+-----+-----+-----+-----+
-      // 3: | STO | RCL | RDN | COS |SHIFT| TAN |
-      //    | 7: 7| 8: 8| 9: 9|10:11|11:28|12:12|
+      // 3: | STO | RCL | RDN | COS | TAN |SHIFT|
+      //    | 7: 7| 8: 8| 9: 9|10:11|11:12|12:28|
       //    +-----+-----+-----+-----+-----+-----+
       // 4: |   ENTER   |x<>y | CHS |  E  | <-- |
       //    |   13:13   |14:14|15:15|16:16|17:17|
@@ -567,34 +567,53 @@ void program_main(void) {
       //    | 33:37| 34:34| 35:35| 36:36| 37:33 |
       //    +------+------+------+------+-------+
       //
-
       // Fetch the key
       //  < 0 -> No key event
       //  > 0 -> Key pressed
       // == 0 -> Key released
       key = key_pop();
 
-      //The switch instruction below is implemented as follows e.g. for the up arrow key:
-      //  the output of keymap2layout for yhis key is UP 27:18
-      //  so we need the line:
+      //The switch instruction below is implemented as follows e.g. for the up arrow key on the WP43S layout:
+      //  the output of keymap2layout for this key is UP 27:18 so we need the line:
       //    case 18: key = 27; break;
-      switch(key) {
-        case  1: key =  2; break;
-        case  2: key =  1; break;
-        case  3: key =  6; break;
-        case  4: key =  5; break;
-        case  5: key =  4; break;
-        case  6: key = 22; break;
-        case 10: key =  3; break;
-        case 11: key = 10; break;
-        case 18: key = 27; break;
-        case 22: key = 18; break;
-        case 23: key = 32; break;
-        case 27: key = 23; break;
-        case 28: key = 11; break;
-        case 32: key = 28; break;
-        case 33: key = 37; break;
-        case 37: key = 33; break;
+      switch(key) {               // Original
+        case  1: key =  2; break; // SUM+
+        case  2: key =  1; break; // 1/x
+        case  3: key =  6; break; // SQRT
+        case  4: key =  5; break; // LOG
+        case  5: key =  4; break; // LN
+        case  6: key = 22; break; // XEQ
+      //case  7: key =  7; break; // STO
+      //case  8: key =  8; break; // RCL
+      //case  9: key =  9; break; // RDN
+        case 10: key =  3; break; // SIN
+        case 11: key = 10; break; // COS
+        case 12: key = 11; break; // TAN
+      //case 13: key = 13; break; // ENTER
+      //case 14: key = 14; break; // x<>y
+      //case 15: key = 15; break; // +/-
+      //case 16: key = 16; break; // E
+      //case 17: key = 17; break; // <--
+        case 18: key = 27; break; // UP
+      //case 19: key = 19; break; // 7
+      //case 20: key = 20; break; // 8
+      //case 21: key = 21; break; // 9
+        case 22: key = 18; break; // /
+        case 23: key = 32; break; // DOWN
+      //case 24: key = 24; break; // 4
+      //case 25: key = 25; break; // 5
+      //case 26: key = 26; break; // 6
+        case 27: key = 23; break; // x
+        case 28: key = 12; break; // SHIFT
+      //case 29: key = 29; break; // 1
+      //case 30: key = 30; break; // 2
+      //case 31: key = 31; break; // 3
+        case 32: key = 28; break; // -
+        case 33: key = 37; break; // EXIT
+      //case 34: key = 34; break; // 0
+      //case 35: key = 35; break; // .
+      //case 36: key = 36; break; // R/S
+        case 37: key = 33; break; // +
         default: {}
       }
     }
@@ -604,6 +623,12 @@ void program_main(void) {
       //  > 0 -> Key pressed
       // == 0 -> Key released
       key = key_pop();
+    }
+
+    if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
+      shiftF = false;
+      shiftG = false;
+      create_screenshot(0);
     }
 
     if(38 <= key && key <=43) {

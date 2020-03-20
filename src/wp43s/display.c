@@ -1971,26 +1971,6 @@ char tmpa[60];
       strcpy(tmpStr3000 + 2100,tmpa);
     }
 
-//JMSHOW Attempt to line up groups of three. Not working.
-//      char tmp[12];  
-//      tmp[0]=0;
-//      if(  tmpStr3000[2103]!=45) {                //if not -, then add + to keep len consistent
-//        strcat(tmp,"+");
-//        if(tmpStr3000[2105]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION); strcat(tmp,STD_SPACE_PUNCTUATION);}
-//        if(tmpStr3000[2106]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION);}
-//      } else {
-//        if(tmpStr3000[2106]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION); strcat(tmp,STD_SPACE_PUNCTUATION);}
-//        if(tmpStr3000[2107]!= 8) {strcat(tmp,STD_SPACE_PUNCTUATION);}
-//      }
-//      if(tmp[0]!=0){
-//        strcpy(tmpStr3000 + 2103,tmp);
-//        longIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103 + stringByteLength(tmp), TMP_STR_LENGTH, 7*400 - 8, 350);
-//      }
-
-//JMSHOW add final GAP to line up. See above. Not working.
-//      strcat(tmpStr3000 + 2100,STD_SPACE_PUNCTUATION);
-
-
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
       dest = 0;
@@ -2158,12 +2138,17 @@ char tmpa[60];
     case dtShortInteger:
       temporaryInformation = TI_SHOW_REGISTER_BIG;         //JMSHOW
       bool_t displayLeadingZerosMem = displayLeadingZeros;
-      displayLeadingZeros = true;
+//      displayLeadingZeros = true;                        //Change this to have leading zeroes on
         const font_t *font_tmp;
         font_tmp = &numericFont; //&numericFont;
         shortIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, &font_tmp);
-        strcat(tmpStr3000 + 2100,"          ");            //JMSHOW move short strings into the middle
-
+//        strcat(tmpStr3000 + 2100,"          ");            //JMSHOW move short strings into the middle
+        while (stringByteLength(tmpStr3000 + 2100) < 30) {
+          strcpy(tmpa," ");
+          strcat(tmpa,tmpStr3000 + 2100);
+          strcat(tmpa," ");
+          strcpy(tmpStr3000 + 2100,tmpa);
+        }
         last = 2100 + stringByteLength(tmpStr3000 + 2100);
         source = 2100;
         dest = 0;
@@ -2177,6 +2162,14 @@ char tmpa[60];
             }
             source++;
             tmpStr3000[++dest] = 0;
+          }
+
+          if(source < last) {  //Not in the last line
+            if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the spaces
+            if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
+            tmpStr3000[dest] = 0;
           }
         }
       displayLeadingZeros = displayLeadingZerosMem;
@@ -2204,37 +2197,26 @@ char tmpa[60];
       }
       break;
 
-
-
                                                                               //  JMSHOW ^^
 
     default:
       strcat(tmpStr3000 + 2103," Type not yet supported by SHOW");             //  JMSOW vv
       strcpy(tmpStr3000 + 0, tmpStr3000 +2100);
 
-/*      temporaryInformation = TI_NO_INFO;
-      displayCalcErrorMessage(ERROR_INVALID_DATA_INPUT_FOR_OP, ERR_REGISTER_LINE, SHOWregis);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(SHOWregis, true, false));
-        showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
-      #endif
-      return;
-*/
-
   }
 
-if (temporaryInformation == TI_SHOW_REGISTER) {
-  refreshRegisterLine(REGISTER_T);
-  if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
-  if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);  //bug changed 900 to 1500
-} else
-if (temporaryInformation == TI_SHOW_REGISTER_BIG) {
-  refreshRegisterLine(REGISTER_T);
-  if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-  if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);
-  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);  
-}
+  if (temporaryInformation == TI_SHOW_REGISTER) {
+    refreshRegisterLine(REGISTER_T);
+    if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
+    if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
+    if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);  //bug changed 900 to 1500
+  } else
+  if (temporaryInformation == TI_SHOW_REGISTER_BIG) {
+    refreshRegisterLine(REGISTER_T);
+    if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
+    if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);
+    if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);  
+  }
 
   displayFormat = savedDisplayFormat;
   displayFormatDigits = savedDisplayFormatDigits;

@@ -1453,7 +1453,9 @@ void refreshRegisterLine(calcRegister_t regist) {
             default: {}
           }
 
-          real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, 34);
+          if(getRegisterDataType(REGISTER_X) == dtReal34) {
+            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, 34);
+          }
         }
                                                                          //JM ^^
 

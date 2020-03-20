@@ -1957,13 +1957,19 @@ void fnShow_SCROLL(uint16_t fnShow_param) {             //JMSHOW Heavily modifie
     default: break;
   }                                              //JMSHOW ^^
 
-
+char tmpa[60];
 
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
       longIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350);
-      strcat(tmpStr3000 + 2100,"          ");    //JMSHOW move short strings into the middle
 
+//      if (stringByteLength(tmpStr3000 + 2100) < 33) {strcat(tmpStr3000 + 2100,"          ");}    //JMSHOW move short strings into the middle
+    while (stringByteLength(tmpStr3000 + 2100) < 30) {
+      strcpy(tmpa," ");
+      strcat(tmpa,tmpStr3000 + 2100);
+      strcat(tmpa," ");
+      strcpy(tmpStr3000 + 2100,tmpa);
+    }
 
 //JMSHOW Attempt to line up groups of three. Not working.
 //      char tmp[12];  
@@ -1990,7 +1996,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {             //JMSHOW Heavily modifie
       dest = 0;
 
       //printf("1: %d\n",stringByteLength(tmpStr3000 + 2100));
-      if (stringByteLength(tmpStr3000 + 2100) > 137) {
+      if (stringByteLength(tmpStr3000 + 2100) > 137+1) { //It only reliably shows up to +1. +1+3 does not work as it cuts off trailing digits
         temporaryInformation = TI_SHOW_REGISTER;
         for(d=0; d<=1800 ; d+=300) {
           dest = d;
@@ -2007,7 +2013,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {             //JMSHOW Heavily modifie
     else
 
      //printf("2: %d\n",stringByteLength(tmpStr3000 + 2100));
-     if (stringByteLength(tmpStr3000 + 2100) <= 137) {
+     if (stringByteLength(tmpStr3000 + 2100) <= 137+1) {  //10^80 2^269
       temporaryInformation = TI_SHOW_REGISTER_BIG;
       for(d=0; d<=1800 ; d+=300) {
         dest = d;
@@ -2019,7 +2025,21 @@ void fnShow_SCROLL(uint16_t fnShow_param) {             //JMSHOW Heavily modifie
           source++;
           tmpStr3000[++dest] = 0;
         }
+
+        if(source < last) {  //Not in the last line
+          if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the spaces
+          if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
+          if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
+          tmpStr3000[dest] = 0;
+        } else {
+          tmpStr3000[dest+0] = 0xa0; //Add a space to the very end to space it nicely.
+          tmpStr3000[dest+1] = 0x08;
+          tmpStr3000[dest+2] = 0;
+          dest+=2;
+        }
+
       }
+
     }   
    
       break;

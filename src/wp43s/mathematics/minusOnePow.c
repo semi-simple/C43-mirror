@@ -102,7 +102,16 @@ void m1PowCxma(void) {
 
 
 void m1PowShoI(void) {
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_int_1pow(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+  int32_t signExponent;
+  uint64_t valueExponent = WP34S_extract_value(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)), &signExponent);
+  int32_t odd = valueExponent & 1;
+
+  if(shortIntegerMode == SIM_UNSIGN && odd)
+    fnSetFlag(FLAG_OVERFLOW);
+  else
+    fnClearFlag(FLAG_OVERFLOW);
+
+  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_build_value((uint64_t)1, odd);
 }
 
 

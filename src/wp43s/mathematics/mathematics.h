@@ -69,6 +69,7 @@
 #include "parallel.h"
 #include "pcg_basic.h"
 #include "power.h"
+#include "prime.h"
 #include "random.h"
 #include "realPart.h"
 #include "remainder.h"

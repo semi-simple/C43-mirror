@@ -79,10 +79,11 @@
 #define longIntegerAddUInt(op, uint, result)                              mpz_add_ui    (result, op, uint)
 #define longIntegerSubtractUInt(op, uint, result)                         mpz_sub_ui    (result, op, uint)
 #define longIntegerMultiplyUInt(op, uint, result)                         mpz_mul_ui    (result, op, uint)
-#define longIntegerDivideRemainderUInt(op, uint, result, remainder)       mpz_tdiv_qr_ui(remainder, result, op, uint) /* op/uint => result*uint + remainder == op */
-#define longIntegerDivideUInt(op, uint, result)                           mpz_tdiv_q_ui (result, op, uint)            /* op/uint => result*uint + remainder == op */
-#define longIntegerPowerUIntUInt(base, exponent, result)                  mpz_ui_pow_ui (result, base, exponent)      /* result = base ^ exponent */
-#define longIntegerModuloUInt(op, uint)                                   mpz_fdiv_ui    (op, uint)                   /* result = op mod uint, 0 <= result < uint */
+#define longIntegerDivideRemainderUInt(op, uint, result, remainder)       mpz_tdiv_qr_ui(remainder, result, op, uint)    /* op/uint => result*uint + remainder == op */
+#define longIntegerDivideUInt(op, uint, result)                           mpz_tdiv_q_ui (result, op, uint)               /* op/uint => result*uint + remainder == op */
+#define longIntegerPowerUIntUInt(base, exponent, result)                  mpz_ui_pow_ui (result, base, exponent)         /* result = base ^ exponent */
+#define longIntegerPowerModuloSec(base, exponent, modulo, result)         mpz_powm_sec  (result, base, exponent, modulo) /* result = base ^ exponent */
+#define longIntegerModuloUInt(op, uint)                                   mpz_fdiv_ui   (op, uint)                       /* result = op mod uint, 0 <= result < uint */
 
 #define longIntegerGcd(op1, op2, result)                                  mpz_gcd     (result, op1, op2)
 #define longIntegerLcm(op1, op2, result)                                  mpz_lcm     (result, op1, op2)

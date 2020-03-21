@@ -233,6 +233,7 @@ void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum roun
   exponent = real34GetExponent(real34);
 
   //longIntegerInit(coef);
+  longIntegerInit(lgInt);
   uIntToLongInteger(bcd[0], lgInt);
 
   for(int i=1; i<DECQUAD_Pmax; i++) {
@@ -259,8 +260,6 @@ void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum roun
 
 void convertReal34ToLongIntegerRegister(real34_t *real34, calcRegister_t dest, enum rounding roundingMode) {
   longInteger_t lgInt;
-
-  longIntegerInit(lgInt);
 
   convertReal34ToLongInteger(real34, lgInt, roundingMode);
   convertLongIntegerToLongIntegerRegister(lgInt, dest);

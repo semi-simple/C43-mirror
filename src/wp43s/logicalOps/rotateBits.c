@@ -391,3 +391,38 @@ void fnRj(uint16_t numberOfShifts) {
     #endif
   }
 }
+
+
+
+void fnMirror(uint16_t unusedButMandatoryParameter) {
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    uint64_t x, r;
+    uint32_t i;
+
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    x = *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X));
+    if(x == 0) {
+      r = 0;
+    }
+    else {
+      for(i=0; i<shortIntegerWordSize; i++) {
+        if(x & (1LL << i)) {
+          r |= 1LL << (shortIntegerWordSize-i-1);
+        }
+      }
+    }
+
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = r;
+  }
+
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if(EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "the input type %s is not allowed for MIRROR!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
+      showInfoDialog("In function fnMirror:", errorMessage, NULL, NULL);
+    #endif
+  }
+
+  refreshRegisterLine(NIM_REGISTER_LINE);
+}

@@ -21,8 +21,6 @@
 #define shortIntegerIsZero(op) (((*(uint64_t *)(op)) == 0) || (shortIntegerMode == SIM_SIGNMT && (((*(uint64_t *)(op)) == 1u<<((uint64_t)shortIntegerWordSize-1)))))
 
 void     fnChangeBase               (uint16_t base);
-void     fnMirror                   (uint16_t unusedButMandatoryParameter);
-void     fnIsPrime                  (uint16_t unusedButMandatoryParameter);
 void     longIntegerMultiply         (longInteger_t opY, longInteger_t opX, longInteger_t result);
 void     longIntegerSquare           (longInteger_t op,  longInteger_t result);
 void     longIntegerAdd              (longInteger_t opY, longInteger_t opX, longInteger_t result);
@@ -55,5 +53,4 @@ uint64_t WP34S_int10pow             (uint64_t x);
 uint64_t WP34S_intLog2              (uint64_t x);
 uint64_t WP34S_intLog10             (uint64_t x);
 int32_t  WP34S_isPrime              (uint64_t p);
-uint64_t WP34S_int_1pow             (uint64_t exponent);
-uint64_t WP34S_intMirror            (uint64_t x);
+uint64_t WP34S_extract_value        (const uint64_t val, int32_t *const sign);

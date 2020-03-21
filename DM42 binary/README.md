@@ -1,6 +1,7 @@
 This is a very early version of the WP43C program for DM42. Use it at your own risk.  
 
-Many things simply do not work! You will have to press reset quite often.  
+From the version of March 19th 2020 21:30 it is also necessary to install the new version of the keymap.bin file.
+This changes introduce a new feature: pressing [g] not releasing it and pressing [DISP] releasing [DISP] then releasing [g] creates a screen capture on the USB flash disk in the /SCREENS directory.
 
 Installation instructions:  
 Copy the **WP43C.pgm** file to the DM42 flash disk over USB.

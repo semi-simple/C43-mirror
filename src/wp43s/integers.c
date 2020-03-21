@@ -104,57 +104,6 @@ void fnChangeBase(uint16_t base) {
 
 
 
-void fnMirror(uint16_t unusedButMandatoryParameter) {
-  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intMirror(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
-  }
-
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "the input type %s is not allowed for MIRROR!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      showInfoDialog("In function fnMirror:", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  refreshRegisterLine(NIM_REGISTER_LINE);
-}
-
-
-
-void fnIsPrime(uint16_t unusedButMandatoryParameter) {
-  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_isPrime(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    int32_t prime;
-    longInteger_t value;
-
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, value);
-    prime = longIntegerProbabPrime(value); // 0=composite 1=probably prime 2=prime
-    prime = prime*(3*prime - 5) / 2;       // -1=probably prime 0=composite 1=prime
-    intToLongInteger(prime, value);
-
-    convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
-
-    longIntegerFree(value);
-  }
-
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "the input type %s is not allowed for PRIME?!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      showInfoDialog("In function fnIsPrime:", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  refreshRegisterLine(NIM_REGISTER_LINE);
-}
-
-
-
 void longIntegerMultiply(longInteger_t opY, longInteger_t opX, longInteger_t result) {
   if(longIntegerBits(opY) + longIntegerBits(opX) <= MAX_LONG_INTEGER_SIZE_IN_BITS) {
     mpz_mul(result, opY, opX);
@@ -231,24 +180,6 @@ void longIntegerSubtract(longInteger_t opY, longInteger_t opX, longInteger_t res
  * modified and adapted
  */
 
-static void WP34S_set_carry(int32_t carry) {
-  if(carry) {
-    fnSetFlag(FLAG_CARRY);
-  }
-  else {
-    fnClearFlag(FLAG_CARRY);
-  }
-}
-
-static void WP34S_set_overflow(int32_t overflow) {
-  if(overflow) {
-    fnSetFlag(FLAG_OVERFLOW);
-  }
-  else {
-   fnClearFlag(FLAG_OVERFLOW);
-  }
-}
-
 /* Helper routine for addition and subtraction that detemines the proper
  * setting for the overflow bit.  This routine should only be called when
  * the signs of the operands are the same for addition and different
@@ -299,7 +230,7 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
       return 0;
   }
 
-  WP34S_set_overflow(1);
+  fnSetFlag(FLAG_OVERFLOW);
 
   return 1;
 }
@@ -308,7 +239,7 @@ static int32_t WP34S_calc_overflow(uint64_t xv, uint64_t yv, int32_t neg) {
 /* Utility routine to convert a binary integer into separate sign and
  * value components.  The sign returned is 1 for negative and 0 for positive.
  */
-static uint64_t WP34S_extract_value(const uint64_t val, int32_t *const sign) {
+uint64_t WP34S_extract_value(const uint64_t val, int32_t *const sign) {
   uint64_t value = val & shortIntegerMask;
 
   if(shortIntegerMode == SIM_UNSIGN) {
@@ -377,7 +308,7 @@ uint64_t WP34S_intAdd(uint64_t y, uint64_t x) {
   uint64_t sum;
   int32_t overflow;
 
-  WP34S_set_overflow(0);
+  fnClearFlag(FLAG_OVERFLOW);
   if(termXSign == termYSign) {
     overflow = WP34S_calc_overflow(termX, termY, termXSign);
   }
@@ -389,7 +320,10 @@ uint64_t WP34S_intAdd(uint64_t y, uint64_t x) {
     const uint64_t x2 = (x & shortIntegerSignBit)?-(x ^ shortIntegerSignBit):x;
     const uint64_t y2 = (y & shortIntegerSignBit)?-(y ^ shortIntegerSignBit):y;
 
-    WP34S_set_carry(overflow);
+    if(overflow)
+      fnSetFlag(FLAG_CARRY);
+    else
+      fnClearFlag(FLAG_CARRY);
 
     sum = y2 + x2;
     if(sum & shortIntegerSignBit) {
@@ -402,14 +336,14 @@ uint64_t WP34S_intAdd(uint64_t y, uint64_t x) {
     sum = y + x;
 
     if(maskedSum < (y & shortIntegerMask)) {
-      WP34S_set_carry(1);
+      fnSetFlag(FLAG_CARRY);
 
       if(shortIntegerMode == SIM_1COMPL) {
         sum++;
       }
     }
     else {
-      WP34S_set_carry(0);
+      fnClearFlag(FLAG_CARRY);
     }
   }
   return sum & shortIntegerMask;
@@ -422,14 +356,18 @@ uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
   uint64_t termY = WP34S_extract_value(y, &termYSign);
   uint64_t difference;
 
-  WP34S_set_overflow(0);
+  fnClearFlag(FLAG_OVERFLOW);
   if(termXSign != termYSign) {
     WP34S_calc_overflow(termX, termY, termYSign);
   }
 
   if(shortIntegerMode == SIM_SIGNMT) {
     int64_t x2, y2;
-    WP34S_set_carry((termXSign == 0 && termYSign == 0 && termX > termY) || (termXSign != 0 && termYSign != 0 && termX < termY));
+
+    if((termXSign == 0 && termYSign == 0 && termX > termY) || (termXSign != 0 && termYSign != 0 && termX < termY))
+      fnSetFlag(FLAG_CARRY);
+    else
+      fnClearFlag(FLAG_CARRY);
 
     x2 = (x & shortIntegerSignBit)?-(x ^ shortIntegerSignBit):x;
     y2 = (y & shortIntegerSignBit)?-(y ^ shortIntegerSignBit):y;
@@ -443,9 +381,9 @@ uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
     difference = y - x;
 
     if((uint64_t)y < (uint64_t)x) {
-      WP34S_set_carry(1);
+      fnSetFlag(FLAG_CARRY);
       if(shortIntegerMode == SIM_UNSIGN) {
-        WP34S_set_overflow(1);
+        fnSetFlag(FLAG_OVERFLOW);
       }
 
       if(shortIntegerMode == SIM_1COMPL) {
@@ -453,7 +391,7 @@ uint64_t WP34S_intSubtract(uint64_t y, uint64_t x) {
       }
     }
     else {
-      WP34S_set_carry(0);
+      fnClearFlag(FLAG_CARRY);
     }
   }
   return difference & shortIntegerMask;
@@ -468,7 +406,11 @@ uint64_t WP34S_intMultiply(uint64_t y, uint64_t x) {
   int32_t overflow = 0;
 
   product = WP34S_multiply_with_overflow(multiplier, multiplicand, &overflow);
-  WP34S_set_overflow(overflow);
+
+  if(overflow)
+    fnSetFlag(FLAG_OVERFLOW);
+  else
+    fnClearFlag(FLAG_OVERFLOW);
 
   if(shortIntegerMode == SIM_UNSIGN) {
     return product;
@@ -505,17 +447,20 @@ uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
     return 0;
   }
 
-  WP34S_set_overflow(0);
+  fnClearFlag(FLAG_OVERFLOW);
   quotient = (dividend / divisor) & shortIntegerMask;
   // Set carry if there is a remainder
-  WP34S_set_carry(quotient * divisor != dividend);
+  if(quotient * divisor != dividend)
+    fnSetFlag(FLAG_CARRY);
+  else
+    fnClearFlag(FLAG_CARRY);
 
   if(shortIntegerMode != SIM_UNSIGN) {
     if(quotient & shortIntegerSignBit)
-    WP34S_set_carry(1);
+      fnSetFlag(FLAG_CARRY);
     // Special case for 0x8000...00 / -1 in 2's complement
     if(shortIntegerMode == SIM_2COMPL && divisorSign && divisor == 1 && y == shortIntegerSignBit) {
-      WP34S_set_overflow(1);
+      fnSetFlag(FLAG_OVERFLOW);
     }
   }
   return WP34S_build_value(quotient, divisorSign ^ dividendSign);
@@ -532,7 +477,7 @@ uint64_t WP34S_intCube(uint64_t x) {
 
   y = WP34S_intMultiply(x, y);
   if(overflow) {
-    WP34S_set_overflow(1);
+    fnSetFlag(FLAG_OVERFLOW);
   }
   return y;
 }
@@ -589,11 +534,11 @@ uint64_t WP34S_intChs(uint64_t x) {
   uint64_t value = WP34S_extract_value(x, &signValue);
 
   if(shortIntegerMode == SIM_UNSIGN || (shortIntegerMode == SIM_2COMPL && x == shortIntegerSignBit)) {
-    WP34S_set_overflow(1);
+    fnSetFlag(FLAG_OVERFLOW);
     return (-(int64_t)value) & shortIntegerMask;
   }
 
-  WP34S_set_overflow(0);
+  fnClearFlag(FLAG_OVERFLOW);
   return WP34S_build_value(value, !signValue);
 }
 
@@ -626,7 +571,11 @@ uint64_t WP34S_intSqrt(uint64_t x) {
     if(nn0 > value) {
       nn1--;
     }
-    WP34S_set_carry((nn0 != value) ? 1 : 0);
+
+    if(nn0 != value)
+      fnSetFlag(FLAG_CARRY);
+    else
+      fnClearFlag(FLAG_CARRY);
   }
   return WP34S_build_value(nn1, signValue);
 }
@@ -636,9 +585,9 @@ uint64_t WP34S_intAbs(uint64_t x) {
   int32_t signValue;
   uint64_t value = WP34S_extract_value(x, &signValue);
 
-  WP34S_set_overflow(0);
+  fnClearFlag(FLAG_OVERFLOW);
   if(shortIntegerMode == SIM_2COMPL && x == shortIntegerSignBit) {
-    WP34S_set_overflow(1);
+    fnSetFlag(FLAG_OVERFLOW);
     return x;
   }
   return WP34S_build_value(value, 0);
@@ -695,7 +644,11 @@ static uint64_t WP34S_int_power_helper(uint64_t base, uint64_t exponent, int32_t
     }
   }
 
-  WP34S_set_overflow(overflow);
+  if(overflow)
+    fnSetFlag(FLAG_OVERFLOW);
+  else
+    fnClearFlag(FLAG_OVERFLOW);
+
   return power;
 }
 
@@ -712,11 +665,11 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intPower: Cannot calculate 0^0!", NULL, NULL, NULL);
     #endif
-    WP34S_set_overflow(1);
+    fnSetFlag(FLAG_OVERFLOW);
     return 0;
   }
-  WP34S_set_carry(0);
-  WP34S_set_overflow(0);
+  fnClearFlag(FLAG_CARRY);
+  fnClearFlag(FLAG_OVERFLOW);
 
   if(exponent == 0) {
     return 1;
@@ -726,7 +679,7 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
   }
 
   if(exponentSign) {
-    WP34S_set_carry(1);
+    fnSetFlag(FLAG_CARRY);
     return 0;
   }
 
@@ -742,8 +695,12 @@ uint64_t WP34S_int2pow(uint64_t exp) {
   uint64_t exponent = WP34S_extract_value(exp, &signExponent);
   uint32_t wordSize = shortIntegerWordSize;
 
-  WP34S_set_overflow(0);
-  WP34S_set_carry(signExponent && exponent == 1);
+  fnClearFlag(FLAG_OVERFLOW);
+  if(signExponent && exponent == 1)
+    fnSetFlag(FLAG_CARRY);
+  else
+    fnClearFlag(FLAG_CARRY);
+
   if(signExponent && exponent != 0) {
     return 0;
   }
@@ -752,8 +709,12 @@ uint64_t WP34S_int2pow(uint64_t exp) {
     wordSize--;
   }
   if(exponent >= wordSize) {
-    WP34S_set_carry(exponent == wordSize);
-    WP34S_set_overflow(1);
+    if(exponent == wordSize)
+      fnSetFlag(FLAG_CARRY);
+    else
+      fnClearFlag(FLAG_CARRY);
+
+    fnSetFlag(FLAG_OVERFLOW);
     return 0;
   }
   return 1LL << (uint32_t)(exponent & 0xff);
@@ -767,14 +728,14 @@ uint64_t WP34S_int10pow(uint64_t x) {
   uint64_t exponent = WP34S_extract_value(x, &sx);
   int32_t overflow = 0;
 
-  WP34S_set_carry(0);
+  fnClearFlag(FLAG_CARRY);
   if(exponent == 0) {
-    WP34S_set_overflow(0);
+    fnClearFlag(FLAG_OVERFLOW);
     return 1;
   }
 
   if(sx) {
-    WP34S_set_carry(1);
+    fnSetFlag(FLAG_CARRY);
     return 0;
   }
 
@@ -797,11 +758,14 @@ uint64_t WP34S_intLog2(uint64_t x) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intLog2: Cannot calculate the log" STD_SUB_2 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
-    //WP34S_set_overflow(1);
     return 0;
   }
 
-  WP34S_set_carry((value & (value - 1)) ? 1 : 0);
+  if(value & (value - 1))
+    fnSetFlag(FLAG_CARRY);
+  else
+    fnClearFlag(FLAG_CARRY);
+
   if(value != 0) {
     while(value >>= 1) {
       log2++;
@@ -825,7 +789,6 @@ uint64_t WP34S_intLog10(uint64_t x) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function WP34S_intLog10: Cannot calculate the log" STD_SUB_10 " of a number " STD_LESS_EQUAL " 0!", NULL, NULL, NULL);
     #endif
-    //WP34S_set_overflow(1);
     return 0;
   }
 
@@ -837,13 +800,18 @@ uint64_t WP34S_intLog10(uint64_t x) {
     value /= 10;
   }
 
-  WP34S_set_carry(c || value != 1);
+  if(c || value != 1)
+    fnSetFlag(FLAG_CARRY);
+  else
+    fnClearFlag(FLAG_CARRY);
+
   return WP34S_build_value(r, signValue);
 }
 
 
 
 
+#ifdef DUMMY
 /* Calculate (a . b) mod c taking care to avoid overflow */
 static uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {
   uint64_t x = 0, y = a % c;
@@ -874,99 +842,6 @@ static uint64_t WP34S_expmod(const uint64_t a, uint64_t b, const uint64_t c) {
 
 
 
-/* Test if a number is prime or not using a Miller-Rabin test */
-const uint8_t primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
-#define N_PRIMES (sizeof(primes) / sizeof(uint8_t))
-#define QUICK_CHECK (101*101-1)
-
-int32_t WP34S_isPrime(uint64_t primeCandidate) {
-  uint32_t i;
-  uint64_t s;
-  #define PRIME_ITERATION 15
-
-  if(primeCandidate < 2) {
-    return 0;
-  }
-
-  /* We fail for numbers >= 2^63 */
-  if((primeCandidate & 0x8000000000000000ull) != 0) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function WP34S_isPrime:", "We fail for numbers " STD_GREATER_EQUAL " 2^63!", tmpStr3000, NULL);
-    #endif
-    return 1;
-  }
-
-  /* Quick check for divisibility by small primes */
-  for(i=0; i<N_PRIMES; i++) {
-    if(primeCandidate == primes[i]) {
-      return 1;
-    }
-    else if((primeCandidate % primes[i]) == 0) {
-      return 0;
-    }
-  }
-
-  if(primeCandidate < QUICK_CHECK) {
-    return 1;
-  }
-
-  s = primeCandidate - 1;
-  while((s & 1) == 0) {
-    s /= 2;
-  }
-
-  for(i=0; i<PRIME_ITERATION; i++) {
-    uint64_t temp = s;
-    uint64_t mod = WP34S_expmod(primes[i], temp, primeCandidate);
-    while(temp != primeCandidate - 1 && mod != 1 && mod != primeCandidate - 1) {
-      mod = WP34S_mulmod(mod, mod, primeCandidate);
-      temp += temp;
-    }
-
-    if(mod != primeCandidate - 1 && temp % 2 == 0) {
-      return 0;
-    }
-  }
-  return 1;
-}
-
-
-
-/* -1^x
- */
-uint64_t WP34S_int_1pow(uint64_t exponent) {
-  int32_t signExponent;
-  uint64_t valueExponent = WP34S_extract_value(exponent, &signExponent);
-  int32_t odd = valueExponent & 1;
-
-  WP34S_set_overflow((shortIntegerMode == SIM_UNSIGN && odd) ? 1 : 0);
-  return WP34S_build_value((uint64_t)1, odd);
-}
-
-
-
-/* Mirror - reverse the bits in the word
- */
-uint64_t WP34S_intMirror(uint64_t x) {
-  uint64_t r = 0;
-  uint32_t i;
-
-  if(x == 0) {
-    return 0;
-  }
-
-  for(i=0; i<shortIntegerWordSize; i++) {
-    if(x & (1LL << i)) {
-      r |= 1LL << (shortIntegerWordSize-i-1);
-    }
-  }
-  return r;
-}
-
-
-
-#ifdef DUMMY
 /* Justify to the end of the register
  */
 void justify(int64_t (*shift)(int64_t), const int64_t mask)

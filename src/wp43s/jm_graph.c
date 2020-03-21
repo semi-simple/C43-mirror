@@ -374,15 +374,11 @@ void graph_axis (void){
   for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
     cnt = screen_window_y(y_min,y,y_max);
     setPixel(xzero-1,cnt); //tick
-    setPixel(xzero-2,cnt); //tick
-    setPixel(xzero+1,cnt); //tick
     setPixel(xzero+1,cnt); //tick
   }  
   for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
     cnt = screen_window_y(y_min,y,y_max);
     setPixel(xzero-1,cnt); //tick
-    setPixel(xzero-2,cnt); //tick
-    setPixel(xzero+1,cnt); //tick
     setPixel(xzero+1,cnt); //tick
   }  
 
@@ -390,16 +386,46 @@ void graph_axis (void){
     cnt = screen_window_x(x_min,x,x_max);
       setPixel(cnt,yzero+1); //tick
       setPixel(cnt,yzero-1); //tick
-      setPixel(cnt,yzero+2); //tick
-      setPixel(cnt,yzero-2); //tick
    }
   for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
       setPixel(cnt,yzero+1); //tick
       setPixel(cnt,yzero-1); //tick
+   }
+
+
+
+  for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
+    cnt = screen_window_y(y_min,y,y_max);
+    setPixel(xzero-2,cnt); //tick
+    setPixel(xzero-3,cnt); //tick
+    setPixel(xzero+2,cnt); //tick
+    setPixel(xzero+3,cnt); //tick
+  }  
+  for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
+    cnt = screen_window_y(y_min,y,y_max);
+    setPixel(xzero-2,cnt); //tick
+    setPixel(xzero-3,cnt); //tick
+    setPixel(xzero+2,cnt); //tick
+    setPixel(xzero+3,cnt); //tick
+  }  
+
+  for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
+    cnt = screen_window_x(x_min,x,x_max);
       setPixel(cnt,yzero+2); //tick
       setPixel(cnt,yzero-2); //tick
+      setPixel(cnt,yzero+3); //tick
+      setPixel(cnt,yzero-3); //tick
    }
+  for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
+    cnt = screen_window_x(x_min,x,x_max);
+      setPixel(cnt,yzero+2); //tick
+      setPixel(cnt,yzero-2); //tick
+      setPixel(cnt,yzero+3); //tick
+      setPixel(cnt,yzero-3); //tick
+   }
+
+
 
 
 /*
@@ -414,7 +440,7 @@ void graph_axis (void){
   #endif
 }
 
-
+//#define STATDEBUG
 void graph_plotmem(void) {
   #ifndef TESTSUITE_BUILD
   uint16_t cnt, ix, statnum;
@@ -435,30 +461,49 @@ void graph_plotmem(void) {
     real34ToReal(SIGMA_N, &tmpy);
     realToString(&tmpy, tmpStr3000);
     statnum = atoi (tmpStr3000);
+    
+    #ifdef STATDEBUG
+    printf("n=%d\n",statnum);
+    #endif
 
     x_min = 1e99;
     x_max = -1e99;
     y_min = 1e99;
     y_max = -1e99;
-    for(cnt=0; cnt<statnum; cnt++) {
+    #ifdef STATDEBUG
+    printf("Axis0: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+    #endif
+
+    for(cnt=0; cnt<=statnum-1; cnt++) {
       if(gr_x[cnt]<x_min) {x_min = gr_x[cnt];}
       if(gr_x[cnt]>x_max) {x_max = gr_x[cnt];}
       if(gr_y[cnt]<y_min) {y_min = gr_y[cnt];}
       if(gr_y[cnt]>y_max) {y_max = gr_y[cnt];}
     }
-    if(x_min>0 && x_max>0) {if(x_min<x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
-    if(x_min<0 && x_max<0) {if(x_min>x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
-    if(y_min>0 && y_max>0) {if(y_min<y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
-    if(y_min<0 && y_max<0) {if(y_min>y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
+
+    #ifdef STATDEBUG
+    printf("Axis1: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+    #endif
+
+    if(x_min>0 && x_max>0) {if(x_min<=x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
+    if(x_min<0 && x_max<0) {if(x_min>=x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
+    if(y_min>0 && y_max>0) {if(y_min<=y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
+    if(y_min<0 && y_max<0) {if(y_min>=y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
+
+    #ifdef STATDEBUG
+    printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+    #endif
 
     x_min = 1.05 * x_min;
     x_max = 1.05 * x_max;
     y_min = 1.05 * y_min;
     y_max = 1.05 * y_max;
+
+    #ifdef STATDEBUG
+    printf("Axis3: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+    #endif
+
     graph_axis();
-
-
-   
 
       /* //Sample data
       gr_x[0] = 0; gr_y[0] = 1;
@@ -473,19 +518,19 @@ void graph_plotmem(void) {
 
     yn = screen_window_y(y_min,gr_y[0],y_max);
     xn = screen_window_x(x_min,gr_x[0],x_max);
-  xN = xn;
-  yN = yn;
+    xN = xn;
+    yN = yn;
 
     //GRAPH
     ix = 0;
     for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
       x = gr_x[ix];
       y = gr_y[ix];
-      //printf("plotting graph table[%d] = x:%f y:%f\n",ix,x,y);
-
-  xo = xN;
-  yo = yN;
-
+      #ifdef STATDEBUG
+      printf("plotting graph table[%d] = x:%f y:%f \n",ix,x,y);
+      #endif
+      xo = xN;
+      yo = yN;
       xN = screen_window_x(x_min,x,x_max);
       yN = screen_window_y(y_min,y,y_max);
 

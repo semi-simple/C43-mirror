@@ -198,6 +198,10 @@ real39_t             const *angle90;
 real39_t             const *angle45;
 pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
+  #ifdef JMSHOWCODES 
+  int8_t               telltale_pos;       //JM Test
+  int8_t               telltale_lastkey;   //JM Test
+  #endif
   bool_t               backToDMCP;
   uint32_t             nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
   uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
@@ -369,7 +373,6 @@ void setupDefaults(void) {
   // Load_HOME(); //JMHOME: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK
 
   telltale = 0;                                                  //JMGRAPH MEM
-
   
   #ifndef TESTSUITE_BUILD
     showShiftState();
@@ -532,6 +535,7 @@ int main(int argc, char* argv[]) {
 }
 #endif
 
+
 #ifdef DMCP_BUILD
 void program_main(void) {
   int key = 0;
@@ -561,6 +565,10 @@ void program_main(void) {
 
   lcd_clear_buf();*/                                                            //^^
   setupDefaults();
+  #ifdef JMSHOWCODES 
+  telltale_lastkey = 0;                                          //JM test
+  telltale_pos = 0;                                              //JM test
+  #endif
 
   backToDMCP = false;
 
@@ -650,16 +658,21 @@ void program_main(void) {
     key = key_pop();
 
     if(sys_last_key() == 44 ) {                                 //JM DISP for special SCREEN DUMP key code. Supposed to be 16 but shift decoding done already to 44
-      shiftF = false; //R_shF();
-      shiftG = false; //R_shG();
-      showShiftState();  
+      resetShiftState();
       fnJM(33);                                                 //SCREEN DUMP
     } 
-    
+   
+   #ifdef JMSHOWCODES 
     //Show key codes
-    //char aaa[50];
-    //sprintf(aaa,"--> %d    \n",sys_last_key());
-    //showString(aaa, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+    if(sys_last_key()!=telltale_lastkey) {
+       telltale_lastkey = sys_last_key();
+       telltale_pos++;
+       telltale_pos = telltale_pos & 0x03;
+       char aaa[50];
+       sprintf(aaa,"--> %d    \n",sys_last_key());
+       showString(aaa, &standardFont, telltale_pos*75+ 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+     }
+    #endif
 
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);

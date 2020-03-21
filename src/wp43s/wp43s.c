@@ -652,8 +652,14 @@ void program_main(void) {
     if(sys_last_key() == 44 ) {                                 //JM DISP for special SCREEN DUMP key code. Supposed to be 16 but shift decoding done already to 44
       shiftF = false; //R_shF();
       shiftG = false; //R_shG();
+      showShiftState();  
       fnJM(33);                                                 //SCREEN DUMP
     } 
+    
+    //Show key codes
+    //char aaa[50];
+    //sprintf(aaa,"--> %d    \n",sys_last_key());
+    //showString(aaa, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
 
     if(38 <= key && key <= 43) {
       sprintf(charKey, "%c", key +11);

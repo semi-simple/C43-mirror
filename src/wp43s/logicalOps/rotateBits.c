@@ -396,16 +396,13 @@ void fnRj(uint16_t numberOfShifts) {
 
 void fnMirror(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    uint64_t x, r;
+    uint64_t x, r=0;
     uint32_t i;
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     x = *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X));
-    if(x == 0) {
-      r = 0;
-    }
-    else {
+    if(x != 0) {
       for(i=0; i<shortIntegerWordSize; i++) {
         if(x & (1LL << i)) {
           r |= 1LL << (shortIntegerWordSize-i-1);

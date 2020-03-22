@@ -228,7 +228,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
       digit = supNumber % 10;
       supNumber /= 10;
 
-      memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
+      xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
       if(digit <= 1) {
         *(displayString)     = *(STD_SUP_0);
@@ -247,7 +247,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
       }
 
       if(greaterThan9999 && supNumber > 0 && groupingGap != 0 && ((++digitCount) % groupingGap) == 0) {
-        memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
+        xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
         *(displayString)     = *(STD_SPACE_PUNCTUATION);
         *(displayString + 1) = *(STD_SPACE_PUNCTUATION + 1);
       }
@@ -280,7 +280,7 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
       digit = subNumber % 10;
       subNumber /= 10;
 
-      memmove(displayString + 2, displayString, stringByteLength(displayString) + 1);
+      xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
       *(displayString)     = *(STD_SUB_0);
       *(displayString + 1) = *(STD_SUB_0 + 1);
@@ -984,7 +984,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
 
     strcat(displayString, COMPLEX_UNIT);
     strcat(displayString, PRODUCT_SIGN);
-    memmove(strchr(displayString, '\0'), displayString + i, strlen(displayString + i) + 1);
+    xcopy(strchr(displayString, '\0'), displayString + i, strlen(displayString + i) + 1);
   }
   else { // POLAR
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
@@ -1036,7 +1036,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       if(gap == groupingGap) {
         gap = 0;
         endingZero++;
-        memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
+        xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
         *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
         *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
       }
@@ -1044,7 +1044,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       u = intPart % 10;
       intPart /= 10;
       endingZero++;
-      memmove(displayString + insertAt + 1, displayString + insertAt, endingZero - insertAt);
+      xcopy(displayString + insertAt + 1, displayString + insertAt, endingZero - insertAt);
       displayString[insertAt] = '0' + u;
     } while(intPart != 0);
 
@@ -1075,7 +1075,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     if(gap == groupingGap) {
       gap = 0;
       endingZero++;
-      memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
+      xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
       *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
       *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
     }
@@ -1083,7 +1083,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     u = numer % 10;
     numer /= 10;
     endingZero++;
-    memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
+    xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 
     if(u <= 1) {
       *(displayString + insertAt)     = *(STD_SUP_0);
@@ -1117,7 +1117,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     if(gap == groupingGap) {
       gap = 0;
       endingZero++;
-      memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
+      xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
       *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
       *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
     }
@@ -1125,7 +1125,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     u = denom % 10;
     denom /= 10;
     endingZero++;
-    memmove(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
+    xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
     *(displayString + insertAt)     = *(STD_SUB_0);
     *(displayString + insertAt + 1) = *(STD_SUB_0 + 1);
     displayString[insertAt + 1] += u;
@@ -1532,7 +1532,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
     len = strlen(displayString);
     for(int16_t i=len - groupingGap; i>0; i-=groupingGap) {
       if(i != 1 || displayString[0] != '-') {
-        memmove(displayString + i + 2, displayString + i, len - i + 1);
+        xcopy(displayString + i + 2, displayString + i, len - i + 1);
         displayString[i] = 0xa0;
         displayString[i + 1] = 0x08;
         len += 2;
@@ -1577,10 +1577,10 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
         }
         else { // We are rounding up from 9999... to 10000...
           lastChar = (displayString[0] == '-' ? 1 : 0);
-          memmove(displayString + lastChar + 1, displayString + lastChar, strlen(displayString) + 1);
+          xcopy(displayString + lastChar + 1, displayString + lastChar, strlen(displayString) + 1);
           displayString[lastChar] = '1';
           if(groupingGap != 0 && displayString[lastChar + groupingGap + 2] == 0x08) { // We need to insert a new goup separator
-            memmove(displayString + lastChar + 3, displayString + lastChar + 1, strlen(displayString));
+            xcopy(displayString + lastChar + 3, displayString + lastChar + 1, strlen(displayString));
             displayString[lastChar + 1] = 0xa0;
             displayString[lastChar + 2] = 0x08;
           }
@@ -1608,7 +1608,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
         }
 
         if(displayValueX[lastChar] > '9') { // We are rounding 9999... to 10000...
-          memmove(displayValueX + 1, displayValueX, strlen(displayValueX) + 1);
+          xcopy(displayValueX + 1, displayValueX, strlen(displayValueX) + 1);
           displayValueX[lastChar++] = '1';
           displayValueX[lastChar] = '0';
         }
@@ -1664,7 +1664,7 @@ void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLen
   }
 
   if(counter == 1) { // digit was 1 too big
-    memmove(str + stringLen, str + stringLen + 1, digits);
+    xcopy(str + stringLen, str + stringLen + 1, digits);
   }
 
   longIntegerFree(x);

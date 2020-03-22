@@ -727,14 +727,14 @@ void setParameter(char *p) {
     // separating the data type and the value
     r[i] = 0;
     strcpy(l, r);
-    memmove(r, r + i + 1, strlen(r + i + 1) + 1);
+    xcopy(r, r + i + 1, strlen(r + i + 1) + 1);
 
     if(strcmp(l, "LONI") == 0) {
       longInteger_t lgInt;
 
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       longIntegerInit(lgInt);
@@ -766,8 +766,8 @@ void setParameter(char *p) {
       }
 
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       // replace , with .
@@ -793,8 +793,8 @@ void setParameter(char *p) {
       }
 
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       // Convert string to upper case
@@ -808,8 +808,8 @@ void setParameter(char *p) {
     }
     else if(strcmp(l, "CPLX") == 0) {
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       // find the i separating the real and imagynary part
@@ -826,7 +826,7 @@ void setParameter(char *p) {
       strcpy(imag, r + i + 1);
 
       // remove leading spaces
-      while(imag[0] == ' ') memmove(imag, imag + 1, strlen(imag));
+      while(imag[0] == ' ') xcopy(imag, imag + 1, strlen(imag));
 
       // removing trailing spaces from real part
       while(real[strlen(real) - 1] == ' ') real[strlen(real) - 1] = 0;
@@ -1420,14 +1420,14 @@ void checkExpectedOutParameter(char *p) {
     // separating the data type and the value
     r[i] = 0;
     strcpy(l, r);
-    memmove(r, r + i + 1, strlen(r + i + 1) + 1);
+    xcopy(r, r + i + 1, strlen(r + i + 1) + 1);
 
     if(strcmp(l, "LONI") == 0) {
       longInteger_t expectedLongInteger, registerLongInteger;
 
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       longIntegerInit(expectedLongInteger);
@@ -1466,8 +1466,8 @@ void checkExpectedOutParameter(char *p) {
 
 
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       // replace , with .
@@ -1536,8 +1536,8 @@ void checkExpectedOutParameter(char *p) {
       }
 
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       // Convert string to upper case
@@ -1557,8 +1557,8 @@ void checkExpectedOutParameter(char *p) {
       checkRegisterType(regist, letter, dtComplex34, AM_NONE);
 
       // remove beginning and ending " and removing leading spaces
-      memmove(r, r + 1, strlen(r));
-      while(r[0] == ' ') memmove(r, r + 1, strlen(r));
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
       r[strlen(r) - 1] = 0;
 
       // find the i separating the real and imagynary part
@@ -1575,7 +1575,7 @@ void checkExpectedOutParameter(char *p) {
       strcpy(imag, r + i + 1);
 
       // remove leading spaces
-      while(imag[0] == ' ') memmove(imag, imag + 1, strlen(imag));
+      while(imag[0] == ' ') xcopy(imag, imag + 1, strlen(imag));
 
       // removing trailing spaces from real part
       while(real[strlen(real) - 1] == ' ') real[strlen(real) - 1] = 0;
@@ -1800,7 +1800,7 @@ void standardizeLine(void) {
 
   // Trim beginning spaces
   while(line[0] == ' ') {
-    memmove(line, line + 1, strlen(line));
+    xcopy(line, line + 1, strlen(line));
   }
 
   // 2 spaces ==> 1 space
@@ -1809,7 +1809,7 @@ void standardizeLine(void) {
       i = endOfString(line + i) - line;
     }
     if(line[i] == ' ' && line[i + 1] == ' ') {
-      memmove(line + i, line + i + 1, strlen(line + i) - 1);
+      xcopy(line + i, line + i + 1, strlen(line + i) - 1);
       line[strlen(line) - 1] = 0;
       i--;
     }

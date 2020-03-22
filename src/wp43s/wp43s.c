@@ -625,9 +625,13 @@ void program_main(void) {
       key = key_pop();
     }
 
+    //The 3 lines below to see in the top left screen corner the pressed keycode
+    //char sysLastKeyCh[5];
+    //sprintf(sysLastKeyCh, "%2d", sys_last_key());
+    //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
+
     if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
-      shiftF = false;
-      shiftG = false;
+      resetShiftState(); // to avoid f or g top left of the screen
       create_screenshot(0);
     }
 

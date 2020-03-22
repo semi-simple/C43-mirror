@@ -247,16 +247,24 @@
 
   /* ----- Shared data (in decNumber.c) ----- */
   /* Public lookup table used by the D2U macro (see below)            */
-  #define DECMAXD2U 49
-  extern const uByte d2utable[DECMAXD2U+1];
+  //#define DECMAXD2U 49
+  //extern const uByte d2utable[DECMAXD2U+1];
 
   /* ----- Macros ----- */
   /* ISZERO -- return true if decNumber dn is a zero                  */
   /* [performance-critical in some situations]                        */
   #define ISZERO(dn) decNumberIsZero(dn)     /* now just a local name */
 
-  /* D2U -- return the number of Units needed to hold d digits        */
-  /* (runtime version, with table lookaside for small d)              */
+  // SD2U -- static D2U macro (for compile-time calculation)
+#define SD2U(d) (((d)+DECDPUN-1)/DECDPUN)
+
+#if 1
+#define D2U(d) SD2U(d)
+#else
+  // WTF!
+
+  // D2U -- return the number of Units needed to hold d digits
+  // (runtime version, with table lookaside for small d)
   #if DECDPUN==8
     #define D2U(d) ((unsigned)((d)<=DECMAXD2U?d2utable[d]:((d)+7)>>3))
   #elif DECDPUN==4
@@ -266,6 +274,7 @@
   #endif
   /* SD2U -- static D2U macro (for compile-time calculation)          */
   #define SD2U(d) (((d)+DECDPUN-1)/DECDPUN)
+#endif
 
   /* MSUDIGITS -- returns digits in msu, from digits, calculated      */
   /* using D2U                                                        */

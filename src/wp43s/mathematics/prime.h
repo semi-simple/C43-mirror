@@ -15,16 +15,10 @@
  */
 
 /********************************************//**
- * \file rotateBits.h
+ * \file prime.h
  ***********************************************/
 
-void fnAsr   (uint16_t numberOfShifts);
-void fnSl    (uint16_t numberOfShifts);
-void fnSr    (uint16_t numberOfShifts);
-void fnRl    (uint16_t numberOfShifts);
-void fnRlc   (uint16_t numberOfShifts);
-void fnRr    (uint16_t numberOfShifts);
-void fnRrc   (uint16_t numberOfShifts);
-void fnLj    (uint16_t numberOfShifts);
-void fnRj    (uint16_t numberOfShifts);
-void fnMirror(uint16_t unusedButMandatoryParameter);
+#include "wp43s.h"
+
+void     fnIsPrime  (uint16_t unusedParamButMandatory);
+void     fnNextPrime(uint16_t unusedParamButMandatory);

@@ -399,6 +399,7 @@ void fnRrc                      (uint16_t unusedParamButMandatory) {}
 void fnLj                       (uint16_t unusedParamButMandatory) {}
 void fnRj                       (uint16_t unusedParamButMandatory) {}
 void fnCountBits                (uint16_t unusedParamButMandatory) {}
+void fnNextPrime                (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
@@ -850,7 +851,7 @@ const item_t indexOfItems[] = {
 /*  419 */  { itemToBeCoded,               NOPARAM,                     "NBin" STD_SUP_MINUS_1,                        "NBin" STD_SUP_MINUS_1,                        CAT_FNCT, SLS_UNCHANGED},
 /*  420 */  { itemToBeCoded,               NOPARAM,                     "NBin:",                                       "NBin:",                                       CAT_MENU, SLS_UNCHANGED},
 /*  421 */  { fnNeighb,                    NOPARAM,                     "NEIGHB",                                      "NEIGHB",                                      CAT_FNCT, SLS_ENABLED  },
-/*  422 */  { itemToBeCoded,               NOPARAM,                     "NEXTP",                                       "NEXTP",                                       CAT_FNCT, SLS_UNCHANGED},
+/*  422 */  { fnNextPrime,                 NOPARAM,                     "NEXTP",                                       "NEXTP",                                       CAT_FNCT, SLS_ENABLED  },
 /*  423 */  { fnCvtNmiM,                   multiply,                    "nmi." STD_RIGHT_ARROW "m",                    "nmi." STD_RIGHT_ARROW "m",                    CAT_FNCT, SLS_ENABLED  },
 /*  424 */  { fnNop,                       NOPARAM,                     "NOP",                                         "NOP",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  425 */  { fnLogicalNor,                NOPARAM,                     "NOR",                                         "NOR",                                         CAT_FNCT, SLS_ENABLED  },

@@ -1091,6 +1091,22 @@ void fnJM(uint16_t JM_OPCODE) {
     refreshRegisterLine(REGISTER_X);
   }
 
+ else
+
+ if(JM_OPCODE == 45) {                                         //
+
+    int16_t ix;
+    ix = 40;
+    //fnStrInputLongint("4776913109852041418248056622882488319");
+    fnStore(ix);
+
+    while (ix < 99) {
+      runFunction(ITM_NEXTP);
+      fnStore(ix);
+      ix++;
+    }
+
+ }
 
 // Item 255 is NOP
 

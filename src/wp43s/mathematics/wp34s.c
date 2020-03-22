@@ -1173,3 +1173,22 @@ void WP34S_Mod(const real_t *x, const real_t *y, real_t *res) {
 // realDivideRemainder(x, y, &out, &ctxtReal2139);
 // realPlus(&out, res, &ctxtReal39);
 //}
+
+
+void *xcopy(void *dest, const void *source, int n) {
+  char       *pDest   = (char *)dest;
+  const char *pSource = (char *)source;
+
+  if(pSource > pDest) {
+    while(n--) {
+      *pDest++ = *pSource++;
+    }
+  }
+  else if (pSource < pDest) {
+    while(n--) {
+      pDest[n] = pSource[n];
+    }
+  }
+
+  return dest;
+}

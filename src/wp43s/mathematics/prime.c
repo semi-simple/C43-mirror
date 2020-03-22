@@ -98,7 +98,11 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
 void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   longInteger_t primeCandidate;
 
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    convertShortIntegerRegisterToLongInteger(REGISTER_X, primeCandidate);
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, primeCandidate);
   }
 
@@ -125,7 +129,11 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
 void fnNextPrime(uint16_t unusedButMandatoryParameter) {
   longInteger_t primeCandidate;
 
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    convertShortIntegerRegisterToLongInteger(REGISTER_X, primeCandidate);
+  }
+
+  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, primeCandidate);
   }
 
@@ -156,8 +164,13 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
     longIntegerAddUInt(primeCandidate, 2, primeCandidate);
   }
 
-  convertLongIntegerToLongIntegerRegister(primeCandidate, REGISTER_X);
-  longIntegerFree(primeCandidate);
+  if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
+    convertLongIntegerToShortIntegerRegister(primeCandidate, getRegisterShortIntegerBase(REGISTER_L), REGISTER_X);
+  }
+  else {
+    convertLongIntegerToLongIntegerRegister(primeCandidate, REGISTER_X);
+  }
 
+  longIntegerFree(primeCandidate);
   refreshStack();
 }

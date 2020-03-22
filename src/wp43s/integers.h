@@ -52,5 +52,4 @@ uint64_t WP34S_int2pow              (uint64_t x);
 uint64_t WP34S_int10pow             (uint64_t x);
 uint64_t WP34S_intLog2              (uint64_t x);
 uint64_t WP34S_intLog10             (uint64_t x);
-int32_t  WP34S_isPrime              (uint64_t p);
 uint64_t WP34S_extract_value        (const uint64_t val, int32_t *const sign);

@@ -1219,22 +1219,20 @@ void fnStoreDiv(uint16_t regist) {
  * \param[in] registerNumber uint16_t
  * \return void
  ***********************************************/
-void fnStoreMin(uint16_t regist)
-{
-    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
-    {
-        registerMin(REGISTER_X, regist, regist);
+void fnStoreMin(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+    registerMin(REGISTER_X, regist, regist);
 
-        if(REGISTER_X <= regist && regist <= REGISTER_T)
-            refreshRegisterLine(regist);
+    if(REGISTER_X <= regist && regist <= REGISTER_T) {
+      refreshRegisterLine(regist);
     }
-#ifdef PC_BUILD
-    else
-    {
-        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-        showInfoDialog("In function fnStoreMin:", errorMessage, "is not defined!", NULL);
-    }
-#endif
+  }
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnStoreMin:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
 }
 
 
@@ -1245,22 +1243,20 @@ void fnStoreMin(uint16_t regist)
  * \param[in] registerNumber uint16_t
  * \return void
  ***********************************************/
-void fnStoreMax(uint16_t regist)
-{
-    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
-    {
-        registerMax(REGISTER_X, regist, regist);
+void fnStoreMax(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+    registerMax(REGISTER_X, regist, regist);
 
-        if(REGISTER_X <= regist && regist <= REGISTER_T)
-            refreshRegisterLine(regist);
+    if(REGISTER_X <= regist && regist <= REGISTER_T) {
+      refreshRegisterLine(regist);
     }
-#ifdef PC_BUILD
-    else
-    {
-        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-        showInfoDialog("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
-    }
-#endif
+  }
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
 }
 
 
@@ -1272,6 +1268,10 @@ void fnStoreMax(uint16_t regist)
  * \return void
  ***********************************************/
 void fnStoreConfig(uint16_t r) {
+#ifdef PC_BUILD
+printf("fnStoreConfig %" FMT16U "\n", r);
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnStoreConfig:", "To be coded", NULL, NULL);
   #endif
@@ -1286,6 +1286,10 @@ void fnStoreConfig(uint16_t r) {
  * \return void
  ***********************************************/
 void fnStoreStack(uint16_t r) {
+#ifdef PC_BUILD
+printf("fnStoreStack %" FMT16U "\n", r);
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnStoreStack:", "To be coded", NULL, NULL);
   #endif
@@ -1299,7 +1303,11 @@ void fnStoreStack(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnStoreElement(uint16_t r) {
+void fnStoreElement(uint16_t unusedParamButMandatory) {
+#ifdef PC_BUILD
+printf("fnStoreElement\n");
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnStoreElement:", "To be coded", NULL, NULL);
   #endif
@@ -1313,7 +1321,11 @@ void fnStoreElement(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnStoreIJ(uint16_t r) {
+void fnStoreIJ(uint16_t unusedParamButMandatory) {
+#ifdef PC_BUILD
+printf("fnStoreIJ\n");
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnStoreIJ:", "To be coded", NULL, NULL);
   #endif
@@ -1484,21 +1496,18 @@ void fnRecallDiv(uint16_t regist) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallMin(uint16_t regist)
-{
-    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
-    {
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        registerMin(REGISTER_X, regist, REGISTER_X);
-        refreshRegisterLine(REGISTER_X);
-    }
-#ifdef PC_BUILD
-    else
-    {
-        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-        showInfoDialog("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
-    }
-#endif
+void fnRecallMin(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    registerMin(REGISTER_X, regist, REGISTER_X);
+    refreshRegisterLine(REGISTER_X);
+  }
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
 }
 
 
@@ -1509,21 +1518,18 @@ void fnRecallMin(uint16_t regist)
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallMax(uint16_t regist)
-{
-    if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters)
-    {
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        registerMax(REGISTER_X, regist, REGISTER_X);
-        refreshRegisterLine(REGISTER_X);
-    }
-#ifdef PC_BUILD
-    else
-    {
-        sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-        showInfoDialog("In function fnReallMax:", errorMessage, "is not defined!", NULL);
-    }
-#endif
+void fnRecallMax(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + numberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    registerMax(REGISTER_X, regist, REGISTER_X);
+    refreshRegisterLine(REGISTER_X);
+  }
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnReallMax:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
 }
 
 
@@ -1535,6 +1541,10 @@ void fnRecallMax(uint16_t regist)
  * \return void
  ***********************************************/
 void fnRecallConfig(uint16_t r) {
+#ifdef PC_BUILD
+printf("fnRecallConfig %" FMT16U "\n", r);
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnRecallConfig:", "To be coded", NULL, NULL);
   #endif
@@ -1549,6 +1559,10 @@ void fnRecallConfig(uint16_t r) {
  * \return void
  ***********************************************/
 void fnRecallStack(uint16_t r) {
+#ifdef PC_BUILD
+printf("fnRecallStack %" FMT16U "\n", r);
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnRecallStack:", "To be coded", NULL, NULL);
   #endif
@@ -1562,7 +1576,11 @@ void fnRecallStack(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallElement(uint16_t r) {
+void fnRecallElement(uint16_t unusedParamButMandatory) {
+#ifdef PC_BUILD
+printf("fnRecallElement\n");
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnRecallElement:", "To be coded", NULL, NULL);
   #endif
@@ -1576,7 +1594,11 @@ void fnRecallElement(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallIJ(uint16_t r) {
+void fnRecallIJ(uint16_t unusedParamButMandatory) {
+#ifdef PC_BUILD
+printf("fnRecallIJ\n");
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnRecallIJ:", "To be coded", NULL, NULL);
   #endif
@@ -1591,6 +1613,10 @@ void fnRecallIJ(uint16_t r) {
  * \return void
  ***********************************************/
 void fnXLessThan(uint16_t unusedParamButMandatory) {
+#ifdef PC_BUILD
+printf("fnXLessThan\n");
+#endif
+  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     showInfoDialog("In function fnXLessThan:", "To be coded", NULL, NULL);
   #endif

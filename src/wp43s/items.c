@@ -1120,7 +1120,6 @@ const item_t indexOfItems[] = {
 /*  688 */  { itemToBeCoded,               NOPARAM,                     "x=-0?",                                       "x=-0?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  689 */  { itemToBeCoded,               NOPARAM,                     "x" STD_ALMOST_EQUAL " ?",                     "x" STD_ALMOST_EQUAL " ?",                     CAT_FNCT, SLS_UNCHANGED},
 /*  690 */  { itemToBeCoded,               NOPARAM,                     "x< ?",                                        "x< ?",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  690 *///{ fnXLessThan,                 NOPARAM,                     "x< ?",                                        "x< ?",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  691 */  { itemToBeCoded,               NOPARAM,                     "x" STD_LESS_EQUAL " ?",                       "x" STD_LESS_EQUAL " ?",                       CAT_FNCT, SLS_UNCHANGED},
 /*  692 */  { itemToBeCoded,               NOPARAM,                     "x" STD_GREATER_EQUAL " ?",                    "x" STD_GREATER_EQUAL " ?",                    CAT_FNCT, SLS_UNCHANGED},
 /*  693 */  { itemToBeCoded,               NOPARAM,                     "x> ?",                                        "x> ?",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -2382,6 +2381,5 @@ const item_t indexOfItems[] = {
 /* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               CAT_NONE, SLS_UNCHANGED},
 /* 1934 */  { fnUserJM,                    USER_GSHFT,                  "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        CAT_NONE, SLS_UNCHANGED},
 /* 1935 */  { fnKeyDotD,                   NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },
-
 /* 1936 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

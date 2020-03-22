@@ -172,7 +172,7 @@
 
 /* Constants */
 // Public lookup table used by the D2U macro
-const uByte d2utable[DECMAXD2U+1]=D2UTABLE;
+//const uByte d2utable[DECMAXD2U+1]=D2UTABLE;
 
 #define DECVERB     1              // set to 1 for verbose DECCHECK
 #define powers      DECPOWERS      // old internal name
@@ -248,6 +248,9 @@ static void        decToString(const decNumber *, char[], Flag);
 static decNumber * decTrim(decNumber *, decContext *, Flag, Flag, Int *);
 static Int         decUnitAddSub(const Unit *, Int, const Unit *, Int, Int, Unit *, Int);
 static Int         decUnitCompare(const Unit *, Int, const Unit *, Int, Int);
+#ifndef xcopy
+  extern void *xcopy(void *, const void *, int);
+#endif
 
 #if !DECSUBSET
 /* decFinish == decFinalize when no subset arithmetic needed */
@@ -3333,6 +3336,16 @@ const char *decNumberClassToString(enum decClass eclass) {
 /* All fields are updated as required.  This is a utility operation,  */
 /* so special values are unchanged and no error is possible.          */
 /* ------------------------------------------------------------------ */
+#if 1
+decNumber * decNumberCopy(decNumber *dest, const decNumber *src)
+{
+    // this works in the emulator, but not on the real build.
+    // it should, but why not?
+
+    int n = sizeof(decNumber) + (D2U(src->digits)-1)*sizeof(Unit);
+    return (decNumber*)xcopy(dest, src, n);
+}
+#else
 decNumber * decNumberCopy(decNumber *dest, const decNumber *src) {
 
   #if DECCHECK
@@ -3360,6 +3373,7 @@ decNumber * decNumberCopy(decNumber *dest, const decNumber *src) {
     }
   return dest;
   } // decNumberCopy
+#endif
 
 /* ------------------------------------------------------------------ */
 /* decNumberCopyAbs -- quiet absolute value operator                  */
@@ -3623,15 +3637,17 @@ static void decToString(const decNumber *dn, char *string, Flag eng) {
     }
   if (dn->bits&DECSPECIAL) {       // Is a special value
     if (decNumberIsInfinite(dn)) {
-      strcpy(c,   "Inf");
-      strcpy(c+3, "inity");
+      xcopy(c, "Infinity", sizeof("Infinity"));
+      //strcpy(c,   "Inf");
+      //strcpy(c+3, "inity");
       return;}
     // a NaN
     if (dn->bits&DECSNAN) {        // signalling NaN
       *c='s';
       c++;
       }
-    strcpy(c, "NaN");
+    xcopy(c, "NaN", sizeof("NaN"));
+    //strcpy(c, "NaN");
     c+=3;                          // step past
     // if not a clean non-zero coefficient, that's all there is in a
     // NaN string
@@ -4817,7 +4833,7 @@ static decNumber * decDivideOp(decNumber *res,
 /* Static buffers are larger than needed just for multiply, to allow  */
 /* for calls from other operations (notably exp).                     */
 /* ------------------------------------------------------------------ */
-#define FASTMUL (DECUSE64 && DECDPUN<5)
+//#define FASTMUL (DECUSE64 && DECDPUN<5)
 static decNumber * decMultiplyOp(decNumber *res, const decNumber *lhs,
                                  const decNumber *rhs, decContext *set,
                                  uInt *status) {

@@ -1461,7 +1461,7 @@ void debugNIM(void) {
     formatReal34Debug(str + 64, addr + REAL34_SIZE);
 
     strcat(str, " ");
-    memmove(strchr(str, '\0'), str + 64, strlen(str + 64) + 1);
+    xcopy(strchr(str, '\0'), str + 64, strlen(str + 64) + 1);
     strcat(str, "i");
   }
 #endif

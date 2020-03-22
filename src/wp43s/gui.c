@@ -3118,6 +3118,7 @@ void calcModeTam(void) {
   showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 
   transitionSystemState = 0;
+  tamCurrentOperation = 0;
 
   #ifdef PC_BUILD
     calcModeTamGui();

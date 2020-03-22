@@ -735,6 +735,13 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("195845982777569926302400511");
     fnStore(25);
     fnDrop(0);
+    fnStrInputLongint("4776913109852041418248056622882488319");
+    fnStore(26);
+    fnDrop(0);
+    fnStrInputLongint("225251798594466661409915431774713195745814267044878909733007331390393510002687");
+    fnStore(27);
+    fnDrop(0);
+
 
 
 

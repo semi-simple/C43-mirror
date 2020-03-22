@@ -175,8 +175,11 @@ typedef int16_t calcRegister_t;
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 15000 //JM 3328
-#define MAX_FACTORIAL                 1388  //JM  450
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 9965 // 15000  //JM 3328   //JMMAX     
+                               //     15000 bits gives 4515 decimal digits. 1388 Factorial limit.
+                               //      9965 bits gives 3000 decimal digits. 
+                               // 43S: 3328 bits gives 1001 decimal digits.  450 Factorial limit.
+#define MAX_FACTORIAL                  1388 //  1388  //JM  450   //JMMAX
 
 #if (LIBGMP == 1)
   #include <gmp.h>
@@ -242,7 +245,7 @@ typedef int16_t calcRegister_t;
 #define NUMBER_OF_CONSTANTS_1071   1
 #define NUMBER_OF_CONSTANTS_34     7
 
-#define RAM_SIZE        (64*1024) // 96*1024 = 96kb
+#define RAM_SIZE        (64*1024) // 96*1024 = 96kb //JMMAX
 #define MAX_FREE_BLOCKS 50
 
 #define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))
@@ -579,7 +582,7 @@ extern realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t             flags[7];
-#define TMP_STR_LENGTH      3000
+#define TMP_STR_LENGTH      3000          //JMMAX
 #define ERROR_MESSAGE_LENGTH 512
 #define DISPLAY_VALUE_LEN     80
 extern char                 tmpStr3000[TMP_STR_LENGTH];

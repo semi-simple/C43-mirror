@@ -47,6 +47,26 @@ char       realArray[1000000], realPointerDeclarations[1000000], real16PointerDe
 FILE       *constantsC, *constantsH;
 int        idx, c;
 
+
+void *xcopy(void *dest, const void *source, int n) {
+  char       *pDest   = (char *)dest;
+  const char *pSource = (char *)source;
+
+  if(pSource > pDest) {
+    while(n--) {
+      *pDest++ = *pSource++;
+    }
+  }
+  else if (pSource < pDest) {
+    while(n--) {
+      pDest[n] = pSource[n];
+    }
+  }
+
+  return dest;
+}
+
+
 void generateConstantArray(char *name, char *value) {
   real39_t real39;
 

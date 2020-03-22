@@ -69,10 +69,9 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
     longIntegerToLongInteger(s, temp);
 
     uIntToLongInteger(smallPrimes[i], smallPrime);
-    longIntegerPowerModuloSec(smallPrime, temp, primeCandidate, mod); // exp must be >0 and mod must be odd
+    longIntegerPowerModuloSec(smallPrime, temp, primeCandidate, mod); // exp must be >0 and modulo (3rd param) must be odd
     while(longIntegerCompare(temp, primeCandidateM1) != 0 && longIntegerCompareUInt(mod, 1) != 0 && longIntegerCompare(mod, primeCandidateM1) != 0) {
-      longIntegerMultiply(mod, mod, mod);
-      longIntegerModulo(mod, primeCandidate, mod);
+      longIntegerPowerUIntModulo(mod, 2, primeCandidate, mod);
       longIntegerMultiply2(temp, temp);
     }
 

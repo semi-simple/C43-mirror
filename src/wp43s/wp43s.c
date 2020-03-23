@@ -688,17 +688,22 @@ int main(int argc, char* argv[]) {
   setupDefaults();
 
   fnReset(CONFIRMED);
-/*
-reallocateRegister(REGISTER_X, dtComplex16, COMPLEX16_SIZE, AM_NONE);
-stringToReal16("-2.1", REGISTER_REAL34_DATA(REGISTER_X));
-stringToReal16("0", REGISTER_IMAG16_DATA(REGISTER_X));
-printf("X = "); printRegisterToConsole(REGISTER_X); printf("\n");
-fnSetFlag(FLAG_DANGER);
-fnSetFlag(FLAG_CPXRES);
-fnLnGamma(NOPARAM);
-printf("lngamma(X) = "); printRegisterToConsole(REGISTER_X); printf("\n");
+
+longInteger_t li;
+longIntegerInit(li);
+uIntToLongInteger(1, li);
+convertLongIntegerToLongIntegerRegister(li, REGISTER_Z);
+uIntToLongInteger(2, li);
+convertLongIntegerToLongIntegerRegister(li, REGISTER_Y);
+uIntToLongInteger(2203, li);
+convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
+fnPower(NOPARAM);
+fnSwapXY(NOPARAM);
+fnSubtract(NOPARAM);
+fnIsPrime(NOPARAM);
+longIntegerFree(li);
 return 0;
-*/
+
   processTests();
   printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
   debugMemory();

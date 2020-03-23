@@ -27,7 +27,6 @@
 const uint8_t smallPrimes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
 #define NUMBER_OF_SMALL_PRIMES (sizeof(smallPrimes) / sizeof(uint8_t))
 #define QUICK_CHECK (101*101-1)
-#define PRIME_ITERATION 15
 
 static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
   uint32_t i;
@@ -50,26 +49,26 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
   if(longIntegerCompareInt(primeCandidate, QUICK_CHECK) < 0) {
     return true;
   }
-
-  // Calculate s such as   primeCandidate - 1 = s×2^d
   longIntegerInit(s);
   longIntegerInit(primeCandidateM1);
+  longIntegerInit(temp);
+  longIntegerInit(smallPrime);
+  longIntegerInit(mod);
   longIntegerSubtractUInt(primeCandidate, 1, primeCandidateM1);
-  longIntegerToLongInteger(primeCandidateM1, s);
+  longIntegerCopy(primeCandidateM1, s);
+
+  // Calculate s such as   primeCandidate - 1 = s×2^d and s odd
   while(longIntegerIsEven(s)) {
     longIntegerDivideUInt(s, 2, s);
   }
 
-  longIntegerInit(temp);
-  longIntegerInit(smallPrime);
-  longIntegerInit(mod);
   // The loop below should only go from 0 to 12 (primes from 2 to 41) ensuring correct result for candidatePrime < 3 317 044 064 679 887 385 961 981
   // There is a conjecture that when going from 0 to 19 (primes from 2 to 71) the result is correct up to 10^36
   for(i=0; i<NUMBER_OF_SMALL_PRIMES; i++) {
-    longIntegerToLongInteger(s, temp);
+    longIntegerCopy(s, temp);
 
     uIntToLongInteger(smallPrimes[i], smallPrime);
-    longIntegerPowerModuloSec(smallPrime, temp, primeCandidate, mod); // exp must be >0 and modulo (3rd param) must be odd
+    longIntegerPowerModuloSec(smallPrime, temp, primeCandidate, mod); // exp (2nd param) must be >0 and modulo (3rd param) must be odd
     while(longIntegerCompare(temp, primeCandidateM1) != 0 && longIntegerCompareUInt(mod, 1) != 0 && longIntegerCompare(mod, primeCandidateM1) != 0) {
       longIntegerPowerUIntModulo(mod, 2, primeCandidate, mod);
       longIntegerMultiply2(temp, temp);

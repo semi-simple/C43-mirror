@@ -688,7 +688,7 @@ int main(int argc, char* argv[]) {
   setupDefaults();
 
   fnReset(CONFIRMED);
-
+/*
 longInteger_t li;
 longIntegerInit(li);
 uIntToLongInteger(1, li);
@@ -703,7 +703,7 @@ fnSubtract(NOPARAM);
 fnIsPrime(NOPARAM);
 longIntegerFree(li);
 return 0;
-
+*/
   processTests();
   printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
   debugMemory();

@@ -1369,4 +1369,17 @@ void refreshRegisterLine(calcRegister_t regist) {
     }
   }
 }
+
+
+
+void fnScreenDump(uint16_t unusedButMandatoryParameter) {
+  #ifdef PC_BUILD
+  copyScreenToClipboard();
+  #endif
+
+  #ifdef DMCP_BUILD
+  //resetShiftState(); // to avoid f or g top left of the screen
+  create_screenshot(0);
+  #endif
+}
 #endif

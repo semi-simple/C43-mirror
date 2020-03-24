@@ -26,9 +26,9 @@
   /* parameters for decimal128s */
   #define DECIMAL128_Bytes  16          /* length                     */
   #define DECIMAL128_Pmax   34          /* maximum precision (digits) */
-  #define DECIMAL128_Emax   6144        /* maximum adjusted exponent  */
-  #define DECIMAL128_Emin  -6143        /* minimum adjusted exponent  */
-  #define DECIMAL128_Bias   6176        /* bias for the exponent      */
+  #define DECIMAL128_Emax    999        /* maximum adjusted exponent  */ //  WP43S team leader Walter Bonin asked to change this from  6144 to  999
+  #define DECIMAL128_Emin   -999        /* minimum adjusted exponent  */ //  WP43S team leader Walter Bonin asked to change this from -6143 to -999
+  #define DECIMAL128_Bias   1031        /* bias for the exponent      */ //  WP43S team leader Walter Bonin asked to change this from  6176 to 1031
   #define DECIMAL128_String 43          /* maximum string length, +1  */
   #define DECIMAL128_EconL  12          /* exp. continuation length   */
   /* highest biased exponent (Elimit-1)                               */

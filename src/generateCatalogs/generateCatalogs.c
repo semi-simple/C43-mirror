@@ -130,11 +130,11 @@ int main(int argc, char* argv[]) {
   fprintf(catalog, "\n};\n");
 
 
-/****************/
-/* Catalog CNST */
-/****************/
-  printf("Generating catalog CNST\n");
-  fprintf(catalog, "\n\nconst int16_t menu_CNST[] = {\n");
+/*****************/
+/* Catalog CONST */
+/*****************/
+  printf("Generating catalog CONST\n");
+  fprintf(catalog, "\n\nconst int16_t menu_CONST[] = {\n");
 
   numberOfItems = 0;
   for(item=1; item<LAST_ITEM; item++) {

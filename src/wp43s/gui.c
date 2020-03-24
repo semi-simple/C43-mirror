@@ -1532,7 +1532,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);
   gtk_widget_show(lbl34Gr);
-  //gtk_widget_show(lbl35G);
+  gtk_widget_show(lbl35G);
   gtk_widget_show(lbl36F);
 
   gtk_widget_show(btn41);

@@ -108,8 +108,8 @@ decContext * decContextDefault(decContext *context, Int kind) {
       break;
     case DEC_INIT_DECIMAL128:
       context->digits=34;                    // digits
-      context->emax=6144;                    // Emax
-      context->emin=-6143;                   // Emin
+      context->emax=999;                     // Emax:  WP43S team leader Walter Bonin asked to change this from  6144 to  999
+      context->emin=-999;                    // Emin:  WP43S team leader Walter Bonin asked to change this from -6143 to -999
       context->round=DEC_ROUND_HALF_EVEN;    // 0.5 to nearest even
       context->traps=0;                      // no traps set
       context->clamp=1;                      // clamp exponents

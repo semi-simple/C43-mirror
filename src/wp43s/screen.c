@@ -1235,6 +1235,7 @@ void resetTemporaryInformation(void) {
   switch(tempInfo) {
     case TI_NO_INFO:           break;
 
+    case TI_WHO:
     case TI_RADIUS_THETA:
     case TI_THETA_RADIUS:
     case TI_SUMX_SUMY:
@@ -1248,7 +1249,6 @@ void resetTemporaryInformation(void) {
     case TI_RESET:
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
-    case TI_WHO:
     case TI_FALSE:
     case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
 
@@ -1357,6 +1357,7 @@ void refreshRegisterLine(calcRegister_t regist) {
         }
 
         else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
+          clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X +1), REGISTER_LINE_HEIGHT * 2); //JM ID
           showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
           showString(WHO2, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + 1), vmNormal, true, true);      // JM ID
         }
@@ -1901,7 +1902,7 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
 #endif
 
 #ifdef DMCP_BUILD
-  //resetShiftState(); // to avoid f or g top left of the screen
+  resetShiftState(); // to avoid f or g top left of the screen
   create_screenshot(0);
 #endif
 }

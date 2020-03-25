@@ -1779,7 +1779,7 @@
 #define ITM_op_a2                     1740   //JM OPERATORS
 #define ITM_op_j                      1741   //JM OPERATORS
 #define ITM_BASE_HOME                 1742   //JM BASEMENU
-#define ITM_SSHOT                     1743   //JM
+#define ITM_1743                      1743
 #define ITM_BASE_AHOME                1744   //JM BASEMENU
 #define Not_used1745                  1745
 #define Not_used1746                  1746

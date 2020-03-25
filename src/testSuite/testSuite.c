@@ -1941,7 +1941,7 @@ void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const cha
 void checkCatalogsSorting(void) {
   //compareString(indexOfItems[234].itemCatalogName, indexOfItems[245].itemCatalogName, CMP_EXTENSIVE);
   checkOneCatalogSorting(menu_FCNS,  MNU_FCNS,  "FCNS");
-  checkOneCatalogSorting(menu_CNST,  MNU_CNST,  "CONST");
+  checkOneCatalogSorting(menu_CNST,  MNU_CONST, "CONST");
   checkOneCatalogSorting(menu_MENUS, MNU_MENUS, "MENUS");
 }
 

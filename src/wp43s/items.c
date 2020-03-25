@@ -516,10 +516,10 @@ const item_t indexOfItems[] = {
 /*   83 */  { fnClearStack,                NOPARAM,                     "CLSTK",                                       "CLSTK",                                       CAT_FNCT, SLS_UNCHANGED},
 /*   84 */  { fnClX,                       NOPARAM,                     "CLX",                                         "CLX",                                         CAT_FNCT, SLS_DISABLED },
 /*   85 */  { fnClSigma,                   NOPARAM,                     "CL" STD_SIGMA,                                "CL" STD_SIGMA,                                CAT_FNCT, SLS_UNCHANGED},
-/*   86 */  { itemToBeCoded,               NOPARAM,                     "CNST",                                        "CNST",                                        CAT_MENU, SLS_UNCHANGED},
+/*   86 */  { itemToBeCoded,               NOPARAM,                     "CNST",                                        "CNST",                                        CAT_MENU, SLS_UNCHANGED},   //JM Keeps the same. Don't havce space for more on kjeyplate
 /*   87 */  { fnCyx,                       NOPARAM,                     "COMB",                                        "C" STD_SUB_y STD_SUB_x,                       CAT_FNCT, SLS_ENABLED  },
 /*   88 */  { fnConjugate,                 NOPARAM,                     "CONJ",                                        "conj",                                        CAT_FNCT, SLS_ENABLED  },
-/*   89 */  { fnConstant,                  TM_VALUE,                    "CNST",                                        "CNST",                                        CAT_FNCT, SLS_ENABLED  },
+/*   89 */  { fnConstant,                  TM_VALUE,                    "CNSTS",                                       "CNSTS",                                       CAT_FNCT, SLS_ENABLED  },   //JM RENAMED
 /*   90 */  { itemToBeCoded,               NOPARAM,                     "CONVG?",                                      "CONVG?",                                      CAT_FNCT, SLS_UNCHANGED},
 /*   91 */  { itemToBeCoded,               NOPARAM,                     "CORR",                                        "r",                                           CAT_FNCT, SLS_UNCHANGED},
 /*   92 */  { fnCos,                       NOPARAM,                     "COS",                                         "COS",                                         CAT_FNCT, SLS_ENABLED  },   //JM
@@ -2186,7 +2186,7 @@ const item_t indexOfItems[] = {
 /* 1740 */  { fnJM,                        4,                           "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 CAT_FNCT, SLS_ENABLED  },   //JM Operator a.a
 /* 1741 */  { fnJM,                        5,                           "op_j",                                        "j",                                           CAT_FNCT, SLS_ENABLED  },   //JM Operator j
 /* 1742 */  { fnSetSetJM,                  JC_BASE_HOME,                "_HOME",                                       "HOME",                                        CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
-/* 1743 */  { fnJM,                        33,                          "S.SHOT",                                      "S.SHOT",                                      CAT_FNCT, SLS_UNCHANGED},   // JM SCREEN SHOT
+/* 1743 */  { itemToBeCoded,               NOPARAM,                     "1743",                                        "1743",                                        CAT_NONE, SLS_UNCHANGED},   // JM SCREEN SHOT
 /* 1744 */  { fnSetSetJM,                  JC_BASE_AHOME,               "_" STD_alpha "HOME",                          STD_alpha "HOME",                              CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
 /* 1745 */  { itemToBeCoded,               NOPARAM,                     "1745",                                        "1745",                                        CAT_FREE, SLS_UNCHANGED},
 /* 1746 */  { itemToBeCoded,               NOPARAM,                     "1746",                                        "1746",                                        CAT_FREE, SLS_UNCHANGED},

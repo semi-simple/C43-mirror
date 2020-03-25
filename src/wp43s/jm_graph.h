@@ -22,22 +22,32 @@
 
 //graph.h
 
-float telltale;
+//Memory structure
+float*   gr_x;
+float*   gr_y;
+float    telltale;
+uint16_t ix_count;
+#define  LIM               400                 //Number of points
+#define  MEM_INITIALIZED   199
 
 
+//Screen limits
 #define SCREEN_MIN_GRAPH 20
 #define SCREEN_HEIGHT_GRAPH SCREEN_HEIGHT
-#define LIM 400   
+#define SCREEN_WIDTH_GRAPH  SCREEN_WIDTH
 
+#define _VECT 0
+#define _SCAT 1
+
+//int8_t plotmode;
+#define plotmode      _SCAT
+#define Aspect_Square true
 
 void fnGraph          (uint16_t func);
-
-void graph_sigmaplus(void);
-void graph_sigmaminus(void);
+void graph_sigmaplus  (int8_t plusminus);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 
 void graph_setupmemory(void);
 void graph_end        (void);
-
 
 //TODO
 void autoscale(void);

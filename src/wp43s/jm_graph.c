@@ -22,14 +22,10 @@
 
 
 #include "wp43s.h"
-
-float* gr_x;
-float* gr_y; 
+#include "math.h"
 
 
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
-void graph_sigmaminus(void) { 
-}
 
 void autoscale(void) {
 }
@@ -126,7 +122,7 @@ void Fn_Lbl_D(void) {                                   //Temporary RPN function
 void Fn_Lbl_E(void) {                                   //Temporary RPN function
 #ifndef TESTSUITE_BUILD
     fnStore(99);             // STO 99
-    fnStrInputReal34("0.2"); // 0.2
+    fnStrInputReal34("0.6"); // 0.2
     runFunction(ITM_MULT);   // *             // /
 
     runFunction(ITM_RAN);    // fnRandom(0);                //    
@@ -140,6 +136,25 @@ void Fn_Lbl_E(void) {                                   //Temporary RPN function
     fnRCL(99);               //leaving y in Y and x in X
 #endif
 }
+
+
+void Fn_Lbl_F(void) {                                   //Temporary RPN function
+#ifndef TESTSUITE_BUILD
+    fnStrInputReal34("-1"); // -0.5
+    runFunction(ITM_ADD);    // +             // /
+
+    fnStore(99);             // STO 99
+    fnStrInputReal34("12"); // 0.2
+    runFunction(ITM_MULT);   // *             // /
+
+    runFunction(ITM_sin);    // fnRandom(0);                //    
+    fnRCL(99);               //leaving y in Y and x in X
+    fnStrInputReal34("12"); // 0.2
+    runFunction(ITM_MULT);   // *             // /
+    runFunction(ITM_cos);    // fnRandom(0);                //    
+#endif
+}
+
 
 
 void execute_rpn_function(int16_t nbr){
@@ -157,6 +172,9 @@ void execute_rpn_function(int16_t nbr){
   } else
   if(nbr == 5) {
     Fn_Lbl_E();
+  } else
+  if(nbr == 6) {
+    Fn_Lbl_F();
   }
 }
 
@@ -166,19 +184,20 @@ void execute_rpn_function(int16_t nbr){
 
 void graph_setupmemory(void) {
   int i;
-  if(telltale != 199) {
+  if(telltale != MEM_INITIALIZED) {
     gr_x = (float*)malloc(LIM * sizeof(float)); 
     gr_y = (float*)malloc(LIM * sizeof(float)); 
-    telltale = 199;
+    telltale = MEM_INITIALIZED;
+    ix_count = 0;
   }
-  if ((telltale != 199) || (gr_x == NULL || gr_y == NULL)) { 
+  if ((telltale != MEM_INITIALIZED) || (gr_x == NULL || gr_y == NULL)) { 
   #ifdef PC_BUILD
      showInfoDialog("In function graph_setupmemory:", "error allocating memory for graph!", NULL, NULL);
      exit(1);
   #endif
   } 
   
-  if((telltale==199) && (gr_x != NULL) && (gr_y != NULL)){
+  if((telltale==MEM_INITIALIZED) && (gr_x != NULL) && (gr_y != NULL)){
     for (i = 0; i < LIM; ++i) { 
       gr_x[i] = 0;
       gr_y[i] = 0; 
@@ -195,34 +214,58 @@ void graph_end(void) {
 }
 
 
-void graph_sigmaplus(void) {    //Called from STAT module from fnSigma()
+
+
+
+
+
+void graph_sigmaplus(int8_t plusminus) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
   int16_t cnt;
   real_t tmpy;
   float x; 
   float y;
 
-    //Convert from X register to float
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    y = strtof (tmpStr3000, NULL);
+  //Convert from X register to float
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &tmpy);
+  realToString(&tmpy, tmpStr3000);
+  y = strtof (tmpStr3000, NULL);
 
-    //printf("y=%f ",y);
+  //printf("y=%f ",y);
 
-    //Convert from X register to float
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    x = strtof (tmpStr3000, NULL);
+  //Convert from X register to float
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
+  realToString(&tmpy, tmpStr3000);
+  x = strtof (tmpStr3000, NULL);
 
-    //printf("x=%f ",x);
+  //printf("x=%f ",x);
 
+
+  if(plotmode == _VECT ) {
+    ix_count++;               //Only used for VECT
+    cnt = ix_count;
+  } else {
     //Convert from real to int
     real34ToReal(SIGMA_N, &tmpy);
     realToString(&tmpy, tmpStr3000);
-    cnt = atoi (tmpStr3000);
+    cnt = atoi (tmpStr3000);  
+  }
 
-    //printf("Adding to graph table[%d] = x:%f y:%f\n",cnt,x,y);
+
+  //printf("Adding to graph table[%d] = x:%f y:%f\n",cnt,x,y);
+  
+  if(plusminus == 1) {
     gr_x[cnt-1]=x;
     gr_y[cnt-1]=y;
+  } else {
+    if(plusminus == -1) {
+      if(plotmode == _VECT ) {
+        gr_x[cnt-1]=-x;
+        gr_y[cnt-1]=-y;
+      } else {
+        // Non-vector mode TODO
+      }
+    }
+  }
 }
 
 
@@ -234,9 +277,9 @@ void graph_sigmaplus(void) {    //Called from STAT module from fnSigma()
 #ifndef TESTSUITE_BUILD
 int16_t screen_window_x(float x_min, float x, float x_max) {
 int16_t temp;
-  temp = ((x-x_min)/(x_max-x_min)*SCREEN_WIDTH);
+  temp = ((x-x_min)/(x_max-x_min)*SCREEN_WIDTH_GRAPH);
   //printf("--> %d (%f %f)  ",temp, x_min,x_max);
-  if (temp>SCREEN_WIDTH-1) {temp=SCREEN_WIDTH-1;}
+  if (temp>SCREEN_WIDTH_GRAPH-1) {temp=SCREEN_WIDTH_GRAPH-1;}
   else if (temp<0) {temp=0;}
   //printf("--> %d \n",temp);
   return temp;
@@ -261,8 +304,8 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   fnClearStack(0);
   runFunction(ITM_CLSIGMA);
 
-//  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH) {
-  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
+  //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
+  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
 
     //convert float to X register
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -273,18 +316,19 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
     execute_rpn_function(nbr);
     fnSigma(1);
   }
-fnClearStack(0);
-runFunction(ITM_SIGMAx);
-#endif
+  fnClearStack(0);
+  runFunction(ITM_SIGMAx);
+  #endif
 }
 
 void placePixel(uint16_t x, uint8_t y) {
 #ifndef TESTSUITE_BUILD
-  if(x<SCREEN_WIDTH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+SCREEN_MIN_GRAPH) {
+  if(x<SCREEN_WIDTH_GRAPH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+SCREEN_MIN_GRAPH) {
     setPixel(x,y);
   }
 #endif
 }
+
 
 float auto_tick(float tick_int_f) {
     //Obtain scaling of ticks, to about 20 intervals left to right.
@@ -339,7 +383,7 @@ void graph_axis (void){
 
   //DRAW AXIS
   cnt = 0;  
-  while (cnt!=SCREEN_WIDTH-1) { 
+  while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
       setPixel(cnt,yzero); 
       cnt++; 
     }
@@ -429,7 +473,7 @@ void graph_axis (void){
 
 
 /*
-  for(cnt=1; x<SCREEN_WIDTH; x+=1) {       //draw x ticks
+  for(cnt=1; x<SCREEN_WIDTH_GRAPH; x+=1) {       //draw x ticks
       setPixel(cnt,SCREEN_HEIGHT_GRAPH- (0)       );
       setPixel(cnt,SCREEN_HEIGHT_GRAPH- (SCREEN_HEIGHT_GRAPH-SCREEN_MIN_GRAPH-1) );
   }
@@ -440,32 +484,113 @@ void graph_axis (void){
   #endif
 }
 
+
+//####################################################
+//######### PLOT MEM #################################
+//####################################################
+
 //#define STATDEBUG
 void graph_plotmem(void) {
   #ifndef TESTSUITE_BUILD
+
+      void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+        uint16_t x1;  //range 0-399
+        uint8_t  y1;  //range 0-239
+        #ifdef STATDEBUG
+        printf("%d %d   %d %d \n",xo,yo,xn,yn);
+        #endif
+        if(xo > xn) {
+          for(x1=xo; x1!=xn; x1-=1) {
+            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
+            placePixel(x1,y1);
+          }
+        } 
+        else if(xo < xn) {
+          for(x1=xo; x1!=xn; x1+=1) {
+            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
+            placePixel(x1,y1);
+          }
+        }
+
+        if(yo > yn) {
+          for(y1=yo; y1!=yn; y1-=1) {
+            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
+            placePixel(x1,y1);
+          }
+        } 
+        else if(yo < yn) {
+          for(y1=yo; y1!=yn; y1+=1) {
+            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
+            placePixel(x1,y1);
+          }
+        } else {
+          placePixel(xn,yn);
+        }
+      }
+
+
+      void plotarrow(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+        float dx, dy, ddx, ddy, zz, zzz;
+        ddy = yn-yo;
+        ddx = xn-xo;
+        zz  = sqrt(ddy*ddy+ddx*ddx);
+        zzz = 3;
+        dy  = ddy * (zzz/zz);
+        dx  = ddx * (zzz/zz);
+        #ifdef STATDEBUG
+        printf("%d %d  %d %d  ddx=%f, ddy=%f, zz=%f  zzz=%f, dx=%f, dy=%f \n",xo, yo, xn, yn, ddx,ddy,zz,zzz,dx,dy);
+        #endif
+        if (xo!=xn && yo!=yn){
+          plotline(xn+(-3*dx +dy), yn+(-3*dy -dx), xn, yn);
+          plotline(xn+(-3*dx -dy), yn+(-3*dy +dx), xn, yn);
+        } else {
+          placePixel(xn,yn);
+        }
+      }
+
+
+      void plotcross(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+        placePixel(xn,yn);                     //PLOT a cross
+        placePixel(xn-1,yn-1);
+        placePixel(xn-1,yn+1);
+        placePixel(xn+1,yn-1);
+        placePixel(xn+1,yn+1);
+        placePixel(xn-2,yn-2);
+        placePixel(xn-2,yn+2);
+        placePixel(xn+2,yn-2);
+        placePixel(xn+2,yn+2);
+      }
+
+
+
   uint16_t cnt, ix, statnum;
   real_t tmpy;
   uint16_t xo, xn, xN; 
   uint8_t yo, yn, yN;
   float x; 
   float y;
-  uint16_t x1;  //range 0-399
-  uint8_t  y1;  //range 0-239
+  float sx, sy;
 
-  if(telltale == 199) {
+
+  if(telltale == MEM_INITIALIZED) {
 
     //runFunction(ITM_NSIGMA);
     runFunction(ITM_SUM);
 
-    //Convert from real to int
-    real34ToReal(SIGMA_N, &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    statnum = atoi (tmpStr3000);
-    
+    if(plotmode != _VECT) {
+      //Convert from real to int
+      real34ToReal(SIGMA_N, &tmpy);
+      realToString(&tmpy, tmpStr3000);
+      statnum = atoi (tmpStr3000);
+    } else {
+      statnum = ix_count;
+    }
+   
     #ifdef STATDEBUG
     printf("n=%d\n",statnum);
     #endif
 
+    //AUTOSCALE
     x_min = 1e99;
     x_max = -1e99;
     y_min = 1e99;
@@ -474,11 +599,38 @@ void graph_plotmem(void) {
     printf("Axis0: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
-    for(cnt=0; cnt<=statnum-1; cnt++) {
-      if(gr_x[cnt]<x_min) {x_min = gr_x[cnt];}
-      if(gr_x[cnt]>x_max) {x_max = gr_x[cnt];}
-      if(gr_y[cnt]<y_min) {y_min = gr_y[cnt];}
-      if(gr_y[cnt]>y_max) {y_max = gr_y[cnt];}
+    if(plotmode != _VECT) {
+      for(cnt=0; cnt<=statnum-1; cnt++) {
+        if(gr_x[cnt]<x_min) {x_min = gr_x[cnt];}
+        if(gr_x[cnt]>x_max) {x_max = gr_x[cnt];}
+        if(gr_y[cnt]<y_min) {y_min = gr_y[cnt];}
+        if(gr_y[cnt]>y_max) {y_max = gr_y[cnt];}
+      }
+    } else {
+      sx =0;
+      sy =0;
+      for(cnt=0; cnt<=statnum-1; cnt++) {            //### Note XXX E- will stuff up statnum!
+        sx = sx + gr_x[cnt];
+        sy = sy + gr_y[cnt];
+        if(sx < x_min) {x_min = sx;}
+        if(sx > x_max) {x_max = sx;}
+        if(sy < y_min) {y_min = sy;}
+        if(sy > y_max) {y_max = sy;}
+      }      
+    }
+
+    float tt;                                        //ADjust scale to be rect
+    if (Aspect_Square) {
+      tt = (x_max-x_min)/(y_max-y_min) / (SCREEN_WIDTH_GRAPH/(SCREEN_HEIGHT_GRAPH-SCREEN_MIN_GRAPH)) ;
+      if( tt<1) {
+        y_max = y_max * tt;
+        y_min = y_min * tt;
+      } else {
+        x_max = x_max * tt;
+        x_min = x_min * tt;
+      }
+
+
     }
 
     #ifdef STATDEBUG
@@ -516,16 +668,33 @@ void graph_plotmem(void) {
       statnum = 7;
       */
 
-    yn = screen_window_y(y_min,gr_y[0],y_max);
-    xn = screen_window_x(x_min,gr_x[0],x_max);
-    xN = xn;
-    yN = yn;
 
+    if(plotmode != _VECT) {
+      yn = screen_window_y(y_min,gr_y[0],y_max);
+      xn = screen_window_x(x_min,gr_x[0],x_max);
+      xN = xn;
+      yN = yn;
+    } else {
+      yn = screen_window_y(y_min,0,y_max);
+      xn = screen_window_x(x_min,0,x_max);
+      xN = xn;
+      yN = yn;      
+    }
+
+    sx = 0;
+    sy = 0;
     //GRAPH
     ix = 0;
     for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
-      x = gr_x[ix];
-      y = gr_y[ix];
+      if(plotmode != _VECT) {
+        x = gr_x[ix];
+        y = gr_y[ix];
+      } else {
+        sx = sx + gr_x[ix];
+        sy = sy + gr_y[ix];
+        x = sx;
+        y = sy;
+      }
       #ifdef STATDEBUG
       printf("plotting graph table[%d] = x:%f y:%f \n",ix,x,y);
       #endif
@@ -534,51 +703,23 @@ void graph_plotmem(void) {
       xN = screen_window_x(x_min,x,x_max);
       yN = screen_window_y(y_min,y,y_max);
 
-      if(xN<SCREEN_WIDTH && xN>0 && yN<SCREEN_HEIGHT_GRAPH && yN>1+SCREEN_MIN_GRAPH) {
+      if(xN<SCREEN_WIDTH_GRAPH && xN>0 && yN<SCREEN_HEIGHT_GRAPH && yN>1+SCREEN_MIN_GRAPH) {
   //      yo = yn;                              //old , new, to be able to draw a line between samples
         yn = yN;
   //      xo = xn;
         xn = xN;
 
-        placePixel(xn,yn);                     //PLOT a cross
-        placePixel(xn-1,yn-1);
-        placePixel(xn-1,yn+1);
-        placePixel(xn+1,yn-1);
-        placePixel(xn+1,yn+1);
-        placePixel(xn-2,yn-2);
-        placePixel(xn-2,yn+2);
-        placePixel(xn+2,yn-2);
-        placePixel(xn+2,yn+2);
 
 
-        if(xo > xn) {
-          for(x1=xo; x1!=xn; x1-=1) {
-            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-            placePixel(x1,y1);
-          }
-        } 
-        else if(xo < xn) {
-          for(x1=xo; x1!=xn; x1+=1) {
-            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-            placePixel(x1,y1);
-          }
-        }
-
-
-        if(yo > yn) {
-          for(y1=yo; y1!=yn; y1-=1) {
-            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-            placePixel(x1,y1);
-          }
-        } 
-        else if(yo < yn) {
-          for(y1=yo; y1!=yn; y1+=1) {
-            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-            placePixel(x1,y1);
-          }
+        if(plotmode != _VECT) {
+            plotcross(xn,yn);
         } else {
-          placePixel(xn,yn);
+            plotarrow(xo, yo, xn, yn);
         }
+
+        //placePixel(xn,yn);
+        plotline(xo, yo, xn, yn);
+
       }
     }
   } else {
@@ -597,7 +738,7 @@ void graph_plotmem(void) {
 void graph_prepscreen (void){
   #ifndef TESTSUITE_BUILD
 
-  if(telltale == 199) {
+  if(telltale == MEM_INITIALIZED) {
     //GRAPH SETUP
     calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
     clearScreen(false,true,true);
@@ -630,7 +771,7 @@ void graph_draw(uint8_t nbr, float x_min, float x_max, float y_min, float y_max,
 
   //GRAPH
   cnt = 0;
-  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH) {
+  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
 
     float a_ft = (x/( tick_x));          //Draw ticks
     if(a_ft<0) { a_ft=-a_ft; }
@@ -711,7 +852,7 @@ void fnGraph_old (uint16_t selection){
 
   //DRAW AXIS
   cnt = 0;  
-  while (cnt!=SCREEN_WIDTH-1) { 
+  while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
       setPixel(cnt,yzero); 
       cnt++; 
     }
@@ -755,7 +896,7 @@ void fnGraph (uint16_t func){
   {
 	  case 1:   fnGraph_old(3);
               break;
-	  case 3:   graph_demo(randnum(4,5), graph_xmin, graph_xmax);
+	  case 3:   graph_demo(randnum(4,6), graph_xmin, graph_xmax);
 	            break;
 	  case 4:   graph_prepscreen();
 	            graph_plotmem();

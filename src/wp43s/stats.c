@@ -151,7 +151,7 @@ void fnSigma(uint16_t plusMinus) {
       real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Add(SIGMA_1onY, &tmpReal1, SIGMA_1onY);
 
-      graph_sigmaplus(); //JMGRAPH
+      graph_sigmaplus(+1); //JMGRAPH
 
     }
     else { // SIGMA-
@@ -245,7 +245,7 @@ void fnSigma(uint16_t plusMinus) {
       real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
       real34Subtract(SIGMA_1onY, &tmpReal1, SIGMA_1onY);
 
-      graph_sigmaminus(); //JMGRAPH
+      graph_sigmaplus(-1); //JMGRAPH
     }
 
     temporaryInformation = TI_STATISTIC_SUMS;

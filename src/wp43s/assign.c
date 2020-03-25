@@ -34,10 +34,10 @@ const calcKey_t kbd_std[37] = {
  {26,   ITM_SQUARE,    ITM_AIM,         ITM_SQUAREROOTX, CHR_CHECK_MARK,  CHR_F,             CHR_CHECK_MARK,  CHR_PHI,       CHR_alpha    },
 
  {31,   ITM_STO,       ITM_ASSIGN,      ITM_SAVE,        ITM_NULL,        CHR_G,             ITM_ASSIGN,      CHR_GAMMA,     ITM_NULL     },
- {32,   ITM_RCL,       ITM_VIEW,       -MNU_CNST,        ITM_NULL,        CHR_H,             ITM_NULL,        CHR_CHI,       ITM_HEX      },
- {33,   ITM_Rdown,     ITM_RBR,         ITM_Rup,         ITM_NULL,        CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
+ {32,   ITM_RCL,       ITM_VIEW,        ITM_RBR,         ITM_NULL,        CHR_H,             ITM_NULL,        CHR_CHI,       ITM_HEX      },
+ {33,   ITM_Rdown,     ITM_Rup,        -MNU_CPX,         ITM_NULL,        CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {34,   KEY_CC,        ITM_MAGNITUDE,   ITM_VANGLE,      ITM_NULL,        CHR_J,             ITM_NULL,        CHR_ETA,       ITM_REGJ     }, // If KEY_CC is moved: adapt the function fnComplexCCCC in keyboard.c
- {35,   KEY_f,         ITM_NULL,       -MNU_CPX,         KEY_f,           KEY_f,             ITM_NULL,        ITM_NULL,      KEY_f        },
+ {35,   KEY_f,         ITM_NULL,        ITM_SCRDMP,      KEY_f,           KEY_f,             ITM_NULL,        ITM_SCRDMP,    KEY_f        },
  {36,   KEY_g,         KEY_USERMODE,    ITM_NULL,        KEY_g,           KEY_g,             KEY_USERMODE,    ITM_NULL,      KEY_g        },
 
  {41,   ITM_ENTER,     ITM_STATUS,      ITM_DROP,        ITM_ENTER,       ITM_ENTER,         ITM_STATUS,      ITM_DROP,      ITM_ENTER    },
@@ -47,7 +47,7 @@ const calcKey_t kbd_std[37] = {
  {45,   KEY_BACKSPACE, KEY_UNDO,       -MNU_CLR,         KEY_BACKSPACE,   KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE},
 
  {51,   ITM_DIV,       ITM_RMD,         ITM_MOD,         CHR_SLASH,       CHR_N,             CHR_SLASH,       CHR_NU,        ITM_DIV      },
- {52,   CHR_7,         ITM_NULL,        ITM_NULL,        CHR_7,           CHR_O,             CHR_7,           CHR_OMEGA,     CHR_7        },
+ {52,   CHR_7,        -MNU_CONST,       ITM_NULL,        CHR_7,           CHR_O,             CHR_7,           CHR_OMEGA,     CHR_7        },
  {53,   CHR_8,         ITM_NULL,       -MNU_CFG,         CHR_8,           CHR_P,             CHR_8,           CHR_PI,        CHR_8        },
  {54,   CHR_9,         ITM_NULL,        ITM_RTN,         CHR_9,           CHR_Q,             CHR_9,           ITM_RTN,        CHR_9        },
  {55,   ITM_XEQ,       ITM_GTO,         ITM_LBL,         ITM_NULL,        ITM_NULL,          ITM_NULL,        ITM_NULL,      ITM_NULL     },
@@ -96,7 +96,7 @@ const calcKey_t kbd_std[37] = {
                   
  {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,           KEY_BST,         ITM_NULL,      KEY_UP1      }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_HOME,     CHR_7,          CHR_P,             CHR_7,           CHR_PI,        CHR_7        }, //JM
- {53,   CHR_8,           -MNU_ADV,        -MNU_CNST,     CHR_8,          CHR_Q,             CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
+ {53,   CHR_8,           -MNU_ADV,        -MNU_CONST,    CHR_8,          CHR_Q,             CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
  {54,   CHR_9,           -MNU_MATX,       -MNU_XFN,      CHR_9,          CHR_R,             CHR_9,           CHR_RHO,       CHR_9        }, //JM
  {55,   ITM_DIV,         -MNU_STAT,       -MNU_SUMS,     CHR_DIVIDE,     CHR_S,             CHR_DIVIDE,      CHR_SIGMA,     ITM_DIV      }, //JM
 
@@ -145,7 +145,7 @@ const calcKey_t kbd_std[37] = {
                  
  {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,          KEY_BST,         ITM_NULL,      KEY_UP1      }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_INFO,     CHR_7,          CHR_P,            CHR_7,           CHR_PI,        CHR_7        }, //JM
- {53,   CHR_8,           -MNU_ADV,        -MNU_CNST,     CHR_8,          CHR_Q,            CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
+ {53,   CHR_8,           -MNU_ADV,        -MNU_CONST,    CHR_8,          CHR_Q,            CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
  {54,   CHR_9,           -MNU_MATX,       -MNU_XFN,      CHR_9,          CHR_R,            CHR_9,           CHR_RHO,       CHR_9        }, //JM
  {55,   ITM_DIV,         -MNU_STAT,       -MNU_SUMS,     CHR_DIVIDE,     CHR_S,            CHR_DIVIDE,      CHR_SIGMA,     ITM_DIV      }, //JM
 

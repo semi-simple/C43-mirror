@@ -179,7 +179,17 @@ typedef int16_t calcRegister_t;
                                //     15000 bits gives 4515 decimal digits. 1388 Factorial limit.
                                //      9965 bits gives 3000 decimal digits. 
                                // 43S: 3328 bits gives 1001 decimal digits.  450 Factorial limit.
-#define MAX_FACTORIAL                  1388 //  1388  //JM  450   //JMMAX
+#define MAX_FACTORIAL                 1142 //  1388  //JM  450   //JMMAX
+
+                               //    x    x! digits
+                               //   69    98
+                               //  210   398
+                               //  449   998
+                               //  807  1997
+                               //  977  2499
+                               // 1142  2998
+                               // 2122  6140
+
 
 #if (LIBGMP == 1)
   #include <gmp.h>

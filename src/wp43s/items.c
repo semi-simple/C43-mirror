@@ -94,7 +94,7 @@ void runFunction(int16_t func) {
     else if(func == ITM_WSIZE) {
       tamNumberMax = 64;
     }
-    else if(func == ITM_CONST) {
+    else if(func == ITM_CNST) {
       tamNumberMax = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34;
     }
     else if(func == ITM_ASR || func == ITM_SL || func == ITM_SR || func == ITM_RL || func == ITM_RR || func == ITM_RLC || func == ITM_RRC) {
@@ -400,6 +400,7 @@ void fnLj                       (uint16_t unusedParamButMandatory) {}
 void fnRj                       (uint16_t unusedParamButMandatory) {}
 void fnCountBits                (uint16_t unusedParamButMandatory) {}
 void fnNextPrime                (uint16_t unusedParamButMandatory) {}
+void fnScreenDump               (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
@@ -434,7 +435,7 @@ const item_t indexOfItems[] = {
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
 /*    3 */  { fn10Pow,                     NOPARAM,                     "10" STD_SUP_x,                                "10" STD_SUP_x,                                CAT_FNCT, SLS_ENABLED  },
 /*    4 */  { fnIntegerMode,               SIM_1COMPL,                  "1COMPL",                                      "1COMPL",                                      CAT_FNCT, SLS_UNCHANGED},
-/*    5 */  { itemToBeCoded,               NOPARAM,                     "0005",                                        "0005",                                        CAT_FREE, SLS_UNCHANGED},
+/*    5 */  { fnScreenDump,                NOPARAM,                     "SSHOT",                                       "SSHOT",                                       CAT_FNCT, SLS_UNCHANGED},
 /*    6 */  { fnInvert,                    NOPARAM,                     "1/x",                                         "1/x",                                         CAT_FNCT, SLS_ENABLED  },
 /*    7 */  { fnIntegerMode,               SIM_2COMPL,                  "2COMPL",                                      "2COMPL",                                      CAT_FNCT, SLS_UNCHANGED},
 /*    8 */  { fn2Pow,                      NOPARAM,                     "2" STD_SUP_x,                                 "2" STD_SUP_x,                                 CAT_FNCT, SLS_ENABLED  },
@@ -518,7 +519,7 @@ const item_t indexOfItems[] = {
 /*   86 */  { itemToBeCoded,               NOPARAM,                     "CNST",                                        "CNST",                                        CAT_MENU, SLS_UNCHANGED},
 /*   87 */  { fnCyx,                       NOPARAM,                     "COMB",                                        "C" STD_SUB_y STD_SUB_x,                       CAT_FNCT, SLS_ENABLED  },
 /*   88 */  { fnConjugate,                 NOPARAM,                     "CONJ",                                        "conj",                                        CAT_FNCT, SLS_ENABLED  },
-/*   89 */  { fnConstant,                  TM_VALUE,                    "CONST",                                       "CONST",                                       CAT_FNCT, SLS_ENABLED  },
+/*   89 */  { fnConstant,                  TM_VALUE,                    "CNST",                                        "CNST",                                        CAT_FNCT, SLS_ENABLED  },
 /*   90 */  { itemToBeCoded,               NOPARAM,                     "CONVG?",                                      "CONVG?",                                      CAT_FNCT, SLS_UNCHANGED},
 /*   91 */  { itemToBeCoded,               NOPARAM,                     "CORR",                                        "r",                                           CAT_FNCT, SLS_UNCHANGED},
 /*   92 */  { fnCos,                       NOPARAM,                     "COS",                                         "COS",                                         CAT_FNCT, SLS_ENABLED  },   //JM
@@ -1011,7 +1012,7 @@ const item_t indexOfItems[] = {
 /*  579 */  { itemToBeCoded,               NOPARAM,                     "SOLVE",                                       "SOLVE",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  580 */  { itemToBeCoded,               NOPARAM,                     "Solver",                                      "Solver",                                      CAT_MENU, SLS_UNCHANGED},
 /*  581 */  { itemToBeCoded,               NOPARAM,                     "SPEC?",                                       "SPEC?",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  582 */  { fnSr,                        TM_VALUE,                    "SR",                                          "SR",                                          CAT_FNCT, SLS_UNCHANGED},
+/*  582 */  { fnSr,                        TM_VALUE,                    "SR",                                          "SR",                                          CAT_FNCT, SLS_ENABLED  },
 /*  583 */  { fnStackSize,                 SS_4,                        "SSIZE4",                                      "SSIZE4",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  584 */  { fnStackSize,                 SS_8,                        "SSIZE8",                                      "SSIZE8",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  585 */  { fnGetStackSize,              NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      CAT_FNCT, SLS_ENABLED  },
@@ -2381,5 +2382,6 @@ const item_t indexOfItems[] = {
 /* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               CAT_NONE, SLS_UNCHANGED},
 /* 1934 */  { fnUserJM,                    USER_GSHFT,                  "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        CAT_NONE, SLS_UNCHANGED},
 /* 1935 */  { fnKeyDotD,                   NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },
+
 /* 1936 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

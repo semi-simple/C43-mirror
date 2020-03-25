@@ -751,7 +751,7 @@ void JM_DOT_old(int16_t xx, int16_t yy) {                          // To draw th
 void setPixel(int16_t x, int16_t y) {
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      //printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
+      printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 
@@ -776,7 +776,7 @@ void setPixel(int16_t x, int16_t y) {
 void clearPixel(int16_t x, int16_t y) {
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      //printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+      printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 

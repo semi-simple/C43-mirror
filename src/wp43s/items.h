@@ -26,13 +26,12 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
 #define ITM_10x                          3
 #define ITM_1COMPL                       4
-#define CST_00                           5
+#define ITM_SCRDMP                       5
 #define ITM_1ONX                         6
 #define ITM_2COMPL                       7
 #define ITM_2X                           8
@@ -113,10 +112,10 @@
 #define ITM_CLSTK                       83
 #define ITM_CLX                         84
 #define ITM_CLSIGMA                     85
-#define MNU_CNST                        86
+#define MNU_CONST                       86
 #define ITM_COMB                        87
 #define ITM_CONJ                        88
-#define ITM_CONST                       89
+#define ITM_CNST                        89
 #define ITM_CONVG                       90
 #define ITM_CORR                        91
 #define ITM_cos                         92
@@ -1780,7 +1779,7 @@
 #define ITM_op_a2                     1740   //JM OPERATORS
 #define ITM_op_j                      1741   //JM OPERATORS
 #define ITM_BASE_HOME                 1742   //JM BASEMENU
-#define ITM_SSHOT                     1743   //JM
+#define ITM_1743                      1743
 #define ITM_BASE_AHOME                1744   //JM BASEMENU
 #define Not_used1745                  1745
 #define Not_used1746                  1746

@@ -101,5 +101,6 @@ void     showFunctionName     (int16_t item, int8_t counter);
 void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
 void     resetTemporaryInformation(void);
-void     refreshRegisterLine  (calcRegister_t regist);
+void     refreshRegisterLine      (calcRegister_t regist);
+void     fnScreenDump             (uint16_t unusedButMandatoryParameter);
 #endif

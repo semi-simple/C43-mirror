@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 04  // 27 =
+#define BACKUP_VERSION 29  // 29 = removed displatRealAsFraction
 
 void saveCalc(void) {
   size_t size;

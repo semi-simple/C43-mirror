@@ -82,12 +82,12 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
   longIntegerInit(mini);
   longIntegerInit(maxi);
   if(cmp < 0) {
-    longIntegerToLongInteger(regX, mini);
-    longIntegerToLongInteger(regY, maxi);
+    longIntegerCopy(regX, mini);
+    longIntegerCopy(regY, maxi);
   }
   else {
-    longIntegerToLongInteger(regX, maxi);
-    longIntegerToLongInteger(regY, mini);
+    longIntegerCopy(regX, maxi);
+    longIntegerCopy(regY, mini);
   }
 
   longIntegerSubtract(maxi, mini, regX);

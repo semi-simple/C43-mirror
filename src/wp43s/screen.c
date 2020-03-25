@@ -751,7 +751,7 @@ void JM_DOT_old(int16_t xx, int16_t yy) {                          // To draw th
 void setPixel(int16_t x, int16_t y) {
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      //printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
+      printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 
@@ -776,7 +776,7 @@ void setPixel(int16_t x, int16_t y) {
 void clearPixel(int16_t x, int16_t y) {
   #ifdef PC_BUILD
     if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      //printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+      printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 
@@ -1235,6 +1235,7 @@ void resetTemporaryInformation(void) {
   switch(tempInfo) {
     case TI_NO_INFO:           break;
 
+    case TI_WHO:
     case TI_RADIUS_THETA:
     case TI_THETA_RADIUS:
     case TI_SUMX_SUMY:
@@ -1248,7 +1249,6 @@ void resetTemporaryInformation(void) {
     case TI_RESET:
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
-    case TI_WHO:
     case TI_FALSE:
     case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
 
@@ -1357,6 +1357,7 @@ void refreshRegisterLine(calcRegister_t regist) {
         }
 
         else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
+          clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X +1), REGISTER_LINE_HEIGHT * 2); //JM ID
           showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
           showString(WHO2, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + 1), vmNormal, true, true);      // JM ID
         }
@@ -1782,5 +1783,127 @@ void refreshRegisterLine(calcRegister_t regist) {
       displayBugScreen(errorMessage);
     }
   }
+}
+
+
+
+void fnScreenDump(uint16_t unusedButMandatoryParameter) {
+#ifdef PC_BUILD
+  FILE *bmp;
+  char bmpFileName[22];
+  time_t rawTime;
+  struct tm *timeInfo;
+  int32_t x, y;
+  uint32_t uint32;
+  uint16_t uint16;
+  uint8_t  uint8;
+
+  time(&rawTime);
+  timeInfo = localtime(&rawTime);
+
+  strftime(bmpFileName, 22, "%Y%m%d-%H%M%S00.bmp", timeInfo);
+  bmp = fopen(bmpFileName, "wb");
+
+  fwrite("BM", 1, 2, bmp);        // Offset 0x00  0  BMP header
+
+  uint32 = (SCREEN_WIDTH/8 * SCREEN_HEIGHT) + 610;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x02  2  File size
+
+  uint32 = 0;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x06  6  unused
+
+  uint32 = 0x00000082;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x0a 10  Offset where the bitmap data can be found
+
+  uint32 = 0x0000006c;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x0e 14  Number of bytes in DIB header
+
+  uint32 = SCREEN_WIDTH;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x12 18  Bitmap width
+
+  uint32 = SCREEN_HEIGHT;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x16 22  Bitmap height
+
+  uint16 = 0x0001;
+  fwrite(&uint16, 1, 2, bmp);     // Offset 0x1a 26  Number of planes
+
+  uint16 = 0x0001;
+  fwrite(&uint16, 1, 2, bmp);     // Offset 0x1c 28  Number of bits per pixel
+
+  uint32 = 0;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x1e 30  Compression
+
+  uint32 = 0x000030c0;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x22 34  Size of bitmap data (including padding)
+
+  uint32 = 0x00001a7c; // 6780 pixels/m
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x26 38  Horizontal print resolution
+
+  uint32 = 0x00001a7c; // 6780 pixels/m
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x2a 42  Vertical print resolution
+
+  uint32 = 0x00000002;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x2e 46  Number of colors in the palette
+
+  uint32 = 0x00000002;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x32 50  Number of important colors
+
+  uint32 = 0x73524742;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x36  ???
+
+  uint32 = 0;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x3a  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x3e  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x42  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x46  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x4a  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x4e  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x52  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x56  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x5a  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x5e  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x62  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x66  ???
+
+  uint32 = 0x00000002;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x6a  ???
+
+  uint32 = 0;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x6e  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x72  ???
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x76  ???
+
+  uint32 = 0x00dff5cc; // light green
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x7a  RGB color for 0
+
+  uint32 = 0;
+  fwrite(&uint32, 1, 4, bmp);     // Offset 0x7e  RGB color for 1
+
+  // Offset 0x82  bit map data
+  uint16 = 0;
+  uint32 = 0;
+  for(y=SCREEN_HEIGHT-1; y>=0; y--) {
+    for(x=0; x<SCREEN_WIDTH; x++) {
+      uint8 <<= 1;
+      if(*(screenData + y*screenStride + x) == ON_PIXEL) {
+        uint8 |= 1;
+      }
+
+      if((x % 8) == 7) {
+        fwrite(&uint8, 1, 1, bmp);
+        uint8 = 0;
+      }
+    }
+    fwrite(&uint16, 1, 2, bmp); // Padding
+  }
+
+
+  fclose(bmp);
+#endif
+
+#ifdef DMCP_BUILD
+  resetShiftState(); // to avoid f or g top left of the screen
+  create_screenshot(0);
+#endif
 }
 #endif

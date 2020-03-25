@@ -27,6 +27,7 @@ GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
 GtkWidget *lblFKey2;
 GtkWidget *lblGKey2;
 GtkWidget *lblEKey;
+GtkWidget *lblEEKey;
 GtkWidget *lblSKey;
 GtkWidget *lblBehindScreen;
 
@@ -999,6 +1000,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lblFKey2);  //JMLINES
   gtk_widget_hide(lblGKey2);  //JMLINES
   gtk_widget_hide(lblEKey);   //JMLINES
+  gtk_widget_hide(lblEEKey);   //JMLINES
   gtk_widget_hide(lblSKey);   //JMLINES
 #endif  
   gtk_widget_hide(btn11);
@@ -2022,6 +2024,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show( lblFKey2);  //JMLINES
   gtk_widget_show( lblGKey2);  //JMLINES
   gtk_widget_show( lblEKey);   //JMLINES
+  gtk_widget_show( lblEEKey);   //JMLINES
   gtk_widget_show( lblSKey);   //JMLINES
 #endif
 
@@ -2980,6 +2983,13 @@ void setupUI(void) {
   gtk_widget_set_name(lblEKey,"eSoftkeyArea");
   gtk_widget_set_size_request(lblEKey, 61-8-2-2,  5-2);
   gtk_fixed_put(GTK_FIXED(grid), lblEKey, 350+4+2 - 4 * DELTA_KEYS_X, 563-1 - DELTA_KEYS_Y);
+
+  // Frame around the Sigma- key
+  lblEEKey = gtk_label_new("");
+  gtk_widget_set_name(lblEEKey,"eSoftkeyArea");
+  gtk_widget_set_size_request(lblEEKey, 61-8-2-2,  5-2);
+  gtk_fixed_put(GTK_FIXED(grid), lblEEKey, 350+4+2 - 4 * DELTA_KEYS_X, 563-1 - 2*DELTA_KEYS_Y);
+
 
   // Frame around the SIN key
   lblSKey = gtk_label_new("");

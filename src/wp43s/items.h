@@ -31,7 +31,7 @@
 #define ITM_FtoC                         2
 #define ITM_10x                          3
 #define ITM_1COMPL                       4
-#define CST_00                           5
+#define ITM_SCRDMP                       5
 #define ITM_1ONX                         6
 #define ITM_2COMPL                       7
 #define ITM_2X                           8
@@ -112,10 +112,10 @@
 #define ITM_CLSTK                       83
 #define ITM_CLX                         84
 #define ITM_CLSIGMA                     85
-#define MNU_CNST                        86
+#define MNU_CONST                       86
 #define ITM_COMB                        87
 #define ITM_CONJ                        88
-#define ITM_CONST                       89
+#define ITM_CNST                        89
 #define ITM_CONVG                       90
 #define ITM_CORR                        91
 #define ITM_cos                         92

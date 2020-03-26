@@ -175,11 +175,11 @@ typedef int16_t calcRegister_t;
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 9965 // 15000  //JM 3328   //JMMAX     
-                               //     15000 bits gives 4515 decimal digits. 1388 Factorial limit.
-                               //      9965 bits gives 3000 decimal digits. 
-                               // 43S: 3328 bits gives 1001 decimal digits.  450 Factorial limit.
-#define MAX_FACTORIAL                 1142 //  1388  //JM  450   //JMMAX
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328   //JMMAX     
+                                             //     15000 bits gives 4515 decimal digits. 1388 Factorial limit.
+                                             //      9965 bits gives 3000 decimal digits. 
+                                             // 43S: 3328 bits gives 1001 decimal digits.  450 Factorial limit.
+#define MAX_FACTORIAL                 450    // 43S: 450   //JMMAX
 
                                //    x    x! digits
                                //   69    98

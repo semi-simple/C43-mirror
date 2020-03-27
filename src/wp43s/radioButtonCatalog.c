@@ -90,7 +90,8 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1911 */  { ITM_G_DOUBLETAP,      JC_G_DOUBLETAP,         CB_JC },  //fnSetSetJM
 /* 1679 */  { ITM_HOMEx3,           JC_HOME_TRIPLE,         CB_JC },  //fnSetSetJM
 /* 1770 */  { ITM_HOMEx3T,          JC_SH_3T,               CB_JC },  //fnSetSetJM
-/* 1680 */  { ITM_SHTIM,            JC_SHFT_4s,             CB_JC }   //fnSetSetJM
+/* 1680 */  { ITM_SHTIM,            JC_SHFT_4s,             CB_JC },   //fnSetSetJM
+/* 1943 */  { ITM_VECT,             JC_VECT,                CB_JC }   //fnSetSetJM
 #ifdef INLINE_TEST
 /* 1892 */, { ITM_TEST,             DR_ITM_TST,             CB_JC }   //fnSetInlineTest
 #endif
@@ -424,6 +425,8 @@ void fnRebuildRadioState() {
 // 1892   , { ITM_TEST,             DR_ITM_TST,             CB_JC }   //fnSetInlineTest
   fnRefreshComboxState(CB_JC, DR_ITM_TST, false);
 #endif
+// 1943     { ITM_VECT,             JC_VECT,                CB_JC },  //fnSetSetJM
+  fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);
 
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
   size_t n = nbrOfElements(indexOfRadioCbEepromItems);

@@ -2382,6 +2382,14 @@ const item_t indexOfItems[] = {
 /* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               CAT_NONE, SLS_UNCHANGED},
 /* 1934 */  { fnUserJM,                    USER_GSHFT,                  "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        CAT_NONE, SLS_UNCHANGED},
 /* 1935 */  { fnKeyDotD,                   NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },
+/* 1936 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       CAT_FNCT, SLS_ENABLED  },
+/* 1937 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       CAT_FNCT, SLS_ENABLED  },
+/* 1938 */  { fnGraph,                     13,                          "DEMO3",                                       "DEMO3",                                       CAT_FNCT, SLS_ENABLED  },
+/* 1939 */  { fnGraph,                     14,                          "DEMO4",                                       "DEMO4",                                       CAT_FNCT, SLS_ENABLED  },
+/* 1940 */  { fnGraph,                     15,                          "DEMO5",                                       "DEMO5",                                       CAT_FNCT, SLS_ENABLED  },
+/* 1941 */  { fnGraph,                     16,                          "DEMO6",                                       "DEMO6",                                       CAT_FNCT, SLS_ENABLED  },
+/* 1942 */  { itemToBeCoded,               NOPARAM,                     "ST_GRF",                                      "ST_GRF",                                      CAT_MENU, SLS_ENABLED  },
+/* 1943 */  { fnSetSetJM,                  JC_VECT,                     "VECTOR",                                     "VECTOR",                                     CAT_FNCT, SLS_UNCHANGED},   //JM VECTOR MODE
 
-/* 1936 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1944 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

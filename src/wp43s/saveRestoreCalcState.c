@@ -181,6 +181,7 @@ void saveCalc(void) {
   size += fwrite(&jm_FG_LINE,                         1, sizeof(jm_FG_LINE),                         backup); //JM jm_FG_LINE //printf("%8lu jm_FG_LINE\n",         (unsigned long)size);
   size += fwrite(&jm_FG_DOTS,                         1, sizeof(jm_FG_DOTS),                         backup); //JM jm_FG_DOTS //printf("%8lu jm_FG_DOTS\n",         (unsigned long)size);
   size += fwrite(&jm_G_DOUBLETAP,                     1, sizeof(jm_G_DOUBLETAP),                     backup); //JM jm_G_DOUBLETAP //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
+  size += fwrite(&jm_VECT,                            1, sizeof(jm_VECT),                            backup); //JM jm_VECT //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
 
   size += fwrite(&graph_xmin,                         1, sizeof(graph_xmin),                         backup); //JM graph_xmin //printf("%8lu graph_xmin\n", (unsigned long)size);
   size += fwrite(&graph_xmax,                         1, sizeof(graph_xmax),                         backup); //JM graph_xmax //printf("%8lu graph_xmax\n", (unsigned long)size);
@@ -372,6 +373,7 @@ void restoreCalc(void) {
     size += fread(&jm_FG_LINE,                         1, sizeof(jm_FG_LINE),                         backup); //JM jm_FG_LINE //printf("%8lu jm_FG_LINE\n",         (unsigned long)size);
     size += fread(&jm_FG_DOTS,                         1, sizeof(jm_FG_DOTS),                         backup); //JM jm_FG_DOTS //printf("%8lu jm_FG_DOTS\n",         (unsigned long)size);
     size += fread(&jm_G_DOUBLETAP,                     1, sizeof(jm_G_DOUBLETAP),                     backup); //JM jm_G_DOUBLETAP //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
+    size += fread(&jm_VECT,                            1, sizeof(jm_VECT),                            backup); //JM jm_VECT //printf("%8lu jm_G_DOUBLETAP\n", (unsigned long)size);
 
     size += fread(&graph_xmin,                         1, sizeof(graph_xmin),                         backup); //JM graph_xmin //printf("%8lu graph_xmin\n", (unsigned long)size);
     size += fread(&graph_xmax,                         1, sizeof(graph_xmax),                         backup); //JM graph_xmax //printf("%8lu graph_xmax\n", (unsigned long)size);

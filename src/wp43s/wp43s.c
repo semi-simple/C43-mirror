@@ -137,6 +137,7 @@ uint8_t              currentAngularMode;
 bool_t               jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t               jm_FG_DOTS;                              //JM Screen / keyboard operation setup
 bool_t               jm_G_DOUBLETAP;                          //JM Screen / keyboard operation setup
+bool_t               jm_VECT;                                 //JM GRAPH
 uint8_t              SigFigMode;                              //JM SIGFIG
 bool_t               eRPN;                                    //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 bool_t               HOME3;                                   //JM HOME Create a flag to enable or disable triple shift HOME3.
@@ -335,6 +336,7 @@ void setupDefaults(void) {
   jm_FG_LINE = true;                                             //JM Screen / keyboard operation setup
   jm_FG_DOTS = false;                                            //JM Screen / keyboard operation setup
   jm_G_DOUBLETAP = false;                                        //JM Screen / keyboard operation setup
+  jm_VECT = false;                                               //JM Screen / keyboard operation setup
 
   ULFL = false;                                                  //JM Underline
   ULGL = false;                                                  //JM Underline

@@ -171,6 +171,14 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnLeadingZeros(!displayLeadingZeros);                                       //dr
     break;
 
+  case JC_VECT:                                      //JM
+    jm_VECT = !jm_VECT;
+    fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);                //jm
+    break;
+
+
+
+
   default:
     break;
   }

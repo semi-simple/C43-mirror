@@ -1975,8 +1975,16 @@
 #define ITM_USER_ALPHA                1933   //JM USER
 #define ITM_USER_GSHFT                1934   //JM USER
 #define ITM_DOTDEMU                   1935   //JM USER
+#define ITM_DEMO1                     1936   //JM USER
+#define ITM_DEMO2                     1937   //JM USER
+#define ITM_DEMO3                     1938   //JM USER
+#define ITM_DEMO4                     1939   //JM USER
+#define ITM_DEMO5                     1940   //JM USER
+#define ITM_DEMO6                     1941   //JM USER
+#define MNU_ST_GRAPH                  1942   //JM USER
+#define ITM_VECT                      1943   //JMVECT
 
-#define LAST_ITEM                     1936   //JM
+#define LAST_ITEM                     1944   //JM
 
 #define CHR_PROD_SIGN                 9999
 

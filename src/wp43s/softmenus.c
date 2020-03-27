@@ -69,7 +69,7 @@ const int16_t menu_DSP[]         = { ITM_FIX,                       ITM_SCI,    
                                      ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };    //JM added SIGFIG & UNIT
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
-                                     ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              -MNU_GRAPH,                    ITM_NULL                      };
+                                     ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              -MNU_GRAPH,                  ITM_NULL                      };
 
 const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,                     ITM_SQUARE,               ITM_LOG2,              ITM_EX,                      ITM_LOGXY,                          //JM re-arranged menu. logxy and square to follow DM42 keyboard. Re-aligned with 42S keys.
                                      ITM_CUBEROOT,                  ITM_XTHROOT,                ITM_SQUAREROOTX,          ITM_2X,                ITM_EX1,                     ITM_LN1X,                           //JM re-arranged menu. Added YˆX to follow DM42 keyboard. Swapped YˆX and Yˆ(1/X). Re-aligned with 42S keys.
@@ -173,7 +173,7 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
 const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SUM,
-                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     STAT_DEMO/*ITM_NSIGMA*/,                         //JM added ITM_NSIGMA
+                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     -MNU_ST_GRAPH/*ITM_NSIGMA*/,                         //JM added ITM_NSIGMA
                                      ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
                                      ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,               ITM_XCIRC,                   ITM_YCIRC,
                                      ITM_NULL,                      ITM_XH,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
@@ -523,9 +523,15 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
 
 const int16_t menu_GRAPH[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_GRF_X0,                    ITM_GRF_Y0,                 ITM_GRF_X1,               ITM_SCRDMP,             ITM_GRAPH,                   ITM_GRF_DX,                         //JM GRAPH
+                                     ITM_GRF_X0,                    ITM_GRF_Y0,                 ITM_GRF_X1,               ITM_SCRDMP,            ITM_GRAPH,                   ITM_GRF_DX,                         //JM GRAPH
                                      ITM_NULL,                      ITM_GRF_Y1,                 ITM_NULL,                 ITM_NULL,              ITM_GRF_HLP,                 ITM_GRF_DY,                         //JM GRAPH
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM GRAPH
+
+const int16_t menu_ST_GRAPH[]        = {
+          /*-1------*/                                                                                                                                                                                            //JM ALPHA
+                                     ITM_SIGMAMINUS,                ITM_GRF_X0,                 ITM_GRF_X1,               ITM_NULL,              ITM_SCRDMP,                  ITM_PLOT,                         //JM GRAPH
+                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_NULL,              ITM_GRF_HLP,                 ITM_NULL,                         //JM GRAPH
+                                     ITM_CLSIGMA,                   ITM_VECT,                   STAT_DEMO,                ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
 
 
 
@@ -638,6 +644,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
   {.menuId = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME
   {.menuId = -MNU_GRAPH,       .numItems = sizeof(menu_GRAPH      )/sizeof(int16_t), .softkeyItem = menu_GRAPH       },  //JM GRAPH
+  {.menuId = -MNU_ST_GRAPH,    .numItems = sizeof(menu_ST_GRAPH   )/sizeof(int16_t), .softkeyItem = menu_ST_GRAPH    },  //JM GRAPH
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE

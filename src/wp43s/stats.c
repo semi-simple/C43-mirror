@@ -29,7 +29,9 @@ static void initStatisticalSums(void) {
     for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
       real34Zero((real34_t *)(statisticalSumsPointer + REAL34_SIZE*sum));
     }
-    graph_setupmemory(); //JMGRAPH
+  }
+  if(telltale != MEM_INITIALIZED) {   //JMSTATS
+    graph_setupmemory();
   }
 }
 

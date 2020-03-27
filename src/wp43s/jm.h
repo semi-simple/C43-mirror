@@ -101,7 +101,7 @@ extern float graph_ymin;                                             //JM Graph
 extern float graph_ymax;                                             //JM Graph
 extern float graph_dx;                                               //JM Graph
 extern float graph_dy;                                               //JM Graph
-
+extern bool_t jm_VECT;                                               //JM GRAPH setup
 
 
 
@@ -172,6 +172,7 @@ char* itoa(int value, char* result, int base);
 #define JC_FG_DOTS             21    // screen setup
 #define JC_G_DOUBLETAP         22    // screen setup
 
+#define JC_VECT                23    // screen setup
 
 //items.c
 void fnDisplayFormatSigFig(uint16_t displayFormatN);

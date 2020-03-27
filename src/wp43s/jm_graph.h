@@ -39,9 +39,8 @@ uint16_t ix_count;
 #define _VECT 0
 #define _SCAT 1
 
-//int8_t plotmode;
-#define plotmode      _SCAT
-#define Aspect_Square true
+int8_t plotmode;                            //      _SCAT
+#define Aspect_Square false
 
 void fnGraph          (uint16_t func);
 void graph_sigmaplus  (int8_t plusminus);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.

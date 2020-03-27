@@ -29,10 +29,10 @@
   /* parameters for decQuads */
   #define DECQUAD_Bytes    16      /* length                          */
   #define DECQUAD_Pmax     34      /* maximum precision (digits)      */
-  #define DECQUAD_Emin   -999      /* minimum adjusted exponent       */ //  WP43S team leader Walter Bonin asked to change this from -6143 to -999
-  #define DECQUAD_Emax    999      /* maximum adjusted exponent       */ //  WP43S team leader Walter Bonin asked to change this from  6144 to  999
+  #define DECQUAD_Emin  -6143      /* minimum adjusted exponent       */
+  #define DECQUAD_Emax   6144      /* maximum adjusted exponent       */
   #define DECQUAD_EmaxD     4      /* maximum exponent digits         */
-  #define DECQUAD_Bias   1031      /* bias for the exponent           */ //  WP43S team leader Walter Bonin asked to change this from  6176 to 1031
+  #define DECQUAD_Bias   6176      /* bias for the exponent           */
   #define DECQUAD_String   43      /* maximum string length, +1       */
   #define DECQUAD_EconL    12      /* exponent continuation length    */
   #define DECQUAD_Declets  11      /* count of declets                */

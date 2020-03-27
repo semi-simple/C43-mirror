@@ -24,7 +24,7 @@
 #include "wp43s.h"
 #include "math.h"
 
-//#define STATDEBUG
+#define STATDEBUG
 
 
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
@@ -258,22 +258,31 @@ void graph_sigmaplus(int8_t plusminus) {    //Called from STAT module from fnSig
     ix_count++;               //Only used for VECT
     cnt = ix_count;
   } else {
-    runFunction(ITM_NSIGMA);
     //Convert from real to int
     real34ToReal(SIGMA_N, &tmpy);
     realToString(&tmpy, tmpStr3000);
-    cnt = atoi (tmpStr3000);  
+    cnt = atoi (tmpStr3000);
+    #ifdef STATDEBUG
+    printf("Count: %s, %d\n",tmpStr3000,cnt);
+    #endif
+
   }
   //printf("Adding to graph table[%d] = x:%f y:%f\n",cnt,x,y);
 
   if(plusminus == 1) {
     gr_x[cnt-1]=x;
     gr_y[cnt-1]=y;
+    #ifdef STATDEBUG
+    printf("Index: [%d]=(%f,%f)\n",cnt-1,x,y);
+    #endif
   } else {
     if(plusminus == -1) {
       if(plotmode == _VECT ) {
         gr_x[cnt-1]=-x;
         gr_y[cnt-1]=-y;
+        #ifdef STATDEBUG
+        printf("Index: [%d]=(%f,%f)\n",cnt-1,-x,-y);
+        #endif
       } else {
         // Non-vector mode TODO
       }

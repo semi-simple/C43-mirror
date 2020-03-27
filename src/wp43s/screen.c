@@ -1632,9 +1632,10 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
+                //printf("sum %02d ", 0); printReal34ToConsole(((real34_t *)statisticalSumsPointer) + 0); printf("\n");
                 sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(statisticalSumsPointer));
+                //sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(((real34_t *)statisticalSumsPointer) + 0));
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-
                 #ifdef PC_BUILD
                   for(w=0; w<SCREEN_WIDTH; w++) {
                     setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);

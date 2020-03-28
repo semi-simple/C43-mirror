@@ -18,6 +18,9 @@
  * \file wp43s.c
  ***********************************************/
 
+//#define JMSHOWCODES
+
+
 #include "wp43s.h"
 
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
@@ -203,10 +206,10 @@ pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
   int8_t               telltale_pos;       //JM Test
   int8_t               telltale_lastkey;   //JM Test
   #endif
-  bool_t               backToDMCP;
-  uint32_t             nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
-  uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
-  #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
+bool_t               backToDMCP;
+uint32_t             nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
+uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
+#define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
 

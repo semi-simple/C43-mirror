@@ -151,6 +151,7 @@
 #ifdef DMCP_BUILD
   #include <main.h>
   #include <dmcp.h>
+  #include <ff_ifc.h>
 #endif
 
 /********************************************//**
@@ -175,21 +176,21 @@ typedef int16_t calcRegister_t;
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328   //JMMAX     
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 9965   //JMMAX     
                                              //     15000 bits gives 4515 decimal digits. 1388 Factorial limit.
                                              //      9965 bits gives 3000 decimal digits. 
                                              // 43S: 3328 bits gives 1001 decimal digits.  450 Factorial limit.
-#define MAX_FACTORIAL                 450    // 43S: 450   //JMMAX
+#define MAX_FACTORIAL                 1142   // 43S: 450   //JMMAX
 
-                               //    x    x! digits
-                               //   69    98
-                               //  210   398
-                               //  449   998
-                               //  807  1997
-                               //  977  2499
-                               // 1142  2998
-                               // 2122  6140
-
+                               // bits  digits  43S     x digits   x! digits
+                               //                         69!            98
+                               //                        210!           398
+                               // 3328  1001    450!     449!           998
+                               //                        807!          1997
+                               //                        977!          2499
+                               // 9965  3000            1142!          2998
+                               //15000  4515            1388!
+                               //                       2122!          6140
 
 #if (LIBGMP == 1)
   #include <gmp.h>

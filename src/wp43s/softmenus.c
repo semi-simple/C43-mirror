@@ -172,8 +172,8 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
                                      ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
                                      ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
-const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SUM,
-                                     ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     -MNU_ST_GRAPH/*ITM_NSIGMA*/,                         //JM added ITM_NSIGMA
+const int16_t menu_STAT[]        = { ITM_SIGMAMINUS,                ITM_XBAR,                   ITM_S,                    ITM_sigma,             ITM_SM,                      ITM_SUM,
+                                     ITM_SIGMAPLUS,                 ITM_XW,                     ITM_SW,                   ITM_sigmaw,            ITM_SMW,                     -MNU_ST_GRAPH/*ITM_NSIGMA*/,                         //JM added ITM_NSIGMA
                                      ITM_CLSIGMA,                   ITM_XG,                     ITM_epsilon,              ITM_epsilonP,          ITM_epsilonM,                ITM_PLOT,
                                      ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,               ITM_XCIRC,                   ITM_YCIRC,
                                      ITM_NULL,                      ITM_XH,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
@@ -500,7 +500,7 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
 /* 7 Top    g    */  /*   */         ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME
                                                                                                                                                                                                                   //JM HOME
 /* 6 Bottom Prim */  /* 6 */         ITM_STATUS,                    ITM_NULL,                   -MNU_CLK,                 -MNU_UNITCONV,         -MNU_BITS,                   -MNU_INTS,                          //JM HOME
-/* 5 Middle f    */  /* 5 */         ITM_RBR,                       ITM_NULL,                   -MNU_INFO,                -MNU_CNST,             -MNU_XFN,                    -MNU_SUMS,                          //JM HOME
+/* 5 Middle f    */  /* 5 */         ITM_RBR,                       ITM_NULL,                   -MNU_INFO,                -MNU_CONST,            -MNU_XFN,                    -MNU_SUMS,                          //JM HOME
 #ifdef INLINE_TEST                                                              //vv dr
 /* 4 Top    g    */  /* 4 */         -MNU_CPX,                      -MNU_INL_TST,               -MNU_EXP,                 -MNU_BASE,             -MNU_FIN,                    KEY_UNDO,                           //JM HOME
 #else                                                                           //^^
@@ -529,9 +529,9 @@ const int16_t menu_GRAPH[]        = {
 
 const int16_t menu_ST_GRAPH[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_SIGMAMINUS,                ITM_GRF_X0,                 ITM_GRF_X1,               ITM_NULL,              ITM_SCRDMP,                  ITM_PLOT,                         //JM GRAPH
-                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_NULL,              ITM_GRF_HLP,                 ITM_NULL,                         //JM GRAPH
-                                     ITM_CLSIGMA,                   ITM_VECT,                   STAT_DEMO,                ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
+                                     ITM_SIGMAMINUS,                ITM_NSIGMA,                 ITM_SUM,                  ITM_NULL,              ITM_SCRDMP,                  ITM_PLOT,                         //JM GRAPH
+                                     ITM_SIGMAPLUS,                 ITM_NULL,                   ITM_NULL,                 ITM_GRF_X0,            ITM_GRF_X1,                  ITM_GRF_HLP,                         //JM GRAPH
+                                     ITM_CLSIGMA,                   ITM_VECT,                   ITM_NULL,                 ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
 
 
 

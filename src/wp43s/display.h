@@ -35,6 +35,6 @@ void longIntegerToDisplayString   (calcRegister_t regist, char *displayString, i
 void dateToDisplayString          (calcRegister_t regist, char *displayString);
 void timeToDisplayString          (calcRegister_t regist, char *displayString);
 void exponentToDisplayString      (int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode);
-void supNumberToDisplayString     (int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap);
+void supNumberToDisplayString     (int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap, bool_t isExponent);
 void subNumberToDisplayString     (int32_t subNumber, char *displayString, char *displayValueString);
 void longIntegerToAllocatedString (longInteger_t lgInt, char *str, int32_t strLg);

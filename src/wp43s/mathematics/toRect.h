@@ -18,8 +18,5 @@
  * \file toRect.h
  ***********************************************/
 
-void fnToRect                (uint16_t unusedParamButMandatory);
-void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta34, real34_t *real34, real34_t *imag34);
-void real39PolarToRectangular(const real_t *magnitude,   const real_t *theta,   real_t *real,   real_t *imag);
-void real51PolarToRectangular(const real_t *magnitude,   const real_t *theta,   real_t *real,   real_t *imag);
-void real75PolarToRectangular(const real_t *magnitude,   const real_t *theta,   real_t *real,   real_t *imag);
+void fnToRect              (uint16_t unusedParamButMandatory);
+void realPolarToRectangular(const real_t *magnitude, const real_t *theta, real_t *real, real_t *imag, realContext_t *realContext);

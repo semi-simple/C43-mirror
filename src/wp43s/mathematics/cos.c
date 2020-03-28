@@ -64,25 +64,25 @@ void fnCos(uint16_t unusedParamButMandatory) {
 
 
 
-void cosCo39(const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag) {
+void cosComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
   // cos(a + i b) = cos(a)*cosh(b) - i*sin(a)*sinh(b)
-  real39_t sina, cosa, sinhb, coshb;
+  real_t sina, cosa, sinhb, coshb;
 
-  WP34S_Cvt2RadSinCosTan(zReal, AM_RADIAN, &sina, &cosa, NULL);
-  WP34S_SinhCosh(zImag, &sinhb, &coshb);
+  WP34S_Cvt2RadSinCosTan(real, AM_RADIAN, &sina, &cosa, NULL, realContext);
+  WP34S_SinhCosh(imag, &sinhb, &coshb, realContext);
 
-  realMultiply(&cosa, &coshb, resReal, &ctxtReal39);
-  realMultiply(&sina, &sinhb, resImag, &ctxtReal39);
+  realMultiply(&cosa, &coshb, resReal, realContext);
+  realMultiply(&sina, &sinhb, resImag, realContext);
   realChangeSign(resImag);
 }
 
 
 
 void cosLonI(void) {
-  real39_t x;
+  real_t x;
 
   longIntegerAngleReduction(REGISTER_X, currentAngularMode, &x);
-  WP34S_Cvt2RadSinCosTan(&x, currentAngularMode, NULL, &x, NULL);
+  WP34S_Cvt2RadSinCosTan(&x, currentAngularMode, NULL, &x, NULL, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -107,12 +107,12 @@ void cosReal(void) {
     realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    real39_t x;
+    real_t x;
     uint32_t xAngularMode;
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     xAngularMode = getRegisterAngularMode(REGISTER_X);
-    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), NULL, &x, NULL);
+    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), NULL, &x, NULL, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -121,12 +121,12 @@ void cosReal(void) {
 
 
 void cosCplx(void) {
-  real39_t zReal, zImag;
+  real_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  cosCo39(&zReal, &zImag, &zReal, &zImag);
+  cosComplex(&zReal, &zImag, &zReal, &zImag, &ctxtReal39);
 
   realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));

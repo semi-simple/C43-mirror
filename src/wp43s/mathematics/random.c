@@ -121,7 +121,7 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
 // Method for pseudo random number generation: http://www.pcg-random.org/
 
 void fnRandom(uint16_t unusedParamButMandatory) {
-  real39_t x1, x2;
+  real_t x1, x2;
 
   saveStack();
 

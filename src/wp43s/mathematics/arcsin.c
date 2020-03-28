@@ -65,7 +65,7 @@ void fnArcsin(uint16_t unusedParamButMandatory) {
 
 
 void arcsinLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realCompareAbsGreaterThan(&x, const_1)) {
@@ -117,7 +117,7 @@ void arcsinCxma(void) {
 
 
 void arcsinReal(void) {
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
@@ -142,8 +142,8 @@ void arcsinReal(void) {
     }
   }
 
-  WP34S_Asin(&x, &x);
-  convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
+  WP34S_Asin(&x, &x, &ctxtReal39);
+  convertAngleFromTo(&x, AM_RADIAN, currentAngularMode, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 
   if(currentAngularMode == AM_DMS) {
@@ -154,7 +154,7 @@ void arcsinReal(void) {
 
 
 void arcsinCplx(void) {
-  real39_t a, b, real, imag;
+  real_t a, b, real, imag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
@@ -174,10 +174,10 @@ void arcsinCplx(void) {
   realChangeSign(&imag);
 
   // calculate sqrt(1 - z²)
-  real39RectangularToPolar(&real, &imag, &real, &imag);
+  realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
   realSquareRoot(&real, &real, &ctxtReal39);
   realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
-  real39PolarToRectangular(&real, &imag, &real, &imag);
+  realPolarToRectangular(&real, &imag, &real, &imag, &ctxtReal39);
 
   // calculate iz + sqrt(1 - z²)
   realChangeSign(&b);
@@ -185,8 +185,8 @@ void arcsinCplx(void) {
   realAdd(&imag, &a, &imag, &ctxtReal39);
 
   // calculate ln(iz + sqrt(1 - z²))
-  real39RectangularToPolar(&real, &imag, &a, &b);
-  WP34S_Ln(&a, &a);
+  realRectangularToPolar(&real, &imag, &a, &b, &ctxtReal39);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // calculate = -i.ln(iz + sqrt(1 - z²))
   realChangeSign(&a);

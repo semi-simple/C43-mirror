@@ -254,6 +254,7 @@ extern const real_t * const const_2;
 extern const real_t * const const_ln10;
 extern const real_t * const const_3piOn4;
 extern const real_t * const const_3;
+extern const real_t * const const_3piOn2;
 extern const real_t * const const_5;
 extern const real_t * const const_2pi;
 extern const real_t * const const_10;

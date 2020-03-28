@@ -20,12 +20,12 @@
 
 
 
-void fnCvtToCurrentAngularMode   (uint16_t fromAngularMode);
-void fnCvtFromCurrentAngularMode (uint16_t toAngularMode);
-void fnCvtDegToRad               (uint16_t unusedParamButMandatory);
-void fnCvtDegToDms               (uint16_t unusedParamButMandatory);
-void fnCvtDmsToDeg               (uint16_t unusedParamButMandatory);
-void fnCvtRadToDeg               (uint16_t unusedParamButMandatory);
-void convertAngle34FromTo        (real34_t *angle34, uint32_t fromAngularMode, uint32_t toAngularMode);
-void convertAngle39FromTo        (real_t *angle39, uint32_t fromAngularMode, uint32_t toAngularMode);
-void checkDms34                  (real34_t *angleDms);
+void fnCvtToCurrentAngularMode  (uint16_t fromAngularMode);
+void fnCvtFromCurrentAngularMode(uint16_t toAngularMode);
+void fnCvtDegToRad              (uint16_t unusedParamButMandatory);
+void fnCvtDegToDms              (uint16_t unusedParamButMandatory);
+void fnCvtDmsToDeg              (uint16_t unusedParamButMandatory);
+void fnCvtRadToDeg              (uint16_t unusedParamButMandatory);
+void convertAngle34FromTo       (real34_t *angle34, uint32_t fromAngularMode, uint32_t toAngularMode);
+void convertAngleFromTo         (real_t *angle, uint32_t fromAngularMode, uint32_t toAngularMode, realContext_t *realContext);
+void checkDms34                 (real34_t *angleDms);

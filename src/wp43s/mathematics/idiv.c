@@ -188,7 +188,7 @@ void idivLonIReal(void) {
     return;
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
@@ -205,7 +205,7 @@ void idivLonIReal(void) {
  * \return void
  ***********************************************/
 void idivRealLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realIsZero(&x)) {
@@ -216,7 +216,7 @@ void idivRealLonI(void) {
     return;
   }
 
-  real39_t y;
+  real_t y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   realDivide(&y, &x, &x, &ctxtReal39);
@@ -269,7 +269,7 @@ void idivShoIReal(void) {
     return;
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
@@ -286,7 +286,7 @@ void idivShoIReal(void) {
  * \return void
  ***********************************************/
 void idivRealShoI(void) {
-  real39_t x;
+  real_t x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realIsZero(&x)) {
@@ -297,7 +297,7 @@ void idivRealShoI(void) {
     return;
   }
 
-  real39_t y;
+  real_t y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   realDivide(&y, &x, &x, &ctxtReal39);
@@ -325,7 +325,7 @@ void idivRealReal(void) {
     return;
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);

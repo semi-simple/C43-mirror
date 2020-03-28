@@ -164,10 +164,10 @@ void factShoI(void) {
 
 
 void factReal(void) {
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  WP34S_Factorial(&x, &x);
+  WP34S_Factorial(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -175,13 +175,13 @@ void factReal(void) {
 
 
 void factCplx(void) {
-  real39_t zReal, zImag;
+  real_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
   realAdd(&zReal, const_1, &zReal, &ctxtReal39);
-  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag);
+  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag, &ctxtReal39);
 
   realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));

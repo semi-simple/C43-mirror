@@ -1544,136 +1544,115 @@ void memoryDump2(const char *text) {
     regist = REGISTER_X;
     dataType = reg[regist].dataType;
     printf(" X  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_Y;
     dataType = reg[regist].dataType;
     printf(" Y  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_Z;
     dataType = reg[regist].dataType;
     printf(" Z  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_T;
     dataType = reg[regist].dataType;
     printf(" T  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
 
     regist = REGISTER_A;
     dataType = reg[regist].dataType;
     printf(" A  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_B;
     dataType = reg[regist].dataType;
     printf(" B  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_C;
     dataType = reg[regist].dataType;
     printf(" C  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_D;
     dataType = reg[regist].dataType;
     printf(" D  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
 
     regist = REGISTER_L;
     dataType = reg[regist].dataType;
     printf(" L  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_I;
     dataType = reg[regist].dataType;
     printf(" I  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_J;
     dataType = reg[regist].dataType;
     printf(" J  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = REGISTER_K;
     dataType = reg[regist].dataType;
     printf(" K  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), reg[regist].tag, getRegisterTagName(regist, true), reg[regist].dataPointer, reg[regist].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
 
     regist = SAVED_REGISTER_X;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SX  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = SAVED_REGISTER_Y;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SY  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = SAVED_REGISTER_Z;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SZ  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = SAVED_REGISTER_T;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("ST  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     printf("----------------------------------------------------------------------------------------------------------------------------------------\n");
 
     regist = SAVED_REGISTER_A;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SA  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = SAVED_REGISTER_B;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SB  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = SAVED_REGISTER_C;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SC  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = SAVED_REGISTER_D;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SD  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 
     regist = SAVED_REGISTER_L;
     dataType = savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     printf("SL  %4d           %2u=%s %5u=%s %5u   %5u   %5u       ", regist, dataType, getDataTypeName(dataType, false, true), savedStackRegister[regist - SAVED_REGISTER_X].tag, getRegisterTagName(regist, true), savedStackRegister[regist - SAVED_REGISTER_X].dataPointer, savedStackRegister[regist - SAVED_REGISTER_X].variableNameLen, getRegisterFullSize(regist));
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
 //  }
 }
 

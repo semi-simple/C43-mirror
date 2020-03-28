@@ -20,11 +20,10 @@
 
 void fnLn   (uint16_t unusedParamButMandatory);
 void lnError(void);
-void lnCo39 (const real39_t *zReal, const real39_t *zImag, real39_t *lnReal, real39_t *lnImag);
-void lnCo51 (const real51_t *zReal, const real51_t *zImag, real51_t *lnReal, real51_t *lnImag);
 void lnLonI (void);
 void lnRema (void);
 void lnCxma (void);
 void lnShoI (void);
 void lnReal (void);
 void lnCplx (void);
+void lnComplex(const real_t *real, const real_t *imag, real_t *lnReal, real_t *lnImag, realContext_t *realContext);

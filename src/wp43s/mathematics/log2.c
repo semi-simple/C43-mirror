@@ -88,19 +88,19 @@ void log2LonI(void) {
     }
   }
   else {
-    real39_t x;
+    real_t x;
 
     convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
     if(longIntegerIsPositive(lgInt)) {
-      WP34S_Ln(&x, &x);
+      WP34S_Ln(&x, &x, &ctxtReal39);
       realDivide(&x, const_ln2, &x, &ctxtReal39);
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
       realSetPositiveSign(&x);
-      WP34S_Ln(&x, &x);
+      WP34S_Ln(&x, &x, &ctxtReal39);
       realDivide(&x, const_ln2, &x, &ctxtReal39);
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -174,17 +174,17 @@ void log2Real(void) {
   }
 
   else {
-    real39_t a;
+    real_t a;
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
     if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-      WP34S_Ln(&a, &a);
+      WP34S_Ln(&a, &a, &ctxtReal39);
       realDivide(&a, const_ln2, &a, &ctxtReal39);
       realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
       realSetPositiveSign(&a);
-      WP34S_Ln(&a, &a);
+      WP34S_Ln(&a, &a, &ctxtReal39);
       realDivide(&a, const_ln2, &a, &ctxtReal39);
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
@@ -220,13 +220,13 @@ void log2Cplx(void) {
     }
   }
   else {
-    real39_t a, b;
+    real_t a, b;
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
     real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-    real39RectangularToPolar(&a, &b, &a, &b);
-    WP34S_Ln(&a, &a);
+    realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
+    WP34S_Ln(&a, &a, &ctxtReal39);
     realDivide(&a, const_ln2, &a, &ctxtReal39);
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
     realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));

@@ -84,7 +84,7 @@ void fnParallel(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void parallelLonILonI(void) {
-  real39_t y, x, product;
+  real_t y, x, product;
 
   // y || x = xy / (x+y)
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -109,7 +109,7 @@ void parallelLonILonI(void) {
  * \return void
  ***********************************************/
 void parallelLonIReal(void) {
-  real39_t y, x, product;
+  real_t y, x, product;
 
   // y || x = xy / (x+y)
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -134,7 +134,7 @@ void parallelLonIReal(void) {
  * \return void
  ***********************************************/
 void parallelRealLonI(void) {
-  real39_t y, x, product;
+  real_t y, x, product;
 
   // y || x = xy / (x+y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
@@ -160,9 +160,9 @@ void parallelRealLonI(void) {
  * \return void
  ***********************************************/
 void parallelLonICplx(void) {
-  real39_t y;
-  real39_t xReal, productReal, sumReal;
-  real39_t xImag, productImag, sumImag;
+  real_t y;
+  real_t xReal, productReal, sumReal;
+  real_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -174,7 +174,7 @@ void parallelLonICplx(void) {
     realMultiply(&y, &xImag, &productImag, &ctxtReal39);
     realAdd(&y, &xReal, &sumReal, &ctxtReal39);
     realCopy(&xImag, &sumImag);
-    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
+    divComplexComplex(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag, &ctxtReal39);
   }
 
   realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -190,9 +190,9 @@ void parallelLonICplx(void) {
  * \return void
  ***********************************************/
 void parallelCplxLonI(void) {
-  real39_t x;
-  real39_t yReal, productReal, sumReal;
-  real39_t yImag, productImag, sumImag;
+  real_t x;
+  real_t yReal, productReal, sumReal;
+  real_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
@@ -205,7 +205,7 @@ void parallelCplxLonI(void) {
     realMultiply(&x, &yImag, &productImag, &ctxtReal39);
     realAdd(&x, &yReal, &sumReal, &ctxtReal39);
     realCopy(&yImag, &sumImag);
-    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
+    divComplexComplex(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag, &ctxtReal39);
   }
 
   realToReal34(&yReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -225,7 +225,7 @@ void parallelCplxLonI(void) {
  * \return void
  ***********************************************/
 void parallelRealReal(void) {
-  real39_t y, x, product;
+  real_t y, x, product;
 
   // y || x = xy / (x+y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
@@ -250,9 +250,9 @@ void parallelRealReal(void) {
  * \return void
  ***********************************************/
 void parallelRealCplx(void) {
-  real39_t y;
-  real39_t xReal, productReal, sumReal;
-  real39_t xImag, productImag, sumImag;
+  real_t y;
+  real_t xReal, productReal, sumReal;
+  real_t xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
@@ -264,7 +264,7 @@ void parallelRealCplx(void) {
     realMultiply(&y, &xImag, &productImag, &ctxtReal39);
     realAdd(&y, &xReal, &sumReal, &ctxtReal39);
     realCopy(&xImag, &sumImag);
-    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
+    divComplexComplex(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag, &ctxtReal39);
   }
 
   realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -280,9 +280,9 @@ void parallelRealCplx(void) {
  * \return void
  ***********************************************/
 void parallelCplxReal(void) {
-  real39_t x;
-  real39_t yReal, productReal, sumReal;
-  real39_t yImag, productImag, sumImag;
+  real_t x;
+  real_t yReal, productReal, sumReal;
+  real_t yImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
@@ -295,7 +295,7 @@ void parallelCplxReal(void) {
     realMultiply(&x, &yImag, &productImag, &ctxtReal39);
     realAdd(&x, &yReal, &sumReal, &ctxtReal39);
     realCopy(&yImag, &sumImag);
-    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag);
+    divComplexComplex(&productReal, &productImag, &sumReal, &sumImag, &yReal, &yImag, &ctxtReal39);
   }
 
   realToReal34(&yReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -315,8 +315,8 @@ void parallelCplxReal(void) {
  * \return void
  ***********************************************/
 void parallelCplxCplx(void) {
-  real39_t yReal, xReal, productReal, sumReal;
-  real39_t yImag, xImag, productImag, sumImag;
+  real_t yReal, xReal, productReal, sumReal;
+  real_t yImag, xImag, productImag, sumImag;
 
   // y || x = xy / (x + y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
@@ -325,10 +325,10 @@ void parallelCplxCplx(void) {
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
   if(!realIsZero(&xReal) || !realIsZero(&xImag)) {
-    mulCo39Co39(&yReal, &yImag, &xReal, &xImag, &productReal, &productImag);
+    mulComplexComplex(&yReal, &yImag, &xReal, &xImag, &productReal, &productImag, &ctxtReal39);
     realAdd(&yReal, &xReal, &sumReal, &ctxtReal39);
     realAdd(&yImag, &xImag, &sumImag, &ctxtReal39);
-    divCo39Co39(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag);
+    divComplexComplex(&productReal, &productImag, &sumReal, &sumImag, &xReal, &xImag, &ctxtReal39);
   }
 
   realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));

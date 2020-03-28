@@ -24,7 +24,7 @@
 
 void fnToPolar(uint16_t unusedParamButMandatory) {
   uint32_t dataTypeX, dataTypeY;
-  real39_t x, y;
+  real_t x, y;
 
   dataTypeX = getRegisterDataType(REGISTER_X);
   dataTypeY = getRegisterDataType(REGISTER_Y);
@@ -51,8 +51,8 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
       }
     }
 
-    real39RectangularToPolar(&x, &y, &x, &y);
-    convertAngle39FromTo(&y, AM_RADIAN, currentAngularMode);
+    realRectangularToPolar(&x, &y, &x, &y, &ctxtReal39);
+    convertAngleFromTo(&y, AM_RADIAN, currentAngularMode, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, currentAngularMode);
@@ -76,12 +76,12 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
 
 // The theta34 output angle is in radian
 void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, real34_t *magnitude34, real34_t *theta34) {
-  real39_t real, imag, magnitude, theta;
+  real_t real, imag, magnitude, theta;
 
   real34ToReal(real34, &real);
   real34ToReal(imag34, &imag);
 
-  real39RectangularToPolar(&real, &imag, &magnitude, &theta); // theta in radian
+  realRectangularToPolar(&real, &imag, &magnitude, &theta, &ctxtReal39); // theta in radian
 
   realToReal34(&magnitude, magnitude34);
   realToReal34(&theta, theta34);
@@ -89,99 +89,191 @@ void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, re
 
 
 
-void real39RectangularToPolar(const real_t *re, const real_t *im, real_t *magnitude, real_t *theta) { // theta is in ]-pi, pi]
-  if(realIsZero(re)) {
-    if(realIsZero(im)) {
+void realRectangularToPolar(const real_t *real, const real_t *imag, real_t *magnitude, real_t *theta, realContext_t *realContext) { // theta is in ]-pi, pi]
+  ///////////////////////////////////////////
+  //
+  //    a > 0  and  b > 0
+  //
+  //  +----+----+--------+------------+
+  //  | Re | Im | ρ      | θ          |
+  //  +----+----+--------+------------+
+  //  |NaN |any |NaN     |NaN         |   1
+  //  |any |NaN |NaN     |NaN         |   2
+  //  |-∞  |-∞  |∞       |-3π/4       |   3
+  //  |-∞  |-b  |∞       |π           |   4
+  //  |-∞  |0   |∞       |π           |   5
+  //  |-∞  |+b  |∞       |π           |   6
+  //  |-∞  |+∞  |∞       |3π/4        |   7
+  //  |-a  |-∞  |∞       |-π/2        |   8
+  //  |-a  |-b  |√(a²+b²)|atan2(-b,-a)|   9
+  //  |-a  |0   |a       |π           |  10
+  //  |-a  |+b  |√(a²+b²)|atan2(+b,-a)|  11
+  //  |-a  |+∞  |∞       |π/2         |  12
+  //  |0   |-∞  |∞       |-π/2        |  13
+  //  |0   |-b  |b       |-π/2        |  14
+  //  |0   |0   |0       |0           |  15
+  //  |0   |+b  |b       |π/2         |  16
+  //  |0   |+∞  |∞       |π/2         |  17
+  //  |+a  |-∞  |∞       |-π/2        |  18
+  //  |+a  |-b  |√(a²+b²)|atan2(-b,+a)|  19
+  //  |+a  |0   |a       |0           |  20
+  //  |+a  |+b  |√(a²+b²)|atan2(+b,+a)|  21
+  //  |+a  |+∞  |∞       |π/2         |  22
+  //  |+∞  |-∞  |∞       |-π/4        |  23
+  //  |+∞  |-b  |∞       |0           |  24
+  //  |+∞  |0   |∞       |0           |  25
+  //  |+∞  |+b  |∞       |0           |  26
+  //  |+∞  |+∞  |∞       |π/4         |  27
+
+  real_t re, im;
+
+  realCopy(real, &re);
+  realCopy(imag, &im);
+
+  // Testing NaNs
+  if(realIsNaN(&re) || realIsNaN(&im)) {
+    //  +----+----+--------+------------+
+    //  | Re | Im | ρ      | θ          |
+    //  +----+----+--------+------------+
+    //  |NaN |any |NaN     |NaN         |   1
+    //  |any |NaN |NaN     |NaN         |   2
+    realCopy(const_NaN, magnitude);
+    realCopy(const_NaN, theta);
+    return;
+  }
+
+  // Real part is infinite
+  if(realIsInfinite(&re)) {
+    realCopy(const_plusInfinity, magnitude);
+
+    if(realIsPositive(&re)) { // re = +inf
+      //  +----+----+--------+------------+
+      //  | Re | Im | ρ      | θ          |
+      //  +----+----+--------+------------+
+      //  |+∞  |-∞  |∞       |-π/4        |  23
+      //  |+∞  |-b  |∞       |0           |  24
+      //  |+∞  |0   |∞       |0           |  25
+      //  |+∞  |+b  |∞       |0           |  26
+      //  |+∞  |+∞  |∞       |π/4         |  27
+      if(realIsInfinite(&im)) { // re = +inf  im = ±inf
+        realCopy(const_piOn4, theta);
+
+        if(realIsNegative(&im)) { // re = +inf  im = -inf
+          realSetNegativeSign(theta);
+        }
+      }
+      else { // re = +inf  im ≠ infinite
+        realZero(theta);
+      }
+    }
+    else { // re = -inf
+      //  +----+----+--------+------------+
+      //  | Re | Im | ρ      | θ          |
+      //  +----+----+--------+------------+
+      //  |-∞  |-∞  |∞       |-3π/4       |   3
+      //  |-∞  |-b  |∞       |π           |   4
+      //  |-∞  |0   |∞       |π           |   5
+      //  |-∞  |+b  |∞       |π           |   6
+      //  |-∞  |+∞  |∞       |3π/4        |   7
+      if(realIsInfinite(&im)) { // re = -inf  im = ±inf
+        realCopy(const_3piOn4, theta);
+
+        if(realIsNegative(&im)) { // re = -inf  im = -inf
+          realSetNegativeSign(theta);
+        }
+      }
+      else { // re = -inf  im ≠ infinite
+        realCopy(const_pi, theta);
+      }
+    }
+
+    return;
+  }
+
+  // Imaginary part is infinite
+  if(realIsInfinite(&im)) {
+    //  +----+----+--------+------------+
+    //  | Re | Im | ρ      | θ          |
+    //  +----+----+--------+------------+
+    //  |-a  |+∞  |∞       |π/2         |  12
+    //  |0   |+∞  |∞       |π/2         |  17
+    //  |+a  |+∞  |∞       |π/2         |  22
+    //  |-a  |-∞  |∞       |-π/2        |   8
+    //  |0   |-∞  |∞       |-π/2        |  13
+    //  |+a  |-∞  |∞       |-π/2        |  18
+    realCopy(const_plusInfinity, magnitude);
+    realCopy(const_piOn2, theta);
+
+    if(realIsNegative(&im)) { // im = -inf
+      realSetNegativeSign(theta);
+    }
+
+    return;
+  }
+
+  // Real part = 0
+  if(realIsZero(&re)) { // re = 0
+    //  +----+----+--------+------------+
+    //  | Re | Im | ρ      | θ          |
+    //  +----+----+--------+------------+
+    //  |0   |0   |0       |0           |  15
+    //  |0   |-b  |b       |-π/2        |  14
+    //  |0   |+b  |b       |π/2         |  16
+    if(realIsZero(&im)) { // re = 0  im = 0
       realZero(magnitude);
       realZero(theta);
     }
-    else if(realIsNegative(im)) {
-      realCopyAbs(im, magnitude);
-      realMinus(const_piOn2, theta, &ctxtReal39); //  -90°
-    }
-    else {
-      realCopy(im, magnitude);
+    else { // re = 0  im ≠ 0
+      realCopyAbs(&im, magnitude);
       realCopy(const_piOn2, theta); // 90°
+
+      if(realIsNegative(&im)) { // re = 0  im < 0
+        realSetNegativeSign(theta); // -90°
+      }
     }
+
+    return;
   }
-  else { // real != 0
-    real39_t real, imag;
 
-    realCopy(re, &real);
-    realCopy(im, &imag);
+  // Imaginary part = 0
+  if(realIsZero(&im)) { // im = 0
+    //  +----+----+--------+------------+
+    //  | Re | Im | ρ      | θ          |
+    //  +----+----+--------+------------+
+    //  |-a  |0   |a       |π           |  10
+    //  |+a  |0   |a       |0           |  20
+    realCopyAbs(&re, magnitude);
 
+    if(realIsNegative(&re)) { // re < 0  im = 0
+      realCopy(const_pi, theta); // 180°
+    }
+    else { // re > 0  im = 0
+      realZero(theta); // 0°
+    }
+
+    return;
+  }
+
+  // Real and imagynary part not special and not zero
+  //  +----+----+--------+------------+
+  //  | Re | Im | ρ      | θ          |
+  //  +----+----+--------+------------+
+  //  |-a  |-b  |√(a²+b²)|atan2(-b,-a)|   9
+  //  |-a  |+b  |√(a²+b²)|atan2(+b,-a)|  11
+  //  |+a  |-b  |√(a²+b²)|atan2(-b,+a)|  19
+  //  |+a  |+b  |√(a²+b²)|atan2(+b,+a)|  21
+
+  if(realContext->digits > 75) {
+    sprintf(errorMessage, "In function realRectangularToPolar: The number of digits is > 75");
+    displayBugScreen(errorMessage);
+  }
+  else {
     // Magnitude
-    realMultiply(&real, &real, magnitude, &ctxtReal39);
-    realFMA(&imag, &imag, magnitude, magnitude, &ctxtReal39);
-    realSquareRoot(magnitude, magnitude, &ctxtReal39);
+    realMultiply(&re, &re, magnitude, realContext);
+    realFMA(&im, &im, magnitude, magnitude, realContext);
+    realSquareRoot(magnitude, magnitude, realContext);
 
     // Angle
-    WP34S_Atan2(&imag, &real, theta);
-  }
-}
-
-
-
-void real51RectangularToPolar(const real_t *re, const real_t *im, real_t *magnitude, real_t *theta) { // theta is in ]-pi, pi]
-  if(realIsZero(re)) {
-    if(realIsZero(im)) {
-      realZero(magnitude);
-      realZero(theta);
-    }
-    else if(realIsNegative(im)) {
-      realCopyAbs(im, magnitude);
-      realMinus(const_piOn2, theta, &ctxtReal51); //  -90°
-    }
-    else {
-      realCopy(im, magnitude);
-      realCopy(const_piOn2, theta); // 90°
-    }
-  }
-  else { // real != 0
-    real51_t real, imag;
-
-    realCopy(re, &real);
-    realCopy(im, &imag);
-
-    // Magnitude
-    realMultiply(&real, &real, magnitude, &ctxtReal51);
-    realFMA(&imag, &imag, magnitude, magnitude, &ctxtReal51);
-    realSquareRoot(magnitude, magnitude, &ctxtReal51);
-
-    // Angle
-    WP34S_Atan2((real_t *)&imag, (real_t *)&real, theta);
-  }
-}
-
-
-
-void real75RectangularToPolar(const real_t *re, const real_t *im, real_t *magnitude, real_t *theta) { // theta is in ]-pi, pi]
-  if(realIsZero(re)) {
-    if(realIsZero(im)) {
-      realZero(magnitude);
-      realZero(theta);
-    }
-    else if(realIsNegative(im)) {
-      realCopyAbs(im, magnitude);
-      realMinus(const_piOn2, theta, &ctxtReal75); //  -90°
-    }
-    else {
-      realCopy(im, magnitude);
-      realCopy(const_piOn2, theta); // 90°
-    }
-  }
-  else { // real != 0
-    real75_t real, imag;
-
-    realCopy(re, &real);
-    realCopy(im, &imag);
-
-    // Magnitude
-    realMultiply(&real, &real, magnitude, &ctxtReal75);
-    realFMA(&imag, &imag, magnitude, magnitude, &ctxtReal75);
-    realSquareRoot(magnitude, magnitude, &ctxtReal75);
-
-    // Angle
-    WP34S_Atan2((real_t *)&imag, (real_t *)&real, theta);
+    WP34S_Atan2(&im, &re, theta, realContext);
   }
 }

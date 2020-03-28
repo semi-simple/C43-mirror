@@ -209,12 +209,12 @@ void modLonIReal(void) {
     return;
   }
 
-  real39_t y, x, r;
+  real_t y, x, r;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  WP34S_Mod(&y, &x, &r);
+  WP34S_Mod(&y, &x, &r, &ctxtReal39);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -232,7 +232,7 @@ void modLonIReal(void) {
  * \return void
  ***********************************************/
 void modRealLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realIsZero(&x)) {
@@ -243,10 +243,10 @@ void modRealLonI(void) {
     return;
   }
 
-  real39_t y, r;
+  real_t y, r;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  WP34S_Mod(&y, &x, &r);
+  WP34S_Mod(&y, &x, &r, &ctxtReal39);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -317,12 +317,12 @@ void modShoIReal(void) {
     return;
   }
 
-  real39_t y, x, r;
+  real_t y, x, r;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  WP34S_Mod(&y, &x, &r);
+  WP34S_Mod(&y, &x, &r, &ctxtReal39);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -340,7 +340,7 @@ void modShoIReal(void) {
  * \return void
  ***********************************************/
 void modRealShoI(void) {
-  real39_t x;
+  real_t x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realIsZero(&x)) {
@@ -351,11 +351,11 @@ void modRealShoI(void) {
     return;
   }
 
-  real39_t y, r;
+  real_t y, r;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  WP34S_Mod(&y, &x, &r);
+  WP34S_Mod(&y, &x, &r, &ctxtReal39);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
@@ -385,12 +385,12 @@ void modRealReal(void) {
     return;
   }
 
-  real39_t x, y, r;
+  real_t x, y, r;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  WP34S_Mod(&y, &x, &r);
+  WP34S_Mod(&y, &x, &r, &ctxtReal39);
   if(!realIsZero(&r) && realSign(&y) != realSign(&x)) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }

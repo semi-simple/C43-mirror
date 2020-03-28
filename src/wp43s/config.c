@@ -340,7 +340,7 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
-  real39_t value;
+  real_t value;
 
   liftStack();
 

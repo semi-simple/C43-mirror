@@ -65,7 +65,7 @@ void fnArccos(uint16_t unusedParamButMandatory) {
 
 
 void arccosLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realCompareAbsGreaterThan(&x, const_1)) {
@@ -120,7 +120,7 @@ void arccosCxma(void) {
 
 
 void arccosReal(void) {
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
@@ -144,8 +144,8 @@ void arccosReal(void) {
     return;
   }
 
-  WP34S_Acos(&x, &x);
-  convertAngle39FromTo(&x, AM_RADIAN, currentAngularMode);
+  WP34S_Acos(&x, &x, &ctxtReal39);
+  convertAngleFromTo(&x, AM_RADIAN, currentAngularMode, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 
   if(currentAngularMode == AM_DMS) {
@@ -156,7 +156,7 @@ void arccosReal(void) {
 
 
 void arccosCplx(void) {
-  real39_t a, b, real, imag;
+  real_t a, b, real, imag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
@@ -175,18 +175,18 @@ void arccosCplx(void) {
   realSubtract(&real, const_1, &real, &ctxtReal39);
 
   // calculate sqrt(z² - 1)
-  real39RectangularToPolar(&real, &imag, &real, &imag);
+  realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
   realSquareRoot(&real, &real, &ctxtReal39);
   realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
-  real39PolarToRectangular(&real, &imag, &real, &imag);
+  realPolarToRectangular(&real, &imag, &real, &imag, &ctxtReal39);
 
   // calculate z + sqrt(z² - 1)
   realAdd(&a, &real, &real, &ctxtReal39);
   realAdd(&b, &imag, &imag, &ctxtReal39);
 
   // calculate ln(z + sqtr(z² - 1))
-  real39RectangularToPolar(&real, &imag, &a, &b);
-  WP34S_Ln(&a, &a);
+  realRectangularToPolar(&real, &imag, &a, &b, &ctxtReal39);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // calculate = -i.ln(z + sqtr(z² - 1))
   realChangeSign(&a);

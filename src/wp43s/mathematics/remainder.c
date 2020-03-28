@@ -203,12 +203,12 @@ void rmdLonIReal(void) {
     return;
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  WP34S_Mod(&y, &x, &x);
+  WP34S_Mod(&y, &x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -222,7 +222,7 @@ void rmdLonIReal(void) {
  * \return void
  ***********************************************/
 void rmdRealLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realIsZero(&x)) {
@@ -233,10 +233,10 @@ void rmdRealLonI(void) {
     return;
   }
 
-  real39_t y;
+  real_t y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  WP34S_Mod(&y, &x, &x);
+  WP34S_Mod(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -301,12 +301,12 @@ void rmdShoIReal(void) {
     return;
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  WP34S_Mod(&y, &x, &x);
+  WP34S_Mod(&y, &x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -320,7 +320,7 @@ void rmdShoIReal(void) {
  * \return void
  ***********************************************/
 void rmdRealShoI(void) {
-  real39_t x;
+  real_t x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realIsZero(&x)) {
@@ -331,11 +331,11 @@ void rmdRealShoI(void) {
     return;
   }
 
-  real39_t y;
+  real_t y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  WP34S_Mod(&y, &x, &x);
+  WP34S_Mod(&y, &x, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -361,12 +361,12 @@ void rmdRealReal(void) {
     return;
   }
 
-  real39_t x, y;
+  real_t x, y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  WP34S_Mod(&y, &x, &x);
+  WP34S_Mod(&y, &x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }

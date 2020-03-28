@@ -121,7 +121,7 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
 void convertShortIntegerRegisterToReal(calcRegister_t source, real_t *destination, realContext_t *ctxt) {
   uint64_t value;
   int16_t sign;
-  real39_t lowWord;
+  real_t lowWord;
 
   convertShortIntegerRegisterToUInt64(source, &sign, &value);
 

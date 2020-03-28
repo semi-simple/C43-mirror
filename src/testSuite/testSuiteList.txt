@@ -179,12 +179,12 @@ squareRoot
 cube
 cubeRoot
 
-cyx
-pyx
-
 lnGamma
 gamma
 factorial
+
+cyx
+pyx
 
 fractionalPart
 integerPart

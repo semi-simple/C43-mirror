@@ -65,7 +65,7 @@ void fnArctanh(uint16_t unusedParamButMandatory) {
 
 
 void arctanhLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
@@ -134,7 +134,7 @@ void arctanhCxma(void) {
 
 
 void arctanhReal(void) {
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
@@ -183,7 +183,7 @@ void arctanhReal(void) {
         }
       }
       else {
-        WP34S_ArcTanh(&x, &x);
+        WP34S_ArcTanh(&x, &x, &ctxtReal39);
         realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }
@@ -198,8 +198,8 @@ void arctanhCplx(void) {
   // arctanh(a + i b) = - * ln( ------------ )
   //                    2       1 - (a + ib)
 
-  real39_t numerReal, denomReal;
-  real39_t numerImag, denomImag;
+  real_t numerReal, denomReal;
+  real_t numerImag, denomImag;
 
   // numer = 1 + (a + ib)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &numerReal);
@@ -213,10 +213,10 @@ void arctanhCplx(void) {
   realChangeSign(&denomImag);
 
   // numer = (1 + (a + ib)) / (1 - (a + ib)
-  divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag);
+  divComplexComplex(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag, &ctxtReal39);
 
   // numer = ln((1 + (a + ib)) / (1 - (a + ib))
-  lnCo39(&numerReal, &numerImag, &numerReal, &numerImag);
+  lnComplex(&numerReal, &numerImag, &numerReal, &numerImag, &ctxtReal39);
 
   // 1/2 * ln((1 + (a + ib)) / (1 - (a + ib))
   realMultiply(&numerReal, const_1on2, &numerReal, &ctxtReal39);

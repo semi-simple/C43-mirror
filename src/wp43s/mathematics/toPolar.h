@@ -20,6 +20,4 @@
 
 void fnToPolar               (uint16_t unusedParamButMandatory);
 void real34RectangularToPolar(const real34_t *real34, const real34_t *imag34, real34_t *magnitude34, real34_t *theta34);
-void real39RectangularToPolar(const real_t *real,   const real_t *imag,   real_t *magnitude,   real_t *theta);
-void real51RectangularToPolar(const real_t *real,   const real_t *imag,   real_t *magnitude,   real_t *theta);
-void real75RectangularToPolar(const real_t *real,   const real_t *imag,   real_t *magnitude,   real_t *theta);
+void realRectangularToPolar  (const real_t   *real,   const real_t   *imag,   real_t   *magnitude,   real_t   *theta,  realContext_t *realContext);

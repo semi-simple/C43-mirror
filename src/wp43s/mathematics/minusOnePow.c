@@ -123,12 +123,12 @@ void m1PowReal(void) {
     return;
   }
 
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
   realMultiply(const_pi, &x, &x, &ctxtReal39);
-  WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, NULL, &x, NULL);
+  WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, NULL, &x, NULL, &ctxtReal39);
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -137,18 +137,20 @@ void m1PowReal(void) {
 
 
 void m1PowCplx(void) {
-  real39_t real;
+  real_t real, imag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
   realMultiply(const_pi, &real, &real, &ctxtReal39);
-  realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
 
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &real);
-  realMultiply(const_pi, &real, &real, &ctxtReal39);
-  realToReal34(&real, REGISTER_IMAG34_DATA(REGISTER_X));
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &imag);
+  realMultiply(const_pi, &imag, &imag, &ctxtReal39);
 
   uint8_t savedAngularMode = currentAngularMode;
   currentAngularMode = AM_RADIAN;
-  cosCplx();
+
+  cosComplex(&real, &imag, &real, &imag, &ctxtReal39);
+  realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&imag, REGISTER_IMAG34_DATA(REGISTER_X));
+
   currentAngularMode = savedAngularMode;
 }

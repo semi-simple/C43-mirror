@@ -23,23 +23,23 @@
 
 
 bool_t real34CompareAbsGreaterThan(const real34_t *number1, const real34_t *number2) {
-  real34_t compare, num1, num2;
+  real34_t num1, num2;
 
   real34CopyAbs(number1, &num1);
   real34CopyAbs(number2, &num2);
-  real34Compare(&num1, &num2, &compare);
-  return real34ToInt32(&compare) > 0;
+  real34Compare(&num1, &num2, &num2);
+  return real34ToInt32(&num2) > 0;
 }
 
 
 
 bool_t real34CompareAbsLessThan(const real34_t *number1, const real34_t *number2) {
-  real34_t compare, num1, num2;
+  real34_t num1, num2;
 
   real34CopyAbs(number1, &num1);
   real34CopyAbs(number2, &num2);
-  real34Compare(&num1, &num2, &compare);
-  return real34ToInt32(&compare) < 0;
+  real34Compare(&num1, &num2, &num2);
+  return real34ToInt32(&num2) < 0;
 }
 
 
@@ -90,46 +90,46 @@ bool_t real34CompareLessThan(const real34_t *number1, const real34_t *number2) {
 
 
 bool_t realCompareAbsGreaterThan(const real_t *number1, const real_t *number2) {
-  real75_t compare, num1, num2;
+  real_t num1, num2;
   int32_t cmp;
 
   realCopyAbs(number1, &num1);
   realCopyAbs(number2, &num2);
-  realCompare(&num1, &num2, &compare, &ctxtReal75);
-  realToInt32(&compare, cmp);
+  realCompare(&num1, &num2, &num2, &ctxtReal75);
+  realToInt32(&num2, cmp);
   return cmp > 0;
 }
 
 
 
 bool_t realCompareAbsGreaterEqual(const real_t *number1, const real_t *number2) {
-  real75_t compare, num1, num2;
+  real_t num1, num2;
   int32_t cmp;
 
   realCopyAbs(number1, &num1);
   realCopyAbs(number2, &num2);
-  realCompare(&num1, &num2, &compare, &ctxtReal75);
-  realToInt32(&compare, cmp);
+  realCompare(&num1, &num2, &num2, &ctxtReal75);
+  realToInt32(&num2, cmp);
   return cmp >= 0;
 }
 
 
 
 bool_t realCompareAbsLessThan(const real_t *number1, const real_t *number2) {
-  real75_t compare, num1, num2;
+  real_t num1, num2;
   int32_t cmp;
 
   realCopyAbs(number1, &num1);
   realCopyAbs(number2, &num2);
-  realCompare(&num1, &num2, &compare, &ctxtReal75);
-  realToInt32(&compare, cmp);
+  realCompare(&num1, &num2, &num2, &ctxtReal75);
+  realToInt32(&num2, cmp);
   return cmp < 0;
 }
 
 
 
 bool_t realCompareEqual(const real_t *number1, const real_t *number2) {
-  real75_t compare;
+  real_t compare;
   int32_t cmp;
 
   realCompare(number1, number2, &compare, &ctxtReal75);
@@ -140,7 +140,7 @@ bool_t realCompareEqual(const real_t *number1, const real_t *number2) {
 
 
 bool_t realCompareGreaterEqual(const real_t *number1, const real_t *number2) {
-  real75_t compare;
+  real_t compare;
   int32_t cmp;
 
   realCompare(number1, number2, &compare, &ctxtReal75);
@@ -151,7 +151,7 @@ bool_t realCompareGreaterEqual(const real_t *number1, const real_t *number2) {
 
 
 bool_t realCompareGreaterThan(const real_t *number1, const real_t *number2) {
-  real75_t compare;
+  real_t compare;
   int32_t cmp;
 
   realCompare(number1, number2, &compare, &ctxtReal75);
@@ -162,7 +162,7 @@ bool_t realCompareGreaterThan(const real_t *number1, const real_t *number2) {
 
 
 bool_t realCompareLessEqual(const real_t *number1, const real_t *number2) {
-  real75_t compare;
+  real_t compare;
   int32_t cmp;
 
   realCompare(number1, number2, &compare, &ctxtReal75);
@@ -173,7 +173,7 @@ bool_t realCompareLessEqual(const real_t *number1, const real_t *number2) {
 
 
 bool_t realCompareLessThan(const real_t *number1, const real_t *number2) {
-  real75_t compare;
+  real_t compare;
   int32_t cmp;
 
   realCompare(number1, number2, &compare, &ctxtReal75);
@@ -184,7 +184,7 @@ bool_t realCompareLessThan(const real_t *number1, const real_t *number2) {
 
 
 bool_t real34IsAnInteger(const real34_t *x) {
-  real34_t r, y;
+  real34_t y;
 
   if(real34IsNaN(x)) {
     return false;
@@ -195,15 +195,15 @@ bool_t real34IsAnInteger(const real34_t *x) {
   }
 
   real34ToIntegralValue(x, &y, DEC_ROUND_DOWN);
-  real34Subtract(x, &y, &r);
+  real34Subtract(x, &y, &y);
 
-  return real34CompareEqual(&r, const34_0);
+  return real34CompareEqual(&y, const34_0);
 }
 
 
 
 bool_t realIsAnInteger(const real_t *x) {
-  real75_t r, y;
+  real_t y;
 
   if(realIsNaN(x)) {
     return false;
@@ -214,9 +214,9 @@ bool_t realIsAnInteger(const real_t *x) {
   }
 
   realToIntegralValue(x, &y, DEC_ROUND_DOWN, &ctxtReal75);
-  realSubtract(x, &y, &r, &ctxtReal75);
+  realSubtract(x, &y, &y, &ctxtReal75);
 
-  return realCompareEqual((real_t *)&r, const_0);
+  return realCompareEqual(&y, const_0);
 }
 
 

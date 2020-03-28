@@ -65,7 +65,7 @@ void fnMant(uint16_t unusedParamButMandatory) {
 
 
 void mantLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   x.exponent = 1 - x.digits;
@@ -84,7 +84,7 @@ void mantReal(void) {
     return;
   }
 
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   x.exponent = 1 - x.digits;

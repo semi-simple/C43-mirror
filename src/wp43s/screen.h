@@ -49,6 +49,8 @@ typedef enum {
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
 
+void     fnScreenDump(uint16_t unusedButMandatoryParameter);
+
 #ifdef PC_BUILD
   #if (__linux__ == 1)
     #define LINEBREAK "\n"
@@ -91,5 +93,4 @@ void     hideFunctionName         (void);
 void     clearRegisterLine        (int16_t yStart, int16_t height);
 void     resetTemporaryInformation(void);
 void     refreshRegisterLine      (calcRegister_t regist);
-void     fnScreenDump             (uint16_t unusedButMandatoryParameter);
 #endif

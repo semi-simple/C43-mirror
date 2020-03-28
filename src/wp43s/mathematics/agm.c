@@ -23,11 +23,11 @@
 
 void fnAgm(uint16_t unusedParamButMandatory) {
   bool_t realInput=true;
-  real39_t aReal, bReal, cReal;
-  real39_t aImag, bImag, cImag;
+  real_t aReal, bReal, cReal;
+  real_t aImag, bImag, cImag;
 
   switch(getRegisterDataType(REGISTER_X)) {
-    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&aReal, &ctxtReal39);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &aReal, &ctxtReal39);
                         realZero(&aImag);
                         break;
 
@@ -49,7 +49,7 @@ void fnAgm(uint16_t unusedParamButMandatory) {
   }
 
   switch(getRegisterDataType(REGISTER_Y)) {
-    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&bReal, &ctxtReal39);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, &bReal, &ctxtReal39);
                         realZero(&bImag);
                         break;
 
@@ -94,16 +94,16 @@ void fnAgm(uint16_t unusedParamButMandatory) {
   }
   else { // Complex input
     while(realIdenticalDigits(&aReal, &bReal) <= 34 || realIdenticalDigits(&aImag, &bImag) <= 34) {
-      realAdd(&aReal, &bReal, &cReal, &ctxtReal39);                // c = a + b real part
-      realAdd(&aImag, &bImag, &cImag, &ctxtReal39);                // c = a + b imag part
+      realAdd(&aReal, &bReal, &cReal, &ctxtReal39);                                   // c = a + b real part
+      realAdd(&aImag, &bImag, &cImag, &ctxtReal39);                                   // c = a + b imag part
 
-      mulCo39Co39(&aReal, &aImag, &bReal, &bImag, &bReal, &bImag); // b = a * b
+      mulComplexComplex(&aReal, &aImag, &bReal, &bImag, &bReal, &bImag, &ctxtReal39); // b = a * b
 
       // b = sqrt(a * b)
-      real39RectangularToPolar(&bReal, &bImag, &bReal, &bImag);
+      realRectangularToPolar(&bReal, &bImag, &bReal, &bImag, &ctxtReal39);
       realSquareRoot(&bReal, &bReal, &ctxtReal39);
       realMultiply(&bImag, const_1on2, &bImag, &ctxtReal39);
-      real39PolarToRectangular(&bReal, &bImag, &bReal, &bImag);
+      realPolarToRectangular(&bReal, &bImag, &bReal, &bImag, &ctxtReal39);
 
       realMultiply(&cReal, const_1on2, &aReal, &ctxtReal39); // a = (a + b) / 2 real part
       realMultiply(&cImag, const_1on2, &aImag, &ctxtReal39); // a = (a + b) / 2 imag part

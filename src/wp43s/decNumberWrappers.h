@@ -24,8 +24,8 @@ typedef struct {
                        // range: -1999999997 through 999999999
   uint8_t bits;        // Indicator bits (see above)
                        // Coefficient, from least significant unit
-  decNumberUnit lsu[(51+DECDPUN-1)/DECDPUN]; // 51 = 39 + 1*12
-} real51_t; // used for trigonometric functions borrowed from WP34S
+  decNumberUnit lsu[(39+DECDPUN-1)/DECDPUN]; // 39 = 27 + 1*12
+} real39_t; // used for trigonometric functions borrowed from WP34S
 
 typedef struct {
   int32_t digits;      // Count of digits in the coefficient; >0
@@ -33,8 +33,17 @@ typedef struct {
                        // range: -1999999997 through 999999999
   uint8_t bits;        // Indicator bits (see above)
                        // Coefficient, from least significant unit
-  decNumberUnit lsu[(75+DECDPUN-1)/DECDPUN]; // 75 = 39 + 3*12
-} real75_t; // used in SLVQ
+  decNumberUnit lsu[(51+DECDPUN-1)/DECDPUN]; // 51 = 39 + 1*12
+} real51_t; // used for trigonometric functions borrowed from WP34S
+
+//typedef struct {
+//  int32_t digits;      // Count of digits in the coefficient; >0
+//  int32_t exponent;    // Unadjusted exponent, unbiased, in
+//                       // range: -1999999997 through 999999999
+//  uint8_t bits;        // Indicator bits (see above)
+//                       // Coefficient, from least significant unit
+//  decNumberUnit lsu[(75+DECDPUN-1)/DECDPUN]; // 75 = 39 + 3*12
+//} real75_t; // used in SLVQ
 
 typedef struct {
   int32_t digits;      // Count of digits in the coefficient; >0
@@ -56,7 +65,6 @@ typedef struct {
 
 #define realContext_t                                     decContext
 #define real34_t                                          decQuad      // 34 digits
-#define real39_t                                          decNumber    // 39 digits: Intermediate calculations
 #define real_t                                            decNumber
 typedef struct {real34_t real, imag;}                     complex34_t;
 
@@ -132,7 +140,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real34Subtract(operand1, operand2, res)                decQuadSubtract          ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
 #define real34ToInt32(source)                                  decQuadToInt32           ((real34_t *)(source), &ctxtReal34, DEC_ROUND_DOWN)
 #define real34ToIntegralValue(source, destination, mode)       decQuadToIntegralValue   ((real34_t *)(destination), (real34_t *)(source), &ctxtReal34, mode)
-#define real34ToReal(source, destination)                      decQuadToNumber          ((real34_t *)(source), (real_t *)(destination))
+#define real34ToReal(source, destination)                      decQuadToNumber          ((real34_t *)(source), destination)
 #define real34ToString(source, destination)                    decQuadToString          ((real34_t *)(source), destination)
 #define real34ToUInt32(source)                                 decQuadToUInt32          ((real34_t *)(source), &ctxtReal34, DEC_ROUND_DOWN)
 #define real34Zero(destination)                                decQuadZero              (destination)
@@ -150,59 +158,67 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 
 
 
-#define int32ToReal(source, destination)                       decNumberFromInt32       ((real_t *)(destination), source)
-#define realAdd(operand1, operand2, res, ctxt)                 decNumberAdd             ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
-#define realChangeSign(operand)                                ((real_t *)(operand))->bits ^= 0x80
-#define realCompare(operand1, operand2, res, ctxt)             decNumberCompare         ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
-#define realCopy(source, destination)                          decNumberCopy            ((real_t *)(destination), (real_t *)(source))
-#define realCopyAbs(source, destination)                       decNumberCopyAbs         ((real_t *)(destination), (real_t *)(source))
-#define realDivide(operand1, operand2, res, ctxt)              decNumberDivide          ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
-#define realDivideRemainder(operand1, operand2, res, ctxt)     decNumberRemainder       ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
-#define realExp(operand, res, ctxt)                            decNumberExp             ((real_t *)(res), (real_t *)(operand), ctxt)
-#define realFMA(factor1, factor2, term, res, ctxt)             decNumberFMA             ((real_t *)(res), (real_t *)(factor1),  (real_t *)(factor2),  (real_t *)(term), ctxt)
-#define realGetCoefficient(source, destination)                decNumberGetBCD          ((real_t *)(source), (uint8_t *)(destination))
-#define realGetExponent(source)                                (((real_t *)(source))->digits)
-#define realIsInfinite(source)                                 decNumberIsInfinite      ((real_t *)(source))
-#define realIsNaN(source)                                      decNumberIsNaN           ((real_t *)(source))
-#define realIsNegative(source)                                 (((((real_t *)(source))->bits) & 0x80) == 0x80)
-#define realIsPositive(source)                                 (((((real_t *)(source))->bits) & 0x80) == 0x00)
-#define realIsSpecial(source)                                  decNumberIsSpecial       ((real_t *)(source))
-#define realIsZero(source)                                     decNumberIsZero          ((real_t *)(source))
-#define realLn(operand, res, ctxt)                             decNumberLn              ((real_t *)(res), (real_t *)(operand), ctxt)
-#define realMinus(operand, res, ctxt)                          decNumberMinus           ((real_t *)(res), (real_t *)(operand), ctxt)
-#define realMultiply(operand1, operand2, res, ctxt)            decNumberMultiply        ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
-#define realNextToward(from, toward, res, ctxt)                decNumberNextToward      ((real_t *)(res), (real_t *)(from),     (real_t *)(toward),   ctxt)
-#define realPlus(operand, res, ctxt)                           decNumberPlus            ((real_t *)(res), (real_t *)(operand), ctxt)
-#define realPower(operand1, operand2, res, ctxt)               decNumberPower           ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
-#define realSetNegativeSign(operand)                           ((real_t *)(operand))->bits |= 0x80
-#define realSetPositiveSign(operand)                           ((real_t *)(operand))->bits &= 0x7F
-#define realSign(source)                                       ((((real_t *)(source))->bits) & 0x80) // 0x80=negative and 0x00=positive
-#define realSquareRoot(operand, res, ctxt)                     decNumberSquareRoot      ((real_t *)(res), (real_t *)(operand), ctxt)
-#define realSubtract(operand1, operand2, res, ctxt)            decNumberSubtract        ((real_t *)(res), (real_t *)(operand1), (real_t *)(operand2), ctxt)
+#define int32ToReal(source, destination)                       decNumberFromInt32       (destination, source)
+#define realAdd(operand1, operand2, res, ctxt)                 decNumberAdd             (res, operand1, operand2, ctxt)
+#define realChangeSign(operand)                                (operand)->bits ^= 0x80
+#define realCompare(operand1, operand2, res, ctxt)             decNumberCompare         (res, operand1, operand2, ctxt)
+#define realCopy(source, destination)                          decNumberCopy            (destination, source)
+#define realCopyAbs(source, destination)                       decNumberCopyAbs         (destination, source)
+#define realDivide(operand1, operand2, res, ctxt)              decNumberDivide          (res, operand1, operand2, ctxt)
+#define realDivideRemainder(operand1, operand2, res, ctxt)     decNumberRemainder       (res, operand1, operand2, ctxt)
+#define realExp(operand, res, ctxt)                            decNumberExp             (res, operand, ctxt)
+#define realFMA(factor1, factor2, term, res, ctxt)             decNumberFMA             (res, factor1,  factor2,  term, ctxt)
+#define realGetCoefficient(source, destination)                decNumberGetBCD          (source, (uint8_t *)(destination))
+#define realGetExponent(source)                                ((source)->digits)
+#define realIsInfinite(source)                                 decNumberIsInfinite      (source)
+#define realIsNaN(source)                                      decNumberIsNaN           (source)
+#define realIsNegative(source)                                 ((((source)->bits) & 0x80) == 0x80)
+#define realIsPositive(source)                                 ((((source)->bits) & 0x80) == 0x00)
+#define realIsSpecial(source)                                  decNumberIsSpecial       (source)
+#define realIsZero(source)                                     decNumberIsZero          (source)
+#define realMinus(operand, res, ctxt)                          decNumberMinus           (res, operand, ctxt)
+#define realMultiply(operand1, operand2, res, ctxt)            decNumberMultiply        (res, operand1, operand2, ctxt)
+#define realNextToward(from, toward, res, ctxt)                decNumberNextToward      (res, from,     toward,   ctxt)
+#define realPlus(operand, res, ctxt)                           decNumberPlus            (res, operand, ctxt)
+#define realPower(operand1, operand2, res, ctxt)               decNumberPower           (res, operand1, operand2, ctxt)
+#define realSetNegativeSign(operand)                           (operand)->bits |= 0x80
+#define realSetPositiveSign(operand)                           (operand)->bits &= 0x7F
+#define realSign(source)                                       (((source)->bits) & 0x80) // 0x80=negative and 0x00=positive
+#define realSquareRoot(operand, res, ctxt)                     decNumberSquareRoot      (res, operand, ctxt)
+#define realSubtract(operand1, operand2, res, ctxt)            decNumberSubtract        (res, operand1, operand2, ctxt)
 #define realToInt32(source, destination)                       {enum rounding savedRoundingMode; \
-                                                                real51_t tmp; \
-                                                                savedRoundingMode = ctxtReal51.round; \
-                                                                ctxtReal51.round = DEC_ROUND_DOWN; \
-                                                                decNumberRescale((real_t *)&tmp, (real_t *)(source), const_0, &ctxtReal51); \
-                                                                (destination) = decNumberToInt32((real_t *)&tmp, &ctxtReal51); \
-                                                                ctxtReal51.round = savedRoundingMode; \
+                                                                real_t tmp; \
+                                                                savedRoundingMode = ctxtReal39.round; \
+                                                                ctxtReal39.round = DEC_ROUND_DOWN; \
+                                                                decNumberToIntegralValue(&tmp, source, &ctxtReal39); \
+                                                                destination = decGetInt(&tmp); \
+                                                                ctxtReal39.round = savedRoundingMode; \
+                                                               }
+// There is somehow an issue with the decNumberToInt32 function... Or more likely there is something I don't understand
+#define realToInt32Original(source, destination)               {enum rounding savedRoundingMode; \
+                                                                real_t tmp; \
+                                                                savedRoundingMode = ctxtReal39.round; \
+                                                                ctxtReal39.round = DEC_ROUND_DOWN; \
+                                                                decNumberToIntegralValue(&tmp, source, &ctxtReal39); \
+                                                                destination = decNumberToInt32(&tmp, &ctxtReal39); \
+                                                                ctxtReal39.round = savedRoundingMode; \
                                                                }
 #define realToIntegralValue(source, destination, mode, ctxt)   {enum rounding savedRoundingMode; \
                                                                 savedRoundingMode = (ctxt)->round; \
                                                                 (ctxt)->round = mode; \
-                                                                decNumberToIntegralValue((real_t *)(destination), (real_t *)(source), ctxt); \
+                                                                decNumberToIntegralValue(destination, source, ctxt); \
                                                                 (ctxt)->round = savedRoundingMode; \
                                                                }
-#define realToReal34(source, destination)                      decQuadFromNumber        ((real34_t *)(destination), (real_t *)(source), &ctxtReal34)
-#define realToString(source, destination)                      decNumberToString        ((real_t *)(source), destination)
+#define realToReal34(source, destination)                      decQuadFromNumber        ((real34_t *)(destination), source, &ctxtReal34)
+#define realToString(source, destination)                      decNumberToString        (source, destination)
 #define realToUInt32(source, destination)                      {enum rounding savedRoundingMode; \
-                                                                real51_t tmp; \
-                                                                savedRoundingMode = ctxtReal51.round; \
-                                                                ctxtReal51.round = DEC_ROUND_DOWN; \
-                                                                decNumberRescale((real_t *)&tmp, (real_t *)(source), const_0, &ctxtReal51); \
-                                                                (destination) = decNumberToUInt32((real_t *)&tmp, &ctxtReal51); \
-                                                                ctxtReal51.round = savedRoundingMode; \
+                                                                real_t tmp; \
+                                                                savedRoundingMode = ctxtReal39.round; \
+                                                                ctxtReal39.round = DEC_ROUND_DOWN; \
+                                                                decNumberRescale(&tmp, source, const_0, &ctxtReal39); \
+                                                                destination = decNumberToUInt32(&tmp, &ctxtReal39); \
+                                                                ctxtReal39.round = savedRoundingMode; \
                                                                }
-#define realZero(destination)                                  decNumberZero            ((real_t *)(destination))
-#define stringToReal(source, destination, ctxt)                decNumberFromString      ((real_t *)(destination), source, ctxt)
-#define uInt32ToReal(source, destination)                      decNumberFromUInt32      ((real_t *)(destination), source)
+#define realZero(destination)                                  decNumberZero            (destination)
+#define stringToReal(source, destination, ctxt)                decNumberFromString      (destination, source, ctxt)
+#define uInt32ToReal(source, destination)                      decNumberFromUInt32      (destination, source)

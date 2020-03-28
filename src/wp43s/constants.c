@@ -34,19 +34,19 @@ void fnConstant(const uint16_t cnst) {
   liftStack();
 
   if(cnst < NUMBER_OF_CONSTANTS_39) { // 39 digit constants
-    realToReal34(constants + cnst*REAL39_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34((real_t *)(constants + cnst*REAL39_SIZE), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(cnst < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51) { // 51 digit constants (gamma coefficients)
-    realToReal34(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE
-                           + (cnst - NUMBER_OF_CONSTANTS_39) * REAL51_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE
+                                      + (cnst - NUMBER_OF_CONSTANTS_39) * REAL51_SIZE), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(cnst < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071) { // 1071 digit constant
-    realToReal34(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE + NUMBER_OF_CONSTANTS_51 * REAL51_SIZE
-                           + (cnst - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51) * REAL1071_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE + NUMBER_OF_CONSTANTS_51 * REAL51_SIZE
+                                      + (cnst - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51) * REAL1071_SIZE), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else { // 34 digit constants
-    real34Copy(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE + NUMBER_OF_CONSTANTS_51 * REAL51_SIZE + NUMBER_OF_CONSTANTS_1071 * REAL1071_SIZE
-                         + (cnst - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51 - NUMBER_OF_CONSTANTS_1071) * REAL34_SIZE, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * REAL39_SIZE + NUMBER_OF_CONSTANTS_51 * REAL51_SIZE + NUMBER_OF_CONSTANTS_1071 * REAL1071_SIZE
+                                    + (cnst - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51 - NUMBER_OF_CONSTANTS_1071) * REAL34_SIZE), REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);

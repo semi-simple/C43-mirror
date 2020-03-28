@@ -161,7 +161,7 @@ void twoPowShoI(void) {
 
 
 void twoPowReal(void) {
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   realPower(const_2, &x, &x, &ctxtReal39);
@@ -172,7 +172,7 @@ void twoPowReal(void) {
 
 
 void twoPowCplx(void) {
-  real39_t a, b, factor;
+  real_t a, b, factor;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
@@ -183,7 +183,7 @@ void twoPowCplx(void) {
 
   // exp(ln(2) * (a + bi)) --> (a + bi)
   realExp(&a, &factor, &ctxtReal39);
-  real39PolarToRectangular(const_1, &b, &a, &b);
+  realPolarToRectangular(const_1, &b, &a, &b, &ctxtReal39);
   realMultiply(&factor, &a, &a, &ctxtReal39);
   realMultiply(&factor, &b, &b, &ctxtReal39);
 

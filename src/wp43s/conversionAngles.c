@@ -271,19 +271,19 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
 
 
 void convertAngle34FromTo(real34_t *angle34, uint32_t fromAngularMode, uint32_t toAngularMode) {
-  real39_t angle;
+  real_t angle;
 
   real34ToReal(angle34, &angle);
-  convertAngle39FromTo(&angle, fromAngularMode, toAngularMode);
+  convertAngleFromTo(&angle, fromAngularMode, toAngularMode, &ctxtReal39);
   realToReal34(&angle, angle34);
 }
 
 
 
-void convertAngle39FromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAngularMode) {
+void convertAngleFromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAngularMode, realContext_t *realContext) {
   int16_t sign;
   bool_t toDms;
-  real39_t degrees, minutes, seconds;
+  real_t degrees, minutes, seconds;
 
   if(fromAngularMode == AM_DMS) {
     // Convert angle from DMS to DEGREE
@@ -291,31 +291,31 @@ void convertAngle39FromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAn
     realSetPositiveSign(angle);
 
     decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
-    realToIntegralValue(angle, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
+    realToIntegralValue(angle, &degrees, DEC_ROUND_DOWN, realContext);
 
-    realSubtract(angle, &degrees, angle, &ctxtReal39);
-    realMultiply(angle, const_100, angle, &ctxtReal39);
+    realSubtract(angle, &degrees, angle, realContext);
+    realMultiply(angle, const_100, angle, realContext);
 
-    realToIntegralValue(angle, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
+    realToIntegralValue(angle, &minutes, DEC_ROUND_DOWN, realContext);
 
-    realSubtract(angle, &minutes, angle, &ctxtReal39);
-    realMultiply(angle, const_100, &seconds, &ctxtReal39);
+    realSubtract(angle, &minutes, angle, realContext);
+    realMultiply(angle, const_100, &seconds, realContext);
 
     if(realCompareGreaterEqual(&seconds, const_60)) {
-      realSubtract(&seconds, const_60, &seconds, &ctxtReal39);
-      realAdd(&minutes, const_1, &minutes, &ctxtReal39);
+      realSubtract(&seconds, const_60, &seconds, realContext);
+      realAdd(&minutes, const_1, &minutes, realContext);
     }
 
     if(realCompareGreaterEqual(&minutes, const_60)) {
-      realSubtract(&minutes, const_60, &minutes, &ctxtReal39);
-      realAdd(&degrees, const_1, &degrees, &ctxtReal39);
+      realSubtract(&minutes, const_60, &minutes, realContext);
+      realAdd(&degrees, const_1, &degrees, realContext);
     }
 
-    realDivide(&minutes, const_60,   &minutes, &ctxtReal39);
-    realDivide(&seconds, const_3600, &seconds, &ctxtReal39);
+    realDivide(&minutes, const_60,   &minutes, realContext);
+    realDivide(&seconds, const_3600, &seconds, realContext);
 
-    realAdd(&degrees, &minutes, angle, &ctxtReal39);
-    realAdd(angle,    &seconds, angle, &ctxtReal39);
+    realAdd(&degrees, &minutes, angle, realContext);
+    realAdd(angle,    &seconds, angle, realContext);
 
     if(sign == -1) {
       realSetNegativeSign(angle);
@@ -335,36 +335,36 @@ void convertAngle39FromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAn
   switch(fromAngularMode) {
     case AM_DEGREE:
       switch(toAngularMode) {
-        case AM_GRAD:   realDivide(  angle, const_9on10,   angle, &ctxtReal39); break;
-        case AM_RADIAN: realDivide(  angle, const_180onPi, angle, &ctxtReal39); break;
-        case AM_MULTPI: realDivide(  angle, const_180,     angle, &ctxtReal39); break;
+        case AM_GRAD:   realDivide(  angle, const_9on10,   angle, realContext); break;
+        case AM_RADIAN: realDivide(  angle, const_180onPi, angle, realContext); break;
+        case AM_MULTPI: realDivide(  angle, const_180,     angle, realContext); break;
         default: {}
       }
       break;
 
     case AM_GRAD:
       switch(toAngularMode) {
-        case AM_DEGREE: realMultiply(angle, const_9on10,   angle, &ctxtReal39); break;
-        case AM_RADIAN: realDivide(  angle, const_200onPi, angle, &ctxtReal39); break;
-        case AM_MULTPI: realDivide(  angle, const_200,     angle, &ctxtReal39); break;
+        case AM_DEGREE: realMultiply(angle, const_9on10,   angle, realContext); break;
+        case AM_RADIAN: realDivide(  angle, const_200onPi, angle, realContext); break;
+        case AM_MULTPI: realDivide(  angle, const_200,     angle, realContext); break;
         default: {}
       }
       break;
 
     case AM_RADIAN:
       switch(toAngularMode) {
-        case AM_DEGREE: realMultiply(angle, const_180onPi, angle, &ctxtReal39); break;
-        case AM_GRAD:   realMultiply(angle, const_200onPi, angle, &ctxtReal39); break;
-        case AM_MULTPI: realDivide(  angle, const_pi,      angle, &ctxtReal39); break;
+        case AM_DEGREE: realMultiply(angle, const_180onPi, angle, realContext); break;
+        case AM_GRAD:   realMultiply(angle, const_200onPi, angle, realContext); break;
+        case AM_MULTPI: realDivide(  angle, const_pi,      angle, realContext); break;
         default: {}
       }
       break;
 
     case AM_MULTPI:
       switch(toAngularMode) {
-        case AM_DEGREE: realMultiply(angle, const_180,     angle, &ctxtReal39); break;
-        case AM_GRAD:   realMultiply(angle, const_200,     angle, &ctxtReal39); break;
-        case AM_RADIAN: realMultiply(angle, const_pi,      angle, &ctxtReal39); break;
+        case AM_DEGREE: realMultiply(angle, const_180,     angle, realContext); break;
+        case AM_GRAD:   realMultiply(angle, const_200,     angle, realContext); break;
+        case AM_RADIAN: realMultiply(angle, const_pi,      angle, realContext); break;
         default: {}
       }
       break;
@@ -377,21 +377,21 @@ void convertAngle39FromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAn
     sign = realIsNegative(angle) ? -1 : 1;
     realSetPositiveSign(angle);
 
-    realToIntegralValue(angle, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
+    realToIntegralValue(angle, &degrees, DEC_ROUND_DOWN, realContext);
 
-    realSubtract(angle, &degrees, angle, &ctxtReal39);
-    realMultiply(angle, const_60, angle, &ctxtReal39);
+    realSubtract(angle, &degrees, angle, realContext);
+    realMultiply(angle, const_60, angle, realContext);
 
-    realToIntegralValue(angle, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
+    realToIntegralValue(angle, &minutes, DEC_ROUND_DOWN, realContext);
 
-    realSubtract(angle, &minutes, angle, &ctxtReal39);
-    realMultiply(angle, const_60, &seconds, &ctxtReal39);
+    realSubtract(angle, &minutes, angle, realContext);
+    realMultiply(angle, const_60, &seconds, realContext);
 
-    realDivide(&minutes, const_100,   &minutes, &ctxtReal39);
-    realDivide(&seconds, const_10000, &seconds, &ctxtReal39);
+    realDivide(&minutes, const_100,   &minutes, realContext);
+    realDivide(&seconds, const_10000, &seconds, realContext);
 
-    realAdd(&degrees, &minutes, angle, &ctxtReal39);
-    realAdd(angle,    &seconds, angle, &ctxtReal39);
+    realAdd(&degrees, &minutes, angle, realContext);
+    realAdd(angle,    &seconds, angle, realContext);
 
     if(sign == -1) {
       realSetNegativeSign(angle);
@@ -403,7 +403,7 @@ void convertAngle39FromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAn
 
 void checkDms34(real34_t *angle34Dms) {
   int16_t  sign;
-  real39_t angleDms, degrees, minutes, seconds;
+  real_t angleDms, degrees, minutes, seconds;
 
   real34ToReal(angle34Dms, &angleDms);
 

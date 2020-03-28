@@ -1785,6 +1785,7 @@ void refreshRegisterLine(calcRegister_t regist) {
     }
   }
 }
+#endif
 
 
 
@@ -1907,4 +1908,3 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
   create_screenshot(0);
 #endif
 }
-#endif

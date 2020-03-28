@@ -53,7 +53,7 @@ void fnChangeBase(uint16_t base) {
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
     if(2 <= base && base <= 16) {
       longInteger_t lgInt;
-      real39_t x, value;
+      real_t x, value;
       bool_t isNegative;
       uint32_t tmp32;
 
@@ -72,7 +72,7 @@ void fnChangeBase(uint16_t base) {
       longIntegerLeftShift(lgInt, 32, lgInt);
 
       // Calculate 32 bit low word
-      WP34S_Mod(&x, const_2p32, &value);
+      WP34S_Mod(&x, const_2p32, &value, &ctxtReal39);
 
       realToUInt32(&value, tmp32);
       longIntegerAddUInt(lgInt, tmp32, lgInt);

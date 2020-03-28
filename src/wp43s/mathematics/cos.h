@@ -20,9 +20,9 @@
 
 void fnCos   (uint16_t unusedParamButMandatory);
 void cosError(void);
-void cosCo39 (const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag);
 void cosLonI (void);
 void cosRema (void);
 void cosCxma (void);
 void cosReal (void);
 void cosCplx (void);
+void cosComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);

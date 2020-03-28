@@ -64,25 +64,25 @@ void fnExp(uint16_t unusedParamButMandatory) {
 
 
 
-void expCo39 (const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag) {
-  real39_t expa, sin, cos;
+void expComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
+  real_t expa, sin, cos;
 
-  if(realIsZero(zImag)) {
-   realExp(zReal, resReal, &ctxtReal39);
+  if(realIsZero(imag)) {
+   realExp(real, resReal, realContext);
    realZero(resImag);
    return;
   }
 
-  if(realIsSpecial(zReal) || realIsSpecial(zImag)) {
+  if(realIsSpecial(real) || realIsSpecial(imag)) {
     realCopy(const_NaN, resReal);
     realCopy(const_NaN, resImag);
     return;
   }
 
- realExp(zReal, &expa, &ctxtReal39);
- WP34S_Cvt2RadSinCosTan(zImag, AM_RADIAN, &sin, &cos, NULL);
- realMultiply(&expa, &cos, resReal, &ctxtReal39);
- realMultiply(&expa, &sin, resImag, &ctxtReal39);
+ realExp(real, &expa, realContext);
+ WP34S_Cvt2RadSinCosTan(imag, AM_RADIAN, &sin, &cos, NULL, realContext);
+ realMultiply(&expa, &cos, resReal, realContext);
+ realMultiply(&expa, &sin, resImag, realContext);
 }
 
 
@@ -94,7 +94,7 @@ void expCo39 (const real39_t *zReal, const real39_t *zImag, real39_t *resReal, r
  ***********************************************************************/
 
 void expLonI(void) {
-  real39_t a;
+  real_t a;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
   realExp(&a, &a, &ctxtReal39);
@@ -117,7 +117,7 @@ void expCxma(void) {
 
 
 void expShoI(void) {
-  real39_t x;
+  real_t x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   realExp(&x, &x, &ctxtReal39);
@@ -136,7 +136,7 @@ void expReal(void) {
     return;
   }
 
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   realExp(&x, &x, &ctxtReal39);
@@ -147,12 +147,12 @@ void expReal(void) {
 
 
 void expCplx(void) {
-  real39_t zReal, zImag;
+  real_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  expCo39(&zReal, &zImag, &zReal, &zImag);
+  expComplex(&zReal, &zImag, &zReal, &zImag, &ctxtReal39);
 
   realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));

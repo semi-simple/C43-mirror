@@ -73,8 +73,8 @@ void fnMultiply(uint16_t unusedParamButMandatory) {
 
 
 
-void mulCo39Co39(const real39_t *factor1Real, const real39_t *factor1Imag, const real39_t *factor2Real, const real39_t *factor2Imag, real39_t *productReal, real39_t *productImag) {
-  real39_t a, b, c, d;
+void mulComplexComplex(const real_t *factor1Real, const real_t *factor1Imag, const real_t *factor2Real, const real_t *factor2Imag, real_t *productReal, real_t *productImag, realContext_t *realContext) {
+  real_t a, b, c, d;
 
   realCopy(factor1Real, &a);
   realCopy(factor1Imag, &b);
@@ -82,53 +82,13 @@ void mulCo39Co39(const real39_t *factor1Real, const real39_t *factor1Imag, const
   realCopy(factor2Imag, &d);
 
   // imaginary part
-  realMultiply(&a, &d, productImag, &ctxtReal39);         // a*d
-  realFMA(&b, &c, productImag, productImag, &ctxtReal39); // a*d + b*c
+  realMultiply(&a, &d, productImag, realContext);         // a*d
+  realFMA(&b, &c, productImag, productImag, realContext); // a*d + b*c
 
   // real part
   realChangeSign(&b);                                     // -b
-  realMultiply(&a, &c, productReal, &ctxtReal39);         // a*c
-  realFMA(&b, &d, productReal, productReal, &ctxtReal39); // a*c - b*d
-}
-
-
-
-void mulCo51Co51(const real51_t *factor1Real, const real51_t *factor1Imag, const real51_t *factor2Real, const real51_t *factor2Imag, real51_t *productReal, real51_t *productImag) {
-  real51_t a, b, c, d;
-
-  realCopy(factor1Real, &a);
-  realCopy(factor1Imag, &b);
-  realCopy(factor2Real, &c);
-  realCopy(factor2Imag, &d);
-
-  // imaginary part
-  realMultiply(&a, &d, productImag, &ctxtReal51);         // a*d
-  realFMA(&b, &c, productImag, productImag, &ctxtReal51); // a*d + b*c
-
-  // real part
-  realChangeSign(&b);                                     // -b
-  realMultiply(&a, &c, productReal, &ctxtReal51);         // a*c
-  realFMA(&b, &d, productReal, productReal, &ctxtReal51); // a*c - b*d
-}
-
-
-
-void mulCo75Co75(const real75_t *factor1Real, const real75_t *factor1Imag, const real75_t *factor2Real, const real75_t *factor2Imag, real75_t *productReal, real75_t *productImag) {
-  real75_t a, b, c, d;
-
-  realCopy(factor1Real, &a);
-  realCopy(factor1Imag, &b);
-  realCopy(factor2Real, &c);
-  realCopy(factor2Imag, &d);
-
-  // imaginary part
-  realMultiply(&a, &d, productImag, &ctxtReal75);         // a*d
-  realFMA(&b, &c, productImag, productImag, &ctxtReal75); // a*d + b*c
-
-  // real part
-  realChangeSign(&b);                                     // -b
-  realMultiply(&a, &c, productReal, &ctxtReal75);         // a*c
-  realFMA(&b, &d, productReal, productReal, &ctxtReal75); // a*c - b*d
+  realMultiply(&a, &c, productReal, realContext);         // a*c
+  realFMA(&b, &d, productReal, productReal, realContext); // a*c - b*d
 }
 
 
@@ -284,7 +244,7 @@ void mulShoILonI(void) {
  * \return void
  ***********************************************/
 void mulLonIReal(void) {
-  real39_t y, x;
+  real_t y, x;
   uint32_t xAngularMode;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -297,14 +257,14 @@ void mulLonIReal(void) {
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
+      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
-      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
+      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
@@ -321,7 +281,7 @@ void mulLonIReal(void) {
  * \return void
  ***********************************************/
 void mulRealLonI(void) {
-  real39_t y, x;
+  real_t y, x;
   uint32_t yAngularMode;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
@@ -335,14 +295,14 @@ void mulRealLonI(void) {
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
-      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
@@ -359,7 +319,7 @@ void mulRealLonI(void) {
  * \return void
  ***********************************************/
 void mulLonICplx(void) {
-  real39_t a, c, d;
+  real_t a, c, d;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
@@ -381,7 +341,7 @@ void mulLonICplx(void) {
  * \return void
  ***********************************************/
 void mulCplxLonI(void) {
-  real39_t a, b, c;
+  real_t a, b, c;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
@@ -685,7 +645,7 @@ void mulShoIShoI(void) {
  * \return void
  ***********************************************/
 void mulShoIReal(void) {
-  real39_t y, x;
+  real_t y, x;
   uint32_t xAngularMode;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
@@ -698,14 +658,14 @@ void mulShoIReal(void) {
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
+      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
-      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
+      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
@@ -722,7 +682,7 @@ void mulShoIReal(void) {
  * \return void
  ***********************************************/
 void mulRealShoI(void) {
-  real39_t y, x;
+  real_t y, x;
   uint32_t yAngularMode;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
@@ -736,14 +696,14 @@ void mulRealShoI(void) {
   }
   else {
     if(currentAngularMode == AM_DMS) {
-      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
+      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
-      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
+      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
       realMultiply(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
@@ -807,7 +767,7 @@ void mulRealReal(void) {
     setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
   else {
-    real39_t y, x;
+    real_t y, x;
 
     if(yAngularMode == AM_NONE) {
       yAngularMode = currentAngularMode;
@@ -820,18 +780,18 @@ void mulRealReal(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
     if(currentAngularMode == AM_DMS) {
-      convertAngle39FromTo(&y, yAngularMode, AM_DEGREE);
-      convertAngle39FromTo(&x, xAngularMode, AM_DEGREE);
+      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
+      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
 
       realMultiply(&y, &x, &x, &ctxtReal39);
 
-      convertAngle39FromTo(&x, AM_DEGREE, AM_DMS);
+      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
     }
     else { //current angular mode is not DMS
-      convertAngle39FromTo(&y, yAngularMode, currentAngularMode);
-      convertAngle39FromTo(&x, xAngularMode, currentAngularMode);
+      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
 
       realMultiply(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -881,14 +841,14 @@ void mulCplxReal(void) {
  * \return void
  ***********************************************/
 void mulCplxCplx(void) {
-  real39_t yReal, yImag, xReal, xImag;
+  real_t yReal, yImag, xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  mulCo39Co39(&yReal, &yImag, &xReal, &xImag, &xReal, &xImag);
+  mulComplexComplex(&yReal, &yImag, &xReal, &xImag, &xReal, &xImag, &ctxtReal39);
 
   realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));

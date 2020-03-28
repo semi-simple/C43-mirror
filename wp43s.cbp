@@ -296,6 +296,9 @@
 		<Unit filename="src/testSuite/cxToRe.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/cyx.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>

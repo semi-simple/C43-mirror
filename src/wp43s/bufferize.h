@@ -21,7 +21,12 @@
 #define AIM_BUFFER_LENGTH   50
 #define TAM_BUFFER_LENGTH   30
 #define NIM_BUFFER_LENGTH   70
-#define NIM_EXPONENT_LIMIT 999
+
+#if (LIMIT_EXPONENT_TO_999 == 1)
+  #define NIM_EXPONENT_LIMIT 999
+#else
+  #define NIM_EXPONENT_LIMIT 9999
+#endif
 
 #define TT_OPERATION       0
 #define TT_LETTER          1

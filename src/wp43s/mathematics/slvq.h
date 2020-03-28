@@ -18,4 +18,4 @@
  * \file slvq.h
  ***********************************************/
 
-void fnSlvq  (uint16_t unusedButMandatoryParameter);
+void fnSlvq(uint16_t unusedButMandatoryParameter);

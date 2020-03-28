@@ -495,8 +495,10 @@ void fn_cnst_1_cpx() {
  * \return void
  ***********************************************/
 void fnJM(uint16_t JM_OPCODE) {
-  uint16_t cm;
 
+
+
+//********************************************
   if(JM_OPCODE == 1) {                                          // JM_OPCODE = 1 : Temporary implementation of xthe root of y, until Martins is done
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO TMP
@@ -525,7 +527,14 @@ void fnJM(uint16_t JM_OPCODE) {
   } //end OPCODE 1
   else
 
+
+
+//********************************************
+/*DEPRECIATED, Martin provided proper
+
   if(JM_OPCODE == 2) {                                          // JM_OPCODE = 2 : Angle from complex number.
+    uint16_t cm;
+
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
     saveStack();
     cm = complexMode;
@@ -541,7 +550,9 @@ void fnJM(uint16_t JM_OPCODE) {
     refreshStack();
   }
   else
+*/
 
+//********************************************
   if(JM_OPCODE == 3) {                                          //operator a
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
@@ -1548,11 +1559,11 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
     displayString[0] = 0;                                                                               //JM UNIT
     if(nimMode) {                                                                                       //JM UNIT
       if(exponent != 0) {                                                                               //JM UNIT
-        supNumberToDisplayString(exponent, displayString, NULL, false);                                 //JM UNIT
+        supNumberToDisplayString(exponent, displayString, NULL, false, true);                                 //JM UNIT
       }                                                                                                 //JM UNIT
     }                                                                                                   //JM UNIT
     else {                                                                                              //JM UNIT
-      supNumberToDisplayString(exponent, displayString, NULL, false);                                   //JM UNIT
+      supNumberToDisplayString(exponent, displayString, NULL, false, true);                                   //JM UNIT
     }                                                                                                   //JM UNIT
   }                                                                                                     //JM UNIT
 }                                                                                                       //JM UNIT

@@ -40,7 +40,7 @@ void fnDenMode(uint16_t denMode) {
 
 
 void fnDenMax(uint16_t unusedParamButMandatory) {
-  real39_t reX;
+  real_t reX;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -357,11 +357,11 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   }
 
   // The register value
-  real39_t r;
+  real_t r;
   real34ToReal(REGISTER_REAL34_DATA(regist), &r);
 
   // The fraction value
-  real39_t f, d;
+  real_t f, d;
   uInt32ToReal(*intPart, &f);
   uInt32ToReal(*denom, &d);
   realMultiply(&f, &d, &f, &ctxtReal39);

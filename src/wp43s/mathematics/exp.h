@@ -20,10 +20,10 @@
 
 void fnExp   (uint16_t unusedParamButMandatory);
 void expError(void);
-void expCo39 (const real39_t *zReal, const real39_t *zImag, real39_t *resReal, real39_t *resImag);
 void expLonI (void);
 void expRema (void);
 void expCxma (void);
 void expShoI (void);
 void expReal (void);
 void expCplx (void);
+void expComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);

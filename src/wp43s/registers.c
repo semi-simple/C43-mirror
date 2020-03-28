@@ -1115,7 +1115,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   // Round the register value
   switch(resultDataType) {
-    real39_t tmp;
+    real_t tmp;
 
     case dtReal34:
       if(significantDigits == 0 || significantDigits >= 34) {
@@ -1854,8 +1854,10 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
  * \param r calcRegister_t Register number
  * \return void
  ***********************************************/
-void printRegisterToConsole(calcRegister_t regist) {
+void printRegisterToConsole(calcRegister_t regist, const char *before, const char *after) {
   char str[3000];
+
+  printf(before);
 
   if(getRegisterDataType(regist) == dtReal34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
@@ -1899,6 +1901,8 @@ void printRegisterToConsole(calcRegister_t regist) {
     sprintf(errorMessage, "In printRegisterToConsole: data type %s not supported", getRegisterDataTypeName(regist ,false, false));
     displayBugScreen(errorMessage);
   }
+
+  printf(after);
 }
 #endif
 
@@ -1963,20 +1967,20 @@ void printRegisterToString(calcRegister_t regist, char *registerContent) {
 
 
 
-void printReal34ToConsole(const real34_t *value) {
+void printReal34ToConsole(const real34_t *value, const char *before, const char *after) {
   char str[100];
 
   real34ToString(value, str);
-  printf("real34 %s", str);
+  printf("%sreal34 %s%s", before, str, after);
 }
 
 
 
-void printRealToConsole(const real_t *value) {
+void printRealToConsole(const real_t *value, const char *before, const char *after) {
   char str[1000];
 
   realToString(value, str);
-  printf("real %s", str);
+  printf("%sreal%" FMT32S " %s%s", before, value->digits, str, after);
 
 /*  int32_t i, exponent, last;
 
@@ -2027,13 +2031,13 @@ void printRealToConsole(const real_t *value) {
 
 
 
-void printComplex34ToConsole(const complex34_t *value) {
+void printComplex34ToConsole(const complex34_t *value, const char *before, const char *after) {
   char str[100];
 
   real34ToString((real34_t *)value, str);
-  printf("complex34 %s + ", str);
+  printf("%scomplex34 %s + ", before, str);
   real34ToString((real34_t *)value + 1, str);
-  printf("%si", str);
+  printf("%si%s", str, after);
 }
 
 
@@ -2087,11 +2091,11 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
  * \param r int16_t Register number
  * \return void
  ***********************************************/
-void printLongIntegerToConsole(longInteger_t value) {
+void printLongIntegerToConsole(longInteger_t value, const char *before, const char *after) {
   char str[3000];
 
   longIntegerToAllocatedString(value, str, sizeof(str));
-  printf("LI (%" FMT64U ") %s", (uint64_t)longIntegerSizeInBytes(value), str);
+  printf("%sLI (%" FMT64U ") %s%s", before, (uint64_t)longIntegerSizeInBytes(value), str, after);
 }
 
 
@@ -2201,7 +2205,7 @@ static void incLonI(uint16_t regist, uint8_t flag) {
 }
 
 static void incReal(uint16_t regist, uint8_t flag) {
-  real39_t r;
+  real_t r;
 
   real34ToReal(REGISTER_REAL34_DATA(regist), &r);
   (flag==INC_FLAG) ? realAdd(&r, const_1, &r, &ctxtReal39) : realSubtract(&r, const_1, &r, &ctxtReal39);
@@ -2210,7 +2214,7 @@ static void incReal(uint16_t regist, uint8_t flag) {
 }
 
 static void incCplx(uint16_t regist, uint8_t flag) {
-  real39_t r_real;
+  real_t r_real;
 
   real34ToReal(REGISTER_REAL34_DATA(regist), &r_real);
 
@@ -2324,9 +2328,9 @@ static void registerCmpLonIShoI(calcRegister_t regist1, calcRegister_t regist2, 
 static void registerCmpLonIReal(calcRegister_t regist1, calcRegister_t regist2, int8_t *result) {
   // regist1 = Long Integer, regist2 = Real
 
-  real39_t r1, r2;
+  real_t r1, r2;
 
-  convertLongIntegerRegisterToReal(regist1, (real_t *)&r1, &ctxtReal39);
+  convertLongIntegerRegisterToReal(regist1, &r1, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &r2);
 
   if(realCompareEqual(&r1, &r2))
@@ -2382,9 +2386,9 @@ static void registerCmpShoIShoI(calcRegister_t regist1, calcRegister_t regist2, 
 static void registerCmpShoIReal(calcRegister_t regist1, calcRegister_t regist2, int8_t *result) {
   // regist1 = Short Integer, regist2 = Real
 
-  real39_t r1, r2;
+  real_t r1, r2;
 
-  convertShortIntegerRegisterToReal(regist1, (real_t *)&r1, &ctxtReal39);
+  convertShortIntegerRegisterToReal(regist1, &r1, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);
 
   if(realCompareEqual(&r1, &r2))
@@ -2396,10 +2400,10 @@ static void registerCmpShoIReal(calcRegister_t regist1, calcRegister_t regist2, 
 static void registerCmpRealLonI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result) {
   // regist1 = Real, regist2 = Long Integer
 
-  real39_t r1, r2;
+  real_t r1, r2;
 
   real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
-  convertLongIntegerRegisterToReal(regist2, (real_t *)&r2, &ctxtReal39);
+  convertLongIntegerRegisterToReal(regist2, &r2, &ctxtReal39);
 
   if(realCompareEqual(&r1, &r2))
     *result = 0;
@@ -2410,10 +2414,10 @@ static void registerCmpRealLonI(calcRegister_t regist1, calcRegister_t regist2, 
 static void registerCmpRealShoI(calcRegister_t regist1, calcRegister_t regist2, int8_t *result) {
   // regist1 = Real, regist2 = Short Integer
 
-  real39_t r1, r2;
+  real_t r1, r2;
 
   real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
-  convertShortIntegerRegisterToReal(regist2, (real_t *)&r2, &ctxtReal39);
+  convertShortIntegerRegisterToReal(regist2, &r2, &ctxtReal39);
 
   if(realCompareEqual(&r1, &r2))
     *result = 0;
@@ -2424,7 +2428,7 @@ static void registerCmpRealShoI(calcRegister_t regist1, calcRegister_t regist2, 
 static void registerCmpRealReal(calcRegister_t regist1, calcRegister_t regist2, int8_t *result) {
   // regist1 = Real, regist2 = Real
 
-  real39_t r1, r2;
+  real_t r1, r2;
 
   real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
   real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);

@@ -22,28 +22,27 @@
  * This functions are borrowed from the WP34S project
  ******************************************************/
 
-void   WP34S_Cvt2RadSinCosTan(const real_t *angle39, uint32_t am, real_t *sin39, real_t *cos39, real_t *tan39);
-void   WP34S_SinCosTanTaylor (const real_t *angle39, bool_t swap, real_t *sinOut39, real_t *cosOut39, real_t *tanOut39); // angle in radian
-void   WP34S_Atan            (const real_t *x, real_t *angle);
-void   WP34S_Atan2           (const real_t *y, const real_t *x, real_t *angle);
-void   WP34S_Asin            (const real_t *x, real_t *angle);
-void   WP34S_Acos            (const real_t *x, real_t *angle);
-void   WP34S_Factorial       (const real_t *x, real_t *res);
-void   WP34S_LnGamma         (const real_t *x, real_t *res);
-void   WP34S_Gamma           (const real_t *x, real_t *res);
-void   WP34S_Ln              (const real_t *x, real_t *res);
-void   WP34S_Ln51            (const real_t *x, real_t *res);
-void   WP34S_Log10           (const real_t *x, real_t *res);
-void   WP34S_SinhCosh        (const real_t *x, real_t *sinOut, real_t *cosOut);
-void   WP34S_Tanh            (const real_t *x, real_t *res);
-void   WP34S_ArcSinh         (const real_t *x, real_t *res);
-void   WP34S_ArcCosh         (const real_t *x, real_t *res);
-void   WP34S_ArcTanh         (const real_t *x, real_t *res);
-void   WP34S_Ln1P            (const real_t *x, real_t *res);
-void   WP34S_ExpM1           (const real_t *x, real_t *res);
-void   WP34S_ComplexGamma    (const real39_t *zinReal, const real39_t *zinImag, real39_t *resReal, real39_t *resImag);
-void   WP34S_ComplexLnGamma  (const real39_t *zinReal, const real39_t *zinImag, real39_t *resReal, real39_t *resImag);
-void   WP34S_Mod             (const real_t *x, const real_t *y, real_t *res);
+void   WP34S_Cvt2RadSinCosTan(const real_t *angle, uint32_t am, real_t *sin, real_t *cos, real_t *tan, realContext_t *realContext);
+void   WP34S_SinCosTanTaylor (const real_t *angle, bool_t swap, real_t *sinOut, real_t *cosOut, real_t *tanOut, realContext_t *realContext); // angle in radian
+void   WP34S_Atan            (const real_t *x, real_t *angle, realContext_t *realContext);
+void   WP34S_Atan2           (const real_t *y, const real_t *x, real_t *angle, realContext_t *realContext);
+void   WP34S_Asin            (const real_t *x, real_t *angle, realContext_t *realContext);
+void   WP34S_Acos            (const real_t *x, real_t *angle, realContext_t *realContext);
+void   WP34S_Factorial       (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_LnGamma         (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_Gamma           (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_Ln              (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_Log10           (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_SinhCosh        (const real_t *x, real_t *sinOut, real_t *cosOut, realContext_t *realContext);
+void   WP34S_Tanh            (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_ArcSinh         (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_ArcCosh         (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_ArcTanh         (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_Ln1P            (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_ExpM1           (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_ComplexGamma    (const real_t *zinReal, const real_t *zinImag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+void   WP34S_ComplexLnGamma  (const real_t *zinReal, const real_t *zinImag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+void   WP34S_Mod             (const real_t *x, const real_t *y, real_t *res, realContext_t *realContext);
 //void   WP34S_BigMod          (const real_t *x, const real_t *y, real_t *res);
-bool_t WP34S_RelativeError   (const real_t *x, const real_t *y, const real_t *tol);
+bool_t WP34S_RelativeError   (const real_t *x, const real_t *y, const real_t *tol, realContext_t *realContext);
 void   *xcopy                (void *dest, const void *source, int n);

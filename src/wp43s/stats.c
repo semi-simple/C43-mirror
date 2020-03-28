@@ -19,7 +19,7 @@
  ***********************************************/
 
 #include "wp43s.h"
-#define real34Ln(operand, res) {real34ToReal((real34_t *)operand, &real39); WP34S_Ln(&real39, &real39); realToReal34(&real39, (real34_t *)res);}
+#define real34Ln(operand, res) {real34ToReal(operand, &real); WP34S_Ln(&real, &real, &ctxtReal39); realToReal34(&real, res);}
 
 
 
@@ -45,7 +45,7 @@ static void initStatisticalSums(void) {
  ***********************************************/
 void fnSigma(uint16_t plusMinus) {
   real34_t tmpReal1, tmpReal2, tmpReal3;
-  real39_t real39;
+  real_t real;
 
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal34)
      && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal34)) {

@@ -23,7 +23,7 @@
 
 
 static void unitConversion(const real_t * const coefficient, uint16_t multiplyDivide) {
-  real39_t reX;
+  real_t reX;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -67,7 +67,7 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
  * \return void
  ***********************************************/
 void fnCvtCToF(uint16_t unusedParamButMandatory) {
-  real39_t reX;
+  real_t reX;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -106,7 +106,7 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnCvtFToC(uint16_t unusedParamButMandatory) {
-  real39_t reX;
+  real_t reX;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -377,7 +377,7 @@ void fnCvtHectareM2(uint16_t multiplyDivide) {
  * \return void
  ***********************************************/
 void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
-  real39_t reX;
+  real_t reX;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -399,7 +399,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     return;
   }
 
-  WP34S_Log10(&reX, &reX);
+  WP34S_Log10(&reX, &reX, &ctxtReal39);
   realMultiply(&reX, (tenOrTwenty == 10 ? const_10 : const_20), &reX, &ctxtReal39);
 
   realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
@@ -417,7 +417,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
  * \return void
  ***********************************************/
 void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
-  real39_t reX;
+  real_t reX;
 
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);

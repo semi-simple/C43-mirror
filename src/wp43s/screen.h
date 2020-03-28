@@ -49,6 +49,8 @@ typedef enum {
 int16_t  showFunctionNameItem;
 int8_t   showFunctionNameCounter;
 
+void     fnScreenDump(uint16_t unusedButMandatoryParameter);
+
 void     FN_handler();                       //JM LONGPRESS
 void     Shft_handler();                     //JM LONGPRESS f/g
 void     Clx_handler();                      //JM LONGPRESS CLX
@@ -86,6 +88,8 @@ void     refreshFn            (uint16_t timerType);         //dr - general timeo
 uint8_t  compressString;                                    //JM compressString
 void     underline_softkey    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);  //JM LONGPRESS
 void     JM_DOT               (int16_t xx, int16_t yy);
+void     force_refresh        (void);                                                  //JM SCREEN
+
 void     setPixel             (int16_t x, int16_t y);
 void     clearPixel           (int16_t x, int16_t y);
 void     invertPixel          (int16_t x, int16_t y);
@@ -93,7 +97,6 @@ int      getPixel             (int16_t x, int16_t y);
 int16_t  showString           (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
 int16_t  showGlyph            (const char *ch,    const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
 int16_t  showGlyphCode        (uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-void     force_refresh        (void);                                                  //JM SCREEN 
 void     clearScreen          (bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);
 void     showCursor           (void);
 void     hideCursor           (void);
@@ -102,5 +105,4 @@ void     hideFunctionName     (void);
 void     clearRegisterLine    (int16_t yStart, int16_t height);
 void     resetTemporaryInformation(void);
 void     refreshRegisterLine      (calcRegister_t regist);
-void     fnScreenDump             (uint16_t unusedButMandatoryParameter);
 #endif

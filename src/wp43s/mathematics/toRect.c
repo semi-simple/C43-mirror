@@ -24,7 +24,7 @@
 
 void fnToRect(uint16_t unusedParamButMandatory) {
   uint32_t dataTypeX, dataTypeY, yAngularMode;
-  real39_t x, y;
+  real_t x, y;
 
   dataTypeX = getRegisterDataType(REGISTER_X);
   dataTypeY = getRegisterDataType(REGISTER_Y);
@@ -49,11 +49,11 @@ void fnToRect(uint16_t unusedParamButMandatory) {
 
     switch(dataTypeY) {
       case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-                          convertAngle39FromTo(&y, currentAngularMode, AM_RADIAN);
+                          convertAngleFromTo(&y, currentAngularMode, AM_RADIAN, &ctxtReal39);
                           break;
 
       case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-                          convertAngle39FromTo(&y, yAngularMode, AM_RADIAN);
+                          convertAngleFromTo(&y, yAngularMode, AM_RADIAN, &ctxtReal39);
                           break;
 
       default: {
@@ -62,7 +62,7 @@ void fnToRect(uint16_t unusedParamButMandatory) {
       }
     }
 
-    real39PolarToRectangular(&x, &y, &x, &y);
+    realPolarToRectangular(&x, &y, &x, &y, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
@@ -86,49 +86,202 @@ void fnToRect(uint16_t unusedParamButMandatory) {
 
 
 void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta34, real34_t *real34, real34_t *imag34) {
-  real39_t real, imag, magnitude, theta;
+  real_t real, imag, magnitude, theta;
 
   real34ToReal(magnitude34, &magnitude);
   real34ToReal(theta34, &theta);
 
-  real39PolarToRectangular(&magnitude, &theta, &real, &imag);  // theta in radian
+  realPolarToRectangular(&magnitude, &theta, &real, &imag, &ctxtReal39);  // theta in radian
 
   realToReal34(&real, real34);
   realToReal34(&imag, imag34);
 }
 
 
+void realPolarToRectangular(const real_t *mag, const real_t *the, real_t *real, real_t *imag, realContext_t *realContext) {
+  ///////////////////////////////////////////
+  //
+  //  +----+----+-------------+------+------+
+  //  | ρ  | θ  | Condition   | Re   | Im   |
+  //  +----+----+-------------+------+------+
+  //  |NaN |any |             |NaN   |NaN   |  1
+  //  |any |NaN |             |NaN   |NaN   |  2
+  //  |-∞  |-∞  |             |NaN   |NaN   |  3
+  //  |-∞  |-π  |             |+∞    |0     |  4
+  //  |-∞  |-π/2|             |0     |+∞    |  5
+  //  |-∞  |0   |             |-∞    |0     |  6
+  //  |-∞  |π/2 |             |0     |-∞    |  7
+  //  |-∞  |π   |             |+∞    |0     |  8
+  //  |-∞  |θ   |0 < θ < π/2  |-∞    |-∞    |  9
+  //  |-∞  |θ   |π/2 < θ < π  |+∞    |-∞    | 10
+  //  |-∞  |θ   |-π < θ < -π/2|+∞    |+∞    | 11
+  //  |-∞  |θ   |-π/2 < θ < 0 |-∞    |+∞    | 12
+  //  |-∞  |+∞  |             |NaN   |NaN   | 13
+  //  |0   |-∞  |             |NaN   |NaN   | 14
+  //  |0   |θ   |             |0     |0     | 15
+  //  |0   |+∞  |             |NaN   |NaN   | 16
+  //  |r   |-∞  |             |NaN   |NaN   | 17
+  //  |r   |θ   |             |r·cosθ|r·sinθ| 18
+  //  |r   |+∞  |             |NaN   |NaN   | 19
+  //  |+∞  |-∞  |             |NaN   |NaN   | 20
+  //  |+∞  |-π  |             |-∞    |0     | 21
+  //  |+∞  |-π/2|             |0     |-∞    | 22
+  //  |+∞  |0   |             |+∞    |0     | 23
+  //  |+∞  |π/2 |             |0     |+∞    | 24
+  //  |+∞  |π   |             |-∞    |0     | 25
+  //  |+∞  |θ   |0 < θ < π/2  |+∞    |+∞    | 26
+  //  |+∞  |θ   |π/2 < θ < π  |-∞    |+∞    | 27
+  //  |+∞  |θ   |-π < θ < -π/2|-∞    |-∞    | 28
+  //  |+∞  |θ   |-π/2 < θ < 0 |+∞    |-∞    | 29
+  //  |+∞  |+∞  |             |NaN   |NaN   | 30
 
-void real39PolarToRectangular(const real_t *mag, const real_t *theta, real_t *real, real_t *imag) {
-  real39_t sin, cos, magnitude;
+  real_t sin, cos, magnitude, theta;
+
+  // Testing NaNs and infinities
+  if(realIsNaN(mag) || realIsNaN(the) || realIsInfinite(the)) {
+    //  +----+----+-------------+------+------+
+    //  | ρ  | θ  | Condition   | Re   | Im   |
+    //  +----+----+-------------+------+------+
+    //  |NaN |any |             |NaN   |NaN   |  1
+    //  |any |NaN |             |NaN   |NaN   |  2
+    //  |-∞  |-∞  |             |NaN   |NaN   |  3
+    //  |-∞  |+∞  |             |NaN   |NaN   | 13
+    //  |+∞  |-∞  |             |NaN   |NaN   | 20
+    //  |+∞  |+∞  |             |NaN   |NaN   | 30
+    //  |0   |-∞  |             |NaN   |NaN   | 14
+    //  |0   |+∞  |             |NaN   |NaN   | 16
+    //  |r   |-∞  |             |NaN   |NaN   | 17
+    //  |r   |+∞  |             |NaN   |NaN   | 19
+    realCopy(const_NaN, real);
+    realCopy(const_NaN, imag);
+    return;
+  }
 
   realCopy(mag, &magnitude);
+  WP34S_Mod(the, const1071_2pi, &theta, &ctxtReal75);  // here   0 ≤ theta < 2pi
 
-  WP34S_Cvt2RadSinCosTan(theta, AM_RADIAN, &sin, &cos, NULL);
-  realMultiply(&magnitude, &cos, real, &ctxtReal39);
-  realMultiply(&magnitude, &sin, imag, &ctxtReal39);
-}
+  // Magnitude is infinite
+  if(realIsInfinite(&magnitude)) {
+    if(realIsZero(&theta)) { // theta = 0
+      //  +----+----+-------------+------+------+
+      //  | ρ  | θ  | Condition   | Re   | Im   |
+      //  +----+----+-------------+------+------+
+      //  |+∞  |0   |             |+∞    |0     | 23
+      realCopy(const_plusInfinity, real);
+      realZero(imag);
+    }
+    else {
+      realSubtract(&theta, const_piOn2, real, &ctxtReal39);
+      if(realIsZero(real)) { // theta = pi/2
+        //  +----+----+-------------+------+------+
+        //  | ρ  | θ  | Condition   | Re   | Im   |
+        //  +----+----+-------------+------+------+
+        //  |+∞  |π/2 |             |0     |+∞    | 24
+        realZero(real);
+        realCopy(const_plusInfinity, imag);
+      }
+      else {
+        realSubtract(&theta, const_3piOn2, real, &ctxtReal39);
+        if(realIsZero(real)) { // theta = -pi/2
+          //  +----+----+-------------+------+------+
+          //  | ρ  | θ  | Condition   | Re   | Im   |
+          //  +----+----+-------------+------+------+
+          //  |+∞  |-π/2|             |0     |-∞    | 22
+          realZero(real);
+          realCopy(const_minusInfinity, imag);
+        }
+        else {
+          realSubtract(&theta, const_pi, real, &ctxtReal39);
+          if(realIsZero(real)) { // theta = pi
+            //  +----+----+-------------+------+------+
+            //  | ρ  | θ  | Condition   | Re   | Im   |
+            //  +----+----+-------------+------+------+
+            //  |+∞  |-π  |             |-∞    |0     | 21
+            //  |+∞  |π   |             |-∞    |0     | 25
+            realCopy(const_minusInfinity, real);
+            realZero(imag);
+          }
+          else {
+            realSubtract(&theta, const_piOn2, &theta, &ctxtReal39);
+            if(realIsNegative(&theta)) { //  0 < theta < pi/2
+              //  +----+----+-------------+------+------+
+              //  | ρ  | θ  | Condition   | Re   | Im   |
+              //  +----+----+-------------+------+------+
+              //  |+∞  |θ   |0 < θ < π/2  |+∞    |+∞    | 26
+              realCopy(const_plusInfinity, real);
+              realCopy(const_plusInfinity, imag);
+            }
+            else {
+              realSubtract(&theta, const_piOn2, &theta, &ctxtReal39);
+              if(realIsNegative(&theta)) { //  pi/2 < theta < pi
+                //  +----+----+-------------+------+------+
+                //  | ρ  | θ  | Condition   | Re   | Im   |
+                //  +----+----+-------------+------+------+
+                //  |+∞  |θ   |π/2 < θ < π  |-∞    |+∞    | 27
+                realCopy(const_minusInfinity, real);
+                realCopy(const_plusInfinity, imag);
+              }
+              else {
+                realSubtract(&theta, const_piOn2, &theta, &ctxtReal39);
+                if(realIsNegative(&theta)) { //  pi < theta < 3pi/2
+                  //  +----+----+-------------+------+------+
+                  //  | ρ  | θ  | Condition   | Re   | Im   |
+                  //  +----+----+-------------+------+------+
+                  //  |+∞  |θ   |-π < θ < -π/2|-∞    |-∞    | 28
+                  realCopy(const_minusInfinity, real);
+                  realCopy(const_minusInfinity, imag);
+                }
+                else { //  3pi/2 < theta < 2pi
+                  //  +----+----+-------------+------+------+
+                  //  | ρ  | θ  | Condition   | Re   | Im   |
+                  //  +----+----+-------------+------+------+
+                  //  |+∞  |θ   |-π/2 < θ < 0 |+∞    |-∞    | 29
+                  realCopy(const_plusInfinity, real);
+                  realCopy(const_minusInfinity, imag);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
 
+    if(realIsNegative(&magnitude)) {
+      //  +----+----+-------------+------+------+
+      //  | ρ  | θ  | Condition   | Re   | Im   |
+      //  +----+----+-------------+------+------+
+      //  |-∞  |-π  |             |+∞    |0     |  4
+      //  |-∞  |-π/2|             |0     |+∞    |  5
+      //  |-∞  |0   |             |-∞    |0     |  6
+      //  |-∞  |π/2 |             |0     |-∞    |  7
+      //  |-∞  |π   |             |+∞    |0     |  8
+      //  |-∞  |θ   |0 < θ < π/2  |-∞    |-∞    |  9
+      //  |-∞  |θ   |π/2 < θ < π  |+∞    |-∞    | 10
+      //  |-∞  |θ   |-π < θ < -π/2|+∞    |+∞    | 11
+      //  |-∞  |θ   |-π/2 < θ < 0 |-∞    |+∞    | 12
+      if(!realIsNaN(real) && !realIsZero(real)) realChangeSign(real);
+      if(!realIsNaN(imag) && !realIsZero(imag)) realChangeSign(imag);
+    }
 
+    return;
+  }
 
-void real51PolarToRectangular(const real_t *mag, const real_t *theta, real_t *real, real_t *imag) {
-  real51_t sin, cos, magnitude;
+    //  +----+----+-------------+------+------+
+    //  | ρ  | θ  | Condition   | Re   | Im   |
+    //  +----+----+-------------+------+------+
+    //  |0   |θ   |             |0     |0     | 15
+    if(realIsZero(&magnitude)) {
+      realZero(real);
+      realZero(imag);
+      return;
+    }
 
-  realCopy(mag, &magnitude);
+    //  +----+----+-------------+------+------+
+    //  | ρ  | θ  | Condition   | Re   | Im   |
+    //  +----+----+-------------+------+------+
+    //  |r   |θ   |             |r·cosθ|r·sinθ| 18
 
-  WP34S_Cvt2RadSinCosTan(theta, AM_RADIAN, (real_t *)&sin, (real_t *)&cos, NULL);
-  realMultiply(&magnitude, &cos, real, &ctxtReal51);
-  realMultiply(&magnitude, &sin, imag, &ctxtReal51);
-}
-
-
-
-void real75PolarToRectangular(const real_t *mag, const real_t *theta, real_t *real, real_t *imag) {
-  real75_t sin, cos, magnitude;
-
-  realCopy(mag, &magnitude);
-
-  WP34S_Cvt2RadSinCosTan(theta, AM_RADIAN, (real_t *)&sin, (real_t *)&cos, NULL);
-  realMultiply(&magnitude, &cos, real, &ctxtReal75);
-  realMultiply(&magnitude, &sin, imag, &ctxtReal75);
+  WP34S_Cvt2RadSinCosTan(&theta, AM_RADIAN, &sin, &cos, NULL, realContext);
+  realMultiply(&magnitude, &cos, real, realContext);
+  realMultiply(&magnitude, &sin, imag, realContext);
 }

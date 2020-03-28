@@ -107,7 +107,7 @@ void cubeReal(void) {
     return;
   }
 
-  real39_t x, xSquared;
+  real_t x, xSquared;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
@@ -121,7 +121,7 @@ void cubeReal(void) {
 
 
 void cubeCplx(void) {
-  real39_t a, b, aSquared, bSquared, aCubed, bCubed;
+  real_t a, b, aSquared, bSquared, aCubed, bCubed;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);

@@ -109,7 +109,7 @@ void squareReal(void) {
 
 
 void squareCplx(void) {
-  real39_t a, b, imagPart;
+  real_t a, b, imagPart;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);

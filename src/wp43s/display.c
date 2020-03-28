@@ -220,26 +220,30 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
 
   if(nimMode) {
     if(exponent != 0) {
-      supNumberToDisplayString(exponent, displayString, displayValueString, false);
+      supNumberToDisplayString(exponent, displayString, displayValueString, false, true);
     }
   }
   else {
-    supNumberToDisplayString(exponent, displayString, displayValueString, false);
+    supNumberToDisplayString(exponent, displayString, displayValueString, false, true);
   }
 }
 
 
 
-void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap) {
+void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap, bool_t isExponent) {
   if(displayValueString != NULL) {
     sprintf(displayValueString, "%" FMT32S, supNumber);
   }
 
-  if(supNumber < 0) {
-    supNumber = -supNumber;
-    strcat(displayString, STD_SUP_MINUS);
-    displayString += 2;
+  #if (LIMIT_EXPONENT_TO_999 == 1)
+  if(isExponent && supNumber < -999) {
+    strcat(displayString, STD_SUP_MINUS STD_SUP_MINUS STD_SUP_MINUS STD_SUP_MINUS);
   }
+  else if(isExponent && supNumber > 999) {
+    strcat(displayString, STD_SUP_PLUS STD_SUP_PLUS STD_SUP_PLUS);
+  }
+  else
+  #endif
 
   if(supNumber == 0) {
     strcat(displayString, STD_SUP_0);
@@ -247,6 +251,12 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
   else {
     int16_t digit, digitCount=0;
     bool_t greaterThan9999;
+
+    if(supNumber < 0) {
+      supNumber = -supNumber;
+      strcat(displayString, STD_SUP_MINUS);
+      displayString += 2;
+    }
 
     greaterThan9999 = (supNumber > 9999);
     while(supNumber > 0) {
@@ -377,13 +387,13 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
-  real39_t value39;
+  real_t value;
 
-  real34ToReal(real34, &value39);
+  real34ToReal(real34, &value);
   ctxtReal39.digits = displayHasNDigits;
-  realPlus(&value39, &value39, &ctxtReal39);
+  realPlus(&value, &value, &ctxtReal39);
   ctxtReal39.digits = 39;
-  realToReal34(&value39, &value34);
+  realToReal34(&value, &value34);
 
   if(real34IsInfinite(&value34)) {
     if(real34IsNegative(&value34)) {
@@ -1021,18 +1031,18 @@ void complex34ToDisplayString(const complex34_t *complex34, char *displayString,
 void complex34ToDisplayString2(const complex34_t *complex34, char *displayString, int16_t displayHasNDigits) {
   int16_t i=100;
   real34_t real34, imag34;
-  real39_t real39, imagIc;
+  real_t real, imagIc;
 
   if(complexMode == CM_RECTANGULAR) {
     real34Copy(VARIABLE_REAL34_DATA(complex34), &real34);
     real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
   }
   else if(complexMode == CM_POLAR) {
-    real34ToReal(VARIABLE_REAL34_DATA(complex34), &real39);
+    real34ToReal(VARIABLE_REAL34_DATA(complex34), &real);
     real34ToReal(VARIABLE_IMAG34_DATA(complex34), &imagIc);
-    real39RectangularToPolar(&real39, &imagIc, &real39, &imagIc); // imagIc in radian
-    convertAngle39FromTo(&imagIc, AM_RADIAN, currentAngularMode);
-    realToReal34(&real39, &real34);
+    realRectangularToPolar(&real, &imagIc, &real, &imagIc, &ctxtReal39); // imagIc in radian
+    convertAngleFromTo(&imagIc, AM_RADIAN, currentAngularMode, &ctxtReal39);
+    realToReal34(&real, &real34);
     realToReal34(&imagIc, &imag34);
   }
   else {
@@ -1234,7 +1244,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     uint32_t m, s, fs;
     int16_t sign;
 
-    real39_t temp, degrees, minutes, seconds;
+    real_t temp, degrees, minutes, seconds;
 
     real34ToReal(angle34, &temp);
 

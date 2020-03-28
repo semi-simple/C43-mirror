@@ -936,7 +936,7 @@ void addItemToNimBuffer(int16_t item) {
         strcat(nimBufferDisplay, STD_SPACE_4_PER_EM);
 
         for(index=2; nimBuffer[index]!=' '; index++); // The ending semi colon is OK here
-        supNumberToDisplayString(atoi(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
+        supNumberToDisplayString(atoi(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, false);
 
         strcat(nimBufferDisplay, "/");
 
@@ -2073,17 +2073,17 @@ void closeNim(void) {
               real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
             }
             else {
-              real39_t magnitude, theta;
+              real_t magnitude, theta;
 
               real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &magnitude);
               real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &theta);
-              convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
+              convertAngleFromTo(&theta, currentAngularMode, AM_RADIAN, &ctxtReal39);
               if(realCompareLessThan(&magnitude, const_0)) {
                 realSetPositiveSign(&magnitude);
                 realAdd(&theta, const_pi, &theta, &ctxtReal39);
-                WP34S_Mod(&theta, const1071_2pi, &theta);
+                WP34S_Mod(&theta, const1071_2pi, &theta, &ctxtReal39);
               }
-              real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
+              realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39); // theta in radian
               realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
               realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
             }

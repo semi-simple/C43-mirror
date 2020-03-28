@@ -396,6 +396,7 @@ void fnRj                       (uint16_t unusedParamButMandatory) {}
 void fnCountBits                (uint16_t unusedParamButMandatory) {}
 void fnNextPrime                (uint16_t unusedParamButMandatory) {}
 void fnScreenDump               (uint16_t unusedParamButMandatory) {}
+void fnArg                      (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -406,7 +407,7 @@ const item_t indexOfItems[] = {
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
 /*    3 */  { fn10Pow,                     NOPARAM,                     "10" STD_SUP_x,                                "10" STD_SUP_x,                                CAT_FNCT, SLS_ENABLED  },
 /*    4 */  { fnIntegerMode,               SIM_1COMPL,                  "1COMPL",                                      "1COMPL",                                      CAT_FNCT, SLS_UNCHANGED},
-/*    5 */  { fnScreenDump,                NOPARAM,                     "SCR.DMP",                                     "SCR.DMP",                                     CAT_FNCT, SLS_UNCHANGED},
+/*    5 */  { fnScreenDump,                NOPARAM,                     "SNAP",                                        "SNAP",                                        CAT_FNCT, SLS_UNCHANGED},
 /*    6 */  { fnInvert,                    NOPARAM,                     "1/x",                                         "1/x",                                         CAT_FNCT, SLS_ENABLED  },
 /*    7 */  { fnIntegerMode,               SIM_2COMPL,                  "2COMPL",                                      "2COMPL",                                      CAT_FNCT, SLS_UNCHANGED},
 /*    8 */  { fn2Pow,                      NOPARAM,                     "2" STD_SUP_x,                                 "2" STD_SUP_x,                                 CAT_FNCT, SLS_ENABLED  },
@@ -1221,7 +1222,7 @@ const item_t indexOfItems[] = {
 /*  816 */  { fnParallel,                  NOPARAM,                     "||",                                          "|" STD_SPACE_3_PER_EM "|",                    CAT_FNCT, SLS_ENABLED  },
 /*  817 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                               CAT_FNCT, SLS_UNCHANGED},
 /*  818 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                         CAT_FNCT, SLS_UNCHANGED},
-/*  819 */  { itemToBeCoded,               NOPARAM,                     STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_UNCHANGED},
+/*  819 */  { fnArg,                       NOPARAM,                     STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
 /*  820 */  { fnCvtToCurrentAngularMode,   AM_MULTPI,                   "MUL" STD_pi STD_RIGHT_ARROW,                  "MUL" STD_pi STD_RIGHT_ARROW,                  CAT_FNCT, SLS_ENABLED  },
 /*  821 */  { itemToBeCoded,               NOPARAM,                     STD_MEASURED_ANGLE STD_RIGHT_ARROW,            STD_MEASURED_ANGLE STD_RIGHT_ARROW,            CAT_MENU, SLS_UNCHANGED},
 /*  822 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "ADV",                             STD_PRINTER "ADV",                             CAT_FNCT, SLS_UNCHANGED},
@@ -1938,7 +1939,7 @@ const item_t indexOfItems[] = {
 /* 1531 */  { fnShow,                      NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    CAT_FNCT, SLS_ENABLED  },
-/* 1534 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
+/* 1534 */  { fnArg,                       NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
 /* 1535 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     "fathom",                                      CAT_FNCT, SLS_ENABLED  },
 /* 1536 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     STD_RIGHT_ARROW " m",                          CAT_DUPL, SLS_ENABLED  },
 /* 1537 */  { fnCvtFathomM,                divide,                      "m" STD_RIGHT_ARROW "fm.",                     "m " STD_RIGHT_ARROW,                          CAT_FNCT, SLS_ENABLED  },

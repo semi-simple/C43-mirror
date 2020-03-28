@@ -337,7 +337,7 @@ void powShoILonI(void) {
  * \return void
  ***********************************************/
 void powLonIReal(void) {
-  real39_t y, x;
+  real_t y, x;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
@@ -369,7 +369,7 @@ void powRealLonI(void) {
     return;
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
@@ -389,14 +389,14 @@ void powRealLonI(void) {
  * \return void
  ***********************************************/
 void powLonICplx(void) {
-  real39_t a, c, d;
+  real_t a, c, d;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
-  WP34S_Ln(&a, &a);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // (c + di) * ln(a) --> c +di
   realMultiply(&a, &c, &c, &ctxtReal39);
@@ -404,7 +404,7 @@ void powLonICplx(void) {
 
   // exp((c + di) * ln(a)) --> c +di
   realExp(&c, &a, &ctxtReal39);
-  real39PolarToRectangular(const_1, &d, &c, &d);
+  realPolarToRectangular(const_1, &d, &c, &d, &ctxtReal39);
   realMultiply(&a, &c, &c, &ctxtReal39);
   realMultiply(&a, &d, &d, &ctxtReal39);
 
@@ -435,7 +435,7 @@ void powCplxLonI(void) {
     return;
   }
 
-  real39_t a, b, c, d;
+  real_t a, b, c, d;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
@@ -443,8 +443,8 @@ void powCplxLonI(void) {
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  real39RectangularToPolar(&a, &b, &a, &b);
-  WP34S_Ln(&a, &a);
+  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // c * ln(a + bi) -- > a + bi
   realMultiply(&c, &a, &a, &ctxtReal39);
@@ -452,7 +452,7 @@ void powCplxLonI(void) {
 
   // exp(c * ln(a + bi)) -- > c + di
   realExp(&a, &a, &ctxtReal39);
-  real39PolarToRectangular(const_1, &b, &c, &d);
+  realPolarToRectangular(const_1, &b, &c, &d, &ctxtReal39);
   realMultiply(&a, &c, &c, &ctxtReal39);
   realMultiply(&a, &d, &d, &ctxtReal39);
 
@@ -602,7 +602,7 @@ void powShoIShoI(void) {
  * \return void
  ***********************************************/
 void powShoIReal(void) {
-  real39_t y, x;
+  real_t y, x;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
@@ -634,7 +634,7 @@ void powRealShoI(void) {
     setRegisterAngularMode(REGISTER_X, AM_NONE);
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
@@ -654,14 +654,14 @@ void powRealShoI(void) {
  * \return void
  ***********************************************/
 void powShoICplx(void) {
-  real39_t a, c, d;
+  real_t a, c, d;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
-  WP34S_Ln(&a, &a);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // (c + di) * ln(a) --> c +di
   realMultiply(&a, &c, &c, &ctxtReal39);
@@ -669,7 +669,7 @@ void powShoICplx(void) {
 
   // exp((c + di) * ln(a)) --> c +di
   realExp(&c, &a, &ctxtReal39);
-  real39PolarToRectangular(const_1, &d, &c, &d);
+  realPolarToRectangular(const_1, &d, &c, &d, &ctxtReal39);
   realMultiply(&a, &c, &c, &ctxtReal39);
   realMultiply(&a, &d, &d, &ctxtReal39);
 
@@ -700,7 +700,7 @@ void powCplxShoI(void) {
     return;
   }
 
-  real39_t a, b, c, d;
+  real_t a, b, c, d;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
@@ -708,8 +708,8 @@ void powCplxShoI(void) {
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  real39RectangularToPolar(&a, &b, &a, &b);
-  WP34S_Ln(&a, &a);
+  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // c * ln(a + bi) -- > a + bi
   realMultiply(&c, &a, &a, &ctxtReal39);
@@ -717,7 +717,7 @@ void powCplxShoI(void) {
 
   // exp(c * ln(a + bi)) -- > c + di
   realExp(&a, &a, &ctxtReal39);
-  real39PolarToRectangular(const_1, &b, &c, &d);
+  realPolarToRectangular(const_1, &b, &c, &d, &ctxtReal39);
   realMultiply(&a, &c, &c, &ctxtReal39);
   realMultiply(&a, &d, &d, &ctxtReal39);
 
@@ -751,7 +751,7 @@ void powRealReal(void) {
     return;
   }
 
-  real39_t y, x;
+  real_t y, x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
@@ -784,14 +784,14 @@ void powRealCplx(void) {
     return;
   }
 
-  real39_t a, c, d;
+  real_t a, c, d;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
   // ln(a) --> a
-  WP34S_Ln(&a, &a);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // (c + di) * ln(a) --> c +di
   realMultiply(&a, &c, &c, &ctxtReal39);
@@ -799,7 +799,7 @@ void powRealCplx(void) {
 
   // exp((c + di) * ln(a)) --> c +di
   realExp(&c, &a, &ctxtReal39);
-  real39PolarToRectangular(const_1, &d, &c, &d);
+  realPolarToRectangular(const_1, &d, &c, &d, &ctxtReal39);
   realMultiply(&a, &c, &c, &ctxtReal39);
   realMultiply(&a, &d, &d, &ctxtReal39);
 
@@ -830,7 +830,7 @@ void powCplxReal(void) {
     return;
   }
 
-  real39_t a, b, c, d;
+  real_t a, b, c, d;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
@@ -838,8 +838,8 @@ void powCplxReal(void) {
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 
   // ln(a + bi) --> a + bi
-  real39RectangularToPolar(&a, &b, &a, &b);
-  WP34S_Ln(&a, &a);
+  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   // c * ln(a + bi) -- > a + bi
   realMultiply(&c, &a, &a, &ctxtReal39);
@@ -847,7 +847,7 @@ void powCplxReal(void) {
 
   // exp(c * ln(a + bi)) -- > c + di
   realExp(&a, &a, &ctxtReal39);
-  real39PolarToRectangular(const_1, &b, &c, &d);
+  realPolarToRectangular(const_1, &b, &c, &d, &ctxtReal39);
   realMultiply(&a, &c, &c, &ctxtReal39);
   realMultiply(&a, &d, &d, &ctxtReal39);
 
@@ -882,15 +882,15 @@ void powCplxCplx(void) {
     return;
   }
 
-  real39_t a, b, c, d, theta;
+  real_t a, b, c, d, theta;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
-  real39RectangularToPolar(&a, &b, &a, &theta);
-  WP34S_Ln(&a, &a);
+  realRectangularToPolar(&a, &b, &a, &theta, &ctxtReal39);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   realMultiply(&a, &d, &b, &ctxtReal39);
   realFMA(&theta, &c, &b, &b, &ctxtReal39);
@@ -899,7 +899,7 @@ void powCplxCplx(void) {
   realFMA(&theta, &d, &a, &a, &ctxtReal39);
 
   realExp(&a, &c, &ctxtReal39);
-  real39PolarToRectangular(const_1, &b, &a, &b);
+  realPolarToRectangular(const_1, &b, &a, &b, &ctxtReal39);
   realMultiply(&c, &b, &d, &ctxtReal39);
   realMultiply(&c, &a, &c, &ctxtReal39);
 

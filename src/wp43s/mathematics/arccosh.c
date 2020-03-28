@@ -65,7 +65,7 @@ void fnArccosh(uint16_t unusedParamButMandatory) {
 
 
 void arccoshLonI(void) {
-  real39_t x, xSquared;
+  real_t x, xSquared;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realCompareLessThan(&x, const_1)) {
@@ -95,7 +95,7 @@ void arccoshLonI(void) {
   realSubtract(&xSquared, const_1, &xSquared, &ctxtReal39);
   realSquareRoot(&xSquared, &xSquared, &ctxtReal39);
   realAdd(&xSquared, &x, &x, &ctxtReal39);
-  WP34S_Ln(&x, &x);
+  WP34S_Ln(&x, &x, &ctxtReal39);
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -115,11 +115,11 @@ void arccoshCxma(void) {
 
 
 void arccoshReal(void) {
-  real75_t x, xSquared;
+  real_t x, xSquared;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  if(realCompareLessThan((real_t *)&x, const_1)) {
+  if(realCompareLessThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -144,8 +144,7 @@ void arccoshReal(void) {
   realSubtract(&xSquared, const_1, &xSquared, &ctxtReal75);
   realSquareRoot(&xSquared, &xSquared, &ctxtReal75);
   realAdd(&xSquared, &x, &x, &ctxtReal75);
-  realLn(&x, &x, &ctxtReal75);
-  //WP34S_Ln(&x, &x);
+  WP34S_Ln(&x, &x, &ctxtReal39);
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -154,7 +153,7 @@ void arccoshReal(void) {
 
 
 void arccoshCplx(void) {
-  real39_t a, b, real, imag;
+  real_t a, b, real, imag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
@@ -173,18 +172,18 @@ void arccoshCplx(void) {
   realSubtract(&real, const_1, &real, &ctxtReal39);
 
   // calculate sqrt(z² - 1)
-  real39RectangularToPolar(&real, &imag, &real, &imag);
+  realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
   realSquareRoot(&real, &real, &ctxtReal39);
   realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
-  real39PolarToRectangular(&real, &imag, &real, &imag);
+  realPolarToRectangular(&real, &imag, &real, &imag, &ctxtReal39);
 
   // calculate z + sqrt(z² - 1)
   realAdd(&a, &real, &real, &ctxtReal39);
   realAdd(&b, &imag, &imag, &ctxtReal39);
 
   // calculate ln(z + sqtr(z² - 1))
-  real39RectangularToPolar(&real, &imag, &a, &b);
-  WP34S_Ln(&a, &a);
+  realRectangularToPolar(&real, &imag, &a, &b, &ctxtReal39);
+  WP34S_Ln(&a, &a, &ctxtReal39);
 
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));

@@ -48,7 +48,7 @@ bool_t               funcOK;
 // Variables stored in RAM
 realContext_t        ctxtReal34;   //   34 digits
 realContext_t        ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
-realContext_t        ctxtReal51;   //   51 digits: used in trigonometric function from WP34S
+realContext_t        ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
 realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
 realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
 //realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo
@@ -240,6 +240,7 @@ void setupDefaults(void) {
   temporaryInformation = TI_NO_INFO;
 
   decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
+
   decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
   ctxtReal39.digits = 39;
   ctxtReal39.traps  = 0;
@@ -342,9 +343,9 @@ void setupDefaults(void) {
 
   gammaLanczosCoefficients = (real51_t *)const_gammaC01;
 
-  angle180 = const_180;
-  angle90  = const_90;
-  angle45  = const_45;
+  angle180 = (real39_t *)const_180;
+  angle90  = (real39_t *)const_90;
+  angle45  = (real39_t *)const_45;
 
   alphaSelectionMenu = ASM_NONE;
 
@@ -688,6 +689,7 @@ int main(int argc, char* argv[]) {
   setupDefaults();
 
   fnReset(CONFIRMED);
+
 /*
 longInteger_t li;
 longIntegerInit(li);
@@ -704,6 +706,8 @@ fnIsPrime(NOPARAM);
 longIntegerFree(li);
 return 0;
 */
+
+
   processTests();
   printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
   debugMemory();

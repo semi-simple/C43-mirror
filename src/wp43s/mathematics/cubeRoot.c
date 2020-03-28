@@ -73,7 +73,7 @@ void curtLonI(void) {
     convertLongIntegerToLongIntegerRegister(value, REGISTER_X);
   }
   else {
-    real39_t x;
+    real_t x;
 
     convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -106,7 +106,7 @@ void curtCxma(void) {
 
 
 void curtShoI(void) {
-  real39_t x;
+  real_t x;
   int32_t cubeRoot;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
@@ -141,7 +141,7 @@ void curtReal(void) {
     return;
   }
 
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
@@ -160,15 +160,15 @@ void curtReal(void) {
 
 
 void curtCplx(void) {
-  real39_t a, b;
+  real_t a, b;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  real39RectangularToPolar(&a, &b, &a, &b);
+  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
   realPower(&a, const_1on3, &a, &ctxtReal39);
   realMultiply(&b, const_1on3, &b, &ctxtReal39);
-  real39PolarToRectangular(&a, &b, &a, &b);
+  realPolarToRectangular(&a, &b, &a, &b, &ctxtReal39);
 
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));

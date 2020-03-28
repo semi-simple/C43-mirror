@@ -65,10 +65,10 @@ void fnTanh(uint16_t unusedParamButMandatory) {
 
 
 void tanhLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  WP34S_Tanh(&x, &x);
+  WP34S_Tanh(&x, &x, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
@@ -97,10 +97,10 @@ void tanhReal(void) {
     return;
   }
 
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  WP34S_Tanh(&x, &x);
+  WP34S_Tanh(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -109,25 +109,25 @@ void tanhReal(void) {
 
 void tanhCplx(void) {
   // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
-  real39_t a, b, sina, cosa;
-  real39_t numerReal, denomReal;
-  real39_t numerImag, denomImag;
+  real_t a, b, sina, cosa;
+  real_t numerReal, denomReal;
+  real_t numerImag, denomImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   if(realIsZero(&b)) {
-    WP34S_Tanh(&a, &numerReal);
+    WP34S_Tanh(&a, &numerReal, &ctxtReal39);
     realZero(&numerImag);
   }
   else {
-    WP34S_Tanh(&a, &numerReal);
-    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numerImag);
+    WP34S_Tanh(&a, &numerReal, &ctxtReal39);
+    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numerImag, &ctxtReal39);
 
     realCopy(const_1, &denomReal);
     realMultiply(&numerReal, &numerImag, &denomImag, &ctxtReal39);
 
-    divCo39Co39(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag);
+    divComplexComplex(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag, &ctxtReal39);
   }
 
   realToReal34(&numerReal, REGISTER_REAL34_DATA(REGISTER_X));

@@ -35,6 +35,7 @@
 #define DEBUG_REGISTER_L            1
 #define SHOW_MEMORY_STATUS          1
 #define IBM_DECIMAL                 1
+#define LIMIT_EXPONENT_TO_999       1
 #define LIBGMP                      1
 #define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
 #define MEMORY_ALLOCATION_MASK      (MEMORY_ALLOCATION_ALIGNMENT - 1)
@@ -153,12 +154,13 @@ typedef enum {
 typedef int16_t calcRegister_t;
 
 #if (IBM_DECIMAL == 1)
-  #define DECNUMDIGITS 39
+  #define DECNUMDIGITS 75
   #include "decimal128.h"
   #include "decimal64.h"
   #include "decDouble.h"
   #include "decQuad.h"
   #include "decNumberWrappers.h"
+  extern int decGetInt(const decNumber *x);
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
@@ -216,7 +218,7 @@ typedef int16_t calcRegister_t;
 //#define modulo(n, d)            ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
 #define modulo(n, d)            ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
 
-#define NUMBER_OF_CONSTANTS_39   174
+#define NUMBER_OF_CONSTANTS_39   175
 #define NUMBER_OF_CONSTANTS_51    30
 #define NUMBER_OF_CONSTANTS_1071   1
 #define NUMBER_OF_CONSTANTS_34     7
@@ -532,7 +534,7 @@ extern const softmenu_t     softmenu[];
 // Variables stored in RAM
 extern realContext_t        ctxtReal34;   //   34 digits
 extern realContext_t        ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
-extern realContext_t        ctxtReal51;   //   51 digits: used in trigonometric function from WP34S
+extern realContext_t        ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
 extern realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo

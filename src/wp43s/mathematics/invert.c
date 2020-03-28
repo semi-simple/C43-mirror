@@ -95,7 +95,7 @@ void invertLonI(void) {
       convertLongIntegerToLongIntegerRegister(quotient, REGISTER_X);
     }
     else {
-      real39_t reX;
+      real_t reX;
 
       longIntegerToAllocatedString(a, tmpStr3000, TMP_STR_LENGTH);
       stringToReal(tmpStr3000, &reX, &ctxtReal39);
@@ -169,7 +169,7 @@ void invertReal(void) {
  * \return void
  ***********************************************/
 void invertCplx(void) {
-  real39_t a, b, denom;
+  real_t a, b, denom;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);

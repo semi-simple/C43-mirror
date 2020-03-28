@@ -21,9 +21,7 @@
 void fnMultiply (uint16_t unusedParamButMandatory);
 void mulError   (void);
 
-void mulCo39Co39(const real39_t *factor1Real, const real39_t *factor1Imag, const real39_t *factor2Real, const real39_t *factor2Imag, real39_t *productReal, real39_t *productImag);
-void mulCo51Co51(const real51_t *factor1Real, const real51_t *factor1Imag, const real51_t *factor2Real, const real51_t *factor2Imag, real51_t *productReal, real51_t *productImag);
-void mulCo75Co75(const real75_t *factor1Real, const real75_t *factor1Imag, const real75_t *factor2Real, const real75_t *factor2Imag, real75_t *productReal, real75_t *productImag);
+void mulComplexComplex(const real_t *factor1Real, const real_t *factor1Imag, const real_t *factor2Real, const real_t *factor2Imag, real_t *productReal, real_t *productImag, realContext_t *realContext);
 
 //      RegYRegX
 void mulLonILonI(void);

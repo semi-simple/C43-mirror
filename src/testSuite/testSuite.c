@@ -25,7 +25,7 @@
 
 
 extern const int16_t menu_FCNS[];
-extern const int16_t menu_CNST[];
+extern const int16_t menu_CONST[];
 extern const int16_t menu_MENUS[];
 extern const softmenu_t softmenu[];
 char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000], realString[1000];
@@ -46,6 +46,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnArcsinh",              fnArcsinh             },
   {"fnArctan",               fnArctan              },
   {"fnArctanh",              fnArctanh             },
+  {"fnArg",                  fnArg                 },
   {"fnAsr",                  fnAsr                 },
   {"fnBatteryVoltage",       fnBatteryVoltage      },
   {"fnCb",                   fnCb                  },
@@ -910,8 +911,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
       printf("\nRegister %c should be %s but it is %s!\n", letter, getDataTypeName(expectedDataType, true, false), getDataTypeName(getRegisterDataType(regist), true, false));
       printf("R%c = ", letter);
     }
-    printRegisterToConsole(regist);
-    printf("\n");
+    printRegisterToConsole(regist, "", "\n");
     abortTest();
   }
 
@@ -925,8 +925,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
         printf("\nRegister %c is a short integer base %u but it should be base %u!\n", letter, expectedTag, getRegisterShortIntegerBase(regist));
         printf("R%c = ", letter);
       }
-      printRegisterToConsole(regist);
-      printf("\n");
+      printRegisterToConsole(regist, "", "\n");
       abortTest();
     }
     else if(getRegisterDataType(regist) == dtReal34) {
@@ -938,8 +937,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
         printf("\nRegister %c should be a real tagged %s but it is tagged %s!\n", letter, getAngularModeName(expectedTag), getAngularModeName(getRegisterAngularMode(regist)));
         printf("R%c = ", letter);
       }
-      printRegisterToConsole(regist);
-      printf("\n");
+      printRegisterToConsole(regist, "", "\n");
       abortTest();
     }
     else if(getRegisterDataType(regist) == dtLongInteger) {
@@ -951,8 +949,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
         printf("\nRegister %c should be a long integer tagged %d but it is tagged %d!\n", letter, expectedTag, getRegisterLongIntegerSign(regist));
         printf("R%c = ", letter);
       }
-      printRegisterToConsole(regist);
-      printf("\n");
+      printRegisterToConsole(regist, "", "\n");
       abortTest();
     }
   }
@@ -961,7 +958,7 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
 
 
 int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numberPart, calcRegister_t regist, char letter) {
-  real39_t expectedValue, value, relativeError;
+  real_t expectedValue, value, relativeError;
 
   real34ToReal(expectedValue34, &expectedValue);
   real34ToReal(value34, &value);
@@ -986,14 +983,12 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
     if(letter == 0) {
       printf("\nThere are only %d correct significant digits in the %s part of register %d! Relative error is %s\n", correctSignificantDigits, numberPart, regist, realString);
       printf("R%d = ", regist);
-      printReal34ToConsole(value34);
-      printf("\n");
+      printReal34ToConsole(value34, "", "\n");
     }
     else {
       printf("\nThere are only %d correct significant digits in the %s part of register %c! Relative error is %s\n", correctSignificantDigits, numberPart, letter, realString);
       printf("%c = ", letter);
-      printReal34ToConsole(value34);
-      printf("\n");
+      printReal34ToConsole(value34, "", "\n");
     }
     printf("%s\n", lastInParameters);
     printf("%s\n", line);
@@ -1017,8 +1012,7 @@ void wrongRegisterValue(calcRegister_t regist, char letter, char *expectedValue)
     printf("\nRegister %c value should be ", letter);
   }
   printf("%s\nbut it is ", expectedValue);
-  printRegisterToConsole(regist);
-  printf("\n");
+  printRegisterToConsole(regist, "", "\n");
   abortTest();
 }
 
@@ -1941,7 +1935,7 @@ void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const cha
 void checkCatalogsSorting(void) {
   //compareString(indexOfItems[234].itemCatalogName, indexOfItems[245].itemCatalogName, CMP_EXTENSIVE);
   checkOneCatalogSorting(menu_FCNS,  MNU_FCNS,  "FCNS");
-  checkOneCatalogSorting(menu_CNST,  MNU_CNST,  "CONST");
+  checkOneCatalogSorting(menu_CONST, MNU_CONST, "CONST");
   checkOneCatalogSorting(menu_MENUS, MNU_MENUS, "MENUS");
 }
 

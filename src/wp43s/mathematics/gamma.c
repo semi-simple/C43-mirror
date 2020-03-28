@@ -105,7 +105,7 @@ void fnLnGamma(uint16_t unusedParamButMandatory) {
 
 
 void gammaLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -136,14 +136,14 @@ void gammaLonI(void) {
     return;
   }
 
-  WP34S_Gamma(&x, &x);
+  WP34S_Gamma(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void lnGammaLonI(void) {
-  real39_t x;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -174,7 +174,7 @@ void lnGammaLonI(void) {
     return;
   }
 
-  WP34S_LnGamma(&x, &x);
+  WP34S_LnGamma(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -209,17 +209,17 @@ void gammaReal(void) {
     return;
   }
 
-  real39_t x;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  WP34S_Gamma(&x, &x);
+  WP34S_Gamma(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void lnGammaReal(void) {
-  real39_t xReal, xImag;
+  real_t xReal, xImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
   setRegisterAngularMode(REGISTER_X, AM_NONE);
@@ -252,18 +252,18 @@ void lnGammaReal(void) {
     }
     else { // x is negative and not an integer
       realMinus(&xReal, &xImag, &ctxtReal39); // x.imag is used as a temp variable here
-      WP34S_Mod(&xImag, const_2, &xImag);
+      WP34S_Mod(&xImag, const_2, &xImag, &ctxtReal39);
       if(realCompareGreaterThan(&xImag, const_1)) { // the result is a real
-        WP34S_LnGamma(&xReal, &xReal);
+        WP34S_LnGamma(&xReal, &xReal, &ctxtReal39);
         realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else { // the result is a complex
         if(getFlag(FLAG_CPXRES)) { // We can calculate a complex
           real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xImag);
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-          WP34S_Gamma(&xReal, &xReal);
+          WP34S_Gamma(&xReal, &xReal, &ctxtReal39);
           realSetPositiveSign(&xReal);
-          realLn(&xReal, &xReal, &ctxtReal39);
+          WP34S_Ln(&xReal, &xReal, &ctxtReal39);
           realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
           realToIntegralValue(&xImag, &xImag, DEC_ROUND_FLOOR, &ctxtReal39);
           realMultiply(&xImag, const_pi, &xImag, &ctxtReal39);
@@ -280,20 +280,19 @@ void lnGammaReal(void) {
     return;
   }
 
-
-  WP34S_LnGamma(&xReal, &xReal);
+  WP34S_LnGamma(&xReal, &xReal, &ctxtReal39);
   realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void gammaCplx(void) {
-  real39_t zReal, zImag;
+  real_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag);
+  WP34S_ComplexGamma(&zReal, &zImag, &zReal, &zImag, &ctxtReal39);
 
   realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -302,12 +301,12 @@ void gammaCplx(void) {
 
 
 void lnGammaCplx(void) {
-  real39_t zReal, zImag;
+  real_t zReal, zImag;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &zReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &zImag);
 
-  WP34S_ComplexLnGamma(&zReal, &zImag, &zReal, &zImag);
+  WP34S_ComplexLnGamma(&zReal, &zImag, &zReal, &zImag, &ctxtReal39);
 
   realToReal34(&zReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&zImag, REGISTER_IMAG34_DATA(REGISTER_X));

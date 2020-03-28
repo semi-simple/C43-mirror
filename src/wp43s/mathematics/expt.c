@@ -65,7 +65,7 @@ void fnExpt(uint16_t unusedParamButMandatory) {
 
 
 void exptLonI(void) {
-  real39_t x;
+  real_t x;
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
@@ -86,7 +86,7 @@ void exptReal(void) {
     return;
   }
 
-  real39_t x;
+  real_t x;
   longInteger_t lgInt;
 
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {

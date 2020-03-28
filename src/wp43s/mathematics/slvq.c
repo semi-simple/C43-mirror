@@ -30,11 +30,11 @@
  ***********************************************/
 void fnSlvq(uint16_t unusedParamButMandatory) {
   bool_t realCoefs=true, realRoots=true;
-  real75_t aReal, bReal, cReal, rReal, x1Real, x2Real;
-  real75_t aImag, bImag, cImag, rImag, x1Imag, x2Imag;
+  real_t aReal, bReal, cReal, rReal, x1Real, x2Real;
+  real_t aImag, bImag, cImag, rImag, x1Imag, x2Imag;
 
   switch(getRegisterDataType(REGISTER_X)) {
-    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, (real_t *)&cReal, &ctxtReal75);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &cReal, &ctxtReal75);
                         realZero(&cImag);
                         break;
 
@@ -56,7 +56,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
 
   switch(getRegisterDataType(REGISTER_Y)) {
-    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, (real_t *)&bReal, &ctxtReal75);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, &bReal, &ctxtReal75);
                         realZero(&bImag);
                         break;
 
@@ -78,7 +78,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
 
   switch(getRegisterDataType(REGISTER_Z)) {
-    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Z, (real_t *)&aReal, &ctxtReal75);
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Z, &aReal, &ctxtReal75);
                         realZero(&aImag);
                         break;
 
@@ -194,10 +194,10 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       // bx + c = 0   (b is not 0 here)
 
       // r = b²
-      mulCo75Co75(&bReal, &bImag, &bReal, &bImag, &rReal, &rImag);
+      mulComplexComplex(&bReal, &bImag, &bReal, &bImag, &rReal, &rImag, &ctxtReal75);
 
       // x1 = x2 = -c/b
-      divCo75Co75(&cReal, &cImag, &bReal, &bImag, &x1Real, &x1Imag);
+      divComplexComplex(&cReal, &cImag, &bReal, &bImag, &x1Real, &x1Imag, &ctxtReal75);
       realChangeSign(&x1Real);
       realChangeSign(&x1Imag);
       realCopy(&x1Real, &x2Real);
@@ -207,14 +207,14 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       // ax² + bx = x(ax + b) = 0   (a is not 0 here)
 
       // r = b²
-      mulCo75Co75(&bReal, &bImag, &bReal, &bImag, &rReal, &rImag);
+      mulComplexComplex(&bReal, &bImag, &bReal, &bImag, &rReal, &rImag, &ctxtReal75);
 
       // x1 = 0
       realZero(&x1Real);
       realZero(&x1Imag);
 
       // x2 = -b/a
-      divCo75Co75(&bReal, &bImag, &aReal, &aImag, &x2Real, &x2Imag);
+      divComplexComplex(&bReal, &bImag, &aReal, &aImag, &x2Real, &x2Imag, &ctxtReal75);
       realChangeSign(&x2Real);
       realChangeSign(&x2Imag);
     }
@@ -224,28 +224,28 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
       // r = b² - 4ac
       realMultiply(const__4, &aReal, &rReal, &ctxtReal75);
       realMultiply(const__4, &aImag, &rImag, &ctxtReal75);
-      mulCo75Co75(&cReal, &cImag, &rReal, &rImag, &rReal, &rImag);
-      mulCo75Co75(&bReal, &bImag, &bReal, &bImag, &x1Real, &x1Imag);
+      mulComplexComplex(&cReal, &cImag, &rReal, &rImag, &rReal, &rImag, &ctxtReal75);
+      mulComplexComplex(&bReal, &bImag, &bReal, &bImag, &x1Real, &x1Imag, &ctxtReal75);
       realAdd(&x1Real, &rReal, &rReal, &ctxtReal75);
       realAdd(&x1Imag, &rImag, &rImag, &ctxtReal75);
 
       // x1 = (-b + sqrt(r)) / 2a
       realCopy(&rReal, &x1Real);
       realCopy(&rImag, &x1Imag);
-      real75RectangularToPolar((real_t *)&x1Real, (real_t *)&x1Imag, (real_t *)&x1Real, (real_t *)&x1Imag);
+      realRectangularToPolar(&x1Real, &x1Imag, &x1Real, &x1Imag, &ctxtReal75);
       realSquareRoot(&x1Real, &x1Real, &ctxtReal75);
       realMultiply(&x1Imag, const_1on2, &x1Imag, &ctxtReal75);
-      real75PolarToRectangular((real_t *)&x1Real, (real_t *)&x1Imag, (real_t *)&x1Real, (real_t *)&x1Imag);
+      realPolarToRectangular(&x1Real, &x1Imag, &x1Real, &x1Imag, &ctxtReal75);
 
       realSubtract(&x1Real, &bReal, &x1Real, &ctxtReal75);
       realSubtract(&x1Imag, &bImag, &x1Imag, &ctxtReal75);
       realMultiply(&x1Real, const_1on2, &x1Real, &ctxtReal75);
       realMultiply(&x1Imag, const_1on2, &x1Imag, &ctxtReal75);
-      divCo75Co75(&x1Real, &x1Imag, &aReal, &aImag, &x1Real, &x1Imag);
+      divComplexComplex(&x1Real, &x1Imag, &aReal, &aImag, &x1Real, &x1Imag, &ctxtReal75);
 
       // x2 = c / ax1  (x1 connot be 0 here)
-      divCo75Co75(&cReal, &cImag, &aReal, &aImag, &x2Real, &x2Imag);
-      divCo75Co75(&x2Real, &x2Imag, &x1Real, &x1Imag, &x2Real, &x2Imag);
+      divComplexComplex(&cReal, &cImag, &aReal, &aImag, &x2Real, &x2Imag, &ctxtReal75);
+      divComplexComplex(&x2Real, &x2Imag, &x1Real, &x1Imag, &x2Real, &x2Imag, &ctxtReal75);
     }
   }
 

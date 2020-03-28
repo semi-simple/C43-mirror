@@ -70,19 +70,19 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
         real34Zero(VARIABLE_IMAG34_DATA(&temp));
       }
       else {
-        real39_t magnitude, theta;
+        real_t magnitude, theta;
 
         real34ToReal(VARIABLE_REAL34_DATA(&temp), &magnitude);
         real34ToReal(VARIABLE_IMAG34_DATA(&temp), &theta);
         if(xIsAReal) {
-          convertAngle39FromTo(&theta, currentAngularMode, AM_RADIAN);
+          convertAngleFromTo(&theta, currentAngularMode, AM_RADIAN, &ctxtReal39);
         }
         if(realCompareLessThan(&magnitude, const_0)) {
           realSetPositiveSign(&magnitude);
           realAdd(&theta, const_pi, &theta, &ctxtReal39);
-          WP34S_Mod(&theta, const1071_2pi, &theta);
+          WP34S_Mod(&theta, const1071_2pi, &theta, &ctxtReal39);
         }
-        real39PolarToRectangular(&magnitude, &theta, &magnitude, &theta); // theta in radian
+        realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39); // theta in radian
         realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
         realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
       }

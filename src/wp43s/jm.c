@@ -986,7 +986,7 @@ void fnJM(uint16_t JM_OPCODE) {
     snprintf(tmp, 12, "%.3f", graph_dy);
     strcat(tmpStr3000,tmp);
     fnStrtoX(tmpStr3000);
-    fnStrtoX("[PLOT] graphs, [S.SHOT] saves screen");
+    fnStrtoX("[PLOT] graphs, [SNAP] saves screen");
     refreshStack();
   }
   else
@@ -1057,12 +1057,15 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
 
+/*
+DEPRECIATED for Martin
   if(JM_OPCODE == 33) {                                       //screenshot
     #ifdef DMCP_BUILD
     create_screenshot(0);
     #endif
   }
   else
+*/
 
   if(JM_OPCODE >= 34 && JM_OPCODE <= 39) {                                       //screenshot
     saveStack();

@@ -2390,7 +2390,7 @@ const item_t indexOfItems[] = {
 /* 1940 */  { fnGraph,                     15,                          "DEMO5",                                       "DEMO5",                                       CAT_FNCT, SLS_ENABLED  },
 /* 1941 */  { fnGraph,                     16,                          "DEMO6",                                       "DEMO6",                                       CAT_FNCT, SLS_ENABLED  },
 /* 1942 */  { itemToBeCoded,               NOPARAM,                     "ST_GRF",                                      "ST_GRF",                                      CAT_MENU, SLS_ENABLED  },
-/* 1943 */  { fnSetSetJM,                  JC_VECT,                     "VECTORS",                                     "VECTORS",                                     CAT_FNCT, SLS_UNCHANGED},   //JM VECTOR MODE
+/* 1943 */  { fnSetSetJM,                  JC_VECT,                     "VECTOR",                                      "VECTOR",                                      CAT_FNCT, SLS_UNCHANGED},   //JM VECTOR MODE
 
 /* 1944 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

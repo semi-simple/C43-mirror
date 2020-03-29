@@ -664,9 +664,9 @@ void program_main(void) {
     key = key_pop();
 
     if(sys_last_key() == 44 ) {                                 //JM DISP for special SCREEN DUMP key code. Supposed to be 16 but shift decoding done already to 44
-      resetShiftState();
-      fnJM(33);                                                 //SCREEN DUMP
-    } 
+      resetShiftState();                                        // to avoid f or g top left of the screen
+      fnScreenDump(0);
+    }
    
    #ifdef JMSHOWCODES 
     //Show key codes

@@ -1906,5 +1906,22 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
 #ifdef DMCP_BUILD
   resetShiftState(); // to avoid f or g top left of the screen
   create_screenshot(0);
+
+  uint16_t tmp, tmp2;
+  tmp2 = get_beep_volume();
+  tmp = tmp2;
+  while(tmp < 11) {
+    beep_volume_up();
+    tmp = get_beep_volume();
+  }
+  start_buzzer_freq(100000);
+  create_screenshot(0);      
+  stop_buzzer ();
+  while(tmp != tmp2) {
+    beep_volume_down();
+    tmp = get_beep_volume();
+  }
+
+
 #endif
 }

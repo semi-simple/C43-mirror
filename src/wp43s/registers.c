@@ -1328,13 +1328,8 @@ printf("fnStoreElement\n");
  * \return void
  ***********************************************/
 void fnStoreIJ(uint16_t unusedParamButMandatory) {
-#ifdef PC_BUILD
-printf("fnStoreIJ\n");
-#endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnStoreIJ:", "To be coded", NULL, NULL);
-  #endif
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
+    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);
 }
 
 
@@ -1614,13 +1609,14 @@ printf("fnRecallElement\n");
  * \return void
  ***********************************************/
 void fnRecallIJ(uint16_t unusedParamButMandatory) {
-#ifdef PC_BUILD
-printf("fnRecallIJ\n");
-#endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallIJ:", "To be coded", NULL, NULL);
-  #endif
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    copySourceRegisterToDestRegister(REGISTER_I, REGISTER_X);
+    copySourceRegisterToDestRegister(REGISTER_J, REGISTER_Y);
+
+    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+    adjustResult(REGISTER_Y, false, true, REGISTER_Y, -1, -1);
 }
 
 

@@ -81,23 +81,29 @@ In:  SL=0 FI=0 RX=Real:"NaN"
 Out: EC=0 FI=0 SL=1 RL=Real:"NaN" RX=Real:"NaN"
 
 ; Infinity
-In:  SL=0 FI=0 FD=1 RX=Real:"inf":DEG
-Out: EC=0 FI=0 SL=1 RL=Real:"inf":DEG RX=Real:"inf"
-
-In:  SL=0 FI=0 FD=0 RX=Real:"inf":MULTPI
-Out: EC=4 FI=0 SL=0 RX=Real:"inf":MULTPI
-
-In:  SL=0 FI=0 FD=0 RX=Real:"-inf":RAD
-Out: EC=0 FI=0 SL=1 RX=Real:"0"
-
 In:  SL=0 FI=0 FD=1 RX=Real:"inf"
 Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
 
 In:  SL=0 FI=0 FD=0 RX=Real:"inf"
-Out: EC=4 FI=0 SL=0 RX=Real:"inf"
+Out: EC=1 FI=0 SL=0 RX=Real:"inf"
+
+In:  SL=0 FI=0 FD=1 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
 
 In:  SL=0 FI=0 FD=0 RX=Real:"-inf"
-Out: EC=0 FI=0 SL=1 RX=Real:"0"
+Out: EC=1 FI=0 SL=0 RX=Real:"-inf"
+
+In:  SL=0 FI=0 FD=1 RX=Real:"inf":DEG
+Out: EC=0 FI=0 SL=1 RL=Real:"inf":DEG RX=Real:"inf"
+
+In:  SL=0 FI=0 FD=0 RX=Real:"inf":RAD
+Out: EC=1 FI=0 SL=0 RX=Real:"inf":RAD
+
+In:  SL=0 FI=0 FD=1 RX=Real:"-inf":MULTPI
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf":MULTPI RX=Real:"0"
+
+In:  SL=0 FI=0 FD=0 RX=Real:"-inf":GRAD
+Out: EC=1 FI=0 SL=0 RX=Real:"-inf":GRAD
 
 
 

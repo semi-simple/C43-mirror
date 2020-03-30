@@ -143,10 +143,10 @@ remainder
 mant
 expt
 
+exp
 10pow
 2pow
 minusOnePow
-exp
 log10
 log2
 ln

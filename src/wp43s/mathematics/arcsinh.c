@@ -99,12 +99,17 @@ void arcsinhReal(void) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  // arcsinh(x) = ln(x + sqrt(x² + 1))
-  realMultiply(&x, &x, &xSquared, &ctxtReal51);
-  realAdd(&xSquared, const_1, &xSquared, &ctxtReal51);
-  realSquareRoot(&xSquared, &xSquared, &ctxtReal51);
-  realAdd(&xSquared, &x, &x, &ctxtReal51);
-  WP34S_Ln(&x, &x, &ctxtReal51);
+  if(realIsInfinite(&x) && realIsNegative(&x)) {
+    realCopy(const_minusInfinity, &x);
+  }
+  else {
+    // arcsinh(x) = ln(x + sqrt(x² + 1))
+    realMultiply(&x, &x, &xSquared, &ctxtReal51);
+    realAdd(&xSquared, const_1, &xSquared, &ctxtReal51);
+    realSquareRoot(&xSquared, &xSquared, &ctxtReal51);
+    realAdd(&xSquared, &x, &x, &ctxtReal51);
+    WP34S_Ln(&x, &x, &ctxtReal51);
+  }
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);

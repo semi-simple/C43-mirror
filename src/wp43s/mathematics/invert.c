@@ -169,17 +169,12 @@ void invertReal(void) {
  * \return void
  ***********************************************/
 void invertCplx(void) {
-  real_t a, b, denom;
+  real_t a, b;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  realMultiply(&a, &a, &denom, &ctxtReal39);    // c²
-  realFMA(&b, &b, &denom, &denom, &ctxtReal39); // c² + d²
-
-  realDivide(&a, &denom, &a, &ctxtReal39);
-  realChangeSign(&denom);
-  realDivide(&b, &denom, &b, &ctxtReal39);
+  divRealComplex(const_1, &a, &b, &a, &b, &ctxtReal39);
 
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));

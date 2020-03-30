@@ -81,6 +81,33 @@ void divComplexComplex(const real_t *numerReal, const real_t *numerImag, const r
   realCopy(denomReal, &c);
   realCopy(denomImag, &d);
 
+  if(realIsNaN(&a) || realIsNaN(&b) || realIsNaN(&c) || realIsNaN(&d)) {
+    realCopy(const_NaN, quotientReal);
+    realCopy(const_NaN, quotientImag);
+    return;
+  }
+
+  if(realIsInfinite(&c) || realIsInfinite(&d)) {
+    if(realIsInfinite(&a) || realIsInfinite(&b)) {
+      realCopy(const_NaN, quotientReal);
+      realCopy(const_NaN, quotientImag);
+    }
+    else {
+      realZero(quotientReal);
+      realZero(quotientImag);
+    }
+    return;
+  }
+
+  if(realIsInfinite(&a) && !realIsInfinite(&b)) {
+    realZero(&b);
+  }
+
+  if(realIsInfinite(&b) && !realIsInfinite(&a)) {
+    realZero(&a);
+  }
+
+
   // Denominator
   realMultiply(&c, &c, &realDenom, realContext);                 // realDenom = c²
   realFMA(&d, &d, &realDenom, &realDenom, realContext);          // realDenom = c² + d²
@@ -95,29 +122,41 @@ void divComplexComplex(const real_t *numerReal, const real_t *numerImag, const r
   realChangeSign(&a);                                            // a = -a
   realFMA(&a, &d, &realNumer, &realNumer, realContext);          // realNumer = b*c - a*d
   realDivide(&realNumer, &realDenom, quotientImag, realContext); // imagPart = (b*c - a*d) / (c² + d²) = realNumer / realDenom
+
 }
 
 
 
-void divRealComplex(const real_t *numer, const real_t *denomReal, const real_t *denomImag, real_t *quotientReal, real_t *quotientImag, realContext_t *realContext) {
-  real_t realNumer, realDenom, a, c, d;
+void divRealComplex(const real_t *numerReal, const real_t *denomReal, const real_t *denomImag, real_t *quotientReal, real_t *quotientImag, realContext_t *realContext) {
+  real_t a, c, d, denom;
 
-  realCopy(numer, &a);
+  realCopy(numerReal, &a);
   realCopy(denomReal, &c);
   realCopy(denomImag, &d);
 
-  // Denominator
-  realMultiply(&c, &c, &realDenom, realContext);                 // realDenom = c²
-  realFMA(&d, &d, &realDenom, &realDenom, realContext);          // realDenom = c² + d²
+  if(realIsNaN(&a) || realIsNaN(&c) || realIsNaN(&d)) {
+    realCopy(const_NaN, quotientReal);
+    realCopy(const_NaN, quotientImag);
+    return;
+  }
+
+  if(realIsInfinite(&c) || realIsInfinite(&d)) {
+    realZero(quotientReal);
+    realZero(quotientImag);
+    return;
+  }
+
+  realMultiply(&c, &c, &denom, realContext);    // c²
+  realFMA(&d, &d, &denom, &denom, realContext); // c² + d²
 
   // real part
-  realMultiply(&a, &c, &realNumer, realContext);                 // realNumer = a*c
-  realDivide(&realNumer, &realDenom, quotientReal, realContext); // realPart  = (a*c) / (c² + d²) = realNumer / realDenom
+  realMultiply(&a, &c, quotientReal, realContext);             // numer = a*c
+  realDivide(quotientReal, &denom, quotientReal, realContext); // realPart  = (a*c) / (c² + d²) = numer / denom
 
   // imaginary part
-  realChangeSign(&a);                                            // a = -a
-  realMultiply(&a, &d, &realNumer, realContext);                 // realNumer = -a*d
-  realDivide(&realNumer, &realDenom, quotientImag, realContext); // imagPart  = -(a*d) / (c² + d²) = realNumer / realDenom
+  realChangeSign(&a);                                          // a = -a
+  realMultiply(&a, &d, quotientImag, realContext);             // numer = -a*d
+  realDivide(quotientImag, &denom, quotientImag, realContext); // imagPart  = -(a*d) / (c² + d²) = numer / denom
 }
 
 

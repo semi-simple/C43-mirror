@@ -35,7 +35,6 @@
 #define DEBUG_REGISTER_L            1
 #define SHOW_MEMORY_STATUS          1
 #define IBM_DECIMAL                 1
-#define LIMIT_EXPONENT_TO_999       1
 #define LIBGMP                      1
 #define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
 #define MEMORY_ALLOCATION_MASK      (MEMORY_ALLOCATION_ALIGNMENT - 1)
@@ -650,6 +649,7 @@ extern int16_t              exponentSignLocation;
 extern int16_t              denominatorLocation;
 extern int16_t              imaginaryExponentSignLocation;
 extern int16_t              imaginaryMantissaSignLocation;
+extern int16_t              exponentLimit;
 extern size_t               gmpMemInBytes;
 extern size_t               wp43sMemInBytes;
 extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];

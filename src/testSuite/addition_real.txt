@@ -256,12 +256,60 @@ Out: EC=0 FI=0 SL=1 RL=Real:"2" RX=Real:"12.848232929234865124288980551184697537
 In:  AM=MULTPI FI=0 SL=0 RY=Real:"3.453099789":MULTPI RX=Real:"2"
 Out: EC=0 FI=0 SL=1 RL=Real:"2" RX=Real:"5.453099789":MULTPI
 
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"inf" RX=Real:"5"
+Out: EC=4 FI=0 SL=0 RX=Real:"5"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"inf" RX=Real:"5"
+Out: EC=0 FI=0 SL=1 RL=Real:"5" RX=Real:"inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"-8" RX=Real:"inf"
+Out: EC=4 FI=0 SL=0 RX=Real:"inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"-8" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"-inf" RX=Real:"5"
+Out: EC=5 FI=0 SL=0 RX=Real:"5"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"-inf" RX=Real:"5"
+Out: EC=0 FI=0 SL=1 RL=Real:"5" RX=Real:"-inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"-8" RX=Real:"-inf"
+Out: EC=5 FI=0 SL=0 RX=Real:"-inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"-8" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"-inf" RX=Real:"-inf"
+Out: EC=5 FI=0 SL=0 RX=Real:"-inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"-inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"-inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"-inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  AM=MULTPI FI=0 SL=0 FD=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=4 FI=0 SL=0 RX=Real:"inf"
+
+In:  AM=MULTPI FI=0 SL=0 FD=1 RY=Real:"inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
 
 
 ;=======================================
 ; Real34 + Complex34 --> Complex34
 ;=======================================
-In:  SL=0 FI=0 RY=Real:"12540" RX=Cplx:"123.456 i -6.78"
+In:  SL=0 FI=0 FD=0 RY=Real:"12540" RX=Cplx:"123.456 i -6.78"
 Out: EC=0 FI=1 SL=1 RL=Cplx:"123.456 i -6.78" RX=Cplx:"12663.456 i -6.78"
 
 In:  SL=0 FI=0 RY=Real:"12540":DEG RX=Cplx:"123.456 i -6.78"

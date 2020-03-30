@@ -121,29 +121,13 @@ void cubeReal(void) {
 
 
 void cubeCplx(void) {
-  real_t a, b, aSquared, bSquared, aCubed, bCubed;
+  real_t a, b, realSquare, imagSquare;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  // (a + bi)³ = a³ - 3ab²  +  (3ba² - b³)i
-  // a² and a³
-  realMultiply(&a,        &a, &aSquared, &ctxtReal39);
-  realMultiply(&aSquared, &a, &aCubed, &ctxtReal39);
-
-  // b² annd b³
-  realMultiply(&b,        &b, &bSquared, &ctxtReal39);
-  realMultiply(&bSquared, &b, &bCubed, &ctxtReal39);
-
-  // real part
-  realMultiply(&a,      const_3,   &a, &ctxtReal39);
-  realMultiply(&a,      &bSquared, &a, &ctxtReal39);
-  realSubtract(&aCubed, &a,        &a, &ctxtReal39);
-
-  // imag part
-  realMultiply(&b, const_3,   &b, &ctxtReal39);
-  realMultiply(&b, &aSquared, &b, &ctxtReal39);
-  realSubtract(&b, &bCubed,   &b, &ctxtReal39);
+  mulComplexComplex(&a, &b, &a, &b, &realSquare, &imagSquare, &ctxtReal39);
+  mulComplexComplex(&realSquare, &imagSquare, &a, &b, &a, &b, &ctxtReal39);
 
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));

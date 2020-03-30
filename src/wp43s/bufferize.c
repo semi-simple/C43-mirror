@@ -922,7 +922,7 @@ void addItemToNimBuffer(int16_t item) {
       case NP_REAL_EXPONENT : // +12345.678e+3
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
 
-        exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
+        exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
         if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
           strcat(nimBufferDisplay, STD_SUP_MINUS);
         }
@@ -936,7 +936,7 @@ void addItemToNimBuffer(int16_t item) {
         strcat(nimBufferDisplay, STD_SPACE_4_PER_EM);
 
         for(index=2; nimBuffer[index]!=' '; index++); // The ending semi colon is OK here
-        supNumberToDisplayString(atoi(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
+        supNumberToDisplayString(atoi(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
 
         strcat(nimBufferDisplay, "/");
 
@@ -965,7 +965,7 @@ void addItemToNimBuffer(int16_t item) {
         nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
 
         if(nimNumberPart == NP_REAL_EXPONENT) {
-          exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
+          exponentToDisplayString(atoi(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
           if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
             strcat(nimBufferDisplay, STD_SUP_MINUS);
           }
@@ -1015,7 +1015,7 @@ void addItemToNimBuffer(int16_t item) {
           nimBufferToDisplayBuffer(nimBuffer + imaginaryMantissaSignLocation + 1, nimBufferDisplay + stringByteLength(nimBufferDisplay));
 
           if(nimNumberPart == NP_REAL_EXPONENT) {
-            exponentToDisplayString(atoi(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true);
+            exponentToDisplayString(atoi(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
             if(nimBuffer[imaginaryExponentSignLocation + 1] == 0 && nimBuffer[imaginaryExponentSignLocation] == '-') {
               strcat(nimBufferDisplay, STD_SUP_MINUS);
             }

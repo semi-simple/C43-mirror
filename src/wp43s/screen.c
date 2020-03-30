@@ -1904,20 +1904,28 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
 #endif
 
 #ifdef DMCP_BUILD
-  resetShiftState(); // to avoid f or g top left of the screen
+  resetShiftState();                  //To avoid f or g top left of the screen
   create_screenshot(0);
 
-  uint16_t tmp, tmp2;
-  tmp2 = get_beep_volume();
-  tmp = tmp2;
+  uint16_t tmp, tmp2;                 //Respect the current volume setting: store before maxing out volume
+  tmp = get_beep_volume();
+  tmp2 = tmp;
   while(tmp < 11) {
     beep_volume_up();
     tmp = get_beep_volume();
   }
-  start_buzzer_freq(100000);
-  create_screenshot(0);      
-  stop_buzzer ();
-  while(tmp != tmp2) {
+
+  start_buzzer_freq(100000);          //Click before screen dump
+  sys_delay(5);
+  stop_buzzer();
+
+  create_screenshot(0);               //Screen dump
+
+  start_buzzer_freq(400000);          //Click after screen dump
+  sys_delay(5);
+  stop_buzzer();
+
+  while(tmp != tmp2) {                //Restore volume
     beep_volume_down();
     tmp = get_beep_volume();
   }

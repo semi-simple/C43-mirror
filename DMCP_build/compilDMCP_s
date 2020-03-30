@@ -16,7 +16,4 @@ ln -s ../decNumberICU
 ln -s ../src
 
 make clean
-make -j8  --silent
-#--debug
-
-mv build/WP43S.pgm build/WP43C.pgm
+make -j8 --debug

@@ -5,6 +5,7 @@
 *.layout
 *.depend
 202*bmp
+202*.csv
 .stamp-constantPointers
 .stamp-rasterFontsData
 .stamp-softmenuCatalog
@@ -12,11 +13,12 @@ callgrind.out*
 gmon.out
 bin/
 obj/
-*build*/
+#*build*/
 gmp-6.2.0/
 gmp-6.2.0.tar.bz2
 DMCP_build/src
 DMCP_build/decNumberICU
+DMCP_build/build
 
 # used by cLion
 .idea/
@@ -45,8 +47,11 @@ DMCP_build/decNumberICU
 .vs/
 
 
+!*/compil*
+!*Make*
+!*make*
 
-
+*iCloud*
 
 # Created by https://www.gitignore.io/api/osx,linux,windows
 # Edit at https://www.gitignore.io/?templates=osx,linux,windows

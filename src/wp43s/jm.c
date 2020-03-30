@@ -24,6 +24,281 @@
 #include "wp43s.h"
 
 
+
+#ifdef DMCP_BUILD
+
+
+TCHAR* f_gets (
+  TCHAR* buff,  /* Pointer to the buffer to store read string */
+  int len,    /* Size of string buffer (items) */
+  FIL* fp     /* Pointer to the file object */
+)
+{
+  int nc = 0;
+  TCHAR *p = buff;
+  BYTE s[4];
+  UINT rc;
+  DWORD dc;
+
+      /* Byte-by-byte read without any conversion (ANSI/OEM API) */
+  len -= 1; /* Make a room for the terminator */
+  while (nc < len) {
+    f_read(fp, s, 1, &rc);  /* Get a byte */
+    if (rc != 1) break;   /* EOF? */
+    dc = s[0];
+    if (dc == '\r') continue;
+    *p++ = (TCHAR)dc; nc++;
+    if (dc == '\n') break;
+  }
+
+  *p = 0;   /* Terminate the string */
+  return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
+}
+
+
+
+
+
+
+
+
+
+
+
+/*-----------------------------------------------------------------------*/
+/* Put a Character to the File (sub-functions)                           */
+/*-----------------------------------------------------------------------*/
+
+/* Putchar output buffer and work area */
+
+typedef struct {
+  FIL *fp;    /* Ptr to the writing file */
+  int idx, nchr;  /* Write index of buf[] (-1:error), number of encoding units written */
+  BYTE buf[64]; /* Write buffer */
+} putbuff;
+
+
+/* Buffered write with code conversion */
+static void putc_bfd (putbuff* pb, TCHAR c)
+{
+  UINT n;
+  int i, nc;
+
+
+  if (c == '\n') {    /* LF -> CRLF conversion */
+    putc_bfd(pb, '\r');
+  }
+
+  i = pb->idx;        /* Write index of pb->buf[] */
+  if (i < 0) return;
+  nc = pb->nchr;      /* Write unit counter */
+
+
+  /* ANSI/OEM input (without re-encoding) */
+  pb->buf[i++] = (BYTE)c;
+
+
+  if (i >= (int)(sizeof pb->buf) - 4) { /* Write buffered characters to the file */
+    f_write(pb->fp, pb->buf, (UINT)i, &n);
+    i = (n == (UINT)i) ? 0 : -1;
+  }
+  pb->idx = i;
+  pb->nchr = nc + 1;
+}
+
+
+/* Flush remaining characters in the buffer */
+static int putc_flush (putbuff* pb)
+{
+  UINT nw;
+
+  if (   pb->idx >= 0 /* Flush buffered characters to the file */
+    && f_write(pb->fp, pb->buf, (UINT)pb->idx, &nw) == FR_OK
+    && (UINT)pb->idx == nw) return pb->nchr;
+  return EOF;
+}
+
+
+/* Initialize write buffer */
+
+/* Fill memory block */
+static void mem_set (void* dst, int val, UINT cnt)
+{
+  BYTE *d = (BYTE*)dst;
+
+  do {
+    *d++ = (BYTE)val;
+  } while (--cnt);
+}
+
+
+static void putc_init (putbuff* pb, FIL* fp)
+{
+  mem_set(pb, 0, sizeof (putbuff));
+  pb->fp = fp;
+}
+
+
+
+int f_putc (
+  TCHAR c,  /* A character to be output */
+  FIL* fp   /* Pointer to the file object */
+)
+{
+  putbuff pb;
+
+
+  putc_init(&pb, fp);
+  putc_bfd(&pb, c); /* Put the character */
+  return putc_flush(&pb);
+}
+
+
+
+
+/*-----------------------------------------------------------------------*/
+/* Put a String to the File                                              */
+/*-----------------------------------------------------------------------*/
+
+int f_puts (
+  const TCHAR* str, /* Pointer to the string to be output */
+  FIL* fp       /* Pointer to the file object */
+)
+{
+  putbuff pb;
+
+
+  putc_init(&pb, fp);
+  while (*str) putc_bfd(&pb, *str++);   /* Put the string */
+  return putc_flush(&pb);
+}
+
+/*-----------------------------------------------------------------------*/
+
+int16_t line_y;
+char line[100];               /* Line buffer */
+void print_line(bool_t line_init) {
+
+    if(line_init) {line_y = 20;}
+    showString(line, &standardFont, 1, line_y, vmNormal, true, true);
+    line_y += 20;
+}
+
+int16_t testjm(void){
+    FIL fil;                      /* File object */
+    FRESULT fr;                   /* FatFs return code */
+
+    /* Opens an existing file. If not exist, creates a new file. */
+    fr = f_open(&fil, "message.txt", FA_READ | FA_OPEN_ALWAYS);
+    if (fr) return (int)fr;
+    sprintf(line,"Opened file read--> %d    \n",fr);        print_line(true);
+    while (f_gets(line, sizeof line, &fil)) {               print_line(false); }
+    f_close(&fil);
+
+
+
+    /* Prepare to write */
+    sys_disk_write_enable(1);
+    fr = sys_is_disk_write_enable();
+    sprintf(line,"Write enable?--> %d    \n",fr);           print_line(false);
+
+    /* Opens an existing file. If not exist, creates a new file. */
+    fr = f_open(&fil, "message.csv", FA_OPEN_APPEND | FA_WRITE);
+    if (fr) {
+      sprintf(line,"Open append error--> %d    \n",fr);     print_line(false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    sprintf(line,"Opened file append--> %d    \n",fr);      print_line(false);
+
+    /* Seek to end of the file to append data */
+    fr = f_lseek(&fil, f_size(&fil));
+    if (fr) {
+      sprintf(line,"Seek error--> %d    \n",fr);            print_line(false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+
+
+//    TCHAR aa;
+//    aa = 48;
+//    fr = f_putc(aa,&fil);
+//    sprintf(line,"puts--> %d    \n",fr);                    print_line(false);
+
+    fr = f_puts("ABCDEF\n",&fil);
+    sprintf(line,"puts--> %d    \n",fr);                    print_line(false);
+
+    fr = f_close(&fil);
+    sys_disk_write_enable(0);
+ 
+    return 0;
+  }
+
+
+
+int16_t test_xy(float x, float y){
+    FIL fil;                      /* File object */
+    FRESULT fr;                   /* FatFs return code */
+
+    /* Prepare to write */
+    sys_disk_write_enable(1);
+    fr = sys_is_disk_write_enable();
+    if (fr==0) {
+      sprintf(line,"Write access error--> %d    \n",fr);     print_line(true);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    /* Opens an existing file. If not exist, creates a new file. */
+    fr = f_open(&fil, "message.csv", FA_OPEN_APPEND | FA_WRITE);
+    if (fr) {
+      sprintf(line,"File open error--> %d    \n",fr);     print_line(false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    /* Seek to end of the file to append data */
+    fr = f_lseek(&fil, f_size(&fil));
+    if (fr) {
+      sprintf(line,"Seek error--> %d    \n",fr);            print_line(false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    sprintf(line,"%f, %f\n",x,y);                     print_line(false);    
+    sprintf(tmpStr3000,"%f, %f\n",x,y);
+    fr = f_puts(tmpStr3000, &fil);
+
+    fr = f_close(&fil);
+    if (fr) {
+      sprintf(line,"File close error--> %d    \n",fr);            print_line(false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    sys_disk_write_enable(0);
+ 
+    return 0;
+  }
+
+
+#endif
+
+
+
+
+
+
+
+
 /********************************************//**
  * SEEMS TO BE WORKING. CALLED FROM ## in BASE
  *
@@ -1011,6 +1286,12 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 30) {                                         //.ms
+    printf("TEST:%d\n",test_xy(1.001,3.141));               //TEST FUNCTION
+  }
+  else
+
+
+  if(JM_OPCODE == 230) {                                         //.ms
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_L, 99);   // STO TMP
 
@@ -1697,4 +1978,9 @@ void ItemBrowser(uint16_t unusedParamButMandatory) {
   }
 }
 */
+
+
+
+
+
 

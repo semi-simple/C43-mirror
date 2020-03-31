@@ -1,0 +1,436 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                   special results                       **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: AM=DEG SD=0 RM=0 SS=4
+
+
+In:  FD=1 FI=0
+
+In:  SL=0 FI=0 RX=LonI:"-1"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-1"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"-1" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RX=LonI:"0"
+Func: fnLn
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Func: fnLn
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+;In:  SL=0 FI=0 RX=LonI:"0"
+;Func: fnLn1PX
+;Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+;In:  SL=0 FI=0 RX=Real:"0"
+;Func: fnLn1PX
+;Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=LonI:"0"
+Func: fnLog10
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Func: fnLog10
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=LonI:"0"
+Func: fnLog2
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Func: fnLog2
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RX=Real:"0"
+Func: fnInvert
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RX=LonI:"1"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=LonI:"1" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"1"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"1" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RX=LonI:"0"
+Func: fnGamma
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Func: fnGamma
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RX=LonI:"0"
+Func: fnArccosh
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Func: fnArccosh
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"0.999"
+Func: fnArccosh
+Out: EC=0 FI=0 SL=1 RL=Real:"0.999" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArccosh
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RX=LonI:"2"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-2"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=LonI:"-2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"100"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=LonI:"100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"1.001"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=Real:"1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-1.001"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=Real:"-1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArccos
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN":DEG
+
+
+In:  SL=0 FI=0 RX=LonI:"2"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-2"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=LonI:"-2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"100"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=LonI:"100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"1.001"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=Real:"1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-1.001"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=Real:"-1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArcsin
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN":DEG
+
+
+In:  SL=0 FI=0 RX=LonI:"2"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-2"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=LonI:"-2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"100"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=LonI:"100" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"1.001"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"1.001" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-1.001"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"-1.001" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RX=LonI:"90"
+Func: fnTan
+Out: EC=0 FI=0 SL=1 RL=LonI:"90" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-90"
+Func: fnTan
+Out: EC=0 FI=0 SL=1 RL=LonI:"-90" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"90"
+Func: fnTan
+Out: EC=0 FI=0 SL=1 RL=Real:"90" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-90"
+Func: fnTan
+Out: EC=0 FI=0 SL=1 RL=Real:"-90" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnCube
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnCube
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnCubeRoot
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnCubeRoot
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArcsinh
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArcsinh
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArctan
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-90":DEG
+
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnTanh
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-1"
+
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnInvert
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnExp
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fn10Pow
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fn2Pow
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+;In:  SL=0 FI=0 RX=Real:"-inf"
+;Func: fnSinC
+;Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnSquare
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnArccosh
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RX=LonI:"-1"
+Func: fnLn
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnLn
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-10"
+Func: fnLn
+Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+;In:  SL=0 FI=0 RX=LonI:"-1"
+;Func: fnLn1PX
+;Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+;In:  SL=0 FI=0 RX=Real:"-inf"
+;Func: fnLn1PX
+;Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+;In:  SL=0 FI=0 RX=Real:"-10"
+;Func: fnLn1PX
+;Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-1"
+Func: fnLog10
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnLog10
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-10"
+Func: fnLog10
+Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-1"
+Func: fnLog2
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Func: fnLog2
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-10"
+Func: fnLog2
+Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnInvert
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"0"
+
+;In:  SL=0 FI=0 RX=Real:"inf"
+;Func: fnSinc
+;Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"0"
+
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnTanh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"1"
+
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArctan
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"90":DEG
+
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnLn
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+;In:  SL=0 FI=0 RX=Real:"inf"
+;Func: fnLn1PX
+;Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnExp
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnSquare
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnSquareRoot
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnLog10
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fn10Pow
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnLog2
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnCube
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnCubeRoot
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnSinh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnCosh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArcsinh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArccosh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fn2Pow
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnCos
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnCos
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnSin
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnSin
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnTan
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnTan
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Func: fnArctanh
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"

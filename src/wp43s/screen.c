@@ -58,6 +58,9 @@ void copyScreenToClipboard(void) {
 }
 
 
+#endif
+#if defined (PC_BUILD) || defined (DMCP_BUILD)
+
 
 static void angularUnitToString(uint32_t angularMode, char *string) {
   switch(angularMode) {
@@ -70,7 +73,6 @@ static void angularUnitToString(uint32_t angularMode, char *string) {
     default:        strcpy(string, "?");
   }
 }
-
 
 
 void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
@@ -112,7 +114,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       base = getRegisterShortIntegerBase(regist);
 
       n = ERROR_MESSAGE_LENGTH - 100;
-      sprintf(errorMessage + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
+      sprintf(errorMessage + n--, "#%d, (word size = %u)", base, shortIntegerWordSize);  //JMCSV added comma
 
       if(shortInt == 0) {
         errorMessage[n--] = '0';
@@ -161,6 +163,8 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   strcpy(clipboardString, tmpStr3000);
 }
 
+#endif
+#ifdef PC_BUILD
 
 
 void copyRegisterXToClipboard(void) {

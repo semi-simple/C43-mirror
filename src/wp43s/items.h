@@ -26,6 +26,8 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
+
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1983,8 +1985,10 @@
 #define ITM_DEMO6                     1941   //JM USER
 #define MNU_ST_GRAPH                  1942   //JM USER
 #define ITM_VECT                      1943   //JMVECT
+#define ITM_TOFILE                    1944   //TOFILE
+#define ITM_P_ALLREGS                 1945   //JM Print all regs
 
-#define LAST_ITEM                     1944   //JM
+#define LAST_ITEM                     1946   //JM
 
 #define CHR_PROD_SIGN                 9999
 

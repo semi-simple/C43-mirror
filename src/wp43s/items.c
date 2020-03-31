@@ -425,12 +425,14 @@ void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
 void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}
-void fnKeyDotD                  (uint16_t unusedParamButMandatory) {}          //^^
+void fnKeyDotD                  (uint16_t unusedParamButMandatory) {}
+void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}          //^^
 #endif
 
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -1261,7 +1263,7 @@ const item_t indexOfItems[] = {
 /*  827 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "PROG",                            STD_PRINTER "PROG",                            CAT_FNCT, SLS_UNCHANGED},
 /*  828 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "r",                               STD_PRINTER "r",                               CAT_FNCT, SLS_UNCHANGED},
 /*  829 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "REGS",                            STD_PRINTER "REGS",                            CAT_FNCT, SLS_UNCHANGED},
-/*  830 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "STK",                             STD_PRINTER "STK",                             CAT_FNCT, SLS_UNCHANGED},
+/*  830 */  { fnP_All_Regs,                1,                           STD_PRINTER "STK",                             STD_PRINTER "STK",                             CAT_FNCT, SLS_UNCHANGED},
 /*  831 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "TAB",                             STD_PRINTER "TAB",                             CAT_FNCT, SLS_UNCHANGED},
 /*  832 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "USER",                            STD_PRINTER "USER",                            CAT_FNCT, SLS_UNCHANGED},
 /*  833 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "WIDTH",                           STD_PRINTER "WIDTH",                           CAT_FNCT, SLS_UNCHANGED},
@@ -2391,6 +2393,8 @@ const item_t indexOfItems[] = {
 /* 1941 */  { fnGraph,                     16,                          "DEMO6",                                       "DEMO6",                                       CAT_FNCT, SLS_ENABLED  },
 /* 1942 */  { itemToBeCoded,               NOPARAM,                     "ST_GRF",                                      "ST_GRF",                                      CAT_MENU, SLS_ENABLED  },
 /* 1943 */  { fnSetSetJM,                  JC_VECT,                     "VECTOR",                                      "VECTOR",                                      CAT_FNCT, SLS_UNCHANGED},   //JM VECTOR MODE
+/* 1944 */  { fnSetSetJM,                  NOPARAM,                     "TOFILE",                                      "TOFILE",                                      CAT_FNCT, SLS_UNCHANGED},   //JM CSV FILE MODE
+/* 1945 */  { fnP_All_Regs,                0,                           STD_PRINTER "ALLr",                            STD_PRINTER "ALLr",                            CAT_FNCT, SLS_UNCHANGED},
 
-/* 1944 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1946 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

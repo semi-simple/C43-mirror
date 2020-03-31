@@ -68,13 +68,14 @@ DEPS_DECIMAL             = $(SRC_DECIMAL:.c=.d)
 
 SRC_WP43S                = \
 	$(addprefix src/wp43s/, \
-		jm.c jm_graph.c assign.c bufferize.c charString.c config.c constantPointers.c \
+		jm.c jm_graph.c \
+		assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
 		fonts.c fractions.c gui.c integers.c items.c keyboard.c keyboardTweak.c \
 		rasterFontsData.c radioButtonCatalog.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
-		stats.c statusBar.c timer.c \
+		stats.c statusBar.c textfiles.c timer.c \
 		wp43s.c memory.c) \
 	$(addprefix src/wp43s/mathematics/, \
 		10pow.c 2pow.c addition.c agm.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \

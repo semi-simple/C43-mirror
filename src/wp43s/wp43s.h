@@ -237,6 +237,7 @@ typedef int16_t calcRegister_t;
 #include "timer.h"
 #include "jm_graph.h"                                    //JM include 
 #include "jm.h"                                          //JM include
+#include "textfiles.h"
 #include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
 #ifdef INLINE_TEST                      //vv dr

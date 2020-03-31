@@ -80,6 +80,7 @@ void     underline(int16_t y);               //JM SHIFT LINE
 #endif
 
 #ifdef DMCP_BUILD
+  void     copyRegisterToClipboardString      (calcRegister_t regist, char *clipboardString);   //JMCSV Added for textfiles 
   void     refreshScreen        (void);
 #endif
 

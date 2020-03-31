@@ -64,6 +64,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
       strcat(csv, csvp);
       strcat(csv, "\n");
     }
+
     #ifdef DMCP_BUILD
     strcpy(tmpStr3000, csv);
     test_line();                    //Output append to CSV file
@@ -282,7 +283,6 @@ int16_t testjm(void){
     f_close(&fil);
 
 
-
     /* Prepare to write */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
@@ -330,13 +330,10 @@ int16_t test_xy(float x, float y){
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
-
-  #if defined (DMCP_BUILD)
-  make_date_filename(filename_csv,"/SCREENS/",".CSV");
-  filename_csv[19]=0;
-  strcat(filename_csv,"STATS.CSV");
-  #endif
-
+    //Create file name
+    make_date_filename(filename_csv,"/SCREENS/",".CSV");
+    filename_csv[19]=0;
+    strcat(filename_csv,"STATS.CSV");
 
     /* Prepare to write */
     sys_disk_write_enable(1);
@@ -440,6 +437,18 @@ int16_t test_line(void){          //uses  tmpStr3000;
   }
 
 
+
+
+
+#elif PC_BUILD
+
+int16_t test_line(void){          //uses  tmpStr3000;
+  return 0;
+}
+
+int16_t test_xy(float x, float y){
+  return 0;
+}
 
 #endif
 

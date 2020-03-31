@@ -79,6 +79,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   longInteger_t lgInt;
   int16_t base, sign, n;
   uint64_t shortInt;
+  char tmp2[3000];
   static const char digits[17] = "0123456789ABCDEF";
 
   switch(getRegisterDataType(regist)) {
@@ -86,6 +87,11 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       convertLongIntegerRegisterToLongInteger(regist, lgInt);
       longIntegerToAllocatedString(lgInt, tmpStr3000, sizeof(tmpStr3000));
       longIntegerFree(lgInt);
+      tmp2[0]=0;                 //JM
+      strcat(tmp2,"\"");   //JM
+      strcat(tmp2,tmpStr3000);   //JM
+      strcpy(tmpStr3000,tmp2);   //JM
+      strcat(tmpStr3000,"\"");   //JM
       break;
 
     case dtTime:
@@ -99,6 +105,11 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
     case dtString:
       memcpy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
       stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
+      tmp2[0]=0;                 //JM
+      strcat(tmp2,"\"");   //JM
+      strcat(tmp2,tmpStr3000);   //JM
+      strcpy(tmpStr3000,tmp2);   //JM
+      strcat(tmpStr3000,"\"");   //JM
       break;
 
     case dtReal34Matrix:

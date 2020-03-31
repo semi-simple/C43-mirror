@@ -30,15 +30,13 @@ char filename_csv[30];
 
 
 void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
+#ifndef TESTSUITE_BUILD
   char csv[3000];
   char csvp[3000];
-  int16_t ix;
-  
   csvp[0] = 0;
+
+  int16_t ix;
   ix = reg_b;
-
-#ifndef TESTSUITE_BUILD
-
   while (ix <= reg_e) {
     if((ix>=100)&&(ix<=111)) {
        switch (ix)
@@ -58,20 +56,18 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
         default:break;
         }
       strcat(csv, csvp);
-      csv[stringByteLength(csv)+1] = 13;
-      csv[stringByteLength(csv)+1] = 0;
+      strcat(csv, "\n");
       }
     if((ix>=0)&&(ix<=99)) {
       sprintf(csv, "R%02d,", ix);
       copyRegisterToClipboardString(ix, csvp);
       strcat(csv, csvp);
-      csv[stringByteLength(csv)+1] = 13;
-      csv[stringByteLength(csv)+1] = 0;
+      strcat(csv, "\n");
     }
     #ifdef DMCP_BUILD
-    test_line();
-
-    #else
+    strcpy(tmpStr3000, csv);
+    test_line();                    //Output append to CSV file
+    #elif PC_BUILD
     printf("%s\n",csv);
     #endif
 
@@ -84,8 +80,9 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 
 
 void fnP_All_Regs(uint16_t unusedParamButMandatory){
-  
-  make_date_filename(filename_csv,"",".CSV");
+  #if defined (DMCP_BUILD)
+  make_date_filename(filename_csv,"/SCREENS/",".CSV");
+
   switch (unusedParamButMandatory)
   {
   case 0:           //All registers
@@ -114,7 +111,7 @@ void fnP_All_Regs(uint16_t unusedParamButMandatory){
   default:
     break;
   }
-
+  #endif
 }
 
 
@@ -333,20 +330,28 @@ int16_t test_xy(float x, float y){
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
+
+  #if defined (DMCP_BUILD)
+  make_date_filename(filename_csv,"/SCREENS/",".CSV");
+  filename_csv[19]=0;
+  strcat(filename_csv,"STATS.CSV");
+  #endif
+
+
     /* Prepare to write */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
     if (fr==0) {
-      sprintf(line,"Write access error--> %d    \n",fr);     print_line(true);
+      sprintf(line,"Write access error--> %d    \n",fr);    print_line(true);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
     }
 
     /* Opens an existing file. If not exist, creates a new file. */
-    fr = f_open(&fil, "message.csv", FA_OPEN_APPEND | FA_WRITE);
+    fr = f_open(&fil, filename_csv, FA_OPEN_APPEND | FA_WRITE);
     if (fr) {
-      sprintf(line,"File open error--> %d    \n",fr);     print_line(false);
+      sprintf(line,"File open error--> %d    \n",fr);       print_line(false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -361,13 +366,16 @@ int16_t test_xy(float x, float y){
       return (int)fr;
     }
 
-    sprintf(line,"%f, %f\n",x,y);                     print_line(false);    
+//uses tmpstr3000
+    //sprintf(line,"%f, %f\n",x,y);                           print_line(false);    
     sprintf(tmpStr3000,"%f, %f\n",x,y);
     fr = f_puts(tmpStr3000, &fil);
 
+
+    /* close the file */
     fr = f_close(&fil);
     if (fr) {
-      sprintf(line,"File close error--> %d    \n",fr);            print_line(false);
+      sprintf(line,"File close error--> %d    \n",fr);     print_line(false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -398,7 +406,7 @@ int16_t test_line(void){          //uses  tmpStr3000;
     /* Opens an existing file. If not exist, creates a new file. */
     fr = f_open(&fil, filename_csv, FA_OPEN_APPEND | FA_WRITE);
     if (fr) {
-      sprintf(line,"File open error--> %d    \n",fr);     print_line(false);
+      sprintf(line,"File open error--> %d    \n",fr);       print_line(false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -416,9 +424,11 @@ int16_t test_line(void){          //uses  tmpStr3000;
 //uses tmpstr3000
     fr = f_puts(tmpStr3000, &fil);
 
+
+    /* close the file */
     fr = f_close(&fil);
     if (fr) {
-      sprintf(line,"File close error--> %d    \n",fr);            print_line(false);
+      sprintf(line,"File close error--> %d    \n",fr);      print_line(false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;

@@ -87,11 +87,11 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       convertLongIntegerRegisterToLongInteger(regist, lgInt);
       longIntegerToAllocatedString(lgInt, tmpStr3000, sizeof(tmpStr3000));
       longIntegerFree(lgInt);
-      tmp2[0]=0;                 //JM
-      strcat(tmp2,"\"");   //JM
-      strcat(tmp2,tmpStr3000);   //JM
-      strcpy(tmpStr3000,tmp2);   //JM
-      strcat(tmpStr3000,"\"");   //JM
+      tmp2[0]=0;                 //JMCSV add apostrophies
+      strcat(tmp2,"\"");         //JMCSV
+      strcat(tmp2,tmpStr3000);   //JMCSV
+      strcpy(tmpStr3000,tmp2);   //JMCSV
+      strcat(tmpStr3000,"\"");   //JMCSV
       break;
 
     case dtTime:
@@ -105,11 +105,11 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
     case dtString:
       memcpy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
       stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
-      tmp2[0]=0;                 //JM
-      strcat(tmp2,"\"");   //JM
-      strcat(tmp2,tmpStr3000);   //JM
-      strcpy(tmpStr3000,tmp2);   //JM
-      strcat(tmpStr3000,"\"");   //JM
+      tmp2[0]=0;                 //JMCSV add apostrophies
+      strcat(tmp2,"\"");         //JMCSV
+      strcat(tmp2,tmpStr3000);   //JMCSV
+      strcpy(tmpStr3000,tmp2);   //JMCSV
+      strcat(tmpStr3000,"\"");   //JMCSV
       break;
 
     case dtReal34Matrix:
@@ -125,7 +125,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       base = getRegisterShortIntegerBase(regist);
 
       n = ERROR_MESSAGE_LENGTH - 100;
-      sprintf(errorMessage + n--, "#%d, (word size = %u)", base, shortIntegerWordSize);  //JMCSV added comma
+      sprintf(errorMessage + n--, "#%d%s (word size = %u)", base, CSV_TAB, shortIntegerWordSize);  //JMCSV added comma
 
       if(shortInt == 0) {
         errorMessage[n--] = '0';
@@ -1919,8 +1919,7 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
 #endif
 
 #ifdef DMCP_BUILD
-  resetShiftState();                  //To avoid f or g top left of the screen
-  create_screenshot(0);
+  resetShiftState();                  //To avoid f or g top left of the screen, clear to make sure
 
   uint16_t tmp, tmp2;                 //Respect the current volume setting: store before maxing out volume
   tmp = get_beep_volume();

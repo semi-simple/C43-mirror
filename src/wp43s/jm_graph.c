@@ -253,9 +253,9 @@ void graph_sigmaplus(int8_t plusminus) {    //Called from STAT module from fnSig
 
   //printf("x=%f ",x);
 
-
+  #ifndef TESTSUITE_BUILD
   test_xy(x,y);               //Write to CSV file
-
+  #endif
 
   if(plotmode == _VECT ) {
     ix_count++;               //Only used for VECT

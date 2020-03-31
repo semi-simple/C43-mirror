@@ -20,6 +20,16 @@
 
 /* ADDITIONAL WP43C functions and routines */
 
+char                 filename_csv[60];                        //JM_CSV
+uint32_t             tmp__32;                                 //JM_CSV
+uint32_t             mem__32;                                 //JM_CSV
+
+#define CSV_NEWLINE "\n"
+#define CSV_TAB     "\t"
+#define CSV_CR      "\r"
+#define CSV_SLASH   "\\"
+#define CSV_STR     "\""
+
 
 int16_t testjm(void);
 int16_t test_xy(float x, float y);

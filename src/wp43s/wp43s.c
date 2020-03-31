@@ -371,6 +371,10 @@ void setupDefaults(void) {
   graph_ymax = +2;                                               //JM GRAPH
   graph_dx   = 0;                                                //JM GRAPH
   graph_dy   = 0;                                                //JM GRAPH
+  strcpy(filename_csv,"DEFAULT.CSV");                            //JMCSV
+  tmp__32=0;                                                     //JMCSV
+  mem__32=0;                                                     //JMCSV
+
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
 

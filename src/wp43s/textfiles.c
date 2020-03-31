@@ -24,9 +24,9 @@
 #include "wp43s.h"
 #include "math.h"
 
-
-
-char filename_csv[30];
+char                 filename_csv[60];                        //JM_CSV
+uint32_t             tmp__32;                                 //JM_CSV
+uint32_t             mem__32;                                 //JM_CSV
 
 
 void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
@@ -41,28 +41,34 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
     if((ix>=100)&&(ix<=111)) {
        switch (ix)
        {
-        case 100:   strcpy(csv, "X,");copyRegisterToClipboardString(REGISTER_X, csvp); break;
-        case 101:   strcpy(csv, "Y,");copyRegisterToClipboardString(REGISTER_Y, csvp); break;
-        case 102:   strcpy(csv, "Z,");copyRegisterToClipboardString(REGISTER_Z, csvp); break;
-        case 103:   strcpy(csv, "T,");copyRegisterToClipboardString(REGISTER_T, csvp); break;
-        case 104:   strcpy(csv, "A,");copyRegisterToClipboardString(REGISTER_A, csvp); break;
-        case 105:   strcpy(csv, "B,");copyRegisterToClipboardString(REGISTER_B, csvp); break;
-        case 106:   strcpy(csv, "C,");copyRegisterToClipboardString(REGISTER_C, csvp); break;
-        case 107:   strcpy(csv, "D,");copyRegisterToClipboardString(REGISTER_D, csvp); break;
-        case 108:   strcpy(csv, "L,");copyRegisterToClipboardString(REGISTER_L, csvp); break;
-        case 109:   strcpy(csv, "I,");copyRegisterToClipboardString(REGISTER_I, csvp); break;
-        case 110:   strcpy(csv, "J,");copyRegisterToClipboardString(REGISTER_J, csvp); break;
-        case 111:   strcpy(csv, "K,");copyRegisterToClipboardString(REGISTER_K, csvp); break;
+        case 100:   strcpy(csv, "X");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_X, csvp); break;
+        case 101:   strcpy(csv, "Y");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_Y, csvp); break;
+        case 102:   strcpy(csv, "Z");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_Z, csvp); break;
+        case 103:   strcpy(csv, "T");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_T, csvp); break;
+        case 104:   strcpy(csv, "A");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_A, csvp); break;
+        case 105:   strcpy(csv, "B");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_B, csvp); break;
+        case 106:   strcpy(csv, "C");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_C, csvp); break;
+        case 107:   strcpy(csv, "D");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_D, csvp); break;
+        case 108:   strcpy(csv, "L");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_L, csvp); break;
+        case 109:   strcpy(csv, "I");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_I, csvp); break;
+        case 110:   strcpy(csv, "J");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_J, csvp); break;
+        case 111:   strcpy(csv, "K");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_K, csvp); break;
         default:break;
         }
       strcat(csv, csvp);
-      strcat(csv, "\n");
-      }
+      strcat(csv, CSV_NEWLINE);
+      } else
     if((ix>=0)&&(ix<=99)) {
-      sprintf(csv, "R%02d,", ix);
+      sprintf(csv, "%sR%02d%s%s", CSV_STR, ix, CSV_STR, CSV_TAB);
       copyRegisterToClipboardString(ix, csvp);
       strcat(csv, csvp);
-      strcat(csv, "\n");
+      strcat(csv, CSV_NEWLINE);
+    } else
+    if((ix>=112)&&(ix<=112+100)) {
+      sprintf(csv, "%sU%02d%s%s", CSV_STR, ix-100, CSV_STR, CSV_TAB);
+      copyRegisterToClipboardString(ix, csvp);
+      strcat(csv, csvp);
+      strcat(csv, CSV_NEWLINE);
     }
 
     #ifdef DMCP_BUILD
@@ -82,7 +88,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 
 void fnP_All_Regs(uint16_t unusedParamButMandatory){
   #if defined (DMCP_BUILD)
-  make_date_filename(filename_csv,"/SCREENS/",".CSV");
+  make_date_filename(filename_csv,"/SCREENS/",".TSV");
 
   switch (unusedParamButMandatory)
   {
@@ -116,7 +122,9 @@ void fnP_All_Regs(uint16_t unusedParamButMandatory){
 }
 
 
-
+//###################################################################################
+//###################################################################################
+//###################################################################################
 
 #ifdef DMCP_BUILD
 
@@ -257,7 +265,8 @@ int f_puts (
 }
 
 /*-----------------------------------------------------------------------*/
-
+//###################################################################################
+//###################################################################################
 int16_t line_y;
 char line[100];               /* Line buffer */
 void print_line(bool_t line_init) {
@@ -330,10 +339,16 @@ int16_t test_xy(float x, float y){
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
-    //Create file name
-    make_date_filename(filename_csv,"/SCREENS/",".CSV");
-    filename_csv[19]=0;
-    strcat(filename_csv,"STATS.CSV");
+    tmp__32 = getUptimeMs();
+    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
+      //Create file name
+      make_date_filename(filename_csv,"/SCREENS/",".TSV");
+      //filename_csv[19+3]=0;                                     //20200331-180STATS
+      strcat(filename_csv,"STATS.TSV");      
+    }
+    mem__32 = tmp__32;
+
+
 
     /* Prepare to write */
     sys_disk_write_enable(1);
@@ -365,7 +380,7 @@ int16_t test_xy(float x, float y){
 
 //uses tmpstr3000
     //sprintf(line,"%f, %f\n",x,y);                           print_line(false);    
-    sprintf(tmpStr3000,"%f, %f\n",x,y);
+    sprintf(tmpStr3000,"%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
     fr = f_puts(tmpStr3000, &fil);
 
 

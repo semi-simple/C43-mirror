@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 29  // 29 = removed displatRealAsFraction
+#define BACKUP_VERSION 30  // 30 = exponentLimit
 
 void saveCalc(void) {
   size_t size;
@@ -167,6 +167,7 @@ void saveCalc(void) {
   size += fwrite(&lgCatalogSelection,                 1, sizeof(lgCatalogSelection),                 backup); //printf("%8lu lgCatalogSelection\n",                 (unsigned long)size);
   size += fwrite(displayValueX,                       1, sizeof(displayValueX),                      backup); //printf("%8lu displayValueX\n",                      (unsigned long)size);
   size += fwrite(&pcg32_global,                       1, sizeof(pcg32_global),                       backup); //printf("%8lu pcg32_global\n",                       (unsigned long)size);
+  size += fwrite(&exponentLimit,                      1, sizeof(exponentLimit),                      backup); //printf("%8lu exponentLimit\n",                      (unsigned long)size);
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
 
@@ -336,6 +337,7 @@ void restoreCalc(void) {
     size += fread(&lgCatalogSelection,                 1, sizeof(lgCatalogSelection),                 backup); //printf("%8lu lgCatalogSelection\n",                 (unsigned long)size);
     size += fread(displayValueX,                       1, sizeof(displayValueX),                      backup); //printf("%8lu displayValueX\n",                      (unsigned long)size);
     size += fread(&pcg32_global,                       1, sizeof(pcg32_global),                       backup); //printf("%8lu pcg32_global\n",                       (unsigned long)size);
+    size += fread(&exponentLimit,                      1, sizeof(exponentLimit),                      backup); //printf("%8lu exponentLimit\n",                      (unsigned long)size);
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);
 

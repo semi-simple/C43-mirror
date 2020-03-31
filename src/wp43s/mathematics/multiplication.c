@@ -81,14 +81,63 @@ void mulComplexComplex(const real_t *factor1Real, const real_t *factor1Imag, con
   realCopy(factor2Real, &c);
   realCopy(factor2Imag, &d);
 
-  // imaginary part
-  realMultiply(&a, &d, productImag, realContext);         // a*d
-  realFMA(&b, &c, productImag, productImag, realContext); // a*d + b*c
+  if(realIsNaN(&a) || realIsNaN(&b) || realIsNaN(&c) || realIsNaN(&d)) {
+    realCopy(const_NaN, productReal);
+    realCopy(const_NaN, productImag);
+    return;
+  }
+
+  if(realIsInfinite(&a) && !realIsInfinite(&b)) {
+    realZero(&b);
+  }
+
+  if(realIsInfinite(&b) && !realIsInfinite(&a)) {
+    realZero(&a);
+  }
+
+  if(realIsInfinite(&c) && !realIsInfinite(&d)) {
+    realZero(&d);
+  }
+
+  if(realIsInfinite(&d) && !realIsInfinite(&c)) {
+    realZero(&c);
+  }
+
 
   // real part
-  realChangeSign(&b);                                     // -b
-  realMultiply(&a, &c, productReal, realContext);         // a*c
-  realFMA(&b, &d, productReal, productReal, realContext); // a*c - b*d
+  if(realIsZero(&a) || realIsZero(&c)) {
+    realZero(productReal);
+  }
+  else {
+    realMultiply(&a, &c, productReal, realContext);                // a*c
+  }
+
+  if(realIsZero(&b) || realIsZero(&d)) {
+    realZero(productImag);
+  }
+  else {
+    realMultiply(&b, &d, productImag, realContext);                 // b*d
+  }
+
+  realSubtract(productReal, productImag, productReal, realContext); // a*c - b*d
+
+
+  // imaginary part
+  if(realIsZero(&a) || realIsZero(&d)) {
+    realZero(productImag);
+  }
+  else {
+    realMultiply(&a, &d, productImag, realContext);   // a*d
+  }
+
+  if(realIsZero(&b) || realIsZero(&c)) {
+    realZero(&a);
+  }
+  else {
+    realMultiply(&b, &c, &a, realContext);            // b*c
+  }
+
+  realAdd(productImag, &a, productImag, realContext); // a*d + b*c
 }
 
 

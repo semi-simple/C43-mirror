@@ -1550,7 +1550,7 @@ char* itoa(int value, char* result, int base) {
  * \param[in]  exponent int32_t Power of 10 to format                                                     JM UNIT
  * \return void                                                                                           JM UNIT
  ***********************************************                                                          JM UNIT */
-void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode) {               //JM UNIT
+void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode, const char *separator) {               //JM UNIT
        if(exponent == -15) { displayString[0] = ' '; displayString[1] = 'f'; displayString[2] = 0; }    //JM UNIT
   else if(exponent == -12) { displayString[0] = ' '; displayString[1] = 'p'; displayString[2] = 0; }    //JM UNIT
   else if(exponent == -9 ) { displayString[0] = ' '; displayString[1] = 'n'; displayString[2] = 0; }    //JM UNIT
@@ -1568,11 +1568,11 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
     displayString[0] = 0;                                                                               //JM UNIT
     if(nimMode) {                                                                                       //JM UNIT
       if(exponent != 0) {                                                                               //JM UNIT
-        supNumberToDisplayString(exponent, displayString, NULL, false, true);                                 //JM UNIT
+        supNumberToDisplayString(exponent, displayString, NULL, false, separator);                                 //JM UNIT
       }                                                                                                 //JM UNIT
     }                                                                                                   //JM UNIT
     else {                                                                                              //JM UNIT
-      supNumberToDisplayString(exponent, displayString, NULL, false, true);                                   //JM UNIT
+      supNumberToDisplayString(exponent, displayString, NULL, false, separator);                                   //JM UNIT
     }                                                                                                   //JM UNIT
   }                                                                                                     //JM UNIT
 }                                                                                                       //JM UNIT

@@ -64,12 +64,6 @@ void fn2Pow(uint16_t unusedParamButMandatory) {
 
 
 
-/**********************************************************************
- * In all the functions below:
- * if X is a number then X = a + ib
- * The variables a and b are used for intermediate calculations
- ***********************************************************************/
-
 void twoPowLonI(void) {
   int32_t exponentSign;
   longInteger_t base, exponent;
@@ -83,26 +77,8 @@ void twoPowLonI(void) {
   exponentSign = longIntegerSign(exponent);
   longIntegerSetPositiveSign(exponent);
 
-  if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function twoPowLonI: Cannot calculate 0^0!", NULL, NULL, NULL);
-    #endif
-
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-
   if(longIntegerIsZero(exponent)) {
     uIntToLongInteger(1, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-  else if(longIntegerIsZero(base)) {
-    uIntToLongInteger(0, base);
     convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
     longIntegerFree(base);
     longIntegerFree(exponent);
@@ -161,6 +137,14 @@ void twoPowShoI(void) {
 
 
 void twoPowReal(void) {
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function twoPowReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of 2" STD_SUP_x " when flag D is not set", NULL, NULL);
+    #endif
+    return;
+  }
+
   real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);

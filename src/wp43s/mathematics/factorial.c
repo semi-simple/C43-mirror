@@ -72,7 +72,7 @@ void factLonI(void) {
   if(longIntegerIsNegative(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
@@ -83,7 +83,7 @@ void factLonI(void) {
   if(longIntegerCompareUInt(x, MAX_FACTORIAL) > 0) {                            //JM
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(errorMessage, "cannot calculate factorial(%s), the limit is %d, it's to ensure that the %d bits limit is not exceeded", errorMessage + 100,MAX_FACTORIAL, MAX_LONG_INTEGER_SIZE_IN_BITS);
       showInfoDialog("In function factLonI:", errorMessage, NULL, NULL);
     #endif
@@ -135,7 +135,7 @@ void factShoI(void) {
   if(sign == 1) { // Negative value
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif
@@ -145,7 +145,7 @@ void factShoI(void) {
   if(value > 20) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50);
+      longIntegerToDisplayString(REGISTER_X, errorMessage + 100, sizeof(errorMessage) - 100, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(errorMessage, "cannot calculate factorial(%s)", errorMessage + 100);
       showInfoDialog("In function factShoI:", errorMessage, NULL, NULL);
     #endif

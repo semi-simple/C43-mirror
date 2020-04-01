@@ -432,7 +432,6 @@ void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}          /
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -925,7 +924,7 @@ const item_t indexOfItems[] = {
 /*  489 */  { fnRecallConfig,              NOPARAM,                     "RCLCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  490 */  { fnRecallElement,             NOPARAM,                     "RCLEL",                                       "RCLEL",                                       CAT_FNCT, SLS_ENABLED  },
 /*  491 */  { fnRecallIJ,                  NOPARAM,                     "RCLIJ",                                       "RCLIJ",                                       CAT_FNCT, SLS_ENABLED  },
-/*  492 */  { fnRecallStack,               NOPARAM,                     "RCLS",                                        "Stack",                                       CAT_FNCT, SLS_ENABLED  },
+/*  492 */  { fnRecallStack,               TM_REGISTER,                 "RCLS",                                        "RCLS",                                        CAT_FNCT, SLS_ENABLED  },
 /*  493 */  { fnRecallAdd,                 NOPARAM,                     "RCL+",                                        "RCL+",                                        CAT_FNCT, SLS_ENABLED  },
 /*  494 */  { fnRecallSub,                 NOPARAM,                     "RCL-",                                        "RCL-",                                        CAT_FNCT, SLS_ENABLED  },
 /*  495 */  { fnRecallMult,                NOPARAM,                     "RCL" STD_CROSS,                               "RCL" STD_CROSS,                               CAT_FNCT, SLS_ENABLED  },
@@ -1027,7 +1026,7 @@ const item_t indexOfItems[] = {
 /*  591 */  { fnStoreElement,              NOPARAM,                     "STOEL",                                       "STOEL",                                       CAT_FNCT, SLS_ENABLED  },
 /*  592 */  { fnStoreIJ,                   NOPARAM,                     "STOIJ",                                       "STOIJ",                                       CAT_FNCT, SLS_ENABLED  },
 /*  593 */  { itemToBeCoded,               NOPARAM,                     "STOP",                                        "R/S",                                         CAT_FNCT, SLS_UNCHANGED},
-/*  594 */  { fnStoreStack,                NOPARAM,                     "STOS",                                        "Stack",                                       CAT_FNCT, SLS_ENABLED  },
+/*  594 */  { fnStoreStack,                TM_REGISTER,                 "STOS",                                        "STOS",                                        CAT_FNCT, SLS_ENABLED  },
 /*  595 */  { fnStoreAdd,                  NOPARAM,                     "STO+",                                        "STO+",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  596 */  { fnStoreSub,                  NOPARAM,                     "STO-",                                        "STO-",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  597 */  { fnStoreMult,                 NOPARAM,                     "STO" STD_CROSS,                               "STO" STD_CROSS,                               CAT_FNCT, SLS_UNCHANGED},

@@ -42,6 +42,7 @@
 #include "cpyx.h"
 #include "decomp.h"
 #include "division.h"
+#include "dot.h"
 #include "exp.h"
 #include "expt.h"
 #include "factorial.h"

@@ -399,6 +399,7 @@ void fnScreenDump               (uint16_t unusedParamButMandatory) {}
 void fnArg                      (uint16_t unusedParamButMandatory) {}
 void fnRange                    (uint16_t unusedParamButMandatory) {}
 void fnGetRange                 (uint16_t unusedParamButMandatory) {}
+void fnDot                      (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -529,7 +530,7 @@ const item_t indexOfItems[] = {
 /*  122 */  { fnDenMax,                    NOPARAM,                     "DENMAX",                                      "DENMAX",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  123 */  { itemToBeCoded,               NOPARAM,                     "DIGITS",                                      "DIGITS",                                      CAT_MENU, SLS_UNCHANGED},
 /*  124 */  { itemToBeCoded,               NOPARAM,                     "DISP",                                        "DISP",                                        CAT_MENU, SLS_UNCHANGED},
-/*  125 */  { itemToBeCoded,               NOPARAM,                     "DOT",                                         "dot",                                         CAT_FNCT, SLS_UNCHANGED},
+/*  125 */  { fnDot,                       NOPARAM,                     "DOT",                                         "dot",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  126 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "DP",                          STD_RIGHT_ARROW "DP",                          CAT_FNCT, SLS_ENABLED  },
 /*  127 */  { fnDrop,                      NOPARAM,                     "DROP",                                        "DROP" STD_DOWN_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  128 */  { fnDropY,                     NOPARAM,                     "DROPy",                                       "DROPy",                                       CAT_FNCT, SLS_ENABLED  },

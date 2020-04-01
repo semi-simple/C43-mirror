@@ -468,6 +468,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       real34ToString(&value34, displayValueX + strlen(displayValueX));
     }
     return;
+  }
 
 //JM /* *************************************** TEST SIGFIG ********************************** */
 //    SigFigMode                                                                      //JM SIGFIG
@@ -745,6 +746,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
             charIndex += 2;
           }
 
+          if((SigFigMode == 0) || (SigFigTmp == 0) || (SigFigTmp == 1 && SigFigCnt+1 <= SigFig)) {  //JM SIGFIG: Put '0' unless number of sigfig digits already reached
           // Significant digit or zero
           if(digitPointer <= lastDigit) {
             displayString[charIndex++] = '0' + bcd[digitPointer];

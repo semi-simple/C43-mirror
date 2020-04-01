@@ -527,6 +527,9 @@
 		<Unit filename="src/testSuite/slvq.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/specialResults.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/square.txt">
 			<Option target="testSuite" />
 		</Unit>

@@ -39,7 +39,9 @@ void convertShortIntegerRegisterToReal               (calcRegister_t source, rea
 void convertShortIntegerRegisterToUInt64             (calcRegister_t regist, int16_t *sign, uint64_t *value);
 void convertUInt64ToShortIntegerRegister             (int16_t sign, uint64_t value, uint32_t base, calcRegister_t regist);
 
-void convertReal34ToLongInteger                      (const real34_t *real34, longInteger_t lgInt, enum rounding roundingMode);
-void convertReal34ToLongIntegerRegister              (const real34_t *real34, calcRegister_t dest, enum rounding roundingMode);
-void convertRealToLongInteger                        (const real_t *real39, longInteger_t lgInt, enum rounding roundingMode);
-void convertRealToLongIntegerRegister                (const real_t *real39, calcRegister_t dest, enum rounding roundingMode);
+void convertReal34ToLongInteger                      (const real34_t *real34, longInteger_t lgInt, enum rounding mode);
+void convertReal34ToLongIntegerRegister              (const real34_t *real34, calcRegister_t dest, enum rounding mode);
+void convertRealToLongInteger                        (const real_t *real, longInteger_t lgInt, enum rounding mode);
+void convertRealToLongIntegerRegister                (const real_t *real, calcRegister_t dest, enum rounding mode);
+void realToIntegralValue                             (const real_t *source, real_t *destination, enum rounding mode, realContext_t *realContext);
+void realToUInt32                                    (const real_t *re, enum rounding mode, uint32_t *value32, bool_t *overflow);

@@ -119,7 +119,7 @@ add_custom_command(
         WORKING_DIRECTORY 	${CMAKE_CURRENT_SOURCE_DIR})
 
 #==============================================================================
-# Generate Cataglog Application
+# Generate Catalog Application
 #------------------------------------------------------------------------------
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 

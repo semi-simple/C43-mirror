@@ -35,7 +35,6 @@
 #define DEBUG_REGISTER_L            1
 #define SHOW_MEMORY_STATUS          1
 #define IBM_DECIMAL                 1
-#define LIMIT_EXPONENT_TO_999       0                                             //JMMAX
 #define LIBGMP                      1
 #define MEMORY_ALLOCATION_ALIGNMENT 4 // 1, 2 or 4 bytes
 #define MEMORY_ALLOCATION_MASK      (MEMORY_ALLOCATION_ALIGNMENT - 1)
@@ -178,8 +177,8 @@ typedef int16_t calcRegister_t;
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328 //9965   // 43S:3328 //JMMAX
-#define MAX_FACTORIAL                 450  //1142   // 43S: 450 //JMMAX
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 9965 //9965   // 43S:3328 //JMMAX
+#define MAX_FACTORIAL                 1142  //1142   // 43S: 450 //JMMAX
 
                                // bits  digits  43S     x digits   x! digits
                                //                         69!            98
@@ -706,6 +705,7 @@ extern int16_t              exponentSignLocation;
 extern int16_t              denominatorLocation;
 extern int16_t              imaginaryExponentSignLocation;
 extern int16_t              imaginaryMantissaSignLocation;
+extern int16_t              exponentLimit;
 extern size_t               gmpMemInBytes;
 extern size_t               wp43sMemInBytes;
 extern freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];

@@ -1411,13 +1411,19 @@ printf("fnStoreConfig %" FMT16U "\n", r);
  * \return void
  ***********************************************/
 void fnStoreStack(uint16_t r) {
-#ifdef PC_BUILD
-printf("fnStoreStack %" FMT16U "\n", r);
+    uint16_t size = stackSize==SS_4 ? 4 : 8;
+
+    if(r + size >= REGISTER_X) {
+        displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Cannot execute STOS, destination register is out of range: %d", r);
+        showInfoDialog("In function fnStoreStack:", errorMessage, NULL, NULL);
 #endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnStoreStack:", "To be coded", NULL, NULL);
-  #endif
+    } else {
+        for (int i = 0; i < size; i++) {
+            copySourceRegisterToDestRegister(REGISTER_X + i, r + i);
+        }
+    }
 }
 
 
@@ -1447,13 +1453,8 @@ printf("fnStoreElement\n");
  * \return void
  ***********************************************/
 void fnStoreIJ(uint16_t unusedParamButMandatory) {
-#ifdef PC_BUILD
-printf("fnStoreIJ\n");
-#endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnStoreIJ:", "To be coded", NULL, NULL);
-  #endif
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
+    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);
 }
 
 
@@ -1687,13 +1688,26 @@ printf("fnRecallConfig %" FMT16U "\n", r);
  * \return void
  ***********************************************/
 void fnRecallStack(uint16_t r) {
-#ifdef PC_BUILD
-printf("fnRecallStack %" FMT16U "\n", r);
+    uint16_t size = stackSize==SS_4 ? 4 : 8;
+
+    if(r + size >= REGISTER_X) {
+        displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Cannot execute RCLS, destination register is out of range: %d", r);
+        showInfoDialog("In function fnRecallStack:", errorMessage, NULL, NULL);
 #endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallStack:", "To be coded", NULL, NULL);
-  #endif
+    } else {
+        saveStack();
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+        for (int i = 0; i < size; i++) {
+            copySourceRegisterToDestRegister(r + i, REGISTER_X + i);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            adjustResult(REGISTER_X + i, false, true, REGISTER_X + i, -1, -1);
+        }
+    }
 }
 
 
@@ -1723,13 +1737,14 @@ printf("fnRecallElement\n");
  * \return void
  ***********************************************/
 void fnRecallIJ(uint16_t unusedParamButMandatory) {
-#ifdef PC_BUILD
-printf("fnRecallIJ\n");
-#endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallIJ:", "To be coded", NULL, NULL);
-  #endif
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+    copySourceRegisterToDestRegister(REGISTER_I, REGISTER_X);
+    copySourceRegisterToDestRegister(REGISTER_J, REGISTER_Y);
+
+    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+    adjustResult(REGISTER_Y, false, true, REGISTER_Y, -1, -1);
 }
 
 

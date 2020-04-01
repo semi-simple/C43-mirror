@@ -190,6 +190,7 @@ int16_t              exponentSignLocation;
 int16_t              denominatorLocation;
 int16_t              imaginaryExponentSignLocation;
 int16_t              imaginaryMantissaSignLocation;
+int16_t              exponentLimit;
 size_t               gmpMemInBytes;
 size_t               wp43sMemInBytes;
 freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
@@ -445,6 +446,8 @@ void setupDefaults(void) {
   lastFcnsMenuPos = 0;
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
+
+  exponentLimit = 9999;             //JMMAX
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;

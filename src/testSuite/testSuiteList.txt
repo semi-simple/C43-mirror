@@ -207,3 +207,4 @@ decomp
 
 matrix
 dot
+cross

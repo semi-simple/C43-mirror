@@ -15,55 +15,53 @@
  */
 
 /********************************************//**
- * \file dot.c
+ * \file cross.c
  ***********************************************/
 
 #include "wp43s.h"
 
-static void dotDataTypeError(void);
+static void crossDataTypeError(void);
 
-
-void (* const dot[9][9])(void) = {
-// regX |    regY ==>    1                  2                  3                  4                  5                  6                  7                  8                  9
-//      V                Long integer       Real34             Complex34          Time               Date               String             Real34 mat         Complex34 mat      Short integer
-/*  1 Long integer  */ { dotDataTypeError,  dotDataTypeError,  dotCplxLonI,       dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError },
-/*  2 Real34        */ { dotDataTypeError,  dotDataTypeError,  dotCplxReal,       dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError },
-/*  3 Complex34     */ { dotLonICplx,       dotRealCplx,       dotCplxCplx,       dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotShoICplx      },
-/*  4 Time          */ { dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError },
-/*  5 Date          */ { dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError },
-/*  6 String        */ { dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError },
-/*  7 Real34 mat    */ { dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotRemaRema,       dotCpmaRema,       dotDataTypeError },
-/*  8 Complex34 mat */ { dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotRemaCpma,       dotCpmaCpma,       dotDataTypeError },
-/*  9 Short integer */ { dotDataTypeError,  dotDataTypeError,  dotCplxShoI,       dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError }
+void (* const cross[9][9])(void) = {
+// regX |    regY ==>    1                    2                    3                    4                    5                    6                    7                    8                    9
+//      V                Long integer         Real34               Complex34            Time                 Date                 String               Real34 mat           Complex34 mat        Short integer
+/*  1 Long integer  */ { crossDataTypeError,  crossDataTypeError,  crossCplxLonI,       crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError },
+/*  2 Real34        */ { crossDataTypeError,  crossDataTypeError,  crossCplxReal,       crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError },
+/*  3 Complex34     */ { crossLonICplx,       crossRealCplx,       crossCplxCplx,       crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossShoICplx      },
+/*  4 Time          */ { crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError },
+/*  5 Date          */ { crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError },
+/*  6 String        */ { crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError },
+/*  7 Real34 mat    */ { crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossRemaRema,       crossCpmaRema,       crossDataTypeError },
+/*  8 Complex34 mat */ { crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossRemaCpma,       crossCpmaCpma,       crossDataTypeError },
+/*  9 Short integer */ { crossDataTypeError,  crossDataTypeError,  crossCplxShoI,       crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError }
 };
-
 
 //=============================================================================
 // Error handling
 //-----------------------------------------------------------------------------
 
 /********************************************//**
- * \brief Data type error in DOT
+ * \brief Data type error in CROSS
  *
  * \param void
  * \return void
  ***********************************************/
-static void dotDataTypeError(void) {
+static void crossDataTypeError(void) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnDot:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    showInfoDialog("In function fnCross:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
 #endif
 }
 
-static void dotSizeError() {
+static void crossSizeError() {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate DOT product, matrix size mismatch.");
-    showInfoDialog("In function fnDot:", errorMessage, NULL, NULL);
+    sprintf(errorMessage, "cannot calculate CROSS product, matrix size mismatch.");
+    showInfoDialog("In function fnCross:", errorMessage, NULL, NULL);
 #endif
 }
 
@@ -72,41 +70,42 @@ static void dotSizeError() {
 //-----------------------------------------------------------------------------
 
 /********************************************//**
- * \brief regX ==> regL and Dot(regX, RegY) ==> regX
+ * \brief regX ==> regL and CROSS(regX, RegY) ==> regX
  * enables stack lift and refreshes the stack.
- * Calculate the dot (or scalar) product between complex and matrix
+ * Calculate the cross (or vector) product between complex and matrix
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnDot(uint16_t unusedParamButMandatory) {
+void fnCross(uint16_t unusedParamButMandatory) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    dot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+    cross[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
     adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
 
 //=============================================================================
-// Complex dot product calculation functionS
+// Complex cross product calculation functionS
 //-----------------------------------------------------------------------------
 
-static void dotCplx(real_t *xReal, real_t *xImag, real_t *yReal, real_t *yImag, real_t *rReal, realContext_t *realContext) {
+static void crossCplx(real_t *xReal, real_t *xImag, real_t *yReal, real_t *yImag, real_t *rReal, realContext_t *realContext) {
     real_t t;
 
-    realMultiply(xReal, yReal, &t, realContext);     // t = xReal * yReal
-    realMultiply(xImag, yImag, rReal, realContext);      // r = xImag * yImag
-    realAdd(&t, rReal, rReal, realContext);     // r = r + t
+    realMultiply(xReal, yImag, &t, realContext);        // t = xReal * yImag
+    realMultiply(yReal, xImag, rReal, realContext);         // r = yReal * xImag
+    realSubtract(rReal, &t, rReal, realContext);   // r = r - t
 }
 
+
 /********************************************//**
- * \brief Dot(Y(real34), X(complex34)) ==> X(real34)
+ * \brief cross(Y(real34), X(complex34)) ==> X(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotRealCplx(void) {
+void crossRealCplx(void) {
     real_t xReal, xImag, yReal, yImag;
     real_t rReal;
 
@@ -116,7 +115,7 @@ void dotRealCplx(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
     real34ToReal(const34_0, &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -124,12 +123,12 @@ void dotRealCplx(void) {
 }
 
 /********************************************//**
- * \brief Dot(Y(long integer), X(complex34)) ==> X(real34)
+ * \brief cross(Y(long integer), X(complex34)) ==> X(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotLonICplx(void) {
+void crossLonICplx(void) {
     real_t xReal, xImag, yReal, yImag;
     real_t rReal;
 
@@ -139,7 +138,7 @@ void dotLonICplx(void) {
     convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
     real34ToReal(const34_0, &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -147,12 +146,12 @@ void dotLonICplx(void) {
 }
 
 /********************************************//**
- * \brief Dot(Y(short integer), X(complex34)) ==> X(real34)
+ * \brief cross(Y(short integer), X(complex34)) ==> X(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotShoICplx(void) {
+void crossShoICplx(void) {
     real_t xReal, xImag, yReal, yImag;
     real_t rReal;
 
@@ -162,7 +161,7 @@ void dotShoICplx(void) {
     convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
     real34ToReal(const34_0, &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -170,12 +169,12 @@ void dotShoICplx(void) {
 }
 
 /********************************************//**
- * \brief Dot(Y(complex34), X(complex34)) ==> X(real34)
+ * \brief cross(Y(complex34), X(complex34)) ==> X(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotCplxCplx(void) {
+void crossCplxCplx(void) {
     real_t xReal, xImag, yReal, yImag;
     real_t rReal;
 
@@ -185,7 +184,7 @@ void dotCplxCplx(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
     real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -193,12 +192,12 @@ void dotCplxCplx(void) {
 }
 
 /********************************************//**
- * \brief Dot(Y(complex34), X(real34)) ==> X(real34)
+ * \brief cross(Y(complex34), X(real34)) ==> X(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotCplxReal(void) {
+void crossCplxReal(void) {
     real_t xReal, xImag, yReal, yImag;
     real_t rReal;
 
@@ -208,19 +207,19 @@ void dotCplxReal(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
     real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
- * \brief Dot(Y(complex34), X(long integer)) ==> X(real34)
+ * \brief cross(Y(complex34), X(long integer)) ==> X(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotCplxLonI(void) {
+void crossCplxLonI(void) {
     real_t xReal, xImag, yReal, yImag;
     real_t rReal;
 
@@ -230,7 +229,7 @@ void dotCplxLonI(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
     real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -238,12 +237,12 @@ void dotCplxLonI(void) {
 }
 
 /********************************************//**
- * \brief Dot(Y(complex34), X(short integer)) ==> X(real34)
+ * \brief cross(Y(complex34), X(short integer)) ==> X(real34)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotCplxShoI(void) {
+void crossCplxShoI(void) {
     real_t xReal, xImag, yReal, yImag;
     real_t rReal;
 
@@ -253,7 +252,7 @@ void dotCplxShoI(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
     real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -261,46 +260,46 @@ void dotCplxShoI(void) {
 }
 
 //=============================================================================
-// Matrix dot calculation function
+// Matrix cross calculation function
 //-----------------------------------------------------------------------------
 
 /********************************************//**
- * \brief Dot(Y(real34 matrix), X(real34 matrix)) ==> X(real34 matrix)
+ * \brief cross(Y(real34 matrix), X(real34 matrix)) ==> X(real34 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotRemaRema(void) {
+void crossRemaRema(void) {
     itemToBeCoded(0);
 }
 
 /********************************************//**
- * \brief Dot(Y(complex34 matrix), X(real34 matrix)) ==> X(complex34 matrix)
+ * \brief cross(Y(complex34 matrix), X(real34 matrix)) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotCpmaRema(void) {
+void crossCpmaRema(void) {
     itemToBeCoded(0);
 }
 
 /********************************************//**
- * \brief Dot(Y(real34 matrix), X(complex34 matrix)) ==> X(complex34 matrix)
+ * \brief cross(Y(real34 matrix), X(complex34 matrix)) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotRemaCpma(void) {
+void crossRemaCpma(void) {
     itemToBeCoded(0);
 }
 
 /********************************************//**
- * \brief Dot(Y(complex34 matrix), X(complex34 matrix)) ==> X(complex34 matrix)
+ * \brief cross(Y(complex34 matrix), X(complex34 matrix)) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
  ***********************************************/
-void dotCpmaCpma(void) {
+void crossCpmaCpma(void) {
     itemToBeCoded(0);
 }
 

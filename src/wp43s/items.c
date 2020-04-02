@@ -400,6 +400,7 @@ void fnArg                      (uint16_t unusedParamButMandatory) {}
 void fnRange                    (uint16_t unusedParamButMandatory) {}
 void fnGetRange                 (uint16_t unusedParamButMandatory) {}
 void fnDot                      (uint16_t unusedParamButMandatory) {}
+void fnCross                    (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -506,7 +507,7 @@ const item_t indexOfItems[] = {
 /*   98 */  { fnComplexResult,             true,                        "CPXRES",                                      "CPXRES",                                      CAT_FNCT, SLS_UNCHANGED},
 /*   99 */  { itemToBeCoded,               NOPARAM,                     "CPXS",                                        "CPXS",                                        CAT_MENU, SLS_UNCHANGED},
 /*  100 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  101 */  { itemToBeCoded,               NOPARAM,                     "CROSS",                                       "cross",                                       CAT_FNCT, SLS_UNCHANGED},
+/*  101 */  { fnCross,                     NOPARAM,                     "CROSS",                                       "cross",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  102 */  { fnCvtCwtKg,                  multiply,                    "cwt" STD_RIGHT_ARROW "kg",                    "cwt" STD_RIGHT_ARROW "kg",                    CAT_FNCT, SLS_ENABLED  },
 /*  103 */  { fnCxToRe,                    NOPARAM,                     "CX" STD_RIGHT_ARROW "RE",                     "CX" STD_RIGHT_ARROW "RE",                     CAT_FNCT, SLS_ENABLED  },
 /*  104 */  { itemToBeCoded,               NOPARAM,                     "D",                                           "D",                                           CAT_RVAR, SLS_UNCHANGED},

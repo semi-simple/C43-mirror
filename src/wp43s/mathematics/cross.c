@@ -47,23 +47,23 @@ void (* const cross[9][9])(void) = {
  * \return void
  ***********************************************/
 static void crossDataTypeError(void) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnCross:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-#endif
+  #endif
 }
 
-static void crossSizeError() {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+//static void crossSizeError() {
+//    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate CROSS product, matrix size mismatch.");
-    showInfoDialog("In function fnCross:", errorMessage, NULL, NULL);
-#endif
-}
+//#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+//    sprintf(errorMessage, "cannot calculate CROSS product, matrix size mismatch.");
+//    showInfoDialog("In function fnCross:", errorMessage, NULL, NULL);
+//#endif
+//}
 
 //=============================================================================
 // Main function
@@ -78,12 +78,12 @@ static void crossSizeError() {
  * \return void
  ***********************************************/
 void fnCross(uint16_t unusedParamButMandatory) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    cross[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  cross[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-    adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
 
 //=============================================================================
@@ -91,11 +91,11 @@ void fnCross(uint16_t unusedParamButMandatory) {
 //-----------------------------------------------------------------------------
 
 static void crossCplx(real_t *xReal, real_t *xImag, real_t *yReal, real_t *yImag, real_t *rReal, realContext_t *realContext) {
-    real_t t;
+  real_t t;
 
-    realMultiply(xReal, yImag, &t, realContext);        // t = xReal * yImag
-    realMultiply(yReal, xImag, rReal, realContext);         // r = yReal * xImag
-    realSubtract(rReal, &t, rReal, realContext);   // r = r - t
+  realMultiply(xReal, yImag, &t, realContext);        // t = xReal * yImag
+  realMultiply(yReal, xImag, rReal, realContext);         // r = yReal * xImag
+  realSubtract(rReal, &t, rReal, realContext);   // r = r - t
 }
 
 
@@ -106,20 +106,20 @@ static void crossCplx(real_t *xReal, real_t *xImag, real_t *yReal, real_t *yImag
  * \return void
  ***********************************************/
 void crossRealCplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(const34_0, &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(const34_0, &yImag);
 
-    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -129,20 +129,20 @@ void crossRealCplx(void) {
  * \return void
  ***********************************************/
 void crossLonICplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -152,20 +152,20 @@ void crossLonICplx(void) {
  * \return void
  ***********************************************/
 void crossShoICplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -175,20 +175,20 @@ void crossShoICplx(void) {
  * \return void
  ***********************************************/
 void crossCplxCplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -198,19 +198,19 @@ void crossCplxCplx(void) {
  * \return void
  ***********************************************/
 void crossCplxReal(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(const34_0, &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(const34_0, &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -220,20 +220,20 @@ void crossCplxReal(void) {
  * \return void
  ***********************************************/
 void crossCplxLonI(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -243,20 +243,20 @@ void crossCplxLonI(void) {
  * \return void
  ***********************************************/
 void crossCplxShoI(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 //=============================================================================
@@ -270,7 +270,7 @@ void crossCplxShoI(void) {
  * \return void
  ***********************************************/
 void crossRemaRema(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
 
 /********************************************//**
@@ -280,7 +280,7 @@ void crossRemaRema(void) {
  * \return void
  ***********************************************/
 void crossCpmaRema(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
 
 /********************************************//**
@@ -290,7 +290,7 @@ void crossCpmaRema(void) {
  * \return void
  ***********************************************/
 void crossRemaCpma(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
 
 /********************************************//**
@@ -300,6 +300,5 @@ void crossRemaCpma(void) {
  * \return void
  ***********************************************/
 void crossCpmaCpma(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
-

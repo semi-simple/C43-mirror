@@ -795,8 +795,8 @@
 #define ITM_RANI                       766
 #define ITM_PRINTERX                   767
 #define MNU_SYSFL                      768
-#define ITM_0769                       769
-#define ITM_0770                       770
+#define ITM_RANGE                      769
+#define ITM_GETRANGE                   770
 #define ITM_chi2x                      771
 #define ITM_chi2Px                     772
 #define ITM_chi2ux                     773

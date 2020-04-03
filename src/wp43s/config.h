@@ -48,3 +48,5 @@ void     fnClAll               (uint16_t confirmation);
 void     fnClPAll              (uint16_t confirmation);
 void     fnClSigma             (uint16_t unusedParamButMandatory);
 void     backToSystem          (uint16_t unusedParamButMandatory);
+void     fnRange               (uint16_t unusedParamButMandatory);
+void     fnGetRange            (uint16_t unusedParamButMandatory);

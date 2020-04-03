@@ -1160,6 +1160,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     char degStr[27];
     uint32_t m, s, fs;
     int16_t sign;
+    bool_t overflow;
 
     real_t temp, degrees, minutes, seconds;
 
@@ -1184,11 +1185,10 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     // Get the fractional seconds
     realSubtract(&temp, &seconds, &temp, &ctxtReal39);
     realMultiply(&temp, const_100, &temp, &ctxtReal39);
-    realToIntegralValue(&temp, &temp, DEC_ROUND_DOWN, &ctxtReal39);
 
-    realToUInt32(&temp, fs);
-    realToUInt32(&seconds, s);
-    realToUInt32(&minutes, m);
+    realToUInt32(&temp, DEC_ROUND_DOWN, &fs, &overflow);
+    realToUInt32(&seconds, DEC_ROUND_DOWN, &s, &overflow);
+    realToUInt32(&minutes, DEC_ROUND_DOWN, &m, &overflow);
 
     if(fs >= 100) {
       fs -= 100;

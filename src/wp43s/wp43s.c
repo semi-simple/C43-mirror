@@ -358,7 +358,7 @@ void setupDefaults(void) {
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
 
-  exponentLimit = 999;
+  exponentLimit = 6145;
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;

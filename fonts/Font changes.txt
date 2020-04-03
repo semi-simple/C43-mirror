@@ -136,6 +136,6 @@
 2020-03-07 Changed glyph U+21CD (undo)
            New WP43S_StandardFont.ttf generated.
            
-2020-04-03 Changed characters U+2422 and U+2423.
+2020-04-03 Changed characters U+2422 and U+2423 in Standard font.
            Added U+2421 and U+2430 ... 33.
            

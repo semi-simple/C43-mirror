@@ -1699,6 +1699,7 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
  * \return void
  ***********************************************/
 void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
+#ifndef TESTSUITE_BUILD
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = false;
   shiftF = false;                 //JM
@@ -1709,6 +1710,7 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
   btnClicked(NULL, "00");
   Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
   userModeEnabled = userModeEnabledMEM;
+#endif
 }
 
 
@@ -1721,6 +1723,7 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
  * \return void
  ***********************************************/
 void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWIRED FOR TOP LEFT BUTTON
+#ifndef TESTSUITE_BUILD
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = false;
   shiftF = false;                 //JM
@@ -1731,9 +1734,9 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
   btnClicked(NULL, "00");
   Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
   userModeEnabled = userModeEnabledMEM;
+#endif
 }
 //JM^^^^^^^
-
 
 
 /*

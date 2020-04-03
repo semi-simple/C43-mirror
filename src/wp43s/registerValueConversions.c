@@ -223,16 +223,15 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
 
 
 
-void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum rounding roundingMode) {
+void convertReal34ToLongInteger(const real34_t *re34, longInteger_t lgInt, enum rounding roundingMode) {
   uint8_t bcd[DECQUAD_Pmax];
   int32_t sign, exponent;
-  //longInteger_t coef;
+  real34_t real34;
 
-  real34ToIntegralValue(real34, real34, roundingMode);
-  sign = real34GetCoefficient(real34, bcd);
-  exponent = real34GetExponent(real34);
+  real34ToIntegralValue(re34, &real34, roundingMode);
+  sign = real34GetCoefficient(&real34, bcd);
+  exponent = real34GetExponent(&real34);
 
-  //longIntegerInit(coef);
   longIntegerInit(lgInt);
   uIntToLongInteger(bcd[0], lgInt);
 
@@ -241,8 +240,6 @@ void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum roun
     longIntegerAddUInt(lgInt, bcd[i], lgInt);
   }
 
-  //longIntegerPowerUIntUInt(10, exponent, coef);
-  //longIntegerMultiply(lgInt, coef, lgInt);
   while(exponent > 0) {
     longIntegerMultiplyUInt(lgInt, 10, lgInt);
     exponent--;
@@ -251,14 +248,11 @@ void convertReal34ToLongInteger(real34_t *real34, longInteger_t lgInt, enum roun
   if(sign) {
     longIntegerChangeSign(lgInt);
   }
-
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  //longIntegerFree(coef);
 }
 
 
 
-void convertReal34ToLongIntegerRegister(real34_t *real34, calcRegister_t dest, enum rounding roundingMode) {
+void convertReal34ToLongIntegerRegister(const real34_t *real34, calcRegister_t dest, enum rounding roundingMode) {
   longInteger_t lgInt;
 
   convertReal34ToLongInteger(real34, lgInt, roundingMode);
@@ -269,26 +263,23 @@ void convertReal34ToLongIntegerRegister(real34_t *real34, calcRegister_t dest, e
 
 
 
-void convertReal39ToLongInteger(real_t *real39, longInteger_t lgInt, enum rounding roundingMode) {
-  uint8_t bcd[39];
+void convertRealToLongInteger(const real_t *re, longInteger_t lgInt, enum rounding roundingMode) {
+  uint8_t bcd[75];
   int32_t sign, exponent;
-  //longInteger_t coef;
+  real_t real;
 
-  realToIntegralValue(real39, real39, roundingMode, &ctxtReal39);
-  realGetCoefficient(real39, bcd);
-  sign = (realIsNegative(real39) ? 1 : 0);
-  exponent = realGetExponent(real39) - real39->digits;
+  realToIntegralValue(re, &real, roundingMode, &ctxtReal39);
+  realGetCoefficient(&real, bcd);
+  sign = (realIsNegative(&real) ? 1 : 0);
+  exponent = realGetExponent(&real) - real.digits;
 
-  //longIntegerInit(coef);
   uIntToLongInteger(bcd[0], lgInt);
 
-  for(int i=1; i<real39->digits; i++) {
+  for(int i=1; i<real.digits; i++) {
     longIntegerMultiplyUInt(lgInt, 10, lgInt);
     longIntegerAddUInt(lgInt, bcd[i], lgInt);
   }
 
-  //longIntegerPowerUIntUInt(10, exponent, coef);
-  //longIntegerMultiply(lgInt, coef, lgInt);
   while(exponent > 0) {
     longIntegerMultiplyUInt(lgInt, 10, lgInt);
     exponent--;
@@ -299,18 +290,68 @@ void convertReal39ToLongInteger(real_t *real39, longInteger_t lgInt, enum roundi
   }
 
   convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  //longIntegerFree(coef);
 }
 
 
 
-void convertRealToLongIntegerRegister(real_t *real39, calcRegister_t dest, enum rounding roundingMode) {
+void convertRealToLongIntegerRegister(const real_t *real, calcRegister_t dest, enum rounding roundingMode) {
   longInteger_t lgInt;
 
   longIntegerInit(lgInt);
 
-  convertReal39ToLongInteger(real39, lgInt, roundingMode);
+  convertRealToLongInteger(real, lgInt, roundingMode);
   convertLongIntegerToLongIntegerRegister(lgInt, dest);
+  longIntegerFree(lgInt);
+}
+
+
+
+void realToIntegralValue(const real_t *source, real_t *destination, enum rounding mode, realContext_t *realContext) {
+  enum rounding savedRoundingMode;
+
+  savedRoundingMode = realContext->round;
+  realContext->round = mode;
+  decNumberToIntegralValue(destination, source, realContext);
+  realContext->round = savedRoundingMode;
+}
+
+
+
+void realToUInt32(const real_t *re, enum rounding mode, uint32_t *value32, bool_t *overflow) {
+  uint8_t bcd[76], sign;
+  real_t real;
+  longInteger_t lgInt;
+
+  realToIntegralValue(re, &real, mode, &ctxtReal75);
+  sign = real.bits & 0x80;
+  realGetCoefficient(&real, bcd);
+
+  longIntegerInit(lgInt);
+  uIntToLongInteger(bcd[0], lgInt);
+
+  for(int i=1; i<real.digits; i++) {
+    longIntegerMultiplyUInt(lgInt, 10, lgInt);
+    longIntegerAddUInt(lgInt, bcd[i], lgInt);
+  }
+
+  while(real.exponent > 0) {
+    longIntegerMultiplyUInt(lgInt, 10, lgInt);
+    real.exponent--;
+  }
+
+  *overflow = false;
+
+  #ifdef DMCP_BUILD // 32 bits
+    *value32 = (lgInt->_mp_size == 0 ? 0 : lgInt->_mp_d[0]);
+    if(sign || lgInt->_mp_size > 1) {
+      *overflow = true;
+    }
+  #else // 64 bits
+    *value32 = (lgInt->_mp_size == 0 ? 0 : lgInt->_mp_d[0] & 0x00000000ffffffffULL);
+    if(sign || lgInt->_mp_size > 1 || lgInt->_mp_d[0] & 0xffffffff00000000ULL) {
+      *overflow = true;
+    }
+  #endif
 
   longIntegerFree(lgInt);
 }

@@ -397,6 +397,8 @@ void fnCountBits                (uint16_t unusedParamButMandatory) {}
 void fnNextPrime                (uint16_t unusedParamButMandatory) {}
 void fnScreenDump               (uint16_t unusedParamButMandatory) {}
 void fnArg                      (uint16_t unusedParamButMandatory) {}
+void fnRange                    (uint16_t unusedParamButMandatory) {}
+void fnGetRange                 (uint16_t unusedParamButMandatory) {}
 void fnDot                      (uint16_t unusedParamButMandatory) {}
 void fnCross                    (uint16_t unusedParamButMandatory) {}
 #endif
@@ -1174,8 +1176,8 @@ const item_t indexOfItems[] = {
 /*  766 */  { fnRandomI,                   NOPARAM,                     "RANI#",                                       "RANI#",                                       CAT_FNCT, SLS_ENABLED  },
 /*  767 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "x",                               STD_PRINTER "x",                               CAT_FNCT, SLS_UNCHANGED},
 /*  768 */  { itemToBeCoded,               NOPARAM,                     "SYS.FL",                                      "SYS.FL",                                      CAT_MENU, SLS_UNCHANGED},
-/*  769 */  { itemToBeCoded,               NOPARAM,                     "0769",                                        "0769",                                        CAT_FREE, SLS_UNCHANGED},
-/*  770 */  { itemToBeCoded,               NOPARAM,                     "0770",                                        "0770",                                        CAT_FREE, SLS_UNCHANGED},
+/*  769 */  { fnRange,                     NOPARAM,                     "RANGE",                                       "RANGE",                                       CAT_FNCT, SLS_ENABLED  },
+/*  770 */  { fnGetRange,                  NOPARAM,                     "RANGE?",                                      "RANGE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  771 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 "(x)",                       STD_chi STD_SUP_2 "(x)",                       CAT_FNCT, SLS_UNCHANGED},
 /*  772 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_p "(x)",             STD_chi STD_SUP_2 STD_SUB_p "(x)",             CAT_FNCT, SLS_UNCHANGED},
 /*  773 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_e "(x)",             STD_chi STD_SUP_2 STD_SUB_e "(x)",             CAT_FNCT, SLS_UNCHANGED},

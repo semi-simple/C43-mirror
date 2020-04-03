@@ -65,46 +65,14 @@ void fnLn(uint16_t unusedParamButMandatory) {
 
 
 void lnComplex(const real_t *real, const real_t *imag, real_t *lnReal, real_t *lnImag, realContext_t *realContext) {
-  if(realIsSpecial(real) || realIsSpecial(imag)) {
-    if(realIsNaN(real) || realIsNaN(imag)) {
-      realCopy(const_NaN, lnReal);
-      realCopy(const_NaN, lnImag);
-    }
-    else {
-      realCopy(const_plusInfinity, lnReal);
-
-      if(realIsNegative(imag)) {
-        realCopy(const_minusInfinity, lnImag);
-      }
-      else {
-        realCopy(const_plusInfinity, lnImag);
-      }
-    }
-    return;
+  if(realIsZero(real) && realIsZero(imag)) {
+    realCopy(const_minusInfinity, lnReal);
+    realZero(lnImag);
   }
-
-  if(realIsZero(imag)) {
-    if(realIsZero(real)) {
-      realCopy(const_NaN, lnReal);
-      realCopy(const_NaN, lnImag);
-    }
-    else {
-      if(realIsNegative(real)) {
-        realCopy(real, lnReal);
-        realSetPositiveSign(lnReal);
-        WP34S_Ln(lnReal, lnReal, realContext);
-        realCopy(const_pi, lnImag);
-      }
-      else {
-        WP34S_Ln(real, lnReal, realContext);
-        realZero(lnImag);
-      }
-    }
-   return;
+  else {
+    realRectangularToPolar(real, imag, lnReal, lnImag, realContext);
+    WP34S_Ln(lnReal, lnReal, realContext);
   }
-
-  realRectangularToPolar(real, imag, lnReal, lnImag, realContext);
-  WP34S_Ln(lnReal, lnReal, realContext);
 }
 
 
@@ -285,8 +253,8 @@ void lnReal(void) {
 void lnCplx(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

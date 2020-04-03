@@ -49,23 +49,23 @@ void (* const dot[9][9])(void) = {
  * \return void
  ***********************************************/
 static void dotDataTypeError(void) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnDot:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-#endif
+  #endif
 }
 
-static void dotSizeError() {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+//static void dotSizeError() {
+//    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate DOT product, matrix size mismatch.");
-    showInfoDialog("In function fnDot:", errorMessage, NULL, NULL);
-#endif
-}
+//#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+//    sprintf(errorMessage, "cannot calculate DOT product, matrix size mismatch.");
+//    showInfoDialog("In function fnDot:", errorMessage, NULL, NULL);
+//#endif
+//}
 
 //=============================================================================
 // Main function
@@ -80,12 +80,12 @@ static void dotSizeError() {
  * \return void
  ***********************************************/
 void fnDot(uint16_t unusedParamButMandatory) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    dot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  dot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-    adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
 
 //=============================================================================
@@ -93,11 +93,11 @@ void fnDot(uint16_t unusedParamButMandatory) {
 //-----------------------------------------------------------------------------
 
 static void dotCplx(real_t *xReal, real_t *xImag, real_t *yReal, real_t *yImag, real_t *rReal, realContext_t *realContext) {
-    real_t t;
+  real_t t;
 
-    realMultiply(xReal, yReal, &t, realContext);     // t = xReal * yReal
-    realMultiply(xImag, yImag, rReal, realContext);      // r = xImag * yImag
-    realAdd(&t, rReal, rReal, realContext);     // r = r + t
+  realMultiply(xReal, yReal, &t, realContext);     // t = xReal * yReal
+  realMultiply(xImag, yImag, rReal, realContext);      // r = xImag * yImag
+  realAdd(&t, rReal, rReal, realContext);     // r = r + t
 }
 
 /********************************************//**
@@ -107,20 +107,20 @@ static void dotCplx(real_t *xReal, real_t *xImag, real_t *yReal, real_t *yImag, 
  * \return void
  ***********************************************/
 void dotRealCplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(const34_0, &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(const34_0, &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -130,20 +130,20 @@ void dotRealCplx(void) {
  * \return void
  ***********************************************/
 void dotLonICplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -153,20 +153,20 @@ void dotLonICplx(void) {
  * \return void
  ***********************************************/
 void dotShoICplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -176,20 +176,20 @@ void dotShoICplx(void) {
  * \return void
  ***********************************************/
 void dotCplxCplx(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -199,19 +199,19 @@ void dotCplxCplx(void) {
  * \return void
  ***********************************************/
 void dotCplxReal(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(const34_0, &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(const34_0, &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -221,20 +221,20 @@ void dotCplxReal(void) {
  * \return void
  ***********************************************/
 void dotCplxLonI(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -244,20 +244,20 @@ void dotCplxLonI(void) {
  * \return void
  ***********************************************/
 void dotCplxShoI(void) {
-    real_t xReal, xImag, yReal, yImag;
-    real_t rReal;
+  real_t xReal, xImag, yReal, yImag;
+  real_t rReal;
 
-    convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
+  dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 //=============================================================================
@@ -271,7 +271,7 @@ void dotCplxShoI(void) {
  * \return void
  ***********************************************/
 void dotRemaRema(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
 
 /********************************************//**
@@ -281,7 +281,7 @@ void dotRemaRema(void) {
  * \return void
  ***********************************************/
 void dotCpmaRema(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
 
 /********************************************//**
@@ -291,7 +291,7 @@ void dotCpmaRema(void) {
  * \return void
  ***********************************************/
 void dotRemaCpma(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
 
 /********************************************//**
@@ -301,6 +301,5 @@ void dotRemaCpma(void) {
  * \return void
  ***********************************************/
 void dotCpmaCpma(void) {
-    itemToBeCoded(0);
+  itemToBeCoded(0);
 }
-

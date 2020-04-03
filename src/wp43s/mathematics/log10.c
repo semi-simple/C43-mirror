@@ -209,8 +209,8 @@ void log10Real(void) {
 void log10Cplx(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+      realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

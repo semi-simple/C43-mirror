@@ -1,0 +1,747 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                   special results                       **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: AM=DEG SD=0 RM=0 SS=4
+
+
+;-------------------------------------------------------------------------
+; Flag D set
+;-------------------------------------------------------------------------
+In:  FD=1
+
+Func: fnArctanh
+In:  SL=0 FI=0 RX=LonI:"-1"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-1"
+Out: EC=0 FI=0 SL=1 RL=Real:"-1" RX=Real:"-inf"
+
+
+Func: fnLn
+In:  SL=0 FI=0 RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+;Func: fnLn1PX
+;In:  SL=0 FI=0 RX=LonI:"0"
+;Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+;In:  SL=0 FI=0 RX=Real:"0"
+;Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+Func: fnLog10
+In:  SL=0 FI=0 RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+Func: fnLog2
+In:  SL=0 FI=0 RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+
+Func: fnInvert
+In:  SL=0 FI=0 RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"inf"
+
+
+Func: fnArctanh
+In:  SL=0 FI=0 RX=LonI:"1"
+Out: EC=0 FI=0 SL=1 RL=LonI:"1" RX=Real:"inf"
+
+In:  SL=0 FI=0 RX=Real:"1"
+Out: EC=0 FI=0 SL=1 RL=Real:"1" RX=Real:"inf"
+
+
+Func: fnGamma
+In:  SL=0 FI=0 RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+
+Func: fnArccosh
+In:  SL=0 FI=0 RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"0.999"
+Out: EC=0 FI=0 SL=1 RL=Real:"0.999" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+
+Func: fnArccos
+In:  SL=0 FI=0 RX=LonI:"2"
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-2"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"100"
+Out: EC=0 FI=0 SL=1 RL=LonI:"100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"1.001"
+Out: EC=0 FI=0 SL=1 RL=Real:"1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-1.001"
+Out: EC=0 FI=0 SL=1 RL=Real:"-1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN":DEG
+
+
+Func: fnArcsin
+In:  SL=0 FI=0 RX=LonI:"2"
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-2"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-2" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"100"
+Out: EC=0 FI=0 SL=1 RL=LonI:"100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"1.001"
+Out: EC=0 FI=0 SL=1 RL=Real:"1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-1.001"
+Out: EC=0 FI=0 SL=1 RL=Real:"-1.001" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN":DEG
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN":DEG
+
+
+Func: fnArctanh
+In:  SL=0 FI=0 RX=LonI:"2"
+Out: EC=0 FI=0 SL=1 RL=LonI:"2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-2"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"100"
+Out: EC=0 FI=0 SL=1 RL=LonI:"100" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-100"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-100" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"1.001"
+Out: EC=0 FI=0 SL=1 RL=Real:"1.001" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-1.001"
+Out: EC=0 FI=0 SL=1 RL=Real:"-1.001" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+
+Func: fnTan
+In:  SL=0 FI=0 RX=LonI:"90"
+Out: EC=0 FI=0 SL=1 RL=LonI:"90" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=LonI:"-90"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-90" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"90"
+Out: EC=0 FI=0 SL=1 RL=Real:"90" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-90"
+Out: EC=0 FI=0 SL=1 RL=Real:"-90" RX=Real:"NaN"
+
+
+Func: fnCube
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+Func: fnCubeRoot
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+Func: fnArcsinh
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+
+Func: fnArctan
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-90":DEG
+
+
+Func: fnTanh
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-1"
+
+
+Func: fnInvert
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+Func: fnExp
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+Func: fn10Pow
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+Func: fn2Pow
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+;Func: fnSinC
+;In:  SL=0 FI=0 RX=Real:"-inf"
+;Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+
+Func: fnSquare
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+
+Func: fnArccosh
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+
+Func: fnLn
+In:  SL=0 FI=0 RX=LonI:"-1"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-10"
+Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+;Func: fnLn1PX
+;In:  SL=0 FI=0 RX=LonI:"-1"
+;Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+;In:  SL=0 FI=0 RX=Real:"-inf"
+;Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+;In:  SL=0 FI=0 RX=Real:"-10"
+;Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+Func: fnLog10
+In:  SL=0 FI=0 RX=LonI:"-1"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-10"
+Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+Func: fnLog2
+In:  SL=0 FI=0 RX=LonI:"-1"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-1" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-10"
+Out: EC=0 FI=0 SL=1 RL=Real:"-10" RX=Real:"NaN"
+
+
+Func: fnInvert
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"0"
+
+;Func: fnSinc
+;In:  SL=0 FI=0 RX=Real:"inf"
+;Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"0"
+
+
+Func: fnTanh
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"1"
+
+
+Func: fnArctan
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"90":DEG
+
+
+Func: fnLn
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+;Func: fnLn1PX
+;In:  SL=0 FI=0 RX=Real:"inf"
+;Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnExp
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnSquare
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnSquareRoot
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnLog10
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fn10Pow
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnLog2
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnCube
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnCubeRoot
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnSinh
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnCosh
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnArcsinh
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fnArccosh
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+Func: fn2Pow
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+
+Func: fnCos
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+Func: fnSin
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+Func: fnTan
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+Func: fnArctanh
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+
+Func: fnAdd
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"99"
+Out: EC=0 FI=0 SL=1 RL=Real:"99" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"99"
+Out: EC=0 FI=0 SL=1 RL=LonI:"99" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"99"
+Out: EC=0 FI=0 SL=1 RL=Real:"99" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"99"
+Out: EC=0 FI=0 SL=1 RL=LonI:"99" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"99" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=LonI:"99" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=Real:"99" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=LonI:"99" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+
+Func: fnSubtract
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"99"
+Out: EC=0 FI=0 SL=1 RL=Real:"99" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"99"
+Out: EC=0 FI=0 SL=1 RL=LonI:"99" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"99"
+Out: EC=0 FI=0 SL=1 RL=Real:"99" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"99"
+Out: EC=0 FI=0 SL=1 RL=LonI:"99" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"99" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=LonI:"99" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=Real:"99" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=LonI:"99" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+
+Func: fnMultiply
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"5"
+Out: EC=0 FI=0 SL=1 RL=Real:"5" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"-5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-5" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"-5"
+Out: EC=0 FI=0 SL=1 RL=Real:"-5" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"-5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"-5" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"-5"
+Out: EC=0 FI=0 SL=1 RL=Real:"-5" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"5"
+Out: EC=0 FI=0 SL=1 RL=Real:"5" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=LonI:"5" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"5" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=LonI:"-5" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"-5" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=LonI:"-5" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-5" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=LonI:"5" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"5" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=LonI:"0" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"0" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=LonI:"0" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"0" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+
+
+Func: fnDivide
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"99" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=LonI:"99" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-99" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=LonI:"-99" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"99" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=LonI:"99" RX=LonI:"0"
+Out: EC=1 FI=0 SL=0 RX=LonI:"0"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-99" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=LonI:"-99" RX=LonI:"0"
+Out: EC=1 FI=0 SL=0 RX=LonI:"0"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"0" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=LonI:"0" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"0" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=LonI:"0" RX=LonI:"0"
+Out: EC=1 FI=0 SL=0 RX=LonI:"0"
+
+
+
+Func: fnPower
+In:  SL=0 FI=0 RY=Real:"0" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=LonI:"0" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"0" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=LonI:"0" RX=LonI:"0"
+Out: EC=1 FI=0 SL=0 RX=LonI:"0"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"0"
+Out: EC=0 FI=0 SL=1 RL=Real:"0" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"0"
+Out: EC=0 FI=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RY=Real:"-10" RX=Real:"-10.2"
+Out: EC=0 FI=0 SL=1 RL=Real:"-10.2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-10.2" RX=Real:"-10.2"
+Out: EC=0 FI=0 SL=1 RL=Real:"-10.2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=LonI:"-10" RX=Real:"-10.2"
+Out: EC=0 FI=0 SL=1 RL=Real:"-10.2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-10" RX=Real:"10.2"
+Out: EC=0 FI=0 SL=1 RL=Real:"10.2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=Real:"-10.2" RX=Real:"10.2"
+Out: EC=0 FI=0 SL=1 RL=Real:"10.2" RX=Real:"NaN"
+
+In:  SL=0 FI=0 RY=LonI:"-10" RX=Real:"10.2"
+Out: EC=0 FI=0 SL=1 RL=Real:"10.2" RX=Real:"NaN"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"5"
+Out: EC=0 FI=0 SL=1 RL=Real:"5" RX=Real:"-inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"5"
+Out: EC=0 FI=0 SL=1 RL=LonI:"5" RX=Real:"-inf"
+
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=Real:"6"
+Out: EC=0 FI=0 SL=1 RL=Real:"6" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"-inf" RX=LonI:"6"
+Out: EC=0 FI=0 SL=1 RL=LonI:"6" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"5.6"
+Out: EC=0 FI=0 SL=1 RL=Real:"5.6" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"6"
+Out: EC=0 FI=0 SL=1 RL=Real:"6" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=LonI:"6"
+Out: EC=0 FI=0 SL=1 RL=LonI:"6" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+
+In:  SL=0 FI=0 RY=Real:"5.6" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+In:  SL=0 FI=0 RY=Real:"7" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+In:  SL=0 FI=0 RY=LonI:"7" RX=Real:"-inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+
+
+In:  SL=0 FI=0 RY=Real:"5.6" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=Real:"7" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"
+
+In:  SL=0 FI=0 RY=LonI:"7" RX=Real:"inf"
+Out: EC=0 FI=0 SL=1 RL=Real:"inf" RX=Real:"inf"

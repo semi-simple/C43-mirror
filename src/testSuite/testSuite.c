@@ -68,6 +68,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnCos",                  fnCos                 },
   {"fnCosh",                 fnCosh                },
   {"fnCountBits",            fnCountBits           },
+  { "fnCross",                      fnCross               },
   {"fnCube",                 fnCube                },
   {"fnCubeRoot",             fnCubeRoot            },
   {"fnCxToRe",               fnCxToRe              },

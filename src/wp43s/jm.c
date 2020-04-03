@@ -210,7 +210,21 @@ void fnInDefault(uint16_t inputDefault) {
 
 
 
-/********************************************//**
+
+
+void Show_User_Keys(void) {
+  userModeEnabled = false;
+  toggleUserMode();
+}
+
+
+void Show_Normal_Keys(void) {
+  userModeEnabled = true;
+  toggleUserMode();
+}
+
+
+/********************************************//** XXX
  * \brief Set Norm_Key_00_VAR
  *
  * \param[in] sigmaAssign uint16_t
@@ -218,9 +232,8 @@ void fnInDefault(uint16_t inputDefault) {
  ***********************************************/
 void fnSigmaAssign(uint16_t sigmaAssign) {
   Norm_Key_00_VAR = sigmaAssign;
-  userModeEnabled = !userModeEnabled; toggleUserMode(); //JMUSER
-
-  fnRefreshRadioState(RB_SA, sigmaAssign);
+  fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+  Show_Normal_Keys();
 }
 
 
@@ -315,9 +328,9 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
     X_REG = longIntegerToInt(lgInt);
     longIntegerFree(lgInt);
-  //printf("Xreg %d\n", X_REG);
+    //printf("Xreg %d\n", X_REG);
     Norm_Key_00_VAR = X_REG;
-    userModeEnabled = !userModeEnabled; toggleUserMode(); //JMUSER
+    Show_Normal_Keys();
   }
 }
 
@@ -1276,19 +1289,6 @@ void fnUserJM(uint16_t jmUser) {
     Show_User_Keys();
     break;
 
-  case USER_ALPHA:                                              //USER_DEFAULTS FOR USER: E+ ALPHA
-    kbd_usr[0].primary     = ITM_AIM;
-    Norm_Key_00_VAR        = ITM_AIM;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
-    break;
-
-  case USER_MYM:                                              //USER_DEFAULTS FOR USER: E+ MYM
-    kbd_usr[0].primary     = -MNU_MyMenu;
-    Norm_Key_00_VAR        = -MNU_MyMenu;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
-    break;
 
 #ifdef JM_LAYOUT_1A                         //JM LAYOUT 1A.
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
@@ -1311,7 +1311,7 @@ void fnUserJM(uint16_t jmUser) {
 
 #ifdef JM_LAYOUT_2_DM42_STRICT              //JM LAYOUT 42
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
-    kbd_usr[12].gShifted   = KEY_CC;
+    //kbd_usr[12].gShifted   = KEY_CC;
     kbd_usr[0].primary     = -MNU_MyMenu;
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
@@ -1327,6 +1327,8 @@ void fnUserJM(uint16_t jmUser) {
     Show_User_Keys();
     break;
 #endif
+
+
 
   case USER_SHIFTS:                                             //USER_SHIFTS 25          //JM Sectioon to be put on a menu
     kbd_usr[0].primary     = KEY_USERMODE;
@@ -1344,6 +1346,42 @@ void fnUserJM(uint16_t jmUser) {
     Show_User_Keys();
     break;
 
+
+  case USER_SIGMAPLUS:                                              //USER_DEFAULTS FOR USER: E+ E+
+    kbd_usr[0].primary     = ITM_SIGMAPLUS;
+    Norm_Key_00_VAR        = ITM_SIGMAPLUS;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+  case USER_PRGM:                                              //USER_DEFAULTS FOR USER: E+ PRGM
+    kbd_usr[0].primary     = ITM_PR;
+    Norm_Key_00_VAR        = ITM_PR;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+  case USER_USER:                                              //USER_DEFAULTS FOR USER: E+ USER
+    kbd_usr[0].primary     = KEY_USERMODE;
+    Norm_Key_00_VAR        = KEY_USERMODE;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+  case USER_ALPHA:                                              //USER_DEFAULTS FOR USER: E+ ALPHA
+    kbd_usr[0].primary     = ITM_AIM;
+    Norm_Key_00_VAR        = ITM_AIM;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+  case USER_MYM:                                              //USER_DEFAULTS FOR USER: E+ MYM
+    kbd_usr[0].primary     = -MNU_MyMenu;
+    Norm_Key_00_VAR        = -MNU_MyMenu;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
   case USER_GSHFT:                                           //USER_DEFAULTS FOR USER: E+ SHIFT G
     kbd_usr[0].primary     = KEY_g;
     kbd_usr[0].gShifted    = ITM_NULL;
@@ -1352,8 +1390,6 @@ void fnUserJM(uint16_t jmUser) {
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
-
-
 
   case USER_RESET:                                              //USER_RESET 26
     memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -1382,12 +1418,6 @@ void fnUserJM(uint16_t jmUser) {
   }
 }
 
-
-
-void Show_User_Keys(void) {
-  userModeEnabled = false;
-  toggleUserMode();
-}
 
 
 

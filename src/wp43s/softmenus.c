@@ -162,9 +162,11 @@ const int16_t menu_Nbin[]        = { ITM_NBINP,                     ITM_NBIN,   
 const int16_t menu_Poiss[]       = { ITM_POISSP,                    ITM_POISS,                  ITM_NULL,                 ITM_NULL,              ITM_POISSU,                  ITM_POISSM1                   };
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
-/*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
+/*                                  <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_PFN[]         = { ITM_INPUT,                     ITM_END,                    ITM_ERR,                  ITM_TICKS,             ITM_PAUSE,                   -MNU_PFN2,
+const int16_t menu_PFN[]         = { ITM_LBL,                       ITM_RTN,                    ITM_END,                  ITM_GTO,               ITM_XEQ,                     -MNU_PFN2,          //JM
+
+                                     ITM_INPUT,                     ITM_END,                    ITM_ERR,                  ITM_TICKS,             ITM_PAUSE,                   -MNU_PFN2,
                                      ITM_PSTO,                      ITM_PRCL,                   ITM_ALPHAOFF,             ITM_ALPHAON,           ITM_CNST,                    ITM_PUTK,
                                      ITM_R_CLR,                     ITM_R_COPY,                 ITM_R_SORT,               ITM_R_SWAP,            ITM_LocR,                    ITM_POPLR                     };
 
@@ -444,33 +446,33 @@ const int16_t menu_ASN_N[]       = {
                                      -MNU_ASN,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_SH_NORM_E,               ITM_GET_NORM_E                };    //JM USER NAORMAL MODE
 
 const int16_t menu_ASN[]         = { 
-      ITM_USER_DEFAULTS, ITM_USER_COMPLEX, ITM_USER_SHIFTS, ITM_USER_RESET, ITM_JM_SEEK, /*ITM_JM_ASN*/ KEY_USERMODE,
-      ITM_USER_ALPHA,    ITM_USER_CC,      ITM_USER_GSHFT,  ITM_USER_MYM,   ITM_NULL,      ITM_NULL,
-     -MNU_ASN_N,         ITM_NULL,         ITM_NULL,        ITM_NULL,       ITM_NULL,      ITM_NULL,
-
-      K_00U, K_01U, K_02U, K_03U, K_04U, K_05U,  //JM USER
-      Kf00U, Kf01U, Kf02U, Kf03U, Kf04U, Kf05U,  //JM USER
-      Kg00U, Kg01U, Kg02U, Kg03U, Kg04U, Kg05U,  //JM USER
-
-      K_06U, K_07U, K_08U, K_09U, K_10U, K_11U,  //JM USER
-      Kf06U, Kf07U, Kf08U, Kf09U, Kf10U, Kf11U,  //JM USER
-      Kg06U, Kg07U, Kg08U, Kg09U, Kg10U, Kg11U,  //JM USER
-
-      K_12U, K_13U, K_14U, K_15U, K_16U,   ITM_NULL,  //JM USER
-      Kf12U, Kf13U, Kf14U, Kf15U, Kf16U,   ITM_NULL,  //JM USER
-      Kg12U, Kg13U, Kg14U, Kg15U, Kg16U,   ITM_NULL,  //JM USER
-/*    K_17U, K_18U, K_19U, K_20U, K_21U,   ITM_NULL,  //JM USER
-      Kf17U, Kf18U, Kf19U, Kf20U, Kf21U,   ITM_NULL,  //JM USER
-      Kg17U, Kg18U, Kg19U, Kg20U, Kg21U,   ITM_NULL,  //JM USER
-      K_22U, K_23U, K_24U, K_25U, K_26U,   ITM_NULL,  //JM USER
-      Kf22U, Kf23U, Kf24U, Kf25U, Kf26U,   ITM_NULL,  //JM USER
-      Kg22U, Kg23U, Kg24U, Kg25U, Kg26U,   ITM_NULL,  //JM USER
-      K_27U, K_28U, K_29U, K_30U, K_31U,   ITM_NULL,  //JM USER
-      Kf27U, Kf28U, Kf29U, Kf30U, Kf31U,   ITM_NULL,  //JM USER
-      Kg27U, Kg28U, Kg29U, Kg30U, Kg31U,   ITM_NULL,  //JM USER
-      K_32U, K_33U, K_34U, K_35U, K_36U,   ITM_NULL,  //JM USER
-      Kf32U, Kf33U, Kf34U, Kf35U, Kf36U,   ITM_NULL,  //JM USER
-      Kg32U, Kg33U, Kg34U, Kg35U, Kg36U,   ITM_NULL   //JM USER
+                                     ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_USER_SHIFTS,          ITM_USER_RESET,        ITM_NULL,                    KEY_USERMODE,         /*ITM_JM_ASN*/
+                                     ITM_USER_ALPHA,                ITM_USER_CC,                ITM_USER_GSHFT,           ITM_USER_MYM,          ITM_NULL,                    ITM_JM_SEEK,
+                                     ITM_USER_PRGM,                 ITM_USER_USER,              ITM_NULL,                 ITM_USER_SIGMAPLUS,    ITM_NULL,                    -MNU_ASN_N,
+                                                                          
+                                     K_00U,                         K_01U,                      K_02U,                    K_03U,                 K_04U,                       K_05U,  //JM USER
+                                     Kf00U,                         Kf01U,                      Kf02U,                    Kf03U,                 Kf04U,                       Kf05U,  //JM USER
+                                     Kg00U,                         Kg01U,                      Kg02U,                    Kg03U,                 Kg04U,                       Kg05U,  //JM USER
+                                                                                                                           
+                                     K_06U,                         K_07U,                      K_08U,                    K_09U,                 K_10U,                       K_11U,  //JM USER
+                                     Kf06U,                         Kf07U,                      Kf08U,                    Kf09U,                 Kf10U,                       Kf11U,  //JM USER
+                                     Kg06U,                         Kg07U,                      Kg08U,                    Kg09U,                 Kg10U,                       Kg11U,  //JM USER
+                                                                                                                           
+                                     K_12U,                         K_13U,                      K_14U,                    K_15U,                 K_16U,                       ITM_NULL,  //JM USER
+                                     Kf12U,                         Kf13U,                      Kf14U,                    Kf15U,                 Kf16U,                       ITM_NULL,  //JM USER
+                                     Kg12U,                         Kg13U,                      Kg14U,                    Kg15U,                 Kg16U,                       ITM_NULL,  //JM USER
+/*                                   K_17U,                         K_18U,                      K_19U,                    K_20U,                 K_21U,                       ITM_NULL,  //JM USER
+                                     Kf17U,                         Kf18U,                      Kf19U,                    Kf20U,                 Kf21U,                       ITM_NULL,  //JM USER
+                                     Kg17U,                         Kg18U,                      Kg19U,                    Kg20U,                 Kg21U,                       ITM_NULL,  //JM USER
+                                     K_22U,                         K_23U,                      K_24U,                    K_25U,                 K_26U,                       ITM_NULL,  //JM USER
+                                     Kf22U,                         Kf23U,                      Kf24U,                    Kf25U,                 Kf26U,                       ITM_NULL,  //JM USER
+                                     Kg22U,                         Kg23U,                      Kg24U,                    Kg25U,                 Kg26U,                       ITM_NULL,  //JM USER
+                                     K_27U,                         K_28U,                      K_29U,                    K_30U,                 K_31U,                       ITM_NULL,  //JM USER
+                                     Kf27U,                         Kf28U,                      Kf29U,                    Kf30U,                 Kf31U,                       ITM_NULL,  //JM USER
+                                     Kg27U,                         Kg28U,                      Kg29U,                    Kg30U,                 Kg31U,                       ITM_NULL,  //JM USER
+                                     K_32U,                         K_33U,                      K_34U,                    K_35U,                 K_36U,                       ITM_NULL,  //JM USER
+                                     Kf32U,                         Kf33U,                      Kf34U,                    Kf35U,                 Kf36U,                       ITM_NULL,  //JM USER
+                                     Kg32U,                         Kg33U,                      Kg34U,                    Kg35U,                 Kg36U,                       ITM_NULL   //JM USER
  */
       };
 
@@ -504,13 +506,16 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
 /* 5 Middle f    */  /* 5 */         KEY_UP1,                       ITM_RBR,                    -MNU_INFO,                -MNU_CONST,            -MNU_XFN,                    -MNU_SUMS,                          //JM HOME
 
 
+
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
 #ifdef INLINE_TEST                                                              //vv dr
-/* 4 Top    g    */  /* 4 */        -MNU_INL_TST,                   -MNU_CPX,                   -MNU_EXP,                 -MNU_BASE,             -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+/* 4 Top    g    */  /* 4 */        -MNU_INL_TST,                   -MNU_CPX,                   -MNU_EXP,                 KEY_CC,                -MNU_FIN,                    KEY_UNDO,                           //JM HOME
 #else                                                                           //^^
-/* 4 Top    g    */  /* 4 */         ITM_ENTER,                     -MNU_CPX,                   -MNU_EXP,                 -MNU_BASE,             -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+/* 4 Top    g    */  /* 4 */         ITM_ENTER,                     -MNU_CPX,                   -MNU_EXP,                 KEY_CC,                -MNU_FIN,                    KEY_UNDO,                           //JM HOME
 #endif                                                                          //dr
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+
+
                                                                                                                                                                                                                   //JM HOME
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
                                      ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME

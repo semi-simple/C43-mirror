@@ -126,7 +126,11 @@ void fnUserJM(uint16_t jmUser);
 #define USER_ALPHA       33
 #define USER_GSHFT       34
 #define USER_CC          35
-#define USER_MYM         36 //last number
+#define USER_MYM         36
+#define USER_PRGM        37
+#define USER_USER        38
+#define USER_SIGMAPLUS   39
+ //last number
 
 
 

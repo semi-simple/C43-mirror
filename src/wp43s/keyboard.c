@@ -147,7 +147,7 @@ void resetShiftState(void) {
 void executeFunction(int16_t fn, int16_t itemShift) {
   int16_t row, func;
   const softmenu_t *sm;
-printf("Exec %d=\n",fn);
+  //printf("Exec %d=\n",fn); //JMEXEC
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
@@ -657,7 +657,7 @@ void btnPressed(void *notUsed, void *data) {
     case      KEY_DOWN1: break;
     default:  SHOWregis = 9999; break;     
   }
-printf("###\n");
+  //printf("###\n"); //JMEXEC
 #ifdef JM_MULTISHIFT ////MULTISHIFT AND CLRDROP                                //JM TIMER - checks on any key pressed.
 
   JM_auto_drop_enabled = false;                       //JM TIMER CLRDROP

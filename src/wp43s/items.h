@@ -1992,8 +1992,11 @@
 #define ITM_SI_T                      1948   //JM PRE UNIT
 #define ITM_USER_CC                   1949   //JM USER
 #define ITM_USER_MYM                  1950   //JM USER
+#define ITM_USER_PRGM                 1951   //JM USER
+#define ITM_USER_USER                 1952   //JM USER
+#define ITM_USER_SIGMAPLUS            1953   //JM USER
 
-#define LAST_ITEM                     1951   //JM
+#define LAST_ITEM                     1954   //JM
 
 #define CHR_PROD_SIGN                 9999
 

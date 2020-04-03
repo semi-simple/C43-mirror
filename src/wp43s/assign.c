@@ -139,7 +139,7 @@ const calcKey_t kbd_std[37] = {
        
  {41,   ITM_ENTER,        ITM_AIM,        -MNU_CPX,      ITM_ENTER,      ITM_ENTER,        ITM_NULL,        ITM_NULL,      ITM_ENTER    }, //JM
  {42,   ITM_XexY,         ITM_LASTX,      -MNU_EXP,      CHR_ex,         CHR_M,            CHR_ex,          CHR_MU,        ITM_NULL     }, //JM
- {43,   ITM_CHS,         -MNU_MODE,       -MNU_BASE,     CHR_PLUS_MINUS, CHR_N,            CHR_PLUS_MINUS,  CHR_NU,        ITM_NULL     }, //JM
+ {43,   ITM_CHS,         -MNU_MODE,        KEY_CC,       CHR_PLUS_MINUS, CHR_N,            CHR_PLUS_MINUS,  CHR_NU,        ITM_NULL     }, //JM
  {44,   ITM_EXPONENT,    -MNU_DSP,        -MNU_FIN,      ITM_NULL,       CHR_O,            CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
  {45,   KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,     KEY_BACKSPACE,  KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,      KEY_BACKSPACE}, //JM
                  

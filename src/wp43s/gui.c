@@ -2278,10 +2278,10 @@ void calcModeAimGui(void) {
   labelCaptionAimFaChr(   keys,   lbl21Fa, CHR_ALPHA);          //JM new
   labelCaptionAim(keys++, btn21A, lbl21Gr, lbl21L);     //vv dr - new AIM
 //  labelCaptionAimFa(keys, lbl22Fa);                     //vv dr - new AIM
-  labelCaptionAimFaChr(   keys,   lbl22Fa, CHR_SQUARE_ROOT);          //JM new
+  labelCaptionAimFaChr(   keys,   lbl22Fa, CHR_NUMBER_SIGN);          //JM new
   labelCaptionAim(keys++, btn22A, lbl22Gr, lbl22L);
 //  labelCaptionAimFa(keys, lbl23Fa);                     //vv dr - new AIM
-  labelCaptionAimFaChr(   keys,   lbl23Fa, CHR_NUMBER_SIGN);          //JM
+  labelCaptionAimFaChr(   keys,   lbl23Fa, CHR_SQUARE_ROOT);          //JM
   labelCaptionAim(keys++, btn23A, lbl23Gr, lbl23L);
   labelCaptionAim(keys++, btn24A, lbl24Gr, lbl24L);
   labelCaptionAim(keys++, btn25A, lbl25Gr, lbl25L);

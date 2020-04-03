@@ -1333,8 +1333,9 @@ void fnUserJM(uint16_t jmUser) {
   case USER_SHIFTS:                                             //USER_SHIFTS 25          //JM Sectioon to be put on a menu
     kbd_usr[0].primary     = KEY_USERMODE;
     kbd_usr[9].primary     = -MNU_TRI;
-    kbd_usr[9].fShifted    = KEY_USERMODE;
-    kbd_usr[9].gShifted    = ITM_RTN;
+    //    kbd_usr[9].fShifted    = KEY_USERMODE;
+    //    kbd_usr[9].gShifted    = ITM_RTN;
+    kbd_usr[9].fShifted    = ITM_NULL;
     kbd_usr[10].primary    = KEY_f;
     kbd_usr[10].fShifted   = ITM_NULL;
     kbd_usr[10].gShifted   = ITM_NULL;

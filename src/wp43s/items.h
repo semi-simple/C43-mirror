@@ -1987,8 +1987,13 @@
 #define ITM_VECT                      1943   //JMVECT
 #define ITM_TOFILE                    1944   //TOFILE
 #define ITM_P_ALLREGS                 1945   //JM Print all regs
+#define ITM_SI_f                      1946   //JM PRE UNIT
+#define ITM_SI_G                      1947   //JM PRE UNIT
+#define ITM_SI_T                      1948   //JM PRE UNIT
+#define ITM_USER_CC                   1949   //JM USER
+#define ITM_USER_MYM                  1950   //JM USER
 
-#define LAST_ITEM                     1946   //JM
+#define LAST_ITEM                     1951   //JM
 
 #define CHR_PROD_SIGN                 9999
 

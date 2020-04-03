@@ -121,7 +121,7 @@ const calcKey_t kbd_std[37] = {
 #endif //JM END OF LAYOUT 1a.
 
 
-#ifdef JM_LAYOUT_2_DM42_STRICT //JM DM42 STRICT. NAME CHANGE TO LAYOUT 42C
+#ifdef JM_LAYOUT_2_DM42_STRICT //JM DM42 STRICT. NAME CHANGE FROM LAYOUT 2 TO LAYOUT 42C
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_RND,         ITM_PROFRC,   ITM_NULL,       CHR_A,           -MNU_ALPHAintl,   CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_XTHROOT,  CHR_CHECK_MARK, CHR_B,            CHR_CHECK_MARK,  CHR_BETA,      ITM_ST_B     }, //JM

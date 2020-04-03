@@ -67,12 +67,21 @@
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
   #endif
-//SWAP THE BELOW TWO DEFINES
-  #define JM_LAYOUT_1A               //Preferred layout
-//#define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
-  #if defined(JM_LAYOUT_2_DM42_STRICT)
-    #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
+
+
+  #define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
+
+  #ifndef SWAP_LAYOUTS
+      #define JM_LAYOUT_1A               //Preferred layout
   #endif
+
+  #ifdef SWAP_LAYOUTS
+      #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
+      #if defined(JM_LAYOUT_2_DM42_STRICT)
+        #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
+      #endif
+  #endif
+
 #endif
 
 #ifdef DMCP_BUILD

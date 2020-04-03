@@ -147,6 +147,7 @@ void resetShiftState(void) {
 void executeFunction(int16_t fn, int16_t itemShift) {
   int16_t row, func;
   const softmenu_t *sm;
+printf("Exec %d=\n",fn);
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
@@ -656,7 +657,7 @@ void btnPressed(void *notUsed, void *data) {
     case      KEY_DOWN1: break;
     default:  SHOWregis = 9999; break;     
   }
-
+printf("###\n");
 #ifdef JM_MULTISHIFT ////MULTISHIFT AND CLRDROP                                //JM TIMER - checks on any key pressed.
 
   JM_auto_drop_enabled = false;                       //JM TIMER CLRDROP
@@ -806,7 +807,7 @@ void btnPressed(void *notUsed, void *data) {
     int16_t item = determineItem(key);
     //printf("1: %d, %s, %s, calcMode %d CM_NORMAL %d, userModeEnabled %d shiftF %d shiftG %d \n",item, indexOfItems[item].itemCatalogName,indexOfItems[item].itemSoftmenuName, calcMode,CM_NORMAL,userModeEnabled,shiftF,shiftG);
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE
-    if((calcMode == CM_NORMAL) && (!userModeEnabled && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
+    if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!userModeEnabled && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
       //printf("%d", stringToKeyNumber(data));
       item = Norm_Key_00_VAR;
     }
@@ -1484,9 +1485,10 @@ void btnReleased(void *notUsed, void *data) {
 void fnComplexCCCC(uint16_t unusedParamButMandatory) {
   // Emulating a CC key stroke
   //if(!shiftF) {
-  //shiftF = true;
-  //shiftStateChanged = true; //dr
+  //  shiftF = true;
+  //  shiftStateChanged = true;
   //}
+  //btnClicked(NULL, "09"); // Index 9 of kbd_std array (beginning with "{34,   KEY_CC,") in file assign.c
   int16_t Norm_Key_00_VAR_M = Norm_Key_00_VAR;   //JM Use key 00 as temporary location for CC, which is not normally on the 43C keyboard.
   Norm_Key_00_VAR        = KEY_CC;               //JM
   btnClicked(NULL, "00");

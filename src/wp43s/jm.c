@@ -1070,7 +1070,7 @@ DEPRECIATED for Martin
   else
 */
 
-  if(JM_OPCODE >= 34 && JM_OPCODE <= 39) {                                       //screenshot
+  if(JM_OPCODE >= 34 && JM_OPCODE <= 42)   {                                       //screenshot
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_L, 99);   // STO TMP
     switch (JM_OPCODE) {
@@ -1106,6 +1106,25 @@ DEPRECIATED for Martin
       } break;
       case 39: {
         fnStrInputLongint("1000000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+
+      case 40: {
+        fnStrInputLongint("1000000000000000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      case 41: {
+        fnStrInputLongint("1000000000");
+        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+      } break;
+      case 42: {
+        fnStrInputLongint("1000000000000");
         copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
         multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
         adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
@@ -1264,6 +1283,13 @@ void fnUserJM(uint16_t jmUser) {
     Show_User_Keys();
     break;
 
+  case USER_MYM:                                              //USER_DEFAULTS FOR USER: E+ MYM
+    kbd_usr[0].primary     = -MNU_MyMenu;
+    Norm_Key_00_VAR        = -MNU_MyMenu;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
 #ifdef JM_LAYOUT_1A                         //JM LAYOUT 1A.
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].fShifted   = KEY_CC;                            //JM Changed CPX menu therefore USER MODE changes
@@ -1271,6 +1297,13 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = -MNU_MyMenu;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+  case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
+    kbd_usr[0].primary     = KEY_CC;
+    Norm_Key_00_VAR        = KEY_CC;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
@@ -1283,6 +1316,13 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].gShifted    = KEY_TYPCON_UP;
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = -MNU_MyMenu;
+    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    Show_User_Keys();
+    break;
+
+  case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
+    kbd_usr[0].primary     = KEY_CC;
+    Norm_Key_00_VAR        = KEY_CC;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     Show_User_Keys();
     break;
@@ -1629,17 +1669,17 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
  ***********************************************/
 void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
-  userModeEnabled = true;
-  shiftF = true;                  //JM
+  userModeEnabled = false;
+  shiftF = false;                 //JM
   shiftG = false;                 //JM
-#ifdef PC_BUILD
-  btnClicked(NULL, "00");         //JM changed from 02
-#endif
-#ifdef DMCP_BUILD
-  btnClicked(NULL, "00");         //JM changed from 02
-#endif
+  int16_t Norm_Key_00_VAR_M;
+  Norm_Key_00_VAR_M = Norm_Key_00_VAR;   //JM Use key 00 as temporary location for CC, which is not normally on the 43C keyboard.
+  Norm_Key_00_VAR        = KEY_CC1;               //JM
+  btnClicked(NULL, "00");
+  Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
   userModeEnabled = userModeEnabledMEM;
 }
+
 
 
 
@@ -1651,15 +1691,14 @@ void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDW
  ***********************************************/
 void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWIRED FOR TOP LEFT BUTTON
   userModeEnabledMEM = userModeEnabled;
-  userModeEnabled = true;
+  userModeEnabled = false;
   shiftF = false;                 //JM
   shiftG = false;                 //JM
-  #ifdef PC_BUILD
-    btnClicked(NULL, "00");       //JM changed from 02
-  #endif
-  #ifdef DMCP_BUILD
-    btnClicked(NULL, "00");       //JM changed from 02
-  #endif
+  int16_t Norm_Key_00_VAR_M;
+  Norm_Key_00_VAR_M = Norm_Key_00_VAR;   //JM Use key 00 as temporary location for CC, which is not normally on the 43C keyboard.
+  Norm_Key_00_VAR        = KEY_CC;               //JM
+  btnClicked(NULL, "00");
+  Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
   userModeEnabled = userModeEnabledMEM;
 }
 //JM^^^^^^^

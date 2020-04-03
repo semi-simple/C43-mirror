@@ -33,10 +33,6 @@ Modes available in the mode menu:
 8. ALPHAHOME
 */
 
-/*********   MAIN OPTION SELECTION                  */
-//#define JM_LAYOUT_2_DM42_STRICT  //DM42 compatible layout
-//#define JM_LAYOUT_1A             //Preferred layout
-
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
@@ -119,14 +115,20 @@ void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
 void fnUserJM(uint16_t jmUser);
+
+//fnUserJM
 #define USER_DEFAULTS    23
 #define USER_COMPLEX     24
 #define USER_SHIFTS      25
 #define USER_RESET       26
-#define USER_ALPHA       33
-#define USER_GSHFT       34 //last number
 #define JM_ASSIGN        27
 #define JM_SEEK_FN       28
+#define USER_ALPHA       33
+#define USER_GSHFT       34
+#define USER_CC          35
+#define USER_MYM         36 //last number
+
+
 
 void fnJM_GetXToNORMmode(uint16_t Rubbish);
 void fnJMUSERmode   (uint16_t JM_KEY);

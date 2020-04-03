@@ -2508,7 +2508,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn85A);      //^^
 
   gtk_widget_show(lbl81L);
-  gtk_widget_show(lbl81F); //JM added OFF with Layout2
+  gtk_widget_show(lbl81F); //JM added OFF with Layout 42 LAYOUT42
 /*gtk_widget_show(lbl82L);      //vv dr - new AIM
   gtk_widget_show(lbl83L);
   gtk_widget_show(lbl84L);

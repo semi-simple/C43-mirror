@@ -920,7 +920,7 @@ const item_t indexOfItems[] = {
 /*  484 */  { fnCvtToCurrentAngularMode,   AM_RADIAN,                   "RAD" STD_RIGHT_ARROW,                         "RAD" STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  485 */  { itemToBeCoded,               NOPARAM,                     "RAM",                                         "RAM",                                         CAT_MENU, SLS_UNCHANGED},
 /*  486 */  { fnRandom,                    NOPARAM,                     "RAN#",                                        "RAN#",                                        CAT_FNCT, SLS_ENABLED  },
-/*  487 */  { registerBrowser,             NOPARAM,                     "REGS.V",                                      "REGS.V",                                      CAT_FNCT, SLS_UNCHANGED},   //JM Changed RBR to REGS
+/*  487 */  { registerBrowser,             NOPARAM,                     "REGS.V",                                      "REGS",                                      CAT_FNCT, SLS_UNCHANGED},   //JM Changed RBR to REGS
 /*  488 */  { fnRecall,                    TM_STORCL,                   "RCL",                                         "RCL",                                         CAT_FNCT, SLS_ENABLED  },
 /*  489 */  { fnRecallConfig,              NOPARAM,                     "RCLCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  490 */  { fnRecallElement,             NOPARAM,                     "RCLEL",                                       "RCLEL",                                       CAT_FNCT, SLS_ENABLED  },
@@ -1020,7 +1020,7 @@ const item_t indexOfItems[] = {
 /*  584 */  { fnStackSize,                 SS_8,                        "SSIZE8",                                      "SSIZE8",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  585 */  { fnGetStackSize,              NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  586 */  { itemToBeCoded,               NOPARAM,                     "STAT",                                        "STAT",                                        CAT_MENU, SLS_UNCHANGED},
-/*  587 */  { flagBrowser,                 NOPARAM,                     "FLAGS.V",                                     "FLAGS.V",                                     CAT_FNCT, SLS_UNCHANGED},   //JM Changed STATUS
+/*  587 */  { flagBrowser,                 NOPARAM,                     "FLAGS.V",                                     "FLGS",                                        CAT_FNCT, SLS_UNCHANGED},   //JM Changed STATUS
 /*  588 */  { itemToBeCoded,               NOPARAM,                     "STK",                                         "STK",                                         CAT_MENU, SLS_UNCHANGED},
 /*  589 */  { fnStore,                     TM_STORCL,                   "STO",                                         "STO",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  590 */  { fnStoreConfig,               NOPARAM,                     "STOCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
@@ -2219,7 +2219,7 @@ const item_t indexOfItems[] = {
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
 /* 1771 */  { fnGraph,                     3,                           "DEMO",                                        "DEMO",                                        CAT_FNCT, SLS_ENABLED  },
 
-/* 1772 */  { itemToBeCoded,               NOPARAM,                     "K.PK",                                        "K.PK",                                        CAT_MENU, SLS_UNCHANGED},
+/* 1772 */  { itemToBeCoded,               NOPARAM,                     "KEYS",                                        "KEYS",                                        CAT_MENU, SLS_UNCHANGED},
 
 /* 1773 */  { fnJMUSERmode,                256+0,                       "",                                            "K_00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)
 /* 1774 */  { fnJMUSERmode_f,              256+0,                       "",                                            "Kf00U",                                       CAT_NONE, SLS_UNCHANGED},   //JM User mode (Will remove later - reserved)
@@ -2395,6 +2395,11 @@ const item_t indexOfItems[] = {
 /* 1943 */  { fnSetSetJM,                  JC_VECT,                     "VECTOR",                                      "VECTOR",                                      CAT_FNCT, SLS_UNCHANGED},   //JM VECTOR MODE
 /* 1944 */  { fnSetSetJM,                  NOPARAM,                     "TOFILE",                                      "TOFILE",                                      CAT_FNCT, SLS_UNCHANGED},   //JM CSV FILE MODE
 /* 1945 */  { fnP_All_Regs,                0,                           STD_PRINTER "ALLr",                            STD_PRINTER "ALLr",                            CAT_FNCT, SLS_UNCHANGED},
+/* 1946 */  { fnJM,                        40,                          STD_DOT "f",                                   STD_DOT "f",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1947 */  { fnJM,                        41,                          STD_DOT "G",                                   STD_DOT "G",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1948 */  { fnJM,                        42,                          STD_DOT "T",                                   STD_DOT "T",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
+/* 1949 */  { fnUserJM,                    USER_CC,                     "U" STD_SIGMA STD_DOT "CC",                    "U" STD_SIGMA STD_DOT "CC",                    CAT_NONE, SLS_UNCHANGED},
+/* 1950 */  { fnUserJM,                    USER_MYM,                    "U" STD_SIGMA STD_DOT "MYM",                   "U" STD_SIGMA STD_DOT "MYM",                   CAT_NONE, SLS_UNCHANGED},
 
-/* 1946 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1951 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

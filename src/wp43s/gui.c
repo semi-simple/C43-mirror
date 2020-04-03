@@ -22,10 +22,8 @@
 
 #ifdef PC_BUILD
 GtkWidget *grid;
-GtkWidget *backgroundImage;
+GtkWidget *backgroundImage, *bezelImage;
 GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
-GtkWidget *lblFKey1,*lblFKey2,*lblFKey3;
-GtkWidget *lblGKey1,*lblGKey2,*lblGKey3;
 GtkWidget *lblBehindScreen;
 
 GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
@@ -1250,6 +1248,8 @@ void calcModeNormalGui(void) {
   labelCaptionNormal(keys++, btn84, lbl84F, lbl84G, lbl84L);
   labelCaptionNormal(keys++, btn85, lbl85F, lbl85G, lbl85L);
 
+  gtk_image_set_from_file((GtkImage *)bezelImage, "WP43S_normal.png");
+
   gtk_widget_show(btn11);
   gtk_widget_show(btn12);
   gtk_widget_show(btn13);
@@ -1264,27 +1264,6 @@ void calcModeNormalGui(void) {
   gtk_widget_show(btn25);
   gtk_widget_show(btn26);
 
-  gtk_widget_show(lbl21F);
-  gtk_widget_show(lbl21G);
-  gtk_widget_show(lbl21H);
-  gtk_widget_show(lbl21L);
-  gtk_widget_show(lbl22F);
-  gtk_widget_show(lbl22G);
-  gtk_widget_show(lbl22L);
-  gtk_widget_show(lbl23F);
-  gtk_widget_show(lbl23G);
-  gtk_widget_show(lbl23L);
-  gtk_widget_show(lbl24F);
-  gtk_widget_show(lbl24G);
-  gtk_widget_show(lbl24L);
-  gtk_widget_show(lbl25F);
-  gtk_widget_show(lbl25G);
-  gtk_widget_show(lbl25L);
-  gtk_widget_show(lbl26L);
-  gtk_widget_show(lbl26F);
-  gtk_widget_show(lbl26G);
-  gtk_widget_show(lbl26H);
-
   gtk_widget_show(btn31);
   gtk_widget_show(btn32);
   gtk_widget_show(btn33);
@@ -1292,45 +1271,11 @@ void calcModeNormalGui(void) {
   gtk_widget_show(btn35);
   gtk_widget_show(btn36);
 
-  gtk_widget_show(lbl31F);
-  gtk_widget_show(lbl31G);
-  gtk_widget_show(lbl31L);
-  gtk_widget_show(lbl32F);
-  gtk_widget_show(lbl32G);
-  gtk_widget_show(lbl32L);
-  gtk_widget_show(lbl33F);
-  gtk_widget_show(lbl33G);
-  gtk_widget_show(lbl33H);
-  gtk_widget_show(lbl33L);
-  gtk_widget_show(lbl34F);
-  gtk_widget_show(lbl34G);
-  gtk_widget_show(lbl34H);
-  gtk_widget_show(lbl34L);
-  gtk_widget_show(lbl35G);
-  gtk_widget_show(lbl36F);
-
   gtk_widget_show(btn41);
   gtk_widget_show(btn42);
   gtk_widget_show(btn43);
   gtk_widget_show(btn44);
   gtk_widget_show(btn45);
-
-  gtk_widget_show(lbl41F);
-  gtk_widget_show(lbl41G);
-  gtk_widget_show(lbl42F);
-  gtk_widget_show(lbl42G);
-  gtk_widget_show(lbl42H);
-  gtk_widget_show(lbl42L);
-  gtk_widget_show(lbl43F);
-  gtk_widget_show(lbl43G);
-  gtk_widget_show(lbl43L);
-  gtk_widget_show(lbl43P);
-  gtk_widget_show(lbl44F);
-  gtk_widget_show(lbl44G);
-  gtk_widget_show(lbl44L);
-  gtk_widget_show(lbl44P);
-  gtk_widget_show(lbl45F);
-  gtk_widget_show(lbl45G);
 
   gtk_widget_show(btn51);
   gtk_widget_show(btn52);
@@ -1338,43 +1283,11 @@ void calcModeNormalGui(void) {
   gtk_widget_show(btn54);
   gtk_widget_show(btn55);
 
-  gtk_widget_show(lbl51F);
-  gtk_widget_show(lbl51G);
-  gtk_widget_show(lbl51L);
-  gtk_widget_show(lbl52F);
-  gtk_widget_show(lbl52G);
-  gtk_widget_show(lbl52L);
-  gtk_widget_show(lbl53F);
-  gtk_widget_show(lbl53G);
-  gtk_widget_show(lbl53L);
-  gtk_widget_show(lbl54F);
-  gtk_widget_show(lbl54G);
-  gtk_widget_show(lbl54L);
-  gtk_widget_show(lbl55F);
-  gtk_widget_show(lbl55G);
-  gtk_widget_show(lbl55L);
-
   gtk_widget_show(btn61);
   gtk_widget_show(btn62);
   gtk_widget_show(btn63);
   gtk_widget_show(btn64);
   gtk_widget_show(btn65);
-
-  gtk_widget_show(lbl61F);
-  gtk_widget_show(lbl61G);
-  gtk_widget_show(lbl61L);
-  gtk_widget_show(lbl62F);
-  gtk_widget_show(lbl62G);
-  gtk_widget_show(lbl62L);
-  gtk_widget_show(lbl63F);
-  gtk_widget_show(lbl63G);
-  gtk_widget_show(lbl63L);
-  gtk_widget_show(lbl64F);
-  gtk_widget_show(lbl64G);
-  gtk_widget_show(lbl64L);
-  gtk_widget_show(lbl64H);
-  gtk_widget_show(lbl65F);
-  gtk_widget_show(lbl65G);
 
   gtk_widget_show(btn71);
   gtk_widget_show(btn72);
@@ -1382,48 +1295,11 @@ void calcModeNormalGui(void) {
   gtk_widget_show(btn74);
   gtk_widget_show(btn75);
 
-  gtk_widget_show(lbl71F);
-  gtk_widget_show(lbl71G);
-  gtk_widget_show(lbl71L);
-  gtk_widget_show(lbl71H);
-  gtk_widget_show(lbl72F);
-  gtk_widget_show(lbl72G);
-  gtk_widget_show(lbl72L);
-  gtk_widget_show(lbl72H);
-  gtk_widget_show(lbl73F);
-  gtk_widget_show(lbl73G);
-  gtk_widget_show(lbl73L);
-  gtk_widget_show(lbl74F);
-  gtk_widget_show(lbl74G);
-  gtk_widget_show(lbl74L);
-  gtk_widget_show(lbl75F);
-  gtk_widget_show(lbl75G);
-
   gtk_widget_show(btn81);
   gtk_widget_show(btn82);
   gtk_widget_show(btn83);
   gtk_widget_show(btn84);
   gtk_widget_show(btn85);
-
-  gtk_widget_show(lbl81F);
-  gtk_widget_show(lbl81G);
-  gtk_widget_show(lbl81L);
-  gtk_widget_show(lbl82H);
-  gtk_widget_show(lbl82F);
-  gtk_widget_show(lbl82G);
-  gtk_widget_show(lbl82L);
-  gtk_widget_show(lbl83F);
-  gtk_widget_show(lbl83G);
-  gtk_widget_show(lbl83L);
-  gtk_widget_show(lbl83H);
-  gtk_widget_show(lbl84F);
-  gtk_widget_show(lbl84G);
-  gtk_widget_show(lbl84H);
-  gtk_widget_show(lbl84L);
-  gtk_widget_show(lbl85F);
-  gtk_widget_show(lbl85G);
-
-  gtk_widget_show(lblOn);
 
   moveLabels();
 }
@@ -1481,7 +1357,7 @@ void calcModeAimGui(void) {
   labelCaptionAim(keys++, btn84, lbl84Gr, lbl84L);
   labelCaptionAim(keys++, btn85, lbl85Gr, lbl85L);
 
-  gtk_widget_show(lblOn);
+  gtk_image_set_from_file((GtkImage *)bezelImage, "WP43S_AIM.png");
 
   gtk_widget_show(btn11);
   gtk_widget_show(btn12);
@@ -1497,23 +1373,6 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn25);
   gtk_widget_show(btn26);
 
-  gtk_widget_show(lbl21H);
-  gtk_widget_show(lbl26H);
-  gtk_widget_show(lbl21L);
-  gtk_widget_show(lbl22L);
-  gtk_widget_show(lbl23L);
-  gtk_widget_show(lbl24L);
-  gtk_widget_show(lbl25L);
-  gtk_widget_show(lbl26L);
-  //gtk_widget_show(lbl26F);
-  //gtk_widget_show(lbl26G);
-  gtk_widget_show(lbl21Gr);
-  gtk_widget_show(lbl22Gr);
-  gtk_widget_show(lbl23Gr);
-  gtk_widget_show(lbl24Gr);
-  gtk_widget_show(lbl25Gr);
-  gtk_widget_show(lbl26Gr);
-
   gtk_widget_show(btn31);
   gtk_widget_show(btn32);
   gtk_widget_show(btn33);
@@ -1521,38 +1380,11 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn35);
   gtk_widget_show(btn36);
 
-  gtk_widget_show(lbl31F);
-  gtk_widget_show(lbl31L);
-  gtk_widget_show(lbl32L);
-  gtk_widget_show(lbl33H);
-  gtk_widget_show(lbl33L);
-  gtk_widget_show(lbl34L);
-  //gtk_widget_show(lbl34H);
-  gtk_widget_show(lbl31Gr);
-  gtk_widget_show(lbl32Gr);
-  gtk_widget_show(lbl33Gr);
-  gtk_widget_show(lbl34Gr);
-  gtk_widget_show(lbl35G);
-  gtk_widget_show(lbl36F);
-
   gtk_widget_show(btn41);
   gtk_widget_show(btn42);
   gtk_widget_show(btn43);
   gtk_widget_show(btn44);
   gtk_widget_show(btn45);
-
-  gtk_widget_show(lbl41F);
-  gtk_widget_show(lbl41G);
-  gtk_widget_show(lbl42L);
-  gtk_widget_show(lbl43L);
-  gtk_widget_show(lbl43P);
-  gtk_widget_show(lbl44L);
-  gtk_widget_show(lbl44P);
-  gtk_widget_show(lbl45F);
-  gtk_widget_show(lbl45G);
-  gtk_widget_show(lbl42Gr);
-  gtk_widget_show(lbl43Gr);
-  gtk_widget_show(lbl44Gr);
 
   gtk_widget_show(btn51);
   gtk_widget_show(btn52);
@@ -1560,35 +1392,11 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn54);
   gtk_widget_show(btn55);
 
-  gtk_widget_show(lbl51L);
-  //gtk_widget_show(lbl51F);
-  //gtk_widget_show(lbl51G);
-
-  gtk_widget_show(lbl52L);
-  gtk_widget_show(lbl53L);
-  gtk_widget_show(lbl54L);
-  gtk_widget_show(lbl55L);
-  gtk_widget_show(lbl51Gr);
-  gtk_widget_show(lbl52Gr);
-  gtk_widget_show(lbl53Gr);
-  gtk_widget_show(lbl54Gr);
-
   gtk_widget_show(btn61);
   gtk_widget_show(btn62);
   gtk_widget_show(btn63);
   gtk_widget_show(btn64);
   gtk_widget_show(btn65);
-
-  gtk_widget_show(lbl61L);
-  gtk_widget_show(lbl62L);
-  gtk_widget_show(lbl63L);
-  gtk_widget_show(lbl64L);
-  gtk_widget_show(lbl65F);
-  gtk_widget_show(lbl65G);
-  gtk_widget_show(lbl61Gr);
-  gtk_widget_show(lbl62Gr);
-  gtk_widget_show(lbl63Gr);
-  gtk_widget_show(lbl64Gr);
 
   gtk_widget_show(btn71);
   gtk_widget_show(btn72);
@@ -1596,40 +1404,13 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn74);
   gtk_widget_show(btn75);
 
-  gtk_widget_show(lbl71L);
-  //gtk_widget_show(lbl71G);
-  gtk_widget_show(lbl72L);
-  gtk_widget_show(lbl73L);
-  gtk_widget_show(lbl74L);
-  gtk_widget_show(lbl75F);
-  gtk_widget_show(lbl75G);
-  gtk_widget_show(lbl71Gr);
-  gtk_widget_show(lbl72Gr);
-  gtk_widget_show(lbl73Gr);
-  gtk_widget_show(lbl74Gr);
-
   gtk_widget_show(btn81);
   gtk_widget_show(btn82);
   gtk_widget_show(btn83);
   gtk_widget_show(btn84);
   gtk_widget_show(btn85);
 
-  gtk_widget_show(lbl81L);
-  gtk_widget_show(lbl82L);
-  gtk_widget_show(lbl83L);
-  gtk_widget_show(lbl84L);
-  gtk_widget_show(lbl84H);
-  gtk_widget_show(lbl85F);
-  gtk_widget_show(lbl85G);
-  gtk_widget_show(lbl81Gr);
-  gtk_widget_show(lbl82Gr);
-  gtk_widget_show(lbl83Gr);
-
-  gtk_widget_show(lblOn);
-
-  gtk_widget_show(lbl31G);
   moveLabels();
-  gtk_widget_hide(lbl31G);
 }
 
 
@@ -2036,8 +1817,10 @@ void setupUI(void) {
     backgroundImage = gtk_image_new_from_file("dm42l.png");
   }
 
-  gtk_fixed_put(GTK_FIXED(grid), backgroundImage,  0, 0);
+  gtk_fixed_put(GTK_FIXED(grid), backgroundImage, 0, 0);
 
+  bezelImage = gtk_image_new_from_file("WP43S_normal.png");
+  gtk_fixed_put(GTK_FIXED(grid), bezelImage, 30, 424);
 
   // Areas for the g shifted softkeys
   lblGSoftkeyArea = gtk_label_new("");
@@ -2052,38 +1835,6 @@ void setupUI(void) {
   gtk_widget_set_name(lblFSoftkeyArea, "fSoftkeyArea");
   gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
   gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
-
-
-
-  // Frame around the f key
-  lblFKey1 = gtk_label_new("");
-  lblFKey2 = gtk_label_new("");
-  lblFKey3 = gtk_label_new("");
-  gtk_widget_set_name(lblFKey1, "fSoftkeyArea");
-  gtk_widget_set_name(lblFKey2, "fSoftkeyArea");
-  gtk_widget_set_name(lblFKey3, "fSoftkeyArea");
-  gtk_widget_set_size_request(lblFKey1,  5, 45);
-  gtk_widget_set_size_request(lblFKey2, 61,  5);
-  gtk_widget_set_size_request(lblFKey3,  5, 45);
-  gtk_fixed_put(GTK_FIXED(grid), lblFKey1, 349, 522);
-  gtk_fixed_put(GTK_FIXED(grid), lblFKey2, 350, 563);
-  gtk_fixed_put(GTK_FIXED(grid), lblFKey3, 407, 522);
-
-
-
-  // Frame around the g key
-  lblGKey1 = gtk_label_new("");
-  lblGKey2 = gtk_label_new("");
-  lblGKey3 = gtk_label_new("");
-  gtk_widget_set_name(lblGKey1, "gSoftkeyArea");
-  gtk_widget_set_name(lblGKey2, "gSoftkeyArea");
-  gtk_widget_set_name(lblGKey3, "gSoftkeyArea");
-  gtk_widget_set_size_request(lblGKey1,  5, 45);
-  gtk_widget_set_size_request(lblGKey2, 61,  5);
-  gtk_widget_set_size_request(lblGKey3,  5, 45);
-  gtk_fixed_put(GTK_FIXED(grid), lblGKey1, 349 + DELTA_KEYS_X, 522);
-  gtk_fixed_put(GTK_FIXED(grid), lblGKey2, 350 + DELTA_KEYS_X, 563);
-  gtk_fixed_put(GTK_FIXED(grid), lblGKey3, 407 + DELTA_KEYS_X, 522);
 
 
 

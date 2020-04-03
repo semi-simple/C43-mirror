@@ -287,6 +287,9 @@
 		<Unit filename="src/testSuite/cosh.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/cross.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/cube.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -327,6 +330,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dot.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/exp.txt">

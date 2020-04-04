@@ -1452,8 +1452,8 @@ void moveLabels(void) {
   yPos += DELTA_KEYS_Y + 1;
   gtk_widget_get_preferred_size(  lbl51F, NULL, &lblF);
   gtk_widget_get_preferred_size(  lbl51G, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl51F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width *0-40 +2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);//JM align [f] arrowUp (*0-40)
-  gtk_fixed_move(GTK_FIXED(grid), lbl51G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width *0-40 +2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);//JM align [f] arrowUp (*0-40)
+  gtk_fixed_move(GTK_FIXED(grid), lbl51F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);//JM align [f] arrowUp (*0-40)
+  gtk_fixed_move(GTK_FIXED(grid), lbl51G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);//JM align [f] arrowUp (*0-40)
   //gtk_widget_get_preferred_size(  lbl51Gr, NULL, &lblG);
   //gtk_fixed_move(GTK_FIXED(grid), lbl51Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
 
@@ -1502,8 +1502,8 @@ void moveLabels(void) {
   yPos += DELTA_KEYS_Y + 1;
   gtk_widget_get_preferred_size(  lbl61F, NULL, &lblF);
   gtk_widget_get_preferred_size(  lbl61G, NULL, &lblG);
-  gtk_fixed_move(GTK_FIXED(grid), lbl61F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width *0-40 +2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM align [f] arrowDn (*0-40)
-  gtk_fixed_move(GTK_FIXED(grid), lbl61G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width *0-40 +2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM align [f] arrowDn (*0-40)
+  gtk_fixed_move(GTK_FIXED(grid), lbl61F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM align [f] arrowDn (*0-40)
+  gtk_fixed_move(GTK_FIXED(grid), lbl61G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM align [f] arrowDn (*0-40)
   //gtk_widget_get_preferred_size(  lbl61Gr, NULL, &lblG);                                                                       //JM10
   //gtk_fixed_move(GTK_FIXED(grid), lbl61Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);          //JM10
 
@@ -2942,7 +2942,7 @@ void setupUI(void) {
     backgroundImage = gtk_image_new_from_file("dm42l_L2.png");
 #endif //JM Layout
 #if defined(JM_LAYOUT_1A) //JM LAYOUT 1
-    backgroundImage = gtk_image_new_from_file("dm42l.png");
+    backgroundImage = gtk_image_new_from_file("dm42l_L1.png");
 #endif //JM Layout
 
   }

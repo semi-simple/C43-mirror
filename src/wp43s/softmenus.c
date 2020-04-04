@@ -64,9 +64,9 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_CXtoRE,               ITM_REtoCX,            ITM_RECT,                    ITM_POLAR                     };    //JM re-arranged menu
                         /*KEY_CC1 removed this one*/
 
-const int16_t menu_DSP[]         = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
+const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
                                      ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_NULL,                    -MNU_CFG,                           //JM added CFG
-                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };    //JM added SIGFIG & UNIT
+                                     ITM_DSTACK,                    ITM_GAP,                    ITM_RANGE,                ITM_GETRANGE,              ITM_RECT,                    ITM_POLAR                     };    //JM added SIGFIG & UNIT
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              -MNU_GRAPH,                  ITM_NULL                      };
@@ -95,7 +95,7 @@ const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,    
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
                                      ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,                 
 
-                                     ITM_SH_INP_DEF,                ITM_SH_ERPN,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM INFO
+                                     ITM_GETRANGE,                  ITM_SH_INP_DEF,             ITM_SH_ERPN,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM INFO
               
 
 const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
@@ -563,7 +563,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_CLK,         .numItems = sizeof(menu_CLK        )/sizeof(int16_t), .softkeyItem = menu_CLK         },
   {.menuId = -MNU_CLR,         .numItems = sizeof(menu_CLR        )/sizeof(int16_t), .softkeyItem = menu_CLR         },
   {.menuId = -MNU_CPX,         .numItems = sizeof(menu_CPX        )/sizeof(int16_t), .softkeyItem = menu_CPX         },
-  {.menuId = -MNU_DSP,         .numItems = sizeof(menu_DSP        )/sizeof(int16_t), .softkeyItem = menu_DSP         },
+  {.menuId = -MNU_DSP,         .numItems = sizeof(menu_DISP       )/sizeof(int16_t), .softkeyItem = menu_DISP        },
   {.menuId = -MNU_EQN,         .numItems = sizeof(menu_EQN        )/sizeof(int16_t), .softkeyItem = menu_EQN         },
   {.menuId = -MNU_1STDERIV,    .numItems = sizeof(menu_1stDeriv   )/sizeof(int16_t), .softkeyItem = menu_1stDeriv    },
   {.menuId = -MNU_2NDDERIV,    .numItems = sizeof(menu_2ndDeriv   )/sizeof(int16_t), .softkeyItem = menu_2ndDeriv    },

@@ -186,12 +186,8 @@ bool_t realCompareLessThan(const real_t *number1, const real_t *number2) {
 bool_t real34IsAnInteger(const real34_t *x) {
   real34_t y;
 
-  if(real34IsNaN(x)) {
+  if(real34IsNaN(x) || real34IsInfinite(x)) {
     return false;
-  }
-
-  if(real34IsInfinite(x)) {
-    return true;
   }
 
   real34ToIntegralValue(x, &y, DEC_ROUND_DOWN);

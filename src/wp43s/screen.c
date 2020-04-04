@@ -59,7 +59,7 @@ void copyScreenToClipboard(void) {
 
 
 #endif
-#if defined (PC_BUILD) || defined (DMCP_BUILD)
+#if defined (PC_BUILD) || defined (DMCP_BUILD)        //JMCSV
 
 
 static void angularUnitToString(uint32_t angularMode, char *string) {
@@ -79,7 +79,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   longInteger_t lgInt;
   int16_t base, sign, n;
   uint64_t shortInt;
-  char tmp2[3000];
+  char tmp2[3000];                   //JMCSV
   static const char digits[17] = "0123456789ABCDEF";
 
   switch(getRegisterDataType(regist)) {

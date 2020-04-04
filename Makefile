@@ -79,7 +79,7 @@ SRC_WP43S                = \
 		wp43s.c memory.c) \
 	$(addprefix src/wp43s/mathematics/, \
 		10pow.c 2pow.c addition.c agm.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \
-		ceil.c changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cube.c cubeRoot.c \
+		ceil.c changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cross.c cube.c cubeRoot.c \
 		cxToRe.c cpyx.c idiv.c idivr.c decomp.c dot.c \
 		division.c exp.c expt.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c log10.c \

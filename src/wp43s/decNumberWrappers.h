@@ -194,31 +194,8 @@ typedef struct {real34_t real, imag;}                     complex34_t;
                                                                 destination = decGetInt(&tmp); \
                                                                 ctxtReal39.round = savedRoundingMode; \
                                                                }
-// There is somehow an issue with the decNumberToInt32 function... Or more likely there is something I don't understand
-#define realToInt32Original(source, destination)               {enum rounding savedRoundingMode; \
-                                                                real_t tmp; \
-                                                                savedRoundingMode = ctxtReal39.round; \
-                                                                ctxtReal39.round = DEC_ROUND_DOWN; \
-                                                                decNumberToIntegralValue(&tmp, source, &ctxtReal39); \
-                                                                destination = decNumberToInt32(&tmp, &ctxtReal39); \
-                                                                ctxtReal39.round = savedRoundingMode; \
-                                                               }
-#define realToIntegralValue(source, destination, mode, ctxt)   {enum rounding savedRoundingMode; \
-                                                                savedRoundingMode = (ctxt)->round; \
-                                                                (ctxt)->round = mode; \
-                                                                decNumberToIntegralValue(destination, source, ctxt); \
-                                                                (ctxt)->round = savedRoundingMode; \
-                                                               }
 #define realToReal34(source, destination)                      decQuadFromNumber        ((real34_t *)(destination), source, &ctxtReal34)
 #define realToString(source, destination)                      decNumberToString        (source, destination)
-#define realToUInt32(source, destination)                      {enum rounding savedRoundingMode; \
-                                                                real_t tmp; \
-                                                                savedRoundingMode = ctxtReal39.round; \
-                                                                ctxtReal39.round = DEC_ROUND_DOWN; \
-                                                                decNumberRescale(&tmp, source, const_0, &ctxtReal39); \
-                                                                destination = decNumberToUInt32(&tmp, &ctxtReal39); \
-                                                                ctxtReal39.round = savedRoundingMode; \
-                                                               }
 #define realZero(destination)                                  decNumberZero            (destination)
 #define stringToReal(source, destination, ctxt)                decNumberFromString      (destination, source, ctxt)
 #define uInt32ToReal(source, destination)                      decNumberFromUInt32      (destination, source)

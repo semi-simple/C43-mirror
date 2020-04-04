@@ -447,7 +447,7 @@ void setupDefaults(void) {
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
 
-  exponentLimit = 9999;             //JMMAX
+  exponentLimit = 6145;             //JMMAX
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;

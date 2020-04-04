@@ -2406,7 +2406,7 @@ const item_t indexOfItems[] = {
 /* 1950 */  { fnUserJM,                    USER_MYM,                    "U" STD_SIGMA STD_DOT "MYM",                   "U" STD_SIGMA STD_DOT "MYM",                   CAT_NONE, SLS_UNCHANGED},
 /* 1951 */  { fnUserJM,                    USER_PRGM,                   "U" STD_SIGMA STD_DOT "PRGM",                  "U" STD_SIGMA STD_DOT "PRGM",                  CAT_NONE, SLS_UNCHANGED},
 /* 1952 */  { fnUserJM,                    USER_USER,                   "U" STD_SIGMA STD_DOT "USER",                  "U" STD_SIGMA STD_DOT "USER",                  CAT_NONE, SLS_UNCHANGED},
-/* 1953 */  { fnUserJM,                    USER_SIGMAPLUS,              U STD_SIGMA STD_DOT STD_SIGMA "+",             U STD_SIGMA STD_DOT STD_SIGMA "+",             CAT_NONE, SLS_UNCHANGED},
+/* 1953 */  { fnUserJM,                    USER_SIGMAPLUS,              "U" STD_SIGMA STD_DOT STD_SIGMA "+",           "U" STD_SIGMA STD_DOT STD_SIGMA "+",           CAT_NONE, SLS_UNCHANGED},
 
 /* 1954 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

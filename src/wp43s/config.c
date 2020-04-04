@@ -497,6 +497,57 @@ void fnComplexMode(uint16_t cm) {
 
 
 
+void fnRange(uint16_t unusedParamButMandatory) {
+  longInteger_t longInt;
+
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, longInt);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), longInt, DEC_ROUND_DOWN);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot use %s for setting RANGE", getRegisterDataTypeName(REGISTER_X, true, true));
+      showInfoDialog("In function fnRange:", errorMessage, NULL, NULL);
+    #endif
+    return;
+  }
+
+  longIntegerSetPositiveSign(longInt);
+
+  if(longIntegerCompareInt(longInt, 6145) > 0) {
+    exponentLimit = 6145;
+  }
+  else if(longIntegerCompareInt(longInt, 99) < 0) {
+    exponentLimit = 99;
+  }
+  else {
+    exponentLimit = (int16_t)(longInt->_mp_d[0]);
+  }
+
+  longIntegerFree(longInt);
+  refreshStack();
+}
+
+
+
+void fnGetRange(uint16_t unusedParamButMandatory) {
+  longInteger_t range;
+
+  liftStack();
+
+  longIntegerInit(range);
+  uIntToLongInteger(exponentLimit, range);
+  convertLongIntegerToLongIntegerRegister(range, REGISTER_X);
+  longIntegerFree(range);
+
+  refreshStack();
+}
+
+
+
 void fnClAll(uint16_t confirmation) {
   if(confirmation == NOT_CONFIRMED) {
     setConfirmationMode(fnClAll);
@@ -630,6 +681,8 @@ void fnReset(uint16_t confirmation) {
     #endif // TESTSUITE_BUILD
 
     oldTime[0] = 0;
+
+    exponentLimit = 6145;                               //JMMAX
 
     temporaryInformation = TI_RESET;
 

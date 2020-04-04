@@ -447,7 +447,7 @@ void setupDefaults(void) {
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
 
-  exponentLimit = 9999;             //JMMAX
+  exponentLimit = 6145;             //JMMAX
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
@@ -487,7 +487,7 @@ int main(int argc, char* argv[]) {
   calcLandscape             = false;
   calcAutoLandscapePortrait = true;
 
-  for(int arg=1; arg<=argc-1; arg++) {
+  for(int arg=1; arg<argc; arg++) {
     if(strcmp(argv[arg], "--landscape") == 0) {
       calcLandscape             = true;
       calcAutoLandscapePortrait = false;
@@ -513,19 +513,6 @@ int main(int argc, char* argv[]) {
   setupUI();
 
   setupDefaults();
-
-  // Without the following 8 lines of code
-  // the f- and g-shifted labels are
-  // miss aligned! I dont know why!
-  calcModeAimGui();
-  while(gtk_events_pending()) {
-    gtk_main_iteration();
-  }
-  calcModeNormalGui();
-  while(gtk_events_pending()) {
-    gtk_main_iteration();
-  }
-
 
   restoreCalc();
   //fnReset(CONFIRMED);

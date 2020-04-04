@@ -36,6 +36,7 @@
 #include "conjugate.h"
 #include "cos.h"
 #include "cosh.h"
+#include "cross.h"
 #include "cube.h"
 #include "cubeRoot.h"
 #include "cxToRe.h"

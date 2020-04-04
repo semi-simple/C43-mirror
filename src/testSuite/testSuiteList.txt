@@ -49,7 +49,6 @@ initialSettings
 
 ;debug
 
-
 ulp
 neighb
 min
@@ -124,6 +123,8 @@ parallel_complexMatrix
 parallel_shortInteger
 parallel_real
 parallel_complex
+
+specialResults
 
 ;Answer to the Ultimate Question of Life
 ultimateQuestionOfLife
@@ -206,3 +207,4 @@ decomp
 
 matrix
 dot
+cross

@@ -402,7 +402,10 @@ void fnCountBits                (uint16_t unusedParamButMandatory) {}
 void fnNextPrime                (uint16_t unusedParamButMandatory) {}
 void fnScreenDump               (uint16_t unusedParamButMandatory) {}
 void fnArg                      (uint16_t unusedParamButMandatory) {}
+void fnRange                    (uint16_t unusedParamButMandatory) {}
+void fnGetRange                 (uint16_t unusedParamButMandatory) {}
 void fnDot                      (uint16_t unusedParamButMandatory) {}
+void fnCross                    (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
@@ -433,6 +436,7 @@ void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}          /
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -534,7 +538,7 @@ const item_t indexOfItems[] = {
 /*   98 */  { fnComplexResult,             true,                        "CPXRES",                                      "CPXRES",                                      CAT_NONE, SLS_UNCHANGED},   //dr
 /*   99 */  { itemToBeCoded,               NOPARAM,                     "CPXS",                                        "CPXS",                                        CAT_MENU, SLS_UNCHANGED},
 /*  100 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  101 */  { itemToBeCoded,               NOPARAM,                     "CROSS",                                       "cross",                                       CAT_FNCT, SLS_UNCHANGED},
+/*  101 */  { fnCross,                     NOPARAM,                     "CROSS",                                       "cross",                                       CAT_FNCT, SLS_ENABLED  },
 /*  102 */  { fnCvtCwtKg,                  multiply,                    "cwt" STD_RIGHT_ARROW "kg",                    "cwt" STD_RIGHT_ARROW "kg",                    CAT_FNCT, SLS_ENABLED  },
 /*  103 */  { fnCxToRe,                    NOPARAM,                     "CX" STD_RIGHT_ARROW "RE",                     "CX" STD_RIGHT_ARROW "RE",                     CAT_FNCT, SLS_ENABLED  },
 /*  104 */  { itemToBeCoded,               NOPARAM,                     "D",                                           "D",                                           CAT_RVAR, SLS_UNCHANGED},
@@ -558,7 +562,7 @@ const item_t indexOfItems[] = {
 /*  122 */  { fnDenMax,                    NOPARAM,                     "DENMAX",                                      "DENMAX",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  123 */  { itemToBeCoded,               NOPARAM,                     "DIGITS",                                      "DIGITS",                                      CAT_MENU, SLS_UNCHANGED},
 /*  124 */  { itemToBeCoded,               NOPARAM,                     "DISP",                                        "DISP",                                        CAT_MENU, SLS_UNCHANGED},
-/*  125 */  { fnDot,                       NOPARAM,                     "DOT",                                         "dot",                                         CAT_FNCT, SLS_UNCHANGED},
+/*  125 */  { fnDot,                       NOPARAM,                     "DOT",                                         "dot",                                         CAT_FNCT, SLS_ENABLED  },
 /*  126 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "DP",                          STD_RIGHT_ARROW "DP",                          CAT_FNCT, SLS_ENABLED  },
 /*  127 */  { fnDrop,                      NOPARAM,                     "DROP",                                        "DROP" STD_DOWN_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  128 */  { fnDropY,                     NOPARAM,                     "DROPy",                                       "DROPy",                                       CAT_FNCT, SLS_ENABLED  },
@@ -1202,8 +1206,8 @@ const item_t indexOfItems[] = {
 /*  766 */  { fnRandomI,                   NOPARAM,                     "RANI#",                                       "RANI#",                                       CAT_FNCT, SLS_ENABLED  },
 /*  767 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "x",                               STD_PRINTER "x",                               CAT_FNCT, SLS_UNCHANGED},
 /*  768 */  { itemToBeCoded,               NOPARAM,                     "SYS.FL",                                      "SYS.FL",                                      CAT_MENU, SLS_UNCHANGED},
-/*  769 */  { itemToBeCoded,               NOPARAM,                     "0769",                                        "0769",                                        CAT_FREE, SLS_UNCHANGED},
-/*  770 */  { itemToBeCoded,               NOPARAM,                     "0770",                                        "0770",                                        CAT_FREE, SLS_UNCHANGED},
+/*  769 */  { fnRange,                     NOPARAM,                     "RANGE",                                       "RANGE",                                       CAT_FNCT, SLS_ENABLED  },
+/*  770 */  { fnGetRange,                  NOPARAM,                     "RANGE?",                                      "RANGE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  771 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 "(x)",                       STD_chi STD_SUP_2 "(x)",                       CAT_FNCT, SLS_UNCHANGED},
 /*  772 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_p "(x)",             STD_chi STD_SUP_2 STD_SUB_p "(x)",             CAT_FNCT, SLS_UNCHANGED},
 /*  773 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_e "(x)",             STD_chi STD_SUP_2 STD_SUB_e "(x)",             CAT_FNCT, SLS_UNCHANGED},
@@ -2402,7 +2406,7 @@ const item_t indexOfItems[] = {
 /* 1950 */  { fnUserJM,                    USER_MYM,                    "U" STD_SIGMA STD_DOT "MYM",                   "U" STD_SIGMA STD_DOT "MYM",                   CAT_NONE, SLS_UNCHANGED},
 /* 1951 */  { fnUserJM,                    USER_PRGM,                   "U" STD_SIGMA STD_DOT "PRGM",                  "U" STD_SIGMA STD_DOT "PRGM",                  CAT_NONE, SLS_UNCHANGED},
 /* 1952 */  { fnUserJM,                    USER_USER,                   "U" STD_SIGMA STD_DOT "USER",                  "U" STD_SIGMA STD_DOT "USER",                  CAT_NONE, SLS_UNCHANGED},
-/* 1953 */  { fnUserJM,                    USER_SIGMAPLUS,              "U" STD_SIGMA STD_DOT STD_SIGMA "+",           "U" STD_SIGMA STD_DOT STD_SIGMA "+",       CAT_NONE, SLS_UNCHANGED},
+/* 1953 */  { fnUserJM,                    USER_SIGMAPLUS,              "U" STD_SIGMA STD_DOT STD_SIGMA "+",           "U" STD_SIGMA STD_DOT STD_SIGMA "+",           CAT_NONE, SLS_UNCHANGED},
 
 /* 1954 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}       //JM
 };

@@ -81,7 +81,9 @@ void mulComplexComplex(const real_t *factor1Real, const real_t *factor1Imag, con
   realCopy(factor2Real, &c);
   realCopy(factor2Imag, &d);
 
-  if(realIsNaN(&a) || realIsNaN(&b) || realIsNaN(&c) || realIsNaN(&d)) {
+  if(   realIsNaN(&a) || realIsNaN(&b) || realIsNaN(&c) || realIsNaN(&d)
+     || (realIsZero(&a) && realIsZero(&b) && (realIsInfinite(&c) || realIsInfinite(&d)))
+     || (realIsZero(&c) && realIsZero(&d) && (realIsInfinite(&a) || realIsInfinite(&b)))) {
     realCopy(const_NaN, productReal);
     realCopy(const_NaN, productImag);
     return;

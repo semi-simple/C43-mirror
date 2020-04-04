@@ -287,6 +287,9 @@
 		<Unit filename="src/testSuite/cosh.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/cross.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/cube.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -327,6 +330,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/division_time.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dot.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/exp.txt">
@@ -525,6 +531,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/slvq.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/specialResults.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/square.txt">
@@ -1187,6 +1196,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/cross.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/cross.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/cube.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1240,6 +1260,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/division.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dot.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dot.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

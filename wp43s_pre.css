@@ -21,18 +21,14 @@
 /* Replace $fHoverGold           with #ffff00 */
 /* Replace $gBlue                with #00ccff */
 /* Replace $gHoverBlue           with #00ffff */
-/* Replace $letterGrey           with #a5a5a5 */
-/* Replace $keyBorder            with #022901 */
-/* Replace $keyBackground        with #3a2517 */
+/* Replace $keyBorder            with #303030 */
+/* Replace $keyBackground        with #101010 */
 /* Replace $keyLabelColor        with #ffffff */
 /* Replace $bezelBackground      with #000000 */
 /* Replace $funcKeyBackground    with #808080 */
-/* Replace $keyHover             with #744a2e */
+/* Replace $keyHover             with #202020 */
 /* Replace $screenColor          with #222222 */
 /* Replace $behindScreen         with #303030 */
-/* Replace $numericKeyBorder     with #022901 */
-/* Replace $numericKeyBackground with #3a2517 */
-/* Replace $numericKeyLabelColor with #ffffff */
 /* Replace $radius               with 3px     */
 /**********************************************/
 
@@ -78,23 +74,6 @@
   border-width:  2px;
 }
 #calcKey:hover {background-color: $keyHover;}
-
-#calcNumericKey {
-  background:    $numericKeyBackground;
-  color:         $numericKeyLabelColor;
-  font-family:   WP43S_StandardFont;
-  font-style:    normal;
-  font-weight:   normal;
-  font-size:     33px;
-  border-radius: $radius;
-  padding:       0px;
-  padding-left:  4px;
-  padding-top:   0px;
-  padding-bottom:0px;
-  border-color:  $numericKeyBorder;
-  border-width:  2px;
-}
-#calcNumericKey:hover {background-color: $keyHover;}
 
 #calcKeyGoldenBorder {
   background:    $keyBackground;
@@ -144,89 +123,6 @@
   border-width:  2px;
 }
 #calcKeyG:hover {background-color: $gHoverBlue;}
-
-#fShifted {
-  background:  $bezelBackground;
-  color:       $fGold;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   18px;
-  padding:     0px;
-}
-
-#fShiftedUnderline {
-  background:  $bezelBackground;
-  color:       $fGold;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   18px;
-  text-decoration: underline;
-  padding:     0px;
-}
-
-#gShifted {
-  background:  $bezelBackground;
-  color:       $gBlue;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   18px;
-  padding:     0px;
-}
-
-#gShiftedUnderline {
-  background:  $bezelBackground;
-  color:       $gBlue;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   18px;
-  text-decoration: underline;
-  padding:     0px;
-}
-
-#greek {
-  background:  $bezelBackground;
-  color:       $gBlue;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   20px;
-  padding:     0px;
-}
-
-#greekUnderline {
-  background:  $bezelBackground;
-  color:       $gBlue;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   20px;
-  text-decoration: underline;
-  padding:     0px;
-}
-
-#On {
-  background:  $bezelBackground;
-  color:       $letterGrey;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   18px;
-  padding:     0px;
-}
-
-#letter {
-  background:  $bezelBackground;
-  color:       $letterGrey;
-  font-family: WP43S_StandardFont;
-  font-style:  normal;
-  font-weight: normal;
-  font-size:   19px;
-  padding:     0px;
-}
 
 #fColor {
   background: $fGold;

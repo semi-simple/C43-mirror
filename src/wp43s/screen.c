@@ -970,8 +970,11 @@ void refreshRegisterLine(calcRegister_t regist) {
         clearRegisterLine(Y_POSITION_OF_REGISTER_X_LINE - 4 - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), REGISTER_LINE_HEIGHT + (regist == REGISTER_X ? 3 : 0));
 
         #ifdef PC_BUILD
+          #if (DEBUG_REGISTER_L == 1 || SHOW_MEMORY_STATUS == 1)
+            char tmpStr[1000];
+          #endif
           #if (DEBUG_REGISTER_L == 1)
-            char string1[1000], string2[1000], *p, tmpStr[1000];
+            char string1[1000], string2[1000], *p;
             uint16_t i;
 
             strcpy(string1, "L = ");

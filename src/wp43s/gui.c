@@ -1085,7 +1085,7 @@ void setupUI(void) {
   //gdk_screen_get_monitor_geometry(gdk_screen_get_default(), 0, &monitor);
 
   if(calcAutoLandscapePortrait) {
-    calcLandscape = (monitor.height <  1025);
+    calcLandscape = (monitor.height < 1025);
   }
 
   // The main window

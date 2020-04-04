@@ -6,8 +6,92 @@ make -j8 V=1 clean_all
 rm ./backup.bin
 rm ./wp43c
 
+make -j8 V=1 mrproper
+
+find . -type f -name "* 2.css" -exec rm {} \;
+find . -type f -name "* 3.css" -exec rm {} \;
+find . -type f -name "* 4.css" -exec rm {} \;
+find . -type f -name "* 5.css" -exec rm {} \;
+find . -type f -name "* 6.css" -exec rm {} \;
+find . -type f -name "* 7.css" -exec rm {} \;
+find . -type f -name "* 8.css" -exec rm {} \;
+find . -type f -name "* 9.css" -exec rm {} \;
+find . -type f -name "* 10.css" -exec rm {} \;
+find . -type f -name "* 11.css" -exec rm {} \;
+find . -type f -name "* 12.css" -exec rm {} \;
+find . -type f -name "* 13.css" -exec rm {} \;
+find . -type f -name "* 14.css" -exec rm {} \;
+find . -type f -name "* 15.css" -exec rm {} \;
+find . -type f -name "* 16.css" -exec rm {} \;
+find . -type f -name "* 17.css" -exec rm {} \;
+find . -type f -name "* 18.css" -exec rm {} \;
+find . -type f -name "* 19.css" -exec rm {} \;
+find . -type f -name "* 20.css" -exec rm {} \;
+
+find . -type f -name "* 2.txt" -exec rm {} \;
+find . -type f -name "* 3.txt" -exec rm {} \;
+find . -type f -name "* 4.txt" -exec rm {} \;
+find . -type f -name "* 5.txt" -exec rm {} \;
+find . -type f -name "* 6.txt" -exec rm {} \;
+find . -type f -name "* 7.txt" -exec rm {} \;
+find . -type f -name "* 8.txt" -exec rm {} \;
+find . -type f -name "* 9.txt" -exec rm {} \;
+find . -type f -name "* 10.txt" -exec rm {} \;
+find . -type f -name "* 11.txt" -exec rm {} \;
+find . -type f -name "* 12.txt" -exec rm {} \;
+find . -type f -name "* 13.txt" -exec rm {} \;
+find . -type f -name "* 14.txt" -exec rm {} \;
+find . -type f -name "* 15.txt" -exec rm {} \;
+find . -type f -name "* 16.txt" -exec rm {} \;
+find . -type f -name "* 17.txt" -exec rm {} \;
+find . -type f -name "* 18.txt" -exec rm {} \;
+find . -type f -name "* 19.txt" -exec rm {} \;
+find . -type f -name "* 20.txt" -exec rm {} \;
+
+find . -type f -name "* 2.o" -exec rm {} \;
+find . -type f -name "* 3.o" -exec rm {} \;
+find . -type f -name "* 4.o" -exec rm {} \;
+find . -type f -name "* 5.o" -exec rm {} \;
+find . -type f -name "* 6.o" -exec rm {} \;
+find . -type f -name "* 7.o" -exec rm {} \;
+find . -type f -name "* 8.o" -exec rm {} \;
+find . -type f -name "* 9.o" -exec rm {} \;
+find . -type f -name "* 10.o" -exec rm {} \;
+find . -type f -name "* 11.o" -exec rm {} \;
+find . -type f -name "* 12.o" -exec rm {} \;
+find . -type f -name "* 13.o" -exec rm {} \;
+find . -type f -name "* 14.o" -exec rm {} \;
+find . -type f -name "* 15.o" -exec rm {} \;
+find . -type f -name "* 16.o" -exec rm {} \;
+find . -type f -name "* 17.o" -exec rm {} \;
+find . -type f -name "* 18.o" -exec rm {} \;
+find . -type f -name "* 19.o" -exec rm {} \;
+find . -type f -name "* 20.o" -exec rm {} \;
+
+find . -type f -name "* 2.d" -exec rm {} \;
+find . -type f -name "* 3.d" -exec rm {} \;
+find . -type f -name "* 4.d" -exec rm {} \;
+find . -type f -name "* 5.d" -exec rm {} \;
+find . -type f -name "* 6.d" -exec rm {} \;
+find . -type f -name "* 7.d" -exec rm {} \;
+find . -type f -name "* 8.d" -exec rm {} \;
+find . -type f -name "* 9.d" -exec rm {} \;
+find . -type f -name "* 10.d" -exec rm {} \;
+find . -type f -name "* 11.d" -exec rm {} \;
+find . -type f -name "* 12.d" -exec rm {} \;
+find . -type f -name "* 13.d" -exec rm {} \;
+find . -type f -name "* 14.d" -exec rm {} \;
+find . -type f -name "* 15.d" -exec rm {} \;
+find . -type f -name "* 16.d" -exec rm {} \;
+find . -type f -name "* 17.d" -exec rm {} \;
+find . -type f -name "* 18.d" -exec rm {} \;
+find . -type f -name "* 19.d" -exec rm {} \;
+find . -type f -name "* 20.d" -exec rm {} \;
+
+
 cd ./src
 cd ./wp43s
+
 
 rm "assign 2.o" "assign 3.o" "assign 4.o" "assign 5.o" "assign 6.o" "assign 7.o" "assign 8.o" "assign 9.o" "assign 10.o" "assign 11.o"
 rm "bufferize 2.o" "bufferize 3.o" "bufferize 4.o" "bufferize 5.o" "bufferize 6.o" "bufferize 7.o" "bufferize 8.o" "bufferize 9.o" "bufferize 10.o" "bufferize 11.o"
@@ -121,5 +205,6 @@ rm "ttf2RasterFonts" "ttf2RasterFonts 2" "ttf2RasterFonts 3" "ttf2RasterFonts 4"
 rm "wp43c" "wp43c 2" "wp43c 3" "wp43c 4" "wp43c 5" "wp43c 6" "wp43c 7" "wp43c 8" "wp43c 9" "wp43c 10" "wp43c 11"
 rm "testSuite" "testSuite 2" "testSuite 3" "testSuite 4" "testSuite 5" "testSuite 6" "testSuite 7" "testSuite 8" "testSuite 9" "testSuite 10"
 rm "backup 2.bin" "backup 3.bin" "backup 4.bin" "backup 5.bin" "backup 6.bin" "backup 7.bin" "backup 8.bin" "backup 9.bin" "backup 10.bin"
+rm "wp43s" "wp43s 2" "wp43s 3" "wp43s 4" "wp43s 5" "wp43s 6" "wp43s 7" "wp43s 8" "wp43s 9" "wp43s 10" "wp43s 11"
 
 

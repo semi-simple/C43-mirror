@@ -1093,7 +1093,7 @@ void setupUI(void) {
 
   if(calcLandscape) {
     #if (DEBUG_PANEL == 1)
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 540);
+      gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 1530);
       debugWidgetDx = 0;
       debugWidgetDy = 545;
     #else
@@ -1136,7 +1136,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), backgroundImage, 0, 0);
 
   bezelImage = gtk_image_new_from_file("WP43S_normal.png");
-  gtk_fixed_put(GTK_FIXED(grid), bezelImage, 30, 424);
+  gtk_fixed_put(GTK_FIXED(grid), bezelImage, (calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT) - 15, calcLandscape ? 4 : 424);
 
   // Areas for the g shifted softkeys
   lblGSoftkeyArea = gtk_label_new("");

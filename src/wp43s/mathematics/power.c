@@ -357,15 +357,27 @@ void powLonIReal(void) {
  ***********************************************/
 void powRealLonI(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
+    if(longIntegerIsZeroRegister(REGISTER_X)) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      if(getRegisterLongIntegerSign(REGISTER_X) == LONG_INTEGER_POSITIVE) {
+        longInteger_t lgInt;
+        convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        if(longIntegerIsEven(lgInt)) {
+          realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        }
+        else {
+          realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        }
+      }
+      else {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      }
     }
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;
   }
 
@@ -422,7 +434,7 @@ void powLonICplx(void) {
  ***********************************************/
 void powCplxLonI(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
+    if(longIntegerIsZeroRegister(REGISTER_X)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -740,12 +752,22 @@ void powCplxShoI(void) {
 void powRealReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsAnInteger(REGISTER_REAL34_DATA(REGISTER_X))) {
+        longInteger_t lgInt;
+        convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), lgInt, DEC_ROUND_DOWN);
+        if(longIntegerIsEven(lgInt)) {
+          realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        }
+        else {
+          realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        }
+      }
+      else {
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      }
     }
     setRegisterAngularMode(REGISTER_X, AM_NONE);
     return;

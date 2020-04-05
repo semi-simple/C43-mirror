@@ -23,23 +23,31 @@
 
 
 void convertLongIntegerToLongIntegerRegister(const longInteger_t lgInt, calcRegister_t regist) {
-  reallocateRegister(regist, dtLongInteger, longIntegerSizeInBytes(lgInt), longIntegerSignTag(lgInt));
-  memcpy(REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_d, longIntegerSizeInBytes(lgInt));
+  dataSize_t sizeInBytes = longIntegerSizeInBytes(lgInt);
+  uint32_t sign = longIntegerSignTag(lgInt);
+
+  reallocateRegister(regist, dtLongInteger, sizeInBytes, sign);
+
+  memcpy(REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_d, sizeInBytes);
+  *REGISTER_DATA_MAX_LEN(regist) = sizeInBytes;
+
+  setRegisterLongIntegerSign(regist, sign);
 }
 
 
 
 void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_t lgInt) {
-  longIntegerInitSizeInBits(lgInt, max(*REGISTER_DATA_MAX_LEN(regist) * 8, 64));
-  lgInt->_mp_size = *REGISTER_DATA_MAX_LEN(regist);
+  dataSize_t sizeInBytes = *REGISTER_DATA_MAX_LEN(regist);
 
-  memcpy(lgInt->_mp_d, REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_size);
+  longIntegerInitSizeInBits(lgInt, max(sizeInBytes * 8, 64));
+
+  memcpy(lgInt->_mp_d, REGISTER_LONG_INTEGER_DATA(regist), sizeInBytes);
 
   if(getRegisterLongIntegerSign(regist) == LONG_INTEGER_NEGATIVE) {
-    lgInt->_mp_size = -(lgInt->_mp_size / LIMB_SIZE);
+    lgInt->_mp_size = -(sizeInBytes / LIMB_SIZE);
   }
   else {
-    lgInt->_mp_size = lgInt->_mp_size / LIMB_SIZE;
+    lgInt->_mp_size = sizeInBytes / LIMB_SIZE;
   }
 }
 
@@ -311,6 +319,7 @@ void realToIntegralValue(const real_t *source, real_t *destination, enum roundin
 
   savedRoundingMode = realContext->round;
   realContext->round = mode;
+  realContext->status = 0;
   decNumberToIntegralValue(destination, source, realContext);
   realContext->round = savedRoundingMode;
 }

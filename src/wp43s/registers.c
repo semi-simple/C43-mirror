@@ -1766,7 +1766,7 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
 
   else if(getRegisterDataType(regist) == dtString) {
     stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
-    printf("string (%" FMT32U " bytes) |%s|", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
+    printf("string (%" FMT64U " + %" FMT32U " bytes) |%s|", sizeof(dataSize_t), (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
   }
 
   else if(getRegisterDataType(regist) == dtShortInteger) {
@@ -1781,7 +1781,7 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
     longIntegerToAllocatedString(lgInt, str, sizeof(str));
     longIntegerFree(lgInt);
-    printf("long integer (%" FMT32U " bytes) %s", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
+    printf("long integer (%" FMT64U " + %" FMT32U " bytes) %s", sizeof(dataSize_t), (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
   }
 
   else {
@@ -1978,16 +1978,16 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
  * \param r int16_t Register number
  * \return void
  ***********************************************/
-void printLongIntegerToConsole(longInteger_t value, const char *before, const char *after) {
+void printLongIntegerToConsole(const longInteger_t value, const char *before, const char *after) {
   char str[3000];
 
   longIntegerToAllocatedString(value, str, sizeof(str));
-  printf("%sLI (%" FMT64U ") %s%s", before, (uint64_t)longIntegerSizeInBytes(value), str, after);
+  printf("%slong integer (%" FMT64U " + %" FMT64U " <%" FMT64U " reserved> bytes) %s%s", before, sizeof(value->_mp_size) + sizeof(value->_mp_d) + sizeof(value->_mp_alloc), (uint64_t)longIntegerSizeInBytes(value), value->_mp_alloc * LIMB_SIZE, str, after);
 }
 
 
 
-void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag) { // dataSize without trailing 0 and without data length
+void reallocateRegister(calcRegister_t regist, uint32_t dataType, dataSize_t dataSizeWithoutDataLen, uint32_t tag) { // dataSize without trailing 0 and without data length
   uint32_t dataSizeWithDataLen = dataSizeWithoutDataLen;
 
   //printf("reallocateRegister: %d to %s tag=%u (%u bytes excluding maxSize) begin\n", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithoutDataLen);

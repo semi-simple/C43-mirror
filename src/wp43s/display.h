@@ -37,6 +37,6 @@ void timeToDisplayString          (calcRegister_t regist, char *displayString);
 void exponentToDisplayString      (int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode, const char *separator);
 void supNumberToDisplayString     (int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap, const char *separator);
 void subNumberToDisplayString     (int32_t subNumber, char *displayString, char *displayValueString);
-void longIntegerToAllocatedString (longInteger_t lgInt, char *str, int32_t strLg);
+void longIntegerToAllocatedString (const longInteger_t lgInt, char *str, int32_t strLg);
 void fnShow_SCROLL                (uint16_t fnShow_param);
 int16_t SHOWregis;                               //JMSHOW

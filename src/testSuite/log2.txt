@@ -133,13 +133,13 @@ In:  SL=0 FI=0 FD=0 RX=Real:"-inf"
 Out: EC=1 FI=0 SL=0 RX=Real:"-inf"
 
 In:  SL=0 FI=0 FD=1 RX=Real:"-inf":DMS
-Out: EC=0 FI=0 SL=1 RL=Real:"-inf":DMS RX=Real:"NaN"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf":DMS RX=Real:"inf"
 
 In:  SL=0 FI=0 FD=0 RX=Real:"-inf":MULTPI
 Out: EC=1 FI=0 SL=0 RX=Real:"-inf":MULTPI
 
 In:  SL=0 FI=0 FD=1 RX=Real:"-inf":RAD
-Out: EC=0 FI=0 SL=1 RL=Real:"-inf":RAD RX=Real:"NaN"
+Out: EC=0 FI=0 SL=1 RL=Real:"-inf":RAD RX=Real:"inf"
 
 
 

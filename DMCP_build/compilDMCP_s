@@ -16,4 +16,5 @@ ln -s ../decNumberICU
 ln -s ../src
 
 make clean
-make -j8 --debug
+make -j8 --silent
+#--debug

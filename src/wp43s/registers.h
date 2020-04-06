@@ -150,8 +150,8 @@ int16_t   indirectAddressing              (calcRegister_t regist, int16_t minVal
 void      printReal34ToConsole            (const real34_t *value, const char *before, const char *after);
 void      printRealToConsole              (const real_t *value, const char *before, const char *after);
 void      printComplex34ToConsole         (const complex34_t *value, const char *before, const char *after);
-void      printLongIntegerToConsole       (longInteger_t value, const char *before, const char *after);
-void      reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
+void      printLongIntegerToConsole       (const longInteger_t value, const char *before, const char *after);
+void      reallocateRegister              (calcRegister_t regist, dataSize_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
 void      printRegisterToConsole          (calcRegister_t regist, const char *before, const char *after);
 void      printRegisterDescriptorToConsole(calcRegister_t regist);
 void      fnToReal                        (uint16_t unusedParamButMandatory);

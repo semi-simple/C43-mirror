@@ -1173,6 +1173,15 @@ DEPRECIATED for Martin
 }
 
 
+void fnJM_fnToPolar(uint16_t unusedParamButMandatory) {
+  fnJM(29);
+}
+
+
+void fnJM_fnToRect(uint16_t unusedParamButMandatory) {
+  fnJM(28);
+}
+
 
 /********************************************//**
  * \brief CONVERT DATA TYPES UP

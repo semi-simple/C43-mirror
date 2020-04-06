@@ -372,6 +372,7 @@ void powRealLonI(void) {
         else {
           realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
         }
+        longIntegerFree(lgInt);
       }
       else {
         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -764,6 +765,7 @@ void powRealReal(void) {
         else {
           realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
         }
+        longIntegerFree(lgInt);
       }
       else {
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));

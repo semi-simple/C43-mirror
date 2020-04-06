@@ -157,8 +157,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSwapXY",               fnSwapXY              },
   {"fnTan",                  fnTan                 },
   {"fnTanh",                 fnTanh                },
-  {"fnToPolar",              fnToPolar             },
-  {"fnToRect",               fnToRect              },
+  {"fnJM_fnToPolar",         fnJM_fnToPolar        },     //JM
+  {"fnJM_fnToRect",          fnJM_fnToRect         },     //JM
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
   {"",                       NULL                  }

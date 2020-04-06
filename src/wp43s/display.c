@@ -1728,7 +1728,7 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
 
 
 
-void longIntegerToAllocatedString(longInteger_t lgInt, char *str, int32_t strLen) {
+void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t strLen) {
   int32_t digits, stringLen, counter;
   longInteger_t x;
 

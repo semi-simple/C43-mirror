@@ -1766,7 +1766,7 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
 
   else if(getRegisterDataType(regist) == dtString) {
     stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
-    printf("string (%" FMT64U " + %" FMT32U " bytes) |%s|", sizeof(dataSize_t), (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
+    printf("string (%" FMTSIZE " + %" FMT32U " bytes) |%s|", sizeof(dataSize_t), (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
   }
 
   else if(getRegisterDataType(regist) == dtShortInteger) {
@@ -1781,7 +1781,7 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
     longIntegerToAllocatedString(lgInt, str, sizeof(str));
     longIntegerFree(lgInt);
-    printf("long integer (%" FMT64U " + %" FMT32U " bytes) %s", sizeof(dataSize_t), (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
+    printf("long integer (%" FMTSIZE " + %" FMT32U " bytes) %s", sizeof(dataSize_t), (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)), str);
   }
 
   else {
@@ -1982,7 +1982,7 @@ void printLongIntegerToConsole(const longInteger_t value, const char *before, co
   char str[3000];
 
   longIntegerToAllocatedString(value, str, sizeof(str));
-  printf("%slong integer (%" FMT64U " + %" FMT64U " <%" FMT64U " reserved> bytes) %s%s", before, sizeof(value->_mp_size) + sizeof(value->_mp_d) + sizeof(value->_mp_alloc), (uint64_t)longIntegerSizeInBytes(value), value->_mp_alloc * LIMB_SIZE, str, after);
+  printf("%slong integer (%" FMTSIZE " + %" FMT64U " <%" FMT64U " reserved> bytes) %s%s", before, sizeof(value->_mp_size) + sizeof(value->_mp_d) + sizeof(value->_mp_alloc), (uint64_t)longIntegerSizeInBytes(value), value->_mp_alloc * LIMB_SIZE, str, after);
 }
 
 

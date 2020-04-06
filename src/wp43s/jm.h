@@ -115,6 +115,9 @@ void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
 void fnUserJM(uint16_t jmUser);
+void fnJM_fnToPolar(uint16_t unusedParamButMandatory);
+void fnJM_fnToRect(uint16_t unusedParamButMandatory);
+
 
 //fnUserJM
 #define USER_DEFAULTS    23

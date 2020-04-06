@@ -18,6 +18,8 @@
  * \file wp43s.h
  ***********************************************/
 
+//#define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
+
 
 
 #ifndef wp43s_H_INCLUDED
@@ -68,18 +70,15 @@
     #define DEBUG_PANEL 0
   #endif
 
-
-//#define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
-
   #ifndef SWAP_LAYOUTS
       #define JM_LAYOUT_1A               //Preferred layout
+      #undef  JM_LAYOUT_2_DM42_STRICT
   #endif
 
   #ifdef SWAP_LAYOUTS
       #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
-      #if defined(JM_LAYOUT_2_DM42_STRICT)
-        #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
-      #endif
+      #undef  JM_LAYOUT_1A
+      #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
   #endif
 
 #endif
@@ -93,6 +92,7 @@
   #define SHOW_MEMORY_STATUS 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
+  #undef  JM_LAYOUT_1A
   #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
 #endif
 

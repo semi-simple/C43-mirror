@@ -134,6 +134,7 @@ void signReal(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function signReal:", "cannot use NaN as X input of SIGN", NULL, NULL);
     #endif
+    longIntegerFree(lgInt);
     return;
   }
 

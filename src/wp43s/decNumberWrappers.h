@@ -190,6 +190,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
                                                                 real_t tmp; \
                                                                 savedRoundingMode = ctxtReal39.round; \
                                                                 ctxtReal39.round = DEC_ROUND_DOWN; \
+                                                                ctxtReal39.status = 0; \
                                                                 decNumberToIntegralValue(&tmp, source, &ctxtReal39); \
                                                                 destination = decGetInt(&tmp); \
                                                                 ctxtReal39.round = savedRoundingMode; \

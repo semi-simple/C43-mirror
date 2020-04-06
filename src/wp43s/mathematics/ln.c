@@ -211,12 +211,7 @@ void lnReal(void) {
       return;
     }
     else {
-      if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
-        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      }
-      else {
-        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      }
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 

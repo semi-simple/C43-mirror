@@ -3960,10 +3960,10 @@ void setupUI(void) {
   lbl83G  = gtk_label_new("");
   lbl84G  = gtk_label_new("");
   lbl85G  = gtk_label_new("");
-  lbl82H  = gtk_label_new("\u03B1");        //JM ALPHA u221D
-  lbl83H  = gtk_label_new("\u2219");  //JM Alphadot -  Menu alphaDOT for AIM 2218
-  lbl84H  = gtk_label_new("\u221E");  //JM Alpha MATH - also considered pi \u03C0 and integral u222E
-  lbl85H  = gtk_label_new("\u00f1");  //JM Alpha Intnl - also considered \u2139
+  lbl82H  = gtk_label_new("");//("\u03B1");        //JM ALPHA u221D
+  lbl83H  = gtk_label_new("");//("\u2219");  //JM Alphadot -  Menu alphaDOT for AIM 2218
+  lbl84H  = gtk_label_new("");//("\u221E");  //JM Alpha MATH - also considered pi \u03C0 and integral u222E
+  lbl85H  = gtk_label_new("");//("\u00f1");  //JM Alpha Intnl - also considered \u2139
   lbl81L  = gtk_label_new("");
   lbl82L  = gtk_label_new("");
   lbl83L  = gtk_label_new("");
